@@ -30,7 +30,7 @@
  * Original Author:  Tom Larkworthy
  * Contributor(s):   Soren Davidsen
  *
- * $Id$
+ * $Id: FloydWarshallShortestPaths.java 755 2012-01-18 23:50:37Z perfecthash $
  *
  * Changes
  * -------
@@ -50,7 +50,7 @@ import org.jgrapht.util.*;
 /**
  * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm">
  * Floyd-Warshall algorithm</a> finds all shortest paths (all n^2 of them) in
- * O(n^3) time. This also works out the graph diameter during the process.
+ * O(n^3) time. It can also calculate the graph diameter.
  *
  * @author Tom Larkworthy
  * @author Soren Davidsen <soren@tanesha.net>
@@ -62,7 +62,7 @@ public class FloydWarshallShortestPaths<V, E>
     private Graph<V, E> graph;
     private List<V> vertices;
     private int nShortestPaths = 0;
-    private double diameter = 0.0;
+    private double diameter = Double.NaN;
     private double [][] d = null;
     private int [][] backtrace = null;
     private Map<VertexPair<V>, GraphPath<V, E>> paths = null;
@@ -95,8 +95,8 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Calculates the matrix of all shortest paths, along with the diameter, but
-     * does not populate the paths map.
+     * Calculates the matrix of all shortest paths, but does not populate the
+     * paths map.
      */
     private void lazyCalculateMatrix()
     {
@@ -147,7 +147,6 @@ public class FloydWarshallShortestPaths<V, E>
                     if (ik_kj < d[i][j]) {
                         d[i][j] = ik_kj;
                         backtrace[i][j] = k;
-                        diameter = (diameter > d[i][j]) ? diameter : d[i][j];
                     }
                 }
             }
@@ -171,11 +170,23 @@ public class FloydWarshallShortestPaths<V, E>
 
     /**
      * @return the diameter (longest of all the shortest paths) computed for the
-     * graph
+     * graph. If the graph is vertexless, return 0.0.
      */
     public double getDiameter()
     {
         lazyCalculateMatrix();
+
+        if (Double.isNaN(diameter)) {
+            diameter = 0.0;
+            int n = vertices.size();
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (!Double.isInfinite(d[i][j]) && d[i][j] > diameter) {
+                        diameter = d[i][j];
+                    }
+                }
+            }
+        }
         return diameter;
     }
 
@@ -289,6 +300,17 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         return found;
+    }
+
+    /**
+     * Get all shortest paths in the graph.
+     *
+     * @return List of paths
+     */
+    public Collection<GraphPath<V, E>> getShortestPaths()
+    {
+        lazyCalculatePaths();
+        return paths.values();
     }
 }
 

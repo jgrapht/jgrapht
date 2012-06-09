@@ -30,7 +30,7 @@
  * Original Author:  Tom Larkworthy
  * Contributors:  Andrea Pagani
  *
- * $Id$
+ * $Id: FloydWarshallShortestPathsTest.java 715 2010-06-13 01:25:00Z perfecthash $
  *
  * Changes
  * -------
@@ -50,7 +50,7 @@ import org.jgrapht.graph.*;
 
 /**
  * @author Tom Larkworthy
- * @version $Id$
+ * @version $Id: FloydWarshallShortestPathsTest.java 715 2010-06-13 01:25:00Z perfecthash $
  */
 public class FloydWarshallShortestPathsTest
     extends TestCase
@@ -159,6 +159,27 @@ public class FloydWarshallShortestPathsTest
             new FloydWarshallShortestPaths<String, DefaultEdge>(stringGraph);
         double diameter = testFWPath.getDiameter();
         assertEquals(2.0, diameter);
+    }
+
+    public void testEmptyDiameter() {
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+        FloydWarshallShortestPaths<String, DefaultEdge> fw =
+            new FloydWarshallShortestPaths<String, DefaultEdge>(graph);
+        double diameter = fw.getDiameter();
+        assertEquals(0.0, diameter);
+    }
+
+    public void testEdgeLessDiameter() {
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+        String a = "a", b = "b";
+        graph.addVertex(a);
+        graph.addVertex(b);
+        FloydWarshallShortestPaths<String, DefaultEdge> fw =
+            new FloydWarshallShortestPaths<String, DefaultEdge>(graph);
+        double diameter = fw.getDiameter();
+        assertEquals(0.0, diameter);
     }
 }
 
