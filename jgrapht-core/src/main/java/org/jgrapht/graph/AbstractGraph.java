@@ -29,6 +29,7 @@
  *
  * Original Author:  Barak Naveh
  * Contributor(s):   Christian Hammer
+ *                   Vladimir Kostyukov
  *
  * $Id$
  *
@@ -38,13 +39,15 @@
  * 11-Mar-2004 : Made generic (CH);
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- *
+ * 14-Jun-2012 : Added hashCode() and equals() methods implementation (VK);
+ * 
  */
 package org.jgrapht.graph;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 
 /**
@@ -225,6 +228,94 @@ public abstract class AbstractGraph<V, E>
         }
 
         return "(" + vertexSet + ", " + renderedEdges + ")";
+    }
+
+    /**
+     * Returns a hash code value for this graph. The hash code of a graph is 
+     * defined to be the sum of the hash codes of vertices and edges in the 
+     * graph. It is also based on graph topology and edges weights.
+     * 
+     * @return the hash code value this graph
+     * 
+     * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
+     */
+    public int hashCode()
+    {
+        int hash = vertexSet().hashCode();
+
+        for (E e: edgeSet()) {
+
+            int part = e.hashCode();
+
+            int source = getEdgeSource(e).hashCode();
+            int target = getEdgeTarget(e).hashCode();
+
+            // see http://en.wikipedia.org/wiki/Pairing_function (VK);
+            int pairing = ((source + target) * 
+                (source + target + 1) / 2) + target;
+            part = 27 * part + pairing;
+
+            long weight = (long) getEdgeWeight(e);
+            part = 27 * part + (int) (weight ^ (weight >>> 32));
+
+            hash += part;
+        }
+
+        return hash;
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this graph. 
+     * Returns <code>true</code> if the given object is also a graph, 
+     * the two graphs are instances of the same graph class, 
+     * have identical vertices and edges sets with the same weights.
+     * 
+     * @param obj object to be compared for equality with this graph
+     * 
+     * @return <code>true</code> if the specified object is equal to this graph 
+     * 
+     * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
+     */
+    public boolean equals(Object obj)
+    {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        TypeUtil<Graph<V, E>> typeDecl = null;
+        Graph<V, E> g = TypeUtil.uncheckedCast(obj, typeDecl);
+
+        if (!vertexSet().equals(g.vertexSet())) {
+            return false;
+        }
+        if (edgeSet().size() != g.edgeSet().size()) {
+            return false;
+        }
+
+        for (E e: edgeSet()) {
+
+            V source = getEdgeSource(e);
+            V target = getEdgeTarget(e);
+
+            if (!g.containsEdge(e)) {
+                return false;
+            }
+
+            if (!g.getEdgeSource(e).equals(source) 
+                || !g.getEdgeTarget(e).equals(target)) 
+            {
+                return false;
+            }
+
+            if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(e)) > 10e-7) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
