@@ -192,9 +192,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
 
             Set<E> baseEdges = base.getAllEdges(sourceVertex, targetVertex);
 
-            for (Iterator<E> iter = baseEdges.iterator(); iter.hasNext();) {
-                E e = iter.next();
-
+            for (E e : baseEdges) {
                 if (edgeSet.contains(e)) { // add if subgraph also contains
                                            // it
                     edges.add(e);
@@ -244,9 +242,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
 
         Set<E> edges = base.getAllEdges(sourceVertex, targetVertex);
 
-        for (Iterator<E> iter = edges.iterator(); iter.hasNext();) {
-            E e = iter.next();
-
+        for (E e : edges) {
             if (!containsEdge(e)) {
                 edgeSet.add(e);
 
@@ -466,8 +462,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         V v;
 
-        for (Iterator<V> iter = vertexSet.iterator(); iter.hasNext();) {
-            v = iter.next();
+        for (final V aVertexSet : vertexSet) {
+            v = aVertexSet;
 
             // note the use of short circuit evaluation
             if ((filter == null) || filter.contains(v)) {

@@ -180,8 +180,8 @@ public abstract class AbstractGraph<V, E>
     {
         boolean modified = false;
 
-        for (int i = 0; i < edges.length; i++) {
-            modified |= removeEdge(edges[i]);
+        for (final E edge : edges) {
+            modified |= removeEdge(edge);
         }
 
         return modified;

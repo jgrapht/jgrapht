@@ -121,8 +121,8 @@ final class RankingPathElementList<V, E>
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
 
         // loop over the path elements in increasing order of weight.
-        for (int i = 0; i < elementList.size(); i++) {
-            RankingPathElement<V, E> prevPathElement = elementList.get(i);
+        for (RankingPathElement<V, E> anElementList : elementList) {
+            RankingPathElement<V, E> prevPathElement = anElementList;
 
             if (isNotValidPath(prevPathElement, edge)) {
                 continue;

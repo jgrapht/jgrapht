@@ -170,11 +170,7 @@ class KShortestPathsIterator<V, E>
         if (hasNext()) {
             Set<V> improvedVertices = new HashSet<V>();
 
-            for (
-                Iterator<V> iter = this.prevImprovedVertices.iterator();
-                iter.hasNext();)
-            {
-                V vertex = iter.next();
+            for (V vertex : this.prevImprovedVertices) {
                 if (!vertex.equals(this.endVertex)) {
                     updateOutgoingVertices(vertex, improvedVertices);
                 }
@@ -293,9 +289,7 @@ class KShortestPathsIterator<V, E>
 
     private void savePassData(Set<V> improvedVertices)
     {
-        for (Iterator<V> iter = improvedVertices.iterator(); iter.hasNext();) {
-            V vertex = iter.next();
-
+        for (V vertex : improvedVertices) {
             RankingPathElementList<V, E> pathElementList =
                 this.seenDataContainer.get(vertex);
 
@@ -305,12 +299,7 @@ class KShortestPathsIterator<V, E>
                     pathElementList.maxSize,
                     vertex);
 
-            for (
-                Iterator<RankingPathElement<V, E>> pathIter =
-                    pathElementList.iterator();
-                pathIter.hasNext();)
-            {
-                RankingPathElement<V, E> path = pathIter.next();
+            for (RankingPathElement<V, E> path : pathElementList) {
                 if (path.getHopCount() == this.passNumber) {
                     // the path has just been computed.
                     improvedPaths.pathElements.add(path);

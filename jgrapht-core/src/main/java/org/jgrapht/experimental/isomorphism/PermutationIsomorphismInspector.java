@@ -131,8 +131,7 @@ class PermutationIsomorphismInspector<V, E>
         Iterator<V> iter2 = vertexSet2.iterator();
 
         // only check hasNext() of one , cause they are of the same size
-        for (Iterator<V> iter1 = vertexSet1.iterator(); iter1.hasNext();) {
-            V vertex1 = iter1.next();
+        for (V vertex1 : vertexSet1) {
             V vertex2 = iter2.next();
             if (!this.vertexComparator.equivalenceCompare(
                     vertex1,

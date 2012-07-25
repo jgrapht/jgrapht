@@ -288,12 +288,8 @@ class EquivalenceIsomorphismInspector<V, E>
         int flatVertexArrayNextFree = 0; // the next free place in the array
 
         // iterate over the EqualityGroup array
-        for (
-            int eqGroupCounter = 0;
-            eqGroupCounter < eqGroupArray.length;
-            eqGroupCounter++)
-        {
-            Object [] currGroupArray = eqGroupArray[eqGroupCounter].toArray();
+        for (final EquivalenceSet anEqGroupArray : eqGroupArray) {
+            Object[] currGroupArray = anEqGroupArray.toArray();
 
             // copy this small array to the free place in the big
             // flatVertexArray
@@ -303,7 +299,7 @@ class EquivalenceIsomorphismInspector<V, E>
                 flatVertexArray, // dest
                 flatVertexArrayNextFree, // destPos
                 currGroupArray.length // length
-                );
+            );
             flatVertexArrayNextFree += currGroupArray.length;
         }
     }

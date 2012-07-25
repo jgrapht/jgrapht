@@ -127,11 +127,7 @@ public abstract class EulerianCircuit
             // Finds an arbitrary circuit of the current vertex and
             // appends this into the circuit list
             while (sg.degreeOf(v) > 0) {
-                for (
-                    Iterator<V> iter = sg.vertexSet().iterator();
-                    iter.hasNext();)
-                {
-                    V temp = iter.next();
+                for (V temp : sg.vertexSet()) {
                     if (sg.containsEdge(v, temp)) {
                         path.add(index, temp);
                         sg.removeEdge(v, temp);

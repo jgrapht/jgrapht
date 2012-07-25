@@ -232,12 +232,8 @@ public class CompoundPermutationIter
     {
         int [] resultArray = new int[this.totalPermArraySize];
         int counter = 0;
-        for (
-            int groupIndex = 0;
-            groupIndex < this.permArray.length;
-            groupIndex++)
-        {
-            int [] currPermArray = this.permArray[groupIndex].getCurrent();
+        for (final IntegerPermutationIter aPermArray : this.permArray) {
+            int[] currPermArray = aPermArray.getCurrent();
             System.arraycopy(
                 currPermArray,
                 0,

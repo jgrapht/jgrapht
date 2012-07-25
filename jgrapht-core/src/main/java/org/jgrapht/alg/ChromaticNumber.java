@@ -117,11 +117,7 @@ public abstract class ChromaticNumber
                 // adjacent with any other vertex that has already been colored
                 // with the current color
                 boolean flag = true;
-                for (
-                    Iterator<V> innerIter = currentColor.iterator();
-                    innerIter.hasNext();)
-                {
-                    V temp = innerIter.next();
+                for (V temp : currentColor) {
                     if (sg.containsEdge(temp, v)) {
                         flag = false;
                         break;

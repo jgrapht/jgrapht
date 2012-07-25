@@ -50,11 +50,8 @@ public final class GraphTests<V, E>
 
         while (!queue.isEmpty()) {
             v = queue.removeFirst();
-            for (
-                Iterator<V> it = Graphs.neighborListOf(g, v).iterator();
-                it.hasNext();)
-            {
-                v = it.next();
+            for (final V v1 : Graphs.neighborListOf(g, v)) {
+                v = v1;
                 if (!known.contains(v)) {
                     known.add(v);
                     queue.add(v);
@@ -96,11 +93,7 @@ public final class GraphTests<V, E>
             v = queue.removeFirst();
             unknown.remove(v);
 
-            for (
-                Iterator<V> it = Graphs.neighborListOf(g, v).iterator();
-                it.hasNext();)
-            {
-                V n = it.next();
+            for (V n : Graphs.neighborListOf(g, v)) {
                 if (unknown.contains(n)) {
                     queue.add(n);
                     if (!odd.contains(v)) {

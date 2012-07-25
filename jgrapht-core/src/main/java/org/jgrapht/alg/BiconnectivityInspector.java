@@ -78,12 +78,8 @@ public class BiconnectivityInspector<V, E>
     public Set<Set<V>> getBiconnectedVertexComponents()
     {
         Set<Set<V>> biconnectedVertexComponents = new HashSet<Set<V>>();
-        for (
-            Iterator<UndirectedGraph<V, E>> iter =
-                this.blockCutpointGraph.vertexSet().iterator();
-            iter.hasNext();)
-        {
-            UndirectedGraph<V, E> subgraph = iter.next();
+        for (UndirectedGraph<V, E> subgraph : this.blockCutpointGraph
+            .vertexSet()) {
             if (!subgraph.edgeSet().isEmpty()) {
                 biconnectedVertexComponents.add(subgraph.vertexSet());
             }
@@ -105,11 +101,7 @@ public class BiconnectivityInspector<V, E>
     public Set<Set<V>> getBiconnectedVertexComponents(V vertex)
     {
         Set<Set<V>> vertexComponents = new HashSet<Set<V>>();
-        for (
-            Iterator<Set<V>> iter = getBiconnectedVertexComponents().iterator();
-            iter.hasNext();)
-        {
-            Set<V> vertexComponent = iter.next();
+        for (Set<V> vertexComponent : getBiconnectedVertexComponents()) {
             if (vertexComponent.contains(vertex)) {
                 vertexComponents.add(vertexComponent);
             }

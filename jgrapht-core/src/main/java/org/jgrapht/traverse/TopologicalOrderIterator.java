@@ -215,9 +215,7 @@ public class TopologicalOrderIterator<V, E>
         Queue<V> queue,
         Map<V, ModifiableInteger> inDegreeMap)
     {
-        for (Iterator<V> i = dg.vertexSet().iterator(); i.hasNext();) {
-            V vertex = i.next();
-
+        for (V vertex : dg.vertexSet()) {
             int inDegree = dg.inDegreeOf(vertex);
             inDegreeMap.put(vertex, new ModifiableInteger(inDegree));
 

@@ -124,8 +124,7 @@ public class BlockCutpointGraph<V, E>
             this.cutpoints.remove(s);
         }
 
-        for (Iterator<V> iter = this.cutpoints.iterator(); iter.hasNext();) {
-            V cutpoint = iter.next();
+        for (V cutpoint : this.cutpoints) {
             UndirectedGraph<V, E> subgraph =
                 new SimpleGraph<V, E>(this.graph.getEdgeFactory());
             subgraph.addVertex(cutpoint);
@@ -133,12 +132,7 @@ public class BlockCutpointGraph<V, E>
             addVertex(subgraph);
             Set<UndirectedGraph<V, E>> biconnectedSubgraphs =
                 getBiconnectedSubgraphs(cutpoint);
-            for (
-                Iterator<UndirectedGraph<V, E>> iterator =
-                    biconnectedSubgraphs.iterator();
-                iterator.hasNext();)
-            {
-                UndirectedGraph<V, E> biconnectedSubgraph = iterator.next();
+            for (UndirectedGraph<V, E> biconnectedSubgraph : biconnectedSubgraphs) {
                 assert (vertexSet().contains(biconnectedSubgraph));
                 addEdge(subgraph, biconnectedSubgraph);
             }
@@ -216,8 +210,7 @@ public class BlockCutpointGraph<V, E>
             new UndirectedMaskSubgraph<V, E>(
                 this.graph,
                 mask);
-        for (Iterator<V> iter = vertexComponent.iterator(); iter.hasNext();) {
-            V vertex = iter.next();
+        for (V vertex : vertexComponent) {
             this.vertex2block.put(vertex, biconnectedSubgraph);
             getBiconnectedSubgraphs(vertex).add(biconnectedSubgraph);
         }
@@ -230,11 +223,7 @@ public class BlockCutpointGraph<V, E>
         int minS = this.numOrder;
         setNumOrder(s, this.numOrder);
 
-        for (
-            Iterator<E> iter = this.graph.edgesOf(s).iterator();
-            iter.hasNext();)
-        {
-            E edge = iter.next();
+        for (E edge : this.graph.edgesOf(s)) {
             V n = Graphs.getOppositeVertex(this.graph, edge, s);
             if (getNumOrder(n) == 0) {
                 this.dfsTree.addVertex(n);

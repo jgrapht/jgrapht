@@ -255,15 +255,12 @@ public class JGraphModelAdapter<V, E>
             g.addGraphListener(new JGraphTListener());
         }
 
-        for (
-            Iterator<V> i = jGraphTGraph.vertexSet().iterator();
-            i.hasNext();)
-        {
-            handleJGraphTAddedVertex(i.next());
+        for (final V v : jGraphTGraph.vertexSet()) {
+            handleJGraphTAddedVertex(v);
         }
 
-        for (Iterator<E> i = jGraphTGraph.edgeSet().iterator(); i.hasNext();) {
-            handleJGraphTAddedEdge(i.next());
+        for (final E e : jGraphTGraph.edgeSet()) {
+            handleJGraphTAddedEdge(e);
         }
 
         this.addGraphModelListener(new JGraphListener());
@@ -909,9 +906,9 @@ public class JGraphModelAdapter<V, E>
         {
             List<Object> jEdges = new ArrayList<Object>();
 
-            for (int i = 0; i < cells.length; i++) {
-                if (cells[i] instanceof org.jgraph.graph.Edge) {
-                    jEdges.add(cells[i]);
+            for (final Object cell : cells) {
+                if (cell instanceof Edge) {
+                    jEdges.add(cell);
                 }
             }
 
@@ -930,10 +927,8 @@ public class JGraphModelAdapter<V, E>
         {
             List<Object> jVertices = new ArrayList<Object>();
 
-            for (int i = 0; i < cells.length; i++) {
-                Object cell = cells[i];
-
-                if (cell instanceof org.jgraph.graph.Edge) {
+            for (Object cell : cells) {
+                if (cell instanceof Edge) {
                     // ignore -- we don't care about edges.
                 } else if (cell instanceof Port) {
                     // ignore -- we don't care about ports.
@@ -961,8 +956,8 @@ public class JGraphModelAdapter<V, E>
 
         private void handleChangedEdges(List<Object> jEdges)
         {
-            for (Iterator<Object> i = jEdges.iterator(); i.hasNext();) {
-                org.jgraph.graph.Edge jEdge = (org.jgraph.graph.Edge) i.next();
+            for (final Object jEdge1 : jEdges) {
+                Edge jEdge = (Edge) jEdge1;
 
                 handleJGraphChangedEdge(jEdge);
             }
@@ -970,8 +965,8 @@ public class JGraphModelAdapter<V, E>
 
         private void handleInsertedEdges(List<Object> jEdges)
         {
-            for (Iterator<Object> i = jEdges.iterator(); i.hasNext();) {
-                org.jgraph.graph.Edge jEdge = (org.jgraph.graph.Edge) i.next();
+            for (final Object jEdge1 : jEdges) {
+                Edge jEdge = (Edge) jEdge1;
 
                 if (!jCellsBeingAdded.remove(jEdge)) {
                     handleJGraphInsertedEdge(jEdge);
@@ -981,8 +976,8 @@ public class JGraphModelAdapter<V, E>
 
         private void handleInsertedVertices(List<Object> jVertices)
         {
-            for (Iterator<Object> i = jVertices.iterator(); i.hasNext();) {
-                GraphCell jVertex = (GraphCell) i.next();
+            for (final Object jVertice : jVertices) {
+                GraphCell jVertex = (GraphCell) jVertice;
 
                 if (!jCellsBeingAdded.remove(jVertex)) {
                     handleJGraphInsertedVertex(jVertex);
@@ -992,8 +987,8 @@ public class JGraphModelAdapter<V, E>
 
         private void handleRemovedEdges(List<Object> jEdges)
         {
-            for (Iterator<Object> i = jEdges.iterator(); i.hasNext();) {
-                org.jgraph.graph.Edge jEdge = (org.jgraph.graph.Edge) i.next();
+            for (final Object jEdge1 : jEdges) {
+                Edge jEdge = (Edge) jEdge1;
 
                 if (!jCellsBeingRemoved.remove(jEdge)) {
                     handleJGraphRemovedEdge(jEdge);
@@ -1003,8 +998,8 @@ public class JGraphModelAdapter<V, E>
 
         private void handleRemovedVertices(List<Object> jVertices)
         {
-            for (Iterator<Object> i = jVertices.iterator(); i.hasNext();) {
-                GraphCell jVertex = (GraphCell) i.next();
+            for (final Object jVertice : jVertices) {
+                GraphCell jVertex = (GraphCell) jVertice;
 
                 if (!jCellsBeingRemoved.remove(jVertex)) {
                     handleJGraphRemovedVertex(jVertex);

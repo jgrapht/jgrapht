@@ -102,8 +102,7 @@ class MaskVertexSet<V, E>
     {
         if (this.size == -1) {
             this.size = 0;
-            for (Iterator<V> iter = iterator(); iter.hasNext();) {
-                iter.next();
+            for (final V v : this) {
                 this.size++;
             }
         }

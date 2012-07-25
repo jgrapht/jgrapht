@@ -208,9 +208,7 @@ public class GraphSquare<V, E>
 
         final List<V> adjVertices = Graphs.neighborListOf(g, u);
 
-        for (int i = 0; i < adjVertices.size(); i++) {
-            final V w = adjVertices.get(i);
-
+        for (final V w : adjVertices) {
             if (g.containsEdge(u, w) && ((v != w) || createLoops)) {
                 super.addEdge(v, w);
             }
@@ -222,8 +220,8 @@ public class GraphSquare<V, E>
         for (V v : g.vertexSet()) {
             List<V> adjVertices = Graphs.neighborListOf(g, v);
 
-            for (int i = 0; i < adjVertices.size(); i++) {
-                addEdgesStartingAt(g, v, adjVertices.get(i), createLoops);
+            for (V adjVertice : adjVertices) {
+                addEdgesStartingAt(g, v, adjVertice, createLoops);
             }
         }
     }

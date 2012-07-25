@@ -108,10 +108,9 @@ public class CompleteBipartiteGraphGenerator<V, E>
         }
 
         //Add an edge for each pair of vertices in different partitions
-        for (Iterator<V> iterA = a.iterator(); iterA.hasNext();) {
-            V v = iterA.next();
-            for (Iterator<V> iterB = b.iterator(); iterB.hasNext();) {
-                target.addEdge(v, iterB.next());
+        for (V v : a) {
+            for (final V aB : b) {
+                target.addEdge(v, aB);
             }
         }
     }
