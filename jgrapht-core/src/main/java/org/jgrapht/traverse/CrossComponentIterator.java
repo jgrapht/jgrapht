@@ -75,7 +75,7 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * Standard vertex visit state enumeration.
      */
-    protected static enum VisitColor
+    protected enum VisitColor
     {
         /**
          * Vertex has not been returned via iterator yet.
