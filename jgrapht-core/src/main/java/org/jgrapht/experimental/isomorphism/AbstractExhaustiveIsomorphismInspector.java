@@ -98,7 +98,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      * @param edgeChecker eq. group checker for edges. If null,
      * UniformEquivalenceComparator will be used as default (always return true)
      */
-    public AbstractExhaustiveIsomorphismInspector(
+    protected AbstractExhaustiveIsomorphismInspector(
         Graph<V, E> graph1,
         Graph<V, E> graph2,
 
@@ -135,7 +135,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      *
      * @see #AbstractExhaustiveIsomorphismInspector(Graph,Graph,EquivalenceComparator,EquivalenceComparator)
      */
-    public AbstractExhaustiveIsomorphismInspector(
+    protected AbstractExhaustiveIsomorphismInspector(
         Graph<V, E> graph1,
         Graph<V, E> graph2)
     {

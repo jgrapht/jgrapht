@@ -141,7 +141,7 @@ public abstract class CrossComponentIterator<V, E, D>
      * @throws IllegalArgumentException if <code>g==null</code> or does not
      * contain <code>startVertex</code>
      */
-    public CrossComponentIterator(Graph<V, E> g, V startVertex)
+    protected CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
         super();
 

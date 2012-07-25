@@ -24,7 +24,7 @@ public abstract class IntArrayGraphAlgorithm<V, E>
     /**
      * @param g
      */
-    public IntArrayGraphAlgorithm(final Graph<V, E> g)
+    protected IntArrayGraphAlgorithm(final Graph<V, E> g)
     {
         final int numVertices = g.vertexSet().size();
         _vertices = new ArrayList<V>(numVertices);

@@ -106,7 +106,7 @@ public abstract class AbstractBaseGraph<V, E>
      * @throws NullPointerException if the specified edge factory is <code>
      * null</code>.
      */
-    public AbstractBaseGraph(
+    protected AbstractBaseGraph(
         EdgeFactory<V, E> ef,
         boolean allowMultipleEdges,
         boolean allowLoops)
