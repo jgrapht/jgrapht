@@ -182,6 +182,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
+    @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> edges = null;
@@ -207,6 +208,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdge(Object, Object)
      */
+    @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         Set<E> edges = getAllEdges(sourceVertex, targetVertex);
@@ -221,6 +223,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeFactory()
      */
+    @Override
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return base.getEdgeFactory();
@@ -229,6 +232,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#addEdge(Object, Object)
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         assertVertexExist(sourceVertex);
@@ -256,6 +260,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         if (e == null) {
@@ -295,6 +300,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * @see Subgraph
      * @see Graph#addVertex(Object)
      */
+    @Override
     public boolean addVertex(V v)
     {
         if (v == null) {
@@ -317,6 +323,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#containsEdge(Object)
      */
+    @Override
     public boolean containsEdge(E e)
     {
         return edgeSet.contains(e);
@@ -325,6 +332,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#containsVertex(Object)
      */
+    @Override
     public boolean containsVertex(V v)
     {
         return vertexSet.contains(v);
@@ -333,6 +341,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#edgeSet()
      */
+    @Override
     public Set<E> edgeSet()
     {
         if (unmodifiableEdgeSet == null) {
@@ -345,6 +354,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#edgesOf(Object)
      */
+    @Override
     public Set<E> edgesOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -364,6 +374,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#removeEdge(Object)
      */
+    @Override
     public boolean removeEdge(E e)
     {
         return edgeSet.remove(e);
@@ -372,6 +383,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
+    @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         E e = getEdge(sourceVertex, targetVertex);
@@ -382,6 +394,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#removeVertex(Object)
      */
+    @Override
     public boolean removeVertex(V v)
     {
         // If the base graph does NOT contain v it means we are here in
@@ -397,6 +410,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#vertexSet()
      */
+    @Override
     public Set<V> vertexSet()
     {
         if (unmodifiableVertexSet == null) {
@@ -409,6 +423,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeSource(Object)
      */
+    @Override
     public V getEdgeSource(E e)
     {
         return base.getEdgeSource(e);
@@ -417,6 +432,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeTarget(Object)
      */
+    @Override
     public V getEdgeTarget(E e)
     {
         return base.getEdgeTarget(e);
@@ -468,6 +484,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeWeight(Object)
      */
+    @Override
     public double getEdgeWeight(E e)
     {
         return base.getEdgeWeight(e);
@@ -498,6 +515,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
          */
+        @Override
         public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
         {
             if (isInduced) {
@@ -516,6 +534,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
          */
+        @Override
         public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
         {
             E edge = e.getEdge();
@@ -526,6 +545,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
          */
+        @Override
         public void vertexAdded(GraphVertexChangeEvent<V> e)
         {
             // we don't care
@@ -534,6 +554,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
          */
+        @Override
         public void vertexRemoved(GraphVertexChangeEvent<V> e)
         {
             V vertex = e.getVertex();

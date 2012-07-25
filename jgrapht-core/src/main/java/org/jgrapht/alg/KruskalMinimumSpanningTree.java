@@ -77,6 +77,7 @@ public class KruskalMinimumSpanningTree<V, E>
         Collections.sort(
             allEdges,
             new Comparator<E>() {
+                @Override
                 public int compare(E edge1, E edge2)
                 {
                     return Double.valueOf(graph.getEdgeWeight(edge1)).compareTo(

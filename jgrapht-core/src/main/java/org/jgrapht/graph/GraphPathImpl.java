@@ -83,30 +83,35 @@ public class GraphPathImpl<V, E>
     //~ Methods ----------------------------------------------------------------
 
     // implement GraphPath
+    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     // implement GraphPath
+    @Override
     public V getStartVertex()
     {
         return startVertex;
     }
 
     // implement GraphPath
+    @Override
     public V getEndVertex()
     {
         return endVertex;
     }
 
     // implement GraphPath
+    @Override
     public List<E> getEdgeList()
     {
         return edgeList;
     }
 
     // implement GraphPath
+    @Override
     public double getWeight()
     {
         return weight;

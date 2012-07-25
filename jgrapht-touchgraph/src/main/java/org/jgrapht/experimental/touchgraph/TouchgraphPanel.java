@@ -129,6 +129,7 @@ public class TouchgraphPanel<V, E>
     /**
      * Initialize panel, lens, and establish a random graph as a demonstration.
      */
+    @Override
     public void initialize()
     {
         buildPanel();

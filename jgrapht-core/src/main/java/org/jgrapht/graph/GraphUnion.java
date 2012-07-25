@@ -98,6 +98,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> res = new HashSet<E>();
@@ -114,6 +115,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return Collections.unmodifiableSet(res);
     }
 
+    @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         E res = null;
@@ -135,6 +137,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public EdgeFactory<V, E> getEdgeFactory()
     {
         throw new UnsupportedOperationException(READ_ONLY);
@@ -144,6 +147,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(READ_ONLY);
@@ -153,6 +157,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         throw new UnsupportedOperationException(READ_ONLY);
@@ -162,21 +167,25 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
 
+    @Override
     public boolean containsEdge(E e)
     {
         return g1.containsEdge(e) || g2.containsEdge(e);
     }
 
+    @Override
     public boolean containsVertex(V v)
     {
         return g1.containsVertex(v) || g2.containsVertex(v);
     }
 
+    @Override
     public Set<E> edgeSet()
     {
         Set<E> res = new HashSet<E>();
@@ -185,6 +194,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return Collections.unmodifiableSet(res);
     }
 
+    @Override
     public Set<E> edgesOf(V vertex)
     {
         Set<E> res = new HashSet<E>();
@@ -201,6 +211,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(READ_ONLY);
@@ -210,6 +221,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public boolean removeEdge(E e)
     {
         throw new UnsupportedOperationException(READ_ONLY);
@@ -219,11 +231,13 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      * Throws <tt>UnsupportedOperationException</tt>, because <tt>
      * GraphUnion</tt> is read-only.
      */
+    @Override
     public boolean removeVertex(V v)
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
 
+    @Override
     public Set<V> vertexSet()
     {
         Set<V> res = new HashSet<V>();
@@ -232,6 +246,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return Collections.unmodifiableSet(res);
     }
 
+    @Override
     public V getEdgeSource(E e)
     {
         if (g1.containsEdge(e)) {
@@ -243,6 +258,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return null;
     }
 
+    @Override
     public V getEdgeTarget(E e)
     {
         if (g1.containsEdge(e)) {
@@ -254,6 +270,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return null;
     }
 
+    @Override
     public double getEdgeWeight(E e)
     {
         if (g1.containsEdge(e) && g2.containsEdge(e)) {

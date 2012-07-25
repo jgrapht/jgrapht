@@ -77,6 +77,7 @@ public class VertexDegreeEquivalenceComparator<V, E>
      * @see EquivalenceComparator#equivalenceCompare(Object, Object, Object,
      * Object)
      */
+    @Override
     public boolean equivalenceCompare(
         V vertex1,
         V vertex2,
@@ -96,6 +97,7 @@ public class VertexDegreeEquivalenceComparator<V, E>
      *
      * @see EquivalenceComparator#equivalenceHashcode(Object, Object)
      */
+    @Override
     public int equivalenceHashcode(V vertex, Graph<V, E> context)
     {
         InOutDegrees inOut = getInOutDegrees(context, vertex);

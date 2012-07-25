@@ -57,6 +57,7 @@ public class UniformEquivalenceComparator<E, C>
      * @see EquivalenceComparator#equivalenceCompare(Object, Object, Object,
      * Object)
      */
+    @Override
     public boolean equivalenceCompare(
         E arg1,
         E arg2,
@@ -71,6 +72,7 @@ public class UniformEquivalenceComparator<E, C>
      *
      * @see EquivalenceComparator#equivalenceHashcode(Object, Object)
      */
+    @Override
     public int equivalenceHashcode(E arg1, C context)
     {
         return 0;

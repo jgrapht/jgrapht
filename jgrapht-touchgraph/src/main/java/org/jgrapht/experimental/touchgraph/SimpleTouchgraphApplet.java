@@ -97,6 +97,7 @@ public class SimpleTouchgraphApplet
     /**
      * initialize the applet
      */
+    @Override
     public void init()
     {
         Graph<String, DefaultEdge> g = createSamplegraph();

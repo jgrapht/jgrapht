@@ -158,6 +158,7 @@ public class ModifiableInteger
      * numerically greater than the argument <code>ModifiableInteger</code>
      * (signed comparison).
      */
+    @Override
     public int compareTo(ModifiableInteger anotherInteger)
     {
         int thisVal = this.value;
@@ -169,6 +170,7 @@ public class ModifiableInteger
     /**
      * @see Number#doubleValue()
      */
+    @Override
     public double doubleValue()
     {
         return this.value;
@@ -197,6 +199,7 @@ public class ModifiableInteger
     /**
      * @see Number#floatValue()
      */
+    @Override
     public float floatValue()
     {
         return this.value;
@@ -217,6 +220,7 @@ public class ModifiableInteger
     /**
      * @see Number#intValue()
      */
+    @Override
     public int intValue()
     {
         return this.value;
@@ -225,6 +229,7 @@ public class ModifiableInteger
     /**
      * @see Number#longValue()
      */
+    @Override
     public long longValue()
     {
         return this.value;

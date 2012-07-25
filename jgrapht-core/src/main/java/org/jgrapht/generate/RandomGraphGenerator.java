@@ -120,6 +120,7 @@ public class RandomGraphGenerator<V, E>
      *
      * @see GraphGenerator#generateGraph(Graph, VertexFactory, Map)
      */
+    @Override
     public void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,
@@ -243,6 +244,7 @@ public class RandomGraphGenerator<V, E>
     public class DefaultEdgeTopologyFactory<VV, EE>
         implements EdgeTopologyFactory<VV, EE>
     {
+        @Override
         public void createEdges(
             Graph<VV, EE> targetGraph,
             Map<Integer, VV> orderToVertexMap,
@@ -333,6 +335,7 @@ public class RandomGraphGenerator<V, E>
          * @see RandomGraphGenerator.EdgeTopologyFactory#isNumberOfEdgesValid(Graph,
          * int)
          */
+        @Override
         public boolean isNumberOfEdgesValid(
             Graph<VV, EE> targetGraph,
             int numberOfEdges)

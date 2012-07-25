@@ -69,6 +69,7 @@ public class StringNameProvider<V>
      *
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
+    @Override
     public String getVertexName(V vertex)
     {
         return vertex.toString();

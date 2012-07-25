@@ -181,6 +181,7 @@ public class IntegerPermutationIter
     /**
      * Efficiency: O(N) implementation, try to take the next!
      */
+    @Override
     public boolean hasNext()
     {
         if ((this.permutationCounter == 0)
@@ -216,6 +217,7 @@ public class IntegerPermutationIter
         return result;
     }
 
+    @Override
     public Object next()
     {
         return getNext();
@@ -286,6 +288,7 @@ public class IntegerPermutationIter
      *
      * @see java.util.Iterator#remove()
      */
+    @Override
     public void remove()
     {
         throw new UnsupportedOperationException();
@@ -294,6 +297,7 @@ public class IntegerPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#nextPermutation()
      */
+    @Override
     public int [] nextPermutation()
     {
         return (int []) next();
@@ -302,6 +306,7 @@ public class IntegerPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#hasNextPermutaions()
      */
+    @Override
     public boolean hasNextPermutaions()
     {
         return hasNext();

@@ -83,6 +83,7 @@ public class UndirectedSubgraph<V, E>
     /**
      * @see UndirectedGraph#degreeOf(Object)
      */
+    @Override
     public int degreeOf(V vertex)
     {
         assertVertexExist(vertex);

@@ -130,6 +130,7 @@ public class ClosestFirstIterator<V, E>
     //~ Methods ----------------------------------------------------------------
 
     // override AbstractGraphIterator
+    @Override
     public void setCrossComponentTraversal(boolean crossComponentTraversal)
     {
         if (initialized) {
@@ -185,6 +186,7 @@ public class ClosestFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
+    @Override
     protected boolean isConnectedComponentExhausted()
     {
         if (heap.size() == 0) {
@@ -203,6 +205,7 @@ public class ClosestFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
+    @Override
     protected void encounterVertex(V vertex, E edge)
     {
         double shortestPathLength;
@@ -223,6 +226,7 @@ public class ClosestFirstIterator<V, E>
      * @param vertex the vertex re-encountered
      * @param edge the edge via which the vertex was re-encountered
      */
+    @Override
     protected void encounterVertexAgain(V vertex, E edge)
     {
         FibonacciHeapNode<QueueEntry<V, E>> node = getSeenData(vertex);
@@ -243,6 +247,7 @@ public class ClosestFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
+    @Override
     protected V provideNextVertex()
     {
         FibonacciHeapNode<QueueEntry<V, E>> node = heap.removeMin();

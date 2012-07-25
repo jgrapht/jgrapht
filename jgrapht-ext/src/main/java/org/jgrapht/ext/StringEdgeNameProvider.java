@@ -55,6 +55,7 @@ public class StringEdgeNameProvider<E>
      *
      * @param edge the edge to be named
      */
+    @Override
     public String getEdgeName(E edge)
     {
         return edge.toString();

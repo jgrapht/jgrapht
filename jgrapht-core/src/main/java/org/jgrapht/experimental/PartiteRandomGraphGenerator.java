@@ -139,6 +139,7 @@ public class PartiteRandomGraphGenerator<V, E>
      *
      * @see GraphGenerator#generateGraph
      */
+    @Override
     public void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,

@@ -353,11 +353,13 @@ public class StrongConnectivityInspector<V, E>
             this.finishedData = finishedData;
         }
 
+        @Override
         VertexData<V> getFinishedData()
         {
             return finishedData;
         }
 
+        @Override
         V getVertex()
         {
             return null;
@@ -378,11 +380,13 @@ public class StrongConnectivityInspector<V, E>
             this.vertex = vertex;
         }
 
+        @Override
         VertexData<V> getFinishedData()
         {
             return null;
         }
 
+        @Override
         V getVertex()
         {
             return vertex;

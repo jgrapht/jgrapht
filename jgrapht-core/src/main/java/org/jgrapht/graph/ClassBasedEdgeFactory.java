@@ -78,6 +78,7 @@ public class ClassBasedEdgeFactory<V, E>
     /**
      * @see EdgeFactory#createEdge(Object, Object)
      */
+    @Override
     public E createEdge(V source, V target)
     {
         try {

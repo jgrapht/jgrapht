@@ -91,6 +91,7 @@ public class AsUnweightedDirectedGraph<V, E>
     /**
      * @see Graph#getEdgeWeight
      */
+    @Override
     public double getEdgeWeight(E e)
     {
         return WeightedGraph.DEFAULT_EDGE_WEIGHT;

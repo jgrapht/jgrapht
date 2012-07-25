@@ -85,6 +85,7 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
+    @Override
     public int inDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -103,6 +104,7 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
+    @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -121,6 +123,7 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
+    @Override
     public int outDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -139,6 +142,7 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
+    @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);

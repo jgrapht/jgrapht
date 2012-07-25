@@ -95,11 +95,13 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E edge)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -108,16 +110,19 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
+    @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    @Override
     public boolean containsEdge(E e)
     {
         return edgeSet().contains(e);
     }
 
+    @Override
     public boolean containsVertex(V v)
     {
         return !this.mask.isVertexMasked(v) && this.base.containsVertex(v);
@@ -131,11 +136,13 @@ public class MaskSubgraph<V, E>
         return edgesOf(vertex).size();
     }
 
+    @Override
     public Set<E> edgeSet()
     {
         return this.edges;
     }
 
+    @Override
     public Set<E> edgesOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -146,6 +153,7 @@ public class MaskSubgraph<V, E>
             this.mask);
     }
 
+    @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> edges = null;
@@ -162,6 +170,7 @@ public class MaskSubgraph<V, E>
         return edges;
     }
 
+    @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         Set<E> edges = getAllEdges(sourceVertex, targetVertex);
@@ -173,11 +182,13 @@ public class MaskSubgraph<V, E>
         }
     }
 
+    @Override
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return this.base.getEdgeFactory();
     }
 
+    @Override
     public V getEdgeSource(E edge)
     {
         assert (edgeSet().contains(edge));
@@ -185,6 +196,7 @@ public class MaskSubgraph<V, E>
         return this.base.getEdgeSource(edge);
     }
 
+    @Override
     public V getEdgeTarget(E edge)
     {
         assert (edgeSet().contains(edge));
@@ -192,6 +204,7 @@ public class MaskSubgraph<V, E>
         return this.base.getEdgeTarget(edge);
     }
 
+    @Override
     public double getEdgeWeight(E edge)
     {
         assert (edgeSet().contains(edge));
@@ -244,6 +257,7 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#removeAllEdges(Collection)
      */
+    @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -252,6 +266,7 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#removeAllEdges(Object, Object)
      */
+    @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -260,6 +275,7 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#removeAllVertices(Collection)
      */
+    @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -268,6 +284,7 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#removeEdge(Object)
      */
+    @Override
     public boolean removeEdge(E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -276,6 +293,7 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
+    @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -284,11 +302,13 @@ public class MaskSubgraph<V, E>
     /**
      * @see Graph#removeVertex(Object)
      */
+    @Override
     public boolean removeVertex(V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    @Override
     public Set<V> vertexSet()
     {
         return this.vertices;

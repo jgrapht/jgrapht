@@ -101,6 +101,7 @@ public interface GraphIterator<V, E>
      *
      * @throws UnsupportedOperationException
      */
+    @Override
     public void remove();
 
     /**

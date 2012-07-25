@@ -104,6 +104,7 @@ class PermutationIsomorphismInspector<V, E>
      *
      * @return the permutation iterator
      */
+    @Override
     protected CollectionPermutationIter<V> createPermutationIterator(
         Set<V> vertexSet1,
         Set<V> vertexSet2)
@@ -119,6 +120,7 @@ class PermutationIsomorphismInspector<V, E>
      *
      * @return FIXME Document me
      */
+    @Override
     protected boolean areVertexSetsOfTheSameEqualityGroup(
         Set<V> vertexSet1,
         Set<V> vertexSet2)

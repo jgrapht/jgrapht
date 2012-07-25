@@ -170,6 +170,7 @@ public class ConnectivityInspector<V, E>
     /**
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
+    @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
         init(); // for now invalidate cached results, in the future need to
@@ -179,6 +180,7 @@ public class ConnectivityInspector<V, E>
     /**
      * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
      */
+    @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
         init(); // for now invalidate cached results, in the future need to
@@ -213,6 +215,7 @@ public class ConnectivityInspector<V, E>
     /**
      * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
      */
+    @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
         init(); // for now invalidate cached results, in the future need to
@@ -222,6 +225,7 @@ public class ConnectivityInspector<V, E>
     /**
      * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
      */
+    @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
         init(); // for now invalidate cached results, in the future need to
@@ -272,6 +276,7 @@ public class ConnectivityInspector<V, E>
         /**
          * @see TraversalListenerAdapter#connectedComponentFinished(ConnectedComponentTraversalEvent)
          */
+        @Override
         public void connectedComponentFinished(
             ConnectedComponentTraversalEvent e)
         {
@@ -281,6 +286,7 @@ public class ConnectivityInspector<V, E>
         /**
          * @see TraversalListenerAdapter#connectedComponentStarted(ConnectedComponentTraversalEvent)
          */
+        @Override
         public void connectedComponentStarted(
             ConnectedComponentTraversalEvent e)
         {
@@ -290,6 +296,7 @@ public class ConnectivityInspector<V, E>
         /**
          * @see TraversalListenerAdapter#vertexTraversed(VertexTraversalEvent)
          */
+        @Override
         public void vertexTraversed(VertexTraversalEvent<V> e)
         {
             V v = e.getVertex();

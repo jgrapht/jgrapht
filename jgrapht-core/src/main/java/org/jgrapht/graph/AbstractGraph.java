@@ -77,6 +77,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#containsEdge(Object, Object)
      */
+    @Override
     public boolean containsEdge(V sourceVertex, V targetVertex)
     {
         return getEdge(sourceVertex, targetVertex) != null;
@@ -85,6 +86,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Collection)
      */
+    @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
     {
         boolean modified = false;
@@ -99,6 +101,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Object, Object)
      */
+    @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> removed = getAllEdges(sourceVertex, targetVertex);
@@ -110,6 +113,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllVertices(Collection)
      */
+    @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
     {
         boolean modified = false;

@@ -215,24 +215,28 @@ public class KShortestPaths<V, E>
         }
 
         // implement GraphPath
+        @Override
         public Graph<V, E> getGraph()
         {
             return graph;
         }
 
         // implement GraphPath
+        @Override
         public V getStartVertex()
         {
             return startVertex;
         }
 
         // implement GraphPath
+        @Override
         public V getEndVertex()
         {
             return rankingPathElement.getVertex();
         }
 
         // implement GraphPath
+        @Override
         public List<E> getEdgeList()
         {
             if (edgeList == null) {
@@ -242,6 +246,7 @@ public class KShortestPaths<V, E>
         }
 
         // implement GraphPath
+        @Override
         public double getWeight()
         {
             return rankingPathElement.getWeight();

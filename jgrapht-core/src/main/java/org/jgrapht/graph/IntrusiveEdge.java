@@ -68,6 +68,7 @@ class IntrusiveEdge
     /**
      * @see Object#clone()
      */
+    @Override
     public Object clone()
     {
         try {

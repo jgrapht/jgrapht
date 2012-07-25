@@ -71,6 +71,7 @@ public class UndirectedGraphUnion<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     public int degreeOf(V vertex)
     {
         Set<E> res = edgesOf(vertex);
