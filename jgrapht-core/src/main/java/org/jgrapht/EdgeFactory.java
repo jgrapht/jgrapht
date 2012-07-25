@@ -60,7 +60,7 @@ public interface EdgeFactory<V, E>
      * @return a new edge whose endpoints are the specified source and target
      * vertices.
      */
-    public E createEdge(V sourceVertex, V targetVertex);
+    E createEdge(V sourceVertex, V targetVertex);
 }
 
 // End EdgeFactory.java

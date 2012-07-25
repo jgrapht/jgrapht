@@ -220,7 +220,7 @@ public class PrefetchIterator<E>
          * You must implement that NoSuchElementException is thrown on
          * nextElement() if it is out of bound.
          */
-        public EE nextElement()
+        EE nextElement()
             throws NoSuchElementException;
     }
 }

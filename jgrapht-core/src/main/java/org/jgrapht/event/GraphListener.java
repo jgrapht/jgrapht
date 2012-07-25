@@ -61,14 +61,14 @@ public interface GraphListener<V, E>
      *
      * @param e the edge event.
      */
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e);
+    void edgeAdded(GraphEdgeChangeEvent<V, E> e);
 
     /**
      * Notifies that an edge has been removed from the graph.
      *
      * @param e the edge event.
      */
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e);
+    void edgeRemoved(GraphEdgeChangeEvent<V, E> e);
 }
 
 // End GraphListener.java

@@ -48,7 +48,7 @@ public interface WeightCombiner
     /**
      * Sum of weights.
      */
-    public WeightCombiner SUM =
+    WeightCombiner SUM =
         new WeightCombiner() {
             @Override
             public double combine(double a, double b)
@@ -60,7 +60,7 @@ public interface WeightCombiner
     /**
      * Minimum weight.
      */
-    public WeightCombiner MIN =
+    WeightCombiner MIN =
         new WeightCombiner() {
             @Override
             public double combine(double a, double b)
@@ -72,7 +72,7 @@ public interface WeightCombiner
     /**
      * Maximum weight.
      */
-    public WeightCombiner MAX =
+    WeightCombiner MAX =
         new WeightCombiner() {
             @Override
             public double combine(double a, double b)
@@ -84,7 +84,7 @@ public interface WeightCombiner
     /**
      * First weight.
      */
-    public WeightCombiner FIRST =
+    WeightCombiner FIRST =
         new WeightCombiner() {
             @Override
             public double combine(double a, double b)
@@ -96,7 +96,7 @@ public interface WeightCombiner
     /**
      * Second weight.
      */
-    public WeightCombiner SECOND =
+    WeightCombiner SECOND =
         new WeightCombiner() {
             @Override
             public double combine(double a, double b)

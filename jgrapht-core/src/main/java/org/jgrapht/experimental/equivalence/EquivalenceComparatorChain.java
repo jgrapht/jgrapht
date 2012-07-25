@@ -65,7 +65,7 @@ public interface EquivalenceComparatorChain<E, C>
      * together. This method may be used multiple times to create a long "chain"
      * of comparators.
      */
-    public void appendComparator(EquivalenceComparator<E, C> comparatorAfter);
+    void appendComparator(EquivalenceComparator<E, C> comparatorAfter);
 }
 
 // End EquivalenceComparatorChain.java

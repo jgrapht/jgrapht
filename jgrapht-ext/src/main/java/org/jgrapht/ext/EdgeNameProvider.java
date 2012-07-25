@@ -47,7 +47,7 @@ public interface EdgeNameProvider<E>
      *
      * @return the name of the edge
      */
-    public String getEdgeName(E edge);
+    String getEdgeName(E edge);
 }
 
 // End EdgeNameProvider.java

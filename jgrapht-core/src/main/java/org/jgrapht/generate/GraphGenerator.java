@@ -71,7 +71,7 @@ public interface GraphGenerator<V, E, T>
      * @param resultMap if non-null, receives implementation-specific mappings
      * from String roles to graph elements (or collections of graph elements)
      */
-    public void generateGraph(
+    void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,
         Map<String, T> resultMap);

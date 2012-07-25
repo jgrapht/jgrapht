@@ -571,7 +571,7 @@ public class DirectedAcyclicGraph<V, E>
          * @param index
          * @param vertex
          */
-        public void putVertex(Integer index, V vertex);
+        void putVertex(Integer index, V vertex);
 
         /**
          * get the vertex at the given topological index.
@@ -580,7 +580,7 @@ public class DirectedAcyclicGraph<V, E>
          *
          * @return
          */
-        public V getVertex(Integer index);
+        V getVertex(Integer index);
 
         /**
          * get the topological index of the given vertex.
@@ -590,7 +590,7 @@ public class DirectedAcyclicGraph<V, E>
          * @return the index that the vertex is at, or null if the vertex isn't
          * in the topological ordering
          */
-        public Integer getTopologicalIndex(V vertex);
+        Integer getTopologicalIndex(V vertex);
 
         /**
          * remove the given vertex from the topological ordering
@@ -600,17 +600,17 @@ public class DirectedAcyclicGraph<V, E>
          * @return the index that the vertex was at, or null if the vertex
          * wasn't in the topological ordering
          */
-        public Integer removeVertex(V vertex);
+        Integer removeVertex(V vertex);
 
         /**
          * remove all vertices from the topological ordering
          */
-        public void removeAllVertices();
+        void removeAllVertices();
     }
 
     public interface TopoOrderMappingFactory<V>
     {
-        public TopoOrderMapping<V> getTopoOrderMapping();
+        TopoOrderMapping<V> getTopoOrderMapping();
     }
 
     /**
@@ -625,14 +625,14 @@ public class DirectedAcyclicGraph<V, E>
          *
          * @param index the topological index
          */
-        public void setVisited(int index);
+        void setVisited(int index);
 
         /**
          * has the given topological index been visited?
          *
          * @param index the topological index
          */
-        public boolean getVisited(int index);
+        boolean getVisited(int index);
 
         /**
          * Clear the visited state of the given topological index
@@ -645,7 +645,7 @@ public class DirectedAcyclicGraph<V, E>
          * state after the search of the Affected Region is done, so an
          * UnsupportedOperationException *should* be thrown.
          */
-        public void clearVisited(int index)
+        void clearVisited(int index)
             throws UnsupportedOperationException;
     }
 
@@ -657,7 +657,7 @@ public class DirectedAcyclicGraph<V, E>
     public interface VisitedFactory
         extends Serializable
     {
-        public Visited getInstance(Region affectedRegion);
+        Visited getInstance(Region affectedRegion);
     }
 
     //~ Inner Classes ----------------------------------------------------------

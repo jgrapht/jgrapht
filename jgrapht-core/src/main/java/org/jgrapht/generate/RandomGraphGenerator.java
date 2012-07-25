@@ -202,7 +202,7 @@ public class RandomGraphGenerator<V, E>
          * @param numberOfEdges - to create in the graph
          * @param randomizer
          */
-        public void createEdges(
+        void createEdges(
             Graph<VV, EE> targetGraph,
             Map<Integer, VV> orderToVertexMap,
             int numberOfEdges,
@@ -217,7 +217,7 @@ public class RandomGraphGenerator<V, E>
          * @param targetGraph guranteed to start with zero edges.
          * @param numberOfEdges
          */
-        public boolean isNumberOfEdgesValid(
+        boolean isNumberOfEdgesValid(
             Graph<VV, EE> targetGraph,
             int numberOfEdges);
     }

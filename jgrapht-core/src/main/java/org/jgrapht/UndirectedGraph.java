@@ -64,7 +64,7 @@ public interface UndirectedGraph<V, E>
      *
      * @return the degree of the specified vertex.
      */
-    public int degreeOf(V vertex);
+    int degreeOf(V vertex);
 }
 
 // End UndirectedGraph.java

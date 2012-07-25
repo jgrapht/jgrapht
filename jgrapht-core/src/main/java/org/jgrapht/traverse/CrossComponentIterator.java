@@ -407,28 +407,28 @@ public abstract class CrossComponentIterator<V, E, D>
 
     //~ Inner Interfaces -------------------------------------------------------
 
-    static interface SimpleContainer<T>
+    interface SimpleContainer<T>
     {
         /**
          * Tests if this container is empty.
          *
          * @return <code>true</code> if empty, otherwise <code>false</code>.
          */
-        public boolean isEmpty();
+        boolean isEmpty();
 
         /**
          * Adds the specified object to this container.
          *
          * @param o the object to be added.
          */
-        public void add(T o);
+        void add(T o);
 
         /**
          * Remove an object from this container and return it.
          *
          * @return the object removed from this container.
          */
-        public T remove();
+        T remove();
     }
 
     //~ Inner Classes ----------------------------------------------------------

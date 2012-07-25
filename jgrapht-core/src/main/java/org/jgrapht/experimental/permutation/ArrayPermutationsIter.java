@@ -48,9 +48,9 @@ public interface ArrayPermutationsIter
 {
     //~ Methods ----------------------------------------------------------------
 
-    public int [] nextPermutation();
+    int [] nextPermutation();
 
-    public boolean hasNextPermutaions();
+    boolean hasNextPermutaions();
 }
 
 // End ArrayPermutationsIter.java

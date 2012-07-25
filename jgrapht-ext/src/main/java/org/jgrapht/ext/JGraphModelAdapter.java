@@ -790,7 +790,7 @@ public class JGraphModelAdapter<V, E>
      * @author Barak Naveh
      * @since Dec 12, 2003
      */
-    public static interface CellFactory<VV, EE>
+    public interface CellFactory<VV, EE>
     {
         /**
          * Creates an edge cell that contains its respective JGraphT edge.
@@ -799,7 +799,7 @@ public class JGraphModelAdapter<V, E>
          *
          * @return an edge cell that contains its respective JGraphT edge.
          */
-        public DefaultEdge createEdgeCell(EE jGraphTEdge);
+        DefaultEdge createEdgeCell(EE jGraphTEdge);
 
         /**
          * Creates a vertex cell that contains its respective JGraphT vertex.
@@ -808,7 +808,7 @@ public class JGraphModelAdapter<V, E>
          *
          * @return a vertex cell that contains its respective JGraphT vertex.
          */
-        public DefaultGraphCell createVertexCell(VV jGraphTVertex);
+        DefaultGraphCell createVertexCell(VV jGraphTVertex);
     }
 
     //~ Inner Classes ----------------------------------------------------------
