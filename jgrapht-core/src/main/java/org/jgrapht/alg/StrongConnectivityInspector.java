@@ -137,7 +137,7 @@ public class StrongConnectivityInspector<V, E>
     {
         if (stronglyConnectedSets == null) {
             orderedVertices = new LinkedList<VertexData<V>>();
-            stronglyConnectedSets = new Vector<Set<V>>();
+            stronglyConnectedSets = new ArrayList<Set<V>>();
 
             // create VertexData objects for all vertices, store them
             createVertexData();
@@ -195,7 +195,7 @@ public class StrongConnectivityInspector<V, E>
         if (stronglyConnectedSubgraphs == null) {
             List<Set<V>> sets = stronglyConnectedSets();
             stronglyConnectedSubgraphs =
-                new Vector<DirectedSubgraph<V, E>>(sets.size());
+                new ArrayList<DirectedSubgraph<V, E>>(sets.size());
 
             for (Set<V> set : sets) {
                 stronglyConnectedSubgraphs.add(
