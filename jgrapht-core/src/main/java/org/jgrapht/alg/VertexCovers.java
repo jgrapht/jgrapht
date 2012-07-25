@@ -93,7 +93,7 @@ public abstract class VertexCovers
                 null);
 
         // while E' is non-empty
-        while (sg.edgeSet().size() > 0) {
+        while (!sg.edgeSet().isEmpty()) {
             // let (u,v) be an arbitrary edge of E'
             E e = sg.edgeSet().iterator().next();
 
@@ -139,7 +139,7 @@ public abstract class VertexCovers
             new VertexDegreeComparator<V, E>(sg);
 
         // while G' != {}
-        while (sg.edgeSet().size() > 0) {
+        while (!sg.edgeSet().isEmpty()) {
             // v <-- vertex with maximum degree in G'
             V v = Collections.max(sg.vertexSet(), comp);
 

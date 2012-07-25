@@ -81,7 +81,7 @@ public class GreedyColoring<V, E>
             buckets.get(degree[i]).add(i);
         }
         for (int i = 0; i < _neighbors.length; i++) {
-            while (buckets.get(i).size() > 0) {
+            while (!buckets.get(i).isEmpty()) {
                 final int s = buckets.get(i).size() - 1;
                 final int vertex = (Integer) buckets.get(i).get(s);
                 buckets.get(i).remove(s);

@@ -227,7 +227,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         queue.offer(currentSource);
         nodes.get(currentSource).visited = true;
         nodes.get(currentSource).flowAmount = Double.POSITIVE_INFINITY;
-        while (queue.size() != 0) {
+        while (!queue.isEmpty()) {
             int currentNode = queue.poll();
             for (Arc currentArc : nodes.get(currentNode).outgoingArcs) {
                 if ((currentArc.flow + epsilon) < currentArc.capacity) {

@@ -103,7 +103,7 @@ public abstract class ChromaticNumber
         // We'll attempt to color each vertex with a single color each
         // iteration, and these vertices will be removed from the graph at the
         // end of each iteration
-        for (color = 0; sg.vertexSet().size() > 0; color++) {
+        for (color = 0; !sg.vertexSet().isEmpty(); color++) {
             // This set will contain vertices that are colored with the
             // current color of this iteration
             Set<V> currentColor = new HashSet<V>();

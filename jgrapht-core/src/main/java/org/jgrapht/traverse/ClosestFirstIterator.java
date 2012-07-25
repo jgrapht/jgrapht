@@ -189,7 +189,7 @@ public class ClosestFirstIterator<V, E>
     @Override
     protected boolean isConnectedComponentExhausted()
     {
-        if (heap.size() == 0) {
+        if (heap.isEmpty()) {
             return true;
         } else {
             if (heap.min().getKey() > radius) {

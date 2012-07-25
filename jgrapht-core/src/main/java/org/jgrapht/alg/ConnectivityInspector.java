@@ -245,7 +245,7 @@ public class ConnectivityInspector<V, E>
 
             Set<V> vertexSet = graph.vertexSet();
 
-            if (vertexSet.size() > 0) {
+            if (!vertexSet.isEmpty()) {
                 BreadthFirstIterator<V, E> i =
                     new BreadthFirstIterator<V, E>(graph, null);
                 i.addTraversalListener(new MyTraversalListener());

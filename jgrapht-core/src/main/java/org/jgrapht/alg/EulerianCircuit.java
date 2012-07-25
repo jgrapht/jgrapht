@@ -111,7 +111,7 @@ public abstract class EulerianCircuit
         // Algorithm for finding an Eulerian circuit Basically this will find an
         // arbitrary circuit, then it will find another arbitrary circuit until
         // every edge has been traversed
-        while (sg.edgeSet().size() > 0) {
+        while (!sg.edgeSet().isEmpty()) {
             V v = null;
 
             // Find a vertex which has an edge that hasn't been traversed yet,
