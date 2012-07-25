@@ -203,7 +203,7 @@ public class DOTExporter<V, E>
         if (attributes != null) {
             for (Map.Entry<String, String> entry : attributes.entrySet()) {
                 String name = entry.getKey();
-                if (name.equals("label")) {
+                if ("label".equals(name)) {
                     // already handled by special case above
                     continue;
                 }

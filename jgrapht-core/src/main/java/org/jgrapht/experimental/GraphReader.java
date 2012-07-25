@@ -121,7 +121,7 @@ public class GraphReader<V, E>
             while (
                 (cols != null)
                 && ((cols.length == 0)
-                    || cols[0].equals("c")
+                    || "c".equals(cols[0])
                     || cols[0].startsWith("%")))
             {
                 cols = split(_in.readLine());
@@ -134,7 +134,7 @@ public class GraphReader<V, E>
     private int readNodeCount()
     {
         final String [] cols = skipComments();
-        if (cols[0].equals("p")) {
+        if ("p".equals(cols[0])) {
             return Integer.parseInt(cols[1]);
         }
         return -1;
@@ -161,7 +161,7 @@ public class GraphReader<V, E>
         }
         String [] cols = skipComments();
         while (cols != null) {
-            if (cols[0].equals("e")) {
+            if ("e".equals(cols[0])) {
                 E edge =
                     target.addEdge(
                         resultMap.get(cols[1]),
