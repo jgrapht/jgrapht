@@ -60,10 +60,10 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    public static EquivalenceComparator<Object, Object>
+    private static final EquivalenceComparator<Object, Object>
         edgeDefaultIsomorphismComparator =
             new UniformEquivalenceComparator<Object, Object>();
-    public static EquivalenceComparator<Object, Object>
+    private static final EquivalenceComparator<Object, Object>
         vertexDefaultIsomorphismComparator =
             new UniformEquivalenceComparator<Object, Object>();
 

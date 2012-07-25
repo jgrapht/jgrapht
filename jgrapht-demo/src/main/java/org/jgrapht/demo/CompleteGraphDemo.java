@@ -50,18 +50,16 @@ public final class CompleteGraphDemo
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    static Graph<Object, DefaultEdge> completeGraph;
+    private static final Graph<Object, DefaultEdge> completeGraph
+        = new SimpleGraph<Object, DefaultEdge>(DefaultEdge.class);
 
     //Number of vertices
-    static int size = 10;
+    private static final int size = 10;
 
     //~ Methods ----------------------------------------------------------------
 
     public static void main(String [] args)
     {
-        //Create the graph object; it is null at this point
-        completeGraph = new SimpleGraph<Object, DefaultEdge>(DefaultEdge.class);
-
         //Create the CompleteGraphGenerator object
         CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(size);
