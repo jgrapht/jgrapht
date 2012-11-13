@@ -69,6 +69,7 @@ public final class AllAlgTests
         TestSuite suite = new TestSuite();
 
         // $JUnit-BEGIN$
+        suite.addTest(new TestSuite(AStarShortestPathTest.class));
         suite.addTest(new TestSuite(ConnectivityInspectorTest.class));
         suite.addTest(new TestSuite(DijkstraShortestPathTest.class));
         suite.addTest(new TestSuite(BellmanFordShortestPathTest.class));
