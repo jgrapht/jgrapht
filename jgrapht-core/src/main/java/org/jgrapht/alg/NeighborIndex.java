@@ -38,11 +38,22 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
+import org.jgrapht.util.ModifiableInteger;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -68,7 +79,7 @@ public class NeighborIndex<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    Map<V, Neighbors<V, E>> neighborMap = new HashMap<V, Neighbors<V, E>>();
+    Map<V, Neighbors<V>> neighborMap = new HashMap<V, Neighbors<V>>();
     private Graph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------
@@ -179,11 +190,11 @@ public class NeighborIndex<V, E>
         neighborMap.remove(e.getVertex());
     }
 
-    private Neighbors<V, E> getNeighbors(V v)
+    private Neighbors<V> getNeighbors(V v)
     {
-        Neighbors<V, E> neighbors = neighborMap.get(v);
+        Neighbors<V> neighbors = neighborMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<V, E>(v,
+            neighbors = new Neighbors<V>(v,
                 Graphs.neighborListOf(graph, v));
             neighborMap.put(v, neighbors);
         }
@@ -196,7 +207,7 @@ public class NeighborIndex<V, E>
      * Stores cached neighbors for a single vertex. Includes support for live
      * neighbor sets and duplicate neighbors.
      */
-    static class Neighbors<V, E>
+    static class Neighbors<V>
     {
         private Map<V, ModifiableInteger> neighborCounts =
             new LinkedHashMap<V, ModifiableInteger>();
@@ -204,8 +215,7 @@ public class NeighborIndex<V, E>
         // TODO could eventually make neighborSet modifiable, resulting
         // in edge removals from the graph
         private Set<V> neighborSet =
-            Collections.unmodifiableSet(
-                neighborCounts.keySet());
+            Collections.unmodifiableSet(neighborCounts.keySet());
 
         public Neighbors(V v, Collection<V> neighbors)
         {
