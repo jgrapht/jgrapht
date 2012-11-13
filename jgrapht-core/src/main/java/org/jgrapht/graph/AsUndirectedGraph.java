@@ -42,12 +42,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import com.google.common.collect.Sets;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.io.Serializable;
+import java.util.Set;
 
 
 /**
@@ -117,9 +118,8 @@ public class AsUndirectedGraph<V, E>
         }
 
         Set<E> reverseList = super.getAllEdges(targetVertex, sourceVertex);
-        Set<E> list =
-            new ArrayUnenforcedSet<E>(
-                forwardList.size() + reverseList.size());
+        Set<E> list = Sets.newHashSetWithExpectedSize(forwardList.size()
+            + reverseList.size());
         list.addAll(forwardList);
         list.addAll(reverseList);
 

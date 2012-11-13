@@ -61,9 +61,7 @@ public interface EdgeSetFactory<V, E>
      *
      * @param vertex the vertex for which the edge set is being created;
      * sophisticated factories may be able to use this information to choose an
-     * optimal set representation (e.g. ArrayUnenforcedSet for a vertex expected
-     * to have low degree, and LinkedHashSet for a vertex expected to have high
-     * degree)
+     * optimal set representation.
      *
      * @return new set
      */

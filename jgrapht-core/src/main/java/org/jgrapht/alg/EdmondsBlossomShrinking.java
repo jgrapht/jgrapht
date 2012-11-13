@@ -37,10 +37,15 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Sets;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * An implementation of Edmonds Blossom Shrinking algorithm for constructing
@@ -73,7 +78,7 @@ public class EdmondsBlossomShrinking<V, E>
      */
     public Set<E> findMatch(final UndirectedGraph<V, E> g)
     {
-        Set<E> result = new ArrayUnenforcedSet<E>();
+        final Set<E> result = Sets.newHashSet();
         match = new HashMap<V, V>();
         p = new HashMap<V, V>();
         q = new ArrayDeque<V>();

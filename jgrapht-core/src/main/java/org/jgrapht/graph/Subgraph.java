@@ -49,13 +49,21 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import com.google.common.collect.Sets;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.util.*;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**
@@ -185,20 +193,13 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        Set<E> edges = null;
 
-        if (containsVertex(sourceVertex) && containsVertex(targetVertex)) {
-            edges = new ArrayUnenforcedSet<E>();
+        if (!containsVertex(sourceVertex) || !containsVertex(targetVertex))
+            return null;
 
-            Set<E> baseEdges = base.getAllEdges(sourceVertex, targetVertex);
-
-            for (E e : baseEdges) {
-                if (edgeSet.contains(e)) { // add if subgraph also contains
-                                           // it
-                    edges.add(e);
-                }
-            }
-        }
+        final Set<E> edges
+            = Sets.newHashSet(base.getAllEdges(sourceVertex, targetVertex));
+        edges.retainAll(edgeSet);
 
         return edges;
     }
@@ -355,14 +356,12 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
-        Set<E> baseEdges = base.edgesOf(vertex);
+        final Set<E> baseEdges = base.edgesOf(vertex);
+        final Set<E> edges = Sets.newHashSet();
 
-        for (E e : baseEdges) {
-            if (containsEdge(e)) {
+        for (final E e : baseEdges)
+            if (containsEdge(e))
                 edges.add(e);
-            }
-        }
 
         return edges;
     }

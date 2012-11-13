@@ -52,6 +52,9 @@ import java.io.*;
 import java.util.*;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
@@ -628,9 +631,7 @@ public abstract class AbstractBaseGraph<V, E>
         @Override
         public Set<EE> createEdgeSet(VV vertex)
         {
-            // NOTE:  use size 1 to keep memory usage under control
-            // for the common case of vertices with low degree
-            return new ArrayUnenforcedSet<EE>(1);
+            return Sets.newLinkedHashSet();
         }
     }
 
@@ -763,7 +764,7 @@ public abstract class AbstractBaseGraph<V, E>
             if (!containsVertex(sourceVertex) || !containsVertex(targetVertex))
                 return null;
 
-            final Set<E> edges = new ArrayUnenforcedSet<E>();
+            final Set<E> edges = Sets.newHashSet();
 
             DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
 
@@ -822,25 +823,14 @@ public abstract class AbstractBaseGraph<V, E>
         {
             final DirectedEdgeContainer<V, E> container
                 = getEdgeContainer(vertex);
-            ArrayUnenforcedSet<E> inAndOut =
-                new ArrayUnenforcedSet<E>(container.incoming);
-            inAndOut.addAll(container.outgoing);
+            final List<E> list = Lists.newArrayList(container.incoming);
+            list.addAll(container.outgoing);
 
-            // we have two copies for each self-loop - remove one of them.
-            if (allowingLoops) {
-                Set<E> loops = getAllEdges(vertex, vertex);
+            if (allowingLoops)
+                for (final E e: getAllEdges(vertex, vertex))
+                    list.remove(e);
 
-                for (int i = 0; i < inAndOut.size();) {
-                    E e = inAndOut.get(i);
-
-                    if (loops.remove(e))
-                        inAndOut.remove(i);
-                    else
-                        i++;
-                }
-            }
-
-            return Collections.unmodifiableSet(inAndOut);
+            return ImmutableSet.copyOf(list);
         }
 
         /**
@@ -1020,7 +1010,7 @@ public abstract class AbstractBaseGraph<V, E>
             if (!containsVertex(sourceVertex) || !containsVertex(targetVertex))
                 return null;
 
-            final Set<E> edges = new ArrayUnenforcedSet<E>();
+            final Set<E> edges = Sets.newHashSet();
 
             boolean equalStraight;
             boolean equalInverted;

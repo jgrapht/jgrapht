@@ -41,10 +41,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import com.google.common.collect.Sets;
+import org.jgrapht.DirectedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Set;
 
 
 /**
@@ -109,13 +109,11 @@ public class DirectedSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
+        Set<E> edges = Sets.newHashSet();
 
-        for (E e : getBase().incomingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
+        for (E e : getBase().incomingEdgesOf(vertex))
+            if (containsEdge(e))
                 edges.add(e);
-            }
-        }
 
         return edges;
     }
@@ -147,13 +145,11 @@ public class DirectedSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
+        Set<E> edges = Sets.newHashSet();
 
-        for (E e : getBase().outgoingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
+        for (E e : getBase().outgoingEdgesOf(vertex))
+            if (containsEdge(e))
                 edges.add(e);
-            }
-        }
 
         return edges;
     }
