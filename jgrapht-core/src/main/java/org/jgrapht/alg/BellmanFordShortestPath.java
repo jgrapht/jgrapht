@@ -40,9 +40,9 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
 
-import org.jgrapht.*;
+import java.util.List;
 
 
 /**

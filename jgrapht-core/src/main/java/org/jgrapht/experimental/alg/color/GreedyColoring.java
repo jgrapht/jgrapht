@@ -1,9 +1,15 @@
 package org.jgrapht.experimental.alg.color;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.alg.ApproximationAlgorithm;
+import org.jgrapht.experimental.alg.IntArrayGraphAlgorithm;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.alg.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 public class GreedyColoring<V, E>

@@ -37,11 +37,11 @@
  */
 package org.jgrapht.experimental.equivalence;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.experimental.isomorphism.comparators.Mod3GroupComparator;
+import org.jgrapht.experimental.isomorphism.comparators.OddEvenGroupComparator;
 
-import junit.framework.*;
-
-import org.jgrapht.experimental.isomorphism.comparators.*;
+import java.util.ArrayList;
 
 
 /**

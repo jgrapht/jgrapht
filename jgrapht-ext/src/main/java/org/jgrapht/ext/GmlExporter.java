@@ -38,9 +38,12 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 
 /**

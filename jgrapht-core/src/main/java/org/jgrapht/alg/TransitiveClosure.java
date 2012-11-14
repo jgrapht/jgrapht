@@ -37,9 +37,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
-import org.jgrapht.graph.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

@@ -39,11 +39,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.lang.String;
-
 import junit.framework.TestCase;
-import org.jgrapht.*;
+import org.jgrapht.EnhancedTestCase;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 /**

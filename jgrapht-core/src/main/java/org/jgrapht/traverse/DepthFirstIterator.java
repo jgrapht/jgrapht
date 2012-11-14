@@ -48,10 +48,11 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 /**

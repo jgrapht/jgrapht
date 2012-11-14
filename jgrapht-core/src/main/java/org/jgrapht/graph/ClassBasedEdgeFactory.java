@@ -43,9 +43,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import org.jgrapht.EdgeFactory;
 
-import org.jgrapht.*;
+import java.io.Serializable;
 
 
 /**

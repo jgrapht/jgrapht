@@ -1,20 +1,16 @@
 package org.jgrapht.alg;
 
-import static org.junit.Assert.*;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import junit.framework.TestCase;
-
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Test class for the MinSourceSinkCut class.

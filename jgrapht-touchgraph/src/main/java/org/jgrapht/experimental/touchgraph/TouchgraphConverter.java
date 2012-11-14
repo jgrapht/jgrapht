@@ -39,11 +39,14 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import com.touchgraph.graphlayout.*;
+import com.touchgraph.graphlayout.Edge;
+import com.touchgraph.graphlayout.Node;
+import com.touchgraph.graphlayout.TGException;
+import com.touchgraph.graphlayout.TGPanel;
+import org.jgrapht.Graph;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

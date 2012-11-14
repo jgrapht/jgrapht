@@ -38,8 +38,8 @@
  */
 package org.jgrapht.experimental.isomorphism.comparators;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
 
 
 /**

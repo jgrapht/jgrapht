@@ -40,9 +40,10 @@
 package org.jgrapht.graph;
 
 import junit.framework.TestCase;
-import org.jgrapht.*;
-
-import java.lang.String;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
 
 /**

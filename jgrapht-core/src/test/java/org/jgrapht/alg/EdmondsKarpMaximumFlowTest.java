@@ -37,11 +37,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
 
-import junit.framework.*;
-
-import org.jgrapht.graph.*;
+import java.util.Map;
 
 
 public final class EdmondsKarpMaximumFlowTest

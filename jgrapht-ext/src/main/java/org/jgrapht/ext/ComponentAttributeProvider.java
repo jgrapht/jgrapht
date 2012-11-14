@@ -38,7 +38,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import java.util.Map;
 
 
 /**

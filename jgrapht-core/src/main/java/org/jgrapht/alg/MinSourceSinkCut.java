@@ -1,5 +1,8 @@
 package org.jgrapht.alg;
 
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,13 +10,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.EdmondsKarpMaximumFlow;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
  * Given a directed, weighted graph G(V,E). This class computes a minimum s-t cut. For this, it relies on 

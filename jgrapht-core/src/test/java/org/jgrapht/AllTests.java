@@ -39,17 +39,16 @@
  */
 package org.jgrapht;
 
-import java.lang.String;
-import java.util.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jgrapht.alg.AllAlgTests;
+import org.jgrapht.alg.util.AllAlgUtilTests;
+import org.jgrapht.generate.AllGenerateTests;
+import org.jgrapht.graph.AllGraphTests;
+import org.jgrapht.traverse.AllTraverseTests;
+import org.jgrapht.util.AllUtilTests;
 
-import junit.framework.*;
-
-import org.jgrapht.alg.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
-import org.jgrapht.util.*;
+import java.util.Enumeration;
 
 
 /**

@@ -39,10 +39,14 @@
  */
 package org.jgrapht.demo;
 
-import java.net.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**

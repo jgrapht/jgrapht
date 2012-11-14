@@ -40,12 +40,12 @@
  */
 package org.jgrapht.graph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-
-import java.lang.String;
+import junit.framework.TestCase;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
 
 
 /**

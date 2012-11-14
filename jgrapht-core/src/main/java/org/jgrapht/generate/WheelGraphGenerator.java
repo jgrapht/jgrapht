@@ -39,9 +39,12 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 
 /**

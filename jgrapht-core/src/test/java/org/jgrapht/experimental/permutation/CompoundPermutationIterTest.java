@@ -37,9 +37,9 @@
  */
 package org.jgrapht.experimental.permutation;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.Arrays;
 
 
 /**

@@ -40,10 +40,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**

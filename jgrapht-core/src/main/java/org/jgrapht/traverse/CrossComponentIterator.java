@@ -44,11 +44,18 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import com.google.common.collect.Maps;
-import org.jgrapht.*;
-import org.jgrapht.event.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.EdgeTraversalEvent;
+import org.jgrapht.event.VertexTraversalEvent;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**

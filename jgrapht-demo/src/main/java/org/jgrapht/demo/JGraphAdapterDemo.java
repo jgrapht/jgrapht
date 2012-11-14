@@ -40,20 +40,22 @@
  */
 package org.jgrapht.demo;
 
-import java.awt.*;
-import java.awt.geom.*;
+import org.jgraph.JGraph;
+import org.jgraph.graph.AttributeMap;
+import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.GraphConstants;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.ext.JGraphModelAdapter;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
+import org.jgrapht.graph.DirectedMultigraph;
 
 import javax.swing.*;
-
-import org.jgraph.*;
-import org.jgraph.graph.*;
-
-import org.jgrapht.*;
-import org.jgrapht.ext.*;
-import org.jgrapht.graph.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 // resolve ambiguity
-import org.jgrapht.graph.DefaultEdge;
 
 
 /**

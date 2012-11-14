@@ -38,11 +38,12 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
+import org.jgrapht.experimental.permutation.CollectionPermutationIter;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.permutation.*;
+import java.util.Iterator;
+import java.util.Set;
 
 
 /**

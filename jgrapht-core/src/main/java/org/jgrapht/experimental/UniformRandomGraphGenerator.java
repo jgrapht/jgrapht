@@ -40,10 +40,12 @@
 // package org.jgrapht.generate;
 package org.jgrapht.experimental;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.GraphGenerator;
 
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**

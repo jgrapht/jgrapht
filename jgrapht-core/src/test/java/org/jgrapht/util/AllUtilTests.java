@@ -37,10 +37,10 @@
  */
 package org.jgrapht.util;
 
-import junit.framework.*;
-
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.permutation.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jgrapht.experimental.equivalence.EquivalenceGroupCreatorTest;
+import org.jgrapht.experimental.permutation.CompoundPermutationIterTest;
 
 
 public class AllUtilTests

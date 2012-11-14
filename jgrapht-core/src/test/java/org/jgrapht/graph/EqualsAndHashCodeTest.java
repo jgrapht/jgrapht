@@ -47,7 +47,6 @@ import org.jgrapht.EnhancedTestCase;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.WeightedGraph;
 
-import java.lang.String;
 import java.util.Map;
 
 public class EqualsAndHashCodeTest

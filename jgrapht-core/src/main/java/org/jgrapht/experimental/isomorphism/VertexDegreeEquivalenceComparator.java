@@ -38,10 +38,10 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
-
-import java.lang.Object;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
 
 
 /**

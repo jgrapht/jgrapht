@@ -38,9 +38,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.Collection;
+import java.util.Set;
 
 
 /**

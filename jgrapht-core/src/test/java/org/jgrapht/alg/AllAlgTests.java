@@ -39,9 +39,9 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.experimental.isomorphism.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jgrapht.experimental.isomorphism.IsomorphismInspectorTest;
 
 
 /**

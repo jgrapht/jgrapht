@@ -44,9 +44,13 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 
-import org.jgrapht.graph.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**

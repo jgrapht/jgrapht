@@ -40,13 +40,20 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.RingGraphGenerator;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedSubgraph;
+import org.jgrapht.graph.ListenableDirectedGraph;
+import org.jgrapht.graph.Pseudograph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**

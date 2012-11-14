@@ -37,13 +37,17 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.isomorphism.EdgeTopologyCompare;
+import org.jgrapht.experimental.isomorphism.IntegerVertexFactory;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.ListenableUndirectedGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.experimental.isomorphism.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

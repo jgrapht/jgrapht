@@ -39,10 +39,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.UndirectedSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**

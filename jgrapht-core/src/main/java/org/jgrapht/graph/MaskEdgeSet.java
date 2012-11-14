@@ -38,12 +38,16 @@
  */
 package org.jgrapht.graph;
 
-import java.lang.Object;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.util.PrefetchIterator;
+import org.jgrapht.util.PrefetchIterator.NextElementFunctor;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
-import org.jgrapht.util.PrefetchIterator.*;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**

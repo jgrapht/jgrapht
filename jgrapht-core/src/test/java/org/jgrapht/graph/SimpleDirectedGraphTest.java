@@ -39,11 +39,13 @@
  */
 package org.jgrapht.graph;
 
-import java.lang.String;
-import java.util.*;
-
 import junit.framework.TestCase;
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.EnhancedTestCase;
+
+import java.util.Iterator;
+import java.util.Set;
 
 
 /**

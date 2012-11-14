@@ -37,15 +37,23 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
+import org.jgrapht.experimental.isomorphism.comparators.DirectedEdgeWeightOddEvenComparator;
+import org.jgrapht.experimental.isomorphism.comparators.OddEvenGroupComparator;
+import org.jgrapht.generate.LinearGraphGenerator;
+import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.WheelGraphGenerator;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.isomorphism.comparators.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
+import java.util.Set;
 
 
 /**

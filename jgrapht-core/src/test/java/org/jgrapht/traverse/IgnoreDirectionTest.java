@@ -39,8 +39,10 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 
 /**

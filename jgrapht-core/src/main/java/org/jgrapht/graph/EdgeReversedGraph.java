@@ -39,11 +39,11 @@
  */
 package org.jgrapht.graph;
 
-import java.lang.Object;
-import java.util.*;
-
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.traverse.DepthFirstIterator;
+
+import java.util.Set;
 
 
 /**

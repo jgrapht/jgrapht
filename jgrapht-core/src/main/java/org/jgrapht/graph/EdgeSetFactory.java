@@ -41,7 +41,7 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.util.Set;
 
 
 /**

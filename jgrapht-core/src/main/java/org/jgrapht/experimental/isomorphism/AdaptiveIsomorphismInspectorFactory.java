@@ -38,9 +38,13 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
+import org.jgrapht.experimental.equivalence.EquivalenceComparatorChain;
+import org.jgrapht.experimental.equivalence.EquivalenceComparatorChainBase;
+import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.Pseudograph;
 
 
 /**

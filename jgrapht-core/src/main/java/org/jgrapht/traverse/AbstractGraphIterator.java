@@ -41,9 +41,13 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.EdgeTraversalEvent;
+import org.jgrapht.event.TraversalListener;
+import org.jgrapht.event.VertexTraversalEvent;
 
-import org.jgrapht.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

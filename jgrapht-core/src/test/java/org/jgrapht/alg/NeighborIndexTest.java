@@ -38,11 +38,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.graph.ListenableDirectedGraph;
+import org.jgrapht.graph.ListenableUndirectedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.graph.*;
+import java.util.Set;
 
 
 /**

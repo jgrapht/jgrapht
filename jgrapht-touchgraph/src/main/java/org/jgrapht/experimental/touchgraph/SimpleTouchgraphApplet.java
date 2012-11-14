@@ -39,14 +39,14 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import java.applet.*;
-
-import java.awt.*;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 import javax.swing.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.applet.Applet;
+import java.awt.*;
 
 
 /**

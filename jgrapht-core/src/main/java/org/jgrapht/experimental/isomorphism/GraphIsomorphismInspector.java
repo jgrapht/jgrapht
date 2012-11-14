@@ -37,7 +37,7 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import java.util.Iterator;
 
 
 /**

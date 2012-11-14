@@ -37,10 +37,13 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphMapping;
+import org.jgrapht.graph.DefaultGraphMapping;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**

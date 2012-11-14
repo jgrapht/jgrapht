@@ -39,7 +39,8 @@ package org.jgrapht.alg.util;
 
 import com.google.common.collect.Maps;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

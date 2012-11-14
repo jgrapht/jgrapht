@@ -47,7 +47,6 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 
-import java.io.Serializable;
 import java.util.Set;
 
 

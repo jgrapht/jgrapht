@@ -37,9 +37,11 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 public class PrefetchIteratorTest

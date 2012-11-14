@@ -39,14 +39,20 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import com.touchgraph.graphlayout.*;
-import com.touchgraph.graphlayout.interaction.*;
+import com.touchgraph.graphlayout.GLPanel;
+import com.touchgraph.graphlayout.Node;
+import com.touchgraph.graphlayout.TGException;
+import com.touchgraph.graphlayout.TGLensSet;
+import com.touchgraph.graphlayout.TGPanel;
+import com.touchgraph.graphlayout.interaction.HVScroll;
+import com.touchgraph.graphlayout.interaction.HyperScroll;
+import com.touchgraph.graphlayout.interaction.LocalityScroll;
+import com.touchgraph.graphlayout.interaction.RotateScroll;
+import com.touchgraph.graphlayout.interaction.ZoomScroll;
+import org.jgrapht.Graph;
 
 import java.awt.*;
-
-import java.util.*;
-
-import org.jgrapht.*;
+import java.util.Hashtable;
 
 
 /**

@@ -41,7 +41,7 @@
  */
 package org.jgrapht.event;
 
-import java.util.*;
+import java.util.EventListener;
 
 
 /**

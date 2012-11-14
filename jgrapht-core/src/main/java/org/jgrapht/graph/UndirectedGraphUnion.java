@@ -38,10 +38,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.util.WeightCombiner;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Set;
 
 
 public class UndirectedGraphUnion<V, E>

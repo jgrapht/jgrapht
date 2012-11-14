@@ -1,7 +1,6 @@
 package org.jgrapht.alg;
 
 import junit.framework.TestCase;
-
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.AStarShortestPath.AStarFunctionProvider;
 import org.jgrapht.graph.DefaultWeightedEdge;

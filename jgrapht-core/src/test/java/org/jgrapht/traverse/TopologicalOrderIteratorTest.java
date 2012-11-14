@@ -39,10 +39,13 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.EdgeReversedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
 
 
 /**

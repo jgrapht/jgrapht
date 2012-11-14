@@ -41,11 +41,17 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.VertexDegreeComparator;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.Subgraph;
+import org.jgrapht.graph.UndirectedSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

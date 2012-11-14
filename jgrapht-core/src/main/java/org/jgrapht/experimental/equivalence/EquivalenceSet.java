@@ -37,8 +37,8 @@
  */
 package org.jgrapht.experimental.equivalence;
 
-import java.lang.Object;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

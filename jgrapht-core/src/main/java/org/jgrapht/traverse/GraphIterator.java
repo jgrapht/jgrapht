@@ -41,9 +41,9 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.event.TraversalListener;
 
-import org.jgrapht.event.*;
+import java.util.Iterator;
 
 
 /**

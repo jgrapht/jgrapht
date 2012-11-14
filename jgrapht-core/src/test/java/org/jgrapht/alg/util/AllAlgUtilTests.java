@@ -37,7 +37,8 @@
  */
 package org.jgrapht.alg.util;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**

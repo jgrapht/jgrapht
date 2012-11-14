@@ -38,9 +38,9 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.Random;
 
 
 public class FibonacciHeapTest

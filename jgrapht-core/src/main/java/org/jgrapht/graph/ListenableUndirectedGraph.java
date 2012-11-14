@@ -41,7 +41,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.UndirectedGraph;
 
 
 /**

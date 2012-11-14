@@ -38,7 +38,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 
 /**

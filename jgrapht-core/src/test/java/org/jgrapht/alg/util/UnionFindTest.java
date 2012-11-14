@@ -37,9 +37,10 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 
 /**

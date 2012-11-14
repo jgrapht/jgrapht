@@ -44,9 +44,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
 
-import org.jgrapht.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 /**

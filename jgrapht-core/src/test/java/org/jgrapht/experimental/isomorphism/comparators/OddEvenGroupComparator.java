@@ -37,7 +37,7 @@
  */
 package org.jgrapht.experimental.isomorphism.comparators;
 
-import org.jgrapht.experimental.equivalence.*;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
 
 
 /**

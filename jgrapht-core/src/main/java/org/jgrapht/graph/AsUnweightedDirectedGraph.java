@@ -38,9 +38,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
 
 
 /**

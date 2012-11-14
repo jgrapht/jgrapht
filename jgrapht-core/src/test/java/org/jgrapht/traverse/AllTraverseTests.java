@@ -39,7 +39,8 @@
  */
 package org.jgrapht.traverse;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**

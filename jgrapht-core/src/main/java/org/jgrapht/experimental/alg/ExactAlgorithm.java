@@ -1,6 +1,6 @@
 package org.jgrapht.experimental.alg;
 
-import java.util.*;
+import java.util.Map;
 
 
 public interface ExactAlgorithm<ResultType, V>

@@ -38,9 +38,10 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.graph.*;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
 
 
 @SuppressWarnings("unchecked")

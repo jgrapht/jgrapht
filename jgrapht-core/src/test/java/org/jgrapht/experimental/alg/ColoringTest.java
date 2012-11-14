@@ -39,12 +39,14 @@
  */
 package org.jgrapht.experimental.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.experimental.alg.color.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.alg.color.BrownBacktrackColoring;
+import org.jgrapht.experimental.alg.color.GreedyColoring;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 
 /**

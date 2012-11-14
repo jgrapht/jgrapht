@@ -37,10 +37,14 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.UnionFind;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

@@ -39,12 +39,14 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**

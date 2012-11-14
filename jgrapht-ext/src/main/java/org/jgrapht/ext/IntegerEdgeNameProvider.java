@@ -34,7 +34,7 @@ package org.jgrapht.ext;
 
 import com.google.common.collect.Maps;
 
-import java.util.*;
+import java.util.Map;
 
 
 /**

@@ -42,12 +42,14 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.WeightedGraph;
 
-import java.lang.Object;
-import java.util.*;
-
-import org.jgrapht.*;
+import java.io.Serializable;
+import java.util.Set;
 
 
 /**

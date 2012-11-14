@@ -44,7 +44,9 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**

@@ -39,7 +39,7 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import java.util.List;
 
 
 /**

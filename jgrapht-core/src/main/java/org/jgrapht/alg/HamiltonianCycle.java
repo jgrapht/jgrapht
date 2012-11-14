@@ -39,9 +39,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
-import org.jgrapht.graph.*;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**

@@ -1,8 +1,11 @@
 package org.jgrapht.experimental;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 
-import org.jgrapht.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 
 public final class GraphTests<V, E>

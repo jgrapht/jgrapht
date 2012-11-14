@@ -40,10 +40,13 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
-import org.jgrapht.*;
-import org.jgrapht.traverse.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**

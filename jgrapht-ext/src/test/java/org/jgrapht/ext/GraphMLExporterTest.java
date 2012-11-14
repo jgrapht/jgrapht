@@ -32,14 +32,13 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import junit.framework.TestCase;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.custommonkey.xmlunit.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.io.StringWriter;
 
 
 /**

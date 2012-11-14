@@ -38,10 +38,12 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.util.WeightCombiner;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class DirectedGraphUnion<V, E>

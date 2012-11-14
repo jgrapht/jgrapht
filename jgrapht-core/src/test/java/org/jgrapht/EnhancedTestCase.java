@@ -39,9 +39,7 @@
  */
 package org.jgrapht;
 
-import junit.framework.*;
-
-import java.lang.String;
+import junit.framework.TestCase;
 
 
 /**

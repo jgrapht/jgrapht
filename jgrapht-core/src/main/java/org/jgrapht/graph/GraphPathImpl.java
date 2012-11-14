@@ -38,9 +38,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
-import org.jgrapht.*;
+import java.util.List;
 
 
 /**

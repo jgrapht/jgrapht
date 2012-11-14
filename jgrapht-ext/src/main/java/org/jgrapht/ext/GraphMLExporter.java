@@ -32,16 +32,19 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
-import javax.xml.transform.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.*;
-
-import org.jgrapht.*;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 
 /**

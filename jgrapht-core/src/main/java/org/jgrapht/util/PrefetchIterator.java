@@ -37,7 +37,9 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 /**

@@ -39,13 +39,14 @@
  */
 package org.jgrapht.demo;
 
-import java.io.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.traverse.BreadthFirstIterator;
+import org.jgrapht.traverse.DepthFirstIterator;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
+import java.io.IOException;
+import java.util.Iterator;
 
 
 /**

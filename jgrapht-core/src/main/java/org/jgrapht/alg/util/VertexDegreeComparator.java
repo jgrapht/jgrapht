@@ -40,7 +40,7 @@
  */
 package org.jgrapht.alg.util;
 
-import org.jgrapht.*;
+import org.jgrapht.UndirectedGraph;
 
 import java.util.Comparator;
 

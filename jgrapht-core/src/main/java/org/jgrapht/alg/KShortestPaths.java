@@ -41,9 +41,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

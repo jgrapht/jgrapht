@@ -40,9 +40,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.Set;
 
 
 /**

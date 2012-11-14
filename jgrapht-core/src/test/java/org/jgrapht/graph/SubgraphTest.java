@@ -39,12 +39,14 @@
  */
 package org.jgrapht.graph;
 
-import java.lang.String;
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.UndirectedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**

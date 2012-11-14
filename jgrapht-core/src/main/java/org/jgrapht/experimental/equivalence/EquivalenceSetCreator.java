@@ -37,8 +37,13 @@
  */
 package org.jgrapht.experimental.equivalence;
 
-import java.lang.Object;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**

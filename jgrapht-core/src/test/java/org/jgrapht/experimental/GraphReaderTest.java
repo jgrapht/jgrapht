@@ -39,12 +39,17 @@
  */
 package org.jgrapht.experimental;
 
-import java.io.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.io.IOException;
+import java.io.StringReader;
 
 
 /**

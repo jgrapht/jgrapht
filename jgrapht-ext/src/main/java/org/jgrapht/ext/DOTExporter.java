@@ -32,11 +32,12 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Map;
 
 
 /**

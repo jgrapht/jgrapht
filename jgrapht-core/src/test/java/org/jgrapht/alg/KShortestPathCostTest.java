@@ -39,11 +39,14 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**

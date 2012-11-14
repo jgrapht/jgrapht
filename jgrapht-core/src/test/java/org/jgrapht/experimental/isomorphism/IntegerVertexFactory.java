@@ -37,7 +37,7 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import org.jgrapht.*;
+import org.jgrapht.VertexFactory;
 
 
 /**

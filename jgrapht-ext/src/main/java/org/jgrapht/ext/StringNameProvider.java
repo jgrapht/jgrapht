@@ -38,7 +38,8 @@
  */
 package org.jgrapht.ext;
 
-import org.jgrapht.event.*;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
 
 
 /**
