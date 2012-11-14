@@ -98,7 +98,7 @@ public class PrefetchIterator<E>
     private final NextElementFunctor<E> innerEnum;
     private E getNextLastResult;
     private boolean isGetNextLastResultUpToDate = false;
-    private static final boolean endOfEnumerationReached = false;
+    private boolean endOfEnumerationReached = false;
     private boolean flagIsEnumerationStartedEmpty = true;
     private int innerFunctorUsageCounter = 0;
 
