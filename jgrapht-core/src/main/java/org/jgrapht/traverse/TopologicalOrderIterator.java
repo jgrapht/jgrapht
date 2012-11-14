@@ -41,10 +41,13 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -78,7 +81,7 @@ public class TopologicalOrderIterator<V, E>
     //~ Instance fields --------------------------------------------------------
 
     private Queue<V> queue;
-    private Map<V, ModifiableInteger> inDegreeMap;
+    private Map<V, AtomicInteger> inDegreeMap;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -112,15 +115,13 @@ public class TopologicalOrderIterator<V, E>
      */
     public TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue)
     {
-        this(dg, queue, new HashMap<V, ModifiableInteger>());
+        this(dg, queue, new HashMap<V, AtomicInteger>());
     }
 
     // NOTE: This is a hack to deal with the fact that CrossComponentIterator
     // needs to know the start vertex in its constructor
-    private TopologicalOrderIterator(
-        DirectedGraph<V, E> dg,
-        Queue<V> queue,
-        Map<V, ModifiableInteger> inDegreeMap)
+    private TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue,
+        Map<V, AtomicInteger> inDegreeMap)
     {
         this(dg, initialize(dg, queue, inDegreeMap));
         this.queue = queue;
@@ -188,15 +189,13 @@ public class TopologicalOrderIterator<V, E>
      */
     private void decrementInDegree(V vertex)
     {
-        ModifiableInteger inDegree = inDegreeMap.get(vertex);
+        final AtomicInteger inDegree = inDegreeMap.get(vertex);
 
-        if (inDegree.value > 0) {
-            inDegree.value--;
+        if (inDegree.get() <= 0)
+            return;
 
-            if (inDegree.value == 0) {
-                queue.offer(vertex);
-            }
-        }
+        if (inDegree.decrementAndGet() == 0)
+            queue.offer(vertex);
     }
 
     /**
@@ -210,14 +209,12 @@ public class TopologicalOrderIterator<V, E>
      *
      * @return start vertex
      */
-    private static <V, E> V initialize(
-        DirectedGraph<V, E> dg,
-        Queue<V> queue,
-        Map<V, ModifiableInteger> inDegreeMap)
+    private static <V, E> V initialize(DirectedGraph<V, E> dg, Queue<V> queue,
+        Map<V, AtomicInteger> inDegreeMap)
     {
         for (V vertex : dg.vertexSet()) {
             int inDegree = dg.inDegreeOf(vertex);
-            inDegreeMap.put(vertex, new ModifiableInteger(inDegree));
+            inDegreeMap.put(vertex, new AtomicInteger(inDegree));
 
             if (inDegree == 0) {
                 queue.offer(vertex);

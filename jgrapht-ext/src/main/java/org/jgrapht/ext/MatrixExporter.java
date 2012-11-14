@@ -38,12 +38,18 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -151,25 +157,23 @@ public class MatrixExporter<V, E>
         List<V> neighbors)
     {
         String fromName = nameProvider.getVertexName(from);
-        Map<String, ModifiableInteger> counts =
-            new LinkedHashMap<String, ModifiableInteger>();
+        Map<String, AtomicInteger> counts = Maps.newLinkedHashMap();
         for (V to : neighbors) {
             String toName = nameProvider.getVertexName(to);
-            ModifiableInteger count = counts.get(toName);
+            AtomicInteger count = counts.get(toName);
             if (count == null) {
-                count = new ModifiableInteger(0);
+                count = new AtomicInteger(0);
                 counts.put(toName, count);
             }
 
-            count.increment();
-            if (from.equals(to)) {
+            count.incrementAndGet();
+            if (from.equals(to))
                 // count loops twice, once for each end
-                count.increment();
-            }
+                count.incrementAndGet();
         }
-        for (Map.Entry<String, ModifiableInteger> entry : counts.entrySet()) {
+        for (final Map.Entry<String, AtomicInteger> entry: counts.entrySet()) {
             String toName = entry.getKey();
-            ModifiableInteger count = entry.getValue();
+            AtomicInteger count = entry.getValue();
             println(out, fromName, toName, count.toString());
         }
     }
