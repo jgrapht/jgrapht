@@ -54,6 +54,7 @@ public class Mod3GroupComparator
 {
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     public boolean equivalenceCompare(
         Integer arg1,
         Integer arg2,
@@ -76,6 +77,7 @@ public class Mod3GroupComparator
      *
      * org.jgrapht.experimental.equivalence.EquivalenceComparator#equivalenceHashcode(java.lang.Object)
      */
+    @Override
     public int equivalenceHashcode(Integer arg1, Object context)
     {
         int int1 = arg1.intValue();

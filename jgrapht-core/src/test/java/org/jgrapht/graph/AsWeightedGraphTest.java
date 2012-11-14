@@ -61,6 +61,7 @@ public class AsWeightedGraphTest
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     public void setUp()
     {
         weightedGraph =
@@ -87,6 +88,7 @@ public class AsWeightedGraphTest
         unweightedGraph.addEdge("v3", "v1");
     }
 
+    @Override
     public void tearDown()
     {
     }

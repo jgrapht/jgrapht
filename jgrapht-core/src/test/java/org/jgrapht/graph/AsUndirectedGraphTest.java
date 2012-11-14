@@ -169,6 +169,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Override
     protected void setUp()
     {
         directed =

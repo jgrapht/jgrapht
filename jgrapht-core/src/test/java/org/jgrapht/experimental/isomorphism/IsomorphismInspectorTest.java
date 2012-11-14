@@ -72,6 +72,7 @@ public class IsomorphismInspectorTest
     /*
      * @see TestCase#setUp()
      */
+    @Override
     protected void setUp()
         throws Exception
     {

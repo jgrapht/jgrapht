@@ -67,6 +67,7 @@ public class FloydWarshallShortestPathsTest
             new VertexFactory<Integer>() {
                 int gid;
 
+                @Override
                 public Integer createVertex()
                 {
                     return gid++;

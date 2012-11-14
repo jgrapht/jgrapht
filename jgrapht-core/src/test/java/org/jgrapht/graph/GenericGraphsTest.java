@@ -149,6 +149,7 @@ public class GenericGraphsTest
     /**
      * .
      */
+    @Override
     protected void setUp()
     {
         objectGraph =

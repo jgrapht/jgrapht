@@ -89,6 +89,7 @@ public class DOTExporterTest
         StringWriter w = new StringWriter();
         ComponentAttributeProvider<String> vertexAttributeProvider =
             new ComponentAttributeProvider<String>() {
+                @Override
                 public Map<String, String> getComponentAttributes(String v)
                 {
                     Map<String, String> map = Maps.newLinkedHashMap();
