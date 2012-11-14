@@ -54,6 +54,7 @@ import java.util.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
@@ -113,7 +114,7 @@ public abstract class AbstractBaseGraph<V, E>
     {
         edgeFactory = Preconditions.checkNotNull(ef);
 
-        edgeMap = new LinkedHashMap<E, IntrusiveEdge>();
+        edgeMap = Maps.newLinkedHashMap();
         allowingLoops = allowLoops;
         allowingMultipleEdges = allowMultipleEdges;
 
@@ -319,7 +320,7 @@ public abstract class AbstractBaseGraph<V, E>
             AbstractBaseGraph<V, E> newGraph =
                 TypeUtil.uncheckedCast(super.clone(), typeDecl);
 
-            newGraph.edgeMap = new LinkedHashMap<E, IntrusiveEdge>();
+            newGraph.edgeMap = Maps.newLinkedHashMap();
 
             newGraph.edgeFactory = edgeFactory;
             newGraph.unmodifiableEdgeSet = null;
@@ -738,8 +739,8 @@ public abstract class AbstractBaseGraph<V, E>
         private static final String NOT_IN_DIRECTED_GRAPH =
             "no such operation in a directed graph";
 
-        private final Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected =
-            new LinkedHashMap<V, DirectedEdgeContainer<V, E>>();
+        private final Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected
+            = Maps.newLinkedHashMap();
 
         @Override
         public void addVertex(V v)
@@ -985,8 +986,8 @@ public abstract class AbstractBaseGraph<V, E>
         private static final String NOT_IN_UNDIRECTED_GRAPH =
             "no such operation in an undirected graph";
 
-        private Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected =
-            new LinkedHashMap<V, UndirectedEdgeContainer<V, E>>();
+        private Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected
+            = Maps.newLinkedHashMap();
 
         @Override
         public void addVertex(V v)

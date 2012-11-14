@@ -32,14 +32,19 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import com.google.common.collect.Maps;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import java.util.*;
-
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -86,8 +91,7 @@ public class DOTExporterTest
             new ComponentAttributeProvider<String>() {
                 public Map<String, String> getComponentAttributes(String v)
                 {
-                    Map<String, String> map =
-                        new LinkedHashMap<String, String>();
+                    Map<String, String> map = Maps.newLinkedHashMap();
                     if (v.equals(V1)) {
                         map.put("label", "a");
                     } else if (v.equals(V2)) {
