@@ -41,11 +41,12 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.ListenableGraph;
 
 
 /**
- * A directed graph which is also {@link org.jgrapht.ListenableGraph}.
+ * A directed graph which is also {@link ListenableGraph}.
  *
  * @see DefaultListenableGraph
  */
@@ -64,7 +65,7 @@ public class ListenableDirectedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public ListenableDirectedGraph(Class<? extends E> edgeClass)
+    public ListenableDirectedGraph(final Class<? extends E> edgeClass)
     {
         this(new DefaultDirectedGraph<V, E>(edgeClass));
     }
@@ -74,7 +75,7 @@ public class ListenableDirectedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableDirectedGraph(DirectedGraph<V, E> base)
+    public ListenableDirectedGraph(final DirectedGraph<V, E> base)
     {
         super(base);
     }

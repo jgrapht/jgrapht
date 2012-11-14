@@ -38,7 +38,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.VertexFactory;
 
 
 /**
@@ -56,7 +56,7 @@ public class ClassBasedVertexFactory<V>
 
     //~ Constructors -----------------------------------------------------------
 
-    public ClassBasedVertexFactory(Class<? extends V> vertexClass)
+    public ClassBasedVertexFactory(final Class<? extends V> vertexClass)
     {
         this.vertexClass = vertexClass;
     }
@@ -66,10 +66,11 @@ public class ClassBasedVertexFactory<V>
     /**
      * @see VertexFactory#createVertex()
      */
+    @Override
     public V createVertex()
     {
         try {
-            return this.vertexClass.newInstance();
+            return vertexClass.newInstance();
         } catch (Exception e) {
             throw new RuntimeException("Vertex factory failed", e);
         }

@@ -39,7 +39,8 @@
  */
 package org.jgrapht.graph;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**
@@ -65,7 +66,7 @@ public final class AllGraphTests
      */
     public static Test suite()
     {
-        TestSuite suite = new TestSuite();
+        final TestSuite suite = new TestSuite();
 
         // $JUnit-BEGIN$
         suite.addTest(new TestSuite(DefaultDirectedGraphTest.class));

@@ -44,9 +44,13 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 
-import org.jgrapht.graph.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -74,18 +78,18 @@ public abstract class Graphs
      * @see Graph#addEdge(Object, Object)
      */
     public static <V, E> E addEdge(
-        Graph<V, E> g,
-        V sourceVertex,
-        V targetVertex,
-        double weight)
+        final Graph<V, E> g,
+        final V sourceVertex,
+        final V targetVertex,
+        final double weight)
     {
-        EdgeFactory<V, E> ef = g.getEdgeFactory();
-        E e = ef.createEdge(sourceVertex, targetVertex);
+        final EdgeFactory<V, E> ef = g.getEdgeFactory();
+        final E e = ef.createEdge(sourceVertex, targetVertex);
 
         // we first create the edge and set the weight to make sure that
         // listeners will see the correct weight upon addEdge.
 
-        assert (g instanceof WeightedGraph<?, ?>) : g.getClass();
+        assert g instanceof WeightedGraph<?, ?> : g.getClass();
         ((WeightedGraph<V, E>) g).setEdgeWeight(e, weight);
 
         return g.addEdge(sourceVertex, targetVertex, e) ? e : null;
@@ -104,9 +108,9 @@ public abstract class Graphs
      * null</code>.
      */
     public static <V, E> E addEdgeWithVertices(
-        Graph<V, E> g,
-        V sourceVertex,
-        V targetVertex)
+        final Graph<V, E> g,
+        final V sourceVertex,
+        final V targetVertex)
     {
         g.addVertex(sourceVertex);
         g.addVertex(targetVertex);
@@ -127,12 +131,12 @@ public abstract class Graphs
      * specified edge.
      */
     public static <V, E> boolean addEdgeWithVertices(
-        Graph<V, E> targetGraph,
-        Graph<V, E> sourceGraph,
-        E edge)
+        final Graph<V, E> targetGraph,
+        final Graph<V, E> sourceGraph,
+        final E edge)
     {
-        V sourceVertex = sourceGraph.getEdgeSource(edge);
-        V targetVertex = sourceGraph.getEdgeTarget(edge);
+        final V sourceVertex = sourceGraph.getEdgeSource(edge);
+        final V targetVertex = sourceGraph.getEdgeTarget(edge);
 
         targetGraph.addVertex(sourceVertex);
         targetGraph.addVertex(targetVertex);
@@ -155,10 +159,10 @@ public abstract class Graphs
      * null</code>.
      */
     public static <V, E> E addEdgeWithVertices(
-        Graph<V, E> g,
-        V sourceVertex,
-        V targetVertex,
-        double weight)
+        final Graph<V, E> g,
+        final V sourceVertex,
+        final V targetVertex,
+        final double weight)
     {
         g.addVertex(sourceVertex);
         g.addVertex(targetVertex);
@@ -184,8 +188,8 @@ public abstract class Graphs
      * changed as a result of this operation.
      */
     public static <V, E> boolean addGraph(
-        Graph<? super V, ? super E> destination,
-        Graph<V, E> source)
+        final Graph<? super V, ? super E> destination,
+        final Graph<V, E> source)
     {
         boolean modified = addAllVertices(destination, source.vertexSet());
         modified |= addAllEdges(destination, source, source.edgeSet());
@@ -208,12 +212,12 @@ public abstract class Graphs
      * @see EdgeReversedGraph
      */
     public static <V, E> void addGraphReversed(
-        DirectedGraph<? super V, ? super E> destination,
-        DirectedGraph<V, E> source)
+        final DirectedGraph<? super V, ? super E> destination,
+        final DirectedGraph<V, E> source)
     {
         addAllVertices(destination, source.vertexSet());
 
-        for (E edge : source.edgeSet()) {
+        for (final E edge : source.edgeSet()) {
             destination.addEdge(
                 source.getEdgeTarget(edge),
                 source.getEdgeSource(edge));
@@ -234,15 +238,15 @@ public abstract class Graphs
      * @return <tt>true</tt> if this graph changed as a result of the call
      */
     public static <V, E> boolean addAllEdges(
-        Graph<? super V, ? super E> destination,
-        Graph<V, E> source,
-        Collection<? extends E> edges)
+        final Graph<? super V, ? super E> destination,
+        final Graph<V, E> source,
+        final Collection<? extends E> edges)
     {
         boolean modified = false;
 
-        for (E e : edges) {
-            V s = source.getEdgeSource(e);
-            V t = source.getEdgeTarget(e);
+        for (final E e : edges) {
+            final V s = source.getEdgeSource(e);
+            final V t = source.getEdgeTarget(e);
             destination.addVertex(s);
             destination.addVertex(t);
             modified |= destination.addEdge(s, t, e);
@@ -269,12 +273,12 @@ public abstract class Graphs
      * @see Graph#addVertex(Object)
      */
     public static <V, E> boolean addAllVertices(
-        Graph<? super V, ? super E> destination,
-        Collection<? extends V> vertices)
+        final Graph<? super V, ? super E> destination,
+        final Collection<? extends V> vertices)
     {
         boolean modified = false;
 
-        for (V v : vertices) {
+        for (final V v : vertices) {
             modified |= destination.addVertex(v);
         }
 
@@ -292,12 +296,12 @@ public abstract class Graphs
      * @return a list of the vertices that are the neighbors of the specified
      * vertex.
      */
-    public static <V, E> List<V> neighborListOf(Graph<V, E> g,
-        V vertex)
+    public static <V, E> List<V> neighborListOf(final Graph<V, E> g,
+        final V vertex)
     {
-        List<V> neighbors = new ArrayList<V>();
+        final List<V> neighbors = new ArrayList<V>();
 
-        for (E e : g.edgesOf(vertex)) {
+        for (final E e : g.edgesOf(vertex)) {
             neighbors.add(getOppositeVertex(g, e, vertex));
         }
 
@@ -316,13 +320,13 @@ public abstract class Graphs
      * specified vertex.
      */
     public static <V, E> List<V> predecessorListOf(
-        DirectedGraph<V, E> g,
-        V vertex)
+        final DirectedGraph<V, E> g,
+        final V vertex)
     {
-        List<V> predecessors = new ArrayList<V>();
-        Set<? extends E> edges = g.incomingEdgesOf(vertex);
+        final List<V> predecessors = new ArrayList<V>();
+        final Set<? extends E> edges = g.incomingEdgesOf(vertex);
 
-        for (E e : edges) {
+        for (final E e : edges) {
             predecessors.add(getOppositeVertex(g, e, vertex));
         }
 
@@ -341,13 +345,13 @@ public abstract class Graphs
      * specified vertex.
      */
     public static <V, E> List<V> successorListOf(
-        DirectedGraph<V, E> g,
-        V vertex)
+        final DirectedGraph<V, E> g,
+        final V vertex)
     {
-        List<V> successors = new ArrayList<V>();
-        Set<? extends E> edges = g.outgoingEdgesOf(vertex);
+        final List<V> successors = new ArrayList<V>();
+        final Set<? extends E> edges = g.outgoingEdgesOf(vertex);
 
-        for (E e : edges) {
+        for (final E e : edges) {
             successors.add(getOppositeVertex(g, e, vertex));
         }
 
@@ -369,7 +373,7 @@ public abstract class Graphs
      *
      * @see AsUndirectedGraph
      */
-    public static <V, E> UndirectedGraph<V, E> undirectedGraph(Graph<V, E> g)
+    public static <V, E> UndirectedGraph<V, E> undirectedGraph(final Graph<V, E> g)
     {
         if (g instanceof DirectedGraph<?, ?>) {
             return new AsUndirectedGraph<V, E>((DirectedGraph<V, E>) g);
@@ -390,10 +394,10 @@ public abstract class Graphs
      *
      * @return true iff e is incident on v
      */
-    public static <V, E> boolean testIncidence(Graph<V, E> g, E e, V v)
+    public static <V, E> boolean testIncidence(final Graph<V, E> g, final E e, final V v)
     {
-        return (g.getEdgeSource(e).equals(v))
-            || (g.getEdgeTarget(e).equals(v));
+        return g.getEdgeSource(e).equals(v)
+            || g.getEdgeTarget(e).equals(v);
     }
 
     /**
@@ -405,10 +409,10 @@ public abstract class Graphs
      *
      * @return vertex opposite to v across e
      */
-    public static <V, E> V getOppositeVertex(Graph<V, E> g, E e, V v)
+    public static <V, E> V getOppositeVertex(final Graph<V, E> g, final E e, final V v)
     {
-        V source = g.getEdgeSource(e);
-        V target = g.getEdgeTarget(e);
+        final V source = g.getEdgeSource(e);
+        final V target = g.getEdgeTarget(e);
         if (v.equals(source)) {
             return target;
         } else if (v.equals(target)) {
@@ -425,13 +429,13 @@ public abstract class Graphs
      *
      * @return corresponding vertex list
      */
-    public static <V, E> List<V> getPathVertexList(GraphPath<V, E> path)
+    public static <V, E> List<V> getPathVertexList(final GraphPath<V, E> path)
     {
-        Graph<V, E> g = path.getGraph();
-        List<V> list = new ArrayList<V>();
+        final Graph<V, E> g = path.getGraph();
+        final List<V> list = new ArrayList<V>();
         V v = path.getStartVertex();
         list.add(v);
-        for (E e : path.getEdgeList()) {
+        for (final E e : path.getEdgeList()) {
             v = getOppositeVertex(g, e, v);
             list.add(v);
         }

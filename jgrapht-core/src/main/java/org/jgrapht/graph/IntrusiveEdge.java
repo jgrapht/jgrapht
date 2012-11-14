@@ -39,7 +39,7 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import java.io.Serializable;
 
 
 /**
@@ -68,6 +68,7 @@ class IntrusiveEdge
     /**
      * @see Object#clone()
      */
+    @Override
     public Object clone()
     {
         try {

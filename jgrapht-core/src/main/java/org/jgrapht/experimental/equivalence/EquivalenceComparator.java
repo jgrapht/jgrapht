@@ -81,13 +81,13 @@ public interface EquivalenceComparator<E, C>
 {
     //~ Methods ----------------------------------------------------------------
 
-    public boolean equivalenceCompare(
+    boolean equivalenceCompare(
         E arg1,
         E arg2,
         C context1,
         C context2);
 
-    public int equivalenceHashcode(E arg1, C context);
+    int equivalenceHashcode(E arg1, C context);
 }
 
 // End EquivalenceComparator.java

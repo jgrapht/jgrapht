@@ -39,9 +39,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -63,7 +65,7 @@ public class CompleteGraphGenerator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private int size;
+    private final int size;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -74,7 +76,7 @@ public class CompleteGraphGenerator<V, E>
      *
      * @throws IllegalArgumentException if the specified size is negative.
      */
-    public CompleteGraphGenerator(int size)
+    public CompleteGraphGenerator(final int size)
     {
         if (size < 0) {
             throw new IllegalArgumentException("must be non-negative");
@@ -88,10 +90,11 @@ public class CompleteGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -99,7 +102,7 @@ public class CompleteGraphGenerator<V, E>
 
         //Add all the vertices to the set
         for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
         }
 
@@ -112,17 +115,16 @@ public class CompleteGraphGenerator<V, E>
          * If we have an undirected graph, the second addEdge call will return
          * nothing; it will not add a second edge.
          */
-        Iterator<V> slowI = target.vertexSet().iterator();
+        final Iterator<V> slowI = target.vertexSet().iterator();
         Iterator<V> fastI;
 
         while (slowI.hasNext()) { //While there are more vertices in the set
 
-            V latestVertex = slowI.next();
+            final V latestVertex = slowI.next();
             fastI = target.vertexSet().iterator();
 
             //Jump to the first vertex *past* latestVertex
             while (fastI.next() != latestVertex) {
-                ;
             }
 
             //And, add edges to all remaining vertices

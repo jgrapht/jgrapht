@@ -73,11 +73,9 @@ public class PermutationFactory
 {
     //~ Methods ----------------------------------------------------------------
 
-    public static ArrayPermutationsIter createRegular(int [] permSourceArray)
+    public static ArrayPermutationsIter createRegular(final int [] permSourceArray)
     {
-        IntegerPermutationIter regularPerm =
-            new IntegerPermutationIter(permSourceArray);
-        return regularPerm;
+        return new IntegerPermutationIter(permSourceArray);
     }
 
     /**
@@ -87,11 +85,9 @@ public class PermutationFactory
      * @param groupSizesArray . example [3,2] will create an array (0,1,2)(3,4)
      */
     public static ArrayPermutationsIter createByGroups(
-        int [] groupSizesArray)
+        final int [] groupSizesArray)
     {
-        CompoundPermutationIter complexPerm =
-            new CompoundPermutationIter(groupSizesArray);
-        return complexPerm;
+        return new CompoundPermutationIter(groupSizesArray);
     }
 }
 

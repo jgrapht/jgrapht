@@ -39,13 +39,18 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import java.util.HashMap;
 
 
 /**
@@ -59,14 +64,15 @@ public class FloydWarshallShortestPathsTest
 
     public void testCompareWithDijkstra()
     {
-        RandomGraphGenerator<Integer, DefaultWeightedEdge> gen =
+        final RandomGraphGenerator<Integer, DefaultWeightedEdge> gen =
             new RandomGraphGenerator<Integer, DefaultWeightedEdge>(
                 10,
                 15);
-        VertexFactory<Integer> f =
+        final VertexFactory<Integer> f =
             new VertexFactory<Integer>() {
                 int gid;
 
+                @Override
                 public Integer createVertex()
                 {
                     return gid++;
@@ -74,7 +80,7 @@ public class FloydWarshallShortestPathsTest
             };
 
         for (int i = 0; i < 10; i++) {
-            SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed =
+            final SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed =
                 new SimpleDirectedGraph<Integer, DefaultWeightedEdge>(
                     DefaultWeightedEdge.class);
 
@@ -85,22 +91,22 @@ public class FloydWarshallShortestPathsTest
                 new FloydWarshallShortestPaths<Integer, DefaultWeightedEdge>(
                     directed);
 
-            for (Integer v1 : directed.vertexSet()) {
-                for (Integer v2 : directed.vertexSet()) {
-                    double fwSp = fw.shortestDistance(v1, v2);
-                    double dijSp =
+            for (final Integer v1 : directed.vertexSet()) {
+                for (final Integer v2 : directed.vertexSet()) {
+                    final double fwSp = fw.shortestDistance(v1, v2);
+                    final double dijSp =
                         new DijkstraShortestPath<Integer, DefaultWeightedEdge>(
                             directed,
                             v1,
                             v2).getPathLength();
                     assertTrue(
-                        (Math.abs(dijSp - fwSp) < .01)
-                        || (Double.isInfinite(fwSp)
-                            && Double.isInfinite(dijSp)));
+                        Math.abs(dijSp - fwSp) < .01
+                        || Double.isInfinite(fwSp)
+                            && Double.isInfinite(dijSp));
                 }
             }
 
-            SimpleGraph<Integer, DefaultWeightedEdge> undirected =
+            final SimpleGraph<Integer, DefaultWeightedEdge> undirected =
                 new SimpleGraph<Integer, DefaultWeightedEdge>(
                     DefaultWeightedEdge.class);
 
@@ -110,18 +116,18 @@ public class FloydWarshallShortestPathsTest
             fw = new FloydWarshallShortestPaths<Integer, DefaultWeightedEdge>(
                 undirected);
 
-            for (Integer v1 : undirected.vertexSet()) {
-                for (Integer v2 : undirected.vertexSet()) {
-                    double fwSp = fw.shortestDistance(v1, v2);
-                    double dijSp =
+            for (final Integer v1 : undirected.vertexSet()) {
+                for (final Integer v2 : undirected.vertexSet()) {
+                    final double fwSp = fw.shortestDistance(v1, v2);
+                    final double dijSp =
                         new DijkstraShortestPath<Integer, DefaultWeightedEdge>(
                             undirected,
                             v1,
                             v2).getPathLength();
                     assertTrue(
-                        (Math.abs(dijSp - fwSp) < .01)
-                        || (Double.isInfinite(fwSp)
-                            && Double.isInfinite(dijSp)));
+                        Math.abs(dijSp - fwSp) < .01
+                        || Double.isInfinite(fwSp)
+                            && Double.isInfinite(dijSp));
                 }
             }
         }
@@ -129,13 +135,13 @@ public class FloydWarshallShortestPathsTest
 
     private static UndirectedGraph<String, DefaultEdge> createStringGraph()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 
-        String v1 = "v1";
-        String v2 = "v2";
-        String v3 = "v3";
-        String v4 = "v4";
+        final String v1 = "v1";
+        final String v2 = "v2";
+        final String v3 = "v3";
+        final String v4 = "v4";
 
         // add the vertices
         g.addVertex(v1);
@@ -154,31 +160,32 @@ public class FloydWarshallShortestPathsTest
 
     public void testDiameter()
     {
-        UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
-        FloydWarshallShortestPaths<String, DefaultEdge> testFWPath =
+        final UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
+        final FloydWarshallShortestPaths<String, DefaultEdge> testFWPath =
             new FloydWarshallShortestPaths<String, DefaultEdge>(stringGraph);
-        double diameter = testFWPath.getDiameter();
+        final double diameter = testFWPath.getDiameter();
         assertEquals(2.0, diameter);
     }
 
     public void testEmptyDiameter() {
-        DirectedGraph<String, DefaultEdge> graph =
+        final DirectedGraph<String, DefaultEdge> graph =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
-        FloydWarshallShortestPaths<String, DefaultEdge> fw =
+        final FloydWarshallShortestPaths<String, DefaultEdge> fw =
             new FloydWarshallShortestPaths<String, DefaultEdge>(graph);
-        double diameter = fw.getDiameter();
+        final double diameter = fw.getDiameter();
         assertEquals(0.0, diameter);
     }
 
     public void testEdgeLessDiameter() {
-        DirectedGraph<String, DefaultEdge> graph =
+        final DirectedGraph<String, DefaultEdge> graph =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
-        String a = "a", b = "b";
+        final String a = "a";
+        final String b = "b";
         graph.addVertex(a);
         graph.addVertex(b);
-        FloydWarshallShortestPaths<String, DefaultEdge> fw =
+        final FloydWarshallShortestPaths<String, DefaultEdge> fw =
             new FloydWarshallShortestPaths<String, DefaultEdge>(graph);
-        double diameter = fw.getDiameter();
+        final double diameter = fw.getDiameter();
         assertEquals(0.0, diameter);
     }
 }

@@ -39,12 +39,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.util.MathUtil;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Iterator;
 
 
 /**
@@ -63,7 +62,7 @@ public class KShortestPathKValuesTest
      *
      * @return A(n,k).
      */
-    public static long permutation(int n, int k)
+    public static long permutation(final int n, final int k)
     {
         if (k <= n) {
             return MathUtil.factorial(n) / MathUtil.factorial(n - k);
@@ -74,14 +73,14 @@ public class KShortestPathKValuesTest
 
     public void testMaxSizeValueCompleteGraph6()
     {
-        KShortestPathCompleteGraph6 graph = new KShortestPathCompleteGraph6();
+        final KShortestPathCompleteGraph6 graph = new KShortestPathCompleteGraph6();
 
         for (
             int maxSize = 1;
             maxSize <= calculateNbElementaryPathsForCompleteGraph(6);
             maxSize++)
         {
-            KShortestPaths finder = new KShortestPaths(graph, "vS", maxSize);
+            final KShortestPaths finder = new KShortestPaths(graph, "vS", maxSize);
 
             assertEquals(finder.getPaths("v1").size(), maxSize);
             assertEquals(finder.getPaths("v2").size(), maxSize);
@@ -93,15 +92,15 @@ public class KShortestPathKValuesTest
 
     public void testNbReturnedPaths()
     {
-        KShortestPathCompleteGraph4 kSPCompleteGraph4 =
+        final KShortestPathCompleteGraph4 kSPCompleteGraph4 =
             new KShortestPathCompleteGraph4();
         verifyNbPathsForAllPairsOfVertices(kSPCompleteGraph4);
 
-        KShortestPathCompleteGraph5 kSPCompleteGraph5 =
+        final KShortestPathCompleteGraph5 kSPCompleteGraph5 =
             new KShortestPathCompleteGraph5();
         verifyNbPathsForAllPairsOfVertices(kSPCompleteGraph5);
 
-        KShortestPathCompleteGraph6 kSPCompleteGraph6 =
+        final KShortestPathCompleteGraph6 kSPCompleteGraph6 =
             new KShortestPathCompleteGraph6();
         verifyNbPathsForAllPairsOfVertices(kSPCompleteGraph6);
     }
@@ -114,36 +113,36 @@ public class KShortestPathKValuesTest
      *
      * @return
      */
-    private long calculateNbElementaryPathsForCompleteGraph(int n)
+    private static long calculateNbElementaryPathsForCompleteGraph(final int n)
     {
         long nbPaths = 0;
-        for (int k = 1; k <= (n - 1); k++) {
-            nbPaths = nbPaths + permutation(n - 2, k - 1);
+        for (int k = 1; k <= n - 1; k++) {
+            nbPaths += permutation(n - 2, k - 1);
         }
         return nbPaths;
     }
 
-    private void verifyNbPathsForAllPairsOfVertices(Graph graph)
+    private void verifyNbPathsForAllPairsOfVertices(final Graph graph)
     {
-        long nbPaths =
+        final long nbPaths =
             calculateNbElementaryPathsForCompleteGraph(
                 graph.vertexSet().size());
-        int maxSize = Integer.MAX_VALUE;
+        final int maxSize = Integer.MAX_VALUE;
 
         for (
             Iterator sourceIterator = graph.vertexSet().iterator();
             sourceIterator.hasNext();)
         {
-            Object sourceVertex = sourceIterator.next();
+            final Object sourceVertex = sourceIterator.next();
 
-            KShortestPaths finder =
+            final KShortestPaths finder =
                 new KShortestPaths(graph, sourceVertex,
                     maxSize);
             for (
                 Iterator targetIterator = graph.vertexSet().iterator();
                 targetIterator.hasNext();)
             {
-                Object targetVertex = targetIterator.next();
+                final Object targetVertex = targetIterator.next();
                 if (targetVertex != sourceVertex) {
                     assertEquals(finder.getPaths(targetVertex).size(), nbPaths);
                 }

@@ -32,14 +32,13 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import junit.framework.TestCase;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.custommonkey.xmlunit.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.io.StringWriter;
 
 
 /**
@@ -81,7 +80,7 @@ public class GraphMLExporterTest
     public void testUndirected()
         throws Exception
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -89,7 +88,7 @@ public class GraphMLExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        StringWriter w = new StringWriter();
+        final StringWriter w = new StringWriter();
         exporter.export(w, g);
 
         if (System.getProperty("java.vm.version").startsWith("1.4")) {

@@ -44,10 +44,18 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.EdgeTraversalEvent;
+import org.jgrapht.event.VertexTraversalEvent;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**
@@ -75,7 +83,7 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * Standard vertex visit state enumeration.
      */
-    protected static enum VisitColor
+    protected enum VisitColor
     {
         /**
          * Vertex has not been returned via iterator yet.
@@ -109,17 +117,17 @@ public abstract class CrossComponentIterator<V, E, D>
 
     // TODO: support ConcurrentModificationException if graph modified
     // during iteration.
-    private FlyweightEdgeEvent<V, E> reusableEdgeEvent;
-    private FlyweightVertexEvent<V> reusableVertexEvent;
+    private final FlyweightEdgeEvent<V, E> reusableEdgeEvent;
+    private final FlyweightVertexEvent<V> reusableVertexEvent;
     private Iterator<V> vertexIterator = null;
 
     /**
      * Stores the vertices that have been seen during iteration and (optionally)
      * some additional traversal info regarding each vertex.
      */
-    private Map<V, D> seen = new HashMap<V, D>();
+    private final Map<V, D> seen = Maps.newHashMap();
     private V startVertex;
-    private Specifics<V, E> specifics;
+    private final Specifics<V, E> specifics;
 
     private final Graph<V, E> graph;
 
@@ -141,9 +149,8 @@ public abstract class CrossComponentIterator<V, E, D>
      * @throws IllegalArgumentException if <code>g==null</code> or does not
      * contain <code>startVertex</code>
      */
-    public CrossComponentIterator(Graph<V, E> g, V startVertex)
+    protected CrossComponentIterator(final Graph<V, E> g, final V startVertex)
     {
-        super();
 
         if (g == null) {
             throw new IllegalArgumentException("graph must not be null");
@@ -183,8 +190,9 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * @see java.util.Iterator#hasNext()
+     * @see Iterator#hasNext()
      */
+    @Override
     public boolean hasNext()
     {
         if (startVertex != null) {
@@ -201,7 +209,7 @@ public abstract class CrossComponentIterator<V, E, D>
 
             if (isCrossComponentTraversal()) {
                 while (vertexIterator.hasNext()) {
-                    V v = vertexIterator.next();
+                    final V v = vertexIterator.next();
 
                     if (!isSeenVertex(v)) {
                         encounterVertex(v, null);
@@ -221,8 +229,9 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * @see java.util.Iterator#next()
+     * @see Iterator#next()
      */
+    @Override
     public V next()
     {
         if (startVertex != null) {
@@ -237,7 +246,7 @@ public abstract class CrossComponentIterator<V, E, D>
                 }
             }
 
-            V nextVertex = provideNextVertex();
+            final V nextVertex = provideNextVertex();
             if (nListeners != 0) {
                 fireVertexTraversed(createVertexTraversalEvent(nextVertex));
             }
@@ -286,7 +295,7 @@ public abstract class CrossComponentIterator<V, E, D>
      * indicate that the vertex was explicitly associated with <code>
      * null</code>.
      */
-    protected D getSeenData(V vertex)
+    protected D getSeenData(final V vertex)
     {
         return seen.get(vertex);
     }
@@ -298,7 +307,7 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @return <tt>true</tt> if vertex has already been seen
      */
-    protected boolean isSeenVertex(Object vertex)
+    protected boolean isSeenVertex(final Object vertex)
     {
         return seen.containsKey(vertex);
     }
@@ -323,7 +332,7 @@ public abstract class CrossComponentIterator<V, E, D>
      * null</code> return can also indicate that the vertex was explicitly
      * associated with <code>null</code>.
      */
-    protected D putSeenData(V vertex, D data)
+    protected D putSeenData(final V vertex, final D data)
     {
         return seen.put(vertex, data);
     }
@@ -334,7 +343,7 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex vertex which has been finished
      */
-    protected void finishVertex(V vertex)
+    protected void finishVertex(final V vertex)
     {
         if (nListeners != 0) {
             fireVertexFinished(createVertexTraversalEvent(vertex));
@@ -349,7 +358,7 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @return TODO Document me
      */
-    static <V, E> Specifics<V, E> createGraphSpecifics(Graph<V, E> g)
+    static <V, E> Specifics<V, E> createGraphSpecifics(final Graph<V, E> g)
     {
         if (g instanceof DirectedGraph<?, ?>) {
             return new DirectedSpecifics<V, E>((DirectedGraph<V, E>) g);
@@ -358,14 +367,14 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
-    private void addUnseenChildrenOf(V vertex)
+    private void addUnseenChildrenOf(final V vertex)
     {
-        for (E edge : specifics.edgesOf(vertex)) {
+        for (final E edge : specifics.edgesOf(vertex)) {
             if (nListeners != 0) {
                 fireEdgeTraversed(createEdgeTraversalEvent(edge));
             }
 
-            V oppositeV = Graphs.getOppositeVertex(graph, edge, vertex);
+            final V oppositeV = Graphs.getOppositeVertex(graph, edge, vertex);
 
             if (isSeenVertex(oppositeV)) {
                 encounterVertexAgain(oppositeV, edge);
@@ -375,7 +384,7 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
-    private EdgeTraversalEvent<V, E> createEdgeTraversalEvent(E edge)
+    private EdgeTraversalEvent<V, E> createEdgeTraversalEvent(final E edge)
     {
         if (isReuseEvents()) {
             reusableEdgeEvent.setEdge(edge);
@@ -386,7 +395,7 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
-    private VertexTraversalEvent<V> createVertexTraversalEvent(V vertex)
+    private VertexTraversalEvent<V> createVertexTraversalEvent(final V vertex)
     {
         if (isReuseEvents()) {
             reusableVertexEvent.setVertex(vertex);
@@ -405,28 +414,28 @@ public abstract class CrossComponentIterator<V, E, D>
 
     //~ Inner Interfaces -------------------------------------------------------
 
-    static interface SimpleContainer<T>
+    interface SimpleContainer<T>
     {
         /**
          * Tests if this container is empty.
          *
          * @return <code>true</code> if empty, otherwise <code>false</code>.
          */
-        public boolean isEmpty();
+        boolean isEmpty();
 
         /**
          * Adds the specified object to this container.
          *
          * @param o the object to be added.
          */
-        public void add(T o);
+        void add(T o);
 
         /**
          * Remove an object from this container and return it.
          *
          * @return the object removed from this container.
          */
-        public T remove();
+        T remove();
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -465,7 +474,7 @@ public abstract class CrossComponentIterator<V, E, D>
         /**
          * @see EdgeTraversalEvent#EdgeTraversalEvent(Object, Edge)
          */
-        public FlyweightEdgeEvent(Object eventSource, localE edge)
+        public FlyweightEdgeEvent(final Object eventSource, final localE edge)
         {
             super(eventSource, edge);
         }
@@ -475,7 +484,7 @@ public abstract class CrossComponentIterator<V, E, D>
          *
          * @param edge the edge to be set.
          */
-        protected void setEdge(localE edge)
+        protected void setEdge(final localE edge)
         {
             this.edge = edge;
         }
@@ -495,7 +504,7 @@ public abstract class CrossComponentIterator<V, E, D>
         /**
          * @see VertexTraversalEvent#VertexTraversalEvent(Object, Object)
          */
-        public FlyweightVertexEvent(Object eventSource, VV vertex)
+        public FlyweightVertexEvent(final Object eventSource, final VV vertex)
         {
             super(eventSource, vertex);
         }
@@ -505,7 +514,7 @@ public abstract class CrossComponentIterator<V, E, D>
          *
          * @param vertex the vertex to be set.
          */
-        protected void setVertex(VV vertex)
+        protected void setVertex(final VV vertex)
         {
             this.vertex = vertex;
         }
@@ -517,14 +526,14 @@ public abstract class CrossComponentIterator<V, E, D>
     private static class DirectedSpecifics<VV, EE>
         extends Specifics<VV, EE>
     {
-        private DirectedGraph<VV, EE> graph;
+        private final DirectedGraph<VV, EE> graph;
 
         /**
          * Creates a new DirectedSpecifics object.
          *
          * @param g the graph for which this specifics object to be created.
          */
-        public DirectedSpecifics(DirectedGraph<VV, EE> g)
+        public DirectedSpecifics(final DirectedGraph<VV, EE> g)
         {
             graph = g;
         }
@@ -532,7 +541,8 @@ public abstract class CrossComponentIterator<V, E, D>
         /**
          * @see CrossComponentIterator.Specifics#edgesOf(Object)
          */
-        public Set<? extends EE> edgesOf(VV vertex)
+        @Override
+        public Set<? extends EE> edgesOf(final VV vertex)
         {
             return graph.outgoingEdgesOf(vertex);
         }
@@ -545,14 +555,14 @@ public abstract class CrossComponentIterator<V, E, D>
     private static class UndirectedSpecifics<VV, EE>
         extends Specifics<VV, EE>
     {
-        private Graph<VV, EE> graph;
+        private final Graph<VV, EE> graph;
 
         /**
          * Creates a new UndirectedSpecifics object.
          *
          * @param g the graph for which this specifics object to be created.
          */
-        public UndirectedSpecifics(Graph<VV, EE> g)
+        public UndirectedSpecifics(final Graph<VV, EE> g)
         {
             graph = g;
         }
@@ -560,7 +570,8 @@ public abstract class CrossComponentIterator<V, E, D>
         /**
          * @see CrossComponentIterator.Specifics#edgesOf(Object)
          */
-        public Set<EE> edgesOf(VV vertex)
+        @Override
+        public Set<EE> edgesOf(final VV vertex)
         {
             return graph.edgesOf(vertex);
         }

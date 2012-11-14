@@ -44,10 +44,15 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -68,7 +73,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * Construct a new empty graph object.
      */
-    public AbstractGraph()
+    protected AbstractGraph()
     {
     }
 
@@ -77,7 +82,8 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#containsEdge(Object, Object)
      */
-    public boolean containsEdge(V sourceVertex, V targetVertex)
+    @Override
+    public boolean containsEdge(final V sourceVertex, final V targetVertex)
     {
         return getEdge(sourceVertex, targetVertex) != null;
     }
@@ -85,11 +91,12 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Collection)
      */
-    public boolean removeAllEdges(Collection<? extends E> edges)
+    @Override
+    public boolean removeAllEdges(final Collection<? extends E> edges)
     {
         boolean modified = false;
 
-        for (E e : edges) {
+        for (final E e : edges) {
             modified |= removeEdge(e);
         }
 
@@ -99,9 +106,10 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Object, Object)
      */
-    public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> removeAllEdges(final V sourceVertex, final V targetVertex)
     {
-        Set<E> removed = getAllEdges(sourceVertex, targetVertex);
+        final Set<E> removed = getAllEdges(sourceVertex, targetVertex);
         removeAllEdges(removed);
 
         return removed;
@@ -110,11 +118,12 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllVertices(Collection)
      */
-    public boolean removeAllVertices(Collection<? extends V> vertices)
+    @Override
+    public boolean removeAllVertices(final Collection<? extends V> vertices)
     {
         boolean modified = false;
 
-        for (V v : vertices) {
+        for (final V v : vertices) {
             modified |= removeVertex(v);
         }
 
@@ -132,8 +141,7 @@ public abstract class AbstractGraph<V, E>
     {
         return toStringFromSets(
             vertexSet(),
-            edgeSet(),
-            (this instanceof DirectedGraph<?, ?>));
+            edgeSet(), this instanceof DirectedGraph<?, ?>);
     }
 
     /**
@@ -148,7 +156,7 @@ public abstract class AbstractGraph<V, E>
      * @throws IllegalArgumentException if specified vertex does not exist in
      * this graph.
      */
-    protected boolean assertVertexExist(V v)
+    protected boolean assertVertexExist(final V v)
     {
         if (containsVertex(v)) {
             return true;
@@ -172,12 +180,12 @@ public abstract class AbstractGraph<V, E>
      * @see Graph#removeEdge(Object)
      * @see Graph#containsEdge(Object)
      */
-    protected boolean removeAllEdges(E [] edges)
+    protected boolean removeAllEdges(final E [] edges)
     {
         boolean modified = false;
 
-        for (int i = 0; i < edges.length; i++) {
-            modified |= removeEdge(edges[i]);
+        for (final E edge : edges) {
+            modified |= removeEdge(edge);
         }
 
         return modified;
@@ -194,16 +202,16 @@ public abstract class AbstractGraph<V, E>
      * @return a string representation of (V,E)
      */
     protected String toStringFromSets(
-        Collection<? extends V> vertexSet,
-        Collection<? extends E> edgeSet,
-        boolean directed)
+        final Collection<? extends V> vertexSet,
+        final Collection<? extends E> edgeSet,
+        final boolean directed)
     {
-        List<String> renderedEdges = new ArrayList<String>();
+        final List<String> renderedEdges = new ArrayList<String>();
 
-        StringBuffer sb = new StringBuffer();
-        for (E e : edgeSet) {
-            if ((e.getClass() != DefaultEdge.class)
-                && (e.getClass() != DefaultWeightedEdge.class))
+        final StringBuffer sb = new StringBuffer();
+        for (final E e : edgeSet) {
+            if (e.getClass() != DefaultEdge.class
+                && e.getClass() != DefaultWeightedEdge.class)
             {
                 sb.append(e.toString());
                 sb.append("=");
@@ -243,20 +251,19 @@ public abstract class AbstractGraph<V, E>
     {
         int hash = vertexSet().hashCode();
 
-        for (E e: edgeSet()) {
+        for (final E e: edgeSet()) {
 
             int part = e.hashCode();
 
-            int source = getEdgeSource(e).hashCode();
-            int target = getEdgeTarget(e).hashCode();
+            final int source = getEdgeSource(e).hashCode();
+            final int target = getEdgeTarget(e).hashCode();
 
             // see http://en.wikipedia.org/wiki/Pairing_function (VK);
-            int pairing = ((source + target) * 
-                (source + target + 1) / 2) + target;
+            final int pairing = (source + target) * (source + target + 1) / 2 + target;
             part = 27 * part + pairing;
 
-            long weight = (long) getEdgeWeight(e);
-            part = 27 * part + (int) (weight ^ (weight >>> 32));
+            final long weight = (long) getEdgeWeight(e);
+            part = 27 * part + (int) (weight ^ weight >>> 32);
 
             hash += part;
         }
@@ -276,7 +283,7 @@ public abstract class AbstractGraph<V, E>
      * 
      * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
      */
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) {
             return true;
@@ -285,8 +292,8 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        TypeUtil<Graph<V, E>> typeDecl = null;
-        Graph<V, E> g = TypeUtil.uncheckedCast(obj, typeDecl);
+        final TypeUtil<Graph<V, E>> typeDecl = null;
+        final Graph<V, E> g = TypeUtil.uncheckedCast(obj, typeDecl);
 
         if (!vertexSet().equals(g.vertexSet())) {
             return false;
@@ -295,10 +302,10 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        for (E e: edgeSet()) {
+        for (final E e: edgeSet()) {
 
-            V source = getEdgeSource(e);
-            V target = getEdgeTarget(e);
+            final V source = getEdgeSource(e);
+            final V target = getEdgeTarget(e);
 
             if (!g.containsEdge(e)) {
                 return false;

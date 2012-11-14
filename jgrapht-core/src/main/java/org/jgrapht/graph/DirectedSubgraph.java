@@ -41,10 +41,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import com.google.common.collect.Sets;
+import org.jgrapht.DirectedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Set;
 
 
 /**
@@ -73,9 +73,9 @@ public class DirectedSubgraph<V, E>
      * are included.
      */
     public DirectedSubgraph(
-        DirectedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+        final DirectedGraph<V, E> base,
+        final Set<V> vertexSubset,
+        final Set<E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -85,13 +85,14 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
-    public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(final V vertex)
     {
         assertVertexExist(vertex);
 
         int degree = 0;
 
-        for (E e : getBase().incomingEdgesOf(vertex)) {
+        for (final E e : getBase().incomingEdgesOf(vertex)) {
             if (containsEdge(e)) {
                 degree++;
             }
@@ -103,17 +104,16 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
-    public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(final V vertex)
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
+        final Set<E> edges = Sets.newHashSet();
 
-        for (E e : getBase().incomingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
+        for (final E e : getBase().incomingEdgesOf(vertex))
+            if (containsEdge(e))
                 edges.add(e);
-            }
-        }
 
         return edges;
     }
@@ -121,13 +121,14 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
-    public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(final V vertex)
     {
         assertVertexExist(vertex);
 
         int degree = 0;
 
-        for (E e : getBase().outgoingEdgesOf(vertex)) {
+        for (final E e : getBase().outgoingEdgesOf(vertex)) {
             if (containsEdge(e)) {
                 degree++;
             }
@@ -139,17 +140,16 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
-    public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(final V vertex)
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
+        final Set<E> edges = Sets.newHashSet();
 
-        for (E e : getBase().outgoingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
+        for (final E e : getBase().outgoingEdgesOf(vertex))
+            if (containsEdge(e))
                 edges.add(e);
-            }
-        }
 
         return edges;
     }

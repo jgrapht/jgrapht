@@ -39,7 +39,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.WeightedGraph;
 
 
 /**

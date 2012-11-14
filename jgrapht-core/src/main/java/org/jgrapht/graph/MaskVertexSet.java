@@ -38,10 +38,15 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.util.PrefetchIterator;
+import org.jgrapht.util.PrefetchIterator.NextElementFunctor;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.util.*;
-import org.jgrapht.util.PrefetchIterator.*;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**
@@ -55,56 +60,58 @@ class MaskVertexSet<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private MaskFunctor<V, E> mask;
+    private final MaskFunctor<V, E> mask;
 
     private int size;
 
-    private Set<V> vertexSet;
+    private final Set<V> vertexSet;
 
-    private transient TypeUtil<V> vertexTypeDecl = null;
+    private final transient TypeUtil<V> vertexTypeDecl = null;
 
     //~ Constructors -----------------------------------------------------------
 
-    public MaskVertexSet(Set<V> vertexSet, MaskFunctor<V, E> mask)
+    public MaskVertexSet(final Set<V> vertexSet, final MaskFunctor<V, E> mask)
     {
         this.vertexSet = vertexSet;
         this.mask = mask;
-        this.size = -1;
+        size = -1;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * @see java.util.Collection#contains(java.lang.Object)
+     * @see Collection#contains(Object)
      */
-    public boolean contains(Object o)
+    @Override
+    public boolean contains(final Object o)
     {
         return
-            !this.mask.isVertexMasked(TypeUtil.uncheckedCast(o, vertexTypeDecl))
-            && this.vertexSet.contains(o);
+            !mask.isVertexMasked(TypeUtil.uncheckedCast(o, vertexTypeDecl))
+            && vertexSet.contains(o);
     }
 
     /**
-     * @see java.util.Set#iterator()
+     * @see Set#iterator()
      */
+    @Override
     public Iterator<V> iterator()
     {
         return new PrefetchIterator<V>(new MaskVertexSetNextElementFunctor());
     }
 
     /**
-     * @see java.util.Set#size()
+     * @see Set#size()
      */
+    @Override
     public int size()
     {
-        if (this.size == -1) {
-            this.size = 0;
-            for (Iterator<V> iter = iterator(); iter.hasNext();) {
-                iter.next();
-                this.size++;
+        if (size == -1) {
+            size = 0;
+            for (final V v : this) {
+                size++;
             }
         }
-        return this.size;
+        return size;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -112,19 +119,20 @@ class MaskVertexSet<V, E>
     private class MaskVertexSetNextElementFunctor
         implements NextElementFunctor<V>
     {
-        private Iterator<V> iter;
+        private final Iterator<V> iter;
 
         public MaskVertexSetNextElementFunctor()
         {
-            this.iter = MaskVertexSet.this.vertexSet.iterator();
+            iter = vertexSet.iterator();
         }
 
+        @Override
         public V nextElement()
             throws NoSuchElementException
         {
-            V element = this.iter.next();
-            while (MaskVertexSet.this.mask.isVertexMasked(element)) {
-                element = this.iter.next();
+            V element = iter.next();
+            while (mask.isVertexMasked(element)) {
+                element = iter.next();
             }
             return element;
         }

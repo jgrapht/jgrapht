@@ -39,11 +39,10 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import org.jgrapht.Graph;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 
 /**
@@ -66,7 +65,7 @@ public class VisioExporter<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private VertexNameProvider<V> vertexNameProvider;
+    private final VertexNameProvider<V> vertexNameProvider;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -76,7 +75,7 @@ public class VisioExporter<V, E>
      * @param vertexNameProvider the vertex name provider to be used for naming
      * the Visio shapes.
      */
-    public VisioExporter(VertexNameProvider<V> vertexNameProvider)
+    public VisioExporter(final VertexNameProvider<V> vertexNameProvider)
     {
         this.vertexNameProvider = vertexNameProvider;
     }
@@ -97,26 +96,26 @@ public class VisioExporter<V, E>
      * @param output the print stream to which the graph to be exported.
      * @param g the graph to be exported.
      */
-    public void export(OutputStream output, Graph<V, E> g)
+    public void export(final OutputStream output, final Graph<V, E> g)
     {
-        PrintStream out = new PrintStream(output);
+        final PrintStream out = new PrintStream(output);
 
-        for (Iterator<V> i = g.vertexSet().iterator(); i.hasNext();) {
-            exportVertex(out, i.next());
+        for (final V v : g.vertexSet()) {
+            exportVertex(out, v);
         }
 
-        for (Iterator<E> i = g.edgeSet().iterator(); i.hasNext();) {
-            exportEdge(out, i.next(), g);
+        for (final E e : g.edgeSet()) {
+            exportEdge(out, e, g);
         }
 
         out.flush();
     }
 
-    private void exportEdge(PrintStream out, E edge, Graph<V, E> g)
+    private void exportEdge(final PrintStream out, final E edge, final Graph<V, E> g)
     {
-        String sourceName =
+        final String sourceName =
             vertexNameProvider.getVertexName(g.getEdgeSource(edge));
-        String targetName =
+        final String targetName =
             vertexNameProvider.getVertexName(g.getEdgeTarget(edge));
 
         out.print("Link,");
@@ -134,9 +133,9 @@ public class VisioExporter<V, E>
         out.print("\n");
     }
 
-    private void exportVertex(PrintStream out, V vertex)
+    private void exportVertex(final PrintStream out, final V vertex)
     {
-        String name = vertexNameProvider.getVertexName(vertex);
+        final String name = vertexNameProvider.getVertexName(vertex);
 
         out.print("Shape,");
         out.print(name);

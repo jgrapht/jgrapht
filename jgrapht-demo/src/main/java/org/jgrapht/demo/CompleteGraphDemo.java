@@ -38,36 +38,39 @@
  */
 package org.jgrapht.demo;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public final class CompleteGraphDemo
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    static Graph<Object, DefaultEdge> completeGraph;
+    private static final Graph<Object, DefaultEdge> completeGraph
+        = new SimpleGraph<Object, DefaultEdge>(DefaultEdge.class);
 
     //Number of vertices
-    static int size = 10;
+    private static final int size = 10;
 
     //~ Methods ----------------------------------------------------------------
 
-    public static void main(String [] args)
+    public static void main(final String [] args)
     {
-        //Create the graph object; it is null at this point
-        completeGraph = new SimpleGraph<Object, DefaultEdge>(DefaultEdge.class);
-
         //Create the CompleteGraphGenerator object
-        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(size);
 
         //Create the VertexFactory so the generator can create vertices
-        VertexFactory<Object> vFactory =
+        final VertexFactory<Object> vFactory =
             new ClassBasedVertexFactory<Object>(Object.class);
 
         //Use the CompleteGraphGenerator object to make completeGraph a
@@ -76,15 +79,15 @@ public final class CompleteGraphDemo
 
         //Now, replace all the vertices with sequential numbers so we can ID
         //them
-        Set<Object> vertices = new HashSet<Object>();
+        final Set<Object> vertices = new HashSet<Object>();
         vertices.addAll(completeGraph.vertexSet());
         Integer counter = 0;
-        for (Object vertex : vertices) {
-            replaceVertex(vertex, (Object) counter++);
+        for (final Object vertex : vertices) {
+            replaceVertex(vertex, counter++);
         }
 
         //Print out the graph to be sure it's really complete
-        Iterator<Object> iter =
+        final Iterator<Object> iter =
             new DepthFirstIterator<Object, DefaultEdge>(completeGraph);
         Object vertex;
         while (iter.hasNext()) {
@@ -95,17 +98,17 @@ public final class CompleteGraphDemo
         }
     }
 
-    public static boolean replaceVertex(Object oldVertex, Object newVertex)
+    public static boolean replaceVertex(final Object oldVertex, final Object newVertex)
     {
-        if ((oldVertex == null) || (newVertex == null)) {
+        if (oldVertex == null || newVertex == null) {
             return false;
         }
-        Set<DefaultEdge> relatedEdges = completeGraph.edgesOf(oldVertex);
+        final Set<DefaultEdge> relatedEdges = completeGraph.edgesOf(oldVertex);
         completeGraph.addVertex(newVertex);
 
         Object sourceVertex;
         Object targetVertex;
-        for (DefaultEdge e : relatedEdges) {
+        for (final DefaultEdge e : relatedEdges) {
             sourceVertex = completeGraph.getEdgeSource(e);
             targetVertex = completeGraph.getEdgeTarget(e);
             if (sourceVertex.equals(oldVertex)

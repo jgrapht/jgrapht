@@ -40,7 +40,7 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 
 /**
@@ -53,7 +53,7 @@ final class BellmanFordPathElement<V, E>
     //~ Instance fields --------------------------------------------------------
 
     private double cost = 0;
-    private double epsilon;
+    private final double epsilon;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -66,11 +66,11 @@ final class BellmanFordPathElement<V, E>
      * @param epsilon tolerance factor.
      */
     protected BellmanFordPathElement(
-        Graph<V, E> graph,
-        BellmanFordPathElement<V, E> pathElement,
-        E edge,
-        double cost,
-        double epsilon)
+        final Graph<V, E> graph,
+        final BellmanFordPathElement<V, E> pathElement,
+        final E edge,
+        final double cost,
+        final double epsilon)
     {
         super(graph, pathElement, edge);
 
@@ -83,11 +83,11 @@ final class BellmanFordPathElement<V, E>
      *
      * @param original source to copy from
      */
-    BellmanFordPathElement(BellmanFordPathElement<V, E> original)
+    BellmanFordPathElement(final BellmanFordPathElement<V, E> original)
     {
         super(original);
-        this.cost = original.cost;
-        this.epsilon = original.epsilon;
+        cost = original.cost;
+        epsilon = original.epsilon;
     }
 
     /**
@@ -96,11 +96,11 @@ final class BellmanFordPathElement<V, E>
      * @param vertex end vertex of the path element.
      * @param epsilon tolerance factor.
      */
-    protected BellmanFordPathElement(V vertex, double epsilon)
+    protected BellmanFordPathElement(final V vertex, final double epsilon)
     {
         super(vertex);
 
-        this.cost = 0;
+        cost = 0;
         this.epsilon = epsilon;
     }
 
@@ -113,7 +113,7 @@ final class BellmanFordPathElement<V, E>
      */
     public double getCost()
     {
-        return this.cost;
+        return cost;
     }
 
     /**
@@ -129,16 +129,16 @@ final class BellmanFordPathElement<V, E>
      * @return .
      */
     protected boolean improve(
-        BellmanFordPathElement<V, E> candidatePrevPathElement,
-        E candidateEdge,
-        double candidateCost)
+        final BellmanFordPathElement<V, E> candidatePrevPathElement,
+        final E candidateEdge,
+        final double candidateCost)
     {
         // to avoid improvement only due to rounding errors.
-        if (candidateCost < (getCost() - epsilon)) {
-            this.prevPathElement = candidatePrevPathElement;
-            this.prevEdge = candidateEdge;
-            this.cost = candidateCost;
-            this.nHops = candidatePrevPathElement.getHopCount() + 1;
+        if (candidateCost < cost - epsilon) {
+            prevPathElement = candidatePrevPathElement;
+            prevEdge = candidateEdge;
+            cost = candidateCost;
+            nHops = candidatePrevPathElement.getHopCount() + 1;
 
             return true;
         } else {

@@ -39,13 +39,16 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.generate.LinearGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -63,10 +66,10 @@ public class ChromaticNumberTest
      */
     public void testChromaticNumber()
     {
-        UndirectedGraph<Object, DefaultEdge> completeGraph =
+        final UndirectedGraph<Object, DefaultEdge> completeGraph =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 7);
         completeGenerator.generateGraph(
@@ -78,16 +81,16 @@ public class ChromaticNumberTest
         assertEquals(
             7,
             ChromaticNumber.findGreedyChromaticNumber(completeGraph));
-        Map<Integer, Set<Object>> coloring =
+        final Map<Integer, Set<Object>> coloring =
             ChromaticNumber.findGreedyColoredGroups(completeGraph);
         assertEquals(
             7,
             coloring.keySet().size());
 
-        UndirectedGraph<Object, DefaultEdge> linearGraph =
+        final UndirectedGraph<Object, DefaultEdge> linearGraph =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        LinearGraphGenerator<Object, DefaultEdge> linearGenerator =
+        final LinearGraphGenerator<Object, DefaultEdge> linearGenerator =
             new LinearGraphGenerator<Object, DefaultEdge>(
                 50);
         linearGenerator.generateGraph(

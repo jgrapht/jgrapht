@@ -48,12 +48,12 @@ public class VertexPair<V>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private V n1;
-    private V n2;
+    private final V n1;
+    private final V n2;
 
     //~ Constructors -----------------------------------------------------------
 
-    public VertexPair(V n1, V n2)
+    public VertexPair(final V n1, final V n2)
     {
         this.n1 = n1;
         this.n2 = n2;
@@ -78,12 +78,12 @@ public class VertexPair<V>
      *
      * @return true if contains, false otherwise
      */
-    public boolean hasVertex(V v)
+    public boolean hasVertex(final V v)
     {
         return v.equals(n1) || v.equals(n2);
     }
 
-    public V getOther(V one)
+    public V getOther(final V one)
     {
         if (one.equals(n1)) {
             return n2;
@@ -99,32 +99,28 @@ public class VertexPair<V>
         return n1 + "," + n2;
     }
 
-    @Override public boolean equals(Object o)
+    @Override public boolean equals(final Object o)
     {
         if (this == o) {
             return true;
         }
-        if ((o == null) || (getClass() != o.getClass())) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        @SuppressWarnings("unchecked")
-        VertexPair<V> that = (VertexPair<V>) o;
+        @SuppressWarnings("unchecked") final VertexPair<V> that = (VertexPair<V>) o;
 
-        if ((n1 != null) ? (!n1.equals(that.n1)) : (that.n1 != null)) {
+        if (n1 != null ? !n1.equals(that.n1) : that.n1 != null) {
             return false;
         }
-        if ((n2 != null) ? (!n2.equals(that.n2)) : (that.n2 != null)) {
-            return false;
-        }
+        return !(n2 != null ? !n2.equals(that.n2) : that.n2 != null);
 
-        return true;
     }
 
     @Override public int hashCode()
     {
-        int result = (n1 != null) ? n1.hashCode() : 0;
-        result = (31 * result) + ((n2 != null) ? n2.hashCode() : 0);
+        int result = n1 != null ? n1.hashCode() : 0;
+        result = 31 * result + (n2 != null ? n2.hashCode() : 0);
         return result;
     }
 }

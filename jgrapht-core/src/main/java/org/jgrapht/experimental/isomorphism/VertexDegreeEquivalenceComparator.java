@@ -38,8 +38,10 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
 
 
 /**
@@ -60,12 +62,6 @@ public class VertexDegreeEquivalenceComparator<V, E>
 {
     //~ Constructors -----------------------------------------------------------
 
-    /**
-     */
-    public VertexDegreeEquivalenceComparator()
-    {
-    }
-
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -77,18 +73,18 @@ public class VertexDegreeEquivalenceComparator<V, E>
      * @see EquivalenceComparator#equivalenceCompare(Object, Object, Object,
      * Object)
      */
+    @Override
     public boolean equivalenceCompare(
-        V vertex1,
-        V vertex2,
-        Graph<V, E> context1,
-        Graph<V, E> context2)
+        final V vertex1,
+        final V vertex2,
+        final Graph<V, E> context1,
+        final Graph<V, E> context2)
     {
         // note that VertexDegreeComparator cannot be used. It supports only
         // directed graphs.
-        InOutDegrees inOut1 = getInOutDegrees(context1, vertex1);
-        InOutDegrees inOut2 = getInOutDegrees(context2, vertex2);
-        boolean result = inOut1.equals(inOut2);
-        return result;
+        final InOutDegrees inOut1 = getInOutDegrees(context1, vertex1);
+        final InOutDegrees inOut2 = getInOutDegrees(context2, vertex2);
+        return inOut1.equals(inOut2);
     }
 
     /**
@@ -96,12 +92,13 @@ public class VertexDegreeEquivalenceComparator<V, E>
      *
      * @see EquivalenceComparator#equivalenceHashcode(Object, Object)
      */
-    public int equivalenceHashcode(V vertex, Graph<V, E> context)
+    @Override
+    public int equivalenceHashcode(final V vertex, final Graph<V, E> context)
     {
-        InOutDegrees inOut = getInOutDegrees(context, vertex);
+        final InOutDegrees inOut = getInOutDegrees(context, vertex);
 
         // hash it using the string hash. use the format N '-' N
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         sb.append(String.valueOf(inOut.inDegree));
         sb.append("-"); // to diffrentiate inner and outer
         sb.append(String.valueOf(inOut.outDegree));
@@ -116,18 +113,18 @@ public class VertexDegreeEquivalenceComparator<V, E>
      * @param aContextGraph
      * @param vertex
      */
-    protected InOutDegrees getInOutDegrees(Graph<V, E> aContextGraph,
-        V vertex)
+    protected InOutDegrees getInOutDegrees(final Graph<V, E> aContextGraph,
+        final V vertex)
     {
         int inVertexDegree = 0;
         int outVertexDegree = 0;
         if (aContextGraph instanceof UndirectedGraph<?, ?>) {
-            UndirectedGraph<V, E> undirectedGraph =
+            final UndirectedGraph<V, E> undirectedGraph =
                 (UndirectedGraph<V, E>) aContextGraph;
             inVertexDegree = undirectedGraph.degreeOf(vertex);
             outVertexDegree = inVertexDegree; // it is UNdirected
         } else if (aContextGraph instanceof DirectedGraph<?, ?>) {
-            DirectedGraph<V, E> directedGraph =
+            final DirectedGraph<V, E> directedGraph =
                 (DirectedGraph<V, E>) aContextGraph;
             inVertexDegree = directedGraph.inDegreeOf(vertex);
             outVertexDegree = directedGraph.outDegreeOf(vertex);
@@ -151,26 +148,26 @@ public class VertexDegreeEquivalenceComparator<V, E>
      */
     protected class InOutDegrees
     {
-        public int inDegree;
-        public int outDegree;
+        public final int inDegree;
+        public final int outDegree;
 
-        public InOutDegrees(int aInDegree, int aOutDegree)
+        public InOutDegrees(final int aInDegree, final int aOutDegree)
         {
-            this.inDegree = aInDegree;
-            this.outDegree = aOutDegree;
+            inDegree = aInDegree;
+            outDegree = aOutDegree;
         }
 
         /**
          * Checks both inDegree and outDegree. Does not check class type to save
          * time. If should be used with caution.
          *
-         * @see java.lang.Object#equals(java.lang.Object)
+         * @see Object#equals(Object)
          */
-        public boolean equals(Object obj)
+        public boolean equals(final Object obj)
         {
-            InOutDegrees other = (InOutDegrees) obj;
-            return ((this.inDegree == other.inDegree)
-                && (this.outDegree == other.outDegree));
+            final InOutDegrees other = (InOutDegrees) obj;
+            return inDegree == other.inDegree
+                && outDegree == other.outDegree;
         }
     }
 }

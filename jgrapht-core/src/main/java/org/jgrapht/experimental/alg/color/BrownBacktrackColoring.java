@@ -3,10 +3,12 @@
  */
 package org.jgrapht.experimental.alg.color;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.alg.ExactAlgorithm;
+import org.jgrapht.experimental.alg.IntArrayGraphAlgorithm;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.alg.*;
+import java.util.BitSet;
+import java.util.Map;
 
 
 /**
@@ -35,7 +37,7 @@ public class BrownBacktrackColoring<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    void recursiveColor(int pos)
+    void recursiveColor(final int pos)
     {
         _colorCount[pos] = _colorCount[pos - 1];
         _allowedColors[pos].set(0, _colorCount[pos] + 1);
@@ -47,23 +49,23 @@ public class BrownBacktrackColoring<V, E>
         }
         for (
             int i = 1;
-            (i <= _colorCount[pos])
-            && (_colorCount[pos] < _chi);
+            i <= _colorCount[pos]
+            && _colorCount[pos] < _chi;
             i++)
         {
             if (_allowedColors[pos].get(i)) {
                 _color[pos] = i;
-                if (pos < (_neighbors.length - 1)) {
+                if (pos < _neighbors.length - 1) {
                     recursiveColor(pos + 1);
                 } else {
                     _chi = _colorCount[pos];
                 }
             }
         }
-        if ((_colorCount[pos] + 1) < _chi) {
+        if (_colorCount[pos] + 1 < _chi) {
             _colorCount[pos]++;
             _color[pos] = _colorCount[pos];
-            if (pos < (_neighbors.length - 1)) {
+            if (pos < _neighbors.length - 1) {
                 recursiveColor(pos + 1);
             } else {
                 _chi = _colorCount[pos];
@@ -75,7 +77,8 @@ public class BrownBacktrackColoring<V, E>
     /* (non-Javadoc)
      * @see org.jgrapht.experimental.alg.ExactAlgorithm#getResult()
      */
-    public Integer getResult(Map<V, Object> additionalData)
+    @Override
+    public Integer getResult(final Map<V, Object> additionalData)
     {
         _chi = _neighbors.length;
         _color = new int[_neighbors.length];

@@ -39,7 +39,7 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import java.util.List;
 
 
 /**
@@ -61,21 +61,21 @@ public interface GraphPath<V, E>
      *
      * @return the containing graph
      */
-    public Graph<V, E> getGraph();
+    Graph<V, E> getGraph();
 
     /**
      * Returns the start vertex in the path.
      *
      * @return the start vertex
      */
-    public V getStartVertex();
+    V getStartVertex();
 
     /**
      * Returns the end vertex in the path.
      *
      * @return the end vertex
      */
-    public V getEndVertex();
+    V getEndVertex();
 
     /**
      * Returns the edges making up the path. The first edge in this path is
@@ -90,7 +90,7 @@ public interface GraphPath<V, E>
      *
      * @return list of edges traversed by the path
      */
-    public List<E> getEdgeList();
+    List<E> getEdgeList();
 
     /**
      * Returns the weight assigned to the path. Typically, this will be the sum
@@ -99,7 +99,7 @@ public interface GraphPath<V, E>
      *
      * @return the weight of the path
      */
-    public double getWeight();
+    double getWeight();
 }
 
 // End GraphPath.java

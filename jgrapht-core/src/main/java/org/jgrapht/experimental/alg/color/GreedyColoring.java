@@ -1,9 +1,15 @@
 package org.jgrapht.experimental.alg.color;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.alg.ApproximationAlgorithm;
+import org.jgrapht.experimental.alg.IntArrayGraphAlgorithm;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.alg.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 public class GreedyColoring<V, E>
@@ -42,14 +48,14 @@ public class GreedyColoring<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    int color(int [] order)
+    int color(final int [] order)
     {
         final int [] color = new int[_neighbors.length];
         int maxColor = 1;
-        BitSet usedColors = new BitSet(_neighbors.length);
+        final BitSet usedColors = new BitSet(_neighbors.length);
 
         for (int i = 0; i < _neighbors.length; i++) {
-            final int v = (order == null) ? i : order[i];
+            final int v = order == null ? i : order[i];
             usedColors.clear();
             for (int j = 0; j < _neighbors[v].length; j++) {
                 final int nb = _neighbors[v][j];
@@ -81,9 +87,9 @@ public class GreedyColoring<V, E>
             buckets.get(degree[i]).add(i);
         }
         for (int i = 0; i < _neighbors.length; i++) {
-            while (buckets.get(i).size() > 0) {
+            while (!buckets.get(i).isEmpty()) {
                 final int s = buckets.get(i).size() - 1;
-                final int vertex = (Integer) buckets.get(i).get(s);
+                final int vertex = buckets.get(i).get(s);
                 buckets.get(i).remove(s);
                 degree[vertex] = -1;
                 order[index--] = vertex;
@@ -119,8 +125,8 @@ public class GreedyColoring<V, E>
         cumBucketSize[0] = _neighbors.length;
         while (index < _neighbors.length) {
             while (
-                (maxSat > 0)
-                && (cumBucketSize[maxSat] == cumBucketSize[maxSat - 1]))
+                maxSat > 0
+                && cumBucketSize[maxSat] == cumBucketSize[maxSat - 1])
             {
                 cumBucketSize[maxSat--] = 0;
             }
@@ -129,10 +135,10 @@ public class GreedyColoring<V, E>
             satur[v] = -1;
             index++;
             for (int j = 0; j < _neighbors[v].length; j++) {
-                final int nb = (int) _neighbors[v][j];
+                final int nb = _neighbors[v][j];
                 final int bi = bucketIndex[nb];
                 if (satur[nb] >= 0) {
-                    if (bi != (cumBucketSize[satur[nb]] - 1)) {
+                    if (bi != cumBucketSize[satur[nb]] - 1) {
                         buckets[bi] = buckets[cumBucketSize[satur[nb]] - 1];
                         buckets[cumBucketSize[satur[nb]] - 1] = nb;
                         bucketIndex[nb] = cumBucketSize[satur[nb]] - 1;
@@ -154,12 +160,14 @@ public class GreedyColoring<V, E>
         return buckets;
     }
 
-    public Integer getLowerBound(Map<V, Object> optionalData)
+    @Override
+    public Integer getLowerBound(final Map<V, Object> optionalData)
     {
         return 0;
     }
 
-    public Integer getUpperBound(Map<V, Object> optionalData)
+    @Override
+    public Integer getUpperBound(final Map<V, Object> optionalData)
     {
         switch (_order) {
         case BEST_ORDER:
@@ -176,6 +184,7 @@ public class GreedyColoring<V, E>
         return _neighbors.length;
     }
 
+    @Override
     public boolean isExact()
     {
         return false;

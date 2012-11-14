@@ -39,7 +39,11 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
 
 /**
@@ -60,9 +64,9 @@ public class GenericGraphsTest
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public GenericGraphsTest(String name)
+    public GenericGraphsTest(final String name)
     {
         super(name);
     }
@@ -73,8 +77,8 @@ public class GenericGraphsTest
 
     public void testLegalInsertStringGraph()
     {
-        String v1 = "Vertex1";
-        Object v2 = "Vertex2";
+        final String v1 = "Vertex1";
+        final Object v2 = "Vertex2";
         objectGraph.addVertex(v1);
         objectGraph.addVertex(v2);
         objectGraph.addEdge(v1, v2);
@@ -82,10 +86,10 @@ public class GenericGraphsTest
 
     public void testLegalInsertFooGraph()
     {
-        FooVertex v1 = new FooVertex();
-        FooVertex v2 = new FooVertex();
-        BarVertex vb1 = new BarVertex();
-        BarVertex vb2 = new BarVertex();
+        final FooVertex v1 = new FooVertex();
+        final FooVertex v2 = new FooVertex();
+        final BarVertex vb1 = new BarVertex();
+        final BarVertex vb2 = new BarVertex();
         fooFooGraph.addVertex(v1);
         fooFooGraph.addVertex(v2);
         fooFooGraph.addVertex(vb1);
@@ -100,8 +104,8 @@ public class GenericGraphsTest
 
     public void testLegalInsertBarGraph()
     {
-        BarVertex v1 = new BarVertex();
-        BarVertex v2 = new BarVertex();
+        final BarVertex v1 = new BarVertex();
+        final BarVertex v2 = new BarVertex();
         barBarGraph.addVertex(v1);
         barBarGraph.addVertex(v2);
         barBarGraph.addEdge(v1, v2);
@@ -109,10 +113,10 @@ public class GenericGraphsTest
 
     public void testLegalInsertFooBarGraph()
     {
-        FooVertex v1 = new FooVertex();
-        FooVertex v2 = new FooVertex();
-        BarVertex vb1 = new BarVertex();
-        BarVertex vb2 = new BarVertex();
+        final FooVertex v1 = new FooVertex();
+        final FooVertex v2 = new FooVertex();
+        final BarVertex vb1 = new BarVertex();
+        final BarVertex vb2 = new BarVertex();
         fooFooGraph.addVertex(v1);
         fooFooGraph.addVertex(v2);
         fooFooGraph.addVertex(vb1);
@@ -124,21 +128,21 @@ public class GenericGraphsTest
 
     public void testAlissaHacker()
     {
-        DirectedGraph<String, CustomEdge> g =
+        final DirectedGraph<String, CustomEdge> g =
             new DefaultDirectedGraph<String, CustomEdge>(CustomEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addEdge("a", "b");
-        CustomEdge custom = g.getEdge("a", "b");
-        String s = custom.toString();
+        final CustomEdge custom = g.getEdge("a", "b");
+        final String s = custom.toString();
         assertEquals("Alissa P. Hacker approves the edge from a to b", s);
     }
 
     public void testEqualButNotSameVertex()
     {
-        EquivVertex v1 = new EquivVertex();
-        EquivVertex v2 = new EquivVertex();
-        EquivGraph g = new EquivGraph();
+        final EquivVertex v1 = new EquivVertex();
+        final EquivVertex v2 = new EquivVertex();
+        final EquivGraph g = new EquivGraph();
         g.addVertex(v1);
         g.addVertex(v2);
         g.addEdge(v1, v2, new DefaultEdge());
@@ -149,6 +153,7 @@ public class GenericGraphsTest
     /**
      * .
      */
+    @Override
     protected void setUp()
     {
         objectGraph =
@@ -174,7 +179,7 @@ public class GenericGraphsTest
 
     public static class EquivVertex
     {
-        public boolean equals(Object o)
+        public boolean equals(final Object o)
         {
             return true;
         }
@@ -209,17 +214,16 @@ public class GenericGraphsTest
         private static final long serialVersionUID = 1L;
     }
 
-    private class FooVertex
+    private static class FooVertex
     {
-        String str;
+        final String str;
 
         public FooVertex()
         {
-            super();
             str = "empty foo";
         }
 
-        public FooVertex(String s)
+        public FooVertex(final String s)
         {
             str = s;
         }
@@ -239,7 +243,7 @@ public class GenericGraphsTest
             super("empty bar");
         }
 
-        public BarVertex(String s)
+        public BarVertex(final String s)
         {
             super(s);
         }

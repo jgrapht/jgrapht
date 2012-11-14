@@ -40,7 +40,7 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 
 /**
@@ -57,7 +57,7 @@ final class RankingPathElement<V, E>
     /**
      * Weight of the path.
      */
-    private double weight;
+    private final double weight;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -69,10 +69,10 @@ final class RankingPathElement<V, E>
      * @param weight total cost of the created path element.
      */
     RankingPathElement(
-        Graph<V, E> graph,
-        RankingPathElement<V, E> pathElement,
-        E edge,
-        double weight)
+        final Graph<V, E> graph,
+        final RankingPathElement<V, E> pathElement,
+        final E edge,
+        final double weight)
     {
         super(graph, pathElement, edge);
         this.weight = weight;
@@ -83,10 +83,10 @@ final class RankingPathElement<V, E>
      *
      * @param vertex end vertex of the path element.
      */
-    RankingPathElement(V vertex)
+    RankingPathElement(final V vertex)
     {
         super(vertex);
-        this.weight = 0;
+        weight = 0;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -98,7 +98,7 @@ final class RankingPathElement<V, E>
      */
     public double getWeight()
     {
-        return this.weight;
+        return weight;
     }
 
     /**
@@ -106,6 +106,7 @@ final class RankingPathElement<V, E>
      *
      * @return <code>null</code> is the path is empty.
      */
+    @Override
     public RankingPathElement<V, E> getPrevPathElement()
     {
         return (RankingPathElement<V, E>) super.getPrevPathElement();

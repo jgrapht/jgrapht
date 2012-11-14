@@ -39,12 +39,16 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -80,7 +84,7 @@ public abstract class ShortestPathTestCase
     public void testPathBetween()
     {
         List path;
-        Graph<String, DefaultWeightedEdge> g = create();
+        final Graph<String, DefaultWeightedEdge> g = create();
 
         path = findPathBetween(g, V1, V2);
         assertEquals(Arrays.asList(new DefaultEdge[] { e12 }), path);
@@ -120,9 +124,9 @@ public abstract class ShortestPathTestCase
     }
 
     protected Graph<String, DefaultWeightedEdge> createWithBias(
-        boolean negate)
+        final boolean negate)
     {
-        Graph<String, DefaultWeightedEdge> g;
+        final Graph<String, DefaultWeightedEdge> g;
         double bias = 1;
         if (negate) {
             // negative-weight edges are being tested, so only a directed graph

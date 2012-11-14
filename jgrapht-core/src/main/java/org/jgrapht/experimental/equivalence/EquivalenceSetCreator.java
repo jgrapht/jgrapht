@@ -37,7 +37,13 @@
  */
 package org.jgrapht.experimental.equivalence;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -73,14 +79,14 @@ public class EquivalenceSetCreator<E, C>
      */
     @Deprecated public static <EE, CC> EquivalenceSet []
     createEqualityGroupOrderedArray(
-        EE [] aElementsArray,
-        EquivalenceComparator<? super EE, ? super CC> aEqComparator,
-        CC aContext)
+        final EE [] aElementsArray,
+        final EquivalenceComparator<? super EE, ? super CC> aEqComparator,
+        final CC aContext)
     {
-        return (createEqualityGroupOrderedArray(
+        return createEqualityGroupOrderedArray(
             Arrays.asList(aElementsArray),
             aEqComparator,
-            aContext));
+            aContext);
             // ArrayList<EquivalenceSet<? super EE,? super CC>> arrayList = new
             // ArrayList<EquivalenceSet<? super EE,? super CC>>();
             //
@@ -112,14 +118,14 @@ public class EquivalenceSetCreator<E, C>
      * causes problems with generics elsewhere - change to List?
      */
     public static <EE, CC> EquivalenceSet [] createEqualityGroupOrderedArray(
-        Collection<EE> elements,
-        EquivalenceComparator<? super EE, ? super CC> aEqComparator,
-        CC aContext)
+        final Collection<EE> elements,
+        final EquivalenceComparator<? super EE, ? super CC> aEqComparator,
+        final CC aContext)
     {
-        ArrayList<EquivalenceSet<? super EE, ? super CC>> arrayList =
+        final ArrayList<EquivalenceSet<? super EE, ? super CC>> arrayList =
             new ArrayList<EquivalenceSet<? super EE, ? super CC>>();
 
-        HashMap<Integer, List<EquivalenceSet<? super EE, ? super CC>>> map =
+        final HashMap<Integer, List<EquivalenceSet<? super EE, ? super CC>>> map =
             createEqualityGroupMap(elements, aEqComparator, aContext);
         // each of the map values is a list with one or more groups in it.
         // Object[] array = map.values().toArray();
@@ -127,15 +133,15 @@ public class EquivalenceSetCreator<E, C>
         // {
         // List list = (List)array[i];
 
-        for (List<EquivalenceSet<? super EE, ? super CC>> list : map.values()) {
-            for (EquivalenceSet<? super EE, ? super CC> eSet : list) {
+        for (final List<EquivalenceSet<? super EE, ? super CC>> list : map.values()) {
+            for (final EquivalenceSet<? super EE, ? super CC> eSet : list) {
                 arrayList.add(eSet);
             }
         }
 
         // now we got all the eq. groups  in an array list. we need to sort
         // them
-        EquivalenceSet [] resultArray = new EquivalenceSet[arrayList.size()];
+        final EquivalenceSet [] resultArray = new EquivalenceSet[arrayList.size()];
         arrayList.toArray(resultArray);
         Arrays.sort(resultArray, groupSizeComparator);
         return resultArray;
@@ -155,16 +161,16 @@ public class EquivalenceSetCreator<E, C>
      */
     private static <EE, CC> HashMap<Integer,
         List<EquivalenceSet<? super EE, ? super CC>>> createEqualityGroupMap(
-        Collection<EE> elements,
-        EquivalenceComparator<? super EE, ? super CC> aEqComparator,
-        CC aComparatorContext)
+        final Collection<EE> elements,
+        final EquivalenceComparator<? super EE, ? super CC> aEqComparator,
+        final CC aComparatorContext)
     {
-        HashMap<Integer, List<EquivalenceSet<? super EE, ? super CC>>> equalityGroupMap =
+        final HashMap<Integer, List<EquivalenceSet<? super EE, ? super CC>>> equalityGroupMap =
             new HashMap<Integer, List<EquivalenceSet<? super EE, ? super CC>>>(
                 elements.size());
 
-        for (EE curentElement : elements) {
-            int hashcode =
+        for (final EE curentElement : elements) {
+            final int hashcode =
                 aEqComparator.equivalenceHashcode(
                     curentElement,
                     aComparatorContext);
@@ -190,7 +196,7 @@ public class EquivalenceSetCreator<E, C>
 
                 // we need to check the groups in the list. If none are good,
                 // create a new one
-                for (EquivalenceSet<? super EE, ? super CC> eqGroup : list) {
+                for (final EquivalenceSet<? super EE, ? super CC> eqGroup : list) {
                     if (eqGroup.equivalentTo(
                             curentElement,
                             aComparatorContext))
@@ -233,20 +239,21 @@ public class EquivalenceSetCreator<E, C>
         /**
          * compare by size , then (if size equal) by hashcode
          *
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         * @see Comparator#compare(Object, Object)
          */
+        @Override
         @SuppressWarnings("unchecked")
-        public int compare(EquivalenceSet arg1, EquivalenceSet arg2)
+        public int compare(final EquivalenceSet arg1, final EquivalenceSet arg2)
         {
-            int eqGroupSize1 = arg1.size();
-            int eqGroupSize2 = arg2.size();
+            final int eqGroupSize1 = arg1.size();
+            final int eqGroupSize2 = arg2.size();
             if (eqGroupSize1 > eqGroupSize2) {
                 return 1;
             } else if (eqGroupSize1 < eqGroupSize2) {
                 return -1;
             } else { // size equal , compare hashcodes
-                int eqGroupHash1 = arg1.hashCode();
-                int eqGroupHash2 = arg2.hashCode();
+                final int eqGroupHash1 = arg1.hashCode();
+                final int eqGroupHash2 = arg2.hashCode();
                 if (eqGroupHash1 > eqGroupHash2) {
                     return 1;
                 } else if (eqGroupHash1 < eqGroupHash2) {

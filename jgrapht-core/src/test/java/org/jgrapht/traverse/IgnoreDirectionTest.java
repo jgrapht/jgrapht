@@ -39,8 +39,10 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 
 /**
@@ -58,30 +60,34 @@ public class IgnoreDirectionTest
 {
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     String getExpectedStr1()
     {
         return "4,9,7,8,2,1,3,6,5";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return "4,9,7,8,2,1,3,6,5,orphan";
     }
 
+    @Override
     String getExpectedFinishString()
     {
         return "5:6:3:1:2:8:7:9:4:orphan:";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        final DirectedGraph<String, DefaultEdge> g,
+        final String vertex)
     {
         // ignore the passed in vertex and always start from v4, since that's
         // the only vertex without out-edges
-        UndirectedGraph<String, DefaultEdge> undirectedView =
+        final UndirectedGraph<String, DefaultEdge> undirectedView =
             new AsUndirectedGraph<String, DefaultEdge>(g);
-        AbstractGraphIterator<String, DefaultEdge> i =
+        final AbstractGraphIterator<String, DefaultEdge> i =
             new DepthFirstIterator<String, DefaultEdge>(undirectedView, "4");
         i.setCrossComponentTraversal(true);
 

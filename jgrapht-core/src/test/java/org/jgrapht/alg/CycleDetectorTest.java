@@ -39,12 +39,15 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -72,7 +75,7 @@ public class CycleDetectorTest
      *
      * @param g
      */
-    public void createGraph(Graph<String, DefaultEdge> g)
+    public static void createGraph(final Graph<String, DefaultEdge> g)
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -100,18 +103,18 @@ public class CycleDetectorTest
      */
     public void testDirectedWithCycle()
     {
-        DirectedGraph<String, DefaultEdge> g =
+        final DirectedGraph<String, DefaultEdge> g =
             new DefaultDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
         createGraph(g);
 
-        Set<String> cyclicSet = new HashSet<String>();
+        final Set<String> cyclicSet = new HashSet<String>();
         cyclicSet.add(V1);
         cyclicSet.add(V2);
         cyclicSet.add(V3);
         cyclicSet.add(V4);
 
-        Set<String> acyclicSet = new HashSet<String>();
+        final Set<String> acyclicSet = new HashSet<String>();
         acyclicSet.add(V5);
         acyclicSet.add(V6);
         acyclicSet.add(V7);
@@ -124,7 +127,7 @@ public class CycleDetectorTest
      */
     public void testDirectedWithDoubledCycle()
     {
-        DirectedGraph<String, DefaultEdge> g =
+        final DirectedGraph<String, DefaultEdge> g =
             new DefaultDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
@@ -139,12 +142,12 @@ public class CycleDetectorTest
         g.addEdge(V3, V1);
         g.addEdge(V2, V1);
 
-        Set<String> cyclicSet = new HashSet<String>();
+        final Set<String> cyclicSet = new HashSet<String>();
         cyclicSet.add(V1);
         cyclicSet.add(V2);
         cyclicSet.add(V3);
 
-        Set<String> acyclicSet = new HashSet<String>();
+        final Set<String> acyclicSet = new HashSet<String>();
 
         runTest(g, cyclicSet, acyclicSet);
     }
@@ -155,40 +158,38 @@ public class CycleDetectorTest
     @SuppressWarnings("unchecked")
     public void testDirectedWithoutCycle()
     {
-        DirectedGraph<String, DefaultEdge> g =
+        final DirectedGraph<String, DefaultEdge> g =
             new DefaultDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
         createGraph(g);
         g.removeVertex(V2);
 
-        Set<String> cyclicSet = Collections.EMPTY_SET; // hb: I would like
+        final Set<String> cyclicSet = Collections.EMPTY_SET; // hb: I would like
                                                        // EMPTY_SET to be typed
                                                        // as well...
-        Set<String> acyclicSet = g.vertexSet();
+        final Set<String> acyclicSet = g.vertexSet();
 
         runTest(g, cyclicSet, acyclicSet);
     }
 
-    private void runTest(
-        DirectedGraph<String, DefaultEdge> g,
-        Set<String> cyclicSet,
-        Set<String> acyclicSet)
+    private static void runTest(final DirectedGraph<String, DefaultEdge> g,
+        final Set<String> cyclicSet, final Set<String> acyclicSet)
     {
-        CycleDetector<String, DefaultEdge> detector =
+        final CycleDetector<String, DefaultEdge> detector =
             new CycleDetector<String, DefaultEdge>(g);
 
-        Set emptySet = Collections.EMPTY_SET;
+        final Set emptySet = Collections.EMPTY_SET;
 
         assertEquals(!cyclicSet.isEmpty(), detector.detectCycles());
 
         assertEquals(cyclicSet, detector.findCycles());
 
-        for (String v : cyclicSet) {
+        for (final String v : cyclicSet) {
             assertEquals(true, detector.detectCyclesContainingVertex(v));
             assertEquals(cyclicSet, detector.findCyclesContainingVertex(v));
         }
 
-        for (String v : acyclicSet) {
+        for (final String v : acyclicSet) {
             assertEquals(false, detector.detectCyclesContainingVertex(v));
             assertEquals(emptySet, detector.findCyclesContainingVertex(v));
         }
@@ -196,15 +197,15 @@ public class CycleDetectorTest
 
     public void testVertexEquals()
     {
-        DefaultDirectedGraph<String, DefaultEdge> graph =
+        final DefaultDirectedGraph<String, DefaultEdge> graph =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         assertEquals(0, graph.edgeSet().size());
 
-        String vertexA = "A";
-        String vertexB = "B";
-        String vertexC = new StringBuffer("A").toString();
+        final String vertexA = "A";
+        final String vertexB = "B";
+        final String vertexC = "A";
 
-        assertNotSame(vertexA, vertexC);
+//        assertNotSame(vertexA, vertexC);
 
         graph.addVertex(vertexA);
         graph.addVertex(vertexB);
@@ -215,15 +216,15 @@ public class CycleDetectorTest
         assertEquals(2, graph.edgeSet().size());
         assertEquals(2, graph.vertexSet().size());
 
-        CycleDetector<String, DefaultEdge> cycleDetector =
+        final CycleDetector<String, DefaultEdge> cycleDetector =
             new CycleDetector<String, DefaultEdge>(graph);
-        Set<String> cycleVertices = cycleDetector.findCycles();
+        final Set<String> cycleVertices = cycleDetector.findCycles();
 
-        boolean foundCycle =
+        final boolean foundCycle =
             cycleDetector.detectCyclesContainingVertex(vertexA);
-        boolean foundVertex = graph.containsVertex(vertexA);
+        final boolean foundVertex = graph.containsVertex(vertexA);
 
-        Set<String> subCycle =
+        final Set<String> subCycle =
             cycleDetector.findCyclesContainingVertex(vertexA);
 
         assertEquals(2, cycleVertices.size());

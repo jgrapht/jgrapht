@@ -38,7 +38,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 
 /**
@@ -102,33 +103,33 @@ public class Picture1Graph
 
     private void addEdges()
     {
-        this.eS1 = this.addEdge("vS", "v1");
-        this.eS2 = this.addEdge("vS", "v2");
-        this.eS3 = this.addEdge("vS", "v3");
-        this.eS4 = this.addEdge("vS", "v4");
-        this.eS7 = this.addEdge("vS", "v7");
-        this.e15 = this.addEdge("v1", "v5");
-        this.e25 = this.addEdge("v2", "v5");
-        this.e27 = this.addEdge("v2", "v7");
-        this.e37 = this.addEdge("v3", "v7");
-        this.e47 = this.addEdge("v4", "v7");
-        this.e56 = this.addEdge("v5", "v6");
-        this.e57 = this.addEdge("v5", "v7");
-        this.e67 = this.addEdge("v6", "v7");
+        eS1 = addEdge("vS", "v1");
+        eS2 = addEdge("vS", "v2");
+        eS3 = addEdge("vS", "v3");
+        eS4 = addEdge("vS", "v4");
+        eS7 = addEdge("vS", "v7");
+        e15 = addEdge("v1", "v5");
+        e25 = addEdge("v2", "v5");
+        e27 = addEdge("v2", "v7");
+        e37 = addEdge("v3", "v7");
+        e47 = addEdge("v4", "v7");
+        e56 = addEdge("v5", "v6");
+        e57 = addEdge("v5", "v7");
+        e67 = addEdge("v6", "v7");
 
-        setEdgeWeight(this.eS1, 3.0);
-        setEdgeWeight(this.eS2, 2.0);
-        setEdgeWeight(this.eS3, 10.0);
-        setEdgeWeight(this.eS4, 15.0);
-        setEdgeWeight(this.eS7, 15.0);
-        setEdgeWeight(this.e15, 3.0);
-        setEdgeWeight(this.e25, 6.0);
-        setEdgeWeight(this.e27, 10.0);
-        setEdgeWeight(this.e37, 20.0);
-        setEdgeWeight(this.e47, 5.0);
-        setEdgeWeight(this.e56, -3.0);
-        setEdgeWeight(this.e57, 4.0);
-        setEdgeWeight(this.e67, 5.0);
+        setEdgeWeight(eS1, 3.0);
+        setEdgeWeight(eS2, 2.0);
+        setEdgeWeight(eS3, 10.0);
+        setEdgeWeight(eS4, 15.0);
+        setEdgeWeight(eS7, 15.0);
+        setEdgeWeight(e15, 3.0);
+        setEdgeWeight(e25, 6.0);
+        setEdgeWeight(e27, 10.0);
+        setEdgeWeight(e37, 20.0);
+        setEdgeWeight(e47, 5.0);
+        setEdgeWeight(e56, -3.0);
+        setEdgeWeight(e57, 4.0);
+        setEdgeWeight(e67, 5.0);
     }
 
     private void addVertices()

@@ -40,7 +40,9 @@
  */
 package org.jgrapht.alg.util;
 
-import org.jgrapht.*;
+import org.jgrapht.UndirectedGraph;
+
+import java.util.Comparator;
 
 
 /**
@@ -53,20 +55,20 @@ import org.jgrapht.*;
  * @since Nov 6, 2003
  */
 public class VertexDegreeComparator<V, E>
-    implements java.util.Comparator<V>
+    implements Comparator<V>
 {
     //~ Instance fields --------------------------------------------------------
 
     /**
      * The graph that contains the vertices to be compared.
      */
-    private UndirectedGraph<V, E> graph;
+    private final UndirectedGraph<V, E> graph;
 
     /**
      * The sort order for vertex degree. <code>true</code> for ascending degree
      * order (smaller degrees first), <code>false</code> for descending.
      */
-    private boolean ascendingOrder;
+    private final boolean ascendingOrder;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -77,7 +79,7 @@ public class VertexDegreeComparator<V, E>
      *
      * @param g graph with respect to which the degree is calculated.
      */
-    public VertexDegreeComparator(UndirectedGraph<V, E> g)
+    public VertexDegreeComparator(final UndirectedGraph<V, E> g)
     {
         this(g, true);
     }
@@ -92,8 +94,8 @@ public class VertexDegreeComparator<V, E>
      * first).
      */
     public VertexDegreeComparator(
-        UndirectedGraph<V, E> g,
-        boolean ascendingOrder)
+        final UndirectedGraph<V, E> g,
+        final boolean ascendingOrder)
     {
         graph = g;
         this.ascendingOrder = ascendingOrder;
@@ -111,18 +113,19 @@ public class VertexDegreeComparator<V, E>
      * @return -1 if <code>v1</code> comes before <code>v2</code>, +1 if <code>
      * v1</code> comes after <code>v2</code>, 0 if equal.
      */
-    public int compare(V v1, V v2)
+    @Override
+    public int compare(final V v1, final V v2)
     {
-        int degree1 = graph.degreeOf(v1);
-        int degree2 = graph.degreeOf(v2);
+        final int degree1 = graph.degreeOf(v1);
+        final int degree2 = graph.degreeOf(v2);
 
-        if (((degree1 < degree2) && ascendingOrder)
-            || ((degree1 > degree2) && !ascendingOrder))
+        if (degree1 < degree2 && ascendingOrder
+            || degree1 > degree2 && !ascendingOrder)
         {
             return -1;
         } else if (
-            ((degree1 > degree2) && ascendingOrder)
-            || ((degree1 < degree2) && !ascendingOrder))
+            degree1 > degree2 && ascendingOrder
+            || degree1 < degree2 && !ascendingOrder)
         {
             return 1;
         } else {

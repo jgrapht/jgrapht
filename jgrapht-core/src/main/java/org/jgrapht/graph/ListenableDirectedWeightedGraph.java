@@ -42,11 +42,13 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.WeightedGraph;
 
 
 /**
- * A directed weighted graph which is also {@link org.jgrapht.ListenableGraph}.
+ * A directed weighted graph which is also {@link ListenableGraph}.
  *
  * @see DefaultListenableGraph
  */
@@ -65,7 +67,7 @@ public class ListenableDirectedWeightedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public ListenableDirectedWeightedGraph(Class<? extends E> edgeClass)
+    public ListenableDirectedWeightedGraph(final Class<? extends E> edgeClass)
     {
         this(new DefaultDirectedWeightedGraph<V, E>(edgeClass));
     }
@@ -75,7 +77,7 @@ public class ListenableDirectedWeightedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableDirectedWeightedGraph(WeightedGraph<V, E> base)
+    public ListenableDirectedWeightedGraph(final WeightedGraph<V, E> base)
     {
         super((DirectedGraph<V, E>) base);
     }

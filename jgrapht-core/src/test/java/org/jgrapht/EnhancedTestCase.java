@@ -39,7 +39,7 @@
  */
 package org.jgrapht;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 
 /**
@@ -58,13 +58,12 @@ public abstract class EnhancedTestCase
      */
     public EnhancedTestCase()
     {
-        super();
     }
 
     /**
-     * @see TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public EnhancedTestCase(String name)
+    public EnhancedTestCase(final String name)
     {
         super(name);
     }
@@ -74,7 +73,7 @@ public abstract class EnhancedTestCase
     /**
      * It means: it's wrong that we got here.
      */
-    public void assertFalse()
+    public static void assertFalse()
     {
         assertTrue(false);
     }
@@ -82,7 +81,7 @@ public abstract class EnhancedTestCase
     /**
      * It means: it's right that we got here.
      */
-    public void assertTrue()
+    public static void assertTrue()
     {
         assertTrue(true);
     }

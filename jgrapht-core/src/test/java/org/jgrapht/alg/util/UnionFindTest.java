@@ -37,9 +37,10 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 
 /**
@@ -57,15 +58,15 @@ public class UnionFindTest
      */
     public void testUnionFind()
     {
-        TreeSet<String> set = new TreeSet<String>();
-        String [] strs = { "aaa", "bbb", "ccc", "ddd", "eee" };
-        ArrayList<ArrayList<String>> sets = new ArrayList<ArrayList<String>>();
-        for (String str : strs) {
+        final TreeSet<String> set = new TreeSet<String>();
+        final String [] strs = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        final ArrayList<ArrayList<String>> sets = new ArrayList<ArrayList<String>>();
+        for (final String str : strs) {
             set.add(str);
             sets.add(new ArrayList<String>());
             sets.get(sets.size() - 1).add(str);
         }
-        UnionFind<String> uf = new UnionFind<String>(set);
+        final UnionFind<String> uf = new UnionFind<String>(set);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[1]);
@@ -89,9 +90,10 @@ public class UnionFindTest
         testIdentical(strs, sets, uf);
     }
 
-    private void union(ArrayList<ArrayList<String>> sets, String a, String b)
+    private static void union(final ArrayList<ArrayList<String>> sets,
+        final String a, final String b)
     {
-        ArrayList<String> toAdd = new ArrayList<String>();
+        final ArrayList<String> toAdd = new ArrayList<String>();
         for (int i = 0; i < sets.size(); i++) {
             if (sets.get(i).contains(a)) {
                 toAdd.addAll(sets.get(i));
@@ -109,9 +111,10 @@ public class UnionFindTest
         sets.add(toAdd);
     }
 
-    private boolean same(ArrayList<ArrayList<String>> sets, String a, String b)
+    private static boolean same(final ArrayList<ArrayList<String>> sets,
+        final String a, final String b)
     {
-        for (ArrayList<String> set : sets) {
+        for (final ArrayList<String> set : sets) {
             if (set.contains(a) && set.contains(b)) {
                 return true;
             }
@@ -120,14 +123,14 @@ public class UnionFindTest
     }
 
     private void testIdentical(
-        String [] universe,
-        ArrayList<ArrayList<String>> sets,
-        UnionFind<String> uf)
+        final String [] universe,
+        final ArrayList<ArrayList<String>> sets,
+        final UnionFind<String> uf)
     {
-        for (String a : universe) {
-            for (String b : universe) {
-                boolean same1 = uf.find(a).equals(uf.find(b));
-                boolean same2 = same(sets, a, b);
+        for (final String a : universe) {
+            for (final String b : universe) {
+                final boolean same1 = uf.find(a).equals(uf.find(b));
+                final boolean same2 = same(sets, a, b);
                 assertEquals(same1, same2);
             }
         }

@@ -41,9 +41,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 
-import org.jgrapht.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
 
 
 /**
@@ -68,7 +70,7 @@ abstract class AbstractPathElementList<V,
     /**
      * Stored paths, list of <code>AbstractPathElement</code>.
      */
-    protected ArrayList<T> pathElements = new ArrayList<T>();
+    protected final ArrayList<T> pathElements = new ArrayList<T>();
 
     /**
      * Target vertex of the paths.
@@ -91,10 +93,10 @@ abstract class AbstractPathElementList<V,
      * 0.
      */
     protected AbstractPathElementList(
-        Graph<V, E> graph,
-        int maxSize,
-        AbstractPathElementList<V, E, T> elementList,
-        E edge)
+        final Graph<V, E> graph,
+        final int maxSize,
+        final AbstractPathElementList<V, E, T> elementList,
+        final E edge)
     {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize is negative or 0");
@@ -108,8 +110,8 @@ abstract class AbstractPathElementList<V,
 
         this.graph = graph;
         this.maxSize = maxSize;
-        this.vertex =
-            Graphs.getOppositeVertex(graph, edge, elementList.getVertex());
+        vertex =
+            Graphs.getOppositeVertex(graph, edge, elementList.vertex);
     }
 
     /**
@@ -125,9 +127,9 @@ abstract class AbstractPathElementList<V,
      * empty.
      */
     protected AbstractPathElementList(
-        Graph<V, E> graph,
-        int maxSize,
-        T pathElement)
+        final Graph<V, E> graph,
+        final int maxSize,
+        final T pathElement)
     {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize is negative or 0");
@@ -141,9 +143,9 @@ abstract class AbstractPathElementList<V,
 
         this.graph = graph;
         this.maxSize = maxSize;
-        this.vertex = pathElement.getVertex();
+        vertex = pathElement.getVertex();
 
-        this.pathElements.add(pathElement);
+        pathElements.add(pathElement);
     }
 
     /**
@@ -154,7 +156,7 @@ abstract class AbstractPathElementList<V,
      * @throws IllegalArgumentException if <code>maxSize</code> is negative or
      * 0.
      */
-    protected AbstractPathElementList(Graph<V, E> graph, int maxSize, V vertex)
+    protected AbstractPathElementList(final Graph<V, E> graph, final int maxSize, final V vertex)
     {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize is negative or 0");
@@ -171,9 +173,10 @@ abstract class AbstractPathElementList<V,
      * Returns path <code>AbstractPathElement</code> stored at the specified
      * index.
      */
-    public T get(int index)
+    @Override
+    public T get(final int index)
     {
-        return this.pathElements.get(index);
+        return pathElements.get(index);
     }
 
     /**
@@ -181,15 +184,16 @@ abstract class AbstractPathElementList<V,
      */
     public V getVertex()
     {
-        return this.vertex;
+        return vertex;
     }
 
     /**
      * Returns the number of paths stored in the list.
      */
+    @Override
     public int size()
     {
-        return this.pathElements.size();
+        return pathElements.size();
     }
 }
 

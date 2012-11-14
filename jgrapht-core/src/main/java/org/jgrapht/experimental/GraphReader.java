@@ -39,12 +39,16 @@
  */
 package org.jgrapht.experimental;
 
-import java.io.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.generate.GraphGenerator;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Map;
 
 
 public class GraphReader<V, E>
@@ -71,8 +75,8 @@ public class GraphReader<V, E>
     /**
      * Construct a new GraphReader.
      */
-    private GraphReader(Reader input, boolean isWeighted, double defaultWeight)
-        throws IOException
+    private GraphReader(
+        final Reader input, final boolean isWeighted, final double defaultWeight)
     {
         if (input instanceof BufferedReader) {
             _in = (BufferedReader) input;
@@ -86,7 +90,7 @@ public class GraphReader<V, E>
     /**
      * Construct a new GraphReader.
      */
-    public GraphReader(Reader input)
+    public GraphReader(final Reader input)
         throws IOException
     {
         this(input, false, 1);
@@ -95,7 +99,7 @@ public class GraphReader<V, E>
     /**
      * Construct a new GraphReader.
      */
-    public GraphReader(Reader input, double defaultWeight)
+    public GraphReader(final Reader input, final double defaultWeight)
         throws IOException
     {
         this(input, true, defaultWeight);
@@ -105,7 +109,7 @@ public class GraphReader<V, E>
 
     // ~ Methods ---------------------------------------------------------------
 
-    private String [] split(final String src)
+    private static String [] split(final String src)
     {
         if (src == null) {
             return null;
@@ -119,9 +123,9 @@ public class GraphReader<V, E>
         try {
             cols = split(_in.readLine());
             while (
-                (cols != null)
-                && ((cols.length == 0)
-                    || cols[0].equals("c")
+                cols != null
+                && (cols.length == 0
+                    || "c".equals(cols[0])
                     || cols[0].startsWith("%")))
             {
                 cols = split(_in.readLine());
@@ -134,7 +138,7 @@ public class GraphReader<V, E>
     private int readNodeCount()
     {
         final String [] cols = skipComments();
-        if (cols[0].equals("p")) {
+        if ("p".equals(cols[0])) {
             return Integer.parseInt(cols[1]);
         }
         return -1;
@@ -143,29 +147,30 @@ public class GraphReader<V, E>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
         Map<String, V> resultMap)
     {
         final int size = readNodeCount();
         if (resultMap == null) {
-            resultMap = new HashMap<String, V>();
+            resultMap = Maps.newHashMap();
         }
 
         for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
             resultMap.put(Integer.toString(i + 1), newVertex);
         }
         String [] cols = skipComments();
         while (cols != null) {
-            if (cols[0].equals("e")) {
-                E edge =
+            if ("e".equals(cols[0])) {
+                final E edge =
                     target.addEdge(
                         resultMap.get(cols[1]),
                         resultMap.get(cols[2]));
-                if (_isWeighted && (edge != null)) {
+                if (_isWeighted && edge != null) {
                     double weight = _defaultWeight;
                     if (cols.length > 3) {
                         weight = Double.parseDouble(cols[3]);

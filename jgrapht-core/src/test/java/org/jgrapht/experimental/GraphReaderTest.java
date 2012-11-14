@@ -39,12 +39,17 @@
  */
 package org.jgrapht.experimental;
 
-import java.io.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.io.IOException;
+import java.io.StringReader;
 
 
 /**
@@ -57,8 +62,8 @@ public class GraphReaderTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    String _unweighted = "p 3\ne 1 2\ne 1 3\n";
-    String _weighted = "p 3\ne 1 2 .5\ne 1 3 7\n";
+    static final String _unweighted = "p 3\ne 1 2\ne 1 3\n";
+    static final String _weighted = "p 3\ne 1 2 .5\ne 1 3 7\n";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -67,17 +72,17 @@ public class GraphReaderTest
      */
     public void testGraphReader()
     {
-        GraphReader<Integer, DefaultEdge> reader;
+        final GraphReader<Integer, DefaultEdge> reader;
         try {
             reader =
                 new GraphReader<Integer, DefaultEdge>(
                     new StringReader(_unweighted));
-            Graph<Integer, DefaultEdge> g =
+            final Graph<Integer, DefaultEdge> g =
                 new SimpleGraph<Integer, DefaultEdge>(
                     DefaultEdge.class);
-            VertexFactory<Integer> vf = new IntVertexFactory();
+            final VertexFactory<Integer> vf = new IntVertexFactory();
             reader.generateGraph(g, vf, null);
-            Graph<Integer, DefaultEdge> g2 =
+            final Graph<Integer, DefaultEdge> g2 =
                 new SimpleGraph<Integer, DefaultEdge>(
                     DefaultEdge.class);
             g2.addVertex(0);
@@ -96,16 +101,16 @@ public class GraphReaderTest
     public void testGraphReaderWeighted()
     {
         try {
-            GraphReader<Integer, DefaultWeightedEdge> reader =
+            final GraphReader<Integer, DefaultWeightedEdge> reader =
                 new GraphReader<Integer, DefaultWeightedEdge>(
                     new StringReader(_weighted),
                     1);
-            Graph<Integer, DefaultWeightedEdge> g =
+            final Graph<Integer, DefaultWeightedEdge> g =
                 new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(
                     DefaultWeightedEdge.class);
-            VertexFactory<Integer> vf = new IntVertexFactory();
+            final VertexFactory<Integer> vf = new IntVertexFactory();
             reader.generateGraph(g, vf, null);
-            WeightedGraph<Integer, DefaultWeightedEdge> g2 =
+            final WeightedGraph<Integer, DefaultWeightedEdge> g2 =
                 new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(
                     DefaultWeightedEdge.class);
             g2.addVertex(0);
@@ -125,6 +130,7 @@ public class GraphReaderTest
     {
         int last = 0;
 
+        @Override
         public Integer createVertex()
         {
             return last++;

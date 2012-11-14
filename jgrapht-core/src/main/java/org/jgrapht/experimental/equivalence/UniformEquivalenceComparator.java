@@ -57,11 +57,12 @@ public class UniformEquivalenceComparator<E, C>
      * @see EquivalenceComparator#equivalenceCompare(Object, Object, Object,
      * Object)
      */
+    @Override
     public boolean equivalenceCompare(
-        E arg1,
-        E arg2,
-        C context1,
-        C context2)
+        final E arg1,
+        final E arg2,
+        final C context1,
+        final C context2)
     {
         return true;
     }
@@ -71,7 +72,8 @@ public class UniformEquivalenceComparator<E, C>
      *
      * @see EquivalenceComparator#equivalenceHashcode(Object, Object)
      */
-    public int equivalenceHashcode(E arg1, C context)
+    @Override
+    public int equivalenceHashcode(final E arg1, final C context)
     {
         return 0;
     }

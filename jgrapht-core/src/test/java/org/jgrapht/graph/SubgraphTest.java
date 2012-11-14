@@ -39,11 +39,14 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.UndirectedGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**
@@ -57,17 +60,17 @@ public class SubgraphTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-    private String v4 = "v4";
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
+    private static final String v4 = "v4";
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public SubgraphTest(String name)
+    public SubgraphTest(final String name)
     {
         super(name);
     }
@@ -79,8 +82,8 @@ public class SubgraphTest
      */
     public void testInducedSubgraphListener()
     {
-        UndirectedGraph<String, DefaultEdge> g = init(true);
-        UndirectedSubgraph<String, DefaultEdge> sub =
+        final UndirectedGraph<String, DefaultEdge> g = init(true);
+        final UndirectedSubgraph<String, DefaultEdge> sub =
             new UndirectedSubgraph<String, DefaultEdge>(g, null, null);
 
         assertEquals(g.vertexSet(), sub.vertexSet());
@@ -132,23 +135,23 @@ public class SubgraphTest
      */
     public void testSubgraphListener()
     {
-        UndirectedGraph<String, DefaultEdge> g = init(true);
-        UndirectedSubgraph<String, DefaultEdge> sub =
+        final UndirectedGraph<String, DefaultEdge> g = init(true);
+        final UndirectedSubgraph<String, DefaultEdge> sub =
             new UndirectedSubgraph<String, DefaultEdge>(g, null, null);
 
         assertEquals(g.vertexSet(), sub.vertexSet());
         assertEquals(g.edgeSet(), sub.edgeSet());
 
-        Set<String> vset = new HashSet<String>(g.vertexSet());
+        final Set<String> vset = new HashSet<String>(g.vertexSet());
         g.removeVertex(v1);
         vset.remove(v1);
         assertEquals(vset, sub.vertexSet()); // not losing track
         assertEquals(g.edgeSet(), sub.edgeSet());
     }
 
-    private UndirectedGraph<String, DefaultEdge> init(boolean listenable)
+    private UndirectedGraph<String, DefaultEdge> init(final boolean listenable)
     {
-        UndirectedGraph<String, DefaultEdge> g;
+        final UndirectedGraph<String, DefaultEdge> g;
 
         if (listenable) {
             g = new ListenableUndirectedGraph<String, DefaultEdge>(
@@ -172,16 +175,16 @@ public class SubgraphTest
 
     public void testInducedSubgraphUnderlyingEdgeAddition()
     {
-        ListenableGraph<Object, DefaultEdge> baseGraph =
+        final ListenableGraph<Object, DefaultEdge> baseGraph =
             new ListenableUndirectedGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
 
         baseGraph.addVertex(v1);
         baseGraph.addVertex(v2);
 
-        Set<Object> initialVertexes = new LinkedHashSet<Object>();
+        final Set<Object> initialVertexes = new LinkedHashSet<Object>();
         initialVertexes.add(v1);
-        Subgraph<Object, DefaultEdge, ListenableGraph<Object, DefaultEdge>> subgraph =
+        final Subgraph<Object, DefaultEdge, ListenableGraph<Object, DefaultEdge>> subgraph =
             new Subgraph<Object,
                 DefaultEdge, ListenableGraph<Object, DefaultEdge>>(
                 baseGraph,

@@ -40,10 +40,12 @@
  */
 package org.jgrapht.graph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.event.*;
+import junit.framework.TestCase;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
 
 
 /**
@@ -65,9 +67,9 @@ public class ListenableGraphTest
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public ListenableGraphTest(String name)
+    public ListenableGraphTest(final String name)
     {
         super(name);
     }
@@ -81,14 +83,14 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g =
+        final ListenableGraph<Object, DefaultEdge> g =
             new ListenableUndirectedGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        GraphListener<Object, DefaultEdge> listener = new MyGraphListner();
+        final GraphListener<Object, DefaultEdge> listener = new MyGraphListner();
         g.addGraphListener(listener);
 
-        String v1 = "v1";
-        String v2 = "v2";
+        final String v1 = "v1";
+        final String v2 = "v2";
 
         // test vertex notification
         g.addVertex(v1);
@@ -141,14 +143,14 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g =
+        final ListenableGraph<Object, DefaultEdge> g =
             new ListenableUndirectedGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        VertexSetListener<Object> listener = new MyGraphListner();
+        final VertexSetListener<Object> listener = new MyGraphListner();
         g.addVertexSetListener(listener);
 
-        String v1 = "v1";
-        String v2 = "v2";
+        final String v1 = "v1";
+        final String v2 = "v2";
 
         // test vertex notification
         g.addVertex(v1);
@@ -216,7 +218,8 @@ public class ListenableGraphTest
         /**
          * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
          */
-        public void edgeAdded(GraphEdgeChangeEvent<Object, DefaultEdge> e)
+        @Override
+        public void edgeAdded(final GraphEdgeChangeEvent<Object, DefaultEdge> e)
         {
             lastAddedEdge = e.getEdge();
         }
@@ -224,7 +227,8 @@ public class ListenableGraphTest
         /**
          * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
          */
-        public void edgeRemoved(GraphEdgeChangeEvent<Object, DefaultEdge> e)
+        @Override
+        public void edgeRemoved(final GraphEdgeChangeEvent<Object, DefaultEdge> e)
         {
             lastRemovedEdge = e.getEdge();
         }
@@ -232,7 +236,8 @@ public class ListenableGraphTest
         /**
          * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
          */
-        public void vertexAdded(GraphVertexChangeEvent<Object> e)
+        @Override
+        public void vertexAdded(final GraphVertexChangeEvent<Object> e)
         {
             lastAddedVertex = e.getVertex();
         }
@@ -240,7 +245,8 @@ public class ListenableGraphTest
         /**
          * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
          */
-        public void vertexRemoved(GraphVertexChangeEvent<Object> e)
+        @Override
+        public void vertexRemoved(final GraphVertexChangeEvent<Object> e)
         {
             lastRemovedVertex = e.getVertex();
         }

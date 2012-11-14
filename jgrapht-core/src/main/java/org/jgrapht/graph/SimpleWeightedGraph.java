@@ -41,7 +41,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.WeightedGraph;
 
 
 /**
@@ -63,7 +64,7 @@ public class SimpleWeightedGraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public SimpleWeightedGraph(EdgeFactory<V, E> ef)
+    public SimpleWeightedGraph(final EdgeFactory<V, E> ef)
     {
         super(ef);
     }
@@ -73,7 +74,7 @@ public class SimpleWeightedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public SimpleWeightedGraph(Class<? extends E> edgeClass)
+    public SimpleWeightedGraph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }

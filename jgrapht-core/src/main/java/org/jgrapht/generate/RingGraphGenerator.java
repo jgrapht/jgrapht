@@ -39,9 +39,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.Map;
 
 
 /**
@@ -58,7 +60,7 @@ public class RingGraphGenerator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private int size;
+    private final int size;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -69,7 +71,7 @@ public class RingGraphGenerator<V, E>
      *
      * @throws IllegalArgumentException if the specified size is negative.
      */
-    public RingGraphGenerator(int size)
+    public RingGraphGenerator(final int size)
     {
         if (size < 0) {
             throw new IllegalArgumentException("must be non-negative");
@@ -83,22 +85,23 @@ public class RingGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
         }
 
-        LinearGraphGenerator<V, E> linearGenerator =
+        final LinearGraphGenerator<V, E> linearGenerator =
             new LinearGraphGenerator<V, E>(size);
-        Map<String, V> privateMap = new HashMap<String, V>();
+        final Map<String, V> privateMap = Maps.newHashMap();
         linearGenerator.generateGraph(target, vertexFactory, privateMap);
 
-        V startVertex = privateMap.get(LinearGraphGenerator.START_VERTEX);
-        V endVertex = privateMap.get(LinearGraphGenerator.END_VERTEX);
+        final V startVertex = privateMap.get(LinearGraphGenerator.START_VERTEX);
+        final V endVertex = privateMap.get(LinearGraphGenerator.END_VERTEX);
         target.addEdge(endVertex, startVertex);
     }
 }

@@ -40,9 +40,13 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -81,7 +85,7 @@ abstract class AbstractPathElement<V, E>
     /**
      * Target vertex.
      */
-    private V vertex;
+    private final V vertex;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -92,19 +96,18 @@ abstract class AbstractPathElement<V, E>
      * @param edge edge reaching the end vertex of the path element created.
      */
     protected AbstractPathElement(
-        Graph<V, E> graph,
-        AbstractPathElement<V, E> pathElement,
-        E edge)
+        final Graph<V, E> graph,
+        final AbstractPathElement<V, E> pathElement,
+        final E edge)
     {
-        this.vertex =
+        vertex =
             Graphs.getOppositeVertex(
                 graph,
-                edge,
-                pathElement.getVertex());
-        this.prevEdge = edge;
-        this.prevPathElement = pathElement;
+                edge, pathElement.vertex);
+        prevEdge = edge;
+        prevPathElement = pathElement;
 
-        this.nHops = pathElement.getHopCount() + 1;
+        nHops = pathElement.nHops + 1;
     }
 
     /**
@@ -112,12 +115,12 @@ abstract class AbstractPathElement<V, E>
      *
      * @param original source to copy from
      */
-    protected AbstractPathElement(AbstractPathElement<V, E> original)
+    protected AbstractPathElement(final AbstractPathElement<V, E> original)
     {
-        this.nHops = original.nHops;
-        this.prevEdge = original.prevEdge;
-        this.prevPathElement = original.prevPathElement;
-        this.vertex = original.vertex;
+        nHops = original.nHops;
+        prevEdge = original.prevEdge;
+        prevPathElement = original.prevPathElement;
+        vertex = original.vertex;
     }
 
     /**
@@ -125,13 +128,13 @@ abstract class AbstractPathElement<V, E>
      *
      * @param vertex end vertex of the path element.
      */
-    protected AbstractPathElement(V vertex)
+    protected AbstractPathElement(final V vertex)
     {
         this.vertex = vertex;
-        this.prevEdge = null;
-        this.prevPathElement = null;
+        prevEdge = null;
+        prevPathElement = null;
 
-        this.nHops = 0;
+        nHops = 0;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -143,12 +146,12 @@ abstract class AbstractPathElement<V, E>
      */
     public List<E> createEdgeListPath()
     {
-        List<E> path = new ArrayList<E>();
+        final List<E> path = new ArrayList<E>();
         AbstractPathElement<V, E> pathElement = this;
 
         // while start vertex is not reached.
-        while (pathElement.getPrevEdge() != null) {
-            path.add(pathElement.getPrevEdge());
+        while (pathElement.prevEdge != null) {
+            path.add(pathElement.prevEdge);
 
             pathElement = pathElement.getPrevPathElement();
         }
@@ -165,7 +168,7 @@ abstract class AbstractPathElement<V, E>
      */
     public int getHopCount()
     {
-        return this.nHops;
+        return nHops;
     }
 
     /**
@@ -175,7 +178,7 @@ abstract class AbstractPathElement<V, E>
      */
     public E getPrevEdge()
     {
-        return this.prevEdge;
+        return prevEdge;
     }
 
     /**
@@ -185,7 +188,7 @@ abstract class AbstractPathElement<V, E>
      */
     public AbstractPathElement<V, E> getPrevPathElement()
     {
-        return this.prevPathElement;
+        return prevPathElement;
     }
 
     /**
@@ -195,7 +198,7 @@ abstract class AbstractPathElement<V, E>
      */
     public V getVertex()
     {
-        return this.vertex;
+        return vertex;
     }
 }
 

@@ -37,9 +37,9 @@
  */
 package org.jgrapht.experimental.permutation;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.Arrays;
 
 
 /**
@@ -67,7 +67,7 @@ public class CompoundPermutationIterTest
         // StopperTimer timer = new StopperTimer();
         // timer.start();
 
-        this.complexPerm =
+        complexPerm =
             new CompoundPermutationIter(
                 new int[] {
                     1,
@@ -79,12 +79,12 @@ public class CompoundPermutationIterTest
                     4,
                     5
                 });
-        int maxPermNum = this.complexPerm.getMax();
+        final int maxPermNum = complexPerm.getMax();
 
         // System.out.println(Arrays.toString(this.complexPerm.getPermAsArray()));
         int counter = 0;
-        while (this.complexPerm.hasNext()) {
-            int [] resultArray = this.complexPerm.getNext();
+        while (complexPerm.hasNext()) {
+            final int [] resultArray = complexPerm.getNext();
 
             if (false) {
                 System.out.println(Arrays.toString(resultArray));
@@ -98,7 +98,7 @@ public class CompoundPermutationIterTest
         // timer.stopAndReport();
 
         // timer.start();
-        this.complexPerm =
+        complexPerm =
             new CompoundPermutationIter(
                 new int[] {
                     5,
@@ -114,8 +114,8 @@ public class CompoundPermutationIterTest
         // System.out.println("testing complex perm {5,4,3,2,2,1,1,1} ");
         // System.out.println(Arrays.toString(this.complexPerm.getPermAsArray()));
         counter = 0;
-        while (this.complexPerm.hasNext()) {
-            int [] resultArray = this.complexPerm.getNext();
+        while (complexPerm.hasNext()) {
+            final int [] resultArray = complexPerm.getNext();
 
             if (false) {
                 System.out.println(Arrays.toString(resultArray));

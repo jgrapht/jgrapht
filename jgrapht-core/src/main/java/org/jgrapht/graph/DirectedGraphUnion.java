@@ -38,10 +38,12 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.util.WeightCombiner;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class DirectedGraphUnion<V, E>
@@ -55,29 +57,31 @@ public class DirectedGraphUnion<V, E>
     //~ Constructors -----------------------------------------------------------
 
     public DirectedGraphUnion(
-        DirectedGraph<V, E> g1,
-        DirectedGraph<V, E> g2,
-        WeightCombiner operator)
+        final DirectedGraph<V, E> g1,
+        final DirectedGraph<V, E> g2,
+        final WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
 
-    public DirectedGraphUnion(DirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
+    public DirectedGraphUnion(final DirectedGraph<V, E> g1, final DirectedGraph<V, E> g2)
     {
         super(g1, g2);
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(final V vertex)
     {
-        Set<E> res = incomingEdgesOf(vertex);
+        final Set<E> res = incomingEdgesOf(vertex);
         return res.size();
     }
 
-    public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(final V vertex)
     {
-        Set<E> res = new HashSet<E>();
+        final Set<E> res = new HashSet<E>();
         if (getG1().containsVertex(vertex)) {
             res.addAll(getG1().incomingEdgesOf(vertex));
         }
@@ -87,15 +91,17 @@ public class DirectedGraphUnion<V, E>
         return Collections.unmodifiableSet(res);
     }
 
-    public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(final V vertex)
     {
-        Set<E> res = outgoingEdgesOf(vertex);
+        final Set<E> res = outgoingEdgesOf(vertex);
         return res.size();
     }
 
-    public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(final V vertex)
     {
-        Set<E> res = new HashSet<E>();
+        final Set<E> res = new HashSet<E>();
         if (getG1().containsVertex(vertex)) {
             res.addAll(getG1().outgoingEdgesOf(vertex));
         }

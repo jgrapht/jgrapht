@@ -39,14 +39,14 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import java.applet.*;
-
-import java.awt.*;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 import javax.swing.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.applet.Applet;
+import java.awt.*;
 
 
 /**
@@ -71,13 +71,13 @@ public class SimpleTouchgraphApplet
      */
     public static Graph<String, DefaultEdge> createSamplegraph()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 
-        String v1 = "v1";
-        String v2 = "v2";
-        String v3 = "v3";
-        String v4 = "v4";
+        final String v1 = "v1";
+        final String v2 = "v2";
+        final String v3 = "v3";
+        final String v4 = "v4";
 
         // add the vertices
         g.addVertex(v1);
@@ -97,10 +97,11 @@ public class SimpleTouchgraphApplet
     /**
      * initialize the applet
      */
+    @Override
     public void init()
     {
-        Graph<String, DefaultEdge> g = createSamplegraph();
-        boolean selfReferencesAllowed = false;
+        final Graph<String, DefaultEdge> g = createSamplegraph();
+        final boolean selfReferencesAllowed = false;
 
         setLayout(new BorderLayout());
         setSize(800, 600);
@@ -109,12 +110,12 @@ public class SimpleTouchgraphApplet
             BorderLayout.CENTER);
     }
 
-    public static void main(String [] args)
+    public static void main(final String [] args)
     {
-        Graph<String, DefaultEdge> g = createSamplegraph();
-        boolean selfReferencesAllowed = false;
+        final Graph<String, DefaultEdge> g = createSamplegraph();
+        final boolean selfReferencesAllowed = false;
 
-        JFrame frame = new JFrame();
+        final JFrame frame = new JFrame();
         frame.getContentPane().add(
             new TouchgraphPanel<String, DefaultEdge>(g, selfReferencesAllowed));
         frame.setPreferredSize(new Dimension(800, 800));

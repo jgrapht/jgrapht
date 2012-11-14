@@ -39,11 +39,12 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import junit.framework.TestCase;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 
 /**
@@ -61,10 +62,10 @@ public class EulerianCircuitTest
      */
     public void testEulerianCircuit()
     {
-        UndirectedGraph<Object, DefaultEdge> completeGraph1 =
+        final UndirectedGraph<Object, DefaultEdge> completeGraph1 =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator1 =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGenerator1 =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 6);
         completeGenerator1.generateGraph(
@@ -78,10 +79,10 @@ public class EulerianCircuitTest
         assertTrue(
             EulerianCircuit.getEulerianCircuitVertices(completeGraph1) == null);
 
-        UndirectedGraph<Object, DefaultEdge> completeGraph2 =
+        final UndirectedGraph<Object, DefaultEdge> completeGraph2 =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator2 =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGenerator2 =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 5);
         completeGenerator2.generateGraph(

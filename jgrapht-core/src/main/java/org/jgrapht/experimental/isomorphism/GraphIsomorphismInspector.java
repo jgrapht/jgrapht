@@ -37,7 +37,7 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import java.util.Iterator;
 
 
 /**
@@ -89,7 +89,7 @@ public interface GraphIsomorphismInspector<E>
     /**
      * @return <code>true</code> iff the two graphs are isomorphic
      */
-    public boolean isIsomorphic();
+    boolean isIsomorphic();
 }
 
 // End GraphIsomorphismInspector.java

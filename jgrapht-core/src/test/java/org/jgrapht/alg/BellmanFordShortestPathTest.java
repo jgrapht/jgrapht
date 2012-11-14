@@ -39,10 +39,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -61,7 +63,7 @@ public class BellmanFordShortestPathTest
     public void testConstructor()
     {
         BellmanFordShortestPath<String, DefaultWeightedEdge> path;
-        Graph<String, DefaultWeightedEdge> g = create();
+        final Graph<String, DefaultWeightedEdge> g = create();
 
         path = new BellmanFordShortestPath<String, DefaultWeightedEdge>(g, V3);
 
@@ -102,17 +104,18 @@ public class BellmanFordShortestPathTest
         assertEquals(Double.POSITIVE_INFINITY, path.getCost(V5));
     }
 
+    @Override
     protected List findPathBetween(
-        Graph<String, DefaultWeightedEdge> g,
-        String src,
-        String dest)
+        final Graph<String, DefaultWeightedEdge> g,
+        final String src,
+        final String dest)
     {
         return BellmanFordShortestPath.findPathBetween(g, src, dest);
     }
 
     public void testWithNegativeEdges()
     {
-        Graph<String, DefaultWeightedEdge> g = createWithBias(true);
+        final Graph<String, DefaultWeightedEdge> g = createWithBias(true);
 
         List path;
 

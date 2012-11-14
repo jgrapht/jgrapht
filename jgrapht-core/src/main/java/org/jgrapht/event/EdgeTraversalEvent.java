@@ -40,7 +40,7 @@
  */
 package org.jgrapht.event;
 
-import java.util.*;
+import java.util.EventObject;
 
 
 /**
@@ -71,7 +71,7 @@ public class EdgeTraversalEvent<V, E>
      * @param eventSource the source of the event.
      * @param edge the traversed edge.
      */
-    public EdgeTraversalEvent(Object eventSource, E edge)
+    public EdgeTraversalEvent(final Object eventSource, final E edge)
     {
         super(eventSource);
         this.edge = edge;

@@ -38,12 +38,16 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.io.StringWriter;
+import java.io.Writer;
 
 
 /**
@@ -100,7 +104,7 @@ public class MatrixExporterTest
 
     public void testLaplacian()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -119,7 +123,7 @@ public class MatrixExporterTest
 
     public void testAdjacencyUndirected()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -128,14 +132,14 @@ public class MatrixExporterTest
         g.addEdge(V3, V1);
         g.addEdge(V1, V1);
 
-        StringWriter w = new StringWriter();
+        final StringWriter w = new StringWriter();
         exporter.exportAdjacencyMatrix(w, g);
         assertEquals(UNDIRECTED_ADJACENCY, w.toString());
     }
 
     public void testAdjacencyDirected()
     {
-        DirectedGraph<String, DefaultEdge> g =
+        final DirectedGraph<String, DefaultEdge> g =
             new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -144,7 +148,7 @@ public class MatrixExporterTest
         g.addEdge(V3, V1);
         g.addEdge(V3, V1);
 
-        Writer w = new StringWriter();
+        final Writer w = new StringWriter();
         exporter.exportAdjacencyMatrix(w, g);
         assertEquals(DIRECTED_ADJACENCY, w.toString());
     }

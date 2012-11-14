@@ -38,11 +38,22 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -68,8 +79,8 @@ public class NeighborIndex<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    Map<V, Neighbors<V, E>> neighborMap = new HashMap<V, Neighbors<V, E>>();
-    private Graph<V, E> graph;
+    final Map<V, Neighbors<V>> neighborMap = Maps.newHashMap();
+    private final Graph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -78,7 +89,7 @@ public class NeighborIndex<V, E>
      *
      * @param g the graph for which a neighbor index is to be created.
      */
-    public NeighborIndex(Graph<V, E> g)
+    public NeighborIndex(final Graph<V, E> g)
     {
         // no need to distinguish directedgraphs as we don't do traversals
         graph = g;
@@ -95,7 +106,7 @@ public class NeighborIndex<V, E>
      *
      * @return all unique neighbors of the specified vertex
      */
-    public Set<V> neighborsOf(V v)
+    public Set<V> neighborsOf(final V v)
     {
         return getNeighbors(v).getNeighbors();
     }
@@ -112,7 +123,7 @@ public class NeighborIndex<V, E>
      *
      * @return all neighbors of the specified vertex
      */
-    public List<V> neighborListOf(V v)
+    public List<V> neighborListOf(final V v)
     {
         return getNeighbors(v).getNeighborList();
     }
@@ -120,11 +131,12 @@ public class NeighborIndex<V, E>
     /**
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+    @Override
+    public void edgeAdded(final GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = graph.getEdgeSource(edge);
-        V target = graph.getEdgeTarget(edge);
+        final E edge = e.getEdge();
+        final V source = graph.getEdgeSource(edge);
+        final V target = graph.getEdgeTarget(edge);
 
         // if a map does not already contain an entry,
         // then skip addNeighbor, since instantiating the map
@@ -146,11 +158,12 @@ public class NeighborIndex<V, E>
     /**
      * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
      */
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+    @Override
+    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = e.getEdgeSource();
-        V target = e.getEdgeTarget();
+        final E edge = e.getEdge();
+        final V source = e.getEdgeSource();
+        final V target = e.getEdgeTarget();
         if (neighborMap.containsKey(source)) {
             neighborMap.get(source).removeNeighbor(target);
         }
@@ -162,7 +175,8 @@ public class NeighborIndex<V, E>
     /**
      * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
      */
-    public void vertexAdded(GraphVertexChangeEvent<V> e)
+    @Override
+    public void vertexAdded(final GraphVertexChangeEvent<V> e)
     {
         // nothing to cache until there are edges
     }
@@ -170,17 +184,17 @@ public class NeighborIndex<V, E>
     /**
      * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
      */
-    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+    @Override
+    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
     {
         neighborMap.remove(e.getVertex());
     }
 
-    private Neighbors<V, E> getNeighbors(V v)
+    private Neighbors<V> getNeighbors(final V v)
     {
-        Neighbors<V, E> neighbors = neighborMap.get(v);
+        Neighbors<V> neighbors = neighborMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<V, E>(v,
-                Graphs.neighborListOf(graph, v));
+            neighbors = new Neighbors<V>(Graphs.neighborListOf(graph, v));
             neighborMap.put(v, neighbors);
         }
         return neighbors;
@@ -192,48 +206,38 @@ public class NeighborIndex<V, E>
      * Stores cached neighbors for a single vertex. Includes support for live
      * neighbor sets and duplicate neighbors.
      */
-    static class Neighbors<V, E>
+    static final class Neighbors<V>
     {
-        private Map<V, ModifiableInteger> neighborCounts =
-            new LinkedHashMap<V, ModifiableInteger>();
+        private final Map<V, AtomicInteger> neighborCounts = Maps.newHashMap();
 
-        // TODO could eventually make neighborSet modifiable, resulting
-        // in edge removals from the graph
-        private Set<V> neighborSet =
-            Collections.unmodifiableSet(
-                neighborCounts.keySet());
+        private final Set<V> neighborSet
+            = Collections.unmodifiableSet(neighborCounts.keySet());
 
-        public Neighbors(V v, Collection<V> neighbors)
+        Neighbors(final Collection<V> neighbors)
         {
-            // add all current neighbors
-            for (V neighbor : neighbors) {
+            for (final V neighbor : neighbors)
                 addNeighbor(neighbor);
-            }
         }
 
-        public void addNeighbor(V v)
+        public void addNeighbor(final V v)
         {
-            ModifiableInteger count = neighborCounts.get(v);
-            if (count == null) {
-                count = new ModifiableInteger(1);
-                neighborCounts.put(v, count);
-            } else {
-                count.increment();
+            if (!neighborCounts.containsKey(v)) {
+                neighborCounts.put(v, new AtomicInteger(1));
+                return;
             }
+
+            neighborCounts.get(v).incrementAndGet();
         }
 
-        public void removeNeighbor(V v)
+        public void removeNeighbor(final V v)
         {
-            ModifiableInteger count = neighborCounts.get(v);
-            if (count == null) {
-                throw new IllegalArgumentException(
-                    "Attempting to remove a neighbor that wasn't present");
-            }
+            Preconditions.checkArgument(neighborCounts.containsKey(v),
+                "Attempting to remove a neighbor that wasn't present");
 
-            count.decrement();
-            if (count.getValue() == 0) {
+            final int count = neighborCounts.get(v).decrementAndGet();
+
+            if (count == 0)
                 neighborCounts.remove(v);
-            }
         }
 
         public Set<V> getNeighbors()
@@ -243,16 +247,17 @@ public class NeighborIndex<V, E>
 
         public List<V> getNeighborList()
         {
-            List<V> neighbors = new ArrayList<V>();
-            for (
-                Map.Entry<V, ModifiableInteger> entry
-                : neighborCounts.entrySet())
-            {
-                V v = entry.getKey();
-                int count = entry.getValue().intValue();
-                for (int i = 0; i < count; i++) {
+            final List<V> neighbors = Lists.newArrayList();
+
+            V v;
+            int count;
+
+            for (final Map.Entry<V, AtomicInteger> entry:
+                neighborCounts.entrySet()) {
+                v = entry.getKey();
+                count = entry.getValue().get();
+                for (int i = 0; i < count; i++)
                     neighbors.add(v);
-                }
             }
             return neighbors;
         }

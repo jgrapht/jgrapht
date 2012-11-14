@@ -39,11 +39,17 @@
  */
 package org.jgrapht.experimental;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.graph.AbstractBaseGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.graph.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -77,9 +83,10 @@ public class GraphSquare<V, E>
         if (g instanceof ListenableGraph) {
             ((ListenableGraph<V, E>) g).addGraphListener(
                 new GraphListener<V, E>() {
-                    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+                    @Override
+                    public void edgeAdded(final GraphEdgeChangeEvent<V, E> e)
                     {
-                        E edge = e.getEdge();
+                        final E edge = e.getEdge();
                         addEdgesStartingAt(
                             g,
                             g.getEdgeSource(edge),
@@ -92,17 +99,20 @@ public class GraphSquare<V, E>
                             createLoops);
                     }
 
-                    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+                    @Override
+                    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> e)
                     { // this is not a very performant implementation
                         GraphSquare.super.removeAllEdges(edgeSet());
                         addSquareEdges(g, createLoops);
                     }
 
-                    public void vertexAdded(GraphVertexChangeEvent<V> e)
+                    @Override
+                    public void vertexAdded(final GraphVertexChangeEvent<V> e)
                     {
                     }
 
-                    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+                    @Override
+                    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
                     {
                     }
                 });
@@ -114,7 +124,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
-    public E addEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E addEdge(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -122,7 +133,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#addEdge(Object, Object, E)
      */
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override
+    public boolean addEdge(final V sourceVertex, final V targetVertex, final E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -130,7 +142,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
-    public boolean addVertex(V v)
+    @Override
+    public boolean addVertex(final V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -138,7 +151,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#removeAllEdges(Collection)
      */
-    public boolean removeAllEdges(Collection<? extends E> edges)
+    @Override
+    public boolean removeAllEdges(final Collection<? extends E> edges)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -146,7 +160,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#removeAllEdges(V, V)
      */
-    public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> removeAllEdges(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -154,7 +169,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#removeAllVertices(Collection)
      */
-    public boolean removeAllVertices(Collection<? extends V> vertices)
+    @Override
+    public boolean removeAllVertices(final Collection<? extends V> vertices)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -162,7 +178,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#removeEdge(E)
      */
-    public boolean removeEdge(E e)
+    @Override
+    public boolean removeEdge(final E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -170,7 +187,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#removeEdge(V, V)
      */
-    public E removeEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E removeEdge(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -178,7 +196,8 @@ public class GraphSquare<V, E>
     /**
      * @see Graph#removeVertex(V)
      */
-    public boolean removeVertex(V v)
+    @Override
+    public boolean removeVertex(final V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -187,7 +206,7 @@ public class GraphSquare<V, E>
         final Graph<V, E> g,
         final V v,
         final V u,
-        boolean createLoops)
+        final boolean createLoops)
     {
         if (!g.containsEdge(v, u)) {
             return;
@@ -195,22 +214,20 @@ public class GraphSquare<V, E>
 
         final List<V> adjVertices = Graphs.neighborListOf(g, u);
 
-        for (int i = 0; i < adjVertices.size(); i++) {
-            final V w = adjVertices.get(i);
-
-            if (g.containsEdge(u, w) && ((v != w) || createLoops)) {
+        for (final V w : adjVertices) {
+            if (g.containsEdge(u, w) && (v != w || createLoops)) {
                 super.addEdge(v, w);
             }
         }
     }
 
-    private void addSquareEdges(Graph<V, E> g, boolean createLoops)
+    private void addSquareEdges(final Graph<V, E> g, final boolean createLoops)
     {
-        for (V v : g.vertexSet()) {
-            List<V> adjVertices = Graphs.neighborListOf(g, v);
+        for (final V v : g.vertexSet()) {
+            final List<V> adjVertices = Graphs.neighborListOf(g, v);
 
-            for (int i = 0; i < adjVertices.size(); i++) {
-                addEdgesStartingAt(g, v, adjVertices.get(i), createLoops);
+            for (final V adjVertice : adjVertices) {
+                addEdgesStartingAt(g, v, adjVertice, createLoops);
             }
         }
     }

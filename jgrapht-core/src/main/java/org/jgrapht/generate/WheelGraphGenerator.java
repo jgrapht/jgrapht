@@ -39,9 +39,12 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 
 /**
@@ -66,8 +69,8 @@ public class WheelGraphGenerator<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean inwardSpokes;
-    private int size;
+    private final boolean inwardSpokes;
+    private final int size;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -78,7 +81,7 @@ public class WheelGraphGenerator<V, E>
      *
      * @param size number of vertices to be generated.
      */
-    public WheelGraphGenerator(int size)
+    public WheelGraphGenerator(final int size)
     {
         this(size, true);
     }
@@ -92,7 +95,7 @@ public class WheelGraphGenerator<V, E>
      *
      * @throws IllegalArgumentException
      */
-    public WheelGraphGenerator(int size, boolean inwardSpokes)
+    public WheelGraphGenerator(final int size, final boolean inwardSpokes)
     {
         if (size < 0) {
             throw new IllegalArgumentException("must be non-negative");
@@ -107,10 +110,11 @@ public class WheelGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void generateGraph(
-        Graph<V, E> target,
+        final Graph<V, E> target,
         final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -120,29 +124,30 @@ public class WheelGraphGenerator<V, E>
         // necessary since target may be initially non-empty, meaning we can't
         // rely on its vertex set after the rim is generated.
         final Collection<V> rim = new ArrayList<V>();
-        VertexFactory<V> rimVertexFactory =
+        final VertexFactory<V> rimVertexFactory =
             new VertexFactory<V>() {
+                @Override
                 public V createVertex()
                 {
-                    V vertex = vertexFactory.createVertex();
+                    final V vertex = vertexFactory.createVertex();
                     rim.add(vertex);
 
                     return vertex;
                 }
             };
 
-        RingGraphGenerator<V, E> ringGenerator =
+        final RingGraphGenerator<V, E> ringGenerator =
             new RingGraphGenerator<V, E>(size - 1);
         ringGenerator.generateGraph(target, rimVertexFactory, resultMap);
 
-        V hubVertex = vertexFactory.createVertex();
+        final V hubVertex = vertexFactory.createVertex();
         target.addVertex(hubVertex);
 
         if (resultMap != null) {
             resultMap.put(HUB_VERTEX, hubVertex);
         }
 
-        for (V rimVertex : rim) {
+        for (final V rimVertex : rim) {
             if (inwardSpokes) {
                 target.addEdge(rimVertex, hubVertex);
             } else {

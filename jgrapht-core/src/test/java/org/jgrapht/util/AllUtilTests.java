@@ -37,10 +37,10 @@
  */
 package org.jgrapht.util;
 
-import junit.framework.*;
-
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.permutation.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jgrapht.experimental.equivalence.EquivalenceGroupCreatorTest;
+import org.jgrapht.experimental.permutation.CompoundPermutationIterTest;
 
 
 public class AllUtilTests
@@ -49,7 +49,7 @@ public class AllUtilTests
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.jgrapht.util");
+        final TestSuite suite = new TestSuite("Test for org.jgrapht.util");
 
         // $JUnit-BEGIN$
         suite.addTestSuite(FibonacciHeapTest.class);

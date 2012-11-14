@@ -42,12 +42,14 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.WeightedGraph;
 
 
 /**
  * An undirected weighted graph which is also {@link
- * org.jgrapht.ListenableGraph}.
+ * ListenableGraph}.
  *
  * @see DefaultListenableGraph
  */
@@ -66,7 +68,7 @@ public class ListenableUndirectedWeightedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public ListenableUndirectedWeightedGraph(Class<? extends E> edgeClass)
+    public ListenableUndirectedWeightedGraph(final Class<? extends E> edgeClass)
     {
         this(new SimpleWeightedGraph<V, E>(edgeClass));
     }
@@ -76,7 +78,7 @@ public class ListenableUndirectedWeightedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableUndirectedWeightedGraph(WeightedGraph<V, E> base)
+    public ListenableUndirectedWeightedGraph(final WeightedGraph<V, E> base)
     {
         super((UndirectedGraph<V, E>) base);
     }

@@ -41,9 +41,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.WeightedGraph;
 
-import org.jgrapht.*;
+import java.util.Set;
 
 
 /**
@@ -72,9 +73,9 @@ public class DirectedWeightedSubgraph<V, E>
      * are included.
      */
     public DirectedWeightedSubgraph(
-        WeightedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+        final WeightedGraph<V, E> base,
+        final Set<V> vertexSubset,
+        final Set<E> edgeSubset)
     {
         super((DirectedGraph<V, E>) base, vertexSubset, edgeSubset);
     }

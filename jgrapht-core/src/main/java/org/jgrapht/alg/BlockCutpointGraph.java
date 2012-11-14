@@ -40,10 +40,21 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.MaskFunctor;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.UndirectedMaskSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -80,66 +91,59 @@ public class BlockCutpointGraph<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private Set<V> cutpoints = new HashSet<V>();
+    private final Set<V> cutpoints = new HashSet<V>();
 
     /**
      * DFS (Depth-First-Search) tree.
      */
-    private DirectedGraph<V, DefaultEdge> dfsTree;
+    private final DirectedGraph<V, DefaultEdge> dfsTree;
 
-    private UndirectedGraph<V, E> graph;
+    private final UndirectedGraph<V, E> graph;
 
     private int numOrder;
 
-    private Deque<BCGEdge> stack = new ArrayDeque<BCGEdge>();
+    private final Deque<BCGEdge> stack = new ArrayDeque<BCGEdge>();
 
-    private Map<V, Set<UndirectedGraph<V, E>>> vertex2biconnectedSubgraphs =
-        new HashMap<V, Set<UndirectedGraph<V, E>>>();
+    private final Map<V, Set<UndirectedGraph<V, E>>> vertex2biconnectedSubgraphs
+        = Maps.newHashMap();
 
-    private Map<V, UndirectedGraph<V, E>> vertex2block =
-        new HashMap<V, UndirectedGraph<V, E>>();
+    private final Map<V, UndirectedGraph<V, E>> vertex2block = Maps.newHashMap();
 
-    private Map<V, Integer> vertex2numOrder = new HashMap<V, Integer>();
+    private final Map<V, Integer> vertex2numOrder = Maps.newHashMap();
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Running time = O(m) where m is the number of edges.
      */
-    public BlockCutpointGraph(UndirectedGraph<V, E> graph)
+    public BlockCutpointGraph(final UndirectedGraph<V, E> graph)
     {
         super(DefaultEdge.class);
         this.graph = graph;
 
-        this.dfsTree =
+        dfsTree =
             new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
-        V s = graph.vertexSet().iterator().next();
-        this.dfsTree.addVertex(s);
+        final V s = graph.vertexSet().iterator().next();
+        dfsTree.addVertex(s);
         dfsVisit(s, s);
 
-        if (this.dfsTree.edgesOf(s).size() > 1) {
-            this.cutpoints.add(s);
+        if (dfsTree.edgesOf(s).size() > 1) {
+            cutpoints.add(s);
         } else {
-            this.cutpoints.remove(s);
+            cutpoints.remove(s);
         }
 
-        for (Iterator<V> iter = this.cutpoints.iterator(); iter.hasNext();) {
-            V cutpoint = iter.next();
-            UndirectedGraph<V, E> subgraph =
+        for (final V cutpoint : cutpoints) {
+            final UndirectedGraph<V, E> subgraph =
                 new SimpleGraph<V, E>(this.graph.getEdgeFactory());
             subgraph.addVertex(cutpoint);
-            this.vertex2block.put(cutpoint, subgraph);
+            vertex2block.put(cutpoint, subgraph);
             addVertex(subgraph);
-            Set<UndirectedGraph<V, E>> biconnectedSubgraphs =
+            final Set<UndirectedGraph<V, E>> biconnectedSubgraphs =
                 getBiconnectedSubgraphs(cutpoint);
-            for (
-                Iterator<UndirectedGraph<V, E>> iterator =
-                    biconnectedSubgraphs.iterator();
-                iterator.hasNext();)
-            {
-                UndirectedGraph<V, E> biconnectedSubgraph = iterator.next();
-                assert (vertexSet().contains(biconnectedSubgraph));
+            for (final UndirectedGraph<V, E> biconnectedSubgraph : biconnectedSubgraphs) {
+                assert vertexSet().contains(biconnectedSubgraph);
                 addEdge(subgraph, biconnectedSubgraph);
             }
         }
@@ -153,13 +157,13 @@ public class BlockCutpointGraph<V, E>
      *
      * @param vertex vertex in the initial graph.
      */
-    public UndirectedGraph<V, E> getBlock(V vertex)
+    public UndirectedGraph<V, E> getBlock(final V vertex)
     {
-        if (!this.graph.vertexSet().contains(vertex)) {
+        if (!graph.vertexSet().contains(vertex)) {
             throw new IllegalArgumentException("No such vertex in the graph!");
         }
 
-        return this.vertex2block.get(vertex);
+        return vertex2block.get(vertex);
     }
 
     /**
@@ -167,7 +171,7 @@ public class BlockCutpointGraph<V, E>
      */
     public Set<V> getCutpoints()
     {
-        return this.cutpoints;
+        return cutpoints;
     }
 
     /**
@@ -176,32 +180,32 @@ public class BlockCutpointGraph<V, E>
      *
      * @param vertex vertex in the initial graph.
      */
-    public boolean isCutpoint(V vertex)
+    public boolean isCutpoint(final V vertex)
     {
-        if (!this.graph.vertexSet().contains(vertex)) {
+        if (!graph.vertexSet().contains(vertex)) {
             throw new IllegalArgumentException("No such vertex in the graph!");
         }
 
-        return this.cutpoints.contains(vertex);
+        return cutpoints.contains(vertex);
     }
 
-    private void biconnectedComponentFinished(V s, V n)
+    private void biconnectedComponentFinished(final V s, final V n)
     {
-        this.cutpoints.add(s);
+        cutpoints.add(s);
 
-        Set<V> vertexComponent = new HashSet<V>();
-        Set<BCGEdge> edgeComponent = new HashSet<BCGEdge>();
-        BCGEdge edge = this.stack.removeLast();
+        final Set<V> vertexComponent = new HashSet<V>();
+        final Set<BCGEdge> edgeComponent = new HashSet<BCGEdge>();
+        BCGEdge edge = stack.removeLast();
         while (
-            (getNumOrder(edge.getSource()) >= getNumOrder(n))
-            && !this.stack.isEmpty())
+            getNumOrder(edge.getSource()) >= getNumOrder(n)
+            && !stack.isEmpty())
         {
             edgeComponent.add(edge);
 
             vertexComponent.add(edge.getSource());
             vertexComponent.add(edge.getTarget());
 
-            edge = this.stack.removeLast();
+            edge = stack.removeLast();
         }
         edgeComponent.add(edge);
         // edgeComponent is an equivalence class.
@@ -209,52 +213,46 @@ public class BlockCutpointGraph<V, E>
         vertexComponent.add(edge.getSource());
         vertexComponent.add(edge.getTarget());
 
-        VertexComponentForbiddenFunction mask =
+        final VertexComponentForbiddenFunction mask =
             new VertexComponentForbiddenFunction(
                 vertexComponent);
-        UndirectedGraph<V, E> biconnectedSubgraph =
-            new UndirectedMaskSubgraph<V, E>(
-                this.graph,
+        final UndirectedGraph<V, E> biconnectedSubgraph =
+            new UndirectedMaskSubgraph<V, E>(graph,
                 mask);
-        for (Iterator<V> iter = vertexComponent.iterator(); iter.hasNext();) {
-            V vertex = iter.next();
-            this.vertex2block.put(vertex, biconnectedSubgraph);
+        for (final V vertex : vertexComponent) {
+            vertex2block.put(vertex, biconnectedSubgraph);
             getBiconnectedSubgraphs(vertex).add(biconnectedSubgraph);
         }
         addVertex(biconnectedSubgraph);
     }
 
-    private int dfsVisit(V s, V father)
+    private int dfsVisit(final V s, final V father)
     {
-        this.numOrder++;
-        int minS = this.numOrder;
-        setNumOrder(s, this.numOrder);
+        numOrder++;
+        int minS = numOrder;
+        setNumOrder(s, numOrder);
 
-        for (
-            Iterator<E> iter = this.graph.edgesOf(s).iterator();
-            iter.hasNext();)
-        {
-            E edge = iter.next();
-            V n = Graphs.getOppositeVertex(this.graph, edge, s);
+        for (final E edge : graph.edgesOf(s)) {
+            final V n = Graphs.getOppositeVertex(graph, edge, s);
             if (getNumOrder(n) == 0) {
-                this.dfsTree.addVertex(n);
-                BCGEdge dfsEdge = new BCGEdge(s, n);
-                this.dfsTree.addEdge(s, n, dfsEdge);
+                dfsTree.addVertex(n);
+                final BCGEdge dfsEdge = new BCGEdge(s, n);
+                dfsTree.addEdge(s, n, dfsEdge);
 
-                this.stack.add(dfsEdge);
+                stack.add(dfsEdge);
 
                 // minimum of the traverse orders of the "attach points" of
                 // the vertex n.
-                int minN = dfsVisit(n, s);
+                final int minN = dfsVisit(n, s);
                 minS = Math.min(minN, minS);
                 if (minN >= getNumOrder(s)) {
                     // s is a cutpoint.
                     // it has a son whose "attach depth" is greater or equal.
                     biconnectedComponentFinished(s, n);
                 }
-            } else if ((getNumOrder(n) < getNumOrder(s)) && !n.equals(father)) {
-                BCGEdge backwardEdge = new BCGEdge(s, n);
-                this.stack.add(backwardEdge);
+            } else if (getNumOrder(n) < getNumOrder(s) && !n.equals(father)) {
+                final BCGEdge backwardEdge = new BCGEdge(s, n);
+                stack.add(backwardEdge);
 
                 // n is an "attach point" of s. {s->n} is a backward edge.
                 minS = Math.min(getNumOrder(n), minS);
@@ -273,13 +271,13 @@ public class BlockCutpointGraph<V, E>
      *
      * @param vertex vertex in the initial graph.
      */
-    private Set<UndirectedGraph<V, E>> getBiconnectedSubgraphs(V vertex)
+    private Set<UndirectedGraph<V, E>> getBiconnectedSubgraphs(final V vertex)
     {
-        Set<UndirectedGraph<V, E>> biconnectedSubgraphs =
-            this.vertex2biconnectedSubgraphs.get(vertex);
+        Set<UndirectedGraph<V, E>> biconnectedSubgraphs = vertex2biconnectedSubgraphs
+            .get(vertex);
         if (biconnectedSubgraphs == null) {
             biconnectedSubgraphs = new HashSet<UndirectedGraph<V, E>>();
-            this.vertex2biconnectedSubgraphs.put(vertex, biconnectedSubgraphs);
+            vertex2biconnectedSubgraphs.put(vertex, biconnectedSubgraphs);
         }
         return biconnectedSubgraphs;
     }
@@ -287,11 +285,11 @@ public class BlockCutpointGraph<V, E>
     /**
      * Returns the traverse order of the vertex in the DFS.
      */
-    private int getNumOrder(V vertex)
+    private int getNumOrder(final V vertex)
     {
-        assert (vertex != null);
+        assert vertex != null;
 
-        Integer numOrder = this.vertex2numOrder.get(vertex);
+        final Integer numOrder = vertex2numOrder.get(vertex);
         if (numOrder == null) {
             return 0;
         } else {
@@ -299,9 +297,9 @@ public class BlockCutpointGraph<V, E>
         }
     }
 
-    private void setNumOrder(V vertex, int numOrder)
+    private void setNumOrder(final V vertex, final int numOrder)
     {
-        this.vertex2numOrder.put(vertex, Integer.valueOf(numOrder));
+        vertex2numOrder.put(vertex, Integer.valueOf(numOrder));
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -313,51 +311,49 @@ public class BlockCutpointGraph<V, E>
          */
         private static final long serialVersionUID = -5115006161815760059L;
 
-        private V source;
+        private final V source;
 
-        private V target;
+        private final V target;
 
-        public BCGEdge(V source, V target)
+        public BCGEdge(final V source, final V target)
         {
-            super();
             this.source = source;
             this.target = target;
         }
 
+        @Override
         public V getSource()
         {
-            return this.source;
+            return source;
         }
 
+        @Override
         public V getTarget()
         {
-            return this.target;
+            return target;
         }
     }
 
     private class VertexComponentForbiddenFunction
         implements MaskFunctor<V, E>
     {
-        private Set<V> vertexComponent;
+        private final Set<V> vertexComponent;
 
-        public VertexComponentForbiddenFunction(Set<V> vertexComponent)
+        public VertexComponentForbiddenFunction(final Set<V> vertexComponent)
         {
             this.vertexComponent = vertexComponent;
         }
 
-        public boolean isEdgeMasked(E edge)
+        @Override
+        public boolean isEdgeMasked(final E edge)
         {
             return false;
         }
 
-        public boolean isVertexMasked(V vertex)
+        @Override
+        public boolean isVertexMasked(final V vertex)
         {
-            if (this.vertexComponent.contains(vertex)) {
-                // vertex belongs to component then we do not mask it.
-                return false;
-            } else {
-                return true;
-            }
+            return !vertexComponent.contains(vertex);
         }
     }
 }

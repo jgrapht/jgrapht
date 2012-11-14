@@ -38,7 +38,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import java.util.Map;
 
 
 /**
@@ -60,7 +60,7 @@ public interface ComponentAttributeProvider<T>
      *
      * @return key/value pairs, or null if no attributes should be supplied
      */
-    public Map<String, String> getComponentAttributes(T component);
+    Map<String, String> getComponentAttributes(T component);
 }
 
 // End ComponentAttributeProvider.java

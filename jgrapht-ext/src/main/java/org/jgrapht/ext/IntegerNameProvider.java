@@ -38,9 +38,11 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
 
-import org.jgrapht.event.*;
+import java.util.Map;
 
 
 /**
@@ -57,7 +59,7 @@ public class IntegerNameProvider<V>
     //~ Instance fields --------------------------------------------------------
 
     private int nextID = 1;
-    private final Map<V, Integer> idMap = new HashMap<V, Integer>();
+    private final Map<V, Integer> idMap = Maps.newHashMap();
 
     //~ Methods ----------------------------------------------------------------
 
@@ -80,7 +82,8 @@ public class IntegerNameProvider<V>
      *
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
-    public String getVertexName(V vertex)
+    @Override
+    public String getVertexName(final V vertex)
     {
         Integer id = idMap.get(vertex);
         if (id == null) {

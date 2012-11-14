@@ -39,12 +39,14 @@
  */
 package org.jgrapht.experimental.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.experimental.alg.color.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.alg.color.BrownBacktrackColoring;
+import org.jgrapht.experimental.alg.color.GreedyColoring;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 
 /**
@@ -62,17 +64,17 @@ public class ColoringTest
      */
     public void testGreedyColoring()
     {
-        Graph<Object, DefaultEdge> completeGraph =
+        final Graph<Object, DefaultEdge> completeGraph =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 6);
         completeGraphGenerator.generateGraph(
             completeGraph,
             new ClassBasedVertexFactory<Object>(Object.class),
             null);
-        GreedyColoring<Object, DefaultEdge> colorer =
+        final GreedyColoring<Object, DefaultEdge> colorer =
             new GreedyColoring<Object, DefaultEdge>(completeGraph);
         assertEquals(new Integer(6), colorer.getUpperBound(null));
     }
@@ -82,17 +84,17 @@ public class ColoringTest
      */
     public void testBacktrackColoring()
     {
-        Graph<Object, DefaultEdge> completeGraph =
+        final Graph<Object, DefaultEdge> completeGraph =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 6);
         completeGraphGenerator.generateGraph(
             completeGraph,
             new ClassBasedVertexFactory<Object>(Object.class),
             null);
-        BrownBacktrackColoring<Object, DefaultEdge> colorer =
+        final BrownBacktrackColoring<Object, DefaultEdge> colorer =
             new BrownBacktrackColoring<Object, DefaultEdge>(completeGraph);
         assertEquals(new Integer(6), colorer.getResult(null));
     }

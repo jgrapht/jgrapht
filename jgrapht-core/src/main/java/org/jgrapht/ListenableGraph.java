@@ -41,7 +41,8 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.event.*;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.VertexSetListener;
 
 
 /**
@@ -62,7 +63,7 @@ public interface ListenableGraph<V, E>
      *
      * @param l the listener to be added.
      */
-    public void addGraphListener(GraphListener<V, E> l);
+    void addGraphListener(GraphListener<V, E> l);
 
     /**
      * Adds the specified vertex set listener to this graph, if not already
@@ -70,21 +71,21 @@ public interface ListenableGraph<V, E>
      *
      * @param l the listener to be added.
      */
-    public void addVertexSetListener(VertexSetListener<V> l);
+    void addVertexSetListener(VertexSetListener<V> l);
 
     /**
      * Removes the specified graph listener from this graph, if present.
      *
      * @param l the listener to be removed.
      */
-    public void removeGraphListener(GraphListener<V, E> l);
+    void removeGraphListener(GraphListener<V, E> l);
 
     /**
      * Removes the specified vertex set listener from this graph, if present.
      *
      * @param l the listener to be removed.
      */
-    public void removeVertexSetListener(VertexSetListener<V> l);
+    void removeVertexSetListener(VertexSetListener<V> l);
 }
 
 // End ListenableGraph.java

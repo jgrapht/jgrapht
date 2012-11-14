@@ -38,7 +38,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.UndirectedGraph;
 
 
 /**
@@ -54,8 +54,8 @@ public class UndirectedMaskSubgraph<V, E>
     //~ Constructors -----------------------------------------------------------
 
     public UndirectedMaskSubgraph(
-        UndirectedGraph<V, E> base,
-        MaskFunctor<V, E> mask)
+        final UndirectedGraph<V, E> base,
+        final MaskFunctor<V, E> mask)
     {
         super(base, mask);
     }

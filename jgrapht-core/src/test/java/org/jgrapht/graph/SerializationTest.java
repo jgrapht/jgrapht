@@ -39,9 +39,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import junit.framework.TestCase;
+import org.jgrapht.EnhancedTestCase;
 
-import org.jgrapht.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 /**
@@ -54,16 +58,16 @@ public class SerializationTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public SerializationTest(String name)
+    public SerializationTest(final String name)
     {
         super(name);
     }
@@ -100,17 +104,17 @@ public class SerializationTest
         assertEquals(2, graph.edgesOf(v3).size());
     }
 
-    private Object serializeAndDeserialize(Object obj)
+    private static Object serializeAndDeserialize(Object obj)
         throws Exception
     {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bout);
+        final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        final ObjectOutputStream out = new ObjectOutputStream(bout);
 
         out.writeObject(obj);
         out.flush();
 
-        ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bin);
+        final ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
+        final ObjectInputStream in = new ObjectInputStream(bin);
 
         obj = in.readObject();
         return obj;

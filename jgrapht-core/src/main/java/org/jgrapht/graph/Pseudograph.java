@@ -41,7 +41,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.UndirectedGraph;
 
 
 /**
@@ -65,7 +66,7 @@ public class Pseudograph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public Pseudograph(Class<? extends E> edgeClass)
+    public Pseudograph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
@@ -75,7 +76,7 @@ public class Pseudograph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public Pseudograph(EdgeFactory<V, E> ef)
+    public Pseudograph(final EdgeFactory<V, E> ef)
     {
         super(ef, true, true);
     }

@@ -40,9 +40,11 @@
 // package org.jgrapht.generate;
 package org.jgrapht.experimental;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -76,13 +78,13 @@ public final class RandomGraphHelper
      */
     @SuppressWarnings("unchecked")
     public static void addEdges(
-        Graph target,
-        List sourceVertices,
-        List destVertices,
-        int numEdges)
+        final Graph target,
+        final List sourceVertices,
+        final List destVertices,
+        final int numEdges)
     {
-        int sourceSize = sourceVertices.size();
-        int destSize = destVertices.size();
+        final int sourceSize = sourceVertices.size();
+        final int destSize = destVertices.size();
 
         for (int i = 0; i < numEdges; ++i) {
             while (
@@ -92,7 +94,6 @@ public final class RandomGraphHelper
                     destVertices.get(randSingleton.nextInt(destSize)))
                 == null)
             {
-                ;
             }
         }
     }
@@ -108,11 +109,11 @@ public final class RandomGraphHelper
      */
     @SuppressWarnings("unchecked")
     public static Object [] addVertices(
-        Graph target,
-        VertexFactory vertexFactory,
-        int numVertices)
+        final Graph target,
+        final VertexFactory vertexFactory,
+        final int numVertices)
     {
-        Object [] vertices = new Object[numVertices];
+        final Object [] vertices = new Object[numVertices];
 
         for (int i = 0; i < numVertices; ++i) {
             vertices[i] = vertexFactory.createVertex();

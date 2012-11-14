@@ -41,9 +41,17 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 
-import org.jgrapht.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**
@@ -60,17 +68,17 @@ class KShortestPathsIterator<V, E>
     /**
      * End vertex.
      */
-    private V endVertex;
+    private final V endVertex;
 
     /**
      * Graph on which shortest paths are searched.
      */
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
     /**
      * Number of paths stored at each end vertex.
      */
-    private int k;
+    private final int k;
 
     /**
      * Vertices whose ranking shortest paths have been modified during the
@@ -81,19 +89,19 @@ class KShortestPathsIterator<V, E>
     /**
      * Stores the paths that improved the vertex in the previous pass.
      */
-    private Map<V, RankingPathElementList<V, E>> prevSeenDataContainer;
+    private final Map<V, RankingPathElementList<V, E>> prevSeenDataContainer;
 
     /**
      * Stores the vertices that have been seen during iteration and (optionally)
      * some additional traversal info regarding each vertex. Key = vertex, value
      * = <code>RankingPathElementList</code> list of calculated paths.
      */
-    private Map<V, RankingPathElementList<V, E>> seenDataContainer;
+    private final Map<V, RankingPathElementList<V, E>> seenDataContainer;
 
     /**
      * Start vertex.
      */
-    private V startVertex;
+    private final V startVertex;
 
     private boolean startVertexEncountered;
 
@@ -111,10 +119,10 @@ class KShortestPathsIterator<V, E>
      * @param maxSize number of paths stored at end vertex of the graph.
      */
     public KShortestPathsIterator(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        int maxSize)
+        final Graph<V, E> graph,
+        final V startVertex,
+        final V endVertex,
+        final int maxSize)
     {
         assertKShortestPathsIterator(graph, startVertex);
 
@@ -122,13 +130,12 @@ class KShortestPathsIterator<V, E>
         this.startVertex = startVertex;
         this.endVertex = endVertex;
 
-        this.k = maxSize;
+        k = maxSize;
 
-        this.seenDataContainer = new HashMap<V, RankingPathElementList<V, E>>();
-        this.prevSeenDataContainer =
-            new HashMap<V, RankingPathElementList<V, E>>();
+        seenDataContainer = Maps.newHashMap();
+        prevSeenDataContainer = Maps.newHashMap();
 
-        this.prevImprovedVertices = new HashSet<V>();
+        prevImprovedVertices = Sets.newHashSet();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -137,13 +144,14 @@ class KShortestPathsIterator<V, E>
      * @return <code>true</code> if at least one path has been improved during
      * the previous pass, <code>false</code> otherwise.
      */
+    @Override
     public boolean hasNext()
     {
-        if (!this.startVertexEncountered) {
+        if (!startVertexEncountered) {
             encounterStartVertex();
         }
 
-        return !(this.prevImprovedVertices.isEmpty());
+        return !prevImprovedVertices.isEmpty();
     }
 
     /**
@@ -156,30 +164,27 @@ class KShortestPathsIterator<V, E>
      * the graph and <code>n</code> is the number of vertices of the graph</li>
      * </ul>
      *
-     * @see java.util.Iterator#next()
+     * @see Iterator#next()
      */
+    @Override
     public Set<V> next()
     {
-        if (!this.startVertexEncountered) {
+        if (!startVertexEncountered) {
             encounterStartVertex();
         }
 
         // at the i-th pass the shortest paths with i edges are calculated.
         if (hasNext()) {
-            Set<V> improvedVertices = new HashSet<V>();
+            final Set<V> improvedVertices = new HashSet<V>();
 
-            for (
-                Iterator<V> iter = this.prevImprovedVertices.iterator();
-                iter.hasNext();)
-            {
-                V vertex = iter.next();
-                if (!vertex.equals(this.endVertex)) {
+            for (final V vertex : prevImprovedVertices) {
+                if (!vertex.equals(endVertex)) {
                     updateOutgoingVertices(vertex, improvedVertices);
                 }
             }
 
             savePassData(improvedVertices);
-            this.passNumber++;
+            passNumber++;
 
             return improvedVertices;
         }
@@ -189,8 +194,9 @@ class KShortestPathsIterator<V, E>
     /**
      * Unsupported.
      *
-     * @see java.util.Iterator#remove()
+     * @see Iterator#remove()
      */
+    @Override
     public void remove()
     {
         throw new UnsupportedOperationException();
@@ -205,12 +211,12 @@ class KShortestPathsIterator<V, E>
      * @return list of <code>RankingPathElement</code>, or <code>null</code> of
      * no path exists between the start vertex and the end vertex.
      */
-    RankingPathElementList<V, E> getPathElements(V endVertex)
+    RankingPathElementList<V, E> getPathElements(final V endVertex)
     {
-        return this.seenDataContainer.get(endVertex);
+        return seenDataContainer.get(endVertex);
     }
 
-    private void assertKShortestPathsIterator(Graph<V, E> graph, V startVertex)
+    private void assertKShortestPathsIterator(final Graph<V, E> graph, final V startVertex)
     {
         if (graph == null) {
             throw new NullPointerException("graph is null");
@@ -228,24 +234,18 @@ class KShortestPathsIterator<V, E>
      *
      * @return the new entry.
      */
-    private RankingPathElementList<V, E> createSeenData(V vertex, E edge)
+    private RankingPathElementList<V, E> createSeenData(final V vertex, final E edge)
     {
-        V oppositeVertex = Graphs.getOppositeVertex(this.graph, edge, vertex);
+        final V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
 
-        RankingPathElementList<V, E> oppositeData =
-            this.prevSeenDataContainer.get(oppositeVertex);
+        final RankingPathElementList<V, E> oppositeData = prevSeenDataContainer
+            .get(oppositeVertex);
 
         // endVertex in argument to ensure that stored paths do not disconnect
         // the end-vertex
-        RankingPathElementList<V, E> data =
-            new RankingPathElementList<V, E>(
-                this.graph,
-                this.k,
-                oppositeData,
-                edge,
-                this.endVertex);
 
-        return data;
+        return new RankingPathElementList<V, E>(graph, k, oppositeData, edge,
+            endVertex);
     }
 
     /**
@@ -256,13 +256,13 @@ class KShortestPathsIterator<V, E>
      *
      * @return .
      */
-    private Iterator<E> edgesOfIterator(V vertex)
+    private Iterator<E> edgesOfIterator(final V vertex)
     {
-        if (this.graph instanceof DirectedGraph<?, ?>) {
-            return ((DirectedGraph<V, E>) this.graph).outgoingEdgesOf(vertex)
+        if (graph instanceof DirectedGraph<?, ?>) {
+            return ((DirectedGraph<V, E>) graph).outgoingEdgesOf(vertex)
                 .iterator();
         } else {
-            return this.graph.edgesOf(vertex).iterator();
+            return graph.edgesOf(vertex).iterator();
         }
     }
 
@@ -271,53 +271,42 @@ class KShortestPathsIterator<V, E>
      */
     private void encounterStartVertex()
     {
-        RankingPathElementList<V, E> data =
-            new RankingPathElementList<V, E>(
-                this.graph,
-                this.k,
-                new RankingPathElement<V, E>(
-                    this.startVertex));
+        final RankingPathElementList<V, E> data =
+            new RankingPathElementList<V, E>(graph, k,
+                new RankingPathElement<V, E>(startVertex));
 
-        this.seenDataContainer.put(this.startVertex, data);
-        this.prevSeenDataContainer.put(this.startVertex, data);
+        seenDataContainer.put(startVertex, data);
+        prevSeenDataContainer.put(startVertex, data);
 
         // initially the only vertex whose value is considered to have changed
         // is the start vertex
-        this.prevImprovedVertices.add(this.startVertex);
+        prevImprovedVertices.add(startVertex);
 
-        this.startVertexEncountered = true;
+        startVertexEncountered = true;
     }
 
-    private void savePassData(Set<V> improvedVertices)
+    private void savePassData(final Set<V> improvedVertices)
     {
-        for (Iterator<V> iter = improvedVertices.iterator(); iter.hasNext();) {
-            V vertex = iter.next();
+        for (final V vertex : improvedVertices) {
+            final RankingPathElementList<V, E> pathElementList = seenDataContainer
+                .get(vertex);
 
-            RankingPathElementList<V, E> pathElementList =
-                this.seenDataContainer.get(vertex);
-
-            RankingPathElementList<V, E> improvedPaths =
-                new RankingPathElementList<V, E>(
-                    this.graph,
+            final RankingPathElementList<V, E> improvedPaths =
+                new RankingPathElementList<V, E>(graph,
                     pathElementList.maxSize,
                     vertex);
 
-            for (
-                Iterator<RankingPathElement<V, E>> pathIter =
-                    pathElementList.iterator();
-                pathIter.hasNext();)
-            {
-                RankingPathElement<V, E> path = pathIter.next();
-                if (path.getHopCount() == this.passNumber) {
+            for (final RankingPathElement<V, E> path : pathElementList) {
+                if (path.getHopCount() == passNumber) {
                     // the path has just been computed.
                     improvedPaths.pathElements.add(path);
                 }
             }
 
-            this.prevSeenDataContainer.put(vertex, improvedPaths);
+            prevSeenDataContainer.put(vertex, improvedPaths);
         }
 
-        this.prevImprovedVertices = improvedVertices;
+        prevImprovedVertices = improvedVertices;
     }
 
     /**
@@ -329,13 +318,13 @@ class KShortestPathsIterator<V, E>
      * @param vertex vertex reached by a path.
      * @param edge edge reaching the vertex.
      */
-    private boolean tryToAddFirstPaths(V vertex, E edge)
+    private boolean tryToAddFirstPaths(final V vertex, final E edge)
     {
         // the vertex has not been reached yet
-        RankingPathElementList<V, E> data = createSeenData(vertex, edge);
+        final RankingPathElementList<V, E> data = createSeenData(vertex, edge);
 
         if (!data.isEmpty()) {
-            this.seenDataContainer.put(vertex, data);
+            seenDataContainer.put(vertex, data);
             return true;
         }
         return false;
@@ -350,13 +339,13 @@ class KShortestPathsIterator<V, E>
      * @param vertex a vertex which has just been encountered.
      * @param edge the edge via which the vertex was encountered.
      */
-    private boolean tryToAddNewPaths(V vertex, E edge)
+    private boolean tryToAddNewPaths(final V vertex, final E edge)
     {
-        RankingPathElementList<V, E> data = this.seenDataContainer.get(vertex);
+        final RankingPathElementList<V, E> data = seenDataContainer.get(vertex);
 
-        V oppositeVertex = Graphs.getOppositeVertex(this.graph, edge, vertex);
-        RankingPathElementList<V, E> oppositeData =
-            this.prevSeenDataContainer.get(oppositeVertex);
+        final V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
+        final RankingPathElementList<V, E> oppositeData = prevSeenDataContainer
+            .get(oppositeVertex);
 
         return data.addPathElements(oppositeData, edge);
     }
@@ -381,27 +370,27 @@ class KShortestPathsIterator<V, E>
      * @param vertex
      * @param improvedVertices
      */
-    private void updateOutgoingVertices(V vertex, Set<V> improvedVertices)
+    private void updateOutgoingVertices(final V vertex, final Set<V> improvedVertices)
     {
         // try to add new paths for the target vertices of the outgoing edges
         // of the vertex in argument.
         for (Iterator<E> iter = edgesOfIterator(vertex); iter.hasNext();) {
-            E edge = iter.next();
-            V vertexReachedByEdge =
-                Graphs.getOppositeVertex(this.graph, edge,
+            final E edge = iter.next();
+            final V vertexReachedByEdge =
+                Graphs.getOppositeVertex(graph, edge,
                     vertex);
 
             // check if the path does not loop over the start vertex.
-            if (vertexReachedByEdge != this.startVertex) {
-                if (this.seenDataContainer.containsKey(vertexReachedByEdge)) {
-                    boolean relaxed =
+            if (vertexReachedByEdge != startVertex) {
+                if (seenDataContainer.containsKey(vertexReachedByEdge)) {
+                    final boolean relaxed =
                         tryToAddNewPaths(vertexReachedByEdge,
                             edge);
                     if (relaxed) {
                         improvedVertices.add(vertexReachedByEdge);
                     }
                 } else {
-                    boolean relaxed =
+                    final boolean relaxed =
                         tryToAddFirstPaths(vertexReachedByEdge,
                             edge);
                     if (relaxed) {

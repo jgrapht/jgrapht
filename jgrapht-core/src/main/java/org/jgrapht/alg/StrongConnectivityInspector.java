@@ -40,19 +40,28 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DirectedSubgraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * <p>Complements the {@link org.jgrapht.alg.ConnectivityInspector} class with
+ * <p>Complements the {@link ConnectivityInspector} class with
  * the capability to compute the strongly connected components of a directed
  * graph. The algorithm is implemented after "Cormen et al: Introduction to
  * agorithms", Chapter 22.5. It has a running time of O(V + E).</p>
  *
- * <p>Unlike {@link org.jgrapht.alg.ConnectivityInspector}, this class does not
+ * <p>Unlike {@link ConnectivityInspector}, this class does not
  * implement incremental inspection. The full algorithm is executed at the first
  * call of {@link StrongConnectivityInspector#stronglyConnectedSets()} or {@link
  * StrongConnectivityInspector#isStronglyConnected()}.</p>
@@ -89,7 +98,7 @@ public class StrongConnectivityInspector<V, E>
      *
      * @throws IllegalArgumentException
      */
-    public StrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
+    public StrongConnectivityInspector(final DirectedGraph<V, E> directedGraph)
     {
         if (directedGraph == null) {
             throw new IllegalArgumentException("null not allowed for graph!");
@@ -137,21 +146,21 @@ public class StrongConnectivityInspector<V, E>
     {
         if (stronglyConnectedSets == null) {
             orderedVertices = new LinkedList<VertexData<V>>();
-            stronglyConnectedSets = new Vector<Set<V>>();
+            stronglyConnectedSets = new ArrayList<Set<V>>();
 
             // create VertexData objects for all vertices, store them
             createVertexData();
 
             // perform the first round of DFS, result is an ordering
             // of the vertices by decreasing finishing time
-            for (VertexData<V> data : vertexToVertexData.values()) {
+            for (final VertexData<V> data : vertexToVertexData.values()) {
                 if (!data.isDiscovered()) {
                     dfsVisit(graph, data, null);
                 }
             }
 
             // 'create' inverse graph (i.e. every edge is reversed)
-            DirectedGraph<V, E> inverseGraph =
+            final DirectedGraph<V, E> inverseGraph =
                 new EdgeReversedGraph<V, E>(graph);
 
             // get ready for next dfs round
@@ -160,10 +169,10 @@ public class StrongConnectivityInspector<V, E>
             // second dfs round: vertices are considered in decreasing
             // finishing time order; every tree found is a strongly
             // connected set
-            for (VertexData<V> data : orderedVertices) {
+            for (final VertexData<V> data : orderedVertices) {
                 if (!data.isDiscovered()) {
                     // new strongly connected set
-                    Set<V> set = new HashSet<V>();
+                    final Set<V> set = new HashSet<V>();
                     stronglyConnectedSets.add(set);
                     dfsVisit(inverseGraph, data, set);
                 }
@@ -193,11 +202,11 @@ public class StrongConnectivityInspector<V, E>
     public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
     {
         if (stronglyConnectedSubgraphs == null) {
-            List<Set<V>> sets = stronglyConnectedSets();
+            final List<Set<V>> sets = stronglyConnectedSets();
             stronglyConnectedSubgraphs =
-                new Vector<DirectedSubgraph<V, E>>(sets.size());
+                new ArrayList<DirectedSubgraph<V, E>>(sets.size());
 
-            for (Set<V> set : sets) {
+            for (final Set<V> set : sets) {
                 stronglyConnectedSubgraphs.add(
                     new DirectedSubgraph<V, E>(
                         graph,
@@ -219,7 +228,7 @@ public class StrongConnectivityInspector<V, E>
         vertexToVertexData =
             new HashMap<V, VertexData<V>>(graph.vertexSet().size());
 
-        for (V vertex : graph.vertexSet()) {
+        for (final V vertex : graph.vertexSet()) {
             vertexToVertexData.put(
                 vertex,
                 new VertexData2<V>(vertex, false, false));
@@ -233,15 +242,15 @@ public class StrongConnectivityInspector<V, E>
      * round)
      */
     private void dfsVisit(
-        DirectedGraph<V, E> visitedGraph,
-        VertexData<V> vertexData,
-        Set<V> vertices)
+        final DirectedGraph<V, E> visitedGraph,
+        final VertexData<V> vertexData,
+        final Set<V> vertices)
     {
-        Deque<VertexData<V>> stack = new ArrayDeque<VertexData<V>>();
+        final Deque<VertexData<V>> stack = new ArrayDeque<VertexData<V>>();
         stack.add(vertexData);
 
         while (!stack.isEmpty()) {
-            VertexData<V> data = stack.removeLast();
+            final VertexData<V> data = stack.removeLast();
 
             if (!data.isDiscovered()) {
                 data.setDiscovered(true);
@@ -253,8 +262,8 @@ public class StrongConnectivityInspector<V, E>
                 stack.add(new VertexData1<V>(data, true, true));
 
                 // follow all edges
-                for (E edge : visitedGraph.outgoingEdgesOf(data.getVertex())) {
-                    VertexData<V> targetData =
+                for (final E edge : visitedGraph.outgoingEdgesOf(data.getVertex())) {
+                    final VertexData<V> targetData =
                         vertexToVertexData.get(
                             visitedGraph.getEdgeTarget(edge));
 
@@ -276,7 +285,7 @@ public class StrongConnectivityInspector<V, E>
      */
     private void resetVertexData()
     {
-        for (VertexData<V> data : vertexToVertexData.values()) {
+        for (final VertexData<V> data : vertexToVertexData.values()) {
             data.setDiscovered(false);
             data.setFinished(false);
         }
@@ -292,31 +301,25 @@ public class StrongConnectivityInspector<V, E>
         private byte bitfield;
 
         private VertexData(
-            boolean discovered,
-            boolean finished)
+            final boolean discovered,
+            final boolean finished)
         {
-            this.bitfield = 0;
+            bitfield = 0;
             setDiscovered(discovered);
             setFinished(finished);
         }
 
         private boolean isDiscovered()
         {
-            if ((bitfield & 1) == 1) {
-                return true;
-            }
-            return false;
+            return (bitfield & 1) == 1;
         }
 
         private boolean isFinished()
         {
-            if ((bitfield & 2) == 2) {
-                return true;
-            }
-            return false;
+            return (bitfield & 2) == 2;
         }
 
-        private void setDiscovered(boolean discovered)
+        private void setDiscovered(final boolean discovered)
         {
             if (discovered) {
                 bitfield |= 1;
@@ -325,7 +328,7 @@ public class StrongConnectivityInspector<V, E>
             }
         }
 
-        private void setFinished(boolean finished)
+        private void setFinished(final boolean finished)
         {
             if (finished) {
                 bitfield |= 2;
@@ -345,19 +348,21 @@ public class StrongConnectivityInspector<V, E>
         private final VertexData<V> finishedData;
 
         private VertexData1(
-            VertexData<V> finishedData,
-            boolean discovered,
-            boolean finished)
+            final VertexData<V> finishedData,
+            final boolean discovered,
+            final boolean finished)
         {
             super(discovered, finished);
             this.finishedData = finishedData;
         }
 
+        @Override
         VertexData<V> getFinishedData()
         {
             return finishedData;
         }
 
+        @Override
         V getVertex()
         {
             return null;
@@ -370,19 +375,21 @@ public class StrongConnectivityInspector<V, E>
         private final V vertex;
 
         private VertexData2(
-            V vertex,
-            boolean discovered,
-            boolean finished)
+            final V vertex,
+            final boolean discovered,
+            final boolean finished)
         {
             super(discovered, finished);
             this.vertex = vertex;
         }
 
+        @Override
         VertexData<V> getFinishedData()
         {
             return null;
         }
 
+        @Override
         V getVertex()
         {
             return vertex;

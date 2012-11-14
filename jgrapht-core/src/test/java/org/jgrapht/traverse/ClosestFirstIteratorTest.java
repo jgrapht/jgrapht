@@ -40,8 +40,8 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 
 /**
@@ -62,11 +62,11 @@ public class ClosestFirstIteratorTest
     {
         result = new StringBuffer();
 
-        DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
+        final DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
 
         // NOTE:  pick 301 as the radius because it discriminates
         // the boundary case edge between v7 and v9
-        AbstractGraphIterator<String, ?> iterator =
+        final AbstractGraphIterator<String, ?> iterator =
             new ClosestFirstIterator<String, DefaultEdge>(graph, "1", 301);
 
         while (iterator.hasNext()) {
@@ -87,9 +87,9 @@ public class ClosestFirstIteratorTest
     {
         result = new StringBuffer();
 
-        DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
+        final DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
 
-        AbstractGraphIterator<String, ?> iterator =
+        final AbstractGraphIterator<String, ?> iterator =
             new ClosestFirstIterator<String, DefaultEdge>(graph);
 
         while (iterator.hasNext()) {
@@ -104,21 +104,24 @@ public class ClosestFirstIteratorTest
     }
 
     // NOTE:  the edge weights make the result deterministic
+    @Override
     String getExpectedStr1()
     {
         return "1,2,3,5,6,7,9,4,8";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return getExpectedStr1() + ",orphan";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        final DirectedGraph<String, DefaultEdge> g,
+        final String vertex)
     {
-        AbstractGraphIterator<String, DefaultEdge> i =
+        final AbstractGraphIterator<String, DefaultEdge> i =
             new ClosestFirstIterator<String, DefaultEdge>(g, vertex);
         i.setCrossComponentTraversal(true);
 

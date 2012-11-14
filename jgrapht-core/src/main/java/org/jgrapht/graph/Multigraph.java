@@ -41,7 +41,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.UndirectedGraph;
 
 
 /**
@@ -66,7 +67,7 @@ public class Multigraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public Multigraph(Class<? extends E> edgeClass)
+    public Multigraph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
@@ -76,7 +77,7 @@ public class Multigraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public Multigraph(EdgeFactory<V, E> ef)
+    public Multigraph(final EdgeFactory<V, E> ef)
     {
         super(ef, true, false);
     }

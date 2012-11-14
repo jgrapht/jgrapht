@@ -41,7 +41,7 @@
  */
 package org.jgrapht.event;
 
-import java.util.*;
+import java.util.EventListener;
 
 
 /**
@@ -64,14 +64,14 @@ public interface VertexSetListener<V>
      *
      * @param e the vertex event.
      */
-    public void vertexAdded(GraphVertexChangeEvent<V> e);
+    void vertexAdded(GraphVertexChangeEvent<V> e);
 
     /**
      * Notifies that a vertex has been removed from the graph.
      *
      * @param e the vertex event.
      */
-    public void vertexRemoved(GraphVertexChangeEvent<V> e);
+    void vertexRemoved(GraphVertexChangeEvent<V> e);
 }
 
 // End VertexSetListener.java

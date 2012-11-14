@@ -39,9 +39,9 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.experimental.isomorphism.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jgrapht.experimental.isomorphism.IsomorphismInspectorTest;
 
 
 /**
@@ -66,9 +66,10 @@ public final class AllAlgTests
      */
     public static Test suite()
     {
-        TestSuite suite = new TestSuite();
+        final TestSuite suite = new TestSuite();
 
         // $JUnit-BEGIN$
+        suite.addTest(new TestSuite(AStarShortestPathTest.class));
         suite.addTest(new TestSuite(ConnectivityInspectorTest.class));
         suite.addTest(new TestSuite(DijkstraShortestPathTest.class));
         suite.addTest(new TestSuite(BellmanFordShortestPathTest.class));
@@ -91,7 +92,9 @@ public final class AllAlgTests
         suite.addTest(new TestSuite(KruskalMinimumSpanningTreeTest.class));
         suite.addTest(new TestSuite(StoerWagnerMinimumCutTest.class));
         suite.addTest(new TestSuite(EdmondsBlossomShrinkingTest.class));
-
+        suite.addTest(new TestSuite(MinSourceSinkCutTest.class));
+        suite.addTest(new TestSuite(MaxBipartiteMatchingTest.class));
+        
         // $JUnit-END$
         return suite;
     }

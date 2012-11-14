@@ -38,13 +38,14 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.generate.LinearGraphGenerator;
+import org.jgrapht.graph.ClassBasedVertexFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
 
 
 /**
@@ -59,31 +60,31 @@ public class BlockCutpointGraphTest
 
     public void testBiconnected()
     {
-        BiconnectedGraph graph = new BiconnectedGraph();
+        final BiconnectedGraph graph = new BiconnectedGraph();
 
-        BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
+        final BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(0, blockCutpointGraph.getCutpoints().size());
-        int nbBiconnectedComponents =
+        final int nbBiconnectedComponents =
             blockCutpointGraph.vertexSet().size()
             - blockCutpointGraph.getCutpoints().size();
         assertEquals(1, nbBiconnectedComponents);
     }
 
-    public void testGetBlock(BlockCutpointGraph blockCutpointGraph)
+    public static void testGetBlock(final BlockCutpointGraph blockCutpointGraph)
     {
         for (
             Iterator iter = blockCutpointGraph.vertexSet().iterator();
             iter.hasNext();)
         {
-            UndirectedGraph component = (UndirectedGraph) iter.next();
+            final UndirectedGraph component = (UndirectedGraph) iter.next();
             if (!component.edgeSet().isEmpty()) {
                 for (
                     Iterator iterator = component.vertexSet().iterator();
                     iterator.hasNext();)
                 {
-                    Object vertex = iterator.next();
+                    final Object vertex = iterator.next();
                     if (!blockCutpointGraph.getCutpoints().contains(vertex)) {
                         assertEquals(
                             component,
@@ -104,22 +105,22 @@ public class BlockCutpointGraphTest
         testLinearGraph(5);
     }
 
-    public void testLinearGraph(int nbVertices)
+    public void testLinearGraph(final int nbVertices)
     {
-        UndirectedGraph graph = new SimpleGraph(DefaultEdge.class);
+        final UndirectedGraph graph = new SimpleGraph(DefaultEdge.class);
 
-        LinearGraphGenerator generator = new LinearGraphGenerator(nbVertices);
+        final LinearGraphGenerator generator = new LinearGraphGenerator(nbVertices);
         generator.generateGraph(
             graph,
             new ClassBasedVertexFactory<Object>(
                 Object.class),
             null);
 
-        BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
+        final BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(nbVertices - 2, blockCutpointGraph.getCutpoints().size());
-        int nbBiconnectedComponents =
+        final int nbBiconnectedComponents =
             blockCutpointGraph.vertexSet().size()
             - blockCutpointGraph.getCutpoints().size();
         assertEquals(nbVertices - 1, nbBiconnectedComponents);
@@ -127,13 +128,13 @@ public class BlockCutpointGraphTest
 
     public void testNotBiconnected()
     {
-        UndirectedGraph graph = new NotBiconnectedGraph();
+        final UndirectedGraph graph = new NotBiconnectedGraph();
 
-        BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
+        final BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(2, blockCutpointGraph.getCutpoints().size());
-        int nbBiconnectedComponents =
+        final int nbBiconnectedComponents =
             blockCutpointGraph.vertexSet().size()
             - blockCutpointGraph.getCutpoints().size();
         assertEquals(3, nbBiconnectedComponents);

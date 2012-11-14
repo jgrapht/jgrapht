@@ -38,7 +38,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 
 /**
@@ -91,27 +92,27 @@ public class KShortestPathCompleteGraph5
 
     private void addEdges()
     {
-        this.eS1 = addEdge("vS", "v1");
-        this.eS2 = addEdge("vS", "v2");
-        this.eS3 = addEdge("vS", "v3");
-        this.eS4 = addEdge("vS", "v4");
-        this.e12 = addEdge("v1", "v2");
-        this.e13 = addEdge("v1", "v3");
-        this.e14 = addEdge("v1", "v4");
-        this.e23 = addEdge("v2", "v3");
-        this.e24 = addEdge("v2", "v4");
-        this.e34 = addEdge("v3", "v4");
+        eS1 = addEdge("vS", "v1");
+        eS2 = addEdge("vS", "v2");
+        eS3 = addEdge("vS", "v3");
+        eS4 = addEdge("vS", "v4");
+        e12 = addEdge("v1", "v2");
+        e13 = addEdge("v1", "v3");
+        e14 = addEdge("v1", "v4");
+        e23 = addEdge("v2", "v3");
+        e24 = addEdge("v2", "v4");
+        e34 = addEdge("v3", "v4");
 
-        setEdgeWeight(this.eS1, 1.0);
-        setEdgeWeight(this.eS2, 1.0);
-        setEdgeWeight(this.eS3, 1.0);
-        setEdgeWeight(this.eS4, 1000.0);
-        setEdgeWeight(this.e12, 1.0);
-        setEdgeWeight(this.e13, 1.0);
-        setEdgeWeight(this.e14, 1.0);
-        setEdgeWeight(this.e23, 1.0);
-        setEdgeWeight(this.e24, 1.0);
-        setEdgeWeight(this.e34, 1.0);
+        setEdgeWeight(eS1, 1.0);
+        setEdgeWeight(eS2, 1.0);
+        setEdgeWeight(eS3, 1.0);
+        setEdgeWeight(eS4, 1000.0);
+        setEdgeWeight(e12, 1.0);
+        setEdgeWeight(e13, 1.0);
+        setEdgeWeight(e14, 1.0);
+        setEdgeWeight(e23, 1.0);
+        setEdgeWeight(e24, 1.0);
+        setEdgeWeight(e34, 1.0);
     }
 
     private void addVertices()

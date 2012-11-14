@@ -55,7 +55,7 @@ public interface WeightedGraph<V, E>
     /**
      * The default weight for an edge.
      */
-    public static double DEFAULT_EDGE_WEIGHT = 1.0;
+    double DEFAULT_EDGE_WEIGHT = 1.0;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -65,7 +65,7 @@ public interface WeightedGraph<V, E>
      * @param e edge on which to set weight
      * @param weight new weight for edge
      */
-    public void setEdgeWeight(E e, double weight);
+    void setEdgeWeight(E e, double weight);
 }
 
 // End WeightedGraph.java

@@ -32,7 +32,9 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+
+import java.util.Map;
 
 
 /**
@@ -49,7 +51,7 @@ public class IntegerEdgeNameProvider<E>
     //~ Instance fields --------------------------------------------------------
 
     private int nextID = 1;
-    private final Map<E, Integer> idMap = new HashMap<E, Integer>();
+    private final Map<E, Integer> idMap = Maps.newHashMap();
 
     //~ Methods ----------------------------------------------------------------
 
@@ -67,7 +69,8 @@ public class IntegerEdgeNameProvider<E>
      *
      * @param edge the edge to be named
      */
-    public String getEdgeName(E edge)
+    @Override
+    public String getEdgeName(final E edge)
     {
         Integer id = idMap.get(edge);
         if (id == null) {

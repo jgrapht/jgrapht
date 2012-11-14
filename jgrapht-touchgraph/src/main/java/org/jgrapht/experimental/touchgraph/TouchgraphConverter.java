@@ -39,11 +39,14 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import com.touchgraph.graphlayout.*;
+import com.touchgraph.graphlayout.Edge;
+import com.touchgraph.graphlayout.Node;
+import com.touchgraph.graphlayout.TGException;
+import com.touchgraph.graphlayout.TGPanel;
+import org.jgrapht.Graph;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -82,17 +85,17 @@ public class TouchgraphConverter<V, E>
      * @throws TGException
      */
     public Node convertToTouchGraph(
-        Graph<V, E> graph,
-        TGPanel tgPanel,
-        boolean selfReferencesAllowed)
+        final Graph<V, E> graph,
+        final TGPanel tgPanel,
+        final boolean selfReferencesAllowed)
         throws TGException
     {
-        List<V> jgtNodes = new ArrayList<V>(graph.vertexSet());
-        Node [] tgNodes = new Node[jgtNodes.size()];
+        final List<V> jgtNodes = new ArrayList<V>(graph.vertexSet());
+        final Node [] tgNodes = new Node[jgtNodes.size()];
 
         // add all the nodes...
         for (int i = 0; i < jgtNodes.size(); i++) {
-            Node n;
+            final Node n;
             if (jgtNodes.get(i) instanceof Node) {
                 // if our JGraphT object was a touchGraph node, add it unaltered
                 n = (Node) jgtNodes.get(i);
@@ -115,7 +118,7 @@ public class TouchgraphConverter<V, E>
                 // self-referential loops do not show up in the TG
                 // visualization but you may want to
                 // subclass TG's Node class to show them
-                if ((i != j) || selfReferencesAllowed) {
+                if (i != j || selfReferencesAllowed) {
                     if (graph.getEdge(jgtNodes.get(i), jgtNodes.get(j))
                         != null)
                     {

@@ -40,9 +40,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.Set;
 
 
 /**
@@ -71,9 +71,9 @@ public class UndirectedSubgraph<V, E>
      * are included.
      */
     public UndirectedSubgraph(
-        UndirectedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+        final UndirectedGraph<V, E> base,
+        final Set<V> vertexSubset,
+        final Set<E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -83,13 +83,14 @@ public class UndirectedSubgraph<V, E>
     /**
      * @see UndirectedGraph#degreeOf(Object)
      */
-    public int degreeOf(V vertex)
+    @Override
+    public int degreeOf(final V vertex)
     {
         assertVertexExist(vertex);
 
         int degree = 0;
 
-        for (E e : getBase().edgesOf(vertex)) {
+        for (final E e : getBase().edgesOf(vertex)) {
             if (containsEdge(e)) {
                 degree++;
 

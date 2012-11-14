@@ -39,14 +39,20 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import com.touchgraph.graphlayout.*;
-import com.touchgraph.graphlayout.interaction.*;
+import com.touchgraph.graphlayout.GLPanel;
+import com.touchgraph.graphlayout.Node;
+import com.touchgraph.graphlayout.TGException;
+import com.touchgraph.graphlayout.TGLensSet;
+import com.touchgraph.graphlayout.TGPanel;
+import com.touchgraph.graphlayout.interaction.HVScroll;
+import com.touchgraph.graphlayout.interaction.HyperScroll;
+import com.touchgraph.graphlayout.interaction.LocalityScroll;
+import com.touchgraph.graphlayout.interaction.RotateScroll;
+import com.touchgraph.graphlayout.interaction.ZoomScroll;
+import org.jgrapht.Graph;
 
 import java.awt.*;
-
-import java.util.*;
-
-import org.jgrapht.*;
+import java.util.Hashtable;
 
 
 /**
@@ -66,15 +72,15 @@ public class TouchgraphPanel<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private Color defaultBackColor = new Color(0x01, 0x11, 0x44);
-    private Color defaultBorderBackColor = new Color(0x02, 0x35, 0x81);
-    private Color defaultForeColor =
+    private final Color defaultBackColor = new Color(0x01, 0x11, 0x44);
+    private final Color defaultBorderBackColor = new Color(0x02, 0x35, 0x81);
+    private final Color defaultForeColor =
         new Color((float) 0.95, (float) 0.85, (float) 0.55);
 
     /**
      * the JGraphT graph we are displaying
      */
-    Graph<V, E> graph;
+    final Graph<V, E> graph;
 
     /**
      * are self-references allowed? They will not show up in TouchGraph unless
@@ -87,7 +93,7 @@ public class TouchgraphPanel<V, E>
     //~ Constructors -----------------------------------------------------------
 
     /**constructor*/
-    public TouchgraphPanel(Graph<V, E> graph, boolean selfReferencesAllowed)
+    public TouchgraphPanel(final Graph<V, E> graph, final boolean selfReferencesAllowed)
     {
         this.graph = graph;
         this.selfReferencesAllowed = selfReferencesAllowed;
@@ -113,8 +119,8 @@ public class TouchgraphPanel<V, E>
      */
     public void preinitialize()
     {
-        this.setBackground(defaultBorderBackColor);
-        this.setForeground(defaultForeColor);
+        setBackground(defaultBorderBackColor);
+        setForeground(defaultForeColor);
         scrollBarHash = new Hashtable();
         tgLensSet = new TGLensSet();
         tgPanel = new TGPanel();
@@ -129,6 +135,7 @@ public class TouchgraphPanel<V, E>
     /**
      * Initialize panel, lens, and establish a random graph as a demonstration.
      */
+    @Override
     public void initialize()
     {
         buildPanel();
@@ -136,7 +143,7 @@ public class TouchgraphPanel<V, E>
         tgPanel.setLensSet(tgLensSet);
         addUIs();
         try {
-            if (this.graph == null) {
+            if (graph == null) {
                 /*
                  * Add a random graph
                  */
@@ -145,13 +152,10 @@ public class TouchgraphPanel<V, E>
                 /*
                  * Add users graph
                  */
-                TouchgraphConverter<V, E> converter =
+                final TouchgraphConverter<V, E> converter =
                     new TouchgraphConverter<V, E>();
-                Node n =
-                    (Node) converter.convertToTouchGraph(
-                        this.graph,
-                        tgPanel,
-                        this.selfReferencesAllowed);
+                final Node n = converter.convertToTouchGraph(graph,
+                    tgPanel, selfReferencesAllowed);
                 getHVScroll().slowScrollToCenter(n);
                 tgPanel.setLocale(n, Integer.MAX_VALUE);
             }

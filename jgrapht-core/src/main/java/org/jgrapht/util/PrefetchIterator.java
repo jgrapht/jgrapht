@@ -37,7 +37,9 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -93,7 +95,7 @@ public class PrefetchIterator<E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private NextElementFunctor<E> innerEnum;
+    private final NextElementFunctor<E> innerEnum;
     private E getNextLastResult;
     private boolean isGetNextLastResultUpToDate = false;
     private boolean endOfEnumerationReached = false;
@@ -102,7 +104,7 @@ public class PrefetchIterator<E>
 
     //~ Constructors -----------------------------------------------------------
 
-    public PrefetchIterator(NextElementFunctor<E> aEnum)
+    public PrefetchIterator(final NextElementFunctor<E> aEnum)
     {
         innerEnum = aEnum;
     }
@@ -116,7 +118,7 @@ public class PrefetchIterator<E>
     private E getNextElementFromInnerFunctor()
     {
         innerFunctorUsageCounter++;
-        E result = this.innerEnum.nextElement();
+        final E result = innerEnum.nextElement();
 
         // if we got here , an exception was not thrown, so at least
         // one time a good value returned
@@ -129,16 +131,17 @@ public class PrefetchIterator<E>
      * Changes isGetNextLastResultUpToDate to false. (Because it does not save
      * the NEXT element now; it saves the current one!)
      */
+    @Override
     public E nextElement()
     {
         E result = null;
-        if (this.isGetNextLastResultUpToDate) {
-            result = this.getNextLastResult;
+        if (isGetNextLastResultUpToDate) {
+            result = getNextLastResult;
         } else {
             result = getNextElementFromInnerFunctor();
         }
 
-        this.isGetNextLastResultUpToDate = false;
+        isGetNextLastResultUpToDate = false;
         return result;
     }
 
@@ -146,6 +149,7 @@ public class PrefetchIterator<E>
      * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates
      * getNext() and saves it 2. sets isGetNextLastResultUpToDate to true.
      */
+    @Override
     public boolean hasMoreElements()
     {
         if (endOfEnumerationReached) {
@@ -156,8 +160,8 @@ public class PrefetchIterator<E>
             return true;
         } else {
             try {
-                this.getNextLastResult = getNextElementFromInnerFunctor();
-                this.isGetNextLastResultUpToDate = true;
+                getNextLastResult = getNextElementFromInnerFunctor();
+                isGetNextLastResultUpToDate = true;
                 return true;
             } catch (NoSuchElementException noSuchE) {
                 endOfEnumerationReached = true;
@@ -174,12 +178,8 @@ public class PrefetchIterator<E>
      */
     public boolean isEnumerationStartedEmpty()
     {
-        if (this.innerFunctorUsageCounter == 0) {
-            if (hasMoreElements()) {
-                return false;
-            } else {
-                return true;
-            }
+        if (innerFunctorUsageCounter == 0) {
+            return !hasMoreElements();
         } else // it is not the first time , so use the saved value
                // which was initilaizeed during a call to
                // getNextElementFromInnerFunctor
@@ -188,19 +188,22 @@ public class PrefetchIterator<E>
         }
     }
 
+    @Override
     public boolean hasNext()
     {
-        return this.hasMoreElements();
+        return hasMoreElements();
     }
 
+    @Override
     public E next()
     {
-        return this.nextElement();
+        return nextElement();
     }
 
     /**
      * Always throws UnsupportedOperationException.
      */
+    @Override
     public void remove()
         throws UnsupportedOperationException
     {
@@ -215,7 +218,7 @@ public class PrefetchIterator<E>
          * You must implement that NoSuchElementException is thrown on
          * nextElement() if it is out of bound.
          */
-        public EE nextElement()
+        EE nextElement()
             throws NoSuchElementException;
     }
 }

@@ -1,0 +1,134 @@
+package org.jgrapht.alg;
+
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Test class for the MinSourceSinkCut class.
+ * @author Joris Kinable
+ *
+ */
+public class MinSourceSinkCutTest extends TestCase{
+
+	/**
+	 * Constructs a small realistic graph and computes the min s-t cut
+	 */
+	public void testRealGraph() {
+		final DirectedGraph<Integer, DefaultWeightedEdge> graph=new DefaultDirectedWeightedGraph <Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		final Integer[] vertices={0,1,2,3,4,5,6};
+		for(final Integer i: vertices)
+			graph.addVertex(i);
+		
+		final DefaultWeightedEdge e01=Graphs.addEdge(graph, 0, 1, 2);
+		final DefaultWeightedEdge e02=Graphs.addEdge(graph, 0, 2, 6);
+		final DefaultWeightedEdge e03=Graphs.addEdge(graph, 0, 3, 3);
+		final DefaultWeightedEdge e12=Graphs.addEdge(graph, 1, 2, 4);
+		final DefaultWeightedEdge e32=Graphs.addEdge(graph, 3, 2, 2);
+		final DefaultWeightedEdge e14=Graphs.addEdge(graph, 1, 4, 1);
+		final DefaultWeightedEdge e35=Graphs.addEdge(graph, 3, 5, 6);
+		final DefaultWeightedEdge e24=Graphs.addEdge(graph, 2, 4, 2);
+		final DefaultWeightedEdge e26=Graphs.addEdge(graph, 2, 6, 1);
+		final DefaultWeightedEdge e52=Graphs.addEdge(graph, 5, 2, 4);
+		final DefaultWeightedEdge e46=Graphs.addEdge(graph, 4, 6, 8);
+		final DefaultWeightedEdge e56=Graphs.addEdge(graph, 5, 6, 7);
+		
+		
+		final MinSourceSinkCut<Integer, DefaultWeightedEdge> mc=new MinSourceSinkCut<Integer, DefaultWeightedEdge>(graph);
+		mc.computeMinCut(0, 6);
+		
+		//Test the current source
+		assertEquals(0, mc.getCurrentSource(), 0);
+		//Test the current sink
+		assertEquals(6, mc.getCurrentSink(), 0);
+		
+		//Test the source and sink partitions
+		final List<Integer> l1 = Arrays.asList(0, 1, 2);
+		final List<Integer> l2 = Arrays.asList(3, 4, 5, 6);
+	    final Set<Integer> partition1 = new HashSet<Integer>(l1);
+	    final Set<Integer> partition2 = new HashSet<Integer>(l2);
+		assertEquals(partition1, mc.getSourcePartition());
+	    assertEquals(partition2, mc.getSinkPartition());
+	    
+	    //Test the cut weight
+	    assertEquals(7, mc.getCutWeight(),0);
+	    
+	    //Test the cut edge set
+	    final List<DefaultWeightedEdge> l3=Arrays.asList(e03, e26, e24, e14);
+	    final Set<DefaultWeightedEdge> cutEdges=new HashSet<DefaultWeightedEdge>(l3);
+	    assertEquals(cutEdges, mc.getCutEdges());
+	}
+	
+	/**
+	 * Computes the min s-t cut in a graph with 2 vertices and one directed edge between source and sink
+	 */
+	public void testGraphWithOneEdge(){
+		final DirectedGraph<Integer, DefaultWeightedEdge> graph=new DefaultDirectedWeightedGraph <Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		final Integer[] vertices={0,1};
+		for(final Integer i: vertices)
+			graph.addVertex(i);
+		
+		final DefaultWeightedEdge e01=Graphs.addEdge(graph, 0, 1, 2);
+		final MinSourceSinkCut<Integer, DefaultWeightedEdge> mc=new MinSourceSinkCut<Integer, DefaultWeightedEdge>(graph);
+		mc.computeMinCut(0, 1);
+		
+		assertEquals(0, mc.getCurrentSource(), 0);
+		assertEquals(1, mc.getCurrentSink(), 0);
+		
+		//Test the source and sink partitions
+		final List<Integer> l1 = Arrays.asList(0);
+		final List<Integer> l2 = Arrays.asList(1);
+	    final Set<Integer> partition1 = new HashSet<Integer>(l1);
+	    final Set<Integer> partition2 = new HashSet<Integer>(l2);
+		assertEquals(partition1, mc.getSourcePartition());
+	    assertEquals(partition2, mc.getSinkPartition());
+	    
+	    //Test the cut weight
+	    assertEquals(2, mc.getCutWeight(),0);
+	    
+	    //Reverse the source and sink
+	    mc.computeMinCut(1, 0);
+	    assertEquals(1, mc.getCurrentSource(), 0);
+		assertEquals(0, mc.getCurrentSink(), 0);
+		assertEquals(0, mc.getCutWeight(),0);
+	}
+
+	/**
+	 * Computes the min s-t cut in a disconnected graph
+	 */
+	public void testDisconnectedGraph(){
+		final DirectedGraph<Integer, DefaultWeightedEdge> graph=new DefaultDirectedWeightedGraph <Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		final Integer[] vertices={0,1,2};
+		for(final Integer i: vertices)
+			graph.addVertex(i);
+		
+		final DefaultWeightedEdge e01=Graphs.addEdge(graph, 1, 2, 2);
+		
+		final MinSourceSinkCut<Integer, DefaultWeightedEdge> mc=new MinSourceSinkCut<Integer, DefaultWeightedEdge>(graph);
+		mc.computeMinCut(0, 2);
+		
+		assertEquals(0, mc.getCurrentSource(), 0);
+		//Test the current sink
+		assertEquals(2, mc.getCurrentSink(), 0);
+		
+		//Test the source and sink partitions
+		final List<Integer> l1 = Arrays.asList(0);
+		final List<Integer> l2 = Arrays.asList(1,2);
+	    final Set<Integer> partition1 = new HashSet<Integer>(l1);
+	    final Set<Integer> partition2 = new HashSet<Integer>(l2);
+		assertEquals(partition1, mc.getSourcePartition());
+	    assertEquals(partition2, mc.getSinkPartition());
+	    
+	    //Test the cut weight
+	    assertEquals(0, mc.getCutWeight(),0);
+	    assertEquals(Collections.EMPTY_SET, mc.getCutEdges());
+	}
+}

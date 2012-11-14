@@ -39,16 +39,16 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jgrapht.alg.AllAlgTests;
+import org.jgrapht.alg.util.AllAlgUtilTests;
+import org.jgrapht.generate.AllGenerateTests;
+import org.jgrapht.graph.AllGraphTests;
+import org.jgrapht.traverse.AllTraverseTests;
+import org.jgrapht.util.AllUtilTests;
 
-import junit.framework.*;
-
-import org.jgrapht.alg.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
-import org.jgrapht.util.*;
+import java.util.Enumeration;
 
 
 /**
@@ -73,7 +73,7 @@ public final class AllTests
      */
     public static Test suite()
     {
-        ExpandableTestSuite suite =
+        final ExpandableTestSuite suite =
             new ExpandableTestSuite("All tests of JGraphT");
 
         suite.addTestSuit((TestSuite) AllAlgTests.suite());
@@ -96,13 +96,12 @@ public final class AllTests
          */
         public ExpandableTestSuite()
         {
-            super();
         }
 
         /**
-         * @see TestSuite#TestSuite(java.lang.String)
+         * @see TestSuite#TestSuite(String)
          */
-        public ExpandableTestSuite(String name)
+        public ExpandableTestSuite(final String name)
         {
             super(name);
         }
@@ -112,11 +111,11 @@ public final class AllTests
          *
          * @param suite
          */
-        public void addTestSuit(TestSuite suite)
+        public void addTestSuit(final TestSuite suite)
         {
             for (Enumeration e = suite.tests(); e.hasMoreElements();) {
-                Test t = (Test) e.nextElement();
-                this.addTest(t);
+                final Test t = (Test) e.nextElement();
+                addTest(t);
             }
         }
     }

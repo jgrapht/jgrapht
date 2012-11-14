@@ -58,7 +58,7 @@ public class TypeUtil<T>
      * @return the result of the cast
      */
     @SuppressWarnings("unchecked")
-    public static <T> T uncheckedCast(Object o, TypeUtil<T> typeDecl)
+    public static <T> T uncheckedCast(final Object o, final TypeUtil<T> typeDecl)
     {
         return (T) o;
     }

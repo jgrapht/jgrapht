@@ -39,9 +39,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.LinkedList;
+import java.util.Map;
 
 
 /**
@@ -59,7 +61,7 @@ public class HyperCubeGraphGenerator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private int dim;
+    private final int dim;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -68,7 +70,7 @@ public class HyperCubeGraphGenerator<V, E>
      *
      * @param dim This is the dimension of the hypercube.
      */
-    public HyperCubeGraphGenerator(int dim)
+    public HyperCubeGraphGenerator(final int dim)
     {
         this.dim = dim;
     }
@@ -78,17 +80,18 @@ public class HyperCubeGraphGenerator<V, E>
     /**
      * This will generate the hypercube graph
      */
+    @Override
     public void generateGraph(
-        Graph<V, E> target,
+        final Graph<V, E> target,
         final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Map<String, V> resultMap)
     {
         //Vertices are created, and they are included in the resultmap as their
         //bitstring representation
-        int order = (int) Math.pow(2, dim);
-        LinkedList<V> vertices = new LinkedList<V>();
+        final int order = (int) Math.pow(2, dim);
+        final LinkedList<V> vertices = new LinkedList<V>();
         for (int i = 0; i < order; i++) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
             vertices.add(newVertex);
             if (resultMap != null) {
@@ -105,7 +108,7 @@ public class HyperCubeGraphGenerator<V, E>
         for (int i = 0; i < order; i++) {
             for (int j = i + 1; j < order; j++) {
                 for (int z = 0; z < dim; z++) {
-                    if ((j ^ i) == (1 << z)) {
+                    if ((j ^ i) == 1 << z) {
                         target.addEdge(vertices.get(i), vertices.get(j));
                         break;
                     }

@@ -38,8 +38,8 @@
  */
 package org.jgrapht.experimental.isomorphism.comparators;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
 
 
 /**
@@ -58,7 +58,7 @@ public class DirectedEdgeWeightOddEvenComparator
 
     //~ Constructors -----------------------------------------------------------
 
-    public DirectedEdgeWeightOddEvenComparator(Graph graph)
+    public DirectedEdgeWeightOddEvenComparator(final Graph graph)
     {
         this.graph = graph;
     }
@@ -75,18 +75,18 @@ public class DirectedEdgeWeightOddEvenComparator
      * org.jgrapht.experimental.equivalence.EquivalenceComparator#equivalenceCompare(java.lang.Object,
      * java.lang.Object, java.lang.Object, java.lang.Object)
      */
+    @Override
     @SuppressWarnings("unchecked")
     public boolean equivalenceCompare(
-        Object arg1,
-        Object arg2,
-        Object context1,
-        Object context2)
+        final Object arg1,
+        final Object arg2,
+        final Object context1,
+        final Object context2)
     {
-        int int1 = (int) graph.getEdgeWeight(arg1);
-        int int2 = (int) graph.getEdgeWeight(arg2);
+        final int int1 = (int) graph.getEdgeWeight(arg1);
+        final int int2 = (int) graph.getEdgeWeight(arg2);
 
-        boolean result = ((int1 % 2) == (int2 % 2));
-        return result;
+        return int1 % 2 == int2 % 2;
     }
 
     /* (non-Javadoc)
@@ -99,10 +99,11 @@ public class DirectedEdgeWeightOddEvenComparator
      * org.jgrapht.experimental.equivalence.EquivalenceComparator#equivalenceHashcode(java.lang.Object,
      * java.lang.Object)
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public int equivalenceHashcode(Object arg1, Object context)
+    public int equivalenceHashcode(final Object arg1, final Object context)
     {
-        int int1 = (int) graph.getEdgeWeight(arg1);
+        final int int1 = (int) graph.getEdgeWeight(arg1);
         return int1 % 2;
     }
 }

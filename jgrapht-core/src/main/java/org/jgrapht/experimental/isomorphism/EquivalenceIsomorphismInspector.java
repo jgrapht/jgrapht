@@ -38,11 +38,16 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
+import org.jgrapht.experimental.equivalence.EquivalenceSet;
+import org.jgrapht.experimental.equivalence.EquivalenceSetCreator;
+import org.jgrapht.experimental.permutation.ArrayPermutationsIter;
+import org.jgrapht.experimental.permutation.CollectionPermutationIter;
+import org.jgrapht.experimental.permutation.PermutationFactory;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.permutation.*;
+import java.util.Arrays;
+import java.util.Set;
 
 
 /**
@@ -68,13 +73,13 @@ class EquivalenceIsomorphismInspector<V, E>
      * UniformEquivalenceComparator will be used as default (always return true)
      */
     public EquivalenceIsomorphismInspector(
-        Graph<V, E> graph1,
-        Graph<V, E> graph2,
+        final Graph<V, E> graph1,
+        final Graph<V, E> graph2,
 
         // XXX hb 060128: FOllowing parameter may need Graph<? super V,? super
         // E>
-        EquivalenceComparator<? super V, ? super Graph<? super V, ? super E>> vertexChecker,
-        EquivalenceComparator<? super E, ? super Graph<? super V, ? super E>> edgeChecker)
+        final EquivalenceComparator<? super V, ? super Graph<? super V, ? super E>> vertexChecker,
+        final EquivalenceComparator<? super E, ? super Graph<? super V, ? super E>> edgeChecker)
     {
         super(graph1, graph2, vertexChecker, edgeChecker);
     }
@@ -85,8 +90,8 @@ class EquivalenceIsomorphismInspector<V, E>
      * @see ExhaustiveIsomorphismInspector(Graph,Graph,EquivalenceComparator,EquivalenceComparator)
      */
     public EquivalenceIsomorphismInspector(
-        Graph<V, E> graph1,
-        Graph<V, E> graph2)
+        final Graph<V, E> graph1,
+        final Graph<V, E> graph2)
     {
         super(graph1, graph2);
     }
@@ -128,10 +133,11 @@ class EquivalenceIsomorphismInspector<V, E>
      * @see AbstractExhaustiveIsomorphismInspector#createPermutationIterator(Set,
      * Set)
      */
+    @Override
     @SuppressWarnings("unchecked")
     protected CollectionPermutationIter<V> createPermutationIterator(
-        Set<V> vertexSet1,
-        Set<V> vertexSet2)
+        final Set<V> vertexSet1,
+        final Set<V> vertexSet2)
     {
         if (vertexSet1.size() != vertexSet2.size()) {
             // throw new IllegalArgumentException("the two vertx-sets
@@ -142,21 +148,17 @@ class EquivalenceIsomorphismInspector<V, E>
         }
 
         // 1//
-        EquivalenceSet [] eqGroupArray1 =
+        final EquivalenceSet [] eqGroupArray1 =
             EquivalenceSetCreator.createEqualityGroupOrderedArray(
-                vertexSet1,
-                this.vertexComparator,
-                this.graph1);
+                vertexSet1, vertexComparator, graph1);
 
         // 2//
-        EquivalenceSet [] eqGroupArray2 =
+        final EquivalenceSet [] eqGroupArray2 =
             EquivalenceSetCreator.createEqualityGroupOrderedArray(
-                vertexSet2,
-                this.vertexComparator,
-                this.graph2);
+                vertexSet2, vertexComparator, graph2);
 
         // 3//
-        boolean reorderSuccess =
+        final boolean reorderSuccess =
             reorderTargetArrayToMatchSourceOrder(eqGroupArray1, eqGroupArray2); // 2 is the target
         if (!reorderSuccess) {
             // if reordering fail , no match can be done
@@ -168,7 +170,7 @@ class EquivalenceIsomorphismInspector<V, E>
         // the permutations will be relevant.
         // note that it does not start in any way related to eqGroup sizes.
 
-        V [] reorderingVertexSet1Temp = (V []) new Object[vertexSet1.size()];
+        final V [] reorderingVertexSet1Temp = (V []) new Object[vertexSet1.size()];
         fillElementsflatArray(eqGroupArray1, reorderingVertexSet1Temp);
         vertexSet1.clear();
         vertexSet1.addAll(Arrays.asList(reorderingVertexSet1Temp));
@@ -180,11 +182,11 @@ class EquivalenceIsomorphismInspector<V, E>
         // 1. create array of the vertexes , by flattening the eq.group array
         // contents
 
-        V [] flatVertexArray = (V []) new Object[vertexSet2.size()];
+        final V [] flatVertexArray = (V []) new Object[vertexSet2.size()];
         fillElementsflatArray(eqGroupArray2, flatVertexArray);
 
         // 2. make the permuter according to the groups size
-        int [] groupSizesArray = new int[eqGroupArray1.length];
+        final int [] groupSizesArray = new int[eqGroupArray1.length];
 
         // iterate over the EqualityGroup array
         for (
@@ -197,14 +199,11 @@ class EquivalenceIsomorphismInspector<V, E>
                 eqGroupArray2[eqGroupCounter].size();
         }
 
-        ArrayPermutationsIter arrayPermIter =
+        final ArrayPermutationsIter arrayPermIter =
             PermutationFactory.createByGroups(groupSizesArray);
-        CollectionPermutationIter<V> vertexPermIter =
-            new CollectionPermutationIter<V>(
-                Arrays.asList(flatVertexArray),
-                arrayPermIter);
 
-        return vertexPermIter;
+        return new CollectionPermutationIter<V>(Arrays.asList(flatVertexArray),
+            arrayPermIter);
     }
 
     /**
@@ -227,9 +226,8 @@ class EquivalenceIsomorphismInspector<V, E>
      * @return true if the array was reordered successfully. false if not(It
      * will happen if there is no complete match between the groups)
      */
-    private boolean reorderTargetArrayToMatchSourceOrder(
-        EquivalenceSet [] sourceArray,
-        EquivalenceSet [] targetArray)
+    private static boolean reorderTargetArrayToMatchSourceOrder(
+        final EquivalenceSet[] sourceArray, final EquivalenceSet[] targetArray)
     {
         boolean result = true;
         for (
@@ -240,18 +238,18 @@ class EquivalenceIsomorphismInspector<V, E>
             int currTargetIndex = sourceIndex;
 
             // if they are already equivalent do nothing.
-            EquivalenceSet sourceEqGroup = sourceArray[sourceIndex];
+            final EquivalenceSet sourceEqGroup = sourceArray[sourceIndex];
             EquivalenceSet targetEqGroup = targetArray[currTargetIndex];
             if (!sourceEqGroup.equals(targetEqGroup)) {
                 // iterate through the next group in the targetArray until
                 // a new size or hashcode is seen
                 boolean foundMatch = false;
-                int sourceSize = sourceEqGroup.size();
-                int sourceHashCode = sourceEqGroup.hashCode();
+                final int sourceSize = sourceEqGroup.size();
+                final int sourceHashCode = sourceEqGroup.hashCode();
                 while (
-                    (targetEqGroup.size() == sourceSize)
-                    && (targetEqGroup.hashCode() == sourceHashCode)
-                    && (currTargetIndex < (targetArray.length - 1)))
+                    targetEqGroup.size() == sourceSize
+                    && targetEqGroup.hashCode() == sourceHashCode
+                    && currTargetIndex < targetArray.length - 1)
                 {
                     currTargetIndex++;
                     targetEqGroup = targetArray[currTargetIndex];
@@ -280,19 +278,14 @@ class EquivalenceIsomorphismInspector<V, E>
      * @param eqGroupArray
      * @param flatArray an empy array with the proper size
      */
-    protected void fillElementsflatArray(
-        EquivalenceSet [] eqGroupArray,
-        Object [] flatVertexArray)
+    protected static void fillElementsflatArray(
+        final EquivalenceSet[] eqGroupArray, final Object[] flatVertexArray)
     {
         int flatVertexArrayNextFree = 0; // the next free place in the array
 
         // iterate over the EqualityGroup array
-        for (
-            int eqGroupCounter = 0;
-            eqGroupCounter < eqGroupArray.length;
-            eqGroupCounter++)
-        {
-            Object [] currGroupArray = eqGroupArray[eqGroupCounter].toArray();
+        for (final EquivalenceSet anEqGroupArray : eqGroupArray) {
+            final Object[] currGroupArray = anEqGroupArray.toArray();
 
             // copy this small array to the free place in the big
             // flatVertexArray
@@ -302,7 +295,7 @@ class EquivalenceIsomorphismInspector<V, E>
                 flatVertexArray, // dest
                 flatVertexArrayNextFree, // destPos
                 currGroupArray.length // length
-                );
+            );
             flatVertexArrayNextFree += currGroupArray.length;
         }
     }
@@ -314,9 +307,10 @@ class EquivalenceIsomorphismInspector<V, E>
      * @see AbstractExhaustiveIsomorphismInspector#areVertexSetsOfTheSameEqualityGroup(
      * Set, Set)
      */
+    @Override
     protected boolean areVertexSetsOfTheSameEqualityGroup(
-        Set vertexSet1,
-        Set vertexSet2)
+        final Set vertexSet1,
+        final Set vertexSet2)
     {
         return true;
     }

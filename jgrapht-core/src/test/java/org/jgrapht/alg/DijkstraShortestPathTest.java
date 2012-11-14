@@ -40,10 +40,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -62,7 +64,7 @@ public class DijkstraShortestPathTest
     public void testConstructor()
     {
         DijkstraShortestPath<String, DefaultWeightedEdge> path;
-        Graph<String, DefaultWeightedEdge> g = create();
+        final Graph<String, DefaultWeightedEdge> g = create();
 
         path =
             new DijkstraShortestPath<String, DefaultWeightedEdge>(
@@ -90,10 +92,11 @@ public class DijkstraShortestPathTest
         assertEquals(Double.POSITIVE_INFINITY, path.getPathLength(), 0);
     }
 
+    @Override
     protected List findPathBetween(
-        Graph<String, DefaultWeightedEdge> g,
-        String src,
-        String dest)
+        final Graph<String, DefaultWeightedEdge> g,
+        final String src,
+        final String dest)
     {
         return DijkstraShortestPath.findPathBetween(g, src, dest);
     }

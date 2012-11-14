@@ -39,9 +39,12 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.Set;
 
 
 /**
@@ -56,18 +59,18 @@ public class AsUndirectedGraphTest
 
     private DirectedGraph<String, DefaultEdge> directed;
     private DefaultEdge loop;
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-    private String v4 = "v4";
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
+    private static final String v4 = "v4";
     private UndirectedGraph<String, DefaultEdge> undirected;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public AsUndirectedGraphTest(String name)
+    public AsUndirectedGraphTest(final String name)
     {
         super(name);
     }
@@ -96,7 +99,7 @@ public class AsUndirectedGraphTest
      */
     public void testAddVertex()
     {
-        String v5 = "v5";
+        final String v5 = "v5";
 
         undirected.addVertex(v5);
         assertEquals(true, undirected.containsVertex(v5));
@@ -169,6 +172,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Override
     protected void setUp()
     {
         directed =

@@ -41,7 +41,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.WeightedGraph;
 
 
 /**
@@ -66,7 +67,7 @@ public class DefaultDirectedWeightedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public DefaultDirectedWeightedGraph(Class<? extends E> edgeClass)
+    public DefaultDirectedWeightedGraph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
@@ -76,7 +77,7 @@ public class DefaultDirectedWeightedGraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public DefaultDirectedWeightedGraph(EdgeFactory<V, E> ef)
+    public DefaultDirectedWeightedGraph(final EdgeFactory<V, E> ef)
     {
         super(ef);
     }

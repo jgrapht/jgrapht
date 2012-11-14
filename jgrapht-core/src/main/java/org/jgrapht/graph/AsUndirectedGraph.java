@@ -42,12 +42,12 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import com.google.common.collect.Sets;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Set;
 
 
 /**
@@ -77,8 +77,7 @@ import org.jgrapht.util.*;
  */
 public class AsUndirectedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable,
-        UndirectedGraph<V, E>
+    implements UndirectedGraph<V, E>
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -96,7 +95,7 @@ public class AsUndirectedGraph<V, E>
      * @param g the backing directed graph over which an undirected view is to
      * be created.
      */
-    public AsUndirectedGraph(DirectedGraph<V, E> g)
+    public AsUndirectedGraph(final DirectedGraph<V, E> g)
     {
         super(g);
     }
@@ -106,19 +105,19 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
-    public Set<E> getAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> getAllEdges(final V sourceVertex, final V targetVertex)
     {
-        Set<E> forwardList = super.getAllEdges(sourceVertex, targetVertex);
+        final Set<E> forwardList = super.getAllEdges(sourceVertex, targetVertex);
 
         if (sourceVertex.equals(targetVertex)) {
             // avoid duplicating loops
             return forwardList;
         }
 
-        Set<E> reverseList = super.getAllEdges(targetVertex, sourceVertex);
-        Set<E> list =
-            new ArrayUnenforcedSet<E>(
-                forwardList.size() + reverseList.size());
+        final Set<E> reverseList = super.getAllEdges(targetVertex, sourceVertex);
+        final Set<E> list = Sets.newHashSetWithExpectedSize(forwardList.size()
+            + reverseList.size());
         list.addAll(forwardList);
         list.addAll(reverseList);
 
@@ -128,9 +127,10 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#getEdge(Object, Object)
      */
-    public E getEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E getEdge(final V sourceVertex, final V targetVertex)
     {
-        E edge = super.getEdge(sourceVertex, targetVertex);
+        final E edge = super.getEdge(sourceVertex, targetVertex);
 
         if (edge != null) {
             return edge;
@@ -143,7 +143,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
-    public E addEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E addEdge(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(NO_EDGE_ADD);
     }
@@ -151,7 +152,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override
+    public boolean addEdge(final V sourceVertex, final V targetVertex, final E e)
     {
         throw new UnsupportedOperationException(NO_EDGE_ADD);
     }
@@ -159,7 +161,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see UndirectedGraph#degreeOf(Object)
      */
-    public int degreeOf(V vertex)
+    @Override
+    public int degreeOf(final V vertex)
     {
         // this counts loops twice, which is consistent with AbstractBaseGraph
         return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
@@ -168,7 +171,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
-    public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(final V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
     }
@@ -176,7 +180,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
-    public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(final V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
     }
@@ -184,7 +189,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
-    public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(final V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
     }
@@ -192,7 +198,8 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
-    public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(final V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
     }
@@ -202,7 +209,7 @@ public class AsUndirectedGraph<V, E>
      */
     public String toString()
     {
-        return super.toStringFromSets(vertexSet(), edgeSet(), false);
+        return toStringFromSets(vertexSet(), edgeSet(), false);
     }
 }
 

@@ -40,14 +40,21 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.EdgeTraversalEvent;
+import org.jgrapht.event.TraversalListener;
+import org.jgrapht.event.VertexTraversalEvent;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 
 /**
- * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
- * {@link org.jgrapht.traverse.DepthFirstIterator} classes.
+ * A basis for testing {@link BreadthFirstIterator} and
+ * {@link DepthFirstIterator} classes.
  *
  * @author Liviu Rau
  * @since Jul 30, 2003
@@ -68,11 +75,11 @@ public abstract class AbstractGraphIteratorTest
     {
         result = new StringBuffer();
 
-        DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
+        final DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
 
-        AbstractGraphIterator<String, DefaultEdge> iterator =
+        final AbstractGraphIterator<String, DefaultEdge> iterator =
             createIterator(graph, "1");
-        MyTraversalListener listener = new MyTraversalListener();
+        final MyTraversalListener listener = new MyTraversalListener();
         iterator.addTraversalListener(listener);
 
         while (iterator.hasNext()) {
@@ -97,22 +104,22 @@ public abstract class AbstractGraphIteratorTest
         return "";
     }
 
-    DirectedGraph<String, DefaultEdge> createDirectedGraph()
+    static DirectedGraph<String, DefaultEdge> createDirectedGraph()
     {
-        DirectedGraph<String, DefaultEdge> graph =
+        final DirectedGraph<String, DefaultEdge> graph =
             new DefaultDirectedWeightedGraph<String, DefaultEdge>(
                 DefaultWeightedEdge.class);
 
         //
-        String v1 = "1";
-        String v2 = "2";
-        String v3 = "3";
-        String v4 = "4";
-        String v5 = "5";
-        String v6 = "6";
-        String v7 = "7";
-        String v8 = "8";
-        String v9 = "9";
+        final String v1 = "1";
+        final String v2 = "2";
+        final String v3 = "3";
+        final String v4 = "4";
+        final String v5 = "5";
+        final String v6 = "6";
+        final String v7 = "7";
+        final String v8 = "8";
+        final String v9 = "9";
 
         graph.addVertex(v1);
         graph.addVertex(v2);
@@ -167,8 +174,9 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)
          */
+        @Override
         public void connectedComponentFinished(
-            ConnectedComponentTraversalEvent e)
+            final ConnectedComponentTraversalEvent e)
         {
             switch (componentNumber) {
             case 1:
@@ -195,8 +203,9 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#connectedComponentStarted(ConnectedComponentTraversalEvent)
          */
+        @Override
         public void connectedComponentStarted(
-            ConnectedComponentTraversalEvent e)
+            final ConnectedComponentTraversalEvent e)
         {
             componentNumber++;
         }
@@ -204,7 +213,8 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#edgeTraversed(EdgeTraversalEvent)
          */
-        public void edgeTraversed(EdgeTraversalEvent<String, DefaultEdge> e)
+        @Override
+        public void edgeTraversed(final EdgeTraversalEvent<String, DefaultEdge> e)
         {
             // to be tested...
         }
@@ -212,7 +222,8 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#vertexTraversed(VertexTraversalEvent)
          */
-        public void vertexTraversed(VertexTraversalEvent<String> e)
+        @Override
+        public void vertexTraversed(final VertexTraversalEvent<String> e)
         {
             numComponentVertices++;
         }
@@ -220,7 +231,8 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#vertexTraversed(VertexTraversalEvent)
          */
-        public void vertexFinished(VertexTraversalEvent<String> e)
+        @Override
+        public void vertexFinished(final VertexTraversalEvent<String> e)
         {
             finishString += e.getVertex() + ":";
         }

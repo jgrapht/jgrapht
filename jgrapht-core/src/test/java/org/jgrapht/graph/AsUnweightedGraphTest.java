@@ -39,7 +39,11 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import junit.framework.TestCase;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.WeightedGraph;
 
 
 /**
@@ -59,9 +63,9 @@ public class AsUnweightedGraphTest
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public AsUnweightedGraphTest(String name)
+    public AsUnweightedGraphTest(final String name)
     {
         super(name);
     }
@@ -73,12 +77,12 @@ public class AsUnweightedGraphTest
      */
     public void testDirected()
     {
-        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> directed =
+        final DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> directed =
             new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
         constructWeighted(directed);
 
-        AsUnweightedDirectedGraph<String, DefaultWeightedEdge> unweighted =
+        final AsUnweightedDirectedGraph<String, DefaultWeightedEdge> unweighted =
             new AsUnweightedDirectedGraph<String, DefaultWeightedEdge>(
                 directed);
         checkView(directed, unweighted);
@@ -89,19 +93,19 @@ public class AsUnweightedGraphTest
      */
     public void testUndirected()
     {
-        WeightedGraph<String, DefaultWeightedEdge> undirected =
+        final WeightedGraph<String, DefaultWeightedEdge> undirected =
             new SimpleWeightedGraph<String, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
         constructWeighted(undirected);
 
-        AsUnweightedGraph<String, DefaultWeightedEdge> unweighted =
+        final AsUnweightedGraph<String, DefaultWeightedEdge> unweighted =
             new AsUnweightedGraph<String, DefaultWeightedEdge>(
                 undirected);
         checkView(undirected, unweighted);
     }
 
-    private void constructWeighted(
-        WeightedGraph<String, DefaultWeightedEdge> weighted)
+    private static void constructWeighted(
+        final WeightedGraph<String, DefaultWeightedEdge> weighted)
     {
         weighted.addVertex(v1);
         weighted.addVertex(v2);
@@ -113,9 +117,9 @@ public class AsUnweightedGraphTest
                 weighted.getEdge(v1, v2)));
     }
 
-    private void checkView(
-        WeightedGraph<String, DefaultWeightedEdge> weighted,
-        Graph<String, DefaultWeightedEdge> unweighted)
+    private static void checkView(
+        final WeightedGraph<String, DefaultWeightedEdge> weighted,
+        final Graph<String, DefaultWeightedEdge> unweighted)
     {
         assertEquals(
             WeightedGraph.DEFAULT_EDGE_WEIGHT,

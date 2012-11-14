@@ -38,9 +38,12 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 
 /**
@@ -94,10 +97,10 @@ public class GmlExporter<V, E>
 
     private Integer printLabels = PRINT_NO_LABELS;
 
-    private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
-    private EdgeNameProvider<E> edgeIDProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
+    private final VertexNameProvider<V> vertexIDProvider;
+    private final VertexNameProvider<V> vertexLabelProvider;
+    private final EdgeNameProvider<E> edgeIDProvider;
+    private final EdgeNameProvider<E> edgeLabelProvider;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -127,10 +130,10 @@ public class GmlExporter<V, E>
      * will be generated using the toString() method of the edge object.
      */
     public GmlExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeIDProvider,
-        EdgeNameProvider<E> edgeLabelProvider)
+        final VertexNameProvider<V> vertexIDProvider,
+        final VertexNameProvider<V> vertexLabelProvider,
+        final EdgeNameProvider<E> edgeIDProvider,
+        final EdgeNameProvider<E> edgeLabelProvider)
     {
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
@@ -140,31 +143,31 @@ public class GmlExporter<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    private String quoted(final String s)
+    private static String quoted(final String s)
     {
         return "\"" + s + "\"";
     }
 
-    private void exportHeader(PrintWriter out)
+    private void exportHeader(final PrintWriter out)
     {
         out.println("Creator" + delim + quoted(creator));
         out.println("Version" + delim + version);
     }
 
     private void exportVertices(
-        PrintWriter out,
-        Graph<V, E> g)
+        final PrintWriter out,
+        final Graph<V, E> g)
     {
-        for (V from : g.vertexSet()) {
+        for (final V from : g.vertexSet()) {
             out.println(tab1 + "node");
             out.println(tab1 + "[");
             out.println(
                 tab2 + "id" + delim + vertexIDProvider.getVertexName(from));
-            if ((printLabels == PRINT_VERTEX_LABELS)
-                || (printLabels == PRINT_EDGE_VERTEX_LABELS))
+            if (printLabels == PRINT_VERTEX_LABELS
+                || printLabels == PRINT_EDGE_VERTEX_LABELS)
             {
-                String label =
-                    (vertexLabelProvider == null) ? from.toString()
+                final String label =
+                    vertexLabelProvider == null ? from.toString()
                     : vertexLabelProvider.getVertexName(from);
                 out.println(tab2 + "label" + delim + quoted(label));
             }
@@ -173,23 +176,23 @@ public class GmlExporter<V, E>
     }
 
     private void exportEdges(
-        PrintWriter out,
-        Graph<V, E> g)
+        final PrintWriter out,
+        final Graph<V, E> g)
     {
-        for (E edge : g.edgeSet()) {
+        for (final E edge : g.edgeSet()) {
             out.println(tab1 + "edge");
             out.println(tab1 + "[");
-            String id = edgeIDProvider.getEdgeName(edge);
+            final String id = edgeIDProvider.getEdgeName(edge);
             out.println(tab2 + "id" + delim + id);
-            String s = vertexIDProvider.getVertexName(g.getEdgeSource(edge));
+            final String s = vertexIDProvider.getVertexName(g.getEdgeSource(edge));
             out.println(tab2 + "source" + delim + s);
-            String t = vertexIDProvider.getVertexName(g.getEdgeTarget(edge));
+            final String t = vertexIDProvider.getVertexName(g.getEdgeTarget(edge));
             out.println(tab2 + "target" + delim + t);
-            if ((printLabels == PRINT_EDGE_LABELS)
-                || (printLabels == PRINT_EDGE_VERTEX_LABELS))
+            if (printLabels == PRINT_EDGE_LABELS
+                || printLabels == PRINT_EDGE_VERTEX_LABELS)
             {
-                String label =
-                    (edgeLabelProvider == null) ? edge.toString()
+                final String label =
+                    edgeLabelProvider == null ? edge.toString()
                     : edgeLabelProvider.getEdgeName(edge);
                 out.println(tab2 + "label" + delim + quoted(label));
             }
@@ -197,11 +200,11 @@ public class GmlExporter<V, E>
         }
     }
 
-    private void export(Writer output, Graph<V, E> g, boolean directed)
+    private void export(final Writer output, final Graph<V, E> g, final boolean directed)
     {
-        PrintWriter out = new PrintWriter(output);
+        final PrintWriter out = new PrintWriter(output);
 
-        for (V from : g.vertexSet()) {
+        for (final V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
             vertexIDProvider.getVertexName(from);
         }
@@ -227,7 +230,7 @@ public class GmlExporter<V, E>
      * @param output the writer to which the graph to be exported
      * @param g the undirected graph to be exported
      */
-    public void export(Writer output, UndirectedGraph<V, E> g)
+    public void export(final Writer output, final UndirectedGraph<V, E> g)
     {
         export(output, g, false);
     }
@@ -238,7 +241,7 @@ public class GmlExporter<V, E>
      * @param output the writer to which the graph to be exported
      * @param g the directed graph to be exported
      */
-    public void export(Writer output, DirectedGraph<V, E> g)
+    public void export(final Writer output, final DirectedGraph<V, E> g)
     {
         export(output, g, true);
     }
@@ -260,10 +263,10 @@ public class GmlExporter<V, E>
      */
     public void setPrintLabels(final Integer i)
     {
-        if ((i != PRINT_NO_LABELS)
-            && (i != PRINT_EDGE_LABELS)
-            && (i != PRINT_EDGE_VERTEX_LABELS)
-            && (i != PRINT_VERTEX_LABELS))
+        if (i != PRINT_NO_LABELS
+            && i != PRINT_EDGE_LABELS
+            && i != PRINT_EDGE_VERTEX_LABELS
+            && i != PRINT_VERTEX_LABELS)
         {
             throw new IllegalArgumentException(
                 "Non-supported parameter value: " + Integer.toString(i));

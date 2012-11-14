@@ -41,7 +41,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
 
 
 /**
@@ -67,7 +68,7 @@ public class DefaultDirectedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public DefaultDirectedGraph(Class<? extends E> edgeClass)
+    public DefaultDirectedGraph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
@@ -77,7 +78,7 @@ public class DefaultDirectedGraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public DefaultDirectedGraph(EdgeFactory<V, E> ef)
+    public DefaultDirectedGraph(final EdgeFactory<V, E> ef)
     {
         super(ef, false, true);
     }

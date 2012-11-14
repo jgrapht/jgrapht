@@ -39,9 +39,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -61,7 +63,7 @@ public class StarGraphGenerator<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private int order;
+    private final int order;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -70,7 +72,7 @@ public class StarGraphGenerator<V, E>
      *
      * @param order number of total vertices including the center vertex
      */
-    public StarGraphGenerator(int order)
+    public StarGraphGenerator(final int order)
     {
         this.order = order;
     }
@@ -80,32 +82,33 @@ public class StarGraphGenerator<V, E>
     /**
      * Generates a star graph with the designated order from the constructor
      */
+    @Override
     public void generateGraph(
-        Graph<V, E> target,
+        final Graph<V, E> target,
         final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Map<String, V> resultMap)
     {
         if (order < 1) {
             return;
         }
 
         //Create center vertex
-        V centerVertex = vertexFactory.createVertex();
+        final V centerVertex = vertexFactory.createVertex();
         target.addVertex(centerVertex);
         if (resultMap != null) {
             resultMap.put(CENTER_VERTEX, centerVertex);
         }
 
         //Create other vertices
-        for (int i = 0; i < (order - 1); i++) {
-            V newVertex = vertexFactory.createVertex();
+        for (int i = 0; i < order - 1; i++) {
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
         }
 
         //Add one edge between the center vertex and every other vertex
-        Iterator<V> iter = target.vertexSet().iterator();
+        final Iterator<V> iter = target.vertexSet().iterator();
         while (iter.hasNext()) {
-            V v = iter.next();
+            final V v = iter.next();
             if (v != centerVertex) {
                 target.addEdge(v, centerVertex);
             }

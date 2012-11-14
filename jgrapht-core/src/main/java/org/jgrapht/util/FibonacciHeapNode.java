@@ -65,7 +65,7 @@ public class FibonacciHeapNode<T>
     /**
      * Node data.
      */
-    T data;
+    final T data;
 
     /**
      * first child node
@@ -111,7 +111,7 @@ public class FibonacciHeapNode<T>
      *
      * @param data data for this node
      */
-    public FibonacciHeapNode(T data)
+    public FibonacciHeapNode(final T data)
     {
         right = this;
         left = this;

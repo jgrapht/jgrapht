@@ -56,7 +56,7 @@ public interface MaskFunctor<V, E>
      *
      * @return .
      */
-    public boolean isEdgeMasked(E edge);
+    boolean isEdgeMasked(E edge);
 
     /**
      * Returns <code>true</code> if the vertex is masked, <code>false</code>
@@ -66,7 +66,7 @@ public interface MaskFunctor<V, E>
      *
      * @return .
      */
-    public boolean isVertexMasked(V vertex);
+    boolean isVertexMasked(V vertex);
 }
 
 // End MaskFunctor.java

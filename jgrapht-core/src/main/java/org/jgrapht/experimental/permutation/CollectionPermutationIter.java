@@ -37,7 +37,12 @@
  */
 package org.jgrapht.experimental.permutation;
 
-import java.util.*;
+import com.google.common.collect.Sets;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -54,8 +59,8 @@ public class CollectionPermutationIter<E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private ArrayPermutationsIter permOrder;
-    private List<E> sourceArray;
+    private final ArrayPermutationsIter permOrder;
+    private final List<E> sourceArray;
 
     /**
      * change everry calculation.can be retrieved publicly
@@ -74,7 +79,7 @@ public class CollectionPermutationIter<E>
      *
      * @param objectsSet
      */
-    public CollectionPermutationIter(Set<E> objectsSet)
+    public CollectionPermutationIter(final Set<E> objectsSet)
     {
         this(
             new ArrayList<E>(objectsSet),
@@ -89,7 +94,7 @@ public class CollectionPermutationIter<E>
      * @param objectsArray
      * @param permuter
      */
-    public CollectionPermutationIter(List<E> objectsArray)
+    public CollectionPermutationIter(final List<E> objectsArray)
     {
         this(
             objectsArray,
@@ -97,18 +102,18 @@ public class CollectionPermutationIter<E>
     }
 
     public CollectionPermutationIter(
-        List<E> objectsArray,
-        ArrayPermutationsIter permuter)
+        final List<E> objectsArray,
+        final ArrayPermutationsIter permuter)
     {
-        this.permOrder = permuter;
-        this.sourceArray = objectsArray;
+        permOrder = permuter;
+        sourceArray = objectsArray;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     public boolean hasNext()
     {
-        return this.permOrder.hasNextPermutaions();
+        return permOrder.hasNextPermutaions();
     }
 
     /**
@@ -119,9 +124,9 @@ public class CollectionPermutationIter<E>
      */
     public List<E> getNextArray()
     {
-        List<E> permutationResult; // will hold the array result
-        if (this.permOrder.hasNextPermutaions()) {
-            this.currPermutationArray = this.permOrder.nextPermutation();
+        final List<E> permutationResult; // will hold the array result
+        if (permOrder.hasNextPermutaions()) {
+            currPermutationArray = permOrder.nextPermutation();
             permutationResult = applyPermutation();
         } else {
             permutationResult = null;
@@ -132,15 +137,14 @@ public class CollectionPermutationIter<E>
 
     private List<E> applyPermutation()
     {
-        ArrayList<E> output = new ArrayList<E>(sourceArray);
+        final ArrayList<E> output = new ArrayList<E>(sourceArray);
 
         // Example : this.sourceArray = ["A","B","C","D"]
         // perOrder:                  = [ 1 , 0 , 3 , 2 ]
         // result  :                  = ["B","A","D","C"]
         for (int i = 0; i < output.size(); i++) {
             output.set(
-                i,
-                this.sourceArray.get(this.currPermutationArray[i]));
+                i, sourceArray.get(currPermutationArray[i]));
         }
         return output;
     }
@@ -152,30 +156,24 @@ public class CollectionPermutationIter<E>
      */
     public Set<E> getNextSet()
     {
-        List<E> result = getNextArray();
-        if (result == null) {
-            return null;
-        } else // wrap in a SET
-        {
-            Set<E> resultSet = new LinkedHashSet<E>(result);
-            return resultSet;
-        }
+        final List<E> result = getNextArray();
+        return result == null ? null : Sets.newLinkedHashSet(result);
     }
 
     public int [] getCurrentPermutationArray()
     {
-        return this.currPermutationArray;
+        return currPermutationArray;
     }
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         sb.append("Permutation int[]=");
-        sb.append(Arrays.toString(getCurrentPermutationArray()));
+        sb.append(Arrays.toString(currPermutationArray));
 
-        List<E> permutationResult = applyPermutation();
+        final List<E> permutationResult = applyPermutation();
         sb.append("\nPermutationSet Source Object[]=");
-        sb.append(this.sourceArray.toString());
+        sb.append(sourceArray.toString());
         sb.append("\nPermutationSet Result Object[]=");
         sb.append(permutationResult.toString());
         return sb.toString();

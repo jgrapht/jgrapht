@@ -40,10 +40,11 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
 
 
 /**
@@ -61,26 +62,30 @@ public class DepthFirstIteratorTest
 {
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     String getExpectedStr1()
     {
         return "1,3,6,5,7,9,4,8,2";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return "1,3,6,5,7,9,4,8,2,orphan";
     }
 
+    @Override
     String getExpectedFinishString()
     {
         return "6:4:9:2:8:7:5:3:1:orphan:";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        final DirectedGraph<String, DefaultEdge> g,
+        final String vertex)
     {
-        AbstractGraphIterator<String, DefaultEdge> i =
+        final AbstractGraphIterator<String, DefaultEdge> i =
             new DepthFirstIterator<String, DefaultEdge>(g, vertex);
         i.setCrossComponentTraversal(true);
 
@@ -93,21 +98,21 @@ public class DepthFirstIteratorTest
      */
     public void testBug1169182()
     {
-        DirectedGraph<String, DefaultEdge> dg =
+        final DirectedGraph<String, DefaultEdge> dg =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-        String e = "E";
-        String f = "F";
-        String g = "G";
-        String h = "H";
-        String i = "I";
-        String j = "J";
-        String k = "K";
-        String l = "L";
+        final String a = "A";
+        final String b = "B";
+        final String c = "C";
+        final String d = "D";
+        final String e = "E";
+        final String f = "F";
+        final String g = "G";
+        final String h = "H";
+        final String i = "I";
+        final String j = "J";
+        final String k = "K";
+        final String l = "L";
 
         dg.addVertex(a);
         dg.addVertex(b);
@@ -138,14 +143,14 @@ public class DepthFirstIteratorTest
         dg.addEdge(j, k);
         dg.addEdge(k, l);
 
-        Iterator<String> dfs = new DepthFirstIterator<String, DefaultEdge>(dg);
+        final Iterator<String> dfs = new DepthFirstIterator<String, DefaultEdge>(dg);
         String actual = "";
         while (dfs.hasNext()) {
-            String v = dfs.next();
+            final String v = dfs.next();
             actual += v;
         }
 
-        String expected = "ABCGIFEHJKLD";
+        final String expected = "ABCGIFEHJKLD";
         assertEquals(expected, actual);
     }
 }

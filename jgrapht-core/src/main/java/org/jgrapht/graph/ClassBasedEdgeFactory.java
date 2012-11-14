@@ -43,9 +43,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import org.jgrapht.EdgeFactory;
 
-import org.jgrapht.*;
+import java.io.Serializable;
 
 
 /**
@@ -68,7 +68,7 @@ public class ClassBasedEdgeFactory<V, E>
 
     //~ Constructors -----------------------------------------------------------
 
-    public ClassBasedEdgeFactory(Class<? extends E> edgeClass)
+    public ClassBasedEdgeFactory(final Class<? extends E> edgeClass)
     {
         this.edgeClass = edgeClass;
     }
@@ -78,7 +78,8 @@ public class ClassBasedEdgeFactory<V, E>
     /**
      * @see EdgeFactory#createEdge(Object, Object)
      */
-    public E createEdge(V source, V target)
+    @Override
+    public E createEdge(final V source, final V target)
     {
         try {
             return edgeClass.newInstance();

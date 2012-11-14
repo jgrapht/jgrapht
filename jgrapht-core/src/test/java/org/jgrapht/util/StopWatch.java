@@ -51,20 +51,20 @@ public class StopWatch
 
     public void start()
     {
-        this.beforeTime = System.currentTimeMillis();
+        beforeTime = System.currentTimeMillis();
     }
 
     public void stopAndReport()
     {
-        long deltaTime = System.currentTimeMillis() - beforeTime;
+        final long deltaTime = System.currentTimeMillis() - beforeTime;
         if (deltaTime > 9999) {
-            double deltaTimeSec = deltaTime / 1000.0;
+            final double deltaTimeSec = deltaTime / 1000.0;
             System.out.println(
                 "# Performence: " + deltaTimeSec + " full Seconds");
         } else {
-            String timeDesc;
+            final String timeDesc;
             timeDesc =
-                (deltaTime <= 10) ? "<10ms [less than minumun measurement time]"
+                deltaTime <= 10 ? "<10ms [less than minumun measurement time]"
                 : String.valueOf(deltaTime);
             System.out.println("# Performence:  in MiliSeconds:" + timeDesc);
         }

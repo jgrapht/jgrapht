@@ -39,7 +39,8 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import junit.framework.TestCase;
+import org.jgrapht.EnhancedTestCase;
 
 
 /**
@@ -54,9 +55,9 @@ public class CloneTest
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public CloneTest(String name)
+    public CloneTest(final String name)
     {
         super(name);
     }
@@ -69,18 +70,18 @@ public class CloneTest
     @SuppressWarnings("unchecked")
     public void testCloneSpecificsBug()
     {
-        SimpleGraph<String, DefaultEdge> g1 =
+        final SimpleGraph<String, DefaultEdge> g1 =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
-        String one = "1";
-        String two = "2";
-        String three = "3";
+        final String one = "1";
+        final String two = "2";
+        final String three = "3";
         g1.addVertex(one);
         g1.addVertex(two);
         g1.addVertex(three);
         g1.addEdge(one, two);
         g1.addEdge(two, three);
 
-        SimpleGraph<String, DefaultEdge> g2 =
+        final SimpleGraph<String, DefaultEdge> g2 =
             (SimpleGraph<String, DefaultEdge>) g1.clone(); // Type-safty
                                                            // warning OK with
                                                            // clone
@@ -97,13 +98,13 @@ public class CloneTest
      */
     public void testParanoidGraph()
     {
-        BrokenVertex v1 = new BrokenVertex(1);
-        BrokenVertex v2 = new BrokenVertex(2);
-        BrokenVertex v3 = new BrokenVertex(1);
+        final BrokenVertex v1 = new BrokenVertex(1);
+        final BrokenVertex v2 = new BrokenVertex(2);
+        final BrokenVertex v3 = new BrokenVertex(1);
 
-        SimpleGraph<BrokenVertex, DefaultEdge> g =
+        final SimpleGraph<BrokenVertex, DefaultEdge> g =
             new SimpleGraph<BrokenVertex, DefaultEdge>(DefaultEdge.class);
-        ParanoidGraph<BrokenVertex, DefaultEdge> pg =
+        final ParanoidGraph<BrokenVertex, DefaultEdge> pg =
             new ParanoidGraph<BrokenVertex, DefaultEdge>(g);
         pg.addVertex(v1);
         pg.addVertex(v2);
@@ -121,14 +122,14 @@ public class CloneTest
 
     private class BrokenVertex
     {
-        private int x;
+        private final int x;
 
-        BrokenVertex(int x)
+        BrokenVertex(final int x)
         {
             this.x = x;
         }
 
-        public boolean equals(Object other)
+        public boolean equals(final Object other)
         {
             if (!(other instanceof BrokenVertex)) {
                 return false;

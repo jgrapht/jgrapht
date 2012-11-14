@@ -48,10 +48,11 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 /**
@@ -81,9 +82,9 @@ public class DepthFirstIterator<V, E>
     /**
      * @see #getStack
      */
-    private Deque<Object> stack = new ArrayDeque<Object>();
+    private final Deque<Object> stack = new ArrayDeque<Object>();
 
-    private transient TypeUtil<V> vertexTypeDecl = null;
+    private final transient TypeUtil<V> vertexTypeDecl = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -92,7 +93,7 @@ public class DepthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      */
-    public DepthFirstIterator(Graph<V, E> g)
+    public DepthFirstIterator(final Graph<V, E> g)
     {
         this(g, null);
     }
@@ -107,7 +108,7 @@ public class DepthFirstIterator<V, E>
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      */
-    public DepthFirstIterator(Graph<V, E> g, V startVertex)
+    public DepthFirstIterator(final Graph<V, E> g, final V startVertex)
     {
         super(g, startVertex);
     }
@@ -117,6 +118,7 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
+    @Override
     protected boolean isConnectedComponentExhausted()
     {
         for (;;) {
@@ -142,7 +144,8 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
-    protected void encounterVertex(V vertex, E edge)
+    @Override
+    protected void encounterVertex(final V vertex, final E edge)
     {
         putSeenData(vertex, VisitColor.WHITE);
         stack.addLast(vertex);
@@ -151,9 +154,10 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
-    protected void encounterVertexAgain(V vertex, E edge)
+    @Override
+    protected void encounterVertexAgain(final V vertex, final E edge)
     {
-        VisitColor color = getSeenData(vertex);
+        final VisitColor color = getSeenData(vertex);
         if (color != VisitColor.WHITE) {
             // We've already visited this vertex; no need to mess with the
             // stack (either it's BLACK and not there at all, or it's GRAY
@@ -166,19 +170,20 @@ public class DepthFirstIterator<V, E>
         // assumption that for typical topologies and traversals,
         // it's likely to be nearer the top of the stack than
         // the bottom of the stack.
-        boolean found = stack.removeLastOccurrence(vertex);
-        assert (found);
+        final boolean found = stack.removeLastOccurrence(vertex);
+        assert found;
         stack.addLast(vertex);
     }
 
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
+    @Override
     protected V provideNextVertex()
     {
-        V v;
+        final V v;
         for (;;) {
-            Object o = stack.removeLast();
+            final Object o = stack.removeLast();
             if (o == SENTINEL) {
                 // This is a finish-time sentinel we previously pushed.
                 recordFinish();
@@ -200,7 +205,7 @@ public class DepthFirstIterator<V, E>
 
     private void recordFinish()
     {
-        V v = TypeUtil.uncheckedCast(stack.removeLast(), vertexTypeDecl);
+        final V v = TypeUtil.uncheckedCast(stack.removeLast(), vertexTypeDecl);
         putSeenData(v, VisitColor.BLACK);
         finishVertex(v);
     }

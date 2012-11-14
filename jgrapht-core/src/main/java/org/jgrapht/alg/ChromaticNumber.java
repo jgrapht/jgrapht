@@ -39,11 +39,18 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.VertexDegreeComparator;
+import org.jgrapht.graph.UndirectedSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -69,9 +76,9 @@ public abstract class ChromaticNumber
      * @return integer the approximate chromatic number from the greedy
      * algorithm
      */
-    public static <V, E> int findGreedyChromaticNumber(UndirectedGraph<V, E> g)
+    public static <V, E> int findGreedyChromaticNumber(final UndirectedGraph<V, E> g)
     {
-        Map<Integer, Set<V>> coloredGroups = findGreedyColoredGroups(g);
+        final Map<Integer, Set<V>> coloredGroups = findGreedyColoredGroups(g);
         return coloredGroups.keySet().size();
     }
 
@@ -81,47 +88,43 @@ public abstract class ChromaticNumber
      * @param g an undirected graph for which to find the coloring
      */
     public static <V, E> Map<Integer, Set<V>> findGreedyColoredGroups(
-        UndirectedGraph<V, E> g)
+        final UndirectedGraph<V, E> g)
     {
         // A copy of the graph is made, so that elements of the graph may be
         // removed to carry out the algorithm
-        UndirectedGraph<V, E> sg = new UndirectedSubgraph<V, E>(g, null, null);
+        final UndirectedGraph<V, E> sg = new UndirectedSubgraph<V, E>(g, null, null);
 
         // The Vertices will be sorted in decreasing order by degree, so that
         // higher degree vertices have priority to be colored first
-        VertexDegreeComparator<V, E> comp =
+        final VertexDegreeComparator<V, E> comp =
             new VertexDegreeComparator<V, E>(sg);
-        List<V> sortedVertices = new LinkedList<V>(sg.vertexSet());
+        final List<V> sortedVertices = new LinkedList<V>(sg.vertexSet());
         Collections.sort(sortedVertices, comp);
         Collections.reverse(sortedVertices);
 
         int color;
 
         // create a map which will hold color as key and Set<V> as value
-        Map<Integer, Set<V>> coloredGroups = new HashMap<Integer, Set<V>>();
+        final Map<Integer, Set<V>> coloredGroups = Maps.newHashMap();
 
         // We'll attempt to color each vertex with a single color each
         // iteration, and these vertices will be removed from the graph at the
         // end of each iteration
-        for (color = 0; sg.vertexSet().size() > 0; color++) {
+        for (color = 0; !sg.vertexSet().isEmpty(); color++) {
             // This set will contain vertices that are colored with the
             // current color of this iteration
-            Set<V> currentColor = new HashSet<V>();
+            final Set<V> currentColor = new HashSet<V>();
             for (
                 Iterator<V> iter = sortedVertices.iterator();
                 iter.hasNext();)
             {
-                V v = iter.next();
+                final V v = iter.next();
 
                 // Add new vertices to be colored as long as they are not
                 // adjacent with any other vertex that has already been colored
                 // with the current color
                 boolean flag = true;
-                for (
-                    Iterator<V> innerIter = currentColor.iterator();
-                    innerIter.hasNext();)
-                {
-                    V temp = innerIter.next();
+                for (final V temp : currentColor) {
                     if (sg.containsEdge(temp, v)) {
                         flag = false;
                         break;

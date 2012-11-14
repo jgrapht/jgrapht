@@ -37,11 +37,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
 
-import junit.framework.*;
-
-import org.jgrapht.graph.*;
+import java.util.Map;
 
 
 public final class EdmondsKarpMaximumFlowTest
@@ -54,12 +54,12 @@ public final class EdmondsKarpMaximumFlowTest
      */
     public void testCornerCases()
     {
-        DirectedWeightedMultigraph<Integer, DefaultWeightedEdge> simple =
+        final DirectedWeightedMultigraph<Integer, DefaultWeightedEdge> simple =
             new DirectedWeightedMultigraph<Integer, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
         simple.addVertex(0);
         simple.addVertex(1);
-        DefaultWeightedEdge e = simple.addEdge(0, 1);
+        final DefaultWeightedEdge e = simple.addEdge(0, 1);
         try {
             new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(null);
             fail();
@@ -80,17 +80,17 @@ public final class EdmondsKarpMaximumFlowTest
         }
         try {
             simple.setEdgeWeight(e, 1.0);
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+            final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(
                     simple);
             solver.calculateMaximumFlow(0, 1);
-            Map<DefaultWeightedEdge, Double> flow = solver.getMaximumFlow();
+            final Map<DefaultWeightedEdge, Double> flow = solver.getMaximumFlow();
             flow.put(e, 25.0);
             fail();
         } catch (UnsupportedOperationException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+            final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(
                     simple);
             solver.calculateMaximumFlow(2, 0);
@@ -98,7 +98,7 @@ public final class EdmondsKarpMaximumFlowTest
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+            final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(
                     simple);
             solver.calculateMaximumFlow(1, 2);
@@ -106,7 +106,7 @@ public final class EdmondsKarpMaximumFlowTest
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+            final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(
                     simple);
             solver.calculateMaximumFlow(0, 0);
@@ -114,7 +114,7 @@ public final class EdmondsKarpMaximumFlowTest
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+            final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(
                     simple);
             solver.calculateMaximumFlow(null, 0);
@@ -122,7 +122,7 @@ public final class EdmondsKarpMaximumFlowTest
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+            final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(
                     simple);
             solver.calculateMaximumFlow(0, null);
@@ -168,33 +168,29 @@ public final class EdmondsKarpMaximumFlowTest
             new double[] { 2000000000.0 });
     }
 
-    private void runTest(
-        int [] tails,
-        int [] heads,
-        double [] capacities,
-        int [] sources,
-        int [] sinks,
-        double [] expectedResults)
+    private static void runTest(final int[] tails, final int[] heads,
+        final double[] capacities, final int[] sources, final int[] sinks,
+        final double[] expectedResults)
     {
         assertTrue(tails.length == heads.length);
         assertTrue(tails.length == capacities.length);
-        DirectedWeightedMultigraph<Integer, DefaultWeightedEdge> network =
+        final DirectedWeightedMultigraph<Integer, DefaultWeightedEdge> network =
             new DirectedWeightedMultigraph<Integer, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
-        int m = tails.length;
+        final int m = tails.length;
         for (int i = 0; i < m; i++) {
             network.addVertex(tails[i]);
             network.addVertex(heads[i]);
-            DefaultWeightedEdge e = network.addEdge(tails[i], heads[i]);
+            final DefaultWeightedEdge e = network.addEdge(tails[i], heads[i]);
             network.setEdgeWeight(e, capacities[i]);
         }
         assertTrue(sources.length == sinks.length);
-        int q = sources.length;
+        final int q = sources.length;
         for (int i = 0; i < q; i++) {
             network.addVertex(sources[i]);
             network.addVertex(sinks[i]);
         }
-        EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+        final EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
             new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(network);
         assertTrue(solver.getCurrentSource() == null);
         assertTrue(solver.getCurrentSink() == null);
@@ -204,30 +200,30 @@ public final class EdmondsKarpMaximumFlowTest
             solver.calculateMaximumFlow(sources[i], sinks[i]);
             assertTrue(solver.getCurrentSource().equals(sources[i]));
             assertTrue(solver.getCurrentSink().equals(sinks[i]));
-            double flowValue = solver.getMaximumFlowValue();
-            Map<DefaultWeightedEdge, Double> flow = solver.getMaximumFlow();
+            final double flowValue = solver.getMaximumFlowValue();
+            final Map<DefaultWeightedEdge, Double> flow = solver.getMaximumFlow();
             assertEquals(
                 expectedResults[i],
                 flowValue,
                 EdmondsKarpMaximumFlow.DEFAULT_EPSILON);
-            for (DefaultWeightedEdge e : network.edgeSet()) {
+            for (final DefaultWeightedEdge e : network.edgeSet()) {
                 assertTrue(flow.containsKey(e));
             }
-            for (DefaultWeightedEdge e : flow.keySet()) {
+            for (final DefaultWeightedEdge e : flow.keySet()) {
                 assertTrue(network.containsEdge(e));
                 assertTrue(
                     flow.get(e) >= -EdmondsKarpMaximumFlow.DEFAULT_EPSILON);
                 assertTrue(
                     flow.get(e)
-                    <= (network.getEdgeWeight(e)
-                        + EdmondsKarpMaximumFlow.DEFAULT_EPSILON));
+                    <= network.getEdgeWeight(e)
+                        + EdmondsKarpMaximumFlow.DEFAULT_EPSILON);
             }
-            for (Integer v : network.vertexSet()) {
+            for (final Integer v : network.vertexSet()) {
                 double balance = 0.0;
-                for (DefaultWeightedEdge e : network.outgoingEdgesOf(v)) {
+                for (final DefaultWeightedEdge e : network.outgoingEdgesOf(v)) {
                     balance -= flow.get(e);
                 }
-                for (DefaultWeightedEdge e : network.incomingEdgesOf(v)) {
+                for (final DefaultWeightedEdge e : network.incomingEdgesOf(v)) {
                     balance += flow.get(e);
                 }
                 if (v.equals(sources[i])) {

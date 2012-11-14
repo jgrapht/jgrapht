@@ -38,9 +38,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
 
 
 /**
@@ -64,8 +64,7 @@ import org.jgrapht.*;
  */
 public class AsUnweightedDirectedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable,
-        DirectedGraph<V, E>
+    implements DirectedGraph<V, E>
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -81,7 +80,7 @@ public class AsUnweightedDirectedGraph<V, E>
      * @param g the backing graph over which an unweighted view is to be
      * created.
      */
-    public AsUnweightedDirectedGraph(DirectedGraph<V, E> g)
+    public AsUnweightedDirectedGraph(final DirectedGraph<V, E> g)
     {
         super(g);
     }
@@ -91,7 +90,8 @@ public class AsUnweightedDirectedGraph<V, E>
     /**
      * @see Graph#getEdgeWeight
      */
-    public double getEdgeWeight(E e)
+    @Override
+    public double getEdgeWeight(final E e)
     {
         return WeightedGraph.DEFAULT_EDGE_WEIGHT;
     }

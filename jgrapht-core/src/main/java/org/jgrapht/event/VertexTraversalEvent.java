@@ -40,7 +40,7 @@
  */
 package org.jgrapht.event;
 
-import java.util.*;
+import java.util.EventObject;
 
 
 /**
@@ -71,7 +71,7 @@ public class VertexTraversalEvent<V>
      * @param eventSource the source of the event.
      * @param vertex the traversed vertex.
      */
-    public VertexTraversalEvent(Object eventSource, V vertex)
+    public VertexTraversalEvent(final Object eventSource, final V vertex)
     {
         super(eventSource);
         this.vertex = vertex;

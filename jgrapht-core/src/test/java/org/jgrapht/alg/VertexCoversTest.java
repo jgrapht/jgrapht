@@ -40,12 +40,17 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Pseudograph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -70,7 +75,7 @@ public class VertexCoversTest
     public void testFind2ApproximationCover()
     {
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomGraph();
+            final Graph<Integer, DefaultEdge> g = createRandomGraph();
             assertTrue(
                 isCover(VertexCovers.find2ApproximationCover(g), g));
         }
@@ -82,8 +87,8 @@ public class VertexCoversTest
     public void testFindGreedyCover()
     {
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomGraph();
-            Set<Integer> c =
+            final Graph<Integer, DefaultEdge> g = createRandomGraph();
+            final Set<Integer> c =
                 VertexCovers.findGreedyCover(
                     Graphs.undirectedGraph(g));
             assertTrue(isCover(c, g));
@@ -101,17 +106,16 @@ public class VertexCoversTest
      *
      * @return
      */
-    private boolean isCover(
-        Set<Integer> vertexSet,
-        Graph<Integer, DefaultEdge> g)
+    private static boolean isCover(final Set<Integer> vertexSet,
+        final Graph<Integer, DefaultEdge> g)
     {
-        Set<DefaultEdge> uncoveredEdges = new HashSet<DefaultEdge>(g.edgeSet());
+        final Set<DefaultEdge> uncoveredEdges = new HashSet<DefaultEdge>(g.edgeSet());
 
         for (Iterator<Integer> i = vertexSet.iterator(); i.hasNext();) {
             uncoveredEdges.removeAll(g.edgesOf(i.next()));
         }
 
-        return uncoveredEdges.size() == 0;
+        return uncoveredEdges.isEmpty();
     }
 
     /**
@@ -119,27 +123,27 @@ public class VertexCoversTest
      *
      * @return
      */
-    private Graph<Integer, DefaultEdge> createRandomGraph()
+    private static Graph<Integer, DefaultEdge> createRandomGraph()
     {
         // TODO: move random graph generator to be under GraphGenerator
         // framework.
-        Pseudograph<Integer, DefaultEdge> g =
+        final Pseudograph<Integer, DefaultEdge> g =
             new Pseudograph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int i = 0; i < TEST_GRAPH_SIZE; i++) {
             g.addVertex(new Integer(i));
         }
 
-        List<Integer> vertices = new ArrayList<Integer>(g.vertexSet());
+        final List<Integer> vertices = new ArrayList<Integer>(g.vertexSet());
 
         // join every vertex with a random number of other vertices
         for (int source = 0; source < TEST_GRAPH_SIZE; source++) {
-            int numEdgesToCreate =
-                ((int) Math.random() * TEST_GRAPH_SIZE / 2) + 1;
+            final int numEdgesToCreate =
+                (int) Math.random() * TEST_GRAPH_SIZE / 2 + 1;
 
             for (int j = 0; j < numEdgesToCreate; j++) {
                 // find a random vertex to join to
-                int target = (int) Math.floor(Math.random() * TEST_GRAPH_SIZE);
+                final int target = (int) Math.floor(Math.random() * TEST_GRAPH_SIZE);
                 g.addEdge(vertices.get(source), vertices.get(target));
             }
         }

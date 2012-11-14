@@ -40,9 +40,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -57,17 +58,16 @@ public class BiconnectivityInspector<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private BlockCutpointGraph<V, E> blockCutpointGraph;
+    private final BlockCutpointGraph<V, E> blockCutpointGraph;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Running time = O(m) where m is the number of edges.
      */
-    public BiconnectivityInspector(UndirectedGraph<V, E> graph)
+    public BiconnectivityInspector(final UndirectedGraph<V, E> graph)
     {
-        super();
-        this.blockCutpointGraph = new BlockCutpointGraph<V, E>(graph);
+        blockCutpointGraph = new BlockCutpointGraph<V, E>(graph);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -77,13 +77,9 @@ public class BiconnectivityInspector<V, E>
      */
     public Set<Set<V>> getBiconnectedVertexComponents()
     {
-        Set<Set<V>> biconnectedVertexComponents = new HashSet<Set<V>>();
-        for (
-            Iterator<UndirectedGraph<V, E>> iter =
-                this.blockCutpointGraph.vertexSet().iterator();
-            iter.hasNext();)
-        {
-            UndirectedGraph<V, E> subgraph = iter.next();
+        final Set<Set<V>> biconnectedVertexComponents = new HashSet<Set<V>>();
+        for (final UndirectedGraph<V, E> subgraph : blockCutpointGraph
+            .vertexSet()) {
             if (!subgraph.edgeSet().isEmpty()) {
                 biconnectedVertexComponents.add(subgraph.vertexSet());
             }
@@ -102,14 +98,10 @@ public class BiconnectivityInspector<V, E>
      *
      * @return set of all biconnected vertex-components containing the vertex.
      */
-    public Set<Set<V>> getBiconnectedVertexComponents(V vertex)
+    public Set<Set<V>> getBiconnectedVertexComponents(final V vertex)
     {
-        Set<Set<V>> vertexComponents = new HashSet<Set<V>>();
-        for (
-            Iterator<Set<V>> iter = getBiconnectedVertexComponents().iterator();
-            iter.hasNext();)
-        {
-            Set<V> vertexComponent = iter.next();
+        final Set<Set<V>> vertexComponents = new HashSet<Set<V>>();
+        for (final Set<V> vertexComponent : getBiconnectedVertexComponents()) {
             if (vertexComponent.contains(vertex)) {
                 vertexComponents.add(vertexComponent);
             }
@@ -122,7 +114,7 @@ public class BiconnectivityInspector<V, E>
      */
     public Set<V> getCutpoints()
     {
-        return this.blockCutpointGraph.getCutpoints();
+        return blockCutpointGraph.getCutpoints();
     }
 
     /**
@@ -131,7 +123,7 @@ public class BiconnectivityInspector<V, E>
      */
     public boolean isBiconnected()
     {
-        return this.blockCutpointGraph.vertexSet().size() == 1;
+        return blockCutpointGraph.vertexSet().size() == 1;
     }
 }
 

@@ -39,10 +39,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.UndirectedSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -66,19 +68,19 @@ public abstract class EulerianCircuit
      *
      * @return true for Eulerian and false for non-Eulerian
      */
-    public static <V, E> boolean isEulerian(UndirectedGraph<V, E> g)
+    public static <V, E> boolean isEulerian(final UndirectedGraph<V, E> g)
     {
         // If the graph is not connected, then no Eulerian circuit exists
-        if (!(new ConnectivityInspector<V, E>(g)).isGraphConnected()) {
+        if (!new ConnectivityInspector<V, E>(g).isGraphConnected()) {
             return false;
         }
 
         // A graph is Eulerian if and only if all vertices have even degree
         // So, this code will check for that
-        Iterator<V> iter = g.vertexSet().iterator();
+        final Iterator<V> iter = g.vertexSet().iterator();
         while (iter.hasNext()) {
-            V v = iter.next();
-            if ((g.degreeOf(v) % 2) == 1) {
+            final V v = iter.next();
+            if (g.degreeOf(v) % 2 == 1) {
                 return false;
             }
         }
@@ -95,7 +97,7 @@ public abstract class EulerianCircuit
      * representing the Eulerian circuit if one does exist
      */
     public static <V, E> List<V> getEulerianCircuitVertices(
-        UndirectedGraph<V, E> g)
+        final UndirectedGraph<V, E> g)
     {
         // If the graph is not Eulerian then just return a null since no
         // Eulerian circuit exists
@@ -104,14 +106,14 @@ public abstract class EulerianCircuit
         }
 
         // The circuit will be represented by a linked list
-        List<V> path = new LinkedList<V>();
-        UndirectedGraph<V, E> sg = new UndirectedSubgraph<V, E>(g, null, null);
+        final List<V> path = new LinkedList<V>();
+        final UndirectedGraph<V, E> sg = new UndirectedSubgraph<V, E>(g, null, null);
         path.add(sg.vertexSet().iterator().next());
 
         // Algorithm for finding an Eulerian circuit Basically this will find an
         // arbitrary circuit, then it will find another arbitrary circuit until
         // every edge has been traversed
-        while (sg.edgeSet().size() > 0) {
+        while (!sg.edgeSet().isEmpty()) {
             V v = null;
 
             // Find a vertex which has an edge that hasn't been traversed yet,
@@ -127,11 +129,7 @@ public abstract class EulerianCircuit
             // Finds an arbitrary circuit of the current vertex and
             // appends this into the circuit list
             while (sg.degreeOf(v) > 0) {
-                for (
-                    Iterator<V> iter = sg.vertexSet().iterator();
-                    iter.hasNext();)
-                {
-                    V temp = iter.next();
+                for (final V temp : sg.vertexSet()) {
                     if (sg.containsEdge(v, temp)) {
                         path.add(index, temp);
                         sg.removeEdge(v, temp);

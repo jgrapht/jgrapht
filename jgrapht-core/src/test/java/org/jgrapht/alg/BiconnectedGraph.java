@@ -38,7 +38,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 
 /**

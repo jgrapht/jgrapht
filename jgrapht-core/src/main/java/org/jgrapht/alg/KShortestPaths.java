@@ -41,9 +41,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -66,13 +68,13 @@ public class KShortestPaths<V, E>
     /**
      * Graph on which shortest paths are searched.
      */
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-    private int nMaxHops;
+    private final int nMaxHops;
 
-    private int nPaths;
+    private final int nPaths;
 
-    private V startVertex;
+    private final V startVertex;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -84,7 +86,8 @@ public class KShortestPaths<V, E>
      * @param startVertex
      * @param k number of paths to be computed.
      */
-    public KShortestPaths(Graph<V, E> graph, V startVertex, int k)
+    public KShortestPaths(
+        final Graph<V, E> graph, final V startVertex, final int k)
     {
         this(graph, startVertex, k, graph.vertexSet().size() - 1);
     }
@@ -105,10 +108,10 @@ public class KShortestPaths<V, E>
      * @throws IllegalArgumentException if nMaxHops is negative or 0.
      */
     public KShortestPaths(
-        Graph<V, E> graph,
-        V startVertex,
-        int nPaths,
-        int nMaxHops)
+        final Graph<V, E> graph,
+        final V startVertex,
+        final int nPaths,
+        final int nMaxHops)
     {
         assertKShortestPathsFinder(graph, startVertex, nPaths, nMaxHops);
 
@@ -128,63 +131,60 @@ public class KShortestPaths<V, E>
      * @return list of paths, or <code>null</code> if no path exists between the
      * start vertex and the end vertex.
      */
-    public List<GraphPath<V, E>> getPaths(V endVertex)
+    public List<GraphPath<V, E>> getPaths(final V endVertex)
     {
         assertGetPaths(endVertex);
 
-        KShortestPathsIterator<V, E> iter =
-            new KShortestPathsIterator<V, E>(
-                this.graph,
-                this.startVertex,
-                endVertex,
-                this.nPaths);
+        final KShortestPathsIterator<V, E> iter =
+            new KShortestPathsIterator<V, E>(graph, startVertex,
+                endVertex, nPaths);
 
         // at the i-th pass the shortest paths with less (or equal) than i edges
         // are calculated.
         for (
             int passNumber = 1;
-            (passNumber <= this.nMaxHops)
+            passNumber <= nMaxHops
             && iter.hasNext();
             passNumber++)
         {
             iter.next();
         }
 
-        List<RankingPathElement<V, E>> list = iter.getPathElements(endVertex);
+        final List<RankingPathElement<V, E>> list = iter.getPathElements(endVertex);
 
         if (list == null) {
             return null;
         }
 
-        List<GraphPath<V, E>> pathList = new ArrayList<GraphPath<V, E>>();
+        final List<GraphPath<V, E>> pathList = new ArrayList<GraphPath<V, E>>();
 
-        for (RankingPathElement<V, E> element : list) {
+        for (final RankingPathElement<V, E> element : list) {
             pathList.add(new PathWrapper(element));
         }
 
         return pathList;
     }
 
-    private void assertGetPaths(V endVertex)
+    private void assertGetPaths(final V endVertex)
     {
         if (endVertex == null) {
             throw new NullPointerException("endVertex is null");
         }
-        if (endVertex.equals(this.startVertex)) {
+        if (endVertex.equals(startVertex)) {
             throw new IllegalArgumentException(
                 "The end vertex is the same as the start vertex!");
         }
-        if (!this.graph.vertexSet().contains(endVertex)) {
+        if (!graph.vertexSet().contains(endVertex)) {
             throw new IllegalArgumentException(
                 "Graph must contain the end vertex!");
         }
     }
 
     private void assertKShortestPathsFinder(
-        Graph<V, E> graph,
-        V startVertex,
-        int nPaths,
-        int nMaxHops)
+        final Graph<V, E> graph,
+        final V startVertex,
+        final int nPaths,
+        final int nMaxHops)
     {
         if (graph == null) {
             throw new NullPointerException("graph is null");
@@ -205,34 +205,38 @@ public class KShortestPaths<V, E>
     private class PathWrapper
         implements GraphPath<V, E>
     {
-        private RankingPathElement<V, E> rankingPathElement;
+        private final RankingPathElement<V, E> rankingPathElement;
 
         private List<E> edgeList;
 
-        PathWrapper(RankingPathElement<V, E> rankingPathElement)
+        PathWrapper(final RankingPathElement<V, E> rankingPathElement)
         {
             this.rankingPathElement = rankingPathElement;
         }
 
         // implement GraphPath
+        @Override
         public Graph<V, E> getGraph()
         {
             return graph;
         }
 
         // implement GraphPath
+        @Override
         public V getStartVertex()
         {
             return startVertex;
         }
 
         // implement GraphPath
+        @Override
         public V getEndVertex()
         {
             return rankingPathElement.getVertex();
         }
 
         // implement GraphPath
+        @Override
         public List<E> getEdgeList()
         {
             if (edgeList == null) {
@@ -242,6 +246,7 @@ public class KShortestPaths<V, E>
         }
 
         // implement GraphPath
+        @Override
         public double getWeight()
         {
             return rankingPathElement.getWeight();

@@ -37,9 +37,10 @@
  */
 package org.jgrapht.experimental.permutation;
 
-import java.util.*;
+import org.jgrapht.util.MathUtil;
 
-import org.jgrapht.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
 
 
 /**
@@ -125,7 +126,7 @@ public class CompoundPermutationIter
      *
      * @param equalityGroupsSizesArray
      */
-    public CompoundPermutationIter(int [] equalityGroupsSizesArray)
+    public CompoundPermutationIter(final int [] equalityGroupsSizesArray)
     {
         init(equalityGroupsSizesArray);
     }
@@ -138,13 +139,13 @@ public class CompoundPermutationIter
      *
      * @param equalityGroupsSizesArray
      */
-    private void init(int [] equalityGroupsSizesArray)
+    private void init(final int [] equalityGroupsSizesArray)
     {
-        this.permArray =
+        permArray =
             new IntegerPermutationIter[equalityGroupsSizesArray.length];
 
         int counter = 0;
-        this.max = 1; // each time , multiply by factorail(eqGroupSize)
+        max = 1; // each time , multiply by factorail(eqGroupSize)
         for (
             int eqGroup = 0;
             eqGroup < equalityGroupsSizesArray.length;
@@ -152,24 +153,25 @@ public class CompoundPermutationIter
         {
             // create an array of eq.group size filled with values
             // of counter, counter+1, ... counter+size-1
-            int currGroupSize = equalityGroupsSizesArray[eqGroup];
-            int [] currArray = new int[currGroupSize];
+            final int currGroupSize = equalityGroupsSizesArray[eqGroup];
+            final int [] currArray = new int[currGroupSize];
             for (int i = 0; i < currGroupSize; i++) {
                 currArray[i] = counter;
                 counter++;
             }
-            this.permArray[eqGroup] = new IntegerPermutationIter(currArray);
-            this.permArray[eqGroup].getNext(); // first iteration return the
+            permArray[eqGroup] = new IntegerPermutationIter(currArray);
+            permArray[eqGroup].getNext(); // first iteration return the
                                                // source
 
             // each time , multiply by factorail(eqGroupSize)
-            this.max *= MathUtil.factorial(currGroupSize);
+            max *= MathUtil.factorial(currGroupSize);
         }
-        this.totalPermArraySize = counter;
+        totalPermArraySize = counter;
 
         // calc max
     }
 
+    @Override
     public Object next()
     {
         return getNext();
@@ -183,16 +185,16 @@ public class CompoundPermutationIter
      */
     public int [] getNext()
     {
-        if (this.iterCounter == 0) {
+        if (iterCounter == 0) {
             // just return it , without change
-            this.iterCounter++;
+            iterCounter++;
             return getPermAsArray();
         }
 
         int firstGroupCapableOfAdvancing = -1;
         int currGroupIndex = 0; //
         while (firstGroupCapableOfAdvancing == -1) {
-            IntegerPermutationIter currGroup = this.permArray[currGroupIndex];
+            final IntegerPermutationIter currGroup = permArray[currGroupIndex];
 
             if (currGroup.hasNext()) {
                 currGroup.getNext();
@@ -205,20 +207,14 @@ public class CompoundPermutationIter
             }
 
             currGroupIndex++;
-            if (currGroupIndex >= this.permArray.length) {
+            if (currGroupIndex >= permArray.length) {
                 break;
             }
         }
 
-        this.iterCounter++;
+        iterCounter++;
 
-        if (firstGroupCapableOfAdvancing == -1) {
-            // nothing found. we finished all iterations
-            return null;
-        } else {
-            int [] tempArray = getPermAsArray();
-            return tempArray;
-        }
+        return firstGroupCapableOfAdvancing == -1 ? null : getPermAsArray();
     }
 
     /**
@@ -229,14 +225,10 @@ public class CompoundPermutationIter
      */
     public int [] getPermAsArray()
     {
-        int [] resultArray = new int[this.totalPermArraySize];
+        final int [] resultArray = new int[totalPermArraySize];
         int counter = 0;
-        for (
-            int groupIndex = 0;
-            groupIndex < this.permArray.length;
-            groupIndex++)
-        {
-            int [] currPermArray = this.permArray[groupIndex].getCurrent();
+        for (final IntegerPermutationIter aPermArray : permArray) {
+            final int[] currPermArray = aPermArray.getCurrent();
             System.arraycopy(
                 currPermArray,
                 0,
@@ -253,22 +245,19 @@ public class CompoundPermutationIter
      *
      * @param groupIndex
      */
-    private void restartPermutationGroup(int groupIndex)
+    private void restartPermutationGroup(final int groupIndex)
     {
-        int [] oldPermArray = this.permArray[groupIndex].getCurrent();
+        final int [] oldPermArray = permArray[groupIndex].getCurrent();
         Arrays.sort(oldPermArray);
-        this.permArray[groupIndex] = new IntegerPermutationIter(oldPermArray);
-        this.permArray[groupIndex].getNext();
+        permArray[groupIndex] = new IntegerPermutationIter(oldPermArray);
+        permArray[groupIndex].getNext();
     }
 
+    @Override
     public boolean hasNext()
     {
-        boolean result;
-        if (this.iterCounter < this.max) {
-            result = true;
-        } else {
-            result = false;
-        }
+        final boolean result;
+        result = iterCounter < max;
         return result;
     }
 
@@ -280,6 +269,7 @@ public class CompoundPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#nextPermutation()
      */
+    @Override
     public int [] nextPermutation()
     {
         return (int []) next();
@@ -288,6 +278,7 @@ public class CompoundPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#hasNextPermutaions()
      */
+    @Override
     public boolean hasNextPermutaions()
     {
         return hasNext();
@@ -296,8 +287,9 @@ public class CompoundPermutationIter
     /**
      * UNIMPLEMENTED. always throws new UnsupportedOperationException
      *
-     * @see java.util.Iterator#remove()
+     * @see Iterator#remove()
      */
+    @Override
     public void remove()
     {
         throw new UnsupportedOperationException();

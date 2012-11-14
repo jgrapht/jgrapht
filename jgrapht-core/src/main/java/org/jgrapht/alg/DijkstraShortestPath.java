@@ -41,11 +41,15 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphPathImpl;
+import org.jgrapht.traverse.ClosestFirstIterator;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -73,9 +77,9 @@ public final class DijkstraShortestPath<V, E>
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
      */
-    public DijkstraShortestPath(Graph<V, E> graph,
-        V startVertex,
-        V endVertex)
+    public DijkstraShortestPath(final Graph<V, E> graph,
+        final V startVertex,
+        final V endVertex)
     {
         this(graph, startVertex, endVertex, Double.POSITIVE_INFINITY);
     }
@@ -92,21 +96,21 @@ public final class DijkstraShortestPath<V, E>
      * unbounded search
      */
     public DijkstraShortestPath(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        double radius)
+        final Graph<V, E> graph,
+        final V startVertex,
+        final V endVertex,
+        final double radius)
     {
         if (!graph.containsVertex(endVertex)) {
             throw new IllegalArgumentException(
                 "graph must contain the end vertex");
         }
 
-        ClosestFirstIterator<V, E> iter =
+        final ClosestFirstIterator<V, E> iter =
             new ClosestFirstIterator<V, E>(graph, startVertex, radius);
 
         while (iter.hasNext()) {
-            V vertex = iter.next();
+            final V vertex = iter.next();
 
             if (vertex.equals(endVertex)) {
                 createEdgeList(graph, iter, startVertex, endVertex);
@@ -169,11 +173,11 @@ public final class DijkstraShortestPath<V, E>
      * @return List of Edges, or null if no path exists
      */
     public static <V, E> List<E> findPathBetween(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex)
+        final Graph<V, E> graph,
+        final V startVertex,
+        final V endVertex)
     {
-        DijkstraShortestPath<V, E> alg =
+        final DijkstraShortestPath<V, E> alg =
             new DijkstraShortestPath<V, E>(
                 graph,
                 startVertex,
@@ -183,17 +187,17 @@ public final class DijkstraShortestPath<V, E>
     }
 
     private void createEdgeList(
-        Graph<V, E> graph,
-        ClosestFirstIterator<V, E> iter,
-        V startVertex,
-        V endVertex)
+        final Graph<V, E> graph,
+        final ClosestFirstIterator<V, E> iter,
+        final V startVertex,
+        final V endVertex)
     {
-        List<E> edgeList = new ArrayList<E>();
+        final List<E> edgeList = new ArrayList<E>();
 
         V v = endVertex;
 
         while (true) {
-            E edge = iter.getSpanningTreeEdge(v);
+            final E edge = iter.getSpanningTreeEdge(v);
 
             if (edge == null) {
                 break;
@@ -204,7 +208,7 @@ public final class DijkstraShortestPath<V, E>
         }
 
         Collections.reverse(edgeList);
-        double pathLength = iter.getShortestPathLength(endVertex);
+        final double pathLength = iter.getShortestPathLength(endVertex);
         path =
             new GraphPathImpl<V, E>(
                 graph,

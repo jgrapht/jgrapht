@@ -38,7 +38,9 @@
  */
 package org.jgrapht.experimental.equivalence;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 
 /**
@@ -73,18 +75,18 @@ public class EquivalenceComparatorChainBase<E, C>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private List<EquivalenceComparator<? super E, ? super C>> chain;
+    private final List<EquivalenceComparator<? super E, ? super C>> chain;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      */
     public EquivalenceComparatorChainBase(
-        EquivalenceComparator<E, C> firstComaparator)
+        final EquivalenceComparator<E, C> firstComaparator)
     {
-        this.chain =
+        chain =
             new LinkedList<EquivalenceComparator<? super E, ? super C>>();
-        this.chain.add(firstComaparator);
+        chain.add(firstComaparator);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -98,11 +100,12 @@ public class EquivalenceComparatorChainBase<E, C>
      *
      * org.jgrapht.experimental.equivalence.EquivalenceComparatorChain#addComparatorAfter(org.jgrapht.experimental.equivalence.EquivalenceComparator)
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public void appendComparator(EquivalenceComparator comparatorAfter)
+    public void appendComparator(final EquivalenceComparator comparatorAfter)
     {
         if (comparatorAfter != null) {
-            this.chain.add(comparatorAfter);
+            chain.add(comparatorAfter);
         }
     }
 
@@ -114,15 +117,16 @@ public class EquivalenceComparatorChainBase<E, C>
      * @see EquivalenceComparator#equivalenceCompare(Object, Object, Object,
      * Object)
      */
+    @Override
     public boolean equivalenceCompare(
-        E arg1,
-        E arg2,
-        C context1,
-        C context2)
+        final E arg1,
+        final E arg2,
+        final C context1,
+        final C context2)
     {
         for (
-            EquivalenceComparator<? super E, ? super C> currentComparator
-            : this.chain)
+            final EquivalenceComparator<? super E, ? super C> currentComparator
+            : chain)
         {
             if (!currentComparator.equivalenceCompare(
                     arg1,
@@ -141,17 +145,18 @@ public class EquivalenceComparatorChainBase<E, C>
      *
      * @see EquivalenceComparator#equivalenceHashcode(Object, Object)
      */
-    public int equivalenceHashcode(E arg1, C context)
+    @Override
+    public int equivalenceHashcode(final E arg1, final C context)
     {
-        StringBuffer hashStringBuffer = new StringBuffer();
+        final StringBuffer hashStringBuffer = new StringBuffer();
         for (
-            ListIterator<EquivalenceComparator<? super E, ? super C>> iter =
-                this.chain.listIterator();
+            ListIterator<EquivalenceComparator<? super E, ? super C>> iter = chain
+                .listIterator();
             iter.hasNext();)
         {
-            EquivalenceComparator<? super E, ? super C> currentComparator =
+            final EquivalenceComparator<? super E, ? super C> currentComparator =
                 iter.next();
-            int currentHashCode =
+            final int currentHashCode =
                 currentComparator.equivalenceHashcode(arg1, context);
             hashStringBuffer.append(currentHashCode);
 

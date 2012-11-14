@@ -40,9 +40,13 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -69,7 +73,7 @@ public class BronKerboschCliqueFinder<V, E>
      * @param graph the graph in which cliques are to be found; graph must be
      * simple
      */
-    public BronKerboschCliqueFinder(Graph<V, E> graph)
+    public BronKerboschCliqueFinder(final Graph<V, E> graph)
     {
         this.graph = graph;
     }
@@ -89,9 +93,9 @@ public class BronKerboschCliqueFinder<V, E>
         // TODO jvs 26-July-2005:  assert that graph is simple
 
         cliques = new ArrayList<Set<V>>();
-        List<V> potential_clique = new ArrayList<V>();
-        List<V> candidates = new ArrayList<V>();
-        List<V> already_found = new ArrayList<V>();
+        final List<V> potential_clique = new ArrayList<V>();
+        final List<V> candidates = new ArrayList<V>();
+        final List<V> already_found = new ArrayList<V>();
         candidates.addAll(graph.vertexSet());
         findCliques(potential_clique, candidates, already_found);
         return cliques;
@@ -109,13 +113,13 @@ public class BronKerboschCliqueFinder<V, E>
         getAllMaximalCliques();
 
         int maximum = 0;
-        Collection<Set<V>> biggest_cliques = new ArrayList<Set<V>>();
-        for (Set<V> clique : cliques) {
+        final Collection<Set<V>> biggest_cliques = new ArrayList<Set<V>>();
+        for (final Set<V> clique : cliques) {
             if (maximum < clique.size()) {
                 maximum = clique.size();
             }
         }
-        for (Set<V> clique : cliques) {
+        for (final Set<V> clique : cliques) {
             if (maximum == clique.size()) {
                 biggest_cliques.add(clique);
             }
@@ -124,16 +128,16 @@ public class BronKerboschCliqueFinder<V, E>
     }
 
     private void findCliques(
-        List<V> potential_clique,
-        List<V> candidates,
-        List<V> already_found)
+        final List<V> potential_clique,
+        final List<V> candidates,
+        final List<V> already_found)
     {
-        List<V> candidates_array = new ArrayList<V>(candidates);
+        final List<V> candidates_array = new ArrayList<V>(candidates);
         if (!end(candidates, already_found)) {
             // for each candidate_node in candidates do
-            for (V candidate : candidates_array) {
-                List<V> new_candidates = new ArrayList<V>();
-                List<V> new_already_found = new ArrayList<V>();
+            for (final V candidate : candidates_array) {
+                final List<V> new_candidates = new ArrayList<V>();
+                final List<V> new_already_found = new ArrayList<V>();
 
                 // move candidate node to potential_clique
                 potential_clique.add(candidate);
@@ -141,7 +145,7 @@ public class BronKerboschCliqueFinder<V, E>
 
                 // create new_candidates by removing nodes in candidates not
                 // connected to candidate node
-                for (V new_candidate : candidates) {
+                for (final V new_candidate : candidates) {
                     if (graph.containsEdge(candidate, new_candidate)) {
                         new_candidates.add(new_candidate);
                     } // of if
@@ -149,7 +153,7 @@ public class BronKerboschCliqueFinder<V, E>
 
                 // create new_already_found by removing nodes in already_found
                 // not connected to candidate node
-                for (V new_found : already_found) {
+                for (final V new_found : already_found) {
                     if (graph.containsEdge(candidate, new_found)) {
                         new_already_found.add(new_found);
                     } // of if
@@ -175,14 +179,14 @@ public class BronKerboschCliqueFinder<V, E>
         } // of if
     }
 
-    private boolean end(List<V> candidates, List<V> already_found)
+    private boolean end(final List<V> candidates, final List<V> already_found)
     {
         // if a node in already_found is connected to all nodes in candidates
         boolean end = false;
         int edgecounter;
-        for (V found : already_found) {
+        for (final V found : already_found) {
             edgecounter = 0;
-            for (V candidate : candidates) {
+            for (final V candidate : candidates) {
                 if (graph.containsEdge(found, candidate)) {
                     edgecounter++;
                 } // of if

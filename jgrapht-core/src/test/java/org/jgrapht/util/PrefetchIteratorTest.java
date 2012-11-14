@@ -37,9 +37,11 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import junit.framework.TestCase;
 
-import junit.framework.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 public class PrefetchIteratorTest
@@ -49,7 +51,7 @@ public class PrefetchIteratorTest
 
     public void testIteratorInterface()
     {
-        Iterator iterator = new IterateFrom1To99();
+        final Iterator iterator = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
             assertEquals(true, iterator.hasNext());
             assertEquals(i, iterator.next());
@@ -66,7 +68,7 @@ public class PrefetchIteratorTest
 
     public void testEnumInterface()
     {
-        Enumeration enumuration = new IterateFrom1To99();
+        final Enumeration enumuration = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
             assertEquals(true, enumuration.hasMoreElements());
             assertEquals(i, enumuration.nextElement());
@@ -89,13 +91,14 @@ public class PrefetchIteratorTest
             Iterator
     {
         private int counter = 0;
-        private PrefetchIterator nextSupplier;
+        private final PrefetchIterator nextSupplier;
 
         public IterateFrom1To99()
         {
             nextSupplier =
                 new PrefetchIterator<Integer>(
                     new PrefetchIterator.NextElementFunctor<Integer>() {
+                        @Override
                         public Integer nextElement()
                             throws NoSuchElementException
                         {
@@ -110,30 +113,35 @@ public class PrefetchIteratorTest
         }
 
         // forwarding to nextSupplier and return its returned value
+        @Override
         public boolean hasMoreElements()
         {
-            return this.nextSupplier.hasMoreElements();
+            return nextSupplier.hasMoreElements();
         }
 
         // forwarding to nextSupplier and return its returned value
+        @Override
         public Object nextElement()
         {
-            return this.nextSupplier.nextElement();
+            return nextSupplier.nextElement();
         }
 
+        @Override
         public Object next()
         {
-            return this.nextSupplier.next();
+            return nextSupplier.next();
         }
 
+        @Override
         public boolean hasNext()
         {
-            return this.nextSupplier.hasNext();
+            return nextSupplier.hasNext();
         }
 
+        @Override
         public void remove()
         {
-            this.nextSupplier.remove();
+            nextSupplier.remove();
         }
     }
 }

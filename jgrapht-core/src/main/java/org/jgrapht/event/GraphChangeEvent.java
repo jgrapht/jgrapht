@@ -39,7 +39,7 @@
  */
 package org.jgrapht.event;
 
-import java.util.*;
+import java.util.EventObject;
 
 
 /**
@@ -71,7 +71,7 @@ public class GraphChangeEvent
      * @param eventSource the source of the event.
      * @param type the type of event.
      */
-    public GraphChangeEvent(Object eventSource, int type)
+    public GraphChangeEvent(final Object eventSource, final int type)
     {
         super(eventSource);
         this.type = type;

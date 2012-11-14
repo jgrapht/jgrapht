@@ -44,9 +44,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
 
-import org.jgrapht.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 /**
@@ -63,7 +64,7 @@ public class BreadthFirstIterator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private Deque<V> queue = new ArrayDeque<V>();
+    private final Deque<V> queue = new ArrayDeque<V>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -72,7 +73,7 @@ public class BreadthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      */
-    public BreadthFirstIterator(Graph<V, E> g)
+    public BreadthFirstIterator(final Graph<V, E> g)
     {
         this(g, null);
     }
@@ -87,7 +88,7 @@ public class BreadthFirstIterator<V, E>
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      */
-    public BreadthFirstIterator(Graph<V, E> g, V startVertex)
+    public BreadthFirstIterator(final Graph<V, E> g, final V startVertex)
     {
         super(g, startVertex);
     }
@@ -97,6 +98,7 @@ public class BreadthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
+    @Override
     protected boolean isConnectedComponentExhausted()
     {
         return queue.isEmpty();
@@ -105,7 +107,8 @@ public class BreadthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
-    protected void encounterVertex(V vertex, E edge)
+    @Override
+    protected void encounterVertex(final V vertex, final E edge)
     {
         putSeenData(vertex, null);
         queue.add(vertex);
@@ -114,13 +117,15 @@ public class BreadthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
-    protected void encounterVertexAgain(V vertex, E edge)
+    @Override
+    protected void encounterVertexAgain(final V vertex, final E edge)
     {
     }
 
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
+    @Override
     protected V provideNextVertex()
     {
         return queue.removeFirst();

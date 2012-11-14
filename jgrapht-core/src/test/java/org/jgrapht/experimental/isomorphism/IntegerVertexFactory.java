@@ -37,7 +37,7 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import org.jgrapht.*;
+import org.jgrapht.VertexFactory;
 
 
 /**
@@ -70,17 +70,18 @@ public class IntegerVertexFactory
         this(0);
     }
 
-    public IntegerVertexFactory(int oneBeforeFirstValue)
+    public IntegerVertexFactory(final int oneBeforeFirstValue)
     {
-        this.counter = oneBeforeFirstValue;
+        counter = oneBeforeFirstValue;
     }
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     public Integer createVertex()
     {
-        this.counter++;
-        return new Integer(this.counter);
+        counter++;
+        return new Integer(counter);
     }
 }
 

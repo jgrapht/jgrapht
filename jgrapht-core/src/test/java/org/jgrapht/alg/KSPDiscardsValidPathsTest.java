@@ -38,9 +38,10 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
-import org.jgrapht.graph.*;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
 
 
 @SuppressWarnings("unchecked")
@@ -56,8 +57,8 @@ public class KSPDiscardsValidPathsTest
      */
     public void testNot3connectedGraph()
     {
-        WeightedMultigraph<String, DefaultWeightedEdge> graph;
-        KShortestPaths<String, DefaultWeightedEdge> paths;
+        final WeightedMultigraph<String, DefaultWeightedEdge> graph;
+        final KShortestPaths<String, DefaultWeightedEdge> paths;
 
         graph =
             new WeightedMultigraph<String, DefaultWeightedEdge>(
@@ -77,25 +78,25 @@ public class KSPDiscardsValidPathsTest
         graph.addVertex("K");
         graph.addVertex("L");
 
-        this.addGraphEdge(graph, "S", "A", 1.0);
-        this.addGraphEdge(graph, "A", "T", 1.0);
-        this.addGraphEdge(graph, "A", "B", 1.0);
-        this.addGraphEdge(graph, "B", "T", 1.0);
-        this.addGraphEdge(graph, "B", "C", 1.0);
+        addGraphEdge(graph, "S", "A", 1.0);
+        addGraphEdge(graph, "A", "T", 1.0);
+        addGraphEdge(graph, "A", "B", 1.0);
+        addGraphEdge(graph, "B", "T", 1.0);
+        addGraphEdge(graph, "B", "C", 1.0);
 
-        this.addGraphEdge(graph, "C", "D", 1.0);
-        this.addGraphEdge(graph, "C", "E", 1.0);
-        this.addGraphEdge(graph, "C", "F", 1.0);
-        this.addGraphEdge(graph, "D", "G", 1.0);
-        this.addGraphEdge(graph, "E", "G", 1.0);
-        this.addGraphEdge(graph, "F", "G", 1.0);
+        addGraphEdge(graph, "C", "D", 1.0);
+        addGraphEdge(graph, "C", "E", 1.0);
+        addGraphEdge(graph, "C", "F", 1.0);
+        addGraphEdge(graph, "D", "G", 1.0);
+        addGraphEdge(graph, "E", "G", 1.0);
+        addGraphEdge(graph, "F", "G", 1.0);
 
-        this.addGraphEdge(graph, "G", "H", 1.0);
-        this.addGraphEdge(graph, "H", "I", 1.0);
-        this.addGraphEdge(graph, "I", "J", 1.0);
-        this.addGraphEdge(graph, "J", "K", 1.0);
-        this.addGraphEdge(graph, "K", "L", 1.0);
-        this.addGraphEdge(graph, "L", "S", 1.0);
+        addGraphEdge(graph, "G", "H", 1.0);
+        addGraphEdge(graph, "H", "I", 1.0);
+        addGraphEdge(graph, "I", "J", 1.0);
+        addGraphEdge(graph, "J", "K", 1.0);
+        addGraphEdge(graph, "K", "L", 1.0);
+        addGraphEdge(graph, "L", "S", 1.0);
 
         paths = new KShortestPaths<String, DefaultWeightedEdge>(graph, "S", 3);
 
@@ -109,7 +110,7 @@ public class KSPDiscardsValidPathsTest
      */
     public void testBrunoMaoili()
     {
-        WeightedMultigraph<String, DefaultWeightedEdge> graph;
+        final WeightedMultigraph<String, DefaultWeightedEdge> graph;
         KShortestPaths<String, DefaultWeightedEdge> paths;
 
         graph =
@@ -121,13 +122,13 @@ public class KSPDiscardsValidPathsTest
         graph.addVertex("D");
         graph.addVertex("E");
 
-        this.addGraphEdge(graph, "A", "B", 1.0);
-        this.addGraphEdge(graph, "A", "C", 2.0);
-        this.addGraphEdge(graph, "B", "D", 1.0);
-        this.addGraphEdge(graph, "B", "D", 1.0);
-        this.addGraphEdge(graph, "B", "D", 1.0);
-        this.addGraphEdge(graph, "B", "E", 1.0);
-        this.addGraphEdge(graph, "C", "D", 1.0);
+        addGraphEdge(graph, "A", "B", 1.0);
+        addGraphEdge(graph, "A", "C", 2.0);
+        addGraphEdge(graph, "B", "D", 1.0);
+        addGraphEdge(graph, "B", "D", 1.0);
+        addGraphEdge(graph, "B", "D", 1.0);
+        addGraphEdge(graph, "B", "E", 1.0);
+        addGraphEdge(graph, "C", "D", 1.0);
 
         paths = new KShortestPaths<String, DefaultWeightedEdge>(graph, "A", 2);
         Assert.assertTrue(paths.getPaths("E").size() == 2);
@@ -139,13 +140,12 @@ public class KSPDiscardsValidPathsTest
         Assert.assertTrue(paths.getPaths("E").size() == 4);
     }
 
-    private void addGraphEdge(
-        WeightedMultigraph<String, DefaultWeightedEdge> graph,
-        String sourceVertex,
-        String targetVertex,
-        double weight)
+    private static void addGraphEdge(
+        final WeightedMultigraph<String, DefaultWeightedEdge> graph,
+        final String sourceVertex, final String targetVertex,
+        final double weight)
     {
-        DefaultWeightedEdge edge = new DefaultWeightedEdge();
+        final DefaultWeightedEdge edge = new DefaultWeightedEdge();
 
         graph.addEdge(sourceVertex, targetVertex, edge);
         graph.setEdgeWeight(edge, weight);

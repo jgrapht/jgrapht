@@ -37,7 +37,8 @@
  */
 package org.jgrapht.alg.util;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**
@@ -62,7 +63,7 @@ public final class AllAlgUtilTests
      */
     public static Test suite()
     {
-        TestSuite suite = new TestSuite();
+        final TestSuite suite = new TestSuite();
 
         // $JUnit-BEGIN$
         suite.addTest(new TestSuite(UnionFindTest.class));

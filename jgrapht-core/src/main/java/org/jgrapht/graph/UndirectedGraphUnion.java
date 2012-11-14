@@ -38,10 +38,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.util.WeightCombiner;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Set;
 
 
 public class UndirectedGraphUnion<V, E>
@@ -55,25 +55,26 @@ public class UndirectedGraphUnion<V, E>
     //~ Constructors -----------------------------------------------------------
 
     UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraphUnion<V, E> g2,
-        WeightCombiner operator)
+        final UndirectedGraph<V, E> g1,
+        final UndirectedGraphUnion<V, E> g2,
+        final WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
 
     UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraphUnion<V, E> g2)
+        final UndirectedGraph<V, E> g1,
+        final UndirectedGraphUnion<V, E> g2)
     {
         super(g1, g2);
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    public int degreeOf(V vertex)
+    @Override
+    public int degreeOf(final V vertex)
     {
-        Set<E> res = edgesOf(vertex);
+        final Set<E> res = edgesOf(vertex);
         return res.size();
     }
 }
