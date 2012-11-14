@@ -140,10 +140,9 @@ public class KSPDiscardsValidPathsTest
         Assert.assertTrue(paths.getPaths("E").size() == 4);
     }
 
-    private void addGraphEdge(
+    private static void addGraphEdge(
         final WeightedMultigraph<String, DefaultWeightedEdge> graph,
-        final String sourceVertex,
-        final String targetVertex,
+        final String sourceVertex, final String targetVertex,
         final double weight)
     {
         final DefaultWeightedEdge edge = new DefaultWeightedEdge();

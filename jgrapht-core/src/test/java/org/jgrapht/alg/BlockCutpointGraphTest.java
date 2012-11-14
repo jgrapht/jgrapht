@@ -72,7 +72,7 @@ public class BlockCutpointGraphTest
         assertEquals(1, nbBiconnectedComponents);
     }
 
-    public void testGetBlock(final BlockCutpointGraph blockCutpointGraph)
+    public static void testGetBlock(final BlockCutpointGraph blockCutpointGraph)
     {
         for (
             Iterator iter = blockCutpointGraph.vertexSet().iterator();

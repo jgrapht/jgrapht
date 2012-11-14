@@ -65,13 +65,13 @@ public class EquivalenceSet<E, C>
     /**
      * The comparator used to define the group
      */
-    protected EquivalenceComparator<? super E, ? super C> eqComparator;
-    protected C comparatorContext;
+    protected final EquivalenceComparator<? super E, ? super C> eqComparator;
+    protected final C comparatorContext;
 
     /**
      * Contains the current elements of the group
      */
-    protected Set<E> elementsSet;
+    protected final Set<E> elementsSet;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -153,7 +153,7 @@ public class EquivalenceSet<E, C>
         if (other instanceof EquivalenceSet) {
             otherRepresentative =
                 ((EquivalenceSet<E, C>) other).getRepresentative();
-            otherContext = ((EquivalenceSet<E, C>) other).getContext();
+            otherContext = ((EquivalenceSet<E, C>) other).comparatorContext;
         } else {
             throw new ClassCastException(
                 "can check equal() only of EqualityGroup");

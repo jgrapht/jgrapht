@@ -65,7 +65,7 @@ public class FibonacciHeapNode<T>
     /**
      * Node data.
      */
-    T data;
+    final T data;
 
     /**
      * first child node

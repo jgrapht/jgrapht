@@ -129,7 +129,7 @@ public class IntegerPermutationIter
         Value[j] = temp;
     }
 
-    private int [] arrayClone(final int [] sourceArray)
+    private static int [] arrayClone(final int[] sourceArray)
     {
         final int [] destArray = new int[sourceArray.length];
         System.arraycopy(sourceArray, 0, destArray, 0, sourceArray.length);
@@ -270,7 +270,7 @@ public class IntegerPermutationIter
      *
      * @param array
      */
-    public String toString(final int [] array)
+    public static String toString(final int[] array)
     {
         if (array.length <= 0) {
             return "[]";

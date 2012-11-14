@@ -75,7 +75,7 @@ public class CycleDetectorTest
      *
      * @param g
      */
-    public void createGraph(final Graph<String, DefaultEdge> g)
+    public static void createGraph(final Graph<String, DefaultEdge> g)
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -172,10 +172,8 @@ public class CycleDetectorTest
         runTest(g, cyclicSet, acyclicSet);
     }
 
-    private void runTest(
-        final DirectedGraph<String, DefaultEdge> g,
-        final Set<String> cyclicSet,
-        final Set<String> acyclicSet)
+    private static void runTest(final DirectedGraph<String, DefaultEdge> g,
+        final Set<String> cyclicSet, final Set<String> acyclicSet)
     {
         final CycleDetector<String, DefaultEdge> detector =
             new CycleDetector<String, DefaultEdge>(g);
@@ -205,7 +203,7 @@ public class CycleDetectorTest
 
         final String vertexA = "A";
         final String vertexB = "B";
-        final String vertexC = new StringBuffer("A").toString();
+        final String vertexC = "A";
 
         assertNotSame(vertexA, vertexC);
 

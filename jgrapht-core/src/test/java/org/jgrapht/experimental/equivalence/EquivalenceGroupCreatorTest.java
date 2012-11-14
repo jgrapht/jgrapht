@@ -54,7 +54,7 @@ public class EquivalenceGroupCreatorTest
     //~ Instance fields --------------------------------------------------------
 
     // create the groups array as 0 to X (it)
-    final int INTEGER_ARRAY_SIZE = 25;
+    static final int INTEGER_ARRAY_SIZE = 25;
 
     //~ Methods ----------------------------------------------------------------
 

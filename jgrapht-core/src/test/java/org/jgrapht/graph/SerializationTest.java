@@ -58,9 +58,9 @@ public class SerializationTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    private final String v1 = "v1";
-    private final String v2 = "v2";
-    private final String v3 = "v3";
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -104,7 +104,7 @@ public class SerializationTest
         assertEquals(2, graph.edgesOf(v3).size());
     }
 
-    private Object serializeAndDeserialize(Object obj)
+    private static Object serializeAndDeserialize(Object obj)
         throws Exception
     {
         final ByteArrayOutputStream bout = new ByteArrayOutputStream();

@@ -94,7 +94,7 @@ public abstract class AbstractBaseGraph<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    boolean allowingLoops;
+    final boolean allowingLoops;
 
     private EdgeFactory<V, E> edgeFactory;
     private EdgeSetFactory<V, E> edgeSetFactory;
@@ -659,8 +659,8 @@ public abstract class AbstractBaseGraph<V, E>
         implements Serializable
     {
         private static final long serialVersionUID = 7494242245729767106L;
-        Set<EE> incoming;
-        Set<EE> outgoing;
+        final Set<EE> incoming;
+        final Set<EE> outgoing;
         private transient Set<EE> unmodifiableIncoming = null;
         private transient Set<EE> unmodifiableOutgoing = null;
 
@@ -929,7 +929,7 @@ public abstract class AbstractBaseGraph<V, E>
         implements Serializable
     {
         private static final long serialVersionUID = -6623207588411170010L;
-        Set<EE> vertexEdges;
+        final Set<EE> vertexEdges;
         private transient Set<EE> unmodifiableVertexEdges = null;
 
         UndirectedEdgeContainer(

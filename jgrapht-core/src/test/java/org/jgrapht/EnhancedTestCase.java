@@ -73,7 +73,7 @@ public abstract class EnhancedTestCase
     /**
      * It means: it's wrong that we got here.
      */
-    public void assertFalse()
+    public static void assertFalse()
     {
         assertTrue(false);
     }
@@ -81,7 +81,7 @@ public abstract class EnhancedTestCase
     /**
      * It means: it's right that we got here.
      */
-    public void assertTrue()
+    public static void assertTrue()
     {
         assertTrue(true);
     }

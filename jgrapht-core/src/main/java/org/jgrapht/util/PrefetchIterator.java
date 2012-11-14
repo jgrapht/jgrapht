@@ -95,10 +95,10 @@ public class PrefetchIterator<E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private NextElementFunctor<E> innerEnum;
+    private final NextElementFunctor<E> innerEnum;
     private E getNextLastResult;
     private boolean isGetNextLastResultUpToDate = false;
-    private final boolean endOfEnumerationReached = false;
+    private static final boolean endOfEnumerationReached = false;
     private boolean flagIsEnumerationStartedEmpty = true;
     private int innerFunctorUsageCounter = 0;
 

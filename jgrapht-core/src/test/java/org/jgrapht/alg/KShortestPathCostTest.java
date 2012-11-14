@@ -190,7 +190,8 @@ public class KShortestPathCostTest
         verifyShortestPathsWeightsWithMaxSizeIncreases(picture1Graph);
     }
 
-    private void verifyShortestPathsInIncreasingOrderOfWeight(final Graph graph)
+    private static void verifyShortestPathsInIncreasingOrderOfWeight(
+        final Graph graph)
     {
         final int maxSize = 20;
 
@@ -285,15 +286,13 @@ public class KShortestPathCostTest
      * @param pathElementsResults results obtained with a max-size argument
      * equal to <code>k+1</code>
      */
-    private void verifyWeightsConsistency(
+    private static void verifyWeightsConsistency(
         final List<GraphPath> prevPathElementsResults,
         final List<GraphPath> pathElementsResults)
     {
         for (int i = 0; i < prevPathElementsResults.size(); i++) {
-            final GraphPath pathElementResult =
-                (GraphPath) pathElementsResults.get(i);
-            final GraphPath prevPathElementResult =
-                (GraphPath) prevPathElementsResults.get(i);
+            final GraphPath pathElementResult = pathElementsResults.get(i);
+            final GraphPath prevPathElementResult = prevPathElementsResults.get(i);
             assertTrue(
                 pathElementResult.getWeight()
                 == prevPathElementResult.getWeight());

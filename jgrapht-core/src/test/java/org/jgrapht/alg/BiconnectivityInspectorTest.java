@@ -73,7 +73,7 @@ public class BiconnectivityInspectorTest
         testLinearGraph(5);
     }
 
-    public void testLinearGraph(final int nbVertices)
+    public static void testLinearGraph(final int nbVertices)
     {
         final UndirectedGraph graph = new SimpleGraph(DefaultEdge.class);
 

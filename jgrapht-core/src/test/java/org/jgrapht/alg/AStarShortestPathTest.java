@@ -7,7 +7,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 public class AStarShortestPathTest extends TestCase {
-	private final int GRAPH_SIZE = 100;
+	private static final int GRAPH_SIZE = 100;
 	private WeightedGraph<Vector2, DefaultWeightedEdge> g;
 	
 	
@@ -44,7 +44,8 @@ public class AStarShortestPathTest extends TestCase {
     }
 
     private class Vector2{
-    	public double x,y;
+    	public final double x;
+        public final double y;
     	
     	public Vector2(final double x, final double y) {
     		this.x = x;

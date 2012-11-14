@@ -61,12 +61,12 @@ public class BellmanFordShortestPath<V, E>
     /**
      * Graph on which shortest paths are searched.
      */
-    protected Graph<V, E> graph;
+    protected final Graph<V, E> graph;
 
     /**
      * Start vertex.
      */
-    protected V startVertex;
+    protected final V startVertex;
 
     private BellmanFordIterator<V, E> iter;
 

@@ -214,9 +214,9 @@ public class GenericGraphsTest
         private static final long serialVersionUID = 1L;
     }
 
-    private class FooVertex
+    private static class FooVertex
     {
-        String str;
+        final String str;
 
         public FooVertex()
         {

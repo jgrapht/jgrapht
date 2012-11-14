@@ -265,7 +265,7 @@ public class StoerWagnerMinimumCut<V, E>
     protected class VertexAndWeight
         implements Comparable<VertexAndWeight>
     {
-        public Set<V> vertex;
+        public final Set<V> vertex;
         public Double weight;
 
         public VertexAndWeight(final Set<V> v, final double w)

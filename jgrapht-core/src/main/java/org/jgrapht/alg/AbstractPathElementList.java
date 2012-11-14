@@ -70,7 +70,7 @@ abstract class AbstractPathElementList<V,
     /**
      * Stored paths, list of <code>AbstractPathElement</code>.
      */
-    protected ArrayList<T> pathElements = new ArrayList<T>();
+    protected final ArrayList<T> pathElements = new ArrayList<T>();
 
     /**
      * Target vertex of the paths.
@@ -111,7 +111,7 @@ abstract class AbstractPathElementList<V,
         this.graph = graph;
         this.maxSize = maxSize;
         vertex =
-            Graphs.getOppositeVertex(graph, edge, elementList.getVertex());
+            Graphs.getOppositeVertex(graph, edge, elementList.vertex);
     }
 
     /**

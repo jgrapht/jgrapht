@@ -169,7 +169,7 @@ public class CollectionPermutationIter<E>
     {
         final StringBuffer sb = new StringBuffer();
         sb.append("Permutation int[]=");
-        sb.append(Arrays.toString(getCurrentPermutationArray()));
+        sb.append(Arrays.toString(currPermutationArray));
 
         final List<E> permutationResult = applyPermutation();
         sb.append("\nPermutationSet Source Object[]=");

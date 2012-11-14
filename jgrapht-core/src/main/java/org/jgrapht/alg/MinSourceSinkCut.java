@@ -20,9 +20,9 @@ import java.util.Set;
  */
 public class MinSourceSinkCut<V,E> {
 	
-	EdmondsKarpMaximumFlow<V,E> ekMaxFlow;
+	final EdmondsKarpMaximumFlow<V,E> ekMaxFlow;
 	Set<V> minCut=null;
-	DirectedGraph<V, E> graph;
+	final DirectedGraph<V, E> graph;
 	double cutWeight;
 	V source=null;
 	V sink=null;

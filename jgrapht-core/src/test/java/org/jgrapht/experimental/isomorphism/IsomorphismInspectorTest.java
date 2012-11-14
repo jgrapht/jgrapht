@@ -100,8 +100,8 @@ public class IsomorphismInspectorTest
     }
 
     @SuppressWarnings("unchecked")
-    private void assertIsomorphic(
-        final Graph<Integer, DefaultEdge> [] graphs,
+    private static void assertIsomorphic(
+        final Graph<Integer, DefaultEdge>[] graphs,
         final boolean shouldTheyBeIsomorphic,
         final EquivalenceComparator vertexChecker,
         final EquivalenceComparator edgeChecker)
@@ -151,8 +151,8 @@ public class IsomorphismInspectorTest
     }
 
     @SuppressWarnings("unchecked")
-    private void checkRelation(
-        final Graph<Integer, DefaultEdge> [] graphs,
+    private static void checkRelation(
+        final Graph<Integer, DefaultEdge>[] graphs,
         final EquivalenceComparator vertexChecker,
         final EquivalenceComparator edgeChecker)
     {
@@ -452,9 +452,8 @@ public class IsomorphismInspectorTest
     }
 
     @SuppressWarnings("unchecked")
-    private void assertIsomorphicStopAfterFirstMatch(
-        final Graph [] graphs,
-        final boolean assertActive,
+    private static void assertIsomorphicStopAfterFirstMatch(
+        final Graph[] graphs, final boolean assertActive,
         final boolean shouldTheyBeIsomorphic,
         final EquivalenceComparator vertexChecker,
         final EquivalenceComparator edgeChecker)

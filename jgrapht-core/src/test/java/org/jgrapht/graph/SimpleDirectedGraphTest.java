@@ -66,10 +66,10 @@ public class SimpleDirectedGraphTest
     private DirectedGraph<String, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private EdgeFactory<String, DefaultEdge> eFactory;
-    private final String v1 = "v1";
-    private final String v2 = "v2";
-    private final String v3 = "v3";
-    private final String v4 = "v4";
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
+    private static final String v4 = "v4";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -293,7 +293,7 @@ public class SimpleDirectedGraphTest
         assertEquals(1, g4.inDegreeOf(v4));
 
         try {
-            g3.inDegreeOf(new String());
+            g3.inDegreeOf("");
             assertFalse();
         } catch (IllegalArgumentException e) {
             assertTrue();

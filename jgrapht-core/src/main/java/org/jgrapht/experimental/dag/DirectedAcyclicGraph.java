@@ -692,7 +692,7 @@ public class DirectedAcyclicGraph<V, E>
          */
         private static final long serialVersionUID = 1L;
 
-        private TopoOrderMapping<V> topoOrderMap;
+        private final TopoOrderMapping<V> topoOrderMap;
 
         public TopoComparator(final TopoOrderMapping<V> topoOrderMap)
         {

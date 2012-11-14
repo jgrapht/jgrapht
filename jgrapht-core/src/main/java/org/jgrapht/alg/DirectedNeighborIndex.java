@@ -71,8 +71,8 @@ public class DirectedNeighborIndex<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    Map<V, Neighbors<V>> predecessorMap = Maps.newHashMap();
-    Map<V, Neighbors<V>> successorMap = Maps.newHashMap();
+    final Map<V, Neighbors<V>> predecessorMap = Maps.newHashMap();
+    final Map<V, Neighbors<V>> successorMap = Maps.newHashMap();
     private final DirectedGraph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------

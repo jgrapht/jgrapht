@@ -83,7 +83,7 @@ public final class CompleteGraphDemo
         vertices.addAll(completeGraph.vertexSet());
         Integer counter = 0;
         for (final Object vertex : vertices) {
-            replaceVertex(vertex, (Object) counter++);
+            replaceVertex(vertex, counter++);
         }
 
         //Print out the graph to be sure it's really complete

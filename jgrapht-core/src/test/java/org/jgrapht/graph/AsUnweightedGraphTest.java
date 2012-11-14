@@ -104,7 +104,7 @@ public class AsUnweightedGraphTest
         checkView(undirected, unweighted);
     }
 
-    private void constructWeighted(
+    private static void constructWeighted(
         final WeightedGraph<String, DefaultWeightedEdge> weighted)
     {
         weighted.addVertex(v1);
@@ -117,7 +117,7 @@ public class AsUnweightedGraphTest
                 weighted.getEdge(v1, v2)));
     }
 
-    private void checkView(
+    private static void checkView(
         final WeightedGraph<String, DefaultWeightedEdge> weighted,
         final Graph<String, DefaultWeightedEdge> unweighted)
     {

@@ -328,7 +328,7 @@ public class GraphGeneratorTest
                 final String sourceVertex,
                 final String targetVertex)
             {
-                return new String(sourceVertex + '-' + targetVertex);
+                return sourceVertex + '-' + targetVertex;
             }
         }
 
@@ -355,10 +355,8 @@ public class GraphGeneratorTest
         validateGridGraphGenerator(rows, cols, undirectedGridGraph, resultMap);
     }
 
-    public void validateGridGraphGenerator(
-        final int rows,
-        final int cols,
-        final Graph<String, String> gridGraph,
+    public static void validateGridGraphGenerator(final int rows,
+        final int cols, final Graph<String, String> gridGraph,
         final Map<String, String> resultMap)
     {
         // graph structure validations

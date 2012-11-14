@@ -51,8 +51,8 @@ public class MinSourceSinkCutTest extends TestCase{
 		assertEquals(6, mc.getCurrentSink(), 0);
 		
 		//Test the source and sink partitions
-		final List<Integer> l1 = Arrays.asList(new Integer[] {0, 1, 2});
-		final List<Integer> l2 = Arrays.asList(new Integer[] {3, 4, 5, 6});
+		final List<Integer> l1 = Arrays.asList(0, 1, 2);
+		final List<Integer> l2 = Arrays.asList(3, 4, 5, 6);
 	    final Set<Integer> partition1 = new HashSet<Integer>(l1);
 	    final Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());
@@ -62,7 +62,7 @@ public class MinSourceSinkCutTest extends TestCase{
 	    assertEquals(7, mc.getCutWeight(),0);
 	    
 	    //Test the cut edge set
-	    final List<DefaultWeightedEdge> l3=Arrays.asList(new DefaultWeightedEdge[] {e03, e26, e24, e14});
+	    final List<DefaultWeightedEdge> l3=Arrays.asList(e03, e26, e24, e14);
 	    final Set<DefaultWeightedEdge> cutEdges=new HashSet<DefaultWeightedEdge>(l3);
 	    assertEquals(cutEdges, mc.getCutEdges());
 	}
@@ -84,8 +84,8 @@ public class MinSourceSinkCutTest extends TestCase{
 		assertEquals(1, mc.getCurrentSink(), 0);
 		
 		//Test the source and sink partitions
-		final List<Integer> l1 = Arrays.asList(new Integer[] {0});
-		final List<Integer> l2 = Arrays.asList(new Integer[] {1});
+		final List<Integer> l1 = Arrays.asList(0);
+		final List<Integer> l2 = Arrays.asList(1);
 	    final Set<Integer> partition1 = new HashSet<Integer>(l1);
 	    final Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());
@@ -120,8 +120,8 @@ public class MinSourceSinkCutTest extends TestCase{
 		assertEquals(2, mc.getCurrentSink(), 0);
 		
 		//Test the source and sink partitions
-		final List<Integer> l1 = Arrays.asList(new Integer[] {0});
-		final List<Integer> l2 = Arrays.asList(new Integer[] {1,2});
+		final List<Integer> l1 = Arrays.asList(0);
+		final List<Integer> l2 = Arrays.asList(1,2);
 	    final Set<Integer> partition1 = new HashSet<Integer>(l1);
 	    final Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());

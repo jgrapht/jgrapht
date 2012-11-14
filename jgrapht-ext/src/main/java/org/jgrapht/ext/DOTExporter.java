@@ -186,10 +186,8 @@ public class DOTExporter<V, E>
         out.flush();
     }
 
-    private void renderAttributes(
-        final PrintWriter out,
-        String labelName,
-        final Map<String, String> attributes)
+    private static void renderAttributes(final PrintWriter out,
+        String labelName, final Map<String, String> attributes)
     {
         if (labelName == null && attributes == null) {
             return;

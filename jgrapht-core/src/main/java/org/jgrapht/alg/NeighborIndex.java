@@ -79,7 +79,7 @@ public class NeighborIndex<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    Map<V, Neighbors<V>> neighborMap = Maps.newHashMap();
+    final Map<V, Neighbors<V>> neighborMap = Maps.newHashMap();
     private final Graph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------

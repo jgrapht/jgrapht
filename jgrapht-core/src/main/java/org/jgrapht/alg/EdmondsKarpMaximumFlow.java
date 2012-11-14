@@ -324,8 +324,8 @@ public final class EdmondsKarpMaximumFlow<V, E>
     // class used for internal representation of network
     class Node
     {
-        V prototype; // corresponding node in the original network
-        List<Arc> outgoingArcs = new ArrayList<Arc>(); // list of outgoing arcs
+        final V prototype; // corresponding node in the original network
+        final List<Arc> outgoingArcs = new ArrayList<Arc>(); // list of outgoing arcs
                                                        // in the residual
                                                        // network
         boolean visited; // this mark is used during BFS to mark visited nodes
@@ -342,13 +342,13 @@ public final class EdmondsKarpMaximumFlow<V, E>
     // class used for internal representation of network
     class Arc
     {
-        int tail; // "from"
-        int head; // "to"
-        double capacity; // capacity (can be zero)
+        final int tail; // "from"
+        final int head; // "to"
+        final double capacity; // capacity (can be zero)
         double flow; // current flow (can be negative)
         Arc reversed; // for each arc in the original network we are to create
                       // reversed arc
-        E prototype; // corresponding edge in the original network, can be null,
+                      final E prototype; // corresponding edge in the original network, can be null,
                      // if it is reversed arc
 
         Arc(

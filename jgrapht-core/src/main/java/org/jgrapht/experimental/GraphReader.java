@@ -77,7 +77,6 @@ public class GraphReader<V, E>
      */
     private GraphReader(
         final Reader input, final boolean isWeighted, final double defaultWeight)
-        throws IOException
     {
         if (input instanceof BufferedReader) {
             _in = (BufferedReader) input;
@@ -110,7 +109,7 @@ public class GraphReader<V, E>
 
     // ~ Methods ---------------------------------------------------------------
 
-    private String [] split(final String src)
+    private static String [] split(final String src)
     {
         if (src == null) {
             return null;

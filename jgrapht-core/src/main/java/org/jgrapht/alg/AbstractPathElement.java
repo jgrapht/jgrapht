@@ -103,12 +103,11 @@ abstract class AbstractPathElement<V, E>
         vertex =
             Graphs.getOppositeVertex(
                 graph,
-                edge,
-                pathElement.getVertex());
+                edge, pathElement.vertex);
         prevEdge = edge;
         prevPathElement = pathElement;
 
-        nHops = pathElement.getHopCount() + 1;
+        nHops = pathElement.nHops + 1;
     }
 
     /**
@@ -151,8 +150,8 @@ abstract class AbstractPathElement<V, E>
         AbstractPathElement<V, E> pathElement = this;
 
         // while start vertex is not reached.
-        while (pathElement.getPrevEdge() != null) {
-            path.add(pathElement.getPrevEdge());
+        while (pathElement.prevEdge != null) {
+            path.add(pathElement.prevEdge);
 
             pathElement = pathElement.getPrevPathElement();
         }

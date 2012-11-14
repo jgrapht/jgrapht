@@ -74,12 +74,12 @@ class BellmanFordIterator<V, E>
     /**
      * Graph on which shortest paths are searched.
      */
-    protected Graph<V, E> graph;
+    protected final Graph<V, E> graph;
 
     /**
      * Start vertex.
      */
-    protected V startVertex;
+    protected final V startVertex;
 
     /**
      * Vertices whose shortest path cost have been improved during the previous

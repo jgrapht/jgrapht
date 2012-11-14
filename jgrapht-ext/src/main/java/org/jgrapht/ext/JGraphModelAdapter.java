@@ -252,8 +252,8 @@ public class JGraphModelAdapter<V, E>
         }
 
         jtGraph = new ShieldedGraph(jGraphTGraph);
-        setDefaultVertexAttributes(defaultVertexAttributes);
-        setDefaultEdgeAttributes(defaultEdgeAttributes);
+        this.defaultVertexAttributes = defaultVertexAttributes;
+        this.defaultEdgeAttributes = defaultEdgeAttributes;
         this.cellFactory = cellFactory;
 
         if (jGraphTGraph instanceof ListenableGraph<?, ?>) {
@@ -739,7 +739,7 @@ public class JGraphModelAdapter<V, E>
         final AttributeMap attrs = new AttributeMap();
 
         // FIXME hb 28-nov-05: waiting for graph to go generic
-        attrs.put(edgeCell, getDefaultEdgeAttributes().clone());
+        attrs.put(edgeCell, defaultEdgeAttributes.clone());
 
         return attrs;
     }
@@ -750,7 +750,7 @@ public class JGraphModelAdapter<V, E>
         final AttributeMap attrs = new AttributeMap();
 
         // FIXME hb 28-nov-05: waiting for graph to go generic
-        attrs.put(vertexCell, getDefaultVertexAttributes().clone());
+        attrs.put(vertexCell, defaultVertexAttributes.clone());
 
         return attrs;
     }

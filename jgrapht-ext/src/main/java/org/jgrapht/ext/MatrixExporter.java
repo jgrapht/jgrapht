@@ -63,9 +63,9 @@ public class MatrixExporter<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private final String delimiter = " ";
-    private final String prefix = "";
-    private final String suffix = "";
+    private static final String delimiter = " ";
+    private static final String prefix = "";
+    private static final String suffix = "";
 
     //~ Constructors -----------------------------------------------------------
 

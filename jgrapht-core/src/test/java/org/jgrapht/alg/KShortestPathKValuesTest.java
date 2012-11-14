@@ -113,7 +113,7 @@ public class KShortestPathKValuesTest
      *
      * @return
      */
-    private long calculateNbElementaryPathsForCompleteGraph(final int n)
+    private static long calculateNbElementaryPathsForCompleteGraph(final int n)
     {
         long nbPaths = 0;
         for (int k = 1; k <= n - 1; k++) {

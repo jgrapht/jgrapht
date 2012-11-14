@@ -62,8 +62,8 @@ public class GraphReaderTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    String _unweighted = "p 3\ne 1 2\ne 1 3\n";
-    String _weighted = "p 3\ne 1 2 .5\ne 1 3 7\n";
+    static final String _unweighted = "p 3\ne 1 2\ne 1 3\n";
+    static final String _weighted = "p 3\ne 1 2 .5\ne 1 3 7\n";
 
     //~ Methods ----------------------------------------------------------------
 

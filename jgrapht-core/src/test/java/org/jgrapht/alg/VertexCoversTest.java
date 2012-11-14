@@ -106,8 +106,7 @@ public class VertexCoversTest
      *
      * @return
      */
-    private boolean isCover(
-        final Set<Integer> vertexSet,
+    private static boolean isCover(final Set<Integer> vertexSet,
         final Graph<Integer, DefaultEdge> g)
     {
         final Set<DefaultEdge> uncoveredEdges = new HashSet<DefaultEdge>(g.edgeSet());
@@ -124,7 +123,7 @@ public class VertexCoversTest
      *
      * @return
      */
-    private Graph<Integer, DefaultEdge> createRandomGraph()
+    private static Graph<Integer, DefaultEdge> createRandomGraph()
     {
         // TODO: move random graph generator to be under GraphGenerator
         // framework.

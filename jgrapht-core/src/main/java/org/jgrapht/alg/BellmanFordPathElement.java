@@ -134,7 +134,7 @@ final class BellmanFordPathElement<V, E>
         final double candidateCost)
     {
         // to avoid improvement only due to rounding errors.
-        if (candidateCost < getCost() - epsilon) {
+        if (candidateCost < cost - epsilon) {
             prevPathElement = candidatePrevPathElement;
             prevEdge = candidateEdge;
             cost = candidateCost;

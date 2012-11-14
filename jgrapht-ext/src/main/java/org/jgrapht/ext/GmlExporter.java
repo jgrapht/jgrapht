@@ -143,7 +143,7 @@ public class GmlExporter<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    private String quoted(final String s)
+    private static String quoted(final String s)
     {
         return "\"" + s + "\"";
     }

@@ -64,7 +64,7 @@ public class CycleDetector<V, E>
     /**
      * Graph on which cycle detection is being performed.
      */
-    DirectedGraph<V, E> graph;
+    final DirectedGraph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -200,9 +200,9 @@ public class CycleDetector<V, E>
     private class ProbeIterator
         extends DepthFirstIterator<V, E>
     {
-        private List<V> path;
-        private Set<V> cycleSet;
-        private V root;
+        private final List<V> path;
+        private final Set<V> cycleSet;
+        private final V root;
 
         ProbeIterator(final Set<V> cycleSet, final V startVertex)
         {

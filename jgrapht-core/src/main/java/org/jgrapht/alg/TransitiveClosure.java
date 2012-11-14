@@ -122,7 +122,7 @@ public class TransitiveClosure
     /**
      * Computes floor(log_2(n)) + 1
      */
-    private int computeBinaryLog(int n)
+    private static int computeBinaryLog(int n)
     {
         assert n >= 0;
 

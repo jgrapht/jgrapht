@@ -151,7 +151,7 @@ public class GraphOrdering<V, E>
     public boolean equalsByEdgeOrder(final GraphOrdering otherGraph)
     {
 
-        return getLabelsEdgesSet().equals(otherGraph.getLabelsEdgesSet());
+        return labelsEdgesSet.equals(otherGraph.labelsEdgesSet);
     }
 
     public Set<LabelsEdge> getLabelsEdgesSet()
@@ -196,7 +196,7 @@ public class GraphOrdering<V, E>
             source = aSource;
             target = aTarget;
             hashCode =
-                new String(source + "" + target).hashCode();
+                (source + "" + target).hashCode();
         }
 
         /**

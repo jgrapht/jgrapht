@@ -148,8 +148,8 @@ public class VertexDegreeEquivalenceComparator<V, E>
      */
     protected class InOutDegrees
     {
-        public int inDegree;
-        public int outDegree;
+        public final int inDegree;
+        public final int outDegree;
 
         public InOutDegrees(final int aInDegree, final int aOutDegree)
         {

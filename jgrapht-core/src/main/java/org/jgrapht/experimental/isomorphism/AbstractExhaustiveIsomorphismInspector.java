@@ -76,11 +76,11 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
 
     protected EquivalenceComparator<? super E, ? super Graph<V, ? super E>>
         edgeComparator;
-    protected EquivalenceComparator<? super V, ? super Graph<? super V, E>>
+    protected final EquivalenceComparator<? super V, ? super Graph<? super V, E>>
         vertexComparator;
 
-    protected Graph<V, E> graph1;
-    protected Graph<V, E> graph2;
+    protected final Graph<V, E> graph1;
+    protected final Graph<V, E> graph2;
 
     private PrefetchIterator<IsomorphismRelation> nextSupplier;
 

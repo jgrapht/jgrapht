@@ -226,9 +226,8 @@ class EquivalenceIsomorphismInspector<V, E>
      * @return true if the array was reordered successfully. false if not(It
      * will happen if there is no complete match between the groups)
      */
-    private boolean reorderTargetArrayToMatchSourceOrder(
-        final EquivalenceSet [] sourceArray,
-        final EquivalenceSet [] targetArray)
+    private static boolean reorderTargetArrayToMatchSourceOrder(
+        final EquivalenceSet[] sourceArray, final EquivalenceSet[] targetArray)
     {
         boolean result = true;
         for (
@@ -279,9 +278,8 @@ class EquivalenceIsomorphismInspector<V, E>
      * @param eqGroupArray
      * @param flatArray an empy array with the proper size
      */
-    protected void fillElementsflatArray(
-        final EquivalenceSet [] eqGroupArray,
-        final Object [] flatVertexArray)
+    protected static void fillElementsflatArray(
+        final EquivalenceSet[] eqGroupArray, final Object[] flatVertexArray)
     {
         int flatVertexArrayNextFree = 0; // the next free place in the array
 

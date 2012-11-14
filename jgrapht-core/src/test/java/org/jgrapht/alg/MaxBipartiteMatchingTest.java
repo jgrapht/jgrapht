@@ -24,8 +24,8 @@ public class MaxBipartiteMatchingTest extends TestCase{
 	 */
 	public void testBipartiteMatching1(){
 		final UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-		final List<Integer> partition1=Arrays.asList(new Integer[]{0,1,2,3});
-		final List<Integer> partition2=Arrays.asList(new Integer[]{4,5,6,7});
+		final List<Integer> partition1=Arrays.asList(0,1,2,3);
+		final List<Integer> partition2=Arrays.asList(4,5,6,7);
 		Graphs.addAllVertices(graph, partition1);
 		Graphs.addAllVertices(graph,partition2);
 
@@ -42,7 +42,7 @@ public class MaxBipartiteMatchingTest extends TestCase{
 		
 		final MaxBipartiteMatching<Integer,DefaultEdge> bm=new MaxBipartiteMatching<Integer,DefaultEdge>(graph,partition1,partition2);
 		assertEquals(3, bm.getSize(), 0);
-		final List<DefaultEdge> l1 = Arrays.asList(new DefaultEdge[] {e11, e02, e20});
+		final List<DefaultEdge> l1 = Arrays.asList(e11, e02, e20);
 	    final Set<DefaultEdge> matching = new HashSet<DefaultEdge>(l1);
 		assertEquals(matching, bm.getMatching());
 	}
@@ -52,8 +52,8 @@ public class MaxBipartiteMatchingTest extends TestCase{
 	 */
 	public void testBipartiteMatching2(){
 		final UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-		final List<Integer> partition1=Arrays.asList(new Integer[]{0,1,2,3,4,5});
-		final List<Integer> partition2=Arrays.asList(new Integer[]{6,7,8,9,10,11});
+		final List<Integer> partition1=Arrays.asList(0,1,2,3,4,5);
+		final List<Integer> partition2=Arrays.asList(6,7,8,9,10,11);
 		Graphs.addAllVertices(graph, partition1);
 		Graphs.addAllVertices(graph,partition2);
 			
@@ -71,7 +71,7 @@ public class MaxBipartiteMatchingTest extends TestCase{
 		
 		final MaxBipartiteMatching<Integer,DefaultEdge> bm=new MaxBipartiteMatching<Integer,DefaultEdge>(graph,partition1,partition2);
 		assertEquals(6, bm.getSize(), 0);
-		final List<DefaultEdge> l1 = Arrays.asList(new DefaultEdge[] {e21, e13, e00, e42, e34, e55});
+		final List<DefaultEdge> l1 = Arrays.asList(e21, e13, e00, e42, e34, e55);
 	    final Set<DefaultEdge> matching = new HashSet<DefaultEdge>(l1);
 		assertEquals(matching, bm.getMatching());
 	}
@@ -81,8 +81,8 @@ public class MaxBipartiteMatchingTest extends TestCase{
 	 */
 	public void testEmptyMatching(){
 		final UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-		final List<Integer> partition1=Arrays.asList(new Integer[]{0});
-		final List<Integer> partition2=Arrays.asList(new Integer[]{1});
+		final List<Integer> partition1=Arrays.asList(0);
+		final List<Integer> partition2=Arrays.asList(1);
 		Graphs.addAllVertices(graph, partition1);
 		Graphs.addAllVertices(graph,partition2);
 		final MaxBipartiteMatching<Integer,DefaultEdge> bm=new MaxBipartiteMatching<Integer,DefaultEdge>(graph,partition1,partition2);

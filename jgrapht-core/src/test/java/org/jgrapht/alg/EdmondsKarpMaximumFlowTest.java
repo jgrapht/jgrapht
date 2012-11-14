@@ -168,13 +168,9 @@ public final class EdmondsKarpMaximumFlowTest
             new double[] { 2000000000.0 });
     }
 
-    private void runTest(
-        final int [] tails,
-        final int [] heads,
-        final double [] capacities,
-        final int [] sources,
-        final int [] sinks,
-        final double [] expectedResults)
+    private static void runTest(final int[] tails, final int[] heads,
+        final double[] capacities, final int[] sources, final int[] sinks,
+        final double[] expectedResults)
     {
         assertTrue(tails.length == heads.length);
         assertTrue(tails.length == capacities.length);

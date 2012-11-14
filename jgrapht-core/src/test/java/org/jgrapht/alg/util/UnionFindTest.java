@@ -90,7 +90,8 @@ public class UnionFindTest
         testIdentical(strs, sets, uf);
     }
 
-    private void union(final ArrayList<ArrayList<String>> sets, final String a, final String b)
+    private static void union(final ArrayList<ArrayList<String>> sets,
+        final String a, final String b)
     {
         final ArrayList<String> toAdd = new ArrayList<String>();
         for (int i = 0; i < sets.size(); i++) {
@@ -110,7 +111,8 @@ public class UnionFindTest
         sets.add(toAdd);
     }
 
-    private boolean same(final ArrayList<ArrayList<String>> sets, final String a, final String b)
+    private static boolean same(final ArrayList<ArrayList<String>> sets,
+        final String a, final String b)
     {
         for (final ArrayList<String> set : sets) {
             if (set.contains(a) && set.contains(b)) {

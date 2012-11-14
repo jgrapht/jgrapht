@@ -80,7 +80,7 @@ public class TouchgraphPanel<V, E>
     /**
      * the JGraphT graph we are displaying
      */
-    Graph<V, E> graph;
+    final Graph<V, E> graph;
 
     /**
      * are self-references allowed? They will not show up in TouchGraph unless
@@ -154,9 +154,8 @@ public class TouchgraphPanel<V, E>
                  */
                 final TouchgraphConverter<V, E> converter =
                     new TouchgraphConverter<V, E>();
-                final Node n =
-                    (Node) converter.convertToTouchGraph(graph,
-                        tgPanel, selfReferencesAllowed);
+                final Node n = converter.convertToTouchGraph(graph,
+                    tgPanel, selfReferencesAllowed);
                 getHVScroll().slowScrollToCenter(n);
                 tgPanel.setLocale(n, Integer.MAX_VALUE);
             }

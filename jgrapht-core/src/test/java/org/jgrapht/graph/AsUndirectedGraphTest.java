@@ -59,10 +59,10 @@ public class AsUndirectedGraphTest
 
     private DirectedGraph<String, DefaultEdge> directed;
     private DefaultEdge loop;
-    private final String v1 = "v1";
-    private final String v2 = "v2";
-    private final String v3 = "v3";
-    private final String v4 = "v4";
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
+    private static final String v4 = "v4";
     private UndirectedGraph<String, DefaultEdge> undirected;
 
     //~ Constructors -----------------------------------------------------------

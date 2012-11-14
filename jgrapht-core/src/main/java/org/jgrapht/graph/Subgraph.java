@@ -128,8 +128,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     //~ Instance fields --------------------------------------------------------
 
     //
-    Set<E> edgeSet = new LinkedHashSet<E>(); // friendly to improve performance
-    Set<V> vertexSet = new LinkedHashSet<V>(); // friendly to improve
+    final Set<E> edgeSet = new LinkedHashSet<E>(); // friendly to improve performance
+    final Set<V> vertexSet = new LinkedHashSet<V>(); // friendly to improve
 
     // performance
 
