@@ -40,10 +40,13 @@
 
 package org.jgrapht.graph;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.WeightedGraph;
 
-import org.jgrapht.*;
+import java.util.Map;
 
 public class EqualsAndHashCodeTest
     extends EnhancedTestCase
@@ -293,8 +296,7 @@ public class EqualsAndHashCodeTest
         g2.addEdge(v2, v3, e23);
         g2.addEdge(v3, v1, e31);
 
-        Map<DefaultEdge, Double> weightMap1 =
-            new HashMap<DefaultEdge, Double>();
+        Map<DefaultEdge, Double> weightMap1 = Maps.newHashMap();
 
         weightMap1.put(e12, 10.0);
         weightMap1.put(e23, 20.0);
@@ -304,8 +306,7 @@ public class EqualsAndHashCodeTest
             new AsWeightedGraph<String, DefaultEdge>(
                 g1, weightMap1);
 
-        Map<DefaultEdge, Double> weightMap2 =
-            new HashMap<DefaultEdge, Double>();
+        Map<DefaultEdge, Double> weightMap2 = Maps.newHashMap();
 
         weightMap2.put(e12, 10.0);
         weightMap2.put(e23, 20.0);
@@ -315,8 +316,7 @@ public class EqualsAndHashCodeTest
             new AsWeightedGraph<String, DefaultEdge>(
                 g2, weightMap2);
 
-        Map<DefaultEdge, Double> weightMap3 =
-            new HashMap<DefaultEdge, Double>();
+        Map<DefaultEdge, Double> weightMap3 = Maps.newHashMap();
 
         weightMap3.put(e12, 100.0);
         weightMap3.put(e23, 200.0);

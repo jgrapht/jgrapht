@@ -46,29 +46,38 @@
  */
 package org.jgrapht.ext;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.geom.*;
+import com.google.common.collect.Maps;
+import org.jgraph.event.GraphModelEvent;
+import org.jgraph.event.GraphModelEvent.GraphModelChange;
+import org.jgraph.event.GraphModelListener;
+import org.jgraph.graph.AttributeMap;
+import org.jgraph.graph.ConnectionSet;
+import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.DefaultGraphModel;
+import org.jgraph.graph.DefaultPort;
+import org.jgraph.graph.Edge;
+import org.jgraph.graph.GraphCell;
+import org.jgraph.graph.GraphConstants;
+import org.jgraph.graph.Port;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
 
-import java.io.*;
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.*;
-
-import org.jgraph.event.*;
-import org.jgraph.event.GraphModelEvent.*;
-import org.jgraph.graph.*;
-
-import org.jgrapht.*;
-import org.jgrapht.event.*;
 
 
 /**
@@ -155,26 +164,24 @@ public class JGraphModelAdapter<V, E>
     /**
      * Maps JGraph edges to JGraphT edges
      */
-    private final Map<org.jgraph.graph.Edge, E> cellToEdge =
-        new HashMap<org.jgraph.graph.Edge, E>();
+    private final Map<Edge, E> cellToEdge = Maps.newHashMap();
 
     /**
      * Maps JGraph vertices to JGraphT vertices
      */
-    private final Map<GraphCell, V> cellToVertex = new HashMap<GraphCell, V>();
+    private final Map<GraphCell, V> cellToVertex = Maps.newHashMap();
     private AttributeMap defaultEdgeAttributes;
     private AttributeMap defaultVertexAttributes;
 
     /**
      * Maps JGraphT edges to JGraph edges
      */
-    private final Map<E, org.jgraph.graph.Edge> edgeToCell =
-        new HashMap<E, org.jgraph.graph.Edge>();
+    private final Map<E, Edge> edgeToCell = Maps.newHashMap();
 
     /**
      * Maps JGraphT vertices to JGraph vertices
      */
-    private final Map<V, GraphCell> vertexToCell = new HashMap<V, GraphCell>();
+    private final Map<V, GraphCell> vertexToCell = Maps.newHashMap();
     private final ShieldedGraph jtGraph;
 
     //~ Constructors -----------------------------------------------------------
@@ -432,7 +439,7 @@ public class JGraphModelAdapter<V, E>
      *
      * @param jEdge the JGraph edge that has changed.
      */
-    void handleJGraphChangedEdge(org.jgraph.graph.Edge jEdge)
+    void handleJGraphChangedEdge(Edge jEdge)
     {
         if (isDangling(jEdge)) {
             if (cellToEdge.containsKey(jEdge)) {
@@ -487,7 +494,7 @@ public class JGraphModelAdapter<V, E>
      *
      * @param jEdge the JGraph edge that has been added.
      */
-    void handleJGraphInsertedEdge(org.jgraph.graph.Edge jEdge)
+    void handleJGraphInsertedEdge(Edge jEdge)
     {
         if (isDangling(jEdge)) {
             // JGraphT forbid dangling edges so we cannot add the edge yet. If
@@ -576,7 +583,7 @@ public class JGraphModelAdapter<V, E>
      *
      * @param jEdge the JGraph edge that has been removed.
      */
-    void handleJGraphRemovedEdge(org.jgraph.graph.Edge jEdge)
+    void handleJGraphRemovedEdge(Edge jEdge)
     {
         if (cellToEdge.containsKey(jEdge)) {
             E jtEdge = cellToEdge.get(jEdge);
@@ -718,7 +725,7 @@ public class JGraphModelAdapter<V, E>
      * @return <code>true</code> if the specified edge is dangling, otherwise
      * <code>false</code>.
      */
-    private boolean isDangling(org.jgraph.graph.Edge jEdge)
+    private boolean isDangling(Edge jEdge)
     {
         Object jSource = getSourceVertex(this, jEdge);
         Object jTarget = getTargetVertex(this, jEdge);

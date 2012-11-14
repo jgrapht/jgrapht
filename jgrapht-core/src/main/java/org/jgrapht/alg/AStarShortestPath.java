@@ -38,10 +38,16 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.GraphPath;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.graph.GraphPathImpl;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * An implementation of <a
@@ -82,10 +88,11 @@ public final class AStarShortestPath<V, E>
             throw new IllegalArgumentException("graph must contain the end vertex");
         List<V> closedSet = new ArrayList<V>(),
         		openSet = new ArrayList<V>();
-        Map<V,V> cameFrom = new HashMap<V,V>();
-        Map<V, Double> gScoreMap = new HashMap<V, Double>();
+        Map<V,V> cameFrom = Maps.newHashMap();
+        Map<V, Double> gScoreMap = Maps.newHashMap();
         openSet.add(startVertex);
-        TreeMap<V, Double> fScoreMap = new TreeMap<V, Double>(new VertexComparator(functionProvider, endVertex));
+        TreeMap<V, Double> fScoreMap
+            = Maps.newTreeMap(new VertexComparator(functionProvider, endVertex));
         gScoreMap.put(startVertex, 0.0);
         fScoreMap.put(startVertex, functionProvider.getHeuristicCost(startVertex, endVertex));
 

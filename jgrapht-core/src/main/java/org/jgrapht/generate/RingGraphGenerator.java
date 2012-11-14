@@ -39,9 +39,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.Map;
 
 
 /**
@@ -95,7 +97,7 @@ public class RingGraphGenerator<V, E>
 
         LinearGraphGenerator<V, E> linearGenerator =
             new LinearGraphGenerator<V, E>(size);
-        Map<String, V> privateMap = new HashMap<String, V>();
+        Map<String, V> privateMap = Maps.newHashMap();
         linearGenerator.generateGraph(target, vertexFactory, privateMap);
 
         V startVertex = privateMap.get(LinearGraphGenerator.START_VERTEX);

@@ -43,6 +43,7 @@ package org.jgrapht.alg;
 
 import java.util.*;
 
+import com.google.common.collect.Maps;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
@@ -63,8 +64,8 @@ final class RankingPathElementList<V, E>
      */
     private V guardVertexToNotDisconnect = null;
 
-    private Map<RankingPathElement<V, E>, Boolean> path2disconnect =
-        new HashMap<RankingPathElement<V, E>, Boolean>();
+    private Map<RankingPathElement<V, E>, Boolean> path2disconnect
+        = Maps.newHashMap();
 
     //~ Constructors -----------------------------------------------------------
 

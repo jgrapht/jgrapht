@@ -40,11 +40,19 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.graph.GraphPathImpl;
+import org.jgrapht.util.VertexPair;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -251,8 +259,7 @@ public class FloydWarshallShortestPaths<V, E>
 
         lazyCalculateMatrix();
 
-        Map<VertexPair<V>, GraphPath<V, E>> sps =
-            new HashMap<VertexPair<V>, GraphPath<V, E>>();
+        Map<VertexPair<V>, GraphPath<V, E>> sps = Maps.newHashMap();
         int n = vertices.size();
 
         nShortestPaths = 0;

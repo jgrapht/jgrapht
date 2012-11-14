@@ -39,11 +39,18 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.VertexDegreeComparator;
+import org.jgrapht.graph.UndirectedSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -98,7 +105,7 @@ public abstract class ChromaticNumber
         int color;
 
         // create a map which will hold color as key and Set<V> as value
-        Map<Integer, Set<V>> coloredGroups = new HashMap<Integer, Set<V>>();
+        Map<Integer, Set<V>> coloredGroups = Maps.newHashMap();
 
         // We'll attempt to color each vertex with a single color each
         // iteration, and these vertices will be removed from the graph at the

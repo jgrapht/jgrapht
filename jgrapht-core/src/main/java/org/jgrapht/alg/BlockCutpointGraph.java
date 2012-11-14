@@ -40,10 +40,21 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.MaskFunctor;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.UndirectedMaskSubgraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -93,13 +104,12 @@ public class BlockCutpointGraph<V, E>
 
     private Deque<BCGEdge> stack = new ArrayDeque<BCGEdge>();
 
-    private Map<V, Set<UndirectedGraph<V, E>>> vertex2biconnectedSubgraphs =
-        new HashMap<V, Set<UndirectedGraph<V, E>>>();
+    private Map<V, Set<UndirectedGraph<V, E>>> vertex2biconnectedSubgraphs
+        = Maps.newHashMap();
 
-    private Map<V, UndirectedGraph<V, E>> vertex2block =
-        new HashMap<V, UndirectedGraph<V, E>>();
+    private Map<V, UndirectedGraph<V, E>> vertex2block = Maps.newHashMap();
 
-    private Map<V, Integer> vertex2numOrder = new HashMap<V, Integer>();
+    private Map<V, Integer> vertex2numOrder = Maps.newHashMap();
 
     //~ Constructors -----------------------------------------------------------
 

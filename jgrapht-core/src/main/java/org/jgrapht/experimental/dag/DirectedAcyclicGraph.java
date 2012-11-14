@@ -44,6 +44,7 @@ import java.io.*;
 
 import java.util.*;
 
+import com.google.common.collect.Maps;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
@@ -706,8 +707,8 @@ public class DirectedAcyclicGraph<V, E>
          */
         private static final long serialVersionUID = 1L;
 
-        private final Map<Integer, V> topoToVertex = new HashMap<Integer, V>();
-        private final Map<V, Integer> vertexToTopo = new HashMap<V, Integer>();
+        private final Map<Integer, V> topoToVertex = Maps.newHashMap();
+        private final Map<V, Integer> vertexToTopo = Maps.newHashMap();
 
         @Override
         public void putVertex(Integer index, V vertex)
@@ -768,7 +769,7 @@ public class DirectedAcyclicGraph<V, E>
         private static final long serialVersionUID = 1L;
 
         private final List<V> topoToVertex = new ArrayList<V>();
-        private final Map<V, Integer> vertexToTopo = new HashMap<V, Integer>();
+        private final Map<V, Integer> vertexToTopo = Maps.newHashMap();
 
         @Override
         public void putVertex(Integer index, V vertex)

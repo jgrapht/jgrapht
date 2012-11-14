@@ -37,9 +37,16 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 
 /**
@@ -143,7 +150,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         numNodes = network.vertexSet().size();
         nodes = new ArrayList<Node>();
         Iterator<V> it = network.vertexSet().iterator();
-        indexer = new HashMap<V, Integer>();
+        indexer = Maps.newHashMap();
         for (int i = 0; i < numNodes; i++) {
             V currentNode = it.next();
             nodes.add(new Node(currentNode));
@@ -202,7 +209,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         for (;;) {
             breadthFirstSearch();
             if (!nodes.get(currentSink).visited) {
-                maximumFlow = new HashMap<E, Double>();
+                maximumFlow = Maps.newHashMap();
                 for (int i = 0; i < numNodes; i++) {
                     for (Arc currentArc : nodes.get(i).outgoingArcs) {
                         if (currentArc.prototype != null) {

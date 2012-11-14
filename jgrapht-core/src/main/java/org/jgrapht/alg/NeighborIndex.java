@@ -50,7 +50,6 @@ import org.jgrapht.event.VertexSetListener;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,7 +79,7 @@ public class NeighborIndex<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    Map<V, Neighbors<V>> neighborMap = new HashMap<V, Neighbors<V>>();
+    Map<V, Neighbors<V>> neighborMap = Maps.newHashMap();
     private Graph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------

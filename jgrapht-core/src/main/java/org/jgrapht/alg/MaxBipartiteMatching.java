@@ -1,17 +1,16 @@
 package org.jgrapht.alg;
 
+import com.google.common.collect.Maps;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-
-import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
 
 
 /**
@@ -114,7 +113,7 @@ public class MaxBipartiteMatching<V,E> {
 		List<LinkedList<V>> augmentingPaths=new ArrayList<LinkedList<V>>();
 		
 		//1. Build data structure
-		Map<V,Set<V>> layeredMap= new HashMap<V,Set<V>>();
+		Map<V,Set<V>> layeredMap= Maps.newHashMap();
 		for(V vertex:unmatchedVertices1)
 			layeredMap.put(vertex, new HashSet<V>());
 		

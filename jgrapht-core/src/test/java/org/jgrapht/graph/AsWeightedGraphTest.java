@@ -39,9 +39,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.WeightedGraph;
 
-import org.jgrapht.*;
+import java.util.Map;
 
 
 /**
@@ -91,10 +93,8 @@ public class AsWeightedGraphTest
 
     public void test1()
     {
-        Map<DefaultEdge, Double> weightMap1 =
-            new HashMap<DefaultEdge, Double>();
-        Map<DefaultWeightedEdge, Double> weightMap2 =
-            new HashMap<DefaultWeightedEdge, Double>();
+        Map<DefaultEdge, Double> weightMap1 = Maps.newHashMap();
+        Map<DefaultWeightedEdge, Double> weightMap2 = Maps.newHashMap();
 
         DefaultEdge e1 = unweightedGraph.getEdge("v1", "v2");
         DefaultEdge e2 = unweightedGraph.getEdge("v2", "v3");

@@ -39,12 +39,16 @@
  */
 package org.jgrapht.experimental;
 
-import java.io.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.generate.GraphGenerator;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Map;
 
 
 public class GraphReader<V, E>
@@ -151,7 +155,7 @@ public class GraphReader<V, E>
     {
         final int size = readNodeCount();
         if (resultMap == null) {
-            resultMap = new HashMap<String, V>();
+            resultMap = Maps.newHashMap();
         }
 
         for (int i = 0; i < size; i++) {

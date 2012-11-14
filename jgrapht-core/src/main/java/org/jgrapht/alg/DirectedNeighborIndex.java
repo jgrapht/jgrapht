@@ -38,11 +38,18 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.NeighborIndex.Neighbors;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.NeighborIndex.*;
-import org.jgrapht.event.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -64,8 +71,8 @@ public class DirectedNeighborIndex<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    Map<V, Neighbors<V>> predecessorMap = new HashMap<V, Neighbors<V>>();
-    Map<V, Neighbors<V>> successorMap = new HashMap<V, Neighbors<V>>();
+    Map<V, Neighbors<V>> predecessorMap = Maps.newHashMap();
+    Map<V, Neighbors<V>> successorMap = Maps.newHashMap();
     private DirectedGraph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------

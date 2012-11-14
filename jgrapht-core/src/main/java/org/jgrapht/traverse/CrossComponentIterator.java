@@ -46,6 +46,7 @@ package org.jgrapht.traverse;
 
 import java.util.*;
 
+import com.google.common.collect.Maps;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
@@ -117,7 +118,7 @@ public abstract class CrossComponentIterator<V, E, D>
      * Stores the vertices that have been seen during iteration and (optionally)
      * some additional traversal info regarding each vertex.
      */
-    private Map<V, D> seen = new HashMap<V, D>();
+    private Map<V, D> seen = Maps.newHashMap();
     private V startVertex;
     private Specifics<V, E> specifics;
 

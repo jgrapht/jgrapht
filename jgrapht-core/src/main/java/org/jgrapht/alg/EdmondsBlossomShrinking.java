@@ -37,11 +37,11 @@
  */
 package org.jgrapht.alg;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import org.jgrapht.UndirectedGraph;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
@@ -79,12 +79,12 @@ public class EdmondsBlossomShrinking<V, E>
     public Set<E> findMatch(final UndirectedGraph<V, E> g)
     {
         final Set<E> result = Sets.newHashSet();
-        match = new HashMap<V, V>();
-        p = new HashMap<V, V>();
-        q = new ArrayDeque<V>();
-        base = new HashMap<V, V>();
-        used = new HashSet<V>();
-        blossom = new HashSet<V>();
+        match = Maps.newHashMap();
+        p = Maps.newHashMap();
+        q =  Queues.newArrayDeque();
+        base = Maps.newHashMap();
+        used = Sets.newHashSet();
+        blossom = Sets.newHashSet();
 
         for (V i : g.vertexSet()) {
             if (!match.containsKey(i)) {

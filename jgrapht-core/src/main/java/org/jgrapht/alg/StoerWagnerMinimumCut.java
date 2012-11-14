@@ -38,11 +38,19 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 
 /**
@@ -78,9 +86,9 @@ public class StoerWagnerMinimumCut<V, E>
         workingGraph =
             new SimpleWeightedGraph<Set<V>, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
-        Map<V, Set<V>> vertexMap = new HashMap<V, Set<V>>();
+        Map<V, Set<V>> vertexMap = Maps.newHashMap();
         for (V v : graph.vertexSet()) {
-            Set<V> list = new HashSet<V>();
+            Set<V> list = Sets.newHashSet();
             list.add(v);
             vertexMap.put(v, list);
             workingGraph.addVertex(list);
@@ -109,10 +117,8 @@ public class StoerWagnerMinimumCut<V, E>
     protected void minimumCutPhase(Set<V> a)
     {
         //construct sorted queue with vertices connected to vertex a
-        PriorityQueue<VertexAndWeight> queue =
-            new PriorityQueue<VertexAndWeight>();
-        Map<Set<V>, VertexAndWeight> dmap =
-            new HashMap<Set<V>, VertexAndWeight>();
+        PriorityQueue<VertexAndWeight> queue = Queues.newPriorityQueue();
+        Map<Set<V>, VertexAndWeight> dmap = Maps.newHashMap();
         for (Set<V> v : workingGraph.vertexSet()) {
             if (v != a) {
                 Double w =

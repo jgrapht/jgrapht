@@ -41,9 +41,17 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 
-import org.jgrapht.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**
@@ -124,11 +132,10 @@ class KShortestPathsIterator<V, E>
 
         this.k = maxSize;
 
-        this.seenDataContainer = new HashMap<V, RankingPathElementList<V, E>>();
-        this.prevSeenDataContainer =
-            new HashMap<V, RankingPathElementList<V, E>>();
+        this.seenDataContainer = Maps.newHashMap();
+        this.prevSeenDataContainer = Maps.newHashMap();
 
-        this.prevImprovedVertices = new HashSet<V>();
+        this.prevImprovedVertices = Sets.newHashSet();
     }
 
     //~ Methods ----------------------------------------------------------------

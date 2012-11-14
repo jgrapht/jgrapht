@@ -40,9 +40,17 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -310,8 +318,7 @@ class BellmanFordIterator<V, E>
         BellmanFordPathElement<V, E> data)
     {
         if (this.prevVertexData == null) {
-            this.prevVertexData =
-                new HashMap<V, BellmanFordPathElement<V, E>>();
+            this.prevVertexData = Maps.newHashMap();
         }
 
         return this.prevVertexData.put(vertex, data);
@@ -332,7 +339,7 @@ class BellmanFordIterator<V, E>
         BellmanFordPathElement<V, E> data)
     {
         if (this.vertexData == null) {
-            this.vertexData = new HashMap<V, BellmanFordPathElement<V, E>>();
+            this.vertexData = Maps.newHashMap();
         }
 
         return this.vertexData.put(vertex, data);

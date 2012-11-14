@@ -42,12 +42,25 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.TraversalListenerAdapter;
+import org.jgrapht.event.VertexSetListener;
+import org.jgrapht.event.VertexTraversalEvent;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -235,7 +248,7 @@ public class ConnectivityInspector<V, E>
     private void init()
     {
         connectedSets = null;
-        vertexToConnectedSet = new HashMap<V, Set<V>>();
+        vertexToConnectedSet = Maps.newHashMap();
     }
 
     private List<Set<V>> lazyFindConnectedSets()
