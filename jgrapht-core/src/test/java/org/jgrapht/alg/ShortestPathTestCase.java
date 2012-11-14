@@ -80,7 +80,7 @@ public abstract class ShortestPathTestCase
     public void testPathBetween()
     {
         List path;
-        Graph<String, DefaultWeightedEdge> g = create();
+        final Graph<String, DefaultWeightedEdge> g = create();
 
         path = findPathBetween(g, V1, V2);
         assertEquals(Arrays.asList(new DefaultEdge[] { e12 }), path);
@@ -120,9 +120,9 @@ public abstract class ShortestPathTestCase
     }
 
     protected Graph<String, DefaultWeightedEdge> createWithBias(
-        boolean negate)
+        final boolean negate)
     {
-        Graph<String, DefaultWeightedEdge> g;
+        final Graph<String, DefaultWeightedEdge> g;
         double bias = 1;
         if (negate) {
             // negative-weight edges are being tested, so only a directed graph

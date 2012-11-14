@@ -100,7 +100,7 @@ public class MatrixExporterTest
 
     public void testLaplacian()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -119,7 +119,7 @@ public class MatrixExporterTest
 
     public void testAdjacencyUndirected()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -128,14 +128,14 @@ public class MatrixExporterTest
         g.addEdge(V3, V1);
         g.addEdge(V1, V1);
 
-        StringWriter w = new StringWriter();
+        final StringWriter w = new StringWriter();
         exporter.exportAdjacencyMatrix(w, g);
         assertEquals(UNDIRECTED_ADJACENCY, w.toString());
     }
 
     public void testAdjacencyDirected()
     {
-        DirectedGraph<String, DefaultEdge> g =
+        final DirectedGraph<String, DefaultEdge> g =
             new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -144,7 +144,7 @@ public class MatrixExporterTest
         g.addEdge(V3, V1);
         g.addEdge(V3, V1);
 
-        Writer w = new StringWriter();
+        final Writer w = new StringWriter();
         exporter.exportAdjacencyMatrix(w, g);
         assertEquals(DIRECTED_ADJACENCY, w.toString());
     }

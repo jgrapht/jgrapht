@@ -57,7 +57,7 @@ public class RandomGraphGeneratorTest
 
     public void testGenerateDirectedGraph()
     {
-        List<Graph<Integer, DefaultEdge>> graphArray =
+        final List<Graph<Integer, DefaultEdge>> graphArray =
             new ArrayList<Graph<Integer, DefaultEdge>>();
         for (int i = 0; i < 3; ++i) {
             graphArray.add(
@@ -76,7 +76,7 @@ public class RandomGraphGeneratorTest
 
     public void testGenerateListenableUndirectedGraph()
     {
-        List<Graph<Integer, DefaultEdge>> graphArray =
+        final List<Graph<Integer, DefaultEdge>> graphArray =
             new ArrayList<Graph<Integer, DefaultEdge>>();
         for (int i = 0; i < 3; ++i) {
             graphArray.add(
@@ -92,11 +92,11 @@ public class RandomGraphGeneratorTest
 
     public void testBadVertexFactory()
     {
-        RandomGraphGenerator<String, DefaultEdge> randomGen =
+        final RandomGraphGenerator<String, DefaultEdge> randomGen =
             new RandomGraphGenerator<String, DefaultEdge>(
                 10,
                 3);
-        Graph<String, DefaultEdge> graph =
+        final Graph<String, DefaultEdge> graph =
             new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         try {
             randomGen.generateGraph(
@@ -119,11 +119,11 @@ public class RandomGraphGeneratorTest
      * @param numOfEdges number of edges to generate per graph
      */
     private static void generateGraphs(
-        List<Graph<Integer, DefaultEdge>> graphs,
-        int numOfVertex,
-        int numOfEdges)
+        final List<Graph<Integer, DefaultEdge>> graphs,
+        final int numOfVertex,
+        final int numOfEdges)
     {
-        RandomGraphGenerator<Integer, DefaultEdge> randomGen =
+        final RandomGraphGenerator<Integer, DefaultEdge> randomGen =
             new RandomGraphGenerator<Integer, DefaultEdge>(
                 numOfVertex,
                 numOfEdges);
@@ -140,7 +140,7 @@ public class RandomGraphGeneratorTest
             null);
 
         // use new randomGen here
-        RandomGraphGenerator<Integer, DefaultEdge> newRandomGen =
+        final RandomGraphGenerator<Integer, DefaultEdge> newRandomGen =
             new RandomGraphGenerator<Integer, DefaultEdge>(
                 numOfVertex,
                 numOfEdges);

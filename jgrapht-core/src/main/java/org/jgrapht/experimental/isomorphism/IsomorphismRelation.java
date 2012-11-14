@@ -67,44 +67,42 @@ public class IsomorphismRelation<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private List<V> vertexList1;
-    private List<V> vertexList2;
+    private final List<V> vertexList1;
+    private final List<V> vertexList2;
 
     private GraphMapping<V, E> graphMapping = null;
 
-    private Graph<V, E> graph1;
-    private Graph<V, E> graph2;
+    private final Graph<V, E> graph1;
+    private final Graph<V, E> graph2;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      */
     public IsomorphismRelation(
-        List<V> aGraph1vertexArray,
-        List<V> aGraph2vertexArray,
-        Graph<V, E> g1,
-        Graph<V, E> g2)
+        final List<V> aGraph1vertexArray,
+        final List<V> aGraph2vertexArray,
+        final Graph<V, E> g1,
+        final Graph<V, E> g2)
     {
-        this.vertexList1 = aGraph1vertexArray;
-        this.vertexList2 = aGraph2vertexArray;
-        this.graph1 = g1;
-        this.graph2 = g2;
+        vertexList1 = aGraph1vertexArray;
+        vertexList2 = aGraph2vertexArray;
+        graph1 = g1;
+        graph2 = g2;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append("vertexList1: ").append(
-            this.vertexList1.toString());
-        sb.append("\tvertexList2: ").append(
-            this.vertexList2.toString());
+        final StringBuffer sb = new StringBuffer();
+        sb.append("vertexList1: ").append(vertexList1.toString());
+        sb.append("\tvertexList2: ").append(vertexList2.toString());
         return sb.toString();
     }
 
     @Override
-    public V getVertexCorrespondence(V vertex, boolean forward)
+    public V getVertexCorrespondence(final V vertex, final boolean forward)
     {
         // lazy initializer for graphMapping
         if (graphMapping == null) {
@@ -115,7 +113,7 @@ public class IsomorphismRelation<V, E>
     }
 
     @Override
-    public E getEdgeCorrespondence(E edge, boolean forward)
+    public E getEdgeCorrespondence(final E edge, final boolean forward)
     {
         // lazy initializer for graphMapping
         if (graphMapping == null) {
@@ -131,22 +129,20 @@ public class IsomorphismRelation<V, E>
      */
     private void initGraphMapping()
     {
-        int mapSize = vertexList1.size();
-        Map<V, V> g1ToG2 = new HashMap<V, V>(mapSize);
-        Map<V, V> g2ToG1 = new HashMap<V, V>(mapSize);
+        final int mapSize = vertexList1.size();
+        final Map<V, V> g1ToG2 = new HashMap<V, V>(mapSize);
+        final Map<V, V> g2ToG1 = new HashMap<V, V>(mapSize);
 
         for (int i = 0; i < mapSize; i++) {
-            V source = this.vertexList1.get(i);
-            V target = this.vertexList2.get(i);
+            final V source = vertexList1.get(i);
+            final V target = vertexList2.get(i);
             g1ToG2.put(source, target);
             g2ToG1.put(target, source);
         }
-        this.graphMapping =
+        graphMapping =
             new DefaultGraphMapping<V, E>(
                 g1ToG2,
-                g2ToG1,
-                this.graph1,
-                this.graph2);
+                g2ToG1, graph1, graph2);
     }
 }
 

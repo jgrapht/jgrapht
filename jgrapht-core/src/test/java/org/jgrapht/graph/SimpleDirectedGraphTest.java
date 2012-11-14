@@ -39,8 +39,10 @@
  */
 package org.jgrapht.graph;
 
+import java.lang.String;
 import java.util.*;
 
+import junit.framework.TestCase;
 import org.jgrapht.*;
 
 
@@ -62,17 +64,17 @@ public class SimpleDirectedGraphTest
     private DirectedGraph<String, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private EdgeFactory<String, DefaultEdge> eFactory;
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-    private String v4 = "v4";
+    private final String v1 = "v1";
+    private final String v2 = "v2";
+    private final String v3 = "v3";
+    private final String v4 = "v4";
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public SimpleDirectedGraphTest(String name)
+    public SimpleDirectedGraphTest(final String name)
     {
         super(name);
     }
@@ -100,7 +102,7 @@ public class SimpleDirectedGraphTest
             assertTrue();
         }
 
-        DefaultEdge e = eFactory.createEdge(v2, v1);
+        final DefaultEdge e = eFactory.createEdge(v2, v1);
 
         try {
             g1.addEdge("ya", "ya", e); // no such vertex in graph
@@ -232,7 +234,7 @@ public class SimpleDirectedGraphTest
         assertEquals(g4.edgesOf(v1).size(), 2);
         assertEquals(g3.edgesOf(v1).size(), 4);
 
-        Iterator<DefaultEdge> iter = g3.edgesOf(v1).iterator();
+        final Iterator<DefaultEdge> iter = g3.edgesOf(v1).iterator();
         int count = 0;
 
         while (iter.hasNext()) {
@@ -310,8 +312,8 @@ public class SimpleDirectedGraphTest
     {
         init();
 
-        Set<DefaultEdge> e1to2 = g2.outgoingEdgesOf(v1);
-        Set<DefaultEdge> e2from1 = g2.incomingEdgesOf(v2);
+        final Set<DefaultEdge> e1to2 = g2.outgoingEdgesOf(v1);
+        final Set<DefaultEdge> e2from1 = g2.incomingEdgesOf(v2);
         assertEquals(e1to2, e2from1);
     }
 
@@ -387,14 +389,14 @@ public class SimpleDirectedGraphTest
     {
         init();
 
-        DirectedGraph<String, DefaultEdge> g =
+        final DirectedGraph<String, DefaultEdge> g =
             new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
-        DirectedGraph<String, DefaultEdge> r =
+        final DirectedGraph<String, DefaultEdge> r =
             new EdgeReversedGraph<String, DefaultEdge>(g);
 
         g.addVertex(v1);
         g.addVertex(v2);
-        DefaultEdge e = g.addEdge(v1, v2);
+        final DefaultEdge e = g.addEdge(v1, v2);
 
         verifyReversal(g, r, e);
 
@@ -416,9 +418,9 @@ public class SimpleDirectedGraphTest
     }
 
     private void verifyReversal(
-        DirectedGraph<String, DefaultEdge> g,
-        DirectedGraph<String, DefaultEdge> r,
-        DefaultEdge e)
+        final DirectedGraph<String, DefaultEdge> g,
+        final DirectedGraph<String, DefaultEdge> r,
+        final DefaultEdge e)
     {
         assertTrue(r.containsVertex(v1));
         assertTrue(r.containsVertex(v2));

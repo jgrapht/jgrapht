@@ -68,9 +68,9 @@ public class GridGraphGenerator<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private int rows;
+    private final int rows;
 
-    private int cols;
+    private final int cols;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -80,7 +80,7 @@ public class GridGraphGenerator<V, E>
      * @param rows the number of rows
      * @param cols the number of columns
      */
-    public GridGraphGenerator(int rows, int cols)
+    public GridGraphGenerator(final int rows, final int cols)
     {
         if (rows < 2) {
             throw new IllegalArgumentException(
@@ -102,23 +102,23 @@ public class GridGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, V> resultMap)
     {
-        Map<Integer, V> map = new TreeMap<Integer, V>();
+        final Map<Integer, V> map = new TreeMap<Integer, V>();
 
         // Adding all vertices to the set
         int cornerCtr = 0;
-        for (int i = 0; i < (rows * cols); i++) {
-            V vertex = vertexFactory.createVertex();
+        for (int i = 0; i < rows * cols; i++) {
+            final V vertex = vertexFactory.createVertex();
             target.addVertex(vertex);
             map.put(i + 1, vertex);
 
-            boolean isCorner =
-                (i == 0) || (i == (cols - 1)) || (i == (cols * (rows - 1)))
-                || (i == ((rows * cols) - 1));
-            if (isCorner && (resultMap != null)) {
+            final boolean isCorner =
+                i == 0 || i == cols - 1 || i == cols * (rows - 1)
+                || i == rows * cols - 1;
+            if (isCorner && resultMap != null) {
                 resultMap.put(CORNER_VERTEX + ' ' + ++cornerCtr, vertex);
             }
         }
@@ -128,11 +128,11 @@ public class GridGraphGenerator<V, E>
         // second addEdge call will return nothing; it will not add a the edge
         // at the opposite direction. For directed graph, edges in opposite
         // direction are also added.
-        for (int i : map.keySet()) {
-            for (int j : map.keySet()) {
-                if ((((i % cols) > 0)
-                        && ((i + 1) == Integer.valueOf(j)))
-                    || ((i + cols) == j))
+        for (final int i : map.keySet()) {
+            for (final int j : map.keySet()) {
+                if (i % cols > 0
+                        && i + 1 == Integer.valueOf(j)
+                    || i + cols == j)
                 {
                     target.addEdge(map.get(i), map.get(j));
                     target.addEdge(map.get(j), map.get(i));

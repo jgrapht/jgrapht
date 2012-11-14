@@ -78,9 +78,9 @@ public class IntegerPermutationIter
      *
      * @param N
      */
-    public IntegerPermutationIter(int N)
+    public IntegerPermutationIter(final int N)
     {
-        int [] newArray = new int[N];
+        final int [] newArray = new int[N];
 
         // fill the array with 1,2,3...
         for (int i = 0; i < newArray.length; i++) {
@@ -97,9 +97,9 @@ public class IntegerPermutationIter
      * @param array creates a copy of it (so sort / later changes will not
      * matter)
      */
-    public IntegerPermutationIter(int [] array)
+    public IntegerPermutationIter(final int [] array)
     {
-        int [] newArray = new int[array.length];
+        final int [] newArray = new int[array.length];
         System.arraycopy(array, 0, newArray, 0, array.length);
         Arrays.sort(newArray);
         init(newArray);
@@ -107,11 +107,11 @@ public class IntegerPermutationIter
 
     //~ Methods ----------------------------------------------------------------
 
-    private void init(int [] array)
+    private void init(final int [] array)
     {
-        this.N = array.length;
-        this.Value = array;
-        this.currentValueBackup = this.Value;
+        N = array.length;
+        Value = array;
+        currentValueBackup = Value;
         permutationCounter = 0;
     }
 
@@ -121,16 +121,16 @@ public class IntegerPermutationIter
      * @param i
      * @param j
      */
-    private void swap(int i, int j)
+    private void swap(final int i, final int j)
     {
-        int temp = this.Value[i];
-        this.Value[i] = this.Value[j];
-        this.Value[j] = temp;
+        final int temp = Value[i];
+        Value[i] = Value[j];
+        Value[j] = temp;
     }
 
-    private int [] arrayClone(int [] sourceArray)
+    private int [] arrayClone(final int [] sourceArray)
     {
-        int [] destArray = new int[sourceArray.length];
+        final int [] destArray = new int[sourceArray.length];
         System.arraycopy(sourceArray, 0, destArray, 0, sourceArray.length);
         return destArray;
     }
@@ -143,7 +143,7 @@ public class IntegerPermutationIter
         if (i <= 0) // may happen only on N<=1
 
         {
-            this.endWasReached = true;
+            endWasReached = true;
             return null;
         }
 
@@ -152,9 +152,9 @@ public class IntegerPermutationIter
           i = i-1;
           }*/
         while (Value[i - 1] >= Value[i]) {
-            i = i - 1;
+            i -= 1;
             if (i == 0) {
-                this.endWasReached = true;
+                endWasReached = true;
                 return null;
             }
         }
@@ -162,7 +162,7 @@ public class IntegerPermutationIter
         int j = N;
 
         while (Value[j - 1] <= Value[i - 1]) {
-            j = j - 1;
+            j -= 1;
         }
 
         swap(i - 1, j - 1); // swap values at positions (i-1) and (j-1)
@@ -175,7 +175,7 @@ public class IntegerPermutationIter
             i++;
             j--;
         }
-        return this.Value;
+        return Value;
     }
 
     /**
@@ -184,15 +184,14 @@ public class IntegerPermutationIter
     @Override
     public boolean hasNext()
     {
-        if ((this.permutationCounter == 0)
-            || (this.wasNextValueCalculatedAlready))
-        {
+        if (permutationCounter == 0 || wasNextValueCalculatedAlready) {
             return true;
-        } else if (this.endWasReached) {
+        }
+        if (endWasReached) {
             return false;
         }
 
-        boolean result = true;
+        final boolean result = true;
         // calculate the next value into this.value  save the current result. in
         // the end swap the arrays there is no way to know when to stop , but
         // the out-of-bound
@@ -208,7 +207,7 @@ public class IntegerPermutationIter
          *  }*/
 
         getNextStartingWith2();
-        this.wasNextValueCalculatedAlready = true;
+        wasNextValueCalculatedAlready = true;
         if (endWasReached) {
             return false;
         }
@@ -239,29 +238,29 @@ public class IntegerPermutationIter
         }
 
         // if it is the first one , return original
-        int [] internalArray;
-        if (this.permutationCounter == 0) {
-            this.permutationCounter++;
-            internalArray = this.Value;
+        final int [] internalArray;
+        if (permutationCounter == 0) {
+            permutationCounter++;
+            internalArray = Value;
         } else {
             // if hasNext() has precaclulated it , take this value.
-            if (this.wasNextValueCalculatedAlready) {
-                internalArray = this.Value;
-                this.wasNextValueCalculatedAlready = false;
+            if (wasNextValueCalculatedAlready) {
+                internalArray = Value;
+                wasNextValueCalculatedAlready = false;
             } else {
                 internalArray = getNextStartingWith2();
-                if (this.endWasReached) {
+                if (endWasReached) {
                     return null;
                 }
             }
         }
-        this.currentValueBackup = arrayClone(internalArray);
+        currentValueBackup = arrayClone(internalArray);
         return arrayClone(internalArray);
     }
 
     public int [] getCurrent()
     {
-        return arrayClone(this.currentValueBackup);
+        return arrayClone(currentValueBackup);
     }
 
     /**
@@ -270,13 +269,13 @@ public class IntegerPermutationIter
      *
      * @param array
      */
-    public String toString(int [] array)
+    public String toString(final int [] array)
     {
         if (array.length <= 0) {
             return "[]";
         }
-        StringBuffer stBuffer = new StringBuffer("[");
-        for (int i = 0; i < (array.length - 1); i++) {
+        final StringBuffer stBuffer = new StringBuffer("[");
+        for (int i = 0; i < array.length - 1; i++) {
             stBuffer.append(array[i]).append(",");
         }
         stBuffer.append(array[array.length - 1]).append("]");
@@ -286,7 +285,7 @@ public class IntegerPermutationIter
     /**
      * UNIMPLEMENTED. always throws new UnsupportedOperationException
      *
-     * @see java.util.Iterator#remove()
+     * @see Iterator#remove()
      */
     @Override
     public void remove()

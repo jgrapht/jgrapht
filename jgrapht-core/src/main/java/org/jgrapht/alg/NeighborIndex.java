@@ -80,7 +80,7 @@ public class NeighborIndex<V, E>
     //~ Instance fields --------------------------------------------------------
 
     Map<V, Neighbors<V>> neighborMap = Maps.newHashMap();
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -89,7 +89,7 @@ public class NeighborIndex<V, E>
      *
      * @param g the graph for which a neighbor index is to be created.
      */
-    public NeighborIndex(Graph<V, E> g)
+    public NeighborIndex(final Graph<V, E> g)
     {
         // no need to distinguish directedgraphs as we don't do traversals
         graph = g;
@@ -106,7 +106,7 @@ public class NeighborIndex<V, E>
      *
      * @return all unique neighbors of the specified vertex
      */
-    public Set<V> neighborsOf(V v)
+    public Set<V> neighborsOf(final V v)
     {
         return getNeighbors(v).getNeighbors();
     }
@@ -123,7 +123,7 @@ public class NeighborIndex<V, E>
      *
      * @return all neighbors of the specified vertex
      */
-    public List<V> neighborListOf(V v)
+    public List<V> neighborListOf(final V v)
     {
         return getNeighbors(v).getNeighborList();
     }
@@ -132,11 +132,11 @@ public class NeighborIndex<V, E>
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
     @Override
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+    public void edgeAdded(final GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = graph.getEdgeSource(edge);
-        V target = graph.getEdgeTarget(edge);
+        final E edge = e.getEdge();
+        final V source = graph.getEdgeSource(edge);
+        final V target = graph.getEdgeTarget(edge);
 
         // if a map does not already contain an entry,
         // then skip addNeighbor, since instantiating the map
@@ -159,11 +159,11 @@ public class NeighborIndex<V, E>
      * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
      */
     @Override
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = e.getEdgeSource();
-        V target = e.getEdgeTarget();
+        final E edge = e.getEdge();
+        final V source = e.getEdgeSource();
+        final V target = e.getEdgeTarget();
         if (neighborMap.containsKey(source)) {
             neighborMap.get(source).removeNeighbor(target);
         }
@@ -176,7 +176,7 @@ public class NeighborIndex<V, E>
      * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
      */
     @Override
-    public void vertexAdded(GraphVertexChangeEvent<V> e)
+    public void vertexAdded(final GraphVertexChangeEvent<V> e)
     {
         // nothing to cache until there are edges
     }
@@ -185,12 +185,12 @@ public class NeighborIndex<V, E>
      * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
      */
     @Override
-    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
     {
         neighborMap.remove(e.getVertex());
     }
 
-    private Neighbors<V> getNeighbors(V v)
+    private Neighbors<V> getNeighbors(final V v)
     {
         Neighbors<V> neighbors = neighborMap.get(v);
         if (neighbors == null) {
@@ -219,7 +219,7 @@ public class NeighborIndex<V, E>
                 addNeighbor(neighbor);
         }
 
-        public void addNeighbor(V v)
+        public void addNeighbor(final V v)
         {
             if (!neighborCounts.containsKey(v)) {
                 neighborCounts.put(v, new AtomicInteger(1));
@@ -229,7 +229,7 @@ public class NeighborIndex<V, E>
             neighborCounts.get(v).incrementAndGet();
         }
 
-        public void removeNeighbor(V v)
+        public void removeNeighbor(final V v)
         {
             Preconditions.checkArgument(neighborCounts.containsKey(v),
                 "Attempting to remove a neighbor that wasn't present");

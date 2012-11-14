@@ -71,7 +71,7 @@ public class CycleDetector<V, E>
      *
      * @param graph the DirectedGraph in which to detect cycles
      */
-    public CycleDetector(DirectedGraph<V, E> graph)
+    public CycleDetector(final DirectedGraph<V, E> graph)
     {
         this.graph = graph;
     }
@@ -101,7 +101,7 @@ public class CycleDetector<V, E>
      *
      * @return true if v is on at least one cycle
      */
-    public boolean detectCyclesContainingVertex(V v)
+    public boolean detectCyclesContainingVertex(final V v)
     {
         try {
             execute(null, v);
@@ -122,21 +122,21 @@ public class CycleDetector<V, E>
     {
         // ProbeIterator can't be used to handle this case,
         // so use StrongConnectivityInspector instead.
-        StrongConnectivityInspector<V, E> inspector =
+        final StrongConnectivityInspector<V, E> inspector =
             new StrongConnectivityInspector<V, E>(graph);
-        List<Set<V>> components = inspector.stronglyConnectedSets();
+        final List<Set<V>> components = inspector.stronglyConnectedSets();
 
         // A vertex participates in a cycle if either of the following is
         // true:  (a) it is in a component whose size is greater than 1
         // or (b) it is a self-loop
 
-        Set<V> set = new HashSet<V>();
-        for (Set<V> component : components) {
+        final Set<V> set = new HashSet<V>();
+        for (final Set<V> component : components) {
             if (component.size() > 1) {
                 // cycle
                 set.addAll(component);
             } else {
-                V v = component.iterator().next();
+                final V v = component.iterator().next();
                 if (graph.containsEdge(v, v)) {
                     // self-loop
                     set.add(v);
@@ -161,17 +161,17 @@ public class CycleDetector<V, E>
      *
      * @return set of all vertices reachable from v via at least one cycle
      */
-    public Set<V> findCyclesContainingVertex(V v)
+    public Set<V> findCyclesContainingVertex(final V v)
     {
-        Set<V> set = new HashSet<V>();
+        final Set<V> set = new HashSet<V>();
         execute(set, v);
 
         return set;
     }
 
-    private void execute(Set<V> s, V v)
+    private void execute(final Set<V> s, final V v)
     {
-        ProbeIterator iter = new ProbeIterator(s, v);
+        final ProbeIterator iter = new ProbeIterator(s, v);
 
         while (iter.hasNext()) {
             iter.next();
@@ -201,7 +201,7 @@ public class CycleDetector<V, E>
         private Set<V> cycleSet;
         private V root;
 
-        ProbeIterator(Set<V> cycleSet, V startVertex)
+        ProbeIterator(final Set<V> cycleSet, final V startVertex)
         {
             super(graph, startVertex);
             root = startVertex;
@@ -213,7 +213,7 @@ public class CycleDetector<V, E>
          * {@inheritDoc}
          */
         @Override
-        protected void encounterVertexAgain(V vertex, E edge)
+        protected void encounterVertexAgain(final V vertex, final E edge)
         {
             super.encounterVertexAgain(vertex, edge);
 
@@ -225,7 +225,7 @@ public class CycleDetector<V, E>
                 // which has already been detected.
                 if (vertex.equals(root)) {
                     i = 0;
-                } else if ((cycleSet != null) && cycleSet.contains(vertex)) {
+                } else if (cycleSet != null && cycleSet.contains(vertex)) {
                     i = 0;
                 } else {
                     return;
@@ -252,7 +252,7 @@ public class CycleDetector<V, E>
         @Override
         protected V provideNextVertex()
         {
-            V v = super.provideNextVertex();
+            final V v = super.provideNextVertex();
 
             // backtrack
             for (int i = path.size() - 1; i >= 0; --i) {

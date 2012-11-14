@@ -48,11 +48,11 @@ public class MathUtil
 {
     //~ Methods ----------------------------------------------------------------
 
-    public static long factorial(int N)
+    public static long factorial(final int N)
     {
         long multi = 1;
         for (int i = 1; i <= N; i++) {
-            multi = multi * i;
+            multi *= i;
         }
         return multi;
     }

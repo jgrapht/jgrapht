@@ -78,9 +78,9 @@ public class GraphSquare<V, E>
             ((ListenableGraph<V, E>) g).addGraphListener(
                 new GraphListener<V, E>() {
                     @Override
-                    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+                    public void edgeAdded(final GraphEdgeChangeEvent<V, E> e)
                     {
-                        E edge = e.getEdge();
+                        final E edge = e.getEdge();
                         addEdgesStartingAt(
                             g,
                             g.getEdgeSource(edge),
@@ -94,19 +94,19 @@ public class GraphSquare<V, E>
                     }
 
                     @Override
-                    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+                    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> e)
                     { // this is not a very performant implementation
                         GraphSquare.super.removeAllEdges(edgeSet());
                         addSquareEdges(g, createLoops);
                     }
 
                     @Override
-                    public void vertexAdded(GraphVertexChangeEvent<V> e)
+                    public void vertexAdded(final GraphVertexChangeEvent<V> e)
                     {
                     }
 
                     @Override
-                    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+                    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
                     {
                     }
                 });
@@ -119,7 +119,7 @@ public class GraphSquare<V, E>
      * @see Graph#addEdge(Object, Object)
      */
     @Override
-    public E addEdge(V sourceVertex, V targetVertex)
+    public E addEdge(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -128,7 +128,7 @@ public class GraphSquare<V, E>
      * @see Graph#addEdge(Object, Object, E)
      */
     @Override
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    public boolean addEdge(final V sourceVertex, final V targetVertex, final E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -137,7 +137,7 @@ public class GraphSquare<V, E>
      * @see Graph#addVertex(Object)
      */
     @Override
-    public boolean addVertex(V v)
+    public boolean addVertex(final V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -146,7 +146,7 @@ public class GraphSquare<V, E>
      * @see Graph#removeAllEdges(Collection)
      */
     @Override
-    public boolean removeAllEdges(Collection<? extends E> edges)
+    public boolean removeAllEdges(final Collection<? extends E> edges)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -155,7 +155,7 @@ public class GraphSquare<V, E>
      * @see Graph#removeAllEdges(V, V)
      */
     @Override
-    public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
+    public Set<E> removeAllEdges(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -164,7 +164,7 @@ public class GraphSquare<V, E>
      * @see Graph#removeAllVertices(Collection)
      */
     @Override
-    public boolean removeAllVertices(Collection<? extends V> vertices)
+    public boolean removeAllVertices(final Collection<? extends V> vertices)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -173,7 +173,7 @@ public class GraphSquare<V, E>
      * @see Graph#removeEdge(E)
      */
     @Override
-    public boolean removeEdge(E e)
+    public boolean removeEdge(final E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -182,7 +182,7 @@ public class GraphSquare<V, E>
      * @see Graph#removeEdge(V, V)
      */
     @Override
-    public E removeEdge(V sourceVertex, V targetVertex)
+    public E removeEdge(final V sourceVertex, final V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -191,7 +191,7 @@ public class GraphSquare<V, E>
      * @see Graph#removeVertex(V)
      */
     @Override
-    public boolean removeVertex(V v)
+    public boolean removeVertex(final V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -200,7 +200,7 @@ public class GraphSquare<V, E>
         final Graph<V, E> g,
         final V v,
         final V u,
-        boolean createLoops)
+        final boolean createLoops)
     {
         if (!g.containsEdge(v, u)) {
             return;
@@ -209,18 +209,18 @@ public class GraphSquare<V, E>
         final List<V> adjVertices = Graphs.neighborListOf(g, u);
 
         for (final V w : adjVertices) {
-            if (g.containsEdge(u, w) && ((v != w) || createLoops)) {
+            if (g.containsEdge(u, w) && (v != w || createLoops)) {
                 super.addEdge(v, w);
             }
         }
     }
 
-    private void addSquareEdges(Graph<V, E> g, boolean createLoops)
+    private void addSquareEdges(final Graph<V, E> g, final boolean createLoops)
     {
-        for (V v : g.vertexSet()) {
-            List<V> adjVertices = Graphs.neighborListOf(g, v);
+        for (final V v : g.vertexSet()) {
+            final List<V> adjVertices = Graphs.neighborListOf(g, v);
 
-            for (V adjVertice : adjVertices) {
+            for (final V adjVertice : adjVertices) {
                 addEdgesStartingAt(g, v, adjVertice, createLoops);
             }
         }

@@ -64,7 +64,7 @@ public class SimpleDirectedWeightedGraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public SimpleDirectedWeightedGraph(EdgeFactory<V, E> ef)
+    public SimpleDirectedWeightedGraph(final EdgeFactory<V, E> ef)
     {
         super(ef);
     }
@@ -74,7 +74,7 @@ public class SimpleDirectedWeightedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public SimpleDirectedWeightedGraph(Class<? extends E> edgeClass)
+    public SimpleDirectedWeightedGraph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }

@@ -39,9 +39,12 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
-import org.jgrapht.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -59,7 +62,8 @@ public class CompleteBipartiteGraphGenerator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private int sizeA, sizeB;
+    private final int sizeA;
+    private final int sizeB;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -69,13 +73,13 @@ public class CompleteBipartiteGraphGenerator<V, E>
      * @param partitionOne This is the number of vertices in the first partition
      * @param partitionTwo This is the number of vertices in the second parition
      */
-    public CompleteBipartiteGraphGenerator(int partitionOne, int partitionTwo)
+    public CompleteBipartiteGraphGenerator(final int partitionOne, final int partitionTwo)
     {
-        if ((partitionOne < 0) || (partitionTwo < 0)) {
+        if (partitionOne < 0 || partitionTwo < 0) {
             throw new IllegalArgumentException("must be non-negative");
         }
-        this.sizeA = partitionOne;
-        this.sizeB = partitionTwo;
+        sizeA = partitionOne;
+        sizeB = partitionTwo;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -85,30 +89,30 @@ public class CompleteBipartiteGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target,
+        final Graph<V, E> target,
         final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Map<String, V> resultMap)
     {
-        if ((sizeA < 1) && (sizeB < 1)) {
+        if (sizeA < 1 && sizeB < 1) {
             return;
         }
 
         //Create vertices in each of the partitions
-        Set<V> a = new HashSet<V>();
-        Set<V> b = new HashSet<V>();
+        final Set<V> a = new HashSet<V>();
+        final Set<V> b = new HashSet<V>();
         for (int i = 0; i < sizeA; i++) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
             a.add(newVertex);
         }
         for (int i = 0; i < sizeB; i++) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
             b.add(newVertex);
         }
 
         //Add an edge for each pair of vertices in different partitions
-        for (V v : a) {
+        for (final V v : a) {
             for (final V aB : b) {
                 target.addEdge(v, aB);
             }

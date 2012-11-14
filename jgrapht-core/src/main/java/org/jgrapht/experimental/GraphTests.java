@@ -15,34 +15,34 @@ public final class GraphTests<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    public static <V, E> boolean isEmpty(Graph<V, E> g)
+    public static <V, E> boolean isEmpty(final Graph<V, E> g)
     {
         return g.edgeSet().isEmpty();
     }
 
-    public static <V, E> boolean isComplete(Graph<V, E> g)
+    public static <V, E> boolean isComplete(final Graph<V, E> g)
     {
-        int n = g.vertexSet().size();
+        final int n = g.vertexSet().size();
         return g.edgeSet().size()
-            == (n * (n - 1) / 2);
+            == n * (n - 1) / 2;
     }
 
-    public static <V, E> boolean isConnected(Graph<V, E> g)
+    public static <V, E> boolean isConnected(final Graph<V, E> g)
     {
-        int numVertices = g.vertexSet().size();
-        int numEdges = g.edgeSet().size();
+        final int numVertices = g.vertexSet().size();
+        final int numEdges = g.edgeSet().size();
 
-        if (numEdges < (numVertices - 1)) {
+        if (numEdges < numVertices - 1) {
             return false;
         }
-        if ((numVertices < 2)
-            || (numEdges > ((numVertices - 1) * (numVertices - 2) / 2)))
+        if (numVertices < 2
+            || numEdges > (numVertices - 1) * (numVertices - 2) / 2)
         {
             return true;
         }
 
-        Set<V> known = new HashSet<V>();
-        LinkedList<V> queue = new LinkedList<V>();
+        final Set<V> known = new HashSet<V>();
+        final LinkedList<V> queue = new LinkedList<V>();
         V v = g.vertexSet().iterator().next();
 
         queue.add(v); // start with node 1
@@ -61,16 +61,16 @@ public final class GraphTests<V, E>
         return known.size() == numVertices;
     }
 
-    public static <V, E> boolean isTree(Graph<V, E> g)
+    public static <V, E> boolean isTree(final Graph<V, E> g)
     {
         return isConnected(g)
-            && (g.edgeSet().size() == (g.vertexSet().size() - 1));
+            && g.edgeSet().size() == g.vertexSet().size() - 1;
     }
 
-    public static <V, E> boolean isBipartite(Graph<V, E> g)
+    public static <V, E> boolean isBipartite(final Graph<V, E> g)
     {
-        if ((4 * g.edgeSet().size())
-            > (g.vertexSet().size() * g.vertexSet().size()))
+        if (4 * g.edgeSet().size()
+            > g.vertexSet().size() * g.vertexSet().size())
         {
             return false;
         }
@@ -78,10 +78,10 @@ public final class GraphTests<V, E>
             return true;
         }
 
-        Set<V> unknown = new HashSet<V>(g.vertexSet());
-        LinkedList<V> queue = new LinkedList<V>();
+        final Set<V> unknown = new HashSet<V>(g.vertexSet());
+        final LinkedList<V> queue = new LinkedList<V>();
         V v = unknown.iterator().next();
-        Set<V> odd = new HashSet<V>();
+        final Set<V> odd = new HashSet<V>();
 
         queue.add(v);
 
@@ -93,7 +93,7 @@ public final class GraphTests<V, E>
             v = queue.removeFirst();
             unknown.remove(v);
 
-            for (V n : Graphs.neighborListOf(g, v)) {
+            for (final V n : Graphs.neighborListOf(g, v)) {
                 if (unknown.contains(n)) {
                     queue.add(n);
                     if (!odd.contains(v)) {

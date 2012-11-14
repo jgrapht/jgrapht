@@ -44,10 +44,6 @@ public class StringEdgeNameProvider<E>
 {
     //~ Constructors -----------------------------------------------------------
 
-    public StringEdgeNameProvider()
-    {
-    }
-
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -56,7 +52,7 @@ public class StringEdgeNameProvider<E>
      * @param edge the edge to be named
      */
     @Override
-    public String getEdgeName(E edge)
+    public String getEdgeName(final E edge)
     {
         return edge.toString();
     }

@@ -64,7 +64,7 @@ public final class AllTraverseTests
      */
     public static Test suite()
     {
-        TestSuite suite = new TestSuite();
+        final TestSuite suite = new TestSuite();
 
         // $JUnit-BEGIN$
         suite.addTest(new TestSuite(BreadthFirstIteratorTest.class));

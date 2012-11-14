@@ -91,10 +91,10 @@ abstract class AbstractPathElementList<V,
      * 0.
      */
     protected AbstractPathElementList(
-        Graph<V, E> graph,
-        int maxSize,
-        AbstractPathElementList<V, E, T> elementList,
-        E edge)
+        final Graph<V, E> graph,
+        final int maxSize,
+        final AbstractPathElementList<V, E, T> elementList,
+        final E edge)
     {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize is negative or 0");
@@ -108,7 +108,7 @@ abstract class AbstractPathElementList<V,
 
         this.graph = graph;
         this.maxSize = maxSize;
-        this.vertex =
+        vertex =
             Graphs.getOppositeVertex(graph, edge, elementList.getVertex());
     }
 
@@ -125,9 +125,9 @@ abstract class AbstractPathElementList<V,
      * empty.
      */
     protected AbstractPathElementList(
-        Graph<V, E> graph,
-        int maxSize,
-        T pathElement)
+        final Graph<V, E> graph,
+        final int maxSize,
+        final T pathElement)
     {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize is negative or 0");
@@ -141,9 +141,9 @@ abstract class AbstractPathElementList<V,
 
         this.graph = graph;
         this.maxSize = maxSize;
-        this.vertex = pathElement.getVertex();
+        vertex = pathElement.getVertex();
 
-        this.pathElements.add(pathElement);
+        pathElements.add(pathElement);
     }
 
     /**
@@ -154,7 +154,7 @@ abstract class AbstractPathElementList<V,
      * @throws IllegalArgumentException if <code>maxSize</code> is negative or
      * 0.
      */
-    protected AbstractPathElementList(Graph<V, E> graph, int maxSize, V vertex)
+    protected AbstractPathElementList(final Graph<V, E> graph, final int maxSize, final V vertex)
     {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize is negative or 0");
@@ -172,9 +172,9 @@ abstract class AbstractPathElementList<V,
      * index.
      */
     @Override
-    public T get(int index)
+    public T get(final int index)
     {
-        return this.pathElements.get(index);
+        return pathElements.get(index);
     }
 
     /**
@@ -182,7 +182,7 @@ abstract class AbstractPathElementList<V,
      */
     public V getVertex()
     {
-        return this.vertex;
+        return vertex;
     }
 
     /**
@@ -191,7 +191,7 @@ abstract class AbstractPathElementList<V,
     @Override
     public int size()
     {
-        return this.pathElements.size();
+        return pathElements.size();
     }
 }
 

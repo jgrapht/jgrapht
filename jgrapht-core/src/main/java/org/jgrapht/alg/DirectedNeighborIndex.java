@@ -73,7 +73,7 @@ public class DirectedNeighborIndex<V, E>
 
     Map<V, Neighbors<V>> predecessorMap = Maps.newHashMap();
     Map<V, Neighbors<V>> successorMap = Maps.newHashMap();
-    private DirectedGraph<V, E> graph;
+    private final DirectedGraph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -82,7 +82,7 @@ public class DirectedNeighborIndex<V, E>
      *
      * @param g the graph for which a neighbor index is to be created.
      */
-    public DirectedNeighborIndex(DirectedGraph<V, E> g)
+    public DirectedNeighborIndex(final DirectedGraph<V, E> g)
     {
         graph = g;
     }
@@ -99,7 +99,7 @@ public class DirectedNeighborIndex<V, E>
      *
      * @return all unique predecessors of the specified vertex
      */
-    public Set<V> predecessorsOf(V v)
+    public Set<V> predecessorsOf(final V v)
     {
         return getPredecessors(v).getNeighbors();
     }
@@ -116,7 +116,7 @@ public class DirectedNeighborIndex<V, E>
      *
      * @return all predecessors of the specified vertex
      */
-    public List<V> predecessorListOf(V v)
+    public List<V> predecessorListOf(final V v)
     {
         return getPredecessors(v).getNeighborList();
     }
@@ -131,7 +131,7 @@ public class DirectedNeighborIndex<V, E>
      *
      * @return all unique successors of the specified vertex
      */
-    public Set<V> successorsOf(V v)
+    public Set<V> successorsOf(final V v)
     {
         return getSuccessors(v).getNeighbors();
     }
@@ -148,7 +148,7 @@ public class DirectedNeighborIndex<V, E>
      *
      * @return all successors of the specified vertex
      */
-    public List<V> successorListOf(V v)
+    public List<V> successorListOf(final V v)
     {
         return getSuccessors(v).getNeighborList();
     }
@@ -157,11 +157,11 @@ public class DirectedNeighborIndex<V, E>
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
     @Override
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+    public void edgeAdded(final GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = graph.getEdgeSource(edge);
-        V target = graph.getEdgeTarget(edge);
+        final E edge = e.getEdge();
+        final V source = graph.getEdgeSource(edge);
+        final V target = graph.getEdgeTarget(edge);
 
         // if a map does not already contain an entry,
         // then skip addNeighbor, since instantiating the map
@@ -184,11 +184,11 @@ public class DirectedNeighborIndex<V, E>
      * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
      */
     @Override
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = e.getEdgeSource();
-        V target = e.getEdgeTarget();
+        final E edge = e.getEdge();
+        final V source = e.getEdgeSource();
+        final V target = e.getEdgeTarget();
         if (successorMap.containsKey(source)) {
             successorMap.get(source).removeNeighbor(target);
         }
@@ -201,7 +201,7 @@ public class DirectedNeighborIndex<V, E>
      * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
      */
     @Override
-    public void vertexAdded(GraphVertexChangeEvent<V> e)
+    public void vertexAdded(final GraphVertexChangeEvent<V> e)
     {
         // nothing to cache until there are edges
     }
@@ -210,13 +210,13 @@ public class DirectedNeighborIndex<V, E>
      * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
      */
     @Override
-    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
     {
         predecessorMap.remove(e.getVertex());
         successorMap.remove(e.getVertex());
     }
 
-    private Neighbors<V> getPredecessors(V v)
+    private Neighbors<V> getPredecessors(final V v)
     {
         Neighbors<V> neighbors = predecessorMap.get(v);
         if (neighbors == null) {
@@ -227,7 +227,7 @@ public class DirectedNeighborIndex<V, E>
         return neighbors;
     }
 
-    private Neighbors<V> getSuccessors(V v)
+    private Neighbors<V> getSuccessors(final V v)
     {
         Neighbors<V> neighbors = successorMap.get(v);
         if (neighbors == null) {

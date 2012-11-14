@@ -54,8 +54,8 @@ public class DirectedMaskSubgraph<V, E>
     //~ Constructors -----------------------------------------------------------
 
     public DirectedMaskSubgraph(
-        DirectedGraph<V, E> base,
-        MaskFunctor<V, E> mask)
+        final DirectedGraph<V, E> base,
+        final MaskFunctor<V, E> mask)
     {
         super(base, mask);
     }

@@ -32,12 +32,12 @@ public class MinSourceSinkCut<V,E> {
 	V sink=null;
 	double epsilon=EdmondsKarpMaximumFlow.DEFAULT_EPSILON;
 	
-	public MinSourceSinkCut(DirectedGraph<V, E> graph){
-		this.ekMaxFlow=new EdmondsKarpMaximumFlow<V,E>(graph);
+	public MinSourceSinkCut(final DirectedGraph<V, E> graph){
+        ekMaxFlow =new EdmondsKarpMaximumFlow<V,E>(graph);
 		this.graph=graph;
 	}
-	public MinSourceSinkCut(DirectedGraph<V, E> graph, double epsilon){
-		this.ekMaxFlow=new EdmondsKarpMaximumFlow<V,E>(graph);
+	public MinSourceSinkCut(final DirectedGraph<V, E> graph, final double epsilon){
+        ekMaxFlow =new EdmondsKarpMaximumFlow<V,E>(graph);
 		this.graph=graph;
 		this.epsilon=epsilon;
 	}
@@ -48,47 +48,46 @@ public class MinSourceSinkCut<V,E> {
 	 * @param sink
 	 * @return One partition of the minimum s-t cut
 	 */
-	public void computeMinCut(V source, V sink){
+	public void computeMinCut(final V source, final V sink){
 		this.source=source;
 		this.sink=sink;
 		minCut=new HashSet<V>();
 		//First compute a maxFlow from source to sink
 		ekMaxFlow.calculateMaximumFlow(source, sink);
-		this.cutWeight=ekMaxFlow.getMaximumFlowValue();
-		Map<E, Double> maxFlow=ekMaxFlow.getMaximumFlow();
+        cutWeight =ekMaxFlow.getMaximumFlowValue();
+		final Map<E, Double> maxFlow=ekMaxFlow.getMaximumFlow();
 		
-		Queue<V> processQueue=new LinkedList<V>();
+		final Queue<V> processQueue=new LinkedList<V>();
 		processQueue.add(source);
 		
 		while(!processQueue.isEmpty()){
-			V vertex=processQueue.remove();
-			if(minCut.contains(vertex))
-				continue;
-			else
-				minCut.add(vertex);
-			//1. Get the forward edges with residual capacity
-			Set<E> outEdges=new HashSet<E>(graph.outgoingEdgesOf(vertex));
+			final V vertex=processQueue.remove();
+            if (minCut.contains(vertex))
+                continue;
+            minCut.add(vertex);
+            //1. Get the forward edges with residual capacity
+			final Set<E> outEdges=new HashSet<E>(graph.outgoingEdgesOf(vertex));
 			for(Iterator<E> it=outEdges.iterator(); it.hasNext();){
-				E edge=it.next();
-				double edgeCapacity=graph.getEdgeWeight(edge);
-				double flowValue=maxFlow.get(edge);
+				final E edge=it.next();
+				final double edgeCapacity=graph.getEdgeWeight(edge);
+				final double flowValue=maxFlow.get(edge);
 				if(Math.abs(edgeCapacity-flowValue)<=epsilon) //No residual capacity on the edge
 					it.remove();
 			}
-			for(E edge: outEdges){
+			for(final E edge: outEdges){
 				processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
 			}
 			
 			//2. Get the backward edges with non-zero flow
-			Set<E> inEdges=new HashSet<E>(graph.incomingEdgesOf(vertex));
+			final Set<E> inEdges=new HashSet<E>(graph.incomingEdgesOf(vertex));
 			for(Iterator<E> it=inEdges.iterator(); it.hasNext();){
-				E edge=it.next();
+				final E edge=it.next();
 				//double edgeCapacity=graph.getEdgeWeight(edge);
-				double flowValue=maxFlow.get(edge);
+				final double flowValue=maxFlow.get(edge);
 				if(flowValue<=epsilon) //There is no flow on this edge
 					it.remove();
 			}
-			for(E edge: outEdges){
+			for(final E edge: outEdges){
 				processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
 			}
 		}
@@ -110,7 +109,7 @@ public class MinSourceSinkCut<V,E> {
 	public Set<V> getSinkPartition(){
 		if(minCut==null)
 			return null;
-		Set<V> set=new HashSet<V>(graph.vertexSet());
+		final Set<V> set=new HashSet<V>(graph.vertexSet());
 		set.removeAll(minCut);
 		return Collections.unmodifiableSet(set);
 	}
@@ -131,9 +130,9 @@ public class MinSourceSinkCut<V,E> {
 	public Set<E> getCutEdges(){
 		if(minCut==null)
 			return null;
-		Set<E> cutEdges=new HashSet<E>();
-		for(V vertex: minCut){
-			for(E edge: graph.outgoingEdgesOf(vertex)){
+		final Set<E> cutEdges=new HashSet<E>();
+		for(final V vertex: minCut){
+			for(final E edge: graph.outgoingEdgesOf(vertex)){
 				if(!minCut.contains(Graphs.getOppositeVertex(graph, edge, vertex)))
 					cutEdges.add(edge);
 			}

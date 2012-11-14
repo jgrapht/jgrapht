@@ -23,8 +23,8 @@ public class AStarShortestPathTest extends TestCase {
 	 */
 	public void testShortestPath()
     {
-        AStarShortestPath<Vector2, DefaultWeightedEdge> path;
-        Vector2[] vectors = new Vector2[GRAPH_SIZE*GRAPH_SIZE];
+        final AStarShortestPath<Vector2, DefaultWeightedEdge> path;
+        final Vector2[] vectors = new Vector2[GRAPH_SIZE*GRAPH_SIZE];
     	for(int y=0; y<GRAPH_SIZE; y++)
     		for(int x=0; x<GRAPH_SIZE; x++){
         		vectors[y*GRAPH_SIZE + x] = new Vector2(x, y);
@@ -47,25 +47,24 @@ public class AStarShortestPathTest extends TestCase {
     private class Vector2{
     	public double x,y;
     	
-    	public Vector2(double x, double y) {
+    	public Vector2(final double x, final double y) {
     		this.x = x;
     		this.y = y;
     	}
     	
-    	public double dst (Vector2 goal) {
+    	public double dst (final Vector2 goal) {
     		final double x_d = goal.x - x;
     		final double y_d = goal.y - y;
     		return Math.sqrt(x_d * x_d + y_d * y_d);
     	}
 
-    	@Override public boolean equals (Object obj) {
+    	@Override public boolean equals (final Object obj) {
     		if (this == obj) return true;
     		if (obj == null) return false;
     		if (getClass() != obj.getClass()) return false;
-    		Vector2 other = (Vector2)obj;
-    		if (x != other.x || y != other.y) return false;
-    		return true;
-    	}
+    		final Vector2 other = (Vector2)obj;
+            return !(x != other.x || y != other.y);
+        }
     	
     	public String toString () {
     		return "[" + x + ":" + y + "]";
@@ -73,7 +72,8 @@ public class AStarShortestPathTest extends TestCase {
     }
     
     private class AStarAlgorithmProviderImpl implements AStarFunctionProvider<Vector2>{
-		@Override public double getHeuristicCost(Vector2 neighbor, Vector2 goal) {
+		@Override public double getHeuristicCost(
+            final Vector2 neighbor, final Vector2 goal) {
 			return neighbor.dst(goal);
 		}
 		/**
@@ -82,7 +82,8 @@ public class AStarShortestPathTest extends TestCase {
 		 * Vector2 (and my purposes) this is pretty close. For performance, I'd
 		 * imagine caching these maps would be in an optimal solution.
 		 */
-		@Override public double getPathCost(Vector2 neighbor, Vector2 goal) {
+		@Override public double getPathCost(
+            final Vector2 neighbor, final Vector2 goal) {
 			return neighbor.dst(goal);
 		}
     }

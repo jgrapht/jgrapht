@@ -89,23 +89,23 @@ public class KSPExampleGraph
 
     private void addEdges()
     {
-        this.edgeST = this.addEdge("S", "T");
-        this.edgeSA = this.addEdge("S", "A");
-        this.edgeAD = this.addEdge("A", "D");
-        this.edgeDE = this.addEdge("D", "E");
-        this.edgeEC = this.addEdge("E", "C");
-        this.edgeCB = this.addEdge("C", "B");
-        this.edgeCT = this.addEdge("C", "T");
-        this.edgeBT = this.addEdge("B", "T");
+        edgeST = addEdge("S", "T");
+        edgeSA = addEdge("S", "A");
+        edgeAD = addEdge("A", "D");
+        edgeDE = addEdge("D", "E");
+        edgeEC = addEdge("E", "C");
+        edgeCB = addEdge("C", "B");
+        edgeCT = addEdge("C", "T");
+        edgeBT = addEdge("B", "T");
 
-        setEdgeWeight(this.edgeST, 1);
-        setEdgeWeight(this.edgeSA, 100);
-        setEdgeWeight(this.edgeAD, 1);
-        setEdgeWeight(this.edgeDE, 1);
-        setEdgeWeight(this.edgeEC, 1);
-        setEdgeWeight(this.edgeCB, 1);
-        setEdgeWeight(this.edgeCT, 1);
-        setEdgeWeight(this.edgeBT, 1);
+        setEdgeWeight(edgeST, 1);
+        setEdgeWeight(edgeSA, 100);
+        setEdgeWeight(edgeAD, 1);
+        setEdgeWeight(edgeDE, 1);
+        setEdgeWeight(edgeEC, 1);
+        setEdgeWeight(edgeCB, 1);
+        setEdgeWeight(edgeCT, 1);
+        setEdgeWeight(edgeBT, 1);
     }
 
     private void addVertices()

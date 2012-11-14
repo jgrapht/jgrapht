@@ -64,7 +64,7 @@ public class ParanoidGraph<V, E>
 
     //~ Constructors -----------------------------------------------------------
 
-    public ParanoidGraph(Graph<V, E> g)
+    public ParanoidGraph(final Graph<V, E> g)
     {
         super(g);
     }
@@ -75,7 +75,7 @@ public class ParanoidGraph<V, E>
      * @see Graph#addEdge(Object, Object, Object)
      */
     @Override
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    public boolean addEdge(final V sourceVertex, final V targetVertex, final E e)
     {
         verifyAdd(edgeSet(), e);
         return super.addEdge(sourceVertex, targetVertex, e);
@@ -85,19 +85,19 @@ public class ParanoidGraph<V, E>
      * @see Graph#addVertex(Object)
      */
     @Override
-    public boolean addVertex(V v)
+    public boolean addVertex(final V v)
     {
         verifyAdd(vertexSet(), v);
         return super.addVertex(v);
     }
 
-    private static <T> void verifyAdd(Set<T> set, T t)
+    private static <T> void verifyAdd(final Set<T> set, final T t)
     {
-        for (T o : set) {
+        for (final T o : set) {
             if (o == t) {
                 continue;
             }
-            if (o.equals(t) && (o.hashCode() != t.hashCode())) {
+            if (o.equals(t) && o.hashCode() != t.hashCode()) {
                 throw new IllegalArgumentException(
                     "ParanoidGraph detected objects "
                     + "o1 (hashCode=" + o.hashCode()

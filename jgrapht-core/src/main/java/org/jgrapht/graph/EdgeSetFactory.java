@@ -46,7 +46,7 @@ import java.util.*;
 
 /**
  * A factory for edge sets. This interface allows the creator of a graph to
- * choose the {@link java.util.Set} implementation used internally by the graph
+ * choose the {@link Set} implementation used internally by the graph
  * to maintain sets of edges. This provides control over performance tradeoffs
  * between memory and CPU usage.
  *

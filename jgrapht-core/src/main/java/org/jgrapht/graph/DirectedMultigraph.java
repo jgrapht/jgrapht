@@ -63,7 +63,7 @@ public class DirectedMultigraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public DirectedMultigraph(Class<? extends E> edgeClass)
+    public DirectedMultigraph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
@@ -73,7 +73,7 @@ public class DirectedMultigraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public DirectedMultigraph(EdgeFactory<V, E> ef)
+    public DirectedMultigraph(final EdgeFactory<V, E> ef)
     {
         super(ef, true, true);
     }

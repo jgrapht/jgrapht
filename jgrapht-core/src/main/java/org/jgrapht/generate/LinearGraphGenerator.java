@@ -68,7 +68,7 @@ public class LinearGraphGenerator<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private int size;
+    private final int size;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -79,7 +79,7 @@ public class LinearGraphGenerator<V, E>
      *
      * @throws IllegalArgumentException if the specified size is negative.
      */
-    public LinearGraphGenerator(int size)
+    public LinearGraphGenerator(final int size)
     {
         if (size < 0) {
             throw new IllegalArgumentException("must be non-negative");
@@ -95,14 +95,14 @@ public class LinearGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, V> resultMap)
     {
         V lastVertex = null;
 
         for (int i = 0; i < size; ++i) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
 
             if (lastVertex == null) {
@@ -116,7 +116,7 @@ public class LinearGraphGenerator<V, E>
             lastVertex = newVertex;
         }
 
-        if ((resultMap != null) && (lastVertex != null)) {
+        if (resultMap != null && lastVertex != null) {
             resultMap.put(END_VERTEX, lastVertex);
         }
     }

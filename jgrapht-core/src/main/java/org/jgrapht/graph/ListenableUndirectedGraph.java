@@ -45,7 +45,7 @@ import org.jgrapht.*;
 
 
 /**
- * An undirected graph which is also {@link org.jgrapht.ListenableGraph}.
+ * An undirected graph which is also {@link ListenableGraph}.
  *
  * @see DefaultListenableGraph
  */
@@ -64,7 +64,7 @@ public class ListenableUndirectedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public ListenableUndirectedGraph(Class<? extends E> edgeClass)
+    public ListenableUndirectedGraph(final Class<? extends E> edgeClass)
     {
         this(new SimpleGraph<V, E>(edgeClass));
     }
@@ -74,7 +74,7 @@ public class ListenableUndirectedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableUndirectedGraph(UndirectedGraph<V, E> base)
+    public ListenableUndirectedGraph(final UndirectedGraph<V, E> base)
     {
         super(base);
     }

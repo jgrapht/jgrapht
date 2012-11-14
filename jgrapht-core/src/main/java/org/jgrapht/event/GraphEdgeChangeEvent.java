@@ -45,7 +45,7 @@ package org.jgrapht.event;
  * change. The event can be used either as an indication <i>after</i> the edge
  * has been added or removed, or <i>before</i> it is added. The type of the
  * event can be tested using the {@link
- * org.jgrapht.event.GraphChangeEvent#getType()} method.
+ * GraphChangeEvent#getType()} method.
  *
  * @author Barak Naveh
  * @since Aug 10, 2003
@@ -109,7 +109,7 @@ public class GraphEdgeChangeEvent<V, E>
      * @deprecated Use new constructor which takes vertex parameters.
      */
     public GraphEdgeChangeEvent(
-        Object eventSource, int type, E edge)
+        final Object eventSource, final int type, final E edge)
     {
         this(eventSource, type, edge, null, null);
     }
@@ -124,8 +124,8 @@ public class GraphEdgeChangeEvent<V, E>
      * @param edgeTarget edge target vertex
      */
     public GraphEdgeChangeEvent(
-        Object eventSource, int type, E edge,
-        V edgeSource, V edgeTarget)
+        final Object eventSource, final int type, final E edge,
+        final V edgeSource, final V edgeTarget)
     {
         super(eventSource, type);
         this.edge = edge;

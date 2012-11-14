@@ -65,7 +65,6 @@ import org.jgrapht.*;
 
 public class AsUnweightedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -81,7 +80,7 @@ public class AsUnweightedGraph<V, E>
      * @param g the backing graph over which an unweighted view is to be
      * created.
      */
-    public AsUnweightedGraph(Graph<V, E> g)
+    public AsUnweightedGraph(final Graph<V, E> g)
     {
         super(g);
     }
@@ -92,7 +91,7 @@ public class AsUnweightedGraph<V, E>
      * @see Graph#getEdgeWeight
      */
     @Override
-    public double getEdgeWeight(E e)
+    public double getEdgeWeight(final E e)
     {
         return WeightedGraph.DEFAULT_EDGE_WEIGHT;
     }

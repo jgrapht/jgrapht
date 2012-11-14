@@ -57,10 +57,10 @@ public class GraphMLExporter<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
-    private EdgeNameProvider<E> edgeIDProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
+    private final VertexNameProvider<V> vertexIDProvider;
+    private final VertexNameProvider<V> vertexLabelProvider;
+    private final EdgeNameProvider<E> edgeIDProvider;
+    private final EdgeNameProvider<E> edgeLabelProvider;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -90,10 +90,10 @@ public class GraphMLExporter<V, E>
      * will not be written to the file.
      */
     public GraphMLExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeIDProvider,
-        EdgeNameProvider<E> edgeLabelProvider)
+        final VertexNameProvider<V> vertexIDProvider,
+        final VertexNameProvider<V> vertexLabelProvider,
+        final EdgeNameProvider<E> edgeIDProvider,
+        final EdgeNameProvider<E> edgeLabelProvider)
     {
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
@@ -109,21 +109,21 @@ public class GraphMLExporter<V, E>
      * @param writer the writer to which the graph to be exported
      * @param g the graph to be exported
      */
-    public void export(Writer writer, Graph<V, E> g)
+    public void export(final Writer writer, final Graph<V, E> g)
         throws SAXException, TransformerConfigurationException
     {
         // Prepare an XML file to receive the GraphML data
-        PrintWriter out = new PrintWriter(writer);
-        StreamResult streamResult = new StreamResult(out);
-        SAXTransformerFactory factory =
+        final PrintWriter out = new PrintWriter(writer);
+        final StreamResult streamResult = new StreamResult(out);
+        final SAXTransformerFactory factory =
             (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-        TransformerHandler handler = factory.newTransformerHandler();
-        Transformer serializer = handler.getTransformer();
+        final TransformerHandler handler = factory.newTransformerHandler();
+        final Transformer serializer = handler.getTransformer();
         serializer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         serializer.setOutputProperty(OutputKeys.INDENT, "yes");
         handler.setResult(streamResult);
         handler.startDocument();
-        AttributesImpl attr = new AttributesImpl();
+        final AttributesImpl attr = new AttributesImpl();
 
         // <graphml>
         handler.startPrefixMapping(
@@ -173,11 +173,11 @@ public class GraphMLExporter<V, E>
             "",
             "edgedefault",
             "CDATA",
-            (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
+            g instanceof DirectedGraph<?, ?> ? "directed" : "undirected");
         handler.startElement("", "", "graph", attr);
 
         // Add all the vertices as <node> elements...
-        for (V v : g.vertexSet()) {
+        for (final V v : g.vertexSet()) {
             // <node>
             attr.clear();
             attr.addAttribute(
@@ -195,7 +195,7 @@ public class GraphMLExporter<V, E>
                 handler.startElement("", "", "data", attr);
 
                 // Content for <data>
-                String vertexLabel = vertexLabelProvider.getVertexName(v);
+                final String vertexLabel = vertexLabelProvider.getVertexName(v);
                 handler.characters(
                     vertexLabel.toCharArray(),
                     0,
@@ -208,7 +208,7 @@ public class GraphMLExporter<V, E>
         }
 
         // Add all the edges as <edge> elements...
-        for (E e : g.edgeSet()) {
+        for (final E e : g.edgeSet()) {
             // <edge>
             attr.clear();
             attr.addAttribute(
@@ -238,7 +238,7 @@ public class GraphMLExporter<V, E>
                 handler.startElement("", "", "data", attr);
 
                 // Content for <data>
-                String edgeLabel = edgeLabelProvider.getEdgeName(e);
+                final String edgeLabel = edgeLabelProvider.getEdgeName(e);
                 handler.characters(
                     edgeLabel.toCharArray(),
                     0,

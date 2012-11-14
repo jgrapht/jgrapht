@@ -72,8 +72,7 @@ import org.jgrapht.*;
  */
 public class AsWeightedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable,
-        WeightedGraph<V, E>
+    implements WeightedGraph<V, E>
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -98,15 +97,15 @@ public class AsWeightedGraph<V, E>
      * changes the map after construction, the changes will affect the
      * AsWeightedGraph instance as well.
      */
-    public AsWeightedGraph(Graph<V, E> g, Map<E, Double> weightMap)
+    public AsWeightedGraph(final Graph<V, E> g, final Map<E, Double> weightMap)
     {
         super(g);
-        assert (weightMap != null);
+        assert weightMap != null;
         this.weightMap = weightMap;
 
         // Remember whether the backing graph implements the WeightedGraph
         // interface
-        this.isWeightedGraph = (g instanceof WeightedGraph<?, ?>);
+        isWeightedGraph = g instanceof WeightedGraph<?, ?>;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -115,7 +114,7 @@ public class AsWeightedGraph<V, E>
      * @see WeightedGraph#setEdgeWeight
      */
     @Override
-    public void setEdgeWeight(E e, double weight)
+    public void setEdgeWeight(final E e, final double weight)
     {
         if (isWeightedGraph) {
             super.setEdgeWeight(e, weight);
@@ -130,9 +129,9 @@ public class AsWeightedGraph<V, E>
      * @see Graph#getEdgeWeight
      */
     @Override
-    public double getEdgeWeight(E e)
+    public double getEdgeWeight(final E e)
     {
-        double weight;
+        final double weight;
 
         // Always return the value from the weight map first and
         // only pass the call through as a backup

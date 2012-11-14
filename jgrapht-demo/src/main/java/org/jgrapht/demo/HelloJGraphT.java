@@ -66,15 +66,15 @@ public final class HelloJGraphT
      *
      * @param args ignored.
      */
-    public static void main(String [] args)
+    public static void main(final String [] args)
     {
-        UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
+        final UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
 
         // note undirected edges are printed as: {<v1>,<v2>}
         System.out.println(stringGraph.toString());
 
         // create a graph based on URL objects
-        DirectedGraph<URL, DefaultEdge> hrefGraph = createHrefGraph();
+        final DirectedGraph<URL, DefaultEdge> hrefGraph = createHrefGraph();
 
         // note directed edges are printed as: (<v1>,<v2>)
         System.out.println(hrefGraph.toString());
@@ -88,13 +88,13 @@ public final class HelloJGraphT
      */
     private static DirectedGraph<URL, DefaultEdge> createHrefGraph()
     {
-        DirectedGraph<URL, DefaultEdge> g =
+        final DirectedGraph<URL, DefaultEdge> g =
             new DefaultDirectedGraph<URL, DefaultEdge>(DefaultEdge.class);
 
         try {
-            URL amazon = new URL("http://www.amazon.com");
-            URL yahoo = new URL("http://www.yahoo.com");
-            URL ebay = new URL("http://www.ebay.com");
+            final URL amazon = new URL("http://www.amazon.com");
+            final URL yahoo = new URL("http://www.yahoo.com");
+            final URL ebay = new URL("http://www.ebay.com");
 
             // add the vertices
             g.addVertex(amazon);
@@ -118,13 +118,13 @@ public final class HelloJGraphT
      */
     private static UndirectedGraph<String, DefaultEdge> createStringGraph()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 
-        String v1 = "v1";
-        String v2 = "v2";
-        String v3 = "v3";
-        String v4 = "v4";
+        final String v1 = "v1";
+        final String v2 = "v2";
+        final String v3 = "v3";
+        final String v4 = "v4";
 
         // add the vertices
         g.addVertex(v1);

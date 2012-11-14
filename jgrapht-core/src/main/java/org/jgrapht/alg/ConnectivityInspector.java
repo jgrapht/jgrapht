@@ -74,7 +74,7 @@ import java.util.Set;
  * unless immediately necessary. Computation are done once and results and
  * cached within this class for future need.</p>
  *
- * <p>The inspector is also a {@link org.jgrapht.event.GraphListener}. If added
+ * <p>The inspector is also a {@link GraphListener}. If added
  * as a listener to the inspected graph, the inspector will amend internal
  * cached results instead of recomputing them. It is efficient when a few
  * modifications are applied to a large graph. If many modifications are
@@ -93,7 +93,7 @@ public class ConnectivityInspector<V, E>
 
     List<Set<V>> connectedSets;
     Map<V, Set<V>> vertexToConnectedSet;
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -102,10 +102,10 @@ public class ConnectivityInspector<V, E>
      *
      * @param g the graph for which a connectivity inspector to be created.
      */
-    public ConnectivityInspector(UndirectedGraph<V, E> g)
+    public ConnectivityInspector(final UndirectedGraph<V, E> g)
     {
         init();
-        this.graph = g;
+        graph = g;
     }
 
     /**
@@ -113,10 +113,10 @@ public class ConnectivityInspector<V, E>
      *
      * @param g the graph for which a connectivity inspector to be created.
      */
-    public ConnectivityInspector(DirectedGraph<V, E> g)
+    public ConnectivityInspector(final DirectedGraph<V, E> g)
     {
         init();
-        this.graph = new AsUndirectedGraph<V, E>(g);
+        graph = new AsUndirectedGraph<V, E>(g);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -144,14 +144,14 @@ public class ConnectivityInspector<V, E>
      * @return a set of all vertices that are in the maximally connected
      * component together with the specified vertex.
      */
-    public Set<V> connectedSetOf(V vertex)
+    public Set<V> connectedSetOf(final V vertex)
     {
         Set<V> connectedSet = vertexToConnectedSet.get(vertex);
 
         if (connectedSet == null) {
             connectedSet = new HashSet<V>();
 
-            BreadthFirstIterator<V, E> i =
+            final BreadthFirstIterator<V, E> i =
                 new BreadthFirstIterator<V, E>(graph, vertex);
 
             while (i.hasNext()) {
@@ -184,7 +184,7 @@ public class ConnectivityInspector<V, E>
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
     @Override
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+    public void edgeAdded(final GraphEdgeChangeEvent<V, E> e)
     {
         init(); // for now invalidate cached results, in the future need to
                 // amend them.
@@ -194,7 +194,7 @@ public class ConnectivityInspector<V, E>
      * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
      */
     @Override
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> e)
     {
         init(); // for now invalidate cached results, in the future need to
                 // amend them.
@@ -214,13 +214,13 @@ public class ConnectivityInspector<V, E>
      * @return <code>true</code> if and only if there is a path from the source
      * vertex to the target vertex.
      */
-    public boolean pathExists(V sourceVertex, V targetVertex)
+    public boolean pathExists(final V sourceVertex, final V targetVertex)
     {
         /*
          * TODO: Ignoring edge direction for directed graph may be
          * confusing. For directed graphs, consider Dijkstra's algorithm.
          */
-        Set<V> sourceSet = connectedSetOf(sourceVertex);
+        final Set<V> sourceSet = connectedSetOf(sourceVertex);
 
         return sourceSet.contains(targetVertex);
     }
@@ -229,7 +229,7 @@ public class ConnectivityInspector<V, E>
      * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
      */
     @Override
-    public void vertexAdded(GraphVertexChangeEvent<V> e)
+    public void vertexAdded(final GraphVertexChangeEvent<V> e)
     {
         init(); // for now invalidate cached results, in the future need to
                 // amend them.
@@ -239,7 +239,7 @@ public class ConnectivityInspector<V, E>
      * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
      */
     @Override
-    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
     {
         init(); // for now invalidate cached results, in the future need to
                 // amend them.
@@ -256,10 +256,10 @@ public class ConnectivityInspector<V, E>
         if (connectedSets == null) {
             connectedSets = new ArrayList<Set<V>>();
 
-            Set<V> vertexSet = graph.vertexSet();
+            final Set<V> vertexSet = graph.vertexSet();
 
             if (!vertexSet.isEmpty()) {
-                BreadthFirstIterator<V, E> i =
+                final BreadthFirstIterator<V, E> i =
                     new BreadthFirstIterator<V, E>(graph, null);
                 i.addTraversalListener(new MyTraversalListener());
 
@@ -291,7 +291,7 @@ public class ConnectivityInspector<V, E>
          */
         @Override
         public void connectedComponentFinished(
-            ConnectedComponentTraversalEvent e)
+            final ConnectedComponentTraversalEvent e)
         {
             connectedSets.add(currentConnectedSet);
         }
@@ -301,7 +301,7 @@ public class ConnectivityInspector<V, E>
          */
         @Override
         public void connectedComponentStarted(
-            ConnectedComponentTraversalEvent e)
+            final ConnectedComponentTraversalEvent e)
         {
             currentConnectedSet = new HashSet<V>();
         }
@@ -310,9 +310,9 @@ public class ConnectivityInspector<V, E>
          * @see TraversalListenerAdapter#vertexTraversed(VertexTraversalEvent)
          */
         @Override
-        public void vertexTraversed(VertexTraversalEvent<V> e)
+        public void vertexTraversed(final VertexTraversalEvent<V> e)
         {
-            V v = e.getVertex();
+            final V v = e.getVertex();
             currentConnectedSet.add(v);
             vertexToConnectedSet.put(v, currentConnectedSet);
         }

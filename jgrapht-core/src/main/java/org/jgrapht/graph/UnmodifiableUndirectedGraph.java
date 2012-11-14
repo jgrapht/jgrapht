@@ -65,7 +65,7 @@ public class UnmodifiableUndirectedGraph<V, E>
      * @param g the backing graph on which an unmodifiable graph is to be
      * created.
      */
-    public UnmodifiableUndirectedGraph(UndirectedGraph<V, E> g)
+    public UnmodifiableUndirectedGraph(final UndirectedGraph<V, E> g)
     {
         super(g);
     }

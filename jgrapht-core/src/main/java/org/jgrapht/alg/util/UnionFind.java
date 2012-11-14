@@ -59,8 +59,8 @@ public class UnionFind<T>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private Map<T, T> parentMap;
-    private Map<T, Integer> rankMap;
+    private final Map<T, T> parentMap;
+    private final Map<T, Integer> rankMap;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -68,11 +68,11 @@ public class UnionFind<T>
      * Creates a UnionFind instance with all of the elements of elements in
      * seperate sets.
      */
-    public UnionFind(Set<T> elements)
+    public UnionFind(final Set<T> elements)
     {
         parentMap = Maps.newHashMap();
         rankMap = Maps.newHashMap();
-        for (T element : elements) {
+        for (final T element : elements) {
             parentMap.put(element, element);
             rankMap.put(element, 0);
         }
@@ -85,7 +85,7 @@ public class UnionFind<T>
      *
      * @param element The element to add.
      */
-    public void addElement(T element)
+    public void addElement(final T element)
     {
         parentMap.put(element, element);
         rankMap.put(element, 0);
@@ -114,19 +114,19 @@ public class UnionFind<T>
      *
      * @return The element representing the set the element is in.
      */
-    public T find(T element)
+    public T find(final T element)
     {
         if (!parentMap.containsKey(element)) {
             throw new IllegalArgumentException(
                 "elements must be contained in given set");
         }
 
-        T parent = parentMap.get(element);
+        final T parent = parentMap.get(element);
         if (parent.equals(element)) {
             return element;
         }
 
-        T newParent = find(parent);
+        final T newParent = find(parent);
         parentMap.put(element, newParent);
         return newParent;
     }
@@ -137,7 +137,7 @@ public class UnionFind<T>
      * @param element1 The first element to union.
      * @param element2 The second element to union.
      */
-    public void union(T element1, T element2)
+    public void union(final T element1, final T element2)
     {
         if (!parentMap.containsKey(element1)
             || !parentMap.containsKey(element2))
@@ -146,16 +146,16 @@ public class UnionFind<T>
                 "elements must be contained in given set");
         }
 
-        T parent1 = find(element1);
-        T parent2 = find(element2);
+        final T parent1 = find(element1);
+        final T parent2 = find(element2);
 
         //check if the elements are already in the same set
         if (parent1.equals(parent2)) {
             return;
         }
 
-        int rank1 = rankMap.get(parent1);
-        int rank2 = rankMap.get(parent2);
+        final int rank1 = rankMap.get(parent1);
+        final int rank2 = rankMap.get(parent2);
         if (rank1 > rank2) {
             parentMap.put(parent2, parent1);
         } else if (rank1 < rank2) {

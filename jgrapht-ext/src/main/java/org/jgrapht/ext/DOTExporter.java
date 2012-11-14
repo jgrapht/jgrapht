@@ -52,11 +52,11 @@ public class DOTExporter<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
-    private ComponentAttributeProvider<V> vertexAttributeProvider;
-    private ComponentAttributeProvider<E> edgeAttributeProvider;
+    private final VertexNameProvider<V> vertexIDProvider;
+    private final VertexNameProvider<V> vertexLabelProvider;
+    private final EdgeNameProvider<E> edgeLabelProvider;
+    private final ComponentAttributeProvider<V> vertexAttributeProvider;
+    private final ComponentAttributeProvider<E> edgeAttributeProvider;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -80,9 +80,9 @@ public class DOTExporter<V, E>
      * will not be written to the file.
      */
     public DOTExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeLabelProvider)
+        final VertexNameProvider<V> vertexIDProvider,
+        final VertexNameProvider<V> vertexLabelProvider,
+        final EdgeNameProvider<E> edgeLabelProvider)
     {
         this(
             vertexIDProvider,
@@ -110,11 +110,11 @@ public class DOTExporter<V, E>
      * edge attributes will not be written to the file.
      */
     public DOTExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeLabelProvider,
-        ComponentAttributeProvider<V> vertexAttributeProvider,
-        ComponentAttributeProvider<E> edgeAttributeProvider)
+        final VertexNameProvider<V> vertexIDProvider,
+        final VertexNameProvider<V> vertexLabelProvider,
+        final EdgeNameProvider<E> edgeLabelProvider,
+        final ComponentAttributeProvider<V> vertexAttributeProvider,
+        final ComponentAttributeProvider<E> edgeAttributeProvider)
     {
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
@@ -131,11 +131,11 @@ public class DOTExporter<V, E>
      * @param writer the writer to which the graph to be exported
      * @param g the graph to be exported
      */
-    public void export(Writer writer, Graph<V, E> g)
+    public void export(final Writer writer, final Graph<V, E> g)
     {
-        PrintWriter out = new PrintWriter(writer);
-        String indent = "  ";
-        String connector;
+        final PrintWriter out = new PrintWriter(writer);
+        final String indent = "  ";
+        final String connector;
 
         if (g instanceof DirectedGraph<?, ?>) {
             out.println("digraph G {");
@@ -145,7 +145,7 @@ public class DOTExporter<V, E>
             connector = " -- ";
         }
 
-        for (V v : g.vertexSet()) {
+        for (final V v : g.vertexSet()) {
             out.print(indent + getVertexID(v));
 
             String labelName = null;
@@ -161,9 +161,9 @@ public class DOTExporter<V, E>
             out.println(";");
         }
 
-        for (E e : g.edgeSet()) {
-            String source = getVertexID(g.getEdgeSource(e));
-            String target = getVertexID(g.getEdgeTarget(e));
+        for (final E e : g.edgeSet()) {
+            final String source = getVertexID(g.getEdgeSource(e));
+            final String target = getVertexID(g.getEdgeTarget(e));
 
             out.print(indent + source + connector + target);
 
@@ -186,23 +186,23 @@ public class DOTExporter<V, E>
     }
 
     private void renderAttributes(
-        PrintWriter out,
+        final PrintWriter out,
         String labelName,
-        Map<String, String> attributes)
+        final Map<String, String> attributes)
     {
-        if ((labelName == null) && (attributes == null)) {
+        if (labelName == null && attributes == null) {
             return;
         }
         out.print(" [ ");
-        if ((labelName == null) && (attributes != null)) {
+        if (labelName == null && attributes != null) {
             labelName = attributes.get("label");
         }
         if (labelName != null) {
             out.print("label=\"" + labelName + "\" ");
         }
         if (attributes != null) {
-            for (Map.Entry<String, String> entry : attributes.entrySet()) {
-                String name = entry.getKey();
+            for (final Map.Entry<String, String> entry : attributes.entrySet()) {
+                final String name = entry.getKey();
                 if ("label".equals(name)) {
                     // already handled by special case above
                     continue;
@@ -231,21 +231,21 @@ public class DOTExporter<V, E>
      * @throws RuntimeException if the given <code>vertexIDProvider</code>
      * didn't generate a valid vertex ID.
      */
-    private String getVertexID(V v)
+    private String getVertexID(final V v)
     {
         // TODO jvs 28-Jun-2008:  possible optimizations here are
         // (a) only validate once per vertex
         // (b) compile regex patterns
 
         // use the associated id provider for an ID of the given vertex
-        String idCandidate = vertexIDProvider.getVertexName(v);
+        final String idCandidate = vertexIDProvider.getVertexName(v);
 
         // now test that this is a valid ID
-        boolean isAlphaDig = idCandidate.matches("[a-zA-Z]+([\\w_]*)?");
-        boolean isDoubleQuoted = idCandidate.matches("\".*\"");
-        boolean isDotNumber =
+        final boolean isAlphaDig = idCandidate.matches("[a-zA-Z]+([\\w_]*)?");
+        final boolean isDoubleQuoted = idCandidate.matches("\".*\"");
+        final boolean isDotNumber =
             idCandidate.matches("[-]?([.][0-9]+|[0-9]+([.][0-9]*)?)");
-        boolean isHTML = idCandidate.matches("<.*>");
+        final boolean isHTML = idCandidate.matches("<.*>");
 
         if (isAlphaDig || isDotNumber || isDoubleQuoted || isHTML) {
             return idCandidate;

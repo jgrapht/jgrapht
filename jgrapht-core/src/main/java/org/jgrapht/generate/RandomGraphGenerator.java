@@ -69,20 +69,20 @@ public class RandomGraphGenerator<V, E>
     protected int numOfVertexes;
     protected int numOfEdges;
     protected Random randomizer;
-    private long randomizerSeed;
+    private final long randomizerSeed;
 
     //~ Constructors -----------------------------------------------------------
 
-    public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges)
+    public RandomGraphGenerator(final int aNumOfVertexes, final int aNumOfEdges)
     {
-        if ((aNumOfVertexes < 0) || (aNumOfEdges < 0)) {
+        if (aNumOfVertexes < 0 || aNumOfEdges < 0) {
             throw new IllegalArgumentException("must be non-negative");
         }
-        this.numOfVertexes = aNumOfVertexes;
-        this.numOfEdges = aNumOfEdges;
+        numOfVertexes = aNumOfVertexes;
+        numOfEdges = aNumOfEdges;
 
-        this.randomizerSeed = chooseRandomSeedOnce();
-        this.randomizer = new Random(this.randomizerSeed);
+        randomizerSeed = chooseRandomSeedOnce();
+        randomizer = new Random(randomizerSeed);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -98,7 +98,7 @@ public class RandomGraphGenerator<V, E>
      */
     private synchronized static long chooseRandomSeedOnce()
     {
-        return (++seedUniquifier + System.nanoTime());
+        return ++seedUniquifier + System.nanoTime();
     }
 
     /**
@@ -106,7 +106,7 @@ public class RandomGraphGenerator<V, E>
      */
     private void resetRandomSeed()
     {
-        this.randomizer.setSeed(this.randomizerSeed);
+        randomizer.setSeed(randomizerSeed);
     }
 
     /**
@@ -122,19 +122,19 @@ public class RandomGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, V> resultMap)
     {
         resetRandomSeed();
 
         // key = generation order (1st,2nd,3rd,...) value=vertex Object
         // will be used later
-        Map<Integer, V> orderToVertexMap =
-            new HashMap<Integer, V>(this.numOfVertexes);
+        final Map<Integer, V> orderToVertexMap =
+            new HashMap<Integer, V>(numOfVertexes);
 
-        for (int i = 0; i < this.numOfVertexes; i++) {
-            V currVertex = vertexFactory.createVertex();
+        for (int i = 0; i < numOfVertexes; i++) {
+            final V currVertex = vertexFactory.createVertex();
             target.addVertex(currVertex);
             orderToVertexMap.put(Integer.valueOf(i), currVertex);
         }
@@ -147,23 +147,21 @@ public class RandomGraphGenerator<V, E>
 
         // use specific type of edge factory, depending of the graph type
         // and edge density
-        EdgeTopologyFactory<V, E> edgesFactory =
+        final EdgeTopologyFactory<V, E> edgesFactory =
             edgeTopologyFactoryChooser(target, numOfEdges);
         if (!edgesFactory.isNumberOfEdgesValid(target, numOfEdges)) {
             throw new IllegalArgumentException(
                 "numOfEdges is not valid for the graph type "
                 + "\n-> Invalid number Of Edges=" + numOfEdges + " for:"
                 + " graph type=" + target.getClass()
-                + " ,number Of Vertexes=" + this.numOfVertexes
+                + " ,number Of Vertexes=" + numOfVertexes
                 + "\n-> Advice: For the Max value , check the javadoc for"
                 + " org.jgrapht.generate.RandomGraphGenerator.DefaultEdgeTopologyFactory");
         }
 
         edgesFactory.createEdges(
             target,
-            orderToVertexMap,
-            this.numOfEdges,
-            this.randomizer);
+            orderToVertexMap, numOfEdges, randomizer);
     }
 
     /**
@@ -175,8 +173,8 @@ public class RandomGraphGenerator<V, E>
      * @return
      */
     private EdgeTopologyFactory<V, E> edgeTopologyFactoryChooser(
-        Graph<V, E> target,
-        int numOfEdges)
+        final Graph<V, E> target,
+        final int numOfEdges)
     {
         return new DefaultEdgeTopologyFactory<V, E>();
     }
@@ -246,24 +244,24 @@ public class RandomGraphGenerator<V, E>
     {
         @Override
         public void createEdges(
-            Graph<VV, EE> targetGraph,
-            Map<Integer, VV> orderToVertexMap,
-            int numberOfEdges,
-            Random randomizer)
+            final Graph<VV, EE> targetGraph,
+            final Map<Integer, VV> orderToVertexMap,
+            final int numberOfEdges,
+            final Random randomizer)
         {
             int iterationsCounter = 0;
             int edgesCounter = 0;
             while (edgesCounter < numberOfEdges) {
                 // randomizer.nextInt(int n) return a number between zero
                 // (inclusive) and n(exclusive)
-                VV startVertex =
+                final VV startVertex =
                     orderToVertexMap.get(
                         Integer.valueOf(randomizer.nextInt(numOfVertexes)));
-                VV endVertex =
+                final VV endVertex =
                     orderToVertexMap.get(
                         Integer.valueOf(randomizer.nextInt(numOfVertexes)));
                 try {
-                    EE resultEdge = targetGraph.addEdge(startVertex, endVertex);
+                    final EE resultEdge = targetGraph.addEdge(startVertex, endVertex);
                     if (resultEdge != null) {
                         edgesCounter++;
                     }
@@ -337,31 +335,28 @@ public class RandomGraphGenerator<V, E>
          */
         @Override
         public boolean isNumberOfEdgesValid(
-            Graph<VV, EE> targetGraph,
-            int numberOfEdges)
+            final Graph<VV, EE> targetGraph,
+            final int numberOfEdges)
         {
-            boolean result;
+            final boolean result;
 
             boolean infinite = false;
-            int maxAllowedEdges = getMaxEdgesForVertexNum(targetGraph);
+            final int maxAllowedEdges = getMaxEdgesForVertexNum(targetGraph);
             if (maxAllowedEdges == -1) {
                 infinite = true;
             }
 
-            if (true == infinite) {
+            if (infinite) {
                 result = true;
-            } else if (numberOfEdges <= maxAllowedEdges) {
-                result = true;
-            } else {
-                result = false;
-            }
+            } else
+                result = numberOfEdges <= maxAllowedEdges;
             return result;
         }
 
         /**
          * Return max edges for that graph. If it is infinite return -1 instead.
          */
-        public int getMaxEdgesForVertexNum(Graph<VV, EE> targetGraph)
+        public int getMaxEdgesForVertexNum(final Graph<VV, EE> targetGraph)
         {
             int maxAllowedEdges = 0;
             if (targetGraph instanceof SimpleGraph<?, ?>) {

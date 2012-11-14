@@ -104,7 +104,7 @@ public class GmlExporterTest
 
     public void testUndirected()
     {
-        UndirectedGraph<String, DefaultEdge> g =
+        final UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -112,7 +112,7 @@ public class GmlExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        StringWriter w = new StringWriter();
+        final StringWriter w = new StringWriter();
         exporter.export(w, g);
         assertEquals(UNDIRECTED, w.toString());
     }

@@ -80,30 +80,30 @@ public class StoerWagnerMinimumCut<V, E>
      *
      * @param graph graph over which to run algorithm
      */
-    public StoerWagnerMinimumCut(WeightedGraph<V, E> graph)
+    public StoerWagnerMinimumCut(final WeightedGraph<V, E> graph)
     {
         //get a version of this graph where each vertex is wrapped with a list
         workingGraph =
             new SimpleWeightedGraph<Set<V>, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
-        Map<V, Set<V>> vertexMap = Maps.newHashMap();
-        for (V v : graph.vertexSet()) {
-            Set<V> list = Sets.newHashSet();
+        final Map<V, Set<V>> vertexMap = Maps.newHashMap();
+        for (final V v : graph.vertexSet()) {
+            final Set<V> list = Sets.newHashSet();
             list.add(v);
             vertexMap.put(v, list);
             workingGraph.addVertex(list);
         }
-        for (E e : graph.edgeSet()) {
-            V s = graph.getEdgeSource(e);
-            Set<V> sNew = vertexMap.get(s);
-            V t = graph.getEdgeTarget(e);
-            Set<V> tNew = vertexMap.get(t);
-            DefaultWeightedEdge eNew = workingGraph.addEdge(sNew, tNew);
+        for (final E e : graph.edgeSet()) {
+            final V s = graph.getEdgeSource(e);
+            final Set<V> sNew = vertexMap.get(s);
+            final V t = graph.getEdgeTarget(e);
+            final Set<V> tNew = vertexMap.get(t);
+            final DefaultWeightedEdge eNew = workingGraph.addEdge(sNew, tNew);
             workingGraph.setEdgeWeight(eNew, graph.getEdgeWeight(e));
         }
 
         //arbitrary vertex used to seed the algorithm.
-        Set<V> a = workingGraph.vertexSet().iterator().next();
+        final Set<V> a = workingGraph.vertexSet().iterator().next();
         while (workingGraph.vertexSet().size() > 2) {
             minimumCutPhase(a);
         }
@@ -114,38 +114,38 @@ public class StoerWagnerMinimumCut<V, E>
     /**
      * Implements the MinimumCutPhase function of Stoer and Wagner
      */
-    protected void minimumCutPhase(Set<V> a)
+    protected void minimumCutPhase(final Set<V> a)
     {
         //construct sorted queue with vertices connected to vertex a
-        PriorityQueue<VertexAndWeight> queue = Queues.newPriorityQueue();
-        Map<Set<V>, VertexAndWeight> dmap = Maps.newHashMap();
-        for (Set<V> v : workingGraph.vertexSet()) {
+        final PriorityQueue<VertexAndWeight> queue = Queues.newPriorityQueue();
+        final Map<Set<V>, VertexAndWeight> dmap = Maps.newHashMap();
+        for (final Set<V> v : workingGraph.vertexSet()) {
             if (v != a) {
-                Double w =
+                final Double w =
                     -workingGraph.getEdgeWeight(workingGraph.getEdge(v, a));
-                VertexAndWeight vandw = new VertexAndWeight(v, w);
+                final VertexAndWeight vandw = new VertexAndWeight(v, w);
                 queue.add(vandw);
                 dmap.put(v, vandw);
             }
         }
 
         //now iteratatively update the queue to get the required vertex ordering
-        List<Set<V>> list =
+        final List<Set<V>> list =
             new ArrayList<Set<V>>(workingGraph.vertexSet().size());
         list.add(a);
         while (!queue.isEmpty()) {
-            Set<V> v = queue.poll().vertex;
+            final Set<V> v = queue.poll().vertex;
             dmap.remove(v);
             list.add(v);
-            for (DefaultWeightedEdge e : workingGraph.edgesOf(v)) {
-                Set<V> vc;
+            for (final DefaultWeightedEdge e : workingGraph.edgesOf(v)) {
+                final Set<V> vc;
                 if (v != workingGraph.getEdgeSource(e)) {
                     vc = workingGraph.getEdgeSource(e);
                 } else {
                     vc = workingGraph.getEdgeTarget(e);
                 }
                 if (dmap.get(vc) != null) {
-                    Double neww =
+                    final Double neww =
                         -workingGraph.getEdgeWeight(workingGraph.getEdge(v, vc))
                         + dmap.get(vc).weight;
                     queue.remove(dmap.get(vc)); //this is O(logn) but could be
@@ -160,8 +160,8 @@ public class StoerWagnerMinimumCut<V, E>
         //if this is the first run we compute the weight of last vertex in the
         //list
         if (firstRun) {
-            Set<V> v = list.get(list.size() - 1);
-            double w = vertexWeight(v);
+            final Set<V> v = list.get(list.size() - 1);
+            final double w = vertexWeight(v);
             if (w < bestcutweight) {
                 bestcutweight = w;
                 bestCut = v;
@@ -170,11 +170,11 @@ public class StoerWagnerMinimumCut<V, E>
         }
 
         //the last two elements in list are the vertices we want to merge.
-        Set<V> s = list.get(list.size() - 2);
-        Set<V> t = list.get(list.size() - 1);
+        final Set<V> s = list.get(list.size() - 2);
+        final Set<V> t = list.get(list.size() - 1);
 
         //merge these vertices and get the weight.
-        VertexAndWeight vw = mergeVertices(s, t);
+        final VertexAndWeight vw = mergeVertices(s, t);
 
         //If this is the best cut so far store it.
         if (vw.weight < bestcutweight) {
@@ -203,24 +203,24 @@ public class StoerWagnerMinimumCut<V, E>
      * Merges vertex t into vertex s, summing the weights as required. Returns
      * the merged vertex and the sum of its weights
      */
-    protected VertexAndWeight mergeVertices(Set<V> s, Set<V> t)
+    protected VertexAndWeight mergeVertices(final Set<V> s, final Set<V> t)
     {
         //construct the new combinedvertex
-        Set<V> set = new HashSet<V>();
-        for (V v : s) {
+        final Set<V> set = new HashSet<V>();
+        for (final V v : s) {
             set.add(v);
         }
-        for (V v : t) {
+        for (final V v : t) {
             set.add(v);
         }
         workingGraph.addVertex(set);
 
         //add edges and weights to the combined vertex
         double wsum = 0.0;
-        for (Set<V> v : workingGraph.vertexSet()) {
-            if ((s != v) && (t != v)) {
-                DefaultWeightedEdge etv = workingGraph.getEdge(t, v);
-                DefaultWeightedEdge esv = workingGraph.getEdge(s, v);
+        for (final Set<V> v : workingGraph.vertexSet()) {
+            if (s != v && t != v) {
+                final DefaultWeightedEdge etv = workingGraph.getEdge(t, v);
+                final DefaultWeightedEdge esv = workingGraph.getEdge(s, v);
                 double wtv = 0.0, wsv = 0.0;
                 if (etv != null) {
                     wtv = workingGraph.getEdgeWeight(etv);
@@ -228,7 +228,7 @@ public class StoerWagnerMinimumCut<V, E>
                 if (esv != null) {
                     wsv = workingGraph.getEdgeWeight(esv);
                 }
-                double neww = wtv + wsv;
+                final double neww = wtv + wsv;
                 wsum += neww;
                 if (neww != 0.0) {
                     workingGraph.setEdgeWeight(
@@ -248,10 +248,10 @@ public class StoerWagnerMinimumCut<V, E>
     /**
      * Compute the sum of the weights entering a vertex
      */
-    public double vertexWeight(Set<V> v)
+    public double vertexWeight(final Set<V> v)
     {
         double wsum = 0.0;
-        for (DefaultWeightedEdge e : workingGraph.edgesOf(v)) {
+        for (final DefaultWeightedEdge e : workingGraph.edgesOf(v)) {
             wsum += workingGraph.getEdgeWeight(e);
         }
         return wsum;
@@ -268,13 +268,13 @@ public class StoerWagnerMinimumCut<V, E>
         public Set<V> vertex;
         public Double weight;
 
-        public VertexAndWeight(Set<V> v, double w)
+        public VertexAndWeight(final Set<V> v, final double w)
         {
-            this.vertex = v;
-            this.weight = w;
+            vertex = v;
+            weight = w;
         }
 
-        @Override public int compareTo(VertexAndWeight that)
+        @Override public int compareTo(final VertexAndWeight that)
         {
             return Double.compare(weight, that.weight);
         }

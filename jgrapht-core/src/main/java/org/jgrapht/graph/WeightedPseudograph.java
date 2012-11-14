@@ -66,7 +66,7 @@ public class WeightedPseudograph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public WeightedPseudograph(EdgeFactory<V, E> ef)
+    public WeightedPseudograph(final EdgeFactory<V, E> ef)
     {
         super(ef);
     }
@@ -76,7 +76,7 @@ public class WeightedPseudograph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public WeightedPseudograph(Class<? extends E> edgeClass)
+    public WeightedPseudograph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }

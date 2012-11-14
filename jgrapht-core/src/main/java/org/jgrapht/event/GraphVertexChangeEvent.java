@@ -45,7 +45,7 @@ package org.jgrapht.event;
  * change. The event can be used either as an indication <i>after</i> the vertex
  * has been added or removed, or <i>before</i> it is added. The type of the
  * event can be tested using the {@link
- * org.jgrapht.event.GraphChangeEvent#getType()} method.
+ * GraphChangeEvent#getType()} method.
  *
  * @author Barak Naveh
  * @since Aug 10, 2003
@@ -97,7 +97,7 @@ public class GraphVertexChangeEvent<V>
      * @param type the type of the event.
      * @param vertex the vertex that the event is related to.
      */
-    public GraphVertexChangeEvent(Object eventSource, int type, V vertex)
+    public GraphVertexChangeEvent(final Object eventSource, final int type, final V vertex)
     {
         super(eventSource, type);
         this.vertex = vertex;

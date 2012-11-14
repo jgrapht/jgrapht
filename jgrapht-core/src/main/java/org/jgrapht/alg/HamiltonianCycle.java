@@ -73,19 +73,19 @@ public class HamiltonianCycle
      * @return The optimal tour as a list of vertices.
      */
     public static <V, E> List<V> getApproximateOptimalForCompleteGraph(
-        SimpleWeightedGraph<V, E> g)
+        final SimpleWeightedGraph<V, E> g)
     {
-        List<V> vertices = new LinkedList<V>(g.vertexSet());
+        final List<V> vertices = new LinkedList<V>(g.vertexSet());
 
         // If the graph is not complete then return null since this algorithm
         // requires the graph be complete
-        if ((vertices.size() * (vertices.size() - 1) / 2)
+        if (vertices.size() * (vertices.size() - 1) / 2
             != g.edgeSet().size())
         {
             return null;
         }
 
-        List<V> tour = new LinkedList<V>();
+        final List<V> tour = new LinkedList<V>();
 
         // Each iteration a new vertex will be added to the tour until all
         // vertices have been added
@@ -98,11 +98,11 @@ public class HamiltonianCycle
             // A check will be made for the shortest edge to a vertex not within
             // the tour and that new vertex will be added to the vertex
             for (int i = 0; i < tour.size(); i++) {
-                V v = tour.get(i);
+                final V v = tour.get(i);
                 for (int j = 0; j < vertices.size(); j++) {
-                    double weight =
+                    final double weight =
                         g.getEdgeWeight(g.getEdge(v, vertices.get(j)));
-                    if (firstEdge || (weight < minEdgeValue)) {
+                    if (firstEdge || weight < minEdgeValue) {
                         firstEdge = false;
                         minEdgeValue = weight;
                         minVertexFound = j;

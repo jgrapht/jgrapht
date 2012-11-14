@@ -62,17 +62,17 @@ public class ColoringTest
      */
     public void testGreedyColoring()
     {
-        Graph<Object, DefaultEdge> completeGraph =
+        final Graph<Object, DefaultEdge> completeGraph =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 6);
         completeGraphGenerator.generateGraph(
             completeGraph,
             new ClassBasedVertexFactory<Object>(Object.class),
             null);
-        GreedyColoring<Object, DefaultEdge> colorer =
+        final GreedyColoring<Object, DefaultEdge> colorer =
             new GreedyColoring<Object, DefaultEdge>(completeGraph);
         assertEquals(new Integer(6), colorer.getUpperBound(null));
     }
@@ -82,17 +82,17 @@ public class ColoringTest
      */
     public void testBacktrackColoring()
     {
-        Graph<Object, DefaultEdge> completeGraph =
+        final Graph<Object, DefaultEdge> completeGraph =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 6);
         completeGraphGenerator.generateGraph(
             completeGraph,
             new ClassBasedVertexFactory<Object>(Object.class),
             null);
-        BrownBacktrackColoring<Object, DefaultEdge> colorer =
+        final BrownBacktrackColoring<Object, DefaultEdge> colorer =
             new BrownBacktrackColoring<Object, DefaultEdge>(completeGraph);
         assertEquals(new Integer(6), colorer.getResult(null));
     }

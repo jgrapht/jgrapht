@@ -63,7 +63,7 @@ public class BreadthFirstIterator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private Deque<V> queue = new ArrayDeque<V>();
+    private final Deque<V> queue = new ArrayDeque<V>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -72,7 +72,7 @@ public class BreadthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      */
-    public BreadthFirstIterator(Graph<V, E> g)
+    public BreadthFirstIterator(final Graph<V, E> g)
     {
         this(g, null);
     }
@@ -87,7 +87,7 @@ public class BreadthFirstIterator<V, E>
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      */
-    public BreadthFirstIterator(Graph<V, E> g, V startVertex)
+    public BreadthFirstIterator(final Graph<V, E> g, final V startVertex)
     {
         super(g, startVertex);
     }
@@ -107,7 +107,7 @@ public class BreadthFirstIterator<V, E>
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
     @Override
-    protected void encounterVertex(V vertex, E edge)
+    protected void encounterVertex(final V vertex, final E edge)
     {
         putSeenData(vertex, null);
         queue.add(vertex);
@@ -117,7 +117,7 @@ public class BreadthFirstIterator<V, E>
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
     @Override
-    protected void encounterVertexAgain(V vertex, E edge)
+    protected void encounterVertexAgain(final V vertex, final E edge)
     {
     }
 

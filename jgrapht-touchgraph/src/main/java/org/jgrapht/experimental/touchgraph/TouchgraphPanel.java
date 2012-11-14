@@ -66,9 +66,9 @@ public class TouchgraphPanel<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private Color defaultBackColor = new Color(0x01, 0x11, 0x44);
-    private Color defaultBorderBackColor = new Color(0x02, 0x35, 0x81);
-    private Color defaultForeColor =
+    private final Color defaultBackColor = new Color(0x01, 0x11, 0x44);
+    private final Color defaultBorderBackColor = new Color(0x02, 0x35, 0x81);
+    private final Color defaultForeColor =
         new Color((float) 0.95, (float) 0.85, (float) 0.55);
 
     /**
@@ -87,7 +87,7 @@ public class TouchgraphPanel<V, E>
     //~ Constructors -----------------------------------------------------------
 
     /**constructor*/
-    public TouchgraphPanel(Graph<V, E> graph, boolean selfReferencesAllowed)
+    public TouchgraphPanel(final Graph<V, E> graph, final boolean selfReferencesAllowed)
     {
         this.graph = graph;
         this.selfReferencesAllowed = selfReferencesAllowed;
@@ -113,8 +113,8 @@ public class TouchgraphPanel<V, E>
      */
     public void preinitialize()
     {
-        this.setBackground(defaultBorderBackColor);
-        this.setForeground(defaultForeColor);
+        setBackground(defaultBorderBackColor);
+        setForeground(defaultForeColor);
         scrollBarHash = new Hashtable();
         tgLensSet = new TGLensSet();
         tgPanel = new TGPanel();
@@ -137,7 +137,7 @@ public class TouchgraphPanel<V, E>
         tgPanel.setLensSet(tgLensSet);
         addUIs();
         try {
-            if (this.graph == null) {
+            if (graph == null) {
                 /*
                  * Add a random graph
                  */
@@ -146,13 +146,11 @@ public class TouchgraphPanel<V, E>
                 /*
                  * Add users graph
                  */
-                TouchgraphConverter<V, E> converter =
+                final TouchgraphConverter<V, E> converter =
                     new TouchgraphConverter<V, E>();
-                Node n =
-                    (Node) converter.convertToTouchGraph(
-                        this.graph,
-                        tgPanel,
-                        this.selfReferencesAllowed);
+                final Node n =
+                    (Node) converter.convertToTouchGraph(graph,
+                        tgPanel, selfReferencesAllowed);
                 getHVScroll().slowScrollToCenter(n);
                 tgPanel.setLocale(n, Integer.MAX_VALUE);
             }

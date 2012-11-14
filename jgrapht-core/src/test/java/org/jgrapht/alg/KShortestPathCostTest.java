@@ -58,12 +58,12 @@ public class KShortestPathCostTest
 
     public void testKShortestPathCompleteGraph4()
     {
-        int nbPaths = 5;
+        final int nbPaths = 5;
 
-        KShortestPathCompleteGraph4 graph = new KShortestPathCompleteGraph4();
+        final KShortestPathCompleteGraph4 graph = new KShortestPathCompleteGraph4();
 
-        KShortestPaths pathFinder = new KShortestPaths(graph, "vS", nbPaths);
-        List pathElements = pathFinder.getPaths("v3");
+        final KShortestPaths pathFinder = new KShortestPaths(graph, "vS", nbPaths);
+        final List pathElements = pathFinder.getPaths("v3");
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
@@ -72,7 +72,7 @@ public class KShortestPathCostTest
             pathElements.toString());
 
         assertEquals(5, pathElements.size(), 0);
-        GraphPath pathElement = (GraphPath) pathElements.get(0);
+        final GraphPath pathElement = (GraphPath) pathElements.get(0);
         assertEquals(2, pathElement.getWeight(), 0);
 
         assertEquals(
@@ -82,11 +82,11 @@ public class KShortestPathCostTest
 
     public void testPicture1Graph()
     {
-        Picture1Graph picture1Graph = new Picture1Graph();
+        final Picture1Graph picture1Graph = new Picture1Graph();
 
-        int maxSize = 10;
+        final int maxSize = 10;
 
-        KShortestPaths pathFinder =
+        final KShortestPaths pathFinder =
             new KShortestPaths(picture1Graph, "vS",
                 maxSize);
 
@@ -126,7 +126,7 @@ public class KShortestPathCostTest
         double lastCost = pathElement.getWeight();
         for (int i = 0; i < pathElements.size(); i++) {
             pathElement = (GraphPath) pathElements.get(i);
-            double cost = pathElement.getWeight();
+            final double cost = pathElement.getWeight();
 
             assertTrue(lastCost <= cost);
             lastCost = cost;
@@ -135,80 +135,80 @@ public class KShortestPathCostTest
 
     public void testShortestPathsInIncreasingOrder()
     {
-        BiconnectedGraph biconnectedGraph = new BiconnectedGraph();
+        final BiconnectedGraph biconnectedGraph = new BiconnectedGraph();
         verifyShortestPathsInIncreasingOrderOfWeight(biconnectedGraph);
 
-        KShortestPathCompleteGraph4 kSPCompleteGraph4 =
+        final KShortestPathCompleteGraph4 kSPCompleteGraph4 =
             new KShortestPathCompleteGraph4();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPCompleteGraph4);
 
-        KShortestPathCompleteGraph5 kSPCompleteGraph5 =
+        final KShortestPathCompleteGraph5 kSPCompleteGraph5 =
             new KShortestPathCompleteGraph5();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPCompleteGraph5);
 
-        KShortestPathCompleteGraph6 kSPCompleteGraph6 =
+        final KShortestPathCompleteGraph6 kSPCompleteGraph6 =
             new KShortestPathCompleteGraph6();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPCompleteGraph6);
 
-        KSPExampleGraph kSPExampleGraph = new KSPExampleGraph();
+        final KSPExampleGraph kSPExampleGraph = new KSPExampleGraph();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPExampleGraph);
 
-        NotBiconnectedGraph notBiconnectedGraph = new NotBiconnectedGraph();
+        final NotBiconnectedGraph notBiconnectedGraph = new NotBiconnectedGraph();
         verifyShortestPathsInIncreasingOrderOfWeight(notBiconnectedGraph);
 
-        Picture1Graph picture1Graph = new Picture1Graph();
+        final Picture1Graph picture1Graph = new Picture1Graph();
         verifyShortestPathsInIncreasingOrderOfWeight(picture1Graph);
     }
 
     public void testShortestPathsWeightsWithMaxSizeIncreases()
     {
-        BiconnectedGraph biconnectedGraph = new BiconnectedGraph();
+        final BiconnectedGraph biconnectedGraph = new BiconnectedGraph();
         verifyShortestPathsWeightsWithMaxSizeIncreases(biconnectedGraph);
 
-        KShortestPathCompleteGraph4 kSPCompleteGraph4 =
+        final KShortestPathCompleteGraph4 kSPCompleteGraph4 =
             new KShortestPathCompleteGraph4();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPCompleteGraph4);
 
-        KShortestPathCompleteGraph5 kSPCompleteGraph5 =
+        final KShortestPathCompleteGraph5 kSPCompleteGraph5 =
             new KShortestPathCompleteGraph5();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPCompleteGraph5);
 
-        KShortestPathCompleteGraph6 kSPCompleteGraph6 =
+        final KShortestPathCompleteGraph6 kSPCompleteGraph6 =
             new KShortestPathCompleteGraph6();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPCompleteGraph6);
 
-        KSPExampleGraph kSPExampleGraph = new KSPExampleGraph();
+        final KSPExampleGraph kSPExampleGraph = new KSPExampleGraph();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPExampleGraph);
 
-        NotBiconnectedGraph notBiconnectedGraph = new NotBiconnectedGraph();
+        final NotBiconnectedGraph notBiconnectedGraph = new NotBiconnectedGraph();
         verifyShortestPathsWeightsWithMaxSizeIncreases(notBiconnectedGraph);
 
-        Picture1Graph picture1Graph = new Picture1Graph();
+        final Picture1Graph picture1Graph = new Picture1Graph();
         verifyShortestPathsWeightsWithMaxSizeIncreases(picture1Graph);
     }
 
-    private void verifyShortestPathsInIncreasingOrderOfWeight(Graph graph)
+    private void verifyShortestPathsInIncreasingOrderOfWeight(final Graph graph)
     {
-        int maxSize = 20;
+        final int maxSize = 20;
 
         for (
             Iterator sourceIterator = graph.vertexSet().iterator();
             sourceIterator.hasNext();)
         {
-            Object sourceVertex = sourceIterator.next();
+            final Object sourceVertex = sourceIterator.next();
 
             for (
                 Iterator targetIterator = graph.vertexSet().iterator();
                 targetIterator.hasNext();)
             {
-                Object targetVertex = targetIterator.next();
+                final Object targetVertex = targetIterator.next();
 
                 if (targetVertex != sourceVertex) {
-                    KShortestPaths pathFinder =
+                    final KShortestPaths pathFinder =
                         new KShortestPaths(graph,
                             sourceVertex, maxSize);
 
-                    List pathElements = pathFinder.getPaths(targetVertex);
+                    final List pathElements = pathFinder.getPaths(targetVertex);
                     if (pathElements == null) {
                         // no path exists between the start vertex and the end
                         // vertex
@@ -218,7 +218,7 @@ public class KShortestPathCostTest
                     double lastWeight = pathElement.getWeight();
                     for (int i = 0; i < pathElements.size(); i++) {
                         pathElement = (GraphPath) pathElements.get(i);
-                        double weight = pathElement.getWeight();
+                        final double weight = pathElement.getWeight();
                         assertTrue(lastWeight <= weight);
                         lastWeight = weight;
                     }
@@ -228,27 +228,27 @@ public class KShortestPathCostTest
         }
     }
 
-    private void verifyShortestPathsWeightsWithMaxSizeIncreases(Graph graph)
+    private void verifyShortestPathsWeightsWithMaxSizeIncreases(final Graph graph)
     {
-        int maxSizeLimit = 10;
+        final int maxSizeLimit = 10;
 
         for (
             Iterator sourceIterator = graph.vertexSet().iterator();
             sourceIterator.hasNext();)
         {
-            Object sourceVertex = sourceIterator.next();
+            final Object sourceVertex = sourceIterator.next();
 
             for (
                 Iterator targetIterator = graph.vertexSet().iterator();
                 targetIterator.hasNext();)
             {
-                Object targetVertex = targetIterator.next();
+                final Object targetVertex = targetIterator.next();
 
                 if (targetVertex != sourceVertex) {
                     KShortestPaths pathFinder =
                         new KShortestPaths(graph,
                             sourceVertex, 1);
-                    List<GraphPath> prevPathElementsResults =
+                    final List<GraphPath> prevPathElementsResults =
                         pathFinder.getPaths(targetVertex);
 
                     if (prevPathElementsResults == null) {
@@ -261,7 +261,7 @@ public class KShortestPathCostTest
                         pathFinder =
                             new KShortestPaths(graph, sourceVertex,
                                 maxSize);
-                        List<GraphPath> pathElementsResults =
+                        final List<GraphPath> pathElementsResults =
                             pathFinder.getPaths(targetVertex);
 
                         verifyWeightsConsistency(
@@ -283,13 +283,13 @@ public class KShortestPathCostTest
      * equal to <code>k+1</code>
      */
     private void verifyWeightsConsistency(
-        List<GraphPath> prevPathElementsResults,
-        List<GraphPath> pathElementsResults)
+        final List<GraphPath> prevPathElementsResults,
+        final List<GraphPath> pathElementsResults)
     {
         for (int i = 0; i < prevPathElementsResults.size(); i++) {
-            GraphPath pathElementResult =
+            final GraphPath pathElementResult =
                 (GraphPath) pathElementsResults.get(i);
-            GraphPath prevPathElementResult =
+            final GraphPath prevPathElementResult =
                 (GraphPath) prevPathElementsResults.get(i);
             assertTrue(
                 pathElementResult.getWeight()

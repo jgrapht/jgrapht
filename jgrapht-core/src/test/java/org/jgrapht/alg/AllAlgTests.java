@@ -66,7 +66,7 @@ public final class AllAlgTests
      */
     public static Test suite()
     {
-        TestSuite suite = new TestSuite();
+        final TestSuite suite = new TestSuite();
 
         // $JUnit-BEGIN$
         suite.addTest(new TestSuite(AStarShortestPathTest.class));

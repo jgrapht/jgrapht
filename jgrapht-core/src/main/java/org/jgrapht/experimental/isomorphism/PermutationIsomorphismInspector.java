@@ -69,13 +69,13 @@ class PermutationIsomorphismInspector<V, E>
      * UniformEquivalenceComparator will be used as default (always return true)
      */
     public PermutationIsomorphismInspector(
-        Graph<V, E> graph1,
-        Graph<V, E> graph2,
+        final Graph<V, E> graph1,
+        final Graph<V, E> graph2,
 
         // XXX hb 060128: FOllowing parameter may need Graph<? super V,? super
         // E>
-        EquivalenceComparator<? super V, ? super Graph<? super V, ? super E>> vertexChecker,
-        EquivalenceComparator<? super E, ? super Graph<? super V, ? super E>> edgeChecker)
+        final EquivalenceComparator<? super V, ? super Graph<? super V, ? super E>> vertexChecker,
+        final EquivalenceComparator<? super E, ? super Graph<? super V, ? super E>> edgeChecker)
     {
         super(graph1, graph2, vertexChecker, edgeChecker);
     }
@@ -87,8 +87,8 @@ class PermutationIsomorphismInspector<V, E>
      * Graph)
      */
     public PermutationIsomorphismInspector(
-        Graph<V, E> graph1,
-        Graph<V, E> graph2)
+        final Graph<V, E> graph1,
+        final Graph<V, E> graph2)
     {
         super(graph1, graph2);
     }
@@ -106,8 +106,8 @@ class PermutationIsomorphismInspector<V, E>
      */
     @Override
     protected CollectionPermutationIter<V> createPermutationIterator(
-        Set<V> vertexSet1,
-        Set<V> vertexSet2)
+        final Set<V> vertexSet1,
+        final Set<V> vertexSet2)
     {
         return new CollectionPermutationIter<V>(vertexSet2);
     }
@@ -122,22 +122,19 @@ class PermutationIsomorphismInspector<V, E>
      */
     @Override
     protected boolean areVertexSetsOfTheSameEqualityGroup(
-        Set<V> vertexSet1,
-        Set<V> vertexSet2)
+        final Set<V> vertexSet1,
+        final Set<V> vertexSet2)
     {
         if (vertexSet1.size() != vertexSet2.size()) {
             return false;
         }
-        Iterator<V> iter2 = vertexSet2.iterator();
+        final Iterator<V> iter2 = vertexSet2.iterator();
 
         // only check hasNext() of one , cause they are of the same size
-        for (V vertex1 : vertexSet1) {
-            V vertex2 = iter2.next();
-            if (!this.vertexComparator.equivalenceCompare(
-                    vertex1,
-                    vertex2,
-                    this.graph1,
-                    this.graph2))
+        for (final V vertex1 : vertexSet1) {
+            final V vertex2 = iter2.next();
+            if (!vertexComparator
+                .equivalenceCompare(vertex1, vertex2, graph1, graph2))
             {
                 return false;
             }

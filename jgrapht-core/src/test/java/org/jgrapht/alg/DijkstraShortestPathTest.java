@@ -62,7 +62,7 @@ public class DijkstraShortestPathTest
     public void testConstructor()
     {
         DijkstraShortestPath<String, DefaultWeightedEdge> path;
-        Graph<String, DefaultWeightedEdge> g = create();
+        final Graph<String, DefaultWeightedEdge> g = create();
 
         path =
             new DijkstraShortestPath<String, DefaultWeightedEdge>(
@@ -92,9 +92,9 @@ public class DijkstraShortestPathTest
 
     @Override
     protected List findPathBetween(
-        Graph<String, DefaultWeightedEdge> g,
-        String src,
-        String dest)
+        final Graph<String, DefaultWeightedEdge> g,
+        final String src,
+        final String dest)
     {
         return DijkstraShortestPath.findPathBetween(g, src, dest);
     }

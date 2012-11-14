@@ -259,7 +259,7 @@ public interface Graph<V, E>
      * of the iteration are undefined.
      *
      * <p>The graph implementation may maintain a particular set ordering (e.g.
-     * via {@link java.util.LinkedHashSet}) for deterministic iteration, but
+     * via {@link LinkedHashSet}) for deterministic iteration, but
      * this is not required. It is the responsibility of callers who rely on
      * this behavior to only use graph implementations which support it.</p>
      *
@@ -388,7 +388,7 @@ public interface Graph<V, E>
      * results of the iteration are undefined.
      *
      * <p>The graph implementation may maintain a particular set ordering (e.g.
-     * via {@link java.util.LinkedHashSet}) for deterministic iteration, but
+     * via {@link LinkedHashSet}) for deterministic iteration, but
      * this is not required. It is the responsibility of callers who rely on
      * this behavior to only use graph implementations which support it.</p>
      *

@@ -59,7 +59,7 @@ public class KruskalMinimumSpanningTree<V, E>
     //~ Instance fields --------------------------------------------------------
 
     private double spanningTreeCost;
-    private Set<E> edgeList;
+    private final Set<E> edgeList;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -72,13 +72,13 @@ public class KruskalMinimumSpanningTree<V, E>
      */
     public KruskalMinimumSpanningTree(final Graph<V, E> graph)
     {
-        UnionFind<V> forest = new UnionFind<V>(graph.vertexSet());
-        ArrayList<E> allEdges = new ArrayList<E>(graph.edgeSet());
+        final UnionFind<V> forest = new UnionFind<V>(graph.vertexSet());
+        final ArrayList<E> allEdges = new ArrayList<E>(graph.edgeSet());
         Collections.sort(
             allEdges,
             new Comparator<E>() {
                 @Override
-                public int compare(E edge1, E edge2)
+                public int compare(final E edge1, final E edge2)
                 {
                     return Double.valueOf(graph.getEdgeWeight(edge1)).compareTo(
                         graph.getEdgeWeight(edge2));
@@ -88,9 +88,9 @@ public class KruskalMinimumSpanningTree<V, E>
         spanningTreeCost = 0;
         edgeList = new HashSet<E>();
 
-        for (E edge : allEdges) {
-            V source = graph.getEdgeSource(edge);
-            V target = graph.getEdgeTarget(edge);
+        for (final E edge : allEdges) {
+            final V source = graph.getEdgeSource(edge);
+            final V target = graph.getEdgeTarget(edge);
             if (forest.find(source).equals(forest.find(target))) {
                 continue;
             }

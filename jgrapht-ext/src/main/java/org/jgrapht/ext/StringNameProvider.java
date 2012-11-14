@@ -53,10 +53,6 @@ public class StringNameProvider<V>
 {
     //~ Constructors -----------------------------------------------------------
 
-    public StringNameProvider()
-    {
-    }
-
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -70,7 +66,7 @@ public class StringNameProvider<V>
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
     @Override
-    public String getVertexName(V vertex)
+    public String getVertexName(final V vertex)
     {
         return vertex.toString();
     }

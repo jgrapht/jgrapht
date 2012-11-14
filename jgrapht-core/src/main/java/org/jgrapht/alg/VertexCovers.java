@@ -80,13 +80,13 @@ public abstract class VertexCovers
      * @return a set of vertices which is a vertex cover for the specified
      * graph.
      */
-    public static <V, E> Set<V> find2ApproximationCover(Graph<V, E> g)
+    public static <V, E> Set<V> find2ApproximationCover(final Graph<V, E> g)
     {
         // C <-- {}
-        Set<V> cover = new HashSet<V>();
+        final Set<V> cover = new HashSet<V>();
 
         // G'=(V',E') <-- G(V,E)
-        Subgraph<V, E, Graph<V, E>> sg =
+        final Subgraph<V, E, Graph<V, E>> sg =
             new Subgraph<V, E, Graph<V, E>>(
                 g,
                 null,
@@ -95,11 +95,11 @@ public abstract class VertexCovers
         // while E' is non-empty
         while (!sg.edgeSet().isEmpty()) {
             // let (u,v) be an arbitrary edge of E'
-            E e = sg.edgeSet().iterator().next();
+            final E e = sg.edgeSet().iterator().next();
 
             // C <-- C U {u,v}
-            V u = g.getEdgeSource(e);
-            V v = g.getEdgeTarget(e);
+            final V u = g.getEdgeSource(e);
+            final V v = g.getEdgeTarget(e);
             cover.add(u);
             cover.add(v);
 
@@ -118,30 +118,30 @@ public abstract class VertexCovers
      *
      * <p>The algorithm works on undirected graphs, but can also work on
      * directed graphs when their edge-directions are ignored. To ignore edge
-     * directions you can use {@link org.jgrapht.Graphs#undirectedGraph(Graph)}
-     * or {@link org.jgrapht.graph.AsUndirectedGraph}.</p>
+     * directions you can use {@link Graphs#undirectedGraph(Graph)}
+     * or {@link AsUndirectedGraph}.</p>
      *
      * @param g the graph for which vertex cover approximation is to be found.
      *
      * @return a set of vertices which is a vertex cover for the specified
      * graph.
      */
-    public static <V, E> Set<V> findGreedyCover(UndirectedGraph<V, E> g)
+    public static <V, E> Set<V> findGreedyCover(final UndirectedGraph<V, E> g)
     {
         // C <-- {}
-        Set<V> cover = new HashSet<V>();
+        final Set<V> cover = new HashSet<V>();
 
         // G' <-- G
-        UndirectedGraph<V, E> sg = new UndirectedSubgraph<V, E>(g, null, null);
+        final UndirectedGraph<V, E> sg = new UndirectedSubgraph<V, E>(g, null, null);
 
         // compare vertices in descending order of degree
-        VertexDegreeComparator<V, E> comp =
+        final VertexDegreeComparator<V, E> comp =
             new VertexDegreeComparator<V, E>(sg);
 
         // while G' != {}
         while (!sg.edgeSet().isEmpty()) {
             // v <-- vertex with maximum degree in G'
-            V v = Collections.max(sg.vertexSet(), comp);
+            final V v = Collections.max(sg.vertexSet(), comp);
 
             // C <-- C U {v}
             cover.add(v);

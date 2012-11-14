@@ -54,24 +54,24 @@ public class GraphPathImpl<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-    private List<E> edgeList;
+    private final List<E> edgeList;
 
-    private V startVertex;
+    private final V startVertex;
 
-    private V endVertex;
+    private final V endVertex;
 
-    private double weight;
+    private final double weight;
 
     //~ Constructors -----------------------------------------------------------
 
     public GraphPathImpl(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        List<E> edgeList,
-        double weight)
+        final Graph<V, E> graph,
+        final V startVertex,
+        final V endVertex,
+        final List<E> edgeList,
+        final double weight)
     {
         this.graph = graph;
         this.startVertex = startVertex;

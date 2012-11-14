@@ -71,7 +71,7 @@ public class ConnectedComponentTraversalEvent
     /**
      * The type of this event.
      */
-    private int type;
+    private final int type;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -81,7 +81,7 @@ public class ConnectedComponentTraversalEvent
      * @param eventSource the source of the event.
      * @param type the type of event.
      */
-    public ConnectedComponentTraversalEvent(Object eventSource, int type)
+    public ConnectedComponentTraversalEvent(final Object eventSource, final int type)
     {
         super(eventSource);
         this.type = type;

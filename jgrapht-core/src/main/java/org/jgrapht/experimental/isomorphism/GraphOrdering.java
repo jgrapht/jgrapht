@@ -37,9 +37,14 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 
-import org.jgrapht.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -78,7 +83,7 @@ public class GraphOrdering<V, E>
      *
      * @param regularGraph
      */
-    public GraphOrdering(Graph<V, E> regularGraph)
+    public GraphOrdering(final Graph<V, E> regularGraph)
     {
         this(regularGraph, regularGraph.vertexSet(), regularGraph.edgeSet());
     }
@@ -93,24 +98,24 @@ public class GraphOrdering<V, E>
      * @param edgeSet
      */
     public GraphOrdering(
-        Graph<V, E> regularGraph,
-        Set<V> vertexSet,
-        Set<E> edgeSet)
+        final Graph<V, E> regularGraph,
+        final Set<V> vertexSet,
+        final Set<E> edgeSet)
     {
         init(regularGraph, vertexSet, edgeSet);
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    private void init(Graph<V, E> g, Set<V> vertexSet, Set<E> edgeSet)
+    private void init(final Graph<V, E> g, final Set<V> vertexSet, final Set<E> edgeSet)
     {
         // create a map between vertex value to its order(1st,2nd,etc)
         // "CAT"=1 "DOG"=2 "RHINO"=3
 
-        this.mapVertexToOrder = new HashMap<V, Integer>(vertexSet.size());
+        mapVertexToOrder = new HashMap<V, Integer>(vertexSet.size());
 
         int counter = 0;
-        for (V vertex : vertexSet) {
+        for (final V vertex : vertexSet) {
             mapVertexToOrder.put(vertex, new Integer(counter));
             counter++;
         }
@@ -121,21 +126,21 @@ public class GraphOrdering<V, E>
         // on directed graph, edge A->B must be (A,B)
         // on undirected graph, edge A-B can be (A,B) or (B,A)
 
-        this.labelsEdgesSet = new HashSet<LabelsEdge>(edgeSet.size());
-        for (E edge : edgeSet) {
-            V sourceVertex = g.getEdgeSource(edge);
-            Integer sourceOrder = mapVertexToOrder.get(sourceVertex);
-            int sourceLabel = sourceOrder.intValue();
-            int targetLabel =
-                (mapVertexToOrder.get(g.getEdgeTarget(edge))).intValue();
+        labelsEdgesSet = new HashSet<LabelsEdge>(edgeSet.size());
+        for (final E edge : edgeSet) {
+            final V sourceVertex = g.getEdgeSource(edge);
+            final Integer sourceOrder = mapVertexToOrder.get(sourceVertex);
+            final int sourceLabel = sourceOrder.intValue();
+            final int targetLabel =
+                mapVertexToOrder.get(g.getEdgeTarget(edge)).intValue();
 
-            LabelsEdge lablesEdge = new LabelsEdge(sourceLabel, targetLabel);
-            this.labelsEdgesSet.add(lablesEdge);
+            final LabelsEdge lablesEdge = new LabelsEdge(sourceLabel, targetLabel);
+            labelsEdgesSet.add(lablesEdge);
 
             if (g instanceof UndirectedGraph<?, ?>) {
-                LabelsEdge oppositeEdge =
+                final LabelsEdge oppositeEdge =
                     new LabelsEdge(targetLabel, sourceLabel);
-                this.labelsEdgesSet.add(oppositeEdge);
+                labelsEdgesSet.add(oppositeEdge);
             }
         }
     }
@@ -143,12 +148,10 @@ public class GraphOrdering<V, E>
     /**
      * Tests equality by order of edges
      */
-    public boolean equalsByEdgeOrder(GraphOrdering otherGraph)
+    public boolean equalsByEdgeOrder(final GraphOrdering otherGraph)
     {
-        boolean result =
-            this.getLabelsEdgesSet().equals(otherGraph.getLabelsEdgesSet());
 
-        return result;
+        return getLabelsEdgesSet().equals(otherGraph.getLabelsEdgesSet());
     }
 
     public Set<LabelsEdge> getLabelsEdgesSet()
@@ -165,18 +168,18 @@ public class GraphOrdering<V, E>
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         sb.append("mapVertexToOrder=");
 
         // vertex will be printed in their order
-        Object [] vertexArray = new Object[this.mapVertexToOrder.size()];
-        Set<V> keySet = this.mapVertexToOrder.keySet();
-        for (V currVertex : keySet) {
-            Integer index = this.mapVertexToOrder.get(currVertex);
+        final Object [] vertexArray = new Object[mapVertexToOrder.size()];
+        final Set<V> keySet = mapVertexToOrder.keySet();
+        for (final V currVertex : keySet) {
+            final Integer index = mapVertexToOrder.get(currVertex);
             vertexArray[index.intValue()] = currVertex;
         }
         sb.append(Arrays.toString(vertexArray));
-        sb.append("labelsOrder=").append(this.labelsEdgesSet.toString());
+        sb.append("labelsOrder=").append(labelsEdgesSet.toString());
         return sb.toString();
     }
 
@@ -184,47 +187,41 @@ public class GraphOrdering<V, E>
 
     private class LabelsEdge
     {
-        private int source;
-        private int target;
-        private int hashCode;
+        private final int source;
+        private final int target;
+        private final int hashCode;
 
-        public LabelsEdge(int aSource, int aTarget)
+        public LabelsEdge(final int aSource, final int aTarget)
         {
-            this.source = aSource;
-            this.target = aTarget;
-            this.hashCode =
-                new String(this.source + "" + this.target).hashCode();
+            source = aSource;
+            target = aTarget;
+            hashCode =
+                new String(source + "" + target).hashCode();
         }
 
         /**
          * Checks both source and target. Does not check class type to be fast,
          * so it may throw ClassCastException. Careful!
          *
-         * @see java.lang.Object#equals(java.lang.Object)
+         * @see Object#equals(Object)
          */
-        public boolean equals(Object obj)
+        public boolean equals(final Object obj)
         {
-            LabelsEdge otherEdge = (LabelsEdge) obj;
-            if ((this.source == otherEdge.source)
-                && (this.target == otherEdge.target))
-            {
-                return true;
-            } else {
-                return false;
-            }
+            final LabelsEdge otherEdge = (LabelsEdge) obj;
+            return source == otherEdge.source && target == otherEdge.target;
         }
 
         /**
-         * @see java.lang.Object#hashCode()
+         * @see Object#hashCode()
          */
         public int hashCode()
         {
-            return this.hashCode; // filled on constructor
+            return hashCode; // filled on constructor
         }
 
         public String toString()
         {
-            return this.source + "->" + this.target;
+            return source + "->" + target;
         }
     }
 }

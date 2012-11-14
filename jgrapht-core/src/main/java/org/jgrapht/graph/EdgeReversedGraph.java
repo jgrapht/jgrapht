@@ -39,9 +39,11 @@
  */
 package org.jgrapht.graph;
 
+import java.lang.Object;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 
 /**
@@ -54,7 +56,7 @@ import org.jgrapht.*;
  * example, suppose you have a directed graph representing a tree, with edges
  * from parent to child, and you want to find all of the parents of a node. To
  * do this, simply create an edge-reversed graph and pass that as input to
- * {@link org.jgrapht.traverse.DepthFirstIterator}.
+ * {@link DepthFirstIterator}.
  *
  * @author John V. Sichi
  * @see AsUndirectedGraph
@@ -77,7 +79,7 @@ public class EdgeReversedGraph<V, E>
      * @param g the base (backing) graph on which the edge-reversed view will be
      * based.
      */
-    public EdgeReversedGraph(DirectedGraph<V, E> g)
+    public EdgeReversedGraph(final DirectedGraph<V, E> g)
     {
         super(g);
     }
@@ -88,7 +90,7 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#getEdge(Object, Object)
      */
     @Override
-    public E getEdge(V sourceVertex, V targetVertex)
+    public E getEdge(final V sourceVertex, final V targetVertex)
     {
         return super.getEdge(targetVertex, sourceVertex);
     }
@@ -97,7 +99,7 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#getAllEdges(Object, Object)
      */
     @Override
-    public Set<E> getAllEdges(V sourceVertex, V targetVertex)
+    public Set<E> getAllEdges(final V sourceVertex, final V targetVertex)
     {
         return super.getAllEdges(targetVertex, sourceVertex);
     }
@@ -106,7 +108,7 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#addEdge(Object, Object)
      */
     @Override
-    public E addEdge(V sourceVertex, V targetVertex)
+    public E addEdge(final V sourceVertex, final V targetVertex)
     {
         return super.addEdge(targetVertex, sourceVertex);
     }
@@ -115,7 +117,7 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#addEdge(Object, Object, Object)
      */
     @Override
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    public boolean addEdge(final V sourceVertex, final V targetVertex, final E e)
     {
         return super.addEdge(targetVertex, sourceVertex, e);
     }
@@ -124,7 +126,7 @@ public class EdgeReversedGraph<V, E>
      * @see DirectedGraph#inDegreeOf(Object)
      */
     @Override
-    public int inDegreeOf(V vertex)
+    public int inDegreeOf(final V vertex)
     {
         return super.outDegreeOf(vertex);
     }
@@ -133,7 +135,7 @@ public class EdgeReversedGraph<V, E>
      * @see DirectedGraph#outDegreeOf(Object)
      */
     @Override
-    public int outDegreeOf(V vertex)
+    public int outDegreeOf(final V vertex)
     {
         return super.inDegreeOf(vertex);
     }
@@ -142,7 +144,7 @@ public class EdgeReversedGraph<V, E>
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
     @Override
-    public Set<E> incomingEdgesOf(V vertex)
+    public Set<E> incomingEdgesOf(final V vertex)
     {
         return super.outgoingEdgesOf(vertex);
     }
@@ -151,7 +153,7 @@ public class EdgeReversedGraph<V, E>
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
     @Override
-    public Set<E> outgoingEdgesOf(V vertex)
+    public Set<E> outgoingEdgesOf(final V vertex)
     {
         return super.incomingEdgesOf(vertex);
     }
@@ -160,7 +162,7 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#removeEdge(Object, Object)
      */
     @Override
-    public E removeEdge(V sourceVertex, V targetVertex)
+    public E removeEdge(final V sourceVertex, final V targetVertex)
     {
         return super.removeEdge(targetVertex, sourceVertex);
     }
@@ -169,7 +171,7 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#getEdgeSource(Object)
      */
     @Override
-    public V getEdgeSource(E e)
+    public V getEdgeSource(final E e)
     {
         return super.getEdgeTarget(e);
     }
@@ -178,13 +180,13 @@ public class EdgeReversedGraph<V, E>
      * @see Graph#getEdgeTarget(Object)
      */
     @Override
-    public V getEdgeTarget(E e)
+    public V getEdgeTarget(final E e)
     {
         return super.getEdgeSource(e);
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * @see Object#toString()
      */
     public String toString()
     {

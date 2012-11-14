@@ -37,6 +37,7 @@
  */
 package org.jgrapht.experimental.equivalence;
 
+import java.lang.Object;
 import java.util.*;
 
 
@@ -79,15 +80,15 @@ public class EquivalenceSet<E, C>
      * reference to the comparator which is used.
      */
     public EquivalenceSet(
-        E aElement,
-        EquivalenceComparator<? super E, ? super C> aEqComparator,
-        C aComparatorContext)
+        final E aElement,
+        final EquivalenceComparator<? super E, ? super C> aEqComparator,
+        final C aComparatorContext)
     {
-        this.eqComparator = aEqComparator;
-        this.comparatorContext = aComparatorContext;
+        eqComparator = aEqComparator;
+        comparatorContext = aComparatorContext;
 
-        this.elementsSet = new HashSet<E>();
-        this.elementsSet.add(aElement);
+        elementsSet = new HashSet<E>();
+        elementsSet.add(aElement);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -104,7 +105,7 @@ public class EquivalenceSet<E, C>
 
     public C getContext()
     {
-        return this.comparatorContext;
+        return comparatorContext;
     }
 
     public int size()
@@ -116,20 +117,15 @@ public class EquivalenceSet<E, C>
      * Adds an element to the group. It does not check it for equivalance . You
      * must make sure it does, using equals().
      */
-    public void add(E element)
+    public void add(final E element)
     {
-        this.elementsSet.add(element);
+        elementsSet.add(element);
     }
 
-    public boolean equivalentTo(E aOther, C aOtherContext)
+    public boolean equivalentTo(final E aOther, final C aOtherContext)
     {
-        boolean result =
-            this.eqComparator.equivalenceCompare(
-                this.getRepresentative(),
-                aOther,
-                this.comparatorContext,
-                aOtherContext);
-        return result;
+        return eqComparator.equivalenceCompare(getRepresentative(), aOther,
+            comparatorContext, aOtherContext);
     }
 
     /**
@@ -150,7 +146,7 @@ public class EquivalenceSet<E, C>
     // write a warning or some such.
 
     @SuppressWarnings("unchecked")
-    public boolean equals(Object other)
+    public boolean equals(final Object other)
     {
         E otherRepresentative = null;
         C otherContext = null;
@@ -163,33 +159,25 @@ public class EquivalenceSet<E, C>
                 "can check equal() only of EqualityGroup");
         }
 
-        boolean result =
-            this.eqComparator.equivalenceCompare(
-                this.getRepresentative(),
-                otherRepresentative,
-                this.comparatorContext,
-                otherContext);
-        return result;
+        return eqComparator.equivalenceCompare(getRepresentative(),
+            otherRepresentative, comparatorContext, otherContext);
     }
 
     /**
      * Uses a representative to calculate the group hashcode using
      * equivalenceHashcode().
      *
-     * @see java.lang.Object#hashCode()
+     * @see Object#hashCode()
      */
     public int hashCode()
     {
-        int result =
-            this.eqComparator.equivalenceHashcode(
-                this.getRepresentative(),
-                this.comparatorContext);
-        return result;
+        return eqComparator.equivalenceHashcode(getRepresentative(),
+            comparatorContext);
     }
 
     public String toString()
     {
-        return "Eq.Group=" + this.elementsSet.toString();
+        return "Eq.Group=" + elementsSet.toString();
     }
 
     /**
@@ -199,7 +187,7 @@ public class EquivalenceSet<E, C>
      */
     public Object [] toArray()
     {
-        return this.elementsSet.toArray();
+        return elementsSet.toArray();
     }
 }
 

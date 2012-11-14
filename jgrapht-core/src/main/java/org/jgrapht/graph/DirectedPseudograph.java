@@ -63,7 +63,7 @@ public class DirectedPseudograph<V, E>
     /**
      * @see AbstractBaseGraph
      */
-    public DirectedPseudograph(Class<? extends E> edgeClass)
+    public DirectedPseudograph(final Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
@@ -71,7 +71,7 @@ public class DirectedPseudograph<V, E>
     /**
      * @see AbstractBaseGraph
      */
-    public DirectedPseudograph(EdgeFactory<V, E> ef)
+    public DirectedPseudograph(final EdgeFactory<V, E> ef)
     {
         super(ef, true, true);
     }

@@ -40,10 +40,12 @@
 // package org.jgrapht.generate;
 package org.jgrapht.experimental;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.GraphGenerator;
 
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -76,23 +78,19 @@ public class PartiteRandomGraphGenerator<V, E>
      * @throws IllegalArgumentException
      */
     public PartiteRandomGraphGenerator(
-        int numVertices1,
-        int numVertices2,
-        int numEdges)
+        final int numVertices1,
+        final int numVertices2,
+        final int numEdges)
     {
-        if ((numVertices1 < 0) || (numVertices2 < 0)) {
+        if (numVertices1 < 0 || numVertices2 < 0) {
             throw new IllegalArgumentException("must be non-negative");
         }
 
-        if ((numEdges < 0) || (numEdges > (numVertices1 * numVertices2))) {
+        if (numEdges < 0 || numEdges > numVertices1 * numVertices2) {
             throw new IllegalArgumentException("illegal number of edges");
         }
 
-        final int [] numVertices = {
-            numVertices1,
-            numVertices2
-        };
-        this.numVertices = numVertices;
+        numVertices = new int[]{ numVertices1, numVertices2 };
         this.numEdges = numEdges;
     }
 
@@ -105,7 +103,7 @@ public class PartiteRandomGraphGenerator<V, E>
      *
      * @throws IllegalArgumentException
      */
-    public PartiteRandomGraphGenerator(int [] numVertices, int numEdges)
+    public PartiteRandomGraphGenerator(final int [] numVertices, final int numEdges)
     {
         if (numEdges < 0) {
             throw new IllegalArgumentException("illegal number of edges");
@@ -117,7 +115,7 @@ public class PartiteRandomGraphGenerator<V, E>
             }
 
             for (int j = 0; j < i; j++) {
-                if (numEdges > (numVertices[i] * numVertices[j])) {
+                if (numEdges > numVertices[i] * numVertices[j]) {
                     throw new IllegalArgumentException(
                         "illegal number of edges");
                 }
@@ -141,11 +139,11 @@ public class PartiteRandomGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, Object[]> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, Object[]> resultMap)
     {
-        Object [][] vertices = new Object[numVertices.length][];
+        final Object [][] vertices = new Object[numVertices.length][];
 
         for (int i = 0; i < numVertices.length; i++) {
             vertices[i] =

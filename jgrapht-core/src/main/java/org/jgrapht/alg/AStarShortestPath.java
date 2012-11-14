@@ -80,24 +80,24 @@ public final class AStarShortestPath<V, E>
      * @param endVertex the vertex at which the path should end
      * @param functionProvider of f(x) and g(x), estimating costs
      */
-    public AStarShortestPath(WeightedGraph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        AStarFunctionProvider<V> functionProvider) {
+    public AStarShortestPath(final WeightedGraph<V, E> graph,
+        final V startVertex,
+        final V endVertex,
+        final AStarFunctionProvider<V> functionProvider) {
         if (!graph.containsVertex(endVertex))
             throw new IllegalArgumentException("graph must contain the end vertex");
-        List<V> closedSet = new ArrayList<V>(),
-        		openSet = new ArrayList<V>();
-        Map<V,V> cameFrom = Maps.newHashMap();
-        Map<V, Double> gScoreMap = Maps.newHashMap();
+        final List<V> closedSet = new ArrayList<V>();
+        final List<V> openSet = new ArrayList<V>();
+        final Map<V,V> cameFrom = Maps.newHashMap();
+        final Map<V, Double> gScoreMap = Maps.newHashMap();
         openSet.add(startVertex);
-        TreeMap<V, Double> fScoreMap
+        final TreeMap<V, Double> fScoreMap
             = Maps.newTreeMap(new VertexComparator(functionProvider, endVertex));
         gScoreMap.put(startVertex, 0.0);
         fScoreMap.put(startVertex, functionProvider.getHeuristicCost(startVertex, endVertex));
 
         while(!openSet.isEmpty()){
-        	V current = fScoreMap.firstKey();
+        	final V current = fScoreMap.firstKey();
         	fScoreMap.remove(current);
         	if(current == endVertex){
         		path = buildGraphPath(cameFrom, current, graph, startVertex, endVertex);
@@ -105,11 +105,11 @@ public final class AStarShortestPath<V, E>
         	}
         	openSet.remove(current);
         	closedSet.add(current);
-        	for(E edge : graph.edgesOf(current)){
-        		V neighbor = graph.getEdgeTarget(edge);
+        	for(final E edge : graph.edgesOf(current)){
+        		final V neighbor = graph.getEdgeTarget(edge);
         		if(closedSet.contains(neighbor))
         			continue;
-        		double tentativeGScore = gScoreMap.get(current) + functionProvider.getPathCost(current, neighbor);
+        		final double tentativeGScore = gScoreMap.get(current) + functionProvider.getPathCost(current, neighbor);
         		if(!openSet.contains(neighbor) || tentativeGScore < gScoreMap.get(neighbor)){
         			if(!openSet.contains(neighbor))
         				openSet.add(neighbor);
@@ -121,21 +121,21 @@ public final class AStarShortestPath<V, E>
         }
     }
 
-    private List<V> buildPath(Map<V,V> cameFrom, V currentNode){
-    	List<V> path = cameFrom.containsKey(currentNode) ? 
+    private List<V> buildPath(final Map<V,V> cameFrom, final V currentNode){
+    	final List<V> path = cameFrom.containsKey(currentNode) ?
     			buildPath(cameFrom, cameFrom.get(currentNode)) :
     			new ArrayList<V>();
 		path.add(currentNode);
 		return path;
     }
 
-    private GraphPath<V, E> buildGraphPath(Map<V,V> cameFrom, V currentNode,
-    		WeightedGraph<V, E> graph, V startVertex, V endVertex){
-    	List<V> reconstructed = buildPath(cameFrom, currentNode);
-		List<E> edgeList = new ArrayList<E>();
+    private GraphPath<V, E> buildGraphPath(final Map<V,V> cameFrom, final V currentNode,
+    		final WeightedGraph<V, E> graph, final V startVertex, final V endVertex){
+    	final List<V> reconstructed = buildPath(cameFrom, currentNode);
+		final List<E> edgeList = new ArrayList<E>();
 		double weight = 0.0;
 		for(int i=0; i<reconstructed.size()-1; i++){
-			E edge = graph.getEdge(reconstructed.get(i), reconstructed.get(i+1));
+			final E edge = graph.getEdge(reconstructed.get(i), reconstructed.get(i+1));
 			weight += graph.getEdgeWeight(edge);
 			edgeList.add(edge);
 		}
@@ -193,12 +193,12 @@ public final class AStarShortestPath<V, E>
      * @return List of Edges, or null if no path exists
      */
     public static <V, E> List<E> findPathBetween(
-        WeightedGraph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        AStarFunctionProvider<V> functionProvider)
+        final WeightedGraph<V, E> graph,
+        final V startVertex,
+        final V endVertex,
+        final AStarFunctionProvider<V> functionProvider)
     {
-        AStarShortestPath<V, E> alg =
+        final AStarShortestPath<V, E> alg =
             new AStarShortestPath<V, E>(
                 graph,
                 startVertex,
@@ -213,27 +213,28 @@ public final class AStarShortestPath<V, E>
          * An admissible "heuristic estimate" of the distance from x to the goal 
          * (usually denoted h(x)). This is the good guess function.
          */
-    	public double getHeuristicCost(V start, V goal);
+        double getHeuristicCost(V start, V goal);
     	
     	/**
     	 * Path cost from starting node to current node x (usually denoted g(x))
     	 */
-    	public double getPathCost(V neighbor, V goal);
+        double getPathCost(V neighbor, V goal);
     }
     
     private class VertexComparator implements Comparator<V>{
     	private final AStarFunctionProvider<V> provider;
     	private final V goal;
     	
-    	private VertexComparator(AStarFunctionProvider<V> provider, V goal){
+    	private VertexComparator(
+            final AStarFunctionProvider<V> provider, final V goal){
     		this.provider = provider;
     		this.goal = goal;
     	}
     	
-		@Override public int compare(V o1, V o2) {
-			Double o1Distance = provider.getPathCost(o1, goal),
-				o2Distance = provider.getPathCost(o2, goal);
-			return o1Distance.compareTo(o2Distance);
+		@Override public int compare(final V o1, final V o2) {
+			final Double o1Distance = provider.getPathCost(o1, goal);
+            final Double o2Distance = provider.getPathCost(o2, goal);
+            return o1Distance.compareTo(o2Distance);
 		}
     }
 }

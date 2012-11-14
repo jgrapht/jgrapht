@@ -61,10 +61,10 @@ public class EulerianCircuitTest
      */
     public void testEulerianCircuit()
     {
-        UndirectedGraph<Object, DefaultEdge> completeGraph1 =
+        final UndirectedGraph<Object, DefaultEdge> completeGraph1 =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator1 =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGenerator1 =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 6);
         completeGenerator1.generateGraph(
@@ -78,10 +78,10 @@ public class EulerianCircuitTest
         assertTrue(
             EulerianCircuit.getEulerianCircuitVertices(completeGraph1) == null);
 
-        UndirectedGraph<Object, DefaultEdge> completeGraph2 =
+        final UndirectedGraph<Object, DefaultEdge> completeGraph2 =
             new SimpleGraph<Object, DefaultEdge>(
                 DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator2 =
+        final CompleteGraphGenerator<Object, DefaultEdge> completeGenerator2 =
             new CompleteGraphGenerator<Object, DefaultEdge>(
                 5);
         completeGenerator2.generateGraph(

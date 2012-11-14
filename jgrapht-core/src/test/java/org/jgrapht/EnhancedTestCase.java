@@ -41,6 +41,8 @@ package org.jgrapht;
 
 import junit.framework.*;
 
+import java.lang.String;
+
 
 /**
  * A little extension to JUnit's TestCase.
@@ -58,13 +60,12 @@ public abstract class EnhancedTestCase
      */
     public EnhancedTestCase()
     {
-        super();
     }
 
     /**
-     * @see TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public EnhancedTestCase(String name)
+    public EnhancedTestCase(final String name)
     {
         super(name);
     }

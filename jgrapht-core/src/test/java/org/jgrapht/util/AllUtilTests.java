@@ -49,7 +49,7 @@ public class AllUtilTests
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.jgrapht.util");
+        final TestSuite suite = new TestSuite("Test for org.jgrapht.util");
 
         // $JUnit-BEGIN$
         suite.addTestSuite(FibonacciHeapTest.class);

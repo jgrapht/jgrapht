@@ -56,16 +56,15 @@ public class Mod3GroupComparator
 
     @Override
     public boolean equivalenceCompare(
-        Integer arg1,
-        Integer arg2,
-        Object context1,
-        Object context2)
+        final Integer arg1,
+        final Integer arg2,
+        final Object context1,
+        final Object context2)
     {
-        int int1 = arg1.intValue();
-        int int2 = arg2.intValue();
+        final int int1 = arg1.intValue();
+        final int int2 = arg2.intValue();
 
-        boolean result = ((int1 % 3) == (int2 % 3));
-        return result;
+        return int1 % 3 == int2 % 3;
     }
 
     /* Each group must have unique values.
@@ -78,9 +77,9 @@ public class Mod3GroupComparator
      * org.jgrapht.experimental.equivalence.EquivalenceComparator#equivalenceHashcode(java.lang.Object)
      */
     @Override
-    public int equivalenceHashcode(Integer arg1, Object context)
+    public int equivalenceHashcode(final Integer arg1, final Object context)
     {
-        int int1 = arg1.intValue();
+        final int int1 = arg1.intValue();
         return int1 % 3;
     }
 }

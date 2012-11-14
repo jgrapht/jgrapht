@@ -40,7 +40,9 @@
 package org.jgrapht.graph;
 
 import java.io.*;
+import java.lang.String;
 
+import junit.framework.TestCase;
 import org.jgrapht.*;
 
 
@@ -54,16 +56,16 @@ public class SerializationTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
+    private final String v1 = "v1";
+    private final String v2 = "v2";
+    private final String v3 = "v3";
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
+     * @see TestCase#TestCase(String)
      */
-    public SerializationTest(String name)
+    public SerializationTest(final String name)
     {
         super(name);
     }
@@ -103,14 +105,14 @@ public class SerializationTest
     private Object serializeAndDeserialize(Object obj)
         throws Exception
     {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bout);
+        final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        final ObjectOutputStream out = new ObjectOutputStream(bout);
 
         out.writeObject(obj);
         out.flush();
 
-        ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bin);
+        final ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
+        final ObjectInputStream in = new ObjectInputStream(bin);
 
         obj = in.readObject();
         return obj;

@@ -56,7 +56,7 @@ public class EmptyGraphGenerator<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private int size;
+    private final int size;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -67,7 +67,7 @@ public class EmptyGraphGenerator<V, E>
      *
      * @throws IllegalArgumentException if the specified size is negative.
      */
-    public EmptyGraphGenerator(int size)
+    public EmptyGraphGenerator(final int size)
     {
         if (size < 0) {
             throw new IllegalArgumentException("must be non-negative");
@@ -83,9 +83,9 @@ public class EmptyGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
+        final Map<String, V> resultMap)
     {
         for (int i = 0; i < size; ++i) {
             target.addVertex(vertexFactory.createVertex());

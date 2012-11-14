@@ -73,13 +73,13 @@ public final class PerformanceDemo
      *
      * @param args ignored.
      */
-    public static void main(String [] args)
+    public static void main(final String [] args)
     {
         long time = System.currentTimeMillis();
 
         reportPerformanceFor("starting at", time);
 
-        Graph<Object, DefaultEdge> g =
+        final Graph<Object, DefaultEdge> g =
             new Pseudograph<Object, DefaultEdge>(DefaultEdge.class);
         Object prev;
         Object curr;
@@ -87,9 +87,9 @@ public final class PerformanceDemo
         curr = prev = new Object();
         g.addVertex(prev);
 
-        int numVertices = 10000;
-        int numEdgesPerVertex = 200;
-        int numElements = numVertices * (1 + numEdgesPerVertex);
+        final int numVertices = 10000;
+        final int numEdgesPerVertex = 200;
+        final int numElements = numVertices * (1 + numEdgesPerVertex);
 
         System.out.println(
             "\n" + "allocating graph with " + numElements
@@ -145,9 +145,9 @@ public final class PerformanceDemo
         System.out.println("done.");
     }
 
-    private static void reportPerformanceFor(String msg, long refTime)
+    private static void reportPerformanceFor(final String msg, final long refTime)
     {
-        double time = (System.currentTimeMillis() - refTime) / 1000.0;
+        final double time = (System.currentTimeMillis() - refTime) / 1000.0;
         double mem = usedMemory()
             / (1024.0 * 1024.0);
         mem = Math.round(mem * 100) / 100.0;
@@ -156,7 +156,7 @@ public final class PerformanceDemo
 
     private static long usedMemory()
     {
-        Runtime rt = Runtime.getRuntime();
+        final Runtime rt = Runtime.getRuntime();
 
         return rt.totalMemory() - rt.freeMemory();
     }

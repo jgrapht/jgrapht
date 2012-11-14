@@ -55,16 +55,16 @@ public class UndirectedGraphUnion<V, E>
     //~ Constructors -----------------------------------------------------------
 
     UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraphUnion<V, E> g2,
-        WeightCombiner operator)
+        final UndirectedGraph<V, E> g1,
+        final UndirectedGraphUnion<V, E> g2,
+        final WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
 
     UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraphUnion<V, E> g2)
+        final UndirectedGraph<V, E> g1,
+        final UndirectedGraphUnion<V, E> g2)
     {
         super(g1, g2);
     }
@@ -72,9 +72,9 @@ public class UndirectedGraphUnion<V, E>
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public int degreeOf(V vertex)
+    public int degreeOf(final V vertex)
     {
-        Set<E> res = edgesOf(vertex);
+        final Set<E> res = edgesOf(vertex);
         return res.size();
     }
 }

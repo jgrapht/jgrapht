@@ -84,12 +84,12 @@ public class JGraphAdapterDemo
      *
      * @param args ignored.
      */
-    public static void main(String [] args)
+    public static void main(final String [] args)
     {
-        JGraphAdapterDemo applet = new JGraphAdapterDemo();
+        final JGraphAdapterDemo applet = new JGraphAdapterDemo();
         applet.init();
 
-        JFrame frame = new JFrame();
+        final JFrame frame = new JFrame();
         frame.getContentPane().add(applet);
         frame.setTitle("JGraphT Adapter to JGraph Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,23 +104,23 @@ public class JGraphAdapterDemo
     public void init()
     {
         // create a JGraphT graph
-        ListenableGraph<String, DefaultEdge> g =
+        final ListenableGraph<String, DefaultEdge> g =
             new ListenableDirectedMultigraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // create a visualization using JGraph, via an adapter
         jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(g);
 
-        JGraph jgraph = new JGraph(jgAdapter);
+        final JGraph jgraph = new JGraph(jgAdapter);
 
         adjustDisplaySettings(jgraph);
         getContentPane().add(jgraph);
         resize(DEFAULT_SIZE);
 
-        String v1 = "v1";
-        String v2 = "v2";
-        String v3 = "v3";
-        String v4 = "v4";
+        final String v1 = "v1";
+        final String v2 = "v2";
+        final String v3 = "v3";
+        final String v4 = "v4";
 
         // add some sample data (graph manipulated via JGraphT)
         g.addVertex(v1);
@@ -142,7 +142,7 @@ public class JGraphAdapterDemo
         // that's all there is to it!...
     }
 
-    private void adjustDisplaySettings(JGraph jg)
+    private void adjustDisplaySettings(final JGraph jg)
     {
         jg.setPreferredSize(DEFAULT_SIZE);
 
@@ -162,13 +162,13 @@ public class JGraphAdapterDemo
     }
 
     @SuppressWarnings("unchecked") // FIXME hb 28-nov-05: See FIXME below
-    private void positionVertexAt(Object vertex, int x, int y)
+    private void positionVertexAt(final Object vertex, final int x, final int y)
     {
-        DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
-        AttributeMap attr = cell.getAttributes();
-        Rectangle2D bounds = GraphConstants.getBounds(attr);
+        final DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
+        final AttributeMap attr = cell.getAttributes();
+        final Rectangle2D bounds = GraphConstants.getBounds(attr);
 
-        Rectangle2D newBounds =
+        final Rectangle2D newBounds =
             new Rectangle2D.Double(
                 x,
                 y,
@@ -178,7 +178,7 @@ public class JGraphAdapterDemo
         GraphConstants.setBounds(attr, newBounds);
 
         // TODO: Clean up generics once JGraph goes generic
-        AttributeMap cellAttr = new AttributeMap();
+        final AttributeMap cellAttr = new AttributeMap();
         cellAttr.put(cell, attr);
         jgAdapter.edit(cellAttr, null, null, null);
     }
@@ -194,7 +194,7 @@ public class JGraphAdapterDemo
     {
         private static final long serialVersionUID = 1L;
 
-        ListenableDirectedMultigraph(Class<E> edgeClass)
+        ListenableDirectedMultigraph(final Class<E> edgeClass)
         {
             super(new DirectedMultigraph<V, E>(edgeClass));
         }

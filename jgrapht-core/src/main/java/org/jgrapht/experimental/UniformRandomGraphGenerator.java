@@ -73,14 +73,14 @@ public class UniformRandomGraphGenerator
      *
      * @throws IllegalArgumentException
      */
-    public UniformRandomGraphGenerator(int numVertices, int numEdges)
+    public UniformRandomGraphGenerator(final int numVertices, final int numEdges)
     {
         if (numVertices < 0) {
             throw new IllegalArgumentException("must be non-negative");
         }
 
-        if ((numEdges < 0)
-            || (numEdges > (numVertices * (numVertices - 1) / 2)))
+        if (numEdges < 0
+            || numEdges > numVertices * (numVertices - 1) / 2)
         {
             throw new IllegalArgumentException("illegal number of edges");
         }
@@ -96,11 +96,11 @@ public class UniformRandomGraphGenerator
      */
     @Override
     public void generateGraph(
-        Graph target,
-        VertexFactory vertexFactory,
-        Map resultMap)
+        final Graph target,
+        final VertexFactory vertexFactory,
+        final Map resultMap)
     {
-        Object [] vertices =
+        final Object [] vertices =
             RandomGraphHelper.addVertices(
                 target,
                 vertexFactory,

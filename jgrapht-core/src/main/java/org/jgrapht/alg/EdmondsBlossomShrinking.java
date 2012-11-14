@@ -86,12 +86,12 @@ public class EdmondsBlossomShrinking<V, E>
         used = Sets.newHashSet();
         blossom = Sets.newHashSet();
 
-        for (V i : g.vertexSet()) {
+        for (final V i : g.vertexSet()) {
             if (!match.containsKey(i)) {
                 V v = findPath(g, i);
                 while (v != null) {
-                    V pv = p.get(v);
-                    V ppv = match.get(pv);
+                    final V pv = p.get(v);
+                    final V ppv = match.get(pv);
                     match.put(v, pv);
                     match.put(pv, v);
                     v = ppv;
@@ -99,8 +99,8 @@ public class EdmondsBlossomShrinking<V, E>
             }
         }
 
-        Set<V> seen = new HashSet<V>();
-        for (V v : g.vertexSet()) {
+        final Set<V> seen = new HashSet<V>();
+        for (final V v : g.vertexSet()) {
             if (!seen.contains(v) && match.containsKey(v)) {
                 seen.add(v);
                 seen.add(match.get(v));
@@ -111,36 +111,36 @@ public class EdmondsBlossomShrinking<V, E>
         return result;
     }
 
-    private V findPath(UndirectedGraph<V, E> g, V root)
+    private V findPath(final UndirectedGraph<V, E> g, final V root)
     {
         used.clear();
         p.clear();
         base.clear();
 
-        for (V i : g.vertexSet()) {
+        for (final V i : g.vertexSet()) {
             base.put(i, i);
         }
 
         used.add(root);
         q.add(root);
         while (!q.isEmpty()) {
-            V v = q.remove();
+            final V v = q.remove();
             for (V to : g.vertexSet()) {
                 if (!g.containsEdge(v, to)) {
                     continue;
                 }
 
-                if ((base.get(v) == base.get(to)) || (match.get(v) == to)) {
+                if (base.get(v) == base.get(to) || match.get(v) == to) {
                     continue;
                 }
-                if (to == root || (match.containsKey(to))
-                        && (p.containsKey(match.get(to)))) {
-                    V curbase = lca(g, v, to);
+                if (to == root || match.containsKey(to)
+                        && p.containsKey(match.get(to))) {
+                    final V curbase = lca(g, v, to);
                     blossom.clear();
                     markPath(g, v, curbase, to);
                     markPath(g, to, curbase, v);
 
-                    for (V i : g.vertexSet()) {
+                    for (final V i : g.vertexSet()) {
                         if (base.containsKey(i)
                                 && blossom.contains(base.get(i)))
                         {
@@ -165,7 +165,7 @@ public class EdmondsBlossomShrinking<V, E>
         return null;
     }
 
-    private void markPath(UndirectedGraph<V, E> g, V v, V b, V children)
+    private void markPath(final UndirectedGraph<V, E> g, V v, final V b, V children)
     {
         while (base.get(v) != b) {
             blossom.add(base.get(v));
@@ -176,9 +176,9 @@ public class EdmondsBlossomShrinking<V, E>
         }
     }
 
-    private V lca(UndirectedGraph<V, E> g, V a, V b)
+    private V lca(final UndirectedGraph<V, E> g, V a, V b)
     {
-        Set<V> seen = new HashSet<V>();
+        final Set<V> seen = new HashSet<V>();
         for (;;) {
             a = base.get(a);
             seen.add(a);

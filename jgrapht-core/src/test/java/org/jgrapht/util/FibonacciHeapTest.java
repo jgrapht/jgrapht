@@ -51,37 +51,37 @@ public class FibonacciHeapTest
     // in honor of sf.net bug #1845376
     public void testAddRemoveOne()
     {
-        String s = "A";
-        FibonacciHeapNode<String> n = new FibonacciHeapNode<String>(s);
-        FibonacciHeap<String> h = new FibonacciHeap<String>();
+        final String s = "A";
+        final FibonacciHeapNode<String> n = new FibonacciHeapNode<String>(s);
+        final FibonacciHeap<String> h = new FibonacciHeap<String>();
         assertTrue(h.isEmpty());
         h.insert(n, 1.0);
         assertFalse(h.isEmpty());
-        FibonacciHeapNode<String> n2 = h.removeMin();
+        final FibonacciHeapNode<String> n2 = h.removeMin();
         assertEquals(s, n2.getData());
         assertTrue(h.isEmpty());
     }
 
     public void testGrowReplaceShrink()
     {
-        Random r = new Random();
-        int k = 10000;
-        String s = "A";
+        final Random r = new Random();
+        final int k = 10000;
+        final String s = "A";
         double t = 0;
-        FibonacciHeap<String> h = new FibonacciHeap<String>();
-        for (int i = 0; i < (k * 3); ++i) {
+        final FibonacciHeap<String> h = new FibonacciHeap<String>();
+        for (int i = 0; i < k * 3; ++i) {
             // during first two-thirds, insert
-            if (i < (k * 2)) {
-                double d = r.nextDouble();
+            if (i < k * 2) {
+                final double d = r.nextDouble();
                 t += d;
-                FibonacciHeapNode<String> n = new FibonacciHeapNode<String>(s);
+                final FibonacciHeapNode<String> n = new FibonacciHeapNode<String>(s);
                 h.insert(n, d);
             }
 
             // during last two-thirds, delete (so during middle
             // third, we'll do both insert and delete, interleaved)
             if (i >= k) {
-                FibonacciHeapNode<String> n2 = h.removeMin();
+                final FibonacciHeapNode<String> n2 = h.removeMin();
                 t -= n2.getKey();
             }
         }

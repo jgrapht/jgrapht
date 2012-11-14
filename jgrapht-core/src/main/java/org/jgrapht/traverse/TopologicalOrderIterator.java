@@ -42,6 +42,8 @@
 package org.jgrapht.traverse;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.alg.StrongConnectivityInspector;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -69,8 +71,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * not be modified during iteration. Currently there are no means to ensure
  * that, nor to fail-fast; the results with cyclic input (including self-loops)
  * or concurrent modifications are undefined. To precheck a graph for cycles,
- * consider using {@link org.jgrapht.alg.CycleDetector} or {@link
- * org.jgrapht.alg.StrongConnectivityInspector}.</p>
+ * consider using {@link CycleDetector} or {@link
+ * StrongConnectivityInspector}.</p>
  *
  * @author Marden Neubert
  * @since Dec 18, 2004
@@ -95,7 +97,7 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param dg the directed graph to be iterated.
      */
-    public TopologicalOrderIterator(DirectedGraph<V, E> dg)
+    public TopologicalOrderIterator(final DirectedGraph<V, E> dg)
     {
         this(dg, new LinkedListQueue<V>());
     }
@@ -113,15 +115,15 @@ public class TopologicalOrderIterator<V, E>
      * PriorityQueue can be used to break ties according to vertex priority);
      * must be initially empty
      */
-    public TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue)
+    public TopologicalOrderIterator(final DirectedGraph<V, E> dg, final Queue<V> queue)
     {
         this(dg, queue, new HashMap<V, AtomicInteger>());
     }
 
     // NOTE: This is a hack to deal with the fact that CrossComponentIterator
     // needs to know the start vertex in its constructor
-    private TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue,
-        Map<V, AtomicInteger> inDegreeMap)
+    private TopologicalOrderIterator(final DirectedGraph<V, E> dg, final Queue<V> queue,
+        final Map<V, AtomicInteger> inDegreeMap)
     {
         this(dg, initialize(dg, queue, inDegreeMap));
         this.queue = queue;
@@ -134,7 +136,7 @@ public class TopologicalOrderIterator<V, E>
 
     // NOTE: This is intentionally private, because starting the sort "in the
     // middle" doesn't make sense.
-    private TopologicalOrderIterator(DirectedGraph<V, E> dg, V start)
+    private TopologicalOrderIterator(final DirectedGraph<V, E> dg, final V start)
     {
         super(dg, start);
     }
@@ -158,7 +160,7 @@ public class TopologicalOrderIterator<V, E>
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
     @Override
-    protected void encounterVertex(V vertex, E edge)
+    protected void encounterVertex(final V vertex, final E edge)
     {
         putSeenData(vertex, null);
         decrementInDegree(vertex);
@@ -168,7 +170,7 @@ public class TopologicalOrderIterator<V, E>
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
     @Override
-    protected void encounterVertexAgain(V vertex, E edge)
+    protected void encounterVertexAgain(final V vertex, final E edge)
     {
         decrementInDegree(vertex);
     }
@@ -187,7 +189,7 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param vertex the vertex whose in-degree will be decremented.
      */
-    private void decrementInDegree(V vertex)
+    private void decrementInDegree(final V vertex)
     {
         final AtomicInteger inDegree = inDegreeMap.get(vertex);
 
@@ -209,11 +211,11 @@ public class TopologicalOrderIterator<V, E>
      *
      * @return start vertex
      */
-    private static <V, E> V initialize(DirectedGraph<V, E> dg, Queue<V> queue,
-        Map<V, AtomicInteger> inDegreeMap)
+    private static <V, E> V initialize(final DirectedGraph<V, E> dg, final Queue<V> queue,
+        final Map<V, AtomicInteger> inDegreeMap)
     {
-        for (V vertex : dg.vertexSet()) {
-            int inDegree = dg.inDegreeOf(vertex);
+        for (final V vertex : dg.vertexSet()) {
+            final int inDegree = dg.inDegreeOf(vertex);
             inDegreeMap.put(vertex, new AtomicInteger(inDegree));
 
             if (inDegree == 0) {
@@ -236,7 +238,6 @@ public class TopologicalOrderIterator<V, E>
     // top-level in org.jgrapht.util if anyone else needs it.
     private static class LinkedListQueue<T>
         extends LinkedList<T>
-        implements Queue<T>
     {
         private static final long serialVersionUID = 4217659843476891334L;
 
@@ -247,7 +248,7 @@ public class TopologicalOrderIterator<V, E>
         }
 
         @Override
-        public boolean offer(T o)
+        public boolean offer(final T o)
         {
             return add(o);
         }

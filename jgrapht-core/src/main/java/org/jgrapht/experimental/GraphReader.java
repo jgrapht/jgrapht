@@ -75,7 +75,8 @@ public class GraphReader<V, E>
     /**
      * Construct a new GraphReader.
      */
-    private GraphReader(Reader input, boolean isWeighted, double defaultWeight)
+    private GraphReader(
+        final Reader input, final boolean isWeighted, final double defaultWeight)
         throws IOException
     {
         if (input instanceof BufferedReader) {
@@ -90,7 +91,7 @@ public class GraphReader<V, E>
     /**
      * Construct a new GraphReader.
      */
-    public GraphReader(Reader input)
+    public GraphReader(final Reader input)
         throws IOException
     {
         this(input, false, 1);
@@ -99,7 +100,7 @@ public class GraphReader<V, E>
     /**
      * Construct a new GraphReader.
      */
-    public GraphReader(Reader input, double defaultWeight)
+    public GraphReader(final Reader input, final double defaultWeight)
         throws IOException
     {
         this(input, true, defaultWeight);
@@ -123,8 +124,8 @@ public class GraphReader<V, E>
         try {
             cols = split(_in.readLine());
             while (
-                (cols != null)
-                && ((cols.length == 0)
+                cols != null
+                && (cols.length == 0
                     || "c".equals(cols[0])
                     || cols[0].startsWith("%")))
             {
@@ -149,8 +150,8 @@ public class GraphReader<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
+        final Graph<V, E> target,
+        final VertexFactory<V> vertexFactory,
         Map<String, V> resultMap)
     {
         final int size = readNodeCount();
@@ -159,18 +160,18 @@ public class GraphReader<V, E>
         }
 
         for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
+            final V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
             resultMap.put(Integer.toString(i + 1), newVertex);
         }
         String [] cols = skipComments();
         while (cols != null) {
             if ("e".equals(cols[0])) {
-                E edge =
+                final E edge =
                     target.addEdge(
                         resultMap.get(cols[1]),
                         resultMap.get(cols[2]));
-                if (_isWeighted && (edge != null)) {
+                if (_isWeighted && edge != null) {
                     double weight = _defaultWeight;
                     if (cols.length > 3) {
                         weight = Double.parseDouble(cols[3]);

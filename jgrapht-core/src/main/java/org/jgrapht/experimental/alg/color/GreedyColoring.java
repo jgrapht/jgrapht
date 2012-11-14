@@ -42,14 +42,14 @@ public class GreedyColoring<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    int color(int [] order)
+    int color(final int [] order)
     {
         final int [] color = new int[_neighbors.length];
         int maxColor = 1;
-        BitSet usedColors = new BitSet(_neighbors.length);
+        final BitSet usedColors = new BitSet(_neighbors.length);
 
         for (int i = 0; i < _neighbors.length; i++) {
-            final int v = (order == null) ? i : order[i];
+            final int v = order == null ? i : order[i];
             usedColors.clear();
             for (int j = 0; j < _neighbors[v].length; j++) {
                 final int nb = _neighbors[v][j];
@@ -119,8 +119,8 @@ public class GreedyColoring<V, E>
         cumBucketSize[0] = _neighbors.length;
         while (index < _neighbors.length) {
             while (
-                (maxSat > 0)
-                && (cumBucketSize[maxSat] == cumBucketSize[maxSat - 1]))
+                maxSat > 0
+                && cumBucketSize[maxSat] == cumBucketSize[maxSat - 1])
             {
                 cumBucketSize[maxSat--] = 0;
             }
@@ -132,7 +132,7 @@ public class GreedyColoring<V, E>
                 final int nb = (int) _neighbors[v][j];
                 final int bi = bucketIndex[nb];
                 if (satur[nb] >= 0) {
-                    if (bi != (cumBucketSize[satur[nb]] - 1)) {
+                    if (bi != cumBucketSize[satur[nb]] - 1) {
                         buckets[bi] = buckets[cumBucketSize[satur[nb]] - 1];
                         buckets[cumBucketSize[satur[nb]] - 1] = nb;
                         bucketIndex[nb] = cumBucketSize[satur[nb]] - 1;
@@ -155,13 +155,13 @@ public class GreedyColoring<V, E>
     }
 
     @Override
-    public Integer getLowerBound(Map<V, Object> optionalData)
+    public Integer getLowerBound(final Map<V, Object> optionalData)
     {
         return 0;
     }
 
     @Override
-    public Integer getUpperBound(Map<V, Object> optionalData)
+    public Integer getUpperBound(final Map<V, Object> optionalData)
     {
         switch (_order) {
         case BEST_ORDER:

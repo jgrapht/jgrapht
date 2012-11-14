@@ -63,26 +63,19 @@ public class MatrixExporter<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private String delimiter = " ";
-    private String prefix = "";
-    private String suffix = "";
+    private final String delimiter = " ";
+    private final String prefix = "";
+    private final String suffix = "";
 
     //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new MatrixExporter object.
-     */
-    public MatrixExporter()
-    {
-    }
 
     //~ Methods ----------------------------------------------------------------
 
     private void println(
-        PrintWriter out,
-        String fromName,
-        String toName,
-        String value)
+        final PrintWriter out,
+        final String fromName,
+        final String toName,
+        final String value)
     {
         out.println(
             prefix + fromName + suffix + delimiter
@@ -99,17 +92,17 @@ public class MatrixExporter<V, E>
      * @param output the writer to which the graph to be exported.
      * @param g the graph to be exported.
      */
-    public void exportAdjacencyMatrix(Writer output, UndirectedGraph<V, E> g)
+    public void exportAdjacencyMatrix(final Writer output, final UndirectedGraph<V, E> g)
     {
-        PrintWriter out = new PrintWriter(output);
+        final PrintWriter out = new PrintWriter(output);
 
-        VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
-        for (V from : g.vertexSet()) {
+        final VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
+        for (final V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
             nameProvider.getVertexName(from);
         }
 
-        for (V from : g.vertexSet()) {
+        for (final V from : g.vertexSet()) {
             exportAdjacencyMatrixVertex(
                 out,
                 nameProvider,
@@ -129,17 +122,17 @@ public class MatrixExporter<V, E>
      * @param output the writer to which the graph to be exported.
      * @param g the graph to be exported.
      */
-    public void exportAdjacencyMatrix(Writer output, DirectedGraph<V, E> g)
+    public void exportAdjacencyMatrix(final Writer output, final DirectedGraph<V, E> g)
     {
-        PrintWriter out = new PrintWriter(output);
+        final PrintWriter out = new PrintWriter(output);
 
-        VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
-        for (V from : g.vertexSet()) {
+        final VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
+        for (final V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
             nameProvider.getVertexName(from);
         }
 
-        for (V from : g.vertexSet()) {
+        for (final V from : g.vertexSet()) {
             exportAdjacencyMatrixVertex(
                 out,
                 nameProvider,
@@ -151,15 +144,15 @@ public class MatrixExporter<V, E>
     }
 
     private void exportAdjacencyMatrixVertex(
-        PrintWriter out,
-        VertexNameProvider<V> nameProvider,
-        V from,
-        List<V> neighbors)
+        final PrintWriter out,
+        final VertexNameProvider<V> nameProvider,
+        final V from,
+        final List<V> neighbors)
     {
-        String fromName = nameProvider.getVertexName(from);
-        Map<String, AtomicInteger> counts = Maps.newLinkedHashMap();
-        for (V to : neighbors) {
-            String toName = nameProvider.getVertexName(to);
+        final String fromName = nameProvider.getVertexName(from);
+        final Map<String, AtomicInteger> counts = Maps.newLinkedHashMap();
+        for (final V to : neighbors) {
+            final String toName = nameProvider.getVertexName(to);
             AtomicInteger count = counts.get(toName);
             if (count == null) {
                 count = new AtomicInteger(0);
@@ -172,8 +165,8 @@ public class MatrixExporter<V, E>
                 count.incrementAndGet();
         }
         for (final Map.Entry<String, AtomicInteger> entry: counts.entrySet()) {
-            String toName = entry.getKey();
-            AtomicInteger count = entry.getValue();
+            final String toName = entry.getKey();
+            final AtomicInteger count = entry.getValue();
             println(out, fromName, toName, count.toString());
         }
     }
@@ -190,28 +183,28 @@ public class MatrixExporter<V, E>
      * @param output the writer to which the graph is to be exported.
      * @param g the graph to be exported.
      */
-    public void exportLaplacianMatrix(Writer output, UndirectedGraph<V, E> g)
+    public void exportLaplacianMatrix(final Writer output, final UndirectedGraph<V, E> g)
     {
-        PrintWriter out = new PrintWriter(output);
+        final PrintWriter out = new PrintWriter(output);
 
-        VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
-        for (V from : g.vertexSet()) {
+        final VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
+        for (final V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
             nameProvider.getVertexName(from);
         }
 
-        for (V from : g.vertexSet()) {
-            String fromName = nameProvider.getVertexName(from);
+        for (final V from : g.vertexSet()) {
+            final String fromName = nameProvider.getVertexName(from);
 
             // TODO modify Graphs to return neighbor sets
-            List<V> neighbors = Graphs.neighborListOf(g, from);
+            final List<V> neighbors = Graphs.neighborListOf(g, from);
             println(
                 out,
                 fromName,
                 fromName,
                 Integer.toString(neighbors.size()));
-            for (V to : neighbors) {
-                String toName = nameProvider.getVertexName(to);
+            for (final V to : neighbors) {
+                final String toName = nameProvider.getVertexName(to);
                 println(out, fromName, toName, "-1");
             }
         }
@@ -232,29 +225,29 @@ public class MatrixExporter<V, E>
      * @param g the graph to be exported.
      */
     public void exportNormalizedLaplacianMatrix(
-        Writer output,
-        UndirectedGraph<V, E> g)
+        final Writer output,
+        final UndirectedGraph<V, E> g)
     {
-        PrintWriter out = new PrintWriter(output);
+        final PrintWriter out = new PrintWriter(output);
 
-        VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
-        for (V from : g.vertexSet()) {
+        final VertexNameProvider<V> nameProvider = new IntegerNameProvider<V>();
+        for (final V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
             nameProvider.getVertexName(from);
         }
 
-        for (V from : g.vertexSet()) {
-            String fromName = nameProvider.getVertexName(from);
-            Set<V> neighbors =
+        for (final V from : g.vertexSet()) {
+            final String fromName = nameProvider.getVertexName(from);
+            final Set<V> neighbors =
                 new LinkedHashSet<V>(Graphs.neighborListOf(g, from));
             if (neighbors.isEmpty()) {
                 println(out, fromName, fromName, "0");
             } else {
                 println(out, fromName, fromName, "1");
 
-                for (V to : neighbors) {
-                    String toName = nameProvider.getVertexName(to);
-                    double value =
+                for (final V to : neighbors) {
+                    final String toName = nameProvider.getVertexName(to);
+                    final double value =
                         -1 / Math.sqrt(g.degreeOf(from) * g.degreeOf(to));
                     println(out, fromName, toName, Double.toString(value));
                 }

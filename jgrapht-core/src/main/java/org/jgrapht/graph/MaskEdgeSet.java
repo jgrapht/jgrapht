@@ -38,6 +38,7 @@
  */
 package org.jgrapht.graph;
 
+import java.lang.Object;
 import java.util.*;
 
 import org.jgrapht.*;
@@ -56,43 +57,43 @@ class MaskEdgeSet<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private Set<E> edgeSet;
+    private final Set<E> edgeSet;
 
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-    private MaskFunctor<V, E> mask;
+    private final MaskFunctor<V, E> mask;
 
-    private transient TypeUtil<E> edgeTypeDecl = null;
+    private final transient TypeUtil<E> edgeTypeDecl = null;
 
     private int size;
 
     //~ Constructors -----------------------------------------------------------
 
     public MaskEdgeSet(
-        Graph<V, E> graph,
-        Set<E> edgeSet,
-        MaskFunctor<V, E> mask)
+        final Graph<V, E> graph,
+        final Set<E> edgeSet,
+        final MaskFunctor<V, E> mask)
     {
         this.graph = graph;
         this.edgeSet = edgeSet;
         this.mask = mask;
-        this.size = -1;
+        size = -1;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * @see java.util.Collection#contains(java.lang.Object)
+     * @see Collection#contains(Object)
      */
     @Override
-    public boolean contains(Object o)
+    public boolean contains(final Object o)
     {
-        return this.edgeSet.contains(o)
-            && !this.mask.isEdgeMasked(TypeUtil.uncheckedCast(o, edgeTypeDecl));
+        return edgeSet.contains(o)
+            && !mask.isEdgeMasked(TypeUtil.uncheckedCast(o, edgeTypeDecl));
     }
 
     /**
-     * @see java.util.Set#iterator()
+     * @see Set#iterator()
      */
     @Override
     public Iterator<E> iterator()
@@ -101,18 +102,18 @@ class MaskEdgeSet<V, E>
     }
 
     /**
-     * @see java.util.Set#size()
+     * @see Set#size()
      */
     @Override
     public int size()
     {
-        if (this.size == -1) {
-            this.size = 0;
+        if (size == -1) {
+            size = 0;
             for (final E e : this) {
-                this.size++;
+                size++;
             }
         }
-        return this.size;
+        return size;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -120,31 +121,29 @@ class MaskEdgeSet<V, E>
     private class MaskEdgeSetNextElementFunctor
         implements NextElementFunctor<E>
     {
-        private Iterator<E> iter;
+        private final Iterator<E> iter;
 
         public MaskEdgeSetNextElementFunctor()
         {
-            this.iter = MaskEdgeSet.this.edgeSet.iterator();
+            iter = edgeSet.iterator();
         }
 
         @Override
         public E nextElement()
             throws NoSuchElementException
         {
-            E edge = this.iter.next();
+            E edge = iter.next();
             while (isMasked(edge)) {
-                edge = this.iter.next();
+                edge = iter.next();
             }
             return edge;
         }
 
-        private boolean isMasked(E edge)
+        private boolean isMasked(final E edge)
         {
-            return MaskEdgeSet.this.mask.isEdgeMasked(edge)
-                || MaskEdgeSet.this.mask.isVertexMasked(
-                    MaskEdgeSet.this.graph.getEdgeSource(edge))
-                || MaskEdgeSet.this.mask.isVertexMasked(
-                    MaskEdgeSet.this.graph.getEdgeTarget(edge));
+            return mask.isEdgeMasked(edge)
+                || mask.isVertexMasked(graph.getEdgeSource(edge))
+                || mask.isVertexMasked(graph.getEdgeTarget(edge));
         }
     }
 }

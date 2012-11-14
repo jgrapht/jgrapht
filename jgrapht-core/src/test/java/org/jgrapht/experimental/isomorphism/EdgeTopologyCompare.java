@@ -56,11 +56,11 @@ public class EdgeTopologyCompare
      * @param g2
      */
     @SuppressWarnings("unchecked")
-    public static boolean compare(Graph g1, Graph g2)
+    public static boolean compare(final Graph g1, final Graph g2)
     {
         boolean result = false;
-        GraphOrdering lg1 = new GraphOrdering(g1);
-        GraphOrdering lg2 = new GraphOrdering(g2);
+        final GraphOrdering lg1 = new GraphOrdering(g1);
+        final GraphOrdering lg2 = new GraphOrdering(g2);
         result = lg1.equalsByEdgeOrder(lg2);
 
         return result;

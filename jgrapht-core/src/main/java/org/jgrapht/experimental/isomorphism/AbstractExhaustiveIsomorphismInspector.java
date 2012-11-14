@@ -38,12 +38,17 @@
  */
 package org.jgrapht.experimental.isomorphism;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.experimental.equivalence.EquivalenceComparator;
+import org.jgrapht.experimental.equivalence.UniformEquivalenceComparator;
+import org.jgrapht.experimental.permutation.CollectionPermutationIter;
+import org.jgrapht.util.PrefetchIterator;
 
-import org.jgrapht.*;
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.permutation.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 /**
@@ -99,21 +104,21 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      * UniformEquivalenceComparator will be used as default (always return true)
      */
     protected AbstractExhaustiveIsomorphismInspector(
-        Graph<V, E> graph1,
-        Graph<V, E> graph2,
+        final Graph<V, E> graph1,
+        final Graph<V, E> graph2,
 
         // XXX hb 060128: FOllowing parameter may need Graph<? super V,? super
         // E>
-        EquivalenceComparator<? super V, ? super Graph<? super V, ? super E>> vertexChecker,
-        EquivalenceComparator<? super E, ? super Graph<? super V, ? super E>> edgeChecker)
+        final EquivalenceComparator<? super V, ? super Graph<? super V, ? super E>> vertexChecker,
+        final EquivalenceComparator<? super E, ? super Graph<? super V, ? super E>> edgeChecker)
     {
         this.graph1 = graph1;
         this.graph2 = graph2;
 
         if (vertexChecker != null) {
-            this.vertexComparator = vertexChecker;
+            vertexComparator = vertexChecker;
         } else {
-            this.vertexComparator = vertexDefaultIsomorphismComparator;
+            vertexComparator = vertexDefaultIsomorphismComparator;
         }
 
         // Unlike vertexes, edges have better performance, when not tested for
@@ -121,7 +126,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
         // instead of edgeDefaultIsomorphismComparator.
 
         if (edgeChecker != null) {
-            this.edgeComparator = edgeChecker;
+            edgeComparator = edgeChecker;
         }
 
         init();
@@ -136,8 +141,8 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      * @see #AbstractExhaustiveIsomorphismInspector(Graph,Graph,EquivalenceComparator,EquivalenceComparator)
      */
     protected AbstractExhaustiveIsomorphismInspector(
-        Graph<V, E> graph1,
-        Graph<V, E> graph2)
+        final Graph<V, E> graph1,
+        final Graph<V, E> graph2)
     {
         this(
             graph1,
@@ -164,27 +169,22 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      */
     private void init()
     {
-        this.nextSupplier =
+        nextSupplier =
             new PrefetchIterator<IsomorphismRelation>(
 
                 // XXX hb 280106: I don't understand this warning, yet :-)
                 new NextFunctor());
 
-        this.graph1VertexSet = new LinkedHashSet<V>(this.graph1.vertexSet());
+        graph1VertexSet = new LinkedHashSet<V>(graph1.vertexSet());
 
         // vertexPermuteIter will be null, if there is no match
-        this.vertexPermuteIter =
-            createPermutationIterator(
-                this.graph1VertexSet,
-                this.graph2.vertexSet());
+        vertexPermuteIter =
+            createPermutationIterator(graph1VertexSet, graph2.vertexSet());
 
-        this.lableGraph1 =
-            new GraphOrdering<V, E>(
-                this.graph1,
-                this.graph1VertexSet,
-                this.graph1.edgeSet());
+        lableGraph1 =
+            new GraphOrdering<V, E>(graph1, graph1VertexSet, graph1.edgeSet());
 
-        this.graph2EdgeSet = new LinkedHashSet<E>(this.graph2.edgeSet());
+        graph2EdgeSet = new LinkedHashSet<E>(graph2.edgeSet());
     }
 
     /**
@@ -245,28 +245,25 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     {
         boolean result = false;
         IsomorphismRelation<V, E> resultRelation = null;
-        if (this.vertexPermuteIter != null) {
+        if (vertexPermuteIter != null) {
             // System.out.println("Souce  LabelsGraph="+this.lableGraph1);
-            while (this.vertexPermuteIter.hasNext()) {
-                currVertexPermutation = this.vertexPermuteIter.getNextSet();
+            while (vertexPermuteIter.hasNext()) {
+                currVertexPermutation = vertexPermuteIter.getNextSet();
 
                 // compare vertexes
-                if (!areVertexSetsOfTheSameEqualityGroup(
-                        this.graph1VertexSet,
+                if (!areVertexSetsOfTheSameEqualityGroup(graph1VertexSet,
                         currVertexPermutation))
                 {
                     continue; // this one is not iso, so try the next one
                 }
 
                 // compare edges
-                GraphOrdering<V, E> currPermuteGraph =
-                    new GraphOrdering<V, E>(
-                        this.graph2,
-                        currVertexPermutation,
-                        this.graph2EdgeSet);
+                final GraphOrdering<V, E> currPermuteGraph =
+                    new GraphOrdering<V, E>(graph2,
+                        currVertexPermutation, graph2EdgeSet);
 
                 // System.out.println("target LablesGraph="+currPermuteGraph);
-                if (this.lableGraph1.equalsByEdgeOrder(currPermuteGraph)) {
+                if (lableGraph1.equalsByEdgeOrder(currPermuteGraph)) {
                     // create result object.
                     resultRelation =
                         new IsomorphismRelation<V, E>(
@@ -276,10 +273,9 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
                             graph2);
 
                     // if the edge comparator exists, check equivalence by it
-                    boolean edgeEq =
+                    final boolean edgeEq =
                         areAllEdgesEquivalent(
-                            resultRelation,
-                            this.edgeComparator);
+                            resultRelation, edgeComparator);
                     if (edgeEq) // only if equivalent
 
                     {
@@ -290,7 +286,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
             }
         }
 
-        if (result == true) {
+        if (result) {
             return resultRelation;
         } else {
             return null;
@@ -318,8 +314,8 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      * @param edgeComparator if null, always return true.
      */
     protected boolean areAllEdgesEquivalent(
-        IsomorphismRelation<V, E> resultRelation,
-        EquivalenceComparator<? super E, ? super Graph<V, E>> edgeComparator)
+        final IsomorphismRelation<V, E> resultRelation,
+        final EquivalenceComparator<? super E, ? super Graph<V, E>> edgeComparator)
     {
         boolean checkResult = true;
 
@@ -329,18 +325,16 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
         }
 
         try {
-            Set<E> edgeSet = this.graph1.edgeSet();
+            final Set<E> edgeSet = graph1.edgeSet();
 
-            for (E currEdge : edgeSet) {
-                E correspondingEdge =
+            for (final E currEdge : edgeSet) {
+                final E correspondingEdge =
                     resultRelation.getEdgeCorrespondence(currEdge, true);
 
                 // if one edge test fail , fail the whole method
                 if (!edgeComparator.equivalenceCompare(
                         currEdge,
-                        correspondingEdge,
-                        this.graph1,
-                        this.graph2))
+                        correspondingEdge, graph1, graph2))
                 {
                     checkResult = false;
                     break;
@@ -371,7 +365,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     @Override
     public boolean isIsomorphic()
     {
-        return !(this.nextSupplier.isEnumerationStartedEmpty());
+        return !nextSupplier.isEnumerationStartedEmpty();
     }
 
     /* (non-Javadoc)
@@ -380,18 +374,17 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     @Override
     public boolean hasNext()
     {
-        boolean result = this.nextSupplier.hasMoreElements();
 
-        return result;
+        return nextSupplier.hasMoreElements();
     }
 
     /**
-     * @see java.util.Iterator#next()
+     * @see Iterator#next()
      */
     @Override
     public IsomorphismRelation next()
     {
-        return this.nextSupplier.nextElement();
+        return nextSupplier.nextElement();
     }
 
     /* (non-Javadoc)
@@ -414,7 +407,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
         public IsomorphismRelation nextElement()
             throws NoSuchElementException
         {
-            IsomorphismRelation resultRelation = findNextIsomorphicGraph();
+            final IsomorphismRelation resultRelation = findNextIsomorphicGraph();
             if (resultRelation != null) {
                 return resultRelation;
             } else {

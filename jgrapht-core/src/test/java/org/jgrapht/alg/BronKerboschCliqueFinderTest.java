@@ -73,7 +73,7 @@ public class BronKerboschCliqueFinderTest
      *
      * @param g
      */
-    public void createGraph(Graph<String, DefaultEdge> g)
+    public void createGraph(final Graph<String, DefaultEdge> g)
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -107,42 +107,42 @@ public class BronKerboschCliqueFinderTest
 
     public void testFindBiggest()
     {
-        SimpleGraph<String, DefaultEdge> g =
+        final SimpleGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         createGraph(g);
 
-        BronKerboschCliqueFinder<String, DefaultEdge> finder =
+        final BronKerboschCliqueFinder<String, DefaultEdge> finder =
             new BronKerboschCliqueFinder<String, DefaultEdge>(g);
 
-        Collection<Set<String>> cliques = finder.getBiggestMaximalCliques();
+        final Collection<Set<String>> cliques = finder.getBiggestMaximalCliques();
 
         assertEquals(1, cliques.size());
 
-        Set<String> expected = new HashSet<String>();
+        final Set<String> expected = new HashSet<String>();
         expected.add(V1);
         expected.add(V2);
         expected.add(V3);
         expected.add(V4);
 
-        Set<String> actual = cliques.iterator().next();
+        final Set<String> actual = cliques.iterator().next();
 
         assertEquals(expected, actual);
     }
 
     public void testFindAll()
     {
-        SimpleGraph<String, DefaultEdge> g =
+        final SimpleGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         createGraph(g);
 
-        BronKerboschCliqueFinder<String, DefaultEdge> finder =
+        final BronKerboschCliqueFinder<String, DefaultEdge> finder =
             new BronKerboschCliqueFinder<String, DefaultEdge>(g);
 
-        Collection<Set<String>> cliques = finder.getAllMaximalCliques();
+        final Collection<Set<String>> cliques = finder.getAllMaximalCliques();
 
         assertEquals(4, cliques.size());
 
-        Set<Set<String>> expected = new HashSet<Set<String>>();
+        final Set<Set<String>> expected = new HashSet<Set<String>>();
 
         Set<String> set = new HashSet<String>();
         set.add(V1);
@@ -170,7 +170,7 @@ public class BronKerboschCliqueFinderTest
 
         // convert result from Collection to Set because we don't want
         // order to be significant
-        Set<Set<String>> actual = new HashSet<Set<String>>(cliques);
+        final Set<Set<String>> actual = new HashSet<Set<String>>(cliques);
 
         assertEquals(expected, actual);
     }

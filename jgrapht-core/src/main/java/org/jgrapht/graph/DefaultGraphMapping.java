@@ -56,11 +56,11 @@ public class DefaultGraphMapping<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
-    private Map<V, V> graphMappingForward;
-    private Map<V, V> graphMappingReverse;
+    private final Map<V, V> graphMappingForward;
+    private final Map<V, V> graphMappingReverse;
 
-    private Graph<V, E> graph1;
-    private Graph<V, E> graph2;
+    private final Graph<V, E> graph1;
+    private final Graph<V, E> graph2;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -75,41 +75,42 @@ public class DefaultGraphMapping<V, E>
      * @param g2
      */
     public DefaultGraphMapping(
-        Map<V, V> g1ToG2,
-        Map<V, V> g2ToG1,
-        Graph<V, E> g1,
-        Graph<V, E> g2)
+        final Map<V, V> g1ToG2,
+        final Map<V, V> g2ToG1,
+        final Graph<V, E> g1,
+        final Graph<V, E> g2)
     {
-        this.graph1 = g1;
-        this.graph2 = g2;
-        this.graphMappingForward = g1ToG2;
-        this.graphMappingReverse = g2ToG1;
+        graph1 = g1;
+        graph2 = g2;
+        graphMappingForward = g1ToG2;
+        graphMappingReverse = g2ToG1;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public E getEdgeCorrespondence(E currEdge, boolean forward)
+    public E getEdgeCorrespondence(final E currEdge, final boolean forward)
     {
-        Graph<V, E> sourceGraph, targetGraph;
+        final Graph<V, E> sourceGraph;
+        final Graph<V, E> targetGraph;
 
         if (forward) {
-            sourceGraph = this.graph1;
-            targetGraph = this.graph2;
+            sourceGraph = graph1;
+            targetGraph = graph2;
         } else {
-            sourceGraph = this.graph2;
-            targetGraph = this.graph1;
+            sourceGraph = graph2;
+            targetGraph = graph1;
         }
 
-        V mappedSourceVertex =
+        final V mappedSourceVertex =
             getVertexCorrespondence(
                 sourceGraph.getEdgeSource(currEdge),
                 forward);
-        V mappedTargetVertex =
+        final V mappedTargetVertex =
             getVertexCorrespondence(
                 sourceGraph.getEdgeTarget(currEdge),
                 forward);
-        if ((mappedSourceVertex == null) || (mappedTargetVertex == null)) {
+        if (mappedSourceVertex == null || mappedTargetVertex == null) {
             return null;
         } else {
             return targetGraph.getEdge(
@@ -120,10 +121,10 @@ public class DefaultGraphMapping<V, E>
 
     @Override
     public V getVertexCorrespondence(
-        V keyVertex,
-        boolean forward)
+        final V keyVertex,
+        final boolean forward)
     {
-        Map<V, V> graphMapping;
+        final Map<V, V> graphMapping;
         if (forward) {
             graphMapping = graphMappingForward;
         } else {

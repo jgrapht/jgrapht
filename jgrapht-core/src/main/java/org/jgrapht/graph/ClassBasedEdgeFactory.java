@@ -68,7 +68,7 @@ public class ClassBasedEdgeFactory<V, E>
 
     //~ Constructors -----------------------------------------------------------
 
-    public ClassBasedEdgeFactory(Class<? extends E> edgeClass)
+    public ClassBasedEdgeFactory(final Class<? extends E> edgeClass)
     {
         this.edgeClass = edgeClass;
     }
@@ -79,7 +79,7 @@ public class ClassBasedEdgeFactory<V, E>
      * @see EdgeFactory#createEdge(Object, Object)
      */
     @Override
-    public E createEdge(V source, V target)
+    public E createEdge(final V source, final V target)
     {
         try {
             return edgeClass.newInstance();

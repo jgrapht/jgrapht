@@ -78,8 +78,8 @@ public final class EdmondsKarpMaximumFlow<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private DirectedGraph<V, E> network; // our network
-    private double epsilon; // tolerance (DEFAULT_EPSILON or user-defined)
+    private final DirectedGraph<V, E> network; // our network
+    private final double epsilon; // tolerance (DEFAULT_EPSILON or user-defined)
     private int currentSource; // current source vertex
     private int currentSink; // current sink vertex
     private Map<E, Double> maximumFlow; // current maximum flow
@@ -100,7 +100,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      *
      * @param network network, where maximum flow will be calculated
      */
-    public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network)
+    public EdmondsKarpMaximumFlow(final DirectedGraph<V, E> network)
     {
         this(network, DEFAULT_EPSILON);
     }
@@ -114,8 +114,8 @@ public final class EdmondsKarpMaximumFlow<V, E>
      * @param network network, where maximum flow will be calculated
      * @param epsilon tolerance for comparing doubles
      */
-    public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network,
-        double epsilon)
+    public EdmondsKarpMaximumFlow(final DirectedGraph<V, E> network,
+        final double epsilon)
     {
         if (network == null) {
             throw new NullPointerException("network is null");
@@ -124,7 +124,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
             throw new IllegalArgumentException(
                 "invalid epsilon (must be positive)");
         }
-        for (E e : network.edgeSet()) {
+        for (final E e : network.edgeSet()) {
             if (network.getEdgeWeight(e) < -epsilon) {
                 throw new IllegalArgumentException(
                     "invalid capacity (must be non-negative)");
@@ -149,20 +149,20 @@ public final class EdmondsKarpMaximumFlow<V, E>
     {
         numNodes = network.vertexSet().size();
         nodes = new ArrayList<Node>();
-        Iterator<V> it = network.vertexSet().iterator();
+        final Iterator<V> it = network.vertexSet().iterator();
         indexer = Maps.newHashMap();
         for (int i = 0; i < numNodes; i++) {
-            V currentNode = it.next();
+            final V currentNode = it.next();
             nodes.add(new Node(currentNode));
             indexer.put(currentNode, i);
         }
         for (int i = 0; i < numNodes; i++) {
-            V we = nodes.get(i).prototype;
-            for (E e : network.outgoingEdgesOf(we)) {
-                V he = network.getEdgeTarget(e);
-                int j = indexer.get(he);
-                Arc e1 = new Arc(i, j, network.getEdgeWeight(e), e);
-                Arc e2 = new Arc(j, i, 0.0, null);
+            final V we = nodes.get(i).prototype;
+            for (final E e : network.outgoingEdgesOf(we)) {
+                final V he = network.getEdgeTarget(e);
+                final int j = indexer.get(he);
+                final Arc e1 = new Arc(i, j, network.getEdgeWeight(e), e);
+                final Arc e2 = new Arc(j, i, 0.0, null);
                 e1.reversed = e2;
                 e2.reversed = e1;
                 nodes.get(i).outgoingArcs.add(e1);
@@ -181,8 +181,8 @@ public final class EdmondsKarpMaximumFlow<V, E>
      * @param sink sink vertex
      */
     public void calculateMaximumFlow(
-        V source,
-        V sink)
+        final V source,
+        final V sink)
     {
         if (!network.containsVertex(source)) {
             throw new IllegalArgumentException(
@@ -201,7 +201,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         currentSink = indexer.get(sink);
 
         for (int i = 0; i < numNodes; i++) {
-            for (Arc currentArc : nodes.get(i).outgoingArcs) {
+            for (final Arc currentArc : nodes.get(i).outgoingArcs) {
                 currentArc.flow = 0.0;
             }
         }
@@ -211,7 +211,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
             if (!nodes.get(currentSink).visited) {
                 maximumFlow = Maps.newHashMap();
                 for (int i = 0; i < numNodes; i++) {
-                    for (Arc currentArc : nodes.get(i).outgoingArcs) {
+                    for (final Arc currentArc : nodes.get(i).outgoingArcs) {
                         if (currentArc.prototype != null) {
                             maximumFlow.put(
                                 currentArc.prototype,
@@ -230,14 +230,14 @@ public final class EdmondsKarpMaximumFlow<V, E>
         for (int i = 0; i < numNodes; i++) {
             nodes.get(i).visited = false;
         }
-        Queue<Integer> queue = new LinkedList<Integer>();
+        final Queue<Integer> queue = new LinkedList<Integer>();
         queue.offer(currentSource);
         nodes.get(currentSource).visited = true;
         nodes.get(currentSource).flowAmount = Double.POSITIVE_INFINITY;
         while (!queue.isEmpty()) {
-            int currentNode = queue.poll();
-            for (Arc currentArc : nodes.get(currentNode).outgoingArcs) {
-                if ((currentArc.flow + epsilon) < currentArc.capacity) {
+            final int currentNode = queue.poll();
+            for (final Arc currentArc : nodes.get(currentNode).outgoingArcs) {
+                if (currentArc.flow + epsilon < currentArc.capacity) {
                     if (!nodes.get(currentArc.head).visited) {
                         nodes.get(currentArc.head).visited = true;
                         nodes.get(currentArc.head).flowAmount =
@@ -254,7 +254,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
 
     private void augmentFlow()
     {
-        double deltaFlow = nodes.get(currentSink).flowAmount;
+        final double deltaFlow = nodes.get(currentSink).flowAmount;
         maximumFlowValue += deltaFlow;
         int currentNode = currentSink;
         while (currentNode != currentSource) {
@@ -333,7 +333,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         double flowAmount; // amount of flow, we are able to push here
 
         Node(
-            V prototype)
+            final V prototype)
         {
             this.prototype = prototype;
         }
@@ -352,10 +352,10 @@ public final class EdmondsKarpMaximumFlow<V, E>
                      // if it is reversed arc
 
         Arc(
-            int tail,
-            int head,
-            double capacity,
-            E prototype)
+            final int tail,
+            final int head,
+            final double capacity,
+            final E prototype)
         {
             this.tail = tail;
             this.head = head;

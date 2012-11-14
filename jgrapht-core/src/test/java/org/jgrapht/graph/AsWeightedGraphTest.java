@@ -95,16 +95,16 @@ public class AsWeightedGraphTest
 
     public void test1()
     {
-        Map<DefaultEdge, Double> weightMap1 = Maps.newHashMap();
-        Map<DefaultWeightedEdge, Double> weightMap2 = Maps.newHashMap();
+        final Map<DefaultEdge, Double> weightMap1 = Maps.newHashMap();
+        final Map<DefaultWeightedEdge, Double> weightMap2 = Maps.newHashMap();
 
-        DefaultEdge e1 = unweightedGraph.getEdge("v1", "v2");
-        DefaultEdge e2 = unweightedGraph.getEdge("v2", "v3");
-        DefaultEdge e3 = unweightedGraph.getEdge("v3", "v1");
+        final DefaultEdge e1 = unweightedGraph.getEdge("v1", "v2");
+        final DefaultEdge e2 = unweightedGraph.getEdge("v2", "v3");
+        final DefaultEdge e3 = unweightedGraph.getEdge("v3", "v1");
 
-        DefaultWeightedEdge e4 = weightedGraph.getEdge("v1", "v2");
-        DefaultWeightedEdge e5 = weightedGraph.getEdge("v2", "v3");
-        DefaultWeightedEdge e6 = weightedGraph.getEdge("v3", "v1");
+        final DefaultWeightedEdge e4 = weightedGraph.getEdge("v1", "v2");
+        final DefaultWeightedEdge e5 = weightedGraph.getEdge("v2", "v3");
+        final DefaultWeightedEdge e6 = weightedGraph.getEdge("v3", "v1");
 
         weightMap1.put(e1, 9.0);
 
@@ -115,11 +115,11 @@ public class AsWeightedGraphTest
             unweightedGraph.getEdgeWeight(e1),
             WeightedGraph.DEFAULT_EDGE_WEIGHT);
 
-        WeightedGraph<String, DefaultEdge> g1 =
+        final WeightedGraph<String, DefaultEdge> g1 =
             new AsWeightedGraph<String, DefaultEdge>(
                 unweightedGraph,
                 weightMap1);
-        WeightedGraph<String, DefaultWeightedEdge> g2 =
+        final WeightedGraph<String, DefaultWeightedEdge> g2 =
             new AsWeightedGraph<String, DefaultWeightedEdge>(
                 weightedGraph,
                 weightMap2);

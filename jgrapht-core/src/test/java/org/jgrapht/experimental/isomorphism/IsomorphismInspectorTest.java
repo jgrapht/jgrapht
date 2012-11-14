@@ -62,7 +62,7 @@ public class IsomorphismInspectorTest
      *
      * @param arg0
      */
-    public IsomorphismInspectorTest(String arg0)
+    public IsomorphismInspectorTest(final String arg0)
     {
         super(arg0);
     }
@@ -85,27 +85,27 @@ public class IsomorphismInspectorTest
      * edgeChecker = null
      */
     private void assertIsomorphic(
-        Graph<Integer, DefaultEdge> [] graphs,
-        boolean shouldTheyBeIsomorphic)
+        final Graph<Integer, DefaultEdge> [] graphs,
+        final boolean shouldTheyBeIsomorphic)
     {
         assertIsomorphic(graphs, shouldTheyBeIsomorphic, null, null);
     }
 
     @SuppressWarnings("unchecked")
     private void assertIsomorphic(
-        Graph<Integer, DefaultEdge> [] graphs,
-        boolean shouldTheyBeIsomorphic,
-        EquivalenceComparator vertexChecker,
-        EquivalenceComparator edgeChecker)
+        final Graph<Integer, DefaultEdge> [] graphs,
+        final boolean shouldTheyBeIsomorphic,
+        final EquivalenceComparator vertexChecker,
+        final EquivalenceComparator edgeChecker)
     {
         // System.out.println("\nassertIsomorphic:"+shouldTheyBeIsomorphic);
-        Graph<Integer, DefaultEdge> g1 = graphs[0];
-        Graph<Integer, DefaultEdge> g2 = graphs[1];
+        final Graph<Integer, DefaultEdge> g1 = graphs[0];
+        final Graph<Integer, DefaultEdge> g2 = graphs[1];
 
         // System.out.println("g1:"+g1);
         // System.out.println("g2:"+g2);
         // long beforeTime=System.currentTimeMillis();
-        GraphIsomorphismInspector iso =
+        final GraphIsomorphismInspector iso =
             AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(
                 g1,
                 g2,
@@ -113,7 +113,7 @@ public class IsomorphismInspectorTest
                 edgeChecker);
         int counter = 0;
         while (iso.hasNext()) {
-            IsomorphismRelation isioResult = (IsomorphismRelation) iso.next();
+            final IsomorphismRelation isioResult = (IsomorphismRelation) iso.next();
 
             if (false) {
                 if (counter == 0) {
@@ -144,41 +144,41 @@ public class IsomorphismInspectorTest
 
     @SuppressWarnings("unchecked")
     private void checkRelation(
-        Graph<Integer, DefaultEdge> [] graphs,
-        EquivalenceComparator vertexChecker,
-        EquivalenceComparator edgeChecker)
+        final Graph<Integer, DefaultEdge> [] graphs,
+        final EquivalenceComparator vertexChecker,
+        final EquivalenceComparator edgeChecker)
     {
-        Graph<Integer, DefaultEdge> g1 = graphs[0];
-        Graph<Integer, DefaultEdge> g2 = graphs[1];
+        final Graph<Integer, DefaultEdge> g1 = graphs[0];
+        final Graph<Integer, DefaultEdge> g2 = graphs[1];
 
-        GraphIsomorphismInspector iso =
+        final GraphIsomorphismInspector iso =
             AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(
                 g1,
                 g2,
                 vertexChecker,
                 edgeChecker);
-        IsomorphismRelation<Integer, DefaultEdge> isoResult;
+        final IsomorphismRelation<Integer, DefaultEdge> isoResult;
         if (iso.hasNext()) {
             isoResult = (IsomorphismRelation) iso.next();
 
-            Set<Integer> vertexSet = g1.vertexSet();
+            final Set<Integer> vertexSet = g1.vertexSet();
             for (
                 Iterator<Integer> iter = vertexSet.iterator();
                 iter.hasNext();)
             {
-                Integer v1 = iter.next();
-                Integer v2 = isoResult.getVertexCorrespondence(v1, true);
+                final Integer v1 = iter.next();
+                final Integer v2 = isoResult.getVertexCorrespondence(v1, true);
                 if (false) {
                     System.out.println("Vertex relation " + v1 + " to " + v2);
                 }
             }
-            Set<DefaultEdge> edgeSet = g1.edgeSet();
+            final Set<DefaultEdge> edgeSet = g1.edgeSet();
             for (
                 Iterator<DefaultEdge> iter = edgeSet.iterator();
                 iter.hasNext();)
             {
-                DefaultEdge e1 = iter.next();
-                DefaultEdge e2 = isoResult.getEdgeCorrespondence(e1, true);
+                final DefaultEdge e1 = iter.next();
+                final DefaultEdge e2 = isoResult.getEdgeCorrespondence(e1, true);
                 if (false) {
                     System.out.println("Vertex relation " + e1 + " to " + e2);
                 }
@@ -200,13 +200,13 @@ public class IsomorphismInspectorTest
         final int NUM_OF_VERTEXES_IN_WHEEL = 6;
         final int FIRST_INTEGER_FOR_G2 = 13;
 
-        Graph<Integer, DefaultEdge> g1 =
+        final Graph<Integer, DefaultEdge> g1 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
-        Graph<Integer, DefaultEdge> g2 =
+        final Graph<Integer, DefaultEdge> g2 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
-        WheelGraphGenerator<Integer, DefaultEdge> gen1 =
+        final WheelGraphGenerator<Integer, DefaultEdge> gen1 =
             new WheelGraphGenerator<Integer, DefaultEdge>(
                 NUM_OF_VERTEXES_IN_WHEEL);
         gen1.generateGraph(g1, new IntegerVertexFactory(), null);
@@ -255,16 +255,16 @@ public class IsomorphismInspectorTest
     @SuppressWarnings("unchecked")
     public void testLinear4vertexIsomorphicGraph()
     {
-        Graph<Integer, DefaultEdge> g1 =
+        final Graph<Integer, DefaultEdge> g1 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
-        LinearGraphGenerator gen1 = new LinearGraphGenerator(4);
+        final LinearGraphGenerator gen1 = new LinearGraphGenerator(4);
         gen1.generateGraph(g1, new IntegerVertexFactory(), null);
 
-        Graph<Integer, DefaultEdge> g2 =
+        final Graph<Integer, DefaultEdge> g2 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
-        LinearGraphGenerator gen2 = new LinearGraphGenerator(4);
+        final LinearGraphGenerator gen2 = new LinearGraphGenerator(4);
         gen2.generateGraph(g2, new IntegerVertexFactory(5), null); // start vertex from number 6
         assertIsomorphic(
             new Graph[] {
@@ -292,20 +292,20 @@ public class IsomorphismInspectorTest
     @SuppressWarnings("unchecked")
     public void testLinear4vertexNonIsomorphicCauseOfVertexEqGroup()
     {
-        LinearGraphGenerator<Integer, DefaultEdge> gen4 =
+        final LinearGraphGenerator<Integer, DefaultEdge> gen4 =
             new LinearGraphGenerator<Integer, DefaultEdge>(4);
 
-        Graph<Integer, DefaultEdge> g1 =
+        final Graph<Integer, DefaultEdge> g1 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
         gen4.generateGraph(g1, new IntegerVertexFactory(), null);
 
-        Graph<Integer, DefaultEdge> g2 =
+        final Graph<Integer, DefaultEdge> g2 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
         gen4.generateGraph(g2, new IntegerVertexFactory(1), null); // start vertex from number 2
 
-        Graph<Integer, DefaultEdge> g3 =
+        final Graph<Integer, DefaultEdge> g3 =
             new DefaultDirectedGraph<Integer, DefaultEdge>(
                 DefaultEdge.class);
         gen4.generateGraph(g3, new IntegerVertexFactory(2), null); // start vertex from number 3
@@ -331,7 +331,7 @@ public class IsomorphismInspectorTest
             true);
 
         // create a functor according to odd even
-        EquivalenceComparator vertexEqChecker = new OddEvenGroupComparator();
+        final EquivalenceComparator vertexEqChecker = new OddEvenGroupComparator();
         assertIsomorphic(
             new Graph[] {
                 g1,
@@ -369,36 +369,34 @@ public class IsomorphismInspectorTest
     @SuppressWarnings("unchecked")
     public void testEdgeComparator()
     {
-        int LINEAR_GRAPH_VERTEX_NUM = 4;
-        Graph [] graphsArray = new DirectedGraph[3];
-        Character [] charArray =
-            new Character[] {
-                new Character('A'),
-                new Character('B'),
-                new Character('C'),
-                new Character('D')
-            };
-        int [][] weigthsArray =
-            new int[][] {
-                {
-                    12,
-                    10,
-                    5
-                },
-                {
-                    10,
-                    18,
-                    3
-                },
-                {
-                    11,
-                    10,
-                    5
-                }
-            };
+        final int LINEAR_GRAPH_VERTEX_NUM = 4;
+        final Graph [] graphsArray = new DirectedGraph[3];
+        final Character [] charArray = {
+            new Character('A'),
+            new Character('B'),
+            new Character('C'),
+            new Character('D')
+        };
+        final int [][] weigthsArray = {
+            {
+                12,
+                10,
+                5
+            },
+            {
+                10,
+                18,
+                3
+            },
+            {
+                11,
+                10,
+                5
+            }
+        };
 
         for (int i = 0; i < graphsArray.length; i++) {
-            Graph<Character, DefaultEdge> currGraph =
+            final Graph<Character, DefaultEdge> currGraph =
                 graphsArray[i] =
                     new DefaultDirectedWeightedGraph<Character,
                         DefaultWeightedEdge>(
@@ -426,7 +424,7 @@ public class IsomorphismInspectorTest
             true);
 
         // create a functor according to odd even
-        EquivalenceComparator edgeEqChecker =
+        final EquivalenceComparator edgeEqChecker =
             new DirectedEdgeWeightOddEvenComparator(graphsArray[0]);
         assertIsomorphic(
             new Graph[] { graphsArray[0], graphsArray[1] },
@@ -447,38 +445,38 @@ public class IsomorphismInspectorTest
 
     @SuppressWarnings("unchecked")
     private void assertIsomorphicStopAfterFirstMatch(
-        Graph [] graphs,
-        boolean assertActive,
-        boolean shouldTheyBeIsomorphic,
-        EquivalenceComparator vertexChecker,
-        EquivalenceComparator edgeChecker)
+        final Graph [] graphs,
+        final boolean assertActive,
+        final boolean shouldTheyBeIsomorphic,
+        final EquivalenceComparator vertexChecker,
+        final EquivalenceComparator edgeChecker)
     {
         if (assertActive) {
             System.out.println("\nassertIsomorphic:"
                 + shouldTheyBeIsomorphic);
         }
-        Graph g1 = graphs[0];
-        Graph g2 = graphs[1];
+        final Graph g1 = graphs[0];
+        final Graph g2 = graphs[1];
         System.out.println("g1:" + g1);
         System.out.println("g2:" + g2);
-        long beforeTime = System.currentTimeMillis();
-        GraphIsomorphismInspector iso =
+        final long beforeTime = System.currentTimeMillis();
+        final GraphIsomorphismInspector iso =
             AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(
                 g1,
                 g2,
                 vertexChecker,
                 edgeChecker);
-        boolean isoResult = iso.isIsomorphic();
+        final boolean isoResult = iso.isIsomorphic();
         if (isoResult) {
             System.out.println("Graphs are isomorphic. ");
         } else {
             System.out.println("Graphs are NOT isomorphic.");
         }
 
-        long deltaTime = System.currentTimeMillis() - beforeTime;
-        String timeDesc;
+        final long deltaTime = System.currentTimeMillis() - beforeTime;
+        final String timeDesc;
         timeDesc =
-            (deltaTime <= 10) ? "<10ms [less than minumun measurement time]"
+            deltaTime <= 10 ? "<10ms [less than minumun measurement time]"
             : String.valueOf(deltaTime);
         System.out.println(
             "# Performence: Isomorphism check in MiliSeconds:" + timeDesc);
@@ -501,65 +499,62 @@ public class IsomorphismInspectorTest
     public void performanceTestOnRandomGraphs()
         throws Exception
     {
-        final int [] numOfVertexesArray =
-            new int[] {
-                6,
-                6,
-                6,
-                8,
-                8,
-                8,
-                10,
-                10,
-                10,
-                12,
-                14,
-                20,
-                30,
-                99
-            };
-        final int [] numOfEdgesArray =
-            new int[] {
-                0,
-                4,
-                12,
-                1,
-                15,
-                54,
-                0,
-                40,
-                90,
-                130,
-                50,
-                79,
-                30,
-                234
-            };
+        final int [] numOfVertexesArray = {
+            6,
+            6,
+            6,
+            8,
+            8,
+            8,
+            10,
+            10,
+            10,
+            12,
+            14,
+            20,
+            30,
+            99
+        };
+        final int [] numOfEdgesArray = {
+            0,
+            4,
+            12,
+            1,
+            15,
+            54,
+            0,
+            40,
+            90,
+            130,
+            50,
+            79,
+            30,
+            234
+        };
 
         // there will be two different generators. The first will be used for
         // 1st,2nd graph
         // the other for the3rd graph
         final int NUM_OF_GENERATORS = 2;
-        RandomGraphGenerator [] genArray =
+        final RandomGraphGenerator [] genArray =
             new RandomGraphGenerator[NUM_OF_GENERATORS];
 
-        String [] graphConctereClassesFullName =
-            new String[] { // "org.jgrapht.graph.SimpleGraph" ,
-                "org.jgrapht.graph.SimpleDirectedGraph",
-                "org.jgrapht.graph.DefaultDirectedGraph",
-                // "org.jgrapht.graph.Multigraph",
-                // "org.jgrapht.graph.Pseudograph"
-            };
+        final String [] graphConctereClassesFullName = { // "org.jgrapht.graph.SimpleGraph" ,
+            "org.jgrapht.graph.SimpleDirectedGraph",
+            "org.jgrapht.graph.DefaultDirectedGraph",
+            // "org.jgrapht.graph.Multigraph",
+            // "org.jgrapht.graph.Pseudograph"
+        };
 
         // 3 graphs. 1st,2nd must be isomorphic .3rd probably not iso.
         final int SIZE_OF_GENERATED_GRAPH_ARRAY = 3;
 
         // graphsArray rows are different graph types. Columns are few
         // instances of that type
-        Graph [][] graphsArray =
+        final Graph [][] graphsArray =
             new Graph[graphConctereClassesFullName.length][SIZE_OF_GENERATED_GRAPH_ARRAY];
 
-        Graph [] currIsoTestArray = new Graph[2];
+        final Graph [] currIsoTestArray = new Graph[2];
         for (int testNum = 0; testNum < numOfVertexesArray.length; testNum++) {
             // recreate the graphs (empty)
             try {

@@ -73,9 +73,9 @@ public class DirectedSubgraph<V, E>
      * are included.
      */
     public DirectedSubgraph(
-        DirectedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+        final DirectedGraph<V, E> base,
+        final Set<V> vertexSubset,
+        final Set<E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -86,13 +86,13 @@ public class DirectedSubgraph<V, E>
      * @see DirectedGraph#inDegreeOf(Object)
      */
     @Override
-    public int inDegreeOf(V vertex)
+    public int inDegreeOf(final V vertex)
     {
         assertVertexExist(vertex);
 
         int degree = 0;
 
-        for (E e : getBase().incomingEdgesOf(vertex)) {
+        for (final E e : getBase().incomingEdgesOf(vertex)) {
             if (containsEdge(e)) {
                 degree++;
             }
@@ -105,13 +105,13 @@ public class DirectedSubgraph<V, E>
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
     @Override
-    public Set<E> incomingEdgesOf(V vertex)
+    public Set<E> incomingEdgesOf(final V vertex)
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = Sets.newHashSet();
+        final Set<E> edges = Sets.newHashSet();
 
-        for (E e : getBase().incomingEdgesOf(vertex))
+        for (final E e : getBase().incomingEdgesOf(vertex))
             if (containsEdge(e))
                 edges.add(e);
 
@@ -122,13 +122,13 @@ public class DirectedSubgraph<V, E>
      * @see DirectedGraph#outDegreeOf(Object)
      */
     @Override
-    public int outDegreeOf(V vertex)
+    public int outDegreeOf(final V vertex)
     {
         assertVertexExist(vertex);
 
         int degree = 0;
 
-        for (E e : getBase().outgoingEdgesOf(vertex)) {
+        for (final E e : getBase().outgoingEdgesOf(vertex)) {
             if (containsEdge(e)) {
                 degree++;
             }
@@ -141,13 +141,13 @@ public class DirectedSubgraph<V, E>
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
     @Override
-    public Set<E> outgoingEdgesOf(V vertex)
+    public Set<E> outgoingEdgesOf(final V vertex)
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = Sets.newHashSet();
+        final Set<E> edges = Sets.newHashSet();
 
-        for (E e : getBase().outgoingEdgesOf(vertex))
+        for (final E e : getBase().outgoingEdgesOf(vertex))
             if (containsEdge(e))
                 edges.add(e);
 

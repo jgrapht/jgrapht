@@ -55,28 +55,28 @@ public final class EdmondsBlossomShrinkingTest extends TestCase
     public void testOne()
     {
         // create an undirected graph
-        UndirectedGraph<Integer, DefaultEdge> g =
+        final UndirectedGraph<Integer, DefaultEdge> g =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
-        Integer v1 = 1;
-        Integer v2 = 2;
-        Integer v3 = 3;
-        Integer v4 = 4;
+        final Integer v1 = 1;
+        final Integer v2 = 2;
+        final Integer v3 = 3;
+        final Integer v4 = 4;
 
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
         g.addVertex(v4);
 
-        DefaultEdge e12 = g.addEdge(v1, v2);
-        DefaultEdge e23 = g.addEdge(v2, v3);
-        DefaultEdge e24 = g.addEdge(v2, v4);
-        DefaultEdge e34 = g.addEdge(v3, v4);
+        final DefaultEdge e12 = g.addEdge(v1, v2);
+        final DefaultEdge e23 = g.addEdge(v2, v3);
+        final DefaultEdge e24 = g.addEdge(v2, v4);
+        final DefaultEdge e34 = g.addEdge(v3, v4);
 
         // compute max match
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher =
+        final EdmondsBlossomShrinking<Integer, DefaultEdge> matcher =
             new EdmondsBlossomShrinking<Integer, DefaultEdge>();
-        Set<DefaultEdge> match = matcher.findMatch(g);
+        final Set<DefaultEdge> match = matcher.findMatch(g);
         assertEquals(2, match.size());
         assertTrue(match.contains(e12));
         assertTrue(match.contains(e34));

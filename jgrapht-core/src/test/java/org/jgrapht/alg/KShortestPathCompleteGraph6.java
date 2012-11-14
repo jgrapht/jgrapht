@@ -101,45 +101,45 @@ public class KShortestPathCompleteGraph6
 
     private void addEdges()
     {
-        this.eS1 = this.addEdge("vS", "v1");
-        this.eS2 = this.addEdge("vS", "v2");
-        this.eS3 = this.addEdge("vS", "v3");
-        this.eS4 = this.addEdge("vS", "v4");
-        this.eS5 = this.addEdge("vS", "v5");
+        eS1 = addEdge("vS", "v1");
+        eS2 = addEdge("vS", "v2");
+        eS3 = addEdge("vS", "v3");
+        eS4 = addEdge("vS", "v4");
+        eS5 = addEdge("vS", "v5");
 
-        this.e12 = this.addEdge("v1", "v2");
-        this.e13 = this.addEdge("v1", "v3");
-        this.e14 = this.addEdge("v1", "v4");
-        this.e15 = this.addEdge("v1", "v5");
+        e12 = addEdge("v1", "v2");
+        e13 = addEdge("v1", "v3");
+        e14 = addEdge("v1", "v4");
+        e15 = addEdge("v1", "v5");
 
-        this.e23 = this.addEdge("v2", "v3");
-        this.e24 = this.addEdge("v2", "v4");
-        this.e25 = this.addEdge("v2", "v5");
+        e23 = addEdge("v2", "v3");
+        e24 = addEdge("v2", "v4");
+        e25 = addEdge("v2", "v5");
 
-        this.e34 = this.addEdge("v3", "v4");
-        this.e35 = this.addEdge("v3", "v5");
+        e34 = addEdge("v3", "v4");
+        e35 = addEdge("v3", "v5");
 
-        this.e45 = this.addEdge("v4", "v5");
+        e45 = addEdge("v4", "v5");
 
-        setEdgeWeight(this.eS1, 1.0);
-        setEdgeWeight(this.eS2, 1.0);
-        setEdgeWeight(this.eS3, 1.0);
-        setEdgeWeight(this.eS4, 1.0);
-        setEdgeWeight(this.eS5, 1000.0);
+        setEdgeWeight(eS1, 1.0);
+        setEdgeWeight(eS2, 1.0);
+        setEdgeWeight(eS3, 1.0);
+        setEdgeWeight(eS4, 1.0);
+        setEdgeWeight(eS5, 1000.0);
 
-        setEdgeWeight(this.e12, 1.0);
-        setEdgeWeight(this.e13, 1.0);
-        setEdgeWeight(this.e14, 1.0);
-        setEdgeWeight(this.e15, 1.0);
+        setEdgeWeight(e12, 1.0);
+        setEdgeWeight(e13, 1.0);
+        setEdgeWeight(e14, 1.0);
+        setEdgeWeight(e15, 1.0);
 
-        setEdgeWeight(this.e23, 1.0);
-        setEdgeWeight(this.e24, 1.0);
-        setEdgeWeight(this.e25, 1.0);
+        setEdgeWeight(e23, 1.0);
+        setEdgeWeight(e24, 1.0);
+        setEdgeWeight(e25, 1.0);
 
-        setEdgeWeight(this.e34, 1.0);
-        setEdgeWeight(this.e35, 1.0);
+        setEdgeWeight(e34, 1.0);
+        setEdgeWeight(e35, 1.0);
 
-        setEdgeWeight(this.e45, 1.0);
+        setEdgeWeight(e45, 1.0);
     }
 
     private void addVertices()

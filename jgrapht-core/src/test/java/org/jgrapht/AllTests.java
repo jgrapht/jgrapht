@@ -39,6 +39,7 @@
  */
 package org.jgrapht;
 
+import java.lang.String;
 import java.util.*;
 
 import junit.framework.*;
@@ -73,7 +74,7 @@ public final class AllTests
      */
     public static Test suite()
     {
-        ExpandableTestSuite suite =
+        final ExpandableTestSuite suite =
             new ExpandableTestSuite("All tests of JGraphT");
 
         suite.addTestSuit((TestSuite) AllAlgTests.suite());
@@ -96,13 +97,12 @@ public final class AllTests
          */
         public ExpandableTestSuite()
         {
-            super();
         }
 
         /**
-         * @see TestSuite#TestSuite(java.lang.String)
+         * @see TestSuite#TestSuite(String)
          */
-        public ExpandableTestSuite(String name)
+        public ExpandableTestSuite(final String name)
         {
             super(name);
         }
@@ -112,11 +112,11 @@ public final class AllTests
          *
          * @param suite
          */
-        public void addTestSuit(TestSuite suite)
+        public void addTestSuit(final TestSuite suite)
         {
             for (Enumeration e = suite.tests(); e.hasMoreElements();) {
-                Test t = (Test) e.nextElement();
-                this.addTest(t);
+                final Test t = (Test) e.nextElement();
+                addTest(t);
             }
         }
     }
