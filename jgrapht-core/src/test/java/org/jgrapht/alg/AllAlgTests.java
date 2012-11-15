@@ -91,7 +91,9 @@ public final class AllAlgTests
         suite.addTest(new TestSuite(KruskalMinimumSpanningTreeTest.class));
         suite.addTest(new TestSuite(StoerWagnerMinimumCutTest.class));
         suite.addTest(new TestSuite(EdmondsBlossomShrinkingTest.class));
-
+        suite.addTest(new TestSuite(MinSourceSinkCutTest.class));
+        suite.addTest(new TestSuite(HopcroftKarpBipartiteMatchingTest.class));
+        
         // $JUnit-END$
         return suite;
     }
