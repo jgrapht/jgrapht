@@ -181,6 +181,18 @@ public class FloydWarshallShortestPathsTest
         double diameter = fw.getDiameter();
         assertEquals(0.0, diameter);
     }
+    
+    public void testWeightedEdges() {
+    	SimpleGraph<String, DefaultWeightedEdge> weighted = 
+    		new SimpleGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    	weighted.addVertex("a");
+    	weighted.addVertex("b");
+    	weighted.setEdgeWeight(weighted.addEdge("a", "b"), 5.0);
+    	FloydWarshallShortestPaths<String, DefaultWeightedEdge> fw =
+                new FloydWarshallShortestPaths<String, DefaultWeightedEdge>(weighted);
+    	double sD = fw.shortestDistance("a", "b");
+        assertEquals(5.0, sD, 0.1);
+    }
 }
 
 // End FloydWarshallShortestPathsTest.java

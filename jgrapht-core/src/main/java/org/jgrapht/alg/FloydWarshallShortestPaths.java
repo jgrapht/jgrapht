@@ -232,9 +232,14 @@ public class FloydWarshallShortestPaths<V, E>
         if (edges.size() < 1) {
             return null;
         }
-
+        
+        double weight = 0.;
+        for (E e : edges) {
+        	weight += graph.getEdgeWeight(e);
+        }
+        
         GraphPathImpl<V, E> path =
-            new GraphPathImpl<V, E>(graph, a, b, edges, edges.size());
+            new GraphPathImpl<V, E>(graph, a, b, edges, weight);
 
         return path;
     }
