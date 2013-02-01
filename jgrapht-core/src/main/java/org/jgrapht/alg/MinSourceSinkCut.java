@@ -125,7 +125,7 @@ public class MinSourceSinkCut<V,E> {
 				if(flowValue<=epsilon) //There is no flow on this edge
 					it.remove();
 			}
-			for(E edge: outEdges){
+			for(E edge: inEdges){
 				processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
 			}
 		}
