@@ -26,3 +26,5 @@ build
 .kdev4
 .buildpath
 .svn
+.idea
+*.iml
