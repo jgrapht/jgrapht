@@ -26,3 +26,4 @@ build
 .kdev4
 .buildpath
 .svn
+.classpath
