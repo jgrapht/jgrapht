@@ -16,8 +16,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://jgrapht.svn.sourceforge.net/svnroot/jgrapht/trunk</url>
-		<connection>scm:svn:https://jgrapht.svn.sourceforge.net/svnroot/jgrapht/trunk</connection>
+		<url>https://github.com/jgrapht/jgrapht.git</url>
+		<connection>scm:git:git://github.com/jgrapht/jgrapht.git</connection>
+		<developerConnection>git@github.com:jgrapht/jgrapht.git</developerConnection>
 	</scm>
 	<issueManagement>
 		<url>http://sourceforge.net/tracker/?group_id=86459</url>
