@@ -37,10 +37,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MinimumSpanningTree;
+import org.jgrapht.alg.util.UnionFind;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import java.util.*;
 
 
 /**
@@ -54,7 +55,7 @@ import org.jgrapht.alg.util.*;
  * @author Tom Conerly
  * @since Feb 10, 2010
  */
-public class KruskalMinimumSpanningTree<V, E>
+public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
@@ -102,25 +103,39 @@ public class KruskalMinimumSpanningTree<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * Returns the edges making up the tree found.
-     *
-     * @return Set of Edges
-     */
-    public Set<E> getEdgeSet()
+    @Override
+    public Set<E> getMinimumSpanningTreeEdgeSet()
     {
         return edgeList;
     }
 
-    /**
-     * Returns the cost of the minimum spanning tree or forest.
-     *
-     * @return Cost of the spanning tree
-     */
-    public double getSpanningTreeCost()
+    @Override
+    public double getMinimumSpanningTreeTotalWeight()
     {
         return spanningTreeCost;
     }
+
+
+    /**
+     * Returns edges set constituting the minimum spanning tree/forest
+     *
+     * @return minimum spanning-tree edges set
+     */
+    @Deprecated
+    public Set<E> getEdgeSet() {
+        return getMinimumSpanningTreeEdgeSet();
+    }
+
+    /**
+     * Returns total weight of the minimum spanning tree/forest.
+     *
+     * @return minimum spanning-tree total weight
+     */
+    @Deprecated
+    public double getSpanningTreeCost() {
+        return getMinimumSpanningTreeTotalWeight();
+    }
+
 }
 
 // End KruskalMinimumSpanningTree.java
