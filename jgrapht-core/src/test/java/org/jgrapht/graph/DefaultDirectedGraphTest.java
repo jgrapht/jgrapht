@@ -70,7 +70,7 @@ public class DefaultDirectedGraphTest
             new DirectedMultigraph<String, DefaultEdge>(
                 DefaultEdge.class);
         g.setEdgeSetFactory(new LinkedHashSetFactory<String, DefaultEdge>());
-        initMultiTriangleWithMultiLoop(g);
+        initMultiTriangle(g);
     }
 
     /**
@@ -112,22 +112,11 @@ public class DefaultDirectedGraphTest
     public void testEdgesOf()
     {
         DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangleWithMultiLoop();
+            createMultiTriangle();
 
         assertEquals(3, g.edgesOf(v1).size());
-        assertEquals(2, g.edgesOf(v2).size());
-    }
-
-    /**
-     * .
-     */
-    public void testGetAllEdges()
-    {
-        DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangleWithMultiLoop();
-
-        Set<DefaultEdge> loops = g.getAllEdges(v1, v1);
-        assertEquals(1, loops.size());
+        assertEquals(3, g.edgesOf(v2).size());
+        assertEquals(2, g.edgesOf(v3).size());
     }
 
     /**
@@ -136,10 +125,11 @@ public class DefaultDirectedGraphTest
     public void testInDegreeOf()
     {
         DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangleWithMultiLoop();
+            createMultiTriangle();
 
         assertEquals(2, g.inDegreeOf(v1));
         assertEquals(1, g.inDegreeOf(v2));
+        assertEquals(1, g.inDegreeOf(v3));
     }
 
     /**
@@ -148,10 +138,11 @@ public class DefaultDirectedGraphTest
     public void testOutDegreeOf()
     {
         DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangleWithMultiLoop();
+            createMultiTriangle();
 
-        assertEquals(2, g.outDegreeOf(v1));
-        assertEquals(1, g.outDegreeOf(v2));
+        assertEquals(1, g.outDegreeOf(v1));
+        assertEquals(2, g.outDegreeOf(v2));
+        assertEquals(1, g.outDegreeOf(v3));
     }
 
     /**
@@ -160,7 +151,7 @@ public class DefaultDirectedGraphTest
     public void testVertexOrderDeterminism()
     {
         DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangleWithMultiLoop();
+            createMultiTriangle();
         Iterator<String> iter = g.vertexSet().iterator();
         assertEquals(v1, iter.next());
         assertEquals(v2, iter.next());
@@ -168,25 +159,25 @@ public class DefaultDirectedGraphTest
     }
 
     private DirectedGraph<String, DefaultEdge>
-    createMultiTriangleWithMultiLoop()
+    createMultiTriangle()
     {
         DirectedGraph<String, DefaultEdge> g =
             new DirectedMultigraph<String, DefaultEdge>(
                 DefaultEdge.class);
-        initMultiTriangleWithMultiLoop(g);
+        initMultiTriangle(g);
 
         return g;
     }
 
-    private void initMultiTriangleWithMultiLoop(
+    private void initMultiTriangle(
         DirectedGraph<String, DefaultEdge> g)
     {
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
 
-        g.addEdge(v1, v1);
         g.addEdge(v1, v2);
+        g.addEdge(v2, v1);
         g.addEdge(v2, v3);
         g.addEdge(v3, v1);
     }
