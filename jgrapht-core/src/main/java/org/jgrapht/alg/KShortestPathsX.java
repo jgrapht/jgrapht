@@ -4,17 +4,22 @@ import java.util.*;
 
 import org.jgrapht.graph.AbstractBaseGraph;
 
+/**
+ * Find the k shortest paths between two nodes in a graph.
+ * @author Xavier
+ *
+ * @param <V> node type
+ * @param <E> edge type, must extends form org.jgrapht.graph.DefaultEdge
+ */
 public class KShortestPathsX<V, E> {
 
-	//public List<List<E>> paths;
-	
 	private AbstractBaseGraph<V, E> graphBAK;
 	private AbstractBaseGraph<V, E> graph;
 	private V source;
 	private V target;
 	private int nPaths;
 	private int nMaxHops;
-	public List<List<E>> listA;
+	private List<List<E>> listA;
 	private List<List<E>> listB;
 	
 	
@@ -34,13 +39,16 @@ public class KShortestPathsX<V, E> {
 		
 		assertKShortestPathsFinder(g, s, t, k);
 		
-		//graph = (AbstractBaseGraph<V, E>) g.clone();
 		graphBAK = g;
 		source = s;
 		target = t;
 		nPaths = k;
 		nMaxHops = hops;
 		findKShortestPath();
+	}
+	
+	public List<List<E>> getPaths(){
+		return listA;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -63,7 +71,6 @@ public class KShortestPathsX<V, E> {
 			List<E> lastPath = listA.get(listA.size()-1);
 			for(int i=0; i<lastPath.size(); i++)
 			{
-				//if(lastPath.size() > 1 && i==lastPath.size()-1)break;
 				graph = (AbstractBaseGraph<V, E>) graphBAK.clone();
 				List<E> root = createRoot(lastPath, i);
 				alterGraph(root);
