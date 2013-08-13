@@ -37,19 +37,13 @@
  */
 package org.jgrapht.alg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import junit.framework.TestCase;
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 /**
  * Unit test for the MaxBipartiteMatching class
@@ -80,7 +74,7 @@ public class HopcroftKarpBipartiteMatchingTest extends TestCase{
 		
 		
 		HopcroftKarpBipartiteMatching<Integer,DefaultEdge> bm=new HopcroftKarpBipartiteMatching<Integer,DefaultEdge>(graph,new HashSet<Integer>(partition1),new HashSet<Integer>(partition2));
-		assertEquals(3, bm.getSize(), 0);
+		assertEquals(3, bm.getMatching().size(), 0);
 		List<DefaultEdge> l1 = Arrays.asList(new DefaultEdge[] {e11, e02, e20});
 	    Set<DefaultEdge> matching = new HashSet<DefaultEdge>(l1);
 		assertEquals(matching, bm.getMatching());
@@ -109,7 +103,7 @@ public class HopcroftKarpBipartiteMatchingTest extends TestCase{
 		DefaultEdge e55=graph.addEdge(partition1.get(5), partition2.get(5));
 		
 		HopcroftKarpBipartiteMatching<Integer,DefaultEdge> bm=new HopcroftKarpBipartiteMatching<Integer,DefaultEdge>(graph,new HashSet<Integer>(partition1),new HashSet<Integer>(partition2));
-		assertEquals(6, bm.getSize(), 0);
+		assertEquals(6, bm.getMatching().size(), 0);
 		List<DefaultEdge> l1 = Arrays.asList(new DefaultEdge[] {e21, e13, e00, e42, e34, e55});
 	    Set<DefaultEdge> matching = new HashSet<DefaultEdge>(l1);
 		assertEquals(matching, bm.getMatching());
