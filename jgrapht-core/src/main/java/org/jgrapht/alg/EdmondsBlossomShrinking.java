@@ -37,11 +37,10 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.util.ArrayUnenforcedSet;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 /**
  * An implementation of Edmonds Blossom Shrinking algorithm for constructing
@@ -50,14 +49,10 @@ import java.util.*;
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
  */
-public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
-
+public class EdmondsBlossomShrinking<V, E>
+{
     // ~ Instance fields
     // --------------------------------------------------------
-
-    private UndirectedGraph<V, E> graph;
-
-    private Set<E> matching;
 
     private Map<V, V> match;
     private Map<V, V> p;
@@ -66,43 +61,17 @@ public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
     private Set<V> used;
     private Set<V> blossom;
 
-    // ~ Constructors
-    // ----------------------------------------------------------------
-
-    @Deprecated
-    public EdmondsBlossomShrinking() {}
-
-    public EdmondsBlossomShrinking(final UndirectedGraph<V, E> G) {
-        this.graph = G;
-    }
-
-    // ~ Deprecated Methods
-    // ----------------------------------------------------------------
-
-    /**
-     * See `getMatching` as preferred alternative to this one
-     */
-    @Deprecated
-    public Set<E> findMatch(final UndirectedGraph<V, E> g) {
-        return new EdmondsBlossomShrinking<V, E>(g).getMatching();
-    }
-
     // ~ Methods
     // ----------------------------------------------------------------
-
-    @Override
-    public Set<E> getMatching() {
-        if (matching == null)
-            matching = findMatch();
-        return Collections.unmodifiableSet(matching);
-    }
 
     /**
      * Runs the algorithm on the input graph and returns the match edge set.
      * 
+     * @param g
+     *            The graph to be matched
      * @return set of Edges
      */
-    private Set<E> findMatch()
+    public Set<E> findMatch(final UndirectedGraph<V, E> g)
     {
         Set<E> result = new ArrayUnenforcedSet<E>();
         match = new HashMap<V, V>();
@@ -112,9 +81,9 @@ public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
         used = new HashSet<V>();
         blossom = new HashSet<V>();
 
-        for (V i : graph.vertexSet()) {
+        for (V i : g.vertexSet()) {
             if (!match.containsKey(i)) {
-                V v = findPath(i);
+                V v = findPath(g, i);
                 while (v != null) {
                     V pv = p.get(v);
                     V ppv = match.get(pv);
@@ -126,24 +95,24 @@ public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
         }
 
         Set<V> seen = new HashSet<V>();
-        for (V v : graph.vertexSet()) {
+        for (V v : g.vertexSet()) {
             if (!seen.contains(v) && match.containsKey(v)) {
                 seen.add(v);
                 seen.add(match.get(v));
-                result.add(graph.getEdge(v, match.get(v)));
+                result.add(g.getEdge(v, match.get(v)));
             }
         }
 
         return result;
     }
 
-    private V findPath(V root)
+    private V findPath(UndirectedGraph<V, E> g, V root)
     {
         used.clear();
         p.clear();
         base.clear();
 
-        for (V i : graph.vertexSet()) {
+        for (V i : g.vertexSet()) {
             base.put(i, i);
         }
 
@@ -151,21 +120,22 @@ public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
         q.add(root);
         while (!q.isEmpty()) {
             V v = q.remove();
-            for (E e : graph.edgesOf(v)) {
-                V to = graph.getEdgeSource(e);
-                if (to == v)
-                    to = graph.getEdgeTarget(e);
+            for (V to : g.vertexSet()) {
+                if (!g.containsEdge(v, to)) {
+                    continue;
+                }
+
                 if ((base.get(v) == base.get(to)) || (match.get(v) == to)) {
                     continue;
                 }
                 if (to == root || (match.containsKey(to))
                         && (p.containsKey(match.get(to)))) {
-                    V curbase = lca(graph, v, to);
+                    V curbase = lca(g, v, to);
                     blossom.clear();
-                    markPath(v, curbase, to);
-                    markPath(to, curbase, v);
+                    markPath(g, v, curbase, to);
+                    markPath(g, to, curbase, v);
 
-                    for (V i : graph.vertexSet()) {
+                    for (V i : g.vertexSet()) {
                         if (base.containsKey(i)
                                 && blossom.contains(base.get(i)))
                         {
@@ -190,13 +160,13 @@ public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
         return null;
     }
 
-    private void markPath(V v, V b, V child)
+    private void markPath(UndirectedGraph<V, E> g, V v, V b, V children)
     {
         while (base.get(v) != b) {
             blossom.add(base.get(v));
             blossom.add(base.get(match.get(v)));
-            p.put(v, child);
-            child = match.get(v);
+            p.put(v, children);
+            children = match.get(v);
             v = p.get(match.get(v));
         }
     }
