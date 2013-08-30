@@ -37,21 +37,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
-
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.Multigraph;
+
+import java.util.*;
 
 
 /**
@@ -68,7 +59,7 @@ import org.jgrapht.graph.Multigraph;
  * @author Joris Kinable
  */
 
-public class HopcroftKarpBipartiteMatching<V,E> {
+public class HopcroftKarpBipartiteMatching<V,E> implements MatchingAlgorithm<V, E> {
 
 	private final UndirectedGraph<V, E> graph;
 	private final Set<V> partition1; //Partitions of bipartite graph
@@ -98,7 +89,7 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 	private boolean checkInputData(){
 		if(graph instanceof Multigraph)
 			throw new IllegalArgumentException("Multi graphs are not allowed as input, only simple graphs!");
-		//Test the bipartiteness
+		//Test the bipartite-ness
 		Set<V> neighborsSet1=new HashSet<V>();
 		for(V v: partition1)
 			neighborsSet1.addAll(Graphs.neighborListOf(graph, v));
@@ -193,7 +184,12 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 				//List<V> neighbors=this.getNeighbors(vertex);
 				List<V> neighbors=Graphs.neighborListOf(graph, vertex);
 				for(V neighbor: neighbors){
-					if(usedVertices.contains(neighbor) || matching.contains(graph.getEdge(vertex, neighbor)))
+
+
+
+					if(usedVertices.contains(neighbor))
+            // Vertices placed into odd-layer may not be matched by any other vertices except for the one
+            // we came from
 						continue;
 					else{
 						evenLayer.add(neighbor);
@@ -261,7 +257,8 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 	private LinkedList<V> dfs(V startVertex, Map<V,Set<V>> layeredMap){
 		if(!layeredMap.containsKey(startVertex))
 			return null;
-		else if(unmatchedVertices1.contains(startVertex)){
+		else
+        if(unmatchedVertices1.contains(startVertex)){
 			LinkedList<V> list=new LinkedList<V>();
 			list.add(startVertex);
 			return list;
@@ -291,17 +288,9 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 		return false;
 	}
 	
-	/**
-	 * Returns the edges which are part of the maximum matching.
-	 */
+    @Override
 	public Set<E> getMatching() {
 		return Collections.unmodifiableSet(matching);
 	}
 
-	/**
-	 * Returns the number of edges which are part of the maximum matching
-	 */
-	public int getSize(){
-		return matching.size();
-	}
 }

@@ -37,12 +37,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import junit.framework.TestCase;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Set;
 
 /**
  * .
@@ -75,8 +75,8 @@ public final class EdmondsBlossomShrinkingTest extends TestCase
 
         // compute max match
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher =
-            new EdmondsBlossomShrinking<Integer, DefaultEdge>();
-        Set<DefaultEdge> match = matcher.findMatch(g);
+            new EdmondsBlossomShrinking<Integer, DefaultEdge>(g);
+        Set<DefaultEdge> match = matcher.getMatching();
         assertEquals(2, match.size());
         assertTrue(match.contains(e12));
         assertTrue(match.contains(e34));
