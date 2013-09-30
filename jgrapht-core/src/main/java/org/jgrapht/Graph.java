@@ -310,7 +310,7 @@ public interface Graph<V, E>
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
      *
-     * @return the removed edges, or <code>null</code> if no either vertex not
+     * @return the removed edges, or <code>null</code> if either vertex is not
      * part of graph
      */
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex);

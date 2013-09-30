@@ -102,6 +102,9 @@ public abstract class AbstractGraph<V, E>
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> removed = getAllEdges(sourceVertex, targetVertex);
+        if(removed == null) {
+            return null;
+        }
         removeAllEdges(removed);
 
         return removed;

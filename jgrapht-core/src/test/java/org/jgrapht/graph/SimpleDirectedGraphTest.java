@@ -353,6 +353,29 @@ public class SimpleDirectedGraphTest
     {
         init(); // TODO Implement removeEdge().
     }
+    
+    public void testRemoveAllEdgesObjectObject()
+    {
+        init();
+        
+        assertEquals(2, g2.edgeSet().size());
+        assertTrue(g2.containsEdge(v1, v2));
+        Set<DefaultEdge> edges = g2.getAllEdges(v1, v2);
+        assertEquals(edges, g2.removeAllEdges(v1, v2));
+        assertEquals(1, g2.edgeSet().size());
+        assertFalse(g2.containsEdge(v1, v2));
+        
+        assertEquals(4, g4.edgeSet().size());
+        edges = g4.getAllEdges(v3, v4);
+        assertEquals(edges, g4.removeAllEdges(v3, v4));
+        assertEquals(3, g4.edgeSet().size());
+        assertFalse(g4.containsEdge(v3, v4));
+        // No edge to remove.
+        assertEquals(Collections.emptySet(), g4.removeAllEdges(v3, v2));
+        assertEquals(3, g4.edgeSet().size());
+        // Missing vertex.
+        assertEquals(null, g4.removeAllEdges(v1, "v5"));
+    }
 
     /**
      * .
