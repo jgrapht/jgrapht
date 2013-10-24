@@ -30,3 +30,7 @@ build
 out/*
 **/.idea/*
 **/out/*
+jgrapht-core/.classpath
+jgrapht-demo/.classpath
+jgrapht-ext/.classpath
+jgrapht-touchgraph/.classpath
