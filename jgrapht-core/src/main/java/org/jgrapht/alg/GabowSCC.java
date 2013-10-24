@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
+import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  * Allows obtaining the strongly connected components of a directed graph. 
@@ -23,7 +25,7 @@ import org.jgrapht.DirectedGraph;
  * @since September, 2013
  */
 
-public class GabowSCC<V, E>
+public class GabowSCC<V, E> implements StrongConnectivityAlgorithm<V,E>
 {
     //~ Instance fields --------------------------------------------------------
 
@@ -37,6 +39,8 @@ public class GabowSCC<V, E>
     // the result of the computation, cached for future calls
     private List<Set<V>> stronglyConnectedSets;
 
+    // the result of the computation, cached for future calls
+    private List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs;
 
     // maps vertices to their VertexNumber object
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
@@ -126,6 +130,37 @@ public class GabowSCC<V, E>
         return stronglyConnectedSets;
     }
 
+    /**
+     * <p>Computes a list of {@link DirectedSubgraph}s of the given graph. Each
+     * subgraph will represent a strongly connected component and will contain
+     * all vertices of that component. The subgraph will have an edge (u,v) iff
+     * u and v are contained in the strongly connected component.</p>
+     *
+     * <p>NOTE: Calling this method will first execute {@link
+     * GabowSCC#stronglyConnectedSets()}. If you don't need
+     * subgraphs, use that method.</p>
+     *
+     * @return a list of subgraphs representing the strongly connected
+     * components
+     */
+    public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
+    {
+        if (stronglyConnectedSubgraphs == null) {
+            List<Set<V>> sets = stronglyConnectedSets();
+            stronglyConnectedSubgraphs =
+                new Vector<DirectedSubgraph<V, E>>(sets.size());
+
+            for (Set<V> set : sets) {
+                stronglyConnectedSubgraphs.add(
+                    new DirectedSubgraph<V, E>(
+                        graph,
+                        set,
+                        null));
+            }
+        }
+
+        return stronglyConnectedSubgraphs;
+    }
    
     /*
      * Creates a VertexNumber object for every vertex in the graph and stores

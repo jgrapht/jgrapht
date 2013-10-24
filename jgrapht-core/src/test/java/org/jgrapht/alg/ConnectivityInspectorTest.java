@@ -45,6 +45,7 @@ import java.util.*;
 import junit.framework.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.GabowSCC;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
@@ -372,6 +373,208 @@ public class ConnectivityInspectorTest
             expected,
             new HashSet<Set<Integer>>(sc.stronglyConnectedSets()));
     }
+    
+    public void testStronglyConnectedG1()
+    {
+        DirectedGraph<String, DefaultEdge> g =
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V1); // strongly connected
+
+        g.addEdge(V3, V4); // only weakly connected
+
+        GabowSCC<String, DefaultEdge> inspector =
+            new GabowSCC<String, DefaultEdge>(g);
+
+        // convert from List to Set because we need to ignore order
+        // during comparison
+        Set<Set<String>> actualSets =
+            new HashSet<Set<String>>(inspector.stronglyConnectedSets());
+
+        // construct the expected answer
+        Set<Set<String>> expectedSets = new HashSet<Set<String>>();
+        Set<String> set = new HashSet<String>();
+        set.add(V1);
+        set.add(V2);
+        expectedSets.add(set);
+        set = new HashSet<String>();
+        set.add(V3);
+        expectedSets.add(set);
+        set = new HashSet<String>();
+        set.add(V4);
+        expectedSets.add(set);
+
+        assertEquals(expectedSets, actualSets);
+
+        actualSets.clear();
+
+        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
+            inspector.stronglyConnectedSubgraphs();
+        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
+            actualSets.add(sg.vertexSet());
+
+            GabowSCC<String, DefaultEdge> ci =
+                new GabowSCC<String, DefaultEdge>(sg);
+            assertTrue(ci.isStronglyConnected());
+        }
+
+        assertEquals(expectedSets, actualSets);
+    }
+
+    /**
+     * .
+     */
+    public void testStronglyConnectedG2()
+    {
+        DirectedGraph<String, DefaultEdge> g =
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V1); // strongly connected
+
+        g.addEdge(V4, V3); // only weakly connected
+        g.addEdge(V3, V2); // only weakly connected
+
+        GabowSCC<String, DefaultEdge> inspector =
+            new GabowSCC<String, DefaultEdge>(g);
+
+        // convert from List to Set because we need to ignore order
+        // during comparison
+        Set<Set<String>> actualSets =
+            new HashSet<Set<String>>(inspector.stronglyConnectedSets());
+
+        // construct the expected answer
+        Set<Set<String>> expectedSets = new HashSet<Set<String>>();
+        Set<String> set = new HashSet<String>();
+        set.add(V1);
+        set.add(V2);
+        expectedSets.add(set);
+        set = new HashSet<String>();
+        set.add(V3);
+        expectedSets.add(set);
+        set = new HashSet<String>();
+        set.add(V4);
+        expectedSets.add(set);
+
+        assertEquals(expectedSets, actualSets);
+
+        actualSets.clear();
+
+        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
+            inspector.stronglyConnectedSubgraphs();
+        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
+            actualSets.add(sg.vertexSet());
+
+            GabowSCC<String, DefaultEdge> ci =
+                new GabowSCC<String, DefaultEdge>(sg);
+            assertTrue(ci.isStronglyConnected());
+        }
+
+        assertEquals(expectedSets, actualSets);
+    }
+
+    /**
+     * .
+     */
+    public void testStronglyConnectedG3()
+    {
+        DirectedGraph<String, DefaultEdge> g =
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V3);
+        g.addEdge(V3, V1); // strongly connected
+
+        g.addEdge(V1, V4);
+        g.addEdge(V2, V4);
+        g.addEdge(V3, V4); // weakly connected
+
+        GabowSCC<String, DefaultEdge> inspector =
+            new GabowSCC<String, DefaultEdge>(g);
+
+        // convert from List to Set because we need to ignore order
+        // during comparison
+        Set<Set<String>> actualSets =
+            new HashSet<Set<String>>(inspector.stronglyConnectedSets());
+
+        // construct the expected answer
+        Set<Set<String>> expectedSets = new HashSet<Set<String>>();
+        Set<String> set = new HashSet<String>();
+        set.add(V1);
+        set.add(V2);
+        set.add(V3);
+        expectedSets.add(set);
+        set = new HashSet<String>();
+        set.add(V4);
+        expectedSets.add(set);
+
+        assertEquals(expectedSets, actualSets);
+
+        actualSets.clear();
+
+        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
+            inspector.stronglyConnectedSubgraphs();
+
+        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
+            actualSets.add(sg.vertexSet());
+
+            GabowSCC<String, DefaultEdge> ci =
+                new GabowSCC<String, DefaultEdge>(sg);
+            assertTrue(ci.isStronglyConnected());
+        }
+
+        assertEquals(expectedSets, actualSets);
+    }
+
+    public void testStronglyConnectedG4()
+    {
+        DefaultDirectedGraph<Integer, String> graph =
+            new DefaultDirectedGraph<Integer, String>(
+                new EdgeFactory<Integer, String>() {
+                    public String createEdge(Integer from, Integer to)
+                    {
+                        return (from + "->" + to).intern();
+                    }
+                });
+
+        new RingGraphGenerator<Integer, String>(3).generateGraph(
+            graph,
+            new VertexFactory<Integer>() {
+                private int i = 0;
+
+                public Integer createVertex()
+                {
+                    return i++;
+                }
+            },
+            null);
+
+        GabowSCC<Integer, String> sc =
+            new GabowSCC<Integer, String>(
+                graph);
+        Set<Set<Integer>> expected = new HashSet<Set<Integer>>();
+        expected.add(graph.vertexSet());
+        assertEquals(
+            expected,
+            new HashSet<Set<Integer>>(sc.stronglyConnectedSets()));
+    }
 }
+
 
 // End ConnectivityInspectorTest.java
