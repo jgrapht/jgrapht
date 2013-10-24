@@ -275,7 +275,6 @@ public class TopologicalOrderIteratorTest
         
         assertEquals(numberOfVisitedVertices, partialOrder.size());
         
-//        int numberOfPairs = pairsOfVertices.length / 2;
         for (int i = 0; i < pairsOfVertices.length; i+=2) {
             int indexOfFirst = partialOrder.indexOf(pairsOfVertices[i]);
             int indexOfSecond = partialOrder.indexOf(pairsOfVertices[i+1]);
