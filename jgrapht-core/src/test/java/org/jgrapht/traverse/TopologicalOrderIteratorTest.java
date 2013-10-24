@@ -39,10 +39,15 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.EdgeReversedGraph;
 
 
 /**
@@ -57,13 +62,13 @@ public class TopologicalOrderIteratorTest
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * .
+     * Tests graph traversal in topological order on a connected DAG with a
+     * total order.
      */
     public void testRecipe()
     {
         DirectedGraph<String, DefaultEdge> graph =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
         String [] v = new String[9];
 
@@ -124,16 +129,163 @@ public class TopologicalOrderIteratorTest
     }
 
     /**
-     * .
+     * Tests graph traversal in topological order on an empty graph.
      */
     public void testEmptyGraph()
     {
         DirectedGraph<String, DefaultEdge> graph =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         Iterator<String> iter =
             new TopologicalOrderIterator<String, DefaultEdge>(graph);
         assertFalse(iter.hasNext());
+    }
+
+    /**
+     * Tests graph traversal in topological order on a directed graph that is
+     * cyclic and contains no component with a source vertex.
+     * Creating the iterator should throw an exception.
+     */
+    public void testCyclicDigraph()
+    {
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
+        graph.addVertex("1");
+        graph.addVertex("2");
+
+        graph.addEdge("1", "2");
+        graph.addEdge("2", "1");
+        
+        try {
+            new TopologicalOrderIterator<String, DefaultEdge>(graph);
+            fail("Expected an IllegalArgumentException to be thrown.");
+        } catch (IllegalArgumentException e) {
+            assertTrue(true);
+        }
+    }
+
+    /**
+     * Tests graph traversal in topological order on a disconnected DAG
+     * without edges.
+     */
+    public void testDisconnectedDigraphWithoutEdges()
+    {
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
+        graph.addVertex("1");
+        graph.addVertex("2");
+
+        Iterator<String> iter =
+            new TopologicalOrderIterator<String, DefaultEdge>(graph);
+
+        for (int i = 0; i < graph.vertexSet().size(); i++) {
+            assertTrue(iter.hasNext());
+            iter.next();
+        }
+    }
+
+    /**
+     * Tests graph traversal in topological order on a connected DAG with
+     * two partial orders.
+     */
+    public void testConnectedDigraphWithTwoPartialOrders()
+    {
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
+        graph.addVertex("1");
+        graph.addVertex("2");
+        graph.addVertex("3");
+
+        graph.addEdge("1", "3");
+        graph.addEdge("2", "3");
+
+        assertPartialOrder(
+           graph, 3,
+           "1", "3",
+           "2", "3"
+        );
+    }
+
+    /**
+     * Tests graph traversal in topological order on a disconnected DAG with
+     * several partial orders.
+     * The graph also contains a cyclic component that is not visited by the
+     * traversal.
+     */
+    public void testDisconnectedDigraphWithSeveralPartialOrders()
+    {
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
+        graph.addVertex("1");
+        graph.addVertex("2");
+        graph.addVertex("3");
+
+        graph.addEdge("1", "3");
+        graph.addEdge("2", "3");
+        
+        graph.addVertex("4");
+        graph.addVertex("5");
+        graph.addVertex("6");
+        graph.addVertex("7");
+
+        graph.addEdge("4", "6");
+        graph.addEdge("5", "6");
+        graph.addEdge("6", "7");
+
+        // the cyclic component that is not visited by the traversal
+        graph.addVertex("8");
+        graph.addVertex("9");
+        graph.addEdge("8", "9");
+        graph.addEdge("9", "8");
+        
+        assertPartialOrder(
+           graph, 7,
+           "1", "3",
+           "2", "3",
+           "4", "6",
+           "4", "7",
+           "5", "6",
+           "5", "7",
+           "6", "7"
+        );
+    }
+    
+    /**
+     * Checks the topological order of a graph's vertices as determined by a
+     * {@link TopologicalOrderIterator}.
+     * 
+     * @param graph the graph to traverse
+     * @param numberOfVisitedVertices the expected number of vertices
+     * encountered in the traversal
+     * @param pairsOfVertices a variable number of pairs of vertices;
+     * for every pair (a,b), it is asserted that a < b according to the
+     * topological order
+     */
+    private void assertPartialOrder(
+        DirectedGraph<String, DefaultEdge> graph,
+        int numberOfVisitedVertices,
+        String... pairsOfVertices)
+    {
+        assert pairsOfVertices.length % 2 == 0;
+        Iterator<String> iter =
+            new TopologicalOrderIterator<String, DefaultEdge>(graph);
+        
+        List<String> partialOrder = new ArrayList<String>();
+        while (iter.hasNext()) {
+            partialOrder.add(iter.next());
+        }
+        
+        assertEquals(numberOfVisitedVertices, partialOrder.size());
+        
+//        int numberOfPairs = pairsOfVertices.length / 2;
+        for (int i = 0; i < pairsOfVertices.length; i+=2) {
+            int indexOfFirst = partialOrder.indexOf(pairsOfVertices[i]);
+            int indexOfSecond = partialOrder.indexOf(pairsOfVertices[i+1]);
+            assertTrue(indexOfFirst < indexOfSecond);
+        }
     }
 }
 

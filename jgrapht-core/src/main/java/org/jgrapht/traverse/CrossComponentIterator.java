@@ -242,6 +242,12 @@ public abstract class CrossComponentIterator<V, E, D>
                 fireVertexTraversed(createVertexTraversalEvent(nextVertex));
             }
 
+            // NOTE: Depending on the implementation of provideNextVertex(),
+            // the next vertex may not have been seen yet by this traversal,
+            // so we have to check this.
+            if (!isSeenVertex(nextVertex)) {
+                encounterVertex(nextVertex, null);
+            }
             addUnseenChildrenOf(nextVertex);
 
             return nextVertex;
