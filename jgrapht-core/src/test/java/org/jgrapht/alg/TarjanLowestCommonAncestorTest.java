@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.TarjanLowestCommonAncestor.LcaRequestResponse;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -11,10 +13,10 @@ import org.jgrapht.graph.DefaultEdge;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TarjanLowestCommonAncestorTest {
+public class TarjanLowestCommonAncestorTest extends TestCase {
 
     @Test
-    public void binaryTreeTest() {
+    public void testBinaryTree() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
@@ -34,7 +36,7 @@ public class TarjanLowestCommonAncestorTest {
     }
 
     @Test
-    public void dagTest() {
+    public void testDag() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
@@ -80,7 +82,7 @@ public class TarjanLowestCommonAncestorTest {
     }
 
     @Test
-    public void complexDagTest() {
+    public void testComplexDag() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
