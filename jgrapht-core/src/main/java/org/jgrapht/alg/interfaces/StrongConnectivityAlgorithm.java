@@ -47,9 +47,6 @@ public interface StrongConnectivityAlgorithm<V,E> {
      * all vertices of that component. The subgraph will have an edge (u,v) iff
      * u and v are contained in the strongly connected component.</p>
      *
-     * <p>NOTE: Calling this method will first execute {@link
-     * StrongConnectivityAlgorithm#stronglyConnectedSets()}. If you don't need
-     * subgraphs, use that method.</p>
      *
      * @return a list of subgraphs representing the strongly connected
      * components
