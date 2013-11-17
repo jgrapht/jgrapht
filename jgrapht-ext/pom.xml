@@ -9,6 +9,18 @@
 	</parent>
 	<artifactId>jgrapht-ext</artifactId>
 	<name>JGraphT - Ext</name>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
+			<url>http://jgrapht.sourceforge.net/LGPL.html</url>
+			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>Eclipse Public License (EPL) 1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<build>
 		<plugins>
 			<plugin>
@@ -41,6 +53,11 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-core</artifactId>
 		</dependency>
+        <dependency>
+                <groupId>org.tinyjee.jgraphx</groupId>
+                    <artifactId>jgraphx</artifactId>
+                        <version>2.0.0.1</version>
+                    </dependency>
 		<dependency>
 			<groupId>jgraph</groupId>
 			<artifactId>jgraph</artifactId>
