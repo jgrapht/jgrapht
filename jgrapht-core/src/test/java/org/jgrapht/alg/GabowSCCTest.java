@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.EdgeFactory;
@@ -24,11 +25,11 @@ public class GabowSCCTest     extends TestCase
     private static final String V4 = "v4";
    
     
+    /* Create a graph with two vertexes strongly connected and two only weakly connected  */
+    
 	 public void testStronglyConnectedG1()
 	    {
-	        DirectedGraph<String, DefaultEdge> g =
-	            new DefaultDirectedGraph<String, DefaultEdge>(
-	                DefaultEdge.class);
+	        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge> (DefaultEdge.class);
 	        g.addVertex(V1);
 	        g.addVertex(V2);
 	        g.addVertex(V3);
@@ -39,8 +40,7 @@ public class GabowSCCTest     extends TestCase
 
 	        g.addEdge(V3, V4); // only weakly connected
 
-	        GabowSCC<String, DefaultEdge> inspector =
-	            new GabowSCC<String, DefaultEdge>(g);
+	        GabowSCC<String, DefaultEdge> inspector = new GabowSCC<String, DefaultEdge>(g);
 
 	        // convert from List to Set because we need to ignore order
 	        // during comparison
@@ -64,25 +64,23 @@ public class GabowSCCTest     extends TestCase
 
 	        actualSets.clear();
 
-	        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-	            inspector.stronglyConnectedSubgraphs();
+	        List<DirectedSubgraph<String, DefaultEdge>> subgraphs = inspector.stronglyConnectedSubgraphs();
 	        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
 	            actualSets.add(sg.vertexSet());
 
-	            GabowSCC<String, DefaultEdge> ci =
-	                new GabowSCC<String, DefaultEdge>(sg);
+	            GabowSCC<String, DefaultEdge> ci = new GabowSCC<String, DefaultEdge>(sg);
 	            assertTrue(ci.isStronglyConnected());
 	        }
 
 	        assertEquals(expectedSets, actualSets);
 	    }
 
+	 	/* Create a graph with two vertexes strongly connected (v1,v2) and two only weakly connected (v3,v4). 
+	 	 * Verify that v3 is not added between the strongly connected element  */
 
 	    public void testStronglyConnectedG2()
 	    {
-	        DirectedGraph<String, DefaultEdge> g =
-	            new DefaultDirectedGraph<String, DefaultEdge>(
-	                DefaultEdge.class);
+	        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>( DefaultEdge.class);
 	        g.addVertex(V1);
 	        g.addVertex(V2);
 	        g.addVertex(V3);
@@ -119,13 +117,11 @@ public class GabowSCCTest     extends TestCase
 
 	        actualSets.clear();
 
-	        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-	            inspector.stronglyConnectedSubgraphs();
+	        List<DirectedSubgraph<String, DefaultEdge>> subgraphs = inspector.stronglyConnectedSubgraphs();
 	        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
 	            actualSets.add(sg.vertexSet());
 
-	            GabowSCC<String, DefaultEdge> ci =
-	                new GabowSCC<String, DefaultEdge>(sg);
+	            GabowSCC<String, DefaultEdge> ci = new GabowSCC<String, DefaultEdge>(sg);
 	            assertTrue(ci.isStronglyConnected());
 	        }
 
@@ -133,11 +129,12 @@ public class GabowSCCTest     extends TestCase
 	    }
 
 
+	    /* Create a graph with three vertexes strongly connected (v1,v2,v3) and one only weakly connected v4.
+	     * Verify that v4 is not added between the strongly connected elements  */
+	    
 	    public void testStronglyConnectedG3()
 	    {
-	        DirectedGraph<String, DefaultEdge> g =
-	            new DefaultDirectedGraph<String, DefaultEdge>(
-	                DefaultEdge.class);
+	        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 	        g.addVertex(V1);
 	        g.addVertex(V2);
 	        g.addVertex(V3);
@@ -151,8 +148,7 @@ public class GabowSCCTest     extends TestCase
 	        g.addEdge(V2, V4);
 	        g.addEdge(V3, V4); // weakly connected
 
-	        GabowSCC<String, DefaultEdge> inspector =
-	            new GabowSCC<String, DefaultEdge>(g);
+	        GabowSCC<String, DefaultEdge> inspector = new GabowSCC<String, DefaultEdge>(g);
 
 	        // convert from List to Set because we need to ignore order
 	        // during comparison
@@ -174,8 +170,7 @@ public class GabowSCCTest     extends TestCase
 
 	        actualSets.clear();
 
-	        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-	            inspector.stronglyConnectedSubgraphs();
+	        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =   inspector.stronglyConnectedSubgraphs();
 
 	        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
 	            actualSets.add(sg.vertexSet());
@@ -188,6 +183,7 @@ public class GabowSCCTest     extends TestCase
 	        assertEquals(expectedSets, actualSets);
 	    }
 
+	    /* Create a RingGraph, verify that all the vertexes are strongly connected  */
 	    public void testStronglyConnectedG4()
 	    {
 	        DefaultDirectedGraph<Integer, String> graph =
@@ -211,9 +207,7 @@ public class GabowSCCTest     extends TestCase
 	            },
 	            null);
 
-	        GabowSCC<Integer, String> sc =
-	            new GabowSCC<Integer, String>(
-	                graph);
+	        GabowSCC<Integer, String> sc = new GabowSCC<Integer, String>(graph);
 	        Set<Set<Integer>> expected = new HashSet<Set<Integer>>();
 	        expected.add(graph.vertexSet());
 	        assertEquals(
