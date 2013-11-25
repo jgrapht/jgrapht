@@ -218,30 +218,7 @@ public class DirectedAcyclicGraph<V, E>
     public E addDagEdge(V fromVertex, V toVertex)
         throws CycleFoundException
     {
-        Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
-        Integer ub = topoOrderMap.getTopologicalIndex(fromVertex);
-
-        if ((lb == null) || (ub == null)) {
-            throw new IllegalArgumentException(
-                "vertices must be in the graph already!");
-        }
-
-        if (lb < ub) {
-            Set<V> df = new HashSet<V>();
-            Set<V> db = new HashSet<V>();
-
-            // Discovery
-            Region affectedRegion = new Region(lb, ub);
-            Visited visited = visitedFactory.getInstance(affectedRegion);
-
-            // throws CycleFoundException if there is a cycle
-            dfsF(toVertex, df, visited, affectedRegion);
-
-            dfsB(fromVertex, db, visited, affectedRegion);
-            reorder(df, db, visited);
-            ++topologyUpdateCount; // if we do a reorder, than the topology has
-                                   // been updated
-        }
+        updateDag(fromVertex, toVertex);
 
         return super.addEdge(fromVertex, toVertex);
     }
@@ -289,10 +266,16 @@ public class DirectedAcyclicGraph<V, E>
             return false;
         }
 
-        Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
+        updateDag(fromVertex, toVertex);
+
+        return super.addEdge(fromVertex, toVertex, e);
+    }
+
+	private void updateDag(V fromVertex, V toVertex) throws CycleFoundException {
+		Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
         Integer ub = topoOrderMap.getTopologicalIndex(fromVertex);
 
-        if ((lb == null) || (ub == null)) {
+		if ((lb == null) || (ub == null)) {
             throw new IllegalArgumentException(
                 "vertices must be in the graph already!");
         }
@@ -313,9 +296,9 @@ public class DirectedAcyclicGraph<V, E>
             ++topologyUpdateCount; // if we do a reorder, than the topology has
                                    // been updated
         }
+	}
 
-        return super.addEdge(fromVertex, toVertex, e);
-    }
+
 
     /**
      * identical to {@link #addDagEdge(Object, Object, Object)}, except an

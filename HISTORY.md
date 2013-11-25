@@ -19,6 +19,7 @@ Changes to JGraphT in each version:
 	- Add `TarjanLowestCommonAncestor`, contributed by Leo Crawford
 	- Add `JGraphXAdapter`, contributed by Sebastian Hubenschmid and JeanYves Tinevez
 	- Add LGPL/EPL dual licensing, coordinated by Oliver Kopp
+	- Refactoring for `DirectedAcyclicGraph`, contributed by javierj
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.

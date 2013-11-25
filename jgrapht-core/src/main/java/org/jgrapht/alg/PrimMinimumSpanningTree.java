@@ -35,7 +35,7 @@ import org.jgrapht.alg.interfaces.MinimumSpanningTree;
 import java.util.*;
 
 /**
- * An implementation of <a href="http://en.wikipedia.org/wiki/Prim's_algorithm>Prim's algorithm</a>
+ * An implementation of <a href="http://en.wikipedia.org/wiki/Prim's_algorithm">Prim's algorithm</a>
  * that finds a minimum spanning tree/forest subject to connectivity of the supplied weighted
  * undirected graph.
  *

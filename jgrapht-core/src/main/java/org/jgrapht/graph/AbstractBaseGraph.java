@@ -1049,15 +1049,9 @@ public abstract class AbstractBaseGraph<V, E>
                 while (iter.hasNext()) {
                     E e = iter.next();
 
-                    boolean equalStraight =
-                        sourceVertex.equals(getEdgeSource(e))
-                        && targetVertex.equals(getEdgeTarget(e));
+                    boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
 
-                    boolean equalInverted =
-                        sourceVertex.equals(getEdgeTarget(e))
-                        && targetVertex.equals(getEdgeSource(e));
-
-                    if (equalStraight || equalInverted) {
+                    if (equal) {
                         edges.add(e);
                     }
                 }
@@ -1066,7 +1060,7 @@ public abstract class AbstractBaseGraph<V, E>
             return edges;
         }
 
-        /**
+		/**
          * @see Graph#getEdge(Object, Object)
          */
         public E getEdge(V sourceVertex, V targetVertex)
@@ -1080,15 +1074,9 @@ public abstract class AbstractBaseGraph<V, E>
                 while (iter.hasNext()) {
                     E e = iter.next();
 
-                    boolean equalStraight =
-                        sourceVertex.equals(getEdgeSource(e))
-                        && targetVertex.equals(getEdgeTarget(e));
+                    boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
 
-                    boolean equalInverted =
-                        sourceVertex.equals(getEdgeTarget(e))
-                        && targetVertex.equals(getEdgeSource(e));
-
-                    if (equalStraight || equalInverted) {
+                    if (equal) {
                         return e;
                     }
                 }
@@ -1096,6 +1084,18 @@ public abstract class AbstractBaseGraph<V, E>
 
             return null;
         }
+
+        private boolean isEqualsStraightOrInverted( Object sourceVertex, Object targetVertex, E e) {
+            boolean equalStraight =
+                    sourceVertex.equals(getEdgeSource(e))
+                    && targetVertex.equals(getEdgeTarget(e));
+
+                boolean equalInverted =
+                    sourceVertex.equals(getEdgeTarget(e))
+                    && targetVertex.equals(getEdgeSource(e));
+			return equalStraight || equalInverted;
+		}
+
 
         /**
          * @see AbstractBaseGraph#addEdgeToTouchingVertices(Edge)

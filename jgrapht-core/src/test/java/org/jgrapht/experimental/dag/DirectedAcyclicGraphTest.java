@@ -42,6 +42,7 @@ import junit.framework.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
@@ -531,6 +532,21 @@ public class DirectedAcyclicGraphTest
         }
     }
 
+    
+    public void testWhenVertexIsNotInGraph_Then_ThowException() {
+        DirectedAcyclicGraph<Long, DefaultEdge> dag =
+                new DirectedAcyclicGraph<Long, DefaultEdge>(DefaultEdge.class);
+        try {
+        	dag.addDagEdge(1l, 2l);
+        } catch(IllegalArgumentException e) {
+        	return;
+        } catch (CycleFoundException e) {
+			e.printStackTrace();
+			fail("Unexpected 'CycleFoundException' catched");
+		}
+        fail("No exception 'IllegalArgumentException' catched");
+    }
+    
     //~ Inner Classes ----------------------------------------------------------
 
     private static class LongVertexFactory
