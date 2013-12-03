@@ -169,12 +169,12 @@ public class DirectedAcyclicGraph<V, E>
      * adds the vertex if it wasn't already in the graph, and puts it either at
      * the top or the bottom of the topological ordering, depending on the value
      * of addToTop. This may provide useful optimizations for merging
-     * DirectedAcyclicGraphS that become connected.
+     * DirectedAcyclicGraphs that become connected.
      *
      * @param v
      * @param addToTop
      *
-     * @return
+     * @return whether new vertex was added
      */
     public boolean addVertex(V v, boolean addToTop)
     {
@@ -558,7 +558,7 @@ public class DirectedAcyclicGraph<V, E>
          *
          * @param index
          *
-         * @return
+         * @return vertex
          */
         public V getVertex(Integer index);
 

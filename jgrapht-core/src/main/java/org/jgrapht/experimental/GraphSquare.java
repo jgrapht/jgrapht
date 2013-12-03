@@ -117,7 +117,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, E)
+     * @see Graph#addEdge(Object, Object, Object)
      */
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
@@ -141,7 +141,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(V, V)
+     * @see Graph#removeAllEdges(Object, Object)
      */
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
@@ -157,7 +157,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(E)
+     * @see Graph#removeEdge(Object)
      */
     public boolean removeEdge(E e)
     {
@@ -165,7 +165,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(V, V)
+     * @see Graph#removeEdge(Object, Object)
      */
     public E removeEdge(V sourceVertex, V targetVertex)
     {
@@ -173,7 +173,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(V)
+     * @see Graph#removeVertex(Object)
      */
     public boolean removeVertex(V v)
     {

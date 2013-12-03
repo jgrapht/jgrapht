@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-demo</artifactId>
 	<name>JGraphT - Demo</name>
@@ -49,7 +49,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<finalName>${project.artifactId}-${project.version}-shade</finalName>
+					<finalName>${project.artifactId}-${project.version}-uber</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

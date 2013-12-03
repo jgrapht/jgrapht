@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-ext</artifactId>
 	<name>JGraphT - Ext</name>
@@ -36,14 +36,11 @@
 					</execution>
 				</executions>
 				<configuration>
-					<artifactSet>
-						<includes>
-							<include>net.sf.jgrapht</include>
-						</includes>
-					</artifactSet>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-					<shadedClassifierName>combined</shadedClassifierName>
-					<finalName>jgrapht-${project.version}-combined</finalName>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>uber</shadedClassifierName>
+                    <!--
+					<finalName>${project.artifactId}-${project.version}-uber</finalName>
+-->
 				</configuration>
 			</plugin>
 		</plugins>

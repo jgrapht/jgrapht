@@ -208,8 +208,7 @@ public class AdaptiveIsomorphismInspectorFactory
      * IllegalArgumentException if it is. The current unsupported types are
      * graphs with multiple-edges.
      *
-     * @param graph1
-     * @param graph2
+     * @param g
      *
      * @throws IllegalArgumentException
      */

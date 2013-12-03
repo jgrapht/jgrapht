@@ -5,7 +5,7 @@
 	<artifactId>jgrapht</artifactId>
 	<packaging>pom</packaging>
 	<name>JGraphT - Parent</name>
-	<version>0.8.3-SNAPSHOT</version>
+	<version>0.9.0-SNAPSHOT</version>
 	<description>A Java class library for graph-theory data structures and algorithms.</description>
 	<url>http://www.jgrapht.org</url>
     <parent>

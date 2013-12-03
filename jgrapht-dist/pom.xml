@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-dist</artifactId>
 	<name>JGraphT - Distributable Archives</name>
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-ext</artifactId>
-			<classifier>combined</classifier>
+			<classifier>uber</classifier>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

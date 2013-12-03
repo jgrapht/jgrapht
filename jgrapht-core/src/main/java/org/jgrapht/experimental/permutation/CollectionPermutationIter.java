@@ -84,7 +84,6 @@ public class CollectionPermutationIter<E>
      * important)
      *
      * @param objectsArray
-     * @param permuter
      */
     public CollectionPermutationIter(List<E> objectsArray)
     {

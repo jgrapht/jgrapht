@@ -46,14 +46,18 @@ Please refer to the license for details.
 - `jgrapht-core-x.y.z.jar` core library
 - `jgrapht-demo-x.y.z.jar` demo classes
 - `jgrapht-ext-x.y.z.jar` extensions
-- `jgrapht-x.y.z-combined.jar` all libraries rolled into one
+- `jgrapht-ext-x.y.z-uber.jar` all libraries rolled into one
 - `jgraph-a.b.c.jar` JGraph dependency library
+- `jgraphx-a.b.c.jar` JGraphX dependency library
 - `source/` complete source tree used to build this release
-- `pom.xml` Maven project file
 
 ## Getting Started ##
 
 The package `org.jgrapht.demo` includes small demo applications to help you get started. If you spawn your own demo app and think others can use it, please send it to us and we will add it to that package.
+
+To run the graph visualization demo, try executing this command in the lib directory:
+
+    java -jar jgrapht-demo-x.y.z.jar
 
 ## Upgrading Versions ##
 

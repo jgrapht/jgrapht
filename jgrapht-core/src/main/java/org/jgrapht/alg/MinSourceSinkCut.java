@@ -80,7 +80,6 @@ public class MinSourceSinkCut<V,E> {
 	 * Compute a minimum s-t cut
 	 * @param source
 	 * @param sink
-	 * @return One partition of the minimum s-t cut
 	 */
 	public void computeMinCut(V source, V sink){
 		this.source=source;

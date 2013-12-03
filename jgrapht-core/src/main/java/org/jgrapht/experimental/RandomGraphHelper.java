@@ -69,7 +69,7 @@ public final class RandomGraphHelper
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * @see GraphGenerator#generateGraph
+     * @see org.jgrapht.generate.GraphGenerator#generateGraph
      */
     @SuppressWarnings("unchecked")
     public static void addEdges(
@@ -101,7 +101,7 @@ public final class RandomGraphHelper
      * @param vertexFactory
      * @param numVertices
      *
-     * @return
+     * @return vertices
      */
     @SuppressWarnings("unchecked")
     public static Object [] addVertices(

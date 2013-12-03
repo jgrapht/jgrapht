@@ -237,7 +237,7 @@ public abstract class AbstractGraph<V, E>
      * 
      * @return the hash code value this graph
      * 
-     * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
+     * @see Object#hashCode()
      */
     public int hashCode()
     {
@@ -274,7 +274,7 @@ public abstract class AbstractGraph<V, E>
      * 
      * @return <code>true</code> if the specified object is equal to this graph 
      * 
-     * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
+     * @see Object#equals(Object)
      */
     public boolean equals(Object obj)
     {
