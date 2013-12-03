@@ -203,8 +203,6 @@ public class TopologicalOrderIteratorTest
     /**
      * Tests graph traversal in topological order on a disconnected DAG with
      * several partial orders.
-     * The graph also contains a cyclic component that is not visited by the
-     * traversal.
      */
     public void testDisconnectedDigraphWithSeveralPartialOrders()
     {
@@ -227,12 +225,6 @@ public class TopologicalOrderIteratorTest
         graph.addEdge("5", "6");
         graph.addEdge("6", "7");
 
-        // the cyclic component that is not visited by the traversal
-        graph.addVertex("8");
-        graph.addVertex("9");
-        graph.addEdge("8", "9");
-        graph.addEdge("9", "8");
-        
         assertPartialOrder(
            graph, 7,
            "1", "3",
