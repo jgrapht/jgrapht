@@ -548,12 +548,12 @@
       <insertMethods>false</insertMethods>
       <insertRecursive>false</insertRecursive>
       <length>80</length>
-      <template>//~ ${description} ${fill.character}*</template>
+      <template></template>
       <insertAccess>false</insertAccess>
       <insert>true</insert>
       <fillCharacter>-</fillCharacter>
       <insertMethodRecursive>false</insertMethodRecursive>
-      <methodTemplate>//~ ${fill.character}*</methodTemplate>
+      <methodTemplate></methodTemplate>
      </separator>
      <format>
       <multiLine>false</multiLine>

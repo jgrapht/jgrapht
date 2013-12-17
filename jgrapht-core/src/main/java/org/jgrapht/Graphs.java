@@ -54,7 +54,7 @@ import org.jgrapht.graph.*;
  */
 public abstract class Graphs
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Creates a new edge and adds it to the specified graph similarly to the

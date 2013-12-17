@@ -98,7 +98,7 @@ public class CompoundPermutationIter
     implements ArrayPermutationsIter,
         Iterator
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     IntegerPermutationIter [] permArray;
 
@@ -115,7 +115,7 @@ public class CompoundPermutationIter
 
     private int iterCounter = 0;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * For the class example, use [1,2,2]. order matters! (performance-wise too)
@@ -127,7 +127,7 @@ public class CompoundPermutationIter
         init(equalityGroupsSizesArray);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Creates an IntegerPermutationIter class per equalityGroup with different

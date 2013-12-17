@@ -73,18 +73,18 @@ public class AsWeightedGraph<V, E>
     implements Serializable,
         WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      */
     private static final long serialVersionUID = -716810639338971372L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     protected final Map<E, Double> weightMap;
     private final boolean isWeightedGraph;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for AsWeightedGraph.
@@ -107,7 +107,7 @@ public class AsWeightedGraph<V, E>
         this.isWeightedGraph = (g instanceof WeightedGraph<?, ?>);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see WeightedGraph#setEdgeWeight

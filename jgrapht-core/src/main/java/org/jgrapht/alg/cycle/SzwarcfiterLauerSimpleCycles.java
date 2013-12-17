@@ -35,50 +35,47 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.StrongConnectivityInspector;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+
 
 /**
- * Find all simple cycles of a directed graph using the 
- * Schwarcfiter and Lauer's algorithm.
- * <p/>
- * See:<br/>
- * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary 
- * cycles of a directed graph in O(n + m) per cycle, 
- * Technical Report Series, #60, May 1974, Univ. of 
+ * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's
+ * algorithm.
+ *
+ * <p/>See:<br/>
+ * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed
+ * graph in O(n + m) per cycle, Technical Report Series, #60, May 1974, Univ. of
  * Newcastle upon Tyne, Newcastle upon Tyne, England.
- * 
- * @author Nikolay Ognyanov
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public class SzwarcfiterLauerSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
+    
+
     // The graph.
     private DirectedGraph<V, E> graph;
 
     // The state of the algorithm.
-    private List<List<V>>       cycles        = null;
-    private V[]                 iToV          = null;
-    private Map<V, Integer>     vToI          = null;
-    private Map<V, Set<V>>      bSets         = null;
-    private ArrayDeque<V>       stack         = null;
-    private Set<V>              marked        = null;
-    private Map<V, Set<V>>      removed       = null;
-    private int[]               position      = null;
-    private boolean[]           reach         = null;
-    private List<V>             startVertices = null;
+    private List<List<V>> cycles = null;
+    private V [] iToV = null;
+    private Map<V, Integer> vToI = null;
+    private Map<V, Set<V>> bSets = null;
+    private ArrayDeque<V> stack = null;
+    private Set<V> marked = null;
+    private Map<V, Set<V>> removed = null;
+    private int [] position = null;
+    private boolean [] reach = null;
+    private List<V> startVertices = null;
+
+    
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -89,10 +86,11 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     /**
      * Create a simple cycle finder for the specified graph.
-     * 
+     *
      * @param graph - the DirectedGraph in which to find cycles.
-     * @throws IllegalArgumentException if the graph argument is
-     *         <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the graph argument is <code>
+     * null</code>.
      */
     public SzwarcfiterLauerSimpleCycles(DirectedGraph<V, E> graph)
     {
@@ -102,11 +100,12 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         this.graph = graph;
     }
 
+    
+
     /**
-      * {@inheritDoc}
-      */
-    @Override
-    public DirectedGraph<V, E> getGraph()
+     * {@inheritDoc}
+     */
+    @Override public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -114,8 +113,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    @Override public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -126,8 +124,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public List<List<V>> findSimpleCycles()
+    @Override public List<List<V>> findSimpleCycles()
     {
         // Just a straightforward implementation of
         // the algorithm.
@@ -185,12 +182,10 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
                 boolean gotCycle = cycle(w, q);
                 if (gotCycle) {
                     foundCycle = gotCycle;
-                }
-                else {
+                } else {
                     noCycle(v, w);
                 }
-            }
-            else if (position[w] <= q) {
+            } else if (position[w] <= q) {
                 foundCycle = true;
                 List<V> cycle = new ArrayList<V>();
                 Iterator<V> it = stack.descendingIterator();
@@ -210,8 +205,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
                     }
                 }
                 cycles.add(cycle);
-            }
-            else {
+            } else {
                 noCycle(v, w);
             }
         }
@@ -255,7 +249,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     private void initState()
     {
         cycles = new ArrayList<List<V>>();
-        iToV = (V[]) graph.vertexSet().toArray();
+        iToV = (V []) graph.vertexSet().toArray();
         vToI = new HashMap<V, Integer>();
         bSets = new HashMap<V, Set<V>>();
         stack = new ArrayDeque<V>();
@@ -319,3 +313,5 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         return result;
     }
 }
+
+// End SzwarcfiterLauerSimpleCycles.java

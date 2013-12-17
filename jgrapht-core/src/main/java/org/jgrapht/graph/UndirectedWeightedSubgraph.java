@@ -51,11 +51,11 @@ public class UndirectedWeightedSubgraph<V, E>
     extends UndirectedSubgraph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3689346615735236409L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new undirected weighted subgraph.

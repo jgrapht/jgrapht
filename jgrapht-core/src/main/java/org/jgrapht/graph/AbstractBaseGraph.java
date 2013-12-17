@@ -70,13 +70,13 @@ public abstract class AbstractBaseGraph<V, E>
         Cloneable,
         Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = -1263088497616142427L;
 
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     boolean allowingLoops;
 
@@ -90,7 +90,7 @@ public abstract class AbstractBaseGraph<V, E>
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Construct a new pseudograph. The pseudograph can either be directed or
@@ -122,7 +122,7 @@ public abstract class AbstractBaseGraph<V, E>
         this.edgeSetFactory = new ArrayListFactory<V, E>();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getAllEdges(Object, Object)
@@ -523,7 +523,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * .
@@ -1049,7 +1049,11 @@ public abstract class AbstractBaseGraph<V, E>
                 while (iter.hasNext()) {
                     E e = iter.next();
 
-                    boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
+                    boolean equal =
+                        isEqualsStraightOrInverted(
+                            sourceVertex,
+                            targetVertex,
+                            e);
 
                     if (equal) {
                         edges.add(e);
@@ -1060,7 +1064,7 @@ public abstract class AbstractBaseGraph<V, E>
             return edges;
         }
 
-		/**
+        /**
          * @see Graph#getEdge(Object, Object)
          */
         public E getEdge(V sourceVertex, V targetVertex)
@@ -1074,7 +1078,11 @@ public abstract class AbstractBaseGraph<V, E>
                 while (iter.hasNext()) {
                     E e = iter.next();
 
-                    boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
+                    boolean equal =
+                        isEqualsStraightOrInverted(
+                            sourceVertex,
+                            targetVertex,
+                            e);
 
                     if (equal) {
                         return e;
@@ -1085,17 +1093,20 @@ public abstract class AbstractBaseGraph<V, E>
             return null;
         }
 
-        private boolean isEqualsStraightOrInverted( Object sourceVertex, Object targetVertex, E e) {
+        private boolean isEqualsStraightOrInverted(
+            Object sourceVertex,
+            Object targetVertex,
+            E e)
+        {
             boolean equalStraight =
-                    sourceVertex.equals(getEdgeSource(e))
-                    && targetVertex.equals(getEdgeTarget(e));
+                sourceVertex.equals(getEdgeSource(e))
+                && targetVertex.equals(getEdgeTarget(e));
 
-                boolean equalInverted =
-                    sourceVertex.equals(getEdgeTarget(e))
-                    && targetVertex.equals(getEdgeSource(e));
-			return equalStraight || equalInverted;
-		}
-
+            boolean equalInverted =
+                sourceVertex.equals(getEdgeTarget(e))
+                && targetVertex.equals(getEdgeSource(e));
+            return equalStraight || equalInverted;
+        }
 
         /**
          * @see AbstractBaseGraph#addEdgeToTouchingVertices(Edge)

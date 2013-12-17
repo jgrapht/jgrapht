@@ -49,7 +49,7 @@ import org.jgrapht.*;
 class BellmanFordIterator<V, E>
     implements Iterator<List<V>>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      * Error message.
@@ -58,7 +58,7 @@ class BellmanFordIterator<V, E>
         "Negative"
         + "edge-weights are not allowed in an unidrected graph!";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Graph on which shortest paths are searched.
@@ -88,7 +88,7 @@ class BellmanFordIterator<V, E>
 
     private double epsilon;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * @param graph
@@ -107,7 +107,7 @@ class BellmanFordIterator<V, E>
         this.epsilon = epsilon;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the path element of the shortest path with less than <code>

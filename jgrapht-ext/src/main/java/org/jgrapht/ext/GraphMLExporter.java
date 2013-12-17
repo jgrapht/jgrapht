@@ -52,14 +52,14 @@ import org.xml.sax.helpers.*;
  */
 public class GraphMLExporter<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
     private EdgeNameProvider<E> edgeIDProvider;
     private EdgeNameProvider<E> edgeLabelProvider;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructs a new GraphMLExporter object with integer name providers for
@@ -98,7 +98,7 @@ public class GraphMLExporter<V, E>
         this.edgeLabelProvider = edgeLabelProvider;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Exports a graph into a plain text file in GraphML format.

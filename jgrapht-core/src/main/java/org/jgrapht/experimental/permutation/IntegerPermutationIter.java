@@ -53,7 +53,7 @@ public class IntegerPermutationIter
     implements Iterator,
         ArrayPermutationsIter
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int [] Value;
     private int N;
@@ -66,7 +66,7 @@ public class IntegerPermutationIter
      */
     private int [] currentValueBackup;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates an array of size N with elements 1,2,...,n-1 Useful for
@@ -102,7 +102,7 @@ public class IntegerPermutationIter
         init(newArray);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     private void init(int [] array)
     {

@@ -43,12 +43,12 @@ package org.jgrapht.util;
  */
 public class VertexPair<V>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private V n1;
     private V n2;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public VertexPair(V n1, V n2)
     {
@@ -56,7 +56,7 @@ public class VertexPair<V>
         this.n2 = n2;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     public V getFirst()
     {

@@ -50,12 +50,12 @@ import java.util.*;
  */
 public class EquivalenceSetCreator<E, C>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final EqGroupSizeComparator groupSizeComparator =
         new EqGroupSizeComparator();
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Checks for equivalance groups in the aElementsArray. Returns an ordered
@@ -213,7 +213,7 @@ public class EquivalenceSetCreator<E, C>
         return equalityGroupMap;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Functor used to order groups by size (number of elements in the group)

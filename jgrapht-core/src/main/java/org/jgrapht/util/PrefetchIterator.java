@@ -88,7 +88,7 @@ public class PrefetchIterator<E>
     implements Iterator<E>,
         Enumeration<E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private NextElementFunctor<E> innerEnum;
     private E getNextLastResult;
@@ -97,14 +97,14 @@ public class PrefetchIterator<E>
     private boolean flagIsEnumerationStartedEmpty = true;
     private int innerFunctorUsageCounter = 0;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public PrefetchIterator(NextElementFunctor<E> aEnum)
     {
         innerEnum = aEnum;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Serves as one contact place to the functor; all must use it and not
@@ -204,7 +204,7 @@ public class PrefetchIterator<E>
         throw new UnsupportedOperationException();
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     public interface NextElementFunctor<EE>
     {

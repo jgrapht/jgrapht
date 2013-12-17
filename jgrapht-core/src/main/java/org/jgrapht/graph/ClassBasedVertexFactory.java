@@ -47,18 +47,18 @@ import org.jgrapht.*;
 public class ClassBasedVertexFactory<V>
     implements VertexFactory<V>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private final Class<? extends V> vertexClass;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public ClassBasedVertexFactory(Class<? extends V> vertexClass)
     {
         this.vertexClass = vertexClass;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see VertexFactory#createVertex()

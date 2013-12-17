@@ -69,13 +69,13 @@ import org.jgrapht.graph.*;
 public class BlockCutpointGraph<V, E>
     extends SimpleGraph<UndirectedGraph<V, E>, DefaultEdge>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      */
     private static final long serialVersionUID = -9101341117013163934L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Set<V> cutpoints = new HashSet<V>();
 
@@ -98,7 +98,7 @@ public class BlockCutpointGraph<V, E>
 
     private Map<V, Integer> vertex2numOrder = new HashMap<V, Integer>();
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Running time = O(m) where m is the number of edges.
@@ -142,7 +142,7 @@ public class BlockCutpointGraph<V, E>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the vertex if vertex is a cutpoint, and otherwise returns the
@@ -301,7 +301,7 @@ public class BlockCutpointGraph<V, E>
         this.vertex2numOrder.put(vertex, Integer.valueOf(numOrder));
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     private class BCGEdge
         extends DefaultEdge

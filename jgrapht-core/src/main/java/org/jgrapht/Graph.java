@@ -77,7 +77,7 @@ import java.util.*;
  */
 public interface Graph<V, E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns a set of all edges connecting source vertex to target vertex if

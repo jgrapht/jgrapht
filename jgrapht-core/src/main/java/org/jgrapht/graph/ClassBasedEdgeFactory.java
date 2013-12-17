@@ -55,22 +55,22 @@ public class ClassBasedEdgeFactory<V, E>
     implements EdgeFactory<V, E>,
         Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3618135658586388792L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private final Class<? extends E> edgeClass;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public ClassBasedEdgeFactory(Class<? extends E> edgeClass)
     {
         this.edgeClass = edgeClass;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see EdgeFactory#createEdge(Object, Object)

@@ -52,11 +52,11 @@ public class ListenableUndirectedWeightedGraph<V, E>
     extends ListenableUndirectedGraph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3690762799613949747L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new listenable undirected weighted graph.

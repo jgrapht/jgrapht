@@ -60,14 +60,14 @@ import org.jgrapht.graph.*;
  */
 public class AdaptiveIsomorphismInspectorFactory
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     public static final int GRAPH_TYPE_ARBITRARY = 0;
     public static final int GRAPH_TYPE_PLANAR = 1;
     public static final int GRAPH_TYPE_TREE = 2;
     public static final int GRAPH_TYPE_MULTIGRAPH = 3;
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Creates a new inspector, letting this class determine what is the most

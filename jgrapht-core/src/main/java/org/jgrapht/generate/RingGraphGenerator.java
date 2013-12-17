@@ -53,11 +53,11 @@ import org.jgrapht.*;
 public class RingGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int size;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Construct a new RingGraphGenerator.
@@ -75,7 +75,7 @@ public class RingGraphGenerator<V, E>
         this.size = size;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * {@inheritDoc}

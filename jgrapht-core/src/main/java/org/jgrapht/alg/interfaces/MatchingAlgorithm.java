@@ -29,20 +29,25 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.Set;
+import java.util.*;
+
 
 /**
- * Allows to derive <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a>
- * from given graph
+ * Allows to derive <a
+ * href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> from
+ * given graph
  *
- * @param <V>   vertex concept type
- * @param <E>   edge concept type
+ * @param <V> vertex concept type
+ * @param <E> edge concept type
  */
-public abstract interface MatchingAlgorithm<V, E> {
+public abstract interface MatchingAlgorithm<V, E>
+{
+    
 
-  /**
-   * Returns set of edges making up the matching
-   */
-  public Set<E> getMatching();
-
+    /**
+     * Returns set of edges making up the matching
+     */
+    public Set<E> getMatching();
 }
+
+// End MatchingAlgorithm.java

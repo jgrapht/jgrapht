@@ -53,29 +53,30 @@ import org.jgrapht.util.*;
  */
 public class StoerWagnerMinimumCut<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     final WeightedGraph<Set<V>, DefaultWeightedEdge> workingGraph;
 
     protected double bestCutWeight = Double.POSITIVE_INFINITY;
     protected Set<V> bestCut;
 
-
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Will compute the minimum cut in graph.
      *
      * @param graph graph over which to run algorithm
+     *
      * @throws IllegalArgumentException if a negative weight edge is found
      * @throws IllegalArgumentException if graph has less than 2 vertices
      */
     public StoerWagnerMinimumCut(UndirectedGraph<V, E> graph)
     {
-        if (graph.vertexSet().size() < 2)
+        if (graph.vertexSet().size() < 2) {
             throw new IllegalArgumentException(
-                    "Graph has less than 2 vertices");
-        
+                "Graph has less than 2 vertices");
+        }
+
         //get a version of this graph where each vertex is wrapped with a list
         workingGraph =
             new SimpleWeightedGraph<Set<V>, DefaultWeightedEdge>(
@@ -88,9 +89,10 @@ public class StoerWagnerMinimumCut<V, E>
             workingGraph.addVertex(list);
         }
         for (E e : graph.edgeSet()) {
-            if (graph.getEdgeWeight(e) < 0.0)
+            if (graph.getEdgeWeight(e) < 0.0) {
                 throw new IllegalArgumentException(
-                        "Negative edge weights not allowed");
+                    "Negative edge weights not allowed");
+            }
 
             V s = graph.getEdgeSource(e);
             Set<V> sNew = vertexMap.get(s);
@@ -103,10 +105,11 @@ public class StoerWagnerMinimumCut<V, E>
             if (eNew == null) {
                 eNew = workingGraph.addEdge(sNew, tNew);
                 workingGraph.setEdgeWeight(eNew, graph.getEdgeWeight(e));
-            } else
+            } else {
                 workingGraph.setEdgeWeight(
                     eNew,
                     workingGraph.getEdgeWeight(eNew) + graph.getEdgeWeight(e));
+            }
         }
 
         //arbitrary vertex used to seed the algorithm.
@@ -117,7 +120,7 @@ public class StoerWagnerMinimumCut<V, E>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Implements the MinimumCutPhase function of Stoer and Wagner
@@ -126,24 +129,26 @@ public class StoerWagnerMinimumCut<V, E>
     {
         // The last and before last vertices added to A.
         Set<V> last = a, beforelast = null;
+
         // queue contains vertices not in A ordered by max weight of edges to A.
         PriorityQueue<VertexAndWeight> queue =
-                new PriorityQueue<VertexAndWeight>();
+            new PriorityQueue<VertexAndWeight>();
+
         // Maps vertices to elements of queue
         Map<Set<V>, VertexAndWeight> dmap =
-                new HashMap<Set<V>, VertexAndWeight>();
-        
+            new HashMap<Set<V>, VertexAndWeight>();
+
         // Initialize queue
         for (Set<V> v : workingGraph.vertexSet()) {
-            if (v == a)
+            if (v == a) {
                 continue;
+            }
             DefaultWeightedEdge e = workingGraph.getEdge(v, a);
-            Double w = e == null ? 0.0 : workingGraph.getEdgeWeight(e);
+            Double w = (e == null) ? 0.0 : workingGraph.getEdgeWeight(e);
             VertexAndWeight vandw = new VertexAndWeight(v, w, e != null);
             queue.add(vandw);
             dmap.put(v, vandw);
         }
-
 
         // Now iteratively update the queue to get the required vertex ordering
 
@@ -208,7 +213,7 @@ public class StoerWagnerMinimumCut<V, E>
         //add edges and weights to the combined vertex
         double wsum = 0.0;
         for (Set<V> v : workingGraph.vertexSet()) {
-            if (s != v  &&  t != v) {
+            if ((s != v) && (t != v)) {
                 double neww = 0.0;
                 DefaultWeightedEdge etv = workingGraph.getEdge(t, v);
                 DefaultWeightedEdge esv = workingGraph.getEdge(s, v);
@@ -218,7 +223,7 @@ public class StoerWagnerMinimumCut<V, E>
                 if (esv != null) {
                     neww += workingGraph.getEdgeWeight(esv);
                 }
-                if (etv != null  ||  esv != null) {
+                if ((etv != null) || (esv != null)) {
                     wsum += neww;
                     workingGraph.setEdgeWeight(
                         workingGraph.addEdge(set, v),
@@ -246,7 +251,7 @@ public class StoerWagnerMinimumCut<V, E>
         return wsum;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Class for weighted vertices
@@ -256,7 +261,7 @@ public class StoerWagnerMinimumCut<V, E>
     {
         public Set<V> vertex;
         public Double weight;
-        public boolean active;  // active == neighbour in A
+        public boolean active; // active == neighbour in A
 
         public VertexAndWeight(Set<V> v, double w, boolean active)
         {
@@ -266,17 +271,21 @@ public class StoerWagnerMinimumCut<V, E>
         }
 
         /**
-         * compareTo that sorts in reverse order because we need extract-max
-         * and queue provides extract-min. 
+         * compareTo that sorts in reverse order because we need extract-max and
+         * queue provides extract-min.
          */
         @Override public int compareTo(VertexAndWeight that)
         {
-            if (this.active && that.active)
+            if (this.active && that.active) {
                 return -Double.compare(weight, that.weight);
-            if (this.active && !that.active)
+            }
+            if (this.active && !that.active) {
                 return -1;
-            if (!this.active && that.active)
+            }
+            if (!this.active && that.active) {
                 return +1;
+            }
+
             // both inactive
             return 0;
         }

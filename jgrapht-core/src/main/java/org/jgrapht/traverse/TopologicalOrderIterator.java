@@ -72,12 +72,12 @@ import org.jgrapht.util.*;
 public class TopologicalOrderIterator<V, E>
     extends CrossComponentIterator<V, E, Object>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Queue<V> queue;
     private Map<V, ModifiableInteger> inDegreeMap;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new topological order iterator over the directed graph
@@ -142,7 +142,7 @@ public class TopologicalOrderIterator<V, E>
         super(dg, start);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * {@inheritDoc}
@@ -254,7 +254,7 @@ public class TopologicalOrderIterator<V, E>
         }
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     // NOTE jvs 22-Dec-2006:  For JDK1.4-compatibility, we can't assume
     // that LinkedList implements Queue, since that wasn't introduced

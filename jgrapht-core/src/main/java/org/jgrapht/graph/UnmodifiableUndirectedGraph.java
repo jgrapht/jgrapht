@@ -49,11 +49,11 @@ public class UnmodifiableUndirectedGraph<V, E>
     extends UnmodifiableGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3258134639355704624L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new unmodifiable undirected graph based on the specified

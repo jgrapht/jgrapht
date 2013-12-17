@@ -44,7 +44,7 @@ package org.jgrapht;
  */
 public interface GraphMapping<V, E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Gets the mapped value where the key is <code>vertex</code>

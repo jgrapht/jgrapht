@@ -51,11 +51,11 @@ public class ListenableDirectedWeightedGraph<V, E>
     extends ListenableDirectedGraph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3977582476627621938L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new listenable directed weighted graph.

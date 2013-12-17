@@ -75,12 +75,12 @@ import java.util.*;
  */
 public class FibonacciHeap<T>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final double oneOverLogPhi =
         1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Points to the minimum node in the heap.
@@ -92,7 +92,7 @@ public class FibonacciHeap<T>
      */
     private int nNodes;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructs a FibonacciHeap object that contains no elements.
@@ -101,7 +101,7 @@ public class FibonacciHeap<T>
     {
     } // FibonacciHeap
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Tests if the Fibonacci heap is empty or not. Returns true if the heap is

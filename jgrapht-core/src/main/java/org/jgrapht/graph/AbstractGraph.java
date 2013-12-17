@@ -37,7 +37,7 @@
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
  * 14-Jun-2012 : Added hashCode() and equals() methods implementation (VK);
- * 
+ *
  */
 package org.jgrapht.graph;
 
@@ -60,7 +60,7 @@ import org.jgrapht.util.*;
 public abstract class AbstractGraph<V, E>
     implements Graph<V, E>
 {
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Construct a new empty graph object.
@@ -69,7 +69,7 @@ public abstract class AbstractGraph<V, E>
     {
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#containsEdge(Object, Object)
@@ -99,7 +99,7 @@ public abstract class AbstractGraph<V, E>
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> removed = getAllEdges(sourceVertex, targetVertex);
-        if(removed == null) {
+        if (removed == null) {
             return null;
         }
         removeAllEdges(removed);
@@ -231,32 +231,32 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Returns a hash code value for this graph. The hash code of a graph is 
-     * defined to be the sum of the hash codes of vertices and edges in the 
+     * Returns a hash code value for this graph. The hash code of a graph is
+     * defined to be the sum of the hash codes of vertices and edges in the
      * graph. It is also based on graph topology and edges weights.
-     * 
+     *
      * @return the hash code value this graph
-     * 
+     *
      * @see Object#hashCode()
      */
     public int hashCode()
     {
         int hash = vertexSet().hashCode();
 
-        for (E e: edgeSet()) {
-
+        for (E e : edgeSet()) {
             int part = e.hashCode();
 
             int source = getEdgeSource(e).hashCode();
             int target = getEdgeTarget(e).hashCode();
 
             // see http://en.wikipedia.org/wiki/Pairing_function (VK);
-            int pairing = ((source + target) * 
-                (source + target + 1) / 2) + target;
-            part = 27 * part + pairing;
+            int pairing =
+                ((source + target)
+                    * (source + target + 1) / 2) + target;
+            part = (27 * part) + pairing;
 
             long weight = (long) getEdgeWeight(e);
-            part = 27 * part + (int) (weight ^ (weight >>> 32));
+            part = (27 * part) + (int) (weight ^ (weight >>> 32));
 
             hash += part;
         }
@@ -265,15 +265,15 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Indicates whether some other object is "equal to" this graph. 
-     * Returns <code>true</code> if the given object is also a graph, 
-     * the two graphs are instances of the same graph class, 
-     * have identical vertices and edges sets with the same weights.
-     * 
+     * Indicates whether some other object is "equal to" this graph. Returns
+     * <code>true</code> if the given object is also a graph, the two graphs are
+     * instances of the same graph class, have identical vertices and edges sets
+     * with the same weights.
+     *
      * @param obj object to be compared for equality with this graph
-     * 
-     * @return <code>true</code> if the specified object is equal to this graph 
-     * 
+     *
+     * @return <code>true</code> if the specified object is equal to this graph
+     *
      * @see Object#equals(Object)
      */
     public boolean equals(Object obj)
@@ -281,7 +281,7 @@ public abstract class AbstractGraph<V, E>
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if ((obj == null) || (getClass() != obj.getClass())) {
             return false;
         }
 
@@ -295,8 +295,7 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        for (E e: edgeSet()) {
-
+        for (E e : edgeSet()) {
             V source = getEdgeSource(e);
             V target = getEdgeTarget(e);
 
@@ -304,8 +303,8 @@ public abstract class AbstractGraph<V, E>
                 return false;
             }
 
-            if (!g.getEdgeSource(e).equals(source) 
-                || !g.getEdgeTarget(e).equals(target)) 
+            if (!g.getEdgeSource(e).equals(source)
+                || !g.getEdgeTarget(e).equals(target))
             {
                 return false;
             }

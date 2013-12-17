@@ -40,23 +40,29 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
+
 /**
  * A directed weighted pseudograph. A directed weighted pseudograph is a
  * non-simple directed graph in which both graph loops and multiple edges are
  * permitted, and edges have weights.
  */
 public class DirectedWeightedPseudograph<V, E>
-        extends DirectedPseudograph<V, E>
-        implements WeightedGraph<V, E> {
+    extends DirectedPseudograph<V, E>
+    implements WeightedGraph<V, E>
+{
+    
 
     private static final long serialVersionUID = 8762514879586423517L;
+
+    
 
     /**
      * Creates a new directed weighted pseudograph.
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public DirectedWeightedPseudograph(Class<? extends E> edgeClass) {
+    public DirectedWeightedPseudograph(Class<? extends E> edgeClass)
+    {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
 
@@ -66,7 +72,10 @@ public class DirectedWeightedPseudograph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public DirectedWeightedPseudograph(EdgeFactory<V, E> ef) {
+    public DirectedWeightedPseudograph(EdgeFactory<V, E> ef)
+    {
         super(ef);
     }
 }
+
+// End DirectedWeightedPseudograph.java

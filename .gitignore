@@ -30,6 +30,8 @@ build
 out/*
 **/.idea/*
 **/out/*
+pom.xml.releaseBackup
+**/pom.xml.releaseBackup
 jgrapht-core/.classpath
 jgrapht-demo/.classpath
 jgrapht-ext/.classpath

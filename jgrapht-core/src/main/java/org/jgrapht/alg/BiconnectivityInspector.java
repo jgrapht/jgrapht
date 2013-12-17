@@ -52,11 +52,11 @@ import org.jgrapht.*;
  */
 public class BiconnectivityInspector<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private BlockCutpointGraph<V, E> blockCutpointGraph;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Running time = O(m) where m is the number of edges.
@@ -67,7 +67,7 @@ public class BiconnectivityInspector<V, E>
         this.blockCutpointGraph = new BlockCutpointGraph<V, E>(graph);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the biconnected vertex-components of the graph.

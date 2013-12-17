@@ -19,13 +19,13 @@ import org.jgrapht.*;
 
 public final class GraphTests<V, E>
 {
-    //~ Constructors -----------------------------------------------------------
+    
 
     private GraphTests()
     {
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     public static <V, E> boolean isEmpty(Graph<V, E> g)
     {

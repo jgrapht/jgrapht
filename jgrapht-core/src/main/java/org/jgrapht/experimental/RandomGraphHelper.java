@@ -53,11 +53,11 @@ import org.jgrapht.*;
  */
 public final class RandomGraphHelper
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final Random randSingleton = new Random();
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * .
@@ -66,7 +66,7 @@ public final class RandomGraphHelper
     {
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see org.jgrapht.generate.GraphGenerator#generateGraph

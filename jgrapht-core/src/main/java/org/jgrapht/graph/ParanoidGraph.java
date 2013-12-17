@@ -53,20 +53,20 @@ import org.jgrapht.*;
 public class ParanoidGraph<V, E>
     extends GraphDelegator<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      */
     private static final long serialVersionUID = 5075284167422166539L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public ParanoidGraph(Graph<V, E> g)
     {
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#addEdge(Object, Object, Object)

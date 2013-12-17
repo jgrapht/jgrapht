@@ -46,7 +46,7 @@ package org.jgrapht.event;
  */
 public interface TraversalListener<V, E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Called to inform listeners that the traversal of the current connected

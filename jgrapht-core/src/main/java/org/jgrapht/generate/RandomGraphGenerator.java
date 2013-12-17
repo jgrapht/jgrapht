@@ -57,18 +57,18 @@ import org.jgrapht.graph.*;
 public class RandomGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static long seedUniquifier = 8682522807148012L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     protected int numOfVertexes;
     protected int numOfEdges;
     protected Random randomizer;
     private long randomizerSeed;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges)
     {
@@ -82,7 +82,7 @@ public class RandomGraphGenerator<V, E>
         this.randomizer = new Random(this.randomizerSeed);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Should be called only once on creation. Chooses a seed which can be used
@@ -177,7 +177,7 @@ public class RandomGraphGenerator<V, E>
         return new DefaultEdgeTopologyFactory<V, E>();
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     /**
      * This class is used to generate the edge topology for a graph.
@@ -218,7 +218,7 @@ public class RandomGraphGenerator<V, E>
             int numberOfEdges);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Default implementation of the EdgeTopologyFactory interface. randomly

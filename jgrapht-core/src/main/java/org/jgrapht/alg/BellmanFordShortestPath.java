@@ -49,11 +49,11 @@ import org.jgrapht.*;
  */
 public class BellmanFordShortestPath<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final double DEFAULT_EPSILON = 0.000000001;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Graph on which shortest paths are searched.
@@ -76,7 +76,7 @@ public class BellmanFordShortestPath<V, E>
 
     private double epsilon;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates an object to calculate shortest paths between the start vertex
@@ -128,7 +128,7 @@ public class BellmanFordShortestPath<V, E>
         this.epsilon = epsilon;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @param endVertex end vertex.

@@ -50,17 +50,17 @@ class IntrusiveEdge
     implements Cloneable,
         Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3258408452177932855L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     Object source;
 
     Object target;
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Object#clone()

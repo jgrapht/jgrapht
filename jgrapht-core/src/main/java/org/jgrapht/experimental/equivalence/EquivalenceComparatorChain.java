@@ -51,7 +51,7 @@ package org.jgrapht.experimental.equivalence;
 public interface EquivalenceComparatorChain<E, C>
     extends EquivalenceComparator<E, C>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Adds a comparator which will also test equivalence. For

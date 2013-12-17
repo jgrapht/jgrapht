@@ -51,7 +51,7 @@ import org.jgrapht.graph.*;
  */
 public class HamiltonianCycle
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * This method will return an approximate minimal traveling salesman tour

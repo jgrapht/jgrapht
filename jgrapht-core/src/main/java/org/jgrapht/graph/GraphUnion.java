@@ -58,19 +58,19 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
     implements Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = -740199233080172450L;
 
     private static final String READ_ONLY = "union of graphs is read-only";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private G g1;
     private G g2;
     private WeightCombiner operator;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public GraphUnion(G g1, G g2, WeightCombiner operator)
     {
@@ -93,7 +93,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         this(g1, g2, WeightCombiner.SUM);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {

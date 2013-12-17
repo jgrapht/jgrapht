@@ -35,54 +35,49 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+
 
 /**
- * Find all simple cycles of a directed graph using the Johnson's
- * algorithm.
- * <p/>
- * See:<br/>
- * D.B.Johnson, Finding all the elementary circuits of 
- * a directed graph, SIAM J. Comput., 4 (1975), pp. 77-84.
- * 
- * @author Nikolay Ognyanov
+ * Find all simple cycles of a directed graph using the Johnson's algorithm.
+ *
+ * <p/>See:<br/>
+ * D.B.Johnson, Finding all the elementary circuits of a directed graph, SIAM J.
+ * Comput., 4 (1975), pp. 77-84.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public class JohnsonSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
+    
+
     // The graph.
     private DirectedGraph<V, E> graph;
 
     // The main state of the algorithm.
-    private List<List<V>>       cycles   = null;
-    private V[]                 iToV     = null;
-    private Map<V, Integer>     vToI     = null;
-    private Set<V>              blocked  = null;
-    private Map<V, Set<V>>      bSets    = null;
-    private ArrayDeque<V>       stack    = null;
+    private List<List<V>> cycles = null;
+    private V [] iToV = null;
+    private Map<V, Integer> vToI = null;
+    private Set<V> blocked = null;
+    private Map<V, Set<V>> bSets = null;
+    private ArrayDeque<V> stack = null;
 
     // The state of the embedded Tarjan SCC algorithm.
-    private List<Set<V>>        SCCs     = null;
-    private int                 index    = 0;
-    private Map<V, Integer>     vIndex   = null;
-    private Map<V, Integer>     vLowlink = null;
-    private ArrayDeque<V>       path     = null;
-    private Set<V>              pathSet  = null;
+    private List<Set<V>> SCCs = null;
+    private int index = 0;
+    private Map<V, Integer> vIndex = null;
+    private Map<V, Integer> vLowlink = null;
+    private ArrayDeque<V> path = null;
+    private Set<V> pathSet = null;
+
+    
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -93,10 +88,11 @@ public class JohnsonSimpleCycles<V, E>
 
     /**
      * Create a simple cycle finder for the specified graph.
-     * 
+     *
      * @param graph - the DirectedGraph in which to find cycles.
-     * @throws IllegalArgumentException if the graph argument is
-     *         <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the graph argument is <code>
+     * null</code>.
      */
     public JohnsonSimpleCycles(DirectedGraph<V, E> graph)
     {
@@ -106,11 +102,12 @@ public class JohnsonSimpleCycles<V, E>
         this.graph = graph;
     }
 
+    
+
     /**
      * {@inheritDoc}
      */
-    @Override
-    public DirectedGraph<V, E> getGraph()
+    @Override public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -118,8 +115,7 @@ public class JohnsonSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    @Override public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -130,8 +126,7 @@ public class JohnsonSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public List<List<V>> findSimpleCycles()
+    @Override public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -141,8 +136,7 @@ public class JohnsonSimpleCycles<V, E>
         int startIndex = 0;
         int size = graph.vertexSet().size();
         while (startIndex < size) {
-
-            Object[] minSCCGResult = findMinSCSG(startIndex);
+            Object [] minSCCGResult = findMinSCSG(startIndex);
             if (minSCCGResult[0] != null) {
                 startIndex = (Integer) minSCCGResult[1];
                 @SuppressWarnings("unchecked")
@@ -156,8 +150,7 @@ public class JohnsonSimpleCycles<V, E>
                 }
                 findCyclesInSCG(startIndex, startIndex, scg);
                 startIndex++;
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -167,10 +160,10 @@ public class JohnsonSimpleCycles<V, E>
         return result;
     }
 
-    private Object[] findMinSCSG(int startIndex)
+    private Object [] findMinSCSG(int startIndex)
     {
-        // Per Johnson : "adjacency structure of strong 
-        // component K with least vertex in subgraph of 
+        // Per Johnson : "adjacency structure of strong
+        // component K with least vertex in subgraph of
         // G induced by {s, s+ 1, n}".
         // Or in contemporary terms: the strongly connected
         // component of the subgraph induced by {v1,...,vn}
@@ -178,9 +171,10 @@ public class JohnsonSimpleCycles<V, E>
         // vertex index. We return that index together with
         // the graph.
         initMinSCGState();
-        Object[] result = new Object[2];
+        Object [] result = new Object[2];
 
         List<Set<V>> SCCs = findSCCS(startIndex);
+
         // find the SCC with the minimum index
         int minIndexFound = Integer.MAX_VALUE;
         Set<V> minSCC = null;
@@ -196,15 +190,13 @@ public class JohnsonSimpleCycles<V, E>
         if (minSCC == null) {
             return result;
         }
+
         // build a graph for the SCC found
         @SuppressWarnings("unchecked")
-        DirectedGraph<V, E> resultGraph = new DefaultDirectedGraph<V, E>
-            (
-             new ClassBasedEdgeFactory<V, E>
-             (
-              (Class<? extends E>) DefaultEdge.class
-             )
-            );
+        DirectedGraph<V, E> resultGraph =
+            new DefaultDirectedGraph<V, E>(
+                new ClassBasedEdgeFactory<V, E>(
+                    (Class<? extends E>) DefaultEdge.class));
         for (V v : minSCC) {
             resultGraph.addVertex(v);
         }
@@ -215,8 +207,9 @@ public class JohnsonSimpleCycles<V, E>
                 }
             }
         }
+
         // It is ugly to return results in an array
-        // of Object but the idea is to restrict 
+        // of Object but the idea is to restrict
         // dependencies to JgraphT only and there is
         // no utility pair container in JgraphT.
         result[0] = resultGraph;
@@ -273,17 +266,14 @@ public class JohnsonSimpleCycles<V, E>
                     vertex,
                     Math.min(vLowlink.get(vertex),
                         vLowlink.get(successor)));
-            }
-            else if (pathSet.contains(successor)) {
+            } else if (pathSet.contains(successor)) {
                 vLowlink.put(
                     vertex,
                     Math.min(vLowlink.get(vertex),
                         vIndex.get(successor)));
             }
         }
-        if (vLowlink.get(vertex).
-            equals(vIndex.get(vertex)))
-        {
+        if (vLowlink.get(vertex).equals(vIndex.get(vertex))) {
             Set<V> result = new HashSet<V>();
             V temp = null;
             do {
@@ -296,16 +286,16 @@ public class JohnsonSimpleCycles<V, E>
                 if (graph.containsEdge(vertex, v)) {
                     SCCs.add(result);
                 }
-            }
-            else {
+            } else {
                 SCCs.add(result);
             }
         }
     }
 
-    private boolean findCyclesInSCG(int startIndex,
-                                    int vertexIndex,
-                                    DirectedGraph<V, E> scg)
+    private boolean findCyclesInSCG(
+        int startIndex,
+        int vertexIndex,
+        DirectedGraph<V, E> scg)
     {
         // Find cycles in a strongly connected graph
         // per Johnson.
@@ -322,8 +312,7 @@ public class JohnsonSimpleCycles<V, E>
                 cycle.addAll(stack);
                 cycles.add(cycle);
                 foundCycle = true;
-            }
-            else if (!blocked.contains(successor)) {
+            } else if (!blocked.contains(successor)) {
                 boolean gotCycle =
                     findCyclesInSCG(startIndex, successorIndex, scg);
                 foundCycle = foundCycle || gotCycle;
@@ -331,8 +320,7 @@ public class JohnsonSimpleCycles<V, E>
         }
         if (foundCycle) {
             unblock(vertex);
-        }
-        else {
+        } else {
             for (E ew : scg.outgoingEdgesOf(vertex)) {
                 V w = scg.getEdgeTarget(ew);
                 Set<V> bSet = getBSet(w);
@@ -360,7 +348,7 @@ public class JohnsonSimpleCycles<V, E>
     private void initState()
     {
         cycles = new LinkedList<List<V>>();
-        iToV = (V[]) graph.vertexSet().toArray();
+        iToV = (V []) graph.vertexSet().toArray();
         vToI = new HashMap<V, Integer>();
         blocked = new HashSet<V>();
         bSets = new HashMap<V, Set<V>>();
@@ -423,3 +411,5 @@ public class JohnsonSimpleCycles<V, E>
         return result;
     }
 }
+
+// End JohnsonSimpleCycles.java

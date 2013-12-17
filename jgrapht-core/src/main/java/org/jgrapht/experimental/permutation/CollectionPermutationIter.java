@@ -49,7 +49,7 @@ import java.util.*;
  */
 public class CollectionPermutationIter<E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private ArrayPermutationsIter permOrder;
     private List<E> sourceArray;
@@ -59,7 +59,7 @@ public class CollectionPermutationIter<E>
      */
     private int [] currPermutationArray;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Note: the Set interface does not guarantee iteration order. This method
@@ -100,7 +100,7 @@ public class CollectionPermutationIter<E>
         this.sourceArray = objectsArray;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     public boolean hasNext()
     {

@@ -52,12 +52,12 @@ import org.jgrapht.graph.*;
 public class GraphSquare<V, E>
     extends AbstractBaseGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = -2642034600395594304L;
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for GraphSquare.
@@ -106,7 +106,7 @@ public class GraphSquare<V, E>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#addEdge(Object, Object)

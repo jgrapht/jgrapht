@@ -66,18 +66,18 @@ public class GraphDelegator<V, E>
     implements Graph<V, E>,
         Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3257005445226181425L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * The graph to which operations are delegated.
      */
     private Graph<V, E> delegate;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for GraphDelegator.
@@ -97,7 +97,7 @@ public class GraphDelegator<V, E>
         delegate = g;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getAllEdges(Object, Object)

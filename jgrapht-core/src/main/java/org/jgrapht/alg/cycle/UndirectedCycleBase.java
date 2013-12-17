@@ -35,52 +35,53 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.*;
+
 
 /**
- * A common interface for classes implementing algorithms
- * for finding a cycle base of an undirected graph.
- *
- * @author Nikolay Ognyanov
+ * A common interface for classes implementing algorithms for finding a cycle
+ * base of an undirected graph.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public interface UndirectedCycleBase<V, E>
 {
+    
+
     /**
-     * Returns the graph on which the cycle base
-     * search algorithm is executed by this object.
+     * Returns the graph on which the cycle base search algorithm is executed by
+     * this object.
      *
      * @return The graph.
      */
     UndirectedGraph<V, E> getGraph();
 
     /**
-     * Sets the graph on which the cycle base
-     * search algorithm is executed by this object.
+     * Sets the graph on which the cycle base search algorithm is executed by
+     * this object.
      *
      * @param graph the graph.
-     * 
-     * @throws IllegalArgumentException if the
-     *         argument is <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     void setGraph(UndirectedGraph<V, E> graph);
 
     /**
      * Finds a cycle base of the graph.<br/>
-     * Note that the full algorithm is executed on
-     * every call since the graph may have changed
-     * between calls.
+     * Note that the full algorithm is executed on every call since the graph
+     * may have changed between calls.
      *
-     * @return A list of cycles constituting a cycle
-     * base for the graph. Possibly empty but never 
-     * <code>null</code>.
-     * 
-     * @throws IllegalArgumentException if the
-     * current graph is null.
+     * @return A list of cycles constituting a cycle base for the graph.
+     * Possibly empty but never <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the current graph is null.
      */
     List<List<V>> findCycleBase();
 }
+
+// End UndirectedCycleBase.java

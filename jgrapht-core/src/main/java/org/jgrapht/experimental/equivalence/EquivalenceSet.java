@@ -56,7 +56,7 @@ import java.util.*;
  */
 public class EquivalenceSet<E, C>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * The comparator used to define the group
@@ -69,7 +69,7 @@ public class EquivalenceSet<E, C>
      */
     protected Set<E> elementsSet;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructs a new EquivalenceSet, filled with the aElement parameter and a
@@ -87,7 +87,7 @@ public class EquivalenceSet<E, C>
         this.elementsSet.add(aElement);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns an arbitrary object from the group. There is no guarantee as to

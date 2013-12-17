@@ -68,11 +68,11 @@ import java.util.*;
 public class EquivalenceComparatorChainBase<E, C>
     implements EquivalenceComparatorChain<E, C>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private List<EquivalenceComparator<? super E, ? super C>> chain;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      */
@@ -84,7 +84,7 @@ public class EquivalenceComparatorChainBase<E, C>
         this.chain.add(firstComaparator);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /* (non-Javadoc)
      * @see

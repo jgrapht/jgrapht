@@ -54,7 +54,7 @@ import org.jgrapht.util.*;
  */
 public class FloydWarshallShortestPaths<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Graph<V, E> graph;
     private List<V> vertices;
@@ -64,7 +64,7 @@ public class FloydWarshallShortestPaths<V, E>
     private int [][] backtrace = null;
     private Map<VertexPair<V>, GraphPath<V, E>> paths = null;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
@@ -72,7 +72,7 @@ public class FloydWarshallShortestPaths<V, E>
         this.vertices = new ArrayList<V>(graph.vertexSet());
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @return the graph on which this algorithm operates
@@ -178,7 +178,7 @@ public class FloydWarshallShortestPaths<V, E>
             int n = vertices.size();
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    if (!Double.isInfinite(d[i][j]) && d[i][j] > diameter) {
+                    if (!Double.isInfinite(d[i][j]) && (d[i][j] > diameter)) {
                         diameter = d[i][j];
                     }
                 }
@@ -229,12 +229,12 @@ public class FloydWarshallShortestPaths<V, E>
         if (edges.size() < 1) {
             return null;
         }
-        
+
         double weight = 0.;
         for (E e : edges) {
-        	weight += graph.getEdgeWeight(e);
+            weight += graph.getEdgeWeight(e);
         }
-        
+
         GraphPathImpl<V, E> path =
             new GraphPathImpl<V, E>(graph, a, b, edges, weight);
 

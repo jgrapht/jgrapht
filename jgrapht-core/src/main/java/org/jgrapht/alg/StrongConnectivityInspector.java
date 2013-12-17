@@ -60,7 +60,7 @@ import org.jgrapht.graph.*;
  */
 public class StrongConnectivityInspector<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     // the graph to compute the strongly connected sets for
     private final DirectedGraph<V, E> graph;
@@ -77,7 +77,7 @@ public class StrongConnectivityInspector<V, E>
     // maps vertices to their VertexData object
     private Map<V, VertexData<V>> vertexToVertexData;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * The constructor of the StrongConnectivityInspector class.
@@ -99,7 +99,7 @@ public class StrongConnectivityInspector<V, E>
         stronglyConnectedSubgraphs = null;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the graph inspected by the StrongConnectivityInspector.
@@ -279,7 +279,7 @@ public class StrongConnectivityInspector<V, E>
         }
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /*
      * Lightweight class storing some data for every vertex.

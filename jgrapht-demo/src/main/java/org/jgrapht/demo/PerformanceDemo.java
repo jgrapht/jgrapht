@@ -63,7 +63,7 @@ import org.jgrapht.traverse.*;
  */
 public final class PerformanceDemo
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * The starting point for the demo.

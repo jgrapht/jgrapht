@@ -54,7 +54,7 @@ import java.util.*;
 public interface VertexSetListener<V>
     extends EventListener
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Notifies that a vertex has been added to the graph.

@@ -68,7 +68,7 @@ package org.jgrapht.experimental.permutation;
  */
 public class PermutationFactory
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     public static ArrayPermutationsIter createRegular(int [] permSourceArray)
     {

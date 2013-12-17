@@ -31,18 +31,23 @@ package org.jgrapht.alg.interfaces;
 
 /**
  * Allows to derive weighted matching from <i>general</i> graph
- * @see MatchingAlgorithm
  *
  * @param <V>
  * @param <E>
+ *
+ * @see MatchingAlgorithm
  */
-public interface WeightedMatchingAlgorithm<V, E> extends MatchingAlgorithm<V, E> {
+public interface WeightedMatchingAlgorithm<V, E>
+    extends MatchingAlgorithm<V, E>
+{
+    
 
     /**
      * Returns weight of a matching found
      *
-     * @return      weight of a matching found
+     * @return weight of a matching found
      */
     public double getMatchingWeight();
-
 }
+
+// End WeightedMatchingAlgorithm.java

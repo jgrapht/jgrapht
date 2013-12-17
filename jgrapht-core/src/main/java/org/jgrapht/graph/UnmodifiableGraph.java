@@ -65,12 +65,12 @@ public class UnmodifiableGraph<V, E>
     extends GraphDelegator<V, E>
     implements Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3544957670722713913L;
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new unmodifiable graph based on the specified backing graph.
@@ -83,7 +83,7 @@ public class UnmodifiableGraph<V, E>
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#addEdge(Object, Object)

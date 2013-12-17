@@ -50,7 +50,7 @@ package org.jgrapht.event;
 public class GraphEdgeChangeEvent<V, E>
     extends GraphChangeEvent
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3618134563335844662L;
 
@@ -77,7 +77,7 @@ public class GraphEdgeChangeEvent<V, E>
      */
     public static final int EDGE_REMOVED = 24;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * The edge that this event is related to.
@@ -94,7 +94,7 @@ public class GraphEdgeChangeEvent<V, E>
      */
     protected V edgeTarget;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for GraphEdgeChangeEvent.
@@ -106,7 +106,9 @@ public class GraphEdgeChangeEvent<V, E>
      * @deprecated Use new constructor which takes vertex parameters.
      */
     public GraphEdgeChangeEvent(
-        Object eventSource, int type, E edge)
+        Object eventSource,
+        int type,
+        E edge)
     {
         this(eventSource, type, edge, null, null);
     }
@@ -121,8 +123,11 @@ public class GraphEdgeChangeEvent<V, E>
      * @param edgeTarget edge target vertex
      */
     public GraphEdgeChangeEvent(
-        Object eventSource, int type, E edge,
-        V edgeSource, V edgeTarget)
+        Object eventSource,
+        int type,
+        E edge,
+        V edgeSource,
+        V edgeTarget)
     {
         super(eventSource, type);
         this.edge = edge;
@@ -130,7 +135,7 @@ public class GraphEdgeChangeEvent<V, E>
         this.edgeTarget = edgeTarget;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the edge that this event is related to.

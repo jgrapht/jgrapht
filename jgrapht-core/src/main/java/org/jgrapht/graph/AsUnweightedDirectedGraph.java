@@ -65,13 +65,13 @@ public class AsUnweightedDirectedGraph<V, E>
     implements Serializable,
         DirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      */
     private static final long serialVersionUID = -4320818446777715312L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for AsUnweightedGraph.
@@ -84,7 +84,7 @@ public class AsUnweightedDirectedGraph<V, E>
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getEdgeWeight

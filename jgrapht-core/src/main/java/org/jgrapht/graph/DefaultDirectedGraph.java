@@ -53,11 +53,11 @@ public class DefaultDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3544953246956466230L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new directed graph.

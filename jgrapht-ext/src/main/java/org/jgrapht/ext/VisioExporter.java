@@ -61,11 +61,11 @@ import org.jgrapht.*;
  */
 public class VisioExporter<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private VertexNameProvider<V> vertexNameProvider;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new VisioExporter object with the specified naming policy.
@@ -86,7 +86,7 @@ public class VisioExporter<V, E>
         this(new StringNameProvider<V>());
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Exports the specified graph into a Visio csv file format.

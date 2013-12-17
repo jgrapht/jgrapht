@@ -53,7 +53,7 @@ import org.jgrapht.*;
  */
 public class GraphOrdering<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Holds a mapping between key=V(vertex) and value=Integer(vertex order). It
@@ -66,7 +66,7 @@ public class GraphOrdering<V, E>
      */
     private Set<LabelsEdge> labelsEdgesSet;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new labels graph according to the regular graph. After its
@@ -97,7 +97,7 @@ public class GraphOrdering<V, E>
         init(regularGraph, vertexSet, edgeSet);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     private void init(Graph<V, E> g, Set<V> vertexSet, Set<E> edgeSet)
     {
@@ -177,7 +177,7 @@ public class GraphOrdering<V, E>
         return sb.toString();
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     private class LabelsEdge
     {

@@ -49,11 +49,11 @@ public class SimpleDirectedWeightedGraph<V, E>
     extends SimpleDirectedGraph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3904960841681220919L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new simple directed weighted graph with the specified edge

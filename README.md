@@ -1,10 +1,10 @@
 # JGraphT
 
-Released: January, 2012</p>
+Released: December, 2013</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
-(C) Copyright 2003-2012, by Barak Naveh and Contributors. All rights
+(C) Copyright 2003-2013, by Barak Naveh and Contributors. All rights
 reserved.
 
 Please address all contributions, suggestions, and inquiries to the current project administrator [John Sichi](mailto:perfecthash@users.sf.net)

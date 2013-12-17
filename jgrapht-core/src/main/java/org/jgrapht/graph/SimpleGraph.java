@@ -52,11 +52,11 @@ public class SimpleGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3545796589454112304L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new simple graph with the specified edge factory.

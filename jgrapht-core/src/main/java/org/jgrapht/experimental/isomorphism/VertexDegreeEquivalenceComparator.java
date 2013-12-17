@@ -55,7 +55,7 @@ import org.jgrapht.experimental.equivalence.*;
 public class VertexDegreeEquivalenceComparator<V, E>
     implements EquivalenceComparator<V, Graph<V, E>>
 {
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      */
@@ -63,7 +63,7 @@ public class VertexDegreeEquivalenceComparator<V, E>
     {
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Compares the in degrees and the out degrees of the two vertexes.
@@ -136,7 +136,7 @@ public class VertexDegreeEquivalenceComparator<V, E>
         return new InOutDegrees(inVertexDegree, outVertexDegree);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Simple structure used to hold the two ints: vertex in degree and vertex

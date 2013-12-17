@@ -52,15 +52,15 @@ import org.jgrapht.*;
 public class StarGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     public static final String CENTER_VERTEX = "Center Vertex";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int order;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new StarGraphGenerator object.
@@ -72,7 +72,7 @@ public class StarGraphGenerator<V, E>
         this.order = order;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Generates a star graph with the designated order from the constructor

@@ -46,7 +46,7 @@ package org.jgrapht.experimental.equivalence;
 public class UniformEquivalenceComparator<E, C>
     implements EquivalenceComparator<E, C>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Always returns true.

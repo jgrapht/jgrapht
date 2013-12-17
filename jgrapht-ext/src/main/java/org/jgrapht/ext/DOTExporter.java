@@ -47,7 +47,7 @@ import org.jgrapht.*;
  */
 public class DOTExporter<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
@@ -55,7 +55,7 @@ public class DOTExporter<V, E>
     private ComponentAttributeProvider<V> vertexAttributeProvider;
     private ComponentAttributeProvider<E> edgeAttributeProvider;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructs a new DOTExporter object with an integer name provider for the
@@ -120,7 +120,7 @@ public class DOTExporter<V, E>
         this.edgeAttributeProvider = edgeAttributeProvider;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Exports a graph into a plain text file in DOT format.

@@ -59,7 +59,7 @@ import org.jgrapht.graph.*;
  */
 public abstract class VertexCovers
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Finds a 2-approximation for a minimal vertex cover of the specified

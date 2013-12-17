@@ -56,7 +56,7 @@ import org.jgrapht.*;
  */
 public class GmlExporter<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final String creator = "JGraphT GML Exporter";
     private static final String version = "1";
@@ -87,7 +87,7 @@ public class GmlExporter<V, E>
      */
     public static final Integer PRINT_VERTEX_LABELS = 4;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Integer printLabels = PRINT_NO_LABELS;
 
@@ -96,7 +96,7 @@ public class GmlExporter<V, E>
     private EdgeNameProvider<E> edgeIDProvider;
     private EdgeNameProvider<E> edgeLabelProvider;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new GmlExporter object with integer name providers for the
@@ -135,7 +135,7 @@ public class GmlExporter<V, E>
         this.edgeLabelProvider = edgeLabelProvider;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     private String quoted(final String s)
     {

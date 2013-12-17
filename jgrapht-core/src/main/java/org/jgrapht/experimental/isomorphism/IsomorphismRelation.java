@@ -62,7 +62,7 @@ import org.jgrapht.graph.*;
 public class IsomorphismRelation<V, E>
     implements GraphMapping<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private List<V> vertexList1;
     private List<V> vertexList2;
@@ -72,7 +72,7 @@ public class IsomorphismRelation<V, E>
     private Graph<V, E> graph1;
     private Graph<V, E> graph2;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      */
@@ -88,7 +88,7 @@ public class IsomorphismRelation<V, E>
         this.graph2 = g2;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     public String toString()
     {

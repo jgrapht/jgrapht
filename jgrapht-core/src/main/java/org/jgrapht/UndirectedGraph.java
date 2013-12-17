@@ -51,7 +51,7 @@ package org.jgrapht;
 public interface UndirectedGraph<V, E>
     extends Graph<V, E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the degree of the specified vertex. A degree of a vertex in an

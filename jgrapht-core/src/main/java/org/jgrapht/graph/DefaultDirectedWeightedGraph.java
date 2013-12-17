@@ -52,11 +52,11 @@ public class DefaultDirectedWeightedGraph<V, E>
     extends DefaultDirectedGraph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3761405317841171513L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new directed weighted graph.

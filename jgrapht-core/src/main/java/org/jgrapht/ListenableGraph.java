@@ -52,7 +52,7 @@ import org.jgrapht.event.*;
 public interface ListenableGraph<V, E>
     extends Graph<V, E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Adds the specified graph listener to this graph, if not already present.

@@ -52,12 +52,12 @@ import java.util.*;
  */
 public class UnionFind<T>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Map<T, T> parentMap;
     private Map<T, Integer> rankMap;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a UnionFind instance with all of the elements of elements in
@@ -73,7 +73,7 @@ public class UnionFind<T>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Adds a new element to the data structure in its own set.

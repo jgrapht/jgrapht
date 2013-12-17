@@ -56,12 +56,12 @@ import org.jgrapht.generate.*;
 public class PartiteRandomGraphGenerator<V, E>
     implements GraphGenerator<V, E, Object[]>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private final int [] numVertices;
     private final int numEdges;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Construct a new PartiteRandomGraphGenerator for a bipartite graph.
@@ -125,7 +125,7 @@ public class PartiteRandomGraphGenerator<V, E>
         this.numEdges = numEdges;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * TODO hb 30-nov-05: document me

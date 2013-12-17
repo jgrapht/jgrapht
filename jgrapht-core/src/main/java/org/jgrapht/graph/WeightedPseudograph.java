@@ -52,11 +52,11 @@ public class WeightedPseudograph<V, E>
     extends Pseudograph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3257290244524356152L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new weighted pseudograph with the specified edge factory.

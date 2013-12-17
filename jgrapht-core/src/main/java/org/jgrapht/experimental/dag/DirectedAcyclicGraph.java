@@ -72,11 +72,11 @@ import org.jgrapht.graph.*;
 public class DirectedAcyclicGraph<V, E>
     extends SimpleDirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 4522128427004938150L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private TopoComparator<V> topoComparator;
 
@@ -98,7 +98,7 @@ public class DirectedAcyclicGraph<V, E>
      */
     private TopoOrderMappingFactory<V> topoOrderFactory = new TopoVertexBiMap();
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public DirectedAcyclicGraph(Class<? extends E> arg0)
     {
@@ -121,7 +121,7 @@ public class DirectedAcyclicGraph<V, E>
         initialize();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * set the topoOrderMap based on the current factory, and create the
@@ -271,11 +271,13 @@ public class DirectedAcyclicGraph<V, E>
         return super.addEdge(fromVertex, toVertex, e);
     }
 
-	private void updateDag(V fromVertex, V toVertex) throws CycleFoundException {
-		Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
+    private void updateDag(V fromVertex, V toVertex)
+        throws CycleFoundException
+    {
+        Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
         Integer ub = topoOrderMap.getTopologicalIndex(fromVertex);
 
-		if ((lb == null) || (ub == null)) {
+        if ((lb == null) || (ub == null)) {
             throw new IllegalArgumentException(
                 "vertices must be in the graph already!");
         }
@@ -296,9 +298,7 @@ public class DirectedAcyclicGraph<V, E>
             ++topologyUpdateCount; // if we do a reorder, than the topology has
                                    // been updated
         }
-	}
-
-
+    }
 
     /**
      * identical to {@link #addDagEdge(Object, Object, Object)}, except an
@@ -535,7 +535,7 @@ public class DirectedAcyclicGraph<V, E>
         }
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     /**
      * For performance tuning, an interface for storing the topological ordering
@@ -640,7 +640,7 @@ public class DirectedAcyclicGraph<V, E>
         public Visited getInstance(Region affectedRegion);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Note, this is a lazy and incomplete implementation, with assumptions that

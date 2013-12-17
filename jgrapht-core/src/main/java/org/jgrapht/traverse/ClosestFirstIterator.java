@@ -61,7 +61,7 @@ public class ClosestFirstIterator<V, E>
     extends CrossComponentIterator<V,
         E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Priority queue of fringe vertices.
@@ -76,7 +76,7 @@ public class ClosestFirstIterator<V, E>
 
     private boolean initialized = false;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new closest-first iterator for the specified graph.
@@ -124,7 +124,7 @@ public class ClosestFirstIterator<V, E>
         initialized = true;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     // override AbstractGraphIterator
     public void setCrossComponentTraversal(boolean crossComponentTraversal)
@@ -304,7 +304,7 @@ public class ClosestFirstIterator<V, E>
         return new FibonacciHeapNode<QueueEntry<V, E>>(entry);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Private data to associate with each entry in the priority queue.

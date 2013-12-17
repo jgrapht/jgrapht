@@ -51,11 +51,11 @@ import org.jgrapht.*;
 public class EmptyGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int size;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Construct a new EmptyGraphGenerator.
@@ -73,7 +73,7 @@ public class EmptyGraphGenerator<V, E>
         this.size = size;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * {@inheritDoc}

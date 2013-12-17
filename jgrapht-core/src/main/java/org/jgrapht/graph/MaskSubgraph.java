@@ -54,11 +54,11 @@ import org.jgrapht.*;
 public class MaskSubgraph<V, E>
     extends AbstractGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Graph<V, E> base;
 
@@ -68,7 +68,7 @@ public class MaskSubgraph<V, E>
 
     private Set<V> vertices;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new induced subgraph. Running-time = O(1).
@@ -87,7 +87,7 @@ public class MaskSubgraph<V, E>
         this.edges = new MaskEdgeSet<V, E>(base, base.edgeSet(), mask);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#addEdge(Object, Object)

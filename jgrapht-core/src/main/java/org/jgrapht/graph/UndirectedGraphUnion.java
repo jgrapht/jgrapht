@@ -45,11 +45,11 @@ public class UndirectedGraphUnion<V, E>
     extends GraphUnion<V, E, UndirectedGraph<V, E>>
     implements UndirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = -740199233080172450L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     UndirectedGraphUnion(
         UndirectedGraph<V, E> g1,
@@ -66,7 +66,7 @@ public class UndirectedGraphUnion<V, E>
         super(g1, g2);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     public int degreeOf(V vertex)
     {

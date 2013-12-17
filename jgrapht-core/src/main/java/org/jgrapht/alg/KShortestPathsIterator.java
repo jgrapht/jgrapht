@@ -52,7 +52,7 @@ import org.jgrapht.*;
 class KShortestPathsIterator<V, E>
     implements Iterator<Set<V>>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * End vertex.
@@ -99,7 +99,7 @@ class KShortestPathsIterator<V, E>
      */
     private int passNumber = 1;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * @param graph graph on which shortest paths are searched.
@@ -128,7 +128,7 @@ class KShortestPathsIterator<V, E>
         this.prevImprovedVertices = new HashSet<V>();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @return <code>true</code> if at least one path has been improved during

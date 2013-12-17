@@ -62,7 +62,8 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Sebastian Hubenschmid
 - JeanYves Tinevez
 - Oliver Kopp
-- https://github.com/javierj
+- Javier Gutierrez (javierj)
+- Nicolas Fortin
 
 (if we have missed your name on this list, please email us to get it fixed).
 

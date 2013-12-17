@@ -54,19 +54,19 @@ import org.jgrapht.*;
 public class WheelGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      * Role for the hub vertex.
      */
     public static final String HUB_VERTEX = "Hub Vertex";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private boolean inwardSpokes;
     private int size;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new WheelGraphGenerator object. This constructor is more
@@ -99,7 +99,7 @@ public class WheelGraphGenerator<V, E>
         this.inwardSpokes = inwardSpokes;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * {@inheritDoc}

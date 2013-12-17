@@ -65,13 +65,13 @@ public class AsUnweightedGraph<V, E>
     extends GraphDelegator<V, E>
     implements Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      */
     private static final long serialVersionUID = 7175505077601824663L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for AsUnweightedGraph.
@@ -84,7 +84,7 @@ public class AsUnweightedGraph<V, E>
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getEdgeWeight

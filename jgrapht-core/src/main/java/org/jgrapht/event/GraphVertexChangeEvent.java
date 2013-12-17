@@ -50,7 +50,7 @@ package org.jgrapht.event;
 public class GraphVertexChangeEvent<V>
     extends GraphChangeEvent
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3690189962679104053L;
 
@@ -78,14 +78,14 @@ public class GraphVertexChangeEvent<V>
      */
     public static final int VERTEX_REMOVED = 14;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * The vertex that this event is related to.
      */
     protected V vertex;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new GraphVertexChangeEvent object.
@@ -100,7 +100,7 @@ public class GraphVertexChangeEvent<V>
         this.vertex = vertex;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the vertex that this event is related to.

@@ -53,7 +53,7 @@ import org.jgrapht.graph.*;
 final class RankingPathElementList<V, E>
     extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Vertex that paths of the list must not disconnect.
@@ -63,7 +63,7 @@ final class RankingPathElementList<V, E>
     private Map<RankingPathElement<V, E>, Boolean> path2disconnect =
         new HashMap<RankingPathElement<V, E>, Boolean>();
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a list with an empty path. The list size is 1.
@@ -118,9 +118,7 @@ final class RankingPathElementList<V, E>
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
 
         // loop over the path elements in increasing order of weight.
-        for (int i = 0;
-             (i < elementList.size()) && (size() < maxSize); i++)
-        {
+        for (int i = 0; (i < elementList.size()) && (size() < maxSize); i++) {
             RankingPathElement<V, E> prevPathElement = elementList.get(i);
 
             if (isNotValidPath(prevPathElement, edge)) {
@@ -151,7 +149,7 @@ final class RankingPathElementList<V, E>
         super(graph, maxSize, vertex);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * <p>Adds paths in the list at vertex y. Candidate paths are obtained by
@@ -377,8 +375,11 @@ final class RankingPathElementList<V, E>
         RankingPathElement<V, E> prevPathElement,
         E edge)
     {
-        V endVertex = Graphs.getOppositeVertex(this.graph, edge,
-            prevPathElement.getVertex());
+        V endVertex =
+            Graphs.getOppositeVertex(
+                this.graph,
+                edge,
+                prevPathElement.getVertex());
         assert (endVertex.equals(this.vertex));
 
         RankingPathElement<V, E> pathElementToTest = prevPathElement;
@@ -393,7 +394,7 @@ final class RankingPathElementList<V, E>
         return true;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     private static class PathMask<V, E>
         implements MaskFunctor<V, E>

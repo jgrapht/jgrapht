@@ -61,13 +61,13 @@ import org.jgrapht.event.*;
 public abstract class CrossComponentIterator<V, E, D>
     extends AbstractGraphIterator<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final int CCS_BEFORE_COMPONENT = 1;
     private static final int CCS_WITHIN_COMPONENT = 2;
     private static final int CCS_AFTER_COMPONENT = 3;
 
-    //~ Enums ------------------------------------------------------------------
+    
 
     /**
      * Standard vertex visit state enumeration.
@@ -92,7 +92,7 @@ public abstract class CrossComponentIterator<V, E, D>
         BLACK
     }
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     //
     private final ConnectedComponentTraversalEvent ccFinishedEvent =
@@ -125,7 +125,7 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     private int state = CCS_BEFORE_COMPONENT;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at
@@ -169,7 +169,7 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @return the graph being traversed
@@ -406,7 +406,7 @@ public abstract class CrossComponentIterator<V, E, D>
         startVertex = null;
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     static interface SimpleContainer<T>
     {
@@ -432,7 +432,7 @@ public abstract class CrossComponentIterator<V, E, D>
         public T remove();
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Provides unified interface for operations that are different in directed

@@ -12,18 +12,17 @@
  */
 package org.jgrapht.demo;
 
-import java.awt.Dimension;
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 
-import javax.swing.JApplet;
-import javax.swing.JFrame;
+import java.awt.*;
 
-import org.jgrapht.ListenableGraph;
-import org.jgrapht.ext.JGraphXAdapter;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.ListenableDirectedGraph;
+import javax.swing.*;
 
-import com.mxgraph.layout.mxCircleLayout;
-import com.mxgraph.swing.mxGraphComponent;
+import org.jgrapht.*;
+import org.jgrapht.ext.*;
+import org.jgrapht.graph.*;
+
 
 /**
  * A demo applet that shows how to use JGraphX to visualize JGraphT graphs.
@@ -31,19 +30,20 @@ import com.mxgraph.swing.mxGraphComponent;
  *
  * @since July 9, 2013
  */
-public class JGraphXAdapterDemo extends JApplet {
-
-    //~ Static fields/initializers ---------------------------------------------
+public class JGraphXAdapterDemo
+    extends JApplet
+{
+    
 
     private static final long serialVersionUID = 2202072534703043194L;
-
-    //~ Instance fields --------------------------------------------------------
-
-    private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
-    //~ Methods ----------------------------------------------------------------
     
+
+    private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
+
+    
+
     /**
      * An alternative starting point for this demo, to also allow running this
      * applet as an application.
@@ -98,7 +98,7 @@ public class JGraphXAdapterDemo extends JApplet {
         // positioning via jgraphx layouts
         mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
         layout.execute(jgxAdapter.getDefaultParent());
-        
+
         // that's all there is to it!...
     }
 }

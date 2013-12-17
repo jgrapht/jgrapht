@@ -70,11 +70,11 @@ public class DefaultListenableGraph<V, E>
     implements ListenableGraph<V, E>,
         Cloneable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3977575900898471984L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private List<GraphListener<V, E>> graphListeners =
         new ArrayList<GraphListener<V, E>>();
@@ -84,7 +84,7 @@ public class DefaultListenableGraph<V, E>
     private FlyweightVertexEvent<V> reuseableVertexEvent;
     private boolean reuseEvents;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new listenable graph.
@@ -124,7 +124,7 @@ public class DefaultListenableGraph<V, E>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * If the <code>reuseEvents</code> flag is set to <code>true</code> this
@@ -254,7 +254,7 @@ public class DefaultListenableGraph<V, E>
     {
         V sourceVertex = getEdgeSource(e);
         V targetVertex = getEdgeTarget(e);
-        
+
         boolean modified = super.removeEdge(e);
 
         if (modified) {
@@ -305,9 +305,7 @@ public class DefaultListenableGraph<V, E>
      * Notify listeners that the specified edge was added.
      *
      * @param edge the edge that was added.
-     *
      * @param source edge source
-     *
      * @param target edge target
      */
     protected void fireEdgeAdded(E edge, V source, V target)
@@ -315,7 +313,9 @@ public class DefaultListenableGraph<V, E>
         GraphEdgeChangeEvent<V, E> e =
             createGraphEdgeChangeEvent(
                 GraphEdgeChangeEvent.EDGE_ADDED,
-                edge, source, target);
+                edge,
+                source,
+                target);
 
         for (GraphListener<V, E> l : graphListeners) {
             l.edgeAdded(e);
@@ -326,9 +326,7 @@ public class DefaultListenableGraph<V, E>
      * Notify listeners that the specified edge was removed.
      *
      * @param edge the edge that was removed.
-     *
      * @param source edge source
-     *
      * @param target edge target
      */
     protected void fireEdgeRemoved(E edge, V source, V target)
@@ -336,7 +334,9 @@ public class DefaultListenableGraph<V, E>
         GraphEdgeChangeEvent<V, E> e =
             createGraphEdgeChangeEvent(
                 GraphEdgeChangeEvent.EDGE_REMOVED,
-                edge, source, target);
+                edge,
+                source,
+                target);
 
         for (GraphListener<V, E> l : graphListeners) {
             l.edgeRemoved(e);
@@ -395,7 +395,10 @@ public class DefaultListenableGraph<V, E>
     }
 
     private GraphEdgeChangeEvent<V, E> createGraphEdgeChangeEvent(
-        int eventType, E edge, V source, V target)
+        int eventType,
+        E edge,
+        V source,
+        V target)
     {
         if (reuseEvents) {
             reuseableEdgeEvent.setType(eventType);
@@ -406,7 +409,11 @@ public class DefaultListenableGraph<V, E>
             return reuseableEdgeEvent;
         } else {
             return new GraphEdgeChangeEvent<V, E>(
-                this, eventType, edge, source, target);
+                this,
+                eventType,
+                edge,
+                source,
+                target);
         }
     }
 
@@ -424,7 +431,7 @@ public class DefaultListenableGraph<V, E>
         }
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * A reuseable edge event.
@@ -459,12 +466,12 @@ public class DefaultListenableGraph<V, E>
         {
             this.edgeSource = v;
         }
-        
+
         protected void setEdgeTarget(VV v)
         {
             this.edgeTarget = v;
         }
-        
+
         /**
          * Set the event type of this event.
          *

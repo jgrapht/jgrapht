@@ -28,14 +28,14 @@ public class BrownBacktrackColoring<V, E>
     extends IntArrayGraphAlgorithm<V, E>
     implements ExactAlgorithm<Integer, V>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int [] _color;
     private int [] _colorCount;
     private BitSet [] _allowedColors;
     private int _chi;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * @param g
@@ -45,7 +45,7 @@ public class BrownBacktrackColoring<V, E>
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     void recursiveColor(int pos)
     {

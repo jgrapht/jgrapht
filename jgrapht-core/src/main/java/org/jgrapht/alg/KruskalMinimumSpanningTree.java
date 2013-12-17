@@ -34,11 +34,11 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MinimumSpanningTree;
-import org.jgrapht.alg.util.UnionFind;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
 
 /**
@@ -52,14 +52,15 @@ import java.util.*;
  * @author Tom Conerly
  * @since Feb 10, 2010
  */
-public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, E>
+public class KruskalMinimumSpanningTree<V, E>
+    implements MinimumSpanningTree<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private double spanningTreeCost;
     private Set<E> edgeList;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates and executes a new KruskalMinimumSpanningTree algorithm instance.
@@ -98,28 +99,25 @@ public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, 
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
-    @Override
-    public Set<E> getMinimumSpanningTreeEdgeSet()
+    @Override public Set<E> getMinimumSpanningTreeEdgeSet()
     {
         return edgeList;
     }
 
-    @Override
-    public double getMinimumSpanningTreeTotalWeight()
+    @Override public double getMinimumSpanningTreeTotalWeight()
     {
         return spanningTreeCost;
     }
-
 
     /**
      * Returns edges set constituting the minimum spanning tree/forest
      *
      * @return minimum spanning-tree edges set
      */
-    @Deprecated
-    public Set<E> getEdgeSet() {
+    @Deprecated public Set<E> getEdgeSet()
+    {
         return getMinimumSpanningTreeEdgeSet();
     }
 
@@ -128,11 +126,10 @@ public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, 
      *
      * @return minimum spanning-tree total weight
      */
-    @Deprecated
-    public double getSpanningTreeCost() {
+    @Deprecated public double getSpanningTreeCost()
+    {
         return getMinimumSpanningTreeTotalWeight();
     }
-
 }
 
 // End KruskalMinimumSpanningTree.java

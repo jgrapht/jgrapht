@@ -77,7 +77,7 @@ public class AsUndirectedGraph<V, E>
     implements Serializable,
         UndirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3257845485078065462L; // @todo renew
     private static final String NO_EDGE_ADD =
@@ -85,7 +85,7 @@ public class AsUndirectedGraph<V, E>
     private static final String UNDIRECTED =
         "this graph only supports undirected operations";
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for AsUndirectedGraph.
@@ -98,7 +98,7 @@ public class AsUndirectedGraph<V, E>
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getAllEdges(Object, Object)

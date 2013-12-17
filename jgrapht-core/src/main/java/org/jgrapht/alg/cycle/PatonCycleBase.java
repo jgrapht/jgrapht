@@ -35,33 +35,31 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.*;
+
 
 /**
- * Find a cycle base of an undirected graph using the Paton's
- * algorithm.
- * <p/>
- * See:<br/>
- * K. Paton, An algorithm for finding a fundamental set of cycles
- * for an undirected linear graph, Comm. ACM 12 (1969), pp. 514-518.
- * 
- * @author Nikolay Ognyanov
+ * Find a cycle base of an undirected graph using the Paton's algorithm.
+ *
+ * <p/>See:<br/>
+ * K. Paton, An algorithm for finding a fundamental set of cycles for an
+ * undirected linear graph, Comm. ACM 12 (1969), pp. 514-518.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public class PatonCycleBase<V, E>
     implements UndirectedCycleBase<V, E>
 {
+    
+
     private UndirectedGraph<V, E> graph;
+
+    
 
     /**
      * Create a cycle base finder with an unspecified graph.
@@ -72,10 +70,11 @@ public class PatonCycleBase<V, E>
 
     /**
      * Create a cycle base finder for the specified graph.
-     * 
+     *
      * @param graph - the DirectedGraph in which to find cycles.
-     * @throws IllegalArgumentException if the graph argument is
-     *         <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the graph argument is <code>
+     * null</code>.
      */
     public PatonCycleBase(UndirectedGraph<V, E> graph)
     {
@@ -85,11 +84,12 @@ public class PatonCycleBase<V, E>
         this.graph = graph;
     }
 
+    
+
     /**
      * {@inheritDoc}
      */
-    @Override
-    public UndirectedGraph<V, E> getGraph()
+    @Override public UndirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -97,8 +97,7 @@ public class PatonCycleBase<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setGraph(UndirectedGraph<V, E> graph)
+    @Override public void setGraph(UndirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -109,8 +108,7 @@ public class PatonCycleBase<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public List<List<V>> findCycleBase()
+    @Override public List<List<V>> findCycleBase()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -126,16 +124,19 @@ public class PatonCycleBase<V, E>
             if (parent.containsKey(root)) {
                 continue;
             }
+
             // Free some memory in case of
             // multiple connected components.
             used.clear();
+
             // Prepare to walk the spanning tree.
             parent.put(root, root);
             used.put(root, new HashSet<V>());
             stack.push(root);
+
             // Do the walk. It is a BFS with
             // a LIFO instead of the usual
-            // FIFO. Thus it is easier to 
+            // FIFO. Thus it is easier to
             // find the cycles in the tree.
             while (!stack.isEmpty()) {
                 V current = stack.pop();
@@ -152,14 +153,12 @@ public class PatonCycleBase<V, E>
                         neighbourUsed.add(current);
                         used.put(neighbor, neighbourUsed);
                         stack.push(neighbor);
-                    }
-                    else if (neighbor.equals(current)) {
+                    } else if (neighbor.equals(current)) {
                         // found a self loop
                         List<V> cycle = new ArrayList<V>();
                         cycle.add(current);
                         cycles.add(cycle);
-                    }
-                    else if (!currentUsed.contains(neighbor)) {
+                    } else if (!currentUsed.contains(neighbor)) {
                         // found a cycle
                         Set<V> neighbourUsed = used.get(neighbor);
                         List<V> cycle = new ArrayList<V>();
@@ -180,3 +179,5 @@ public class PatonCycleBase<V, E>
         return cycles;
     }
 }
+
+// End PatonCycleBase.java

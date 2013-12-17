@@ -43,7 +43,7 @@ package org.jgrapht.util;
  */
 public class MathUtil
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     public static long factorial(int N)
     {

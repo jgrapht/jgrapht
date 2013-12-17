@@ -49,14 +49,14 @@ import org.jgrapht.*;
 final class RankingPathElement<V, E>
     extends AbstractPathElement<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Weight of the path.
      */
     private double weight;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a path element by concatenation of an edge to a path element.
@@ -86,7 +86,7 @@ final class RankingPathElement<V, E>
         this.weight = 0;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the weight of the path.

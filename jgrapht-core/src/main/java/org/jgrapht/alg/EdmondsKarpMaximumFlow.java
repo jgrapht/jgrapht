@@ -59,14 +59,14 @@ import org.jgrapht.*;
  */
 public final class EdmondsKarpMaximumFlow<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      * Default tolerance.
      */
     public static final double DEFAULT_EPSILON = 0.000000001;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private DirectedGraph<V, E> network; // our network
     private double epsilon; // tolerance (DEFAULT_EPSILON or user-defined)
@@ -79,7 +79,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
                                      // in the internal representation
     private List<Node> nodes; // internal representation of the network
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i>
@@ -132,7 +132,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         buildInternalNetwork();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     // converting the original network into internal more convenient format
     private void buildInternalNetwork()
@@ -309,7 +309,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         return nodes.get(currentSink).prototype;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     // class used for internal representation of network
     class Node

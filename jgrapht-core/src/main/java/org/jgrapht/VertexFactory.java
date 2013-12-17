@@ -47,7 +47,7 @@ package org.jgrapht;
  */
 public interface VertexFactory<V>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Creates a new vertex.

@@ -76,7 +76,7 @@ package org.jgrapht.experimental.equivalence;
  */
 public interface EquivalenceComparator<E, C>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     public boolean equivalenceCompare(
         E arg1,

@@ -52,11 +52,11 @@ public class Multigraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3257001055819871795L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new multigraph.

@@ -55,7 +55,7 @@ import java.util.*;
 public interface DirectedGraph<V, E>
     extends Graph<V, E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the "in degree" of the specified vertex. An in degree of a vertex

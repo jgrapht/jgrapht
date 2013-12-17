@@ -52,13 +52,13 @@ import org.jgrapht.*;
  */
 public class BronKerboschCliqueFinder<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private final Graph<V, E> graph;
 
     private Collection<Set<V>> cliques;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new clique finder.
@@ -71,7 +71,7 @@ public class BronKerboschCliqueFinder<V, E>
         this.graph = graph;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Finds all maximal cliques of the graph. A clique is maximal if it is

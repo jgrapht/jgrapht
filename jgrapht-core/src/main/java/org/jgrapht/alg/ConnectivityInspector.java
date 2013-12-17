@@ -73,13 +73,13 @@ import org.jgrapht.traverse.*;
 public class ConnectivityInspector<V, E>
     implements GraphListener<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     List<Set<V>> connectedSets;
     Map<V, Set<V>> vertexToConnectedSet;
     private Graph<V, E> graph;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a connectivity inspector for the specified undirected graph.
@@ -103,7 +103,7 @@ public class ConnectivityInspector<V, E>
         this.graph = new AsUndirectedGraph<V, E>(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Test if the inspected graph is connected. An empty graph is <i>not</i>
@@ -252,7 +252,7 @@ public class ConnectivityInspector<V, E>
         return connectedSets;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * A traversal listener that groups all vertices according to to their

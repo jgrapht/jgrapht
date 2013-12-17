@@ -55,7 +55,7 @@ import org.jgrapht.util.*;
 abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     implements GraphIsomorphismInspector<IsomorphismRelation>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     public static EquivalenceComparator<Object, Object>
         edgeDefaultIsomorphismComparator =
@@ -64,7 +64,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
         vertexDefaultIsomorphismComparator =
             new UniformEquivalenceComparator<Object, Object>();
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     protected EquivalenceComparator<? super E, ? super Graph<V, ? super E>>
         edgeComparator;
@@ -83,7 +83,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     private CollectionPermutationIter<V> vertexPermuteIter;
     private Set<V> currVertexPermutation; // filled every iteration, used in the
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     // result relation.
 
@@ -143,7 +143,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
             vertexDefaultIsomorphismComparator);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Inits needed data-structures , among them:
@@ -398,7 +398,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
             + " There is no meaning to removing an isomorphism result.");
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     private class NextFunctor
         implements PrefetchIterator.NextElementFunctor<IsomorphismRelation>

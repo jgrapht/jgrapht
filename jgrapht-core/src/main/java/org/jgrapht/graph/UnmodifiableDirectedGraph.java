@@ -49,11 +49,11 @@ public class UnmodifiableDirectedGraph<V, E>
     extends UnmodifiableGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3978701783725913906L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new unmodifiable directed graph based on the specified backing

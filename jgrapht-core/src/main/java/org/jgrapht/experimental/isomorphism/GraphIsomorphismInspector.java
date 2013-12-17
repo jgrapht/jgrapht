@@ -81,7 +81,7 @@ import java.util.*;
 public interface GraphIsomorphismInspector<E>
     extends Iterator<E>
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @return <code>true</code> iff the two graphs are isomorphic

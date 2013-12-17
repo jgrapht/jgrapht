@@ -43,7 +43,7 @@ package org.jgrapht.experimental.permutation;
  */
 public interface ArrayPermutationsIter
 {
-    //~ Methods ----------------------------------------------------------------
+    
 
     public int [] nextPermutation();
 

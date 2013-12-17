@@ -35,51 +35,53 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
+
 
 /**
- * A common interface for classes implementing algorithms
- * for enumeration of the simple cycles of a directed graph.
- *
- * @author Nikolay Ognyanov
+ * A common interface for classes implementing algorithms for enumeration of the
+ * simple cycles of a directed graph.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public interface DirectedSimpleCycles<V, E>
 {
+    
+
     /**
-     * Returns the graph on which the simple cycle
-     * search algorithm is executed by this object.
+     * Returns the graph on which the simple cycle search algorithm is executed
+     * by this object.
      *
      * @return The graph.
      */
     DirectedGraph<V, E> getGraph();
 
     /**
-     * Sets the graph on which the simple cycle
-     * search algorithm is executed by this object.
+     * Sets the graph on which the simple cycle search algorithm is executed by
+     * this object.
      *
      * @param graph the graph.
-     * 
-     * @throws IllegalArgumentException if the
-     *         argument is <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
     void setGraph(DirectedGraph<V, E> graph);
 
     /**
      * Finds the simple cycles of the graph.<br/>
-     * Note that the full algorithm is executed on
-     * every call since the graph may have changed
-     * between calls.
+     * Note that the full algorithm is executed on every call since the graph
+     * may have changed between calls.
      *
-     * @return The list of all simple cycles.
-     * Possibly empty but never <code>null</code>.
-     * 
-     * @throws IllegalArgumentException if the
-     * current graph is null.
+     * @return The list of all simple cycles. Possibly empty but never <code>
+     * null</code>.
+     *
+     * @throws IllegalArgumentException if the current graph is null.
      */
     List<List<V>> findSimpleCycles();
 }
+
+// End DirectedSimpleCycles.java

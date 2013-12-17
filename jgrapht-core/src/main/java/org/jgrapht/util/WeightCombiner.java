@@ -40,7 +40,7 @@ package org.jgrapht.util;
  */
 public interface WeightCombiner
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Sum of weights.
@@ -97,7 +97,7 @@ public interface WeightCombiner
             }
         };
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Combines two weights.

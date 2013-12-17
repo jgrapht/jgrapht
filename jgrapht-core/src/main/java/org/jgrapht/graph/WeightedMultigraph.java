@@ -52,11 +52,11 @@ public class WeightedMultigraph<V, E>
     extends Multigraph<V, E>
     implements WeightedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3544671793370640696L;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new weighted multigraph with the specified edge factory.
