@@ -92,6 +92,7 @@ public final class AllAlgTests
         suite.addTest(new TestSuite(HopcroftKarpBipartiteMatchingTest.class));
         suite.addTest(new TestSuite(KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.class));
         suite.addTest(new TestSuite(TarjanLowestCommonAncestorTest.class));
+        suite.addTest(new TestSuite(GabowSCCTest.class));
         
         // $JUnit-END$
         return suite;
