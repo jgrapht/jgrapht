@@ -1,14 +1,25 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.sf.jgrapht</groupId>
+		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.9.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-ext</artifactId>
 	<name>JGraphT - Ext</name>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
+			<url>http://jgrapht.sourceforge.net/LGPL.html</url>
+			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>Eclipse Public License (EPL) 1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<build>
 		<plugins>
 			<plugin>
@@ -24,14 +35,11 @@
 					</execution>
 				</executions>
 				<configuration>
-					<artifactSet>
-						<includes>
-							<include>net.sf.jgrapht</include>
-						</includes>
-					</artifactSet>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-					<shadedClassifierName>combined</shadedClassifierName>
-					<finalName>jgrapht-${project.version}-combined</finalName>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>uber</shadedClassifierName>
+                    <!--
+					<finalName>${project.artifactId}-${project.version}-uber</finalName>
+-->
 				</configuration>
 			</plugin>
 		</plugins>
@@ -41,6 +49,11 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-core</artifactId>
 		</dependency>
+        <dependency>
+                <groupId>org.tinyjee.jgraphx</groupId>
+                    <artifactId>jgraphx</artifactId>
+                        <version>2.0.0.1</version>
+                    </dependency>
 		<dependency>
 			<groupId>jgraph</groupId>
 			<artifactId>jgraph</artifactId>

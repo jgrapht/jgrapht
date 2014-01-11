@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * AbstractPathElementList.java
@@ -56,7 +53,7 @@ abstract class AbstractPathElementList<V,
     E, T extends AbstractPathElement<V, E>>
     extends AbstractList<T>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     protected Graph<V, E> graph;
 
@@ -75,7 +72,7 @@ abstract class AbstractPathElementList<V,
      */
     protected V vertex;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates paths obtained by concatenating the specified edge to the
@@ -165,7 +162,7 @@ abstract class AbstractPathElementList<V,
         this.vertex = vertex;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns path <code>AbstractPathElement</code> stored at the specified

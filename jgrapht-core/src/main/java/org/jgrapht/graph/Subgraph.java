@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------
  * Subgraph.java
@@ -109,7 +106,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
     implements Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3208313055169665387L;
     private static final String NO_SUCH_EDGE_IN_BASE =
@@ -117,7 +114,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     private static final String NO_SUCH_VERTEX_IN_BASE =
         "no such vertex in base graph";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     //
     Set<E> edgeSet = new LinkedHashSet<E>(); // friendly to improve performance
@@ -131,7 +128,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     private G base;
     private boolean isInduced = false;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new Subgraph.
@@ -177,7 +174,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         this(base, vertexSubset, null);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getAllEdges(Object, Object)
@@ -481,7 +478,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         ((WeightedGraph<V, E>) base).setEdgeWeight(e, weight);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * An internal listener on the base graph.

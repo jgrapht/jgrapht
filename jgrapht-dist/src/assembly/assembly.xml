@@ -14,7 +14,7 @@
 			<scope>runtime</scope>
 			
 			<excludes>
-				<exclude>net.sf.jgrapht:jgrapht-ext:*:combined</exclude>
+				<exclude>org.jgrapht:jgrapht-ext:*:combined</exclude>
 			</excludes>
 		</dependencySet>
 		
@@ -26,7 +26,7 @@
 			<outputFileNameMapping>jgrapht-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
 			
 			<includes>
-				<include>net.sf.jgrapht:jgrapht-ext:*:combined</include>
+				<include>org.jgrapht:jgrapht-ext:*:combined</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>
@@ -48,6 +48,10 @@
 			<source>${basedir}/../license-LGPL.txt</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
+		<file>
+			<source>${basedir}/../license-EPL.txt</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
         </files>
 
 	<fileSets>
@@ -57,6 +61,13 @@
                         <excludes>
                           <exclude>**/target/**</exclude>
                         </excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/../target/site/apidocs</directory>
+			<outputDirectory>/javadoc</outputDirectory>
+                        <includes>
+                          <include>**/*</include>
+                        </includes>
 		</fileSet>
 	</fileSets>
 </assembly>

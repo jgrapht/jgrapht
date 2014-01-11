@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * TarjanSimpleCycles.java
@@ -38,41 +35,38 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
+
 
 /**
- * Find all simple cycles of a directed graph using the Tarjan's
- * algorithm.
- * <p/>
- * See:<br/>
- * R. Tarjan, Enumeration of the elementary circuits of 
- * a directed graph, SIAM J. Comput., 2 (1973), pp. 211-216.
+ * Find all simple cycles of a directed graph using the Tarjan's algorithm.
  *
- * @author Nikolay Ognyanov
+ * <p/>See:<br/>
+ * R. Tarjan, Enumeration of the elementary circuits of a directed graph, SIAM
+ * J. Comput., 2 (1973), pp. 211-216.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public class TarjanSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
+    
+
     private DirectedGraph<V, E> graph;
 
-    private List<List<V>>       cycles;
-    private Set<V>              marked;
-    private ArrayDeque<V>       markedStack;
-    private ArrayDeque<V>       pointStack;
-    private Map<V, Integer>     vToI;
-    private Map<V, Set<V>>      removed;
+    private List<List<V>> cycles;
+    private Set<V> marked;
+    private ArrayDeque<V> markedStack;
+    private ArrayDeque<V> pointStack;
+    private Map<V, Integer> vToI;
+    private Map<V, Set<V>> removed;
+
+    
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -83,10 +77,11 @@ public class TarjanSimpleCycles<V, E>
 
     /**
      * Create a simple cycle finder for the specified graph.
-     * 
+     *
      * @param graph - the DirectedGraph in which to find cycles.
-     * @throws IllegalArgumentException if the graph argument is
-     *         <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the graph argument is <code>
+     * null</code>.
      */
     public TarjanSimpleCycles(DirectedGraph<V, E> graph)
     {
@@ -96,11 +91,12 @@ public class TarjanSimpleCycles<V, E>
         this.graph = graph;
     }
 
+    
+
     /**
      * {@inheritDoc}
      */
-    @Override
-    public DirectedGraph<V, E> getGraph()
+    @Override public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -108,8 +104,7 @@ public class TarjanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    @Override public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -120,8 +115,7 @@ public class TarjanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public List<List<V>> findSimpleCycles()
+    @Override public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -152,12 +146,10 @@ public class TarjanSimpleCycles<V, E>
             if (getRemoved(vertex).contains(currentVertex)) {
                 continue;
             }
-            int comparison = toI(currentVertex).
-                compareTo(toI(start));
+            int comparison = toI(currentVertex).compareTo(toI(start));
             if (comparison < 0) {
                 getRemoved(vertex).add(currentVertex);
-            }
-            else if (comparison == 0) {
+            } else if (comparison == 0) {
                 foundCycle = true;
                 List<V> cycle = new ArrayList<V>();
                 Iterator<V> it = pointStack.descendingIterator();
@@ -173,10 +165,8 @@ public class TarjanSimpleCycles<V, E>
                     cycle.add(it.next());
                 }
                 cycles.add(cycle);
-            }
-            else if (!marked.contains(currentVertex)) {
-                boolean gotCycle =
-                    backtrack(start, currentVertex);
+            } else if (!marked.contains(currentVertex)) {
+                boolean gotCycle = backtrack(start, currentVertex);
                 foundCycle = foundCycle || gotCycle;
             }
         }
@@ -232,3 +222,5 @@ public class TarjanSimpleCycles<V, E>
         return result;
     }
 }
+
+// End TarjanSimpleCycles.java

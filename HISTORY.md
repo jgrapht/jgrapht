@@ -2,8 +2,12 @@
 
 Changes to JGraphT in each version:
 
-- **version 0.8.4** (under development): 
-	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter and Owen Jacobson.
+- **version 0.9.1** (under development): 
+	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
+	- Travis CI configuration, contributed by Peter Goldstein
+
+- **version 0.9.0** (06-Dec-2013): 
+	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
 	- Add source/target vertices to edge events to fix sf.net bug 3486775, spotted by Frank Mori Hess.
 	- Add `EdmondsBlossomShrinking` algorithm, contributed by Alejandro R. Lopez del Huerto.
 	- Fix empty diameter calculation in `FloydWarshallShortestPaths`, contributed by Ernst de Ridder (bug spotted by Jens Lehmann)
@@ -16,7 +20,10 @@ Changes to JGraphT in each version:
 	- Add `KuhnMunkresMinimalWeightBipartitePerfectMatching` and associated generators+interfaces (contributed by Alexey Kudinkin)
 	- Add cycle enumeration (contributed by Nikolay Ognyanov, originally from http://code.google.com/p/niographs/ )
 	- Update `removeAllEdges` to match specification (contributed by Graham Hill)
-
+	- Add `TarjanLowestCommonAncestor`, contributed by Leo Crawford
+	- Add `JGraphXAdapter`, contributed by Sebastian Hubenschmid and JeanYves Tinevez
+	- Add LGPL/EPL dual licensing, coordinated by Oliver Kopp
+	- Refactoring for `DirectedAcyclicGraph`, contributed by Javier Gutierrez
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.

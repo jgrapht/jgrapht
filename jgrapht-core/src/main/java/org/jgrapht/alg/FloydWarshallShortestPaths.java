@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2009, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * FloydWarshallShortestPaths.java
@@ -57,7 +54,7 @@ import org.jgrapht.util.*;
  */
 public class FloydWarshallShortestPaths<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Graph<V, E> graph;
     private List<V> vertices;
@@ -67,7 +64,7 @@ public class FloydWarshallShortestPaths<V, E>
     private int [][] backtrace = null;
     private Map<VertexPair<V>, GraphPath<V, E>> paths = null;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
@@ -75,7 +72,7 @@ public class FloydWarshallShortestPaths<V, E>
         this.vertices = new ArrayList<V>(graph.vertexSet());
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @return the graph on which this algorithm operates
@@ -181,7 +178,7 @@ public class FloydWarshallShortestPaths<V, E>
             int n = vertices.size();
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    if (!Double.isInfinite(d[i][j]) && d[i][j] > diameter) {
+                    if (!Double.isInfinite(d[i][j]) && (d[i][j] > diameter)) {
                         diameter = d[i][j];
                     }
                 }
@@ -232,12 +229,12 @@ public class FloydWarshallShortestPaths<V, E>
         if (edges.size() < 1) {
             return null;
         }
-        
+
         double weight = 0.;
         for (E e : edges) {
-        	weight += graph.getEdgeWeight(e);
+            weight += graph.getEdgeWeight(e);
         }
-        
+
         GraphPathImpl<V, E> path =
             new GraphPathImpl<V, E>(graph, a, b, edges, weight);
 

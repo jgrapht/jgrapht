@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -----------------
  * AbstractExhaustiveIsomorphismInspector.java
@@ -58,7 +55,7 @@ import org.jgrapht.util.*;
 abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     implements GraphIsomorphismInspector<IsomorphismRelation>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     public static EquivalenceComparator<Object, Object>
         edgeDefaultIsomorphismComparator =
@@ -67,7 +64,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
         vertexDefaultIsomorphismComparator =
             new UniformEquivalenceComparator<Object, Object>();
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     protected EquivalenceComparator<? super E, ? super Graph<V, ? super E>>
         edgeComparator;
@@ -86,7 +83,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     private CollectionPermutationIter<V> vertexPermuteIter;
     private Set<V> currVertexPermutation; // filled every iteration, used in the
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     // result relation.
 
@@ -146,7 +143,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
             vertexDefaultIsomorphismComparator);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Inits needed data-structures , among them:
@@ -401,7 +398,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
             + " There is no meaning to removing an isomorphism result.");
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     private class NextFunctor
         implements PrefetchIterator.NextElementFunctor<IsomorphismRelation>

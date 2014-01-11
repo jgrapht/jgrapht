@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * TiernanSimpleCycles.java
@@ -38,35 +35,31 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
+
 
 /**
- * Find all simple cycles of a directed graph using the Tiernan's
- * algorithm.
- * <p/>
- * See:<br/>
- * J.C.Tiernan An Efficient Search Algorithm Find the Elementary
- * Circuits of a Graph., Communications of the ACM, vol.13, 12,
- * (1970), pp. 722 - 726.
-
- * @author Nikolay Ognyanov
+ * Find all simple cycles of a directed graph using the Tiernan's algorithm.
+ *
+ * <p/>See:<br/>
+ * J.C.Tiernan An Efficient Search Algorithm Find the Elementary Circuits of a
+ * Graph., Communications of the ACM, vol.13, 12, (1970), pp. 722 - 726.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
+ *
+ * @author Nikolay Ognyanov
  */
 public class TiernanSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
+    
+
     private DirectedGraph<V, E> graph;
+
+    
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -77,10 +70,11 @@ public class TiernanSimpleCycles<V, E>
 
     /**
      * Create a simple cycle finder for the specified graph.
-     * 
+     *
      * @param graph - the DirectedGraph in which to find cycles.
-     * @throws IllegalArgumentException if the graph argument is
-     *         <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the graph argument is <code>
+     * null</code>.
      */
     public TiernanSimpleCycles(DirectedGraph<V, E> graph)
     {
@@ -90,11 +84,12 @@ public class TiernanSimpleCycles<V, E>
         this.graph = graph;
     }
 
+    
+
     /**
      * {@inheritDoc}
      */
-    @Override
-    public DirectedGraph<V, E> getGraph()
+    @Override public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -102,8 +97,7 @@ public class TiernanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    @Override public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -114,8 +108,7 @@ public class TiernanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public List<List<V>> findSimpleCycles()
+    @Override public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -157,11 +150,11 @@ public class TiernanSimpleCycles<V, E>
                 extensionFound = false;
                 for (E e : graph.outgoingEdgesOf(endOfPath)) {
                     V n = graph.getEdgeTarget(e);
-                    int cmp = indices.get(n).
-                        compareTo(indices.get(path.get(0)));
-                    if ((cmp > 0) &&
-                            !pathSet.contains(n) &&
-                            !blocked.get(endOfPath).contains(n))
+                    int cmp =
+                        indices.get(n).compareTo(indices.get(path.get(0)));
+                    if ((cmp > 0)
+                        && !pathSet.contains(n)
+                        && !blocked.get(endOfPath).contains(n))
                     {
                         path.add(n);
                         pathSet.add(n);
@@ -171,6 +164,7 @@ public class TiernanSimpleCycles<V, E>
                     }
                 }
             } while (extensionFound);
+
             // circuit confirmation
             startOfPath = path.get(0);
             if (graph.containsEdge(endOfPath, startOfPath)) {
@@ -178,6 +172,7 @@ public class TiernanSimpleCycles<V, E>
                 cycle.addAll(path);
                 cycles.add(cycle);
             }
+
             // vertex closure
             if (path.size() > 1) {
                 blocked.get(endOfPath).clear();
@@ -190,6 +185,7 @@ public class TiernanSimpleCycles<V, E>
                 blocked.get(endOfPath).add(temp);
                 continue;
             }
+
             // advance initial index
             if (vertexIterator.hasNext()) {
                 path.clear();
@@ -202,6 +198,7 @@ public class TiernanSimpleCycles<V, E>
                 }
                 continue;
             }
+
             // terminate
             break;
         }
@@ -209,3 +206,5 @@ public class TiernanSimpleCycles<V, E>
         return cycles;
     }
 }
+
+// End TiernanSimpleCycles.java

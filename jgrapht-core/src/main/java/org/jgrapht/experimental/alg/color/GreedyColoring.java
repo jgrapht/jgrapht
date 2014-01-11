@@ -1,3 +1,15 @@
+/* This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.experimental.alg.color;
 
 import java.util.*;
@@ -10,18 +22,18 @@ public class GreedyColoring<V, E>
     extends IntArrayGraphAlgorithm<V, E>
     implements ApproximationAlgorithm<Integer, V>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     public static final int BEST_ORDER = 0;
     public static final int NATURAL_ORDER = 1;
     public static final int SMALLEST_DEGREE_LAST_ORDER = 2;
     public static final int LARGEST_SATURATION_FIRST_ORDER = 3;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int _order = BEST_ORDER;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * @param g
@@ -40,7 +52,7 @@ public class GreedyColoring<V, E>
         _order = method;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     int color(int [] order)
     {

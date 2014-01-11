@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -----------------
  * RandomGraphGenerator.java
@@ -60,18 +57,18 @@ import org.jgrapht.graph.*;
 public class RandomGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static long seedUniquifier = 8682522807148012L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     protected int numOfVertexes;
     protected int numOfEdges;
     protected Random randomizer;
     private long randomizerSeed;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges)
     {
@@ -85,7 +82,7 @@ public class RandomGraphGenerator<V, E>
         this.randomizer = new Random(this.randomizerSeed);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Should be called only once on creation. Chooses a seed which can be used
@@ -180,7 +177,7 @@ public class RandomGraphGenerator<V, E>
         return new DefaultEdgeTopologyFactory<V, E>();
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     /**
      * This class is used to generate the edge topology for a graph.
@@ -221,7 +218,7 @@ public class RandomGraphGenerator<V, E>
             int numberOfEdges);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Default implementation of the EdgeTopologyFactory interface. randomly

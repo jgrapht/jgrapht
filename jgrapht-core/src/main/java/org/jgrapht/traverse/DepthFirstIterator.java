@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -----------------------
  * DepthFirstIterator.java
@@ -67,7 +64,7 @@ import org.jgrapht.util.*;
 public class DepthFirstIterator<V, E>
     extends CrossComponentIterator<V, E, CrossComponentIterator.VisitColor>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     /**
      * Sentinel object. Unfortunately, we can't use null, because ArrayDeque
@@ -76,7 +73,7 @@ public class DepthFirstIterator<V, E>
      */
     public static final Object SENTINEL = new Object();
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * @see #getStack
@@ -85,7 +82,7 @@ public class DepthFirstIterator<V, E>
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new depth-first iterator for the specified graph.
@@ -112,7 +109,7 @@ public class DepthFirstIterator<V, E>
         super(g, startVertex);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()

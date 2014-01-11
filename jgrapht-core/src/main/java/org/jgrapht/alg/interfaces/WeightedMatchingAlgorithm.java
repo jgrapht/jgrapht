@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2013, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * MinimumSpanningTree.java
@@ -34,18 +31,23 @@ package org.jgrapht.alg.interfaces;
 
 /**
  * Allows to derive weighted matching from <i>general</i> graph
- * @see MatchingAlgorithm
  *
  * @param <V>
  * @param <E>
+ *
+ * @see MatchingAlgorithm
  */
-public interface WeightedMatchingAlgorithm<V, E> extends MatchingAlgorithm<V, E> {
+public interface WeightedMatchingAlgorithm<V, E>
+    extends MatchingAlgorithm<V, E>
+{
+    
 
     /**
      * Returns weight of a matching found
      *
-     * @return      weight of a matching found
+     * @return weight of a matching found
      */
     public double getMatchingWeight();
-
 }
+
+// End WeightedMatchingAlgorithm.java

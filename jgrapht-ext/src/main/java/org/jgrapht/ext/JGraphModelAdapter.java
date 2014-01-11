@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -----------------------
  * JGraphModelAdapter.java
@@ -110,11 +107,11 @@ import org.jgrapht.event.*;
 public class JGraphModelAdapter<V, E>
     extends DefaultGraphModel
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3256722883706302515L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * The following (jCells|jtElement)Being(Added|Removed) sets are used to
@@ -177,7 +174,7 @@ public class JGraphModelAdapter<V, E>
     private final Map<V, GraphCell> vertexToCell = new HashMap<V, GraphCell>();
     private final ShieldedGraph jtGraph;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructs a new JGraph model adapter for the specified JGraphT graph.
@@ -269,7 +266,7 @@ public class JGraphModelAdapter<V, E>
         this.addGraphModelListener(new JGraphListener());
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Creates and returns a map of attributes to be used as defaults for edge
@@ -782,7 +779,7 @@ public class JGraphModelAdapter<V, E>
         jCellsBeingRemoved.remove(cell);
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     /**
      * Creates the JGraph cells that reflect the respective JGraphT elements.
@@ -811,7 +808,7 @@ public class JGraphModelAdapter<V, E>
         public DefaultGraphCell createVertexCell(VV jGraphTVertex);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * A simple default cell factory.

@@ -1,3 +1,15 @@
+/* This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 /**
  *
  */
@@ -16,14 +28,14 @@ public class BrownBacktrackColoring<V, E>
     extends IntArrayGraphAlgorithm<V, E>
     implements ExactAlgorithm<Integer, V>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private int [] _color;
     private int [] _colorCount;
     private BitSet [] _allowedColors;
     private int _chi;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * @param g
@@ -33,7 +45,7 @@ public class BrownBacktrackColoring<V, E>
         super(g);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     void recursiveColor(int pos)
     {

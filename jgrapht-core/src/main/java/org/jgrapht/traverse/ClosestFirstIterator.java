@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * ClosestFirstIterator.java
@@ -64,7 +61,7 @@ public class ClosestFirstIterator<V, E>
     extends CrossComponentIterator<V,
         E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Priority queue of fringe vertices.
@@ -79,7 +76,7 @@ public class ClosestFirstIterator<V, E>
 
     private boolean initialized = false;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new closest-first iterator for the specified graph.
@@ -127,7 +124,7 @@ public class ClosestFirstIterator<V, E>
         initialized = true;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     // override AbstractGraphIterator
     public void setCrossComponentTraversal(boolean crossComponentTraversal)
@@ -307,7 +304,7 @@ public class ClosestFirstIterator<V, E>
         return new FibonacciHeapNode<QueueEntry<V, E>>(entry);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Private data to associate with each entry in the priority queue.

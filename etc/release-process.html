@@ -9,21 +9,19 @@
  * Project Info:  http://jgrapht.sourceforge.net/
  * Project Lead:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
  *
- * (C) Copyright 2003-2006, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2013, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* ~~~~~~~~~~~~~
  * release-process.html
@@ -39,6 +37,7 @@
  * ~~~~~~~
  * 18-Jul-2005 : Initial revision added based on email from Barak (JVS);
  * 02-Jul-2006 : Updates for 0.7.0 (JVS);
+ * 06-Dec-2013 : Updates for 0.9.0 (JVS);
  *
  */
 -->
@@ -137,59 +136,42 @@
 
 <ol>
 
-<li>Update the new version number and SVN tag in the build.xml file.
-  
-<li>Review the README.md, HISTORY.md, CONTRIBUTORS.md, and META-INF/MANIFEST.MF files and update:
+<li>Review the README.md, HISTORY.md, CONTRIBUTORS.md, and update:
 <ul>
 <li>Version
 <li>Dependencies
 <li>Release notes
 <li>Contributors
+<li>Copyright year
 </ul>
 
-<li>Review/update the bug/feature trackers to make sure they reflect the
+<li>Review/update github issues to make sure they reflect the
 current state.  If there were important bug/feature changes, it is worth
 mentioning them in the README.md release notes.
 
-<li>Bring dependent libraries (e.g. JGraph) up to date and update
-lib/lib-readme.txt accordingly.
-
-<li>Run ant to build the javadoc and make sure it is generated without
-errors/warnings. Fix where necessary.  Make sure Eclipse build is
-warning-free.
+<li>Run <code>mvn javadoc:aggregate</code> to build the javadoc and make sure 
+it is generated without errors/warnings. Fix where necessary.
+Make sure Eclipse build is warning-free.
 
 <li>We used to run Checkstyle globally to make a "code quality review";
 we may bring this back, and/or add PMD/FindBugs, and Emma for
 code coverage.
 
-<li>Run all the JUnit tests. Fix where necessary.
+<li>Run all the JUnit tests via <code>mvn test</code>. Fix where necessary.
 
-<li>Run jalopy to reformat the code.  
+<li>Run <code>mvn jalopy:format</code> to reformat the code.  
 
-<li>Commit all work to SVN.
+<li>Commit all work and push to github.
 
-<li>Add a SVN tag using the convention: ver_x_y_z (e.g., the tag ver_0_7_1
-denotes Version 0.7.1).  The command for this is something like
-<b>svn copy https://jgrapht.svn.sourceforge.net/svnroot/jgrapht/trunk 
-         https://jgrapht.svn.sourceforge.net/svnroot/jgrapht/tags/ver_0_7_1 
-         -m "Tag for the 0.7.1 release of JGraphT"</b>
+<li>Run <code>mvn clean deploy</code> to push the latest snapshot to Sonatype.
 
-<li>
-At this stage, the release is complete in SVN and only a distribution
-is needed to be built.  The distribution is built from SVN to ensure
-that whatever gets released is reproducible later.
+<li>Run <code>mvn source:jar; mvn javadoc:jar; mvn release:prepare; mvn release:perform</code> to create the Maven artifacts and push them to Maven Central
 
-<li>The ant build.xml has a hack that allows specifying a SVN tag.
-You just need to invoke:
+<li>Run <code>mvn javadoc:aggregate; mvn install</code> to produce the
+release archive distribution
 
-<pre><code>
-      ant -Dsvntag=ver_0_7_1 release
-</code></pre>
-
-It will checkout from SVN the tagged version 0.7.1, and build a
-distribution for it.
-
-<li>Upload the release to SF and add it using the File Release System.
+<li>Upload the release archive distribution to SF and add it using the
+File Release System.
 
 <li>Update the website with the latest javadocs.
 
@@ -199,8 +181,8 @@ etc.  This involves uploading web/index.html (at least).
 <li>Announce the new version in the wiki and mailing lists; also click
 the File Release System notification button.
 
-<li>Update and commit the version number in build.xml again to reflect
-the beginning of development for the next version.
+<li>Update and commit the version number in HISTORY.md and all pom.xml files
+again to reflect the beginning of development for the next version.
 
 </ol>
 
@@ -215,7 +197,7 @@ the beginning of development for the next version.
       "http://www.w3.org/Icons/valid-html401" border="0" alt="Valid HTML 4.01!"
       height="31" width="88"></a></td>
 
-      <td width="80%" align="center"><small>© Copyright 2005, by Barak Naveh
+      <td width="80%" align="center"><small>© Copyright 2005-2013, by Barak Naveh
       and Contributors. All rights reserved.</small></td>
 
       <td width="10%" align="right"><a href="http://sourceforge.net"><img src=

@@ -30,3 +30,5 @@ build
 out/*
 **/.idea/*
 **/out/*
+pom.xml.releaseBackup
+**/pom.xml.releaseBackup

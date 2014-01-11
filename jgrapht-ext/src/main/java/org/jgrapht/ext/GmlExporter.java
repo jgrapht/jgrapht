@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* ------------------
  * GmlExporter.java
@@ -59,7 +56,7 @@ import org.jgrapht.*;
  */
 public class GmlExporter<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final String creator = "JGraphT GML Exporter";
     private static final String version = "1";
@@ -90,7 +87,7 @@ public class GmlExporter<V, E>
      */
     public static final Integer PRINT_VERTEX_LABELS = 4;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private Integer printLabels = PRINT_NO_LABELS;
 
@@ -99,7 +96,7 @@ public class GmlExporter<V, E>
     private EdgeNameProvider<E> edgeIDProvider;
     private EdgeNameProvider<E> edgeLabelProvider;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a new GmlExporter object with integer name providers for the
@@ -138,7 +135,7 @@ public class GmlExporter<V, E>
         this.edgeLabelProvider = edgeLabelProvider;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     private String quoted(final String s)
     {

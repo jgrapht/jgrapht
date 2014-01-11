@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* ----------------------
  * AbstractBaseGraph.java
@@ -73,13 +70,13 @@ public abstract class AbstractBaseGraph<V, E>
         Cloneable,
         Serializable
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = -1263088497616142427L;
 
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     boolean allowingLoops;
 
@@ -93,7 +90,7 @@ public abstract class AbstractBaseGraph<V, E>
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Construct a new pseudograph. The pseudograph can either be directed or
@@ -125,7 +122,7 @@ public abstract class AbstractBaseGraph<V, E>
         this.edgeSetFactory = new ArrayListFactory<V, E>();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#getAllEdges(Object, Object)
@@ -526,7 +523,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * .
@@ -1052,15 +1049,13 @@ public abstract class AbstractBaseGraph<V, E>
                 while (iter.hasNext()) {
                     E e = iter.next();
 
-                    boolean equalStraight =
-                        sourceVertex.equals(getEdgeSource(e))
-                        && targetVertex.equals(getEdgeTarget(e));
+                    boolean equal =
+                        isEqualsStraightOrInverted(
+                            sourceVertex,
+                            targetVertex,
+                            e);
 
-                    boolean equalInverted =
-                        sourceVertex.equals(getEdgeTarget(e))
-                        && targetVertex.equals(getEdgeSource(e));
-
-                    if (equalStraight || equalInverted) {
+                    if (equal) {
                         edges.add(e);
                     }
                 }
@@ -1083,21 +1078,34 @@ public abstract class AbstractBaseGraph<V, E>
                 while (iter.hasNext()) {
                     E e = iter.next();
 
-                    boolean equalStraight =
-                        sourceVertex.equals(getEdgeSource(e))
-                        && targetVertex.equals(getEdgeTarget(e));
+                    boolean equal =
+                        isEqualsStraightOrInverted(
+                            sourceVertex,
+                            targetVertex,
+                            e);
 
-                    boolean equalInverted =
-                        sourceVertex.equals(getEdgeTarget(e))
-                        && targetVertex.equals(getEdgeSource(e));
-
-                    if (equalStraight || equalInverted) {
+                    if (equal) {
                         return e;
                     }
                 }
             }
 
             return null;
+        }
+
+        private boolean isEqualsStraightOrInverted(
+            Object sourceVertex,
+            Object targetVertex,
+            E e)
+        {
+            boolean equalStraight =
+                sourceVertex.equals(getEdgeSource(e))
+                && targetVertex.equals(getEdgeTarget(e));
+
+            boolean equalInverted =
+                sourceVertex.equals(getEdgeTarget(e))
+                && targetVertex.equals(getEdgeSource(e));
+            return equalStraight || equalInverted;
         }
 
         /**

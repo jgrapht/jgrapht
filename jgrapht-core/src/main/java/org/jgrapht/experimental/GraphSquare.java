@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* ----------------------
  * GraphSquare.java
@@ -55,12 +52,12 @@ import org.jgrapht.graph.*;
 public class GraphSquare<V, E>
     extends AbstractBaseGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = -2642034600395594304L;
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for GraphSquare.
@@ -109,7 +106,7 @@ public class GraphSquare<V, E>
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * @see Graph#addEdge(Object, Object)
@@ -120,7 +117,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, E)
+     * @see Graph#addEdge(Object, Object, Object)
      */
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
@@ -144,7 +141,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(V, V)
+     * @see Graph#removeAllEdges(Object, Object)
      */
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
@@ -160,7 +157,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(E)
+     * @see Graph#removeEdge(Object)
      */
     public boolean removeEdge(E e)
     {
@@ -168,7 +165,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(V, V)
+     * @see Graph#removeEdge(Object, Object)
      */
     public E removeEdge(V sourceVertex, V targetVertex)
     {
@@ -176,7 +173,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(V)
+     * @see Graph#removeVertex(Object)
      */
     public boolean removeVertex(V v)
     {

@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * RankingPathElementList.java
@@ -56,7 +53,7 @@ import org.jgrapht.graph.*;
 final class RankingPathElementList<V, E>
     extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * Vertex that paths of the list must not disconnect.
@@ -66,7 +63,7 @@ final class RankingPathElementList<V, E>
     private Map<RankingPathElement<V, E>, Boolean> path2disconnect =
         new HashMap<RankingPathElement<V, E>, Boolean>();
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates a list with an empty path. The list size is 1.
@@ -121,9 +118,7 @@ final class RankingPathElementList<V, E>
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
 
         // loop over the path elements in increasing order of weight.
-        for (int i = 0;
-             (i < elementList.size()) && (size() < maxSize); i++)
-        {
+        for (int i = 0; (i < elementList.size()) && (size() < maxSize); i++) {
             RankingPathElement<V, E> prevPathElement = elementList.get(i);
 
             if (isNotValidPath(prevPathElement, edge)) {
@@ -154,7 +149,7 @@ final class RankingPathElementList<V, E>
         super(graph, maxSize, vertex);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * <p>Adds paths in the list at vertex y. Candidate paths are obtained by
@@ -380,8 +375,11 @@ final class RankingPathElementList<V, E>
         RankingPathElement<V, E> prevPathElement,
         E edge)
     {
-        V endVertex = Graphs.getOppositeVertex(this.graph, edge,
-            prevPathElement.getVertex());
+        V endVertex =
+            Graphs.getOppositeVertex(
+                this.graph,
+                edge,
+                prevPathElement.getVertex());
         assert (endVertex.equals(this.vertex));
 
         RankingPathElement<V, E> pathElementToTest = prevPathElement;
@@ -396,7 +394,7 @@ final class RankingPathElementList<V, E>
         return true;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     private static class PathMask<V, E>
         implements MaskFunctor<V, E>

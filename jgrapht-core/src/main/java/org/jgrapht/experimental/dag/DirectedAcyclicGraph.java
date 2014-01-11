@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------
  * DirectedAcyclicGraph.java
@@ -75,11 +72,11 @@ import org.jgrapht.graph.*;
 public class DirectedAcyclicGraph<V, E>
     extends SimpleDirectedGraph<V, E>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 4522128427004938150L;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     private TopoComparator<V> topoComparator;
 
@@ -101,7 +98,7 @@ public class DirectedAcyclicGraph<V, E>
      */
     private TopoOrderMappingFactory<V> topoOrderFactory = new TopoVertexBiMap();
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     public DirectedAcyclicGraph(Class<? extends E> arg0)
     {
@@ -124,7 +121,7 @@ public class DirectedAcyclicGraph<V, E>
         initialize();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * set the topoOrderMap based on the current factory, and create the
@@ -172,12 +169,12 @@ public class DirectedAcyclicGraph<V, E>
      * adds the vertex if it wasn't already in the graph, and puts it either at
      * the top or the bottom of the topological ordering, depending on the value
      * of addToTop. This may provide useful optimizations for merging
-     * DirectedAcyclicGraphS that become connected.
+     * DirectedAcyclicGraphs that become connected.
      *
      * @param v
      * @param addToTop
      *
-     * @return
+     * @return whether new vertex was added
      */
     public boolean addVertex(V v, boolean addToTop)
     {
@@ -221,30 +218,7 @@ public class DirectedAcyclicGraph<V, E>
     public E addDagEdge(V fromVertex, V toVertex)
         throws CycleFoundException
     {
-        Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
-        Integer ub = topoOrderMap.getTopologicalIndex(fromVertex);
-
-        if ((lb == null) || (ub == null)) {
-            throw new IllegalArgumentException(
-                "vertices must be in the graph already!");
-        }
-
-        if (lb < ub) {
-            Set<V> df = new HashSet<V>();
-            Set<V> db = new HashSet<V>();
-
-            // Discovery
-            Region affectedRegion = new Region(lb, ub);
-            Visited visited = visitedFactory.getInstance(affectedRegion);
-
-            // throws CycleFoundException if there is a cycle
-            dfsF(toVertex, df, visited, affectedRegion);
-
-            dfsB(fromVertex, db, visited, affectedRegion);
-            reorder(df, db, visited);
-            ++topologyUpdateCount; // if we do a reorder, than the topology has
-                                   // been updated
-        }
+        updateDag(fromVertex, toVertex);
 
         return super.addEdge(fromVertex, toVertex);
     }
@@ -292,6 +266,14 @@ public class DirectedAcyclicGraph<V, E>
             return false;
         }
 
+        updateDag(fromVertex, toVertex);
+
+        return super.addEdge(fromVertex, toVertex, e);
+    }
+
+    private void updateDag(V fromVertex, V toVertex)
+        throws CycleFoundException
+    {
         Integer lb = topoOrderMap.getTopologicalIndex(toVertex);
         Integer ub = topoOrderMap.getTopologicalIndex(fromVertex);
 
@@ -316,8 +298,6 @@ public class DirectedAcyclicGraph<V, E>
             ++topologyUpdateCount; // if we do a reorder, than the topology has
                                    // been updated
         }
-
-        return super.addEdge(fromVertex, toVertex, e);
     }
 
     /**
@@ -555,7 +535,7 @@ public class DirectedAcyclicGraph<V, E>
         }
     }
 
-    //~ Inner Interfaces -------------------------------------------------------
+    
 
     /**
      * For performance tuning, an interface for storing the topological ordering
@@ -578,7 +558,7 @@ public class DirectedAcyclicGraph<V, E>
          *
          * @param index
          *
-         * @return
+         * @return vertex
          */
         public V getVertex(Integer index);
 
@@ -660,7 +640,7 @@ public class DirectedAcyclicGraph<V, E>
         public Visited getInstance(Region affectedRegion);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    
 
     /**
      * Note, this is a lazy and incomplete implementation, with assumptions that

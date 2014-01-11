@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * GraphEdgeChangeEvent.java
@@ -53,7 +50,7 @@ package org.jgrapht.event;
 public class GraphEdgeChangeEvent<V, E>
     extends GraphChangeEvent
 {
-    //~ Static fields/initializers ---------------------------------------------
+    
 
     private static final long serialVersionUID = 3618134563335844662L;
 
@@ -80,7 +77,7 @@ public class GraphEdgeChangeEvent<V, E>
      */
     public static final int EDGE_REMOVED = 24;
 
-    //~ Instance fields --------------------------------------------------------
+    
 
     /**
      * The edge that this event is related to.
@@ -97,7 +94,7 @@ public class GraphEdgeChangeEvent<V, E>
      */
     protected V edgeTarget;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Constructor for GraphEdgeChangeEvent.
@@ -109,7 +106,9 @@ public class GraphEdgeChangeEvent<V, E>
      * @deprecated Use new constructor which takes vertex parameters.
      */
     public GraphEdgeChangeEvent(
-        Object eventSource, int type, E edge)
+        Object eventSource,
+        int type,
+        E edge)
     {
         this(eventSource, type, edge, null, null);
     }
@@ -124,8 +123,11 @@ public class GraphEdgeChangeEvent<V, E>
      * @param edgeTarget edge target vertex
      */
     public GraphEdgeChangeEvent(
-        Object eventSource, int type, E edge,
-        V edgeSource, V edgeTarget)
+        Object eventSource,
+        int type,
+        E edge,
+        V edgeSource,
+        V edgeTarget)
     {
         super(eventSource, type);
         this.edge = edge;
@@ -133,7 +135,7 @@ public class GraphEdgeChangeEvent<V, E>
         this.edgeTarget = edgeTarget;
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
     /**
      * Returns the edge that this event is related to.

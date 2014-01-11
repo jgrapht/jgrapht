@@ -7,20 +7,17 @@
  *
  * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program and the accompanying materials are dual-licensed under
+ * either
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation,
- * Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 /* -------------------------
  * KruskalMinimumSpanningTree.java
@@ -37,11 +34,11 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MinimumSpanningTree;
-import org.jgrapht.alg.util.UnionFind;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
 
 /**
@@ -55,14 +52,15 @@ import java.util.*;
  * @author Tom Conerly
  * @since Feb 10, 2010
  */
-public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, E>
+public class KruskalMinimumSpanningTree<V, E>
+    implements MinimumSpanningTree<V, E>
 {
-    //~ Instance fields --------------------------------------------------------
+    
 
     private double spanningTreeCost;
     private Set<E> edgeList;
 
-    //~ Constructors -----------------------------------------------------------
+    
 
     /**
      * Creates and executes a new KruskalMinimumSpanningTree algorithm instance.
@@ -101,28 +99,25 @@ public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, 
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    
 
-    @Override
-    public Set<E> getMinimumSpanningTreeEdgeSet()
+    @Override public Set<E> getMinimumSpanningTreeEdgeSet()
     {
         return edgeList;
     }
 
-    @Override
-    public double getMinimumSpanningTreeTotalWeight()
+    @Override public double getMinimumSpanningTreeTotalWeight()
     {
         return spanningTreeCost;
     }
-
 
     /**
      * Returns edges set constituting the minimum spanning tree/forest
      *
      * @return minimum spanning-tree edges set
      */
-    @Deprecated
-    public Set<E> getEdgeSet() {
+    @Deprecated public Set<E> getEdgeSet()
+    {
         return getMinimumSpanningTreeEdgeSet();
     }
 
@@ -131,11 +126,10 @@ public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, 
      *
      * @return minimum spanning-tree total weight
      */
-    @Deprecated
-    public double getSpanningTreeCost() {
+    @Deprecated public double getSpanningTreeCost()
+    {
         return getMinimumSpanningTreeTotalWeight();
     }
-
 }
 
 // End KruskalMinimumSpanningTree.java
