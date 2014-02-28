@@ -25,7 +25,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TarjanLowestCommonAncestorTest extends TestCase {
+public class TarjanLowestCommonAncestorTest  extends TestCase{
 
     @Test
     public void testBinaryTree() {
@@ -48,7 +48,7 @@ public class TarjanLowestCommonAncestorTest extends TestCase {
     }
 
     @Test
-    public void testDag() {
+    public void testNonBinaryTree() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
@@ -58,63 +58,52 @@ public class TarjanLowestCommonAncestorTest extends TestCase {
 	g.addVertex("e");
 	g.addVertex("f");
 	g.addVertex("g");
+	g.addVertex("h");
+	g.addVertex("i");
+	g.addVertex("j");
 
 	g.addEdge("a", "b");
 	g.addEdge("b", "c");
 	g.addEdge("c", "d");
-	g.addEdge("d", "f");
-	g.addEdge("b", "e");
-	g.addEdge("e", "f");
-	g.addEdge("f", "g");
+	g.addEdge("d", "e");
+	g.addEdge("b", "f");
+	g.addEdge("b", "g");
+	g.addEdge("c", "h");
+	g.addEdge("c", "i");
+	g.addEdge("i", "j");
 
-	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "b", "g"));
-	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "e", "d"));
-	Assert.assertEquals("d", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "f", "d"));
+	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "b", "h"));
+	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "j", "f"));
+	Assert.assertEquals("c", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "j", "h"));
 	// now all together in one call
 	
-	LcaRequestResponse<String> bg = new LcaRequestResponse<String>("b", "g");
-	LcaRequestResponse<String> ed = new LcaRequestResponse<String>("e", "d");
-	LcaRequestResponse<String> fd = new LcaRequestResponse<String>("f", "d");
+	LcaRequestResponse<String> bg = new LcaRequestResponse<String>("b", "h");
+	LcaRequestResponse<String> ed = new LcaRequestResponse<String>("j", "f");
+	LcaRequestResponse<String> fd = new LcaRequestResponse<String>("j", "h");
 	List<LcaRequestResponse<String>> list = new LinkedList<LcaRequestResponse<String>> ();
 	list.add(bg);
 	list.add(ed);
 	list.add(fd);
-	
 	List<String> result = new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", list);
 	// check that the mutable input parameters have changed
 	Assert.assertEquals("b",bg.getLca());
 	Assert.assertEquals("b",ed.getLca());
-	Assert.assertEquals("d",fd.getLca());
+	Assert.assertEquals("c",fd.getLca());
 	// check the returned result is correct
-	Assert.assertEquals(Arrays.asList(new String[]{"b","b","d"}),result);
+	Assert.assertEquals(Arrays.asList(new String[]{"b","b","c"}),result);
 	
-	
-	// test it the other way around
-	Assert.assertEquals("d", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "d", "f"));
+	// test it the other way around and starting from b
+	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("b", "h", "b"));
     }
 
+    
     @Test
-    public void testComplexDag() {
+    public void testOneNode() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
-	g.addVertex("b");
-	g.addVertex("c");
-	g.addVertex("d");
-	g.addVertex("e");
-	g.addVertex("f");
-	g.addVertex("g");
 
-	g.addEdge("a", "b");
-	g.addEdge("b", "c");
-	g.addEdge("c", "d");
-	g.addEdge("d", "f");
-	g.addEdge("b", "e");
-	g.addEdge("e", "f");
-	g.addEdge("f", "g");
-	g.addEdge("a", "f");
-
-	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "e", "c"));
+	Assert.assertEquals("a", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "a", "a"));
 
     }
 

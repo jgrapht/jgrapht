@@ -126,23 +126,24 @@ public class TarjanLowestCommonAncestor<V, E>
                     uf.union(u, v);
                     ancestors.put(uf.find(u), u);
                 }
-                black.add(u);
-
-                Set<LcaRequestResponse<V>> requestsForNodeU = lrrMap.get(u);
-                if (requestsForNodeU != null) {
-                    for (LcaRequestResponse<V> rr : requestsForNodeU) {
-                        if (black.contains(rr.getB()) && rr.getA().equals(u)) {
-                            rr.setLca(ancestors.get(uf.find(rr.getB())));
-                        }
-                        if (black.contains(rr.getA()) && rr.getB().equals(u)) {
-                            rr.setLca(ancestors.get(uf.find(rr.getA())));
-                        }
-                    }
-
-                    // once we've dealt with it - remove it (to save memory?)
-                    lrrMap.remove(u);
-                }
             }
+            black.add(u);
+
+            Set<LcaRequestResponse<V>> requestsForNodeU = lrrMap.get(u);
+            if (requestsForNodeU != null) {
+                for (LcaRequestResponse<V> rr : requestsForNodeU) {
+                    if (black.contains(rr.getB()) && rr.getA().equals(u)) {
+                        rr.setLca(ancestors.get(uf.find(rr.getB())));
+                    }
+                    if (black.contains(rr.getA()) && rr.getB().equals(u)) {
+                        rr.setLca(ancestors.get(uf.find(rr.getA())));
+                    }
+                }
+
+                // once we've dealt with it - remove it (to save memory?)
+                lrrMap.remove(u);
+            }
+            
 
             List<V> result = new LinkedList<V>();
             for (LcaRequestResponse<V> current : lrr) {
