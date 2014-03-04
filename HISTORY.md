@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
 	- Travis CI configuration, contributed by Peter Goldstein
 	- TarjanLCA bugfix, contributed by Leo Crawford
 	- Add `SimpleGraphPath`, contributed by Rodrigo Lopez Dato
+	- Add `NaiveLcaFinder`, contributed by Leo Crawford
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
