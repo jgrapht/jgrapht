@@ -30,6 +30,14 @@ public class SimpleGraphBuilder<V, E> {
 		vertices(vertices);
 	}
 
+	/**
+	 * Adds the specified vertices to the graph. Vertices already contained in
+	 * the graph will be ignored.
+	 * 
+	 * @param vertices
+	 *            the vertices to add
+	 * @return the builder
+	 */
 	public SimpleGraphBuilder<V, E> vertices(final V... vertices) {
 		for (final V vertex : vertices) {
 			this.vertices.add(vertex);
@@ -37,6 +45,17 @@ public class SimpleGraphBuilder<V, E> {
 		return this;
 	}
 
+	/**
+	 * Adds an edge between two vertices to the graph.
+	 * 
+	 * If the vertex is not yet contained in the graph it will be added.
+	 * 
+	 * @param source
+	 *            the source vertex
+	 * @param target
+	 *            the target vertex
+	 * @return the builder
+	 */
 	public SimpleGraphBuilder<V, E> edge(final V source, final V target) {
 		if (!vertices.contains(source)) {
 			vertices.add(source);
@@ -48,6 +67,11 @@ public class SimpleGraphBuilder<V, E> {
 		return this;
 	}
 
+	/**
+	 * Builds the actual graph from the state of this builder.
+	 * 
+	 * @return the graph
+	 */
 	public SimpleGraph<V, E> build() {
 		final SimpleGraph<V, E> g = new SimpleGraph<V, E>(edgeclass);
 		for (final V v : vertices) {
