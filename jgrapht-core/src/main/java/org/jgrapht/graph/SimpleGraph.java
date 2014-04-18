@@ -38,8 +38,14 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.util.VertexPair;
 
 /**
  * A simple graph. A simple graph is an undirected graph for which at most one
@@ -48,35 +54,106 @@ import org.jgrapht.*;
  * href="http://mathworld.wolfram.com/SimpleGraph.html">
  * http://mathworld.wolfram.com/SimpleGraph.html</a>.
  */
-public class SimpleGraph<V, E>
-    extends AbstractBaseGraph<V, E>
-    implements UndirectedGraph<V, E>
-{
-    
+public class SimpleGraph<V, E> extends AbstractBaseGraph<V, E> implements
+		UndirectedGraph<V, E> {
 
-    private static final long serialVersionUID = 3545796589454112304L;
+	private static final long serialVersionUID = 3545796589454112304L;
 
-    
+	/**
+	 * Creates a new simple graph with the specified edge factory.
+	 *
+	 * @param ef
+	 *            the edge factory of the new graph.
+	 */
+	public SimpleGraph(EdgeFactory<V, E> ef) {
+		super(ef, false, false);
+	}
 
-    /**
-     * Creates a new simple graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     */
-    public SimpleGraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, false, false);
-    }
+	/**
+	 * Creates a new simple graph.
+	 *
+	 * @param edgeClass
+	 *            class on which to base factory for edges
+	 */
+	public SimpleGraph(Class<? extends E> edgeClass) {
+		this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+	}
 
-    /**
-     * Creates a new simple graph.
-     *
-     * @param edgeClass class on which to base factory for edges
-     */
-    public SimpleGraph(Class<? extends E> edgeClass)
-    {
-        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
-    }
+	/**
+	 * Builder for {@link SimpleGraph}.
+	 * 
+	 * @author Thomas Feichtinger (t.feichtinger[at]gmail[dot]com)
+	 */
+	public static class Builder<V, E> {
+
+		private final Class<? extends E> edgeclass;
+		private final Set<V> vertices;
+		private final List<VertexPair<V>> edges;
+
+		public Builder(final Class<? extends E> edgeClass) {
+			this.edgeclass = edgeClass;
+			this.vertices = new HashSet<V>();
+			this.edges = new ArrayList<VertexPair<V>>();
+		}
+
+		public Builder(final Class<? extends E> edgeClass, V... vertices) {
+			this(edgeClass);
+			vertices(vertices);
+		}
+
+		/**
+		 * Adds the specified vertices to the graph. Vertices already contained
+		 * in the graph will be ignored.
+		 * 
+		 * @param vertices
+		 *            the vertices to add
+		 * @return the builder
+		 */
+		public Builder<V, E> vertices(final V... vertices) {
+			for (final V vertex : vertices) {
+				this.vertices.add(vertex);
+			}
+			return this;
+		}
+
+		/**
+		 * Adds an edge between two vertices to the graph.
+		 * 
+		 * If the vertex is not yet contained in the graph it will be added.
+		 * 
+		 * @param source
+		 *            the source vertex
+		 * @param target
+		 *            the target vertex
+		 * @return the builder
+		 */
+		public Builder<V, E> edge(final V source, final V target) {
+			if (!vertices.contains(source)) {
+				vertices.add(source);
+			}
+			if (!vertices.contains(target)) {
+				vertices.add(target);
+			}
+			edges.add(new VertexPair<V>(source, target));
+			return this;
+		}
+
+		/**
+		 * Builds the actual graph from the state of this builder.
+		 * 
+		 * @return the graph
+		 */
+		public SimpleGraph<V, E> build() {
+			final SimpleGraph<V, E> g = new SimpleGraph<V, E>(edgeclass);
+			for (final V v : vertices) {
+				g.addVertex(v);
+			}
+			for (final VertexPair<V> edge : edges) {
+				g.addEdge(edge.getFirst(), edge.getSecond());
+			}
+			return g;
+		}
+	}
 }
 
 // End SimpleGraph.java

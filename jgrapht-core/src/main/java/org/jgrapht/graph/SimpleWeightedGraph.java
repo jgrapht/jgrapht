@@ -38,42 +38,128 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.util.VertexPair;
 
 /**
  * A simple weighted graph. A simple weighted graph is a simple graph for which
  * edges are assigned weights.
  */
-public class SimpleWeightedGraph<V, E>
-    extends SimpleGraph<V, E>
-    implements WeightedGraph<V, E>
-{
-    
+public class SimpleWeightedGraph<V, E> extends SimpleGraph<V, E> implements
+		WeightedGraph<V, E> {
 
-    private static final long serialVersionUID = 3906088949100655922L;
+	private static final long serialVersionUID = 3906088949100655922L;
 
-    
+	/**
+	 * Creates a new simple weighted graph with the specified edge factory.
+	 *
+	 * @param ef
+	 *            the edge factory of the new graph.
+	 */
+	public SimpleWeightedGraph(EdgeFactory<V, E> ef) {
+		super(ef);
+	}
 
-    /**
-     * Creates a new simple weighted graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     */
-    public SimpleWeightedGraph(EdgeFactory<V, E> ef)
-    {
-        super(ef);
-    }
+	/**
+	 * Creates a new simple weighted graph.
+	 *
+	 * @param edgeClass
+	 *            class on which to base factory for edges
+	 */
+	public SimpleWeightedGraph(Class<? extends E> edgeClass) {
+		this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+	}
 
-    /**
-     * Creates a new simple weighted graph.
-     *
-     * @param edgeClass class on which to base factory for edges
-     */
-    public SimpleWeightedGraph(Class<? extends E> edgeClass)
-    {
-        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
-    }
+	/**
+	 * Builder for {@SimpleWeightedGraph}.
+	 * 
+	 * @author Thomas Feichtinger (t.feichtinger[at]gmail[dot]com)
+	 */
+	public static class Builder<V, E> {
+
+		private final Class<? extends E> edgeclass;
+		private final Set<V> vertices;
+		private final List<VertexPair<V>> edges;
+		private final List<Double> weights;
+
+		public Builder(final Class<? extends E> edgeClass) {
+			this.edgeclass = edgeClass;
+			this.vertices = new HashSet<V>();
+			this.edges = new ArrayList<VertexPair<V>>();
+			this.weights = new ArrayList<Double>();
+		}
+
+		public Builder(final Class<? extends E> edgeClass, V... vertices) {
+			this(edgeClass);
+			vertices(vertices);
+		}
+
+		/**
+		 * Adds the specified vertices to the graph. Vertices already contained
+		 * in the graph will be ignored.
+		 * 
+		 * @param vertices
+		 *            the vertices to add
+		 * @return the builder
+		 */
+		public Builder<V, E> vertices(final V... vertices) {
+			for (final V vertex : vertices) {
+				this.vertices.add(vertex);
+			}
+			return this;
+		}
+
+		/**
+		 * Adds an edge between two vertices to the graph.
+		 * 
+		 * If the vertex is not yet contained in the graph it will be added.
+		 * 
+		 * @param source
+		 *            the source vertex
+		 * @param target
+		 *            the target vertex
+		 * @param weight
+		 *            the weight of the edge
+		 * @return the builder
+		 */
+		public Builder<V, E> edge(final V source, final V target,
+				final double weight) {
+			vertices.add(source);
+			vertices.add(target);
+			edges.add(new VertexPair<V>(source, target));
+			weights.add(weight);
+			return this;
+		}
+
+		/**
+		 * Builds the actual graph from the state of this builder.
+		 * 
+		 * @return the graph
+		 */
+		public SimpleWeightedGraph<V, E> build() {
+			final SimpleWeightedGraph<V, E> g = new SimpleWeightedGraph<V, E>(
+					edgeclass);
+
+			for (final V v : vertices) {
+				g.addVertex(v);
+			}
+
+			for (int i = 0; i < edges.size(); ++i) {
+				E edge = g.addEdge(edges.get(i).getFirst(), edges.get(i)
+						.getSecond());
+				if (edge != null) {
+					g.setEdgeWeight(edge, weights.get(i));
+				}
+			}
+			return g;
+		}
+	}
 }
 
 // End SimpleWeightedGraph.java
