@@ -43,9 +43,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.*;
 import org.jgrapht.util.VertexPair;
+
 
 /**
  * A simple graph. A simple graph is an undirected graph for which at most one
@@ -54,32 +54,37 @@ import org.jgrapht.util.VertexPair;
  * href="http://mathworld.wolfram.com/SimpleGraph.html">
  * http://mathworld.wolfram.com/SimpleGraph.html</a>.
  */
-public class SimpleGraph<V, E> extends AbstractBaseGraph<V, E> implements
-		UndirectedGraph<V, E> {
+public class SimpleGraph<V, E>
+    extends AbstractBaseGraph<V, E>
+    implements UndirectedGraph<V, E>
+{
+    
 
-	private static final long serialVersionUID = 3545796589454112304L;
+    private static final long serialVersionUID = 3545796589454112304L;
 
-	/**
-	 * Creates a new simple graph with the specified edge factory.
-	 *
-	 * @param ef
-	 *            the edge factory of the new graph.
-	 */
-	public SimpleGraph(EdgeFactory<V, E> ef) {
-		super(ef, false, false);
-	}
+    
 
-	/**
-	 * Creates a new simple graph.
-	 *
-	 * @param edgeClass
-	 *            class on which to base factory for edges
-	 */
-	public SimpleGraph(Class<? extends E> edgeClass) {
-		this(new ClassBasedEdgeFactory<V, E>(edgeClass));
-	}
+    /**
+     * Creates a new simple graph with the specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
+     */
+    public SimpleGraph(EdgeFactory<V, E> ef)
+    {
+        super(ef, false, false);
+    }
 
-	/**
+    /**
+     * Creates a new simple graph.
+     *
+     * @param edgeClass class on which to base factory for edges
+     */
+    public SimpleGraph(Class<? extends E> edgeClass)
+    {
+        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+    }
+    
+    /**
 	 * Builder for {@link SimpleGraph}.
 	 * 
 	 * @author Thomas Feichtinger (t.feichtinger[at]gmail[dot]com)

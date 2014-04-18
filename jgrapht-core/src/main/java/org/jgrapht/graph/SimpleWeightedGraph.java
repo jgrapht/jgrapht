@@ -43,40 +43,45 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.WeightedGraph;
+import org.jgrapht.*;
 import org.jgrapht.util.VertexPair;
+
 
 /**
  * A simple weighted graph. A simple weighted graph is a simple graph for which
  * edges are assigned weights.
  */
-public class SimpleWeightedGraph<V, E> extends SimpleGraph<V, E> implements
-		WeightedGraph<V, E> {
+public class SimpleWeightedGraph<V, E>
+    extends SimpleGraph<V, E>
+    implements WeightedGraph<V, E>
+{
+    
 
-	private static final long serialVersionUID = 3906088949100655922L;
+    private static final long serialVersionUID = 3906088949100655922L;
 
-	/**
-	 * Creates a new simple weighted graph with the specified edge factory.
-	 *
-	 * @param ef
-	 *            the edge factory of the new graph.
-	 */
-	public SimpleWeightedGraph(EdgeFactory<V, E> ef) {
-		super(ef);
-	}
+    
 
-	/**
-	 * Creates a new simple weighted graph.
-	 *
-	 * @param edgeClass
-	 *            class on which to base factory for edges
-	 */
-	public SimpleWeightedGraph(Class<? extends E> edgeClass) {
-		this(new ClassBasedEdgeFactory<V, E>(edgeClass));
-	}
+    /**
+     * Creates a new simple weighted graph with the specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
+     */
+    public SimpleWeightedGraph(EdgeFactory<V, E> ef)
+    {
+        super(ef);
+    }
 
-	/**
+    /**
+     * Creates a new simple weighted graph.
+     *
+     * @param edgeClass class on which to base factory for edges
+     */
+    public SimpleWeightedGraph(Class<? extends E> edgeClass)
+    {
+        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+    }
+    
+    /**
 	 * Builder for {@SimpleWeightedGraph}.
 	 * 
 	 * @author Thomas Feichtinger (t.feichtinger[at]gmail[dot]com)
