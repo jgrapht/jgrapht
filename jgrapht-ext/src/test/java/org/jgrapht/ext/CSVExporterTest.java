@@ -48,27 +48,27 @@ public class CSVExporterTest extends TestCase {
         DirectedGraph<String , DefaultEdge> directed = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         UndirectedGraph<String, DefaultEdge> undirected = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 
-        directed.addVertex("A"); undirected.addVertex("A");
-        directed.addVertex("B"); undirected.addVertex("B");
+        directed.addVertex("\"A"); undirected.addVertex("A");
+        directed.addVertex("B\n"); undirected.addVertex("B");
         directed.addVertex("C"); undirected.addVertex("C");
         directed.addVertex("D"); undirected.addVertex("D");
 
-        directed.addEdge("A", "B"); undirected.addEdge("A", "B");
-        directed.addEdge("A", "D"); undirected.addEdge("A", "D");
-        directed.addEdge("B", "D"); undirected.addEdge("B", "D");
+        directed.addEdge("\"A", "B\n"); undirected.addEdge("A", "B");
+        directed.addEdge("\"A", "D"); undirected.addEdge("A", "D");
+        directed.addEdge("B\n", "D"); undirected.addEdge("B", "D");
 
-        String dir =    "A B\n" +
-                        "A D\n" +
-                        "B D\n" +
+        String dir =    "\"\"\"A\",\"B\n\"\n" +
+                        "\"\"\"A\",D\n" +
+                        "\"B\n\",D\n" +
                         "C\n" +
                         "D";
-        String undir =  "A B\n" +
-                        "A D\n" +
-                        "B A\n" +
-                        "B D\n" +
+        String undir =  "A,B\n" +
+                        "A,D\n" +
+                        "B,A\n" +
+                        "B,D\n" +
                         "C\n" +
-                        "D A\n" +
-                        "D B";
+                        "D,A\n" +
+                        "D,B";
 
         StringWriter wDir = new StringWriter();
         StringWriter wUnDir = new StringWriter();
@@ -99,15 +99,15 @@ public class CSVExporterTest extends TestCase {
         directed.addEdge("A", "D"); undirected.addEdge("A", "D");
         directed.addEdge("B", "D"); undirected.addEdge("B", "D");
 
-        String dir =    "A B D\n" +
-                        "B D\n" +
+        String dir =    "A,B,D\n" +
+                        "B,D\n" +
                         "C\n" +
                         "D";
 
-        String undir =  "A B D\n" +
-                        "B A D\n" +
+        String undir =  "A,B,D\n" +
+                        "B,A,D\n" +
                         "C\n" +
-                        "D A B";
+                        "D,A,B";
 
         StringWriter wDir = new StringWriter();
         StringWriter wUnDir = new StringWriter();
