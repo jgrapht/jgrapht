@@ -89,7 +89,7 @@ public class CSVExporter<V, E> {
      *
      * @param graph  graph to export
      * @param writer output for csv
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public void export(Graph<V, E> graph, Writer writer) throws IOException {
         exportImpl(graph, writer, false);
@@ -114,7 +114,7 @@ public class CSVExporter<V, E> {
      *
      * @param graph  graph to export
      * @param writer output for csv
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public void exportCollapsed(Graph<V, E> graph, Writer writer) throws IOException {
         exportImpl(graph, writer, true);
@@ -127,7 +127,7 @@ public class CSVExporter<V, E> {
      * @param graph     graph to export
      * @param out       output for csv
      * @param collapsed if {@code true} each line is node and its neighbours, otherwise output edge per line
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     private void exportImpl(Graph<V, E> graph, Writer out, boolean collapsed) throws IOException {
         boolean firstLine = true;
