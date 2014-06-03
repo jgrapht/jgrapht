@@ -30,14 +30,20 @@
  */
 package org.jgrapht.ext;
 
+import com.sun.tools.javac.util.Pair;
 import junit.framework.TestCase;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.imp.CSVImporter;
+import org.jgrapht.imp.StringVertexParser;
+import org.jgrapht.util.VertexPair;
 
 import java.io.StringWriter;
+import java.util.Set;
 
 /**
  * Testing the CSV export.
@@ -85,6 +91,33 @@ public class CSVExporterTest extends TestCase {
             fail();
         }
     }
+
+    public void testImport(){
+        String paths[] = new String[]{
+                "/Users/ivan/Projects/ontology/activity-subsumer/src/test/resources/word_net_nouns_hyponym",
+                "/Users/ivan/Projects/ontology/activity-subsumer/src/test/resources/word_net_nouns_synset",
+                "/Users/ivan/Projects/ontology/activity-subsumer/src/test/resources/word_net_verbs_hyponym",
+                "/Users/ivan/Projects/ontology/activity-subsumer/src/test/resources/word_net_verbs_synset"
+        };
+
+        for(String p:paths){
+            CSVImporter<String> importer = new CSVImporter<String>(" ", new StringVertexParser());
+            long start = System.currentTimeMillis();
+            importer.processCSV(p);
+
+            Set<String> vertices = importer.getVertices();
+            Set<VertexPair<String>> edges = importer.getEdges();
+
+            DirectedAcyclicGraph<String, DefaultEdge> graph = new DirectedAcyclicGraph<String, DefaultEdge>(DefaultEdge.class);
+            for(String v:vertices) graph.addVertex(v);
+            for(VertexPair<String> ed: edges) graph.addEdge(ed.getFirst(), ed.getSecond());
+
+            System.out.println("Size of graph, vetices and edges, "+ graph.vertexSet().size() +" "+graph.edgeSet().size() +
+                    ", took "+(System.currentTimeMillis() - start) + "[ms]");
+        }
+
+        assertEquals(1, 1);
+     }
 
     public void testExportCollapsedCSV(){
         DirectedGraph<String , DefaultEdge> directed = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
