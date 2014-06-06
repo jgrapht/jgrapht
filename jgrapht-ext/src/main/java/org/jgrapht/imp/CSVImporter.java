@@ -5,9 +5,7 @@ import org.jgrapht.util.VertexPair;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * @author Ivan Gavrilović
@@ -17,13 +15,26 @@ public class CSVImporter<V> {
     private InputStream stream;
     private VertexParser<V> vertexParser;
 
+    private int numVertices;
+    private int numEdges;
+
     private Set<V> vertices = null;
-    private Set<VertexPair<V>> edges = null;
+    private List<VertexPair<V>> edges = null;
 
     public CSVImporter(String delimiter, VertexParser<V> parser, InputStream stream) {
         this.delimiter = delimiter;
         this.vertexParser = parser;
         this.stream = stream;
+        numVertices = 16;
+        numEdges = 16;
+    }
+
+    public CSVImporter(String delimiter, VertexParser<V> parser, InputStream stream, int numVertices, int numEdges) {
+        this.delimiter = delimiter;
+        this.vertexParser = parser;
+        this.stream = stream;
+        this.numVertices = numVertices;
+        this.numEdges = numEdges;
     }
 
     /**
@@ -31,8 +42,8 @@ public class CSVImporter<V> {
      */
     public void processCSV() {
         try {
-            vertices = new HashSet<V>();
-            edges = new HashSet<VertexPair<V>>();
+            vertices = new HashSet<V>(numVertices);
+            edges = new ArrayList<VertexPair<V>>(numEdges);
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
 
@@ -63,7 +74,7 @@ public class CSVImporter<V> {
         return vertices;
     }
 
-    public Set<VertexPair<V>> getEdges() {
+    public List<VertexPair<V>> getEdges() {
         if (edges == null) processCSV();
         return edges;
     }

@@ -30,7 +30,6 @@
  */
 package org.jgrapht.ext;
 
-import com.sun.tools.javac.util.Pair;
 import junit.framework.TestCase;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.UndirectedGraph;
@@ -42,7 +41,9 @@ import org.jgrapht.imp.CSVImporter;
 import org.jgrapht.imp.StringVertexParser;
 import org.jgrapht.util.VertexPair;
 
+import java.io.FileInputStream;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -101,19 +102,23 @@ public class CSVExporterTest extends TestCase {
         };
 
         for(String p:paths){
-            CSVImporter<String> importer = new CSVImporter<String>(" ", new StringVertexParser());
-            long start = System.currentTimeMillis();
-            importer.processCSV(p);
+            try {
+                CSVImporter<String> importer = new CSVImporter<String>(" ", new StringVertexParser(), new FileInputStream(p));
+                long start = System.currentTimeMillis();
 
-            Set<String> vertices = importer.getVertices();
-            Set<VertexPair<String>> edges = importer.getEdges();
+                Set<String> vertices = importer.getVertices();
+                List<VertexPair<String>> edges = importer.getEdges();
 
-            DirectedAcyclicGraph<String, DefaultEdge> graph = new DirectedAcyclicGraph<String, DefaultEdge>(DefaultEdge.class);
-            for(String v:vertices) graph.addVertex(v);
-            for(VertexPair<String> ed: edges) graph.addEdge(ed.getFirst(), ed.getSecond());
+                DirectedAcyclicGraph<String, DefaultEdge> graph = new DirectedAcyclicGraph<String, DefaultEdge>(DefaultEdge.class);
+                for (String v : vertices) graph.addVertex(v);
+                for (VertexPair<String> ed : edges) graph.addEdge(ed.getFirst(), ed.getSecond());
 
-            System.out.println("Size of graph, vetices and edges, "+ graph.vertexSet().size() +" "+graph.edgeSet().size() +
-                    ", took "+(System.currentTimeMillis() - start) + "[ms]");
+                System.out.println("Size of graph, vetices and edges, " + graph.vertexSet().size() + " " + graph.edgeSet().size() +
+                        ", took " + (System.currentTimeMillis() - start) + "[ms]");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         assertEquals(1, 1);
