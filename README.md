@@ -90,7 +90,7 @@ The JGraphT website is at [http://www.jgrapht.org](http://www.jgrapht.org). You 
 - **Report bugs**: if you have any comments, suggestions or bugs you want to report.
 - **Get support**: if you have questions or need help with JGraphT.
 
-There is also a [wiki](http://wiki.jgrapht.org) set up for everyone in the JGraphT community to share information about the project.
+There is also a [wiki](https://github.com/jgrapht/jgrapht/wiki) set up for everyone in the JGraphT community to share information about the project.
 
 Source code is hosted on [github](https://github.com/jgrapht/jgrapht). You can send contributions as pull requests there.
 

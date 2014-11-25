@@ -137,6 +137,14 @@ public class AsWeightedGraphTest
 
         assertEquals(g2.getEdgeWeight(e5), 5.0);
         assertEquals(weightedGraph.getEdgeWeight(e5), 5.0);
+
+        try {
+            double d = weightedGraph.getEdgeWeight(null);
+            // should not get here
+            assertFalse();
+        } catch (NullPointerException ex) {
+            // expected, swallow
+        }
     }
 }
 

@@ -49,10 +49,11 @@ import org.jgrapht.util.*;
  * Currently there are no means to ensure that, nor to fail-fast. The results of
  * such modifications are undefined.
  *
- * <p>The metric for <i>closest</i> here is the path length from a start vertex.
- * Graph.getEdgeWeight(Edge) is summed to calculate path length. Negative edge
- * weights will result in an IllegalArgumentException. Optionally, path length
- * may be bounded by a finite radius.</p>
+ * <p>The metric for <i>closest</i> here is the weighted path length from a
+ * start vertex, i.e. Graph.getEdgeWeight(Edge) is summed to calculate path
+ * length. Negative edge weights will result in an
+ * IllegalArgumentException. Optionally, path length may be bounded by a finite
+ * radius.</p>
  *
  * @author John V. Sichi
  * @since Sep 2, 2003
@@ -107,14 +108,14 @@ public class ClosestFirstIterator<V, E>
      * Creates a new radius-bounded closest-first iterator for the specified
      * graph. Iteration will start at the specified start vertex and will be
      * limited to the subset of the connected component which includes that
-     * vertex and is reachable via paths of length less than or equal to the
-     * specified radius. The specified start vertex may not be <code>
+     * vertex and is reachable via paths of weighted length less than or equal
+     * to the specified radius. The specified start vertex may not be <code>
      * null</code>.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
-     * @param radius limit on path length, or Double.POSITIVE_INFINITY for
-     * unbounded search.
+     * @param radius limit on weighted path length, or
+     * Double.POSITIVE_INFINITY for unbounded search.
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
@@ -136,14 +137,14 @@ public class ClosestFirstIterator<V, E>
     }
 
     /**
-     * Get the length of the shortest path known to the given vertex. If the
-     * vertex has already been visited, then it is truly the shortest path
-     * length; otherwise, it is the best known upper bound.
+     * Get the weighted length of the shortest path known to the given
+     * vertex. If the vertex has already been visited, then it is truly the
+     * shortest path length; otherwise, it is the best known upper bound.
      *
      * @param vertex vertex being sought from start vertex
      *
-     * @return length of shortest path known, or Double.POSITIVE_INFINITY if no
-     * path found yet
+     * @return weighted length of shortest path known, or
+     * Double.POSITIVE_INFINITY if no path found yet
      */
     public double getShortestPathLength(V vertex)
     {
@@ -257,8 +258,8 @@ public class ClosestFirstIterator<V, E>
     }
 
     /**
-     * Determine path length to a vertex via an edge, using the path length for
-     * the opposite vertex.
+     * Determine weighted path length to a vertex via an edge, using the path
+     * length for the opposite vertex.
      *
      * @param vertex the vertex for which to calculate the path length.
      * @param edge the edge via which the path is being extended.

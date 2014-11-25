@@ -59,6 +59,7 @@ public class VertexCoversTest
     private static final int TEST_GRAPH_SIZE = 200;
     private static final int TEST_REPEATS = 20;
 
+    private static final Random rnd = new Random();
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -128,11 +129,9 @@ public class VertexCoversTest
         }
 
         List<Integer> vertices = new ArrayList<Integer>(g.vertexSet());
-
         // join every vertex with a random number of other vertices
         for (int source = 0; source < TEST_GRAPH_SIZE; source++) {
-            int numEdgesToCreate =
-                ((int) Math.random() * TEST_GRAPH_SIZE / 2) + 1;
+            int numEdgesToCreate = rnd.nextInt(TEST_GRAPH_SIZE / 2) + 1;
 
             for (int j = 0; j < numEdgesToCreate; j++) {
                 // find a random vertex to join to

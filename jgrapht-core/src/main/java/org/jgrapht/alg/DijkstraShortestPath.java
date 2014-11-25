@@ -85,8 +85,8 @@ public final class DijkstraShortestPath<V, E>
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
-     * @param radius limit on path length, or Double.POSITIVE_INFINITY for
-     * unbounded search
+     * @param radius limit on weighted path length, or
+     * Double.POSITIVE_INFINITY for unbounded search
      */
     public DijkstraShortestPath(
         Graph<V, E> graph,
@@ -141,7 +141,7 @@ public final class DijkstraShortestPath<V, E>
     }
 
     /**
-     * Return the length of the path found.
+     * Return the weighted length of the path found.
      *
      * @return path length, or Double.POSITIVE_INFINITY if no path exists
      */

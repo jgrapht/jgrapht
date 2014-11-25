@@ -43,8 +43,8 @@ import org.jgrapht.*;
 
 /**
  * A directed weighted multigraph. A directed weighted multigraph is a
- * non-simple directed graph in which loops and multiple edges between any two
- * vertices are permitted, and edges have weights.
+ * non-simple directed graph in which no loops are permitted, but multiple
+ * edges between any two vertices are permitted, and edges have weights.
  */
 public class DirectedWeightedMultigraph<V, E>
     extends DirectedMultigraph<V, E>

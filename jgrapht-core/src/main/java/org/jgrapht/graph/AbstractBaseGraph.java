@@ -497,6 +497,8 @@ public abstract class AbstractBaseGraph<V, E>
     {
         if (e instanceof DefaultWeightedEdge) {
             return ((DefaultWeightedEdge) e).getWeight();
+        } else if (e == null) {
+            throw new NullPointerException();
         } else {
             return WeightedGraph.DEFAULT_EDGE_WEIGHT;
         }

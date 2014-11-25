@@ -69,7 +69,7 @@ import java.util.*;
  * E</code> and all sub-types.</p>
  *
  * <p>For guidelines on vertex and edge classes, see <a
- * href="http://pub.eigenbase.org/wiki/JGraphT:EqualsAndHashCode">this wiki
+ * href="https://github.com/jgrapht/jgrapht/wiki/EqualsAndHashCode">this wiki
  * page</a>.
  *
  * @author Barak Naveh

@@ -106,6 +106,12 @@ public class DirectedAcyclicGraph<V, E>
         initialize();
     }
 
+    public DirectedAcyclicGraph(EdgeFactory<V, E> ef)
+    {
+        super(ef);
+        initialize();
+    }
+
     DirectedAcyclicGraph(
         Class<? extends E> arg0,
         VisitedFactory visitedFactory,

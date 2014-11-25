@@ -91,7 +91,11 @@ public class AsUnweightedDirectedGraph<V, E>
      */
     public double getEdgeWeight(E e)
     {
-        return WeightedGraph.DEFAULT_EDGE_WEIGHT;
+        if (e == null) {
+            throw new NullPointerException();
+        } else {
+            return WeightedGraph.DEFAULT_EDGE_WEIGHT;
+        }
     }
 }
 
