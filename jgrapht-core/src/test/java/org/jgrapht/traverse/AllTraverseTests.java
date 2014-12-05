@@ -36,43 +36,23 @@
  */
 package org.jgrapht.traverse;
 
-import junit.framework.*;
-
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * A TestSuite for all tests in this package.
  *
  * @author Barak Naveh
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    BreadthFirstIteratorTest.class,
+    ClosestFirstIteratorTest.class,
+    DepthFirstIteratorTest.class,
+    IgnoreDirectionTest.class,
+    TopologicalOrderIteratorTest.class
+})
 public final class AllTraverseTests
 {
-    //~ Constructors -----------------------------------------------------------
-
-    private AllTraverseTests()
-    {
-    } // ensure non-instantiability.
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * Creates a test suite for all tests in this package.
-     *
-     * @return a test suite for all tests in this package.
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite();
-
-        // $JUnit-BEGIN$
-        suite.addTest(new TestSuite(BreadthFirstIteratorTest.class));
-        suite.addTest(new TestSuite(DepthFirstIteratorTest.class));
-        suite.addTest(new TestSuite(ClosestFirstIteratorTest.class));
-        suite.addTest(new TestSuite(IgnoreDirectionTest.class));
-        suite.addTest(new TestSuite(TopologicalOrderIteratorTest.class));
-
-        // $JUnit-END$
-        return suite;
-    }
 }
-
 // End AllTraverseTests.java

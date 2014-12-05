@@ -36,66 +36,47 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import org.jgrapht.experimental.isomorphism.IsomorphismInspectorTest;
-
+import org.jgrapht.experimental.isomorphism.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * A TestSuite for all tests in this package.
  *
  * @author Barak Naveh
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    BellmanFordShortestPathTest.class,
+    BiconnectivityInspectorTest.class,
+    BlockCutpointGraphTest.class,
+    BronKerboschCliqueFinderTest.class,
+    ChromaticNumberTest.class,
+    ConnectivityInspectorTest.class,
+    CycleDetectorTest.class,
+    DijkstraShortestPathTest.class,
+    EdmondsBlossomShrinkingTest.class,
+    EdmondsKarpMaximumFlowTest.class,
+    EulerianCircuitTest.class,
+    FloydWarshallShortestPathsTest.class,
+    HamiltonianCycleTest.class,
+    HopcroftKarpBipartiteMatchingTest.class,
+    IsomorphismInspectorTest.class,
+    KShortestPathCostTest.class,
+    KShortestPathKValuesTest.class,
+    KSPDiscardsValidPathsTest.class,
+    KSPExampleTest.class,
+    KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.class,
+    MinimumSpanningTreeTest.class,
+    MinSourceSinkCutTest.class,
+    NaiveLcaFinderTest.class,
+    NeighborIndexTest.class,
+    StoerWagnerMinimumCutTest.class,
+    TarjanLowestCommonAncestorTest.class,
+    TransitiveClosureTest.class,
+    VertexCoversTest.class
+})
 public final class AllAlgTests
 {
-    //~ Constructors -----------------------------------------------------------
-
-    private AllAlgTests()
-    {
-    } // ensure non-instantiability.
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * Creates a test suite for all tests in this package.
-     *
-     * @return a test suite for all tests in this package.
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite();
-
-        // $JUnit-BEGIN$
-        suite.addTest(new TestSuite(ConnectivityInspectorTest.class));
-        suite.addTest(new TestSuite(DijkstraShortestPathTest.class));
-        suite.addTest(new TestSuite(BellmanFordShortestPathTest.class));
-        suite.addTest(new TestSuite(FloydWarshallShortestPathsTest.class));
-        suite.addTest(new TestSuite(VertexCoversTest.class));
-        suite.addTest(new TestSuite(CycleDetectorTest.class));
-        suite.addTest(new TestSuite(BronKerboschCliqueFinderTest.class));
-        suite.addTest(new TestSuite(TransitiveClosureTest.class));
-        suite.addTest(new TestSuite(BiconnectivityInspectorTest.class));
-        suite.addTest(new TestSuite(BlockCutpointGraphTest.class));
-        suite.addTest(new TestSuite(KShortestPathCostTest.class));
-        suite.addTest(new TestSuite(KShortestPathKValuesTest.class));
-        suite.addTest(new TestSuite(KSPExampleTest.class));
-        suite.addTest(new TestSuite(KSPDiscardsValidPathsTest.class));
-        suite.addTestSuite(IsomorphismInspectorTest.class);
-        suite.addTest(new TestSuite(EdmondsKarpMaximumFlowTest.class));
-        suite.addTest(new TestSuite(ChromaticNumberTest.class));
-        suite.addTest(new TestSuite(EulerianCircuitTest.class));
-        suite.addTest(new TestSuite(HamiltonianCycleTest.class));
-        suite.addTest(new TestSuite(MinimumSpanningTreeTest.class));
-        suite.addTest(new TestSuite(StoerWagnerMinimumCutTest.class));
-        suite.addTest(new TestSuite(EdmondsBlossomShrinkingTest.class));
-        suite.addTest(new TestSuite(MinSourceSinkCutTest.class));
-        suite.addTest(new TestSuite(HopcroftKarpBipartiteMatchingTest.class));
-        suite.addTest(new TestSuite(KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.class));
-        suite.addTest(new TestSuite(TarjanLowestCommonAncestorTest.class));
-        
-        // $JUnit-END$
-        return suite;
-    }
 }
-
 // End AllAlgTests.java

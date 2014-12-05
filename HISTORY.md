@@ -13,6 +13,7 @@ Changes to JGraphT in each version:
 	- Add DAG constructor that takes an edge factory, and make TarjanLCA constructor public, contributed by Anders Wallgren
 	- Fixed rounding error in graph generation, contributed by Siarhei
 	- Fixed Javadoc for `DirectedWeightedMultigraph`, noticed by Martin Lowinski
+	- Use annotations to simplify test suites, contributed by Jan Altenbernd
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.

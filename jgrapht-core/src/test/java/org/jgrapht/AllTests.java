@@ -36,87 +36,30 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-
-import junit.framework.*;
-
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
-
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * Runs all unit tests of the JGraphT library.
  *
  * @author Barak Naveh
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    AllAlgTests.class,
+    AllAlgUtilTests.class,
+    AllGenerateTests.class,
+    AllGraphTests.class,
+    AllTraverseTests.class,
+    AllUtilTests.class
+})
 public final class AllTests
 {
-    //~ Constructors -----------------------------------------------------------
-
-    private AllTests()
-    {
-    } // ensure non-instantiability.
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * Creates a test suite that includes all JGraphT tests.
-     *
-     * @return a test suite that includes all JGraphT tests.
-     */
-    public static Test suite()
-    {
-        ExpandableTestSuite suite =
-            new ExpandableTestSuite("All tests of JGraphT");
-
-        suite.addTestSuit((TestSuite) AllAlgTests.suite());
-        suite.addTestSuit((TestSuite) AllAlgUtilTests.suite());
-        suite.addTestSuit((TestSuite) AllGenerateTests.suite());
-        suite.addTestSuit((TestSuite) AllGraphTests.suite());
-        suite.addTestSuit((TestSuite) AllTraverseTests.suite());
-        suite.addTestSuit((TestSuite) AllUtilTests.suite());
-
-        return suite;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    private static class ExpandableTestSuite
-        extends TestSuite
-    {
-        /**
-         * @see TestSuite#TestSuite()
-         */
-        public ExpandableTestSuite()
-        {
-            super();
-        }
-
-        /**
-         * @see TestSuite#TestSuite(java.lang.String)
-         */
-        public ExpandableTestSuite(String name)
-        {
-            super(name);
-        }
-
-        /**
-         * Adds all the test from the specified suite into this suite.
-         *
-         * @param suite
-         */
-        public void addTestSuit(TestSuite suite)
-        {
-            for (Enumeration e = suite.tests(); e.hasMoreElements();) {
-                Test t = (Test) e.nextElement();
-                this.addTest(t);
-            }
-        }
-    }
 }
-
 // End AllTests.java

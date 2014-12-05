@@ -36,8 +36,8 @@
  */
 package org.jgrapht.graph;
 
-import junit.framework.*;
-
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * A TestSuite for all tests in this package.
@@ -45,39 +45,22 @@ import junit.framework.*;
  * @author Barak Naveh
  * @since Aug 3, 2003
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    AsUndirectedGraphTest.class,
+    AsUnweightedGraphTest.class,
+    AsWeightedGraphTest.class,
+    CloneTest.class,
+    DefaultDirectedGraphTest.class,
+    EqualsAndHashCodeTest.class,
+    GenericGraphsTest.class,
+    ListenableGraphTest.class,
+    SerializationTest.class,
+    SimpleDirectedGraphTest.class,
+    SimpleGraphPathTest.class,
+    SubgraphTest.class
+})
 public final class AllGraphTests
 {
-    //~ Constructors -----------------------------------------------------------
-
-    private AllGraphTests()
-    {
-    } // ensure non-instantiability.
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * Creates a test suite for all tests in this package.
-     *
-     * @return a test suite for all tests in this package.
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite();
-
-        // $JUnit-BEGIN$
-        suite.addTest(new TestSuite(DefaultDirectedGraphTest.class));
-        suite.addTest(new TestSuite(ListenableGraphTest.class));
-        suite.addTest(new TestSuite(SimpleDirectedGraphTest.class));
-        suite.addTest(new TestSuite(AsUndirectedGraphTest.class));
-        suite.addTest(new TestSuite(AsUnweightedGraphTest.class));
-        suite.addTest(new TestSuite(CloneTest.class));
-        suite.addTest(new TestSuite(SerializationTest.class));
-        suite.addTest(new TestSuite(GenericGraphsTest.class));
-        suite.addTest(new TestSuite(EqualsAndHashCodeTest.class));
-        suite.addTest(new TestSuite(SimpleGraphPathTest.class));
-        // $JUnit-END$
-        return suite;
-    }
 }
-
 // End AllGraphTests.java

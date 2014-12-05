@@ -34,29 +34,19 @@
  */
 package org.jgrapht.util;
 
-import junit.framework.*;
-
 import org.jgrapht.experimental.equivalence.*;
 import org.jgrapht.experimental.permutation.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    FibonacciHeapTest.class,
+    PrefetchIteratorTest.class,
+    CompoundPermutationIterTest.class,
+    EquivalenceGroupCreatorTest.class
+})
 public class AllUtilTests
 {
-    //~ Methods ----------------------------------------------------------------
-
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Test for org.jgrapht.util");
-
-        // $JUnit-BEGIN$
-        suite.addTestSuite(FibonacciHeapTest.class);
-        suite.addTestSuite(PrefetchIteratorTest.class);
-        suite.addTestSuite(CompoundPermutationIterTest.class);
-        suite.addTestSuite(EquivalenceGroupCreatorTest.class);
-
-        // $JUnit-END$
-        return suite;
-    }
 }
-
 // End AllUtilTests.java

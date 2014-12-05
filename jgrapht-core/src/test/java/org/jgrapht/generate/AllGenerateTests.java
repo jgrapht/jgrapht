@@ -36,40 +36,20 @@
  */
 package org.jgrapht.generate;
 
-import junit.framework.*;
-
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * A TestSuite for all tests in this package.
  *
  * @author Barak Naveh
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    GraphGeneratorTest.class,
+    RandomGraphGeneratorTest.class
+})
 public final class AllGenerateTests
 {
-    //~ Constructors -----------------------------------------------------------
-
-    private AllGenerateTests()
-    {
-    } // ensure non-instantiability.
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * Creates a test suite for all tests in this package.
-     *
-     * @return a test suite for all tests in this package.
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite();
-
-        // $JUnit-BEGIN$
-        suite.addTest(new TestSuite(GraphGeneratorTest.class));
-        suite.addTestSuite(RandomGraphGeneratorTest.class);
-
-        // $JUnit-END$
-        return suite;
-    }
 }
-
 // End AllGenerateTests.java
