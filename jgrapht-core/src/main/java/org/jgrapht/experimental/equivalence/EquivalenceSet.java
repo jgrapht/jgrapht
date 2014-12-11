@@ -146,6 +146,7 @@ public class EquivalenceSet<E, C>
     // and
     // write a warning or some such.
 
+    @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object other)
     {
@@ -175,6 +176,7 @@ public class EquivalenceSet<E, C>
      *
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode()
     {
         int result =
@@ -184,6 +186,7 @@ public class EquivalenceSet<E, C>
         return result;
     }
 
+    @Override
     public String toString()
     {
         return "Eq.Group=" + this.elementsSet.toString();

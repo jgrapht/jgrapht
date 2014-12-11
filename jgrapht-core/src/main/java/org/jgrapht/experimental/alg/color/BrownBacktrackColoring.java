@@ -87,6 +87,7 @@ public class BrownBacktrackColoring<V, E>
     /* (non-Javadoc)
      * @see org.jgrapht.experimental.alg.ExactAlgorithm#getResult()
      */
+    @Override
     public Integer getResult(Map<V, Object> additionalData)
     {
         _chi = _neighbors.length;

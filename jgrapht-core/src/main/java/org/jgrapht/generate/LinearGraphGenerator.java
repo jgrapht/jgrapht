@@ -90,6 +90,7 @@ public class LinearGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,

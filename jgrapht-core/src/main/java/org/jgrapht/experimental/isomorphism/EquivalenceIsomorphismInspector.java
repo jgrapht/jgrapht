@@ -125,6 +125,7 @@ class EquivalenceIsomorphismInspector<V, E>
      * @see AbstractExhaustiveIsomorphismInspector#createPermutationIterator(Set,
      * Set)
      */
+    @Override
     @SuppressWarnings("unchecked")
     protected CollectionPermutationIter<V> createPermutationIterator(
         Set<V> vertexSet1,
@@ -311,6 +312,7 @@ class EquivalenceIsomorphismInspector<V, E>
      * @see AbstractExhaustiveIsomorphismInspector#areVertexSetsOfTheSameEqualityGroup(
      * Set, Set)
      */
+    @Override
     protected boolean areVertexSetsOfTheSameEqualityGroup(
         Set vertexSet1,
         Set vertexSet2)

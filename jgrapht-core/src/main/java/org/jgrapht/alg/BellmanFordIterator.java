@@ -126,6 +126,7 @@ class BellmanFordIterator<V, E>
      * @return <code>true</code> if at least one path has been improved during
      * the previous pass, <code>false</code> otherwise.
      */
+    @Override
     public boolean hasNext()
     {
         if (!this.startVertexEncountered) {
@@ -141,6 +142,7 @@ class BellmanFordIterator<V, E>
      *
      * @see java.util.Iterator#next()
      */
+    @Override
     public List<V> next()
     {
         if (!this.startVertexEncountered) {
@@ -187,6 +189,7 @@ class BellmanFordIterator<V, E>
      *
      * @see java.util.Iterator#remove()
      */
+    @Override
     public void remove()
     {
         throw new UnsupportedOperationException();

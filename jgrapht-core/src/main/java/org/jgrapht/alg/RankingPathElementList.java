@@ -423,12 +423,14 @@ final class RankingPathElementList<V, E>
         }
 
         // implement MaskFunctor
+        @Override
         public boolean isEdgeMasked(E edge)
         {
             return this.maskedEdges.contains(edge);
         }
 
         // implement MaskFunctor
+        @Override
         public boolean isVertexMasked(V vertex)
         {
             return this.maskedVertices.contains(vertex);

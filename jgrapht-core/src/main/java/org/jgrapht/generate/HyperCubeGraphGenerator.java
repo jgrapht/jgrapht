@@ -75,6 +75,7 @@ public class HyperCubeGraphGenerator<V, E>
     /**
      * This will generate the hypercube graph
      */
+    @Override
     public void generateGraph(
         Graph<V, E> target,
         final VertexFactory<V> vertexFactory,

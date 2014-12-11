@@ -321,11 +321,13 @@ public class BlockCutpointGraph<V, E>
             this.target = target;
         }
 
+        @Override
         public V getSource()
         {
             return this.source;
         }
 
+        @Override
         public V getTarget()
         {
             return this.target;
@@ -342,11 +344,13 @@ public class BlockCutpointGraph<V, E>
             this.vertexComponent = vertexComponent;
         }
 
+        @Override
         public boolean isEdgeMasked(E edge)
         {
             return false;
         }
 
+        @Override
         public boolean isVertexMasked(V vertex)
         {
             if (this.vertexComponent.contains(vertex)) {

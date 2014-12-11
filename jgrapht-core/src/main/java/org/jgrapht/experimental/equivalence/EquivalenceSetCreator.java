@@ -232,6 +232,7 @@ public class EquivalenceSetCreator<E, C>
          *
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
+        @Override
         @SuppressWarnings("unchecked")
         public int compare(EquivalenceSet arg1, EquivalenceSet arg2)
         {

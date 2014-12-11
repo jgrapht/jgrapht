@@ -103,6 +103,7 @@ final class RankingPathElement<V, E>
      *
      * @return <code>null</code> is the path is empty.
      */
+    @Override
     public RankingPathElement<V, E> getPrevPathElement()
     {
         return (RankingPathElement<V, E>) super.getPrevPathElement();

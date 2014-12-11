@@ -167,6 +167,7 @@ public class CompoundPermutationIter
         // calc max
     }
 
+    @Override
     public Object next()
     {
         return getNext();
@@ -258,6 +259,7 @@ public class CompoundPermutationIter
         this.permArray[groupIndex].getNext();
     }
 
+    @Override
     public boolean hasNext()
     {
         boolean result;
@@ -277,6 +279,7 @@ public class CompoundPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#nextPermutation()
      */
+    @Override
     public int [] nextPermutation()
     {
         return (int []) next();
@@ -285,6 +288,7 @@ public class CompoundPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#hasNextPermutaions()
      */
+    @Override
     public boolean hasNextPermutaions()
     {
         return hasNext();
@@ -295,6 +299,7 @@ public class CompoundPermutationIter
      *
      * @see java.util.Iterator#remove()
      */
+    @Override
     public void remove()
     {
         throw new UnsupportedOperationException();

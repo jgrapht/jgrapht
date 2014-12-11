@@ -168,6 +168,7 @@ abstract class AbstractPathElementList<V,
      * Returns path <code>AbstractPathElement</code> stored at the specified
      * index.
      */
+    @Override
     public T get(int index)
     {
         return this.pathElements.get(index);
@@ -184,6 +185,7 @@ abstract class AbstractPathElementList<V,
     /**
      * Returns the number of paths stored in the list.
      */
+    @Override
     public int size()
     {
         return this.pathElements.size();

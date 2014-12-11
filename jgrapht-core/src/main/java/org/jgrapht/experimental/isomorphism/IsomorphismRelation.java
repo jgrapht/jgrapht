@@ -90,6 +90,7 @@ public class IsomorphismRelation<V, E>
 
     
 
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
@@ -100,6 +101,7 @@ public class IsomorphismRelation<V, E>
         return sb.toString();
     }
 
+    @Override
     public V getVertexCorrespondence(V vertex, boolean forward)
     {
         // lazy initializer for graphMapping
@@ -110,6 +112,7 @@ public class IsomorphismRelation<V, E>
         return graphMapping.getVertexCorrespondence(vertex, forward);
     }
 
+    @Override
     public E getEdgeCorrespondence(E edge, boolean forward)
     {
         // lazy initializer for graphMapping

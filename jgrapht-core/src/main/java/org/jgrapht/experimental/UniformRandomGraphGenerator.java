@@ -91,6 +91,7 @@ public class UniformRandomGraphGenerator
     /**
      * @see GraphGenerator#generateGraph
      */
+    @Override
     public void generateGraph(
         Graph target,
         VertexFactory vertexFactory,

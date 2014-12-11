@@ -108,6 +108,7 @@ public class VertexDegreeComparator<V, E>
      * @return -1 if <code>v1</code> comes before <code>v2</code>, +1 if <code>
      * v1</code> comes after <code>v2</code>, 0 if equal.
      */
+    @Override
     public int compare(V v1, V v2)
     {
         int degree1 = graph.degreeOf(v1);

@@ -110,6 +110,7 @@ public class ScaleFreeGraphGenerator<V, E>
      * @param vertexFactory called to produce new vertices
      * @param resultMap unused parameter
      */
+    @Override
     public void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,

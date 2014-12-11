@@ -166,11 +166,13 @@ public class GreedyColoring<V, E>
         return buckets;
     }
 
+    @Override
     public Integer getLowerBound(Map<V, Object> optionalData)
     {
         return 0;
     }
 
+    @Override
     public Integer getUpperBound(Map<V, Object> optionalData)
     {
         switch (_order) {
@@ -188,6 +190,7 @@ public class GreedyColoring<V, E>
         return _neighbors.length;
     }
 
+    @Override
     public boolean isExact()
     {
         return false;
