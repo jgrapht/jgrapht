@@ -122,6 +122,7 @@ public class GraphReaderTest
     {
         int last = 0;
 
+        @Override
         public Integer createVertex()
         {
             return last++;

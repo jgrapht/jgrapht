@@ -64,6 +64,7 @@ public class IntegerEdgeNameProvider<E>
      *
      * @param edge the edge to be named
      */
+    @Override
     public String getEdgeName(E edge)
     {
         Integer id = idMap.get(edge);

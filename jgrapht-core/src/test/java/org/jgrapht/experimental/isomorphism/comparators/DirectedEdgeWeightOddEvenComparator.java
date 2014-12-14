@@ -72,6 +72,7 @@ public class DirectedEdgeWeightOddEvenComparator
      * org.jgrapht.experimental.equivalence.EquivalenceComparator#equivalenceCompare(java.lang.Object,
      * java.lang.Object, java.lang.Object, java.lang.Object)
      */
+    @Override
     @SuppressWarnings("unchecked")
     public boolean equivalenceCompare(
         Object arg1,
@@ -96,6 +97,7 @@ public class DirectedEdgeWeightOddEvenComparator
      * org.jgrapht.experimental.equivalence.EquivalenceComparator#equivalenceHashcode(java.lang.Object,
      * java.lang.Object)
      */
+    @Override
     @SuppressWarnings("unchecked")
     public int equivalenceHashcode(Object arg1, Object context)
     {

@@ -99,6 +99,7 @@ public class BellmanFordShortestPathTest
         assertEquals(Double.POSITIVE_INFINITY, path.getCost(V5));
     }
 
+    @Override
     protected List findPathBetween(
         Graph<String, DefaultWeightedEdge> g,
         String src,

@@ -61,6 +61,7 @@ public class TransitiveClosureTest
             new VertexFactory<Integer>() {
                 private int m_index = 0;
 
+                @Override
                 public Integer createVertex()
                 {
                     return Integer.valueOf(m_index++);
@@ -93,6 +94,7 @@ public class TransitiveClosureTest
             new VertexFactory<Integer>() {
                 private int m_index = 0;
 
+                @Override
                 public Integer createVertex()
                 {
                     return Integer.valueOf(m_index++);

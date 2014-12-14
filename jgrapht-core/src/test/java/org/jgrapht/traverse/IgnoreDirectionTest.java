@@ -55,21 +55,25 @@ public class IgnoreDirectionTest
 {
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     String getExpectedStr1()
     {
         return "4,9,7,8,2,1,3,6,5";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return "4,9,7,8,2,1,3,6,5,orphan";
     }
 
+    @Override
     String getExpectedFinishString()
     {
         return "5:6:3:1:2:8:7:9:4:orphan:";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
         DirectedGraph<String, DefaultEdge> g,
         String vertex)

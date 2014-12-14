@@ -101,16 +101,19 @@ public class ClosestFirstIteratorTest
     }
 
     // NOTE:  the edge weights make the result deterministic
+    @Override
     String getExpectedStr1()
     {
         return "1,2,3,5,6,7,9,4,8";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return getExpectedStr1() + ",orphan";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
         DirectedGraph<String, DefaultEdge> g,
         String vertex)

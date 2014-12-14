@@ -93,6 +93,7 @@ public class PrefetchIteratorTest
             nextSupplier =
                 new PrefetchIterator<Integer>(
                     new PrefetchIterator.NextElementFunctor<Integer>() {
+                        @Override
                         public Integer nextElement()
                             throws NoSuchElementException
                         {
@@ -107,27 +108,32 @@ public class PrefetchIteratorTest
         }
 
         // forwarding to nextSupplier and return its returned value
+        @Override
         public boolean hasMoreElements()
         {
             return this.nextSupplier.hasMoreElements();
         }
 
         // forwarding to nextSupplier and return its returned value
+        @Override
         public Object nextElement()
         {
             return this.nextSupplier.nextElement();
         }
 
+        @Override
         public Object next()
         {
             return this.nextSupplier.next();
         }
 
+        @Override
         public boolean hasNext()
         {
             return this.nextSupplier.hasNext();
         }
 
+        @Override
         public void remove()
         {
             this.nextSupplier.remove();

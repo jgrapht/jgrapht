@@ -112,6 +112,7 @@ public class AsWeightedGraph<V, E>
     /**
      * @see WeightedGraph#setEdgeWeight
      */
+    @Override
     public void setEdgeWeight(E e, double weight)
     {
         if (isWeightedGraph) {
@@ -126,6 +127,7 @@ public class AsWeightedGraph<V, E>
     /**
      * @see Graph#getEdgeWeight
      */
+    @Override
     public double getEdgeWeight(E e)
     {
         double weight;

@@ -342,6 +342,7 @@ public class ConnectivityInspectorTest
         DefaultDirectedGraph<Integer, String> graph =
             new DefaultDirectedGraph<Integer, String>(
                 new EdgeFactory<Integer, String>() {
+                    @Override
                     public String createEdge(Integer from, Integer to)
                     {
                         return (from + "->" + to).intern();
@@ -353,6 +354,7 @@ public class ConnectivityInspectorTest
             new VertexFactory<Integer>() {
                 private int i = 0;
 
+                @Override
                 public Integer createVertex()
                 {
                     return i++;

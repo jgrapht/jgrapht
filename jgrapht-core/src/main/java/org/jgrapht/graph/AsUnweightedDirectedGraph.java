@@ -89,6 +89,7 @@ public class AsUnweightedDirectedGraph<V, E>
     /**
      * @see Graph#getEdgeWeight
      */
+    @Override
     public double getEdgeWeight(E e)
     {
         if (e == null) {

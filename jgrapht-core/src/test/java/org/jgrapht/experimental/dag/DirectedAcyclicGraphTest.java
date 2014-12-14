@@ -554,6 +554,7 @@ public class DirectedAcyclicGraphTest
     {
         private long nextVertex = 0;
 
+        @Override
         public Long createVertex()
         {
             return nextVertex++;

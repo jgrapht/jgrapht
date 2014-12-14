@@ -87,6 +87,7 @@ public class DijkstraShortestPathTest
         assertEquals(Double.POSITIVE_INFINITY, path.getPathLength(), 0);
     }
 
+    @Override
     protected List findPathBetween(
         Graph<String, DefaultWeightedEdge> g,
         String src,

@@ -56,16 +56,19 @@ public class BreadthFirstIteratorTest
 {
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     String getExpectedStr1()
     {
         return "1,2,3,4,5,6,7,8,9";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return "1,2,3,4,5,6,7,8,9,orphan";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
         DirectedGraph<String, DefaultEdge> g,
         String vertex)

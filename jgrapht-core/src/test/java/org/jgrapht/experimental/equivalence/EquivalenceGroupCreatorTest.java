@@ -58,6 +58,7 @@ public class EquivalenceGroupCreatorTest
     /*
      * @see TestCase#setUp()
      */
+    @Override
     protected void setUp()
         throws Exception
     {

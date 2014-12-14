@@ -157,6 +157,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         E e = super.addEdge(sourceVertex, targetVertex);
@@ -171,6 +172,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         boolean added = super.addEdge(sourceVertex, targetVertex, e);
@@ -185,6 +187,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see ListenableGraph#addGraphListener(GraphListener)
      */
+    @Override
     public void addGraphListener(GraphListener<V, E> l)
     {
         addToListenerList(graphListeners, l);
@@ -193,6 +196,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
+    @Override
     public boolean addVertex(V v)
     {
         boolean modified = super.addVertex(v);
@@ -207,6 +211,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see ListenableGraph#addVertexSetListener(VertexSetListener)
      */
+    @Override
     public void addVertexSetListener(VertexSetListener<V> l)
     {
         addToListenerList(vertexSetListeners, l);
@@ -215,6 +220,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone()
     {
         try {
@@ -236,6 +242,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
+    @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         E e = super.removeEdge(sourceVertex, targetVertex);
@@ -250,6 +257,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see Graph#removeEdge(Object)
      */
+    @Override
     public boolean removeEdge(E e)
     {
         V sourceVertex = getEdgeSource(e);
@@ -267,6 +275,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see ListenableGraph#removeGraphListener(GraphListener)
      */
+    @Override
     public void removeGraphListener(GraphListener<V, E> l)
     {
         graphListeners.remove(l);
@@ -275,6 +284,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see Graph#removeVertex(Object)
      */
+    @Override
     public boolean removeVertex(V v)
     {
         if (containsVertex(v)) {
@@ -296,6 +306,7 @@ public class DefaultListenableGraph<V, E>
     /**
      * @see ListenableGraph#removeVertexSetListener(VertexSetListener)
      */
+    @Override
     public void removeVertexSetListener(VertexSetListener<V> l)
     {
         vertexSetListeners.remove(l);

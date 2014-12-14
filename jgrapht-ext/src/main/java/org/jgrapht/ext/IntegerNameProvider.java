@@ -77,6 +77,7 @@ public class IntegerNameProvider<V>
      *
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
+    @Override
     public String getVertexName(V vertex)
     {
         Integer id = idMap.get(vertex);

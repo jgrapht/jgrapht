@@ -74,6 +74,7 @@ class MaskVertexSet<V, E>
     /**
      * @see java.util.Collection#contains(java.lang.Object)
      */
+    @Override
     public boolean contains(Object o)
     {
         return
@@ -84,6 +85,7 @@ class MaskVertexSet<V, E>
     /**
      * @see java.util.Set#iterator()
      */
+    @Override
     public Iterator<V> iterator()
     {
         return new PrefetchIterator<V>(new MaskVertexSetNextElementFunctor());
@@ -92,6 +94,7 @@ class MaskVertexSet<V, E>
     /**
      * @see java.util.Set#size()
      */
+    @Override
     public int size()
     {
         if (this.size == -1) {
@@ -116,6 +119,7 @@ class MaskVertexSet<V, E>
             this.iter = MaskVertexSet.this.vertexSet.iterator();
         }
 
+        @Override
         public V nextElement()
             throws NoSuchElementException
         {

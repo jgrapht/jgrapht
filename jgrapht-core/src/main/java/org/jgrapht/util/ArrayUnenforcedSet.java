@@ -76,11 +76,13 @@ public class ArrayUnenforcedSet<E>
 
     
 
+    @Override
     public boolean equals(Object o)
     {
         return new SetForEquality().equals(o);
     }
 
+    @Override
     public int hashCode()
     {
         return new SetForEquality().hashCode();
@@ -94,11 +96,13 @@ public class ArrayUnenforcedSet<E>
     private class SetForEquality
         extends AbstractSet<E>
     {
+        @Override
         public Iterator<E> iterator()
         {
             return ArrayUnenforcedSet.this.iterator();
         }
 
+        @Override
         public int size()
         {
             return ArrayUnenforcedSet.this.size();

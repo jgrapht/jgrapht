@@ -164,6 +164,7 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)
          */
+        @Override
         public void connectedComponentFinished(
             ConnectedComponentTraversalEvent e)
         {
@@ -192,6 +193,7 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#connectedComponentStarted(ConnectedComponentTraversalEvent)
          */
+        @Override
         public void connectedComponentStarted(
             ConnectedComponentTraversalEvent e)
         {
@@ -201,6 +203,7 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#edgeTraversed(EdgeTraversalEvent)
          */
+        @Override
         public void edgeTraversed(EdgeTraversalEvent<String, DefaultEdge> e)
         {
             // to be tested...
@@ -209,6 +212,7 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#vertexTraversed(VertexTraversalEvent)
          */
+        @Override
         public void vertexTraversed(VertexTraversalEvent<String> e)
         {
             numComponentVertices++;
@@ -217,6 +221,7 @@ public abstract class AbstractGraphIteratorTest
         /**
          * @see TraversalListener#vertexTraversed(VertexTraversalEvent)
          */
+        @Override
         public void vertexFinished(VertexTraversalEvent<String> e)
         {
             finishString += e.getVertex() + ":";

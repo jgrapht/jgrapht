@@ -126,6 +126,7 @@ public class PrefetchIterator<E>
      * Changes isGetNextLastResultUpToDate to false. (Because it does not save
      * the NEXT element now; it saves the current one!)
      */
+    @Override
     public E nextElement()
     {
         E result = null;
@@ -143,6 +144,7 @@ public class PrefetchIterator<E>
      * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates
      * getNext() and saves it 2. sets isGetNextLastResultUpToDate to true.
      */
+    @Override
     public boolean hasMoreElements()
     {
         if (endOfEnumerationReached) {
@@ -185,11 +187,13 @@ public class PrefetchIterator<E>
         }
     }
 
+    @Override
     public boolean hasNext()
     {
         return this.hasMoreElements();
     }
 
+    @Override
     public E next()
     {
         return this.nextElement();
@@ -198,6 +202,7 @@ public class PrefetchIterator<E>
     /**
      * Always throws UnsupportedOperationException.
      */
+    @Override
     public void remove()
         throws UnsupportedOperationException
     {

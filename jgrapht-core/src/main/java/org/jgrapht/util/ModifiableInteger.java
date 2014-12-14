@@ -155,6 +155,7 @@ public class ModifiableInteger
      * numerically greater than the argument <code>ModifiableInteger</code>
      * (signed comparison).
      */
+    @Override
     public int compareTo(ModifiableInteger anotherInteger)
     {
         int thisVal = this.value;
@@ -166,6 +167,7 @@ public class ModifiableInteger
     /**
      * @see Number#doubleValue()
      */
+    @Override
     public double doubleValue()
     {
         return this.value;
@@ -182,6 +184,7 @@ public class ModifiableInteger
      * @return <code>true</code> if the objects are the same; <code>false</code>
      * otherwise.
      */
+    @Override
     public boolean equals(Object o)
     {
         if (o instanceof ModifiableInteger) {
@@ -194,6 +197,7 @@ public class ModifiableInteger
     /**
      * @see Number#floatValue()
      */
+    @Override
     public float floatValue()
     {
         return this.value;
@@ -206,6 +210,7 @@ public class ModifiableInteger
      * int</code> value represented by this <code>ModifiableInteger</code>
      * object.
      */
+    @Override
     public int hashCode()
     {
         return this.value;
@@ -214,6 +219,7 @@ public class ModifiableInteger
     /**
      * @see Number#intValue()
      */
+    @Override
     public int intValue()
     {
         return this.value;
@@ -222,6 +228,7 @@ public class ModifiableInteger
     /**
      * @see Number#longValue()
      */
+    @Override
     public long longValue()
     {
         return this.value;
@@ -249,6 +256,7 @@ public class ModifiableInteger
      * @return a string representation of the value of this object in
      * base&nbsp;10.
      */
+    @Override
     public String toString()
     {
         return String.valueOf(this.value);

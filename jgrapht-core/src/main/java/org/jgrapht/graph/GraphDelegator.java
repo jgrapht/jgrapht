@@ -102,6 +102,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
+    @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return delegate.getAllEdges(sourceVertex, targetVertex);
@@ -110,6 +111,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#getEdge(Object, Object)
      */
+    @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         return delegate.getEdge(sourceVertex, targetVertex);
@@ -118,6 +120,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#getEdgeFactory()
      */
+    @Override
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return delegate.getEdgeFactory();
@@ -126,6 +129,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         return delegate.addEdge(sourceVertex, targetVertex);
@@ -134,6 +138,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         return delegate.addEdge(sourceVertex, targetVertex, e);
@@ -142,6 +147,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
+    @Override
     public boolean addVertex(V v)
     {
         return delegate.addVertex(v);
@@ -150,6 +156,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#containsEdge(Object)
      */
+    @Override
     public boolean containsEdge(E e)
     {
         return delegate.containsEdge(e);
@@ -158,6 +165,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#containsVertex(Object)
      */
+    @Override
     public boolean containsVertex(V v)
     {
         return delegate.containsVertex(v);
@@ -174,6 +182,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#edgeSet()
      */
+    @Override
     public Set<E> edgeSet()
     {
         return delegate.edgeSet();
@@ -182,6 +191,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#edgesOf(Object)
      */
+    @Override
     public Set<E> edgesOf(V vertex)
     {
         return delegate.edgesOf(vertex);
@@ -222,6 +232,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#removeEdge(Object)
      */
+    @Override
     public boolean removeEdge(E e)
     {
         return delegate.removeEdge(e);
@@ -230,6 +241,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
+    @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         return delegate.removeEdge(sourceVertex, targetVertex);
@@ -238,6 +250,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#removeVertex(Object)
      */
+    @Override
     public boolean removeVertex(V v)
     {
         return delegate.removeVertex(v);
@@ -246,6 +259,7 @@ public class GraphDelegator<V, E>
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString()
     {
         return delegate.toString();
@@ -254,6 +268,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#vertexSet()
      */
+    @Override
     public Set<V> vertexSet()
     {
         return delegate.vertexSet();
@@ -262,6 +277,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#getEdgeSource(Object)
      */
+    @Override
     public V getEdgeSource(E e)
     {
         return delegate.getEdgeSource(e);
@@ -270,6 +286,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#getEdgeTarget(Object)
      */
+    @Override
     public V getEdgeTarget(E e)
     {
         return delegate.getEdgeTarget(e);
@@ -278,6 +295,7 @@ public class GraphDelegator<V, E>
     /**
      * @see Graph#getEdgeWeight(Object)
      */
+    @Override
     public double getEdgeWeight(E e)
     {
         return delegate.getEdgeWeight(e);

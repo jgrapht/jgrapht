@@ -74,6 +74,7 @@ public class IntegerVertexFactory
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     public Integer createVertex()
     {
         this.counter++;

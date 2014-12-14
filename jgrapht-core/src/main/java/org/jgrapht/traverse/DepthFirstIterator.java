@@ -114,6 +114,7 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
+    @Override
     protected boolean isConnectedComponentExhausted()
     {
         for (;;) {
@@ -139,6 +140,7 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
+    @Override
     protected void encounterVertex(V vertex, E edge)
     {
         putSeenData(vertex, VisitColor.WHITE);
@@ -148,6 +150,7 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
+    @Override
     protected void encounterVertexAgain(V vertex, E edge)
     {
         VisitColor color = getSeenData(vertex);
@@ -171,6 +174,7 @@ public class DepthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
+    @Override
     protected V provideNextVertex()
     {
         V v;

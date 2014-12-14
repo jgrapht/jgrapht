@@ -125,6 +125,7 @@ public class CloneTest
             this.x = x;
         }
 
+        @Override
         public boolean equals(Object other)
         {
             if (!(other instanceof BrokenVertex)) {

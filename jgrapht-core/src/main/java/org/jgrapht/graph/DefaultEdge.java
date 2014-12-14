@@ -79,6 +79,7 @@ public class DefaultEdge
         return target;
     }
 
+    @Override
     public String toString()
     {
         return "(" + source + " : " + target + ")";

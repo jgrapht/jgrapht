@@ -85,6 +85,7 @@ public class DefaultGraphMapping<V, E>
 
     
 
+    @Override
     public E getEdgeCorrespondence(E currEdge, boolean forward)
     {
         Graph<V, E> sourceGraph, targetGraph;
@@ -114,6 +115,7 @@ public class DefaultGraphMapping<V, E>
         }
     }
 
+    @Override
     public V getVertexCorrespondence(
         V keyVertex,
         boolean forward)

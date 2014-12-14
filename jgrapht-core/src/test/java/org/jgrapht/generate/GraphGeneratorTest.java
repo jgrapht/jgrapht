@@ -65,6 +65,7 @@ public class GraphGeneratorTest
         new VertexFactory<Object>() {
             private int i;
 
+            @Override
             public Object createVertex()
             {
                 return new Integer(++i);

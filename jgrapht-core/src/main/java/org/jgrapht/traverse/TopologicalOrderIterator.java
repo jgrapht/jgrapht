@@ -164,6 +164,7 @@ public class TopologicalOrderIterator<V, E>
    /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
+    @Override
     protected boolean isConnectedComponentExhausted()
     {
         // FIXME jvs 25-Apr-2005: This isn't correct for a graph with more than
@@ -177,6 +178,7 @@ public class TopologicalOrderIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
+    @Override
     protected void encounterVertex(V vertex, E edge)
     {
         putSeenData(vertex, null);
@@ -186,6 +188,7 @@ public class TopologicalOrderIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
+    @Override
     protected void encounterVertexAgain(V vertex, E edge)
     {
         decrementInDegree(vertex);
@@ -194,6 +197,7 @@ public class TopologicalOrderIterator<V, E>
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
+    @Override
     protected V provideNextVertex()
     {
         return queue.remove();
@@ -266,16 +270,19 @@ public class TopologicalOrderIterator<V, E>
     {
         private static final long serialVersionUID = 4217659843476891334L;
 
+        @Override
         public T element()
         {
             return getFirst();
         }
 
+        @Override
         public boolean offer(T o)
         {
             return add(o);
         }
 
+        @Override
         public T peek()
         {
             if (isEmpty()) {
@@ -284,6 +291,7 @@ public class TopologicalOrderIterator<V, E>
             return getFirst();
         }
 
+        @Override
         public T poll()
         {
             if (isEmpty()) {
@@ -292,6 +300,7 @@ public class TopologicalOrderIterator<V, E>
             return removeFirst();
         }
 
+        @Override
         public T remove()
         {
             return removeFirst();

@@ -103,6 +103,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
+    @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> forwardList = super.getAllEdges(sourceVertex, targetVertex);
@@ -125,6 +126,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#getEdge(Object, Object)
      */
+    @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         E edge = super.getEdge(sourceVertex, targetVertex);
@@ -140,6 +142,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(NO_EDGE_ADD);
@@ -148,6 +151,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         throw new UnsupportedOperationException(NO_EDGE_ADD);
@@ -156,6 +160,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see UndirectedGraph#degreeOf(Object)
      */
+    @Override
     public int degreeOf(V vertex)
     {
         // this counts loops twice, which is consistent with AbstractBaseGraph
@@ -165,6 +170,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
+    @Override
     public int inDegreeOf(V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
@@ -173,6 +179,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
+    @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
@@ -181,6 +188,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
+    @Override
     public int outDegreeOf(V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
@@ -189,6 +197,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
+    @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
         throw new UnsupportedOperationException(UNDIRECTED);
@@ -197,6 +206,7 @@ public class AsUndirectedGraph<V, E>
     /**
      * @see AbstractBaseGraph#toString()
      */
+    @Override
     public String toString()
     {
         return super.toStringFromSets(vertexSet(), edgeSet(), false);

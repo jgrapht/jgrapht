@@ -146,6 +146,7 @@ public class GenericGraphsTest
     /**
      * .
      */
+    @Override
     protected void setUp()
     {
         objectGraph =
@@ -162,6 +163,7 @@ public class GenericGraphsTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public String toString()
         {
             return "Alissa P. Hacker approves the edge from " + getSource()
@@ -171,11 +173,13 @@ public class GenericGraphsTest
 
     public static class EquivVertex
     {
+        @Override
         public boolean equals(Object o)
         {
             return true;
         }
 
+        @Override
         public int hashCode()
         {
             return 1;

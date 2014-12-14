@@ -247,6 +247,7 @@ public class ListenableGraphTest
         /**
          * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
          */
+        @Override
         public void edgeAdded(GraphEdgeChangeEvent<Object, E> e)
         {
             lastAddedEdge = e.getEdge();
@@ -255,6 +256,7 @@ public class ListenableGraphTest
         /**
          * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
          */
+        @Override
         public void edgeRemoved(GraphEdgeChangeEvent<Object, E> e)
         {
             lastRemovedEdge = e.getEdge();
@@ -263,6 +265,7 @@ public class ListenableGraphTest
         /**
          * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
          */
+        @Override
         public void vertexAdded(GraphVertexChangeEvent<Object> e)
         {
             lastAddedVertex = e.getVertex();
@@ -271,6 +274,7 @@ public class ListenableGraphTest
         /**
          * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
          */
+        @Override
         public void vertexRemoved(GraphVertexChangeEvent<Object> e)
         {
             lastRemovedVertex = e.getVertex();

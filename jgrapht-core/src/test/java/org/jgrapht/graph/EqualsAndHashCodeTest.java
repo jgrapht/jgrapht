@@ -346,11 +346,13 @@ public class EqualsAndHashCodeTest
             this.label = label; 
         }
 
+        @Override
         public int hashCode()
         {
             return label.hashCode();
         }
 
+        @Override
         public boolean equals(Object obj)
         {
             if (this == obj) {

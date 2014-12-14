@@ -58,21 +58,25 @@ public class DepthFirstIteratorTest
 {
     //~ Methods ----------------------------------------------------------------
 
+    @Override
     String getExpectedStr1()
     {
         return "1,3,6,5,7,9,4,8,2";
     }
 
+    @Override
     String getExpectedStr2()
     {
         return "1,3,6,5,7,9,4,8,2,orphan";
     }
 
+    @Override
     String getExpectedFinishString()
     {
         return "6:4:9:2:8:7:5:3:1:orphan:";
     }
 
+    @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
         DirectedGraph<String, DefaultEdge> g,
         String vertex)
