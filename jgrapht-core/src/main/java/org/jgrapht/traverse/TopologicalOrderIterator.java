@@ -88,6 +88,9 @@ public class TopologicalOrderIterator<V, E>
      * http://mathworld.wolfram.com/Source.html</a>.
      *
      * @param dg the directed graph to be iterated.
+     *
+     * @throws IllegalArgumentException if the graph is not empty, but has no
+     * source vertices, which means that it is not acyclic
      */
     public TopologicalOrderIterator(DirectedGraph<V, E> dg)
     {
@@ -106,6 +109,9 @@ public class TopologicalOrderIterator<V, E>
      * @param queue queue to use for tie-break in case of partial order (e.g. a
      * PriorityQueue can be used to break ties according to vertex priority);
      * must be initially empty
+     *
+     * @throws IllegalArgumentException if the graph is not empty, but has no
+     * source vertices, which means that it is not acyclic
      */
     public TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue)
     {
@@ -113,7 +119,8 @@ public class TopologicalOrderIterator<V, E>
     }
 
     // NOTE: This is a hack to deal with the fact that CrossComponentIterator
-    // needs to know the start vertex in its constructor
+    // needs to know the start vertex in its constructor, and we want the
+    // traversal to begin with one of the source vertices.
     private TopologicalOrderIterator(
         DirectedGraph<V, E> dg,
         Queue<V> queue,
@@ -138,6 +145,23 @@ public class TopologicalOrderIterator<V, E>
     
 
     /**
+     * {@inheritDoc}
+     * 
+     * <p>
+     * For a {@link TopologicalOrderIterator}, the cross component traversal flag
+     * is always {@code false}, so calling this method is a NOOP.
+     * The topological order traversal of a directed acyclic graph will always
+     * traverse all components of the graph that have at least one source vertex
+     * (even though they may not be acyclic).
+     * </p>
+     */
+    @Override
+    public void setCrossComponentTraversal(boolean crossComponentTraversal)
+    {
+        super.setCrossComponentTraversal(false);
+    }
+
+   /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
     @Override protected boolean isConnectedComponentExhausted()
@@ -146,6 +170,7 @@ public class TopologicalOrderIterator<V, E>
         // one component.  We will actually exhaust a connected component
         // before the queue is empty, because initialize adds roots from all
         // components to the queue.
+        // See also comment on setCrossComponentTraversal().
         return queue.isEmpty();
     }
 
@@ -194,14 +219,17 @@ public class TopologicalOrderIterator<V, E>
 
     /**
      * Initializes the internal traversal object structure. Sets up the internal
-     * queue with the directed graph vertices and creates the control structure
-     * for the in-degrees.
+     * queue with the source vertices of the directed acyclic graph and creates
+     * the control structure for the in-degrees.
      *
      * @param dg the directed graph to be iterated.
      * @param queue initializer for queue
      * @param inDegreeMap initializer for inDegreeMap
      *
      * @return start vertex
+     *
+     * @throws IllegalArgumentException if the graph is not empty, but has no
+     * source vertices, which means that it is not acyclic
      */
     private static <V, E> V initialize(
         DirectedGraph<V, E> dg,
@@ -219,8 +247,8 @@ public class TopologicalOrderIterator<V, E>
             }
         }
 
-        if (queue.isEmpty()) {
-            return null;
+        if (queue.isEmpty() && !dg.vertexSet().isEmpty()) {
+            throw new IllegalArgumentException("Graph has no source vertices: " + dg);
         } else {
             return queue.peek();
         }
