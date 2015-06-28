@@ -32,3 +32,5 @@ out/*
 **/out/*
 pom.xml.releaseBackup
 **/pom.xml.releaseBackup
+
+*.iml
