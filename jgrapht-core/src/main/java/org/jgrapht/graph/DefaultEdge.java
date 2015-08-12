@@ -96,8 +96,20 @@ public class DefaultEdge
         }
 
         DefaultEdge other = (DefaultEdge) obj;
-        boolean sourceE = this.source.equals(other.source);
-        boolean targetE = this.target.equals(other.target);
+
+        boolean sourceE = false;
+        if(null == source) {
+            sourceE = (null == other.source);
+        } else {
+            sourceE = source.equals(other.source);
+        }
+
+        boolean targetE = false;
+        if(null == target) {
+            targetE = (null == other.target);
+        } else {
+            targetE = target.equals(other.target);
+        }
         return sourceE && targetE;
     }
 
