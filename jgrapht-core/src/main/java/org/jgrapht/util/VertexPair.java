@@ -40,7 +40,10 @@ package org.jgrapht.util;
  * Sun ever gets around to adding Pair to java.util.
  *
  * @author Soren (soren@tanesha.net)
+ *
+ * @deprecated use {@link org.jgrapht.alg.util.Pair} instead
  */
+@Deprecated
 public class VertexPair<V>
 {
     
