@@ -15,15 +15,13 @@ package org.jgrapht.alg;
 import junit.framework.TestCase;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.WeightedGraph;
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.generate.SimpleWeightedBipartiteGraphMatrixGenerator;
 import org.jgrapht.generate.WeightedGraphGeneratorAdapter;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.util.VertexPair;
 import org.junit.Assert;
-import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -55,14 +53,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest extends TestCa
 
     static class WeightedEdge extends DefaultWeightedEdge {
 
-        class _ extends VertexPair<V> {
-            public _(V _1, V _2) {
-                super(_1, _2);
-            }
-        }
-
         WeightedEdge(V _1, V _2) {
-            __ = new _(_1, _2);
+            uv = Pair.of(_1, _2);
         }
 
         static WeightedEdge make(V source, V target) {
@@ -71,21 +63,20 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest extends TestCa
 
         @Override
         public boolean equals(Object edge) {
-            return (edge instanceof WeightedEdge) && __.equals(((WeightedEdge) edge).__);
+            return (edge instanceof WeightedEdge) && uv.equals(((WeightedEdge) edge).uv);
         }
 
         @Override
         public int hashCode() {
-            return __.hashCode();
+            return uv.hashCode();
         }
 
         @Override
         public String toString() {
-            return __.toString() + " : " + getWeight();
+            return uv.toString() + " : " + getWeight();
         }
 
-        _ __;
-
+        Pair<V, V> uv;
     }
 
 
