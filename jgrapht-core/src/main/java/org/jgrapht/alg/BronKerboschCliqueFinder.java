@@ -57,7 +57,7 @@ public class BronKerboschCliqueFinder<V, E>
     private final Graph<V, E> graph;
 
     private Collection<Set<V>> cliques;
-
+    private long timeout;
     
 
     /**
@@ -69,6 +69,7 @@ public class BronKerboschCliqueFinder<V, E>
     public BronKerboschCliqueFinder(Graph<V, E> graph)
     {
         this.graph = graph;
+        this.timeout = Long.MAX_VALUE;
     }
 
     
@@ -125,7 +126,9 @@ public class BronKerboschCliqueFinder<V, E>
         List<V> candidates,
         List<V> already_found)
     {
+    	
         List<V> candidates_array = new ArrayList<V>(candidates);
+        Date dateStart = new Date();
         if (!end(candidates, already_found)) {
             // for each candidate_node in candidates do
             for (V candidate : candidates_array) {
@@ -168,6 +171,11 @@ public class BronKerboschCliqueFinder<V, E>
                 // move candidate_node from potential_clique to already_found;
                 already_found.add(candidate);
                 potential_clique.remove(candidate);
+                Date dateEnd = new Date();
+                long theirIntervalInMillis = dateEnd.getTime() - dateStart.getTime();
+                if(theirIntervalInMillis>timeout){
+                	return;
+                }
             } // of for
         } // of if
     }
@@ -189,6 +197,10 @@ public class BronKerboschCliqueFinder<V, E>
             }
         } // of for
         return end;
+    }
+    
+    public void setTimeout(long timeout){
+    	this.timeout = timeout;
     }
 }
 
