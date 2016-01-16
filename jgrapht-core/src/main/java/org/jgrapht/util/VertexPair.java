@@ -43,20 +43,14 @@ package org.jgrapht.util;
  */
 public class VertexPair<V>
 {
-
-
     private V n1;
     private V n2;
-
-
 
     public VertexPair(V n1, V n2)
     {
         this.n1 = n1;
         this.n2 = n2;
     }
-
-
 
     public V getFirst()
     {
@@ -89,6 +83,12 @@ public class VertexPair<V>
         } else {
             return null;
         }
+    }
+
+    public void reverse(){
+        V tmp = this.n1;
+        this.n1 = this.n2;
+        this.n2 = tmp;
     }
 
     @Override public String toString()
