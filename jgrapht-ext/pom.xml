@@ -42,6 +42,46 @@
 -->
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<instructions>
+						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors (see
+							http://sourceforge.net/projects/jgrapht/)</Bundle-Vendor>
+						<!--
+							JGraph (source code at https://github.com/jgraph/legacy-jgraph5.git)
+							is legacy and it does not have a Maven based build. Therefore it is
+							unlikely that JGraph will be osgified. To be able to nevertheless use
+							the jgraph-ext bundle in an OSGi context, we tell the maven	bundle
+							plugin to mark the JGraph dependencies as optional. Consequences:
+							When using jgrapht-ext in an OSGi context you can not use one of
+							it's classes which require packages from JGraph (org.jgraph.*).
+							Otherwise you will get ClassNotFoundExceptions.
+						-->
+						<Import-Package>org.jgraph.*;resolution:=optional,*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
