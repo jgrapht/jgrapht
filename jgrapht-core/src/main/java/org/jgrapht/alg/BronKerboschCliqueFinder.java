@@ -81,7 +81,7 @@ public class BronKerboschCliqueFinder<V, E>
      * @return Collection of cliques (each of which is represented as a Set of
      * vertices)
      */
-    public Collection<Set<V>> getAllMaximalCliques()
+    public Collection<Set<V>> getAllMaximalCliques() throws InterruptedException
     {
         // TODO jvs 26-July-2005:  assert that graph is simple
 
@@ -100,7 +100,7 @@ public class BronKerboschCliqueFinder<V, E>
      * @return Collection of cliques (each of which is represented as a Set of
      * vertices)
      */
-    public Collection<Set<V>> getBiggestMaximalCliques()
+    public Collection<Set<V>> getBiggestMaximalCliques() throws InterruptedException
     {
         // first, find all cliques
         getAllMaximalCliques();
@@ -123,8 +123,11 @@ public class BronKerboschCliqueFinder<V, E>
     private void findCliques(
         List<V> potential_clique,
         List<V> candidates,
-        List<V> already_found)
+        List<V> already_found) throws InterruptedException
     {
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
         List<V> candidates_array = new ArrayList<V>(candidates);
         if (!end(candidates, already_found)) {
             // for each candidate_node in candidates do
