@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
 	- Add `GabowStrongConnectivityInspector` and `KosarajuStrongConnectivityInspector`, contributed by Joris Kinable and Sarah Komla-Ebri
 	- Add `PushRelabelMaximumFlow`; boost `EdmondsKarpMaximumFlow`; add `MaximumFlowAlgorithm` interface; add `Pair` and `Extension` utility classes; optional seed parameter to `RandomGraphGenerator`
 	- Add `MaximumWeightBipartiteMatching`, contributed by Graeme Ahokas
+	- Osgify jgrapht-ext, contributed by Christoph Zauner
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
