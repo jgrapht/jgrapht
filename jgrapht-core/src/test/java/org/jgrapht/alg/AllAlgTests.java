@@ -77,7 +77,8 @@ import org.junit.runners.Suite;
     StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class,
     TransitiveClosureTest.class,
-    VertexCoversTest.class
+    VertexCoversTest.class,
+    GomoryHuCutTreeTest.class
 })
 public final class AllAlgTests
 {
