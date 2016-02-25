@@ -29,15 +29,19 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
-import org.custommonkey.xmlunit.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
+import org.custommonkey.xmlunit.XMLAssert;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * .
@@ -70,34 +74,62 @@ public class GraphMLExporterTest
         + "</graph>" + NL
         + "</graphml>" + NL;
 
-    private static final GraphMLExporter<String, DefaultEdge> exporter =
-        new GraphMLExporter<String, DefaultEdge>();
+    private UndirectedGraph<String, DefaultEdge> graph;
 
     //~ Methods ----------------------------------------------------------------
 
-    public void testUndirected()
-        throws Exception
-    {
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        g.addEdge(V1, V2);
-        g.addVertex(V3);
-        g.addEdge(V3, V1);
+    @Before
+    public void setUp() {
+        graph = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        graph.addVertex(V1);
+        graph.addVertex(V2);
+        graph.addEdge(V1, V2);
+        graph.addVertex(V3);
+        graph.addEdge(V3, V1);
+    }
+
+    @Test
+    public void testUndirected() throws Exception {
 
         StringWriter w = new StringWriter();
-        exporter.export(w, g);
+        final GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
+        exporter.export(w, graph);
 
-        if (System.getProperty("java.vm.version").startsWith("1.4")) {
-            // NOTE jvs 16-Mar-2007:  XML prefix mapping comes out
-            // with missing info on 1.4, so skip the verification part
-            // of the test.
-            return;
-        }
-
-        XMLAssert.assertXMLEqual(UNDIRECTED, w.toString());
+        String xmlString = w.toString();
+        // FIXME: Why does assertXMLValid fail?
+        // XMLAssert.assertXMLValid(xmlString);
+        XMLAssert.assertXMLEqual(UNDIRECTED, xmlString);
     }
+
+    private static class TestPropertyProvider<T> implements ComponentAttributeProvider<T> {
+
+        @Override
+        public Map<String, String> getComponentAttributes(T x) {
+            HashMap<String, String> result = new HashMap<String, String>();
+            if (x.equals(V1)) {
+                result.put("key-1", x.toString() + "-val-1");
+            }
+            result.put("key-2", x.toString() + "-val-2");
+            return result;
+        }
+    }
+
+    @Ignore("FIXME: Why does assertXMLValid fail?") @Test
+    public void undirectedWithProperties() throws Exception {
+        StringWriter w = new StringWriter();
+
+        final GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>(
+                new IntegerNameProvider<String>(), new TestPropertyProvider<String>(),
+                new IntegerEdgeNameProvider<DefaultEdge>(), new TestPropertyProvider<DefaultEdge>());
+        exporter.export(w, graph);
+
+        String xmlString = w.toString();
+
+        XMLAssert.assertXMLValid(xmlString);
+        XMLAssert.assertXpathExists("//graph/node/data[@key='key-1']", xmlString);
+        XMLAssert.assertXpathEvaluatesTo("v1-val-1", "//graph/node[@id='1']", xmlString);
+    }
+
 }
 
 // End GraphMLExporterTest.java

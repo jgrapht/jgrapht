@@ -29,91 +29,88 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import javax.xml.transform.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 
-import org.jgrapht.*;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Exports a graph into a GraphML file.
  *
- * <p>For a description of the format see <a
- * href="http://en.wikipedia.org/wiki/GraphML">
- * http://en.wikipedia.org/wiki/GraphML</a>.</p>
+ * <p>
+ * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
+ * http://en.wikipedia.org/wiki/GraphML</a>.
+ * </p>
  *
  * @author Trevor Harmon
  */
-public class GraphMLExporter<V, E>
-{
-
+public class GraphMLExporter<V, E> {
+    //~ Instance fields --------------------------------------------------------
 
     private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
+
+    private ComponentAttributeProvider<V> vertexAttributeProvider;
+
     private EdgeNameProvider<E> edgeIDProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
 
-
+    private ComponentAttributeProvider<E> edgeAttributeProvider;
 
     /**
-     * Constructs a new GraphMLExporter object with integer name providers for
-     * the vertex and edge IDs and null providers for the vertex and edge
-     * labels.
+     * Constructs a new GraphMLExporter object with integer name providers for the vertex and edge IDs and empty
+     * attribute providers for the vertex and edge labels.
      */
-    public GraphMLExporter()
-    {
-        this(
-            new IntegerNameProvider<V>(),
-            null,
-            new IntegerEdgeNameProvider<E>(),
-            null);
+    public GraphMLExporter() {
+        this(new IntegerNameProvider<V>(), new EmptyAttributeProvider<V>(), new IntegerEdgeNameProvider<E>(),
+                new EmptyAttributeProvider<E>());
     }
 
     /**
-     * Constructs a new GraphMLExporter object with the given ID and label
-     * providers.
+     * Constructs a new GraphMLExporter object with the given ID and label providers.
      *
-     * @param vertexIDProvider for generating vertex IDs. Must not be null.
-     * @param vertexLabelProvider for generating vertex labels. If null, vertex
-     * labels will not be written to the file.
-     * @param edgeIDProvider for generating vertex IDs. Must not be null.
-     * @param edgeLabelProvider for generating edge labels. If null, edge labels
-     * will not be written to the file.
+     * @param vertexIDProvider
+     *            for generating vertex IDs. Must not be null.
+     * @param vertexAttributeProvider
+     *            for generating vertex labels. If null, no vertex attributes will be written to the file.
+     * @param edgeIDProvider
+     *            for generating vertex IDs. Must not be null.
+     * @param edgeAttributeProvider
+     *            for generating edge labels. If null, no edge attributes will not be written to the file.
      */
-    public GraphMLExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeIDProvider,
-        EdgeNameProvider<E> edgeLabelProvider)
-    {
+    public GraphMLExporter(VertexNameProvider<V> vertexIDProvider,
+            ComponentAttributeProvider<V> vertexAttributeProvider, EdgeNameProvider<E> edgeIDProvider,
+            ComponentAttributeProvider<E> edgeAttributeProvider) {
         this.vertexIDProvider = vertexIDProvider;
-        this.vertexLabelProvider = vertexLabelProvider;
+        this.vertexAttributeProvider = vertexAttributeProvider == null ? new EmptyAttributeProvider<V>() : vertexAttributeProvider;
         this.edgeIDProvider = edgeIDProvider;
-        this.edgeLabelProvider = edgeLabelProvider;
+        this.edgeAttributeProvider = edgeAttributeProvider == null ? new EmptyAttributeProvider<E>() : edgeAttributeProvider;
     }
-
-
 
     /**
      * Exports a graph into a plain text file in GraphML format.
      *
-     * @param writer the writer to which the graph to be exported
-     * @param g the graph to be exported
+     * @param writer
+     *            the writer to which the graph to be exported
+     * @param g
+     *            the graph to be exported
      */
-    public void export(Writer writer, Graph<V, E> g)
-        throws SAXException, TransformerConfigurationException
-    {
+    public void export(Writer writer, Graph<V, E> g) throws SAXException, TransformerConfigurationException {
         // Prepare an XML file to receive the GraphML data
         PrintWriter out = new PrintWriter(writer);
         StreamResult streamResult = new StreamResult(out);
-        SAXTransformerFactory factory =
-            (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+        SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
         TransformerHandler handler = factory.newTransformerHandler();
         Transformer serializer = handler.getTransformer();
         serializer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
@@ -123,41 +120,44 @@ public class GraphMLExporter<V, E>
         AttributesImpl attr = new AttributesImpl();
 
         // <graphml>
-        handler.startPrefixMapping(
-            "xsi",
-            "http://www.w3.org/2001/XMLSchema-instance");
+        handler.startPrefixMapping("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
         // FIXME: Is this the proper way to add this attribute?
-        attr.addAttribute(
-            "",
-            "",
-            "xsi:schemaLocation",
-            "CDATA",
-            "http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
-        handler.startElement(
-            "http://graphml.graphdrawing.org/xmlns",
-            "",
-            "graphml",
-            attr);
+        attr.addAttribute("", "", "xsi:schemaLocation", "CDATA",
+                          "http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
+        handler.startElement("http://graphml.graphdrawing.org/xmlns", "", "graphml", attr);
         handler.endPrefixMapping("xsi");
 
-        if (vertexLabelProvider != null) {
-            // <key> for vertex label attribute
+        Set<V> vertexSet = g.vertexSet();
+
+        // Collect vertex data keys into a set and write vertex meta data
+        Set<String> vertexAttributKeys = new HashSet<String>();
+        for (V v : vertexSet) {
+            vertexAttributKeys.addAll(vertexAttributeProvider.getComponentAttributes(v).keySet());
+        }
+        // <key> for vertex label attribute
+        for (String key : vertexAttributKeys) {
             attr.clear();
-            attr.addAttribute("", "", "id", "CDATA", "vertex_label");
+            attr.addAttribute("", "", "id", "CDATA", key);
             attr.addAttribute("", "", "for", "CDATA", "node");
-            attr.addAttribute("", "", "attr.name", "CDATA", "Vertex Label");
+            attr.addAttribute("", "", "attr.name", "CDATA", key);
             attr.addAttribute("", "", "attr.type", "CDATA", "string");
             handler.startElement("", "", "key", attr);
             handler.endElement("", "", "key");
         }
 
-        if (edgeLabelProvider != null) {
+        // Collect edge data keys into a set and write edge meta data.
+        Set<E> edgeSet = g.edgeSet();
+        Set<String> edgeAttributKeys = new HashSet<String>();
+        for (E e : edgeSet) {
+            edgeAttributKeys.addAll(edgeAttributeProvider.getComponentAttributes(e).keySet());
+        }
+        for (String key : edgeAttributKeys) {
             // <key> for edge label attribute
             attr.clear();
-            attr.addAttribute("", "", "id", "CDATA", "edge_label");
+            attr.addAttribute("", "", "id", "CDATA", key);
             attr.addAttribute("", "", "for", "CDATA", "edge");
-            attr.addAttribute("", "", "attr.name", "CDATA", "Edge Label");
+            attr.addAttribute("", "", "attr.name", "CDATA", key);
             attr.addAttribute("", "", "attr.type", "CDATA", "string");
             handler.startElement("", "", "key", attr);
             handler.endElement("", "", "key");
@@ -165,38 +165,27 @@ public class GraphMLExporter<V, E>
 
         // <graph>
         attr.clear();
-        attr.addAttribute(
-            "",
-            "",
-            "edgedefault",
-            "CDATA",
-            (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
+        attr.addAttribute("", "", "edgedefault", "CDATA",
+                (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
         handler.startElement("", "", "graph", attr);
 
         // Add all the vertices as <node> elements...
-        for (V v : g.vertexSet()) {
+        for (V v : vertexSet) {
             // <node>
             attr.clear();
-            attr.addAttribute(
-                "",
-                "",
-                "id",
-                "CDATA",
-                vertexIDProvider.getVertexName(v));
+            attr.addAttribute("", "", "id", "CDATA", vertexIDProvider.getVertexName(v));
             handler.startElement("", "", "node", attr);
 
-            if (vertexLabelProvider != null) {
+            Map<String, String> vertexAttributes = vertexAttributeProvider.getComponentAttributes(v);
+            for (Map.Entry<String, String> entry : vertexAttributes.entrySet()) {
                 // <data>
                 attr.clear();
-                attr.addAttribute("", "", "key", "CDATA", "vertex_label");
+                attr.addAttribute("", "", "key", "CDATA", entry.getKey());
                 handler.startElement("", "", "data", attr);
 
                 // Content for <data>
-                String vertexLabel = vertexLabelProvider.getVertexName(v);
-                handler.characters(
-                    vertexLabel.toCharArray(),
-                    0,
-                    vertexLabel.length());
+                String vertexLabel = entry.getValue();
+                handler.characters(vertexLabel.toCharArray(), 0, vertexLabel.length());
 
                 handler.endElement("", "", "data");
             }
@@ -205,44 +194,26 @@ public class GraphMLExporter<V, E>
         }
 
         // Add all the edges as <edge> elements...
-        for (E e : g.edgeSet()) {
+        for (E e : edgeSet) {
             // <edge>
             attr.clear();
-            attr.addAttribute(
-                "",
-                "",
-                "id",
-                "CDATA",
-                edgeIDProvider.getEdgeName(e));
-            attr.addAttribute(
-                "",
-                "",
-                "source",
-                "CDATA",
-                vertexIDProvider.getVertexName(g.getEdgeSource(e)));
-            attr.addAttribute(
-                "",
-                "",
-                "target",
-                "CDATA",
-                vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
+            attr.addAttribute("", "", "id", "CDATA", edgeIDProvider.getEdgeName(e));
+            attr.addAttribute("", "", "source", "CDATA", vertexIDProvider.getVertexName(g.getEdgeSource(e)));
+            attr.addAttribute("", "", "target", "CDATA", vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
             handler.startElement("", "", "edge", attr);
 
-            if (edgeLabelProvider != null) {
+            Map<String, String> edgeAttributes = edgeAttributeProvider.getComponentAttributes(e);
+            for (Map.Entry<String, String> entry : edgeAttributes.entrySet()) {
                 // <data>
                 attr.clear();
-                attr.addAttribute("", "", "key", "CDATA", "edge_label");
+                attr.addAttribute("", "", "key", "CDATA", entry.getKey());
                 handler.startElement("", "", "data", attr);
 
                 // Content for <data>
-                String edgeLabel = edgeLabelProvider.getEdgeName(e);
-                handler.characters(
-                    edgeLabel.toCharArray(),
-                    0,
-                    edgeLabel.length());
+                String edgeLabel = entry.getValue();
+                handler.characters(edgeLabel.toCharArray(), 0, edgeLabel.length());
                 handler.endElement("", "", "data");
             }
-
             handler.endElement("", "", "edge");
         }
 
