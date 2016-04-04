@@ -104,72 +104,80 @@ public class BronKerboschCliqueFinderTest
 
     public void testFindBiggest()
     {
-        SimpleGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
-        createGraph(g);
+        try {
+            SimpleGraph<String, DefaultEdge> g =
+                new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+            createGraph(g);
 
-        BronKerboschCliqueFinder<String, DefaultEdge> finder =
-            new BronKerboschCliqueFinder<String, DefaultEdge>(g);
+            BronKerboschCliqueFinder<String, DefaultEdge> finder =
+                new BronKerboschCliqueFinder<String, DefaultEdge>(g);
 
-        Collection<Set<String>> cliques = finder.getBiggestMaximalCliques();
+            Collection<Set<String>> cliques = finder.getBiggestMaximalCliques();
 
-        assertEquals(1, cliques.size());
+            assertEquals(1, cliques.size());
 
-        Set<String> expected = new HashSet<String>();
-        expected.add(V1);
-        expected.add(V2);
-        expected.add(V3);
-        expected.add(V4);
+            Set<String> expected = new HashSet<String>();
+            expected.add(V1);
+            expected.add(V2);
+            expected.add(V3);
+            expected.add(V4);
 
-        Set<String> actual = cliques.iterator().next();
+            Set<String> actual = cliques.iterator().next();
 
-        assertEquals(expected, actual);
+            assertEquals(expected, actual);
+        } catch (InterruptedException e) {
+            fail();
+        }
     }
 
     public void testFindAll()
     {
-        SimpleGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
-        createGraph(g);
+        try {
+            SimpleGraph<String, DefaultEdge> g =
+                new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+            createGraph(g);
 
-        BronKerboschCliqueFinder<String, DefaultEdge> finder =
-            new BronKerboschCliqueFinder<String, DefaultEdge>(g);
+            BronKerboschCliqueFinder<String, DefaultEdge> finder =
+                new BronKerboschCliqueFinder<String, DefaultEdge>(g);
 
-        Collection<Set<String>> cliques = finder.getAllMaximalCliques();
+            Collection<Set<String>> cliques = finder.getAllMaximalCliques();
 
-        assertEquals(4, cliques.size());
+            assertEquals(4, cliques.size());
 
-        Set<Set<String>> expected = new HashSet<Set<String>>();
+            Set<Set<String>> expected = new HashSet<Set<String>>();
 
-        Set<String> set = new HashSet<String>();
-        set.add(V1);
-        set.add(V2);
-        set.add(V3);
-        set.add(V4);
-        expected.add(set);
+            Set<String> set = new HashSet<String>();
+            set.add(V1);
+            set.add(V2);
+            set.add(V3);
+            set.add(V4);
+            expected.add(set);
 
-        set = new HashSet<String>();
-        set.add(V5);
-        set.add(V6);
-        set.add(V7);
-        expected.add(set);
+            set = new HashSet<String>();
+            set.add(V5);
+            set.add(V6);
+            set.add(V7);
+            expected.add(set);
 
-        set = new HashSet<String>();
-        set.add(V3);
-        set.add(V4);
-        set.add(V5);
-        expected.add(set);
+            set = new HashSet<String>();
+            set.add(V3);
+            set.add(V4);
+            set.add(V5);
+            expected.add(set);
 
-        set = new HashSet<String>();
-        set.add(V7);
-        set.add(V8);
-        expected.add(set);
+            set = new HashSet<String>();
+            set.add(V7);
+            set.add(V8);
+            expected.add(set);
 
-        // convert result from Collection to Set because we don't want
-        // order to be significant
-        Set<Set<String>> actual = new HashSet<Set<String>>(cliques);
+            // convert result from Collection to Set because we don't want
+            // order to be significant
+            Set<Set<String>> actual = new HashSet<Set<String>>(cliques);
 
-        assertEquals(expected, actual);
+            assertEquals(expected, actual);
+        } catch (InterruptedException e) {
+            fail();
+        }
     }
 }
 
