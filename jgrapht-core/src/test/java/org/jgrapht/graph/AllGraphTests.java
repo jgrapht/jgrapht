@@ -59,7 +59,7 @@ import org.junit.runners.*;
     MaskVertexSetTest.class,
     SerializationTest.class,
     SimpleDirectedGraphTest.class,
-    SimpleGraphPathTest.class,
+    GraphWalkTest.class,
     SubgraphTest.class,
     SimpleIdentityDirectedGraphTest.class,
     UnionGraphTest.class
