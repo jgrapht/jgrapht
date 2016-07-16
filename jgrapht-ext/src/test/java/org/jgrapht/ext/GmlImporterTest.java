@@ -527,6 +527,19 @@ public class GmlImporterTest
         }
     }
 
+    public void testMissingVertices()
+    {
+        // @formatter:off
+        String input = "graph [ edge [ source 1 target 2 ] ]";
+        // @formatter:on
+
+        try {
+            readGraph(input, DefaultEdge.class, false, false);
+            fail("Node is missing?");
+        } catch (ImportException e) {
+        }
+    }
+
     public void testExportImport()
         throws ImportException
     {

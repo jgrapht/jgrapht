@@ -59,11 +59,13 @@ import java.util.Set;
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
  * 
- * <p>For a description of the format see <a
- * href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
- * http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
+ * <p>
+ * For a description of the format see
+ * <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/"> http://www.
+ * infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  *
- * <p>Below is small example of a graph in GML format. 
+ * <p>
+ * Below is small example of a graph in GML format.
  * 
  * <pre>
  * graph [
@@ -89,9 +91,10 @@ import java.util.Set;
  * ]
  * </pre>
  * 
- * <p>In case the 
- * graph is an instance of {@link org.jgrapht.WeightedGraph<V,E>} then the importer also 
- * reads edge weights. Otherwise edge weights are ignored.
+ * <p>
+ * In case the graph is an instance of {@link org.jgrapht.WeightedGraph<V,E>}
+ * then the importer also reads edge weights. Otherwise edge weights are
+ * ignored.
  *
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -102,20 +105,23 @@ public class GmlImporter<V, E>
     private EdgeProvider<V, E> edgeProvider;
 
     /**
-     * Constructs a new importer. 
+     * Constructs a new importer.
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not be null.
-     * @param edgeProvider provider for the generation of edges. Must not be null. 
+     * @param vertexProvider provider for the generation of vertices. Must not
+     *        be null.
+     * @param edgeProvider provider for the generation of edges. Must not be
+     *        null.
      */
     public GmlImporter(
         VertexProvider<V> vertexProvider,
         EdgeProvider<V, E> edgeProvider)
     {
-        if (vertexProvider == null) { 
-            throw new IllegalArgumentException("Vertex provider cannot be null");
+        if (vertexProvider == null) {
+            throw new IllegalArgumentException(
+                "Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
-        if (edgeProvider == null) { 
+        if (edgeProvider == null) {
             throw new IllegalArgumentException("Edge provider cannot be null");
         }
         this.edgeProvider = edgeProvider;
@@ -124,18 +130,21 @@ public class GmlImporter<V, E>
     // ~ Methods ---------------------------------------------------------------
 
     /**
-     * Import a graph. 
+     * Import a graph.
      * 
-     * <p>The provided graph must be able to support the features of the 
-     * graph that is read. For example if the gml file contains self-loops then the 
-     * graph provided must also support self-loops. The same for multiple edges.
+     * <p>
+     * The provided graph must be able to support the features of the graph that
+     * is read. For example if the gml file contains self-loops then the graph
+     * provided must also support self-loops. The same for multiple edges.
      * 
-     * <p>If the provided graph is a weighted graph, the importer also reads edge 
+     * <p>
+     * If the provided graph is a weighted graph, the importer also reads edge
      * weights. Otherwise edge weights are ignored.
-     *  
+     * 
      * @param input the input stream
-     * @param graph the output graph 
-     * @throws ImportException in case an error occurs, such as I/O or parse error
+     * @param graph the output graph
+     * @throws ImportException in case an error occurs, such as I/O or parse
+     *         error
      */
     public void read(Reader input, Graph<V, E> graph)
         throws ImportException
@@ -216,6 +225,7 @@ public class GmlImporter<V, E>
         private List<PartialEdge> edges;
 
         public void updateGraph(Graph<V, E> graph)
+            throws ImportException
         {
             if (foundGraph) {
                 // add nodes
@@ -242,7 +252,15 @@ public class GmlImporter<V, E>
                 for (PartialEdge pe : edges) {
                     String label = "e_" + pe.source + "_" + pe.target;
                     V from = map.get(pe.source);
+                    if (from == null) {
+                        throw new ImportException(
+                            "Node " + pe.source + " does not exist");
+                    }
                     V to = map.get(pe.target);
+                    if (to == null) {
+                        throw new ImportException(
+                            "Node " + pe.target + " does not exist");
+                    }
                     E e = edgeProvider.buildEdge(
                         from,
                         to,
