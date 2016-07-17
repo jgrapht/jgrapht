@@ -127,7 +127,52 @@ public class GmlImporter<V, E>
         this.edgeProvider = edgeProvider;
     }
 
-    // ~ Methods ---------------------------------------------------------------
+    /**
+     * Get the vertex provider
+     * 
+     * @return the vertex provider
+     */
+    public VertexProvider<V> getVertexProvider()
+    {
+        return vertexProvider;
+    }
+
+    /**
+     * Set the vertex provider
+     * 
+     * @param vertexProvider the new vertex provider. Must not be null.
+     */
+    public void setVertexProvider(VertexProvider<V> vertexProvider)
+    {
+        if (vertexProvider == null) {
+            throw new IllegalArgumentException(
+                "Vertex provider cannot be null");
+        }
+        this.vertexProvider = vertexProvider;
+    }
+
+    /**
+     * Get the edge provider
+     * 
+     * @return The edge provider
+     */
+    public EdgeProvider<V, E> getEdgeProvider()
+    {
+        return edgeProvider;
+    }
+
+    /**
+     * Set the edge provider.
+     * 
+     * @param edgeProvider the new edge provider. Must not be null.
+     */
+    public void setEdgeProvider(EdgeProvider<V, E> edgeProvider)
+    {
+        if (edgeProvider == null) {
+            throw new IllegalArgumentException("Edge provider cannot be null");
+        }
+        this.edgeProvider = edgeProvider;
+    }
 
     /**
      * Import a graph.
