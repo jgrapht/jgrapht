@@ -27,6 +27,7 @@
  * Original Author:  Barak Naveh
  * Contributor(s):   John V. Sichi
  *                   Christian Hammer
+ *                   Assaf Mizrachi
  *
  * $Id$
  *
@@ -37,6 +38,7 @@
  * 31-Jan-2004 : Extracted cross-component traversal functionality (BN);
  * 04-May-2004 : Made generic (CH)
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
+ * 15-Jul-2016 : Moved Specifics and Flyweight events from AbstractGraphIterator.
  *
  */
 package org.jgrapht.traverse;
@@ -98,10 +100,6 @@ public abstract class CrossComponentIterator<V, E, D>
             this,
             ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_STARTED);
 
-    // TODO: support ConcurrentModificationException if graph modified
-    // during iteration.
-    private FlyweightEdgeEvent<V, E> reusableEdgeEvent;
-    private FlyweightVertexEvent<V> reusableVertexEvent;
     private Iterator<V> vertexIterator = null;
 
     /**
@@ -110,7 +108,6 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     private Map<V, D> seen = new HashMap<>();
     private V startVertex;
-    private Specifics<V, E> specifics;
 
     private final Graph<V, E> graph;
 
@@ -326,24 +323,7 @@ public abstract class CrossComponentIterator<V, E, D>
         if (nListeners != 0) {
             fireVertexFinished(createVertexTraversalEvent(vertex));
         }
-    }
-
-    // -------------------------------------------------------------------------
-    /**
-     * @param <V>
-     * @param <E>
-     * @param g
-     *
-     * @return TODO Document me
-     */
-    static <V, E> Specifics<V, E> createGraphSpecifics(Graph<V, E> g)
-    {
-        if (g instanceof DirectedGraph<?, ?>) {
-            return new DirectedSpecifics<>((DirectedGraph<V, E>) g);
-        } else {
-            return new UndirectedSpecifics<>(g);
-        }
-    }
+    }    
 
     private void addUnseenChildrenOf(V vertex)
     {
@@ -413,141 +393,7 @@ public abstract class CrossComponentIterator<V, E, D>
          */
         public T remove();
     }
-
-    /**
-     * Provides unified interface for operations that are different in directed
-     * graphs and in undirected graphs.
-     */
-    abstract static class Specifics<VV, EE>
-    {
-        /**
-         * Returns the edges outgoing from the specified vertex in case of
-         * directed graph, and the edge touching the specified vertex in case of
-         * undirected graph.
-         *
-         * @param vertex the vertex whose outgoing edges are to be returned.
-         *
-         * @return the edges outgoing from the specified vertex in case of
-         * directed graph, and the edge touching the specified vertex in case of
-         * undirected graph.
-         */
-        public abstract Set<? extends EE> edgesOf(VV vertex);
-    }
-
-    /**
-     * A reusable edge event.
-     *
-     * @author Barak Naveh
-     * @since Aug 11, 2003
-     */
-    static class FlyweightEdgeEvent<VV, localE>
-        extends EdgeTraversalEvent<localE>
-    {
-        private static final long serialVersionUID = 4051327833765000755L;
-
-        /**
-         * @see EdgeTraversalEvent
-         */
-        public FlyweightEdgeEvent(Object eventSource, localE edge)
-        {
-            super(eventSource, edge);
-        }
-
-        /**
-         * Sets the edge of this event.
-         *
-         * @param edge the edge to be set.
-         */
-        protected void setEdge(localE edge)
-        {
-            this.edge = edge;
-        }
-    }
-
-    /**
-     * A reusable vertex event.
-     *
-     * @author Barak Naveh
-     * @since Aug 11, 2003
-     */
-    static class FlyweightVertexEvent<VV>
-        extends VertexTraversalEvent<VV>
-    {
-        private static final long serialVersionUID = 3834024753848399924L;
-
-        /**
-         * @see VertexTraversalEvent#VertexTraversalEvent(Object, Object)
-         */
-        public FlyweightVertexEvent(Object eventSource, VV vertex)
-        {
-            super(eventSource, vertex);
-        }
-
-        /**
-         * Sets the vertex of this event.
-         *
-         * @param vertex the vertex to be set.
-         */
-        protected void setVertex(VV vertex)
-        {
-            this.vertex = vertex;
-        }
-    }
-
-    /**
-     * An implementation of {@link Specifics} for a directed graph.
-     */
-    private static class DirectedSpecifics<VV, EE>
-        extends Specifics<VV, EE>
-    {
-        private DirectedGraph<VV, EE> graph;
-
-        /**
-         * Creates a new DirectedSpecifics object.
-         *
-         * @param g the graph for which this specifics object to be created.
-         */
-        public DirectedSpecifics(DirectedGraph<VV, EE> g)
-        {
-            graph = g;
-        }
-
-        /**
-         * @see CrossComponentIterator.Specifics#edgesOf(Object)
-         */
-        @Override public Set<? extends EE> edgesOf(VV vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-    }
-
-    /**
-     * An implementation of {@link Specifics} in which edge direction (if any)
-     * is ignored.
-     */
-    private static class UndirectedSpecifics<VV, EE>
-        extends Specifics<VV, EE>
-    {
-        private Graph<VV, EE> graph;
-
-        /**
-         * Creates a new UndirectedSpecifics object.
-         *
-         * @param g the graph for which this specifics object to be created.
-         */
-        public UndirectedSpecifics(Graph<VV, EE> g)
-        {
-            graph = g;
-        }
-
-        /**
-         * @see CrossComponentIterator.Specifics#edgesOf(Object)
-         */
-        @Override public Set<EE> edgesOf(VV vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
-    }
+    
 }
 
 // End CrossComponentIterator.java
