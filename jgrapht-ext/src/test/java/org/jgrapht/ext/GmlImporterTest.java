@@ -49,6 +49,10 @@ import org.jgrapht.graph.WeightedPseudograph;
 
 import junit.framework.TestCase;
 
+/**
+ * 
+ * @author Dimitrios Michail
+ */
 public class GmlImporterTest
     extends TestCase
 {

@@ -92,7 +92,7 @@ import java.util.Set;
  * </pre>
  * 
  * <p>
- * In case the graph is an instance of {@link org.jgrapht.WeightedGraph<V,E>}
+ * In case the graph is an instance of {@link org.jgrapht.WeightedGraph}
  * then the importer also reads edge weights. Otherwise edge weights are
  * ignored.
  *
