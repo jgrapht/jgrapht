@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
 	- Allow paths to be expressed in terms of vertices instead of edges; deprecate `GraphPathImpl` in favor of new `GraphWalk` (contributed by Joris Kinable)
         - Weighted graph support in `GmlExporter` (contributed by Dimitrios Michail)
 	- Add `RandomWalkIterator` (contributed by Assaf Mizrachi)
+	- Add `GreedyMultiplicativeSpanner` (contributed by Dimitrios Michail)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
