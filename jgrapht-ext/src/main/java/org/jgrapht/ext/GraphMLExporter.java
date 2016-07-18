@@ -359,7 +359,7 @@ public class GraphMLExporter<V, E>
             // flush
             writer.flush();
         } catch (Exception e) {
-            throw new ExportException("Failed to export as GraphGML", e);
+            throw new ExportException("Failed to export as GraphML", e);
         }
     }
 }
