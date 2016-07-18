@@ -327,6 +327,7 @@ public class GraphMLExporter<V, E>
      *
      * @param writer the writer to which the graph to be exported
      * @param g the graph to be exported
+     * @throws ExportException in case any error occurs during export
      */
     public void export(Writer writer, Graph<V, E> g)
         throws ExportException
