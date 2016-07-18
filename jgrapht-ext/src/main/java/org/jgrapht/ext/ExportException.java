@@ -19,46 +19,38 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* ------------------
- * ImportException.java
- * ------------------
- * (C) Copyright 2015, by  Wil Selwood.
- *
- * Original Author:  Wil Selwood <wselwood@ijento.com>
- *
- */
 package org.jgrapht.ext;
 
 /**
- * An exception that the library throws in case of graph import errors.
+ * An exception that the library throws in case of graph export errors.
  */
-public class ImportException
+public class ExportException
     extends Exception
 {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs an {@code ImportException} with {@code null} as its error
+     * Constructs an {@code ExportException} with {@code null} as its error
      * detail message.
      */
-    public ImportException()
+    public ExportException()
     {
         super();
     }
 
     /**
-     * Constructs an {@code ImportException} with the specified detail message.
+     * Constructs an {@code ExportException} with the specified detail message.
      *
      * @param message The detail message (which is saved for later retrieval by
      *        the {@link #getMessage()} method)
      */
-    public ImportException(String message)
+    public ExportException(String message)
     {
         super(message);
     }
 
     /**
-     * Constructs an {@code ImportException} with the specified detail message
+     * Constructs an {@code ExportException} with the specified detail message
      * and cause.
      *
      * <p>
@@ -72,13 +64,13 @@ public class ImportException
      *        {@link #getCause()} method). (A null value is permitted, and
      *        indicates that the cause is nonexistent or unknown.)
      */
-    public ImportException(String message, Throwable cause)
+    public ExportException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
     /**
-     * Constructs an {@code ImportException} with the specified cause and a
+     * Constructs an {@code ExportException} with the specified cause and a
      * detail message of {@code (cause==null ? null : cause.toString())} (which
      * typically contains the class and detail message of {@code cause}). This
      * constructor is useful for IO exceptions that are little more than
@@ -89,11 +81,11 @@ public class ImportException
      *        indicates that the cause is nonexistent or unknown.)
      *
      */
-    public ImportException(Throwable cause)
+    public ExportException(Throwable cause)
     {
         super(cause);
     }
 
 }
 
-// End ImportException.java
+// End ExportException.java
