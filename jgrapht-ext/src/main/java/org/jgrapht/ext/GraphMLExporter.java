@@ -22,33 +22,38 @@
 /* ------------------
  * GraphMLExporter.java
  * ------------------
- * (C) Copyright 2006, by Trevor Harmon.
+ * (C) Copyright 2006-2016, by Trevor Harmon and Contributors.
  *
  * Original Author:  Trevor Harmon <trevor@vocaro.com>
+ * Contributors: Dimitrios Michail
  *
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.Writer;
 
-import javax.xml.transform.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 
-import org.jgrapht.*;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Exports a graph into a GraphML file.
  *
- * <p>For a description of the format see <a
- * href="http://en.wikipedia.org/wiki/GraphML">
- * http://en.wikipedia.org/wiki/GraphML</a>.</p>
+ * <p>
+ * For a description of the format see
+ * <a href="http://en.wikipedia.org/wiki/GraphML">
+ * http://en.wikipedia.org/wiki/GraphML</a>.
+ * </p>
  *
  * @author Trevor Harmon
+ * @author Dimitrios Michail
  */
 public class GraphMLExporter<V, E>
 {
@@ -58,6 +63,11 @@ public class GraphMLExporter<V, E>
     private EdgeNameProvider<E> edgeLabelProvider;
 
     /**
+     * Whether to print edge weights in case the graph is weighted.
+     */
+    private boolean exportEdgeWeights = false;
+
+    /**
      * Constructs a new GraphMLExporter object with integer name providers for
      * the vertex and edge IDs and null providers for the vertex and edge
      * labels.
@@ -65,9 +75,9 @@ public class GraphMLExporter<V, E>
     public GraphMLExporter()
     {
         this(
-                new IntegerNameProvider<>(),
+            new IntegerNameProvider<>(),
             null,
-                new IntegerEdgeNameProvider<>(),
+            new IntegerEdgeNameProvider<>(),
             null);
     }
 
@@ -77,10 +87,10 @@ public class GraphMLExporter<V, E>
      *
      * @param vertexIDProvider for generating vertex IDs. Must not be null.
      * @param vertexLabelProvider for generating vertex labels. If null, vertex
-     * labels will not be written to the file.
+     *        labels will not be written to the file.
      * @param edgeIDProvider for generating vertex IDs. Must not be null.
      * @param edgeLabelProvider for generating edge labels. If null, edge labels
-     * will not be written to the file.
+     *        will not be written to the file.
      */
     public GraphMLExporter(
         VertexNameProvider<V> vertexIDProvider,
@@ -88,40 +98,50 @@ public class GraphMLExporter<V, E>
         EdgeNameProvider<E> edgeIDProvider,
         EdgeNameProvider<E> edgeLabelProvider)
     {
+        if (vertexIDProvider == null) {
+            throw new IllegalArgumentException(
+                "Vertex ID provider must not be null");
+        }
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
+        if (edgeIDProvider == null) {
+            throw new IllegalArgumentException(
+                "Edge ID provider must not be null");
+        }
         this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
     }
 
     /**
-     * Exports a graph into a plain text file in GraphML format.
+     * Whether the exporter will print edge weights.
      *
-     * @param writer the writer to which the graph to be exported
-     * @param g the graph to be exported
+     * @return {@code true} if the exporter prints edge weights, {@code false}
+     *         otherwise
      */
-    public void export(Writer writer, Graph<V, E> g)
-        throws SAXException, TransformerConfigurationException
+    public boolean isExportEdgeWeights()
     {
-        // Prepare an XML file to receive the GraphML data
-        PrintWriter out = new PrintWriter(writer);
-        StreamResult streamResult = new StreamResult(out);
-        SAXTransformerFactory factory =
-            (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-        TransformerHandler handler = factory.newTransformerHandler();
-        Transformer serializer = handler.getTransformer();
-        serializer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-        handler.setResult(streamResult);
-        handler.startDocument();
-        AttributesImpl attr = new AttributesImpl();
+        return exportEdgeWeights;
+    }
 
-        // <graphml>
+    /**
+     * Set whether the exporter will print edge weights.
+     *
+     * @param exportEdgeWeights value to set
+     */
+    public void setExportEdgeWeights(boolean exportEdgeWeights)
+    {
+        this.exportEdgeWeights = exportEdgeWeights;
+    }
+
+    private void writeHeader(TransformerHandler handler)
+        throws SAXException
+    {
         handler.startPrefixMapping(
             "xsi",
             "http://www.w3.org/2001/XMLSchema-instance");
+        handler.endPrefixMapping("xsi");
 
-        // FIXME: Is this the proper way to add this attribute?
+        AttributesImpl attr = new AttributesImpl();
         attr.addAttribute(
             "",
             "",
@@ -133,8 +153,38 @@ public class GraphMLExporter<V, E>
             "",
             "graphml",
             attr);
-        handler.endPrefixMapping("xsi");
+    }
 
+    private void writeGraphStart(TransformerHandler handler, Graph<V, E> g)
+        throws SAXException
+    {
+        // <graph>
+        AttributesImpl attr = new AttributesImpl();
+        attr.addAttribute(
+            "",
+            "",
+            "edgedefault",
+            "CDATA",
+            (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
+        handler.startElement("", "", "graph", attr);
+    }
+
+    private void writeGraphEnd(TransformerHandler handler)
+        throws SAXException
+    {
+        handler.endElement("", "", "graph");
+    }
+
+    private void writeFooter(TransformerHandler handler)
+        throws SAXException
+    {
+        handler.endElement("", "", "graphml");
+    }
+
+    private void writeKeys(TransformerHandler handler)
+        throws SAXException
+    {
+        AttributesImpl attr = new AttributesImpl();
         if (vertexLabelProvider != null) {
             // <key> for vertex label attribute
             attr.clear();
@@ -156,17 +206,28 @@ public class GraphMLExporter<V, E>
             handler.startElement("", "", "key", attr);
             handler.endElement("", "", "key");
         }
+        if (exportEdgeWeights) {
+            attr.clear();
+            attr.addAttribute("", "", "id", "CDATA", "edge_weight");
+            attr.addAttribute("", "", "for", "CDATA", "edge");
+            attr.addAttribute("", "", "attr.name", "CDATA", "weight");
+            attr.addAttribute("", "", "attr.type", "CDATA", "double");
+            handler.startElement("", "", "key", attr);
+            handler.startElement("", "", "default", null);
+            String defaultValue = "1.0";
+            handler.characters(
+                defaultValue.toCharArray(),
+                0,
+                defaultValue.length());
+            handler.endElement("", "", "default");
+            handler.endElement("", "", "key");
+        }
+    }
 
-        // <graph>
-        attr.clear();
-        attr.addAttribute(
-            "",
-            "",
-            "edgedefault",
-            "CDATA",
-            (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
-        handler.startElement("", "", "graph", attr);
-
+    private void writeNodes(TransformerHandler handler, Graph<V, E> g)
+        throws SAXException
+    {
+        AttributesImpl attr = new AttributesImpl();
         // Add all the vertices as <node> elements...
         for (V v : g.vertexSet()) {
             // <node>
@@ -197,8 +258,13 @@ public class GraphMLExporter<V, E>
 
             handler.endElement("", "", "node");
         }
+    }
 
+    private void writeEdges(TransformerHandler handler, Graph<V, E> g)
+        throws SAXException
+    {
         // Add all the edges as <edge> elements...
+        AttributesImpl attr = new AttributesImpl();
         for (E e : g.edgeSet()) {
             // <edge>
             attr.clear();
@@ -230,21 +296,71 @@ public class GraphMLExporter<V, E>
 
                 // Content for <data>
                 String edgeLabel = edgeLabelProvider.getEdgeName(e);
-                handler.characters(
-                    edgeLabel.toCharArray(),
-                    0,
-                    edgeLabel.length());
+                handler
+                    .characters(edgeLabel.toCharArray(), 0, edgeLabel.length());
                 handler.endElement("", "", "data");
+            }
+            if (exportEdgeWeights) {
+                Double weight = g.getEdgeWeight(e);
+                if (weight != 1.0) { // not default value
+                    // <data>
+                    attr.clear();
+                    attr.addAttribute("", "", "key", "CDATA", "edge_weight");
+                    handler.startElement("", "", "data", attr);
+
+                    // Content for <data>
+                    String weightAsString = String.valueOf(weight);
+                    handler.characters(
+                        weightAsString.toCharArray(),
+                        0,
+                        weightAsString.length());
+                    handler.endElement("", "", "data");
+                }
             }
 
             handler.endElement("", "", "edge");
         }
+    }
 
-        handler.endElement("", "", "graph");
-        handler.endElement("", "", "graphml");
-        handler.endDocument();
+    /**
+     * Exports a graph into a plain text file in GraphML format.
+     *
+     * @param writer the writer to which the graph to be exported
+     * @param g the graph to be exported
+     * @throws ExportException in case any error occurs during export
+     */
+    public void export(Writer writer, Graph<V, E> g)
+        throws ExportException
+    {
+        try {
+            // Prepare an XML file to receive the GraphML data
+            SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory
+                .newInstance();
+            TransformerHandler handler = factory.newTransformerHandler();
+            handler.getTransformer()
+                .setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            handler.getTransformer()
+                .setOutputProperty(OutputKeys.INDENT, "yes");
+            handler.setResult(new StreamResult(new PrintWriter(writer)));
 
-        out.flush();
+            // export
+            handler.startDocument();
+
+            writeHeader(handler);
+            writeKeys(handler);
+            writeGraphStart(handler, g);
+            writeNodes(handler, g);
+            writeEdges(handler, g);
+            writeGraphEnd(handler);
+            writeFooter(handler);
+
+            handler.endDocument();
+
+            // flush
+            writer.flush();
+        } catch (Exception e) {
+            throw new ExportException("Failed to export as GraphML", e);
+        }
     }
 }
 

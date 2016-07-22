@@ -50,8 +50,10 @@ import java.util.Map;
 /**
  * Imports a graph specified in DIMACS format (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps).
  * In summary, graphs specified in DIMACS format adhere to the following structure:
- * <pre><code>
- *
+ * 
+ * <pre>
+ * {@code
+ * 
  * DIMACS G {
  *    c <comments; ignored during parsing of the graph
  *    p edge <number of nodes> <number of edges>
@@ -61,11 +63,16 @@ import java.util.Map;
  *    e <edge source 4> <edge target 4>
  *    ...
  * }
- *
- * </code></pre>
+ * 
+ * }
+ * </pre>
  *
  * Although not specified directly in the DIMACS format documentation, this implementation also allows for the a weighted variant:
- * <pre><code>e <edge source 1> <edge target 1> <edge_weight> </code></pre>
+ * <pre>{@code
+ *  
+ * e <edge source 1> <edge target 1> <edge_weight>
+ *  
+ * }</pre>
  *
  * Note: the current implementation does not fully implement the DIMACS specifications! Special (rarely used) fields
  * specified as 'Optional Descriptors' are currently not supported.
@@ -73,8 +80,8 @@ import java.util.Map;
  * @author Michael Behrisch (adaptation of GraphReader class)
  * @author Joris Kinable
  *
- * @param <V>
- * @param <E>
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  */
 public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
     private final BufferedReader input;

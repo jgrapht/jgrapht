@@ -22,9 +22,10 @@
 /* ------------------------------
  * GraphMLExporterTest.java
  * ------------------------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ * (C) Copyright 2006-2016, by Trevor Harmon and Contributors.
  *
  * Original Author:  Trevor Harmon
+ * Contributors: Dimitrios Michail
  *
  */
 package org.jgrapht.ext;
@@ -38,16 +39,15 @@ import org.custommonkey.xmlunit.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * .
- *
  * @author Trevor Harmon
+ * @author Dimitrios Michail
  */
 public class GraphMLExporterTest
     extends TestCase
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers
+    // ---------------------------------------------
 
     private static final String V1 = "v1";
     private static final String V2 = "v2";
@@ -55,49 +55,273 @@ public class GraphMLExporterTest
 
     private static final String NL = System.getProperty("line.separator");
 
-    // TODO jvs 23-Dec-2006:  externalized diff-based testing framework
-
-    private static final String UNDIRECTED =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-        + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-        + NL
-        + "<graph edgedefault=\"undirected\">" + NL
-        + "<node id=\"1\"/>" + NL
-        + "<node id=\"2\"/>" + NL
-        + "<node id=\"3\"/>" + NL
-        + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
-        + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
-        + "</graph>" + NL
-        + "</graphml>" + NL;
-
-    private static final GraphMLExporter<String, DefaultEdge> exporter =
-        new GraphMLExporter<String, DefaultEdge>();
-
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
     public void testUndirected()
         throws Exception
     {
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        String output =
+            // @formatter:off
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
+            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
+            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "<graph edgedefault=\"undirected\">" + NL
+            + "<node id=\"1\"/>" + NL
+            + "<node id=\"2\"/>" + NL
+            + "<node id=\"3\"/>" + NL
+            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
+            + "</graph>" + NL
+            + "</graphml>" + NL;
+            // @formatter:on
+
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
+            DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
         StringWriter w = new StringWriter();
         exporter.export(w, g);
 
-        if (System.getProperty("java.vm.version").startsWith("1.4")) {
-            // NOTE jvs 16-Mar-2007:  XML prefix mapping comes out
-            // with missing info on 1.4, so skip the verification part
-            // of the test.
-            return;
-        }
-
-        XMLAssert.assertXMLEqual(UNDIRECTED, w.toString());
+        XMLAssert.assertXMLEqual(output, w.toString());
     }
+
+    public void testUndirectedWeighted()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
+            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
+            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+            + "<default>1.0</default>" + NL
+            + "</key>" + NL
+            + "<graph edgedefault=\"undirected\">" + NL
+            + "<node id=\"1\"/>" + NL
+            + "<node id=\"2\"/>" + NL
+            + "<node id=\"3\"/>" + NL
+            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
+            + "</graph>" + NL
+            + "</graphml>" + NL;
+            // @formatter:on
+
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
+            DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
+    public void testDirected()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
+            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
+            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "<graph edgedefault=\"directed\">" + NL
+            + "<node id=\"1\"/>" + NL
+            + "<node id=\"2\"/>" + NL
+            + "<node id=\"3\"/>" + NL
+            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
+            + "</graph>" + NL
+            + "</graphml>" + NL;
+            // @formatter:on
+
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<String, DefaultEdge>(
+            DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
+        StringWriter w = new StringWriter();
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
+    public void testUndirectedUnweightedWithWeights()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
+            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
+            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+            + "<default>1.0</default>" + NL
+            + "</key>" + NL
+            + "<graph edgedefault=\"undirected\">" + NL
+            + "<node id=\"1\"/>" + NL
+            + "<node id=\"2\"/>" + NL
+            + "<node id=\"3\"/>" + NL
+            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
+            + "</graph>" + NL
+            + "</graphml>" + NL;
+            // @formatter:on
+
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
+            DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
+    public void testUndirectedWeightedWithWeights()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
+            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
+            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+            + "<default>1.0</default>" + NL
+            + "</key>" + NL
+            + "<graph edgedefault=\"undirected\">" + NL
+            + "<node id=\"1\"/>" + NL
+            + "<node id=\"2\"/>" + NL
+            + "<node id=\"3\"/>" + NL
+            + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL
+            + "<data key=\"edge_weight\">3.0</data>" + NL
+            + "</edge>" + NL
+            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
+            + "</graph>" + NL
+            + "</graphml>" + NL;
+            // @formatter:on
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+        g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
+
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
+    public void testUndirectedWeightedWithWeightsAndLabels()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
+            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
+            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "<key id=\"vertex_label\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
+            + "<key id=\"edge_label\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
+            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+            + "<default>1.0</default>" + NL
+            + "</key>" + NL
+            + "<graph edgedefault=\"undirected\">" + NL
+            + "<node id=\"1\">" + NL
+            + "<data key=\"vertex_label\">v1</data>" + NL
+            + "</node>" + NL
+            + "<node id=\"2\">" + NL
+            + "<data key=\"vertex_label\">v2</data>" + NL
+            + "</node>" + NL            
+            + "<node id=\"3\">" + NL
+            + "<data key=\"vertex_label\">v3</data>" + NL
+            + "</node>" + NL            
+            + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL
+            + "<data key=\"edge_label\">(v1 : v2)</data>" + NL
+            + "<data key=\"edge_weight\">3.0</data>" + NL
+            + "</edge>" + NL
+            + "<edge id=\"2\" source=\"3\" target=\"1\">" + NL
+            + "<data key=\"edge_label\">(v3 : v1)</data>" + NL            
+            + "<data key=\"edge_weight\">15.0</data>" + NL            
+            + "</edge>" + NL
+            + "</graph>" + NL
+            + "</graphml>" + NL;
+            // @formatter:on
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+        g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
+        g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
+
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>(
+            new IntegerNameProvider<String>(),
+            new VertexNameProvider<String>()
+            {
+                @Override
+                public String getVertexName(String vertex)
+                {
+                    return vertex;
+                }
+            },
+            new IntegerEdgeNameProvider<DefaultWeightedEdge>(),
+            new EdgeNameProvider<DefaultWeightedEdge>()
+            {
+                @Override
+                public String getEdgeName(DefaultWeightedEdge edge)
+                {
+                    return edge.toString();
+                }
+
+            });
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
 }
 
 // End GraphMLExporterTest.java
