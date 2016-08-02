@@ -56,10 +56,10 @@ public class VertexCoversTest
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final int TEST_GRAPH_SIZE = 200;
+    private static final int TEST_GRAPH_SIZE = 10;
     private static final int TEST_REPEATS = 20;
 
-    private static final Random rnd = new Random();
+    private static final Random rnd = new Random(0);
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -88,6 +88,18 @@ public class VertexCoversTest
         }
     }
 
+
+    public void testExactCover(){
+        Graph<Integer, DefaultEdge> g = createRandomGraph();
+        Set<Integer> cover=VertexCovers.findVertexCover(g);
+        System.out.println("Iscover: "+isCover(cover, g)+" cover size: "+cover.size()+" iterations: "+VertexCovers.counter1+" cover: "+cover);
+
+//        cover=VertexCovers.findVertexCover(g);
+//        System.out.println("Iscover: "+isCover(cover, g)+" cover size: "+cover.size()+" iterations: "+VertexCovers.counter1+" cover: "+cover);
+        Set<Integer> cover2=VertexCovers.findVertexCover2(g);
+        System.out.println("Iscover: "+isCover(cover2, g)+" cover size: "+cover2.size()+" iterations: "+VertexCovers.counter2+" cover: "+cover2);
+
+    }
     /**
      * Checks if the specified vertex set covers every edge of the graph. Uses
      * the definition of Vertex Cover - removes every edge that is incident on a
@@ -142,6 +154,8 @@ public class VertexCoversTest
 
         return g;
     }
+
+
 }
 
 // End VertexCoversTest.java
