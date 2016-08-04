@@ -6,13 +6,13 @@ Changes to JGraphT in each version:
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
 	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar
 	- Optimized edge lookups (contributed by Joris Kinable)
-        - Use LinkedHashSet in `CycleDetector` (contributed by Benedikt Waldvogel)
+	- Use LinkedHashSet in `CycleDetector` (contributed by Benedikt Waldvogel)
 	- Use unique OSGi bundle symbolic name for uber artifact (contributed by Christoph Zauner)
-        - Replace experimental GraphReader with `DIMACSImporter` (contributed by Joris Kinable)
+	- Replace experimental GraphReader with `DIMACSImporter` (contributed by Joris Kinable)
 	- Implement various graph utility methods (contributed by Christoph Zauner)
 	- Add getFirstHop and getLastHop to `FloydWarshallShortestPaths` (contributed by Joris Kinable)
 	- Allow paths to be expressed in terms of vertices instead of edges; deprecate `GraphPathImpl` in favor of new `GraphWalk` (contributed by Joris Kinable)
-        - Weighted graph support in `GmlExporter` (contributed by Dimitrios Michail)
+	- Weighted graph support in `GmlExporter` (contributed by Dimitrios Michail)
 	- Add `RandomWalkIterator` (contributed by Assaf Mizrachi)
 	- Add `GreedyMultiplicativeSpanner` (contributed by Dimitrios Michail)
 	- Support undirected graphs in max flow algorithms (contributed by Joris Kinable)
@@ -22,9 +22,9 @@ Changes to JGraphT in each version:
 	- Add `GmlImporter` (contributed by Dimitrios Michail)
 	- Fixed bug in HopcroftKarpBipartiteMatching which caused the algorithm to occasionally throw a NullPointerException (contributed by Dimitrios Michail, bug reported by Nils Olberg)
 	- Fixed `AStarShortestPath` to use Object.equals (contributed by Joris Kinable, bug reported by Zgce)
-        - Enhance `DirectedAcyclicGraph` extend Iterable (contributed by Joris Kinable, suggested by Andrew Pennebaker)
+	- Enhance `DirectedAcyclicGraph` to extend Iterable (contributed by Joris Kinable, suggested by Andrew Pennebaker)
 	- Enhance `MinSourceSinkCut` to make max-flow implementation configurable (contributed by Joris Kinable, suggested by Roman Pearah)
-        - Add new vertex cover algorithms and package (contributed by Joris Kinable and Nils Olberg)
+	- Add new vertex cover algorithms and package (contributed by Joris Kinable and Nils Olberg)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
