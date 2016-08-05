@@ -6,7 +6,7 @@ package org.jgrapht.alg;
  * @author Nils Olberg
  */
 
-public class MaximumWeightIndependentSetTest {
+public class IndependentSetTest {
 	 
 	/**
      * Test algorithm for the maximum weight independent set problem.
