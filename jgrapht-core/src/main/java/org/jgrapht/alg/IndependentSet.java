@@ -7,9 +7,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
+import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
+
 
 /**
  * Finds a maximum (weight) independent set in a undirected graph. 
@@ -21,7 +22,7 @@ import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
  * @author Nils Olberg
  */
 
-public abstract class IndependentSet<V, E> {
+public abstract class IndependentSet {
 	
 	/**
      * Computes a maximum independent set for the {@param graph}.
