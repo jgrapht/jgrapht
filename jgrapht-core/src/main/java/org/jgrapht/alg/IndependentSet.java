@@ -59,7 +59,7 @@ public abstract class IndependentSet<V, E> {
      * @param weights			map with non-negative weights for vertices
      * @return weight of maximum weight independent set
      */
-	public Double getWeight(UndirectedGraph<V, E> graph, Map<V, Double> weights) 
+	public static <V, E> Double getWeight(UndirectedGraph<V, E> graph, Map<V, Double> weights) 
 	{
 		Set<V> set = getIndependentSet(graph, weights);
 		double weight = 0;
