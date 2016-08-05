@@ -2,12 +2,7 @@ package org.jgrapht.alg;
 
 import java.util.HashMap;
 
-import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
-import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
-import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -22,7 +17,7 @@ import junit.framework.TestCase;
 public class IndependentSetTest extends TestCase {
 	 
 	/**
-     * Tests the algorithms for the maximum weight independent set problem.
+     * Tests the algorithm for the maximum weight independent set problem.
      */
 	
 	public static void testIndependentSet1()

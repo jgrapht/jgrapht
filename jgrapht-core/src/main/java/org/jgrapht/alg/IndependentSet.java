@@ -12,8 +12,11 @@ import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
 
 /**
- * Finds a maximum (weight) independent set in a undirected graph. The implementation 
- * relies on the exact algorithm for the minimum weight vertex cover problem.
+ * Finds a maximum (weight) independent set in a undirected graph. 
+ * 
+ * The implementation relies on the fact that if V' is a minimum 
+ * weight vertex cover for graph G = (V,E) with weight function
+ * w: V -> |R_+, then V-V' is a maximum weight independent set in G. 
  *
  * @author Nils Olberg
  */
@@ -43,12 +46,8 @@ public abstract class IndependentSet<V, E> {
 		MinimumWeightedVertexCoverAlgorithm<V, E> mvc = new RecursiveExactVCImpl<V, E>();
 		VertexCover<V> vertexCover = mvc.getVertexCover(graph, weights);
 		
-		Set<V> result = new HashSet<V>();
-		for (V v : graph.vertexSet()) {
-			if (!vertexCover.getVertices().contains(v)) {
-				result.add(v);
-			}
-		}
+		Set<V> result = new HashSet<V>(graph.vertexSet());
+		result.removeAll(vertexCover.getVertices());
 		
 		return result;
 	}
