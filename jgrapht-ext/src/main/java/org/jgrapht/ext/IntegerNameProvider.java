@@ -26,8 +26,6 @@
  *
  * Original Author:  Charles Fry
  *
- * $Id$
- *
  * Changes
  * -------
  * 13-Dec-2005 : Initial Version (CF);
@@ -35,10 +33,11 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.jgrapht.event.*;
-
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
 
 /**
  * Assigns a unique integer to represent each vertex. Each instance of

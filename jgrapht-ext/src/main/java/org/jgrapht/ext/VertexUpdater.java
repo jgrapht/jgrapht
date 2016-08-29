@@ -29,14 +29,13 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
+import java.util.Map;
 
 /**
  * Type to handle updates to a vertex when an import gets more information about
  * a vertex after it has been created.
  *
- * @param <V>
+ * @param <V> the vertex type
  */
 public interface VertexUpdater<V>
 {

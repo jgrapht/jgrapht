@@ -26,17 +26,12 @@
  *
  * Original Author:  Charles Fry
  *
- * $Id$
- *
  * Changes
  * -------
  * 13-Dec-2005 : Initial Version (CF);
  *
  */
 package org.jgrapht.ext;
-
-import org.jgrapht.event.*;
-
 
 /**
  * Generates vertex names by invoking {@link #toString()} on them. This assumes
@@ -59,8 +54,6 @@ public class StringNameProvider<V>
      * @param vertex the vertex to be named
      *
      * @return the name of
-     *
-     * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
     @Override public String getVertexName(V vertex)
     {

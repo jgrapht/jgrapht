@@ -26,8 +26,6 @@
  *
  * Original Author:  Dimitrios Michail <dimitrios.michail@gmail.com>
  *
- * $Id$
- *
  * Changes
  * -------
  * 15-Dec-2006 : Initial Version (DM);
@@ -35,11 +33,15 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.WeightedGraph;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).
@@ -59,6 +61,7 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class GmlExporter<V, E>
+    implements GraphExporter<V, E>
 {
     private static final String CREATOR = "JGraphT GML Exporter";
     private static final String VERSION = "1";
@@ -215,12 +218,37 @@ public class GmlExporter<V, E>
     }
 
     /**
+     * Exports an undirected graph into a plain text file in GML format.
+     *
+     * @param writer the writer to which the graph to be exported
+     * @param g the undirected graph to be exported
+     */
+    @Deprecated
+    public void export(Writer writer, UndirectedGraph<V, E> g)
+    {
+        exportGraph(g, writer);
+    }
+
+    /**
+     * Exports a directed graph into a plain text file in GML format.
+     *
+     * @param writer the writer to which the graph to be exported
+     * @param g the directed graph to be exported
+     */
+    @Deprecated
+    public void export(Writer writer, DirectedGraph<V, E> g)
+    {
+        exportGraph(g, writer);
+    }
+    
+    /**
      * Exports an graph into a plain text GML format.
      *
      * @param writer the writer
      * @param g the graph
      */
-    public void export(Writer writer, Graph<V, E> g)
+    @Override
+    public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
 

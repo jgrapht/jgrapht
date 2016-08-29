@@ -26,8 +26,6 @@
  *
  * Original Author:  Avner Linder
  *
- * $Id$
- *
  * Changes
  * -------
  * 27-May-2004 : Initial Version (AL);

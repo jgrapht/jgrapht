@@ -25,6 +25,11 @@ Changes to JGraphT in each version:
 	- Enhance `DirectedAcyclicGraph` to extend Iterable (contributed by Joris Kinable, suggested by Andrew Pennebaker)
 	- Enhance `MinSourceSinkCut` to make max-flow implementation configurable (contributed by Joris Kinable, suggested by Roman Pearah)
 	- Add new vertex cover algorithms and package (contributed by Joris Kinable and Nils Olberg)
+	- Improved GraphML support (contributed by Dimitrios Michail)
+	- Add common `GraphExporter` and `GraphImporter` interfaces (contributed by Dimitrios Michail)
+	- DOT importer id fix (contributed by Dimitrios Michail)
+	- Add `CSVExporter` and `CSVImporter` (contributed by Dimitrios Michail)
+	- Add `MinimumSTCutAlgorithm` (contributed by Joris Kinable)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
@@ -39,7 +44,7 @@ Changes to JGraphT in each version:
 	- More `FloydWarshallShortestPaths` optimizations, contributed by Joris Kinable
 	- Add `MixedGraphUnion` and `AsWeightedDirectedGraph`; fix UndirectedGraphUnion constructors; contributed by Joris Kinable
 	- Add `GabowStrongConnectivityInspector` and `KosarajuStrongConnectivityInspector`, contributed by Joris Kinable and Sarah Komla-Ebri
-	- Add `PushRelabelMaximumFlow`; boost `EdmondsKarpMaximumFlow`; add `MaximumFlowAlgorithm` interface; add `Pair` and `Extension` utility classes; optional seed parameter to `RandomGraphGenerator`
+	- Add `PushRelabelMaximumFlow`; boost `EdmondsKarpMaximumFlow`; add `MaximumFlowAlgorithm` interface; add `Pair` and `Extension` utility classes; optional seed parameter to `RandomGraphGenerator`, contributed by Alexey Kudinkin
 	- Add `MaximumWeightBipartiteMatching`, contributed by Graeme Ahokas
 	- Osgify jgrapht-ext, contributed by Christoph Zauner
 	- Add `AllDirectedPaths`, contributed by Andrew Gainer-Dewar

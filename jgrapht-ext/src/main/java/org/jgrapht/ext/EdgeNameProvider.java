@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* ------------------
- * VertexNameProvider.java
+ * EdgeNameProvider.java
  * ------------------
  * (C) Copyright 2005-2008, by Trevor Harmon.
  *
@@ -30,7 +30,7 @@
 package org.jgrapht.ext;
 
 /**
- * Assigns a display name for each of the graph edes.
+ * Assigns a display name for each of the graph edges.
  */
 public interface EdgeNameProvider<E>
 {

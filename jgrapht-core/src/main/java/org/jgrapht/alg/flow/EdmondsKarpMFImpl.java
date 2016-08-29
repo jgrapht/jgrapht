@@ -56,6 +56,10 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  * significant amount of time (its upper-bound complexity is O(VE^2), where V -
  * amount of vertices, E - amount of edges in the network).
  *
+ * <p>This class can also computes minimum s-t cuts. Effectively, to compute a
+ * minimum s-t cut, the implementation first computes a minimum s-t flow, after
+ * which a BFS is run on the residual graph.
+ *
  * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
  * (Lecture Notes)</i>.
  *
@@ -66,13 +70,6 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  * @author Ilya Razensteyn
  */
 
-/* * JK: Issues with the current implementation:
- * 1. The internal data structures are completed rebuild each time the algorithm is invoked. Even if the
- * graph and edge capacities don't change, but the source/sink pair change, the data structures get recomputed.
- * 2. The algorithm uses custom data structures to represent a flow network internally. This however could easily be
- * replaced by a DirectedWeightedGraph. However, due to some overhead in the graphs prior to version 0.9.3, it turned out
- * beneficial to use the custom structures instead. In the next iteration we should replace them by proper graph structures.
- * This will improve robustness and readability significantly.*/
 public final class EdmondsKarpMFImpl<V, E>
     extends MaximumFlowAlgorithmBase<V, E>
 {
@@ -161,7 +158,7 @@ public final class EdmondsKarpMFImpl<V, E>
      * @param sink sink vertex
      */
     public double calculateMaximumFlow(V source,V sink){
-        super.init(vertexExtensionsFactory, edgeExtensionsFactory);
+        super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
         if (!network.containsVertex(source)) {
             throw new IllegalArgumentException(
@@ -301,27 +298,6 @@ public final class EdmondsKarpMFImpl<V, E>
 
     private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getExtension(v);}
 
-    /**
-     * Returns current source vertex, or <tt>null</tt> if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
-     *
-     * @return current source
-     */
-    public V getCurrentSource()
-    {
-        return (currentSource == null) ? null : currentSource.prototype;
-    }
-
-    /**
-     * Returns current sink vertex, or <tt>null</tt> if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
-     *
-     * @return current sink
-     */
-    public V getCurrentSink()
-    {
-        return (currentSink == null) ? null : currentSink.prototype;
-    }
 
     class VertexExtension extends VertexExtensionBase
     {

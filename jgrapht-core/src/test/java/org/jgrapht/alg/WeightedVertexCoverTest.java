@@ -70,7 +70,7 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
         MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new ClarksonTwoApproxVCImpl<>();
         MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new BarYehudaEvenTwoApproxVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
             Map<Integer, Double> vertexWeights=getRandomVertexWeights(g);
 
             VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
@@ -92,7 +92,7 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
     {
         MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
             Map<Integer, Double> vertexWeights=getRandomVertexWeights(g);
             VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover));

@@ -30,29 +30,39 @@
  * Changes
  * -------
  * 26-Nov-2012 : Initial revision (JK);
+ * 4-Aug-2016 : Added support for undirected graphs, improved efficiency of algorithm to O(E)
  *
  */
 package org.jgrapht.alg;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
+import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 
 
 /**
- * Given a directed, weighted graph G(V,E). This class computes a minimum s-t
- * cut. For this, it relies on the EdmondsKarpMaximumFlow implementation. Note:
+ * Given a weighted graph G(V,E) (directed or undirected). This class computes a minimum s-t
+ * cut. For this purpose this class relies on Edmonds' Karp Maximum Flow Algorithm. Note:
  * it is not recommended to use this class to calculate the overall minimum cut
  * in a graph by iteratively invoking this class for all source-sink pairs. This
  * is computationally expensive. Instead, use the StoerWagnerMinimumCut
  * implementation.
  *
+ * Runtime: O(E)
+ *
+ * Warning: this implementation cannot be used with the PushRelabel max flow implementation!
+ *
  * @author Joris Kinable
+ * @deprecated Use {@link MinimumSTCutAlgorithm} instead
  */
+@Deprecated
 public class MinSourceSinkCut<V, E>
 {
     MaximumFlowAlgorithm<V, E> ekMaxFlow;

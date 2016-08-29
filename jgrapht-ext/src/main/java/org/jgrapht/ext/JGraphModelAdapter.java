@@ -218,7 +218,7 @@ public class JGraphModelAdapter<V, E>
      * @param cellFactory a {@link CellFactory} to be used to create the JGraph
      * cells. <code>null</code> is NOT permitted.
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException in case a parameter is not permitted
      */
     public JGraphModelAdapter(
         Graph<V, E> jGraphTGraph,
@@ -266,6 +266,8 @@ public class JGraphModelAdapter<V, E>
      *
      * @param jGraphTGraph the graph for which default edge attributes to be
      * created.
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return a map of attributes to be used as default for edge attributes.
      */

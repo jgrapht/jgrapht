@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * EdmondsKarpMaximumFlowTest.java
+ * EdmondsKarpMFImplTest.java
  * -----------------
  * (C) Copyright 2008-2008, by Ilya Razenshteyn and Contributors.
  *
@@ -42,7 +42,7 @@ import org.jgrapht.graph.DirectedWeightedMultigraph;
 import java.util.Map;
 
 
-public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
+public class EdmondsKarpMFImplTest extends MaximumFlowAlgorithmTest
 {
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
@@ -130,4 +130,4 @@ public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
     }
 }
 
-// End EdmondsKarpMaximumFlowTest.java
+// End EdmondsKarpMFImplTest.java

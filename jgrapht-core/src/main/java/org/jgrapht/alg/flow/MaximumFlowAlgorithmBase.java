@@ -31,10 +31,13 @@
  *
  * Changes
  * -------
+ * 2015 : Initial version (AK)(JK);
+ * Aug-2016: Added Minimum Cut functionality (JK)
  */
 package org.jgrapht.alg.flow;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -56,7 +59,7 @@ import org.jgrapht.alg.util.extension.ExtensionManager;
  * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmBase<V, E>
-    implements MaximumFlowAlgorithm<V, E>
+    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V,E>
 {
     /**
      * Default tolerance.
@@ -74,10 +77,20 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     protected ExtensionManager<V, ? extends VertexExtensionBase> vertexExtensionManager;
     protected ExtensionManager<E, ? extends AnnotatedFlowEdge> edgeExtensionManager;
 
+    /* Source used during the last invocation of this algorithm */
+    protected V source=null;
+    /* Sink used during the last invocation of this algorithm */
+    protected V sink=null;
     /* Max flow established after last invocation of the algorithm. */
     protected double maxFlowValue = -1;
     /* Mapping of the flow on each edge. */
     protected Map<E, Double> maxFlow = null;
+    /* Source parition of S-T cut */
+    protected Set<V> sourcePartition;
+    /* Sink parition of S-T cut */
+    protected Set<V> sinkPartition;
+    /* Cut edges */
+    protected Set<E> cutEdges;
 
     public MaximumFlowAlgorithmBase(Graph<V,E> network, double epsilon){
         this.network = network;
@@ -85,7 +98,14 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         this.epsilon = epsilon;
     }
 
+    /**
+     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut algorithms
+     * @param source source
+     * @param sink sink
+     */
     protected <VE extends VertexExtensionBase> void init(
+        V source,
+        V sink,
         ExtensionFactory<VE> vertexExtensionFactory,
         ExtensionFactory<AnnotatedFlowEdge> edgeExtensionFactory)
     {
@@ -93,8 +113,13 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         edgeExtensionManager = new ExtensionManager<>(edgeExtensionFactory);
 
         buildInternal();
+        this.source=source;
+        this.sink=sink;
         maxFlowValue = 0;
         maxFlow = null;
+        sourcePartition=null;
+        sinkPartition=null;
+        cutEdges=null;
     }
 
     /**
@@ -305,6 +330,22 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
+     * Returns current source vertex, or <tt>null</tt> if there was no <tt>
+     * calculateMaximumFlow</tt> calls.
+     *
+     * @return current source
+     */
+    public V getCurrentSource(){ return source; }
+
+    /**
+     * Returns current sink vertex, or <tt>null</tt> if there was no <tt>
+     * calculateMaximumFlow</tt> calls.
+     *
+     * @return current sink
+     */
+    public V getCurrentSink(){ return sink; }
+
+    /**
      * Returns maximum flow value, that was calculated during last <tt>
      * calculateMaximumFlow</tt> call.
      *
@@ -323,7 +364,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      */
     public Map<E, Double> getMaximumFlow(){
         if(maxFlow == null) //Lazily calculate the max flow map
-            composeFlow();
+            maxFlow=composeFlow();
         return maxFlow;
     }
 
@@ -345,6 +386,69 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             return annotatedFlowEdge.getTarget().prototype;
         else
             return inverseEdge.getTarget().prototype;
+    }
+
+
+    /*---------------- Minimum s-t cut related methods -------------------*/
+
+
+    @Override
+    public double calculateMinCut(V source, V sink){
+        return this.calculateMaximumFlow(source, sink);
+    }
+    @Override
+    public double getCutCapacity(){
+        return getMaximumFlowValue();
+    }
+    @Override
+    public Set<V> getSourcePartition(){
+        if(sourcePartition==null)
+            calculateSourcePartition();
+        return sourcePartition;
+    }
+
+    @Override
+    public Set<V> getSinkPartition(){
+        if(sinkPartition==null){
+            sinkPartition=new LinkedHashSet<>(network.vertexSet());
+            sinkPartition.removeAll(this.getSourcePartition());
+        }
+        return sinkPartition;
+    }
+
+    @Override
+    public Set<E> getCutEdges(){
+        if(cutEdges != null)
+            return cutEdges;
+        cutEdges = new LinkedHashSet<>();
+
+        Set<V> p1=getSourcePartition();
+        if(directed_graph) {
+            DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)network;
+            for (V vertex : p1) {
+                cutEdges.addAll(directedGraph.outgoingEdgesOf(vertex).stream().filter(edge -> !p1.contains(network.getEdgeTarget(edge))).collect(Collectors.toList()));
+            }
+        }else{
+            cutEdges.addAll(network.edgeSet().stream().filter(e -> p1.contains(network.getEdgeSource(e)) ^ p1.contains(network.getEdgeTarget(e))).collect(Collectors.toList()));
+        }
+        return cutEdges;
+    }
+
+    protected void calculateSourcePartition(){
+        //the source partition contains all vertices reachable fromt he s in the residual graph
+        this.sourcePartition=new LinkedHashSet<>();
+        Queue<VertexExtensionBase> processQueue = new LinkedList<>();
+        processQueue.add(vertexExtensionManager.getExtension(getCurrentSource()));
+        while(!processQueue.isEmpty()){
+            VertexExtensionBase vx=processQueue.poll();
+            if(sourcePartition.contains(vx.prototype))
+                continue;
+            sourcePartition.add(vx.prototype);
+            for (AnnotatedFlowEdge ex : vx.getOutgoing()) {
+                if(ex.hasCapacity())
+                    processQueue.add(ex.getTarget());
+            }
+        }
     }
 }
 

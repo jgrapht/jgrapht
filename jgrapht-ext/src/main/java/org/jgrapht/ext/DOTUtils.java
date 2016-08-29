@@ -26,8 +26,6 @@
  *
  * Original Author:  Christoph Zauner
  *
- * $Id$
- *
  * Changes
  * -------
  *
@@ -44,7 +42,12 @@ import org.jgrapht.Graph;
 public class DOTUtils
 {
     /**
-     * @return a {@link String} represenation in DOT format of the given graph.
+     * Convert a graph into a String in DOT format.
+     *  
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a {@link String} representation in DOT format of the given graph.
      */
     public static <V, E> String convertGraphToDotString(
         Graph<V, E> graph)
@@ -56,7 +59,7 @@ public class DOTUtils
             // vertex name provider
             new StringNameProvider<V>(),
             // edge label provider
-            null).export(outputWriter, graph);
+            null).exportGraph(graph, outputWriter);
 
         return outputWriter.toString();
     }

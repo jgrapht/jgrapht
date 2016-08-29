@@ -59,8 +59,6 @@ public class MatrixExporterTest
 
     private static final String NL = System.getProperty("line.separator");
 
-    // TODO jvs 23-Dec-2006:  externalized diff-based testing framework
-
     private static final String LAPLACIAN =
         "1 1 2" + NL
         + "1 2 -1" + NL
@@ -90,12 +88,12 @@ public class MatrixExporterTest
         "1 2 1" + NL
         + "3 1 2" + NL;
 
-    private static final MatrixExporter<String, DefaultEdge> exporter =
-        new MatrixExporter<String, DefaultEdge>();
+    
 
     //~ Methods ----------------------------------------------------------------
 
     public void testLaplacian()
+        throws ExportException
     {
         UndirectedGraph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
@@ -105,16 +103,21 @@ public class MatrixExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        StringWriter w = new StringWriter();
-        exporter.exportLaplacianMatrix(w, g);
-        assertEquals(LAPLACIAN, w.toString());
+        GraphExporter<String, DefaultEdge> exporter1 = new MatrixExporter<>(
+            MatrixExporter.Format.SPARSE_LAPLACIAN_MATRIX);
+        StringWriter w1 = new StringWriter();
+        exporter1.exportGraph(g, w1);
+        assertEquals(LAPLACIAN, w1.toString());
 
-        w = new StringWriter();
-        exporter.exportNormalizedLaplacianMatrix(w, g);
-        assertEquals(NORMALIZED_LAPLACIAN, w.toString());
+        GraphExporter<String, DefaultEdge> exporter2 = new MatrixExporter<>(
+            MatrixExporter.Format.SPARSE_NORMALIZED_LAPLACIAN_MATRIX);
+        StringWriter w2 = new StringWriter();
+        exporter2.exportGraph(g, w2);
+        assertEquals(NORMALIZED_LAPLACIAN, w2.toString());
     }
 
     public void testAdjacencyUndirected()
+        throws ExportException
     {
         UndirectedGraph<String, DefaultEdge> g =
             new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
@@ -124,13 +127,15 @@ public class MatrixExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
         g.addEdge(V1, V1);
-
+        
+        GraphExporter<String, DefaultEdge> exporter = new MatrixExporter<>();
         StringWriter w = new StringWriter();
-        exporter.exportAdjacencyMatrix(w, g);
+        exporter.exportGraph(g, w);
         assertEquals(UNDIRECTED_ADJACENCY, w.toString());
     }
 
     public void testAdjacencyDirected()
+        throws ExportException
     {
         DirectedGraph<String, DefaultEdge> g =
             new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
@@ -140,9 +145,10 @@ public class MatrixExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
         g.addEdge(V3, V1);
-
+        
+        GraphExporter<String, DefaultEdge> exporter = new MatrixExporter<>();
         Writer w = new StringWriter();
-        exporter.exportAdjacencyMatrix(w, g);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_ADJACENCY, w.toString());
     }
 }

@@ -22,18 +22,30 @@
 /* ------------------
  * DOTImporter.java
  * ------------------
- * (C) Copyright 2015, by  Wil Selwood.
+ * (C) Copyright 2015-2016, by  Wil Selwood and Contributors.
  *
  * Original Author:  Wil Selwood <wselwood@ijento.com>
+ * Contributor(s): Dimitrios Michail
+ * 
+ * Changes
+ * -------
+ * 2015 : Initial revision (WS);
+ * 19-Aug-2016: Always provide id to vertex providers (DM);
  *
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.AbstractBaseGraph;
 
 /**
  * Imports a graph from a DOT file.
@@ -93,6 +105,7 @@ import org.jgrapht.graph.*;
  * @author Wil Selwood
  */
 public class DOTImporter<V, E>
+    implements GraphImporter<V, E>
 {
     // Constants for the state machine
     private static final int HEADER = 1;
@@ -142,6 +155,45 @@ public class DOTImporter<V, E>
     }
 
     /**
+     * Read a dot formatted input and populate the provided graph.
+     * 
+     * The current implementation reads the whole input as a string and then
+     * parses the graph.
+     *
+     * @param graph the graph to update
+     * @param input the input reader
+     *
+     * @throws ImportException if there is a problem parsing the file.
+     */
+    @Override
+    public void importGraph(Graph<V, E> graph, Reader input)
+        throws ImportException
+    {
+        BufferedReader br;
+        if (input instanceof BufferedReader) {
+            br = (BufferedReader) input;
+        } else {
+            br = new BufferedReader(input);
+        }
+        read(br.lines().collect(Collectors.joining("\n")), (Graph<V, E>) graph);
+    }
+
+    /**
+     * Read a dot formatted string and populate the provided graph.
+     *
+     * @param input the content of a dot file as a string
+     * @param graph the graph to update
+     *
+     * @throws ImportException if there is a problem parsing the file.
+     */
+    @Deprecated
+    public void read(String input, AbstractBaseGraph<V, E> graph)
+        throws ImportException
+    {
+        read(input, (Graph<V,E>) graph);
+    }
+    
+    /**
      * Read a dot formatted string and populate the provided graph.
      *
      * @param input the content of a dot file.
@@ -149,7 +201,7 @@ public class DOTImporter<V, E>
      *
      * @throws ImportException if there is a problem parsing the file.
      */
-    public void read(String input, AbstractBaseGraph<V, E> graph)
+    private void read(String input, Graph<V, E> graph)
         throws ImportException
     {
         if ((input == null) || input.isEmpty()) {
@@ -256,7 +308,7 @@ public class DOTImporter<V, E>
         String input,
         int position,
         StringBuilder sectionBuffer,
-        AbstractBaseGraph<V, E> graph)
+        Graph<V, E> graph)
         throws ImportException
     {
         if (isStartOfLineComment(input, position)) {
@@ -278,7 +330,8 @@ public class DOTImporter<V, E>
             }
 
             int i = 0;
-            if (graph.isAllowingMultipleEdges()
+            if (graph instanceof AbstractBaseGraph
+                && ((AbstractBaseGraph<V, E>) graph).isAllowingMultipleEdges()
                 && headerParts[i].equals("strict"))
             {
                 throw new ImportException(
@@ -331,7 +384,7 @@ public class DOTImporter<V, E>
         String input,
         int position,
         StringBuilder sectionBuffer,
-        AbstractBaseGraph<V, E> graph,
+        Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -411,7 +464,7 @@ public class DOTImporter<V, E>
         String input,
         int position,
         StringBuilder sectionBuffer,
-        AbstractBaseGraph<V, E> graph,
+        Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -468,7 +521,7 @@ public class DOTImporter<V, E>
         String input,
         int position,
         StringBuilder sectionBuffer,
-        AbstractBaseGraph<V, E> graph,
+        Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -568,7 +621,7 @@ public class DOTImporter<V, E>
 
     private void processCompleteNode(
         String node,
-        AbstractBaseGraph<V, E> graph,
+        Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -580,14 +633,9 @@ public class DOTImporter<V, E>
             id = node.substring(0, node.indexOf('[')).trim();
         }
 
-        String label = attributes.get("label");
-        if (label == null) {
-            label = id;
-        }
-
         V existing = vertexes.get(id);
         if (existing == null) {
-            V vertex = vertexProvider.buildVertex(label, attributes);
+            V vertex = vertexProvider.buildVertex(id, attributes);
             graph.addVertex(vertex);
             vertexes.put(id, vertex);
         } else {
@@ -596,7 +644,7 @@ public class DOTImporter<V, E>
             } else {
                 throw new ImportException(
                     "Update required for vertex "
-                    + label
+                    + id
                     + " but no vertexUpdater provided");
             }
         }
@@ -604,7 +652,7 @@ public class DOTImporter<V, E>
 
     private void processCompleteEdge(
         String edge,
-        AbstractBaseGraph<V, E> graph,
+        Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {

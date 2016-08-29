@@ -44,6 +44,7 @@ public class StringEdgeNameProvider<E>
      * Returns the String representation an edge.
      *
      * @param edge the edge to be named
+     * @return a unique String edge representation
      */
     @Override public String getEdgeName(E edge)
     {

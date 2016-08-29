@@ -29,8 +29,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
+import java.util.Map;
 
 /**
  * Creates a Vertex of type V
@@ -45,7 +44,7 @@ public interface VertexProvider<V>
      * @param label the label of the vertex
      * @param attributes any other attributes of the vertex
      *
-     * @return the vertex.
+     * @return the vertex
      */
     V buildVertex(String label, Map<String, String> attributes);
 }

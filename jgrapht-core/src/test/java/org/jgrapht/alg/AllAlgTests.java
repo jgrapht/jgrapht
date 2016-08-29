@@ -36,8 +36,10 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.alg.flow.EdmondsKarpMaximumFlowTest;
+import org.jgrapht.alg.flow.EdmondsKarpMFImplTest;
+import org.jgrapht.alg.flow.EdmondsKarpMinimumSTCutTest;
 import org.jgrapht.alg.flow.PushRelabelMFImplTest;
+import org.jgrapht.alg.flow.PushRelabelMinimumSTCutTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -60,8 +62,8 @@ import org.junit.runners.Suite;
     CycleDetectorTest.class,
     DijkstraShortestPathTest.class,
     EdmondsBlossomShrinkingTest.class,
-    EdmondsKarpMaximumFlowTest.class,
-    PushRelabelMFImplTest.class,
+    EdmondsKarpMFImplTest.class,
+    EdmondsKarpMinimumSTCutTest.class,
     EulerianCircuitTest.class,
     FloydWarshallShortestPathsTest.class,
     HamiltonianCycleTest.class,
@@ -72,9 +74,10 @@ import org.junit.runners.Suite;
     KSPExampleTest.class,
     KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.class,
     MinimumSpanningTreeTest.class,
-    MinSourceSinkCutTest.class,
     NaiveLcaFinderTest.class,
     NeighborIndexTest.class,
+    PushRelabelMFImplTest.class,
+    PushRelabelMinimumSTCutTest.class,
     StoerWagnerMinimumCutTest.class,
     StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class,

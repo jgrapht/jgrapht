@@ -33,8 +33,9 @@
  */
 package org.jgrapht.ext;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.jgrapht.Graph;
@@ -49,7 +50,7 @@ import org.jgrapht.graph.WeightedPseudograph;
 import junit.framework.TestCase;
 
 /**
- * 
+ * .
  * @author Dimitrios Michail
  */
 public class GmlImporterTest
@@ -105,7 +106,7 @@ public class GmlImporterTest
         };
 
         GmlImporter<String, E> importer = new GmlImporter<String, E>(vp, ep);
-        importer.read(new StringReader(input), g);
+        importer.importGraph(g, new StringReader(input));
 
         return g;
     }
@@ -544,7 +545,7 @@ public class GmlImporterTest
     }
 
     public void testExportImport()
-        throws ImportException
+        throws ImportException, ExportException, UnsupportedEncodingException
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 = new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(
             DefaultWeightedEdge.class);
@@ -555,11 +556,11 @@ public class GmlImporterTest
         g1.setEdgeWeight(g1.addEdge("2", "3"), 3.0);
         g1.setEdgeWeight(g1.addEdge("3", "3"), 5.0);
 
-        StringWriter sw = new StringWriter();
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
-        exporter.export(sw, g1);
-        String output = sw.toString();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g1, os);
+        String output = new String(os.toByteArray(), "UTF-8");
 
         Graph<String, DefaultWeightedEdge> g2 = readGraph(
             output,
@@ -616,7 +617,7 @@ public class GmlImporterTest
             GmlImporter<String, DefaultEdge> importer = new GmlImporter<String, DefaultEdge>(
                 vp,
                 ep);
-            importer.read(new StringReader(input), g);
+            importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {
         }

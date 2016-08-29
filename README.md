@@ -116,3 +116,5 @@ With regards from
 [Barak Naveh](mailto:barak_naveh@users.sourceforge.net), JGraphT Project Creator
 
 [John Sichi](mailto:perfecthash@users.sourceforge.net), JGraphT Project Administrator
+
+[Joris Kinable](https://github.com/jkinable), JGraphtT Project Reviewer/Committer

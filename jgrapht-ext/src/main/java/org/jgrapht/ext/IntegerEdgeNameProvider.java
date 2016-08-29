@@ -29,8 +29,8 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Assigns a unique integer to represent each edge. Each instance of

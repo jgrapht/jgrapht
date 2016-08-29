@@ -66,7 +66,7 @@ public class VertexCoverTest
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    protected static final int TEST_GRAPH_SIZE = 100;
+    protected static final int TEST_GRAPH_SIZE = 200;
     protected static final int TEST_REPEATS = 20;
 
     protected final Random rnd = new Random(0);
@@ -84,7 +84,27 @@ public class VertexCoverTest
         MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new EdgeBasedTwoApproxVCImpl<>();
         MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new ClarksonTwoApproxVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
+
+            VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g));
+            assertTrue(isCover(g, vertexCover));
+            assertEquals(vertexCover.getWeight(), 1.0*vertexCover.getVertices().size());
+
+            VertexCover<Integer> vertexCover2=mvc2.getVertexCover(Graphs.undirectedGraph(g));
+            assertTrue(isCover(g, vertexCover2));
+            assertEquals(vertexCover2.getWeight(), 1.0*vertexCover2.getVertices().size());
+        }
+    }
+
+    /**
+     * Test whether the 2 approximations are indeed within 2 times the optimum value
+     */
+    public void testFind2ApproximationCover2()
+    {
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new EdgeBasedTwoApproxVCImpl<>();
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new ClarksonTwoApproxVCImpl<>();
+        for (int i = 0; i < TEST_REPEATS; i++) {
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(70);
 
             VertexCover<Integer> optimalCover=new RecursiveExactVCImpl<Integer, DefaultEdge>().getVertexCover(Graphs.undirectedGraph(g));
 
@@ -109,7 +129,7 @@ public class VertexCoverTest
     {
         MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
             VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover));
             assertEquals(vertexCover.getWeight(), 1.0*vertexCover.getVertices().size());
@@ -440,10 +460,10 @@ public class VertexCoverTest
      *
      * @return random pseudo graph with TEST_GRAPH_SIZE vertices and a random number of edges drawn from the domain [1, TEST_GRAPH_SIZE/2]
      */
-    protected Graph<Integer, DefaultEdge> createRandomPseudoGraph()
+    protected Graph<Integer, DefaultEdge> createRandomPseudoGraph(int vertices)
     {
         Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator=new RandomGraphGenerator<>(TEST_GRAPH_SIZE, rnd.nextInt(TEST_GRAPH_SIZE / 2) + 1);
+        GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator=new RandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
         graphGenerator.generateGraph(g, new IntegerVertexFactory(), null);
         return g;
     }

@@ -29,12 +29,12 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Map;
 
-import java.util.*;
-
-import org.jgrapht.*;
-
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 
 /**
  * Exports a graph into a DOT file.
@@ -46,6 +46,7 @@ import org.jgrapht.*;
  * @author Trevor Harmon
  */
 public class DOTExporter<V, E>
+    implements GraphExporter<V, E>
 {
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
@@ -122,7 +123,19 @@ public class DOTExporter<V, E>
      * @param writer the writer to which the graph to be exported
      * @param g the graph to be exported
      */
-    public void export(Writer writer, Graph<V, E> g)
+    @Deprecated
+    public void export(Writer writer, Graph<V, E> g) { 
+        exportGraph(g, writer);
+    }
+    
+    /**
+     * Exports a graph into a plain text file in DOT format.
+     *
+     * @param g the graph to be exported
+     * @param writer the writer to which the graph to be exported
+     */
+    @Override
+    public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
         String indent = "  ";

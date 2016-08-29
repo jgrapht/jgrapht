@@ -26,8 +26,6 @@
  *
  * Original Author:  John Sichi
  *
- * $Id$
- *
  * Changes
  * -------
  * 12-Jun-2010 : Initial Version (JVS);
@@ -35,14 +33,12 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
+import java.util.Map;
 
 /**
  * Provides display attributes for vertices and/or edges in a graph.
  *
  * @author John Sichi
- * @version $Id$
  */
 public interface ComponentAttributeProvider<T>
 {

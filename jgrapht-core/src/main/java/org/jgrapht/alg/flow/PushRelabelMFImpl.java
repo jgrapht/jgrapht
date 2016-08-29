@@ -50,6 +50,10 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  * Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of the
  * eighteenth annual ACM symposium on Theory of computing</i></p>
  *
+ * <p>This class can also computes minimum s-t cuts. Effectively, to compute a
+ * minimum s-t cut, the implementation first computes a minimum s-t flow, after
+ * which a BFS is run on the residual graph.</p>
+ *
  * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and undirected graphs are supported (and tested!).
  *
  * @author Alexey Kudinkin
@@ -88,9 +92,14 @@ public class PushRelabelMFImpl<V, E>
         }
     }
 
-    void init()
+    /**
+     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut algorithms
+     * @param source source
+     * @param sink sink
+     */
+    void init(V source, V sink)
     {
-        super.init(vertexExtensionsFactory, edgeExtensionsFactory);
+        super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
         this.labeling = new HashMap<>();
         this.flowBack = false;
@@ -174,7 +183,7 @@ public class PushRelabelMFImpl<V, E>
      * @param sink sink vertex
      */
     public double calculateMaximumFlow(V source,V sink){
-        init();
+        init(source, sink);
 
         Queue<VertexExtension> active = new ArrayDeque<>();
 
@@ -261,6 +270,7 @@ public class PushRelabelMFImpl<V, E>
         if (min != Integer.MAX_VALUE) {
             vx.label = min + 1;
         }
+
     }
 
     private void updateLabeling(VertexExtension vx, int l)
@@ -406,6 +416,7 @@ public class PushRelabelMFImpl<V, E>
             return prototype.toString() + String.format(" { LBL: %d } ", label);
         }
     }
+
 }
 
 // End PushRelabelMFImpl.java

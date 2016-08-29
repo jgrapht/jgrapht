@@ -25,9 +25,7 @@
  * (C) Copyright 2010-2010, by Michael Behrisch and Contributors.
  *
  * Original Author:  Michael Behrisch
- * Contributor(s): Joris Kinable  -
- *
- * $Id$
+ * Contributor(s): Joris Kinable, Dimitrios Michail
  *
  * Changes
  * -------
@@ -37,13 +35,12 @@
 package org.jgrapht.ext;
 
 import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
 import org.jgrapht.WeightedGraph;
-import org.jgrapht.generate.GraphGenerator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,14 +78,16 @@ import java.util.Map;
  *
  * @author Michael Behrisch (adaptation of GraphReader class)
  * @author Joris Kinable
+ * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
 public class DIMACSImporter<V, E>
-    implements GraphGenerator<V, E, V>
+    implements GraphImporter<V, E>
 {
-    private final BufferedReader input;
+    private VertexProvider<V> vertexProvider;
+    private EdgeProvider<V, E> edgeProvider;
     private final double defaultWeight;
 
     // ~ Constructors ----------------------------------------------------------
@@ -96,34 +95,196 @@ public class DIMACSImporter<V, E>
     /**
      * Construct a new DIMACSImporter
      * 
-     * @param input the input reader
+     * @param vertexProvider provider for the generation of vertices. Must not
+     *        be null.
+     * @param edgeProvider provider for the generation of edges. Must not be
+     *        null.
      * @param defaultWeight default edge weight
-     * @throws IOException in case an I/O error occurs
      */
-    public DIMACSImporter(Reader input, double defaultWeight)
-        throws IOException
+    public DIMACSImporter(
+        VertexProvider<V> vertexProvider,
+        EdgeProvider<V, E> edgeProvider,
+        double defaultWeight)
     {
-        if (input instanceof BufferedReader) {
-            this.input = (BufferedReader) input;
-        } else {
-            this.input = new BufferedReader(input);
+        if (vertexProvider == null) {
+            throw new IllegalArgumentException(
+                "Vertex provider cannot be null");
         }
+        this.vertexProvider = vertexProvider;
+        if (edgeProvider == null) {
+            throw new IllegalArgumentException("Edge provider cannot be null");
+        }
+        this.edgeProvider = edgeProvider;
         this.defaultWeight = defaultWeight;
     }
 
     /**
      * Construct a new DIMACSImporter
      * 
-     * @param input the input reader
-     * @throws IOException in case an I/O error occurs
+     * @param vertexProvider provider for the generation of vertices. Must not
+     *        be null.
+     * @param edgeProvider provider for the generation of edges. Must not be
+     *        null.
      */
-    public DIMACSImporter(Reader input)
-        throws IOException
+    public DIMACSImporter(
+        VertexProvider<V> vertexProvider,
+        EdgeProvider<V, E> edgeProvider)
     {
-        this(input, 1);
+        this(vertexProvider, edgeProvider, WeightedGraph.DEFAULT_EDGE_WEIGHT);
     }
 
     // ~ Methods ---------------------------------------------------------------
+
+    /**
+     * Get the vertex provider
+     * 
+     * @return the vertex provider
+     */
+    public VertexProvider<V> getVertexProvider()
+    {
+        return vertexProvider;
+    }
+
+    /**
+     * Set the vertex provider
+     * 
+     * @param vertexProvider the new vertex provider. Must not be null.
+     */
+    public void setVertexProvider(VertexProvider<V> vertexProvider)
+    {
+        if (vertexProvider == null) {
+            throw new IllegalArgumentException(
+                "Vertex provider cannot be null");
+        }
+        this.vertexProvider = vertexProvider;
+    }
+
+    /**
+     * Get the edge provider
+     * 
+     * @return The edge provider
+     */
+    public EdgeProvider<V, E> getEdgeProvider()
+    {
+        return edgeProvider;
+    }
+
+    /**
+     * Set the edge provider.
+     * 
+     * @param edgeProvider the new edge provider. Must not be null.
+     */
+    public void setEdgeProvider(EdgeProvider<V, E> edgeProvider)
+    {
+        if (edgeProvider == null) {
+            throw new IllegalArgumentException("Edge provider cannot be null");
+        }
+        this.edgeProvider = edgeProvider;
+    }
+    
+    /**
+     * Import a graph.
+     * 
+     * <p>
+     * The provided graph must be able to support the features of the graph that
+     * is read. For example if the file contains self-loops then the graph
+     * provided must also support self-loops. The same for multiple edges.
+     * 
+     * <p>
+     * If the provided graph is a weighted graph, the importer also reads edge
+     * weights. Otherwise edge weights are ignored.
+     * 
+     * @param graph the output graph
+     * @param input the input reader
+     * @throws ImportException in case an error occurs, such as I/O or parse
+     *         error
+     */
+    @Override
+    public void importGraph(Graph<V, E> graph, Reader input)
+        throws ImportException
+    {
+        // convert to buffered
+        BufferedReader in;
+        if (input instanceof BufferedReader) {
+            in = (BufferedReader) input;
+        } else {
+            in = new BufferedReader(input);
+        }
+
+        // add nodes
+        final int size = readNodeCount(in);
+        Map<Integer, V> map = new HashMap<Integer, V>();
+        for (int i = 0; i < size; i++) {
+            Integer id = Integer.valueOf(i + 1);
+            V vertex = vertexProvider
+                .buildVertex(id.toString(), new HashMap<String, String>());
+            map.put(id, vertex);
+            graph.addVertex(vertex);
+        }
+
+        // add edges
+        String[] cols = skipComments(in);
+        while (cols != null) {
+            if (cols[0].equals("e")) {
+                if (cols.length < 3) {
+                    throw new ImportException(
+                        "Failed to parse edge:" + Arrays.toString(cols));
+                }
+                Integer source;
+                try {
+                    source = Integer.parseInt(cols[1]);
+                } catch (NumberFormatException e) {
+                    throw new ImportException(
+                        "Failed to parse edge source node:" + e.getMessage(),
+                        e);
+                }
+                Integer target;
+                try {
+                    target = Integer.parseInt(cols[2]);
+                } catch (NumberFormatException e) {
+                    throw new ImportException(
+                        "Failed to parse edge target node:" + e.getMessage(),
+                        e);
+                }
+
+                String label = "e_" + source + "_" + target;
+                V from = map.get(source);
+                if (from == null) {
+                    throw new ImportException(
+                        "Node " + source + " does not exist");
+                }
+                V to = map.get(target);
+                if (to == null) {
+                    throw new ImportException(
+                        "Node " + target + " does not exist");
+                }
+
+                try {
+
+                    E e = edgeProvider.buildEdge(
+                        from,
+                        to,
+                        label,
+                        new HashMap<String, String>());
+                    graph.addEdge(from, to, e);
+
+                    if (graph instanceof WeightedGraph<?, ?>) {
+                        double weight = defaultWeight;
+                        if (cols.length > 3) {
+                            weight = Double.parseDouble(cols[3]);
+                        }
+                        ((WeightedGraph<V, E>) graph).setEdgeWeight(e, weight);
+                    }
+                } catch (IllegalArgumentException e) {
+                    throw new ImportException(
+                        "Failed to import DIMACS graph:" + e.getMessage(),
+                        e);
+                }
+            }
+            cols = skipComments(in);
+        }
+
+    }
 
     private String[] split(final String src)
     {
@@ -133,7 +294,7 @@ public class DIMACSImporter<V, E>
         return src.split("\\s+");
     }
 
-    private String[] skipComments()
+    private String[] skipComments(BufferedReader input)
     {
         String[] cols = null;
         try {
@@ -144,52 +305,31 @@ public class DIMACSImporter<V, E>
                 cols = split(input.readLine());
             }
         } catch (IOException e) {
+            // ignore
         }
         return cols;
     }
 
-    private int readNodeCount()
+    private int readNodeCount(BufferedReader input)
+        throws ImportException
     {
-        final String[] cols = skipComments();
+        final String[] cols = skipComments(input);
         if (cols[0].equals("p")) {
-            return Integer.parseInt(cols[2]);
-        }
-        return -1;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
-    {
-        final int size = readNodeCount();
-        if (resultMap == null) {
-            resultMap = new HashMap<>();
-        }
-
-        for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
-            resultMap.put(Integer.toString(i + 1), newVertex);
-        }
-        String[] cols = skipComments();
-        while (cols != null) {
-            if (cols[0].equals("e")) {
-                E edge = target
-                    .addEdge(resultMap.get(cols[1]), resultMap.get(cols[2]));
-                if (target instanceof WeightedGraph && (edge != null)) {
-                    double weight = defaultWeight;
-                    if (cols.length > 3) {
-                        weight = Double.parseDouble(cols[3]);
-                    }
-                    ((WeightedGraph<V, E>) target).setEdgeWeight(edge, weight);
-                }
+            if (cols.length < 3) {
+                throw new ImportException("Failed to read number of vertices.");
             }
-            cols = skipComments();
+            Integer nodes;
+            try {
+                nodes = Integer.parseInt(cols[2]);
+            } catch (NumberFormatException e) {
+                throw new ImportException("Failed to read number of vertices.");
+            }
+            if (nodes < 0) {
+                throw new ImportException("Negative number of vertices.");
+            }
+            return nodes;
         }
+        throw new ImportException("Failed to read number of vertices.");
     }
+
 }

@@ -97,6 +97,7 @@ import java.util.Set;
  * @param <E> the edge type
  */
 public class GmlImporter<V, E>
+    implements GraphImporter<V, E>
 {
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
@@ -183,12 +184,13 @@ public class GmlImporter<V, E>
      * If the provided graph is a weighted graph, the importer also reads edge
      * weights. Otherwise edge weights are ignored.
      * 
-     * @param input the input stream
      * @param graph the output graph
+     * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
-    public void read(Reader input, Graph<V, E> graph)
+    @Override
+    public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         try {
