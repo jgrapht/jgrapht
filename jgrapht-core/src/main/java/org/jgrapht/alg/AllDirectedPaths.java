@@ -23,7 +23,7 @@
 /* -------------------------
  * AllDirectedPaths.java
  * -------------------------
- * (C) Copyright 2015-2015, Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2015-2016, Vera-Licona Research Group and Contributors.
  *
  * Original Author:  Andrew Gainer-Dewar, Ph.D. (Vera-Licona Research Group)
  * Contributor(s):
@@ -259,8 +259,17 @@ public class AllDirectedPaths<V, E>
 
         // Bootstrap the search with the source vertices
         for (V source : sourceVertices) {
+            if (targetVertices.contains(source)) {
+                completePaths.add(new GraphWalk<>(graph, source, source,
+                                                  new ArrayList<>(), 0));
+            }
+
             for (E edge : graph.outgoingEdgesOf(source)) {
                 assert graph.getEdgeSource(edge).equals(source);
+
+                if (targetVertices.contains(graph.getEdgeTarget(edge))) {
+                    completePaths.add(makePath(Collections.singletonList(edge)));
+                }
 
                 if (edgeMinDistancesFromTargets.containsKey(edge)) {
                     List<E> path = Collections.singletonList(edge);

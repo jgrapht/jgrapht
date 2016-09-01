@@ -30,6 +30,7 @@ Changes to JGraphT in each version:
 	- DOT importer id fix (contributed by Dimitrios Michail)
 	- Add `CSVExporter` and `CSVImporter` (contributed by Dimitrios Michail)
 	- Add `MinimumSTCutAlgorithm` (contributed by Joris Kinable)
+	- Capture trivial paths in `AllDirectedPaths` (contributed by Andrew Gainer-Dewar)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill

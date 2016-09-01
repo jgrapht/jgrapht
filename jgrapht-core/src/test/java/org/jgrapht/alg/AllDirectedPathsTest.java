@@ -78,6 +78,24 @@ public class AllDirectedPathsTest
         assertEquals("Toy network should have correct number of simple paths", 7, allPaths.size());
     }
 
+    public void testTrivialPaths () {
+        AllDirectedPaths<String, DefaultEdge> pathFindingAlg =
+            new AllDirectedPaths<>(toyGraph());
+
+        Set<String> sources = new HashSet<>();
+        sources.add(I1);
+
+        Set<String> targets = new HashSet<>();
+        targets.add(I1);
+        targets.add(A);
+
+        List<GraphPath<String, DefaultEdge>> allPaths =
+            pathFindingAlg.getAllPaths(sources, targets, true, null);
+
+        assertEquals("Toy network should have correct number of trivial simple paths", 2, allPaths.size());
+    }
+
+
     public void testCycleBehavior () {
         DirectedGraph<String, DefaultEdge> toyGraph = toyGraph();
         toyGraph.addEdge(D, A);
