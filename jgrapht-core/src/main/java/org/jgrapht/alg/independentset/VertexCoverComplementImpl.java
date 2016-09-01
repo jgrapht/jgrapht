@@ -38,9 +38,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
 import org.jgrapht.alg.interfaces.MaximumWeightedIndependentSetAlgorithm;
 import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
+import org.jgrapht.alg.util.WeightedVertexSet;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
 
 
@@ -62,7 +62,7 @@ public class VertexCoverComplementImpl<V, E> implements MaximumWeightedIndepende
      * @return maximum independent set
      */
 	@Override
-	public IndependentSet<V> getIndependentSet(UndirectedGraph<V, E> graph) 
+	public WeightedVertexSet<V> getIndependentSet(UndirectedGraph<V, E> graph) 
 	{
 		Map<V,Double> weights = graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         
@@ -76,10 +76,10 @@ public class VertexCoverComplementImpl<V, E> implements MaximumWeightedIndepende
      * @return maximum weight independent set
      */
 	@Override
-	public IndependentSet<V> getIndependentSet(UndirectedGraph<V, E> graph, Map<V, Double> weights) 
+	public WeightedVertexSet<V> getIndependentSet(UndirectedGraph<V, E> graph, Map<V, Double> weights) 
 	{
 		MinimumWeightedVertexCoverAlgorithm<V, E> mvc = new RecursiveExactVCImpl<V, E>();
-		VertexCover<V> vertexCover = mvc.getVertexCover(graph, weights);
+		WeightedVertexSet<V> vertexCover = mvc.getVertexCover(graph, weights);
 		
 		Set<V> set = new HashSet<V>(graph.vertexSet());
 		set.removeAll(vertexCover.getVertices());
@@ -89,6 +89,6 @@ public class VertexCoverComplementImpl<V, E> implements MaximumWeightedIndepende
 			weight += weights.get(v);
 		}
 		
-		return new IndependentSetImpl<V>(set, weight);
+		return new WeightedVertexSet<V>(set, weight);
 	}
 }

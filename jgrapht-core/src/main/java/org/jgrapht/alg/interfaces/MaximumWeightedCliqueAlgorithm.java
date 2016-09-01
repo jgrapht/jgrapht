@@ -32,6 +32,7 @@
 package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.WeightedVertexSet;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -50,8 +51,8 @@ import java.util.stream.Collectors;
 public interface MaximumWeightedCliqueAlgorithm<V,E> extends MaximumCliqueAlgorithm<V, E> {
 
     @Override
-    default Clique<V> getClique(UndirectedGraph<V,E> graph, Class<? extends E> edgeClass){
-        Map<V,Double> vertexWeightMap = graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
+    default WeightedVertexSet<V> getClique(UndirectedGraph<V,E> graph, Class<? extends E> edgeClass){
+        Map<V, Double> vertexWeightMap = graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         return getClique(graph, vertexWeightMap, edgeClass);
     }
 
@@ -60,5 +61,6 @@ public interface MaximumWeightedCliqueAlgorithm<V,E> extends MaximumCliqueAlgori
      * @param vertexWeightMap map containing non-negative weights for each vertex
      * @return a maximum weighted clique
      */
-    Clique<V> getClique(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap, Class<? extends E> edgeClass);
+    
+    WeightedVertexSet<V> getClique(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap, Class<? extends E> edgeClass);
 }

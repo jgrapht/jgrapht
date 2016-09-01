@@ -32,6 +32,7 @@
 package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.WeightedVertexSet;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -50,8 +51,8 @@ import java.util.stream.Collectors;
 public interface MaximumWeightedIndependentSetAlgorithm<V,E> extends MaximumIndependentSetAlgorithm<V, E> {
 
     @Override
-    default IndependentSet<V> getIndependentSet(UndirectedGraph<V,E> graph){
-        Map<V,Double> vertexWeightMap = graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
+    default WeightedVertexSet<V> getIndependentSet(UndirectedGraph<V,E> graph){
+        Map<V, Double> vertexWeightMap = graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         return getIndependentSet(graph, vertexWeightMap);
     }
 
@@ -60,5 +61,6 @@ public interface MaximumWeightedIndependentSetAlgorithm<V,E> extends MaximumInde
      * @param vertexWeightMap map containing non-negative weights for each vertex
      * @return a maximum weighted independent set
      */
-    IndependentSet<V> getIndependentSet(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap);
+    
+    WeightedVertexSet<V> getIndependentSet(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap);
 }

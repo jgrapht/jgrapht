@@ -38,6 +38,7 @@ package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
+import org.jgrapht.alg.util.WeightedVertexSet;
 import org.jgrapht.graph.UndirectedSubgraph;
 
 import java.util.HashMap;
@@ -66,7 +67,7 @@ import java.util.Set;
 public class BarYehudaEvenTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
 
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap) {
+    public WeightedVertexSet<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap) {
 
         Set<V> cover=new LinkedHashSet<>();
         double weight=0;
@@ -96,6 +97,6 @@ public class BarYehudaEvenTwoApproxVCImpl<V,E> implements MinimumWeightedVertexC
             }
         }
 
-        return new VertexCoverImpl<>(cover, weight);
+        return new WeightedVertexSet<>(cover, weight);
     }
 }

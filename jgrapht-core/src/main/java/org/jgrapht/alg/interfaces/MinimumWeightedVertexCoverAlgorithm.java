@@ -37,6 +37,7 @@
 package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.WeightedVertexSet;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -54,7 +55,7 @@ import java.util.stream.Collectors;
 public interface MinimumWeightedVertexCoverAlgorithm<V,E> extends MinimumVertexCoverAlgorithm<V,E> {
 
     @Override
-    default VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph){
+    default WeightedVertexSet<V> getVertexCover(UndirectedGraph<V,E> graph){
         Map<V,Double> vertexWeightMap=graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         return getVertexCover(graph, vertexWeightMap);
     }
@@ -64,5 +65,6 @@ public interface MinimumWeightedVertexCoverAlgorithm<V,E> extends MinimumVertexC
      * @param vertexWeightMap map containing non-negative weights for each vertex
      * @return a vertex cover
      */
-    VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap);
+    
+    WeightedVertexSet<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap);
 }

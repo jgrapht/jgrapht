@@ -32,8 +32,7 @@
 package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.UndirectedGraph;
-
-import java.util.Set;
+import org.jgrapht.alg.util.WeightedVertexSet;
 
 /**
  * Computes a maximum clique in an undirected graph. A clique in a graph is a set of vertices V such that for each pair
@@ -49,54 +48,6 @@ public interface MaximumCliqueAlgorithm<V,E> {
      * Computes a maximum clique; all vertices are considered to have equal weight.
      * @return a vertex cover
      */
-	Clique<V> getClique(UndirectedGraph<V,E> graph, Class<? extends E> edgeClass);
-
-    interface Clique<V>{
-
-        /**
-         * Returns the weight of the clique. When solving the maximum weighted clique problem, the weight
-         * returned is the sum of the weights of the vertices in the clique. When solving the unweighted variant, the
-         * cardinality of the clique is returned instead.
-         * @return weight of the clique
-         */
-        double getWeight();
-
-        /**
-         * Set of vertices constituting the clique
-         * @return vertices in the clique
-         */
-        Set<V> getVertices();
-    }
-
-
-    class CliqueImpl<V> implements Clique<V>{
-        protected Set<V> clique;
-        protected double weight;
-
-        public CliqueImpl(){}
-
-        public CliqueImpl(Set<V> clique, double weight){
-            this.clique = clique;
-            this.weight = weight;
-        }
-
-        @Override
-        public double getWeight(){
-            return weight;
-        }
-
-        @Override
-        public Set<V> getVertices(){
-            return clique;
-        }
-
-        @Override
-        public String toString(){
-            StringBuilder builder = new StringBuilder("Clique(");
-            builder.append(this.getWeight());
-            builder.append("): ");
-            builder.append(this.getVertices().toString());
-            return builder.toString();
-        }
-    }
+    
+    WeightedVertexSet<V> getClique(UndirectedGraph<V,E> graph, Class<? extends E> edgeClass);
 }

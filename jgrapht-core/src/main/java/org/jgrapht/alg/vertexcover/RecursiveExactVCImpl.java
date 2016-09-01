@@ -39,6 +39,7 @@ package org.jgrapht.alg.vertexcover;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.NeighborIndex;
 import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
+import org.jgrapht.alg.util.WeightedVertexSet;
 
 import java.util.*;
 import java.util.function.Function;
@@ -107,14 +108,14 @@ public class RecursiveExactVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
     private Map<V, Double> vertexWeightMap=null;
 
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph) {
+    public WeightedVertexSet<V> getVertexCover(UndirectedGraph<V, E> graph) {
         Map<V,Double> vertexWeightMap=graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         weighted=false;
         return this.getVertexCover(graph, vertexWeightMap);
     }
 
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap) {
+    public WeightedVertexSet<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap) {
 
         //Initialize
         this.graph=graph;
@@ -143,7 +144,7 @@ public class RecursiveExactVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
         Set<V> verticesInCover=new LinkedHashSet<>();
         for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i<N; i = vertexCover.bitSetCover.nextSetBit(i+1))
             verticesInCover.add(vertices.get(i));
-        return new VertexCoverImpl<>(verticesInCover, vertexCover.weight);
+        return new WeightedVertexSet<>(verticesInCover, vertexCover.weight);
     }
 
     private BitSetCover calculateCoverRecursively(int indexNextCandidate, BitSet visited, double accumulatedWeight){

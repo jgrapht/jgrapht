@@ -41,6 +41,7 @@ import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.independentset.VertexCoverComplementImpl;
 import org.jgrapht.alg.interfaces.MaximumWeightedCliqueAlgorithm;
 import org.jgrapht.alg.interfaces.MaximumWeightedIndependentSetAlgorithm;
+import org.jgrapht.alg.util.WeightedVertexSet;
 import org.jgrapht.graph.SimpleGraph;
 
 
@@ -68,7 +69,7 @@ public class ISGraphComplementImpl<V, E> implements MaximumWeightedCliqueAlgorit
      * @return maximum clique
      */
     @Override
-	public Clique<V> getClique(UndirectedGraph<V, E> graph, Class<? extends E> edgeClass) 
+	public WeightedVertexSet<V> getClique(UndirectedGraph<V, E> graph, Class<? extends E> edgeClass) 
 	{
 		Map<V,Double> weights = graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         
@@ -82,7 +83,7 @@ public class ISGraphComplementImpl<V, E> implements MaximumWeightedCliqueAlgorit
      * @return maximum weight clique
      */
     @Override
-	public Clique<V> getClique(UndirectedGraph<V, E> graph, Map<V, Double> weights, Class<? extends E> edgeClass) 
+	public WeightedVertexSet<V> getClique(UndirectedGraph<V, E> graph, Map<V, Double> weights, Class<? extends E> edgeClass) 
 	{
 	    // create complement graph
 		UndirectedGraph<V, E> complement = new SimpleGraph<V, E>(edgeClass);
@@ -107,6 +108,6 @@ public class ISGraphComplementImpl<V, E> implements MaximumWeightedCliqueAlgorit
 			weight += weights.get(v);
 		}
 		
-		return new CliqueImpl<V>(clique, weight);
+		return new WeightedVertexSet<V>(clique, weight);
 	}
 }

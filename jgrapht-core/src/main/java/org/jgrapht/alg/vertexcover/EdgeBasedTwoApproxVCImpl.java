@@ -43,6 +43,7 @@ package org.jgrapht.alg.vertexcover;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.util.WeightedVertexSet;
 import org.jgrapht.graph.Subgraph;
 
 import java.util.LinkedHashSet;
@@ -87,7 +88,7 @@ public class EdgeBasedTwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorith
      * graph.
      */
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph) {
+    public WeightedVertexSet<V> getVertexCover(UndirectedGraph<V,E> graph) {
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 
@@ -114,6 +115,6 @@ public class EdgeBasedTwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorith
             sg.removeVertex(v);
         }
 
-        return new VertexCoverImpl<>(cover, cover.size());
+        return new WeightedVertexSet<>(cover, cover.size());
     }
 }

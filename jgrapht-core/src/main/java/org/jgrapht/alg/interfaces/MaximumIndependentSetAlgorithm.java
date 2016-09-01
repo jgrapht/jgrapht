@@ -32,8 +32,7 @@
 package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.UndirectedGraph;
-
-import java.util.Set;
+import org.jgrapht.alg.util.WeightedVertexSet;
 
 /**
  * Computes a maximum independent set in an undirected graph. An independent set in a graph is a set of vertices V such that for each pair
@@ -49,54 +48,6 @@ public interface MaximumIndependentSetAlgorithm<V,E> {
      * Computes a maximum independent set; all vertices are considered to have equal weight.
      * @return a maximum independent set
      */
-	IndependentSet<V> getIndependentSet(UndirectedGraph<V,E> graph);
-
-    interface IndependentSet<V>{
-
-        /**
-         * Returns the weight of the independent set. When solving the maximum weighted independent set problem, the weight
-         * returned is the sum of the weights of the vertices in the independent set. When solving the unweighted variant, the
-         * cardinality of the independent set is returned instead.
-         * @return weight of the independent set
-         */
-        double getWeight();
-
-        /**
-         * Set of vertices constituting the independent set
-         * @return vertices in the independent set
-         */
-        Set<V> getVertices();
-    }
-
-
-    class IndependentSetImpl<V> implements IndependentSet<V>{
-        protected Set<V> set;
-        protected double weight;
-
-        public IndependentSetImpl(){}
-
-        public IndependentSetImpl(Set<V> set, double weight){
-            this.set = set;
-            this.weight = weight;
-        }
-
-        @Override
-        public double getWeight(){
-            return weight;
-        }
-
-        @Override
-        public Set<V> getVertices(){
-            return set;
-        }
-
-        @Override
-        public String toString(){
-            StringBuilder builder = new StringBuilder("IndependentSet(");
-            builder.append(this.getWeight());
-            builder.append("): ");
-            builder.append(this.getVertices().toString());
-            return builder.toString();
-        }
-    }
+    
+    WeightedVertexSet<V> getIndependentSet(UndirectedGraph<V,E> graph);
 }
