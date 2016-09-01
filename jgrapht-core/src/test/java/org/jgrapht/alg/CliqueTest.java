@@ -1,15 +1,48 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -----------------
+ * CliqueTest.java
+ * -----------------
+ * (C) Copyright 2016, by Nils Olberg and Contributors.
+ *
+ * Original Author: Nils Olberg
+ * Contributor(s):
+ *
+ */
+
 package org.jgrapht.alg;
 
 import java.util.HashMap;
 
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.clique.ISGraphComplementImpl;
+import org.jgrapht.alg.interfaces.MaximumWeightedCliqueAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import junit.framework.TestCase;
 
 /**
- * Tests for the maximum weight clique algorithms.
+ * Tests for maximum weight clique algorithms.
  *
  * @author Nils Olberg
  */
@@ -17,7 +50,7 @@ import junit.framework.TestCase;
 public class CliqueTest extends TestCase {
 	 
 	/**
-     * Tests the algorithm for the maximum weight clique problem.
+     * Tests the maximum weight clique algorithm of ISGraphComplementImpl.
      */
 	
 	public static void testClique1()
@@ -56,7 +89,9 @@ public class CliqueTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(Clique.getWeight(graph, weights), 57.0);
+		MaximumWeightedCliqueAlgorithm<Integer, DefaultEdge> mwis = 
+				new ISGraphComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getClique(graph, weights, DefaultEdge.class).getWeight(), 57.0);
 	}
 	
 	public static void testClique2()
@@ -84,7 +119,9 @@ public class CliqueTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(Clique.getWeight(graph, weights), 49.0);
+		MaximumWeightedCliqueAlgorithm<Integer, DefaultEdge> mwis = 
+				new ISGraphComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getClique(graph, weights, DefaultEdge.class).getWeight(), 49.0);
 	}
 	
 	public static void testClique3()
@@ -107,7 +144,9 @@ public class CliqueTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(Clique.getWeight(graph, weights), 48.0);
+		MaximumWeightedCliqueAlgorithm<Integer, DefaultEdge> mwis = 
+				new ISGraphComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getClique(graph, weights, DefaultEdge.class).getWeight(), 48.0);
 	}
 	
 	public static void testClique4()
@@ -129,7 +168,9 @@ public class CliqueTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(Clique.getWeight(graph, weights), 39.0);
+		MaximumWeightedCliqueAlgorithm<Integer, DefaultEdge> mwis = 
+				new ISGraphComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getClique(graph, weights, DefaultEdge.class).getWeight(), 39.0);
 	}
 	
 	public static void testClique5()
@@ -166,6 +207,8 @@ public class CliqueTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(Clique.getWeight(graph, weights), 69.0);
+		MaximumWeightedCliqueAlgorithm<Integer, DefaultEdge> mwis = 
+				new ISGraphComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getClique(graph, weights, DefaultEdge.class).getWeight(), 69.0);
 	}
 }

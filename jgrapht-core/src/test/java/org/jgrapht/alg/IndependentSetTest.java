@@ -1,15 +1,48 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -----------------
+ * IndependentSetTest.java
+ * -----------------
+ * (C) Copyright 2016, by Nils Olberg and Contributors.
+ *
+ * Original Author: Nils Olberg
+ * Contributor(s):
+ *
+ */
+
 package org.jgrapht.alg;
 
 import java.util.HashMap;
 
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.independentset.VertexCoverComplementImpl;
+import org.jgrapht.alg.interfaces.MaximumWeightedIndependentSetAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import junit.framework.TestCase;
 
 /**
- * Tests for the maximum weight independent set algorithms.
+ * Tests for maximum weight independent set algorithms.
  *
  * @author Nils Olberg
  */
@@ -17,7 +50,7 @@ import junit.framework.TestCase;
 public class IndependentSetTest extends TestCase {
 	 
 	/**
-     * Tests the algorithm for the maximum weight independent set problem.
+     * Tests the maximum weight independent set algorithm of VertexCoverComplementImpl.
      */
 	
 	public static void testIndependentSet1()
@@ -40,8 +73,10 @@ public class IndependentSetTest extends TestCase {
 		HashMap<Integer, Double> weights = new HashMap<Integer, Double>();
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
-	
-		assertEquals(IndependentSet.getWeight(graph, weights), 485.0);
+		
+		MaximumWeightedIndependentSetAlgorithm<Integer, DefaultEdge> mwis = 
+				new VertexCoverComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getIndependentSet(graph, weights).getWeight(), 485.0);
 	}
 	
 	public static void testIndependentSet2()
@@ -65,8 +100,10 @@ public class IndependentSetTest extends TestCase {
 		HashMap<Integer, Double> weights = new HashMap<Integer, Double>();
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
-	
-		assertEquals(IndependentSet.getWeight(graph, weights), 555.0);
+
+		MaximumWeightedIndependentSetAlgorithm<Integer, DefaultEdge> mwis = 
+				new VertexCoverComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getIndependentSet(graph, weights).getWeight(), 555.0);
 	}
 	
 	public static void testIndependentSet3()
@@ -91,7 +128,9 @@ public class IndependentSetTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(IndependentSet.getWeight(graph, weights), 608.0);
+		MaximumWeightedIndependentSetAlgorithm<Integer, DefaultEdge> mwis = 
+				new VertexCoverComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getIndependentSet(graph, weights).getWeight(), 608.0);
 	}
 	
 	public static void testIndependentSet4()
@@ -119,7 +158,9 @@ public class IndependentSetTest extends TestCase {
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
 	
-		assertEquals(IndependentSet.getWeight(graph, weights), 507.0);
+		MaximumWeightedIndependentSetAlgorithm<Integer, DefaultEdge> mwis = 
+				new VertexCoverComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getIndependentSet(graph, weights).getWeight(), 507.0);
 	}
 	
 	public static void testIndependentSet5()
@@ -148,7 +189,9 @@ public class IndependentSetTest extends TestCase {
 		HashMap<Integer, Double> weights = new HashMap<Integer, Double>();
 		for (int i = 0; i < weightArray.length; i++)
 			weights.put(i, Double.valueOf(weightArray[i]));
-	
-		assertEquals(IndependentSet.getWeight(graph, weights), 477.0);
+
+		MaximumWeightedIndependentSetAlgorithm<Integer, DefaultEdge> mwis = 
+				new VertexCoverComplementImpl<Integer, DefaultEdge>();
+		assertEquals(mwis.getIndependentSet(graph, weights).getWeight(), 477.0);
 	}
 }
