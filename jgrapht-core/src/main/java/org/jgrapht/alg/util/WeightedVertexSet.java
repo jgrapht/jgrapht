@@ -33,27 +33,33 @@ package org.jgrapht.alg.util;
 
 import java.util.Set;
 
+/**
+ * This class can be used to store a set of vertices together with a weight. 
+ * It is used for example by algorithms for maximum weight independent sets, 
+ * maximum weight cliques and minimum weight vertex covers.
+ */
+
 public class WeightedVertexSet<V> {
     protected Set<V> vertices;
     protected double weight;
 
-    public WeightedVertexSet(){}
+    public WeightedVertexSet() {}
 
-    public WeightedVertexSet(Set<V> vertices, double weight){
+    public WeightedVertexSet(Set<V> vertices, double weight) {
         this.vertices = vertices;
         this.weight = weight;
     }
 
-    public double getWeight(){
+    public double getWeight() {
         return weight;
     }
 
-    public Set<V> getVertices(){
+    public Set<V> getVertices() {
         return vertices;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder builder = new StringBuilder("WeightedVertexSet(");
         builder.append(this.getWeight());
         builder.append("): ");
