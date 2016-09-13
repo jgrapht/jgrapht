@@ -18,10 +18,8 @@
 package org.jgrapht.alg;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
@@ -86,7 +84,7 @@ public class MinSourceSinkCut<V, E>
         minCut = new HashSet<>();
 
         //First compute a maxFlow from source to sink
-        MaximumFlow<E> maxFlow = ekMaxFlow.buildMaximumFlow(source, sink);
+        MaximumFlow<E> maxFlow = ekMaxFlow.getMaximumFlow(source, sink);
 
         this.cutWeight = maxFlow.getValue();
 

@@ -44,7 +44,7 @@ public interface MaximumFlowAlgorithm<V, E>
      *
      * @return maximum flow
      */
-    MaximumFlow<E> buildMaximumFlow(V source, V sink);
+    MaximumFlow<E> getMaximumFlow(V source, V sink);
 
     /**
      * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
@@ -56,7 +56,7 @@ public interface MaximumFlowAlgorithm<V, E>
      * @param sink sink vertex
      */
     default double calculateMaximumFlow(V source,V sink){
-        return buildMaximumFlow(source, sink).getValue();
+        return getMaximumFlow(source, sink).getValue();
     }
 
 
@@ -83,7 +83,7 @@ public interface MaximumFlowAlgorithm<V, E>
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */
-    default Map<E, Double> getMaximumFlow(){
+    default Map<E, Double> getFlowMap(){
         throw new UnsupportedOperationException("Function not implemented");
     }
 

@@ -121,7 +121,7 @@ public final class EdmondsKarpMFImpl<V, E>
      * @param source source vertex
      * @param sink sink vertex
      */
-    public MaximumFlow<E> buildMaximumFlow(V source, V sink)
+    public MaximumFlow<E> getMaximumFlow(V source, V sink)
     {
         this.calculateMaximumFlow(source, sink);
         maxFlow = composeFlow();

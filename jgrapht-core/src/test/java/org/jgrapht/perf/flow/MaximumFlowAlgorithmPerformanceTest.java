@@ -84,7 +84,7 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
 
         @Benchmark
         public void run() {
-            solver.buildMaximumFlow(source, sink);
+            solver.getMaximumFlow(source, sink);
         }
     }
 

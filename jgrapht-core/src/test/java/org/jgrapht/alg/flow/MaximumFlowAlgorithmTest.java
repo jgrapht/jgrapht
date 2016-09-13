@@ -19,12 +19,9 @@ package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedMultigraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.Map;
 
@@ -47,7 +44,7 @@ public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgo
 
         //Calculate the max flow for each source/sink pair
         for (int i = 0; i < sources.length; i++) {
-            verifyDirected(sources[i], sinks[i], expectedResults[i], network, solver.buildMaximumFlow(sources[i], sinks[i]));
+            verifyDirected(sources[i], sinks[i], expectedResults[i], network, solver.getMaximumFlow(sources[i], sinks[i]));
         }
     }
 
@@ -116,7 +113,7 @@ public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgo
     }
 
     static void verifyUndirected(UndirectedGraph<Integer, DefaultWeightedEdge> graph, int source, int sink, int expectedResult, MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver) {
-        MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow=solver.buildMaximumFlow(source, sink);
+        MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow=solver.getMaximumFlow(source, sink);
         Double flowValue = maxFlow.getValue();
         Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlow();
 

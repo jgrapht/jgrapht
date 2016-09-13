@@ -119,7 +119,7 @@ public class GraphPerformanceTest extends TestCase{
 
         private double calculateMaxFlow(SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph, Integer source, Integer sink){
             EdmondsKarpMFImpl<Integer, DefaultWeightedEdge> maximumFlowAlg= new EdmondsKarpMFImpl<>(graph);
-            return maximumFlowAlg.buildMaximumFlow(source, sink).getValue();
+            return maximumFlowAlg.getMaximumFlow(source, sink).getValue();
         }
 
         private boolean isStronglyConnected(SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph){

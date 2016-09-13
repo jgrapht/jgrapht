@@ -346,7 +346,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */
-    public Map<E, Double> getMaximumFlow(){
+    public Map<E, Double> getFlowMap(){
         if(maxFlow == null) //Lazily calculate the max flow map
             maxFlow=composeFlow();
         return maxFlow;
