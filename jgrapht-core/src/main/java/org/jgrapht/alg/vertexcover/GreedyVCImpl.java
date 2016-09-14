@@ -19,6 +19,7 @@ package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
+import org.jgrapht.alg.util.WeightedVertexSet;
 import org.jgrapht.alg.vertexcover.util.RatioVertex;
 
 import java.util.*;
@@ -57,7 +58,7 @@ public class GreedyVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,
      * @return greedy solution
      */
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap) {
+    public WeightedVertexSet<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap) {
         Set<V> cover=new LinkedHashSet<>();
         double weight=0;
 
@@ -107,7 +108,7 @@ public class GreedyVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,
             assert(!workingGraph.parallelStream().anyMatch(ux -> ux.ID==vx.ID)) : "vx should no longer exist in the working graph";
         }
 
-        return new VertexCoverImpl<>(cover, weight);
+        return new WeightedVertexSet<>(cover, weight);
     }
 
 
