@@ -730,16 +730,28 @@ public class DOTImporter<V, E>
         }
     }
 
+    private boolean isEscapedItself(String input, int start)
+    {
+        int backslashCount = 0;
+
+        while (input.charAt(start - backslashCount) == '\\')
+        {
+            backslashCount += 1;
+        }
+
+        boolean isEven = (backslashCount % 2) == 0;
+
+        return isEven;
+    }
+
     private int findNextQuote(String input, int start)
     {
         int result = start;
         do {
             result = input.indexOf('\"', result + 1);
             // if the previous character is an escape then keep going
-        } while ((input.charAt(result - 1) == '\\')
-            && !((input.charAt(result - 1) == '\\') && (input.charAt(result - 2) == '\\'))); // unless
-                                                                                             // its
-                                                                                             // escaped
+        } while (!isEscapedItself(input, result - 1));     // unless its escaped
+
         return result;
     }
 }
