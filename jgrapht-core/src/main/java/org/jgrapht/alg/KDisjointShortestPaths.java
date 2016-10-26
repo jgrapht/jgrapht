@@ -20,11 +20,11 @@
  * the Eclipse Foundation.
  */
 /* -------------------------
- * .java
+ * KDisjointShortestPaths.java
  * -------------------------
- * (C) Copyright 2007-2016, by France Telecom
+ * (C) Copyright 2016, by Assaf Mizrachi and Contributors.
  *
- * Original Author: Assaf Mizrachi and Contributors.
+ * Original Author: Assaf Mizrachi.
  * Contributor(s):
  *
  * $Id$
@@ -48,6 +48,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.AsWeightedDirectedGraph;
+import org.jgrapht.graph.GraphWalk;
 
 /**
  * The algorithm determines the k <em>disjoint</em> shortest simple paths in increasing order of
@@ -69,7 +70,7 @@ import org.jgrapht.graph.AsWeightedDirectedGraph;
  *  </ol>
  * </ol>
  * <p>
- * The algorithm is based on the Surballe (later extended by Bhandari) algorithm, so is to find an
+ * The algorithm is based on the Suurballe (later extended by Bhandari) algorithm, so is to find an
  * Edge-disjoint shortest paths. In order to find a Vertex-disjoint shortest paths use the
  * following transformation:
  * <br>
@@ -84,7 +85,12 @@ import org.jgrapht.graph.AsWeightedDirectedGraph;
  *
  * <p>
  * The algorithm is running k sequential Bellman-Ford iterations to find the shortest path at each step.
- * Hence, yielding a complexity of k*O(Bellman-Ford)
+ * Hence, yielding a complexity of k*O(Bellman-Ford). Also, note that the provided graph is to be modified
+ * (edges and weights) during the path computation.
+ * 
+ * <p>
+ * For further reference, see <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">Farabi Iqbal, Fernando A. Kuipers - 
+ * "Disjoint Paths In Networks"</a> which was the main reference for the code of this class.
  * 
  * @see BellmanFordShortestPath
  *
@@ -108,7 +114,8 @@ public class KDisjointShortestPaths<V, E> {
 	 * vertex and others vertices.
 	 *
 	 * @param graph
-	 *            graph on which shortest paths are searched.
+	 *            graph on which shortest paths are searched. Note: graph will
+	 *            be modified (edges and weights) during the path computation.
 	 * @param startVertex
 	 *            start vertex of the calculated paths.
 	 * @param nPaths
@@ -158,7 +165,7 @@ public class KDisjointShortestPaths<V, E> {
 			}			
 		} while (currentPath != null && cPaths <= this.nPaths);
 
-		return pathList.size() > 0 ? tearDown(endVertex) : null;
+		return pathList.size() > 0 ? resolvePaths(endVertex) : null;
 	}
 
 	/**
@@ -196,7 +203,7 @@ public class KDisjointShortestPaths<V, E> {
 	 * 
 	 * @return sorted list of disjoint paths from start vertex to end vertex.
 	 */
-	private List<GraphPath<V, E>> tearDown(V endVertex) {
+	private List<GraphPath<V, E>> resolvePaths(V endVertex) {
 		//first we need to remove overlapping edges.		
 		removeOverlappingEdges();
 		
@@ -205,14 +212,7 @@ public class KDisjointShortestPaths<V, E> {
 		List<GraphPath<V, E>> paths = mergePaths(endVertex);
 		
 		//sort paths by overall weight (ascending)
-		Collections.sort(paths, new Comparator<GraphPath<V, E>>() {
-
-			@Override
-			public int compare(GraphPath<V, E> o1, GraphPath<V, E> o2) {
-				return (int) (o1.getWeight() - o2.getWeight());
-			}
-		});
-		
+		Collections.sort(paths, (o1, o2) -> Double.compare(o1.getWeight(), o2.getWeight()));		
 		return paths;
 	}
 	
@@ -260,7 +260,7 @@ public class KDisjointShortestPaths<V, E> {
 						graph.getEdgeTarget(nextEdge) : graph.getEdgeSource(nextEdge);
 			}
 			//path is ready, wrap it up.
-			graphPaths.add(new PathWrapper(mergedPath, endVertex));
+			graphPaths.add(createGraphPath(mergedPath, endVertex));
 		}
 		return graphPaths;
 	}
@@ -331,56 +331,13 @@ public class KDisjointShortestPaths<V, E> {
 			throw new NullPointerException("nPaths is negative or 0");
 		}
 	}
-
-	private class PathWrapper implements GraphPath<V, E> {
-
-		private List<E> edgeList;
-		private V endVertex;
-		private double weight;
-
-		PathWrapper(List<E> edgeList, V endVertex) {
-			this.edgeList = edgeList;
-			this.endVertex = endVertex;
-			for (E edge : edgeList) {
-				weight += graph.getEdgeWeight(edge);
-			}
+	
+	private GraphPath<V, E> createGraphPath(List<E> edgeList, V endVertex) {
+		double weight = 0;
+		for (E edge : edgeList) {
+			weight += graph.getEdgeWeight(edge);
 		}
-
-		// implement GraphPath
-		@Override
-		public Graph<V, E> getGraph() {
-			return graph;
-		}
-
-		// implement GraphPath
-		@Override
-		public V getStartVertex() {
-			return startVertex;
-		}
-
-		// implement GraphPath
-		@Override
-		public V getEndVertex() {
-			return endVertex;
-		}
-
-		// implement GraphPath
-		@Override
-		public List<E> getEdgeList() {
-			return edgeList;
-		}
-
-		// implement GraphPath
-		@Override
-		public double getWeight() {
-			return weight;
-		}
-
-		// override Object
-		@Override
-		public String toString() {
-			return edgeList.toString();
-		}
+		return new GraphWalk<>(graph, startVertex, endVertex, edgeList, weight);
 	}
 }
 
