@@ -58,15 +58,15 @@ import org.jgrapht.graph.GraphWalk;
  * An undirected graph can be transformed to a directed simple graph using the following
  * transformation:
  * <br>
- * For each pair of vertices V, U and an undirected edge E:V<-->U with weight W:
+ * For each pair of vertices V, U and an undirected edge {@literal E:V<-->U} with weight W:
  * <ol>
  * <li> Create vertices V_in, V_out, U_in and U_out
  * <li> Create edges:
  * 	<ol>
- * 	<li> V_out-->U_in, weight = W;
- *  <li> U_out-->V_in, weight = W;
- *  <li> V_in-->V_out, weight = 0;
- *  <li> U_in-->U_out, weight = 0;
+ * 	<li> {@literal V_out-->U_in}, weight = W;
+ *  <li> {@literal U_out-->V_in}, weight = W;
+ *  <li> {@literal V_in-->V_out}, weight = 0;
+ *  <li> {@literal U_in-->U_out}, weight = 0;
  *  </ol>
  * </ol>
  * <p>
@@ -77,10 +77,10 @@ import org.jgrapht.graph.GraphWalk;
  * For each vertex V and a set of incoming edges E_in(V) and outgoing edges E_out(V):
  * <ol>
  * <li> Create vertex V_in
- * <li> For every edge e:u-->V, weight=W in E_in(V), create an edge e_in:u-->V_in, weight=W
+ * <li> For every edge {@literal e:u-->V}, weight=W in E_in(V), create an edge {@literal e_in:u-->V_in}, weight=W
  * <li> Create vertex V_out
- * <li> For every edge e:V-->u, weight=W in E_out(V), create an edge e_out:V_out-->u, weight=W
- * <li> Create an edge e_internal:V_in-->V_out with weight=0.
+ * <li> For every edge {@literal e:V-->u}, weight=W in E_out(V), create an edge {@literal e_out:V_out-->u}, weight=W
+ * <li> Create an edge {@literal e_internal:V_in-->V_out} with weight=0.
  * </ol>
  *
  * <p>
