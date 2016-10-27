@@ -56,7 +56,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
  */
 public class KDisjointShortestPathsTest extends EnhancedTestCase {
 
-	    
+        
     /**
      * Tests single path
      * 
@@ -65,7 +65,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 1 --> 2
      */
     public void testSinglePath() {
-    	DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
+        DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
         graph.addVertex(2);
         DefaultWeightedEdge edge = graph.addEdge(1, 2);
@@ -98,7 +98,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 
      */
     public void testTwoDisjointPaths() {
-    	DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
+        DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -146,7 +146,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 
      */
     public void testTwoDisjointPaths2() {
-    	DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
+        DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -212,7 +212,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 3 --> 4, w=1
      */
     public void testThreeDisjointPaths() {
-    	DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
+        DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -263,27 +263,27 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * Only single disjoint path should exist on the line
      */
     public void testLinear() {
-    	Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);  
-    	GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
-    	graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
-			
-    		private int i = 1;
-    		
-			@Override
-			public Integer createVertex() {
-				return i++;
-			}
-		}, null);
-    	
-    	KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 1, 2);
-    	List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(20);
-    	
-    	assertEquals(1, pathList.size());
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);  
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
+        graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
+            
+            private int i = 1;
+            
+            @Override
+            public Integer createVertex() {
+                return i++;
+            }
+        }, null);
+        
+        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 1, 2);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(20);
+        
+        assertEquals(1, pathList.size());
         assertEquals(19, pathList.get(0).getLength());
         assertEquals(19.0, pathList.get(0).getWeight());
         
         for (int i = 1; i < 21; i++) {
-        	assertTrue(pathList.get(0).getVertexList().contains(i));
+            assertTrue(pathList.get(0).getVertexList().contains(i));
         }
     }
     
@@ -291,27 +291,27 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * Exactly single disjoint path should exist on the ring
      */
     public void testRing() {
-    	Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);  
-    	GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
-    	graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
-			
-    		private int i = 1;
-    		
-			@Override
-			public Integer createVertex() {
-				return i++;
-			}
-		}, null);
-    	
-    	KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 1, 2);
-    	List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(10);
-    	
-    	assertEquals(1, pathList.size());
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);  
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
+        graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
+            
+            private int i = 1;
+            
+            @Override
+            public Integer createVertex() {
+                return i++;
+            }
+        }, null);
+        
+        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 1, 2);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(10);
+        
+        assertEquals(1, pathList.size());
         assertEquals(9, pathList.get(0).getLength());
         assertEquals(9.0, pathList.get(0).getWeight());
         
         for (int i = 1; i < 10; i++) {
-        	assertTrue(pathList.get(0).getVertexList().contains(i));
+            assertTrue(pathList.get(0).getVertexList().contains(i));
         }
     }
 }
