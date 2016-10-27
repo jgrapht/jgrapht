@@ -62,7 +62,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 
      * Edges expected in path
      * ---------------
-     * 1 --> 2
+     * {@literal 1 --> 2}
      */
     public void testSinglePath() {
         DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
@@ -89,12 +89,12 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 
      * Edges expected in path 1
      * ---------------
-     * 1 --> 3
+     * {@literal 1 --> 3}
      * 
      * Edges expected in path 2
      * ---------------
-     * 1 --> 2
-     * 2 --> 3
+     * {@literal 1 --> 2}
+     * {@literal 2 --> 3}
      * 
      */
     public void testTwoDisjointPaths() {
@@ -130,19 +130,19 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * 
      * Edges expected in path 1
      * ---------------
-     * 1 --> 2, w=1
-     * 2 --> 6, w=1
-     * 6 --> 4, w=1
+     * {@literal 1 --> 2}, w=1
+     * {@literal 2 --> 6}, w=1
+     * {@literal 6 --> 4}, w=1
      * 
      * Edges expected in path 2
      * ---------------
-     * 1 --> 5, w=2
-     * 5 --> 3, w=2
-     * 3 --> 4, w=2
+     * {@literal 1 --> 5}, w=2
+     * {@literal 5 --> 3}, w=2
+     * {@literal 3 --> 4}, w=2
      * 
      * Edges expected in no path 
      * ---------------
-     * 2 --> 3, w=3
+     * {@literal 2 --> 3}, w=3
      * 
      */
     public void testTwoDisjointPaths2() {
@@ -193,23 +193,23 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * Tests three joint paths from 1 to 5
      * Edges expected in path 1
      * ---------------
-     * 1 --> 4, w=4
-     * 4 --> 5, w=1     
+     * {@literal 1 --> 4}, w=4
+     * {@literal 4 --> 5}, w=1     
      * 
      * Edges expected in path 2
      * ---------------
-     * 1 --> 2, w=1
-     * 2 --> 5, w=6
+     * {@literal 1 --> 2}, w=1
+     * {@literal 2 --> 5}, w=6
      * 
      * Edges expected in path 3
      * ---------------
-     * 1 --> 3, w=4
-     * 3 --> 5, w=5
+     * {@literal 1 --> 3}, w=4
+     * {@literal 3 --> 5}, w=5
      * 
      * Edges expected in no path 
      * ---------------
-     * 2 --> 3, w=1
-     * 3 --> 4, w=1
+     * {@literal 2 --> 3}, w=1
+     * {@literal 3 --> 4}, w=1
      */
     public void testThreeDisjointPaths() {
         DefaultDirectedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);        
