@@ -39,7 +39,12 @@ package org.jgrapht.alg;
 import java.util.List;
 
 import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.generate.LinearGraphGenerator;
+import org.jgrapht.generate.RingGraphGenerator;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
@@ -252,5 +257,61 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         
         assertTrue(pathList.get(2).getEdgeList().contains(e13));
         assertTrue(pathList.get(2).getEdgeList().contains(e35));
+    }
+    
+    /**
+     * Only single disjoint path should exist on the line
+     */
+    public void testLinear() {
+    	Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);  
+    	GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
+    	graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
+			
+    		private int i = 1;
+    		
+			@Override
+			public Integer createVertex() {
+				return i++;
+			}
+		}, null);
+    	
+    	KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 1, 2);
+    	List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(20);
+    	
+    	assertEquals(1, pathList.size());
+        assertEquals(19, pathList.get(0).getLength());
+        assertEquals(19.0, pathList.get(0).getWeight());
+        
+        for (int i = 1; i < 21; i++) {
+        	assertTrue(pathList.get(0).getVertexList().contains(i));
+        }
+    }
+    
+    /**
+     * Exactly single disjoint path should exist on the ring
+     */
+    public void testRing() {
+    	Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedGraph<>(DefaultWeightedEdge.class);  
+    	GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
+    	graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
+			
+    		private int i = 1;
+    		
+			@Override
+			public Integer createVertex() {
+				return i++;
+			}
+		}, null);
+    	
+    	KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 1, 2);
+    	List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(10);
+    	
+    	assertEquals(1, pathList.size());
+        assertEquals(9, pathList.get(0).getLength());
+        assertEquals(9.0, pathList.get(0).getWeight());
+        
+        for (int i = 1; i < 10; i++) {
+        	assertTrue(pathList.get(0).getVertexList().contains(i));
+        }
     }
 }
