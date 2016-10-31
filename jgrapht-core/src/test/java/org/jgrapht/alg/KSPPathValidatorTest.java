@@ -52,7 +52,7 @@ public class KSPPathValidatorTest
 
                         @Override
                         public boolean isValidPath(
-                            AbstractPathElement<String, DefaultEdge> prevPathElement,
+                            PathElement<String, DefaultEdge> prevPathElement,
                             DefaultEdge edge)
                         {
                             // block all paths
@@ -86,7 +86,7 @@ public class KSPPathValidatorTest
 
                         @Override
                         public boolean isValidPath(
-                            AbstractPathElement<String, DefaultEdge> prevPathElement,
+                            PathElement<String, DefaultEdge> prevPathElement,
                             DefaultEdge edge)
                         {
                             // block all paths
@@ -119,7 +119,7 @@ public class KSPPathValidatorTest
 
                     @Override
                     public boolean isValidPath(
-                        AbstractPathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
+                        PathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
                     {
                         if (prevPathElement == null) {
                             return true;
@@ -157,7 +157,7 @@ public class KSPPathValidatorTest
 
                     @Override
                     public boolean isValidPath(
-                        AbstractPathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
+                        PathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
                     {
                         // accept all requests but the one to pass through the edge connecting
                         // the two cliques.

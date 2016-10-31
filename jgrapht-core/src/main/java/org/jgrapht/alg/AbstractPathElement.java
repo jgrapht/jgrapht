@@ -34,7 +34,7 @@ import org.jgrapht.*;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-abstract class AbstractPathElement<V, E>
+abstract class AbstractPathElement<V, E> implements PathElement<V, E>
 {
     /**
      * Number of hops of the path.
@@ -103,6 +103,7 @@ abstract class AbstractPathElement<V, E>
      *
      * @return list of <code>Edge</code>.
      */
+    @Override
     public List<E> createEdgeListPath()
     {
         List<E> path = new ArrayList<>();
@@ -125,6 +126,7 @@ abstract class AbstractPathElement<V, E>
      *
      * @return .
      */
+    @Override
     public int getHopCount()
     {
         return this.nHops;
@@ -135,6 +137,7 @@ abstract class AbstractPathElement<V, E>
      *
      * @return <code>null</code> if the path is empty.
      */
+    @Override
     public E getPrevEdge()
     {
         return this.prevEdge;
@@ -145,6 +148,7 @@ abstract class AbstractPathElement<V, E>
      *
      * @return <code>null</code> is the path is empty.
      */
+    @Override
     public AbstractPathElement<V, E> getPrevPathElement()
     {
         return this.prevPathElement;
@@ -155,6 +159,7 @@ abstract class AbstractPathElement<V, E>
      *
      * @return .
      */
+    @Override
     public V getVertex()
     {
         return this.vertex;
