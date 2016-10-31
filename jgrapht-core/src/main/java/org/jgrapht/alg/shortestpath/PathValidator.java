@@ -40,5 +40,5 @@ public interface PathValidator<V, E>
      * 
      * @return <code>true</code> if edge can be added, <code>false</code> otherwise.
      */
-    public boolean isValidPath(AbstractPathElement<V, E> prevPathElement, E edge);
+    public boolean isValidPath(PathElement<V, E> prevPathElement, E edge);
 }

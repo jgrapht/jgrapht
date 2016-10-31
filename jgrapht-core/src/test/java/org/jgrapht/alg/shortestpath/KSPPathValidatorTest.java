@@ -46,15 +46,25 @@ public class KSPPathValidatorTest
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, 1, Integer.MAX_VALUE, (prevPathElement, edge) -> false);
+                clique, String.valueOf(i), 1, Integer.MAX_VALUE,
+                new PathValidator<String, DefaultEdge>()
+                {
+
+                    @Override
+                    public boolean isValidPath(
+                        GraphPath<String, DefaultEdge> partialPath, DefaultEdge edge)
+                    {
+                        // block all paths
+                        return false;
+                    }
+                });
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<String, DefaultEdge>> paths =
-                    ksp.getPaths(String.valueOf(i), String.valueOf(j));
-                assertTrue(paths.isEmpty());
+                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(j));
+                assertNull(paths);
             }
         }
     }
@@ -68,14 +78,24 @@ public class KSPPathValidatorTest
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, 30, Integer.MAX_VALUE, (prevPathElement, edge) -> true);
+                clique, String.valueOf(i), 30, Integer.MAX_VALUE,
+                new PathValidator<String, DefaultEdge>()
+                {
+
+                    @Override
+                    public boolean isValidPath(
+                        GraphPath<String, DefaultEdge> partialPath, DefaultEdge edge)
+                    {
+                        // block all paths
+                        return true;
+                    }
+                });
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<String, DefaultEdge>> paths =
-                    ksp.getPaths(String.valueOf(i), String.valueOf(j));
+                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(j));
                 assertNotNull(paths);
                 assertEquals(16, paths.size());
             }
@@ -91,20 +111,27 @@ public class KSPPathValidatorTest
         SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                ring, 2, Integer.MAX_VALUE, (prevPathElement, edge) -> {
-                    if (prevPathElement == null) {
-                        return true;
+                ring, i, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+                {
+
+                    @Override
+                    public boolean isValidPath(
+                        GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
+                    {
+                        if (partialPath == null) {
+                            return true;
+                        }
+                        return Math.abs(
+                            partialPath.getEndVertex() - Graphs
+                                .getOppositeVertex(ring, edge, partialPath.getEndVertex())) == 1;
                     }
-                    return Math.abs(
-                        prevPathElement.getVertex() - Graphs
-                            .getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
                 });
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
                 assertNotNull(paths);
                 assertEquals(1, paths.size());
             }
@@ -122,30 +149,87 @@ public class KSPPathValidatorTest
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                graph, 100, Integer.MAX_VALUE, (prevPathElement, edge) -> {
-                    // accept all requests but the one to pass through the edge connecting
-                    // the two cliques.
-                    DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
-                    return connectingEdge != edge;
+                graph, i, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+                {
+
+                    @Override
+                    public boolean isValidPath(
+                        GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
+                    {
+                        // accept all requests but the one to pass through the edge connecting
+                        // the two cliques.
+                        DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
+                        return connectingEdge != edge;
+                    }
                 });
 
             for (int j = 0; j < graph.vertexSet().size(); j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
                 if ((i < cliqueSize && j < cliqueSize) || (i >= cliqueSize && j >= cliqueSize)) {
                     // within the clique - path should exist
                     assertNotNull(paths);
                     assertTrue(paths.size() > 0);
                 } else {
                     // else - should not
-                    assertNotNull(paths);
-                    assertTrue(paths.isEmpty());
+                    assertNull(paths);
                 }
 
             }
         }
+    }
+
+    /**
+     * Testing that the provided GraphPath and new edge are generated correctly. On a directed line
+     * graph, the path at step i is expected to include all vertices [0..i-1] and edges {(0, 1), (1,
+     * 2), ... (i-1, i) and where new edge is (i, i+1). v
+     */
+    public void testGraphPath()
+    {
+        SimpleDirectedGraph<Integer, DefaultEdge> line = buildLineGraph(10);
+        KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
+            line, 0, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+            {
+
+                int index = 0;
+
+                @Override
+                public boolean isValidPath(
+                    GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
+                {
+                    assertNotNull(edge);
+                    assertEquals(line.getEdgeSource(edge), index, index + 1);
+
+                    List<Integer> expectedVertices = new ArrayList<>();
+
+                    for (int i = 0; i < index + 1; i++) {
+                        expectedVertices.add(i);
+                    }
+
+                    List<DefaultEdge> expectedEdges = new ArrayList<>();
+                    for (int i = 0; i < index; i++) {
+                        expectedEdges.add(line.getEdge(i, i + 1));
+                    }
+
+                    assertNotNull(partialPath);
+                    assertEquals(index, partialPath.getEdgeList().size());
+                    assertEquals(expectedEdges, partialPath.getEdgeList());
+                    assertEquals(index, partialPath.getEndVertex().intValue());
+                    assertEquals(line, partialPath.getGraph());
+                    assertEquals(index, partialPath.getLength());
+                    assertEquals(0, partialPath.getStartVertex().intValue());
+                    assertEquals(index + 1, partialPath.getVertexList().size());
+                    assertEquals(expectedVertices, partialPath.getVertexList());
+                    assertEquals((double) index, partialPath.getWeight());
+
+                    index++;
+                    return true;
+                }
+            });
+
+        ksp.getPaths(9);
     }
 
     private SimpleGraph<String, DefaultEdge> buildCliqueGraph(int size)
@@ -197,5 +281,15 @@ public class KSPPathValidatorTest
         RingGraphGenerator<Integer, DefaultEdge> graphGenerator = new RingGraphGenerator<>(size);
         graphGenerator.generateGraph(clique, new IntegerVertexFactory(), null);
         return clique;
+    }
+
+    private SimpleDirectedGraph<Integer, DefaultEdge> buildLineGraph(int size)
+    {
+        SimpleDirectedGraph<Integer, DefaultEdge> line =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+        LinearGraphGenerator<Integer, DefaultEdge> graphGenerator =
+            new LinearGraphGenerator<>(size);
+        graphGenerator.generateGraph(line, new IntegerVertexFactory(), null);
+        return line;
     }
 }
