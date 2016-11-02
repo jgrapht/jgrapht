@@ -52,7 +52,7 @@ public class KSPPathValidatorTest
 
                         @Override
                         public boolean isValidPath(
-                            PathElement<String, DefaultEdge> prevPathElement,
+                            GraphPath<String, DefaultEdge> prevPath,
                             DefaultEdge edge)
                         {
                             // block all paths
@@ -86,7 +86,7 @@ public class KSPPathValidatorTest
 
                         @Override
                         public boolean isValidPath(
-                            PathElement<String, DefaultEdge> prevPathElement,
+                            GraphPath<String, DefaultEdge> prevPath,
                             DefaultEdge edge)
                         {
                             // block all paths
@@ -119,14 +119,14 @@ public class KSPPathValidatorTest
 
                     @Override
                     public boolean isValidPath(
-                        PathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
+                        GraphPath<Integer, DefaultEdge> prevPath, DefaultEdge edge)
                     {
-                        if (prevPathElement == null) {
+                        if (prevPath == null) {
                             return true;
                         }
                         return Math.abs(
-                            prevPathElement.getVertex() - Graphs
-                                .getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
+                            prevPath.getEndVertex() - Graphs
+                                .getOppositeVertex(ring, edge, prevPath.getEndVertex())) == 1;
                     }
                 });
 
@@ -157,7 +157,7 @@ public class KSPPathValidatorTest
 
                     @Override
                     public boolean isValidPath(
-                        PathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
+                        GraphPath<Integer, DefaultEdge> prevPath, DefaultEdge edge)
                     {
                         // accept all requests but the one to pass through the edge connecting
                         // the two cliques.
