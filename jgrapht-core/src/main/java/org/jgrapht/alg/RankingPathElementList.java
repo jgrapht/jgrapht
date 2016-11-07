@@ -334,6 +334,14 @@ final class RankingPathElementList<V, E>
         this.path2disconnect.put(prevPathElement, false);
         return false;
     }
+    
+    private V getStratVertex(RankingPathElement<V, E> prevPathElement) {
+        RankingPathElement<V, E> firstPathElement = prevPathElement;
+      while (firstPathElement.getPrevPathElement() != null) {
+          firstPathElement = firstPathElement.getPrevPathElement();
+      }
+      return firstPathElement.getVertex();
+    }
 
     private boolean isNotValidPath(RankingPathElement<V, E> prevPathElement, E edge)
     {
@@ -343,11 +351,14 @@ final class RankingPathElementList<V, E>
         if (isGuardVertexDisconnected(prevPathElement)) {
             return true;
         }
-        if (externalPathValidator != null
-            && !externalPathValidator.isValidPath(prevPathElement, edge))
-        {
+        if (externalPathValidator != null && !externalPathValidator.isValidPath(
+            new GraphWalk<V, E>(
+                graph, getStratVertex(prevPathElement), prevPathElement.getVertex(),
+                prevPathElement.createEdgeListPath(), prevPathElement.getWeight()),
+            edge)) {
+            
             return true;
-
+            
         } else {
             return false;
         }
