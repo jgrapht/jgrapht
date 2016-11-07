@@ -52,7 +52,11 @@ public class KSPPathValidatorTest
 
                         @Override
                         public boolean isValidPath(
+<<<<<<< HEAD
                             GraphPath<String, DefaultEdge> partialPath,
+=======
+                            GraphPath<String, DefaultEdge> prevPath,
+>>>>>>> bb2518936fea6fc4262a23259462def8e83efae5
                             DefaultEdge edge)
                         {
                             // block all paths
@@ -86,7 +90,11 @@ public class KSPPathValidatorTest
 
                         @Override
                         public boolean isValidPath(
+<<<<<<< HEAD
                             GraphPath<String, DefaultEdge> partialPath,
+=======
+                            GraphPath<String, DefaultEdge> prevPath,
+>>>>>>> bb2518936fea6fc4262a23259462def8e83efae5
                             DefaultEdge edge)
                         {
                             // block all paths
@@ -119,6 +127,7 @@ public class KSPPathValidatorTest
 
                     @Override
                     public boolean isValidPath(
+<<<<<<< HEAD
                         GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
                     {
                         if (partialPath == null) {
@@ -127,6 +136,16 @@ public class KSPPathValidatorTest
                         return Math.abs(
                             partialPath.getEndVertex() - Graphs
                                 .getOppositeVertex(ring, edge, partialPath.getEndVertex())) == 1;
+=======
+                        GraphPath<Integer, DefaultEdge> prevPath, DefaultEdge edge)
+                    {
+                        if (prevPath == null) {
+                            return true;
+                        }
+                        return Math.abs(
+                            prevPath.getEndVertex() - Graphs
+                                .getOppositeVertex(ring, edge, prevPath.getEndVertex())) == 1;
+>>>>>>> bb2518936fea6fc4262a23259462def8e83efae5
                     }
                 });
 
@@ -157,7 +176,11 @@ public class KSPPathValidatorTest
 
                     @Override
                     public boolean isValidPath(
+<<<<<<< HEAD
                         GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
+=======
+                        GraphPath<Integer, DefaultEdge> prevPath, DefaultEdge edge)
+>>>>>>> bb2518936fea6fc4262a23259462def8e83efae5
                     {
                         // accept all requests but the one to pass through the edge connecting
                         // the two cliques.
