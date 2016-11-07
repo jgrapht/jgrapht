@@ -37,10 +37,10 @@ public interface PathValidator<V, E>
     /**
      * Checks if an edge can be added to a previous path element.
      * 
-     * @param prevPath the path from source vertex up to the new edge.
-     * @param edge the edge to be added to the path.
+     * @param partialPath the path from source vertex up to the current vertex.
+     * @param edge the new edge to be added to the path.
      * 
      * @return <code>true</code> if edge can be added, <code>false</code> otherwise.
      */
-    public boolean isValidPath(GraphPath<V, E> prevPath, E edge);
+    public boolean isValidPath(GraphPath<V, E> partialPath, E edge);
 }

@@ -46,7 +46,7 @@ public class KSPPathValidatorTest
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, String.valueOf(i), 1, Integer.MAX_VALUE,
+                clique, 1, Integer.MAX_VALUE,
                 new PathValidator<String, DefaultEdge>()
                 {
 
@@ -63,7 +63,7 @@ public class KSPPathValidatorTest
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(j));
+                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(i), String.valueOf(j));
                 assertNull(paths);
             }
         }
@@ -78,7 +78,7 @@ public class KSPPathValidatorTest
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, String.valueOf(i), 30, Integer.MAX_VALUE,
+                clique, 30, Integer.MAX_VALUE,
                 new PathValidator<String, DefaultEdge>()
                 {
 
@@ -95,7 +95,7 @@ public class KSPPathValidatorTest
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(j));
+                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(i), String.valueOf(j));
                 assertNotNull(paths);
                 assertEquals(16, paths.size());
             }
@@ -111,7 +111,7 @@ public class KSPPathValidatorTest
         SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                ring, i, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+                ring, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
                 {
 
                     @Override
@@ -131,7 +131,7 @@ public class KSPPathValidatorTest
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
                 assertNotNull(paths);
                 assertEquals(1, paths.size());
             }
@@ -149,7 +149,7 @@ public class KSPPathValidatorTest
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                graph, i, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+                graph, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
                 {
 
                     @Override
@@ -167,7 +167,7 @@ public class KSPPathValidatorTest
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
                 if ((i < cliqueSize && j < cliqueSize) || (i >= cliqueSize && j >= cliqueSize)) {
                     // within the clique - path should exist
                     assertNotNull(paths);
@@ -190,7 +190,7 @@ public class KSPPathValidatorTest
     {
         SimpleDirectedGraph<Integer, DefaultEdge> line = buildLineGraph(10);
         KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-            line, 0, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+            line, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
             {
 
                 int index = 0;
@@ -229,7 +229,7 @@ public class KSPPathValidatorTest
                 }
             });
 
-        ksp.getPaths(9);
+        ksp.getPaths(0, 9);
     }
 
     private SimpleGraph<String, DefaultEdge> buildCliqueGraph(int size)
