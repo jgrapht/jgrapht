@@ -154,8 +154,7 @@ public class GmlImporter<V, E>
      * 
      * @param graph the output graph
      * @param input the input reader
-     * @throws ImportException in case an error occurs, such a parse error
-     * @throws IOException if there is an I/O error
+     * @throws ImportException in case an error occurs, such as I/O or parse error
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
