@@ -87,10 +87,8 @@ public class GmlExporter<V, E>
     /**
      * Constructs a new GmlExporter object with the given ID and label providers.
      *
-     * @param vertexIDProvider for generating vertex IDs. Must not be null.
      * @param vertexLabelProvider for generating vertex labels. If null, vertex labels will be
      *        generated using the toString() method of the vertex object.
-     * @param edgeIDProvider for generating vertex IDs. Must not be null.
      * @param edgeLabelProvider for generating edge labels. If null, edge labels will be generated
      *        using the toString() method of the edge object.
      */
