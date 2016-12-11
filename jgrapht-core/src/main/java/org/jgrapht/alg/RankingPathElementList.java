@@ -335,7 +335,7 @@ final class RankingPathElementList<V, E>
         return false;
     }
     
-    private V getStratVertex(RankingPathElement<V, E> prevPathElement) {
+    private V getStartVertex(RankingPathElement<V, E> prevPathElement) {
         RankingPathElement<V, E> firstPathElement = prevPathElement;
       while (firstPathElement.getPrevPathElement() != null) {
           firstPathElement = firstPathElement.getPrevPathElement();
@@ -353,7 +353,7 @@ final class RankingPathElementList<V, E>
         }
         if (externalPathValidator != null && !externalPathValidator.isValidPath(
             new GraphWalk<V, E>(
-                graph, getStratVertex(prevPathElement), prevPathElement.getVertex(),
+                graph, getStartVertex(prevPathElement), prevPathElement.getVertex(),
                 prevPathElement.createEdgeListPath(), prevPathElement.getWeight()),
             edge)) {
             
