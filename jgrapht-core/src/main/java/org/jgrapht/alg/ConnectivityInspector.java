@@ -56,6 +56,7 @@ public class ConnectivityInspector<V, E>
     List<Set<V>> connectedSets;
     Map<V, Set<V>> vertexToConnectedSet;
     private Graph<V, E> graph;
+    private Graph<V, E> originalgraph;
 
     /**
      * Creates a connectivity inspector for the specified undirected graph.
@@ -66,6 +67,7 @@ public class ConnectivityInspector<V, E>
     {
         init();
         this.graph = g;
+        this.originalgraph = g;
     }
 
     /**
@@ -265,6 +267,73 @@ public class ConnectivityInspector<V, E>
             vertexToConnectedSet.put(v, currentConnectedSet);
         }
     }
+
+
+    /**
+     * A complete graph is a graph where
+     * every vertex shares an edge with every other vertex. If it is a directed
+     * graph, then edges must always exist in both directions.
+     * 
+     * This method is equivalent to incompleteVertices().isEmpty() 
+     * 
+     * @return true if the graph is complete. 
+     */
+	public boolean isComplete() {
+		return this.incompleteVertices().isEmpty();
+	}
+
+	/**
+	 *  Calculates the set of vertices that makes a graph incomplete.
+	 *  A complete graph is a graph where
+     * every vertex shares an edge with every other vertex. If it is a directed
+     * graph, then edges must always exist in both directions.
+     * 
+	 * @return A set with vertices that have less edges than the necessary to 
+	 * be a complete graph.
+	 */
+	public Set<V> incompleteVertices() {
+		int grade = (originalgraph.vertexSet().size() - 1);
+
+		if (isDirectedGraph()) {
+			return this.incompleteVertices_DirectedGraph(grade);
+		}
+
+		Set<V> set = new HashSet<V>();
+		Set<V> temp;
+
+		for (V v : originalgraph.vertexSet()) {
+			temp = new HashSet<V>(Graphs.neighborListOf(originalgraph, v));
+			if (temp.size() < grade) {
+				set.add(v);
+			}
+		}
+
+		return set;
+	}
+	
+
+	boolean isDirectedGraph() {
+		return (originalgraph instanceof DirectedGraph);
+	}
+
+	Set<V> incompleteVertices_DirectedGraph(int grade) {
+		Set<V> set = new HashSet<V>();
+		DirectedGraph<V, E> dg = (DirectedGraph<V, E>)originalgraph;
+		List<V> sucessors;
+		int loopCount;
+		for (V v : originalgraph.vertexSet()) {
+			loopCount = 0;
+			sucessors = Graphs.successorListOf(dg, v);
+			if (sucessors.contains(v)) {
+				loopCount = 1;
+			}
+			if (sucessors.size() < (grade + loopCount)) {
+				set.add(v);
+			}
+		}
+		return set;
+	}
+	
 }
 
 // End ConnectivityInspector.java
