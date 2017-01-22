@@ -466,6 +466,41 @@ public class DOTImporterTest
             "wrong parsing", "node", ((TestVertex) result.vertexSet().toArray()[0]).getId());
     }
 
+    public void testLabelsWithDoubleEscape()
+            throws ImportException
+    {
+        String escapedLabel = "<?xml version=\\\\\\\"1.0\\\\\\\" encoding=\\\\\\\"UTF-8\\\\\\\" standalone=\\\\\\\"no\\\\\\\"?>";
+        String input = "graph G {\n node [ label=\"" + escapedLabel + "\" ];\n}\n";
+        Multigraph<TestVertex, DefaultEdge> result =
+                new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+        DOTImporter<TestVertex, DefaultEdge> importer =
+                new DOTImporter<TestVertex, DefaultEdge>(new VertexProvider<TestVertex>()
+                {
+                    @Override
+                    public TestVertex buildVertex(String label, Map<String, String> attributes)
+                    {
+                        if (label.equals("node")) {
+                            Assert.assertEquals(attributes.get("label"), escapedLabel);
+                        }
+                        return new TestVertex(label, attributes);
+                    }
+                }, new EdgeProvider<TestVertex, DefaultEdge>()
+                {
+                    @Override
+                    public DefaultEdge buildEdge(
+                            TestVertex from, TestVertex to, String label, Map<String, String> attributes)
+                    {
+                        return new DefaultEdge();
+                    }
+                });
+
+        importer.importGraph(result, new StringReader(input));
+        Assert.assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
+        Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
+        Assert.assertEquals(
+                "wrong parsing", "node", ((TestVertex) result.vertexSet().toArray()[0]).getId());
+    }
+
     public void testNoLineEndBetweenNodes()
         throws ImportException
     {
