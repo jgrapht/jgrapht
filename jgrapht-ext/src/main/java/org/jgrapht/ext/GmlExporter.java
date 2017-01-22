@@ -69,9 +69,9 @@ public class GmlExporter<V, E>
         EXPORT_EDGE_WEIGHTS
     }
 
-    private ComponentNameProvider<V> vertexIDProvider;
+    private ComponentNameProvider<V> vertexIDProvider = new IntegerComponentNameProvider<>();
     private ComponentNameProvider<V> vertexLabelProvider;
-    private ComponentNameProvider<E> edgeIDProvider;
+    private ComponentNameProvider<E> edgeIDProvider = new IntegerComponentNameProvider<>();
     private ComponentNameProvider<E> edgeLabelProvider;
     private final Set<Parameter> parameters;
 
@@ -81,27 +81,21 @@ public class GmlExporter<V, E>
      */
     public GmlExporter()
     {
-        this(
-            new IntegerComponentNameProvider<>(), null, new IntegerComponentNameProvider<>(), null);
+        this(null, null);
     }
 
     /**
      * Constructs a new GmlExporter object with the given ID and label providers.
      *
-     * @param vertexIDProvider for generating vertex IDs. Must not be null.
      * @param vertexLabelProvider for generating vertex labels. If null, vertex labels will be
      *        generated using the toString() method of the vertex object.
-     * @param edgeIDProvider for generating vertex IDs. Must not be null.
      * @param edgeLabelProvider for generating edge labels. If null, edge labels will be generated
      *        using the toString() method of the edge object.
      */
-    public GmlExporter(
-        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
-        ComponentNameProvider<E> edgeIDProvider, ComponentNameProvider<E> edgeLabelProvider)
+    public GmlExporter(ComponentNameProvider<V> vertexLabelProvider,
+        ComponentNameProvider<E> edgeLabelProvider)
     {
-        this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
-        this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
         this.parameters = new HashSet<>();
     }

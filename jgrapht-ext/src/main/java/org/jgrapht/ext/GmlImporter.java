@@ -40,6 +40,7 @@ import org.jgrapht.ext.GmlParser.*;
  * graph [
  *   node [ 
  *     id 1
+ *     label "node label string"
  *   ]
  *   node [
  *     id 2
@@ -51,11 +52,13 @@ import org.jgrapht.ext.GmlParser.*;
  *     source 1
  *     target 2 
  *     weight 2.0
+ *     label "label string"
  *   ]
  *   edge [
  *     source 2
  *     target 3
  *     weight 3.0
+ *     label "another label string"
  *   ]
  * ]
  * </pre>
@@ -215,6 +218,7 @@ public class GmlImporter<V, E>
         private static final String ID = "id";
         private static final String SOURCE = "source";
         private static final String TARGET = "target";
+        private static final String LABEL = "label";
 
         private boolean foundGraph;
         private boolean insideGraph;
@@ -225,36 +229,62 @@ public class GmlImporter<V, E>
         private Integer sourceId;
         private Integer targetId;
         private Double weight;
+        private String label;
 
-        private Set<Integer> nodes;
-        private int singletons;
+        /**
+         * Maps IDs, which are always integers, to the corresponding node labels
+         * for nodes that are connected in the graph.
+         */
+        private HashMap<Integer, String> nodeLabels;
+        /** Labels for stand-alone nodes that are not connected.  Note that these
+         * can be NULL.
+         */
+        private List<String> singletonLabels;
         private List<PartialEdge> edges;
 
         public void updateGraph(Graph<V, E> graph)
             throws ImportException
         {
             if (foundGraph) {
-                // add nodes
+                // Add connected nodes
                 int maxV = 1;
                 Map<Integer, V> map = new HashMap<Integer, V>();
-                for (Integer id : nodes) {
+                for (Integer id : nodeLabels.keySet()) {
+                	String label = nodeLabels.get(id);
+                	// Substitute the ID for the label if no label provided
+                	if (label == null || (label != null && label.equals(""))) {
+                		label = id + "";
+                	}
                     maxV = Math.max(maxV, id);
-                    V vertex =
-                        vertexProvider.buildVertex(id.toString(), new HashMap<String, String>());
-                    map.put(id, vertex);
-                    graph.addVertex(vertex);
+                    V vertex = vertexProvider.buildVertex(label, new HashMap<String, String>());
+                    if (vertex != null) {
+                    	map.put(id, vertex);
+                    	graph.addVertex(vertex);
+                    }
                 }
 
-                // add singleton nodes
-                for (int i = 0; i < singletons; i++) {
-                    String label = String.valueOf(maxV + 1 + i);
-                    graph.addVertex(
-                        vertexProvider.buildVertex(label, new HashMap<String, String>()));
+                // Add singleton nodes--those with no IDs and that are not connected.
+                for (int i = 0; i < singletonLabels.size(); i++) {
+                	String label = singletonLabels.get(i);
+                	// For nodes that for whatever reason do not have IDs set in the file,
+                	// assign the next higher ID as the label.
+                	if (label == null || (label != null && label.equals(""))) {
+                		label = String.valueOf(maxV + 1 + i);
+                	}
+                	V vertex = vertexProvider.buildVertex(label, new HashMap<String, String>());
+                	if (vertex != null) {
+                		graph.addVertex(vertex);
+                	}
                 }
 
-                // add edges
+                // Add edges
                 for (PartialEdge pe : edges) {
-                    String label = "e_" + pe.source + "_" + pe.target;
+                    String label = pe.label;
+                    // If no label assigned, then substitute e_X_Y where X is the source ID
+                    // and Y is the target ID.
+                    if (label == null || (label != null && label.equals(""))) {
+                    	label = "e_" + pe.source + "_" + pe.target;
+                    }
                     V from = map.get(pe.source);
                     if (from == null) {
                         throw new ImportException("Node " + pe.source + " does not exist");
@@ -263,12 +293,14 @@ public class GmlImporter<V, E>
                     if (to == null) {
                         throw new ImportException("Node " + pe.target + " does not exist");
                     }
-                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
-                    graph.addEdge(from, to, e);
-                    if (pe.weight != null) {
-                        if (graph instanceof WeightedGraph<?, ?>) {
-                            ((WeightedGraph<V, E>) graph).setEdgeWeight(e, pe.weight);
-                        }
+                    E edge = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
+                    if (edge != null) {
+                    	graph.addEdge(from, to, edge);
+                    	if (pe.weight != null) {
+                    		if (graph instanceof WeightedGraph<?, ?>) {
+                    			((WeightedGraph<V, E>) graph).setEdgeWeight(edge, pe.weight);
+                    		}
+                    	}
                     }
                 }
 
@@ -282,12 +314,23 @@ public class GmlImporter<V, E>
             insideGraph = false;
             insideNode = false;
             insideEdge = false;
-            nodes = new HashSet<Integer>();
-            singletons = 0;
+            nodeLabels = new HashMap<>();
+            singletonLabels = new ArrayList<>();
             edges = new ArrayList<PartialEdge>();
             level = 0;
         }
-
+        
+        @Override
+        public void enterStringKeyValue(GmlParser.StringKeyValueContext ctx)
+        {
+        	String key = ctx.ID().getText();
+        	
+        	if ((insideEdge || insideNode) && level == 2 && key.equals(LABEL)) {
+        		// Label will be enclosed in quotes and may contain escape sequences
+        		label = StringUtility.deQuote(ctx.STRING().getText());
+        	}
+        }
+        
         @Override
         public void enterNumberKeyValue(GmlParser.NumberKeyValueContext ctx)
         {
@@ -330,11 +373,13 @@ public class GmlImporter<V, E>
             } else if (level == 1 && insideGraph && key.equals(NODE)) {
                 insideNode = true;
                 nodeId = null;
+                label = null;
             } else if (level == 1 && insideGraph && key.equals(EDGE)) {
                 insideEdge = true;
                 sourceId = null;
                 targetId = null;
                 weight = null;
+                label = null;
             }
             level++;
         }
@@ -347,34 +392,38 @@ public class GmlImporter<V, E>
             if (level == 0 && key.equals(GRAPH)) {
                 insideGraph = false;
             } else if (level == 1 && insideGraph && key.equals(NODE)) {
-                if (nodeId == null) {
-                    singletons++;
+                if (nodeId != null) {
+                	// Normal case: The node has an ID, so record its ID and its label.
+                	nodeLabels.put(nodeId, label);
                 } else {
-                    nodes.add(nodeId);
+                	// A node without a numeric identifier is called a singleton in this
+                	// context.  Lacking an identifier, it cannot be connected.  All we
+                	// can do is track its label.  The label may be null!
+                	singletonLabels.add(label);
                 }
                 insideNode = false;
             } else if (level == 1 && insideGraph && key.equals(EDGE)) {
                 if (sourceId != null && targetId != null) {
-                    edges.add(new PartialEdge(sourceId, targetId, weight));
+                    edges.add(new PartialEdge(sourceId, targetId, weight, label));
                 }
                 insideEdge = false;
             }
-
         }
-
     }
-
+    
     private class PartialEdge
     {
         Integer source;
         Integer target;
         Double weight;
+        String label;
 
-        public PartialEdge(Integer source, Integer target, Double weight)
+        public PartialEdge(Integer source, Integer target, Double weight, String label)
         {
             this.source = source;
             this.target = target;
             this.weight = weight;
+            this.label = label;
         }
     }
 
