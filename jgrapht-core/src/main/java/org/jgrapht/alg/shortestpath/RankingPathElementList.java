@@ -328,14 +328,6 @@ final class RankingPathElementList<V, E>
         this.path2disconnect.put(prevPathElement, false);
         return false;
     }
-    
-    private V getStartVertex(RankingPathElement<V, E> prevPathElement) {
-        RankingPathElement<V, E> firstPathElement = prevPathElement;
-      while (firstPathElement.getPrevPathElement() != null) {
-          firstPathElement = firstPathElement.getPrevPathElement();
-      }
-      return firstPathElement.getVertex();
-    }
 
     private boolean isNotValidPath(RankingPathElement<V, E> prevPathElement, E edge)
     {
@@ -345,17 +337,25 @@ final class RankingPathElementList<V, E>
         if (isGuardVertexDisconnected(prevPathElement)) {
             return true;
         }
-        if (externalPathValidator != null && !externalPathValidator.isValidPath(
-            new GraphWalk<V, E>(
-                graph, getStartVertex(prevPathElement), prevPathElement.getVertex(),
-                prevPathElement.createEdgeListPath(), prevPathElement.getWeight()),
-            edge)) {
-            
-            return true;
-            
-        } else {
-            return false;
+        
+        if (externalPathValidator != null) {            
+            GraphPath<V, E> prevPath;
+            if (prevPathElement.getPrevEdge() == null) {
+                prevPath = new GraphWalk<>(graph, Arrays.asList(prevPathElement.getVertex()), 
+                    prevPathElement.getWeight());
+            } else {
+                List<E> prevEdges = prevPathElement.createEdgeListPath();
+                prevPath = new GraphWalk<V, E>(
+                    graph, graph.getEdgeSource(prevEdges.get(0)), prevPathElement.getVertex(),
+                    prevEdges, prevPathElement.getWeight());
+            }
+
+            if (!externalPathValidator.isValidPath(prevPath, edge)) {
+                return true;
+            }
         }
+        
+        return false;
     }
 
     /**
