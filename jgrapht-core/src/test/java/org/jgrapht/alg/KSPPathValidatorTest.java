@@ -208,13 +208,9 @@ public class KSPPathValidatorTest
                 assertEquals(line.getEdgeSource(edge), index, index + 1);
 
                 List<Integer> expectedVertices = new ArrayList<>();
-                //first path element should include no vertices
-                //second path element should include vertices 0 and 1
-                //i-th path element should include vertices 0 to i
-                if (index > 0) {
-                    for (int i = 0; i < index + 1; i++) {
-                        expectedVertices.add(i);
-                    }
+
+                for (int i = 0; i < index + 1; i++) {
+                    expectedVertices.add(i);
                 }
                 
                 List<DefaultEdge> expectedEdges = new ArrayList<>();
@@ -229,7 +225,7 @@ public class KSPPathValidatorTest
                 assertEquals(line, partialPath.getGraph());
                 assertEquals(index, partialPath.getLength());
                 assertEquals(0, partialPath.getStartVertex().intValue());
-                assertEquals((index == 0 ? 0 : index + 1), partialPath.getVertexList().size());
+                assertEquals(index + 1, partialPath.getVertexList().size());
                 assertEquals(expectedVertices, partialPath.getVertexList());
                 assertEquals((double) index, partialPath.getWeight());
 
