@@ -17,9 +17,13 @@
  */
 package org.jgrapht;
 
+import static org.junit.Assert.*;
+
 import java.util.*;
+import java.util.stream.*;
 
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.specifics.*;
 import org.junit.*;
 
 /**
@@ -453,6 +457,200 @@ public class GraphsTest
         graph.addEdge(b, d);
 
         Assert.assertFalse(Graphs.vertexHasPredecessors(graph, a));
+    }
+
+    @Test
+    public void testEdgeAccessorOnDirectedGraph()
+    {
+        DirectedGraph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        g.addVertex("s");
+        g.addVertex("v1");
+        g.addVertex("v2");
+        g.addVertex("v3");
+        g.addVertex("v4");
+
+        DefaultEdge e1 = g.addEdge("s", "v1");
+        DefaultEdge e2 = g.addEdge("s", "v2");
+        DefaultEdge e3 = g.addEdge("v3", "s");
+        DefaultEdge e4 = g.addEdge("v4", "s");
+        DefaultEdge e5 = g.addEdge("s", "s");
+
+        IncidentEdgeAccessor<String, DefaultEdge> outAccessor = Graphs.outgoingEdgeAccessor(g);
+
+        List<DefaultEdge> outEdges = StreamSupport
+            .stream(outAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(3, outEdges.size());
+        assertTrue(outEdges.contains(e1));
+        assertTrue(outEdges.contains(e2));
+        assertTrue(outEdges.contains(e5));
+
+        IncidentEdgeAccessor<String, DefaultEdge> inAccessor = Graphs.incomingEdgeAccessor(g);
+
+        List<DefaultEdge> inEdges = StreamSupport
+            .stream(inAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(3, inEdges.size());
+        assertTrue(inEdges.contains(e3));
+        assertTrue(inEdges.contains(e4));
+        assertTrue(inEdges.contains(e5));
+
+        IncidentEdgeAccessor<String, DefaultEdge> inOutAccessor =
+            Graphs.incomingOutgoingEdgeAccessor(g);
+
+        List<DefaultEdge> inOutEdges = StreamSupport
+            .stream(inOutAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, inOutEdges.size());
+        assertTrue(inOutEdges.contains(e1));
+        assertTrue(inOutEdges.contains(e2));
+        assertTrue(inOutEdges.contains(e3));
+        assertTrue(inOutEdges.contains(e4));
+        assertTrue(inOutEdges.contains(e5));
+    }
+
+    @Test
+    public void testEdgeAccessorOnUndirectedGraph()
+    {
+        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        g.addVertex("s");
+        g.addVertex("v1");
+        g.addVertex("v2");
+        g.addVertex("v3");
+        g.addVertex("v4");
+
+        DefaultEdge e1 = g.addEdge("s", "v1");
+        DefaultEdge e2 = g.addEdge("s", "v2");
+        DefaultEdge e3 = g.addEdge("v3", "s");
+        DefaultEdge e4 = g.addEdge("v4", "s");
+        DefaultEdge e5 = g.addEdge("s", "s");
+
+        IncidentEdgeAccessor<String, DefaultEdge> outAccessor = Graphs.outgoingEdgeAccessor(g);
+
+        List<DefaultEdge> outEdges = StreamSupport
+            .stream(outAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, outEdges.size());
+        assertTrue(outEdges.contains(e1));
+        assertTrue(outEdges.contains(e2));
+        assertTrue(outEdges.contains(e3));
+        assertTrue(outEdges.contains(e4));
+        assertTrue(outEdges.contains(e3));
+
+        IncidentEdgeAccessor<String, DefaultEdge> inAccessor = Graphs.incomingEdgeAccessor(g);
+
+        List<DefaultEdge> inEdges = StreamSupport
+            .stream(inAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, inEdges.size());
+        assertTrue(inEdges.contains(e1));
+        assertTrue(inEdges.contains(e2));
+        assertTrue(inEdges.contains(e3));
+        assertTrue(inEdges.contains(e4));
+        assertTrue(inEdges.contains(e5));
+
+        IncidentEdgeAccessor<String, DefaultEdge> inOutAccessor =
+            Graphs.incomingOutgoingEdgeAccessor(g);
+
+        List<DefaultEdge> inOutEdges = StreamSupport
+            .stream(inOutAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, inOutEdges.size());
+        assertTrue(inOutEdges.contains(e1));
+        assertTrue(inOutEdges.contains(e2));
+        assertTrue(inOutEdges.contains(e3));
+        assertTrue(inOutEdges.contains(e4));
+        assertTrue(inOutEdges.contains(e5));
+    }
+
+    @Test
+    public void testEdgeAccessorOnNoDirectedNorUndirectedGraph()
+    {
+        Graph<String, DefaultEdge> g = new TestGraph<>(DefaultEdge.class);
+        g.addVertex("s");
+        g.addVertex("v1");
+        g.addVertex("v2");
+        g.addVertex("v3");
+        g.addVertex("v4");
+
+        DefaultEdge e1 = g.addEdge("s", "v1");
+        DefaultEdge e2 = g.addEdge("s", "v2");
+        DefaultEdge e3 = g.addEdge("v3", "s");
+        DefaultEdge e4 = g.addEdge("v4", "s");
+        DefaultEdge e5 = g.addEdge("s", "s");
+
+        IncidentEdgeAccessor<String, DefaultEdge> outAccessor = Graphs.outgoingEdgeAccessor(g);
+
+        List<DefaultEdge> outEdges = StreamSupport
+            .stream(outAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, outEdges.size());
+        assertTrue(outEdges.contains(e1));
+        assertTrue(outEdges.contains(e2));
+        assertTrue(outEdges.contains(e3));
+        assertTrue(outEdges.contains(e4));
+        assertTrue(outEdges.contains(e5));
+
+        IncidentEdgeAccessor<String, DefaultEdge> inAccessor = Graphs.incomingEdgeAccessor(g);
+
+        List<DefaultEdge> inEdges = StreamSupport
+            .stream(inAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, inEdges.size());
+        assertTrue(inEdges.contains(e1));
+        assertTrue(inEdges.contains(e2));
+        assertTrue(inEdges.contains(e3));
+        assertTrue(inEdges.contains(e4));
+        assertTrue(inEdges.contains(e5));
+
+        IncidentEdgeAccessor<String, DefaultEdge> inOutAccessor =
+            Graphs.incomingOutgoingEdgeAccessor(g);
+
+        List<DefaultEdge> inOutEdges = StreamSupport
+            .stream(inOutAccessor.edgesOf("s").spliterator(), false).collect(Collectors.toList());
+
+        assertEquals(5, inOutEdges.size());
+        assertTrue(inOutEdges.contains(e1));
+        assertTrue(inOutEdges.contains(e2));
+        assertTrue(inOutEdges.contains(e3));
+        assertTrue(inOutEdges.contains(e4));
+        assertTrue(inOutEdges.contains(e5));
+    }
+
+    /**
+     * A graph which is neither directed or undirected.
+     */
+    private class TestGraph<V, E>
+        extends AbstractBaseGraph<V, E>
+    {
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * Creates a new graph
+         *
+         * @param edgeClass class on which to base factory for edges
+         */
+        public TestGraph(Class<? extends E> edgeClass)
+        {
+            this(new ClassBasedEdgeFactory<>(edgeClass));
+        }
+
+        /**
+         * Creates a new graph
+         *
+         * @param ef the edge factory of the new graph.
+         */
+        public TestGraph(EdgeFactory<V, E> ef)
+        {
+            super(ef, true, true);
+        }
+
+        @Override
+        protected Specifics<V, E> createSpecifics()
+        {
+            return new FastLookupDirectedSpecifics<>(this);
+        }
+
     }
 
 }

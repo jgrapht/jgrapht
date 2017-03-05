@@ -547,6 +547,65 @@ public abstract class Graphs
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
     }
+
+    /**
+     * Create an outgoing edge accessor. In directed graphs the accessor returns all outgoing edges
+     * of a vertex. In undirected graphs or if the graph is neither directed or undirected, the
+     * accessor returns all incident edges of a vertex.
+     *
+     * @param graph the input graph
+     * @return an vertex edge accessor for the outgoing edges
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public static <V, E> IncidentEdgeAccessor<V, E> outgoingEdgeAccessor(Graph<V, E> graph)
+    {
+        if (graph instanceof DirectedGraph<?, ?>) {
+            DirectedGraph<V, E> g = (DirectedGraph<V, E>) graph;
+            return vertex -> g.outgoingEdgesOf(vertex);
+        } else {
+            return vertex -> graph.edgesOf(vertex);
+        }
+    }
+
+    /**
+     * Create an incoming edge accessor. In directed graphs the accessor returns all incoming edges
+     * of a vertex. In undirected graphs or if the graph is neither directed or undirected, the
+     * accessor returns all incident edges of a vertex.
+     *
+     * @param graph the input graph
+     * @return an vertex edge accessor for the incoming edges
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public static <V, E> IncidentEdgeAccessor<V, E> incomingEdgeAccessor(Graph<V, E> graph)
+    {
+        if (graph instanceof DirectedGraph<?, ?>) {
+            DirectedGraph<V, E> g = (DirectedGraph<V, E>) graph;
+            return vertex -> g.incomingEdgesOf(vertex);
+        } else {
+            return vertex -> graph.edgesOf(vertex);
+        }
+    }
+
+    /**
+     * Create an outgoing/incoming edge accessor. In directed graphs the accessor returns all
+     * outgoing/incoming edges of a vertex. In undirected graphs or if the graph is neither directed
+     * or undirected, the accessor returns all incident edges of a vertex.
+     *
+     * @param graph the input graph
+     * @return an vertex edge accessor for the incoming/outgoing edges
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public static <V, E> IncidentEdgeAccessor<V, E> incomingOutgoingEdgeAccessor(Graph<V, E> graph)
+    {
+        return vertex -> graph.edgesOf(vertex);
+    }
+
 }
 
 // End Graphs.java
