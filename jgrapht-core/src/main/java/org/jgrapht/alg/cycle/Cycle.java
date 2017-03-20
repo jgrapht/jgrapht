@@ -1,15 +1,15 @@
 package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
-
-import java.util.*;
-
-import org.jgrapht.*;
+import org.jgrapht.GraphPath;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.GraphWalk;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * A common interface for classes implementing algorithms for finding a cycle base of an undirected
- * graph.
+ * A common abstract class for classes implementing algorithms for finding a cycle base of a graph.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
