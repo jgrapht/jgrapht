@@ -35,7 +35,6 @@ import org.jgrapht.*;
  * @author Nikolay Ognyanov
  */
 public class PatonCycleBase<V, E> extends Cycle<V,E>
-    implements UndirectedCycleBase
         // was implementing UndirectedCycleBase
 {
     private Graph<V, E> graph;

@@ -36,9 +36,7 @@ import org.jgrapht.alg.*;
  *
  * @author Nikolay Ognyanov
  */
-public class SzwarcfiterLauerSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
-{
+public class SzwarcfiterLauerSimpleCycles<V, E> extends Cycle<V,E> {
     // The graph.
     private Graph<V, E> graph;
 
@@ -96,7 +94,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public List<List<V>> findCycle()
     {
         // Just a straightforward implementation of
         // the algorithm.

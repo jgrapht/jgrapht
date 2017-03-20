@@ -14,7 +14,9 @@ import org.jgrapht.graph.GraphWalk;
  * @param <V> the vertex type.
  * @param <E> the edge type.
  *
- * @author Nikolay Ognyanov
+ * @author Nikita Zhuchkov
+ * @author Stanislav Nikitin
+ * @author Svetlana Blinova
  */
 
 public abstract class Cycle<V, E> {
@@ -74,6 +76,7 @@ public abstract class Cycle<V, E> {
                     V v2 = lv.get(i);
                     weight += this.graph.getEdgeWeight( this.graph.getEdge(v1,v2) );
                 }
+                weight += this.graph.getEdgeWeight( this.graph.getEdge(lv.get(lv.size()-1), lv.get(0)) );
                 gpl.add(new GraphWalk<V, E>(this.graph, lv, weight));
             }
             else{
