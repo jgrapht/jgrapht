@@ -20,6 +20,7 @@ package org.jgrapht.alg.cycle;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.GraphWalk;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
@@ -34,9 +35,7 @@ import org.jgrapht.*;
  *
  * @author Luiz Kill
  */
-public class HawickJamesSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
-{
+public class HawickJamesSimpleCycles<V, E> extends Cycle<V,E> {
     private enum Operation
     {
         ENUMERATE,
@@ -265,7 +264,7 @@ public class HawickJamesSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public List<List<V>> findCycle()
         throws IllegalArgumentException
     {
         if (graph == null) {
@@ -288,6 +287,34 @@ public class HawickJamesSimpleCycles<V, E>
         clearState();
         return result;
     }
+
+//    @Override
+//    public List<GraphPath<V, E>> findCyclePath() throws IllegalArgumentException {
+//
+//        if (graph == null) {
+//            throw new IllegalArgumentException("Null graph.");
+//        }
+//        List<GraphPath<V, E>> gpl = new ArrayList<>();
+//        List<List<V>> list = this.findCycle();
+//        boolean isWeighted = this.graph instanceof WeightedGraph;
+//
+//        for(List<V> lv: list){
+//            if(isWeighted){
+//                int weight = 0;
+//                for(int i=1; i<lv.size(); i++){
+//                    V v1 = lv.get(i-1);
+//                    V v2 = lv.get(i);
+//                    weight += this.graph.getEdgeWeight( this.graph.getEdge(v1,v2) );
+//                }
+//                gpl.add(new GraphWalk<V, E>(this.graph, lv, weight));
+//            }
+//            else{
+//                gpl.add(new GraphWalk<V, E>(this.graph, lv, lv.size()+1));
+//            }
+//        }
+//
+//        return gpl;
+//    }
 
     /**
      * Print to the standard output all simple cycles without building a list to keep them, thus

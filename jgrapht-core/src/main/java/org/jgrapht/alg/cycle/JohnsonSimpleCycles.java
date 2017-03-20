@@ -35,9 +35,7 @@ import org.jgrapht.graph.*;
  *
  * @author Nikolay Ognyanov
  */
-public class JohnsonSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
-{
+public class JohnsonSimpleCycles<V, E> extends Cycle<V,E> {
     // The graph.
     private Graph<V, E> graph;
 
@@ -100,7 +98,7 @@ public class JohnsonSimpleCycles<V, E>
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<List<V>> findSimpleCycles()
+    public List<List<V>> findCycle()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -131,6 +129,7 @@ public class JohnsonSimpleCycles<V, E>
         clearState();
         return result;
     }
+
 
     @SuppressWarnings("unchecked")
     private Object[] findMinSCSG(int startIndex)

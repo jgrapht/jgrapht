@@ -34,8 +34,9 @@ import org.jgrapht.*;
  *
  * @author Nikolay Ognyanov
  */
-public class PatonCycleBase<V, E>
-    implements UndirectedCycleBase<V, E>
+public class PatonCycleBase<V, E> extends Cycle<V,E>
+    implements UndirectedCycleBase
+        // was implementing UndirectedCycleBase
 {
     private Graph<V, E> graph;
 
@@ -81,7 +82,7 @@ public class PatonCycleBase<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycleBase()
+    public List<List<V>> findCycle()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

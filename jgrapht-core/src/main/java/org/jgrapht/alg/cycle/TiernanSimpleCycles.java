@@ -34,9 +34,7 @@ import org.jgrapht.*;
  *
  * @author Nikolay Ognyanov
  */
-public class TiernanSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
-{
+public class TiernanSimpleCycles<V, E> extends Cycle<V,E> {
     private Graph<V, E> graph;
 
     /**
@@ -81,7 +79,7 @@ public class TiernanSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles()
+    public List<List<V>> findCycle()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
