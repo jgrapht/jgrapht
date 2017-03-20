@@ -94,7 +94,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E> extends Cycle<V,E> {
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycle()
+    public List<List<V>> findCycles()
     {
         // Just a straightforward implementation of
         // the algorithm.

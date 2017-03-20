@@ -81,7 +81,7 @@ public class PatonCycleBase<V, E> extends Cycle<V,E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycle()
+    public List<List<V>> findCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

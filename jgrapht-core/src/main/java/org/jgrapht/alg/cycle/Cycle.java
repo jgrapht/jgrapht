@@ -50,14 +50,14 @@ public abstract class Cycle<V, E> {
      *
      * @throws IllegalArgumentException if the current graph is null.
      */
-    abstract List<List<V>> findCycle();
+    abstract List<List<V>> findCycles();
 
     /**
      * * Finds a cycle base of the graph.<br>
      * Note that the full algorithm is executed on every call since the graph may have changed
      * between calls.
      *
-     * @return A list of paths which are cycles. Based on <code> List<List<V>> findCycle() </code>.
+     * @return A list of paths which are cycles. Based on <code> List<List<V>> findCycles() </code>.
      * @throws IllegalArgumentException
      */
     List<GraphPath<V, E>> findCyclePath() throws IllegalArgumentException {
@@ -65,7 +65,7 @@ public abstract class Cycle<V, E> {
             throw new IllegalArgumentException("Null graph.");
         }
         List<GraphPath<V, E>> gpl = new ArrayList<>();
-        List<List<V>> list = this.findCycle();
+        List<List<V>> list = this.findCycles();
         boolean isWeighted = this.graph instanceof WeightedGraph;
 
         for(List<V> lv: list){

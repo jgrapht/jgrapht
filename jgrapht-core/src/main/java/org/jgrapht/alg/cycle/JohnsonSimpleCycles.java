@@ -98,7 +98,7 @@ public class JohnsonSimpleCycles<V, E> extends Cycle<V,E> {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<List<V>> findCycle()
+    public List<List<V>> findCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

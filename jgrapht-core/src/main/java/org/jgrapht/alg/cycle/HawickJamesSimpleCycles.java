@@ -264,7 +264,7 @@ public class HawickJamesSimpleCycles<V, E> extends Cycle<V,E> {
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycle()
+    public List<List<V>> findCycles()
         throws IllegalArgumentException
     {
         if (graph == null) {
@@ -295,7 +295,7 @@ public class HawickJamesSimpleCycles<V, E> extends Cycle<V,E> {
 //            throw new IllegalArgumentException("Null graph.");
 //        }
 //        List<GraphPath<V, E>> gpl = new ArrayList<>();
-//        List<List<V>> list = this.findCycle();
+//        List<List<V>> list = this.findCycles();
 //        boolean isWeighted = this.graph instanceof WeightedGraph;
 //
 //        for(List<V> lv: list){

@@ -87,6 +87,6 @@ public class DirectedSimpleCyclesTest
 
     private void checkResult(Cycle<Integer, DefaultEdge> finder, int size)
     {
-        assertTrue(finder.findCycle().size() == size);
+        assertTrue(finder.findCycles().size() == size);
     }
 }
