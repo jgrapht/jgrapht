@@ -23,7 +23,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 
 /**
- * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in
+ * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum cardinality matching in
  * an undirected simple bipartite graph. The algorithm runs in O(|E|*√|V|) time. The original
  * algorithm is described in: Hopcroft, John E.; Karp, Richard M. (1973), "An n5/2 algorithm for
  * maximum matchings in bipartite graphs", SIAM Journal on Computing 2 (4): 225–231,

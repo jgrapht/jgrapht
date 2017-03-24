@@ -131,6 +131,7 @@ public interface MatchingAlgorithm<V, E>
         {
             return "Matching [edges=" + edges + ", weight=" + weight + "]";
         }
+
     }
 
 }

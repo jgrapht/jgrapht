@@ -92,7 +92,7 @@ public class HierholzerEulerianCycle<V, E>
             }
             // check that at most one connected component contains edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new ConnectivityInspector<V, E>(graph).connectedSets()) {
+            for (Set<V> component : new ConnectivityInspector<>(graph).connectedSets()) {
                 for (V v : component) {
                     if (graph.degreeOf(v) > 0) {
                         if (foundComponentWithEdges) {
@@ -113,7 +113,7 @@ public class HierholzerEulerianCycle<V, E>
             }
             // check that at most one strongly connected component contains edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(graph)
+            for (Set<V> component : new KosarajuStrongConnectivityInspector<>(graph)
                 .stronglyConnectedSets())
             {
                 for (V v : component) {
@@ -270,7 +270,7 @@ public class HierholzerEulerianCycle<V, E>
      * partial cycles from already visited vertices.
      * 
      * @param partialCycle the partial cycle
-     * @param partialCycleStartVertex the source vertex of the first edge in the partial cycle
+     * @param partialCycleSourceVertex the source vertex of the first edge in the partial cycle
      */
     private void updateGraphAndInsertLocations(
         Pair<EdgeNode, EdgeNode> partialCycle, VertexNode partialCycleSourceVertex)
@@ -302,7 +302,7 @@ public class HierholzerEulerianCycle<V, E>
     private GraphWalk<V, E> buildWalk()
     {
         double totalWeight = 0d;
-        List<E> result = new ArrayList<E>();
+        List<E> result = new ArrayList<>();
 
         EdgeNode it = eulerianHead;
         while (it != null) {
