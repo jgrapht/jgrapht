@@ -139,6 +139,26 @@ public class ChinesePostman<V,E> implements EulerianCycleAlgorithm<V, E> {
 
     private GraphPath<V,E> solveCPPDirected(Graph<V, E> graph){
 
+        //1. Find all imbalanced vertices (there should be an odd number of those)
+        List<V> imbalancedVertices=graph.vertexSet().stream().filter(v -> graph.inDegreeOf(v) != graph.outDegreeOf(v)).collect(Collectors.toList());
+
+        //2. Compute all pairwise shortest paths for the oddDegreeVertices
+        @SuppressWarnings("unchecked")
+        GraphPath<V,E>[][] distanceMatrix=(GraphPath<V,E>[][]) Array.newInstance(GraphPath.class, imbalancedVertices.size(), imbalancedVertices.size());
+
+        ShortestPathAlgorithm<V,E> sp=new DijkstraShortestPath<>(graph);
+        for(int i=0; i<imbalancedVertices.size()-1; i++){
+            for(int j=i+1; j<imbalancedVertices.size(); j++){
+                V u=imbalancedVertices.get(i);
+                V v=imbalancedVertices.get(j);
+                distanceMatrix[i][j]=distanceMatrix[j][i]=sp.getPath(u, v);
+            }
+        }
+
+        //3. Solve a matching problem. For that we create an auxiliary bipartite graph. Partition1 contains all nodes with negative imbalance,
+        // Partition2 contains all nodes with positive imbalance. Each imbalanced node is duplicated a number of times. The number of duplicates of a
+        // node equals its imbalance.
+
         return null;
     }
 
