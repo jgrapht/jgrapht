@@ -57,9 +57,7 @@ public class ChinesePostmanTest {
         g.addVertex(1);
         Graphs.addEdge(g, 0, 1, 10);
 
-        EulerianCycleAlgorithm<Integer, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Integer, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 20, 2);
+        this.verifyClosedPath(g, 20, 2);
     }
 
     @Test
@@ -70,9 +68,7 @@ public class ChinesePostmanTest {
         Graphs.addEdge(g, 0, 1, 10);
         Graphs.addEdge(g, 0, 0, 20);
 
-        EulerianCycleAlgorithm<Integer, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Integer, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 40, 3);
+        this.verifyClosedPath(g, 40, 3);
     }
 
     @Test
@@ -85,9 +81,7 @@ public class ChinesePostmanTest {
         Graphs.addEdge(g, 2, 3, 10);
         Graphs.addEdge(g, 3, 4, 2);
 
-        EulerianCycleAlgorithm<Integer, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Integer, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 42, 8);
+        this.verifyClosedPath(g, 42, 8);
     }
 
     @Test
@@ -108,9 +102,7 @@ public class ChinesePostmanTest {
         Graphs.addEdge(g, 'F', 'H', 60);
         Graphs.addEdge(g, 'G', 'H', 70);
 
-        EulerianCycleAlgorithm<Character, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Character, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 1000, 16);
+        this.verifyClosedPath(g, 1000, 16);
     }
 
     @Test
@@ -126,9 +118,7 @@ public class ChinesePostmanTest {
         Graphs.addEdge(g, 'C', 'E', 5);
         Graphs.addEdge(g, 'D', 'E', 8);
 
-        EulerianCycleAlgorithm<Character, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Character, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 60, 10);
+        this.verifyClosedPath(g, 60, 10);
     }
 
     @Test
@@ -148,9 +138,7 @@ public class ChinesePostmanTest {
         Graphs.addEdge(g, 4, 5, 1);
         Graphs.addEdge(g, 6, 7, 3);
 
-        EulerianCycleAlgorithm<Integer, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Integer, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 31, 15);
+        this.verifyClosedPath(g, 31, 15);
     }
 
     @Test
@@ -174,12 +162,116 @@ public class ChinesePostmanTest {
         Graphs.addEdge(g, 8, 9, 40);
         Graphs.addEdge(g, 9, 10, 80);
 
-        EulerianCycleAlgorithm<Integer, DefaultWeightedEdge> alg=new ChinesePostman<>();
-        GraphPath<Integer, DefaultWeightedEdge> path=alg.getEulerianCycle(g);
-        this.verifyClosedPath(g, path, 2590, 20);
+        this.verifyClosedPath(g, 2590, 20);
     }
 
-    private <V,E> void verifyClosedPath(Graph<V,E> graph, GraphPath<V,E> path, double expectedWeight, int expectedLength){
+
+    //---------------------Directed graph tests --------------------------
+
+
+    @Test
+    public void testDirectedGraphWithMultipleEdgesAndSelfLoop(){
+        Graph<Integer, DefaultWeightedEdge> g=new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+        Graphs.addEdge(g, 1, 2, 1);
+        Graphs.addEdge(g, 2, 3, 3);
+        Graphs.addEdge(g, 2, 3, 20);
+        Graphs.addEdge(g, 3, 4, 10);
+        Graphs.addEdge(g, 4, 4, 5);
+        Graphs.addEdge(g, 4, 1, 2);
+
+        this.verifyClosedPath(g, 54, 9);
+    }
+
+    @Test
+    public void testDirectedGraph1(){
+        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+        Graphs.addEdge(g, 1, 2, 1);
+        Graphs.addEdge(g, 1, 4, 5);
+        Graphs.addEdge(g, 2, 3, 2);
+        Graphs.addEdge(g, 3, 1, 3);
+        Graphs.addEdge(g, 4, 3, 4);
+
+        this.verifyClosedPath(g, 18, 6);
+    }
+
+    @Test
+    public void testDirectedGraph2(){
+        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+        Graphs.addEdge(g, 1, 2, 8);
+        Graphs.addEdge(g, 1, 3, 3);
+        Graphs.addEdge(g, 2, 3, 10);
+        Graphs.addEdge(g, 2, 4, 5);
+        Graphs.addEdge(g, 3, 4, 15);
+        Graphs.addEdge(g, 4, 1, 4);
+
+        this.verifyClosedPath(g, 76, 10);
+    }
+
+    @Test
+    public void testDirectedGraph3(){
+        Graph<Integer, DefaultWeightedEdge> g=new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+        Graphs.addEdge(g, 1, 2, 21);
+        Graphs.addEdge(g, 2, 3, 8);
+        Graphs.addEdge(g, 3, 1, 5);
+        Graphs.addEdge(g, 3, 4, 20);
+        Graphs.addEdge(g, 4, 2, 12);
+        Graphs.addEdge(g, 4, 2, 2);
+
+        this.verifyClosedPath(g, 104, 9);
+    }
+
+    @Test
+    public void testDirectedGraph4(){
+        Graph<Integer, DefaultWeightedEdge> g=new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
+        Graphs.addEdge(g, 1, 2, 10);
+        Graphs.addEdge(g, 1, 3, 20);
+        Graphs.addEdge(g, 2, 4, 50);
+        Graphs.addEdge(g, 2, 5, 10);
+        Graphs.addEdge(g, 3, 4, 20);
+        Graphs.addEdge(g, 3, 5, 33);
+        Graphs.addEdge(g, 4, 5, 5);
+        Graphs.addEdge(g, 4, 6, 12);
+        Graphs.addEdge(g, 5, 1, 12);
+        Graphs.addEdge(g, 5, 6, 1);
+        Graphs.addEdge(g, 6, 3, 22);
+
+        this.verifyClosedPath(g, 276, 17);
+    }
+
+    @Test
+    public void testDirectedGraph5(){
+        Graph<Integer, DefaultEdge> g=new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+        g.addEdge(1, 2);
+        g.addEdge(1, 11);
+        g.addEdge(2, 3);
+        g.addEdge(3, 4);
+        g.addEdge(3, 5);
+        g.addEdge(4, 9);
+        g.addEdge(5, 7);
+        g.addEdge(6, 9);
+        g.addEdge(7, 6);
+        g.addEdge(8, 7);
+        g.addEdge(9, 8);
+        g.addEdge(9, 10);
+        g.addEdge(10, 1);
+        g.addEdge(11, 9);
+
+        this.verifyClosedPath(g, 22, 22);
+    }
+
+
+
+    private <V,E> void verifyClosedPath(Graph<V,E> graph, double expectedWeight, int expectedLength){
+
+        EulerianCycleAlgorithm<V, E> alg=new ChinesePostman<>();
+        GraphPath<V, E> path=alg.getEulerianCycle(graph);
+
         Assert.assertEquals(expectedLength, path.getLength());
         Assert.assertEquals(expectedLength, path.getEdgeList().size());
         Assert.assertEquals(expectedWeight, path.getWeight(), 0.00000001);
