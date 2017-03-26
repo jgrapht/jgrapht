@@ -30,7 +30,6 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnorderedPair;
 import org.jgrapht.graph.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -47,13 +46,13 @@ import java.util.stream.IntStream;
  *
  * If the input graph is Eulerian (see {@link GraphTests#isEulerian(Graph)} for details) use {@link HierholzerEulerianCycle} instead.
  * <p>
- * The implementation is based on the following paper:
- * Edmonds, J., Johnson, E.L. Matching, Euler tours and the Chinese postman, Mathematical Programming (1973) 5: 88. doi:10.1007/BF01580113
+ * The implementation is based on the following paper:<br>
+ * Edmonds, J., Johnson, E.L. Matching, Euler tours and the Chinese postman, Mathematical Programming (1973) 5: 88. doi:10.1007/BF01580113<br>
  *
  * More concise descriptions of the algorithms can be found here:
  * <ul>
- * <li></li><a href="http://www.suffolkmaths.co.uk/pages/Maths%20Projects/Projects/Topology%20and%20Graph%20Theory/Chinese%20Postman%20Problem.pdf">CPP for Undirected graphs</a>
- * <li></li><a href="https://www-m9.ma.tum.de/graph-algorithms/directed-chinese-postman/index_en.html">CPP for Directed graphs</a>
+ * <li><a href="http://www.suffolkmaths.co.uk/pages/Maths%20Projects/Projects/Topology%20and%20Graph%20Theory/Chinese%20Postman%20Problem.pdf">CPP for Undirected graphs</a>
+ * <li><a href="https://www-m9.ma.tum.de/graph-algorithms/directed-chinese-postman/index_en.html">CPP for Directed graphs</a>
  * </ul>
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -63,6 +62,11 @@ import java.util.stream.IntStream;
  */
 public class ChinesePostman<V,E> implements EulerianCycleAlgorithm<V, E> {
 
+    /**
+     * Solves the Chinese Postman Problem on the given graph.
+     * @param graph the input graph (must be a strongly connected graph)
+     * @return Eulerian circuit of minimum weight.
+     */
     @Override
     public GraphPath<V, E> getEulerianCycle(Graph<V, E> graph) {
 
