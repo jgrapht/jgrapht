@@ -165,6 +165,19 @@ public class ChinesePostmanTest {
         this.verifyClosedPath(g, 2590, 20);
     }
 
+    @Test
+    public void testUndirectedGraph5(){
+        Graph<Integer, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
+        Graphs.addEdge(g, 1, 2, 1);
+        Graphs.addEdge(g, 2, 3, 1);
+        Graphs.addEdge(g, 3, 4, 1);
+        Graphs.addEdge(g, 2, 5, 1);
+        Graphs.addEdge(g, 3, 6, 1);
+
+        this.verifyClosedPath(g, 10, 10);
+    }
+
 
     //---------------------Directed graph tests --------------------------
 

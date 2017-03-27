@@ -113,6 +113,8 @@ public class ChinesePostman<V, E>
             graph.vertexSet().stream().filter(v -> graph.degreeOf(v) % 2 == 1).collect(
                 Collectors.toList());
 
+        System.out.println("odd deg vertices: "+oddDegreeVertices);
+
         // 2. Compute all pairwise shortest paths for the oddDegreeVertices
         Map<Pair<V, V>, GraphPath<V, E>> shortestPaths = new HashMap<>();
         ShortestPathAlgorithm<V, E> sp = new DijkstraShortestPath<>(graph);
@@ -140,6 +142,8 @@ public class ChinesePostman<V, E>
 
         Graphs.addAllVertices(auxGraph, partition1);
         Graphs.addAllVertices(auxGraph, partition2);
+        System.out.println("partition1: "+partition1);
+        System.out.println("partition2: "+partition2);
 
         for (int i = 0; i < oddDegreeVertices.size(); i++) {
             for (int j = 0; j < oddDegreeVertices.size(); j++) {
@@ -157,6 +161,7 @@ public class ChinesePostman<V, E>
         MatchingAlgorithm.Matching<DefaultWeightedEdge> matching =
             new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(auxGraph, partition1, partition2)
                 .getMatching();
+        System.out.println("matching: "+matching);
 
         // 4. On the original graph, add shortcuts between the odd vertices. These shortcuts have
         // been identified by the matching algorithm. A shortcut from u to v
@@ -176,6 +181,7 @@ public class ChinesePostman<V, E>
             E shortcutEdge = eulerGraph.addEdge(u, v);
             shortcutEdges.put(shortcutEdge, shortestPaths.get(new UnorderedPair<>(u, v)));
         }
+        System.out.println("eulergraph: "+eulerGraph);
 
         EulerianCycleAlgorithm<V, E> eulerianCycleAlgorithm = new HierholzerEulerianCycle<>();
         GraphPath<V, E> pathWithShortcuts = eulerianCycleAlgorithm.getEulerianCycle(eulerGraph);
