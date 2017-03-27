@@ -155,6 +155,7 @@ public class ChinesePostman<V, E>
                     Graphs.addEdge(
                         auxGraph, i, j + oddDegreeVertices.size(),
                         shortestPaths.get(new UnorderedPair<>(u, v)).getWeight());
+                    System.out.println("matching edge: ("+i+","+(j+oddDegreeVertices.size())+"): weight: "+shortestPaths.get(new UnorderedPair<>(u, v)).getWeight()+" u: "+u+" v: "+v);
                 }
             }
         }
@@ -179,6 +180,7 @@ public class ChinesePostman<V, E>
             V u = oddDegreeVertices.get(i);
             V v = oddDegreeVertices.get(j);
             E shortcutEdge = eulerGraph.addEdge(u, v);
+            System.out.println("adding shortcut: "+shortcutEdge);
             shortcutEdges.put(shortcutEdge, shortestPaths.get(new UnorderedPair<>(u, v)));
         }
         System.out.println("eulergraph: "+eulerGraph);
