@@ -17,9 +17,14 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.GraphTests;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.alg.interfaces.AllSimpleCyclesAlgorithm;
+import org.jgrapht.graph.GraphWalk;
 
-import org.jgrapht.*;
+import java.util.*;
 
 /**
  * Find a cycle base of an undirected graph using the Paton's algorithm.
@@ -34,8 +39,8 @@ import org.jgrapht.*;
  *
  * @author Nikolay Ognyanov
  */
-public class PatonCycleBase<V, E> extends Cycle<V,E>
-        // was implementing UndirectedCycleBase
+public class PatonCycleBase<V, E>
+        implements UndirectedCycleBase<V, E>, AllSimpleCyclesAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
@@ -81,7 +86,7 @@ public class PatonCycleBase<V, E> extends Cycle<V,E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycles()
+    public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

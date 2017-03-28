@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.interfaces.AllSimpleCyclesAlgorithm;
 
-import org.jgrapht.*;
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Tarjan's algorithm.
@@ -34,7 +36,9 @@ import org.jgrapht.*;
  *
  * @author Nikolay Ognyanov
  */
-public class TarjanSimpleCycles<V, E> extends Cycle<V,E> {
+public class TarjanSimpleCycles<V, E>
+    implements DirectedSimpleCycles<V, E>, AllSimpleCyclesAlgorithm<V, E>
+{
     private Graph<V, E> graph;
 
     private List<List<V>> cycles;
@@ -86,7 +90,7 @@ public class TarjanSimpleCycles<V, E> extends Cycle<V,E> {
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycles()
+    public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

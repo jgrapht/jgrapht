@@ -17,10 +17,12 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.AllSimpleCyclesAlgorithm;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.GraphWalk;
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
@@ -35,7 +37,9 @@ import org.jgrapht.graph.GraphWalk;
  *
  * @author Luiz Kill
  */
-public class HawickJamesSimpleCycles<V, E> extends Cycle<V,E> {
+public class HawickJamesSimpleCycles<V, E>
+    implements DirectedSimpleCycles<V, E>, AllSimpleCyclesAlgorithm<V, E>
+{
     private enum Operation
     {
         ENUMERATE,
@@ -264,7 +268,7 @@ public class HawickJamesSimpleCycles<V, E> extends Cycle<V,E> {
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findCycles()
+    public List<List<V>> findSimpleCycles()
         throws IllegalArgumentException
     {
         if (graph == null) {
