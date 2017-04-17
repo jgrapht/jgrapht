@@ -530,6 +530,35 @@ public class SimpleDirectedGraphTest
         assertTrue(g4.vertexSet().contains(v4));
     }
 
+    /**
+     *
+     */
+    public void testEquals(){
+        DirectedGraph<String, DefaultEdge> g1 =
+            new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g2 =
+            new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
+        g1.addVertex("A");
+        g2.addVertex("A");
+
+        assertEquals(g1, g2);
+
+        g1.addVertex("B");
+        g2.addVertex("B");
+
+        assertEquals(g1, g2);
+
+        g1.addEdge("A", "B");
+        g2.addEdge("A", "B");
+
+        assertTrue(g1.containsEdge("A", "B"));
+        assertTrue(g2.containsEdge("A", "B"));
+        assertTrue(g1.vertexSet().equals(g2.vertexSet()));
+        assertTrue(g1.edgeSet().equals(g2.edgeSet()));
+        assertTrue(g1.equals(g2));
+    }
+
     public void testReversedView()
     {
         init();

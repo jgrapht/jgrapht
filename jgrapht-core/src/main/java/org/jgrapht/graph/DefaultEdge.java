@@ -57,6 +57,42 @@ public class DefaultEdge
     {
         return "(" + source + " : " + target + ")";
     }
+
+    @Override public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof DefaultEdge)) {
+            return false;
+        }
+
+        DefaultEdge other = (DefaultEdge) obj;
+
+        boolean sourceE = false;
+        if(null == source) {
+            sourceE = (null == other.source);
+        } else {
+            sourceE = source.equals(other.source);
+        }
+
+        boolean targetE = false;
+        if(null == target) {
+            targetE = (null == other.target);
+        } else {
+            targetE = target.equals(other.target);
+        }
+        return sourceE && targetE;
+    }
+
+    @Override public int hashCode() {
+        int hash = 1;
+        hash = hash *  17 + (null == source ? 0: source.hashCode());
+        hash = hash * 31 + (null == target ? 0 : target.hashCode());
+        return hash;
+    }
 }
 
 // End DefaultEdge.java
