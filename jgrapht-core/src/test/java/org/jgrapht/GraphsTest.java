@@ -31,7 +31,9 @@ import org.junit.*;
  */
 public class GraphsTest
 {
-    // Tests for public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
+    /*
+     *  Tests for public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
+     */
     @Test
     public void addEdgeTest() {
         SimpleGraph<String, DefaultWeightedEdge> graph = new SimpleGraph<>(new ClassBasedEdgeFactory<String, DefaultWeightedEdge>(DefaultWeightedEdge.class), true);
@@ -83,7 +85,9 @@ public class GraphsTest
         Graphs.<String, DefaultWeightedEdge>addEdge(graph, a, c, weigth);
     }
 
-    // Tests for public static <V, E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex) 
+    /*
+     *  Tests for public static <V, E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex) 
+     */
     @Test
     public void addEdgeWithVerticesExistingVerticesTest() {
         SimpleGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -115,8 +119,10 @@ public class GraphsTest
         Assert.assertTrue(graph.getEdgeTarget(edge).equals(b));
     }
 
-    // Tests for public static <V,
-    //     E> boolean addEdgeWithVertices(Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
+    /*
+     *  Tests for public static <V,
+     *      E> boolean addEdgeWithVertices(Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
+     */
     @Test
     public void addEdgeWithVertices2ExistingVerticesTest() {
         SimpleGraph<String, DefaultEdge> graphSource = new SimpleGraph<>(DefaultEdge.class);
@@ -170,8 +176,10 @@ public class GraphsTest
         Assert.assertTrue(graphSource.getEdgeTarget(edgeSource).equals(b));
     }
 
-    // Tests for public static <V,
-    //     E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
+    /*
+     *  Tests for public static <V,
+     *      E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
+     */
     @Test
     public void addEdgeWithVertices3ExistingVerticesTest() {
         SimpleGraph<String, DefaultWeightedEdge> graph = new SimpleGraph<>(new ClassBasedEdgeFactory<String, DefaultWeightedEdge>(DefaultWeightedEdge.class), true);
@@ -207,8 +215,10 @@ public class GraphsTest
         Assert.assertTrue(graph.getEdgeTarget(edge).equals(b));
     }
 
-    // Tests for public static <V,
-    //     E> boolean addGraph(Graph<? super V, ? super E> destination, Graph<V, E> source)
+    /*
+     *  Tests for public static <V,
+     *      E> boolean addGraph(Graph<? super V, ? super E> destination, Graph<V, E> source)
+     */
     @Test
     public void addGraphToEmptyGraphTest() {
         SimpleGraph<String, DefaultEdge> graphSource = new SimpleGraph<>(DefaultEdge.class);
@@ -253,8 +263,10 @@ public class GraphsTest
         Assert.assertEquals(graphTargetCopy, graphTarget);
     }
 
-    // Tests for public static <V,
-    //     E> void addGraphReversed(Graph<? super V, ? super E> destination, Graph<V, E> source)
+    /*
+     *  Tests for public static <V, 
+     *      E> void addGraphReversed(Graph<? super V, ? super E> destination, Graph<V, E> source)
+     */
     @Test
     public void addGraphReversedTest() {
         DefaultDirectedGraph<String, DefaultEdge> graphSource = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -327,8 +339,10 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addGraphReversed(graphTarget, graphSource);
     }
 
-    // Tests for public static <V, E> boolean addAllEdges(
-    //     Graph<? super V, ? super E> destination, Graph<V, E> source, Collection<? extends E> edges)
+    /*
+     *  Tests for public static <V, E> boolean addAllEdges(
+     *      Graph<? super V, ? super E> destination, Graph<V, E> source, Collection<? extends E> edges)
+     */
     @Test
     public void addAllEdgesWithEmptyGraphTest() {
         Graph<String, DefaultEdge> graphSource = new SimpleGraph<>(DefaultEdge.class);
@@ -381,8 +395,10 @@ public class GraphsTest
         Assert.assertEquals(graphTargetCopy, graphTarget);
     }
 
-    // Tests for public static <V, E> boolean addAllVertices(
-    //     Graph<? super V, ? super E> destination, Collection<? extends V> vertices)
+    /*
+     *  Tests for public static <V, E> boolean addAllVertices(
+     *      Graph<? super V, ? super E> destination, Collection<? extends V> vertices)
+     */
     @Test
     public void addAllVerticesWithEmptyGraph() {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -426,7 +442,9 @@ public class GraphsTest
         Assert.assertTrue(vertices.contains(b));        
     }
 
-    // Tests for public static <V, E> List<V> neighborListOf(Graph<V, E> g, V vertex)
+    /*
+     *  Tests for public static <V, E> List<V> neighborListOf(Graph<V, E> g, V vertex)
+     */
     @Test
     public void neighborListOfWithSimpleGraphTest() {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -481,7 +499,9 @@ public class GraphsTest
         Assert.assertEquals(b, neighbors.get(1));
     }
 
-    // Tests for public static <V, E> List<V> predecessorListOf(Graph<V, E> g, V vertex)
+    /*
+     *  Tests for public static <V, E> List<V> predecessorListOf(Graph<V, E> g, V vertex)
+     */
     @Test
     public void predecessorListOfWithDefaultDirectedGraphTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -536,7 +556,9 @@ public class GraphsTest
         Assert.assertEquals(b, predecessors.get(1));
     }
 
-    // Tests for public static <V, E> List<V> successorListOf(Graph<V, E> g, V vertex)
+    /*
+     *  Tests for public static <V, E> List<V> successorListOf(Graph<V, E> g, V vertex)
+     */
     @Test
     public void successorListOfWithDefaultDirectedGraphTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -591,7 +613,9 @@ public class GraphsTest
         Assert.assertEquals(b, predecessors.get(1));
     }
 
-    // Tests for public static <V, E> Graph<V, E> undirectedGraph(Graph<V, E> g)
+    /*
+     *  Tests for public static <V, E> Graph<V, E> undirectedGraph(Graph<V, E> g)
+     */
     @Test
     public void undirectedGraphWithSimpleGraphTest() {
         SimpleGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -854,7 +878,9 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>undirectedGraph(graph);
     }
 
-    // Tests for public static <V, E> boolean testIncidence(Graph<V, E> g, E e, V v)
+    /*
+     *  Tests for public static <V, E> boolean testIncidence(Graph<V, E> g, E e, V v)
+     */
     @Test
     public void testIncidenceTest() {
         SimpleGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -910,7 +936,9 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>getOppositeVertex(graph, edge, x);
     }
     
-    // Tests for public static <V, E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, V vertex)
+    /*
+     *  Tests for public static <V, E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, V vertex)
+     */
     @Test
     public void removeVertexAndPreserveConnectivity1WithValidVerticesTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -969,8 +997,10 @@ public class GraphsTest
         Assert.assertTrue(graph.containsEdge(a, c));
     }
 
-    // Tests for public static <V,
-    //     E> boolean removeVerticesAndPreserveConnectivity(Graph<V, E> graph, Predicate<V> predicate)
+    /*
+     *  Tests for public static <V,
+     *      E> boolean removeVerticesAndPreserveConnectivity(Graph<V, E> graph, Predicate<V> predicate)
+     */
     @Test
     public void removeVerticesAndPreserveConnectivityWithValidVerticesTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -1029,8 +1059,10 @@ public class GraphsTest
         Assert.assertTrue(graph.containsEdge(a, c));
     }
     
-    // Tests for public static <V,
-    //     E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, Iterable<V> vertices)
+    /*
+     *  Tests for public static <V,
+     *      E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, Iterable<V> vertices)
+     */
     @Test
     public void removeVertexAndPreserveConnectivity2WithValidVerticesTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -1097,7 +1129,9 @@ public class GraphsTest
         Assert.assertTrue(graph.containsEdge(a, c));
     }
     
-    // Tests for public static <V, E> void addOutgoingEdges(Graph<V, E> graph, V source, Iterable<V> targets)
+    /*
+     *  Tests for public static <V, E> void addOutgoingEdges(Graph<V, E> graph, V source, Iterable<V> targets)
+     */
     @Test
     public void addOutgoingEdgesWithValidVertexAndWithDefaultDirectedGraphTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -1189,7 +1223,9 @@ public class GraphsTest
         Assert.assertTrue(graph.containsEdge(x, a));
     }
     
-    // Tests for public static <V, E> void addIncomingEdges(Graph<V, E> graph, V target, Iterable<V> sources)
+    /*
+     *  Tests for public static <V, E> void addIncomingEdges(Graph<V, E> graph, V target, Iterable<V> sources)
+     */
     @Test
     public void addIncomingEdgesWithValidVertexAndWithDefaultDirectedGraphTest() {
         DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -1281,7 +1317,9 @@ public class GraphsTest
         Assert.assertTrue(graph.containsEdge(a, x));
     }
     
-    // Tests for public static <V, E> boolean vertexHasSuccessors(Graph<V, E> graph, V vertex)
+    /*
+     *  Tests for public static <V, E> boolean vertexHasSuccessors(Graph<V, E> graph, V vertex)
+     */
     @Test
     public void vertexHasSuccessorsWithSimpleGraphTest() {
         SimpleGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -1344,7 +1382,9 @@ public class GraphsTest
         Assert.assertFalse(Graphs.<String, DefaultEdge>vertexHasSuccessors(graph, x));
     }
     
-    // Tests for public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex) 
+    /*
+     *  Tests for public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex) 
+     */
     @Test
     public void vertexHasPredecessorsWithSimpleGraphTest() {
         SimpleGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
