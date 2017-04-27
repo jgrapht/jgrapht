@@ -31,6 +31,433 @@ import org.junit.*;
  */
 public class GraphsTest
 {
+    //@formatter:off
+    /**
+     * Graph before removing X:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     *
+     * Expected graph after removing X:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     */
+    //@formatter:on
+    @Test
+    public void removeVertex_vertexNotFound()
+    {
+
+        Graph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+        String x = "X";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Graph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        expectedGraph.addVertex(a);
+        expectedGraph.addVertex(b);
+        expectedGraph.addVertex(c);
+        expectedGraph.addVertex(d);
+
+        expectedGraph.addEdge(a, b);
+        expectedGraph.addEdge(b, c);
+        expectedGraph.addEdge(b, d);
+
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, x);
+
+        Assert.assertEquals(expectedGraph, graph);
+        Assert.assertFalse(vertexHasBeenRemoved);
+    }
+
+    //@formatter:off
+    /**
+     * Graph before removing B:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     *
+     * Graph after removing B:
+     *
+     *      +--> C
+     *      |
+     * A +--+
+     *      |
+     *      +--> D
+     */
+    //@formatter:on
+    @Test
+    public void removeVertex00()
+    {
+
+        Graph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Graph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        expectedGraph.addVertex(a);
+        expectedGraph.addVertex(c);
+        expectedGraph.addVertex(d);
+
+        expectedGraph.addEdge(a, c);
+        expectedGraph.addEdge(a, d);
+
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
+
+        Assert.assertEquals(expectedGraph, graph);
+        Assert.assertTrue(vertexHasBeenRemoved);
+    }
+
+    //@formatter:off
+    /**
+     * Graph before removing A:
+     *
+     * A +--> B
+     *
+     * Expected graph after removing A:
+     *
+     * B
+     */
+    //@formatter:on
+    @Test
+    public void removeVertex01()
+    {
+
+        Graph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+
+        graph.addEdge(a, b);
+
+        Graph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        expectedGraph.addVertex(b);
+
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, a);
+
+        Assert.assertEquals(expectedGraph, graph);
+        Assert.assertTrue(vertexHasBeenRemoved);
+    }
+
+    //@formatter:off
+    /**
+     * Graph before removing B:
+     *
+     * A +--> B
+     *
+     * Expected graph after removing B:
+     *
+     * A
+     */
+    //@formatter:on
+    @Test
+    public void removeVertex02()
+    {
+
+        Graph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+
+        graph.addEdge(a, b);
+
+        Graph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        expectedGraph.addVertex(a);
+
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
+
+        Assert.assertEquals(expectedGraph, graph);
+        Assert.assertTrue(vertexHasBeenRemoved);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     * A (source, not part of graph)
+     * B (target, already part of graph)
+     * C (target, not part of graph)
+     *
+     * Expected output:
+     *
+     *      +--> B
+     *      |
+     * A +--+
+     *      |
+     *      +--> C
+     */
+    //@formatter:on
+    @Test
+    public void addOutgoingEdges()
+    {
+
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+
+        graph.addVertex(b);
+
+        Graph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        expectedGraph.addVertex(a);
+        expectedGraph.addVertex(b);
+        expectedGraph.addVertex(c);
+
+        expectedGraph.addEdge(a, b);
+        expectedGraph.addEdge(a, c);
+
+        List<String> targets = new ArrayList<String>();
+        targets.add(b);
+        targets.add(c);
+
+        Graphs.addOutgoingEdges(graph, a, targets);
+
+        Assert.assertEquals(expectedGraph, graph);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     * A (target, not part of graph)
+     * B (source, already part of graph)
+     * C (source, not part of graph)
+     *
+     * Expected output:
+     *
+     *      +--+ B
+     *      |
+     * A <--+
+     *      |
+     *      +--+ C
+     */
+    //@formatter:on
+    @Test
+    public void addIncomingEdges()
+    {
+
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+
+        graph.addVertex(b);
+
+        Graph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        expectedGraph.addVertex(a);
+        expectedGraph.addVertex(b);
+        expectedGraph.addVertex(c);
+
+        expectedGraph.addEdge(b, a);
+        expectedGraph.addEdge(c, a);
+
+        List<String> targets = new ArrayList<String>();
+        targets.add(b);
+        targets.add(c);
+
+        Graphs.addIncomingEdges(graph, a, targets);
+
+        Assert.assertEquals(expectedGraph, graph);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     */
+    //@formatter:on
+    @Test
+    public void vertexHasChildren_B()
+    {
+
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Assert.assertTrue(Graphs.vertexHasSuccessors(graph, b));
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     */
+    //@formatter:on
+    @Test
+    public void vertexHasChildren_C()
+    {
+
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Assert.assertFalse(Graphs.vertexHasSuccessors(graph, c));
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     */
+    //@formatter:on
+    @Test
+    public void vertexHasParents_B()
+    {
+
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Assert.assertTrue(Graphs.vertexHasPredecessors(graph, b));
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     */
+    //@formatter:on
+    @Test
+    public void vertexHasParents_A()
+    {
+
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Assert.assertFalse(Graphs.vertexHasPredecessors(graph, a));
+    }
+
     /*
      *  Tests for public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
      */
@@ -694,172 +1121,6 @@ public class GraphsTest
         Assert.assertTrue(graphUndirected.containsEdge(a, b));
     }
 
-    class DummyGraph<V, E>
-    extends AbstractBaseGraph<V, E> {
-        private static final long serialVersionUID = 7211652325301418407L;
-
-        public DummyGraph(Class<? extends E> edgeClass)
-        {
-            this(new ClassBasedEdgeFactory<>(edgeClass));
-        }
-
-        protected DummyGraph(EdgeFactory<V, E> ef)
-        {
-            super(ef, false, false, false, false);
-        }
-
-        public boolean isDirected()
-        {
-            return false;
-        }
-
-        public boolean isUndirected()
-        {
-            return false;
-        }
-
-        @Override
-        public GraphType getType()
-        {
-            return new DummyGraphType(false,false,false,false,false,false,false);
-        }
-    }
-
-    class DummyGraphType
-    implements GraphType, Serializable
-    {
-        private static final long serialVersionUID = 4291049312119347475L;
-
-        private final boolean directed;
-        private final boolean undirected;
-        private final boolean selfLoops;
-        private final boolean multipleEdges;
-        private final boolean weighted;
-        private final boolean allowsCycles;
-        private final boolean modifiable;
-
-        public DummyGraphType(
-            boolean directed, boolean undirected, boolean selfLoops, boolean multipleEdges,
-            boolean weighted, boolean allowsCycles, boolean modifiable)
-        {
-            this.directed = directed;
-            this.undirected = undirected;
-            this.selfLoops = selfLoops;
-            this.multipleEdges = multipleEdges;
-            this.weighted = weighted;
-            this.allowsCycles = allowsCycles;
-            this.modifiable = modifiable;
-        }
-
-        @Override
-        public boolean isDirected()
-        {
-            return directed;
-        }
-
-        @Override
-        public boolean isUndirected()
-        {
-            return undirected;
-        }
-
-        @Override
-        public boolean isMixed()
-        {
-            return undirected && directed;
-        }
-
-        @Override
-        public boolean isAllowingMultipleEdges()
-        {
-            return multipleEdges;
-        }
-
-        @Override
-        public boolean isAllowingSelfLoops()
-        {
-            return selfLoops;
-        }
-
-        @Override
-        public boolean isWeighted()
-        {
-            return weighted;
-        }
-
-        @Override
-        public boolean isAllowingCycles()
-        {
-            return allowsCycles;
-        }
-
-        @Override
-        public boolean isModifiable()
-        {
-            return modifiable;
-        }
-
-        @Override
-        public boolean isSimple()
-        {
-            return !isAllowingMultipleEdges() && !isAllowingSelfLoops();
-        }
-
-        @Override
-        public boolean isPseudograph()
-        {
-            return isAllowingMultipleEdges() && isAllowingSelfLoops();
-        }
-
-        @Override
-        public boolean isMultigraph()
-        {
-            return isAllowingMultipleEdges() && !isAllowingSelfLoops();
-        }
-
-        @Override
-        public GraphType asDirected()
-        {
-            return new Builder(this).directed().build();
-        }
-
-        @Override
-        public GraphType asUndirected()
-        {
-            return new Builder(this).undirected().build();
-        }
-
-        @Override
-        public GraphType asMixed()
-        {
-            return new Builder(this).mixed().build();
-        }
-
-        @Override
-        public GraphType asUnweighted()
-        {
-            return new Builder(this).weighted(false).build();
-        }
-
-        @Override
-        public GraphType asWeighted()
-        {
-            return new Builder(this).weighted(true).build();
-        }
-
-        @Override
-        public GraphType asModifiable()
-        {
-            return new Builder(this).modifiable(true).build();
-        }
-
-        @Override
-        public GraphType asUnmodifiable()
-        {
-            return new Builder(this).modifiable(false).build();
-        }
-    }
-
     @Test(expected=IllegalArgumentException.class)
     public void undirectedGraphWithDummyUndirectedGraphTest() {
         DummyGraph<String, DefaultEdge> graph = new DummyGraph<>(DefaultEdge.class);
@@ -900,7 +1161,7 @@ public class GraphsTest
         Assert.assertTrue(Graphs.<String, DefaultEdge>testIncidence(graph, edge, b));
         Assert.assertFalse(Graphs.<String, DefaultEdge>testIncidence(graph, edge, x));        
     }
-    
+
     // Tests for public static <V, E> V getOppositeVertex(Graph<V, E> g, E e, V v)
     @Test
     public void getOppositeVertexTest() {
@@ -918,7 +1179,7 @@ public class GraphsTest
         Assert.assertEquals(b, Graphs.<String, DefaultEdge>getOppositeVertex(graph, edge, a));
         Assert.assertEquals(a, Graphs.<String, DefaultEdge>getOppositeVertex(graph, edge, b));
     }
-    
+
     @Test(expected=IllegalArgumentException.class)
     public void getOppositeVertexWithInvalidVertexTest() {
         SimpleGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -935,7 +1196,7 @@ public class GraphsTest
 
         Graphs.<String, DefaultEdge>getOppositeVertex(graph, edge, x);
     }
-    
+
     /*
      *  Tests for public static <V, E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, V vertex)
      */
@@ -960,9 +1221,9 @@ public class GraphsTest
         Boolean found = Graphs.<String, DefaultEdge>removeVertexAndPreserveConnectivity(graph, x);
 
         Assert.assertTrue(found);
-        
+
         Assert.assertEquals(2, graph.edgeSet().size());
-        
+
         Assert.assertFalse(graph.containsEdge(a, x));
         Assert.assertFalse(graph.containsEdge(x, b));
         Assert.assertFalse(graph.containsEdge(x, c));
@@ -990,9 +1251,9 @@ public class GraphsTest
         Boolean found = Graphs.<String, DefaultEdge>removeVertexAndPreserveConnectivity(graph, x);
 
         Assert.assertFalse(found);
-        
+
         Assert.assertEquals(2, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(a, b));
         Assert.assertTrue(graph.containsEdge(a, c));
     }
@@ -1022,9 +1283,9 @@ public class GraphsTest
         Boolean found = Graphs.<String, DefaultEdge>removeVerticesAndPreserveConnectivity(graph, (v) -> v.equals(x));
 
         Assert.assertTrue(found);
-        
+
         Assert.assertEquals(2, graph.edgeSet().size());
-        
+
         Assert.assertFalse(graph.containsEdge(a, x));
         Assert.assertFalse(graph.containsEdge(x, b));
         Assert.assertFalse(graph.containsEdge(x, c));
@@ -1052,13 +1313,13 @@ public class GraphsTest
         Boolean found = Graphs.<String, DefaultEdge>removeVerticesAndPreserveConnectivity(graph, (v) -> v.equals(x));
 
         Assert.assertFalse(found);
-        
+
         Assert.assertEquals(2, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(a, b));
         Assert.assertTrue(graph.containsEdge(a, c));
     }
-    
+
     /*
      *  Tests for public static <V,
      *      E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, Iterable<V> vertices)
@@ -1080,7 +1341,7 @@ public class GraphsTest
         graph.addEdge(a, x);
         graph.addEdge(x, b);
         graph.addEdge(x, c);
-        
+
         ArrayList<String> verticesToRemove = new ArrayList<String>() {{
             add(x);
         }};
@@ -1088,9 +1349,9 @@ public class GraphsTest
         Boolean found = Graphs.<String, DefaultEdge>removeVertexAndPreserveConnectivity(graph, verticesToRemove);
 
         Assert.assertTrue(found);
-        
+
         Assert.assertEquals(2, graph.edgeSet().size());
-        
+
         Assert.assertFalse(graph.containsEdge(a, x));
         Assert.assertFalse(graph.containsEdge(x, b));
         Assert.assertFalse(graph.containsEdge(x, c));
@@ -1122,13 +1383,13 @@ public class GraphsTest
         Boolean found = Graphs.<String, DefaultEdge>removeVertexAndPreserveConnectivity(graph, verticesToRemove);
 
         Assert.assertFalse(found);
-        
+
         Assert.assertEquals(2, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(a, b));
         Assert.assertTrue(graph.containsEdge(a, c));
     }
-    
+
     /*
      *  Tests for public static <V, E> void addOutgoingEdges(Graph<V, E> graph, V source, Iterable<V> targets)
      */
@@ -1155,7 +1416,7 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addOutgoingEdges(graph, x, outgoingVertices);
 
         Assert.assertEquals(3, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(x, a));
         Assert.assertTrue(graph.containsEdge(x, b));
         Assert.assertTrue(graph.containsEdge(x, c));
@@ -1183,7 +1444,7 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addOutgoingEdges(graph, x, outgoingVertices);
 
         Assert.assertEquals(3, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(x, a));
         Assert.assertTrue(graph.containsEdge(x, b));
         Assert.assertTrue(graph.containsEdge(x, c));
@@ -1213,16 +1474,16 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addOutgoingEdges(graph, x, outgoingVertices);
 
         Assert.assertEquals(4, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(x, a));
         Assert.assertTrue(graph.containsEdge(x, b));
         Assert.assertTrue(graph.containsEdge(x, c));
-        
+
         graph.removeEdge(x, a);
 
         Assert.assertTrue(graph.containsEdge(x, a));
     }
-    
+
     /*
      *  Tests for public static <V, E> void addIncomingEdges(Graph<V, E> graph, V target, Iterable<V> sources)
      */
@@ -1249,7 +1510,7 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addIncomingEdges(graph, x, outgoingVertices);
 
         Assert.assertEquals(3, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(a, x));
         Assert.assertTrue(graph.containsEdge(b, x));
         Assert.assertTrue(graph.containsEdge(c, x));
@@ -1277,7 +1538,7 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addIncomingEdges(graph, x, outgoingVertices);
 
         Assert.assertEquals(3, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(a, x));
         Assert.assertTrue(graph.containsEdge(b, x));
         Assert.assertTrue(graph.containsEdge(c, x));
@@ -1307,16 +1568,16 @@ public class GraphsTest
         Graphs.<String, DefaultEdge>addIncomingEdges(graph, x, outgoingVertices);
 
         Assert.assertEquals(4, graph.edgeSet().size());
-        
+
         Assert.assertTrue(graph.containsEdge(a, x));
         Assert.assertTrue(graph.containsEdge(b, x));
         Assert.assertTrue(graph.containsEdge(c, x));
-        
+
         graph.removeEdge(a, x);
 
         Assert.assertTrue(graph.containsEdge(a, x));
     }
-    
+
     /*
      *  Tests for public static <V, E> boolean vertexHasSuccessors(Graph<V, E> graph, V vertex)
      */
@@ -1381,7 +1642,7 @@ public class GraphsTest
         Assert.assertFalse(Graphs.<String, DefaultEdge>vertexHasSuccessors(graph, b));
         Assert.assertFalse(Graphs.<String, DefaultEdge>vertexHasSuccessors(graph, x));
     }
-    
+
     /*
      *  Tests for public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex) 
      */
@@ -1446,434 +1707,6 @@ public class GraphsTest
         Assert.assertFalse(Graphs.<String, DefaultEdge>vertexHasPredecessors(graph, a));
         Assert.assertFalse(Graphs.<String, DefaultEdge>vertexHasPredecessors(graph, x));
     }
-
-    //@formatter:off
-    /**
-     * Graph before removing X:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     *
-     * Expected graph after removing X:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     */
-    //@formatter:on
-    @Test
-    public void removeVertex_vertexNotFound()
-    {
-
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-        String x = "X";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        Graph<String, TestEdge> expectedGraph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        expectedGraph.addVertex(a);
-        expectedGraph.addVertex(b);
-        expectedGraph.addVertex(c);
-        expectedGraph.addVertex(d);
-
-        expectedGraph.addEdge(a, b);
-        expectedGraph.addEdge(b, c);
-        expectedGraph.addEdge(b, d);
-
-        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, x);
-
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertFalse(vertexHasBeenRemoved);
-    }
-
-    //@formatter:off
-    /**
-     * Graph before removing B:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     *
-     * Graph after removing B:
-     *
-     *      +--> C
-     *      |
-     * A +--+
-     *      |
-     *      +--> D
-     */
-    //@formatter:on
-    @Test
-    public void removeVertex00()
-    {
-
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        Graph<String, TestEdge> expectedGraph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        expectedGraph.addVertex(a);
-        expectedGraph.addVertex(c);
-        expectedGraph.addVertex(d);
-
-        expectedGraph.addEdge(a, c);
-        expectedGraph.addEdge(a, d);
-
-        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
-
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertTrue(vertexHasBeenRemoved);
-    }
-
-    //@formatter:off
-    /**
-     * Graph before removing A:
-     *
-     * A +--> B
-     *
-     * Expected graph after removing A:
-     *
-     * B
-     */
-    //@formatter:on
-    @Test
-    public void removeVertex01()
-    {
-
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-
-        graph.addEdge(a, b);
-
-        Graph<String, TestEdge> expectedGraph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        expectedGraph.addVertex(b);
-
-        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, a);
-
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertTrue(vertexHasBeenRemoved);
-    }
-
-    //@formatter:off
-    /**
-     * Graph before removing B:
-     *
-     * A +--> B
-     *
-     * Expected graph after removing B:
-     *
-     * A
-     */
-    //@formatter:on
-    @Test
-    public void removeVertex02()
-    {
-
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-
-        graph.addEdge(a, b);
-
-        Graph<String, TestEdge> expectedGraph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        expectedGraph.addVertex(a);
-
-        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
-
-        Assert.assertEquals(expectedGraph, graph);
-        Assert.assertTrue(vertexHasBeenRemoved);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     * A (source, not part of graph)
-     * B (target, already part of graph)
-     * C (target, not part of graph)
-     *
-     * Expected output:
-     *
-     *      +--> B
-     *      |
-     * A +--+
-     *      |
-     *      +--> C
-     */
-    //@formatter:on
-    @Test
-    public void addOutgoingEdges()
-    {
-
-        DefaultDirectedGraph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-
-        graph.addVertex(b);
-
-        Graph<String, TestEdge> expectedGraph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        expectedGraph.addVertex(a);
-        expectedGraph.addVertex(b);
-        expectedGraph.addVertex(c);
-
-        expectedGraph.addEdge(a, b);
-        expectedGraph.addEdge(a, c);
-
-        List<String> targets = new ArrayList<String>();
-        targets.add(b);
-        targets.add(c);
-
-        Graphs.addOutgoingEdges(graph, a, targets);
-
-        Assert.assertEquals(expectedGraph, graph);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     * A (target, not part of graph)
-     * B (source, already part of graph)
-     * C (source, not part of graph)
-     *
-     * Expected output:
-     *
-     *      +--+ B
-     *      |
-     * A <--+
-     *      |
-     *      +--+ C
-     */
-    //@formatter:on
-    @Test
-    public void addIncomingEdges()
-    {
-
-        DefaultDirectedGraph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-
-        graph.addVertex(b);
-
-        Graph<String, TestEdge> expectedGraph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        expectedGraph.addVertex(a);
-        expectedGraph.addVertex(b);
-        expectedGraph.addVertex(c);
-
-        expectedGraph.addEdge(b, a);
-        expectedGraph.addEdge(c, a);
-
-        List<String> targets = new ArrayList<String>();
-        targets.add(b);
-        targets.add(c);
-
-        Graphs.addIncomingEdges(graph, a, targets);
-
-        Assert.assertEquals(expectedGraph, graph);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     */
-    //@formatter:on
-    @Test
-    public void vertexHasChildren_B()
-    {
-
-        DefaultDirectedGraph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        Assert.assertTrue(Graphs.vertexHasSuccessors(graph, b));
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     */
-    //@formatter:on
-    @Test
-    public void vertexHasChildren_C()
-    {
-
-        DefaultDirectedGraph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        Assert.assertFalse(Graphs.vertexHasSuccessors(graph, c));
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     */
-    //@formatter:on
-    @Test
-    public void vertexHasParents_B()
-    {
-
-        DefaultDirectedGraph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        Assert.assertTrue(Graphs.vertexHasPredecessors(graph, b));
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     */
-    //@formatter:on
-    @Test
-    public void vertexHasParents_A()
-    {
-
-        DefaultDirectedGraph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        Assert.assertFalse(Graphs.vertexHasPredecessors(graph, a));
-    }
-
 }
 
 // End GraphsTest.java

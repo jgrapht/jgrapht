@@ -154,6 +154,11 @@ public abstract class GraphTests
     public static <V, E> boolean isWeaklyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+
+        if (!graph.getType().isDirected()) {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_DIRECTED);
+        }
+
         return new ConnectivityInspector<>(graph).isGraphConnected();
     }
 
@@ -173,6 +178,11 @@ public abstract class GraphTests
     public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+
+        if (!graph.getType().isDirected()) {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_DIRECTED);
+        }
+
         return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
     }
 
