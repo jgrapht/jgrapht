@@ -21,15 +21,17 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 
+import java.util.Arrays;
+
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
  * {@link org.jgrapht.traverse.DepthFirstIterator} classes.
  *
- * @author Liviu Rau
- * @since Jul 30, 2003
+ * @author Patrick Sharp (I pretty much just ripped off Liviu Rau's code from AbstractGraphIteratorTest)
+ * @since May 15, 2017
  */
-public abstract class AbstractGraphIteratorTest
-    extends EnhancedTestCase
+public abstract class CrossComponentIteratorTest
+        extends AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -40,19 +42,13 @@ public abstract class AbstractGraphIteratorTest
     /**
      * .
      */
-    public void testDirectedGraph()
+    public void testDirectedGraphViaCCI()
     {
-
-        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
-        AbstractGraphIterator<String, DefaultWeightedEdge> iterator = createIterator(graph, "1");
-
-        doDirectedGraphTest(iterator);
-    }
-
-    public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator){
-
         result = new StringBuffer();
 
+        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
+
+        AbstractGraphIterator<String, DefaultWeightedEdge> iterator = createIterator(graph, Arrays.asList("orphan", "7", "3"));
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
 
@@ -64,69 +60,32 @@ public abstract class AbstractGraphIteratorTest
             }
         }
 
-        assertEquals(getExpectedStr2(), result.toString());
+        assertEquals(getExpectedCCStr3(), result.toString());
 
-        assertEquals(getExpectedFinishString(), listener.getFinishString());
+        assertEquals(getExpectedCCFinishString(), listener.getFinishString());
     }
 
-    abstract String getExpectedStr1();
+    public void testDirectedGraphNullConstructors(){
+        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
+        doDirectedGraphTest(createIterator(graph, (String) null));
+        doDirectedGraphTest(createIterator(graph, (Iterable<String>) null));
+    }
 
-    abstract String getExpectedStr2();
+    abstract String getExpectedCCStr1();
 
-    String getExpectedFinishString()
+    abstract String getExpectedCCStr2();
+
+    abstract String getExpectedCCStr3();
+
+    String getExpectedCCFinishString()
     {
         return "";
     }
 
-    Graph<String, DefaultWeightedEdge> createDirectedGraph()
-    {
-        Graph<String, DefaultWeightedEdge> graph =
-            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
-        //
-        String v1 = "1";
-        String v2 = "2";
-        String v3 = "3";
-        String v4 = "4";
-        String v5 = "5";
-        String v6 = "6";
-        String v7 = "7";
-        String v8 = "8";
-        String v9 = "9";
-
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex("3");
-        graph.addVertex("4");
-        graph.addVertex("5");
-        graph.addVertex("6");
-        graph.addVertex("7");
-        graph.addVertex("8");
-        graph.addVertex("9");
-
-        graph.addVertex("orphan");
-
-        // NOTE: set weights on some of the edges to test traversals like
-        // ClosestFirstIterator where it matters. For other traversals, it
-        // will be ignored. Rely on the default edge weight being 1.
-        graph.addEdge(v1, v2);
-        Graphs.addEdge(graph, v1, v3, 100);
-        Graphs.addEdge(graph, v2, v4, 1000);
-        graph.addEdge(v3, v5);
-        Graphs.addEdge(graph, v3, v6, 100);
-        graph.addEdge(v5, v6);
-        Graphs.addEdge(graph, v5, v7, 200);
-        graph.addEdge(v6, v1);
-        Graphs.addEdge(graph, v7, v8, 100);
-        graph.addEdge(v7, v9);
-        graph.addEdge(v8, v2);
-        graph.addEdge(v9, v4);
-
-        return graph;
-    }
 
     abstract AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
-        Graph<String, DefaultWeightedEdge> g, String startVertex);
+            Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex);
 
     // ~ Inner Classes ----------------------------------------------------------
 
@@ -136,7 +95,7 @@ public abstract class AbstractGraphIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+            implements TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;
@@ -150,22 +109,29 @@ public abstract class AbstractGraphIteratorTest
         public void connectedComponentFinished(ConnectedComponentTraversalEvent e)
         {
             switch (componentNumber) {
-            case 1:
-                assertEquals(getExpectedStr1(), result.toString());
-                assertEquals(9, numComponentVertices);
+                case 1:
+                    assertEquals(getExpectedCCStr1(), result.toString());
+                    assertEquals(1, numComponentVertices);
 
-                break;
+                    break;
 
-            case 2:
-                assertEquals(getExpectedStr2(), result.toString());
-                assertEquals(1, numComponentVertices);
+                case 2:
+                    assertEquals(getExpectedCCStr2(), result.toString());
+                    assertEquals(5, numComponentVertices);
 
-                break;
+                    break;
 
-            default:
-                assertFalse();
+                case 3:
+                    assertEquals(getExpectedCCStr3(), result.toString());
+                    assertEquals(4, numComponentVertices);
 
-                break;
+                    break;
+
+
+                default:
+                    assertFalse();
+
+                    break;
             }
 
             numComponentVertices = 0;

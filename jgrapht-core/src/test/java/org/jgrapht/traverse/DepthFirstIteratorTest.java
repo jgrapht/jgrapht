@@ -17,10 +17,12 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.Iterator;
 
 /**
  * Tests for the {@link DepthFirstIteratorTest} class.
@@ -30,11 +32,11 @@ import org.jgrapht.graph.*;
  * the algorithm. This could cause false failures if the traversal implementation changes.
  * </p>
  *
- * @author Liviu Rau
+ * @author Liviu Rau, Patrick Sharp
  * @since Jul 30, 2003
  */
 public class DepthFirstIteratorTest
-    extends AbstractGraphIteratorTest
+    extends CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -55,6 +57,30 @@ public class DepthFirstIteratorTest
     {
         return "6:4:9:2:8:7:5:3:1:orphan:";
     }
+    @Override
+    String getExpectedCCStr1() {
+        return "orphan";
+    }
+
+    @Override
+    String getExpectedCCStr2() {
+        return "orphan,7,9,4,8,2";
+    }
+
+    @Override
+    String getExpectedCCStr3() {
+        return "orphan,7,9,4,8,2,3,6,1,5";
+    }
+
+    @Override
+    String getExpectedCCFinishString() {
+        return "orphan:4:9:2:8:7:1:6:5:3:";
+    }
+
+    @Override
+    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex) {
+        return new DepthFirstIterator<>(g, startVertex);
+    }
 
     @Override
     AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
@@ -65,6 +91,8 @@ public class DepthFirstIteratorTest
 
         return i;
     }
+
+
 
     /**
      * See <a href="http://sf.net/projects/jgrapht">Sourceforge bug 1169182</a> for details.

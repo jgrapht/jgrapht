@@ -17,10 +17,14 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Provides a cross-connected-component traversal functionality for iterator subclasses.
@@ -74,7 +78,7 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     public CrossComponentIterator(Graph<V, E> g)
     {
-        this(g, null);
+        this(g, g.vertexSet());
     }
 
     /**
@@ -114,6 +118,28 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
+    /**
+     * Creates a new iterator for the specified graph. Iteration will start at the specified start
+     * vertices. If the specified start vertices are <code>
+     * null</code>, Iteration will start at an arbitrary graph vertex.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     *
+     * @throws IllegalArgumentException if <code>g==null</code> or does not contain
+     *         <code>startVertex</code>
+     */
+
+    public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices){
+        super(g);
+        this.crossComponentTraversal = true;
+        startVertexIterator = startVertices!=null?startVertices.iterator():graph.vertexSet().iterator();
+        startVertex = startVertexIterator.hasNext() ? startVertexIterator.next() : null;
+        if (!graph.containsVertex(startVertex)) {
+            throw new IllegalArgumentException("graph must contain the start vertex");
+        }
+    }
+
     @Override
     public boolean hasNext()
     {
@@ -132,6 +158,10 @@ public abstract class CrossComponentIterator<V, E, D>
             if (isCrossComponentTraversal()) {
                 while (startVertexIterator.hasNext()) {
                     V v = startVertexIterator.next();
+
+                    if (!graph.containsVertex(v)) {
+                        throw new IllegalArgumentException("graph must contain the start vertex");
+                    }
 
                     if (!isSeenVertex(v)) {
                         encounterVertex(v, null);

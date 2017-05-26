@@ -59,7 +59,7 @@ public class ClosestFirstIterator<V, E>
      */
     public ClosestFirstIterator(Graph<V, E> g)
     {
-        this(g, null);
+        this(g, g.vertexSet());
     }
 
     /**
@@ -91,6 +91,40 @@ public class ClosestFirstIterator<V, E>
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
         super(g, startVertex);
+        this.radius = radius;
+        checkRadiusTraversal(isCrossComponentTraversal());
+        initialized = true;
+    }
+
+    /**
+     * Creates a new closest-first iterator for the specified graph. Iteration will start at the
+     * specified start vertices and will be limited to the connected component that includes those
+     * vertices. If the specified start vertex is <code>null</code>, iteration will start at an
+     * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     */
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
+    {
+        this(g, startVertices, Double.POSITIVE_INFINITY);
+    }
+
+    /**
+     * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
+     * start at the specified start vertices and will be limited to the subset of the connected
+     * component which includes those vertices and their reachable via paths of weighted length less than
+     * or equal to the specified radius. The specified start vertex may not be <code>
+     * null</code>.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     *        search.
+     */
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius)
+    {
+        super(g, startVertices);
         this.radius = radius;
         checkRadiusTraversal(isCrossComponentTraversal());
         initialized = true;

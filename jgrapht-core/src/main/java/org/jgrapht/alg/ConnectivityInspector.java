@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 import org.jgrapht.event.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
+
+import java.util.*;
 
 /**
  * Allows obtaining various connectivity aspects of a graph. The <i>inspected graph</i> is specified
@@ -211,7 +211,7 @@ public class ConnectivityInspector<V, E>
             Set<V> vertexSet = graph.vertexSet();
 
             if (vertexSet.size() > 0) {
-                BreadthFirstIterator<V, E> i = new BreadthFirstIterator<>(graph, null);
+                BreadthFirstIterator<V, E> i = new BreadthFirstIterator<>(graph, (V) null);
                 i.addTraversalListener(new MyTraversalListener());
 
                 while (i.hasNext()) {
