@@ -28,8 +28,8 @@ import org.jgrapht.util.*;
  * 
  * <p>
  * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm"> Floyd-Warshall algorithm</a>
- * finds all shortest paths (all n^2 of them) in O(n^3) time. It can also calculate the graph
- * diameter. Note that during construction time, no computations are performed! All computations are
+ * finds all shortest paths (all $n^2$ of them) in $O(n^3)$ time. Note that during construction time,
+ * no computations are performed! All computations are
  * performed the first time one of the member methods of this class is invoked. The results are
  * stored, so all subsequent calls to the same method are computationally efficient.
  * 
@@ -87,7 +87,9 @@ public class FloydWarshallShortestPaths<V, E>
      * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
      *         contains no vertices, return {@link Double#NaN}. If there is no path between any two
      *         vertices, return {@link Double#POSITIVE_INFINITY}.
+     * @deprecated deprecated in favor of {@link GraphMeasurer#getDiameter()}
      */
+    @Deprecated
     public double getDiameter()
     {
         lazyCalculateMatrix();
@@ -331,13 +333,11 @@ public class FloydWarshallShortestPaths<V, E>
                     continue;
 
                 // Reconstruct the path from i to j
-                List<E> edges = new ArrayList<>();
                 V u = vertices.get(i);
                 V b = vertices.get(j);
                 while (!u.equals(b)) {
                     int v_u = vertexIndices.get(u);
                     E e = TypeUtil.uncheckedCast(backtrace[v_u][j], null);
-                    edges.add(e);
                     V other = Graphs.getOppositeVertex(graph, e, u);
                     lastHopMatrix[i][vertexIndices.get(other)] = e;
                     u = other;
