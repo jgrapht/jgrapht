@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Karolina.
+ * (C) Copyright 2017-2017, by Karolina Rezkova and Contributors.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@ package org.jgrapht.alg.planarity;
 import java.util.Iterator;
 import java.util.Set;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.BiconnectivityInspector;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.*;
@@ -24,7 +25,7 @@ import org.jgrapht.graph.*;
  * <a href="https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/Efficient%20Planarity.pdf">
  * Hopcroft Tarjan algorithm</a>, which tests if given graph is 
  * <a href="http://mathworld.wolfram.com/PlanarGraph.html">
- * planar</a>. This implementation has a runtime complexity of O(|V|), where V is 
+ * planar</a>. This implementation has a runtime complexity of $O(|V|)$, where $V$ is 
  * the set of graph vertices. 
  *
  * @param <V> the graph vertex type
@@ -42,14 +43,12 @@ public class HopcroftTarjanPlanarityInspector<V, E> {
      * @param g the input graph
      */
     public HopcroftTarjanPlanarityInspector(Graph<V, E> g) {
-        if (g.getType().isDirected()) {
+        GraphTests.requireDirectedOrUndirected(g);
+        if(g.getType().isUndirected())
+          this.graph=g;
+        else
             this.graph = new AsUndirectedGraph<>(g);
-        } else if (g.getType().isUndirected()) {
-            this.graph = g;
-        } else {
-            throw new IllegalArgumentException("UNKNOWN TYPE OF GRAPH");
         }
-    }
 
     /**
      * Runs a test if graph is planar
@@ -57,7 +56,7 @@ public class HopcroftTarjanPlanarityInspector<V, E> {
      *
      * @return true if graph is planar, false otherwise
      */
-    public boolean isGraphPlanar() {
+    public boolean isPlanar() {
         
         if (this.graph.vertexSet().size()<=4){
             return true;
