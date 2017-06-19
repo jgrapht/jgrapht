@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Karolina.
+ * (C) Copyright 2017-2017, by Karolina Rezkova and Contributors.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,16 @@ import java.util.*;
 import org.jgrapht.Graph;
 
 /**
- * Hopcroft Tarjan graph strong planarity testing algorithm
+ * Hopcroft Tarjan segment strong planarity testing algorithm
+ * 
+ * Internal class for the Hopcroft Tarjan planarity test
+ *
+ * The
+ * <a href="https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/Efficient%20Planarity.pdf">
+ * Hopcroft Tarjan algorithm</a> is based on finding bi-components, building 
+ * DFS tree for each bi-component and testing its planarity. It finds a cycle $C$, 
+ * goes down its spine and checks segments $S_i$ defined by outgoing edges 
+ * from $C$. Segment $S_i$ is said to be strongly planar if $S_i \cup C$ is  planar.
  *
  * @author Karolina
  * @param <V>  the graph vertex type
@@ -284,27 +293,6 @@ public class HopcroftTarjanStrongPlanarityInspector<V, E> {
     }
 
     /**
-     * finds the maximum of given list of natural numbers
-     * 
-     * @param list list of integers
-     *
-     * @return the greatest natural number of given list, -1 if given list is empty
-     */
-    private int getListMax(LinkedList<Integer> list) {
-        LinkedList<Integer> tempList = new LinkedList();
-        tempList.addAll(list);
-        int result = -1;
-        int element;
-        while (!tempList.isEmpty()) {
-            element = tempList.removeLast();
-            if (element > result) {
-                result = element;
-            }
-        }
-        return result;
-    }
-
-    /**
      * sorts given list of attachments using radixsort
      * 
      * @param list unsorted list of attachments
@@ -315,7 +303,11 @@ public class HopcroftTarjanStrongPlanarityInspector<V, E> {
         if (list.isEmpty()) {
             return list;
         }
-        int size = getListMax(list);
+        
+        int size = -1;
+        if (!list.isEmpty()){
+            size = Collections.max(list);
+        }
         int to;
 
         ArrayList<Integer> tempList = new ArrayList(size);
