@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.planarity.*;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -243,6 +244,23 @@ public abstract class GraphTests
         }
         return true;
     }
+    
+    /**
+     * Test whether a graph is planar.
+     * 
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is planar, false otherwise
+     */
+    public static <V, E> boolean isPlanar(Graph<V, E> graph)
+    {
+        if (isEmpty(graph)) {
+            return true;
+        }
+        return new HopcroftTarjanPlanarityInspector(graph).isPlanar();
+    }
+    
 
     /**
      * Test whether a partition of the vertices into two sets is a bipartite partition.
