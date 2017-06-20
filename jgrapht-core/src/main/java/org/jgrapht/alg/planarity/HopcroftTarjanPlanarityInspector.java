@@ -50,10 +50,12 @@ public class HopcroftTarjanPlanarityInspector<V, E> {
      */
     public HopcroftTarjanPlanarityInspector(Graph<V, E> g) {
         GraphTests.requireDirectedOrUndirected(g);
-        if(g.getType().isUndirected())
+        if(g.getType().isUndirected()){
           this.graph=g;
-        else
+        }
+        else{
             this.graph = new AsUndirectedGraph<>(g);
+        }
         }
 
     /**
