@@ -22,7 +22,7 @@ import java.util.LinkedList;
 /**
  * Internal class for storing properties of graph vertices
  *
- * @author Karolina
+ * @author Karolina Rezkova
  */
 
     public class VertexProperties {
