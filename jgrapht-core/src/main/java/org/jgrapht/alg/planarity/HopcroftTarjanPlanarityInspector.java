@@ -1,4 +1,5 @@
-/* (C) Copyright 2017-2017, by Karolina Rezkova and Contributors.
+/*
+ * (C) Copyright 2017-2017, by Karolina Rezkova and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
