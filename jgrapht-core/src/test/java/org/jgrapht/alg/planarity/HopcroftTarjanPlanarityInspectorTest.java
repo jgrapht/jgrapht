@@ -1,12 +1,19 @@
 /*
  * (C) Copyright 2017-2017, by Karolina Rezkova and Contributors.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *    Karolina - initial API and implementation and/or initial documentation
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
  */
 package org.jgrapht.alg.planarity;
 
@@ -41,7 +48,7 @@ public class HopcroftTarjanPlanarityInspectorTest extends TestCase{
      * creates graph containing $K_{3,3}$  - 
      * subgraph having vertex set $V=\{V0, V2, V4, V3, V8, V9\}$
      * 
-     * @param g empty input graph
+     * @param g input graph
      */
    
     public void createNonplanarGraph1(Graph<String, DefaultEdge> g){
@@ -90,7 +97,7 @@ public class HopcroftTarjanPlanarityInspectorTest extends TestCase{
      * creates graph containing $K_{5}$  - 
      * subgraph having vertex set $V=\{V2, V3, V4, V6, V7\}$
      * 
-     * @param g empty input graph
+     * @param g input graph
      */
     public void createNonplanarGraph2(Graph<String, DefaultEdge> g){
         
@@ -140,7 +147,7 @@ public class HopcroftTarjanPlanarityInspectorTest extends TestCase{
     /**
      * creates planar graph
      * 
-     * @param g empty input graph
+     * @param g input graph
      */
     public void createPlanarGraph(Graph<String, DefaultEdge> g)
         {
@@ -205,6 +212,10 @@ public class HopcroftTarjanPlanarityInspectorTest extends TestCase{
         createPlanarGraph(g3);
         assertTrue(new HopcroftTarjanPlanarityInspector(g3).isPlanar());
         
-    }   
+    }
+        
+    
+    
+    
     
 }
