@@ -27,10 +27,10 @@ import org.junit.*;
  * Test class GraphTests.
  * 
  * @author Dimitrios Michail
+ * @author David Janos Csillik
  */
 public class GraphTestsTest
 {
-
     @Test
     public void testIsEmpty()
     {
@@ -358,6 +358,347 @@ public class GraphTestsTest
             g.addEdge(4, 3);
             Assert.assertFalse(GraphTests.isBipartitePartition(g, a, b));
         }
+    }
+
+    /*
+     * Tests for public static <V, E> boolean isEmpty(Graph<V, E> graph)
+     */
+    @Test
+    public void isEmptyWithEmptyGraphWithoutVerticesTest() {
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        Assert.assertTrue(GraphTests.isEmpty(graph));
+    }
+
+    @Test
+    public void isEmptyWithNotEmptyGraphWithVerticesTest() {
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        Assert.assertTrue(GraphTests.isEmpty(graph));
+    }
+
+    @Test
+    public void isEmptyWithNotEmptyGraph2Test() {
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+
+        Assert.assertFalse(GraphTests.isEmpty(graph));
+    }
+
+    /*
+     * Tests for public static <V, E> boolean isSimple(Graph<V, E> graph)
+     */
+    @Test
+    public void isSimpleWithSimpleGraphTest() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 1);
+
+        Assert.assertTrue(GraphTests.isSimple(graph));
+    }
+
+    @Test
+    public void isSimpleWithSimpleDefaultDirectedGraphTest() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 2);
+
+        Assert.assertTrue(GraphTests.isSimple(graph));
+    }
+
+    @Test
+    public void isSimpleWithDefaultDirectedGraphWithLoopTest() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 1);
+
+        Assert.assertTrue(GraphTests.isSimple(graph));
+    }
+
+    @Test
+    public void isSimpleWithDefaultDirectedGraphWithSelfLoopTest() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+        DefaultEdge edge = graph.addEdge(2, 2);
+
+        Assert.assertNotNull(edge);
+        Assert.assertFalse(GraphTests.isSimple(graph));
+    }
+
+    @Test
+    public void isSimpleWithSimpleMultigraphTest() {
+        Graph<Integer, DefaultEdge> graph = new Multigraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+
+        Assert.assertTrue(GraphTests.isSimple(graph));
+    }
+
+    @Test
+    public void isSimpleWithMultigraphWithMultipleEdgesTest() {
+        Graph<Integer, DefaultEdge> graph = new Multigraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 2);
+
+        Assert.assertFalse(GraphTests.isSimple(graph));
+    }
+
+    /*
+     * Tests for public static <V, E> boolean isComplete(Graph<V, E> graph)
+     */
+    @Test
+    public void isCompleteWithEmptySimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        Assert.assertFalse(GraphTests.isComplete(graph));
+    }
+
+    @Test
+    public void isCompleteWithANotCompleteSimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+
+        Assert.assertFalse(GraphTests.isComplete(graph));
+    }
+
+    @Test
+    public void isCompleteWithACompleteSimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 3);
+
+        Assert.assertTrue(GraphTests.isComplete(graph));        
+    }
+
+    @Test
+    public void isCompleteWithEmptyDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        Assert.assertFalse(GraphTests.isComplete(graph));
+    }
+
+    @Test
+    public void isCompleteWithANotCompleteDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 1);
+        graph.addEdge(1, 3);
+        graph.addEdge(3, 1);
+        graph.addEdge(2, 3);
+
+        Assert.assertFalse(GraphTests.isComplete(graph));
+    }
+
+    @Test
+    public void isCompleteWithACompleteDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 1);
+        graph.addEdge(1, 3);
+        graph.addEdge(3, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 2);
+
+        Assert.assertTrue(GraphTests.isComplete(graph));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void isCompleteWithDummyUndirectedGraphTest() {
+        DummyGraph<Integer, DefaultEdge> graph = new DummyGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 3);
+
+        GraphTests.isComplete(graph);
+    }
+
+    /*
+     * Tests for public static <V, E> boolean isConnected(Graph<V, E> graph)
+     */
+    @Test
+    public void isConnectedWithEmptySimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        Assert.assertFalse(GraphTests.isConnected(graph));
+    }
+
+    @Test
+    public void isConnectedWithNotEmptySimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+
+        Assert.assertFalse(GraphTests.isConnected(graph));
+    }
+
+    @Test
+    public void isConnectedWithNotEmptyConnectedSimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+
+        Assert.assertTrue(GraphTests.isConnected(graph));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void isConnectedWithDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+
+        GraphTests.isConnected(graph);
+    }
+
+    /*
+     * Tests for public static <V, E> boolean isWeaklyConnected(Graph<V, E> graph)
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void isWeaklyConnectedWithSimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+
+        GraphTests.isWeaklyConnected(graph);
+    }
+
+    @Test
+    public void isWeaklyConnectedWithDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+
+        Assert.assertTrue(GraphTests.isWeaklyConnected(graph));
+    }
+
+    /*
+     * Tests for public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void isStronglyConnectedWithSimpleGraph() {
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+
+        GraphTests.isStronglyConnected(graph);
+    }
+
+    @Test
+    public void isStronglyConnectedWithEdgesInOneWayDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+
+        graph.addEdge(1, 2);
+
+        Assert.assertFalse(GraphTests.isStronglyConnected(graph));
+    }
+
+    @Test
+    public void isStronglyConnectedWithEdgesInBothWayDefaultDirectedGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 1);
+        graph.addEdge(1, 3);
+        graph.addEdge(3, 1);
+
+        Assert.assertTrue(GraphTests.isStronglyConnected(graph));
     }
 }
 
