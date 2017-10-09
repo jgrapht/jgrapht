@@ -17,29 +17,33 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
-import org.apache.commons.lang3.*;
-import org.jgrapht.*;
-import org.jgrapht.io.GmlParser.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.io.GmlParser.GmlContext;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
  * http://www. infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  *
  * <p>
  * Below is small example of a graph in GML format.
- * 
+ *
  * <pre>
  * graph [
- *   node [ 
+ *   node [
  *     id 1
  *   ]
  *   node [
@@ -51,7 +55,7 @@ import org.jgrapht.io.GmlParser.*;
  *   ]
  *   edge [
  *     source 1
- *     target 2 
+ *     target 2
  *     weight 2.0
  *     label "Edge between 1 and 2"
  *   ]
@@ -63,7 +67,7 @@ import org.jgrapht.io.GmlParser.*;
  *   ]
  * ]
  * </pre>
- * 
+ *
  * <p>
  * In case the graph is weighted then the importer also reads edge weights. Otherwise edge weights
  * are ignored. The importer also supports reading additional string attributes such as label or
@@ -71,7 +75,7 @@ import org.jgrapht.io.GmlParser.*;
  *
  * @param <V> the vertex type
  * @param <E> the edge type
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GmlImporter<V, E>
@@ -80,7 +84,7 @@ public class GmlImporter<V, E>
 {
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param vertexProvider provider for the generation of vertices. Must not be null.
      * @param edgeProvider provider for the generation of edges. Must not be null.
      */
@@ -91,16 +95,16 @@ public class GmlImporter<V, E>
 
     /**
      * Import a graph.
-     * 
+     *
      * <p>
      * The provided graph must be able to support the features of the graph that is read. For
      * example if the gml file contains self-loops then the graph provided must also support
      * self-loops. The same for multiple edges.
-     * 
+     *
      * <p>
      * If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
      * edge weights are ignored.
-     * 
+     *
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error
@@ -252,6 +256,8 @@ public class GmlImporter<V, E>
                 } catch (NumberFormatException e) {
                     // ignore error
                 }
+            } else if (insideNode && level == 2) {
+                attributes.put(key, ctx.getText());
             } else if (insideEdge && level == 2 && key.equals(SOURCE)) {
                 try {
                     sourceId = Integer.parseInt(ctx.NUMBER().getText());
@@ -270,6 +276,8 @@ public class GmlImporter<V, E>
                 } catch (NumberFormatException e) {
                     // ignore error
                 }
+            } else if (insideEdge && level == 2) {
+                attributes.put(key, ctx.getText());
             }
         }
 
