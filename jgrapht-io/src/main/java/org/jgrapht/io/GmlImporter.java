@@ -252,6 +252,9 @@ public class GmlImporter<V, E>
                 } catch (NumberFormatException e) {
                     // ignore error
                 }
+            } /* TODO: graphics and its level 3 attributes */
+            else if(insideNode && level == 2) {
+                attributes.put(key, ctx.getText());
             } else if (insideEdge && level == 2 && key.equals(SOURCE)) {
                 try {
                     sourceId = Integer.parseInt(ctx.NUMBER().getText());
