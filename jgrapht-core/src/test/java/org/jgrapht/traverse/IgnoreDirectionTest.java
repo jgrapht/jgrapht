@@ -52,7 +52,7 @@ public class IgnoreDirectionTest
     @Override
     String getExpectedFinishString()
     {
-        return "5:6:3:1:2:8:7:9:4:orphan:";
+        return "4:9:7:8:2:1:3:6:5:orphan:";
     }
 
     @Override

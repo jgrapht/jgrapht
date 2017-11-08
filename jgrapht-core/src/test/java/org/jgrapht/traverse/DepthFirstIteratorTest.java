@@ -18,11 +18,15 @@
 package org.jgrapht.traverse;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.graph.*;
+import org.junit.Test;
 
-import java.util.Iterator;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for the {@link DepthFirstIteratorTest} class.
@@ -55,7 +59,7 @@ public class DepthFirstIteratorTest
     @Override
     String getExpectedFinishString()
     {
-        return "6:4:9:2:8:7:5:3:1:orphan:";
+        return "1:3:6:5:7:9:4:8:2:orphan:";
     }
     @Override
     String getExpectedCCStr1() {
@@ -74,7 +78,7 @@ public class DepthFirstIteratorTest
 
     @Override
     String getExpectedCCFinishString() {
-        return "orphan:4:9:2:8:7:1:6:5:3:";
+        return "orphan:7:9:4:8:2:3:6:1:5:";
     }
 
     @Override
@@ -153,6 +157,106 @@ public class DepthFirstIteratorTest
         String expected = "ABCGIFEHJKLD";
         assertEquals(expected, actual);
     }
+
+
+    public void testWikiGraph(){
+        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12));
+        g.addEdge(1,8);
+        g.addEdge(1,7);
+        g.addEdge(1,2);
+        g.addEdge(2,6);
+        g.addEdge(2,3);
+        g.addEdge(3,5);
+        g.addEdge(3,4);
+        g.addEdge(8,12);
+        g.addEdge(8,9);
+        g.addEdge(9,11);
+        g.addEdge(9,10);
+
+        List<Integer> result = new ArrayList<>();
+        DepthFirstIterator<Integer, DefaultEdge> dfs=new DepthFirstIterator<>(g, 1);
+        dfs.forEachRemaining(result::add);
+        List<Integer> expected=recursiveDFS(g, 1);
+        assertEquals(expected, result);
+
+
+        int[] depth= {0,1,2,3,3,2,1,1,2,3,3,2};
+        Integer[] parent={null,1,2,3,3,2,1,1,8,9,9,8};
+        DefaultEdge[] edges={null, g.getEdge(1,2), g.getEdge(2,3), g.getEdge(3,4), g.getEdge(3,5), g.getEdge(2,6), g.getEdge(1,7), g.getEdge(1,8), g.getEdge(8,9),g.getEdge(9,10), g.getEdge(9,11), g.getEdge(8,12)};
+        for(int i=1; i<13; i++){
+            assertEquals(depth[i-1], dfs.getDepth(i));
+            assertEquals(parent[i-1], dfs.getParent(i));
+            assertEquals(edges[i-1], dfs.getEdgeToParent(i));
+        }
+    }
+
+    public void testMultiComponentGraph(){
+        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1,2,3,4,5,6));
+        g.addEdge(1,2);
+        g.addEdge(2,3);
+        g.addEdge(3,1);
+        g.addEdge(4,5);
+        g.addEdge(4,6);
+
+        List<Integer> result = new ArrayList<>();
+        DepthFirstIterator<Integer, DefaultEdge> dfs=new DepthFirstIterator<>(g);
+        dfs.forEachRemaining(result::add);
+        List<Integer> expected=recursiveDFS(g);
+        assertEquals(expected, result);
+
+        int[] depth= {0,2,1,0,1,1};
+        Integer[] parent={null, 3, 1, null, 4, 4};
+        DefaultEdge[] edges={null, g.getEdge(2,3), g.getEdge(3,1), null, g.getEdge(4,5), g.getEdge(4,6)};
+        for(int i=1; i<7; i++){
+            assertEquals(depth[i-1], dfs.getDepth(i));
+            assertEquals(parent[i-1], dfs.getParent(i));
+            assertEquals(edges[i-1], dfs.getEdgeToParent(i));
+        }
+    }
+
+    public void testRandomGraph(){
+        GnpRandomGraphGenerator<Integer, DefaultEdge> gnp=new GnpRandomGraphGenerator<>(500,.6, 0);
+        for(int i=0; i<10; i++){
+            Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
+            gnp.generateGraph(g, new IntegerVertexFactory(), null);
+
+            List<Integer> result = new ArrayList<>();
+            new DepthFirstIterator<>(g).forEachRemaining(result::add);
+
+            List<Integer> expected=recursiveDFS(g);
+            assertEquals(expected, result);
+        }
+    }
+
+    /*  Alternative DFS implementation which uses recursion. */
+    private <V,E> List<V> recursiveDFS(Graph<V,E> g){
+        List<V> result=new ArrayList<>();
+        Set<V> visited=new HashSet<>();
+        for(V v : g.vertexSet()) {
+            if(!visited.contains(v))
+                recursiveDFSHelper(g, v, visited, result);
+        }
+        return result;
+    }
+
+    private <V,E> List<V> recursiveDFS(Graph<V,E> g, V startVertex){
+        List<V> result=new ArrayList<>();
+        Set<V> visited=new HashSet<>();
+        recursiveDFSHelper(g, startVertex, visited, result);
+        return result;
+    }
+    private <V,E> void recursiveDFSHelper(Graph<V,E> g, V v, Set<V> visited, List<V> result){
+        visited.add(v);
+        result.add(v);
+
+        List<V> neighbors= Graphs.neighborListOf(g, v);
+        Collections.reverse(neighbors); //Returned DFS sequence is order dependent.
+        for(V u : neighbors)
+            if(!visited.contains(u))
+                recursiveDFSHelper(g, u, visited, result);
+    }
 }
 
-// End DepthFirstIteratorTest.java
+//// End DepthFirstIteratorTest.java

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Liviu Rau and Contributors.
+ * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,13 +18,15 @@
 package org.jgrapht.traverse;
 
 import org.jgrapht.Graph;
-import org.jgrapht.util.TypeUtil;
+import org.jgrapht.Graphs;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Stack;
 
 /**
- * A depth-first iterator for a directed or undirected graph.
+ * A depth-first iterator for directed and undirected graphs.
+ * This is a non-recursive implementation with a worst-case space complexity of $O(|E|)$.
  * 
  * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
@@ -34,42 +36,13 @@ import java.util.Deque;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Liviu Rau
- * @author Barak Naveh
- * @since Jul 29, 2003
+ * @author Joris Kinable
  */
 public class DepthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
+    extends CrossComponentIterator<V, E, DepthFirstIterator.SearchNodeData>
 {
-    /**
-     * Sentinel object. Unfortunately, we can't use null, because ArrayDeque won't accept those. And
-     * we don't want to rely on the caller to provide a sentinel object for us. So we have to play
-     * typecasting games.
-     */
-    public static final Object SENTINEL = new Object();
 
-    /**
-     * Standard vertex visit state enumeration.
-     */
-    protected static enum VisitColor
-    {
-        /**
-         * Vertex has not been returned via iterator yet.
-         */
-        WHITE,
-
-        /**
-         * Vertex has been returned via iterator, but we're not done with all of its out-edges yet.
-         */
-        GRAY,
-
-        /**
-         * Vertex has been returned via iterator, and we're done with all of its out-edges.
-         */
-        BLACK
-    }
-
-    private Deque<Object> stack = new ArrayDeque<>();
+    private Deque<StackEntry> stack = new ArrayDeque<>(graph.edgeSet().size());
 
     /**
      * Creates a new depth-first iterator for the specified graph.
@@ -113,97 +86,109 @@ public class DepthFirstIterator<V, E>
     @Override
     protected boolean isConnectedComponentExhausted()
     {
-        for (;;) {
-            if (stack.isEmpty()) {
-                return true;
-            }
-            if (stack.getLast() != SENTINEL) {
-                // Found a non-sentinel.
-                return false;
-            }
-
-            // Found a sentinel: pop it, record the finish time,
-            // and then loop to check the rest of the stack.
-
-            // Pop null we peeked at above.
-            stack.removeLast();
-
-            // This will pop corresponding vertex to be recorded as finished.
-            recordFinish();
-        }
+        while(!stack.isEmpty() && isSeenVertex(stack.peek().vertex))
+            stack.pop();
+        return stack.isEmpty();
     }
 
     @Override
     protected void encounterVertex(V vertex, E edge)
     {
-        putSeenData(vertex, VisitColor.WHITE);
-        stack.addLast(vertex);
+        stack.push(new StackEntry(vertex, edge));
     }
 
     @Override
     protected void encounterVertexAgain(V vertex, E edge)
     {
-        VisitColor color = getSeenData(vertex);
-        if (color != VisitColor.WHITE) {
-            // We've already visited this vertex; no need to mess with the
-            // stack (either it's BLACK and not there at all, or it's GRAY
-            // and therefore just a sentinel).
-            return;
-        }
-
-        // Since we've encountered it before, and it's still WHITE, it
-        // *must* be on the stack. Use removeLastOccurrence on the
-        // assumption that for typical topologies and traversals,
-        // it's likely to be nearer the top of the stack than
-        // the bottom of the stack.
-        boolean found = stack.removeLastOccurrence(vertex);
-        assert (found);
-        stack.addLast(vertex);
+        //Do nothing, not interesting
     }
 
     @Override
     protected V provideNextVertex()
     {
-        V v;
-        for (;;) {
-            Object o = stack.removeLast();
-            if (o == SENTINEL) {
-                // This is a finish-time sentinel we previously pushed.
-                recordFinish();
-                // Now carry on with another pop until we find a non-sentinel
-            } else {
-                // Got a real vertex to start working on
-                v = TypeUtil.uncheckedCast(o, null);
-                break;
-            }
-        }
+        StackEntry next=stack.pop();
 
-        // Push a sentinel for v onto the stack so that we'll know
-        // when we're done with it.
-        stack.addLast(v);
-        stack.addLast(SENTINEL);
-        putSeenData(v, VisitColor.GRAY);
-        return v;
-    }
+        int depth= next.edge == null ? 0 : getSeenData(Graphs.getOppositeVertex(graph, next.edge, next.vertex)).depth+1;
+        SearchNodeData snd=new SearchNodeData(next.edge, depth);
 
-    private void recordFinish()
-    {
-        V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
-        putSeenData(v, VisitColor.BLACK);
-        finishVertex(v);
+        putSeenData(next.vertex, snd);
+        finishVertex(next.vertex);
+        return next.vertex;
     }
 
     /**
-     * Retrieves the LIFO stack of vertices which have been encountered but not yet visited (WHITE).
-     * This stack also contains <em>sentinel</em> entries representing vertices which have been
-     * visited but are still GRAY. A sentinel entry is a sequence (v, SENTINEL), whereas a
-     * non-sentinel entry is just (v).
-     *
-     * @return stack
+     * Private data to associate with each entry in the stack.
      */
-    public Deque<Object> getStack()
+    private class StackEntry
     {
-        return stack;
+        /**
+         * The vertex reached.
+         */
+        final V vertex;
+
+        /**
+         * Edge through which the vertex was reached
+         */
+        final E edge;
+
+        private StackEntry(V vertex, E edge) {
+            this.vertex = vertex;
+            this.edge = edge;
+        }
+    }
+
+    class SearchNodeData{
+        /**
+         * Edge to parent
+         */
+        final E edge;
+        /**
+         * Depth of node in search tree
+         */
+        final int depth;
+
+        SearchNodeData(E edge, int depth) {
+            this.edge = edge;
+            this.depth = depth;
+        }
+    }
+
+    /**
+     * Returns the parent node of vertex v in the DFS search tree, or null if v is the root node.
+     * This method can only be invoked on a vertex v once the iterator has visited vertex v!
+     * @param v vertex
+     * @return parent node of vertex v in the DFS search tree, or null if v is the root node
+     */
+    public V getParent(V v){
+        assert getSeenData(v) != null;
+        E edge=(E) getSeenData(v).edge;
+        if(edge == null)
+            return null;
+        else
+            return Graphs.getOppositeVertex(graph, edge, v);
+    }
+
+    /**
+     * Returns the edge connecting vertex v to its parent in the DFS search tree, or null if v is the root node.
+     * This method can only be invoked on a vertex v once the iterator has visited vertex v!
+     * @param v vertex
+     * @return parent node of vertex v in the DFS search tree, or null if v is the root node
+     */
+    public E getEdgeToParent(V v){
+        assert getSeenData(v) != null;
+        return (E)getSeenData(v).edge;
+    }
+
+    /**
+     * Returns the depth of vertex v in the search tree. The depth of a vertex v is defined as the number of edges
+     * traversed on the path from the root of the DFS tree to vertex v. The root of the search tree has depth 0.
+     * This method can only be invoked on a vertex v once the iterator has visited vertex v!
+     * @param v vertex
+     * @return depth of vertex v in the search tree
+     */
+    public int getDepth(V v){
+        assert getSeenData(v) != null;
+        return getSeenData(v).depth;
     }
 }
 
