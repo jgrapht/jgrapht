@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD:jgrapht-core/src/main/java/org/jgrapht/alg/shortestpath/PathValidator.java
  * (C) Copyright 2016-2017, by Assaf Mizrachi and Contributors.
+=======
+ * (C) Copyright 2016-2016, by Assaf Mizrachi and Contributors.
+>>>>>>> 930978df9538fae11acee32a4723dc5989d0cb4f:jgrapht-core/src/main/java/org/jgrapht/alg/PathValidator.java
  *
  * JGraphT : a free Java graph-theory library
  *
