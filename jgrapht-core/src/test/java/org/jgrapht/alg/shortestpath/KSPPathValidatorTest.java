@@ -47,26 +47,14 @@ public void testBlockAll()
     for (int i = 0; i < size; i++) {
         KShortestPaths<String,
             DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, 1, Integer.MAX_VALUE,
-                new PathValidator<String, DefaultEdge>()
-                {
-
-                    @Override
-                    public boolean isValidPath(
-                        GraphPath<String, DefaultEdge> partialPath,
-                        DefaultEdge edge)
-                    {
-                        // block all paths
-                        return false;
-                    }
-                });
+                clique, 1, Integer.MAX_VALUE, (partialPath, edge) -> false);
 
         for (int j = 0; j < size; j++) {
             if (j == i) {
                 continue;
             }
             List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(i), String.valueOf(j));
-            assertNull(paths);
+            assertTrue(paths.isEmpty());
         }
     }
 }
@@ -81,19 +69,7 @@ public void testAllowAll()
     for (int i = 0; i < size; i++) {
         KShortestPaths<String,
             DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, 30, Integer.MAX_VALUE,
-                new PathValidator<String, DefaultEdge>()
-                {
-
-                    @Override
-                    public boolean isValidPath(
-                        GraphPath<String, DefaultEdge> partialPath,
-                        DefaultEdge edge)
-                    {
-                        // block all paths
-                        return true;
-                    }
-                });
+                clique, 30, Integer.MAX_VALUE, (partialPath, edge) -> true);
 
         for (int j = 0; j < size; j++) {
             if (j == i) {
@@ -115,13 +91,7 @@ public void testRing()
     SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
     for (int i = 0; i < size; i++) {
         KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-            ring, i, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
-            {
-
-                @Override
-                public boolean isValidPath(
-                    GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
-                {
+            ring, 2, Integer.MAX_VALUE, (partialPath, edge) -> {
                     if (partialPath == null) {
                         return true;
                     }
@@ -129,13 +99,13 @@ public void testRing()
                         partialPath.getEndVertex() - Graphs
                             .getOppositeVertex(ring, edge, partialPath.getEndVertex())) == 1;
                 }
-            });
+            );
 
         for (int j = 0; j < size; j++) {
             if (j == i) {
                 continue;
             }
-            List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(2, j);
+            List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
             assertNotNull(paths);
             assertEquals(1, paths.size());
         }
@@ -153,18 +123,11 @@ public void testDisconnected()
     SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
     for (int i = 0; i < graph.vertexSet().size(); i++) {
         KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-            graph, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
-            {
-
-                @Override
-                public boolean isValidPath(
-                    GraphPath<Integer, DefaultEdge> partialPath, DefaultEdge edge)
-                {
-                    // accept all requests but the one to pass through the edge connecting
-                    // the two cliques.
-                    DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
-                    return connectingEdge != edge;
-                }
+            graph, 100, Integer.MAX_VALUE, (partialPath, edge) -> {
+                // accept all requests but the one to pass through the edge connecting
+                // the two cliques.
+                DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
+                return connectingEdge != edge;
             });
 
         for (int j = 0; j < graph.vertexSet().size(); j++) {
@@ -178,7 +141,8 @@ public void testDisconnected()
                 assertTrue(paths.size() > 0);
             } else {
                 // else - should not
-                assertNull(paths);
+                assertNotNull(paths);
+                assertTrue(paths.isEmpty());
             }
 
         }
