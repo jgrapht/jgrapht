@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD:jgrapht-core/src/main/java/org/jgrapht/alg/shortestpath/PathValidator.java
  * (C) Copyright 2016-2017, by Assaf Mizrachi and Contributors.
+=======
+ * (C) Copyright 2016-2016, by Assaf Mizrachi and Contributors.
+>>>>>>> 930978df9538fae11acee32a4723dc5989d0cb4f:jgrapht-core/src/main/java/org/jgrapht/alg/PathValidator.java
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -16,6 +20,8 @@
  * the Eclipse Foundation.
  */
 package org.jgrapht.alg.shortestpath;
+
+import org.jgrapht.*;
 
 /**
  * May be used to provide external path validations in addition to the basic validations done by
@@ -35,10 +41,10 @@ public interface PathValidator<V, E>
     /**
      * Checks if an edge can be added to a previous path element.
      * 
-     * @param prevPathElement the previous path element
-     * @param edge the edge to be added to the path.
+     * @param partialPath the path from source vertex up to the current vertex.
+     * @param edge the new edge to be added to the path.
      * 
      * @return <code>true</code> if edge can be added, <code>false</code> otherwise.
      */
-    public boolean isValidPath(AbstractPathElement<V, E> prevPathElement, E edge);
+    public boolean isValidPath(GraphPath<V, E> partialPath, E edge);
 }
