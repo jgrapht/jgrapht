@@ -35,7 +35,7 @@ public class UndirectedCycleBaseTest
         testAlgorithm(patonFinder);
     }
 
-    private void testAlgorithm(UndirectedCycleBase<Integer, DefaultEdge> finder)
+    private void testAlgorithm(Cycle<Integer, DefaultEdge> finder)
     {
         SimpleGraph<Integer, DefaultEdge> graph =
             new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
@@ -81,8 +81,8 @@ public class UndirectedCycleBaseTest
         }
     }
 
-    private void checkResult(UndirectedCycleBase<Integer, DefaultEdge> finder, int size)
+    private void checkResult(Cycle<Integer, DefaultEdge> finder, int size)
     {
-        assertTrue(finder.findCycleBase().size() == size);
+        assertTrue(finder.findCycles().size() == size);
     }
 }

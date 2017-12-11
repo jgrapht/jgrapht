@@ -17,10 +17,14 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.interfaces.AllSimpleCyclesAlgorithm;
+import org.jgrapht.graph.ClassBasedEdgeFactory;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.
@@ -36,7 +40,7 @@ import org.jgrapht.graph.*;
  * @author Nikolay Ognyanov
  */
 public class JohnsonSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements DirectedSimpleCycles<V, E>, AllSimpleCyclesAlgorithm<V, E>
 {
     // The graph.
     private Graph<V, E> graph;
@@ -131,6 +135,7 @@ public class JohnsonSimpleCycles<V, E>
         clearState();
         return result;
     }
+
 
     @SuppressWarnings("unchecked")
     private Object[] findMinSCSG(int startIndex)

@@ -48,7 +48,7 @@ public class DirectedSimpleCyclesTest
         testAlgorithm(hawickJamesFinder);
     }
 
-    private void testAlgorithm(DirectedSimpleCycles<Integer, DefaultEdge> finder)
+    private void testAlgorithm(Cycle<Integer, DefaultEdge> finder)
     {
         Graph<Integer, DefaultEdge> graph =
             new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
@@ -85,8 +85,8 @@ public class DirectedSimpleCyclesTest
         }
     }
 
-    private void checkResult(DirectedSimpleCycles<Integer, DefaultEdge> finder, int size)
+    private void checkResult(Cycle<Integer, DefaultEdge> finder, int size)
     {
-        assertTrue(finder.findSimpleCycles().size() == size);
+        assertTrue(finder.findCycles().size() == size);
     }
 }

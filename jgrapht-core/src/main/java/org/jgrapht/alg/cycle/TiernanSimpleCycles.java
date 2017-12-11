@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.interfaces.AllSimpleCyclesAlgorithm;
 
-import org.jgrapht.*;
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Tiernan's algorithm.
@@ -35,7 +37,7 @@ import org.jgrapht.*;
  * @author Nikolay Ognyanov
  */
 public class TiernanSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements DirectedSimpleCycles<V, E>, AllSimpleCyclesAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 

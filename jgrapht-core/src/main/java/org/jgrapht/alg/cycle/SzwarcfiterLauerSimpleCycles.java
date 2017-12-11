@@ -17,10 +17,12 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.interfaces.AllSimpleCyclesAlgorithm;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.*;
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's algorithm.
@@ -37,7 +39,7 @@ import org.jgrapht.alg.*;
  * @author Nikolay Ognyanov
  */
 public class SzwarcfiterLauerSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements DirectedSimpleCycles<V, E>, AllSimpleCyclesAlgorithm<V, E>
 {
     // The graph.
     private Graph<V, E> graph;
