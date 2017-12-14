@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * An implementation of <a href="http://en.wikipedia.org/wiki/Disjoint-set_data_structure">Union
@@ -33,12 +33,7 @@ import java.util.stream.*;
  * @author Tom Conerly
  * @since Feb 10, 2010
  */
-public class UnionFind<T>
-{
-    private final Map<T, T> parentMap;
-    private final Map<T, Integer> rankMap;
-    private int count; // number of components
-
+public class UnionFind<T> extends AbstractUnionFind<T> {
     /**
      * Creates a UnionFind instance with all the elements in separate sets.
      * 
@@ -46,58 +41,48 @@ public class UnionFind<T>
      */
     public UnionFind(Set<T> elements)
     {
-        parentMap = new LinkedHashMap<>();
-        rankMap = new HashMap<>();
-        for (T element : elements) {
-            parentMap.put(element, element);
-            rankMap.put(element, 0);
+        super();
+
+        if (Objects.nonNull(elements)){
+            for (T element : elements) {
+                parentMap.put(element, element);
+                rankMap.put(element, 0);
+            }
+            count = elements.size();
         }
-        count = elements.size();
     }
 
     /**
-     * Adds a new element to the data structure in its own set.
-     *
-     * @param element The element to add.
+     * Creates a UnionFind instance with no elements.
      */
+    public UnionFind()
+    {
+        this(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addElement(T element)
     {
         if (parentMap.containsKey(element))
             throw new IllegalArgumentException(
-                "element is already contained in UnionFind: " + element);
+                    "element is already contained in UnionFind: " + element);
         parentMap.put(element, element);
         rankMap.put(element, 0);
         count++;
     }
 
     /**
-     * @return map from element to parent element
+     * {@inheritDoc}
      */
-    protected Map<T, T> getParentMap()
-    {
-        return parentMap;
-    }
-
-    /**
-     * @return map from element to rank
-     */
-    protected Map<T, Integer> getRankMap()
-    {
-        return rankMap;
-    }
-
-    /**
-     * Returns the representative element of the set that element is in.
-     *
-     * @param element The element to find.
-     *
-     * @return The element representing the set the element is in.
-     */
+    @Override
     public T find(final T element)
     {
         if (!parentMap.containsKey(element)) {
             throw new IllegalArgumentException(
-                "element is not contained in this UnionFind data structure: " + element);
+                    "element is not contained in this UnionFind data structure: " + element);
         }
 
         T current = element;
@@ -121,13 +106,9 @@ public class UnionFind<T>
     }
 
     /**
-     * Merges the sets which contain element1 and element2. No guarantees are given as to which
-     * element becomes the representative of the resulting (merged) set: this can be either
-     * find(element1) or find(element2).
-     *
-     * @param element1 The first element to union.
-     * @param element2 The second element to union.
+     * {@inheritDoc}
      */
+    @Override
     public void union(T element1, T element2)
     {
         if (!parentMap.containsKey(element1) || !parentMap.containsKey(element2)) {
@@ -156,42 +137,9 @@ public class UnionFind<T>
     }
 
     /**
-     * Tests whether two elements are contained in the same set.
-     * 
-     * @param element1 first element
-     * @param element2 second element
-     * @return true if element1 and element2 are contained in the same set, false otherwise.
+     * {@inheritDoc}
      */
-    public boolean inSameSet(T element1, T element2)
-    {
-        return find(element1).equals(find(element2));
-    }
-
-    /**
-     * Returns the number of sets. Initially, all items are in their own set. The smallest number of
-     * sets equals one.
-     * 
-     * @return the number of sets
-     */
-    public int numberOfSets()
-    {
-        assert count >= 1 && count <= parentMap.keySet().size();
-        return count;
-    }
-
-    /**
-     * Returns the total number of elements in this data structure.
-     * 
-     * @return the total number of elements in this data structure.
-     */
-    public int size()
-    {
-        return parentMap.size();
-    }
-
-    /**
-     * Resets the UnionFind data structure: each element is placed in its own singleton set.
-     */
+    @Override
     public void reset()
     {
         for (T element : parentMap.keySet()) {
@@ -199,30 +147,6 @@ public class UnionFind<T>
             rankMap.put(element, 0);
         }
         count = parentMap.size();
-    }
-
-    /**
-     * Returns a string representation of this data structure. Each component is represented as
-     * {v_i:v_1,v_2,v_3,...v_n}, where v_i is the representative of the set.
-     * 
-     * @return string representation of this data structure
-     */
-    public String toString()
-    {
-        Map<T, Set<T>> setRep = new LinkedHashMap<>();
-        for (T t : parentMap.keySet()) {
-            T representative = find(t);
-            if (!setRep.containsKey(representative))
-                setRep.put(representative, new LinkedHashSet<>());
-            setRep.get(representative).add(t);
-        }
-
-        return setRep
-            .keySet().stream()
-            .map(
-                key -> "{" + key + ":" + setRep.get(key).stream().map(Objects::toString).collect(
-                    Collectors.joining(",")) + "}")
-            .collect(Collectors.joining(", ", "{", "}"));
     }
 }
 
