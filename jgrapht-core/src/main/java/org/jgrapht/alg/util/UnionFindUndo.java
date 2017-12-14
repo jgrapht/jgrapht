@@ -30,6 +30,9 @@ import java.util.Set;
  * rank to achieve an amortized cost of O(log n) per operation.
  * UnionFindUndo uses the hashCode and equals method of the elements it operates on.
  *
+ * <p>
+ * Note: Only {@link #addElement(Object)} and {@link #union(Object, Object)} can be undone/redone.
+ *
  * @param <T> element type
  *
  * @author Alexandru Valeanu
