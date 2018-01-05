@@ -142,7 +142,7 @@ public class TwoApproxMetricTSPTest
         new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
     }
 
-    private static <V, E> void assertHamiltonian(Graph<V, E> g, GraphPath<V, E> path)
+    static <V, E> void assertHamiltonian(Graph<V, E> g, GraphPath<V, E> path)
     {
         List<V> tourVertices = path.getVertexList();
         List<E> tourEdges = path.getEdgeList();
