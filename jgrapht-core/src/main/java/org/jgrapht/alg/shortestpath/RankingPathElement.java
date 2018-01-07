@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.util.*;
+
 import org.jgrapht.*;
 
 /**
@@ -25,12 +27,14 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 final class RankingPathElement<V, E>
-    extends AbstractPathElement<V, E>
+    extends AbstractPathElement<V, E> implements GraphPath<V, E>
 {
     /**
      * Weight of the path.
      */
     private double weight;
+    
+    private Graph<V, E> graph;
 
     /**
      * Creates a path element by concatenation of an edge to a path element.
@@ -44,6 +48,7 @@ final class RankingPathElement<V, E>
     {
         super(graph, pathElement, edge);
         this.weight = weight;
+        this.graph = graph;
     }
 
     /**
@@ -77,6 +82,35 @@ final class RankingPathElement<V, E>
     {
         return (RankingPathElement<V, E>) super.getPrevPathElement();
     }
+    
+    @Override
+    public Graph<V, E> getGraph()
+    {
+        return this.graph;
+    }
+
+    @Override
+    public V getStartVertex()
+    {
+        if (getPrevPathElement() == null) {
+            return super.getVertex();
+        }
+        return getPrevPathElement().getStartVertex();
+    }
+
+    @Override
+    public V getEndVertex()
+    {
+        return super.getVertex();
+    }
+
+    @Override
+    public List<E> getEdgeList()
+    {
+        return super.createEdgeListPath();
+    }
+    
+    
 }
 
 // End RankingPathElement.java

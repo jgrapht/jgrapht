@@ -8,6 +8,13 @@ Changes to JGraphT in each version:
     - Added assertions to NeighborCache (contributed by Joris Kinable)
     - Upgraded Antlr version to 4.7 (contributed by Dimitrios Michail)
     - Rewrote `MaximumWeightBipartiteMatching` with exact arithmetic, introducing a `GenericFibonacciHeap` (contributed by Dimitrios Michail)
+    - Updated jmh to jdk9 compatible version; updated xmlunit to 2.x (contributed by Dimitrios Michail)
+    - Fixed FastLookup specifics to init edge container capacity to 1 (suggested by shevek, contributed by Joris Kinable)
+    - Made `IntrusiveEdgesSpecifics` interface public and optimized add call sequence (suggested by shevek, contributed by Dimitrios Michail)
+    - Fixed deprecation of Class.newInstance for Java 9; cleaned up GraphTests (contributed by Dimitrios Michail)
+    - Fixed PathValidator interface to use GraphPath (contributed by Assaf Mizrachi)
+    - Added Held-Karp dynamic programming algorithm for TSP (contributed by Alexandru Văleanu)
+    - Added fundamental cycle basis implementations (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)

@@ -17,22 +17,29 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.custommonkey.xmlunit.*;
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.io.GraphMLExporter.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.io.GraphMLExporter.AttributeCategory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 /**
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
 public class GraphMLExporterTest
-    extends TestCase
+    extends
+    TestCase
 {
     // ~ Static fields/initializers
     // ---------------------------------------------
@@ -50,7 +57,7 @@ public class GraphMLExporterTest
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -77,15 +84,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
 
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     public void testUndirectedWeighted()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -116,14 +125,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     public void testDirected()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -151,14 +163,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     public void testUndirectedUnweightedWithWeights()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -189,14 +204,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     public void testUndirectedWeightedWithWeights()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -230,14 +248,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     public void testUndirectedWeightedWithCustomNameWeights()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
                 + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -273,7 +294,10 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     public void testNoRegisterWeightAttribute()
@@ -318,7 +342,7 @@ public class GraphMLExporterTest
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -383,14 +407,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
     }
 
     public void testUndirectedWeightedWithWeightsAndLabelsAndCustomNames()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
                 + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -457,15 +484,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
-
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
     }
 
     public void testUndirectedWeightedWithWeightsAndColor()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -567,14 +596,17 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
     }
 
     public void testUndirectedWeightedWithNullComponentProvider()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
                 + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -612,8 +644,8 @@ public class GraphMLExporterTest
 
         GraphMLExporter<String,
             DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-                new IntegerComponentNameProvider<>(), null, v->null,
-                new IntegerComponentNameProvider<>(), null, e->null);
+                new IntegerComponentNameProvider<>(), null, v -> null,
+                new IntegerComponentNameProvider<>(), null, e -> null);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
             "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
@@ -622,7 +654,10 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+        
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
 }

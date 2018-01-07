@@ -87,6 +87,62 @@ public abstract class GraphTests
     }
 
     /**
+     * Check if a graph has self-loops. A self-loop is an edge with the same source and target
+     * vertices.
+     * 
+     * @param graph a graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if a graph has self-loops, false otherwise
+     */
+    public static <V, E> boolean hasSelfLoops(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+
+        if (!graph.getType().isAllowingSelfLoops()) {
+            return false;
+        }
+
+        // no luck, we have to check
+        for (E e : graph.edgeSet()) {
+            if (graph.getEdgeSource(e).equals(graph.getEdgeTarget(e))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if a graph has multiple edges (parallel edges), that is, whether the graph contains two
+     * or more edges connecting the same pair of vertices.
+     * 
+     * @param graph a graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if a graph has multiple edges, false otherwise
+     */
+    public static <V, E> boolean hasMultipleEdges(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+
+        if (!graph.getType().isAllowingMultipleEdges()) {
+            return false;
+        }
+
+        // no luck, we have to check
+        for (V v : graph.vertexSet()) {
+            Set<V> neighbors = new HashSet<>();
+            for (E e : graph.outgoingEdgesOf(v)) {
+                V u = Graphs.getOppositeVertex(graph, e, v);
+                if (!neighbors.add(u)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Test whether a graph is complete. A complete undirected graph is a simple graph in which
      * every pair of distinct vertices is connected by a unique edge. A complete directed graph is a
      * directed graph in which every pair of distinct vertices is connected by a pair of unique

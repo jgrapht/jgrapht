@@ -130,7 +130,7 @@ public class FastLookupUndirectedSpecifics<V, E>
         if (edgeSet != null)
             edgeSet.add(e);
         else {
-            edgeSet = new ArrayUnenforcedSet<>();
+            edgeSet = new ArrayUnenforcedSet<>(1);
             edgeSet.add(e);
             touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
         }

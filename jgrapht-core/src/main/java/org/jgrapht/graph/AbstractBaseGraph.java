@@ -42,8 +42,12 @@ import org.jgrapht.util.*;
  * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Cloneable, Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Graph<V, E>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = 4811000483921413364L;
 
@@ -180,13 +184,11 @@ public abstract class AbstractBaseGraph<V, E>
 
         E e = edgeFactory.createEdge(sourceVertex, targetVertex);
 
-        if (containsEdge(e)) { // this restriction should stay!
-            return null;
-        } else {
-            intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+        if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
             specifics.addEdgeToTouchingVertices(e);
             return e;
         }
+        return null;
     }
 
     /**
@@ -197,8 +199,6 @@ public abstract class AbstractBaseGraph<V, E>
     {
         if (e == null) {
             throw new NullPointerException();
-        } else if (containsEdge(e)) {
-            return false;
         }
 
         assertVertexExist(sourceVertex);
@@ -212,10 +212,12 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
-        specifics.addEdgeToTouchingVertices(e);
+        if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+            specifics.addEdgeToTouchingVertices(e);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     /**

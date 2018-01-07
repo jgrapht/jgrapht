@@ -30,9 +30,11 @@ package org.jgrapht.graph;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-class WeightedIntrusiveEdgesSpecifics<V, E>
-    extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveWeightedEdge>
-    implements IntrusiveEdgesSpecifics<V, E>
+public class WeightedIntrusiveEdgesSpecifics<V, E>
+    extends
+    BaseIntrusiveEdgesSpecifics<V, E, IntrusiveWeightedEdge>
+    implements
+    IntrusiveEdgesSpecifics<V, E>
 {
     private static final long serialVersionUID = 5327226615635500554L;
 
@@ -45,17 +47,20 @@ class WeightedIntrusiveEdgesSpecifics<V, E>
     }
 
     @Override
-    public void add(E e, V sourceVertex, V targetVertex)
+    public boolean add(E e, V sourceVertex, V targetVertex)
     {
         IntrusiveWeightedEdge intrusiveEdge;
+
         if (e instanceof IntrusiveWeightedEdge) {
             intrusiveEdge = (IntrusiveWeightedEdge) e;
         } else {
             intrusiveEdge = new IntrusiveWeightedEdge();
         }
+
         intrusiveEdge.source = sourceVertex;
         intrusiveEdge.target = targetVertex;
-        edgeMap.put(e, intrusiveEdge);
+
+        return edgeMap.putIfAbsent(e, intrusiveEdge) == null;
     }
 
     @Override

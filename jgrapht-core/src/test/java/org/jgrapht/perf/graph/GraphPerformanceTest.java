@@ -44,7 +44,8 @@ import junit.framework.*;
  * multiple graphs. Not sure how to achieve that through the JMH framework.
  */
 public class GraphPerformanceTest
-    extends TestCase
+    extends
+    TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
@@ -71,7 +72,8 @@ public class GraphPerformanceTest
         @Setup
         public void setup()
         {
-            blackhole = new Blackhole();
+            blackhole = new Blackhole(
+                "Today's password is swordfish. I understand instantiating Blackholes directly is dangerous.");
         }
 
         /**
@@ -167,7 +169,8 @@ public class GraphPerformanceTest
      * optimized for low memory usage, but performs edge retrieval operations fairly slow.
      */
     public static class MemoryEfficientDirectedGraphBenchmark
-        extends DirectedGraphBenchmarkBase
+        extends
+        DirectedGraphBenchmarkBase
     {
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
@@ -184,7 +187,8 @@ public class GraphPerformanceTest
      * perform quick edge retrievals.
      */
     public static class FastLookupDirectedGraphBenchmark
-        extends DirectedGraphBenchmarkBase
+        extends
+        DirectedGraphBenchmarkBase
     {
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
@@ -219,7 +223,8 @@ public class GraphPerformanceTest
      * @param <E> the graph edge type
      */
     public static class MemoryEfficientDirectedWeightedGraph<V, E>
-        extends SimpleDirectedWeightedGraph<V, E>
+        extends
+        SimpleDirectedWeightedGraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 

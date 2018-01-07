@@ -30,9 +30,11 @@ package org.jgrapht.graph;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-class UniformIntrusiveEdgesSpecifics<V, E>
-    extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveEdge>
-    implements IntrusiveEdgesSpecifics<V, E>
+public class UniformIntrusiveEdgesSpecifics<V, E>
+    extends
+    BaseIntrusiveEdgesSpecifics<V, E, IntrusiveEdge>
+    implements
+    IntrusiveEdgesSpecifics<V, E>
 {
     private static final long serialVersionUID = -5736320893697031114L;
 
@@ -45,7 +47,7 @@ class UniformIntrusiveEdgesSpecifics<V, E>
     }
 
     @Override
-    public void add(E e, V sourceVertex, V targetVertex)
+    public boolean add(E e, V sourceVertex, V targetVertex)
     {
         IntrusiveEdge intrusiveEdge;
         if (e instanceof IntrusiveEdge) {
@@ -53,9 +55,11 @@ class UniformIntrusiveEdgesSpecifics<V, E>
         } else {
             intrusiveEdge = new IntrusiveEdge();
         }
+        
         intrusiveEdge.source = sourceVertex;
         intrusiveEdge.target = targetVertex;
-        edgeMap.put(e, intrusiveEdge);
+
+        return edgeMap.putIfAbsent(e, intrusiveEdge) == null;
     }
 
     @Override

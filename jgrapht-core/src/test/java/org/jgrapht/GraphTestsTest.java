@@ -61,7 +61,7 @@ public class GraphTestsTest
         assertTrue(GraphTests.isSimple(g2));
 
         Graph<Integer, DefaultEdge> g3 = new DirectedPseudograph<>(DefaultEdge.class);
-        assertTrue(GraphTests.isSimple(g1));
+        Assert.assertTrue(GraphTests.isSimple(g3));
 
         Graphs.addAllVertices(g3, Arrays.asList(1, 2));
         g3.addEdge(1, 2);
@@ -84,6 +84,73 @@ public class GraphTestsTest
         assertTrue(GraphTests.isSimple(g4));
         g4.addEdge(1, 1);
         assertFalse(GraphTests.isSimple(g4));
+    }
+
+    @Test
+    public void testHasSelfLoops()
+    {
+        Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Assert.assertFalse(GraphTests.hasSelfLoops(g1));
+
+        Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(DefaultEdge.class);
+        Assert.assertFalse(GraphTests.hasSelfLoops(g2));
+
+        Graph<Integer, DefaultEdge> g3 = new DirectedPseudograph<>(DefaultEdge.class);
+        Assert.assertFalse(GraphTests.hasSelfLoops(g3));
+
+        Graphs.addAllVertices(g3, Arrays.asList(1, 2));
+        g3.addEdge(1, 2);
+        g3.addEdge(2, 1);
+        Assert.assertFalse(GraphTests.hasSelfLoops(g3));
+        g3.addEdge(2, 2);
+        Assert.assertTrue(GraphTests.hasSelfLoops(g3));
+
+        Graph<Integer, DefaultEdge> g4 = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g4, Arrays.asList(1, 2));
+        g4.addEdge(1, 2);
+        g4.addEdge(2, 1);
+        Assert.assertFalse(GraphTests.hasSelfLoops(g4));
+        g4.addEdge(2, 2);
+        Assert.assertTrue(GraphTests.hasSelfLoops(g4));
+    }
+
+    @Test
+    public void testHasMultipleEdges()
+    {
+        Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g1));
+
+        Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(DefaultEdge.class);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g2));
+
+        Graph<Integer, DefaultEdge> g3 = new DirectedPseudograph<>(DefaultEdge.class);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g3));
+        Graphs.addAllVertices(g3, Arrays.asList(1, 2));
+        g3.addEdge(1, 2);
+        g3.addEdge(2, 1);
+        g3.addEdge(1, 1);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g3));
+        g3.addEdge(2, 2);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g3));
+        g3.addEdge(2, 1);
+        Assert.assertTrue(GraphTests.hasMultipleEdges(g3));
+
+        Graph<Integer, DefaultEdge> g4 = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g4, Arrays.asList(1, 2));
+        g4.addEdge(1, 2);
+        g4.addEdge(1, 1);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g4));
+        g4.addEdge(2, 1);
+        Assert.assertTrue(GraphTests.hasMultipleEdges(g4));
+
+        Graph<Integer, DefaultEdge> g5 = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g5, Arrays.asList(1, 2));
+        g5.addEdge(1, 2);
+        g5.addEdge(1, 1);
+        Assert.assertFalse(GraphTests.hasMultipleEdges(g5));
+        g5.addEdge(1, 1);
+        Assert.assertTrue(GraphTests.hasMultipleEdges(g5));
+
     }
 
     @Test

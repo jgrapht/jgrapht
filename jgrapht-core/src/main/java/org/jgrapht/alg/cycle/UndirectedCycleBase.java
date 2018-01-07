@@ -20,6 +20,7 @@ package org.jgrapht.alg.cycle;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
 
 /**
  * A common interface for classes implementing algorithms for finding a cycle base of an undirected
@@ -29,7 +30,9 @@ import org.jgrapht.*;
  * @param <E> the edge type.
  *
  * @author Nikolay Ognyanov
+ * @deprecated in favor of {@link CycleBasisAlgorithm}
  */
+@Deprecated
 public interface UndirectedCycleBase<V, E>
 {
     /**

@@ -33,8 +33,9 @@ import org.jgrapht.util.*;
  * @param <E> the graph edge type
  * @param <IE> the intrusive edge type
  */
-abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
-    implements Serializable
+public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -7498268216742485L;
 
@@ -141,8 +142,9 @@ abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
      * @param e the edge
      * @param sourceVertex the source vertex of the edge
      * @param targetVertex the target vertex of the edge
+     * @return true if the edge was added, false if the edge was already present
      */
-    public abstract void add(E e, V sourceVertex, V targetVertex);
+    public abstract boolean add(E e, V sourceVertex, V targetVertex);
 
     /**
      * Get the intrusive edge of an edge.
