@@ -17,16 +17,21 @@
  */
 package org.jgrapht.alg.tour;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.spanning.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
 
 /**
  * @author Dimitrios Michail
@@ -37,7 +42,8 @@ public class TwoApproxMetricTSPTest
     @Test
     public void testWikiExampleSymmetric4Cities()
     {
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex("A");
         g.addVertex("B");
         g.addVertex("C");
@@ -50,9 +56,11 @@ public class TwoApproxMetricTSPTest
         g.setEdgeWeight(g.addEdge("C", "D"), 12d);
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
+            new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
         assertHamiltonian(g, tour);
-        assertTrue(2 * new KruskalMinimumSpanningTree<>(g).getSpanningTree().getWeight() >= tour.getWeight());
+        assertTrue(
+            2 * new KruskalMinimumSpanningTree<>(g).getSpanningTree().getWeight() >= tour
+                .getWeight());
     }
 
     @Test
@@ -66,7 +74,7 @@ public class TwoApproxMetricTSPTest
             generator.generateGraph(g, new ClassBasedVertexFactory<>(Object.class), null);
 
             GraphPath<Object, DefaultEdge> tour =
-                    new TwoApproxMetricTSP<Object, DefaultEdge>().getTour(g);
+                new TwoApproxMetricTSP<Object, DefaultEdge>().getTour(g);
             assertHamiltonian(g, tour);
 
             double mstWeight = new KruskalMinimumSpanningTree<>(g).getSpanningTree().getWeight();
@@ -78,7 +86,8 @@ public class TwoApproxMetricTSPTest
     @Test
     public void testStar()
     {
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex("1");
         g.addVertex("2");
         g.addVertex("3");
@@ -107,7 +116,7 @@ public class TwoApproxMetricTSPTest
         g.setEdgeWeight(g.addEdge("5", "6"), 1d);
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
+            new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
         assertHamiltonian(g, tour);
 
         double mstWeight = new KruskalMinimumSpanningTree<>(g).getSpanningTree().getWeight();
@@ -127,7 +136,8 @@ public class TwoApproxMetricTSPTest
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidInstanceNotComplete()
     {
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex("A");
         g.addVertex("B");
         g.addVertex("C");
