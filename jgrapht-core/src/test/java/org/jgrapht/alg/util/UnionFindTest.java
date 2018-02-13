@@ -17,23 +17,21 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
+import org.junit.Test;
 
-import junit.framework.*;
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+import static org.junit.Assert.*;
 
 /**
- * .
+ * Test {@link UnionFind} class
  *
  * @author Tom Conerly
  */
 public class UnionFindTest
-    extends TestCase
 {
-    // ~ Methods ----------------------------------------------------------------
-
-    /**
-     * .
-     */
+    @Test
     public void testUnionFind()
     {
         TreeSet<String> set = new TreeSet<String>();
@@ -83,9 +81,9 @@ public class UnionFindTest
         assertEquals(6, uf.numberOfSets());
     }
 
-    private void union(ArrayList<ArrayList<String>> sets, String a, String b)
+    static <E> void union(ArrayList<ArrayList<E>> sets, E a, E b)
     {
-        ArrayList<String> toAdd = new ArrayList<String>();
+        ArrayList<E> toAdd = new ArrayList<E>();
         for (int i = 0; i < sets.size(); i++) {
             if (sets.get(i).contains(a)) {
                 toAdd.addAll(sets.get(i));
@@ -103,9 +101,9 @@ public class UnionFindTest
         sets.add(toAdd);
     }
 
-    private boolean same(ArrayList<ArrayList<String>> sets, String a, String b)
+    static <E> boolean same(ArrayList<ArrayList<E>> sets, E a, E b)
     {
-        for (ArrayList<String> set : sets) {
+        for (ArrayList<E> set : sets) {
             if (set.contains(a) && set.contains(b)) {
                 return true;
             }
@@ -113,11 +111,11 @@ public class UnionFindTest
         return false;
     }
 
-    private void testIdentical(
-        String[] universe, ArrayList<ArrayList<String>> sets, UnionFind<String> uf)
+    static <E> void testIdentical(
+        E[] universe, ArrayList<ArrayList<E>> sets, AbstractUnionFind<E> uf)
     {
-        for (String a : universe) {
-            for (String b : universe) {
+        for (E a : universe) {
+            for (E b : universe) {
                 boolean same1 = uf.find(a).equals(uf.find(b));
                 boolean same2 = same(sets, a, b);
                 assertEquals(same1, same2);
