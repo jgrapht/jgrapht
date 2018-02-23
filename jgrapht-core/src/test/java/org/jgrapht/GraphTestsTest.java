@@ -530,6 +530,78 @@ public class GraphTestsTest
         Graphs.addEdgeWithVertices(triangle, 3, 1);
         assertFalse(GraphTests.isCubic(triangle));
     }
+    
+    @Test
+    public void testIsTriangleFree1()
+    {
+    	Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+    	String v1 = "v1";
+        String v2 = "v2";
+        String v3 = "v3";
+        
+        // add the vertices
+        g.addVertex(v1);
+        g.addVertex(v2);
+        g.addVertex(v3);
+
+        // add edges to create a circuit
+        g.addEdge(v1, v2);
+        g.addEdge(v2, v3);
+        g.addEdge(v3, v1);
+        assertFalse(GraphTests.isTriangleFree(g));
+        
+    }
+    
+    @Test
+    public void testIsTriangleFree2()
+    {
+    	Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+    	String v1 = "v1";
+        String v2 = "v2";
+        String v3 = "v3";
+        String v4 = "v4";
+        
+        // add the vertices
+        g.addVertex(v1);
+        g.addVertex(v2);
+        g.addVertex(v3);
+        g.addVertex(v4);
+
+        // add edges to create a circuit
+        g.addEdge(v1, v2);
+        g.addEdge(v2, v3);
+        g.addEdge(v3, v4);
+        assertTrue(GraphTests.isTriangleFree(g));
+        
+    }
+    @Test
+    public void testIsTriangleFree3()
+    {
+    	Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+    	String v1 = "v1";
+        String v2 = "v2";
+        String v3 = "v3";
+        String v4 = "v4";
+        String v5 = "v5";
+        String v6 = "v6";
+        
+        // add the vertices
+        g.addVertex(v1);
+        g.addVertex(v2);
+        g.addVertex(v3);
+        g.addVertex(v4);
+        g.addVertex(v5);
+        g.addVertex(v6);
+
+        // add edges to create a circuit
+        g.addEdge(v1, v6);
+        g.addEdge(v6, v4);
+        g.addEdge(v4, v2);
+        g.addEdge(v2, v1);
+        assertTrue(GraphTests.isTriangleFree(g));
+        
+    }
+    
 }
 
 // End GraphTestsTest.java

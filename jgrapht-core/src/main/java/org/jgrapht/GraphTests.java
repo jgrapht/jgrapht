@@ -599,6 +599,36 @@ public abstract class GraphTests
         return requireDirectedOrUndirected(graph, GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
     }
 
+    /**
+     * Check if the given graph is triangle free or not
+     * RunTime :- O(|V|*|E|)
+     * @param graph the graph reference to check if it is triangle free 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is Trinangle Free, false otherwise
+     */
+     public static <V, E> boolean isTriangleFree(Graph<V, E> graph)
+     {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        Set<E> allEdges = graph.edgeSet();
+        Set<V> allVertices = graph.vertexSet();
+
+        for(E edge : allEdges)
+        {
+            V source = graph.getEdgeSource(edge) ; 
+            V target = graph.getEdgeTarget(edge) ; 
+            for(V vertex : allVertices)
+            {
+                if(graph.containsEdge(target, vertex) && graph.containsEdge(vertex,source))
+                {
+                    return false;
+                }
+            }
+         }
+         return true;
+     }
+
+
 }
 
 // End GraphTests.java
