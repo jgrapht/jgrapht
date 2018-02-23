@@ -87,7 +87,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Sarah Komla-Ebri
 - Graeme Ahokas
 - Christoph Zauner
-- Andrew Gainer-Dewar
+- [Andrew Gainer-Dewar](https://github.com/agdphd)
 - Benedikt Waldvogel
 - Victor Mikhaylov
 - Nils Olberg
