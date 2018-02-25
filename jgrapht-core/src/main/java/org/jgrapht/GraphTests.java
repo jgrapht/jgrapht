@@ -480,7 +480,7 @@ public abstract class GraphTests
     }
 
     /**
-     * Tests whether a graph meets Ore's condition to be Hamiltonian.
+     * Tests whether an undirected graph meets Ore's condition to be Hamiltonian.
      *
      * Let G be a (finite and simple) graph with n ≥ 3 vertices. We denote by deg v the degree of a vertex v in G, i.e. the number of incident edges in G to v.
      * Then, Ore's theorem states that if deg v + deg w ≥ n for every pair of distinct non-adjacent vertices v and w of G, then G is Hamiltonian.
