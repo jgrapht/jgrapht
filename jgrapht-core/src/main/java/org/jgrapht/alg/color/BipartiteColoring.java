@@ -222,7 +222,7 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
         V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
         if (getSeenData(v) == VisitColor.GRAY1) {
             putSeenData(v, VisitColor.BLACK1);
-	    bipartiteColors.put(v, 1);
+            bipartiteColors.put(v, 1);
         }
         else {
             putSeenData(v, VisitColor.BLACK2);
