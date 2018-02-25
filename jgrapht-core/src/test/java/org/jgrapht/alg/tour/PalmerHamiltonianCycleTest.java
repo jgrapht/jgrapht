@@ -82,14 +82,7 @@ public class PalmerHamiltonianCycleTest {
         assertHamiltonian(graph, tour);
     }
 
-    /**
-     * Test with 500 randomly generated graphs.
-     * Method of generation: randomly add edges while the graph doesn't have Ore's property
-     */
-    @Test
-    public void testRandomGraphs(){
-        Random random = new Random(0xDEAD);
-
+    private void testRandomGraphs(Random random){
         final int NUM_TESTS = 500;
         for (int test = 0; test < NUM_TESTS; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -105,17 +98,17 @@ public class PalmerHamiltonianCycleTest {
                 Collections.shuffle(vertexList, random);
 
                 search:
-                    for (int i = 0; i < vertexList.size(); i++) {
-                        for (int j = i + 1; j < vertexList.size(); j++) {
-                            int u = vertexList.get(i);
-                            int v = vertexList.get(j);
+                for (int i = 0; i < vertexList.size(); i++) {
+                    for (int j = i + 1; j < vertexList.size(); j++) {
+                        int u = vertexList.get(i);
+                        int v = vertexList.get(j);
 
-                            if (!graph.containsEdge(u, v) && graph.degreeOf(u) + graph.degreeOf(v) < n){
-                                graph.addEdge(u, v);
-                                break search;
-                            }
+                        if (!graph.containsEdge(u, v) && graph.degreeOf(u) + graph.degreeOf(v) < n){
+                            graph.addEdge(u, v);
+                            break search;
                         }
                     }
+                }
             }
 
             GraphPath<Integer, DefaultEdge> tour = new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
@@ -126,13 +119,25 @@ public class PalmerHamiltonianCycleTest {
     }
 
     /**
-     * Test with 500 randomly generated graphs.
-     * Method of generation: make sure that each node has (n+1)/2 neighbours
+     * Test with 500 randomly generated graphs (fixed seed).
+     * Method of generation: randomly add edges while the graph doesn't have Ore's property
      */
     @Test
-    public void testRandomGraphs2(){
-        Random random = new Random(0xBEEF);
+    public void testRandomGraphsFixedSeed(){
+        testRandomGraphs(new Random(0xDEAD));
+        testRandomGraphs(new Random());
+    }
 
+    /**
+     * Test with 500 randomly generated graphs.
+     * Method of generation: randomly add edges while the graph doesn't have Ore's property
+     */
+    @Test
+    public void testRandomGraphs(){
+        testRandomGraphs(new Random());
+    }
+
+    private void testRandomGraphs2(Random random){
         final int NUM_TESTS = 500;
         for (int test = 0; test < NUM_TESTS; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -150,17 +155,17 @@ public class PalmerHamiltonianCycleTest {
                 Collections.shuffle(vertexList, random);
 
                 search:
-                    for (int v: vertexList){
-                        if (graph.degreeOf(v) < (n + 1) / 2) {
-                            for (int u: vertexList){
-                                if (u != v && !graph.containsEdge(u, v)){
-                                    graph.addEdge(u, v);
-                                    changed = true;
-                                    break search;
-                                }
+                for (int v: vertexList){
+                    if (graph.degreeOf(v) < (n + 1) / 2) {
+                        for (int u: vertexList){
+                            if (u != v && !graph.containsEdge(u, v)){
+                                graph.addEdge(u, v);
+                                changed = true;
+                                break search;
                             }
                         }
                     }
+                }
 
             } while (changed);
 
@@ -169,6 +174,24 @@ public class PalmerHamiltonianCycleTest {
             assertNotNull(tour);
             assertHamiltonian(graph, tour);
         }
+    }
+
+    /**
+     * Test with 500 randomly generated graphs (fixed seed).
+     * Method of generation: make sure that each node has (n+1)/2 neighbours
+     */
+    @Test
+    public void testRandomGraphs2FixedSeed(){
+        testRandomGraphs2(new Random(0xBEEF));
+    }
+
+    /**
+     * Test with 500 randomly generated graphs.
+     * Method of generation: make sure that each node has (n+1)/2 neighbours
+     */
+    @Test
+    public void testRandomGraphs2(){
+        testRandomGraphs2(new Random());
     }
 
     private static Graph<Integer, DefaultEdge> bigGraph = new SimpleGraph<>(DefaultEdge.class);
