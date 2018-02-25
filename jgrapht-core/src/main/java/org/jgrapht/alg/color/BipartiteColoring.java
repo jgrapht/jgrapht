@@ -167,7 +167,7 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
         VisitColor color = getSeenData(vertex);
         if (color != VisitColor.WHITE) {
             // We've already visited this vertex and given it a color;
-        	// If it has the same color as its neighbor (through which we visited this vertex)
+	    // If it has the same color as its neighbor (through which we visited this vertex)
             // The graph is not bipartite
         	if (color == prevColor) {
         		isGraphBipartite = false;
@@ -244,6 +244,9 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
         return stack;
     }
     
+    /**
+     * @return true if graph is bipartite, false otherwise
+     */
     public boolean isGraphBipartite() {
     	return isGraphBipartite;
     }
