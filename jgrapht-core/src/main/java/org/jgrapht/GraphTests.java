@@ -492,6 +492,8 @@ public abstract class GraphTests
      * @see org.jgrapht.alg.tour.PalmerHamiltonianCycle
      */
     public static <V, E> boolean hasOreProperty(Graph<V, E> graph){
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+
         final int n = graph.vertexSet().size();
 
         if (!graph.getType().isSimple() || n < 3)
