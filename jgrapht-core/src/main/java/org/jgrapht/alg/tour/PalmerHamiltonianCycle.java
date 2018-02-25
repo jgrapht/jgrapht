@@ -138,14 +138,11 @@ public class PalmerHamiltonianCycle<V, E> {
         List<E> edgeList = new ArrayList<>(n);
 
         int x = 0;
-        while (true){
+        do {
             vertexList.add(indexList.get(x));
             edgeList.add(graph.getEdge(indexList.get(x), indexList.get(R[x])));
             x = R[x];
-
-            if (x == 0)
-                break;
-        }
+        } while (x != 0);
 
         // add start vertex
         vertexList.add(indexList.get(0));
