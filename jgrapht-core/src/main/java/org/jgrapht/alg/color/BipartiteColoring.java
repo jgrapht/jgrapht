@@ -169,9 +169,9 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
             // We've already visited this vertex and given it a color;
             // If it has the same color as its neighbor (through which we visited this vertex)
             // The graph is not bipartite
-        	if (color == prevColor) {
-        		isGraphBipartite = false;
-        	}
+            if (color == prevColor) {
+                isGraphBipartite = false;
+            }
             return;
         }
 
@@ -221,11 +221,11 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
     {
         V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
         if (getSeenData(v) == VisitColor.GRAY1) {
-        	putSeenData(v, VisitColor.BLACK1);
-            bipartiteColors.put(v, 1);
+            putSeenData(v, VisitColor.BLACK1);
+	    bipartiteColors.put(v, 1);
         }
         else {
-        	putSeenData(v, VisitColor.BLACK2);
+            putSeenData(v, VisitColor.BLACK2);
             bipartiteColors.put(v, 2);
         }
         finishVertex(v);
@@ -251,7 +251,7 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
      * @return true if graph is bipartite, false otherwise
      */
     public boolean isGraphBipartite() {
-    	return isGraphBipartite;
+        return isGraphBipartite;
     }
     
     /**
@@ -259,7 +259,7 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
      * @return a Map - with the vertices and their corresponding colors.
      */
     public Map<V, Integer> getColors() {
-    	return bipartiteColors;
+        return bipartiteColors;
     }
     
     /**
@@ -268,17 +268,17 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
      * @return a map - with the vertices and their corresponding colors.
      */
     public Map<V, Integer> findTwoColoring(Graph<V, E> graph) {
-    	if (((AbstractBaseGraph<V, E>) graph).isDirected() == true) {
-			throw new IllegalArgumentException("Input graph needs to be undirected");
-		}
+        if (((AbstractBaseGraph<V, E>) graph).isDirected() == true) {
+            throw new IllegalArgumentException("Input graph needs to be undirected");
+        }
 		
-	    while (hasNext()) {
-	        next();
-	        if (isGraphBipartite() == false) {
-	        	throw new IllegalArgumentException("Input graph is not bipartite");
-	        }
-	    }
-	    return getColors();
+        while (hasNext()) {
+            next();
+            if (isGraphBipartite() == false) {
+                throw new IllegalArgumentException("Input graph is not bipartite");
+            }
+        }
+        return getColors();
     }
 
 }
