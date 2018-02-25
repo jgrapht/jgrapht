@@ -271,7 +271,7 @@ public class BipartiteColoring<V, E> extends CrossComponentIterator<V, E, Bipart
         if (((AbstractBaseGraph<V, E>) graph).isDirected() == true) {
             throw new IllegalArgumentException("Input graph needs to be undirected");
         }
-	
+
         while (hasNext()) {
             next();
             if (isGraphBipartite() == false) {
