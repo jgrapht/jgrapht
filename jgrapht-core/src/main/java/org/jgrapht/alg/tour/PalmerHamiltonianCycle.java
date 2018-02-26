@@ -36,7 +36,7 @@ import java.util.List;
  * <p>
  *     This is an implementation of the algorithm described by E. M. Palmer in his paper. The algorithm takes a simple
  *     graph that meets Ore's condition (see {@link GraphTests#hasOreProperty(Graph)}) and returns a Hamiltonian cycle.
- *     The algorithm runs in O(|V|^2) and uses O(|V|) space.
+ *     The algorithm runs in $O(|V|^2)$ and uses $O(|V|)$ space.
  * </p>
  *
  * <p>
