@@ -41,7 +41,7 @@ import java.util.List;
  *
  * <p>
  *     The original algorithm is described in: Palmer, E. M. (1997), "The hidden algorithm of Ore's theorem
- *     on Hamiltonian cycles", Computers & Mathematics with Applications, 34 (11): 113–119,
+ *     on Hamiltonian cycles", Computers &amp; Mathematics with Applications, 34 (11): 113–119,
  *     doi:10.1016/S0898-1221(97)00225-3
  *
  *     See <a href="https://en.wikipedia.org/wiki/Ore%27s_theorem">wikipedia</a> for a short description of Ore's theorem
