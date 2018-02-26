@@ -36,12 +36,16 @@ import java.util.List;
  * <p>
  *     This is an implementation of the algorithm described by E. M. Palmer in his paper. The algorithm takes a simple
  *     graph that meets Ore's condition (see {@link GraphTests#hasOreProperty(Graph)}) and returns a Hamiltonian cycle.
- *     The algorithm runs in $O(|V|^2)$ and uses $O(|V|)$ space.
+ *     The algorithm runs in $O(|V|^2)$ time and uses $O(|V|)$ space.
  * </p>
  *
  * <p>
- *    See <a href="https://en.wikipedia.org/wiki/Ore%27s_theorem">wikipedia</a> for a short description of Ore's theorem
- *    and the resulting algorithm and <a href="https://www.sciencedirect.com/science/article/pii/S0898122197002253">Palmer's paper</a> for more details.
+ *     The original algorithm is described in: Palmer, E. M. (1997), "The hidden algorithm of Ore's theorem
+ *     on Hamiltonian cycles", Computers & Mathematics with Applications, 34 (11): 113–119,
+ *     doi:10.1016/S0898-1221(97)00225-3
+ *
+ *     See <a href="https://en.wikipedia.org/wiki/Ore%27s_theorem">wikipedia</a> for a short description of Ore's theorem
+ *     and Palmer's algorithm.
  * </p>
  *
  * @param <V> the graph vertex type
