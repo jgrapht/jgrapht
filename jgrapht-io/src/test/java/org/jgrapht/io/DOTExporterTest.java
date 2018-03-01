@@ -17,16 +17,24 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
-import junit.framework.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.SimpleGraph;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
@@ -44,8 +52,8 @@ public class DOTExporterTest
 
     private static final String NL = System.getProperty("line.separator");
 
-    private static final String UNDIRECTED = "graph G {" + NL + "  1 [ label=\"a\" ];" + NL
-        + "  2 [ x=\"y\" ];" + NL + "  3;" + NL + "  1 -- 2;" + NL + "  3 -- 1;" + NL + "}" + NL;
+    private static final String UNDIRECTED = "graph G {" + NL + "  1 [ label=a ];" + NL
+        + "  2 [ x=y ];" + NL + "  3;" + NL + "  1 -- 2;" + NL + "  3 -- 1;" + NL + "}" + NL;
 
     // @formatter:off
     private static final String UNDIRECTED_WITH_GRAPH_ATTRIBUTES =
@@ -63,17 +71,13 @@ public class DOTExporterTest
     // ~ Methods ----------------------------------------------------------------
 
     @Test
-    public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
-    {
+    public void testUndirected() {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);
         testUndirectedWithGraphAttributes(new Multigraph<>(DefaultEdge.class), false);
     }
 
-    private void testUndirected(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
-    {
+    private void testUndirected(Graph<String, DefaultEdge> g, boolean strict) {
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -104,15 +108,12 @@ public class DOTExporterTest
 
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
             new IntegerComponentNameProvider<>(), null, null, vertexAttributeProvider, null);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        StringWriter os = new StringWriter();
         exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
-        assertEquals((strict) ? "strict " + UNDIRECTED : UNDIRECTED, res);
+        assertEquals((strict) ? "strict " + UNDIRECTED : UNDIRECTED, os.toString());
     }
 
-    private void testUndirectedWithGraphAttributes(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
-    {
+    private void testUndirectedWithGraphAttributes(Graph<String, DefaultEdge> g, boolean strict) {
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -125,13 +126,12 @@ public class DOTExporterTest
         exporter.putGraphAttribute("overlap", "false");
         exporter.putGraphAttribute("splines", "true");
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.exportGraph(g, os);
-        String res = new String(os.toByteArray(), "UTF-8");
+        StringWriter outputWriter = new StringWriter();
+        exporter.exportGraph(g, outputWriter);
         assertEquals(
             (strict) ? "strict " + UNDIRECTED_WITH_GRAPH_ATTRIBUTES
                 : UNDIRECTED_WITH_GRAPH_ATTRIBUTES,
-            res);
+                outputWriter.toString());
     }
 
     @Test
@@ -142,11 +142,13 @@ public class DOTExporterTest
             new StringComponentNameProvider<>(), new StringComponentNameProvider<>(), null);
 
         List<String> validVertices =
-            Arrays.asList("-9.78", "-.5", "12", "a", "12", "abc_78", "\"--34asdf\"");
+            Arrays.asList("-9.78", "-.5", "12", "a", "12", "abc_78", "\"--34asdf\"", "\"abc\"");
         for (String vertex : validVertices) {
+            StringWriter outputWriter = new StringWriter();
             Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
             graph.addVertex(vertex);
-            exporter.exportGraph(graph, new ByteArrayOutputStream());
+            exporter.exportGraph(graph, outputWriter);
+            assertThat(outputWriter.toString(), containsString("label=" + vertex));
         }
 
         List<String> invalidVertices = Arrays.asList("2test", "--4", "foo-bar", "", "t:32");
@@ -161,6 +163,21 @@ public class DOTExporterTest
                 // this is a negative test so exception is expected
             }
         }
+    }
+
+    @Test
+    public void shouldQuoteLanguageKeywords()
+    {
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
+            new StringComponentNameProvider<>(), new StringComponentNameProvider<>(), null);
+
+        String vertex = "strict";
+
+        StringWriter outputWriter = new StringWriter();
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(vertex);
+        exporter.exportGraph(graph, outputWriter);
+        assertThat(outputWriter.toString(), containsString("\"strict\" [ label=\"strict\" ];"));
     }
 
     @Test

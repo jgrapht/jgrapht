@@ -57,6 +57,11 @@ class DOTUtils
             || DOT_NUMBER.matcher(idCandidate).matches() || HTML.matcher(idCandidate).matches();
     }
 
+    static boolean isQuoted(String idCandidate)
+    {
+        return DOUBLE_QUOTE.matcher(idCandidate).matches();
+    }
+
 }
 
 // End DOTUtils.java
