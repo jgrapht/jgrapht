@@ -24,6 +24,9 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Pseudograph;
+import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test for the BipartiteColoring class.
