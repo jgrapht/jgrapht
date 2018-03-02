@@ -45,6 +45,12 @@ public class Bipartite2Coloring<V, E>
     protected final Graph<V, E> graph;
     
     /**
+     * Stores the final colors of the vertices after finding a 2-coloring.
+     */
+    Map<V, Integer> bipartiteColors = new HashMap<>();
+    
+    
+    /**
      * Construct a new bipartite coloring algorithm.
      * 
      * @param graph the input graph
@@ -56,10 +62,32 @@ public class Bipartite2Coloring<V, E>
     
     /**
      * {@inheritDoc}
+     * If the input graph is not bipartite, the Map object returned
+     * by the getColors() method is null. 
+     * A map of vertices and their corresponding colors is returned only
+     * when the input graph is bipartite.
      */
     @Override
     public Coloring<V> getColoring()
     {
+        if (graph.edgeSet().isEmpty()) {
+            for (V v : graph.vertexSet()) {
+                bipartiteColors.put(v, 0);
+            }
+            return new ColoringImpl<>(bipartiteColors, 1);
+        }
+        
+        try {
+            // at most n^2/4 edges
+            if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
+                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
+            {
+                return new ColoringImpl<>(null, 0); //Not a bipartite graph
+            }
+        } catch (ArithmeticException e) {
+            // ignore
+        }
+        
         Deque<V> stack = new ArrayDeque<>();
         Set<V> unseen = new HashSet<>(graph.vertexSet());
         Set<V> odd = new HashSet<>();
@@ -80,16 +108,10 @@ public class Bipartite2Coloring<V, E>
                         odd.add(n);
                     }
                 } else if (!(odd.contains(v) ^ odd.contains(n))) {
-                    throw new IllegalArgumentException("Input graph is not bipartite");
+                    return new ColoringImpl<>(null, 0); //Not a bipartite graph
                 }
             }
         }
-        
-
-        /**
-         * Stores the final colors of the vertices after finding a 2-coloring.
-         */
-        Map<V, Integer> bipartiteColors = new HashMap<>();
         
         Set<V> allVertices = new HashSet<>(graph.vertexSet());
         for (Iterator<V> iter = allVertices.iterator(); iter.hasNext(); ) {
@@ -106,4 +128,3 @@ public class Bipartite2Coloring<V, E>
     }
     
 }
-
