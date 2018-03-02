@@ -29,12 +29,16 @@ import org.junit.*;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test for the BipartiteColoring class.
+ * Test for the Bipartite2Coloring class.
  * 
  * @author Meghana M Reddy
  *
  */
 public class Bipartite2ColoringTest {
+    /**
+     * Test for an undirected bipartite graph with four vertices - a,b,c,d.
+     * And the partitions being (a,b) and (c,d).
+     */
     public void test1() {
         Graph<String, DefaultEdge> dg = new Pseudograph<>(DefaultEdge.class);
         String a = new String("a");
@@ -61,6 +65,11 @@ public class Bipartite2ColoringTest {
         assertEquals(0, colors.get(d).intValue());
         
     }
+    
+    /**
+     * Testing on a disconnected directed graph of 7 vertices. 
+     * And the partitions being (a,b,c) and (d,e,f,g).
+     */
     public void test2() {
         Graph<String, DefaultEdge> dg = new DefaultDirectedGraph<>(DefaultEdge.class);
     
@@ -83,9 +92,9 @@ public class Bipartite2ColoringTest {
         dg.addEdge(a, e);
         dg.addEdge(g, a);
         dg.addEdge(c, e);
-        dg.addEdge(c, f);
+        dg.addEdge(f, c);
         dg.addEdge(b, g);
-        dg.addEdge(b, d);
+        dg.addEdge(d, b);
         
         Coloring<String> coloring = new Bipartite2Coloring<>(dg).getColoring();
         Map<String, Integer> colors = coloring.getColors();
@@ -98,6 +107,59 @@ public class Bipartite2ColoringTest {
         assertEquals(0, colors.get(f).intValue());
         assertEquals(0, colors.get(g).intValue());
         
+    }
+    
+    /**
+     * Test for an edgeless graph with four vertices - a,b,c,d.
+     * All the vertices will be given one color.
+     */
+    public void test3() {
+        Graph<String, DefaultEdge> dg = new Pseudograph<>(DefaultEdge.class);
+        String a = new String("a");
+        String b = new String("b");
+        String c = new String("c");
+        String d = new String("d");
+        
+        dg.addVertex(a);
+        dg.addVertex(b);
+        dg.addVertex(c);
+        dg.addVertex(d);
+        
+        Coloring<String> coloring = new Bipartite2Coloring<>(dg).getColoring();
+        Map<String, Integer> colors = coloring.getColors();
+        
+        assertEquals(1, coloring.getNumberColors());
+        assertEquals(0, colors.get(a).intValue());
+        assertEquals(0, colors.get(b).intValue());
+        assertEquals(0, colors.get(c).intValue());
+        assertEquals(0, colors.get(d).intValue());   
+    }
+    
+    /**
+     * Testing on a non bipartite graph.
+     * The map object returned is null.
+     */
+    public void test4() {
+        Graph<String, DefaultEdge> dg = new Pseudograph<>(DefaultEdge.class);
+        String a = new String("a");
+        String b = new String("b");
+        String c = new String("c");
+        String d = new String("d");
+        
+        dg.addVertex(a);
+        dg.addVertex(b);
+        dg.addVertex(c);
+        dg.addVertex(d);
+        
+        dg.addEdge(a, d);
+        dg.addEdge(a, c);
+        dg.addEdge(b, c);
+        dg.addEdge(d, c);
+        
+        Coloring<String> coloring = new Bipartite2Coloring<>(dg).getColoring();
+        Map<String, Integer> colors = coloring.getColors();
+        
+        assertEquals(null, colors); 
     }
 }
 
