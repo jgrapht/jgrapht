@@ -27,9 +27,11 @@ import org.jgrapht.alg.interfaces.* ;
 /**
  * A 2-coloring algorithm for bipartite graphs using a DFS approach.
  * The running time of the algorithm is O(V+E). 
- * The implementation uses parts of code from the isBipartite() method in GraphTests.java.
  * 
  * @author Meghana M Reddy
+ * @author Barak Naveh
+ * @author Dimitrios Michail
+ * @author Joris Kinable
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
