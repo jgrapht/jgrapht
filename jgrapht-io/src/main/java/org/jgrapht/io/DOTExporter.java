@@ -21,8 +21,14 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.*;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.translate.AggregateTranslator;
+import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
+import org.apache.commons.lang3.text.translate.LookupTranslator;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import static org.jgrapht.io.DOTIDEscaper.escapeDotId;
 
 /**
  * Exports a graph into a DOT file.
@@ -31,7 +37,7 @@ import org.jgrapht.graph.*;
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
  * http://en.wikipedia.org/wiki/DOT_language</a>.
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -45,6 +51,7 @@ public class DOTExporter<V, E>
      * Default graph id used by the exporter.
      */
     public static final String DEFAULT_GRAPH_ID = "G";
+    public static final List<String> KEYWORDS = Arrays.asList("node", "edge", "graph", "digraph", "subgraph", "strict");
 
     private ComponentNameProvider<Graph<V, E>> graphIDProvider;
     private ComponentNameProvider<V> vertexLabelProvider;
@@ -185,7 +192,7 @@ public class DOTExporter<V, E>
 
         // vertex set
         for (V v : g.vertexSet()) {
-            out.print(indent + getVertexID(v));
+            out.print(indent + quoteIfNeeded(getVertexID(v)));
 
             String labelName = null;
             if (vertexLabelProvider != null) {
@@ -257,12 +264,12 @@ public class DOTExporter<V, E>
         out.print(" [ ");
         if (labelName == null) {
             Attribute labelAttribute = attributes.get("label");
-            if (labelAttribute != null) { 
+            if (labelAttribute != null) {
                 labelName = labelAttribute.getValue();
             }
         }
         if (labelName != null) {
-            out.print("label=\"" + labelName + "\" ");
+            out.print("label=" + quoteIfNeeded(escapeDotId(labelName)) + " " );
         }
         if (attributes != null) {
             for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
@@ -271,10 +278,18 @@ public class DOTExporter<V, E>
                     // already handled by special case above
                     continue;
                 }
-                out.print(name + "=\"" + entry.getValue().getValue() + "\" ");
+                out.print(name + "=" + quoteIfNeeded(escapeDotId(entry.getValue().getValue())) + " ");
             }
         }
         out.print("]");
+    }
+
+    private static String quoteIfNeeded(String word){
+        if (KEYWORDS.contains(word)) {
+            return StringUtils.join("\"", word ,"\"");
+        } else {
+            return word;
+        }
     }
 
     /**
