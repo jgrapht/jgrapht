@@ -33,6 +33,8 @@ public class LineDirectedGraphs {
     SimpleDirectedGraph resultGraph;
     /*Method that creates a line graph out of the given input graph
     * @param graph is a graph
+    *@param <V> the graph vertex type
+    * @param <E> the graph edge type
     * @return directed line graph*/
 
     public <V,E>Graph<V,E> createListGraph(SimpleDirectedGraph<V,E> graph){
@@ -76,8 +78,8 @@ public class LineDirectedGraphs {
     }
     /*
     * Checks if two  input vertices are whether connected or not
-    * @param i1 is an Integer object
-    * @param i2 is an Integer Object
+    * @param i1 is an Vertec Object
+    * @param i2 is an Vertex Object
     * @return boolean value*/
 
     public <V,E>boolean isConnected(V i1,V i2){
