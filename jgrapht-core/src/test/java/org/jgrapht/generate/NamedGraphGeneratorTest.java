@@ -20,6 +20,10 @@ package org.jgrapht.generate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.List;
+
 import org.jgrapht.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
@@ -270,6 +274,21 @@ public class NamedGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.thomsenGraph();
         this.validateBasics(g, 6, 9, 2, 2, 4);
         assertTrue(GraphTests.isBipartite(g));
+    }
+    
+    @Test
+    public void testCirculantGraph()
+    {
+    	List<Integer> exampleList = Arrays.asList(1,2);
+    	Graph<Integer, DefaultEdge> g = NamedGraphGenerator.circulantGraph(13,exampleList);
+    	this.validateBasics(g, 13, 66, 0, 0, 0);
+    }
+    
+    @Test
+    public void testBalaban10Cage() 
+    {
+    	Graph<Integer, DefaultEdge> g = NamedGraphGenerator.balaban10Cage();
+    	this.validateBasics(g, 70, 105, 6, 6, 10);
     }
 
     private <V, E> void validateBasics(
