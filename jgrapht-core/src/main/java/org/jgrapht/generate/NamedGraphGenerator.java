@@ -33,7 +33,6 @@ import org.jgrapht.graph.*;
  */
 public class NamedGraphGenerator<V, E>
 {
-
     private VertexFactory<V> vertexFactory;
     private Map<Integer, V> vertexMap;
 
@@ -47,17 +46,138 @@ public class NamedGraphGenerator<V, E>
         this.vertexFactory = vertexFactory;
         vertexMap = new HashMap<>();
     }
+    
+    
+    // -------------Circulant Graph-----------//
+    /**
+     * 
+     * @see #generateCirculantGraph
+     * @param n edge numbers of the graph
+     * @param adjacency proximity that we've to connect the edges between each other
+     * @return Circulant graph
+     */
+    public static Graph<Integer, DefaultEdge> circulantGraph(int n, List<Integer> adjacency)
+    {
+    return CirculantGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class), n, adjacency);
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph
+     * @param n edge numbers of the graph
+     * @param adjacency proximity that we've to connect the edges between each other
+     * @return Circulant graph
+     */
+    public static <V,E> Graph<V,E> CirculantGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory, int n, List<Integer> adjacency)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateCirculantGraph(g, n, adjacency);
+        return g;
+    }
+    
+    /**
+     * Generates a <a href="http://mathworld.wolfram.com/CirculantGraph.html">Circulan graph</a>. A circulant 
+     * graph is a graph of n graph vertices in which the ith graph vertex is adjacent to the (i+j)th and (i-j)th 
+     * graph vertices for each j in a list l.
 
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     * @param n edge numbers of the graph
+     * @param adjacency proximity that we've to connect the edges between each other
+     */
+    public void generateCirculantGraph(Graph<V, E> targetGraph, int n, List<Integer> adjacency)
+    {
+    vertexMap.clear();
+    for (int i=0;i<n;i++) 
+    {
+    for(int j:adjacency) 
+    {
+    this.addEdge(targetGraph, i, (i+j)%n);
+    this.addEdge(targetGraph, i, (i-j)%n);
+    }
+    }
+    }
+    
+    // -------------Balaban 10 cage-----------//
+    /**
+     * @see #generateBalaban10Cage
+     * @return Balaban 10 Cage graph
+     */
+    public static Graph<Integer, DefaultEdge> balaban10Cage()
+    {
+    return Balaban10Cage(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Balaban 10 Cage graph
+     */
+    public static <V, E> Graph<V, E> Balaban10Cage(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBalaban10Cage(g);
+        return g;
+    }
+    
+    /**
+     * Generates a <a href="http://mathworld.wolfram.com/Balaban10-Cage.html">Balaban 10 Cage Graph</a>. The 
+     * Balaban10-cage is one of the three (3,10)-cage graphs (Read and Wilson 1998, p. 272). The 
+     * Balaban(3,10)-cage was the first known example of a 10-cage (Balaban 1973, Pisanski et al. 2001).
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateBalaban10Cage(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int tmp=0;
+        for (int i=0;i<9;i++)
+        {
+        this.addEdge(targetGraph, 0+tmp, 1+tmp);
+        this.addEdge(targetGraph, 1+tmp, 2+tmp);
+        this.addEdge(targetGraph, 1+tmp, 3+tmp);
+        this.addEdge(targetGraph, 3+tmp, 4+tmp);
+        this.addEdge(targetGraph, 4+tmp, 5+tmp);
+        this.addEdge(targetGraph, 4+tmp, 6+tmp);
+        tmp=tmp+7;
+        }
+        int[][] edges = { {0,7},{6,13},{13,20},{14,21},{20,27},{27,34},{28,35},{34,41},{35,42},{41,48},
+        {42,49},{48,55},{49,56},{55,62},{56,63},{62,69},{63,70},{3,37},{10,44},{17,51},{23,58},
+        {30,65},{2,54},{5,51},{2,26},{5,23},{9,61},{12,58},{9,33},{12,30},{16,68},{19,65},{16,40},
+        {19,37},{23,47},{26,44},{30,54},{33,51},{37,61},{40,58},{44,68},{47,65}};
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+    
     // -------------Doyle Graph-----------//
     /**
      * @see #generateDoyleGraph
-     * @return Doyle Graph
+     * @return Doyle graph
      */
     public static Graph<Integer, DefaultEdge> doyleGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateDoyleGraph(g);
+    return DoyleGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Doyle graph
+     */
+    public static <V, E> Graph<V, E> DoyleGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateDoyleGraph(g);
         return g;
     }
 
@@ -98,21 +218,39 @@ public class NamedGraphGenerator<V, E>
     }
 
     // -------------Generalized Petersen Graph-----------//
-
     /**
-     * @see GeneralizedPetersenGraphGenerator
+     * @see #generateGeneralizedPetersenGraph
      * @param n Generalized Petersen graphs $GP(n,k)$
      * @param k Generalized Petersen graphs $GP(n,k)$
      * @return Generalized Petersen Graph
      */
     public static Graph<Integer, DefaultEdge> generalizedPetersenGraph(int n, int k)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateGeneralizedPetersenGraph(g, n, k);
+    return generalizedPetersenGraph(n,k, new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param n Generalized Petersen graphs $GP(n,k)$
+     * @param k Generalized Petersen graphs $GP(n,k)$
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Generalized Petersen Graph
+     */
+    public static <V, E> Graph<V, E> generalizedPetersenGraph(int n, int k, VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateGeneralizedPetersenGraph(g, n, k);
         return g;
     }
-
+    
+    /**
+     * @see GeneralizedPetersenGraphGenerator
+     * @param n Generalized Petersen graphs $GP(n,k)$
+     * @param k Generalized Petersen graphs $GP(n,k)$
+     * @return Generalized Petersen Graph
+     */
     private void generateGeneralizedPetersenGraph(Graph<V, E> targetGraph, int n, int k)
     {
         GeneralizedPetersenGraphGenerator<V, E> gpgg =
@@ -272,9 +410,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> bullGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateBullGraph(g);
+    return bullGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Bull graph
+     */
+    public static <V, E> Graph<V, E> bullGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBullGraph(g);
         return g;
     }
 
@@ -302,11 +451,23 @@ public class NamedGraphGenerator<V, E>
      * @see #generateButterflyGraph
      * @return Butterfly Graph
      */
-    public static Graph<Integer, DefaultEdge> butterflyGraph()
+    public static Graph<Integer, DefaultEdge> ButterflyGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateButterflyGraph(g);
+    return ButterflyGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Butterfly graph
+     */
+    public static <V, E>Graph<V, E> ButterflyGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateButterflyGraph(g);
         return g;
     }
 
@@ -332,9 +493,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> clawGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateClawGraph(g);
+    return clawGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Claw graph
+     */
+    public static <V, E> Graph<V, E> clawGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateClawGraph(g);
         return g;
     }
 
@@ -358,9 +530,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> buckyBallGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateBuckyBallGraph(g);
+    return BuckyBallGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return BuckyBall graph
+     */
+    public static <V, E> Graph<V, E> BuckyBallGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBuckyBallGraph(g);
         return g;
     }
 
@@ -401,9 +584,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> clebschGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateClebschGraph(g);
+    return clebschGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Clebsch graph
+     */
+    public static <V, E> Graph<V, E> clebschGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateClebschGraph(g);
         return g;
     }
 
@@ -439,9 +633,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> grötzschGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateGrötzschGraph(g);
+    return grötzschGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Grötzsch graph
+     */
+    public static <V, E> Graph<V, E> grötzschGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateGrötzschGraph(g);
         return g;
     }
 
@@ -476,9 +681,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> bidiakisCubeGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateBidiakisCubeGraph(g);
+    return bidiakisCubeGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Bidiakis graph
+     */
+    public static <V, E> Graph<V, E> bidiakisCubeGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBidiakisCubeGraph(g);
         return g;
     }
 
@@ -510,9 +726,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> blanusaFirstSnarkGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateBlanusaFirstSnarkGraph(g);
+    return blanusaFirstSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return BlanusaFirstSnark graph
+     */
+    public static <V, E> Graph<V, E> blanusaFirstSnarkGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBlanusaFirstSnarkGraph(g);
         return g;
     }
 
@@ -542,9 +769,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> blanusaSecondSnarkGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateBlanusaSecondSnarkGraph(g);
+    return blanusaSecondSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return BlanusaSecondSnark graph
+     */
+    public static <V, E> Graph<V, E> blanusaSecondSnarkGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBlanusaSecondSnarkGraph(g);
         return g;
     }
 
@@ -574,9 +812,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> doubleStarSnarkGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateDoubleStarSnarkGraph(g);
+    return doubleStarSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return DoubleStarSnark graph
+     */
+    public static <V, E> Graph<V, E> doubleStarSnarkGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateDoubleStarSnarkGraph(g);
         return g;
     }
 
@@ -609,9 +858,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> brinkmannGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateBrinkmannGraph(g);
+    return brinkmannGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return BriknkMann graph
+     */
+    public static <V, E> Graph<V, E> brinkmannGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateBrinkmannGraph(g);
         return g;
     }
 
@@ -643,9 +903,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> gossetGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateGossetGraph(g);
+    return gossetGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Gosset graph
+     */
+    public static <V, E> Graph<V, E> gossetGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateGossetGraph(g);
         return g;
     }
 
@@ -776,9 +1047,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> chvatalGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateChvatalGraph(g);
+    return chvatalGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Chbatal graph
+     */
+    public static <V, E> Graph<V, E> chvatalGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateChvatalGraph(g);
         return g;
     }
 
@@ -809,9 +1091,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> kittellGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateKittellGraph(g);
+    return kittellGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Kittell graph
+     */
+    public static <V, E> Graph<V, E> kittellGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateKittellGraph(g);
         return g;
     }
 
@@ -848,9 +1141,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> coxeterGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateCoxeterGraph(g);
+    return coxeterGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Coxeter graph
+     */
+    public static <V, E> Graph<V, E> coxeterGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateCoxeterGraph(g);
         return g;
     }
 
@@ -882,9 +1186,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> ellinghamHorton54Graph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateEllinghamHorton54Graph(g);
+    return ellinghamHorton54Graph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return EllinghamHorton54 graph
+     */
+    public static <V, E> Graph<V, E> ellinghamHorton54Graph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateEllinghamHorton54Graph(g);
         return g;
     }
 
@@ -923,9 +1238,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> ellinghamHorton78Graph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateEllinghamHorton78Graph(g);
+    return ellinghamHorton78Graph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Ellingham-Horton 78 graph
+     */
+    public static <V, E> Graph<V, E> ellinghamHorton78Graph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateEllinghamHorton78Graph(g);
         return g;
     }
 
@@ -969,9 +1295,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> erreraGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateErreraGraph(g);
+    return erreraGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Errera graph
+     */
+    public static <V, E> Graph<V, E> erreraGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateErreraGraph(g);
         return g;
     }
 
@@ -1003,9 +1340,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> franklinGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateFranklinGraph(g);
+    return franklinGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Franklin graph
+     */
+    public static <V, E> Graph<V, E> franklinGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateFranklinGraph(g);
         return g;
     }
 
@@ -1034,9 +1382,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> fruchtGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateFruchtGraph(g);
+    return fruchtGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Frucht graph
+     */
+    public static <V, E> Graph<V, E> fruchtGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateFruchtGraph(g);
         return g;
     }
 
@@ -1065,9 +1424,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> goldnerHararyGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateGoldnerHararyGraph(g);
+    return goldnerHararyGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Golden-Harary graph
+     */
+    public static <V, E> Graph<V, E> goldnerHararyGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateGoldnerHararyGraph(g);
         return g;
     }
 
@@ -1098,9 +1468,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> heawoodGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateHeawoodGraph(g);
+    return heawoodGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Heawood graph
+     */
+    public static <V, E> Graph<V, E> heawoodGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateHeawoodGraph(g);
         return g;
     }
 
@@ -1130,9 +1511,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> herschelGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateHerschelGraph(g);
+    return herschelGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Herschel graph
+     */
+    public static <V, E> Graph<V, E> herschelGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateHerschelGraph(g);
         return g;
     }
 
@@ -1162,9 +1554,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> hoffmanGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateHoffmanGraph(g);
+    return hoffmanGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Hoffman graph
+     */
+    public static <V, E> Graph<V, E> hoffmanGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateHoffmanGraph(g);
         return g;
     }
 
@@ -1195,9 +1598,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> krackhardtKiteGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateKrackhardtKiteGraph(g);
+    return krackhardtKiteGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Krackhardt graph
+     */
+    public static <V, E> Graph<V, E> krackhardtKiteGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateKrackhardtKiteGraph(g);
         return g;
     }
 
@@ -1227,9 +1641,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> klein3RegularGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateKlein3RegularGraph(g);
+    return klein3RegularGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Klein 3-regular graph
+     */
+    public static <V, E> Graph<V, E> klein3RegularGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateKlein3RegularGraph(g);
         return g;
     }
 
@@ -1267,9 +1692,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> klein7RegularGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateKlein7RegularGraph(g);
+    return klein7RegularGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Klein 7-regular graph
+     */
+    public static <V, E> Graph<V, E> klein7RegularGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateKlein7RegularGraph(g);
         return g;
     }
 
@@ -1307,9 +1743,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> moserSpindleGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateMoserSpindleGraph(g);
+    return moserSpindleGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Moser spindle graph
+     */
+    public static <V, E> Graph<V, E> moserSpindleGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateMoserSpindleGraph(g);
         return g;
     }
 
@@ -1337,9 +1784,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> poussinGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generatePoussinGraph(g);
+    return poussinGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Poussin graph
+     */
+    public static <V, E> Graph<V, E> poussinGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generatePoussinGraph(g);
         return g;
     }
 
@@ -1371,9 +1829,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> schläfliGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateSchläfliGraph(g);
+    return schläfliGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Schaläfli graph
+     */
+    public static <V, E> Graph<V, E> schläfliGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateSchläfliGraph(g);
         return g;
     }
 
@@ -1428,9 +1897,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> thomsenGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateThomsenGraph(g);
+    return thomsenGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
+     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @return Thomsen graph
+     */
+    public static <V, E> Graph<V, E> thomsenGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V, E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V, E>(vertexFactory).generateThomsenGraph(g);
         return g;
     }
 
@@ -1470,3 +1950,4 @@ public class NamedGraphGenerator<V, E>
         targetGraph.addEdge(u, v);
     }
 }
+
