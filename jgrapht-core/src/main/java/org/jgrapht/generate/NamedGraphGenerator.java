@@ -38,7 +38,7 @@ public class NamedGraphGenerator<V, E>
 
     /**
      * Constructs a new generator for named graphs
-     * 
+     *
      * @param vertexFactory factory for vertices
      */
     public NamedGraphGenerator(VertexFactory<V> vertexFactory)
@@ -46,11 +46,11 @@ public class NamedGraphGenerator<V, E>
         this.vertexFactory = vertexFactory;
         vertexMap = new HashMap<>();
     }
-    
-    
+
+
     // -------------Circulant Graph-----------//
     /**
-     * 
+     *
      * @see #generateCirculantGraph
      * @param n edge numbers of the graph
      * @param adjacency proximity that we've to connect the edges between each other
@@ -58,31 +58,31 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> circulantGraph(int n, List<Integer> adjacency)
     {
-    return CirculantGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class), n, adjacency);
+      return circulantGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class), n, adjacency);
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @param n edge numbers of the graph
      * @param adjacency proximity that we've to connect the edges between each other
      * @return Circulant graph
      */
-    public static <V,E> Graph<V,E> CirculantGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory, int n, List<Integer> adjacency)
+    public static <V,E> Graph<V,E> circulantGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory, int n, List<Integer> adjacency)
     {
         Graph<V, E> g = new SimpleGraph<>(edgeFactory);
         new NamedGraphGenerator<V, E>(vertexFactory).generateCirculantGraph(g, n, adjacency);
         return g;
     }
-    
+
     /**
-     * Generates a <a href="http://mathworld.wolfram.com/CirculantGraph.html">Circulan graph</a>. A circulant 
-     * graph is a graph of n graph vertices in which the ith graph vertex is adjacent to the (i+j)th and (i-j)th 
+     * Generates a <a href="http://mathworld.wolfram.com/CirculantGraph.html">Circulan graph</a>. A circulant
+     * graph is a graph of n graph vertices in which the ith graph vertex is adjacent to the (i+j)th and (i-j)th
      * graph vertices for each j in a list l.
 
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -91,17 +91,17 @@ public class NamedGraphGenerator<V, E>
      */
     public void generateCirculantGraph(Graph<V, E> targetGraph, int n, List<Integer> adjacency)
     {
-    vertexMap.clear();
-    for (int i=0;i<n;i++) 
-    {
-    for(int j:adjacency) 
-    {
-    this.addEdge(targetGraph, i, (i+j)%n);
-    this.addEdge(targetGraph, i, (i-j)%n);
+      vertexMap.clear();
+      for (int i=0;i<n;i++)
+      {
+        for(int j:adjacency)
+        {
+          this.addEdge(targetGraph, i, (i+j)%n);
+          this.addEdge(targetGraph, i, (i-j)%n);
+        }
+      }
     }
-    }
-    }
-    
+
     // -------------Balaban 10 cage-----------//
     /**
      * @see #generateBalaban10Cage
@@ -109,28 +109,28 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> balaban10Cage()
     {
-    return Balaban10Cage(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return balaban10Cage(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Balaban 10 Cage graph
      */
-    public static <V, E> Graph<V, E> Balaban10Cage(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
+    public static <V, E> Graph<V, E> balaban10Cage(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
     {
         Graph<V, E> g = new SimpleGraph<>(edgeFactory);
         new NamedGraphGenerator<V, E>(vertexFactory).generateBalaban10Cage(g);
         return g;
     }
-    
+
     /**
-     * Generates a <a href="http://mathworld.wolfram.com/Balaban10-Cage.html">Balaban 10 Cage Graph</a>. The 
-     * Balaban10-cage is one of the three (3,10)-cage graphs (Read and Wilson 1998, p. 272). The 
+     * Generates a <a href="http://mathworld.wolfram.com/Balaban10-Cage.html">Balaban 10 Cage Graph</a>. The
+     * Balaban10-cage is one of the three (3,10)-cage graphs (Read and Wilson 1998, p. 272). The
      * Balaban(3,10)-cage was the first known example of a 10-cage (Balaban 1973, Pisanski et al. 2001).
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -141,13 +141,13 @@ public class NamedGraphGenerator<V, E>
         int tmp=0;
         for (int i=0;i<9;i++)
         {
-        this.addEdge(targetGraph, 0+tmp, 1+tmp);
-        this.addEdge(targetGraph, 1+tmp, 2+tmp);
-        this.addEdge(targetGraph, 1+tmp, 3+tmp);
-        this.addEdge(targetGraph, 3+tmp, 4+tmp);
-        this.addEdge(targetGraph, 4+tmp, 5+tmp);
-        this.addEdge(targetGraph, 4+tmp, 6+tmp);
-        tmp=tmp+7;
+            this.addEdge(targetGraph, 0+tmp, 1+tmp);
+            this.addEdge(targetGraph, 1+tmp, 2+tmp);
+            this.addEdge(targetGraph, 1+tmp, 3+tmp);
+            this.addEdge(targetGraph, 3+tmp, 4+tmp);
+            this.addEdge(targetGraph, 4+tmp, 5+tmp);
+            this.addEdge(targetGraph, 4+tmp, 6+tmp);
+            tmp=tmp+7;
         }
         int[][] edges = { {0,7},{6,13},{13,20},{14,21},{20,27},{27,34},{28,35},{34,41},{35,42},{41,48},
         {42,49},{48,55},{49,56},{55,62},{56,63},{62,69},{63,70},{3,37},{10,44},{17,51},{23,58},
@@ -156,7 +156,7 @@ public class NamedGraphGenerator<V, E>
         for (int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
-    
+
     // -------------Doyle Graph-----------//
     /**
      * @see #generateDoyleGraph
@@ -164,17 +164,17 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> doyleGraph()
     {
-    return DoyleGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return doyleGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Doyle graph
      */
-    public static <V, E> Graph<V, E> DoyleGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
+    public static <V, E> Graph<V, E> doyleGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
     {
         Graph<V, E> g = new SimpleGraph<>(edgeFactory);
         new NamedGraphGenerator<V, E>(vertexFactory).generateDoyleGraph(g);
@@ -185,7 +185,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DoyleGraph.html">Doyle Graph</a>. The Doyle
      * graph, sometimes also known as the Holt graph (Marušič et al. 2005), is the quartic symmetric
      * graph on 27 nodes
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -226,16 +226,16 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> generalizedPetersenGraph(int n, int k)
     {
-    return generalizedPetersenGraph(n,k, new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return generalizedPetersenGraph(n,k, new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @param n Generalized Petersen graphs $GP(n,k)$
      * @param k Generalized Petersen graphs $GP(n,k)$
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Generalized Petersen Graph
      */
     public static <V, E> Graph<V, E> generalizedPetersenGraph(int n, int k, VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -244,7 +244,7 @@ public class NamedGraphGenerator<V, E>
         new NamedGraphGenerator<V, E>(vertexFactory).generateGeneralizedPetersenGraph(g, n, k);
         return g;
     }
-    
+
     /**
      * @see GeneralizedPetersenGraphGenerator
      * @param n Generalized Petersen graphs $GP(n,k)$
@@ -272,7 +272,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/PetersenGraph.html">Petersen Graph</a>. The
      * Petersen Graph is a named graph that consists of 10 vertices and 15 edges, usually drawn as a
      * five-point star embedded in a pentagon. It is the generalized Petersen graph $GP(5,2)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -296,7 +296,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DuererGraph.html">Dürer Graph</a>. The
      * Dürer graph is the skeleton of Dürer's solid, which is the generalized Petersen graph
      * $GP(6,2)$.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -321,7 +321,7 @@ public class NamedGraphGenerator<V, E>
      * Graph</a>. The skeleton of the dodecahedron (the vertices and edges) form a graph. It is one
      * of 5 Platonic graphs, each a skeleton of its Platonic solid. It is the generalized Petersen
      * graph $GP(10,2)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -345,7 +345,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/DesarguesGraph.html">Desargues Graph</a>.
      * The Desargues graph is a cubic symmetric graph distance-regular graph on 20 vertices and 30
      * edges. It is the generalized Petersen graph $GP(10,3)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -369,7 +369,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/NauruGraph.html">Nauru Graph</a>. The Nauru
      * graph is a symmetric bipartite cubic graph with 24 vertices and 36 edges. It is the
      * generalized Petersen graph $GP(12,5)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -393,7 +393,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/Moebius-KantorGraph.html">Möbius-Kantor
      * Graph</a>. The unique cubic symmetric graph on 16 nodes. It is the generalized Petersen graph
      * $GP(8,3)$
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -410,14 +410,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> bullGraph()
     {
-    return bullGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return bullGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Bull graph
      */
     public static <V, E> Graph<V, E> bullGraph(VertexFactory<V> vertexFactory, EdgeFactory<V,E> edgeFactory)
@@ -431,7 +431,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/BullGraph.html">Bull Graph</a>. The bull
      * graph is a simple graph on 5 nodes and 5 edges whose name derives from its resemblance to a
      * schematic illustration of a bull or ram
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -451,20 +451,20 @@ public class NamedGraphGenerator<V, E>
      * @see #generateButterflyGraph
      * @return Butterfly Graph
      */
-    public static Graph<Integer, DefaultEdge> ButterflyGraph()
+    public static Graph<Integer, DefaultEdge> butterflyGraph()
     {
-    return ButterflyGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return butterflyGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Butterfly graph
      */
-    public static <V, E>Graph<V, E> ButterflyGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    public static <V, E>Graph<V, E> butterflyGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
     {
         Graph<V, E> g = new SimpleGraph<>(edgeFactory);
         new NamedGraphGenerator<V, E>(vertexFactory).generateButterflyGraph(g);
@@ -475,7 +475,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/ButterflyGraph.html">Butterfly Graph</a>.
      * This graph is also known as the "bowtie graph" (West 2000, p. 12). It is isomorphic to the
      * friendship graph $F_2$.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -493,14 +493,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> clawGraph()
     {
-    return clawGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return clawGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Claw graph
      */
     public static <V, E> Graph<V, E> clawGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -513,7 +513,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates a <a href="http://mathworld.wolfram.com/ClawGraph.html">Claw Graph</a>. The
      * complete bipartite graph $K_{1,3}$ is a tree known as the "claw."
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -530,17 +530,17 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> buckyBallGraph()
     {
-    return BuckyBallGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return buckyBallGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return BuckyBall graph
      */
-    public static <V, E> Graph<V, E> BuckyBallGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    public static <V, E> Graph<V, E> buckyBallGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
     {
         Graph<V, E> g = new SimpleGraph<>(edgeFactory);
         new NamedGraphGenerator<V, E>(vertexFactory).generateBuckyBallGraph(g);
@@ -552,7 +552,7 @@ public class NamedGraphGenerator<V, E>
      * graph is a 3-regular 60-vertex planar graph. Its vertices and edges correspond precisely to
      * the carbon atoms and bonds in buckminsterfullerene. When embedded on a sphere, its 12
      * pentagon and 20 hexagon faces are arranged exactly as the sections of a soccer ball.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -584,14 +584,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> clebschGraph()
     {
-    return clebschGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return clebschGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Clebsch graph
      */
     public static <V, E> Graph<V, E> clebschGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -605,7 +605,7 @@ public class NamedGraphGenerator<V, E>
      * Generates a <a href="http://mathworld.wolfram.com/ClebschGraph.html">Clebsch Graph</a>. The
      * Clebsch graph, also known as the Greenwood-Gleason graph (Read and Wilson, 1998, p. 284), is
      * a strongly regular quintic graph on 16 vertices and 40 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -633,14 +633,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> grötzschGraph()
     {
-    return grötzschGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return grötzschGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Grötzsch graph
      */
     public static <V, E> Graph<V, E> grötzschGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -653,7 +653,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates a <a href="http://mathworld.wolfram.com/GroetzschGraph.html">Grötzsch Graph</a>.
      * The Grötzsch graph is smallest triangle-free graph with chromatic number four.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -681,14 +681,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> bidiakisCubeGraph()
     {
-    return bidiakisCubeGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return bidiakisCubeGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Bidiakis graph
      */
     public static <V, E> Graph<V, E> bidiakisCubeGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -704,7 +704,7 @@ public class NamedGraphGenerator<V, E>
      * have edges drawn across them which connect the centers of opposite sides of the faces in such
      * a way that the orientation of the edges added on top and bottom are perpendicular to each
      * other.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -726,14 +726,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> blanusaFirstSnarkGraph()
     {
-    return blanusaFirstSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return blanusaFirstSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return BlanusaFirstSnark graph
      */
     public static <V, E> Graph<V, E> blanusaFirstSnarkGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -746,7 +746,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/BlanusaSnarks.html">First Blanusa Snark
      * Graph</a>. The Blanusa graphs are two snarks on 18 vertices and 27 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -769,14 +769,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> blanusaSecondSnarkGraph()
     {
-    return blanusaSecondSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return blanusaSecondSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return BlanusaSecondSnark graph
      */
     public static <V, E> Graph<V, E> blanusaSecondSnarkGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -789,7 +789,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/BlanusaSnarks.html">Second Blanusa Snark
      * Graph</a>. The Blanusa graphs are two snarks on 18 vertices and 27 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -812,14 +812,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> doubleStarSnarkGraph()
     {
-    return doubleStarSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return doubleStarSnarkGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return DoubleStarSnark graph
      */
     public static <V, E> Graph<V, E> doubleStarSnarkGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -832,7 +832,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/DoubleStarSnark.html">Double Star Snark
      * Graph</a>. A snark on 30 vertices with edge chromatic number 4.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -858,14 +858,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> brinkmannGraph()
     {
-    return brinkmannGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return brinkmannGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return BriknkMann graph
      */
     public static <V, E> Graph<V, E> brinkmannGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -878,7 +878,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/BrinkmannGraph.html">Brinkmann Graph</a>.
      * The Brinkmann graph is a weakly regular quartic graph on 21 vertices and 42 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -903,14 +903,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> gossetGraph()
     {
-    return gossetGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return gossetGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Gosset graph
      */
     public static <V, E> Graph<V, E> gossetGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -924,7 +924,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/GossetGraph.html">Gosset Graph</a>. The
      * Gosset graph is a 27-regular graph on 56 vertices which is the skeleton of the Gosset
      * polytope $3_{21}$.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1047,14 +1047,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> chvatalGraph()
     {
-    return chvatalGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return chvatalGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Chbatal graph
      */
     public static <V, E> Graph<V, E> chvatalGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1068,7 +1068,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/ChvatalGraph.html">Chvatal Graph</a>. The
      * Chvátal graph is an undirected graph with 12 vertices and 24 edges, discovered by Václav
      * Chvátal (1970)
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1091,14 +1091,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> kittellGraph()
     {
-    return kittellGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return kittellGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Kittell graph
      */
     public static <V, E> Graph<V, E> kittellGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1113,7 +1113,7 @@ public class NamedGraphGenerator<V, E>
      * Kittell graph is a planar graph on 23 nodes and 63 edges that tangles the Kempe chains in
      * Kempe's algorithm and thus provides an example of how Kempe's supposed proof of the
      * four-color theorem fails.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1141,14 +1141,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> coxeterGraph()
     {
-    return coxeterGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return coxeterGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Coxeter graph
      */
     public static <V, E> Graph<V, E> coxeterGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1161,7 +1161,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/CoxeterGraph.html">Coxeter Graph</a>. The
      * Coxeter graph is a nonhamiltonian cubic symmetric graph on 28 vertices and 42 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1186,14 +1186,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> ellinghamHorton54Graph()
     {
-    return ellinghamHorton54Graph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return ellinghamHorton54Graph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return EllinghamHorton54 graph
      */
     public static <V, E> Graph<V, E> ellinghamHorton54Graph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1207,7 +1207,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the
      * <a href="http://mathworld.wolfram.com/Ellingham-HortonGraphs.html">Ellingham-Horton 54
      * Graph</a>. The Ellingham–Horton graph is a 3-regular bicubic graph of 54 vertices
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1238,14 +1238,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> ellinghamHorton78Graph()
     {
-    return ellinghamHorton78Graph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return ellinghamHorton78Graph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Ellingham-Horton 78 graph
      */
     public static <V, E> Graph<V, E> ellinghamHorton78Graph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1259,7 +1259,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the
      * <a href="http://mathworld.wolfram.com/Ellingham-HortonGraphs.html">Ellingham-Horton 78
      * Graph</a>. The Ellingham–Horton graph is a 3-regular graph of 78 vertices
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1295,14 +1295,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> erreraGraph()
     {
-    return erreraGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return erreraGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Errera graph
      */
     public static <V, E> Graph<V, E> erreraGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1315,7 +1315,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/ErreraGraph.html">Errera Graph</a>. The
      * Errera graph is the 17-node planar graph
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1340,14 +1340,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> franklinGraph()
     {
-    return franklinGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return franklinGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Franklin graph
      */
     public static <V, E> Graph<V, E> franklinGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1360,7 +1360,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/FranklinGraph.html">Franklin Graph</a>.
      * The Franklin graph is the 12-vertex cubic graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1382,14 +1382,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> fruchtGraph()
     {
-    return fruchtGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return fruchtGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Frucht graph
      */
     public static <V, E> Graph<V, E> fruchtGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1402,7 +1402,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/FruchtGraph.html">Frucht Graph</a>. The
      * Frucht graph is smallest cubic identity graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1424,14 +1424,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> goldnerHararyGraph()
     {
-    return goldnerHararyGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return goldnerHararyGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param <E> the graph edge type
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Golden-Harary graph
      */
     public static <V, E> Graph<V, E> goldnerHararyGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1445,7 +1445,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/Goldner-HararyGraph.html">Goldner-Harary
      * Graph</a>. The Goldner-Harary graph is a graph on 11 vertices and 27. It is a simplicial
      * graph, meaning that it is polyhedral and consists of only triangular faces.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1468,14 +1468,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> heawoodGraph()
     {
-    return heawoodGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return heawoodGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Heawood graph
      */
     public static <V, E> Graph<V, E> heawoodGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1489,7 +1489,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/HeawoodGraph.html">Heawood Graph</a>.
      * Heawood graph is an undirected graph with 14 vertices and 21 edges, named after Percy John
      * Heawood.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1511,14 +1511,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> herschelGraph()
     {
-    return herschelGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return herschelGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param <E> the graph edge type
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Herschel graph
      */
     public static <V, E> Graph<V, E> herschelGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1532,7 +1532,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/HerschelGraph.html">Herschel Graph</a>.
      * The Herschel graph is the smallest nonhamiltonian polyhedral graph (Coxeter 1973, p. 8). It
      * is the unique such graph on 11 nodes and 18 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1554,14 +1554,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> hoffmanGraph()
     {
-    return hoffmanGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return hoffmanGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Hoffman graph
      */
     public static <V, E> Graph<V, E> hoffmanGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1574,7 +1574,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/HoffmanGraph.html">Hoffman Graph</a>. The
      * Hoffman graph is the bipartite graph on 16 nodes and 32 edges.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1598,14 +1598,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> krackhardtKiteGraph()
     {
-    return krackhardtKiteGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return krackhardtKiteGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Krackhardt graph
      */
     public static <V, E> Graph<V, E> krackhardtKiteGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1619,7 +1619,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/KrackhardtKite.html">Krackhardt kite
      * Graph</a>. The Krackhardt kite is the simple graph on 10 nodes and 18 edges. It arises in
      * social network theory.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1641,14 +1641,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> klein3RegularGraph()
     {
-    return klein3RegularGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return klein3RegularGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Klein 3-regular graph
      */
     public static <V, E> Graph<V, E> klein3RegularGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1661,7 +1661,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Klein_graphs">Klein 3-regular Graph</a>.
      * This graph is a 3-regular graph with 56 vertices and 84 edges, named after Felix Klein.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1692,14 +1692,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> klein7RegularGraph()
     {
-    return klein7RegularGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return klein7RegularGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Klein 7-regular graph
      */
     public static <V, E> Graph<V, E> klein7RegularGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1712,7 +1712,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="https://en.wikipedia.org/wiki/Klein_graphs">Klein 7-regular Graph</a>.
      * This graph is a 7-regular graph with 24 vertices and 84 edges, named after Felix Klein.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1743,14 +1743,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> moserSpindleGraph()
     {
-    return moserSpindleGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return moserSpindleGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Moser spindle graph
      */
     public static <V, E> Graph<V, E> moserSpindleGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1763,7 +1763,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/MoserSpindle.html">Moser spindle
      * Graph</a>. The Moser spindle is the 7-node unit-distance graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1784,14 +1784,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> poussinGraph()
     {
-    return poussinGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return poussinGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Poussin graph
      */
     public static <V, E> Graph<V, E> poussinGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1804,7 +1804,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/PoussinGraph.html">Poussin Graph</a>. The
      * Poussin graph is the 15-node planar graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1829,14 +1829,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> schläfliGraph()
     {
-    return schläfliGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return schläfliGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Schaläfli graph
      */
     public static <V, E> Graph<V, E> schläfliGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1849,7 +1849,7 @@ public class NamedGraphGenerator<V, E>
     /**
      * Generates the <a href="http://mathworld.wolfram.com/SchlaefliGraph.html">Schläfli Graph</a>.
      * The Schläfli graph is a strongly regular graph on 27 nodes
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1897,14 +1897,14 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> thomsenGraph()
     {
-    return thomsenGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        return thomsenGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
     }
-    
+
     /**
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @param vertexFactory list of type VertexFactory that contain the necessary vertices to build the graph
-     * @param edgeFactory list of type EdgeFactory that contain the necessary couples vertex and edges to build the graph  
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
      * @return Thomsen graph
      */
     public static <V, E> Graph<V, E> thomsenGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
@@ -1918,7 +1918,7 @@ public class NamedGraphGenerator<V, E>
      * Generates the <a href="http://mathworld.wolfram.com/UtilityGraph.html">Thomsen Graph</a>. The
      * Thomsen Graph is complete bipartite graph consisting of 6 vertices (3 vertices in each
      * bipartite partition. It is also called the Utility graph.
-     * 
+     *
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
@@ -1950,4 +1950,3 @@ public class NamedGraphGenerator<V, E>
         targetGraph.addEdge(u, v);
     }
 }
-
