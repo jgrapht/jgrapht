@@ -313,6 +313,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public int degreeOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.degreeOf(vertex);
     }
 
