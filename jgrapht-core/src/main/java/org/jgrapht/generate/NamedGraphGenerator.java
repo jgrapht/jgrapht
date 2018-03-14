@@ -2065,9 +2065,19 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> tutteGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateTutteGraph(g);
+        return tutteGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * 
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
+     * @return Tutte Graph
+     */
+    public static <V,E> Graph<V,E> tutteGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V,E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V,E>(vertexFactory).generateTutteGraph(g);
         return g;
     }
 
