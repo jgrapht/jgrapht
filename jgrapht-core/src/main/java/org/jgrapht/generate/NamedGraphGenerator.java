@@ -1186,9 +1186,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> diamondGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateDiamondGraph(g);
+    	return diamondGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
+     * @return Diamond Graph
+     */
+    public static <V,E> Graph<V,E> diamondGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V,E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V,E>(vertexFactory).generateDiamondGraph(g);
         return g;
     }
 
@@ -1369,9 +1380,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> folkmanGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateFolkmanGraph(g);
+    	return folkmanGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
+     * @return Folkman Graph
+     */
+    public static <V,E> Graph<V,E> folkmanGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V,E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V,E>(vertexFactory).generateFolkmanGraph(g);
         return g;
     }
 
@@ -1847,9 +1869,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> pappusGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generatePappusGraph(g);
+        return pappusGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
+     * @return Pappus Graph
+     */
+    public static <V,E> Graph<V,E> pappusGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V,E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V,E>(vertexFactory).generatePappusGraph(g);
         return g;
     }
 
@@ -1992,9 +2025,20 @@ public class NamedGraphGenerator<V, E>
      */
     public static Graph<Integer, DefaultEdge> tietzeGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
-            .generateTietzeGraph(g);
+        return tietzeGraph(new IntegerVertexFactory(), new ClassBasedEdgeFactory<>(DefaultEdge.class));
+    }
+    
+    /**
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @param vertexFactory a vertex factory
+     * @param edgeFactory an edge factory
+     * @return Tietze Graph
+     */
+    public static <V,E> Graph<V,E> tietzeGraph(VertexFactory<V> vertexFactory, EdgeFactory<V, E> edgeFactory)
+    {
+        Graph<V,E> g = new SimpleGraph<>(edgeFactory);
+        new NamedGraphGenerator<V,E>(vertexFactory).generateTietzeGraph(g);
         return g;
     }
 
@@ -2069,7 +2113,8 @@ public class NamedGraphGenerator<V, E>
     }
     
     /**
-     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      * @param vertexFactory a vertex factory
      * @param edgeFactory an edge factory
      * @return Tutte Graph
