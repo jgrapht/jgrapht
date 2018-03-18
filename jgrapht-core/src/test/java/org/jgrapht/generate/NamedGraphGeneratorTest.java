@@ -326,12 +326,13 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 6, 9, 2, 2, 4);
         assertTrue(GraphTests.isBipartite(g));
     }
-    
+
     @Test
     public void testBalaban10Cage()
     {
     	Graph<Integer, DefaultEdge> g = NamedGraphGenerator.balaban10Cage();
-    	this.validateBasics(g, 70, 105, 6, 6, 10);
+    	this.validateBasics(g, 68, 96, 6, 10, 6);
+    	//this.validateBasics(g, vertices, edges, radius, diameter, girth);
     }
 
     private <V, E> void validateBasics(
