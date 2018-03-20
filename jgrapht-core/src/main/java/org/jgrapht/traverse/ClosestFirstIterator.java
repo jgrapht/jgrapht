@@ -112,9 +112,13 @@ public class ClosestFirstIterator<V, E>
     /**
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertices and will be limited to the subset of the connected
-     * component which includes those vertices and their reachable via paths of weighted length less
-     * than or equal to the specified radius. The specified start vertex may not be <code>
-     * null</code>.
+     * components which include those vertices and is reachable via paths of weighted length less
+     * than or equal to the specified radius. The specified collection of start
+     * vertices may not be <code>null</code>.  Iteration order is based on minimum
+     * distance from any of the start vertices, regardless of the order in
+     * which the start vertices are supplied.  Because of this, the entire
+     * traversal is treated as if it were over a single connected component
+     * with respect to events fired.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
@@ -127,6 +131,21 @@ public class ClosestFirstIterator<V, E>
         this.radius = radius;
         checkRadiusTraversal(isCrossComponentTraversal());
         initialized = true;
+        if (!crossComponentTraversal) {
+            // prime the heap by processing the first start vertex
+            hasNext();
+            Iterator<V> iter = startVertices.iterator();
+            if (iter.hasNext()) {
+                // discard the first since we already primed it above
+                iter.next();
+                // prime the heap with the rest of the start vertices so that
+                // we can process them all simultaneously
+                while (iter.hasNext()) {
+                    V v = iter.next();
+                    encounterVertex(v, null);
+                }
+            }
+        }
     }
 
     // override AbstractGraphIterator
@@ -168,7 +187,7 @@ public class ClosestFirstIterator<V, E>
      *
      * @param vertex the spanned vertex.
      *
-     * @return the spanning tree edge, or null if the vertex either has not been seen yet or is the
+     * @return the spanning tree edge, or null if the vertex either has not been seen yet or is a
      *         start vertex.
      */
     public E getSpanningTreeEdge(V vertex)

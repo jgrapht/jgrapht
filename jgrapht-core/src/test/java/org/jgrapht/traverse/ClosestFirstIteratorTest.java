@@ -20,6 +20,7 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,14 +49,7 @@ public class ClosestFirstIteratorTest
         // the boundary case edge between v7 and v9
         AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph, "1", 301);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals("1,2,3,5,6,7", result.toString());
     }
 
@@ -71,15 +65,28 @@ public class ClosestFirstIteratorTest
 
         AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals("1,2,3,5,6,7,9,4,8,orphan", result.toString());
+    }
+
+    /**
+     * Test simultaneous search from multiple start vertices.
+     */
+    @Test
+    public void testMultipleStarts()
+    {
+        result = new StringBuffer();
+
+        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
+        graph.setEdgeWeight(graph.getEdge("5", "6"), 50.0);
+        List<String> starts = new ArrayList<String>();
+        starts.add("1");
+        starts.add("5");
+        AbstractGraphIterator<String, ?> iterator =
+            new ClosestFirstIterator<>(graph, starts);
+
+        collectResult(iterator, result);
+        assertEquals("1,5,2,6,3,7,9,4,8", result.toString());
     }
 
     // NOTE: the edge weights make the result deterministic
@@ -109,7 +116,7 @@ public class ClosestFirstIteratorTest
     @Override
     String getExpectedCCStr1()
     {
-        return "orphan";
+        return "orphan,7,3,9,5,4,6,1,2,8";
     }
 
     @Override
@@ -121,7 +128,13 @@ public class ClosestFirstIteratorTest
     @Override
     String getExpectedCCStr3()
     {
-        return "orphan,7,9,4,8,2,3,5,6,1";
+        return "orphan,7,3,9,5,4,6,1,2,8";
+    }
+
+    @Override
+    int getExpectedCCVertexCount1()
+    {
+        return 10;
     }
 
     @Override

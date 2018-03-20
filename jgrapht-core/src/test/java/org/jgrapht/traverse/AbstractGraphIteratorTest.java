@@ -22,6 +22,7 @@ import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 import org.junit.Assert;
 import org.junit.Test;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -51,6 +52,17 @@ public abstract class AbstractGraphIteratorTest
         doDirectedGraphTest(iterator);
     }
 
+    protected void collectResult(Iterator<String> iterator, StringBuffer result)
+    {
+        while (iterator.hasNext()) {
+            result.append(iterator.next());
+
+            if (iterator.hasNext()) {
+                result.append(',');
+            }
+        }
+    }
+
     public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator)
     {
 
@@ -59,14 +71,7 @@ public abstract class AbstractGraphIteratorTest
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals(getExpectedStr2(), result.toString());
 
         assertEquals(getExpectedFinishString(), listener.getFinishString());
