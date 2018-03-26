@@ -17,10 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
 
-import org.jgrapht.*;
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * A graph backed by the the graph specified at the constructor, which delegates all its methods to

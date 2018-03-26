@@ -17,12 +17,18 @@
  */
 package org.jgrapht.graph.concurrent;
 
-import java.util.*;
-import junit.extensions.*;
-import junit.framework.*;
-import junit.textui.*;
-import org.jgrapht.graph.*;
+import junit.extensions.ActiveTestSuite;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
 import org.junit.Test;
+
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 /**

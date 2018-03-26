@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.UnionFind;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import java.util.*;
 
 /**
  * Used to calculate Tarjan's Lowest Common Ancestors Algorithm

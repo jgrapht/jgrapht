@@ -17,7 +17,10 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * This class implements a Fibonacci heap data structure. Much of the code in this class is based on

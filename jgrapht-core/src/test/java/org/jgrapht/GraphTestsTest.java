@@ -17,15 +17,19 @@
  */
 package org.jgrapht;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
+import org.jgrapht.generate.NamedGraphGenerator;
+import org.jgrapht.generate.StarGraphGenerator;
+import org.jgrapht.graph.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.*;
 
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class GraphTests.

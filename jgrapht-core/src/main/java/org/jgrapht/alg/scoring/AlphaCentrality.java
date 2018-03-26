@@ -17,10 +17,14 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.ToDoubleFunction;
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
 
 /**
  * AlphaCentrality implementation.

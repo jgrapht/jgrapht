@@ -17,12 +17,17 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
+import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
+import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.specifics.*;
-import org.jgrapht.util.*;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * The most general implementation of the {@link org.jgrapht.Graph} interface. Its subclasses add

@@ -17,9 +17,10 @@
  */
 package org.jgrapht.alg.vertexcover.util;
 
-import java.util.*;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Helper class for vertex covers. Guarantees that vertices can be sorted, thereby obtaining a

@@ -17,13 +17,14 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.cycle.ChordalityInspector;
+import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -201,13 +202,13 @@ public abstract class GraphTests
      *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
-     * case more control is required use {@link org.jgrapht.alg.connectivity.BiconnectivityInspector} directly.
+     * case more control is required use {@link BiconnectivityInspector} directly.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is biconnected, false otherwise
-     * @see org.jgrapht.alg.connectivity.BiconnectivityInspector
+     * @see BiconnectivityInspector
      */
     public static <V, E> boolean isBiconnected(Graph<V, E> graph)
     {
@@ -493,6 +494,36 @@ public abstract class GraphTests
     public static <V, E> boolean isChordal(Graph<V, E> graph){
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new ChordalityInspector<>(graph).isChordal();
+    }
+  
+    /**
+     * Tests whether an undirected graph meets Ore's condition to be Hamiltonian.
+     *
+     * Let G be a (finite and simple) graph with $n \geq 3$ vertices. We denote by deg(v) the degree of a vertex v in G,
+     * i.e. the number of incident edges in G to v.
+     * Then, Ore's theorem states that if $deg(v) + deg(w) \geq n$ for every pair of distinct non-adjacent vertices
+     * v and w of G, then G is Hamiltonian.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph meets Ore's condition, false otherwise
+     * @see org.jgrapht.alg.tour.PalmerHamiltonianCycle
+     */
+    public static <V, E> boolean hasOreProperty(Graph<V, E> graph){
+        requireUndirected(graph);
+
+        final int n = graph.vertexSet().size();
+
+        if (!graph.getType().isSimple() || n < 3)
+            return false;
+
+        for (V v: graph.vertexSet())
+            for (V w: graph.vertexSet())
+                if (!v.equals(w) && !graph.containsEdge(v, w) && graph.degreeOf(v) + graph.degreeOf(w) < n)
+                    return false;
+
+        return true;
     }
 
     /**

@@ -17,10 +17,13 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.util.FibonacciHeap;
+import org.jgrapht.util.FibonacciHeapNode;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * A closest-first iterator for a directed or undirected graph. For this iterator to work correctly

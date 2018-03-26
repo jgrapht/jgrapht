@@ -17,7 +17,8 @@
  */
 package org.jgrapht;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * The root interface in the graph hierarchy. A mathematical graph-theory graph object
