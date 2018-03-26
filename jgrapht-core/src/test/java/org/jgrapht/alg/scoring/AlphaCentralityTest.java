@@ -17,12 +17,16 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-import java.util.function.ToDoubleFunction;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.junit.Test;
 
-import org.junit.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.ToDoubleFunction;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

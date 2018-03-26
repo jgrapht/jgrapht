@@ -17,11 +17,18 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
+import org.jgrapht.util.TypeUtil;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A graph backed by the the graph specified at the constructor, which can be listened by

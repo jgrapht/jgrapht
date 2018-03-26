@@ -17,14 +17,19 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.specifics.*;
-import org.jgrapht.util.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.specifics.DirectedSpecifics;
+import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.util.TypeUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 

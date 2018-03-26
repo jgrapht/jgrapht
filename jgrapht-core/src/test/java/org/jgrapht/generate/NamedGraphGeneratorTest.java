@@ -17,15 +17,19 @@
  */
 package org.jgrapht.generate;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphMapping;
+import org.jgrapht.GraphMetrics;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
+import org.jgrapht.graph.DefaultEdge;
+import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import org.jgrapht.*;
-import java.util.*;
-import org.jgrapht.alg.shortestpath.*;
-import org.jgrapht.alg.isomorphism.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
 
 /**
  * Tests for NamedGraphGenerator

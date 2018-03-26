@@ -17,17 +17,15 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.TypeUtil;
+import org.junit.Test;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * .

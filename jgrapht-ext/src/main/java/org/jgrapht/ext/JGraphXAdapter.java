@@ -17,13 +17,16 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
+import com.mxgraph.model.mxICell;
+import com.mxgraph.view.mxGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-
-import com.mxgraph.model.*;
-import com.mxgraph.view.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * <P>
