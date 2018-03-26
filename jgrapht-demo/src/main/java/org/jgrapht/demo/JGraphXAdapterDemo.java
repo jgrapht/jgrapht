@@ -72,7 +72,11 @@ public class JGraphXAdapterDemo
         // create a visualization using JGraph, via an adapter
         jgxAdapter = new JGraphXAdapter<>(g);
 
-        getContentPane().add(new mxGraphComponent(jgxAdapter));
+        setPreferredSize(DEFAULT_SIZE);
+        mxGraphComponent component = new mxGraphComponent(jgxAdapter);
+        component.setConnectable(false);
+        component.getGraph().setAllowDanglingEdges(false);
+        getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
         String v1 = "v1";
@@ -93,8 +97,15 @@ public class JGraphXAdapterDemo
 
         // positioning via jgraphx layouts
         mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
-        layout.execute(jgxAdapter.getDefaultParent());
 
+        // center the circle
+        int radius = 100;
+        layout.setX0((DEFAULT_SIZE.width / 2.0) - radius);
+        layout.setY0((DEFAULT_SIZE.height / 2.0) - radius);
+        layout.setRadius(radius);
+        layout.setMoveCircle(true);
+
+        layout.execute(jgxAdapter.getDefaultParent());
         // that's all there is to it!...
     }
 }

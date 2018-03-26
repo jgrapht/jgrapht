@@ -492,7 +492,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            VertexNode other = TypeUtil.uncheckedCast(obj, null);
+            VertexNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.v, other.v);
         }
 
@@ -552,7 +552,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            EdgeNode other = TypeUtil.uncheckedCast(obj, null);
+            EdgeNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.e, other.e);
         }
 

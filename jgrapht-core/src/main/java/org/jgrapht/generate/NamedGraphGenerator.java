@@ -875,6 +875,35 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Diamond Graph-----------//
+    /**
+     * @see #generateDiamondGraph
+     * @return Diamond Graph
+     */
+    public static Graph<Integer, DefaultEdge> diamondGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateDiamondGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Diamond_graph">Diamond Graph</a>. 
+     * The Diamond graph has 4 vertices and 5 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateDiamondGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 2 }, { 2, 3 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // -------------Ellingham-Horton 54 Graph-----------//
     /**
      * @see #generateEllinghamHorton54Graph
@@ -992,6 +1021,40 @@ public class NamedGraphGenerator<V, E>
             { 5, 11 }, { 5, 12 }, { 5, 13 }, { 6, 7 }, { 6, 8 }, { 6, 12 }, { 6, 13 }, { 6, 16 },
             { 7, 13 }, { 7, 15 }, { 7, 16 }, { 8, 10 }, { 8, 12 }, { 8, 14 }, { 8, 16 }, { 9, 11 },
             { 9, 13 }, { 9, 15 }, { 10, 12 }, { 11, 13 }, { 13, 15 }, { 14, 16 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
+    // -------------Folkman Graph-----------//
+    /**
+     * @see #generateFolkmanGraph
+     * @return Folkman Graph
+     */
+    public static Graph<Integer, DefaultEdge> folkmanGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateFolkmanGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Folkman_graph">Folkman Graph</a>.
+     * The Folkman graph is the 20-vertex 4-regular graph.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateFolkmanGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 3 }, { 0, 13 }, { 0, 15 }, { 1, 2 }, { 1, 6 }, { 1, 8 },
+            { 2, 3 }, { 2, 17 }, { 2, 19 }, { 3, 6 }, { 3, 8 }, { 4, 5 }, { 4, 7 }, { 4, 17 },
+            { 4, 19 }, { 5, 6 }, { 5, 10 }, { 5, 12 }, { 6, 7 }, { 7, 10 }, { 7, 12 }, { 8, 9 }, 
+            { 8, 11 }, { 9, 10 }, { 9, 14 }, { 9, 16 }, { 10, 11 }, { 11, 14 }, { 11, 16 }, 
+            { 12, 13 }, { 12, 15 }, { 13, 14 }, { 13, 18 }, { 14, 15 }, { 15, 18 }, { 16, 17 },
+            { 16, 19 }, { 17, 18 }, { 18, 19 } };
         for (int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -1330,6 +1393,38 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Pappus Graph-----------//
+    /**
+     * @see #generatePappusGraph
+     * @return Pappus Graph
+     */
+    public static Graph<Integer, DefaultEdge> pappusGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generatePappusGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Pappus_graph">Pappus Graph</a>. The
+     * Pappus Graph is a bipartite 3-regular undirected graph with 18 vertices and 27 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generatePappusGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 5 }, { 0, 6 }, { 1, 2 }, { 1, 7 }, { 2, 3 }, { 2, 8 },
+            { 3, 4 }, { 3, 9 }, { 4, 5 }, { 4, 10 }, { 5, 11 }, { 6, 13 }, { 6, 17 }, { 7, 12 },
+            { 7, 14 }, { 8, 13 }, { 8, 15 }, { 9, 14 }, { 9, 16 }, { 10, 15 }, { 10, 17 }, { 11, 12 },
+            { 11, 16 }, { 12, 15 }, { 13, 16 }, { 14, 17 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // -------------Poussin Graph-----------//
     /**
      * @see #generatePoussinGraph
@@ -1421,6 +1516,37 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Tietze Graph-----------//
+    /**
+     * @see #generateTietzeGraph
+     * @return Tietze Graph
+     */
+    public static Graph<Integer, DefaultEdge> tietzeGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateTietzeGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Tietze's_graph">Tietze Graph</a>. The
+     * Tietze Graph is an undirected cubic graph with 12 vertices and 18 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateTietzeGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 8 }, { 0, 9 }, { 1, 2 }, { 1, 5 }, { 2, 3 }, { 2, 7 },
+            { 3, 4 }, { 3, 10 }, { 4, 5 }, { 4, 8 }, { 5, 6 }, { 6, 7 }, { 6, 11 }, { 7, 8 },
+            { 9, 10 }, { 9, 11 }, { 10, 11 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // -------------Thomsen Graph-----------//
     /**
      * @see #generateThomsenGraph
@@ -1448,6 +1574,44 @@ public class NamedGraphGenerator<V, E>
         vertexMap.clear();
         int[][] edges = { { 0, 3 }, { 0, 4 }, { 0, 5 }, { 1, 3 }, { 1, 4 }, { 1, 5 }, { 2, 3 },
             { 2, 4 }, { 2, 5 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
+    // -------------Tutte Graph-----------//
+    /**
+     * @see #generateTutteGraph
+     * @return Tutte Graph
+     */
+    public static Graph<Integer, DefaultEdge> tutteGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateTutteGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Tutte_graph">Tutte Graph</a>. The
+     * Tutte Graph is a 3-regular graph with 46 vertices and 69 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateTutteGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 16 }, { 0, 31 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 5 },
+            { 3, 4 }, { 3, 7 }, { 4, 9 }, { 5, 6 }, { 5, 10 }, { 6, 7 }, { 6, 11 }, { 7, 8 },
+            { 8, 9 }, { 8, 12 }, { 9, 15 }, { 10, 11 }, { 10, 13 }, { 11, 12 }, { 12, 14 }, 
+            { 13, 14 }, { 13, 30 }, { 14, 15 }, { 15, 43 }, { 16, 17 }, { 16, 19 }, { 17, 18 }, 
+            { 17, 20 }, { 18, 19 }, { 18, 22 }, { 19, 24 }, { 20, 21 }, { 20, 25 }, { 21, 22 }, 
+            { 21, 26 }, { 22, 23 }, { 23, 24 }, { 23, 27 }, { 24, 30 }, { 25, 26 }, { 25, 28 }, 
+            { 26, 27 }, { 27, 29 }, { 28, 29 }, { 28, 45 }, { 29, 30 }, { 31, 32 }, { 31, 34 }, 
+            { 32, 33 }, { 32, 35 }, { 33, 34 }, { 33, 37 }, { 34, 39 }, { 35, 36 }, { 35, 40 }, 
+            { 36, 37 }, { 36, 41 }, { 37, 38 }, { 38, 39 }, { 38, 42 }, { 39, 45 }, { 40, 41 }, 
+            { 40, 43 }, { 41, 42 }, { 42, 44 }, { 43, 44 }, { 44, 45 } };
         for (int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }

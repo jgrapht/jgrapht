@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,23 +17,24 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
 /**
  * An algorithm solving the
- * <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">Travelling salesman
- * problem</a> (TSP).
+ * <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian cycle
+ * problem</a>.
  * 
  * <p>
- * Given a list of cities and the distances between each pair of cities, what is the shortest
- * possible route that visits each city exactly once and returns to the origin city?
+ * A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit,
+ * is a graph cycle (i.e., closed loop) through a graph that visits each node exactly once (Skiena 1990, p. 196).
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Dimitrios Michail
+ * @author Alexandru Valeanu
  */
-public interface TSPAlgorithm<V, E> extends HamiltonianCycleAlgorithm<V, E>
+public interface HamiltonianCycleAlgorithm<V, E>
 {
 
     /**

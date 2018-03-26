@@ -268,7 +268,7 @@ public abstract class AbstractBaseGraph<V, E>
     public Object clone()
     {
         try {
-            AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone(), null);
+            AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
 
             newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableVertexSet = null;
@@ -313,6 +313,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public int degreeOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.degreeOf(vertex);
     }
 

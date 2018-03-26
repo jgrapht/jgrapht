@@ -27,6 +27,18 @@ Changes to JGraphT in each version:
     - Revised BlockCutpointGraph and added additional tests (contributed by Joris Kinable)
     - Removed old JUnit 3 dependencies (contributed by Joris Kinable)
     - Fixed bug with maxPathLength equal to 1 in AllDirectedPaths (contributed by Andrew Gainer-Dewar)
+    - Allow digits as non-leading character in DOTUtils#isValidID (contributed by Mariusz Smykuła)
+    - Escape quotes in identifiers in `DOTExporter` (contributed by Mariusz Smykuła)
+    - Added `AlphaCentrality` (contributed by Pratik Tibrewal)
+    - Fixed bug in AbstractBaseGraph where degreeOf() method would create vertex instead of throwing an exception (spotted and fixed by Chen Kui)
+    - Added Folkman, Diamond, Tietze, Pappus and Tutte named graphs (contributed by Pratik Tibrewal)
+    - Added automorphism count verification to NamedGraphGeneratorTest (contributed by Pratik Tibrewal)
+    - Removed old JGraph dependency, updated JGraphX to version 3.4.1.3, minor revision of `JGraphXAdapterDemo` (contributed by John Sichi)
+    - Added `ChordalityInspector`, `LexBreadthFirstIterator`, and `MaximumCardinalityIterator` (contributed by Timofey Chudakov)
+    - Removed redundant parameter from `TypeUtil.uncheckedCast` method (contributed by Konstantinos Karatsenidis)
+    - Removed recursion from `NaiveLcaFinder.findLca` method (contributed by Konstantinos Karatsenidis)
+    - Added `AsSynchronizedGraph` in new package `org.jgrapht.graph.concurrent` (contributed by Chen Kui)
+    - Fixed bug with `ClosestFirstIterator` when given multiple start vertices (repro by shevek, fixed by John Sichi)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)

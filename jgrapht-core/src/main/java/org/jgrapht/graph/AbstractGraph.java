@@ -253,7 +253,7 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        Graph<V, E> g = TypeUtil.uncheckedCast(obj, null);
+        Graph<V, E> g = TypeUtil.uncheckedCast(obj);
 
         if (!vertexSet().equals(g.vertexSet())) {
             return false;

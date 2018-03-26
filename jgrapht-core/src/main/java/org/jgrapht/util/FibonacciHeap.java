@@ -353,14 +353,14 @@ public class FibonacciHeap<T>
         }
 
         // create a new stack and put root on it
-        Stack<FibonacciHeapNode<T>> stack = new Stack<>();
+        Deque<FibonacciHeapNode<T>> stack = new ArrayDeque<>();
         stack.push(minNode);
 
         StringBuilder buf = new StringBuilder(512);
         buf.append("FibonacciHeap=[");
 
         // do a simple breadth-first traversal on the tree
-        while (!stack.empty()) {
+        while (!stack.isEmpty()) {
             FibonacciHeapNode<T> curr = stack.pop();
             buf.append(curr);
             buf.append(", ");

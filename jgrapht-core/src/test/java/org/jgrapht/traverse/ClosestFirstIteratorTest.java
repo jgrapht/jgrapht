@@ -20,6 +20,7 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,14 +49,7 @@ public class ClosestFirstIteratorTest
         // the boundary case edge between v7 and v9
         AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph, "1", 301);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals("1,2,3,5,6,7", result.toString());
     }
 
@@ -71,15 +65,58 @@ public class ClosestFirstIteratorTest
 
         AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals("1,2,3,5,6,7,9,4,8,orphan", result.toString());
+    }
+
+    /**
+     * Test simultaneous search from multiple start vertices.
+     */
+    @Test
+    public void testMultipleStarts()
+    {
+        result = new StringBuffer();
+
+        Graph<String, DefaultEdge> graph =
+            new DirectedPseudograph<>(DefaultEdge.class);
+
+        graph.addVertex("1624");
+        graph.addVertex("6998");
+        graph.addVertex("2652");
+        graph.addVertex("7383");
+        graph.addVertex("5604");
+        graph.addVertex("6009");
+        graph.addVertex("3344");
+        graph.addVertex("1002");
+        graph.addVertex("6067");
+        graph.addEdge("2652", "1002");
+        graph.addEdge("1002", "6067");
+        graph.addEdge("1002", "7383");
+        graph.addEdge("1002", "6009");
+        graph.addEdge("1002", "6998");
+        graph.addEdge("7383", "6998");
+        graph.addEdge("7383", "6009");
+        graph.addEdge("7383", "3344");
+        graph.addEdge("6009", "6998");
+        graph.addEdge("6009", "7383");
+        graph.addEdge("6009", "3344");
+        graph.addEdge("1624", "3344");
+        graph.addEdge("6998", "6009");
+        graph.addEdge("6998", "7383");
+        graph.addEdge("6998", "5604");
+        graph.addEdge("6998", "3344");
+        graph.addEdge("6998", "6067");
+
+        List<String> starts = new ArrayList<String>();
+        starts.add("2652");
+        starts.add("1624");
+        AbstractGraphIterator<String, DefaultEdge> iterator =
+            new ClosestFirstIterator<>(graph, starts, 2);
+
+        collectResult(iterator, result);
+        assertEquals(
+            "2652,1624,1002,3344,6067,7383,6009,6998",
+            result.toString());
     }
 
     // NOTE: the edge weights make the result deterministic
@@ -109,7 +146,7 @@ public class ClosestFirstIteratorTest
     @Override
     String getExpectedCCStr1()
     {
-        return "orphan";
+        return "orphan,7,3,9,5,4,6,1,2,8";
     }
 
     @Override
@@ -121,7 +158,13 @@ public class ClosestFirstIteratorTest
     @Override
     String getExpectedCCStr3()
     {
-        return "orphan,7,9,4,8,2,3,5,6,1";
+        return "orphan,7,3,9,5,4,6,1,2,8";
+    }
+
+    @Override
+    int getExpectedCCVertexCount1()
+    {
+        return 10;
     }
 
     @Override

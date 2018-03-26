@@ -187,40 +187,39 @@ public class NaiveLcaFinder<V, E>
      * members of sets aSeenSet and bSeenSet respectively, along with all elements on the paths from
      * every member of aSet and bSet
      */
-    private V findLca(
-        Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
+    private V findLca(Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
     {
-        // if there is no LCA...
-        if ((aSet.size() == 0) && (bSet.size() == 0)) {
-            return null;
+        while (true) {
+            // if there is no LCA...
+            if ((aSet.size() == 0) && (bSet.size() == 0)) {
+                return null;
+            }
+
+            // does aSet intersect with bSeenSet
+            if (!Collections.disjoint(aSet, bSeenSet)) {
+                return overlappingMember(aSet, bSeenSet);
+            }
+
+            // does bSet intersect with aSeenSet
+            if (!Collections.disjoint(bSet, aSeenSet)) {
+                return overlappingMember(bSet, aSeenSet);
+            }
+            if (!Collections.disjoint(aSet, bSet)) {
+                return overlappingMember(aSet, bSet);
+            }
+
+            aSeenSet.addAll(aSet);
+            bSeenSet.addAll(bSet);
+
+            aSet = allParents(aSet);
+
+            // no point doing the same again (and it can stop us getting stuck in
+            // an infinite loop)
+            aSet.removeAll(aSeenSet);
+
+            bSet = allParents(bSet);
+            bSet.removeAll(bSeenSet);
         }
-
-        // does aSet intersect with bSeenSet
-        if (!Collections.disjoint(aSet, bSeenSet)) {
-            return overlappingMember(aSet, bSeenSet);
-        }
-
-        // does bSet intersect with aSeenSet
-        if (!Collections.disjoint(bSet, aSeenSet)) {
-            return overlappingMember(bSet, aSeenSet);
-        }
-        if (!Collections.disjoint(aSet, bSet)) {
-            return overlappingMember(aSet, bSet);
-        }
-
-        aSeenSet.addAll(aSet);
-        bSeenSet.addAll(bSet);
-
-        aSet = allParents(aSet);
-
-        // no point doing the same again (and it can stop us getting stuck in
-        // an infinite loop)
-        aSet.removeAll(aSeenSet);
-
-        bSet = allParents(bSet);
-        bSet.removeAll(bSeenSet);
-
-        return findLca(aSet, bSet, aSeenSet, bSeenSet);
     }
 
     /**

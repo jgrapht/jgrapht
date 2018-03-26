@@ -290,6 +290,15 @@ public class GraphDelegator<V, E>
     {
         return delegate.getType();
     }
+
+    /**
+     * Return the backing graph (the delegate).
+     * @return the backing graph (the delegate)
+     */
+    protected Graph<V, E> getDelegate()
+    {
+        return delegate;
+    }
 }
 
 // End GraphDelegator.java

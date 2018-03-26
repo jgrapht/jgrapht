@@ -20,6 +20,7 @@ package org.jgrapht.io;
 import java.io.*;
 import java.util.*;
 import java.util.Map.*;
+import java.util.regex.Matcher;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
@@ -262,7 +263,7 @@ public class DOTExporter<V, E>
             }
         }
         if (labelName != null) {
-            out.print("label=\"" + labelName + "\" ");
+            out.print("label=\"" + escapeDoubleQuotes(labelName) + "\" ");
         }
         if (attributes != null) {
             for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
@@ -271,10 +272,14 @@ public class DOTExporter<V, E>
                     // already handled by special case above
                     continue;
                 }
-                out.print(name + "=\"" + entry.getValue().getValue() + "\" ");
+                out.print(name + "=\"" + escapeDoubleQuotes(entry.getValue().getValue()) + "\" ");
             }
         }
         out.print("]");
+    }
+
+    private static String escapeDoubleQuotes(String labelName) {
+        return labelName.replaceAll("\"", Matcher.quoteReplacement("\\\""));
     }
 
     /**

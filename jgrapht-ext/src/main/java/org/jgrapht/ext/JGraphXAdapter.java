@@ -36,11 +36,12 @@ import com.mxgraph.view.*;
  * </P>
  *
  * <P>
- * Known Bugs: If this class is used with String-Edges, please note that there is a bug with the
- * method JgraphT.addEdge(vertex1, vertex2); The edge will be created with an empty String "" as
- * value and saved (in JGraphT as well as in this class), which results in the edge not saving
- * correctly. So, if you're using Strings as Edgeclass please use the method addEdge(vertex1,
- * vertex2, "Edgename"); with a unique edgename.
+ * Note: If this class is used with an edge type such as String, you must
+ * either supply unique String names via addEdge(v1, v2, "edge123"), or use a
+ * custom edge factory which does so.  Otherwise, if you use addEdge(v1, v2),
+ * the edge will be created with an empty String "" as value and saved (in
+ * JGraphT as well as in this class), which results in the edge not saving
+ * correctly.
  * </P>
  *
  * @param <V> the graph vertex type
@@ -83,7 +84,7 @@ public class JGraphXAdapter<V, E>
     private HashMap<mxICell, E> cellToEdgeMap = new HashMap<>();
 
     /**
-     * Constructs and draws a new ListenableGraph. If the graph changes through as ListenableGraph,
+     * Constructs and draws a new ListenableGraph. If the graph changes through the ListenableGraph,
      * the JGraphXAdapter will automatically add/remove the new edge/vertex as it implements the
      * GraphListener interface. Throws a IllegalArgumentException if the graph is null.
      *
@@ -98,7 +99,7 @@ public class JGraphXAdapter<V, E>
     }
 
     /**
-     * Constructs and draws a new mxGraph from a jGraphT graph. Changes on the jgraphT graph will
+     * Constructs and draws a new mxGraph from a JGraphT graph. Changes on the JGraphT graph will
      * not edit this mxGraph any further; use the constructor with the ListenableGraph parameter
      * instead or use this graph as a normal mxGraph. Throws an IllegalArgumentException if the
      * parameter is null.

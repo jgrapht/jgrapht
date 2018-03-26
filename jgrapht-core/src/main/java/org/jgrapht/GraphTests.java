@@ -20,10 +20,7 @@ package org.jgrapht;
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import org.jgrapht.alg.cycle.*;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -477,6 +474,22 @@ public abstract class GraphTests
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new HierholzerEulerianCycle<V, E>().isEulerian(graph);
+    }
+
+    /**
+     * Checks whether a graph is chordal. A <a href="https://en.wikipedia.org/wiki/Chordal_graph">
+     * chordal graph</a> is one in which all cycles of four or more vertices have a chord, which
+     * is an edge that is not part of the cycle but connects two vertices of the cycle.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is chordal, false otherwise
+     * @see ChordalityInspector#isChordal()
+     */
+    public static <V, E> boolean isChordal(Graph<V, E> graph){
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new ChordalityInspector<>(graph).isChordal();
     }
 
     /**

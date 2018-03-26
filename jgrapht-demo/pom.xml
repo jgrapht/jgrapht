@@ -29,7 +29,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.jgrapht.demo.JGraphAdapterDemo</mainClass>
+							<mainClass>org.jgrapht.demo.JGraphXAdapterDemo</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 						<manifestEntries>
