@@ -20,6 +20,7 @@ package org.jgrapht;
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.cycle.ChordalityInspector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 
 import java.util.*;
@@ -479,6 +480,7 @@ public abstract class GraphTests
         return new HierholzerEulerianCycle<V, E>().isEulerian(graph);
     }
 
+    /**
      * Checks whether a graph is chordal. A <a href="https://en.wikipedia.org/wiki/Chordal_graph">
      * chordal graph</a> is one in which all cycles of four or more vertices have a chord, which
      * is an edge that is not part of the cycle but connects two vertices of the cycle.
@@ -494,13 +496,17 @@ public abstract class GraphTests
         return new ChordalityInspector<>(graph).isChordal();
     }
   
-  /**
+    /**
      * Tests whether an undirected graph meets Ore's condition to be Hamiltonian.
      *
      * Let G be a (finite and simple) graph with $n \geq 3$ vertices. We denote by deg(v) the degree of a vertex v in G,
      * i.e. the number of incident edges in G to v.
      * Then, Ore's theorem states that if $deg(v) + deg(w) \geq n$ for every pair of distinct non-adjacent vertices
      * v and w of G, then G is Hamiltonian.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      * @return true if the graph meets Ore's condition, false otherwise
      * @see org.jgrapht.alg.tour.PalmerHamiltonianCycle
      */
