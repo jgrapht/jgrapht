@@ -616,7 +616,7 @@ public class GnmRandomGraphGeneratorTest
                     return true;
                 else if (!(obj instanceof VertexOrdering.LabelsEdge))
                     return false;
-                LabelsEdge otherEdge = TypeUtil.uncheckedCast(obj, null);
+                LabelsEdge otherEdge = TypeUtil.uncheckedCast(obj);
                 return (this.source == otherEdge.source) && (this.target == otherEdge.target);
             }
 

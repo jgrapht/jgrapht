@@ -206,7 +206,7 @@ public final class GraphTypeBuilder<V, E>
     public <V1 extends V,
         E1 extends E> GraphTypeBuilder<V1, E1> edgeFactory(EdgeFactory<V1, E1> edgeFactory)
     {
-        GraphTypeBuilder<V1, E1> newBuilder = TypeUtil.uncheckedCast(this, null);
+        GraphTypeBuilder<V1, E1> newBuilder = TypeUtil.uncheckedCast(this);
         newBuilder.edgeFactory = edgeFactory;
         return newBuilder;
     }
@@ -220,7 +220,7 @@ public final class GraphTypeBuilder<V, E>
      */
     public <V1 extends V> GraphTypeBuilder<V1, E> vertexClass(Class<V1> vertexClass)
     {
-        GraphTypeBuilder<V1, E> newBuilder = TypeUtil.uncheckedCast(this, null);
+        GraphTypeBuilder<V1, E> newBuilder = TypeUtil.uncheckedCast(this);
         return newBuilder;
     }
 
@@ -233,7 +233,7 @@ public final class GraphTypeBuilder<V, E>
      */
     public <E1 extends E> GraphTypeBuilder<V, E1> edgeClass(Class<E1> edgeClass)
     {
-        GraphTypeBuilder<V, E1> newBuilder = TypeUtil.uncheckedCast(this, null);
+        GraphTypeBuilder<V, E1> newBuilder = TypeUtil.uncheckedCast(this);
         newBuilder.edgeFactory = new ClassBasedEdgeFactory<>(edgeClass);
         return newBuilder;
     }

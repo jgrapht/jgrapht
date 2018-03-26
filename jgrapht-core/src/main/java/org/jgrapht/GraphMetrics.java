@@ -208,3 +208,5 @@ public abstract class GraphMetrics
         return girth;
     }
 }
+
+//End GraphMetrics.java

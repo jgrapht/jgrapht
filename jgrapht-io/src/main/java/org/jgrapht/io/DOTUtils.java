@@ -38,7 +38,7 @@ class DOTUtils
     static final String UNDIRECTED_GRAPH_EDGEOP = "--";
 
     // patterns for IDs
-    private static final Pattern ALPHA_DIG = Pattern.compile("[a-zA-Z]+([\\w_]*)?");
+    private static final Pattern ALPHA_DIG = Pattern.compile("[a-zA-Z_][\\w]*");
     private static final Pattern DOUBLE_QUOTE = Pattern.compile("\".*\"");
     private static final Pattern DOT_NUMBER = Pattern.compile("[-]?([.][0-9]+|[0-9]+([.][0-9]*)?)");
     private static final Pattern HTML = Pattern.compile("<.*>");

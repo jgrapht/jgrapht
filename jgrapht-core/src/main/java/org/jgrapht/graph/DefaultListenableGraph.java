@@ -185,7 +185,7 @@ public class DefaultListenableGraph<V, E>
     public Object clone()
     {
         try {
-            DefaultListenableGraph<V, E> g = TypeUtil.uncheckedCast(super.clone(), null);
+            DefaultListenableGraph<V, E> g = TypeUtil.uncheckedCast(super.clone());
             g.graphListeners = new ArrayList<>();
             g.vertexSetListeners = new ArrayList<>();
 

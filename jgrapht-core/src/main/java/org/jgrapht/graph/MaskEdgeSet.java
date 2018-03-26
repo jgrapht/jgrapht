@@ -58,7 +58,7 @@ class MaskEdgeSet<V, E>
         if (!edgeSet.contains(o)) {
             return false;
         }
-        E e = TypeUtil.uncheckedCast(o, null);
+        E e = TypeUtil.uncheckedCast(o);
 
         return !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
             && !vertexMask.test(graph.getEdgeTarget(e));

@@ -61,7 +61,7 @@ public class SimpleIdentityDirectedGraphTest
             if (o == null || getClass() != o.getClass())
                 return false;
 
-            Holder<T> holder = TypeUtil.uncheckedCast(o, null);
+            Holder<T> holder = TypeUtil.uncheckedCast(o);
 
             return !(t != null ? !t.equals(holder.t) : holder.t != null);
 

@@ -250,6 +250,9 @@ public interface Graph<V, E>
      *
      * @param vertex vertex whose degree is to be calculated.
      * @return the degree of the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     int degreeOf(V vertex);
 
@@ -279,6 +282,9 @@ public interface Graph<V, E>
      *
      * @param vertex vertex whose degree is to be calculated.
      * @return the degree of the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     int inDegreeOf(V vertex);
 
@@ -291,6 +297,9 @@ public interface Graph<V, E>
      *
      * @param vertex the vertex for which the list of incoming edges to be returned.
      * @return a set of all edges incoming into the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> incomingEdgesOf(V vertex);
 
@@ -308,6 +317,9 @@ public interface Graph<V, E>
      *
      * @param vertex vertex whose degree is to be calculated.
      * @return the degree of the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     int outDegreeOf(V vertex);
 
@@ -320,6 +332,9 @@ public interface Graph<V, E>
      *
      * @param vertex the vertex for which the list of outgoing edges to be returned.
      * @return a set of all edges outgoing from the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> outgoingEdgesOf(V vertex);
 

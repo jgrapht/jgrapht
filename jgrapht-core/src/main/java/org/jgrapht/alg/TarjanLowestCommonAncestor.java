@@ -61,9 +61,9 @@ public class TarjanLowestCommonAncestor<V, E>
     }
 
     /**
-     * Calculate the LCMs between a set of pairs (<code>a</code> and <code>
+     * Calculate the LCM's between a set of pairs (<code>a</code> and <code>
      * b</code>) treating <code>start</code> as the root we want to search from, and setting the LCA
-     * of each pair in its LCA field
+     * of each pair in its LCA field.
      * 
      * @param start the root of the subtree
      * @param lrr a list of requests-response objects. The answer if stored on these objects at the
