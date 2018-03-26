@@ -24,6 +24,8 @@ import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.color.*;
+import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -358,44 +360,11 @@ public abstract class GraphTests
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
-        if (isEmpty(graph)) {
-            return true;
-        }
-        try {
-            // at most n^2/4 edges
-            if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
-                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
-            {
-                return false;
-            }
-        } catch (ArithmeticException e) {
-            // ignore
-        }
-
-        Set<V> unknown = new HashSet<>(graph.vertexSet());
-        Set<V> odd = new HashSet<>();
-        Deque<V> queue = new LinkedList<>();
-
-        while (!unknown.isEmpty()) {
-            if (queue.isEmpty()) {
-                queue.add(unknown.iterator().next());
-            }
-
-            V v = queue.removeFirst();
-            unknown.remove(v);
-
-            for (E e : graph.edgesOf(v)) {
-                V n = Graphs.getOppositeVertex(graph, e, v);
-                if (unknown.contains(n)) {
-                    queue.add(n);
-                    if (!odd.contains(v)) {
-                        odd.add(n);
-                    }
-                } else if (!(odd.contains(v) ^ odd.contains(n))) {
-                    return false;
-                }
-            }
-        }
+        Coloring<V> coloring = new Bipartite2Coloring<>(graph).getColoring();
+        Map<V, Integer> colors = coloring.getColors();
+        
+        if (colors == null)
+            return false;
         return true;
     }
 
