@@ -191,7 +191,6 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
 
         // add self loops
         if (this.selfLoops) {
-            System.out.println("loops");
             if (target.getType().isAllowingSelfLoops()) {
                 for (V v : vertices) {
                     if (this.rng.nextDouble() < this.p) {
