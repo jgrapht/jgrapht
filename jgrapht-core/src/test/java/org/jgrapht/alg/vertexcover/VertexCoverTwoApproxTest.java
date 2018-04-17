@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2018, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,9 +29,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests 2-approximation vertex cover algorithms.
  *
- * @author Alexandru Valeanu
+ * @author Linda Buisman
  */
-public abstract class VertexCoverTwoApproxTest extends VertexCoverTest {
+public abstract class VertexCoverTwoApproxTest implements VertexCoverTest {
 
     // ------- Approximation algorithms ------
 

@@ -29,13 +29,12 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
 /**
  * Tests exact vertex cover algorithms.
  *
- * @author Alexandru Valeanu
+ * @author Linda Buisman
  */
-public abstract class VertexCoverExactTest extends VertexCoverTest {
+public abstract class VertexCoverExactTest implements VertexCoverTest {
 
     // ------- Exact algorithms ------
 

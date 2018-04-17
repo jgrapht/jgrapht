@@ -18,11 +18,17 @@
 package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
 
-public class BarYehudaEvenTwoApproxVCImplTest extends VertexCoverTwoApproxTest {
+public class BarYehudaEvenTwoApproxVCImplTest extends WeightedVertexCoverTwoApproxTest {
 
     @Override
-    <V, E>  MinimumVertexCoverAlgorithm<V, E> createSolver() {
+    public <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
+        return new BarYehudaEvenTwoApproxVCImpl<>();
+    }
+
+    @Override
+    public <V, E> MinimumWeightedVertexCoverAlgorithm<V, E> createWeightedSolver() {
         return new BarYehudaEvenTwoApproxVCImpl<>();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2018, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,11 +18,17 @@
 package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
 
-public class RecursiveExactVCImplTest extends VertexCoverExactTest {
+public class RecursiveExactVCImplTest extends WeightedVertexCoverExactTest {
 
     @Override
-    <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
+    public <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
+        return new RecursiveExactVCImpl<>();
+    }
+
+    @Override
+    public <V, E> MinimumWeightedVertexCoverAlgorithm<V, E> createWeightedSolver() {
         return new RecursiveExactVCImpl<>();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2018, by Linda Buisman and Contributors.
+ * (C) Copyright 2018-2018, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,72 +17,14 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * Tests the vertex cover algorithms.
  *
  * @author Linda Buisman
- * @author Alexandru Valeanu
  */
-public abstract class VertexCoverTest {
+public interface VertexCoverTest extends VertexCoverTestBase {
 
-    abstract <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver();
-
-
-    // ~ Static fields/initializers ---------------------------------------------
-
-    protected static final int TEST_GRAPH_SIZE = 200;
-    protected static final int TEST_REPEATS = 20;
-
-    protected final Random rnd = new Random(0);
-
-    // ------- Helper methods ------
-
-    /**
-     * Checks if the specified vertex set covers every edge of the graph. Uses the definition of
-     * Vertex Cover - removes every edge that is incident on a vertex in vertexSet. If no edges are
-     * left, vertexSet is a vertex cover for the specified graph.
-     *
-     * @param vertexCover the vertex cover to be tested for covering the graph.
-     * @param g the graph to be covered.
-     *
-     * @return returns true if the provided vertex cover is a valid cover in the given graph
-     */
-    protected boolean isCover(Graph<Integer, DefaultEdge> g, VertexCover<Integer> vertexCover)
-    {
-        Set<DefaultEdge> uncoveredEdges = new HashSet<>(g.edgeSet());
-        for (Integer v : vertexCover)
-            uncoveredEdges.removeAll(g.edgesOf(v));
-
-        return uncoveredEdges.isEmpty();
-    }
-
-    /**
-     * Create a random PSEUDO graph of TEST_GRAPH_SIZE nodes.
-     *
-     * @return random pseudo graph with TEST_GRAPH_SIZE vertices and a random number of edges drawn
-     *         from the domain [1, TEST_GRAPH_SIZE/2]
-     */
-    protected Graph<Integer, DefaultEdge> createRandomPseudoGraph(int vertices)
-    {
-        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator =
-            new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
-        graphGenerator.generateGraph(g, new IntegerVertexFactory(), null);
-        return g;
-    }
+    <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver();
 }
-
-// End VertexCoverTest.java

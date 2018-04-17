@@ -18,11 +18,17 @@
 package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
 
-public class ClarksonTwoApproxVCImplTest extends VertexCoverTwoApproxTest {
+public class ClarksonTwoApproxVCImplTest extends WeightedVertexCoverTwoApproxTest {
 
     @Override
-    <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
+    public <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
+        return new ClarksonTwoApproxVCImpl<>();
+    }
+
+    @Override
+    public <V, E> MinimumWeightedVertexCoverAlgorithm<V, E> createWeightedSolver() {
         return new ClarksonTwoApproxVCImpl<>();
     }
 }

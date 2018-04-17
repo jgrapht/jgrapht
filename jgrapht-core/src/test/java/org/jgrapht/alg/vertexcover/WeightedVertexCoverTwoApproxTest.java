@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Linda Buisman and Contributors.
+ * (C) Copyright 2018-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,46 +29,27 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class GreedyVCImplTest extends WeightedVertexCoverTwoApproxTest {
+/**
+ * Tests the weighted 2-approx vertex cover algorithms
+ *
+ * @author Joris Kinable
+ */
+public abstract class WeightedVertexCoverTwoApproxTest extends VertexCoverTwoApproxTest implements WeightedVertexCoverTest {
 
-    @Override
-    public <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
-        return new GreedyVCImpl<>();
-    }
-
-    @Override
-    public <V, E> MinimumWeightedVertexCoverAlgorithm<V, E> createWeightedSolver() {
-        return new GreedyVCImpl<>();
-    }
-
-    // ------- Greedy algorithms ------
+    // ------- Approximation algorithms ------
 
     /**
-     * Test greedy algorithm for the minimum vertex cover problem.
+     * Test 2-approximation algorithm for the minimum vertex cover problem.
+     * TODO: verify whether the objective indeed is smaller than 2 times the optimum solution.
      */
     @Test
-    public void testFindGreedyCover()
-    {
-        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc = createSolver();
-
-        for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
-            MinimumVertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover(Graphs.undirectedGraph(g));
-            assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), 1.0 * vertexCover.getVertices().size(),0);
-        }
-    }
-
-    /**
-     * Test greedy algorithm for the minimum weighted vertex cover problem.
-     */
-    @Test
-    public void testFindGreedyWeightedCover()
+    public void testFind2ApproximationWeightedCover()
     {
         MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc = createWeightedSolver();
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
             Map<Integer, Double> vertexWeights = getRandomVertexWeights(g);
+
             MinimumVertexCoverAlgorithm.VertexCover<Integer> vertexCover =
                     mvc.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover));

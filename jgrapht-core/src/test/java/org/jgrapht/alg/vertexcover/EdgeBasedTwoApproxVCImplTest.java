@@ -22,7 +22,7 @@ import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
 public class EdgeBasedTwoApproxVCImplTest extends VertexCoverTwoApproxTest {
 
     @Override
-    <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
+    public <V, E> MinimumVertexCoverAlgorithm<V, E> createSolver() {
         return new EdgeBasedTwoApproxVCImpl<>();
     }
 }
