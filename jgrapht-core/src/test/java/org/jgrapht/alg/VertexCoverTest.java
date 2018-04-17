@@ -17,17 +17,26 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.alg.vertexcover.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.GreedyVCImpl;
+import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -38,6 +47,7 @@ import static org.junit.Assert.assertTrue;
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
+@Deprecated
 public class VertexCoverTest
 {
     // ~ Static fields/initializers ---------------------------------------------
