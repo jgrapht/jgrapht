@@ -17,14 +17,20 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.*;
-import org.jgrapht.alg.vertexcover.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
+import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
+import org.jgrapht.alg.vertexcover.BarYehudaEvenTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.GreedyVCImpl;
+import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +40,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Joris Kinable
  */
+@Deprecated
 public class WeightedVertexCoverTest
     extends VertexCoverTest
 {
