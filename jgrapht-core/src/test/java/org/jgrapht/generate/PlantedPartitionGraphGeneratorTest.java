@@ -25,6 +25,11 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -259,6 +264,64 @@ public class PlantedPartitionGraphGeneratorTest
         assertEquals(l*k, g.vertexSet().size());
         for (Integer v : g.vertexSet()) {
             assertEquals(d, g.degreeOf(v));
+        }
+    }
+
+    /* test getCommunities() */
+    @Test
+    public void testGetCommunities() {
+        int l = 5;
+        int k = 10;
+        double p = 0.5;
+        double q = 0.1;
+
+        List<Set<Integer>> groundTruthCommunities = new ArrayList<>(l);
+        for (int i = 0; i < l; i++) {
+            groundTruthCommunities.add(new LinkedHashSet<>(k));
+            for (int j = 0; j < k; j++) {
+                groundTruthCommunities.get(i).add(i*k + j);
+            }
+        }
+
+        PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen = new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        gen.generateGraph(g, new IntegerVertexFactory(0), null);
+        assertEquals(groundTruthCommunities, gen.getCommunities());
+    }
+
+    @Test
+    public void testCallGetCommunitiesBeforeGenerateGraph() {
+        int l = 5;
+        int k = 10;
+        double p = 0.5;
+        double q = 0.1;
+
+        PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen = new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
+        try {
+            List<Set<Integer>> communities = gen.getCommunities();
+            fail("gen.getCommunities() did not throw an IllegalStateException as expected");
+        }
+        catch (IllegalStateException e) {
+        }
+    }
+
+    @Test
+    public void testCallGetCommunitiesMoreThanOnce() {
+        int l = 5;
+        int k = 10;
+        double p = 0.5;
+        double q = 0.1;
+
+        PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen = new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        gen.generateGraph(g, new IntegerVertexFactory(0), null);
+
+        Graph<Integer, DefaultEdge> f = new SimpleGraph<>(DefaultEdge.class);
+        try {
+            gen.generateGraph(f, new IntegerVertexFactory(0), null);
+            fail("gen.getCommunities() did not throw an IllegalStateException as expected");
+        }
+        catch (IllegalStateException e) {
         }
     }
 
