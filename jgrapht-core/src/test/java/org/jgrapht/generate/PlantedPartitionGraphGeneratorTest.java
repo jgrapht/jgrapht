@@ -315,7 +315,6 @@ public class PlantedPartitionGraphGeneratorTest
         PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen = new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
-
         Graph<Integer, DefaultEdge> f = new SimpleGraph<>(DefaultEdge.class);
         try {
             gen.generateGraph(f, new IntegerVertexFactory(0), null);
