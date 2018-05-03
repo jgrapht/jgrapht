@@ -21,10 +21,7 @@ package org.jgrapht.generate;
 import org.jgrapht.Graph;
 import org.jgrapht.VertexFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Create a random $l$-planted partition graph.
@@ -36,6 +33,23 @@ import java.util.Random;
  * <p>
  * The $l$-planted partition model is a special case of the
  * <a href="https://en.wikipedia.org/wiki/Stochastic_block_model">Stochastic Block Model</a>.
+ * If the probability matrix is a constant, in the sense that
+ * $P_{ij}=p$ for all $i,j$,
+ * then the result is the Erdős–Rényi model $\mathcal G(n,p)$.
+ * This case is degenerate—the partition into communities becomes irrelevant—
+ * but it illustrates a close relationship to the Erdős–Rényi model.
+ *
+ * For more information on planted graphs, refer to:
+ * <ol>
+ *   <li>Condon, A. Karp, R.M.
+ *   Algorithms for graph partitioning on the planted partition model,
+ *   Random Structures and Algorithms, Volume 18, Issue 2, p.116-140, 2001
+ *   </li>
+ *   <li>Fortunato, S.
+ *   Community Detection in Graphs,
+ *   Physical Reports Volume 486, Issue 3-5 p. 75-174, 2010
+ *   </li>
+ * </ol>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -53,6 +67,9 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
     private final double q;
     private final Random rng;
     private final boolean selfLoops;
+
+    private boolean fired;
+    private List<Set<V>> communities;
 
     /**
      * Construct a new PlantedPartitionGraphGenerator.
@@ -123,7 +140,7 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
      */
     public PlantedPartitionGraphGenerator(int l, int k, double p, double q, long seed, boolean selfLoops)
     {
-        this(l, k, p, q, new Random(seed), DEFAULT_ALLOW_SELFLOOPS);
+        this(l, k, p, q, new Random(seed), selfLoops);
     }
 
     /**
@@ -160,20 +177,38 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
         this.q = q;
         this.rng = rng;
         this.selfLoops = selfLoops;
+
+        this.fired = false;
     }
 
     /**
      * Generate an $l$-planted partition graph.
+     *
+     * Note that the method can be called only once.
+     * Must instantiate another PlantedPartitionGraphGenerator object
+     * in order to generate another $l$-planted partition graph.
      *
      * @param target target graph
      * @param vertexFactory vertex factory
      * @param resultMap result map
      * @throws IllegalArgumentException if target is directed
      * @throws IllegalArgumentException if self loops are requested but target does not allow them
+     * @throws IllegalStateException if generateGraph() is called more than once
      */
     @Override
     public void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
+        if (fired) {
+            throw new IllegalStateException("generateGraph() can be only called once");
+        }
+        this.fired = true;
+
+        // instantiate community structure
+        communities = new ArrayList<>(this.l);
+        for (int i = 0; i < this.l; i++) {
+            communities.add(new LinkedHashSet<>(this.k));
+        }
+
         // empty graph case
         if (this.l == 0 || this.k == 0) {
             return;
@@ -187,6 +222,10 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
             V vertex = vertexFactory.createVertex();
             vertices.add(vertex);
             target.addVertex(vertex);
+
+            // populate community structure
+            int lv = i / this.k;  // group of node v
+            communities.get(lv).add(vertex);
         }
 
         // add self loops
@@ -253,6 +292,20 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
                 }
             }
         }
+    }
+    
+    /**
+     * Get the community structure of the graph.
+     * The method return a list of communities, represented as sets of nodes.
+     *
+     * @throws IllegalStateException if getCommunities() is called before generating the graph
+     */
+    public List<Set<V>> getCommunities()
+    {
+        if (communities == null)
+            throw new IllegalStateException("must generate graph before getting community structure");
+
+        return communities;
     }
 
 }
