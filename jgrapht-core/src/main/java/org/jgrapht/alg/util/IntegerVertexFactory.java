@@ -24,7 +24,9 @@ import org.jgrapht.*;
  * from zero.
  * 
  * @author Assaf Lehr
+ * @deprecated Use suppliers instead
  */
+@Deprecated
 public class IntegerVertexFactory
     implements VertexFactory<Integer>
 {

@@ -55,7 +55,7 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
      *
      * @throws NullPointerException if the specified prevPathElementList or edge is
      *         <code>null</code>.
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or 0.
+     * @throws IllegalArgumentException if <code>maxSize</code> is negative or $0$.
      */
     protected AbstractPathElementList(
         Graph<V, E> graph, int maxSize, AbstractPathElementList<V, E, T> elementList, E edge)
@@ -76,7 +76,7 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
     }
 
     /**
-     * Creates a list with an empty path. The list size is 1.
+     * Creates a list with an empty path. The list size is $1$.
      *
      * @param maxSize maximum number of paths the list is able to store.
      *
@@ -105,11 +105,11 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
     }
 
     /**
-     * Creates an empty list. The list size is 0.
+     * Creates an empty list. The list size is $0$.
      *
      * @param maxSize maximum number of paths the list is able to store.
      *
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or 0.
+     * @throws IllegalArgumentException if <code>maxSize</code> is negative or $0$.
      */
     protected AbstractPathElementList(Graph<V, E> graph, int maxSize, V vertex)
     {

@@ -26,12 +26,12 @@ import org.jgrapht.graph.*;
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by R. Bar-Yehuda and S.
  * Even. A linear time approximation algorithm for the weighted vertex cover problem. J. of
- * Algorithms 2:198-203, 1981. The solution is guaranteed to be within 2 times the optimum solution.
+ * Algorithms 2:198-203, 1981. The solution is guaranteed to be within $2$ times the optimum solution.
  * An easier-to-read version of this algorithm can be found here: <a href=
  * "https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf">https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf</a>
  *
- * Note: this class supports pseudo-graphs Runtime: O(|E|) This is a fast algorithm, guaranteed to
- * give a 2-approximation. A solution of higher quality (same approximation ratio) at the expensive
+ * Note: this class supports pseudo-graphs Runtime: $O(|E|)$ This is a fast algorithm, guaranteed to
+ * give a $2$-approximation. A solution of higher quality (same approximation ratio) at the expensive
  * of a higher runtime can be obtained using {@link BarYehudaEvenTwoApproxVCImpl}.
  *
  *

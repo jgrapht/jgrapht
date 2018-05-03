@@ -20,8 +20,8 @@ package org.jgrapht.graph;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -137,11 +137,10 @@ public class GraphWalkTest
     @Test
     public void testNonSimplePath()
     {
-        VertexFactory<Integer> vertexFactory = new IntegerVertexFactory();
         CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(5);
-        Graph<Integer, DefaultEdge> completeGraph = new SimpleGraph<>(DefaultEdge.class);
-        completeGraphGenerator.generateGraph(completeGraph, vertexFactory, new HashMap<>());
+        Graph<Integer, DefaultEdge> completeGraph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        completeGraphGenerator.generateGraph(completeGraph);
 
         List<Integer> vertexList = Arrays.asList(0, 1, 2, 3, 2, 3, 4);
         List<DefaultEdge> edgeList = new ArrayList<>();

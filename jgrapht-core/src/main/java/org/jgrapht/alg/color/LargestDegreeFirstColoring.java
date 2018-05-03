@@ -75,9 +75,7 @@ public class LargestDegreeFirstColoring<V, E>
              * Order vertices by degree by using a comparison based sort.
              */
             List<V> nodes = new ArrayList<>(graph.vertexSet());
-            Collections.sort(nodes, (u, v) -> {
-                return -1 * Integer.compare(degree.get(u), degree.get(v));
-            });
+            nodes.sort((u, v) -> -1 * Integer.compare(degree.get(u), degree.get(v)));
             return nodes;
         } else {
             /*

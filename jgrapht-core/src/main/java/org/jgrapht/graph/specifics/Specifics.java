@@ -34,8 +34,9 @@ public interface Specifics<V, E>
      * Adds a vertex.
      *
      * @param vertex vertex to be added.
+     * @return true if the vertex was added, false if the vertex was already present
      */
-    void addVertex(V vertex);
+    boolean addVertex(V vertex);
 
     /**
      * Get the vertex set.

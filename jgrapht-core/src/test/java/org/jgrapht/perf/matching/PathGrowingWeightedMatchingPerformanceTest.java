@@ -24,12 +24,11 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 /**
  * A small benchmark comparing matching algorithms.
@@ -62,18 +61,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
             }
 
-            graph = new Pseudograph<>(DefaultEdge.class);
-
-            generator.generateGraph(graph, new VertexFactory<Integer>()
-            {
-                int i;
-
-                @Override
-                public Integer createVertex()
-                {
-                    return ++i;
-                }
-            }, null);
+            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
         }
 
         @Benchmark

@@ -31,18 +31,18 @@ import org.jgrapht.graph.*;
  * efficiently query the maximum flows and minimum cuts for all pairs of vertices. The algorithm is
  * described in: <i>Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM
  * Journal on Computing, 19(1), p142-155, 1990</i><br>
- * In an undirected graph, there exist n(n-1)/2 different vertex pairs. This class computes the
- * maximum flow/minimum cut between each of these pairs efficiently by performing exactly (n-1)
- * minimum s-t cut computations. If your application needs fewer than (n-1) flow/cut computations,
+ * In an undirected graph, there exist $\frac{n(n-1)}{2}$ different vertex pairs. This class computes the
+ * maximum flow/minimum cut between each of these pairs efficiently by performing exactly $(n-1)$
+ * minimum $s-t$ cut computations. If your application needs fewer than $n-1$ flow/cut computations,
  * consider computing the maximum flows/minimum cuts manually through
  * {@link MaximumFlowAlgorithm}/{@link MinimumSTCutAlgorithm}.
  *
  *
  * <p>
- * The runtime complexity of this class is O((V-1)Q), where Q is the runtime complexity of the
- * algorithm used to compute s-t cuts in the graph. By default, this class uses the
+ * The runtime complexity of this class is $O((V-1)Q)$, where $Q$ is the runtime complexity of the
+ * algorithm used to compute $s-t$ cuts in the graph. By default, this class uses the
  * {@link PushRelabelMFImpl} implementation to calculate minimum s-t cuts. This class has a runtime
- * complexity of O(V^3), resulting in a O(V^4) runtime complexity for the overall algorithm.
+ * complexity of $O(V^3)$, resulting in a $O(V^4)$ runtime complexity for the overall algorithm.
  *
  *
  * <p>
@@ -73,7 +73,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     private final Graph<V, E> network;
     /* Number of vertices in the graph */
     private final int N;
-    /* Algorithm used to computed the Maximum s-t flows */
+    /* Algorithm used to computed the Maximum $s-t$ flows */
     private final MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm;
 
     /* Data structures for computations */
@@ -82,7 +82,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     private int[] p; // See vector p in the paper description
     private double[] fl; // See vector fl in the paper description
 
-    /* Matrix containing the flow values for every s-t pair */
+    /* Matrix containing the flow values for every $s-t$ pair */
     private double[][] flowMatrix = null;
 
     private V lastInvokedSource = null;
@@ -168,7 +168,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Returns the Gomory-Hu Tree as an actual tree (graph). Note that this tree is not necessarily
-     * unique. The edge weights represent the flow values/cut weights. This method runs in O(n)
+     * unique. The edge weights represent the flow values/cut weights. This method runs in $O(n)$
      * time.
      * 
      * @return Gomory-Hu Tree
@@ -209,7 +209,7 @@ public class GusfieldGomoryHuCutTree<V, E>
 
     /**
      * Returns the Maximum flow between source and sink. The algorithm is only executed once;
-     * successive invocations of this method will return in O(1) time.
+     * successive invocations of this method will return in $O(1)$ time.
      * 
      * @param source source vertex
      * @param sink sink vertex
@@ -276,12 +276,12 @@ public class GusfieldGomoryHuCutTree<V, E>
     }
 
     /**
-     * Calculates the minimum cut in the graph, that is, the minimum cut over all s-t pairs. The
+     * Calculates the minimum cut in the graph, that is, the minimum cut over all $s-t$ pairs. The
      * same result can be obtained with the {@link org.jgrapht.alg.StoerWagnerMinimumCut}
      * implementation. After invoking this method, the source/sink partitions corresponding to the
      * minimum cut can be queried through the {@link #getSourcePartition()} and
      * {@link #getSinkPartition()} methods. After computing the Gomory-Hu Cut tree, this method runs
-     * in O(N) time.
+     * in $O(N)$ time.
      * 
      * @return weight of the minimum cut in the graph
      */

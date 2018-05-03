@@ -38,7 +38,7 @@ import org.jgrapht.traverse.*;
  * This is an implementation of the folklore algorithm which returns a depth-first ordering of the
  * minimum spanning tree. The algorithm is a 2-approximation assuming that the instance satisfies
  * the triangle inequality. The implementation requires the input graph to be undirected and
- * complete. The running time is O(|V|^2 log|V|).
+ * complete. The running time is $O(|V|^2 \log |V|)$.
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">wikipedia</a> for more
@@ -121,7 +121,7 @@ public class TwoApproxMetricTSP<V, E>
         /*
          * Explicitly build the path.
          */
-        List<E> tourEdges = new ArrayList<E>(n);
+        List<E> tourEdges = new ArrayList<>(n);
         double tourWeight = 0d;
         Iterator<V> tourIt = tour.iterator();
         V u = tourIt.next();

@@ -35,7 +35,7 @@ import org.jgrapht.graph.*;
  * algorithm, all distances to and from these landmark nodes are computed and stored. Afterwards,
  * the heuristic estimates the distance from a vertex to another vertex using the already computed
  * distances to and from the landmarks and the fact that shortest path distances obey the
- * triangle-inequality. The heuristic's space requirement is O(n) per landmark where n is the number
+ * triangle-inequality. The heuristic's space requirement is $O(n)$ per landmark where n is the number
  * of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm execution is
  * performed per landmark.
  * 

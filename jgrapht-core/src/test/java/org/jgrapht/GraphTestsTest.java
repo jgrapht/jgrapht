@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
@@ -292,7 +291,7 @@ public class GraphTestsTest
     @Test
     public void testIsTree()
     {
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
         assertFalse(GraphTests.isTree(g));
         g.addVertex(1);
         assertTrue(GraphTests.isTree(g));
@@ -308,7 +307,7 @@ public class GraphTestsTest
         assertFalse(GraphTests.isTree(g));
 
         // disconnected but with correct number of edges
-        Graph<Integer, DefaultEdge> g1 = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 = GraphTestsUtils.createPseudograph();
         assertFalse(GraphTests.isTree(g1));
         g1.addVertex(1);
         g1.addVertex(2);
@@ -319,7 +318,7 @@ public class GraphTestsTest
     @Test
     public void testIsForest1()
     {
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
         assertFalse(GraphTests.isForest(g));
         g.addVertex(1);
         assertTrue(GraphTests.isForest(g));
@@ -334,11 +333,10 @@ public class GraphTestsTest
     @Test
     public void testIsForest2()
     {
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
         StarGraphGenerator<Integer, DefaultEdge> gen = new StarGraphGenerator<>(10);
-        IntegerVertexFactory factory = new IntegerVertexFactory();
-        gen.generateGraph(g, factory, null);
-        gen.generateGraph(g, factory, null);
+        gen.generateGraph(g);
+        gen.generateGraph(g);
         assertTrue(GraphTests.isForest(g));
     }
 
@@ -348,14 +346,14 @@ public class GraphTestsTest
         assertFalse(GraphTests.isOverfull(NamedGraphGenerator.clawGraph()));
         assertTrue(GraphTests.isOverfull(NamedGraphGenerator.doyleGraph()));
 
-        Graph<Integer, DefaultEdge> k6 = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> k6 = GraphTestsUtils.createPseudograph();
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(6);
-        gen.generateGraph(k6, new IntegerVertexFactory(), null);
+        gen.generateGraph(k6);
         assertFalse(GraphTests.isOverfull(k6));
 
-        Graph<Integer, DefaultEdge> k7 = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> k7 = GraphTestsUtils.createPseudograph();
         gen = new CompleteGraphGenerator<>(7);
-        gen.generateGraph(k7, new IntegerVertexFactory(), null);
+        gen.generateGraph(k7);
         assertTrue(GraphTests.isOverfull(k7));
     }
 
@@ -390,8 +388,8 @@ public class GraphTestsTest
 
         for (int inst = 0; inst < 5; inst++) {
             // 1. create a clique
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(0), null);
+            Graph<Integer, DefaultEdge> g = GraphTestsUtils.createSimpleGraph();
+            gen.generateGraph(g);
 
             // 2. add a number of vertices (the independent set) and connect some of these vertices
             // with vertices in the clique.
@@ -475,8 +473,8 @@ public class GraphTestsTest
         GnpRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
             new GnpRandomBipartiteGraphGenerator<>(10, 10, 0.8);
         for (int i = 0; i < 100; i++) {
-            Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-            generator.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
+            generator.generateGraph(g);
             assertTrue(GraphTests.isBipartite(g));
         }
     }
@@ -529,6 +527,33 @@ public class GraphTestsTest
         Graphs.addEdgeWithVertices(triangle, 2, 3);
         Graphs.addEdgeWithVertices(triangle, 3, 1);
         assertFalse(GraphTests.isCubic(triangle));
+    }
+
+    @Test
+    public void testIsChordal(){
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1,2);
+        Graphs.addEdgeWithVertices(graph, 2,3);
+        Graphs.addEdgeWithVertices(graph, 3,4);
+        Graphs.addEdgeWithVertices(graph, 4,5);
+        Graphs.addEdgeWithVertices(graph, 5,1);
+        Graphs.addEdgeWithVertices(graph, 1,3);
+        assertFalse(GraphTests.isChordal(graph));
+        Graphs.addEdgeWithVertices(graph, 1,4);
+        assertTrue(GraphTests.isChordal(graph));
+    }
+
+    @Test
+    public void testIsWeaklyChordal() {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 4);
+        Graphs.addEdgeWithVertices(graph, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 5, 1);
+        assertFalse(GraphTests.isWeaklyChordal(graph));
+        Graphs.addEdgeWithVertices(graph, 1, 3);
+        assertTrue(GraphTests.isWeaklyChordal(graph));
     }
 }
 

@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import java.io.*;
 
-import org.jgrapht.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

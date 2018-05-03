@@ -17,7 +17,6 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.junit.Assert;
 import org.junit.Test;
 

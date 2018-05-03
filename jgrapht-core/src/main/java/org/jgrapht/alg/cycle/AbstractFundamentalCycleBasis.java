@@ -81,7 +81,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
 
         // collect set with all tree edges
         Set<E> treeEdges = spanningForest
-            .entrySet().stream().map(e -> e.getValue()).filter(Objects::nonNull)
+            .entrySet().stream().map(Map.Entry::getValue).filter(Objects::nonNull)
             .collect(Collectors.toSet());
 
         // build cycles for all non-tree edges

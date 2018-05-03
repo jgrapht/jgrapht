@@ -341,46 +341,6 @@ public class GnmRandomGraphGeneratorTest
     }
 
     @Test
-    public void testCannotGuessGraphType()
-    {
-        try {
-            GraphGenerator<Integer, DefaultEdge, Integer> gen1 =
-                new GnmRandomGraphGenerator<>(5, 11, SEED, false, false);
-            GraphDelegator<Integer, DefaultEdge> g1 =
-                new GraphDelegator<>(new SimpleGraph<>(DefaultEdge.class));
-            gen1.generateGraph(g1, new IntegerVertexFactory(), null);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-
-        GraphGenerator<Integer, DefaultEdge, Integer> gen2 =
-            new GnmRandomGraphGenerator<>(5, 10, SEED, false, false);
-        GraphDelegator<Integer, DefaultEdge> g2 =
-            new GraphDelegator<>(new SimpleGraph<>(DefaultEdge.class));
-        gen2.generateGraph(g2, new IntegerVertexFactory(), null);
-
-        try {
-            GraphGenerator<Integer, DefaultEdge, Integer> gen3 =
-                new GnmRandomGraphGenerator<>(5, 11, SEED, true, false);
-            GraphDelegator<Integer, DefaultEdge> g3 =
-                new GraphDelegator<>(new Pseudograph<>(DefaultEdge.class));
-            gen3.generateGraph(g3, new IntegerVertexFactory(), null);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            GraphGenerator<Integer, DefaultEdge, Integer> gen4 =
-                new GnmRandomGraphGenerator<>(5, 11, SEED, false, true);
-            GraphDelegator<Integer, DefaultEdge> g4 =
-                new GraphDelegator<>(new Pseudograph<>(DefaultEdge.class));
-            gen4.generateGraph(g4, new IntegerVertexFactory(), null);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-    }
-
-    @Test
     public void testGenerateDirectedGraph()
     {
         List<Graph<Integer, DefaultEdge>> graphArray = new ArrayList<>();
@@ -616,7 +576,7 @@ public class GnmRandomGraphGeneratorTest
                     return true;
                 else if (!(obj instanceof VertexOrdering.LabelsEdge))
                     return false;
-                LabelsEdge otherEdge = TypeUtil.uncheckedCast(obj, null);
+                LabelsEdge otherEdge = TypeUtil.uncheckedCast(obj);
                 return (this.source == otherEdge.source) && (this.target == otherEdge.target);
             }
 

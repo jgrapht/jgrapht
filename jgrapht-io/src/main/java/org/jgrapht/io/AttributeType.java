@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,7 +29,8 @@ public enum AttributeType
     LONG("long"),
     FLOAT("float"),
     DOUBLE("double"),
-    STRING("string");
+    STRING("string"),
+    UNKNOWN("unknown");
 
     private String name;
 
@@ -69,6 +70,8 @@ public enum AttributeType
             return DOUBLE;
         case "string":
             return STRING;
+        case "unknown": 
+            return UNKNOWN;
         }
         throw new IllegalArgumentException("Type " + value + " is unknown");
     }

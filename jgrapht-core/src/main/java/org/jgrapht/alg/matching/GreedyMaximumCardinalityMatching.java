@@ -31,8 +31,8 @@ import org.jgrapht.alg.interfaces.*;
  * produce better results, albeit at the cost of some additional computational overhead.
  * <p>
  * Independent of the mode, the resulting matching is maximal, and is therefore guaranteed to
- * contain at least half of the edges that a maximum matching has (1/2 approximation). Runtime
- * complexity: O(m) when the edges are not sorted, O(m+m log n) otherwise, where n is the number of
+ * contain at least half of the edges that a maximum matching has ($\frac{1}{2}$ approximation). Runtime
+ * complexity: $O(m)$ when the edges are not sorted, $O(m+ m \log n)$ otherwise, where $n$ is the number of
  * vertices, and m the number of edges.
  *
  * @param <V> the graph vertex type
@@ -60,7 +60,7 @@ public class GreedyMaximumCardinalityMatching<V, E>
     }
 
     /**
-     * Get a matching that is a 1/2-approximation of the maximum cardinality matching.
+     * Get a matching that is a $\frac{1}{2}$-approximation of the maximum cardinality matching.
      *
      * @return a matching
      */

@@ -17,10 +17,28 @@
  */
 package org.jgrapht.graph.builder;
 
-import org.jgrapht.EdgeFactory;
+import java.util.function.Supplier;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultGraphType;
+import org.jgrapht.graph.DefaultUndirectedGraph;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.WeightedMultigraph;
+import org.jgrapht.graph.WeightedPseudograph;
+import org.jgrapht.util.SupplierUtil;
 import org.jgrapht.util.TypeUtil;
 
 /**
@@ -78,7 +96,8 @@ public final class GraphTypeBuilder<V, E>
     private boolean weighted;
     private boolean allowingMultipleEdges;
     private boolean allowingSelfLoops;
-    private EdgeFactory<V, E> edgeFactory;
+    private Supplier<V> vertexSupplier;
+    private Supplier<E> edgeSupplier;
 
     private GraphTypeBuilder(boolean directed, boolean undirected)
     {
@@ -145,7 +164,7 @@ public final class GraphTypeBuilder<V, E>
 
     /**
      * Create a graph type builder which will create the same graph type as the parameter graph. The
-     * new graph will use the same edge factory as the input graph.
+     * new graph will use the same vertex and edge suppliers as the input graph.
      * 
      * @param graph a graph
      * @return a type builder
@@ -155,7 +174,8 @@ public final class GraphTypeBuilder<V, E>
     public static <V, E> GraphTypeBuilder<V, E> forGraph(Graph<V, E> graph)
     {
         GraphTypeBuilder<V, E> builder = forGraphType(graph.getType());
-        builder.edgeFactory = graph.getEdgeFactory();
+        builder.vertexSupplier = graph.getVertexSupplier();
+        builder.edgeSupplier = graph.getEdgeSupplier();
         return builder;
     }
 
@@ -196,18 +216,30 @@ public final class GraphTypeBuilder<V, E>
     }
 
     /**
-     * Set the edge factory.
+     * Set the vertex supplier.
      * 
-     * @param edgeFactory the edge factory to use
+     * @param vertexSupplier the vertex supplier to use
      * @return the graph type builder
      * @param <V1> the graph vertex type
+     */
+    public <V1 extends V> GraphTypeBuilder<V1, E> vertexSupplier(Supplier<V1> vertexSupplier)
+    {
+        GraphTypeBuilder<V1, E> newBuilder = TypeUtil.uncheckedCast(this);
+        newBuilder.vertexSupplier = vertexSupplier;
+        return newBuilder;
+    }
+
+    /**
+     * Set the edge supplier.
+     * 
+     * @param edgeSupplier the edge supplier to use
+     * @return the graph type builder
      * @param <E1> the graph edge type
      */
-    public <V1 extends V,
-        E1 extends E> GraphTypeBuilder<V1, E1> edgeFactory(EdgeFactory<V1, E1> edgeFactory)
+    public <E1 extends E> GraphTypeBuilder<V, E1> edgeSupplier(Supplier<E1> edgeSupplier)
     {
-        GraphTypeBuilder<V1, E1> newBuilder = TypeUtil.uncheckedCast(this, null);
-        newBuilder.edgeFactory = edgeFactory;
+        GraphTypeBuilder<V, E1> newBuilder = TypeUtil.uncheckedCast(this);
+        newBuilder.edgeSupplier = edgeSupplier;
         return newBuilder;
     }
 
@@ -220,7 +252,8 @@ public final class GraphTypeBuilder<V, E>
      */
     public <V1 extends V> GraphTypeBuilder<V1, E> vertexClass(Class<V1> vertexClass)
     {
-        GraphTypeBuilder<V1, E> newBuilder = TypeUtil.uncheckedCast(this, null);
+        GraphTypeBuilder<V1, E> newBuilder = TypeUtil.uncheckedCast(this);
+        newBuilder.vertexSupplier = SupplierUtil.createSupplier(vertexClass);
         return newBuilder;
     }
 
@@ -233,8 +266,8 @@ public final class GraphTypeBuilder<V, E>
      */
     public <E1 extends E> GraphTypeBuilder<V, E1> edgeClass(Class<E1> edgeClass)
     {
-        GraphTypeBuilder<V, E1> newBuilder = TypeUtil.uncheckedCast(this, null);
-        newBuilder.edgeFactory = new ClassBasedEdgeFactory<>(edgeClass);
+        GraphTypeBuilder<V, E1> newBuilder = TypeUtil.uncheckedCast(this);
+        newBuilder.edgeSupplier = SupplierUtil.createSupplier(edgeClass);
         return newBuilder;
     }
 
@@ -272,67 +305,64 @@ public final class GraphTypeBuilder<V, E>
      * Build the actual graph.
      * 
      * @return the graph
-     * @throws IllegalArgumentException if the edge factory is missing
      * @throws UnsupportedOperationException in case a graph type is not supported
      */
     public Graph<V, E> buildGraph()
     {
         if (directed && undirected) {
             throw new UnsupportedOperationException("Mixed graphs are not supported");
-        } else if (edgeFactory == null) {
-            throw new IllegalArgumentException("EdgeFactory missing");
         } else if (directed) {
             if (allowingSelfLoops && allowingMultipleEdges) {
                 if (weighted) {
-                    return new DirectedWeightedPseudograph<>(edgeFactory);
+                    return new DirectedWeightedPseudograph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new DirectedPseudograph<>(edgeFactory);
+                    return new DirectedPseudograph<>(vertexSupplier, edgeSupplier, false);
                 }
             } else if (allowingMultipleEdges) {
                 if (weighted) {
-                    return new DirectedWeightedMultigraph<>(edgeFactory);
+                    return new DirectedWeightedMultigraph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new DirectedMultigraph<>(edgeFactory);
+                    return new DirectedMultigraph<>(vertexSupplier, edgeSupplier, false);
                 }
             } else if (allowingSelfLoops) {
                 if (weighted) {
-                    return new DefaultDirectedWeightedGraph<>(edgeFactory);
+                    return new DefaultDirectedWeightedGraph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new DefaultDirectedGraph<>(edgeFactory);
+                    return new DefaultDirectedGraph<>(vertexSupplier, edgeSupplier, false);
                 }
 
             } else {
                 if (weighted) {
-                    return new SimpleDirectedWeightedGraph<>(edgeFactory);
+                    return new SimpleDirectedWeightedGraph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new SimpleDirectedGraph<>(edgeFactory);
+                    return new SimpleDirectedGraph<>(vertexSupplier, edgeSupplier, false);
                 }
             }
         } else {
             if (allowingSelfLoops && allowingMultipleEdges) {
                 if (weighted) {
-                    return new WeightedPseudograph<>(edgeFactory);
+                    return new WeightedPseudograph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new Pseudograph<>(edgeFactory);
+                    return new Pseudograph<>(vertexSupplier, edgeSupplier, false);
                 }
             } else if (allowingMultipleEdges) {
                 if (weighted) {
-                    return new WeightedMultigraph<>(edgeFactory);
+                    return new WeightedMultigraph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new Multigraph<>(edgeFactory);
+                    return new Multigraph<>(vertexSupplier, edgeSupplier, false);
                 }
             } else if (allowingSelfLoops) {
                 if (weighted) {
-                    return new DefaultUndirectedWeightedGraph<>(edgeFactory);
+                    return new DefaultUndirectedWeightedGraph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new DefaultUndirectedGraph<>(edgeFactory);
+                    return new DefaultUndirectedGraph<>(vertexSupplier, edgeSupplier, false);
                 }
 
             } else {
                 if (weighted) {
-                    return new SimpleWeightedGraph<>(edgeFactory);
+                    return new SimpleWeightedGraph<>(vertexSupplier, edgeSupplier);
                 } else {
-                    return new SimpleGraph<>(edgeFactory);
+                    return new SimpleGraph<>(vertexSupplier, edgeSupplier, false);
                 }
             }
         }

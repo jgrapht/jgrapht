@@ -82,6 +82,8 @@ public class GmlImporterTest
         assertTrue(g.containsEdge("2", "3"));
         assertTrue(g.containsEdge("3", "1"));
     }
+    
+    
 
     @Test
     public void testIgnoreWeightsUndirectedUnweighted()
@@ -725,6 +727,99 @@ public class GmlImporterTest
             assertEquals(AttributeType.INT, attributes.get("frequency").getType());
             assertEquals("7.5", attributes.get("customweight").getValue());
             assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+            return g.getEdgeFactory().createEdge(from, to);
+        };
+
+        GmlImporter<String, DefaultEdge> importer = new GmlImporter<String, DefaultEdge>(vp, ep);
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(1, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsEdge("1", "2"));
+    }
+    
+    @Test
+    public void testNestedStructure()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "graph [\n"
+                     + "  comment \"Sample Graph\"\n"
+                     + "  directed 1\n"
+                     + "  edge [\n"
+                     + "    source 1\n"
+                     + "    target 2\n"
+                     + "    frequency 6\n"
+                     + "    customweight 7.5\n"
+                     + "    points [ x 1.0 y 2.0 ]\n"
+                     + "    deep [ one [ one 1 two 2 ] two [ one 1 two 2 ] ]\n"
+                     + "  ]\n"
+                     + "  node [\n"
+                     + "    id 1\n"
+                     + "    frequency 2\n"
+                     + "    customweight 1.2\n"
+                     + "    deep [ one [ one 1.0 two 2.0 ] two [ one \"1\" two \"2\" ] ]\n"                     
+                     + "  ]\n"
+                     + "  node [\n"
+                     + "    id 2\n"
+                     + "    frequency 3\n"
+                     + "    customweight 2.1\n"
+                     + "    points [ x 1.0 y 2.0 z 3.0 ]\n"
+                     + "    deep [ one [ one 1 two 2 ] two [ one 1 two 2 ] ]\n"
+                     + "  ]\n"
+                     + "  node [\n"
+                     + "    frequency 5\n"
+                     + "    customweight 5.5\n"
+                     + "  ]\n"
+                     + "  deepignored [\n"
+                     + "    deep1 [ deep2 [ deep3 [ deep4 [ deep 5 ] ] ] ]\n"
+                     + "  ]\n"
+                     + "]\n"
+                     + "deepignored [\n"
+                     + "  deep1 [ deep2 [ deep3 [ deep4 [ deep 5 ] ] ] ]\n"
+                     + "]\n";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(DefaultEdge.class);
+
+        VertexProvider<String> vp = (id, attributes) -> {
+            assertNotNull(attributes);
+            if (Integer.parseInt(id) == 1) {
+                assertEquals("2", attributes.get("frequency").getValue());
+                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
+                assertEquals("1.2", attributes.get("customweight").getValue());
+                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+                assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
+                assertEquals("[ one [ one 1.0 two 2.0 ] two [ one \"1\" two \"2\" ] ]", attributes.get("deep").getValue());                
+            } else if (Integer.parseInt(id) == 2) {
+                assertEquals("3", attributes.get("frequency").getValue());
+                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
+                assertEquals("2.1", attributes.get("customweight").getValue());
+                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+                assertEquals(AttributeType.UNKNOWN, attributes.get("points").getType());
+                assertEquals("[ x 1.0 y 2.0 z 3.0 ]", attributes.get("points").getValue());
+                assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
+                assertEquals("[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]", attributes.get("deep").getValue());
+            } else {
+                assertEquals("5", attributes.get("frequency").getValue());
+                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
+                assertEquals("5.5", attributes.get("customweight").getValue());
+                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+            }
+            return id;
+        };
+        EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
+            assertNotNull(attributes);
+            assertEquals("6", attributes.get("frequency").getValue());
+            assertEquals(AttributeType.INT, attributes.get("frequency").getType());
+            assertEquals("7.5", attributes.get("customweight").getValue());
+            assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+            assertEquals(AttributeType.UNKNOWN, attributes.get("points").getType());
+            assertEquals("[ x 1.0 y 2.0 ]", attributes.get("points").getValue());
+            assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
+            assertEquals("[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]", attributes.get("deep").getValue());
             return g.getEdgeFactory().createEdge(from, to);
         };
 

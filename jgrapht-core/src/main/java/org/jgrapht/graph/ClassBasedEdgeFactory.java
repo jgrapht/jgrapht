@@ -34,7 +34,10 @@ import org.jgrapht.*;
  *
  * @author Barak Naveh
  * @since Jul 14, 2003
+ * 
+ * @deprecated Use suppliers instead
  */
+@Deprecated
 public class ClassBasedEdgeFactory<V, E>
     implements EdgeFactory<V, E>, Serializable
 {

@@ -22,8 +22,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -41,8 +41,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(0, 0, 0.5);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
     }
@@ -80,8 +80,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.5, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         int[][] edges = { { 5, 1 }, { 1, 6 }, { 6, 1 }, { 1, 7 }, { 1, 8 }, { 2, 5 }, { 6, 2 },
             { 7, 2 }, { 2, 8 }, { 5, 3 }, { 3, 6 }, { 7, 3 }, { 3, 8 }, { 4, 5 }, { 5, 4 },
@@ -99,8 +99,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 1.0, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(4 + 4, g.vertexSet().size());
         assertEquals(32, g.edgeSet().size());
@@ -111,8 +111,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.1, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         int[][] edges = { { 5, 1 }, { 7, 3 }, { 3, 8 }, { 8, 4 } };
 
@@ -128,8 +128,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.5, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         int[][] edges = { { 1, 6 }, { 1, 7 }, { 1, 8 }, { 2, 5 }, { 2, 7 }, { 3, 5 }, { 3, 8 },
             { 4, 6 }, { 4, 7 } };
@@ -146,8 +146,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 1.0, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(4 + 4, g.vertexSet().size());
         assertEquals(4 * 4, g.edgeSet().size());
@@ -158,8 +158,8 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.0, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(1), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(4 + 4, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());

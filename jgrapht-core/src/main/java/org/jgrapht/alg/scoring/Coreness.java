@@ -27,15 +27,15 @@ import org.jgrapht.alg.interfaces.*;
  * Computes the coreness of each vertex in an undirected graph.
  * 
  * <p>
- * A k-core of a graph G is a maximal connected subgraph of G in which all vertices have degree at
- * least k. Equivalently, it is one of the connected components of the subgraph of G formed by
- * repeatedly deleting all vertices of degree less than k. A vertex u has coreness c if it belongs
- * to a c-core but not to any (c+1)-core.
+ * A $k$-core of a graph $G$ is a maximal connected subgraph of $G$ in which all vertices have degree at
+ * least $k$. Equivalently, it is one of the connected components of the subgraph of $G$ formed by
+ * repeatedly deleting all vertices of degree less than $k$. A vertex $u$ has coreness $c$ if it belongs
+ * to a $c$-core but not to any $(c+1)$-core.
  *
  * <p>
- * If a non-empty k-core exists, then, clearly, G has
- * <a href="https://en.wikipedia.org/wiki/Degeneracy_(graph_theory)">degeneracy</a> at least k, and
- * the degeneracy of G is the largest k for which G has a k-core.
+ * If a non-empty k-core exists, then, clearly, $G$ has
+ * <a href="https://en.wikipedia.org/wiki/Degeneracy_(graph_theory)">degeneracy</a> at least $k$, and
+ * the degeneracy of $G$ is the largest $k$ for which $G$ has a $k$-core.
  *
  * <p>
  * As described in the following paper
@@ -43,7 +43,7 @@ import org.jgrapht.alg.interfaces.*;
  * <li>D. W. Matula and L. L. Beck. Smallest-last ordering and clustering and graph coloring
  * algorithms. Journal of the ACM, 30(3):417--427, 1983.</li>
  * </ul>
- * it is possible to find a vertex ordering of a finite graph G that optimizes the coloring number
+ * it is possible to find a vertex ordering of a finite graph $G$ that optimizes the coloring number
  * of the ordering, in linear time, by using a bucket queue to repeatedly find and remove the vertex
  * of smallest degree.
  *
@@ -96,9 +96,9 @@ public final class Coreness<V, E>
      * Compute the degeneracy of a graph.
      * 
      * <p>
-     * The degeneracy of a graph is the smallest value of k for which it is k-degenerate. In graph
-     * theory, a k-degenerate graph is an undirected graph in which every subgraph has a vertex of
-     * degree at most k: that is, some vertex in the subgraph touches k or fewer of the subgraph's
+     * The degeneracy of a graph is the smallest value of $k$ for which it is $k$-degenerate. In graph
+     * theory, a $k$-degenerate graph is an undirected graph in which every subgraph has a vertex of
+     * degree at most $k$: that is, some vertex in the subgraph touches $k$ or fewer of the subgraph's
      * edges.
      * 
      * @return the degeneracy of a graph

@@ -117,7 +117,7 @@ public class FloydWarshallShortestPaths<V, E>
         V u = a;
         while (!u.equals(b)) {
             int v_u = vertexIndices.get(u);
-            E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
+            E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b]);
             edges.add(e);
             u = Graphs.getOppositeVertex(graph, e, u);
         }
@@ -152,16 +152,16 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is
-     * O(1). If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next
-     * invocation would query the first hop on the shortest path from c to b, vertex d would be
+     * Returns the first hop, i.e., the second node on the shortest path from $a$ to $b$. Lookup time is
+     * $O(1)$. If the shortest path from $a$ to $b$ is $a,c,d,e,b$, this method returns $c$. If the next
+     * invocation would query the first hop on the shortest path from $c$ to $b$, vertex $d$ would be
      * returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the first vertex.
      * 
      * @param a source vertex
      * @param b target vertex
-     * @return next hop on the shortest path from a to b, or null when there exists no path from a
-     *         to b.
+     * @return next hop on the shortest path from a to b, or null when there exists no path from $a$
+     *         to $b$.
      */
     public V getFirstHop(V a, V b)
     {
@@ -173,23 +173,23 @@ public class FloydWarshallShortestPaths<V, E>
         if (backtrace[v_a][v_b] == null) { // No path exists
             return null;
         } else {
-            E e = TypeUtil.uncheckedCast(backtrace[v_a][v_b], null);
+            E e = TypeUtil.uncheckedCast(backtrace[v_a][v_b]);
             return Graphs.getOppositeVertex(graph, e, a);
         }
     }
 
     /**
-     * Returns the last hop, i.e., the second to last node on the shortest path from a to b. Lookup
-     * time is O(1). If the shortest path from a to b is a,c,d,e,b, this method returns e. If the
-     * next invocation would query the next hop on the shortest path from c to e, vertex d would be
+     * Returns the last hop, i.e., the second to last node on the shortest path from $a$ to $b$. Lookup
+     * time is $O(1)$. If the shortest path from $a$ to $b$ is $a,c,d,e,b$, this method returns $e$. If the
+     * next invocation would query the next hop on the shortest path from $c$ to $e$, vertex $d$ would be
      * returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the vertex. The first invocation of this
      * method populates a last hop matrix.
      * 
      * @param a source vertex
      * @param b target vertex
-     * @return last hop on the shortest path from a to b, or null when there exists no path from a
-     *         to b.
+     * @return last hop on the shortest path from $a$ to $b$, or null when there exists no path from $a$
+     *         to $b$.
      */
     public V getLastHop(V a, V b)
     {
@@ -202,7 +202,7 @@ public class FloydWarshallShortestPaths<V, E>
             return null;
         } else {
             populateLastHopMatrix();
-            E e = TypeUtil.uncheckedCast(lastHopMatrix[v_a][v_b], null);
+            E e = TypeUtil.uncheckedCast(lastHopMatrix[v_a][v_b]);
             return Graphs.getOppositeVertex(graph, e, b);
         }
     }
@@ -307,7 +307,7 @@ public class FloydWarshallShortestPaths<V, E>
                 V b = vertices.get(j);
                 while (!u.equals(b)) {
                     int v_u = vertexIndices.get(u);
-                    E e = TypeUtil.uncheckedCast(backtrace[v_u][j], null);
+                    E e = TypeUtil.uncheckedCast(backtrace[v_u][j]);
                     V other = Graphs.getOppositeVertex(graph, e, u);
                     lastHopMatrix[i][vertexIndices.get(other)] = e;
                     u = other;
@@ -377,7 +377,7 @@ public class FloydWarshallShortestPaths<V, E>
             V u = source;
             while (!u.equals(sink)) {
                 int v_u = vertexIndices.get(u);
-                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
+                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b]);
                 edges.add(e);
                 u = Graphs.getOppositeVertex(graph, e, u);
             }

@@ -57,7 +57,7 @@ class GraphOrdering<V, E>
 
         List<V> vertexSet = new ArrayList<>(graph.vertexSet());
         if (orderByDegree) {
-            java.util.Collections.sort(vertexSet, new GeneralVertexDegreeComparator<>(graph));
+            vertexSet.sort(new GeneralVertexDegreeComparator<>(graph));
         }
 
         vertexCount = vertexSet.size();
@@ -94,10 +94,10 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * @param vertexNumber the number which identifies the vertex v in this order.
+     * @param vertexNumber the number which identifies the vertex $v$ in this order.
      *
-     * @return the identifying numbers of all vertices which are connected to v by an edge outgoing
-     *         from v.
+     * @return the identifying numbers of all vertices which are connected to $v$ by an edge outgoing
+     *         from $v$.
      */
     public int[] getOutEdges(int vertexNumber)
     {
@@ -124,10 +124,10 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * @param vertexNumber the number which identifies the vertex v in this order.
+     * @param vertexNumber the number which identifies the vertex $v$ in this order.
      *
-     * @return the identifying numbers of all vertices which are connected to v by an edge incoming
-     *         to v.
+     * @return the identifying numbers of all vertices which are connected to $v$ by an edge incoming
+     *         to $v$.
      */
     public int[] getInEdges(int vertexNumber)
     {
@@ -154,10 +154,10 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * @param v1Number the number of the first vertex v1
-     * @param v2Number the number of the second vertex v2
+     * @param v1Number the number of the first vertex $v_1$
+     * @param v2Number the number of the second vertex $v_2$
      *
-     * @return exists the edge from v1 to v2
+     * @return exists the edge from $v_1$ to $v_2$
      */
     public boolean hasEdge(int v1Number, int v2Number)
     {
@@ -184,9 +184,9 @@ class GraphOrdering<V, E>
     /**
      * be careful: there's no check against an invalid vertexNumber
      *
-     * @param vertexNumber the number identifying the vertex v
+     * @param vertexNumber the number identifying the vertex $v$
      *
-     * @return v
+     * @return $v$
      */
     public V getVertex(int vertexNumber)
     {
@@ -194,10 +194,10 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * @param v1Number the number identifying the vertex v1
-     * @param v2Number the number identifying the vertex v2
+     * @param v1Number the number identifying the vertex $v_1$
+     * @param v2Number the number identifying the vertex $v_2$
      *
-     * @return the edge from v1 to v2
+     * @return the edge from $v_1$ to $v_2$
      */
     public E getEdge(int v1Number, int v2Number)
     {

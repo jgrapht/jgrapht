@@ -18,6 +18,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -161,9 +162,9 @@ public class GenericGraphsTest
     {
         private static final long serialVersionUID = 8647217182401022498L;
 
-        public EquivGraph()
-        {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, true, true, false);
+        public EquivGraph() { 
+            super(SupplierUtil.createSupplier(EquivVertex.class), SupplierUtil.createSupplier(DefaultEdge.class), 
+                DefaultGraphType.directedPseudograph().asUnweighted());
         }
     }
 

@@ -24,9 +24,9 @@ import java.util.function.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -92,8 +92,8 @@ public class AllPairsShortestPathsTest
 
         for (int i = 0; i < tests; i++) {
             Graph<Integer, DefaultWeightedEdge> g =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            gen.generateGraph(g);
 
             // assign random weights
             for (DefaultWeightedEdge e : g.edgeSet()) {

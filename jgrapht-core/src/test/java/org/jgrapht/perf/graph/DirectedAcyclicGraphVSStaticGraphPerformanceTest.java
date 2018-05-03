@@ -23,12 +23,11 @@ import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 /**
  * A somewhat frivolous test of the performance difference between doing a full cycle detection
@@ -63,11 +62,11 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
                                                                                 // graph
                                                                                 // configurations
                         Graph<Long, DefaultEdge> sourceGraph =
-                            new SimpleDirectedGraph<>(DefaultEdge.class);
+                            new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                         RepeatableRandomGraphGenerator<Long, DefaultEdge> gen =
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);
-                        gen.generateGraph(sourceGraph, new LongVertexFactory(), null);
+                        gen.generateGraph(sourceGraph);
 
                         DirectedAcyclicGraph<Long, DefaultEdge> dag =
                             new DirectedAcyclicGraph<>(DefaultEdge.class);
@@ -114,11 +113,11 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
                                                                                 // graph
                                                                                 // configurations
                         Graph<Long, DefaultEdge> sourceGraph =
-                            new SimpleDirectedGraph<>(DefaultEdge.class);
+                            new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                         RepeatableRandomGraphGenerator<Long, DefaultEdge> gen =
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);
-                        gen.generateGraph(sourceGraph, new LongVertexFactory(), null);
+                        gen.generateGraph(sourceGraph);
 
                         SimpleDirectedGraph<Long, DefaultEdge> compareGraph =
                             new SimpleDirectedGraph<>(DefaultEdge.class);

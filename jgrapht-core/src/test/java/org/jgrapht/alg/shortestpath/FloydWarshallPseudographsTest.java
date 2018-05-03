@@ -26,10 +26,11 @@ import java.util.function.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
+import org.junit.experimental.categories.Category;
 
 /**
  * Test {@link FloydWarshallShortestPaths} on pseudo graphs.
@@ -40,6 +41,7 @@ public class FloydWarshallPseudographsTest
 {
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomGraphs()
     {
         final int tests = 20;
@@ -49,15 +51,15 @@ public class FloydWarshallPseudographsTest
         Random rng = new Random();
 
         List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
-        graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
-        graphs.add(() -> new WeightedPseudograph<>(DefaultWeightedEdge.class));
+        graphs.add(() -> new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
+        graphs.add(() -> new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
 
         for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
                 new GnpRandomGraphGenerator<>(n, p, rng, true);
             for (int i = 0; i < tests; i++) {
                 Graph<Integer, DefaultWeightedEdge> g = gSupplier.get();
-                gen.generateGraph(g, new IntegerVertexFactory(), null);
+                gen.generateGraph(g);
 
                 // assign random weights
                 for (DefaultWeightedEdge e : g.edgeSet()) {

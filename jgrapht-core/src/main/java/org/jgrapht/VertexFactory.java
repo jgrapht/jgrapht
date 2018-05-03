@@ -26,7 +26,9 @@ package org.jgrapht;
  *
  * @author John V. Sichi
  * @since Sep 16, 2003
+ * @deprecated Use suppliers instead
  */
+@Deprecated
 public interface VertexFactory<V>
 {
     /**

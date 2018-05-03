@@ -126,7 +126,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         heap = new GenericFibonacciHeap<>(comparator);
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
-        graph.vertexSet().stream().forEach(v -> {
+        graph.vertexSet().forEach(v -> {
             pot.put(v, BigDecimal.ZERO);
             pred.put(v, null);
             dist.put(v, BigDecimal.ZERO);
@@ -175,7 +175,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     /**
      * Augment from a particular node. The algorithm always looks for augmenting paths from nodes in
-     * partition1. In the following code partition1 is A and partition2 is B.
+     * partition1. In the following code partition1 is $A$ and partition2 is $B$.
      * 
      * @param a the node
      */
@@ -306,8 +306,8 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     private void augmentPathTo(V v)
     {
-        List<E> matched = new ArrayList<E>();
-        List<E> free = new ArrayList<E>();
+        List<E> matched = new ArrayList<>();
+        List<E> free = new ArrayList<>();
 
         E e1 = pred.get(v);
         while (e1 != null) {

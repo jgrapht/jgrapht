@@ -28,7 +28,7 @@ import java.util.*;
  * 17(9):972--975, 1991.
  * 
  * <p>
- * Initialization takes O(n) where n is the number of items. Sampling takes O(1).
+ * Initialization takes $O(n)$ where $n$ is the number of items. Sampling takes $O(1)$.
  *
  * @author Dimitrios Michail
  * @since February 2017
@@ -44,7 +44,7 @@ public class AliasMethodSampler
     /**
      * Constructor
      * 
-     * @param p the probability distribution where position i of the array is Prob(X=i)
+     * @param p the probability distribution where position i of the array is $Prob(X=i)$
      * @throws IllegalArgumentException in case of a non-valid probability distribution
      */
     public AliasMethodSampler(double[] p)
@@ -55,7 +55,7 @@ public class AliasMethodSampler
     /**
      * Constructor
      * 
-     * @param p the probability distribution where position i of the array is Prob(X=i)
+     * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param seed seed to use for the random number generator
      */
     public AliasMethodSampler(double[] p, long seed)
@@ -66,7 +66,7 @@ public class AliasMethodSampler
     /**
      * Constructor
      * 
-     * @param p the probability distribution where position i of the array is Prob(X=i)
+     * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param rng the random number generator
      * @throws IllegalArgumentException in case of a non-valid probability distribution
      */
@@ -78,7 +78,7 @@ public class AliasMethodSampler
     /**
      * Constructor
      * 
-     * @param p the probability distribution where position i of the array is Prob(X=i)
+     * @param p the probability distribution where position $i$ of the array is $Prob(X=i)$
      * @param rng the random number generator
      * @param epsilon tolerance used when comparing floating-point values
      * @throws IllegalArgumentException in case of a non-valid probability distribution

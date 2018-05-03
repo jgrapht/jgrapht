@@ -8,6 +8,7 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -106,8 +107,8 @@ public abstract class BasePathGrowingWeightedMatchingTest
 
         for (int i = 0; i < repeat; i++) {
             WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(DefaultWeightedEdge.class);
-            gg.generateGraph(g, new IntegerVertexFactory(), null);
+                new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            gg.generateGraph(g);
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =
                 new PathGrowingWeightedMatching<>(g);

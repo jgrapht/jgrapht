@@ -29,7 +29,7 @@ import org.jgrapht.graph.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Andrew Gainer-Dewar
+ * @author Andrew Gainer-Dewar, Google LLC
  * @since Feb, 2016
  */
 public class AllDirectedPaths<V, E>
@@ -38,7 +38,7 @@ public class AllDirectedPaths<V, E>
 
     /**
      * Create a new instance
-     * 
+     *
      * @param graph the input graph
      * @throws IllegalArgumentException if the graph is not directed
      */
@@ -202,13 +202,8 @@ public class AllDirectedPaths<V, E>
         Deque<List<E>> incompletePaths = new LinkedList<>();
 
         // Input sanity checking
-        if (maxPathLength != null) {
-            if (maxPathLength < 0) {
-                throw new IllegalArgumentException("maxPathLength must be non-negative if defined");
-            }
-            if (maxPathLength == 0) {
-                return completePaths;
-            }
+        if (maxPathLength != null && maxPathLength < 0) {
+            throw new IllegalArgumentException("maxPathLength must be non-negative if defined");
         }
 
         // Bootstrap the search with the source vertices
@@ -224,11 +219,15 @@ public class AllDirectedPaths<V, E>
                     completePaths.add(makePath(Collections.singletonList(edge)));
                 }
 
-                if (edgeMinDistancesFromTargets.containsKey(edge)) {
+                if (edgeMinDistancesFromTargets.containsKey(edge) && (maxPathLength == null || maxPathLength > 1)) {
                     List<E> path = Collections.singletonList(edge);
                     incompletePaths.add(path);
                 }
             }
+        }
+
+        if (maxPathLength != null && maxPathLength == 0) {
+            return completePaths;
         }
 
         // Walk through the queue of incomplete paths

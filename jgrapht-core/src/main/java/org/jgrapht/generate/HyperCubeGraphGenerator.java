@@ -23,7 +23,7 @@ import org.jgrapht.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/HypercubeGraph.html">hyper cube graph</a> of
- * any size. This is a graph that can be represented by bit strings, so for an n-dimensial hypercube
+ * any size. This is a graph that can be represented by bit strings, so for an n-dimensional hypercube
  * each vertex resembles an n-length bit string. Then, two vertices are adjacent if and only if
  * their bitstring differ by exactly one element.
  * 
@@ -39,36 +39,33 @@ public class HyperCubeGraphGenerator<V, E>
     private int dim;
 
     /**
-     * Creates a new HyperCubeGraphGenerator object.
+     * Creates a new generator
      *
-     * @param dim This is the dimension of the hypercube.
+     * @param dim the dimension of the hypercube
      */
     public HyperCubeGraphGenerator(int dim)
     {
         this.dim = dim;
     }
 
-    /**
-     * This will generate the hypercube graph
-     */
     @Override
     public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         // Vertices are created, and they are included in the resultmap as their
         // bitstring representation
         int order = (int) Math.pow(2, dim);
         LinkedList<V> vertices = new LinkedList<>();
         for (int i = 0; i < order; i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
+            V newVertex = target.addVertex();
+            
             vertices.add(newVertex);
             if (resultMap != null) {
-                String s = Integer.toBinaryString(i);
+                StringBuilder s = new StringBuilder(Integer.toBinaryString(i));
                 while (s.length() < dim) {
-                    s = "0" + s;
+                    s.insert(0, "0");
                 }
-                resultMap.put(s, newVertex);
+                resultMap.put(s.toString(), newVertex);
             }
         }
 

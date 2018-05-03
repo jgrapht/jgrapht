@@ -90,10 +90,10 @@ public interface MaximumFlowAlgorithm<V, E>
     }
 
     /**
-     * Returns the direction of the flow on an edge (u,v). In case (u,v) is a directed edge (arc),
-     * this function will always return the edge target v. However, if (u,v) is an edge in an
-     * undirected graph, flow may go through the edge in either side. If the flow goes from u to v,
-     * we return v, otherwise u. If the flow on an edge equals 0, the returned value has no meaning.
+     * Returns the direction of the flow on an edge $(u,v)$. In case $(u,v)$ is a directed edge (arc),
+     * this function will always return the edge target $v$. However, if $(u,v)$ is an edge in an
+     * undirected graph, flow may go through the edge in either side. If the flow goes from $u$ to $v$,
+     * we return $v$, otherwise $u$. If the flow on an edge equals $0$, the returned value has no meaning.
      *
      * NOTE: this function currently has a default implementation to guarantee backwards
      * compatibility. This function should be enforced in the next version.

@@ -24,15 +24,13 @@ import java.util.function.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
 import org.junit.Test;
 import org.openjdk.jmh.runner.*;
-
-import junit.framework.*;
 
 /**
  * A small benchmark comparing Dijkstra like algorithms. The benchmark creates a random graph and
@@ -65,14 +63,15 @@ public class DijkstraShortestPathPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, rng, false);
             }
 
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedGraph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            this.graph = weightedGraph;
+            this.graph = GraphTypeBuilder
+                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).buildGraph();
 
-            generator.generateGraph(graph, new IntegerVertexFactory(), null);
+            generator.generateGraph(graph);
 
-            for (DefaultWeightedEdge e : weightedGraph.edgeSet()) {
-                weightedGraph.setEdgeWeight(e, rng.nextDouble());
+            for (DefaultWeightedEdge e : graph.edgeSet()) {
+                graph.setEdgeWeight(e, rng.nextDouble());
             }
         }
 

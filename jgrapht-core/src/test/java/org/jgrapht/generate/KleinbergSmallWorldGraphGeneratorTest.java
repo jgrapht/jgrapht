@@ -21,8 +21,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -71,8 +71,8 @@ public class KleinbergSmallWorldGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new KleinbergSmallWorldGraphGenerator<>(5, 2, 3, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(25, g.vertexSet().size());
     }
@@ -84,8 +84,8 @@ public class KleinbergSmallWorldGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new KleinbergSmallWorldGraphGenerator<>(5, 2, 3, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(25, g.vertexSet().size());
     }
@@ -97,8 +97,8 @@ public class KleinbergSmallWorldGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new KleinbergSmallWorldGraphGenerator<>(5, 2, 3, 0, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(25, g.vertexSet().size());
     }

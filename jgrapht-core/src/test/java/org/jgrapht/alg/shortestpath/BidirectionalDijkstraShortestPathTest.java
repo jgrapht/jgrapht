@@ -22,8 +22,8 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -283,17 +283,8 @@ public class BidirectionalDijkstraShortestPathTest
     {
 
         GraphGenerator<String, DefaultEdge, String> gen = new GnmRandomGraphGenerator<>(20, 100, 1);
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new VertexFactory<String>()
-        {
-            private int id = 1;
-
-            @Override
-            public String createVertex()
-            {
-                return Integer.toString(id++);
-            }
-        }, null);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         for (String v : g.vertexSet()) {
             for (String u : g.vertexSet()) {
@@ -324,17 +315,8 @@ public class BidirectionalDijkstraShortestPathTest
         GraphGenerator<String, DefaultWeightedEdge, String> gen =
             new GnmRandomGraphGenerator<>(20, 100, 1);
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
-            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        gen.generateGraph(g, new VertexFactory<String>()
-        {
-            private int id = 1;
-
-            @Override
-            public String createVertex()
-            {
-                return Integer.toString(id++);
-            }
-        }, null);
+            new DirectedWeightedPseudograph<>(SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+        gen.generateGraph(g);
 
         Random weightedGenerator = new Random(7);
         for (DefaultWeightedEdge e : g.edgeSet()) {
@@ -369,17 +351,8 @@ public class BidirectionalDijkstraShortestPathTest
     public void testRandomGraphsDirectedWithRadius()
     {
         GraphGenerator<String, DefaultEdge, String> gen = new GnmRandomGraphGenerator<>(20, 100, 1);
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new VertexFactory<String>()
-        {
-            private int id = 1;
-
-            @Override
-            public String createVertex()
-            {
-                return Integer.toString(id++);
-            }
-        }, null);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         double radius = 2.5;
 

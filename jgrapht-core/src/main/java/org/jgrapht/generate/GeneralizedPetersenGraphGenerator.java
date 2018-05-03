@@ -73,23 +73,20 @@ public class GeneralizedPetersenGraphGenerator<V, E>
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
-     * @param vertexFactory called to produce new vertices
      * @param resultMap if non-null, the resultMap contains a mapping from the key "star" to a list
      *        of vertices constituting the star polygon, as well as a key "regular" which maps to a
      *        list of vertices constituting the regular polygon.
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, List<V>> resultMap)
+        Graph<V, E> target, Map<String, List<V>> resultMap)
     {
         List<V> verticesU = new ArrayList<>(n); // Regular polygon vertices
         List<V> verticesV = new ArrayList<>(n); // Star polygon vertices
         for (int i = 0; i < n; i++) {
-            verticesU.add(vertexFactory.createVertex());
-            verticesV.add(vertexFactory.createVertex());
+            verticesU.add(target.addVertex());
+            verticesV.add(target.addVertex());
         }
-        Graphs.addAllVertices(target, verticesU);
-        Graphs.addAllVertices(target, verticesV);
 
         for (int i = 0; i < n; i++) {
             target.addEdge(verticesU.get(i), verticesU.get((i + 1) % n));

@@ -31,7 +31,7 @@ import org.jgrapht.Graph;
 /**
  * Computes the strongly connected components of a directed graph. The implemented algorithm follows
  * Cheriyan-Mehlhorn/Gabow's algorithm presented in Path-based depth-first search for strong and
- * biconnected components by Gabow (2000). The running time is order of O(|V|+|E|).
+ * biconnected components by Gabow (2000). The running time is order of $O(|V|+|E|)$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -148,7 +148,7 @@ public class GabowStrongConnectivityInspector<V, E>
     private static final class VertexNumber<V>
     {
         V vertex;
-        int number = 0;
+        int number;
 
         private VertexNumber(V vertex, int number)
         {

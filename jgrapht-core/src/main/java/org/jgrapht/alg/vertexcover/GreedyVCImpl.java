@@ -31,7 +31,7 @@ import org.jgrapht.alg.vertexcover.util.*;
  * <a href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
- * Note: this class supports pseudo-graphs Runtime: O(|E|*log|V|) This class produces often, but not
+ * Note: this class supports pseudo-graphs Runtime: $O(|E| \log |V|)$ This class produces often, but not
  * always, better solutions than the 2-approximation algorithms. Nevertheless, there are instances
  * where the solution is significantly worse. In those cases, consider using
  * {@link ClarksonTwoApproxVCImpl}.
@@ -53,7 +53,7 @@ public class GreedyVCImpl<V, E>
      * Finds a greedy solution to the minimum weighted vertex cover problem. At each iteration, the
      * algorithm picks the vertex v with the smallest ratio {@code weight(v)/degree(v)} and adds it
      * to the cover. Next vertex v and all edges incident to it are removed. The process repeats
-     * until all vertices are covered. Runtime: O(|E|*log|V|)
+     * until all vertices are covered. Runtime: $O(|E| \log |V|)$
      *
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
@@ -82,12 +82,10 @@ public class GreedyVCImpl<V, E>
             ux.addNeighbor(vx);
             vx.addNeighbor(ux);
 
-            assert (ux.neighbors.get(vx) == vx.neighbors.get(
-                ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+            assert (ux.neighbors.get(vx) == vx.neighbors.get(ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
-        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
-        workingGraph.addAll(vertexEncapsulationMap.values());
+        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>(vertexEncapsulationMap.values());
         assert (workingGraph.size() == vertexEncapsulationMap
             .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
                 + "vertices in working graph: " + workingGraph.size();

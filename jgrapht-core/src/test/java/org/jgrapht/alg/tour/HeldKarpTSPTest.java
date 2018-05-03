@@ -19,8 +19,10 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.SlowTests;
 import org.jgrapht.graph.*;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Random;
 
@@ -30,6 +32,7 @@ import static org.junit.Assert.*;
 /**
  * @author Alexandru Valeanu
  */
+@Category(SlowTests.class)
 public class HeldKarpTSPTest
 {
      static Graph<String, DefaultWeightedEdge> directedGraph(){

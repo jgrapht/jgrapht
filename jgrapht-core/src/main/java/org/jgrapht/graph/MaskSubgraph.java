@@ -92,6 +92,15 @@ public class MaskSubgraph<V, E>
      * {@inheritDoc}
      */
     @Override
+    public V addVertex()
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
@@ -239,11 +248,31 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
+     * @deprecated Use suppliers instead
      */
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return base.getEdgeFactory();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return base.getVertexSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        return base.getEdgeSupplier();
     }
 
     /**

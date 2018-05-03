@@ -26,8 +26,8 @@ import org.jgrapht.alg.vertexcover.util.*;
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by Clarkson, Kenneth L.
  * "A modification of the greedy algorithm for vertex cover." Information Processing Letters 16.1
- * (1983): 23-25. The solution is guaranteed to be within 2 times the optimum solution. Runtime:
- * O(|E|*log|V|)
+ * (1983): 23-25. The solution is guaranteed to be within $2$ times the optimum solution. Runtime:
+ * $O(|E|\log |V|)$
  *
  * Note: this class supports pseudo-graphs
  *

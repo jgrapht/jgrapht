@@ -18,8 +18,10 @@
 package org.jgrapht.graph;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +44,7 @@ public class SimpleDirectedGraphTest
     private Graph<String, DefaultEdge> g3;
     private Graph<String, DefaultEdge> g4;
     private DefaultEdge eLoop;
-    private EdgeFactory<String, DefaultEdge> eFactory;
+    private Supplier<DefaultEdge> eSupplier;
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";
@@ -78,7 +80,7 @@ public class SimpleDirectedGraphTest
         } catch (NullPointerException e) {
         }
 
-        DefaultEdge e = eFactory.createEdge(v2, v1);
+        DefaultEdge e = eSupplier.get();
 
         try {
             g1.addEdge("ya", "ya", e); // no such vertex in graph
@@ -295,14 +297,26 @@ public class SimpleDirectedGraphTest
      * .
      */
     @Test
-    public void testGetEdgeFactory()
+    public void testGetEdgeSupplier()
     {
-        assertNotNull(g1.getEdgeFactory());
-        EdgeFactory<String, DefaultEdge> ef = g1.getEdgeFactory();
-        DefaultEdge e = ef.createEdge(v1, v2);
+        assertNotNull(g1.getEdgeSupplier());
+        Supplier<DefaultEdge> es = g1.getEdgeSupplier();
+        DefaultEdge e = es.get();
         assertNotNull(e);
         assertNull(g1.getEdgeSource(e));
         assertNull(g1.getEdgeTarget(e));
+    }
+    
+    /**
+     * .
+     */
+    @Test
+    public void testGetVertexSupplier()
+    {
+        assertNotNull(g1.getVertexSupplier());
+        Supplier<String> vs = g1.getVertexSupplier();
+        String v = vs.get();
+        assertNotNull(v);
     }
 
     /**
@@ -564,14 +578,14 @@ public class SimpleDirectedGraphTest
     @Before
     public void setUp()
     {
-        gEmpty = new SimpleDirectedGraph<>(DefaultEdge.class);
-        g1 = new SimpleDirectedGraph<>(DefaultEdge.class);
-        g2 = new SimpleDirectedGraph<>(DefaultEdge.class);
-        g3 = new SimpleDirectedGraph<>(DefaultEdge.class);
-        g4 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        gEmpty = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        g1 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        g2 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        g3 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        g4 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        eFactory = g1.getEdgeFactory();
-        eLoop = eFactory.createEdge(v1, v1);
+        eSupplier = g1.getEdgeSupplier();
+        eLoop = eSupplier.get();
 
         g1.addVertex(v1);
 

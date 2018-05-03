@@ -27,13 +27,13 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 /**
- * Implementation of the algorithm by Padberg and Rao to compute Odd Minimum Cut-Sets. Let G=(V,E)
- * be an undirected, simple weighted graph, where all edge weights are positive. Let T &sub; V with
- * |T| even, be a set of vertices that are labelled <i>odd</i>. A cut-set (U:V-U) is called odd if
- * |T &cap; U| is an odd number. Let c(U:V-U) be the weight of the cut, that is, the sum of weights
- * of the edges which have exactly one endpoint in U and one endpoint in V-U. The problem of finding
- * an odd minimum cut-set in G is stated as follows: Find W &sube; V such that
- * c(W:V-W)=min{c(U:V-U)|U&sube; V, |T &cap; U| is odd}.
+ * Implementation of the algorithm by Padberg and Rao to compute Odd Minimum Cut-Sets. Let $G=(V,E)$
+ * be an undirected, simple weighted graph, where all edge weights are positive. Let $T \subset V$ with
+ * $|T|$ even, be a set of vertices that are labelled <i>odd</i>. A cut-set $(U:V-U)$ is called odd if
+ * $|T \cap U|$ is an odd number. Let $c(U:V-U)$ be the weight of the cut, that is, the sum of weights
+ * of the edges which have exactly one endpoint in $U$ and one endpoint in $V-U$. The problem of finding
+ * an odd minimum cut-set in $G$ is stated as follows: Find $W \subseteq V$ such that
+ * $c(W:V-W)=min(c(U:V-U)|U \subseteq V, |T \cap U|$ is odd).
  *
  * <p>
  * The algorithm has been published in: Padberg, M. Rao, M. Odd Minimum Cut-Sets and b-Matchings.
@@ -43,8 +43,8 @@ import org.jgrapht.graph.*;
  *
  * <p>
  * The runtime complexity of this algorithm is dominated by the runtime complexity of the algorithm
- * used to compute A Gomory-Hu tree on graph G. Consequently, the runtime complexity of this class
- * is O(V^4).
+ * used to compute A Gomory-Hu tree on graph $G$. Consequently, the runtime complexity of this class
+ * is $O(V^4)$.
  *
  * <p>
  * This class does not support changes to the underlying graph. The behavior of this class is
@@ -111,8 +111,8 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * Calculates the minimum odd cut. The implementation follows Algorithm 1 in the paper Odd
      * minimum cut sets and b-matchings revisited by Adam Letchford, Gerhard Reinelt and Dirk Theis.
      * The original algorithm runs on a compressed Gomory-Hu tree: a cut-tree with the odd vertices
-     * as terminal vertices. This tree has |T|-1 edges as opposed to |V|-1 for a Gomory-Hu tree
-     * defined on the input graph G. This compression step can however be skipped. If you want to
+     * as terminal vertices. This tree has $|T|-1$ edges as opposed to $|V|-1$ for a Gomory-Hu tree
+     * defined on the input graph $G$. This compression step can however be skipped. If you want to
      * run the original algorithm in the paper, set the parameter <code>useTreeCompression</code> to
      * true. Alternatively, experiment which setting of this parameter produces the fastest results.
      * Both settings are guaranteed to find the optimal cut. Experiments on random graphs showed
@@ -134,7 +134,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
         assert network.vertexSet().containsAll(oddVertices); // All odd vertices must be contained
         // in the graph
         // all edge weights mucht be non-negative
-        assert network.edgeSet().stream().filter(e -> network.getEdgeWeight(e) < 0).count() == 0;
+        assert network.edgeSet().stream().noneMatch(e -> network.getEdgeWeight(e) < 0);
 
         gomoryHuTree = gusfieldGomoryHuCutTreeAlgorithm.getGomoryHuTree();
 
@@ -147,8 +147,8 @@ public class PadbergRaoOddMinimumCutset<V, E>
     /**
      * Modified implementation of the algorithm proposed in Odd Minimum Cut-sets and b-matchings by
      * Padberg and Rao. The optimal cut is directly computed on the Gomory-Hu tree computed for
-     * graph G. This approach iterates efficiently over all possible cuts of the graph (there are
-     * |V| such cuts).
+     * graph $G$. This approach iterates efficiently over all possible cuts of the graph (there are
+     * $|V|$ such cuts).
      *
      * @return weight of the minimum odd cut.
      */
@@ -193,7 +193,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
 
     /**
      * Implementation of the algorithm proposed in Odd Minimum Cut-sets and b-matchings by Padberg
-     * and Rao. The algorithm evaluates at most |T| cuts in the Gomory-Hu tree.
+     * and Rao. The algorithm evaluates at most $|T|$ cuts in the Gomory-Hu tree.
      *
      * @return weight of the minimum odd cut.
      */
@@ -212,11 +212,11 @@ public class PadbergRaoOddMinimumCutset<V, E>
     }
 
     /**
-     * Takes a set of odd vertices with cardinality 2 or more, and splits them into 2 new non-empty
+     * Takes a set of odd vertices with cardinality $2$ or more, and splits them into $2$ new non-empty
      * sets.
      * 
      * @param cluster group of odd vertices
-     * @param queue clusters with cardinality 2 or more
+     * @param queue clusters with cardinality $2$ or more
      */
     private void splitCluster(Set<V> cluster, Queue<Set<V>> queue)
     {
@@ -258,9 +258,9 @@ public class PadbergRaoOddMinimumCutset<V, E>
     /**
      * Efficient way to compute the intersection between two sets
      * 
-     * @param set1 set 1
-     * @param set2 set 2
-     * @return intersection of set 1 and 2
+     * @param set1 set $1$
+     * @param set2 set $2$
+     * @return intersection of set $1$ and $2$
      */
     private Set<V> intersection(Set<V> set1, Set<V> set2)
     {
@@ -274,7 +274,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
             b = set1;
         }
 
-        return a.stream().filter(v -> b.contains(v)).collect(Collectors.toSet());
+        return a.stream().filter(b::contains).collect(Collectors.toSet());
     }
 
     /**
@@ -295,10 +295,10 @@ public class PadbergRaoOddMinimumCutset<V, E>
     }
 
     /**
-     * Returns partition W of the cut obtained after the last invocation of
+     * Returns partition $W$ of the cut obtained after the last invocation of
      * {@link #calculateMinCut(Set, boolean)}
      *
-     * @return partition W
+     * @return partition $W$
      */
     public Set<V> getSourcePartition()
     {
@@ -306,10 +306,10 @@ public class PadbergRaoOddMinimumCutset<V, E>
     }
 
     /**
-     * Returns partition V-W of the cut obtained after the last invocation of
+     * Returns partition $V-W$ of the cut obtained after the last invocation of
      * {@link #calculateMinCut(Set, boolean)}
      *
-     * @return partition V-W
+     * @return partition $V-W$
      */
     public Set<V> getSinkPartition()
     {
@@ -320,7 +320,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
 
     /**
      * Returns the set of edges which run from the source partition to the sink partition, in the
-     * s-t cut obtained after the last invocation of {@link #calculateMinCut(Set, boolean)}
+     * $s-t$ cut obtained after the last invocation of {@link #calculateMinCut(Set, boolean)}
      *
      * @return set of edges which have one endpoint in the source partition and one endpoint in the
      *         sink partition.

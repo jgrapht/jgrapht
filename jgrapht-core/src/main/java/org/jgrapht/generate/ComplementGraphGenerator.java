@@ -17,9 +17,13 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
 
 /**
  * Generator which produces the
@@ -75,21 +79,9 @@ public class ComplementGraphGenerator<V, E>
         this.generateSelfLoops = generateSelfLoops;
     }
 
-    /**
-     * Generates the complement graph.
-     * 
-     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
-     *        result will be a disconnected graph since generated elements will not be connected to
-     *        existing elements
-     */
-    public void generateGraph(Graph<V, E> target)
-    {
-        this.generateGraph(target, null, null);
-    }
-
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         Graphs.addAllVertices(target, graph.vertexSet());
 

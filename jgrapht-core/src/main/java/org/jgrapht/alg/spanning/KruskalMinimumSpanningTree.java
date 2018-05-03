@@ -26,7 +26,7 @@ import org.jgrapht.alg.util.*;
 /**
  * An implementation of <a href="http://en.wikipedia.org/wiki/Kruskal's_algorithm">Kruskal's minimum
  * spanning tree algorithm</a>. If the given graph is connected it computes the minimum spanning
- * tree, otherwise it computes the minimum spanning forest. The algorithm runs in time O(E log E).
+ * tree, otherwise it computes the minimum spanning forest. The algorithm runs in time $O(E \log E)$.
  * This implementation uses the hashCode and equals method of the vertices.
  *
  * @param <V> the graph vertex type
@@ -58,9 +58,7 @@ public class KruskalMinimumSpanningTree<V, E>
     {
         UnionFind<V> forest = new UnionFind<>(graph.vertexSet());
         ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
-        Collections.sort(
-            allEdges, (edge1, edge2) -> Double
-                .valueOf(graph.getEdgeWeight(edge1)).compareTo(graph.getEdgeWeight(edge2)));
+        allEdges.sort(Comparator.comparingDouble(graph::getEdgeWeight));
 
         double spanningTreeCost = 0;
         Set<E> edgeList = new HashSet<>();

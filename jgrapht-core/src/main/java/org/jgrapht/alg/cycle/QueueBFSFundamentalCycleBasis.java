@@ -37,7 +37,7 @@ import org.jgrapht.Graphs;
  * </p>
  * 
  * <p>
- * The total length of the fundamental-cycle set can be as large as O(n^3) where n is the number of
+ * The total length of the fundamental-cycle set can be as large as $O(n^3)$ where $n$ is the number of
  * vertices of the graph.
  * </p>
  * 

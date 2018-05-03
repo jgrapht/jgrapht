@@ -27,7 +27,9 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  *
  * @since July 5, 2007
+ * @deprecated Use suppliers instead 
  */
+@Deprecated
 public class ClassBasedVertexFactory<V>
     implements VertexFactory<V>, Serializable
 {

@@ -22,9 +22,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -38,10 +38,10 @@ public class ListSingleSourcePathsTest
     {
         int n = 50;
         DirectedPseudograph<Integer, DefaultWeightedEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(n, 0.7);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g);
 
         List<GraphPath<Integer, DefaultWeightedEdge>> p = new ArrayList<>();
         Map<Integer, GraphPath<Integer, DefaultWeightedEdge>> map = new HashMap<>();

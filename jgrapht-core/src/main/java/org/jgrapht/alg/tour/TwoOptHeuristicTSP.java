@@ -46,7 +46,7 @@ import org.jgrapht.graph.GraphWalk;
  * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates k
  * random initial tours and then iteratively improves the tours until a local minimum is reached. In
  * each iteration it applies the best possible 2-opt move which means to find the best pair of edges
- * (i,i+1) and (j,j+1) such that replacing them with (i,j) and (i+1,j+1) minimizes the tour length.
+ * $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour length.
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/2-opt">wikipedia</a> for more details.
@@ -229,8 +229,8 @@ public class TwoOptHeuristicTSP<V, E>
 
     /**
      * Improve the tour using the 2-opt heuristic. In each iteration it applies the best possible
-     * 2-opt move which means to find the best pair of edges (i,i+1) and (j,j+1) such that replacing
-     * them with (i,j) and (i+1,j+1) minimizes the tour length.
+     * 2-opt move which means to find the best pair of edges $(i,i+1)$ and $(j,j+1)$ such that replacing
+     * them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour length.
      * 
      * <p>
      * The returned array instance might or might not be the input array.
@@ -311,7 +311,7 @@ public class TwoOptHeuristicTSP<V, E>
     /**
      * Transform from a path representation to an array representation.
      * 
-     * @param a graph path
+     * @param path graph path
      * @return an array containing the index of the vertices of the tour
      */
     private int[] pathToTour(GraphPath<V, E> path)

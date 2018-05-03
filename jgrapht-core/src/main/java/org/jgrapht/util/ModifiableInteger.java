@@ -132,7 +132,7 @@ public class ModifiableInteger
         int thisVal = this.value;
         int anotherVal = anotherInteger.value;
 
-        return (thisVal < anotherVal) ? -1 : ((thisVal == anotherVal) ? 0 : 1);
+        return Integer.compare(thisVal, anotherVal);
     }
 
     /**

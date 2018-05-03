@@ -8,6 +8,9 @@
 	</parent>
 	<artifactId>jgrapht-demo</artifactId>
 	<name>JGraphT - Demo</name>
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -25,11 +28,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.jgrapht.demo.JGraphAdapterDemo</mainClass>
+							<mainClass>org.jgrapht.demo.JGraphXAdapterDemo</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 						<manifestEntries>
@@ -41,7 +43,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.5</version>
 				<executions>
 					<execution>
 						<phase>package</phase>

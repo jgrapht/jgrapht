@@ -20,11 +20,10 @@ package org.jgrapht.alg.shortestpath;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -41,13 +40,12 @@ public class FloydWarshallShortestPathsTest
     {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(10, 15);
-        VertexFactory<Integer> f = new IntegerVertexFactory();
 
         for (int i = 0; i < 10; i++) {
             // Generate directed graph
             SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed =
-                new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
-            gen.generateGraph(directed, f, new HashMap<>());
+                new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+            gen.generateGraph(directed);
 
             // setup our shortest path measurer
             FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =
@@ -76,8 +74,8 @@ public class FloydWarshallShortestPathsTest
 
             // Generate Undirected graph
             SimpleGraph<Integer, DefaultWeightedEdge> undirected =
-                new SimpleGraph<>(DefaultWeightedEdge.class);
-            gen.generateGraph(undirected, f, new HashMap<>());
+                new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+            gen.generateGraph(undirected);
 
             // setup our shortest path measurer
             fw = new FloydWarshallShortestPaths<>(undirected);

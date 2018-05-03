@@ -47,6 +47,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<main.basedir>${project.basedir}</main.basedir>
 	</properties>
 
 	<dependencyManagement>
@@ -66,6 +67,11 @@
 				<artifactId>jgrapht-ext</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>jgrapht-guava</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>jgrapht-demo</artifactId>
@@ -101,10 +107,55 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.12</version>
+					<version>2.21.0</version>
 					<configuration>
 						<testFailureIgnore>false</testFailureIgnore>
 					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-failsafe-plugin</artifactId>
+ 					<version>2.21.0</version>
+ 					<dependencies>
+  						<dependency>
+   							<groupId>org.apache.maven.surefire</groupId>
+   							<artifactId>surefire-junit47</artifactId>
+   							<version>2.21.0</version>
+  						</dependency>
+ 					</dependencies>
+					<executions>
+						<execution>
+							<id>integration-test</id>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-jar-plugin</artifactId>
+	                <version>2.4</version>
+                </plugin>
+                <plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>3.5.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>				
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>1.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -117,13 +168,13 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
+					<version>3.0.0</version>
 					<configuration>
 						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
+						<additionalJOption>--allow-script-in-comments</additionalJOption>
 						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,http://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;</header>
-						<additionalparam>--allow-script-in-comments</additionalparam>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -166,6 +217,7 @@
 		<module>jgrapht-core</module>
 		<module>jgrapht-io</module>
 		<module>jgrapht-ext</module>
+		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>
 		<module>jgrapht-dist</module>
 	</modules>
@@ -184,12 +236,12 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-checkstyle-plugin</artifactId>
-						<version>2.17</version>
+						<version>3.0.0</version>
 						<dependencies>
 							<dependency>
 								<groupId>com.puppycrawl.tools</groupId>
 								<artifactId>checkstyle</artifactId>
-								<version>7.1.1</version>
+								<version>8.8</version>
 							</dependency>
 						</dependencies>
 						<executions>

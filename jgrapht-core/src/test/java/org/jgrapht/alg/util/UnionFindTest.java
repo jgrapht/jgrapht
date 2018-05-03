@@ -19,7 +19,6 @@ package org.jgrapht.alg.util;
 
 import java.util.*;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

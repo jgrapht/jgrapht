@@ -24,7 +24,7 @@ import java.util.stream.*;
  * An implementation of <a href="http://en.wikipedia.org/wiki/Disjoint-set_data_structure">Union
  * Find</a> data structure. Union Find is a disjoint-set data structure. It supports two operations:
  * finding the set a specific element is in, and merging two sets. The implementation uses union by
- * rank and path compression to achieve an amortized cost of O(a(n)) per operation where a is the
+ * rank and path compression to achieve an amortized cost of $O(\alpha(n))$ per operation where $\alpha$ is the
  * inverse Ackermann function. UnionFind uses the hashCode and equals method of the elements it
  * operates on.
  *
@@ -203,7 +203,7 @@ public class UnionFind<T>
 
     /**
      * Returns a string representation of this data structure. Each component is represented as
-     * {v_i:v_1,v_2,v_3,...v_n}, where v_i is the representative of the set.
+     * $\left{v_i:v_1,v_2,v_3,...v_n\right}$, where $v_i$ is the representative of the set.
      * 
      * @return string representation of this data structure
      */

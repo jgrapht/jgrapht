@@ -36,7 +36,7 @@ import org.jgrapht.traverse.*;
  * </ul>
  * 
  * <p>
- * and has running time O(d n 3^{d/3}) where n is the number of vertices of the graph and d is the
+ * and has running time $O(d n 3^{d/3})$ where $n$ is the number of vertices of the graph and $d$ is the
  * degeneracy of the graph. The algorithm looks for a maximal clique parameterized by degeneracy, a
  * frequently-used measure of the sparseness of a graph that is closely related to other common
  * sparsity measures such as arboricity and thickness, and that has previously been used for other

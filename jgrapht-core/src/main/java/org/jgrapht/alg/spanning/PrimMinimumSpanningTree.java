@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2018, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2013-2018, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,14 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
+import org.jgrapht.util.FibonacciHeap;
+import org.jgrapht.util.FibonacciHeapNode;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * An implementation of <a href="http://en.wikipedia.org/wiki/Prim's_algorithm"> Prim's
@@ -28,9 +32,13 @@ import org.jgrapht.alg.interfaces.*;
  * weighted undirected graph. The algorithm was developed by Czech mathematician V. Jarník and later
  * independently by computer scientist Robert C. Prim and rediscovered by E. Dijkstra.
  *
+ * This implementation relies on a Fibonacci heap, and runs in $O(|E| + |V|log(|V|))$.
+ *
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
+ * @author Alexandru Valeanu
  * @author Alexey Kudinkin
  * @since Mar 5, 2013
  */
@@ -53,49 +61,66 @@ public class PrimMinimumSpanningTree<V, E>
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public SpanningTree<E> getSpanningTree()
     {
         Set<E> minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());
         double spanningTreeWeight = 0d;
 
-        Set<V> unspanned = new HashSet<>(g.vertexSet());
+        final int N = g.vertexSet().size();
 
-        while (!unspanned.isEmpty()) {
-            Iterator<V> ri = unspanned.iterator();
+        /*
+         * Normalize the graph
+         *   map each vertex to an integer (using a HashMap)
+         *   keep the reverse mapping  (using an ArrayList)
+         */
+        Map<V, Integer> vertexMap = new HashMap<>();
+        List<V> indexList = new ArrayList<>();
+        for(V v : g.vertexSet()){
+            vertexMap.put(v,vertexMap.size());
+            indexList.add(v);
+        }
 
-            V root = ri.next();
+        VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
+        FibonacciHeapNode<VertexInfo>[] fibNodes = (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
+        FibonacciHeap<VertexInfo> fibonacciHeap = new FibonacciHeap<>();
 
-            ri.remove();
+        for (int i = 0; i < N; i++) {
+            vertices[i] = new VertexInfo();
+            vertices[i].id = i;
+            vertices[i].distance = Double.MAX_VALUE;
+            fibNodes[i] = new FibonacciHeapNode<>(vertices[i]);
 
-            // Edges crossing the cut C = (S, V \ S), where S is set of
-            // already spanned vertices
+            fibonacciHeap.insert(fibNodes[i], vertices[i].distance);
+        }
 
-            PriorityQueue<E> dangling = new PriorityQueue<>(
-                g.edgeSet().size(),
-                (lop, rop) -> Double.valueOf(g.getEdgeWeight(lop)).compareTo(g.getEdgeWeight(rop)));
+        while (!fibonacciHeap.isEmpty()) {
+            FibonacciHeapNode<VertexInfo> fibNode = fibonacciHeap.removeMin();
+            VertexInfo vertexInfo = fibNode.getData();
 
-            dangling.addAll(g.edgesOf(root));
+            V p = indexList.get(vertexInfo.id);
+            vertexInfo.spanned = true;
 
-            for (E next; (next = dangling.poll()) != null;) {
-                V s, t = unspanned.contains(s = g.getEdgeSource(next)) ? s : g.getEdgeTarget(next);
+            // Add the edge from its parent to the spanning tree (if it exists)
+            if (vertexInfo.edgeFromParent != null) {
+                minimumSpanningTreeEdgeSet.add(vertexInfo.edgeFromParent);
+                spanningTreeWeight += g.getEdgeWeight(vertexInfo.edgeFromParent);
+            }
 
-                // Decayed edges aren't removed from priority-queue so that
-                // having them just ignored being encountered through min-max
-                // traversal
-                if (!unspanned.contains(t)) {
-                    continue;
-                }
+            // update all (unspanned) neighbors of p
+            for (E e : g.edgesOf(p)) {
+                V q = Graphs.getOppositeVertex(g, e, p);
+                int id = vertexMap.get(q);
 
-                minimumSpanningTreeEdgeSet.add(next);
-                spanningTreeWeight += g.getEdgeWeight(next);
+                // if the vertex is not explored and we found a better edge, then update the info
+                if (!vertices[id].spanned) {
+                    double cost = g.getEdgeWeight(e);
 
-                unspanned.remove(t);
+                    if (cost < vertices[id].distance){
+                        vertices[id].distance = cost;
+                        vertices[id].edgeFromParent = e;
 
-                for (E e : g.edgesOf(t)) {
-                    if (unspanned.contains(
-                        g.getEdgeSource(e).equals(t) ? g.getEdgeTarget(e) : g.getEdgeSource(e)))
-                    {
-                        dangling.add(e);
+                        fibonacciHeap.decreaseKey(fibNodes[id], cost);
                     }
                 }
             }
@@ -103,6 +128,11 @@ public class PrimMinimumSpanningTree<V, E>
 
         return new SpanningTreeImpl<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
     }
-}
 
-// End PrimMinimumSpanningTree.java
+    private class VertexInfo {
+        public int id;
+        public boolean spanned;
+        public double distance;
+        public E edgeFromParent;
+    }
+}

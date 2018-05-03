@@ -17,13 +17,15 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.cycle.ChordalityInspector;
+import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
+import org.jgrapht.alg.cycle.WeakChordalityInspector;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -477,6 +479,85 @@ public abstract class GraphTests
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new HierholzerEulerianCycle<V, E>().isEulerian(graph);
+    }
+
+    /**
+     * Checks whether a graph is chordal. A <a href="https://en.wikipedia.org/wiki/Chordal_graph">
+     * chordal graph</a> is one in which all cycles of four or more vertices have a chord, which
+     * is an edge that is not part of the cycle but connects two vertices of the cycle.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is chordal, false otherwise
+     * @see ChordalityInspector#isChordal()
+     */
+    public static <V, E> boolean isChordal(Graph<V, E> graph){
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new ChordalityInspector<>(graph).isChordal();
+    }
+
+    /**
+     * Checks whether a graph is <a href="http://www.graphclasses.org/classes/gc_14.html">weakly chordal</a>.
+     * <p>
+     * The following definitions are equivalent:
+     * <ol>
+     * <li>
+     * A graph is weakly chordal (weakly triangulated) if neither it nor its complement
+     * contains a <a href="http://mathworld.wolfram.com/ChordlessCycle.html">chordless cycles</a> with
+     * five or more vertices.</li>
+     * <li> A 2-pair in a graph is a pair of non-adjacent vertices $x$, $y$ such that every chordless path has
+     * exactly two edges. A graph is weakly chordal if every connected
+     * <a href="https://en.wikipedia.org/wiki/Induced_subgraph">induced subgraph</a> $H$ that is not a complete
+     * graph, contains a 2-pair.</li>
+     * </ol>
+     *
+     * @param graph the input graph
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the graph is weakly chordal, false otherwise
+     * @see WeakChordalityInspector#isWeaklyChordal()
+     */
+    public static <V, E> boolean isWeaklyChordal(Graph<V, E> graph) {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new WeakChordalityInspector<>(graph).isWeaklyChordal();
+    }
+
+    /**
+     * Tests whether an undirected graph meets Ore's condition to be Hamiltonian.
+     *
+     * Let $G$ be a (finite and simple) graph with $n \geq 3$ vertices. We denote by $deg(v)$ the degree of a vertex $v$ in $G$,
+     * i.e. the number of incident edges in $G$ to $v$.
+     * Then, Ore's theorem states that if $deg(v) + deg(w) \geq n$ for every pair of distinct non-adjacent vertices
+     * $v$ and $w$ of $G$, then $G$ is Hamiltonian.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph meets Ore's condition, false otherwise
+     * @see org.jgrapht.alg.tour.PalmerHamiltonianCycle
+     */
+    public static <V, E> boolean hasOreProperty(Graph<V, E> graph){
+        requireUndirected(graph);
+
+        final int n = graph.vertexSet().size();
+
+        if (!graph.getType().isSimple() || n < 3)
+            return false;
+
+        List<V> vertexList = new ArrayList<>(graph.vertexSet());
+
+        for (int i = 0; i < vertexList.size(); i++) {
+            for (int j = i + 1; j < vertexList.size(); j++) {
+                V v = vertexList.get(i);
+                V w = vertexList.get(j);
+
+                if (!v.equals(w) && !graph.containsEdge(v, w) && graph.degreeOf(v) + graph.degreeOf(w) < n)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     /**

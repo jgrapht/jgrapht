@@ -77,7 +77,7 @@ public class DegeneracyOrderingIteratorTest
         g.addEdge("v2", "v10");
         g.addEdge("v9", "v10");
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         DegeneracyOrderingIterator<String, DefaultEdge> it = new DegeneracyOrderingIterator<>(g);
         while (it.hasNext()) {
             String v = it.next();
@@ -123,7 +123,7 @@ public class DegeneracyOrderingIteratorTest
         implements TraversalListener<V, E>
     {
 
-        private StringBuffer sb = new StringBuffer();
+        private StringBuilder sb = new StringBuilder();
 
         @Override
         public void connectedComponentFinished(ConnectedComponentTraversalEvent e)

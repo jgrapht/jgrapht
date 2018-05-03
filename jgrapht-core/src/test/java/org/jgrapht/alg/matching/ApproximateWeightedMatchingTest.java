@@ -25,7 +25,6 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

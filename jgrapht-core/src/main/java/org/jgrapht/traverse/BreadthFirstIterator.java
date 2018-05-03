@@ -36,7 +36,7 @@ import org.jgrapht.*;
  * @since Jul 19, 2003
  */
 public class BreadthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, Object>
+    extends CrossComponentIterator<V, E, BreadthFirstIterator.SearchNodeData<E>>
 {
     private Deque<V> queue = new ArrayDeque<>();
 
@@ -93,7 +93,8 @@ public class BreadthFirstIterator<V, E>
     @Override
     protected void encounterVertex(V vertex, E edge)
     {
-        putSeenData(vertex, null);
+        int depth= (edge == null ? 0 : getSeenData(Graphs.getOppositeVertex(graph, edge, vertex)).depth+1);
+        putSeenData(vertex, new SearchNodeData<>(edge, depth));
         queue.add(vertex);
     }
 
@@ -106,12 +107,67 @@ public class BreadthFirstIterator<V, E>
     }
 
     /**
+     * Returns the parent node of vertex $v$ in the BFS search tree, or null if $v$ is the root node.
+     * This method can only be invoked on a vertex $v$ once the iterator has visited vertex $v$!
+     * @param v vertex
+     * @return parent node of vertex $v$ in the BFS search tree, or null if $v$ is a root node
+     */
+    public V getParent(V v){
+        assert getSeenData(v) != null;
+        E edge= getSeenData(v).edge;
+        if(edge == null)
+            return null;
+        else
+            return Graphs.getOppositeVertex(graph, edge, v);
+    }
+
+    /**
+     * Returns the edge connecting vertex $v$ to its parent in the spanning tree formed by the BFS search,
+     * or null if $v$ is a root node.
+     * This method can only be invoked on a vertex $v$ once the iterator has visited vertex $v$!
+     * @param v vertex
+     * @return edge connecting vertex $v$ in the BFS search tree to its parent, or null if $v$ is a root node
+     */
+    public E getSpanningTreeEdge(V v){
+        assert getSeenData(v) != null;
+        return getSeenData(v).edge;
+    }
+
+    /**
+     * Returns the depth of vertex $v$ in the search tree. The depth of a vertex $v$ is defined as the number of edges
+     * traversed on the path from the root of the BFS tree to vertex $v$. The root of the search tree has depth 0.
+     * This method can only be invoked on a vertex $v$ once the iterator has visited vertex $v$!
+     * @param v vertex
+     * @return depth of vertex $v$ in the search tree
+     */
+    public int getDepth(V v){
+        assert getSeenData(v) != null;
+        return getSeenData(v).depth;
+    }
+
+    /**
      * @see CrossComponentIterator#provideNextVertex()
      */
     @Override
     protected V provideNextVertex()
     {
         return queue.removeFirst();
+    }
+
+    static class SearchNodeData<E>{
+        /**
+         * Edge to parent
+         */
+        final E edge;
+        /**
+         * Depth of node in search tree
+         */
+        final int depth;
+
+        SearchNodeData(E edge, int depth) {
+            this.edge = edge;
+            this.depth = depth;
+        }
     }
 }
 

@@ -74,7 +74,7 @@ final class RankingPathElementList<V, E>
     /**
      * Creates paths obtained by concatenating the specified edge to the specified paths.
      *
-     * @param prevPathElementList paths, list of <code>
+     * @param elementList paths, list of <code>
      * RankingPathElement</code>.
      * @param edge edge reaching the end vertex of the created paths.
      * @param maxSize maximum number of paths the list is able to store.
@@ -90,7 +90,7 @@ final class RankingPathElementList<V, E>
     /**
      * Creates paths obtained by concatenating the specified edge to the specified paths.
      *
-     * @param prevPathElementList paths, list of <code>
+     * @param elementList paths, list of <code>
      * RankingPathElement</code>.
      * @param edge edge reaching the end vertex of the created paths.
      * @param maxSize maximum number of paths the list is able to store.
@@ -105,7 +105,7 @@ final class RankingPathElementList<V, E>
     /**
      * Creates paths obtained by concatenating the specified edge to the specified paths.
      *
-     * @param prevPathElementList paths, list of <code>
+     * @param elementList paths, list of <code>
      * RankingPathElement</code>.
      * @param edge edge reaching the end vertex of the created paths.
      * @param maxSize maximum number of paths the list is able to store.
@@ -164,25 +164,25 @@ final class RankingPathElementList<V, E>
 
     /**
      * <p>
-     * Adds paths in the list at vertex y. Candidate paths are obtained by concatenating the
-     * specified edge (v->y) to the paths <code>
-     * elementList</code> at vertex v.
+     * Adds paths in the list at vertex $y$. Candidate paths are obtained by concatenating the
+     * specified edge $(v, y)$ to the paths <code>
+     * elementList</code> at vertex $v$.
      * </p>
      *
      * Complexity =
      *
      * <ul>
-     * <li>w/o guard-vertex: O(<code>k*np</code>) where <code>k</code> is the max size limit of the
-     * list and <code>np</code> is the maximum number of vertices in the paths stored in the
+     * <li>w/o guard-vertex: $O(knp)$ where $k$ is the max size limit of the
+     * list and $np$ is the maximum number of vertices in the paths stored in the
      * list</li>
-     * <li>with guard-vertex: O(<code>k*(m+n)</code>) where <code>k</code> is the max size limit of
-     * the list, <code>m</code> is the number of edges of the graph and <code>n</code> is the number
-     * of vertices of the graph, O(<code>m+n</code>) being the complexity of the <code>
+     * <li>with guard-vertex: $O(k(m+n)$</code>) where $k$ is the max size limit of
+     * the list, $m$ is the number of edges of the graph and $n$ is the number
+     * of vertices of the graph, $O(m + n)$ being the complexity of the <code>
      * ConnectivityInspector</code> to check whether a path exists towards the guard-vertex</li>
      * </ul>
      *
-     * @param elementList list of paths at vertex v.
-     * @param edge edge (v->y).
+     * @param elementList list of paths at vertex $v$.
+     * @param edge edge $(v, y)$.
      *
      * @return <code>true</code> if at least one path has been added in the list, <code>false</code>
      *         otherwise.
@@ -310,8 +310,8 @@ final class RankingPathElementList<V, E>
 
         MaskSubgraph<V,
             E> connectivityGraph = new MaskSubgraph<>(
-                this.graph, v -> connectivityMask.isVertexMasked(v),
-                e -> connectivityMask.isEdgeMasked(e));
+                this.graph, connectivityMask::isVertexMasked,
+                connectivityMask::isEdgeMasked);
         connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
 
         if (connectivityMask.isVertexMasked(this.guardVertexToNotDisconnect)) {
@@ -342,7 +342,7 @@ final class RankingPathElementList<V, E>
             GraphPath<V, E> prevPath;
             if (prevPathElement.getPrevEdge() == null) {
                 prevPath = new GraphWalk<>(
-                    graph, Arrays.asList(prevPathElement.getVertex()), prevPathElement.getWeight());
+                    graph, Collections.singletonList(prevPathElement.getVertex()), prevPathElement.getWeight());
             } else {
                 List<E> prevEdges = prevPathElement.createEdgeListPath();
                 prevPath = new GraphWalk<V, E>(

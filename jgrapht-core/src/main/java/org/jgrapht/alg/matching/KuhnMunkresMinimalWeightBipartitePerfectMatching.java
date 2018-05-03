@@ -26,14 +26,14 @@ import org.jgrapht.alg.interfaces.*;
  * Kuhn-Munkres algorithm (named in honor of Harold Kuhn and James Munkres) solving <i>assignment
  * problem</i> also known as <a href=http://en.wikipedia.org/wiki/Hungarian_algorithm>hungarian
  * algorithm</a> (in the honor of hungarian mathematicians Dénes K?nig and Jen? Egerváry). It's
- * running time O(V^3).
+ * running time $O(V^3)$.
  *
  * <p>
  * <i>Assignment problem</i> could be set as follows:
  *
  * <p>
  * Given <a href=http://en.wikipedia.org/wiki/Complete_bipartite_graph> complete bipartite graph</a>
- * G = (S, T; E), such that |S| = |T|, and each edge has <i>non-negative</i> cost <i>c(i, j)</i>,
+ * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i, j)</i>,
  * find <i>perfect</i> matching of <i>minimal cost</i>.
  * </p>
  * 
@@ -150,12 +150,12 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         boolean[] columnsCovered;
 
         /**
-         * ``columnMatched[i]'' is the column # of the ZERO matched at the i-th row
+         * ``columnMatched[i]'' is the column # of the ZERO matched at the $i$-th row
          */
         private int[] columnMatched;
 
         /**
-         * ``rowMatched[j]'' is the row # of the ZERO matched at the j-th column
+         * ``rowMatched[j]'' is the row # of the ZERO matched at the $j$-th column
          */
         private int[] rowMatched;
 
@@ -376,7 +376,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
                 }
 
                 for (int j = 0; j < excessMatrix[i].length; ++j) {
-                    if (Double.valueOf(excessMatrix[i][j]).compareTo(0.) == 0) {
+                    if (Double.compare(excessMatrix[i][j], 0.) == 0) {
                         rowsCovered[i] = invertible[i] = true;
                         break;
                     }
@@ -389,7 +389,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
                 for (int i = 0; i < excessMatrix.length; ++i) {
                     if (rowsCovered[i]) {
                         for (int j = 0; j < excessMatrix[i].length; ++j) {
-                            if ((Double.valueOf(excessMatrix[i][j]).compareTo(0.) == 0)
+                            if ((Double.compare(excessMatrix[i][j], 0.) == 0)
                                 && !columnsCovered[j])
                             {
                                 columnsCovered[j] = true;
@@ -521,7 +521,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
                     if (colsCovered[j]) {
                         continue;
                     }
-                    if (Double.valueOf(excessMatrix[i][j]).compareTo(0.) == 0) {
+                    if (Double.compare(excessMatrix[i][j], 0.) == 0) {
                         ++uncoveredZero;
                     }
                 }

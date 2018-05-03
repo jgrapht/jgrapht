@@ -26,6 +26,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.spanning.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -64,9 +65,9 @@ public class TwoApproxMetricTSPTest
         final int maxSize = 50;
 
         for (int i = 1; i < maxSize; i++) {
-            SimpleGraph<Object, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            SimpleGraph<Object, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             CompleteGraphGenerator<Object, DefaultEdge> generator = new CompleteGraphGenerator<>(i);
-            generator.generateGraph(g, new ClassBasedVertexFactory<>(Object.class), null);
+            generator.generateGraph(g);
 
             GraphPath<Object, DefaultEdge> tour =
                 new TwoApproxMetricTSP<Object, DefaultEdge>().getTour(g);

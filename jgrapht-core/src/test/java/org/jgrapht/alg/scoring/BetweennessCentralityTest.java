@@ -25,6 +25,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 public class BetweennessCentralityTest
@@ -180,18 +181,10 @@ public class BetweennessCentralityTest
     
     private void testStar(int order)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new StarGraphGenerator<>(order);
         Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, new VertexFactory<Integer>()
-        {
-            private int id = 0; 
-            @Override
-            public Integer createVertex()
-            {
-                return id++;
-            }
-        }, resultMap);
+        generator.generateGraph(g, resultMap);
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         
         assertStar(bc.getScores(), resultMap.get(StarGraphGenerator.CENTER_VERTEX), order);        
@@ -220,18 +213,10 @@ public class BetweennessCentralityTest
     
     private void testLinear(int order)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new LinearGraphGenerator<>(order);
         Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, new VertexFactory<Integer>()
-        {
-            private int id = 0; 
-            @Override
-            public Integer createVertex()
-            {
-                return id++;
-            }
-        }, resultMap);
+        generator.generateGraph(g, resultMap);
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         
         if (order == 5) {
@@ -274,18 +259,10 @@ public class BetweennessCentralityTest
     
     private void testRing(int order)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new RingGraphGenerator<>(order);
         Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, new VertexFactory<Integer>()
-        {
-            private int id = 0; 
-            @Override
-            public Integer createVertex()
-            {
-                return id++;
-            }
-        }, resultMap);
+        generator.generateGraph(g, resultMap);
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         
         if (order == 5) {

@@ -20,12 +20,10 @@ package org.jgrapht.alg.clique;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-
-import junit.framework.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -534,9 +532,9 @@ public class CliqueMinimalSeparatorDecompositionTest
             SimpleGraph<Integer, DefaultEdge> g;
             ConnectivityInspector<Integer, DefaultEdge> inspector;
             do {
-                g = new SimpleGraph<>(DefaultEdge.class);
+                g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                 generator = new GnmRandomGraphGenerator<>(n, m);
-                generator.generateGraph(g, new IntegerVertexFactory(1), null);
+                generator.generateGraph(g);
 
                 inspector = new ConnectivityInspector<>(g);
             } while (!inspector.isConnected());

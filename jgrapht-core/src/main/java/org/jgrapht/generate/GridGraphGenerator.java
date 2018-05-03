@@ -71,15 +71,14 @@ public class GridGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         Map<Integer, V> map = new TreeMap<>();
 
         // Adding all vertices to the set
         int cornerCtr = 0;
         for (int i = 0; i < (rows * cols); i++) {
-            V vertex = vertexFactory.createVertex();
-            target.addVertex(vertex);
+            V vertex = target.addVertex();
             map.put(i + 1, vertex);
 
             boolean isCorner = (i == 0) || (i == (cols - 1)) || (i == (cols * (rows - 1)))

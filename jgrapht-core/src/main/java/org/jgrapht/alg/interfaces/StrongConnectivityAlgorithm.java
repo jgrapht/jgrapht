@@ -58,7 +58,7 @@ public interface StrongConnectivityAlgorithm<V, E>
     /**
      * Computes a list of subgraphs of the given graph. Each subgraph will represent a strongly
      * connected component and will contain all vertices of that component. The subgraph will have
-     * an edge (u,v) iff u and v are contained in the strongly connected component.
+     * an edge $(u,v)$ iff $u$ and $v$ are contained in the strongly connected component.
      *
      * @return a list of subgraphs representing the strongly connected components
      */

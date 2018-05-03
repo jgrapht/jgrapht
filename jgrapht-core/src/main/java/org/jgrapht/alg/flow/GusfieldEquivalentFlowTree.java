@@ -28,17 +28,17 @@ import org.jgrapht.graph.*;
  * EFTs can be used to efficiently calculate the maximum flow for all pairs of vertices. The
  * algorithm is described in: <i>Gusfield, D, Very simple methods for all pairs network flow
  * analysis. SIAM Journal on Computing, 19(1), p142-155, 1990</i><br>
- * In an undirected graph, there exist n(n-1)/2 different vertex pairs. This class computes the
- * maximum flow between each of these pairs efficiently by performing exactly (n-1) minimum s-t cut
- * computations. If your application requires fewer than (n-1) flow calculations, consider computing
+ * In an undirected graph, there exist $frac{n(n-1)}{2}$ different vertex pairs. This class computes the
+ * maximum flow between each of these pairs efficiently by performing exactly $(n-1)$ minimum $s-t$ cut
+ * computations. If your application requires fewer than $(n-1)$ flow calculations, consider computing
  * the maximum flows manually through {@link MaximumFlowAlgorithm}.
  *
  *
  * <p>
- * The runtime complexity of this class is O((V-1)Q), where Q is the runtime complexity of the
- * algorithm used to compute s-t cuts in the graph. By default, this class uses the
- * {@link PushRelabelMFImpl} implementation to calculate minimum s-t cuts. This class has a runtime
- * complexity of O(V^3), resulting in a O(V^4) runtime complexity for the overal algorithm.
+ * The runtime complexity of this class is $O((V-1)Q)$, where $Q$ is the runtime complexity of the
+ * algorithm used to compute $s-t$ cuts in the graph. By default, this class uses the
+ * {@link PushRelabelMFImpl} implementation to calculate minimum $s-t$ cuts. This class has a runtime
+ * complexity of $O(V^3)$, resulting in a $O(V^4)$ runtime complexity for the overal algorithm.
  *
  *
  * <p>
@@ -109,7 +109,7 @@ public class GusfieldEquivalentFlowTree<V, E>
      * Constructs a new GusfieldEquivalentFlowTree instance.
      * 
      * @param network input graph
-     * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
+     * @param minimumSTCutAlgorithm algorithm used to compute the minimum $s-t$ cuts
      */
     public GusfieldEquivalentFlowTree(
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
@@ -156,7 +156,7 @@ public class GusfieldEquivalentFlowTree<V, E>
     /**
      * Returns the Equivalent Flow Tree as an actual tree (graph). Note that this tree is not
      * necessarily unique. The edge weights represent the flow values/cut weights. This method runs
-     * in O(n) time
+     * in $O(n)$ time
      * 
      * @return Equivalent Flow Tree
      */
@@ -192,7 +192,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Returns the Maximum flow between source and sink. The algorithm is only executed once;
-     * successive invocations of this method will return in O(1) time.
+     * successive invocations of this method will return in $O(1)$ time.
      * 
      * @param source source vertex
      * @param sink sink vertex

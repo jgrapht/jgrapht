@@ -18,15 +18,15 @@
 package org.jgrapht.perf.graph;
 
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 /**
  * A small benchmark comparing the different dag implementations.
@@ -64,7 +64,7 @@ public class DirectedAcyclicGraphPerformanceTest
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);
                         DirectedAcyclicGraph<Long, DefaultEdge> dag = createDAG();
-                        gen.generateGraph(dag, new LongVertexFactory(), null);
+                        gen.generateGraph(dag);
                     }
 
                 }
@@ -79,7 +79,7 @@ public class DirectedAcyclicGraphPerformanceTest
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new ArrayDAG<>(DefaultEdge.class);
+            return new ArrayDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
@@ -89,7 +89,7 @@ public class DirectedAcyclicGraphPerformanceTest
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new ArrayListDAG<>(DefaultEdge.class);
+            return new ArrayListDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
@@ -99,7 +99,7 @@ public class DirectedAcyclicGraphPerformanceTest
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new HashSetDAG<>(DefaultEdge.class);
+            return new HashSetDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
@@ -109,7 +109,7 @@ public class DirectedAcyclicGraphPerformanceTest
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new BitSetDAG<>(DefaultEdge.class);
+            return new BitSetDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
@@ -139,12 +139,12 @@ public class DirectedAcyclicGraphPerformanceTest
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public ArrayDAG(Class<? extends E> edgeClass)
+        public ArrayDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
-            super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedArrayImpl(),
+            super(vertexSupplier, edgeSupplier, new VisitedArrayImpl(),
                 new TopoVertexBiMap<>(), false);
         }
     }
@@ -160,12 +160,13 @@ public class DirectedAcyclicGraphPerformanceTest
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public ArrayListDAG(Class<? extends E> edgeClass)
+        public ArrayListDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedArrayListImpl(),
+                vertexSupplier, edgeSupplier, new VisitedArrayListImpl(),
                 new TopoVertexBiMap<>(), false);
         }
     }
@@ -181,12 +182,13 @@ public class DirectedAcyclicGraphPerformanceTest
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public HashSetDAG(Class<? extends E> edgeClass)
+        public HashSetDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedHashSetImpl(),
+                vertexSupplier, edgeSupplier, new VisitedHashSetImpl(),
                 new TopoVertexBiMap<>(), false);
         }
     }
@@ -202,12 +204,13 @@ public class DirectedAcyclicGraphPerformanceTest
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public BitSetDAG(Class<? extends E> edgeClass)
+        public BitSetDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedBitSetImpl(),
+                vertexSupplier, edgeSupplier, new VisitedBitSetImpl(),
                 new TopoVertexBiMap<>(), false);
         }
     }

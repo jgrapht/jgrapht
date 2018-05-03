@@ -90,7 +90,7 @@ public interface MatchingAlgorithm<V, E>
          * in the graph is incident to an edge in the matching.
          * 
          * @return true if the matching is perfect. By definition, a perfect matching consists of
-         *         exactly 1/2|V| edges, and the number of vertices in the graph must be even.
+         *         exactly $\frac{1}{2|V|}$ edges, and the number of vertices in the graph must be even.
          */
         default boolean isPerfect()
         {

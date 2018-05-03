@@ -44,10 +44,10 @@ import org.jgrapht.alg.interfaces.*;
  * </ul>
  * 
  * <p>
- * This implementation requires O(n^2) running time and space. The following paper discusses
+ * This implementation requires $O(n^2)$ running time and space. The following paper discusses
  * possible improvements in the running time.
  * <ul>
- * <li>J. S. Turner. Almost all k-colorable graphs are easy to color. Journal of Algorithms.
+ * <li>J. S. Turner. Almost all $k$-colorable graphs are easy to color. Journal of Algorithms.
  * 9(1):63--82, 1988.</li>
  * </ul>
  *

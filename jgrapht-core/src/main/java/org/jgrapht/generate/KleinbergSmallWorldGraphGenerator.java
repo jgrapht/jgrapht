@@ -32,12 +32,12 @@ import org.jgrapht.alg.util.*;
  * <p>
  * The basic structure is a a two-dimensional grid and allows for edges to be directed. It begins
  * with a set of nodes (representing individuals in the social network) that are identified with the
- * set of lattice points in an n x n square. For a universal constant {@literal p >= 1}, the node u
- * has a directed edge to every other node within lattice distance p (these are its local contacts).
- * For universal constants {@literal q >= 0} and {@literal r >= 0}, we also construct directed edges
- * from u to q other nodes (the long-range contacts) using independent random trials; the i-th
- * directed edge from u has endpoint v with probability proportional to {@literal 1/d(u,v)^r} where
- * d(u,v) is the lattice distance from u to v.
+ * set of lattice points in an $n \times n$ square. For a universal constant $p \geq 1$, the node $u$
+ * has a directed edge to every other node within lattice distance $p$ (these are its local contacts).
+ * For universal constants $q \geq 0$ and $r \geq 0$, we also construct directed edges
+ * from $u$ to $q$ other nodes (the long-range contacts) using independent random trials; the i-th
+ * directed edge from $u$ has endpoint $v$ with probability proportional to \frac{1}{d(u,v)^r}$ where
+ * $d(u,v)$ is the lattice distance from $u$ to $v$.
  * 
  * @author Dimitrios Michail
  * @since February 2017
@@ -58,7 +58,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
     /**
      * Constructor
      * 
-     * @param n generate set of lattice points in a n by n square
+     * @param n generate set of lattice points in a $n$ by $n$ square
      * @param p lattice distance for which each node is connected to every other node in the lattice
      *        (local connections)
      * @param q how many long-range contacts to add for each node
@@ -74,7 +74,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
     /**
      * Constructor
      * 
-     * @param n generate set of lattice points in a n by n square
+     * @param n generate set of lattice points in a $n$ by $n$ square
      * @param p lattice distance for which each node is connected to every other node in the lattice
      *        (local connections)
      * @param q how many long-range contacts to add for each node
@@ -91,7 +91,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
     /**
      * Constructor
      * 
-     * @param n generate set of lattice points in a nxn square
+     * @param n generate set of lattice points in a $n \times n$ square
      * @param p lattice distance for which each node is connected to every other node in the lattice
      *        (local connections)
      * @param q how many long-range contacts to add for each node
@@ -128,12 +128,11 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
      * Generates a small-world graph.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Special cases
@@ -141,7 +140,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
         if (n == 0) {
             return;
         } else if (n == 1) {
-            target.addVertex(vertexFactory.createVertex());
+            target.addVertex();
             return;
         }
 
@@ -156,9 +155,9 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(n * n);
         for (int i = 0; i < n * n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V v = target.addVertex();
+            if (v == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
             nodes.add(v);
         }

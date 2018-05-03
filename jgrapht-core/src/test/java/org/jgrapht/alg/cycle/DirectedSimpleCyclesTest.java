@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 public class DirectedSimpleCyclesTest
@@ -56,7 +57,7 @@ public class DirectedSimpleCyclesTest
             DirectedSimpleCycles<Integer, DefaultEdge>> algProvider)
     {
         Graph<Integer, DefaultEdge> graph =
-            new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -76,7 +77,7 @@ public class DirectedSimpleCyclesTest
         assertTrue(alg.findSimpleCycles().size() == 5);
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }

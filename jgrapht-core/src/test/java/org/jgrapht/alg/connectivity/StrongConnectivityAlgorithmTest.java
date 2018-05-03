@@ -23,11 +23,10 @@ import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.GabowStrongConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -230,12 +229,10 @@ public class StrongConnectivityAlgorithmTest
 
     public void testStronglyConnected4(Class<?> strongConnectivityAlgorithm)
     {
-        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>((from, to) -> {
-            return (from + "->" + to).intern();
-        });
+        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createStringSupplier(), false);
 
         new RingGraphGenerator<Integer, String>(3)
-            .generateGraph(graph, new IntegerVertexFactory(), null);
+            .generateGraph(graph);
 
         StrongConnectivityAlgorithm<Integer, String> sc =
             this.getStrongConnectivityInspector(graph, strongConnectivityAlgorithm);

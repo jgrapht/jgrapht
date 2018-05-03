@@ -17,13 +17,17 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-import java.util.stream.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,7 +39,7 @@ public abstract class MinimumSourceSinkCutTest
     extends MaximumFlowMinimumCutAlgorithmTestBase
 {
 
-    public static final int NR_RANDOM_TESTS = 20;
+    public static final int NR_RANDOM_TESTS = 500;
 
     abstract MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(
         Graph<Integer, DefaultWeightedEdge> network);

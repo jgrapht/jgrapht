@@ -30,14 +30,16 @@ import org.jgrapht.graph.*;
  *
  * <p>
  * The algorithm is a variant of the Bellman-Ford algorithm but instead of only storing the best
- * path it stores the "k" best paths at each pass, yielding a complexity of O(k*n*(m^2)) where m is
- * the number of edges and n is the number of vertices.
+ * path it stores the "k" best paths at each pass, yielding a complexity of $O(k \cdot n \cdot (m^2))$ where $m$ is
+ * the number of edges and $n$ is the number of vertices.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @since July 5, 2007
+ * @deprecated In favor of {@link KShortestSimplePaths}
  */
+@Deprecated
 public class KShortestPaths<V, E>
     implements KShortestPathAlgorithm<V, E>
 {
@@ -123,7 +125,7 @@ public class KShortestPaths<V, E>
     }
 
     /**
-     * Returns the k shortest simple paths in increasing order of weight.
+     * Returns the $k$ shortest simple paths in increasing order of weight.
      *
      * @param startVertex source vertex of the calculated paths.
      * @param endVertex target vertex of the calculated paths.
@@ -148,8 +150,8 @@ public class KShortestPaths<V, E>
             throw new IllegalArgumentException("Graph must contain the end vertex!");
         }
 
-        KShortestPathsIterator<V, E> iter =
-            new KShortestPathsIterator<>(graph, startVertex, endVertex, nPaths, pathValidator);
+        KShortestSimplePathsIterator<V, E> iter =
+            new KShortestSimplePathsIterator<>(graph, startVertex, endVertex, nPaths, pathValidator);
 
         // at the i-th pass the shortest paths with less (or equal) than i edges
         // are calculated.
@@ -172,6 +174,13 @@ public class KShortestPaths<V, E>
         }
 
         return pathList;
+    }
+
+    @Override
+    public List<GraphPath<V, E>> getPaths(V source, V sink, int k)
+    {
+        this.nPaths = k;
+        return getPaths(source, sink);
     }
 
 }

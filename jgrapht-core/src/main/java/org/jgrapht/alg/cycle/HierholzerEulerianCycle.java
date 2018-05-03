@@ -30,7 +30,7 @@ import org.jgrapht.util.*;
 /**
  * An implementation of Hierholzer's algorithm for finding an Eulerian cycle in Eulerian graphs. The
  * algorithm works with directed and undirected graphs which may contain loops and/or multiple
- * (parallel) edges. The running time is linear, i.e. O(|E|) where |E| is the cardinality of the
+ * (parallel) edges. The running time is linear, i.e. $O(|E|)$ where $|E|$ is the cardinality of the
  * edge set of the graph.
  * 
  * <p>
@@ -98,7 +98,7 @@ public class HierholzerEulerianCycle<V, E>
             }
             // check that at most one connected component contains edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new ConnectivityInspector<V, E>(graph).connectedSets()) {
+            for (Set<V> component : new ConnectivityInspector<>(graph).connectedSets()) {
                 for (V v : component) {
                     if (graph.degreeOf(v) > 0) {
                         if (foundComponentWithEdges) {
@@ -120,7 +120,7 @@ public class HierholzerEulerianCycle<V, E>
             // check that at most one strongly connected component contains
             // edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(graph)
+            for (Set<V> component : new KosarajuStrongConnectivityInspector<>(graph)
                 .stronglyConnectedSets())
             {
                 for (V v : component) {
@@ -283,7 +283,7 @@ public class HierholzerEulerianCycle<V, E>
      * partial cycles from already visited vertices.
      * 
      * @param partialCycle the partial cycle
-     * @param partialCycleStartVertex the source vertex of the first edge in the partial cycle
+     * @param partialCycleSourceVertex the source vertex of the first edge in the partial cycle
      */
     private void updateGraphAndInsertLocations(
         Pair<EdgeNode, EdgeNode> partialCycle, VertexNode partialCycleSourceVertex)
@@ -492,7 +492,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            VertexNode other = TypeUtil.uncheckedCast(obj, null);
+            VertexNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.v, other.v);
         }
 
@@ -552,7 +552,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            EdgeNode other = TypeUtil.uncheckedCast(obj, null);
+            EdgeNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.e, other.e);
         }
 

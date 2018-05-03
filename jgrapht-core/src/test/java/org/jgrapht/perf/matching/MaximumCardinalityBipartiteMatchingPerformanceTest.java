@@ -23,15 +23,13 @@ import java.util.concurrent.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 /**
  * A small benchmark comparing matching algorithms for bipartite graphs.
@@ -68,8 +66,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
                     PERF_BENCHMARK_EDGES_PROP, SEED);
             }
 
-            graph = new Pseudograph<>(DefaultEdge.class);
-            generator.generateGraph(graph, new IntegerVertexFactory(0), null);
+            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
             firstPartition = generator.getFirstPartition();
             secondPartition = generator.getSecondPartition();
         }

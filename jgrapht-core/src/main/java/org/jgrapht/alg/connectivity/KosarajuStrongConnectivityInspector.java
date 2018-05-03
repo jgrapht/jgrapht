@@ -24,7 +24,7 @@ import org.jgrapht.graph.*;
 
 /**
  * Computes strongly connected components of a directed graph. The algorithm is implemented after
- * "Cormen et al: Introduction to algorithms", Chapter 22.5. It has a running time of O(V + E).
+ * "Cormen et al: Introduction to algorithms", Chapter 22.5. It has a running time of $O(V + E)$.
  *
  * <p>
  * Unlike {@link ConnectivityInspector}, this class does not implement incremental

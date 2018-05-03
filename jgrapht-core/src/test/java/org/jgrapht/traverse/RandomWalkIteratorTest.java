@@ -23,6 +23,8 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -67,20 +69,15 @@ public class RandomWalkIteratorTest
     @Test
     public void testSink()
     {
-        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String,
+            DefaultEdge> graph = GraphTypeBuilder
+                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
+                .buildGraph();
         int graphSize = 10;
         LinearGraphGenerator<String, DefaultEdge> graphGenerator =
             new LinearGraphGenerator<>(graphSize);
-        graphGenerator.generateGraph(graph, new VertexFactory<String>()
-        {
-            private int index = 1;
-
-            @Override
-            public String createVertex()
-            {
-                return String.valueOf(index++);
-            }
-        }, null);
+        graphGenerator.generateGraph(graph);
         Iterator<String> iter = new RandomWalkIterator<>(graph);
         for (int i = 0; i < graphSize; i++) {
             assertTrue(iter.hasNext());
@@ -95,19 +92,14 @@ public class RandomWalkIteratorTest
     @Test
     public void testExhausted()
     {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String,
+        DefaultEdge> graph = GraphTypeBuilder
+            .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+            .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
+            .buildGraph();
+        
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
-        graphGenerator.generateGraph(graph, new VertexFactory<String>()
-        {
-            private int index = 1;
-
-            @Override
-            public String createVertex()
-            {
-                return String.valueOf(index++);
-            }
-        }, null);
-
+        graphGenerator.generateGraph(graph);
         int maxSteps = 4;
         Iterator<String> iter = new RandomWalkIterator<>(graph, "1", false, maxSteps);
         for (int i = 0; i < maxSteps; i++) {
@@ -123,19 +115,15 @@ public class RandomWalkIteratorTest
     @Test
     public void testDeterministic()
     {
-        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String,
+        DefaultEdge> graph = GraphTypeBuilder
+            .directed().vertexSupplier(SupplierUtil.createStringSupplier())
+            .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
+            .buildGraph();
+        
         int ringSize = 5;
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
-        graphGenerator.generateGraph(graph, new VertexFactory<String>()
-        {
-            private int index = 0;
-
-            @Override
-            public String createVertex()
-            {
-                return String.valueOf(index++);
-            }
-        }, null);
+        graphGenerator.generateGraph(graph);
         Iterator<String> iter = new RandomWalkIterator<>(graph, "0", false, 20);
         int step = 0;
         while (iter.hasNext()) {

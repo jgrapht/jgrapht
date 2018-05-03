@@ -22,11 +22,9 @@ import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-
-import junit.framework.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -195,12 +193,12 @@ public class PadbergRaoOddMinimumCutsetTest
         Random rand = new Random(0);
         for (int i = 0; i < 8; i++) {
             SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+                new SimpleWeightedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             int vertices = rand.nextInt((30 - 10) + 1) + 10; // 10-30 vertices
             double p = 0.01 * (rand.nextInt((85 - 50) + 1) + 50); // p=[0.5;0.85]
             GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen =
                 new GnpRandomGraphGenerator<>(vertices, p);
-            graphGen.generateGraph(randomGraph, new IntegerVertexFactory(0), null);
+            graphGen.generateGraph(randomGraph);
             for (DefaultWeightedEdge edge : randomGraph.edgeSet())
                 randomGraph.setEdgeWeight(edge, rand.nextInt(150));
 

@@ -22,10 +22,9 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -261,10 +260,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
             int edges = random.nextInt(maxEdges(vertices) / 2);
             GraphGenerator<Integer, DefaultEdge, Integer> generator =
                 new GnmRandomGraphGenerator<>(vertices, edges, 0);
-            IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-            generator.generateGraph(graph, vertexFactory, null);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
             EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                 new EdmondsMaximumCardinalityMatching<>(graph);
 
@@ -283,9 +281,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
                     new GnmRandomGraphGenerator<>(n, m);
 
                 for (int i = 0; i < 25; i++) {
-                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-                    IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
-                    generator.generateGraph(graph, vertexFactory, null);
+                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                    generator.generateGraph(graph);
                     EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                         new EdmondsMaximumCardinalityMatching<>(graph);
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();

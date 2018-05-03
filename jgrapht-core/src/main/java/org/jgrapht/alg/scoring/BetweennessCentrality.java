@@ -82,7 +82,7 @@ public class BetweennessCentrality<V, E>
      * Construct a new instance.
      * 
      * @param graph the input graph
-     * @param normalize whether to normalize by dividing the closeness by (n-1)*(n-2), where n is the
+     * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where $n$ is the
      *        number of vertices of the graph
      */
     public BetweennessCentrality(Graph<V, E> graph, boolean normalize)
@@ -130,7 +130,7 @@ public class BetweennessCentrality<V, E>
         this.graph.vertexSet().forEach(v -> this.scores.put(v, 0.0));
 
         // compute for each source
-        this.graph.vertexSet().forEach(s -> compute(s));
+        this.graph.vertexSet().forEach(this::compute);
 
         // For undirected graph, divide scores by two as each shortest path
         // considered twice.

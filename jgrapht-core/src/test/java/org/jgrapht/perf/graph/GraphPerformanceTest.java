@@ -19,22 +19,21 @@ package org.jgrapht.perf.graph;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.alg.connectivity.GabowStrongConnectivityInspector;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.specifics.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 /**
  * Benchmark class to compare different graph implementations. The benchmark creates a graph, runs
@@ -175,8 +174,8 @@ public class GraphPerformanceTest
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new MemoryEfficientDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            rgg.generateGraph(graph, new IntegerVertexFactory(1), null);
+                new MemoryEfficientDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            rgg.generateGraph(graph);
             return graph;
         }
     }
@@ -193,8 +192,8 @@ public class GraphPerformanceTest
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            rgg.generateGraph(graph, new IntegerVertexFactory(1), null);
+                new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            rgg.generateGraph(graph);
             return graph;
         }
     }
@@ -228,9 +227,9 @@ public class GraphPerformanceTest
     {
         private static final long serialVersionUID = -1826738982402033648L;
 
-        public MemoryEfficientDirectedWeightedGraph(Class<? extends E> edgeClass)
+        public MemoryEfficientDirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
-            super(edgeClass);
+            super(vertexSupplier, edgeSupplier);
         }
 
         @Override

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
+import java.util.*;
 
 /**
  * Algorithm class which computes a number of distance related metrics. A summary of various
@@ -31,7 +31,7 @@ import org.jgrapht.alg.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Joris Kinable
+ * @author Joris Kinable, Alexandru Valeanu
  */
 public class GraphMeasurer<V, E>
 {
@@ -131,7 +131,7 @@ public class GraphMeasurer<V, E>
     {
         computeEccentricityMap();
         Set<V> graphCenter = new LinkedHashSet<>();
-        ToleranceDoubleComparator comp = new ToleranceDoubleComparator(0.000000001);
+        ToleranceDoubleComparator comp = new ToleranceDoubleComparator();
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             if (comp.compare(entry.getValue(), radius) == 0)
                 graphCenter.add(entry.getKey());
@@ -150,12 +150,40 @@ public class GraphMeasurer<V, E>
     {
         computeEccentricityMap();
         Set<V> graphPeriphery = new LinkedHashSet<>();
-        ToleranceDoubleComparator comp = new ToleranceDoubleComparator(0.000000001);
+        ToleranceDoubleComparator comp = new ToleranceDoubleComparator();
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             if (comp.compare(entry.getValue(), diameter) == 0)
                 graphPeriphery.add(entry.getKey());
         }
         return graphPeriphery;
+    }
+
+    /**
+     * Compute the graph pseudo-periphery.
+     * The pseudo-periphery of a graph is the set of all pseudo-peripheral vertices.
+     * A pseudo-peripheral vertex $v$ has the property that for any vertex $u$, if $v$ is as far away from $u$ as possible,
+     * then $u$ is as far away from $v$ as possible. Formally, a vertex $u$ is pseudo-peripheral, if for each
+     * vertex $v$ with $d(u,v)=\epsilon(u)$ holds $\epsilon(u)=\epsilon(v)$, where $\epsilon(u)$ is
+     * the eccentricity of vertex $u$.
+     *
+     * @return the graph pseudo-periphery
+     */
+    public Set<V> getGraphPseudoPeriphery()
+    {
+        computeEccentricityMap();
+        Set<V> graphPseudoPeriphery = new LinkedHashSet<>();
+        ToleranceDoubleComparator comp = new ToleranceDoubleComparator();
+
+        for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
+            V u = entry.getKey();
+
+            for (V v: graph.vertexSet())
+                if (comp.compare(shortestPathAlgorithm.getPathWeight(u, v), entry.getValue()) == 0 &&
+                        comp.compare(entry.getValue(), eccentricityMap.get(v)) == 0)
+                    graphPseudoPeriphery.add(entry.getKey());
+        }
+
+        return graphPseudoPeriphery;
     }
 
     /**

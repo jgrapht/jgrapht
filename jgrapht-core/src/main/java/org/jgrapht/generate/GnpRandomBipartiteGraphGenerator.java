@@ -17,18 +17,23 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
- * Create a random bipartite graph based on the G(n, p) Erdős–Rényi model. See the Wikipedia article
+ * Create a random bipartite graph based on the $G(n, p)$ Erdős–Rényi model. See the Wikipedia article
  * for details and references about <a href="https://en.wikipedia.org/wiki/Random_graph">Random
  * Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
  * 
- * The user provides the sizes n1 and n2 of the two partitions (n1+n2=n) and the probability p of
+ * The user provides the sizes $n_1$ and $n_2$ of the two partitions $(n1+n2=n)$ and the probability $p$ of
  * the existence of an edge. The generator supports both directed and undirected graphs.
  *
  * @author Dimitrios Michail
@@ -51,9 +56,9 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     private Map<Integer, V> partitionB;
 
     /**
-     * Create a new random bipartite graph generator. The generator uses the G(n, p) model when n =
-     * n1 + n2 and the bipartite graph has one partition with size n1 and one partition with size
-     * n2. An edge between two vertices of different partitions is included with probability p
+     * Create a new random bipartite graph generator. The generator uses the $G(n, p)$ model
+     * when $n = n_1 + n_2$ and the bipartite graph has one partition with size $n_1$ and one partition with size
+     * $n_2$. An edge between two vertices of different partitions is included with probability $p$
      * independent of all other edges.
      * 
      * @param n1 number of vertices of the first partition
@@ -66,9 +71,9 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     }
 
     /**
-     * Create a new random bipartite graph generator. The generator uses the G(n, p) model when n =
-     * n1 + n2, the bipartite graph has partition with size n1 and a partition with size n2. An edge
-     * between two vertices of different partitions is included with probability p independent of
+     * Create a new random bipartite graph generator. The generator uses the $G(n, p)$ model
+     * when $n = n_1 + n_2$, the bipartite graph has partition with size $n_1$ and a partition with size $n_2$. An edge
+     * between two vertices of different partitions is included with probability $p$ independent of
      * all other edges.
      * 
      * @param n1 number of vertices of the first partition
@@ -82,9 +87,9 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     }
 
     /**
-     * Create a new random bipartite graph generator. The generator uses the G(n, p) model when n =
-     * n1 + n2, the bipartite graph has partition with size n1 and a partition with size n2. An edge
-     * between two vertices of different partitions is included with probability p independent of
+     * Create a new random bipartite graph generator. The generator uses the $G(n, p)$ model when
+     * $n = n_1 + n_2$, the bipartite graph has partition with size $n_1$ and a partition with size $n_2$. An edge
+     * between two vertices of different partitions is included with probability $p$ independent of
      * all other edges.
      * 
      * @param n1 number of vertices of the first partition
@@ -106,19 +111,18 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
             throw new IllegalArgumentException("not valid probability of edge existence");
         }
         this.p = p;
-        this.rng = rng;
+        this.rng = Objects.requireNonNull(rng);
     }
 
     /**
      * Generates a random bipartite graph.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         if (n1 + n2 == 0) {
             return;
@@ -129,15 +133,13 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
 
         partitionA = new LinkedHashMap<>(n1);
         for (int i = 0; i < n1; i++) {
-            V v = vertexFactory.createVertex();
-            target.addVertex(v);
+            V v = target.addVertex();
             partitionA.put(i, v);
         }
 
         partitionB = new LinkedHashMap<>(n2);
         for (int i = 0; i < n2; i++) {
-            V v = vertexFactory.createVertex();
-            target.addVertex(v);
+            V v = target.addVertex();
             partitionB.put(i, v);
         }
 

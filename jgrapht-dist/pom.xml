@@ -8,6 +8,9 @@
 	<artifactId>jgrapht-dist</artifactId>
 	<name>JGraphT - Distributable Archives</name>
 	<packaging>pom</packaging>
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -20,7 +23,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -43,6 +45,16 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-ext</artifactId>
+			<classifier>uber</classifier>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
 			<classifier>uber</classifier>
 			<version>${project.version}</version>
 		</dependency>

@@ -22,8 +22,8 @@ import java.util.*;
 /**
  * This class implements a Fibonacci heap data structure. Much of the code in this class is based on
  * the algorithms in the "Introduction to Algorithms" by Cormen, Leiserson, and Rivest in Chapter
- * 21. The amortized running time of most of these methods is O(1), making it a very fast data
- * structure. Several have an actual running time of O(1). removeMin() and delete() have O(log n)
+ * 21. The amortized running time of most of these methods is $O(1)$, making it a very fast data
+ * structure. Several have an actual running time of $O(1)$. removeMin() and delete() have $O(log n)$
  * amortized running times because they do the heap consolidation. If you attempt to store nodes in
  * this heap with key values of -Infinity (Double.NEGATIVE_INFINITY) the <code>delete()</code>
  * operation may fail to remove the correct element.
@@ -70,7 +70,7 @@ public class FibonacciHeap<T>
      * otherwise.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      * </p>
      *
      * @return true if the heap is empty, false otherwise
@@ -98,13 +98,13 @@ public class FibonacciHeap<T>
      * heap may be changed and will not be consolidated.
      *
      * <p>
-     * Running time: O(1) amortized
+     * Running time: $O(1)$ amortized
      * </p>
      *
      * @param x node to decrease the key of
      * @param k new key value for node x
      *
-     * @exception IllegalArgumentException Thrown if k is larger than x.key value.
+     * @exception IllegalArgumentException Thrown if $k$ is larger than x.key value.
      */
     public void decreaseKey(FibonacciHeapNode<T> x, double k)
     {
@@ -136,10 +136,10 @@ public class FibonacciHeap<T>
     /**
      * Deletes a node from the heap given the reference to the node. The trees in the heap will be
      * consolidated, if necessary. This operation may fail to remove the correct element if there
-     * are nodes with key value -Infinity.
+     * are nodes with key value $-\infty$.
      *
      * <p>
-     * Running time: O(log n) amortized
+     * Running time: $O(\log n)$ amortized
      * </p>
      *
      * @param x node to remove from heap
@@ -160,7 +160,7 @@ public class FibonacciHeap<T>
      * the new node is simply inserted into the root list of this heap.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      * </p>
      *
      * @param node new node to insert into heap
@@ -201,7 +201,7 @@ public class FibonacciHeap<T>
      * key value.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      * </p>
      *
      * @return heap node with the smallest key
@@ -218,7 +218,7 @@ public class FibonacciHeap<T>
      * consolidated, if necessary.
      *
      * <p>
-     * Running time: O(log n) amortized
+     * Running time: $O(\log n)$ amortized
      * </p>
      *
      * @return node with the smallest key
@@ -284,7 +284,7 @@ public class FibonacciHeap<T>
      * heap.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      * </p>
      *
      * @return number of elements in the heap
@@ -301,7 +301,7 @@ public class FibonacciHeap<T>
      * The two root lists are simply joined together.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      * </p>
      *
      * @param h1 first heap
@@ -353,14 +353,14 @@ public class FibonacciHeap<T>
         }
 
         // create a new stack and put root on it
-        Stack<FibonacciHeapNode<T>> stack = new Stack<>();
+        Deque<FibonacciHeapNode<T>> stack = new ArrayDeque<>();
         stack.push(minNode);
 
         StringBuilder buf = new StringBuilder(512);
         buf.append("FibonacciHeap=[");
 
         // do a simple breadth-first traversal on the tree
-        while (!stack.empty()) {
+        while (!stack.isEmpty()) {
             FibonacciHeapNode<T> curr = stack.pop();
             buf.append(curr);
             buf.append(", ");
@@ -396,7 +396,7 @@ public class FibonacciHeap<T>
      * its parent, and so on up the tree.
      *
      * <p>
-     * Running time: O(log n); O(1) excluding the recursion
+     * Running time: $O(\log n)$; $O(1)$ excluding the recursion
      * </p>
      *
      * @param y node to perform cascading cut on
@@ -524,15 +524,15 @@ public class FibonacciHeap<T>
     // consolidate
 
     /**
-     * The reverse of the link operation: removes x from the child list of y. This method assumes
+     * The reverse of the link operation: removes $x$ from the child list of $y$. This method assumes
      * that min is non-null.
      *
      * <p>
-     * Running time: O(1)
+     * Running time: $O(1)$
      * </p>
      *
-     * @param x child of y to be removed from y's child list
-     * @param y parent of x about to lose a child
+     * @param x child of $y$ to be removed from $y$'s child list
+     * @param y parent of $x$ about to lose a child
      */
     protected void cut(FibonacciHeapNode<T> x, FibonacciHeapNode<T> y)
     {
@@ -566,10 +566,10 @@ public class FibonacciHeap<T>
     // cut
 
     /**
-     * Make node y a child of node x.
+     * Make node $y$ a child of node $x$.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      * </p>
      *
      * @param y node to become child

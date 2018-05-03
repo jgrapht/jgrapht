@@ -22,9 +22,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 
 import org.jgrapht.alg.cycle.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -111,43 +111,43 @@ public class GraphMetricsTest
     @Test
     public void testGraphGirthGridGraph()
     {
-        Graph<Integer, DefaultEdge> grid = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> grid = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GridGraphGenerator<>(3, 4);
-        gen.generateGraph(grid, new IntegerVertexFactory(), null);
+        gen.generateGraph(grid);
         assertEquals(4, GraphMetrics.getGirth(grid));
     }
 
     @Test
     public void testGraphGirthRingGraphEven()
     {
-        Graph<Integer, DefaultEdge> ring = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> ring = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new RingGraphGenerator<>(10);
-        gen.generateGraph(ring, new IntegerVertexFactory(), null);
+        gen.generateGraph(ring);
         assertEquals(10, GraphMetrics.getGirth(ring));
     }
 
     @Test
     public void testGraphGirthRingGraphOdd()
     {
-        Graph<Integer, DefaultEdge> ring = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> ring = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new RingGraphGenerator<>(9);
-        gen.generateGraph(ring, new IntegerVertexFactory(), null);
+        gen.generateGraph(ring);
         assertEquals(9, GraphMetrics.getGirth(ring));
     }
 
     @Test
     public void testGraphGirthWheelGraph()
     {
-        Graph<Integer, DefaultEdge> grid = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> grid = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new WheelGraphGenerator<>(5);
-        gen.generateGraph(grid, new IntegerVertexFactory(), null);
+        gen.generateGraph(grid);
         assertEquals(3, GraphMetrics.getGirth(grid));
     }
 
     @Test
     public void testGraphDirected1()
     {
-        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3));
         graph.addEdge(1, 0);
         graph.addEdge(3, 0);
@@ -217,8 +217,8 @@ public class GraphMetricsTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(10, .55, 0);
         for (int i = 0; i < 10; i++) {
-            Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-            gen.generateGraph(graph, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(graph);
 
             TarjanSimpleCycles<Integer, DefaultEdge> tarjanSimpleCycles =
                 new TarjanSimpleCycles<>(graph);

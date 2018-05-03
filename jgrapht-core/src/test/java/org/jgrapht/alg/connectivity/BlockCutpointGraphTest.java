@@ -18,9 +18,9 @@
 package org.jgrapht.alg.connectivity;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import java.util.*;
@@ -38,8 +38,8 @@ public class BlockCutpointGraphTest
     public void randomGraphTest(){
         GnpRandomGraphGenerator<Integer, DefaultEdge> gen=new GnpRandomGraphGenerator<>(50, .5, 0);
         for(int i=0; i<5; i++){
-            Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
             this.validateGraph(g, new BlockCutpointGraph<>(g));
         }
     }
@@ -48,8 +48,8 @@ public class BlockCutpointGraphTest
     public void randomDirectedGraphTest(){
         GnpRandomGraphGenerator<Integer, DefaultEdge> gen=new GnpRandomGraphGenerator<>(50, .5, 0);
         for(int i=0; i<5; i++){
-            Graph<Integer, DefaultEdge> g=new SimpleDirectedGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
             this.validateGraph(g, new BlockCutpointGraph<>(g));
         }
     }

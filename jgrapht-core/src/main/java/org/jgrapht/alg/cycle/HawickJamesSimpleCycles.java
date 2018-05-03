@@ -158,13 +158,12 @@ public class HawickJamesSimpleCycles<V, E>
                 continue;
             }
 
-            if (w == start) {
+            if (Objects.equals(w, start)) {
                 if (o == Operation.ENUMERATE) {
                     List<V> cycle = new ArrayList<>(stack.size());
 
-                    Iterator<Integer> iteratorStack = stack.iterator();
-                    while (iteratorStack.hasNext()) {
-                        cycle.add(iToV[iteratorStack.next()]);
+                    for (Integer aStack : stack) {
+                        cycle.add(iToV[aStack]);
                     }
 
                     cycles.add(cycle);
@@ -234,7 +233,7 @@ public class HawickJamesSimpleCycles<V, E>
         Iterator<Integer> iterator = list.iterator();
         while (iterator.hasNext()) {
             Integer w = iterator.next();
-            if (w == u) {
+            if (Objects.equals(w, u)) {
                 nOccurrences++;
                 iterator.remove();
             }

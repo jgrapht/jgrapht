@@ -22,9 +22,9 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * Provides an edge-reversed view g' of a directed graph g. The vertex sets for the two graphs are
- * the same, but g' contains an edge (v2, v1) iff g contains an edge (v1, v2). g' is backed by g, so
- * changes to g are reflected in g', and vice versa.
+ * Provides an edge-reversed view $g'$ of a directed graph $g$. The vertex sets for the two graphs are
+ * the same, but g' contains an edge $(v2, v1)$ iff g$$ contains an edge $(v1, v2)$. $g'$ is backed by $g$, so
+ * changes to $g$ are reflected in $g'$, and vice versa.
  *
  * <p>
  * This class allows you to use a directed graph algorithm in reverse. For example, suppose you have

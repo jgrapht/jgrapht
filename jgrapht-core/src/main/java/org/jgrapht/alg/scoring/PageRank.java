@@ -41,15 +41,15 @@ import org.jgrapht.alg.interfaces.*;
  * </p>
  *
  * <p>
- * Each iteration of the algorithm runs in linear time O(n+m) when n is the number of nodes and m
+ * Each iteration of the algorithm runs in linear time $O(n+m)$ when $n$ is the number of nodes and $m$
  * the number of edges of the graph. The maximum number of iterations can be adjusted by the caller.
  * The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
  * </p>
  * 
  * <p>
  * If the graph is a weighted graph, a weighted variant is used where the probability of following
- * an edge e out of node v is equal to the weight of e over the sum of weights of all outgoing edges
- * of v.
+ * an edge e out of node $v$ is equal to the weight of $e$ over the sum of weights of all outgoing edges
+ * of $v$.
  * </p>
  * 
  * @param <V> the graph vertex type

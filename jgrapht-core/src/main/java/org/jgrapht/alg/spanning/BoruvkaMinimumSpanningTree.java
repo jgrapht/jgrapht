@@ -34,7 +34,7 @@ import org.jgrapht.alg.util.*;
  * <p>
  * This implementation uses a union-find data structure (with union by rank and path compression
  * heuristic) in order to track components. In graphs where edges have identical weights, edges with
- * equal weights are ordered lexicographically. The running time is O((E+V) logV) under the
+ * equal weights are ordered lexicographically. The running time is $O((E+V) \log V)$ under the
  * assumption that the union-find uses path-compression.
  * 
  * @param <V> the graph vertex type

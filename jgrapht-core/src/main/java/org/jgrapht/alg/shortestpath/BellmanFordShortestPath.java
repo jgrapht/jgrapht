@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.*;
  * undirected graphs.
  *
  * <p>
- * The running time is O(|E||V|).
+ * The running time is $O(|E||V|)$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

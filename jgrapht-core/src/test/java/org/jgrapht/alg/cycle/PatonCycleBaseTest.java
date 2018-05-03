@@ -41,6 +41,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.WeightedPseudograph;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 public class PatonCycleBaseTest
@@ -59,7 +60,7 @@ public class PatonCycleBaseTest
     private void testAlgorithm(UndirectedCycleBase<Integer, DefaultEdge> finder)
     {
         SimpleGraph<Integer, DefaultEdge> graph =
-            new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }

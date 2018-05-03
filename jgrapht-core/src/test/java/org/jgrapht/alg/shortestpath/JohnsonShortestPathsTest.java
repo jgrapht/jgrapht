@@ -27,6 +27,8 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -35,6 +37,7 @@ import org.junit.*;
 public class JohnsonShortestPathsTest
 {
 
+    @Deprecated
     private VertexFactory<String> vertexFactory = new VertexFactory<String>()
     {
         private int i = 0;
@@ -47,7 +50,8 @@ public class JohnsonShortestPathsTest
     };
 
     @Test
-    public void testIssue408()
+    @Deprecated
+    public void testIssue408Deprecated()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
@@ -67,9 +71,38 @@ public class JohnsonShortestPathsTest
         assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
         assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
     }
-
+    
     @Test
-    public void testWikipediaExample()
+    public void testIssue408()
+    {
+        Graph<Integer,
+            DefaultEdge> graph = GraphTypeBuilder
+                .directed().edgeClass(DefaultEdge.class)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(false)
+                .allowingSelfLoops(false).buildGraph();
+
+        for (int i = 0; i < 7; i++) {
+            graph.addVertex();
+        }
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 4);
+
+        JohnsonShortestPaths<Integer, DefaultEdge> sp = new JohnsonShortestPaths<>(graph);
+
+        assertEquals(2.0, sp.getPathWeight(0, 2), 0.0);
+        assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
+        assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
+    }
+    
+    @Test
+    @Deprecated
+    public void testWikipediaExampleDeprecated()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
@@ -94,6 +127,37 @@ public class JohnsonShortestPathsTest
     }
 
     @Test
+    public void testWikipediaExample()
+    {
+        Graph<String,
+            DefaultWeightedEdge> g = GraphTypeBuilder
+                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).buildGraph();
+        
+        g.addVertex("w");
+        g.addVertex("y");
+        g.addVertex("x");
+        g.addVertex("z");
+        g.setEdgeWeight(g.addEdge("w", "z"), 2);
+        g.setEdgeWeight(g.addEdge("y", "w"), 4);
+        g.setEdgeWeight(g.addEdge("x", "w"), 6);
+        g.setEdgeWeight(g.addEdge("x", "y"), 3);
+        g.setEdgeWeight(g.addEdge("z", "x"), -7);
+        g.setEdgeWeight(g.addEdge("y", "z"), 5);
+        g.setEdgeWeight(g.addEdge("z", "y"), -3);
+
+        JohnsonShortestPaths<String, DefaultWeightedEdge> alg =
+            new JohnsonShortestPaths<>(g);
+        assertEquals(-1d, alg.getPathWeight("z", "w"), 1e-9);
+        assertEquals(-4d, alg.getPathWeight("z", "y"), 1e-9);
+        assertEquals(0, alg.getPathWeight("z", "z"), 1e-9);
+        assertEquals(-7, alg.getPathWeight("z", "x"), 1e-9);
+    }
+    
+    
+
+    @Test
     public void testRandomGraphsCompareWithFloydWarshall()
     {
         final int tests = 20;
@@ -103,15 +167,18 @@ public class JohnsonShortestPathsTest
         Random rng = new Random();
 
         List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
-        graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
+        graphs.add(
+            () -> GraphTypeBuilder
+                .directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).buildGraph());
 
         for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
                 new GnpRandomGraphGenerator<>(n, p, rng, false);
             for (int i = 0; i < tests; i++) {
                 Graph<Integer, DefaultWeightedEdge> g = gSupplier.get();
-                IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
-                gen.generateGraph(g, vertexFactory, null);
+                gen.generateGraph(g);
 
                 // assign weights
                 for (DefaultWeightedEdge e : g.edgeSet()) {
@@ -132,7 +199,7 @@ public class JohnsonShortestPathsTest
                 try {
                     // run Johnson algorithm
                     JohnsonShortestPaths<Integer, DefaultWeightedEdge> fw =
-                        new JohnsonShortestPaths<>(g, vertexFactory);
+                        new JohnsonShortestPaths<>(g);
 
                     // run Floyd-Warshall algorithm
                     FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw1 =

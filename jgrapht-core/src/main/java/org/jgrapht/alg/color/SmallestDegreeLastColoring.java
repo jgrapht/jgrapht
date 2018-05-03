@@ -27,9 +27,9 @@ import org.jgrapht.*;
  * 
  * <p>
  * This is the greedy coloring algorithm with the smallest-last ordering of the vertices. The basic
- * idea is as follows: Assuming that vertices {@code vk+1, ..., vn} have been already selected,
- * choose {@code v_k} so that the degree of {@code v_k} in the subgraph induced by {@code V - {vk+1,
- * ..., v_n}} is minimal. See the following paper for details.
+ * idea is as follows: Assuming that vertices $v_{k+1}, \dotso, v_n$ have been already selected,
+ * choose $v_k$ so that the degree of $v_k$ in the subgraph induced by $V - $(v_{k+1}, \dotso, v_n)$ is minimal.
+ * See the following paper for details.
  * <ul>
  * <li>D. Matula, G. Marble, and J. Isaacson. Graph coloring algorithms in Graph Theory and
  * Computing. Academic Press, 104--122, 1972.</li>

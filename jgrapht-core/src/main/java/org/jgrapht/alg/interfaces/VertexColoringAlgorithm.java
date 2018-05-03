@@ -36,7 +36,7 @@ public interface VertexColoringAlgorithm<V>
     Coloring<V> getColoring();
 
     /**
-     * A coloring. The colors are between 0 and {@code n-1} where n is the number of vertices of the
+     * A coloring. The colors are between 0 and $n-1$ where $n$ is the number of vertices of the
      * graph.
      *
      * @param <V> the graph vertex type
@@ -118,17 +118,11 @@ public interface VertexColoringAlgorithm<V>
         {
             Map<Integer, Set<V>> groups = new HashMap<>();
             colors.forEach((v, color) -> {
-                Set<V> g = groups.get(color);
-                if (g == null) {
-                    g = new HashSet<>();
-                    groups.put(color, g);
-                }
+                Set<V> g = groups.computeIfAbsent(color, k -> new HashSet<>());
                 g.add(v);
             });
             List<Set<V>> classes = new ArrayList<>(numberColors);
-            for (Set<V> c : groups.values()) {
-                classes.add(c);
-            }
+            classes.addAll(groups.values());
             return classes;
         }
 

@@ -23,11 +23,12 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
 
 /**
  * .
@@ -161,6 +162,23 @@ public class DOTExporterTest
                 // this is a negative test so exception is expected
             }
         }
+    }
+
+    @Test
+    public void testQuotedNodeIDs()
+    {
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
+            new StringComponentNameProvider<>(), new StringComponentNameProvider<>(), null);
+
+        StringWriter outputWriter = new StringWriter();
+
+        String quotedNodeId = "\"abc\"";
+
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(quotedNodeId);
+        exporter.exportGraph(graph, outputWriter);
+
+        assertThat(outputWriter.toString(), containsString("label=\"\\\"abc\\\"\""));
     }
 
     @Test

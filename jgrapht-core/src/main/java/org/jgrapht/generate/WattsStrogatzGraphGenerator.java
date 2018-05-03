@@ -32,23 +32,23 @@ import org.jgrapht.*;
  * The following paragraph from the paper describes the construction.
  * 
  * <p>
- * "The generator starts with a ring of n vertices, each connected to its k nearest neighbors (k
+ * "The generator starts with a ring of $n$ vertices, each connected to its $k$ nearest neighbors ($k$
  * must be even). Then it chooses a vertex and the edge that connects it to its nearest neighbor in
- * a clockwise sense. With probability p, it reconnects this edge to a vertex chosen uniformly at
+ * a clockwise sense. With probability $p$, it reconnects this edge to a vertex chosen uniformly at
  * random over the entire ring with duplicate edges forbidden; otherwise it leaves the edge in
  * place. The process is repeated by moving clock-wise around the ring, considering each vertex in
  * turn until one lap is completed. Next, it considers the edges that connect vertices to their
  * second-nearest neighbors clockwise. As before, it randomly rewires each of these edges with
- * probability p , and continues this process, circulating around the ring and proceeding outward to
+ * probability $p$, and continues this process, circulating around the ring and proceeding outward to
  * more distant neighbors after each lap, until each edge in the original lattice has been
- * considered once. As there are nk/2 edges in the entire graph, the rewiring process stops after
- * k/2 laps. For p = 0, the original ring is unchanged; as p increases, the graph becomes
- * increasingly disordered until for p = 1, all edges are rewired randomly. For intermediate values
- * of p, the graph is a small-world network: highly clustered like a regular graph, yet with small
+ * considered once. As there are $\frac{nk}{2}$ edges in the entire graph, the rewiring process stops after
+ * $\frac{k}{2}$ laps. For $p = 0$, the original ring is unchanged; as $p$ increases, the graph becomes
+ * increasingly disordered until for $p = 1$, all edges are rewired randomly. For intermediate values
+ * of $p$, the graph is a small-world network: highly clustered like a regular graph, yet with small
  * characteristic path length, like a random graph."
  * 
  * <p>
- * The authors require n » k » ln(n) » 1 and specifically k » ln(n) guarantees that a random graph
+ * The authors require $n \gg k \gg \ln(n) \gg 1$ and specifically $k \gg \ln(n)$ guarantees that a random graph
  * will be connected.
  * 
  * <p>
@@ -141,18 +141,17 @@ public class WattsStrogatzGraphGenerator<V, E>
      * Generates a small-world graph based on the Watts-Strogatz model.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         // special cases
         if (n == 0) {
             return;
         } else if (n == 1) {
-            target.addVertex(vertexFactory.createVertex());
+            target.addVertex();
             return;
         }
 
@@ -161,8 +160,8 @@ public class WattsStrogatzGraphGenerator<V, E>
         Map<V, List<E>> adj = new LinkedHashMap<>(n);
 
         for (int i = 0; i < n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
+            V v = target.addVertex();
+            if (v == null) {
                 throw new IllegalArgumentException("Invalid vertex factory");
             }
             ring.add(v);

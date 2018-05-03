@@ -17,41 +17,39 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
 
 /**
- * Create a random graph based on the G(n, M) Erdős–Rényi model. See the Wikipedia article for
+ * Create a random graph based on the $G(n, M)$ Erdős–Rényi model. See the Wikipedia article for
  * details and references about <a href="https://en.wikipedia.org/wiki/Random_graph">Random
  * Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
  * 
  * <p>
- * In the G(n, M) model, a graph is chosen uniformly at random from the collection of all graphs
- * which have n nodes and M edges. For example, in the G(3, 2) model, each of the three possible
- * graphs on three vertices and two edges are included with probability 1/3.
+ * In the $G(n, M)$ model, a graph is chosen uniformly at random from the collection of all graphs
+ * which have $n$ nodes and $M$ edges. For example, in the $G(3, 2)$ model, each of the three
+ * possible graphs on three vertices and two edges are included with probability $\frac{1}{3}$.
  * 
  * <p>
  * The implementation creates the vertices and then randomly chooses an edge and tries to add it. If
- * the add fails for any reason (an edge already exists and multiple (parallel) edges are not allowed) it will
- * just choose another and try again. The performance therefore varies significantly based on the
- * probability of successfully constructing an acceptable edge.
+ * the add fails for any reason (an edge already exists and multiple (parallel) edges are not
+ * allowed) it will just choose another and try again. The performance therefore varies
+ * significantly based on the probability of successfully constructing an acceptable edge.
  * 
  * <p>
  * The implementation tries to guess the number of allowed edges based on the following. If
  * self-loops or multiple edges are allowed and requested, the maximum number of edges is
  * {@link Integer#MAX_VALUE}. Otherwise the maximum for undirected graphs with n vertices is
- * n(n-1)/2 while for directed n(n-1). If the graph type cannot be determined (for example using
- * adapter classes or user-created custom graph types) the generator assumes the graph is undirected
- * and therefore uses n(n-1)/2 as the maximum number of edges. If the user requests self-loops
- * and/or multiple edges and the graph type cannot be determined, the corresponding feature is
- * silently ignored.
+ * $\frac{n(n-1)}{2}$ while for directed $n(n-1)$.
  * 
  * <p>
- * For the G(n, p) model please see {@link GnpRandomGraphGenerator}.
+ * For the $G(n, p)$ model please see {@link GnpRandomGraphGenerator}.
  *
  * @author Assaf Lehr
  * @author Dimitrios Michail
@@ -62,7 +60,8 @@ import org.jgrapht.graph.*;
  * @see GnpRandomGraphGenerator
  */
 public class GnmRandomGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ALLOW_LOOPS = false;
     private static final boolean DEFAULT_ALLOW_MULTIPLE_EDGES = false;
@@ -74,7 +73,7 @@ public class GnmRandomGraphGenerator<V, E>
     private final boolean multipleEdges;
 
     /**
-     * Create a new G(n, M) random graph generator. The generator does not create self-loops or
+     * Create a new $G(n, M)$ random graph generator. The generator does not create self-loops or
      * multiple (parallel) edges between the same two vertices.
      * 
      * @param n the number of nodes
@@ -86,7 +85,7 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, M) random graph generator. The generator does not create self-loops or
+     * Create a new $G(n, M)$ random graph generator. The generator does not create self-loops or
      * multiple (parallel) edges between the same two vertices.
      * 
      * @param n the number of nodes
@@ -99,14 +98,14 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, M) random graph generator
+     * Create a new $G(n, M)$ random graph generator
      * 
      * @param n the number of nodes
      * @param m the number of edges
      * @param seed seed for the random number generator
      * @param loops whether the generated graph may contain loops
-     * @param multipleEdges whether the generated graph many contain multiple (parallel) edges between the same
-     *        two vertices
+     * @param multipleEdges whether the generated graph many contain multiple (parallel) edges
+     *        between the same two vertices
      */
     public GnmRandomGraphGenerator(int n, int m, long seed, boolean loops, boolean multipleEdges)
     {
@@ -114,14 +113,14 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, M) random graph generator
+     * Create a new $G(n, M)$ random graph generator
      * 
      * @param n the number of nodes
      * @param m the number of edges
      * @param rng the random number generator
      * @param loops whether the generated graph may contain loops
-     * @param multipleEdges whether the generated graph many contain multiple (parallel) edges between the same
-     *        two vertices
+     * @param multipleEdges whether the generated graph many contain multiple (parallel) edges
+     *        between the same two vertices
      */
     public GnmRandomGraphGenerator(int n, int m, Random rng, boolean loops, boolean multipleEdges)
     {
@@ -133,16 +132,15 @@ public class GnmRandomGraphGenerator<V, E>
             throw new IllegalArgumentException("number of edges must be non-negative");
         }
         this.m = m;
-        this.rng = rng;
+        this.rng = Objects.requireNonNull(rng);
         this.loops = loops;
         this.multipleEdges = multipleEdges;
     }
 
     /**
-     * Generates a random graph based on the G(n, M) model
+     * Generates a random graph based on the $G(n, M)$ model
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      * 
      * @throws IllegalArgumentException if the number of edges, passed in the constructor, cannot be
@@ -151,8 +149,7 @@ public class GnmRandomGraphGenerator<V, E>
      *         self-loops or multiple (parallel) edges
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         // special case
         if (n == 0) {
@@ -160,42 +157,23 @@ public class GnmRandomGraphGenerator<V, E>
         }
 
         // check whether to create loops
-        boolean createLoops = loops;
-        if (createLoops) {
-            if (target instanceof AbstractBaseGraph<?, ?>) {
-                AbstractBaseGraph<V, E> abg = (AbstractBaseGraph<V, E>) target;
-                if (!abg.isAllowingLoops()) {
-                    throw new IllegalArgumentException(
-                        "Provided graph does not support self-loops");
-                }
-            } else {
-                // cannot guess here, so disable loops
-                createLoops = false;
-            }
+        if (loops && !target.getType().isAllowingSelfLoops()) {
+            throw new IllegalArgumentException("Provided graph does not support self-loops");
         }
 
         // check whether to create multiple edges
-        boolean createMultipleEdges = multipleEdges;
-        if (createMultipleEdges) {
-            if (target instanceof AbstractBaseGraph<?, ?>) {
-                AbstractBaseGraph<V, E> abg = (AbstractBaseGraph<V, E>) target;
-                if (!abg.isAllowingMultipleEdges()) {
-                    throw new IllegalArgumentException(
-                        "Provided graph does not support multiple edges between the same vertices");
-                }
-            } else {
-                // cannot guess here, so disable multiple edges
-                createMultipleEdges = false;
-            }
+        if (multipleEdges && !target.getType().isAllowingMultipleEdges()) {
+            throw new IllegalArgumentException(
+                "Provided graph does not support multiple edges between the same vertices");
         }
 
         // compute maximum allowed edges
         if (m > computeMaximumAllowedEdges(
-            n, target.getType().isDirected(), createLoops, createMultipleEdges))
+            n, target.getType().isDirected(), loops, multipleEdges))
         {
             throw new IllegalArgumentException(
                 "number of edges is not valid for the graph type " + "\n-> invalid number of edges="
-                    + m + " for:" + " graph type=" + target.getClass() + ", number of vertices="
+                    + m + " for:" + " graph type=" + target.getType() + ", number of vertices="
                     + n);
         }
 
@@ -203,8 +181,7 @@ public class GnmRandomGraphGenerator<V, E>
         Map<Integer, V> vertices = new HashMap<>(n);
         int previousVertexSetSize = target.vertexSet().size();
         for (int i = 0; i < n; i++) {
-            V currVertex = vertexFactory.createVertex();
-            target.addVertex(currVertex);
+            V currVertex = target.addVertex();
             vertices.put(i, currVertex);
         }
 
@@ -216,19 +193,25 @@ public class GnmRandomGraphGenerator<V, E>
         // create edges
         int edgesCounter = 0;
         while (edgesCounter < m) {
-            V s = vertices.get(rng.nextInt(n));
-            V t = vertices.get(rng.nextInt(n));
+            int sIndex = rng.nextInt(n);
+            int tIndex = rng.nextInt(n);
+
+            // lazy to avoid lookups
+            V s = null;
+            V t = null;
 
             // check whether to add the edge
             boolean addEdge = false;
-            if (s.equals(t)) { // self-loop
-                if (createLoops) {
+            if (sIndex == tIndex) { // self-loop
+                if (loops) {
                     addEdge = true;
                 }
             } else {
-                if (createMultipleEdges) {
+                if (multipleEdges) {
                     addEdge = true;
                 } else {
+                    s = vertices.get(sIndex);
+                    t = vertices.get(tIndex);
                     if (!target.containsEdge(s, t)) {
                         addEdge = true;
                     }
@@ -238,6 +221,10 @@ public class GnmRandomGraphGenerator<V, E>
             // if yes, add it
             if (addEdge) {
                 try {
+                    if (s == null) {
+                        s = vertices.get(sIndex);
+                        t = vertices.get(tIndex);
+                    }
                     E resultEdge = target.addEdge(s, t);
                     if (resultEdge != null) {
                         edgesCounter++;

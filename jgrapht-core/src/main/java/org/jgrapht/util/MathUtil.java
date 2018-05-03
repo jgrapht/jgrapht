@@ -27,7 +27,7 @@ public class MathUtil
 {
 
     /**
-     * Calculate the factorial of n.
+     * Calculate the factorial of $n$.
      * 
      * @param n the input number
      * @return the factorial

@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
-import junit.framework.*;
 import org.junit.Before;
 import org.junit.Test;
 

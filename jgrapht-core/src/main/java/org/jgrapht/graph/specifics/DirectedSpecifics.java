@@ -17,11 +17,15 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.graph.EdgeSetFactory;
+import org.jgrapht.util.ArrayUnenforcedSet;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of
@@ -87,10 +91,14 @@ public class DirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void addVertex(V v)
+    public boolean addVertex(V v)
     {
-        // add with a lazy edge container entry
-        vertexMapDirected.put(v, null);
+        DirectedEdgeContainer<V, E> ec = vertexMapDirected.get(v);
+        if (ec == null) {
+            vertexMapDirected.put(v, new DirectedEdgeContainer<>(edgeSetFactory, v));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -181,7 +189,7 @@ public class DirectedSpecifics<V, E>
         inAndOut.addAll(getEdgeContainer(vertex).outgoing);
 
         // we have two copies for each self-loop - remove one of them.
-        if (abstractBaseGraph.isAllowingLoops()) {
+        if (abstractBaseGraph.getType().isAllowingSelfLoops()) {
             Set<E> loops = getAllEdges(vertex, vertex);
 
             for (int i = 0; i < inAndOut.size();) {
@@ -249,7 +257,7 @@ public class DirectedSpecifics<V, E>
     }
 
     /**
-     * A lazy build of edge container for specified vertex.
+     * Get the edge container for specified vertex.
      *
      * @param vertex a vertex in this graph.
      *

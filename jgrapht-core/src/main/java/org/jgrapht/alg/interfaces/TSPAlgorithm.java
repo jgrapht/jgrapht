@@ -17,7 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
 /**
  * An algorithm solving the
@@ -33,7 +34,7 @@ import org.jgrapht.*;
  *
  * @author Dimitrios Michail
  */
-public interface TSPAlgorithm<V, E>
+public interface TSPAlgorithm<V, E> extends HamiltonianCycleAlgorithm<V, E>
 {
 
     /**

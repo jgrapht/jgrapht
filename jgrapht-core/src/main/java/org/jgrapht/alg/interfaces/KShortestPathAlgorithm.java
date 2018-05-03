@@ -22,7 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * An algorithm which computes k-shortest paths between vertices.
+ * An algorithm which computes $k$-shortest paths between vertices.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -39,7 +39,22 @@ public interface KShortestPathAlgorithm<V, E>
      * @param source the source vertex
      * @param sink the target vertex
      * @return a list of shortest paths
+     * @deprecated In favor of providing k as a parameter.
      */
-    List<GraphPath<V, E>> getPaths(V source, V sink);
+    @Deprecated
+    default List<GraphPath<V, E>> getPaths(V source, V sink) { 
+        return getPaths(source, sink, Integer.MAX_VALUE);
+    }
+    
+    /**
+     * Get a list of k-shortest paths from a source vertex to a sink vertex. If no such paths exist
+     * this method returns an empty list.
+     * 
+     * @param source the source vertex
+     * @param sink the target vertex
+     * @param k the number of shortest paths to return
+     * @return a list of the k-shortest paths
+     */
+    List<GraphPath<V, E>> getPaths(V source, V sink, int k);
 
 }

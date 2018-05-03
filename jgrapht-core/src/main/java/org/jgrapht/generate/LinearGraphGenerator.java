@@ -67,13 +67,12 @@ public class LinearGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         V lastVertex = null;
 
         for (int i = 0; i < size; ++i) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
+            V newVertex = target.addVertex();
 
             if (lastVertex == null) {
                 if (resultMap != null) {

@@ -19,6 +19,7 @@ package org.jgrapht.graph;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;
@@ -134,9 +135,33 @@ public class AsGraphUnion<V, E>
      * {@inheritDoc}
      * 
      * @throws UnsupportedOperationException always, since operation is unsupported
+     * @deprecated Use suppliers instead 
      */
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
@@ -159,6 +184,17 @@ public class AsGraphUnion<V, E>
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public V addVertex()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }

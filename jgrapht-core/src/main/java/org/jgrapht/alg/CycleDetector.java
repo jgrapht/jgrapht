@@ -73,7 +73,7 @@ public class CycleDetector<V, E>
      *
      * @param v the vertex to test
      *
-     * @return true if v is on at least one cycle
+     * @return true if $v$ is on at least one cycle
      */
     public boolean detectCyclesContainingVertex(V v)
     {

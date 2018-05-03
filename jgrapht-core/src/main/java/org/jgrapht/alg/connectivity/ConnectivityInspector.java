@@ -18,7 +18,6 @@
 package org.jgrapht.alg.connectivity;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;

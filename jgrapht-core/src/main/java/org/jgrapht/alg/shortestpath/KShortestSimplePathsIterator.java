@@ -22,11 +22,11 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * Helper class for {@link KShortestPaths}.
+ * Helper class for {@link KShortestSimplePaths}.
  *
  * @since July 5, 2007
  */
-class KShortestPathsIterator<V, E>
+class KShortestSimplePathsIterator<V, E>
     implements Iterator<Set<V>>
 {
     /**
@@ -86,7 +86,7 @@ class KShortestPathsIterator<V, E>
      * @param endVertex end vertex of the calculated paths.
      * @param maxSize number of paths stored at end vertex of the graph.
      */
-    public KShortestPathsIterator(Graph<V, E> graph, V startVertex, V endVertex, int maxSize)
+    public KShortestSimplePathsIterator(Graph<V, E> graph, V startVertex, V endVertex, int maxSize)
     {
         this(graph, startVertex, endVertex, maxSize, null);
     }
@@ -98,7 +98,7 @@ class KShortestPathsIterator<V, E>
      * @param maxSize number of paths stored at end vertex of the graph.
      * @param pathValidator the path validator to use
      */
-    public KShortestPathsIterator(
+    public KShortestSimplePathsIterator(
         Graph<V, E> graph, V startVertex, V endVertex, int maxSize,
         PathValidator<V, E> pathValidator)
     {
@@ -313,7 +313,7 @@ class KShortestPathsIterator<V, E>
      * Complexity =
      *
      * <ul>
-     * <li>O(<code>d(v)*k*(m+n)</code>) where <code>d(v)</code> is the outgoing degree of the
+     * <li>$O(d(v) \cdot k \cdot (m+n))$ where <code>d(v)</code> is the outgoing degree of the
      * specified vertex, <code>k</code> is the maximum number of shortest paths to compute,
      * <code>m</code> is the number of edges of the graph and <code>n</code> is the number of
      * vertices of the graph</li>

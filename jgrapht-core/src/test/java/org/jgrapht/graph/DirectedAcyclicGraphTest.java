@@ -26,11 +26,15 @@ import static org.junit.Assert.fail;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.traverse.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.generate.LinearGraphGenerator;
+import org.jgrapht.traverse.TopologicalOrderIterator;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
+
 
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.
@@ -106,9 +110,9 @@ public class DirectedAcyclicGraphTest
     @Test
     public void testTopoIterationOrderLinearGraph()
     {
-        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         LinearGraphGenerator<Long, DefaultEdge> graphGen = new LinearGraphGenerator<>(100);
-        graphGen.generateGraph(dag, new LongVertexFactory(), null);
+        graphGen.generateGraph(dag);
 
         Iterator<Long> internalTopoIter = dag.iterator();
         TopologicalOrderIterator<Long, DefaultEdge> comparTopoIter =
@@ -137,10 +141,10 @@ public class DirectedAcyclicGraphTest
     {
         for (int seed = 0; seed < 20; seed++) {
             DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                new DirectedAcyclicGraph<>(DefaultEdge.class);
+                new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             RepeatableRandomGraphGenerator<Long, DefaultEdge> graphGen =
                 new RepeatableRandomGraphGenerator<>(100, 500, seed);
-            graphGen.generateGraph(dag, new LongVertexFactory(), null);
+            graphGen.generateGraph(dag);
 
             ConnectivityInspector<Long, DefaultEdge> connectivityInspector =
                 new ConnectivityInspector<>(dag);
@@ -166,10 +170,10 @@ public class DirectedAcyclicGraphTest
     {
         int vertexCount = 100;
 
-        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         RepeatableRandomGraphGenerator<Long, DefaultEdge> graphGen =
             new RepeatableRandomGraphGenerator<>(vertexCount, 500, 2);
-        graphGen.generateGraph(dag, new LongVertexFactory(), null);
+        graphGen.generateGraph(dag);
 
         Iterator<Long> dagIter = dag.iterator();
 
@@ -530,24 +534,12 @@ public class DirectedAcyclicGraphTest
     {
         GraphGenerator<Long, DefaultEdge, Long> randomGraphGenerator =
             new RepeatableRandomGraphGenerator<>(vertices, edges, seed);
-        Graph<Long, DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        randomGraphGenerator.generateGraph(sourceGraph, new LongVertexFactory(), null);
+        Graph<Long, DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        randomGraphGenerator.generateGraph(sourceGraph);
         return sourceGraph;
     }
 
     // ~ Inner Classes ----------------------------------------------------------
-
-    public static class LongVertexFactory
-        implements VertexFactory<Long>
-    {
-        private long nextVertex = 0;
-
-        @Override
-        public Long createVertex()
-        {
-            return nextVertex++;
-        }
-    }
 
     // it is nice for tests to be easily repeatable, so we use a graph generator
     // that we can seed for specific configurations
@@ -567,15 +559,13 @@ public class DirectedAcyclicGraphTest
 
         @Override
         public void generateGraph(
-            Graph<V, E> graph, VertexFactory<V> vertexFactory, Map<String, V> namedVerticesMap)
+            Graph<V, E> graph, Map<String, V> namedVerticesMap)
         {
             List<V> vertices = new ArrayList<>(numOfVertexes);
             Set<Integer> edgeGeneratorIds = new HashSet<>();
 
             for (int i = 0; i < numOfVertexes; i++) {
-                V vertex = vertexFactory.createVertex();
-                vertices.add(vertex);
-                graph.addVertex(vertex);
+                vertices.add(graph.addVertex());
             }
 
             for (int i = 0; i < numOfEdges; i++) {

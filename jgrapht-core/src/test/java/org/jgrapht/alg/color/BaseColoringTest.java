@@ -29,9 +29,9 @@ import java.util.stream.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -101,8 +101,8 @@ public abstract class BaseColoringTest
             new GnpRandomGraphGenerator<>(n, p, rng, false);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
 
             for (Function<Graph<Integer, DefaultEdge>,
                 VertexColoringAlgorithm<Integer>> algProvider : algs)
@@ -313,9 +313,9 @@ public abstract class BaseColoringTest
     public void testCompleteGraph()
     {
         final int n = 20;
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(n);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g);
         Coloring<Integer> coloring = getAlgorithm(g).getColoring();
         assertEquals(n, coloring.getNumberColors());
     }

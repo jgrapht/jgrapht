@@ -34,15 +34,15 @@ import org.jgrapht.alg.util.*;
  *
  * <pre>
  * <code>
- *  VC(G):
- *  if V = ∅ then return ∅
- *  Choose an arbitrary node v ∈ G
- *  G1 := (V − {v}, { e ∈ E | v ∈/ e })
- *  G2 := (V − {v} − N(v), { e ∈ E | e ∩ (N(v) ∪ {v})= ∅ })
- *  if |{v} ∪ VC(G1)| ≤ |N(v) ∪ VC(G2)| then
- *    return {v} ∪ VC(G1)
+ *  $VC(G)$:
+ *  if $V = \emptyset$ then return $\emptyset$
+ *  Choose an arbitrary node $v \in G$
+ *  $G1 := (V − v, \left{ e \in E | v \not \in e \right})$
+ *  $G2 := (V − v − N(v), \left{ e \in E | e \cap (N(v) \cup v)= \empty \right})$
+ *  if $|v \cup VC(G1)| \leq |N(v) \cup VC(G2)|$ then
+ *    return $v \cup VC(G1)$
  *  else
- *    return N(v) ∪ VC(G2)
+ *    return $N(v) \cup VC(G2)$
  * </code>
  * </pre>
  *
@@ -117,11 +117,7 @@ public class RecursiveExactVCImpl<V, E>
         N = vertices.size();
         // Sort vertices based on their weight/degree ratio in ascending order
         // TODO JK: Are there better orderings?
-        Collections.sort(
-            vertices,
-            (V v1, V v2) -> Double.compare(
-                vertexWeightMap.get(v1) / graph.degreeOf(v1),
-                vertexWeightMap.get(v2) / graph.degreeOf(v2)));
+        vertices.sort(Comparator.comparingDouble((V v) -> vertexWeightMap.get(v) / graph.degreeOf(v)));
         for (int i = 0; i < vertices.size(); i++)
             vertexIDDictionary.put(vertices.get(i), i);
 
@@ -196,7 +192,7 @@ public class RecursiveExactVCImpl<V, E>
         // Create 2 branches (N(v) denotes the set of neighbors of v. G_{v} indicates the graph
         // obtained by removing vertex v and all vertices incident to it.):
 
-        // Right branch (N(v) are added to the cover, and we solve for G_{N(v) \cup v }.):
+        // Right branch (N(v) are added to the cover, and we solve for G_{N(v) \cup v }$.):
         BitSet visitedRightBranch = (BitSet) visited.clone();
         visitedRightBranch.set(indexNextVertex);
         for (V v : neighbors)

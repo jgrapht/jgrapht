@@ -29,8 +29,8 @@ import org.jgrapht.*;
  * random networks. Science, 286:509-512, 1999.
  * 
  * <p>
- * The generator starts with a complete graph of m0 nodes and grows the network by adding n-m0
- * additional nodes. The additional nodes are added one by one and each of them is connected to m
+ * The generator starts with a complete graph of $m_0$ nodes and grows the network by adding $n - m_0$
+ * additional nodes. The additional nodes are added one by one and each of them is connected to $m$
  * previously added nodes, where the probability of connecting to a node is proportional to its
  * degree.
  * 
@@ -115,19 +115,18 @@ public class BarabasiAlbertGraphGenerator<V, E>
      * Generates an instance.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Create complete graph with m0 nodes
          */
         Set<V> oldNodes = new HashSet<>(target.vertexSet());
         Set<V> newNodes = new HashSet<>();
-        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, vertexFactory, resultMap);
+        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, resultMap);
         target.vertexSet().stream().filter(v -> !oldNodes.contains(v)).forEach(newNodes::add);
 
         List<V> nodes = new ArrayList<>(n * m);
@@ -143,9 +142,9 @@ public class BarabasiAlbertGraphGenerator<V, E>
          * Grow network with preferential attachment
          */
         for (int i = m0; i < n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V v = target.addVertex();
+            if (v == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier (does not return unique vertices on each call).");
             }
 
             List<V> newEndpoints = new ArrayList<>();

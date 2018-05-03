@@ -11,7 +11,7 @@
 	<dependencySets>
 		<dependencySet>
 			<useProjectArtifact>false</useProjectArtifact>
-			<outputDirectory>/lib</outputDirectory>
+			<outputDirectory>lib</outputDirectory>
 			<scope>runtime</scope>
 
 			<excludes>
@@ -21,7 +21,7 @@
 
 		<dependencySet>
 			<useProjectArtifact>false</useProjectArtifact>
-			<outputDirectory>/lib</outputDirectory>
+			<outputDirectory>lib</outputDirectory>
 			<scope>runtime</scope>
 
 			<outputFileNameMapping>jgrapht-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
@@ -34,38 +34,51 @@
 
 	<files>
 		<file>
-			<source>${basedir}/../README.md</source>
-			<outputDirectory>/</outputDirectory>
+			<source>${main.basedir}/README.md</source>
 		</file>
 		<file>
-			<source>${basedir}/../HISTORY.md</source>
-			<outputDirectory>/</outputDirectory>
+			<source>${main.basedir}/HISTORY.md</source>
 		</file>
 		<file>
-			<source>${basedir}/../CONTRIBUTORS.md</source>
-			<outputDirectory>/</outputDirectory>
+			<source>${main.basedir}/CONTRIBUTORS.md</source>
 		</file>
 		<file>
-			<source>${basedir}/../license-LGPL.txt</source>
-			<outputDirectory>/</outputDirectory>
+			<source>${main.basedir}/license-LGPL.txt</source>
 		</file>
 		<file>
-			<source>${basedir}/../license-EPL.txt</source>
-			<outputDirectory>/</outputDirectory>
+			<source>${main.basedir}/license-EPL.txt</source>
+		</file>
+		<file>
+			<source>${main.basedir}/etc/licenses/antlr-license.txt</source>
+			<outputDirectory>3rd-party-licenses</outputDirectory>
+		</file>
+		<file>
+			<source>${main.basedir}/etc/licenses/jgraphx-license.txt</source>
+			<outputDirectory>3rd-party-licenses</outputDirectory>
+		</file>
+		<file>
+			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+			<outputDirectory>3rd-party-licenses</outputDirectory>
+			<destName>guava-license.txt</destName>
+		</file>
+		<file>
+			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+			<outputDirectory>3rd-party-licenses</outputDirectory>
+			<destName>commons-lang3-license.txt</destName>
 		</file>
 	</files>
 
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/..</directory>
-			<outputDirectory>/source</outputDirectory>
+			<directory>${main.basedir}</directory>
+			<outputDirectory>source</outputDirectory>
 			<excludes>
 				<exclude>**/target/**</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
-			<directory>${basedir}/../target/site/apidocs</directory>
-			<outputDirectory>/javadoc</outputDirectory>
+			<directory>${main.basedir}/target/site/apidocs</directory>
+			<outputDirectory>javadoc</outputDirectory>
 			<includes>
 				<include>**/*</include>
 			</includes>

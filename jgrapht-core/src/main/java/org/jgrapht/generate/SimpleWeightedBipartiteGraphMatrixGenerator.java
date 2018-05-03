@@ -17,9 +17,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
  * A simple weighted bipartite graph matrix generator.
@@ -75,7 +77,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(

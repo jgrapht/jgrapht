@@ -171,7 +171,7 @@ public class DepthFirstIterator<V, E>
                 // Now carry on with another pop until we find a non-sentinel
             } else {
                 // Got a real vertex to start working on
-                v = TypeUtil.uncheckedCast(o, null);
+                v = TypeUtil.uncheckedCast(o);
                 break;
             }
         }
@@ -186,7 +186,7 @@ public class DepthFirstIterator<V, E>
 
     private void recordFinish()
     {
-        V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
+        V v = TypeUtil.uncheckedCast(stack.removeLast());
         putSeenData(v, VisitColor.BLACK);
         finishVertex(v);
     }

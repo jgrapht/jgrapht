@@ -137,8 +137,7 @@ public class TiernanSimpleCycles<V, E>
             // circuit confirmation
             startOfPath = path.get(0);
             if (graph.containsEdge(endOfPath, startOfPath)) {
-                List<V> cycle = new ArrayList<>();
-                cycle.addAll(path);
+                List<V> cycle = new ArrayList<>(path);
                 cycles.add(cycle);
             }
 

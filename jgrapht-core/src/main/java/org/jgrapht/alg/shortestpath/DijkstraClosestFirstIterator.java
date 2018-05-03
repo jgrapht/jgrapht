@@ -187,11 +187,9 @@ class DijkstraClosestFirstIterator<V, E>
             node = new FibonacciHeapNode<>(new QueueEntry(e, v));
             heap.insert(node, distance);
             seen.put(v, node);
-        } else {
-            if (distance < node.getKey()) {
-                heap.decreaseKey(node, distance);
-                node.getData().e = e;
-            }
+        } else if (distance < node.getKey()) {
+            heap.decreaseKey(node, distance);
+            node.getData().e = e;            
         }
     }
 

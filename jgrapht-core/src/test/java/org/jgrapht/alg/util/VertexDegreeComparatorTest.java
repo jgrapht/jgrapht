@@ -22,8 +22,8 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -49,8 +49,8 @@ public class VertexDegreeComparatorTest
     public void testVertexDegreeComparator()
     {
         for (int repeat = 0; repeat < TEST_REPEATS; repeat++) {
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-            randomGraphGenerator.generateGraph(graph, new IntegerVertexFactory(), new HashMap<>());
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            randomGraphGenerator.generateGraph(graph);
             List<Integer> vertices = new ArrayList<>(graph.vertexSet());
             // Sort in ascending vertex degree
             Collections.sort(

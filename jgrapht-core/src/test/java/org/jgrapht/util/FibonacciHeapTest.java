@@ -19,7 +19,6 @@ package org.jgrapht.util;
 
 import java.util.*;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * Computes strongly connected components of a directed graph. The algorithm is implemented after
- * "Cormen et al: Introduction to algorithms", Chapter 22.5. It has a running time of O(V + E).
+ * "Cormen et al: Introduction to algorithms", Chapter 22.5. It has a running time of $O(V + E)$.
  *
  * <p>
  * Unlike {@link ConnectivityInspector}, this class does not implement incremental
@@ -65,8 +65,8 @@ public class KosarajuStrongConnectivityInspector<V, E>
     public List<Set<V>> stronglyConnectedSets()
     {
         if (stronglyConnectedSets == null) {
-            orderedVertices = new LinkedList<VertexData<V>>();
-            stronglyConnectedSets = new Vector<Set<V>>();
+            orderedVertices = new LinkedList<>();
+            stronglyConnectedSets = new Vector<>();
 
             // create VertexData objects for all vertices, store them
             createVertexData();
@@ -110,10 +110,10 @@ public class KosarajuStrongConnectivityInspector<V, E>
      */
     private void createVertexData()
     {
-        vertexToVertexData = new HashMap<V, VertexData<V>>(graph.vertexSet().size());
+        vertexToVertexData = new HashMap<>(graph.vertexSet().size());
 
         for (V vertex : graph.vertexSet()) {
-            vertexToVertexData.put(vertex, new VertexData2<V>(vertex, false, false));
+            vertexToVertexData.put(vertex, new VertexData2<>(vertex, false, false));
         }
     }
 
@@ -124,7 +124,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
      */
     private void dfsVisit(Graph<V, E> visitedGraph, VertexData<V> vertexData, Set<V> vertices)
     {
-        Deque<VertexData<V>> stack = new ArrayDeque<VertexData<V>>();
+        Deque<VertexData<V>> stack = new ArrayDeque<>();
         stack.add(vertexData);
 
         while (!stack.isEmpty()) {

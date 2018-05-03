@@ -75,10 +75,9 @@ public class WindmillGraphsGenerator<V, E>
 
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
-        V center = vertexFactory.createVertex();
-        target.addVertex(center);
+        V center = target.addVertex();
         List<V> sub = new ArrayList<>(n);
 
         if (mode == Mode.DUTCHWINDMILL) { // Generate Dutch windmill graph
@@ -86,9 +85,7 @@ public class WindmillGraphsGenerator<V, E>
                 sub.clear();
                 sub.add(center);
                 for (int j = 1; j < n; j++) {
-                    V v = vertexFactory.createVertex();
-                    target.addVertex(v);
-                    sub.add(v);
+                    sub.add(target.addVertex());
                 }
 
                 for (int r = 0; r < sub.size(); r++)
@@ -99,9 +96,7 @@ public class WindmillGraphsGenerator<V, E>
                 sub.clear();
                 sub.add(center);
                 for (int j = 1; j < n; j++) {
-                    V v = vertexFactory.createVertex();
-                    target.addVertex(v);
-                    sub.add(v);
+                    sub.add(target.addVertex());
                 }
 
                 for (int r = 0; r < sub.size() - 1; r++)

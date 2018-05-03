@@ -53,23 +53,21 @@ public class StarGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         if (order < 1) {
             return;
         }
 
         // Create center vertex
-        V centerVertex = vertexFactory.createVertex();
-        target.addVertex(centerVertex);
+        V centerVertex = target.addVertex();
         if (resultMap != null) {
             resultMap.put(CENTER_VERTEX, centerVertex);
         }
 
         // Create other vertices
         for (int i = 0; i < (order - 1); i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
+            V newVertex = target.addVertex();
             target.addEdge(newVertex, centerVertex);
         }
     }

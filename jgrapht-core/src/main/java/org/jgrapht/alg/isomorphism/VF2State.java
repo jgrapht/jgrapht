@@ -367,7 +367,7 @@ abstract class VF2State<V, E>
     }
 
     /**
-     * checks the vertices v1 and v2 for semantic equivalence
+     * checks the vertices $v_1$ and $v_2$ for semantic equivalence
      *
      * @param v1
      * @param v2
@@ -381,7 +381,7 @@ abstract class VF2State<V, E>
     }
 
     /**
-     * checks the edges from v1 to v2 and from u1 to u2 for semantic equivalence
+     * checks the edges from $v_1$ to $v_2$ and from $u_1$ to $u_2$ for semantic equivalence
      *
      * @param v1
      * @param v2

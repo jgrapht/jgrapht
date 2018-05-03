@@ -134,7 +134,7 @@ public class RatioVertex<V>
             return true;
         else if (!(o instanceof RatioVertex))
             return false;
-        RatioVertex<V> other = TypeUtil.uncheckedCast(o, null);
+        RatioVertex<V> other = TypeUtil.uncheckedCast(o);
         return this.ID == other.ID;
     }
 

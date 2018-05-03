@@ -20,6 +20,7 @@ package org.jgrapht.alg.connectivity;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import java.util.*;
@@ -50,11 +51,11 @@ public class BiconnectivityInspectorTest
     public void testLinearGraph()
     {
         int nbVertices=5;
-        Graph<Object, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         LinearGraphGenerator<Object, DefaultEdge> generator =
             new LinearGraphGenerator<>(nbVertices);
-        generator.generateGraph(graph, new ClassBasedVertexFactory<>(Object.class), null);
+        generator.generateGraph(graph);
 
         BiconnectivityInspector<Object, DefaultEdge> inspector =
             new BiconnectivityInspector<>(graph);

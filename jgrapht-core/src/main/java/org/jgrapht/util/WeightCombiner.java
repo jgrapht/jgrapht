@@ -35,12 +35,12 @@ public interface WeightCombiner
     /**
      * Minimum weight.
      */
-    WeightCombiner MIN = (a, b) -> Math.min(a, b);
+    WeightCombiner MIN = Math::min;
 
     /**
      * Maximum weight.
      */
-    WeightCombiner MAX = (a, b) -> Math.max(a, b);
+    WeightCombiner MAX = Math::max;
 
     /**
      * First weight.

@@ -25,7 +25,7 @@ import org.jgrapht.alg.util.*;
 
 /**
  * The greedy algorithm for computing a maximum weight matching in an arbitrary graph. The algorithm
- * runs in O(m + m log n) where n is the number of vertices and m is the number of edges of the
+ * runs in $O(m + m \log n)$ where $n$ is the number of vertices and $m$ is the number of edges of the
  * graph. This implementation accepts directed and undirected graphs which may contain self-loops
  * and multiple (parallel) edges. There is no assumption on the edge weights, i.e. they can also be negative or
  * zero.
@@ -36,13 +36,13 @@ import org.jgrapht.alg.util.*;
  * then greedily constructs a maximal cardinality matching out of the edges with positive weight. A
  * maximal cardinality matching (not to be confused with maximum cardinality) is a matching that
  * cannot be increased in cardinality without removing an edge first. The resulting matching is
- * guaranteed to be a 1/2-Approximation. <br>
+ * guaranteed to be a $\frac{1}{2}$-Approximation. <br>
  * With normalization, the edges are sorted in non-increasing order of their normalized costs
- * c(u,v)/(d(u)+d(v)) instead, after which the algorithm proceeds in the same manner. Here, c(u,v)
- * is the cost of edge (u,v), and d(u) resp d(v) are the degrees of vertices u resp v. Running this
+ * $\frac{c(u,v)}{d(u)+d(v)}$ instead, after which the algorithm proceeds in the same manner. Here, $c(u,v)$
+ * is the cost of edge $(u,v)$, and $d(u)$ resp $d(v)$ are the degrees of vertices $u$ resp $v$. Running this
  * algorithm in normalized mode often (but not always!) produces a better result than running the
  * algorithm without normalization. <i>Note however that the normalized version does NOT produce a
- * 1/2-approximation</i>. See <a href=
+ * $\frac{1}{2}$-approximation</i>. See <a href=
  * "https://mathoverflow.net/questions/269526/is-greedy-matching-algorithm-with-normalized-edge-weights-a-2-approximation/269760#269760">this
  * proof for details.</a> The runtime complexity remains the same, independent of whether
  * normalization is used.
@@ -51,7 +51,7 @@ import org.jgrapht.alg.util.*;
  * For more information about approximation algorithms for the maximum weight matching problem in
  * arbitrary graphs see:
  * <ul>
- * <li>R. Preis, Linear Time 1/2-Approximation Algorithm for Maximum Weighted Matching in General
+ * <li>R. Preis, Linear Time $\frac{1}{2}$-Approximation Algorithm for Maximum Weighted Matching in General
  * Graphs. Symposium on Theoretical Aspects of Computer Science, 259-269, 1999.</li>
  * <li>D.E. Drake, S. Hougardy, A Simple Approximation Algorithm for the Weighted Matching Problem,
  * Information Processing Letters 85, 211-213, 2003.</li>
@@ -102,7 +102,7 @@ public class GreedyWeightedMatching<V, E>
     }
 
     /**
-     * Get a matching that is a 1/2-approximation of the maximum weighted matching.
+     * Get a matching that is a $\frac{1}{2}$-approximation of the maximum weighted matching.
      * 
      * @return a matching
      */

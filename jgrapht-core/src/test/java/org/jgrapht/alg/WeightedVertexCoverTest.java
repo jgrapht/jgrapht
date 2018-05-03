@@ -25,6 +25,7 @@ import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.*;
 import org.jgrapht.alg.vertexcover.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -95,6 +96,7 @@ public class WeightedVertexCoverTest
     // ------- Exact algorithms ------
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover1()
     {
         int[] weightArray = { 18, 16, 13, 14, 12, 0, 20, 11, 10, 10, 10, 6, 6, 12, 15, 6, 24, 2, 6,
@@ -128,6 +130,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover2()
     {
         int[] weightArray = { 13, 11, 3, 5, 16, 0, 16, 16, 14, 25, 15, 23, 4, 12, 23, 20, 19, 12,
@@ -167,6 +170,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover3()
     {
         int[] weightArray = { 20, 15, 16, 0, 20, 7, 1, 25, 0, 23, 6, 7, 8, 11, 3, 18, 25, 12, 20,
@@ -200,6 +204,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover4()
     {
         int[] weightArray = { 0, 20, 10, 0, 0, 15, 18, 20, 12, 18, 1, 13, 1, 25, 14, 6, 10, 16, 18,
@@ -234,6 +239,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover5()
     {
         int[] weightArray = { 1, 10, 13, 17, 0, 25, 4, 15, 8, 14, 20, 23, 10, 2, 21, 10, 4, 18, 4,
@@ -261,6 +267,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover6()
     {
         int[] weightArray = { 11, 11, 17, 25, 16, 9, 11, 5, 5, 18, 21, 3, 15, 12, 7, 14, 14, 10, 19,
@@ -298,6 +305,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover7()
     {
         int[] weightArray = { 24, 13, 20, 22, 17, 18, 14, 3, 10, 10, 3, 13, 25, 3, 24, 7, 12, 24,
@@ -339,6 +347,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover8()
     {
         int[] weightArray = { 19, 24, 0, 19, 17, 12, 15, 4, 22, 23, 6, 21, 19, 20, 3, 18, 22, 19, 2,
@@ -380,6 +389,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testExactMinimumCover9()
     {
         int[] weightArray = { 19, 0, 13, 1, 2, 18, 3, 17, 5, 13, 1, 17, 20, 7, 18, 21, 9, 13, 11,
@@ -418,6 +428,7 @@ public class WeightedVertexCoverTest
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testExactMinimumCover10()
     {
         int[] weightArray = { 0, 12, 13, 7, 23, 21, 8, 20, 12, 21, 23, 1, 16, 13, 2, 9, 18, 24, 18,

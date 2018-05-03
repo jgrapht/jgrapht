@@ -81,20 +81,19 @@ public class ScaleFreeGraphGenerator<V, E>
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
-     * @param vertexFactory called to produce new vertices
      * @param resultMap unused parameter, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         List<V> vertexList = new ArrayList<>();
         List<Integer> degrees = new ArrayList<>();
         int degreeSum = 0;
         for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
-            if (!target.addVertex(newVertex)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V newVertex = target.addVertex();
+            if (newVertex == null) { 
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
             int newDegree = 0;
             while ((newDegree == 0) && (i != 0)) // we want our graph to be connected

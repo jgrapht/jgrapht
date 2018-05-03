@@ -35,14 +35,14 @@ import java.util.*;
  * Resilience Metrics for Service-Oriented Networks</a>:
  *
  * <ul>
- * <li><b>Definition 4.5</b> Let G(V; E) be a connected undirected graph. The block-cut point graph
- * (BC graph) of G, denoted by GB(VB; EB), is the bipartite graph defined as follows. (a) VB has one
- * node corresponding to each block and one node corresponding to each cut point of G. (b) Each edge
- * fx; yg in EB joins a block node x to a cut point y if the block corresponding to x contains the
- * cut point node corresponding to y.</li>
- * <li><b>Lemma 4.4</b> Let G(V; E) be a connected undirected graph. (a) Each pair of blocks of G
- * share at most one node, and that node is a cutpoint. (b) The BC graph of G is a tree in which
- * each leaf node corresponds to a block of G.</li>
+ * <li><b>Definition 4.5</b> Let $G(V; E)$ be a connected undirected graph. The block-cut point graph
+ * ($BC$ graph) of $G$, denoted by $GB(VB; EB)$, is the bipartite graph defined as follows. (a) $VB$ has one
+ * node corresponding to each block and one node corresponding to each cut point of $G$. (b) Each edge
+ * $fx$; $yg$ in $EB$ joins a block node $x$ to a cut point $y$ if the block corresponding to $x$ contains the
+ * cut point node corresponding to $y$.</li>
+ * <li><b>Lemma 4.4</b> Let $G(V; E)$ be a connected undirected graph. (a) Each pair of blocks of $G$
+ * share at most one node, and that node is a cutpoint. (b) The $BC$ graph of $G$ is a tree in which
+ * each leaf node corresponds to a block of $G$.</li>
  * </ul>
  * 
  * @param <V> the graph vertex type
@@ -77,7 +77,7 @@ public class BlockCutpointGraph<V, E>
     private Map<V, Integer> vertex2numOrder = new HashMap<>();
 
     /**
-     * Running time = O(m) where m is the number of edges.
+     * Running time = $O(m)$ where m is the number of edges.
      * 
      * @param graph the input graph
      */
@@ -221,7 +221,7 @@ public class BlockCutpointGraph<V, E>
 
     /**
      * Returns the biconnected components containing the vertex. A vertex which is not a cutpoint is
-     * contained in exactly one component. A cutpoint is contained is at least 2 components.
+     * contained in exactly one component. A cutpoint is contained is at least $2$ components.
      *
      * @param vertex vertex in the initial graph.
      */
@@ -247,8 +247,6 @@ public class BlockCutpointGraph<V, E>
     private class BCGEdge
         extends DefaultEdge
     {
-        /**
-         */
         private static final long serialVersionUID = -5115006161815760059L;
 
         private V source;

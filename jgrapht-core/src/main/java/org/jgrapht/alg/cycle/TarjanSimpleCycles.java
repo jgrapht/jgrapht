@@ -187,12 +187,7 @@ public class TarjanSimpleCycles<V, E>
     {
         // Removed sets typically not all
         // needed, so instantiate lazily.
-        Set<V> result = removed.get(v);
-        if (result == null) {
-            result = new HashSet<>();
-            removed.put(v, result);
-        }
-        return result;
+        return removed.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
 

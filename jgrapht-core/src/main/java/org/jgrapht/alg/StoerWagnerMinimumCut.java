@@ -24,8 +24,8 @@ import org.jgrapht.graph.*;
 
 /**
  * Implements the <a href="http://dl.acm.org/citation.cfm?id=263872">Stoer and Wagner minimum cut
- * algorithm</a>. Deterministically computes the minimum cut in O(|V||E| + |V|log|V|) time. This
- * implementation uses Java's PriorityQueue and requires O(|V||E|log|E|) time. M. Stoer and F.
+ * algorithm</a>. Deterministically computes the minimum cut in $O(|V||E| + |V| \log |V|)$ time. This
+ * implementation uses Java's PriorityQueue and requires $O(|V||E| \log |E|)$ time. M. Stoer and F.
  * Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591, 1997.
  *
  * @param <V> the graph vertex type
@@ -137,10 +137,10 @@ public class StoerWagnerMinimumCut<V, E>
                 Set<V> vc = Graphs.getOppositeVertex(workingGraph, e, v);
                 VertexAndWeight vcandw = dmap.get(vc);
                 if (vcandw != null) {
-                    queue.remove(vcandw); // this is O(logn) but could be O(1)?
+                    queue.remove(vcandw); // this is O(log n) but could be O(1)?
                     vcandw.active = true;
                     vcandw.weight += workingGraph.getEdgeWeight(e);
-                    queue.add(vcandw); // this is O(logn) but could be O(1)?
+                    queue.add(vcandw); // this is O(log n) but could be O(1)?
                 }
             }
         }
@@ -177,7 +177,7 @@ public class StoerWagnerMinimumCut<V, E>
     }
 
     /**
-     * Merges vertex t into vertex s, summing the weights as required. Returns the merged vertex and
+     * Merges vertex $t$ into vertex $s$, summing the weights as required. Returns the merged vertex and
      * the sum of its weights
      * 
      * @param s the first vertex

@@ -26,10 +26,10 @@ import java.util.*;
  * Find the Lowest Common Ancestor of a directed graph.
  *
  * <p>
- * Find the LCA, defined as <i>Let G = (V, E) be a DAG, and let x, y ∈ V . Let G x,y be the subgraph
- * of G induced by the set of all common ancestors of x and y. Define SLCA (x, y) to be the set of
- * out-degree 0 nodes (leafs) in G x,y . The lowest common ancestors of x and y are the elements of
- * SLCA (x, y). This naive algorithm simply starts at a and b, recursing upwards to the root(s) of
+ * Find the LCA, defined as <i>Let $G = (V, E)$ be a DAG, and let $x, y \in V$ . Let $G x,y$ be the subgraph
+ * of $G$ induced by the set of all common ancestors of $x$ and $y$. Define SLCA (x, y) to be the set of
+ * out-degree 0 nodes (leafs) in $G x,y$. The lowest common ancestors of $x$ and $y$ are the elements of
+ * SLCA (x, y). This naive algorithm simply starts at $a$ and $b$, recursing upwards to the root(s) of
  * the DAG. Wherever the recursion paths cross we have found our LCA.</i> from
  * http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
  *
@@ -152,7 +152,7 @@ public class NaiveLcaFinder<V, E>
      * our search (we know that its ancestors won't be part of the SLCA(x, y) set).
      */
     @SuppressWarnings("unchecked")
-    private void doubleBfs(V a, V b, Set[] visitedSets){
+    private void doubleBfs(V a, V b, Set<V>[] visitedSets){
         Queue<V>[] queues = new Queue[2];
         queues[0] = new ArrayDeque<>();
         queues[1] = new ArrayDeque<>();
@@ -187,40 +187,39 @@ public class NaiveLcaFinder<V, E>
      * members of sets aSeenSet and bSeenSet respectively, along with all elements on the paths from
      * every member of aSet and bSet
      */
-    private V findLca(
-        Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
+    private V findLca(Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
     {
-        // if there is no LCA...
-        if ((aSet.size() == 0) && (bSet.size() == 0)) {
-            return null;
+        while (true) {
+            // if there is no LCA...
+            if ((aSet.size() == 0) && (bSet.size() == 0)) {
+                return null;
+            }
+
+            // does aSet intersect with bSeenSet
+            if (!Collections.disjoint(aSet, bSeenSet)) {
+                return overlappingMember(aSet, bSeenSet);
+            }
+
+            // does bSet intersect with aSeenSet
+            if (!Collections.disjoint(bSet, aSeenSet)) {
+                return overlappingMember(bSet, aSeenSet);
+            }
+            if (!Collections.disjoint(aSet, bSet)) {
+                return overlappingMember(aSet, bSet);
+            }
+
+            aSeenSet.addAll(aSet);
+            bSeenSet.addAll(bSet);
+
+            aSet = allParents(aSet);
+
+            // no point doing the same again (and it can stop us getting stuck in
+            // an infinite loop)
+            aSet.removeAll(aSeenSet);
+
+            bSet = allParents(bSet);
+            bSet.removeAll(bSeenSet);
         }
-
-        // does aSet intersect with bSeenSet
-        if (!Collections.disjoint(aSet, bSeenSet)) {
-            return overlappingMember(aSet, bSeenSet);
-        }
-
-        // does bSet intersect with aSeenSet
-        if (!Collections.disjoint(bSet, aSeenSet)) {
-            return overlappingMember(bSet, aSeenSet);
-        }
-        if (!Collections.disjoint(aSet, bSet)) {
-            return overlappingMember(aSet, bSet);
-        }
-
-        aSeenSet.addAll(aSet);
-        bSeenSet.addAll(bSet);
-
-        aSet = allParents(aSet);
-
-        // no point doing the same again (and it can stop us getting stuck in
-        // an infinite loop)
-        aSet.removeAll(aSeenSet);
-
-        bSet = allParents(bSet);
-        bSet.removeAll(bSeenSet);
-
-        return findLca(aSet, bSet, aSeenSet, bSeenSet);
     }
 
     /**
@@ -245,14 +244,14 @@ public class NaiveLcaFinder<V, E>
     }
 
     /**
-     * Return a single vertex that is both in x and y. If there is more than one then select the
-     * first element from the iterator returned from y, after all the elements of x have been
+     * Return a single vertex that is both in $x$ and $y$. If there is more than one then select the
+     * first element from the iterator returned from $y$, after all the elements of $x$ have been
      * removed. this allows an orderedSet to be passed in to give predictable results.
      *
      * @param x set containing vertex
      * @param y set containing vertex, which may be ordered to give predictable results
      *
-     * @return the first element of y that is also in x, or null if no such element
+     * @return the first element of $y$ that is also in $x$, or null if no such element
      */
     private V overlappingMember(Set<V> x, Set<V> y)
     {

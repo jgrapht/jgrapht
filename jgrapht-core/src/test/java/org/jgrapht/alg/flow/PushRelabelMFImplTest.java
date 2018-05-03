@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +29,6 @@ import static org.junit.Assert.assertEquals;
 public class PushRelabelMFImplTest
     extends MaximumFlowAlgorithmTest
 {
-
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
         Graph<Integer, DefaultWeightedEdge> network)

@@ -20,8 +20,6 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
-import junit.framework.*;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

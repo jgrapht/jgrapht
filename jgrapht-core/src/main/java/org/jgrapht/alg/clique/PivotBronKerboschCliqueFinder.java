@@ -35,7 +35,7 @@ import org.jgrapht.*;
  * 
  * <p>
  * where the authors show that using that rule guarantees that the Bron-Kerbosch algorithm has
- * worst-case running time O(3^{n/3}) where n is the number of vertices of the graph, excluding time
+ * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding time
  * to write the output, which is worst-case optimal.
  * 
  * <p>
@@ -186,9 +186,9 @@ public class PivotBronKerboschCliqueFinder<V, E>
             }
 
             Set<V> newP =
-                P.stream().filter(x -> vNeighbors.contains(x)).collect(Collectors.toSet());
+                P.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
             Set<V> newX =
-                X.stream().filter(x -> vNeighbors.contains(x)).collect(Collectors.toSet());
+                X.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
             Set<V> newR = new HashSet<>(R);
             newR.add(v);
 

@@ -17,8 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import java.util.function.Supplier;
+
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.SupplierUtil;
 
 /**
  * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops
@@ -36,23 +39,26 @@ public class WeightedMultigraph<V, E>
     private static final long serialVersionUID = -6009321659287373874L;
 
     /**
-     * Creates a new weighted multigraph with the specified edge factory.
+     * Creates a new graph.
      *
-     * @param ef the edge factory of the new graph.
-     */
-    public WeightedMultigraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
-
-    /**
-     * Creates a new weighted multigraph.
-     *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public WeightedMultigraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass));
+    }
+
+    /**
+     * Creates a new graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     */
+    public WeightedMultigraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
+    {
+        super(
+            vertexSupplier, edgeSupplier,
+            true);
     }
 
     /**
@@ -68,6 +74,32 @@ public class WeightedMultigraph<V, E>
     {
         return new GraphBuilder<>(new WeightedMultigraph<>(edgeClass));
     }
+    
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeSupplier the edge supplier
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
+        Supplier<E> edgeSupplier)
+    {
+        return new GraphBuilder<>(new WeightedMultigraph<>(null, edgeSupplier));
+    }
+    
+    /**
+     * Creates a new graph with the specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
+     * @deprecated Use suppliers instead 
+     */
+    @Deprecated
+    public WeightedMultigraph(EdgeFactory<V, E> ef)
+    {
+        super(ef, true);
+    }
 
     /**
      * Create a builder for this kind of graph.
@@ -76,7 +108,9 @@ public class WeightedMultigraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated Use suppliers instead 
      */
+    @Deprecated    
     public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {

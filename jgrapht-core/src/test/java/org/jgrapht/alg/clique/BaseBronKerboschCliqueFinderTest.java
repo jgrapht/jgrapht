@@ -26,6 +26,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -205,10 +206,10 @@ public abstract class BaseBronKerboschCliqueFinderTest
     public void testComplete()
     {
         final int size = 6;
-        Graph<Object, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(size);
-        completeGraphGenerator.generateGraph(g, new ClassBasedVertexFactory<>(Object.class), null);
+        completeGraphGenerator.generateGraph(g);
 
         MaximalCliqueEnumerationAlgorithm<Object, DefaultEdge> finder = createFinder2(g);
 

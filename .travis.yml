@@ -2,6 +2,6 @@ language: java
 jdk:
   - oraclejdk8
 script:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
 after_success:
   - test $TRAVIS_BRANCH = "master" && mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml
