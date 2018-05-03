@@ -189,14 +189,13 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
      * in order to generate another $l$-planted partition graph.
      *
      * @param target target graph
-     * @param vertexFactory vertex factory
      * @param resultMap result map
      * @throws IllegalArgumentException if target is directed
      * @throws IllegalArgumentException if self loops are requested but target does not allow them
      * @throws IllegalStateException if generateGraph() is called more than once
      */
     @Override
-    public void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (fired) {
             throw new IllegalStateException("generateGraph() can be only called once");
@@ -219,9 +218,8 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
         // integer to vertices
         List<V> vertices = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
-            V vertex = vertexFactory.createVertex();
+            V vertex = target.addVertex();
             vertices.add(vertex);
-            target.addVertex(vertex);
 
             // populate community structure
             int lv = i / this.k;  // group of node v
