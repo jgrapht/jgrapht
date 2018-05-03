@@ -293,12 +293,13 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
             }
         }
     }
-    
+
     /**
      * Get the community structure of the graph.
      * The method return a list of communities, represented as sets of nodes.
      *
      * @throws IllegalStateException if getCommunities() is called before generating the graph
+     * @return the community structure of the graph
      */
     public List<Set<V>> getCommunities()
     {
