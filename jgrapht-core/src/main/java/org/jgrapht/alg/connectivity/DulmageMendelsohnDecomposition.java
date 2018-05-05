@@ -42,10 +42,13 @@ import org.jgrapht.traverse.DepthFirstIterator;
  *
  * A fine decomposition can be performed that additionally performs a
  * strongly-connected-components algorithm on the remaining subset.
- *
+ * 
+ * The implementation is based on:
+ * Bunus P., Fritzson P., Methods for Structural Analysis and Debugging of Modelica Models, 2nd International Modelica Conference 2002
+ * 
  * @author Peter Harman
- * @param <V>
- * @param <E>
+ * @param <V> Vertex type
+ * @param <E> Edge type
  */
 public class DulmageMendelsohnDecomposition<V, E> {
 
@@ -59,9 +62,8 @@ public class DulmageMendelsohnDecomposition<V, E> {
      * @param graph bipartite graph
      * @param partition1 the first partition of vertices in the bipartite graph
      * @param partition2 the second partition of vertices in the bipartite graph
-     * @throws IllegalArgumentException
      */
-    public DulmageMendelsohnDecomposition(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) throws IllegalArgumentException {
+    public DulmageMendelsohnDecomposition(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) {
         this.graph = graph;
         this.partition1 = partition1;
         this.partition2 = partition2;
@@ -71,7 +73,7 @@ public class DulmageMendelsohnDecomposition<V, E> {
      * Perform the decomposition, using Hopcroft-Karp for the matching
      *
      * @param fine true if the fine decomposition is required
-     * @return
+     * @return the Decomposition
      */
     public Decomposition<V, E> decompose(boolean fine) {
         // Get a maximum matching to the bipartite problem
@@ -85,7 +87,7 @@ public class DulmageMendelsohnDecomposition<V, E> {
      *
      * @param matching the matching from a MatchingAlgorithm
      * @param fine true if the fine decomposition is required
-     * @return
+     * @return the Decomposition
      */
     public Decomposition<V, E> decompose(Matching<V, E> matching, boolean fine) {
         // Determine the unmatched vertices from both partitions

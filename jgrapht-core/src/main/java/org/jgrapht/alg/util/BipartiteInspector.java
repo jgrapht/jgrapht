@@ -27,8 +27,8 @@ import org.jgrapht.util.ArrayUnenforcedSet;
 /**
  *
  * @author Peter Harman
- * @param <V>
- * @param <E>
+ * @param <V> Vertex type
+ * @param <E> Edge type
  */
 public class BipartiteInspector<V, E> {
 
@@ -36,23 +36,45 @@ public class BipartiteInspector<V, E> {
     private final Set<V> partition1;
     private final Set<V> partition2;
 
+    /**
+     * Constructs a BipartiteInspector with graph and partitions
+     * 
+     * @param graph the graph
+     * @param partition1 first partition
+     * @param partition2 second partition
+     */
     public BipartiteInspector(Graph<V, E> graph, List<V> partition1, List<V> partition2) {
-        this(graph, (Set<V>) new ArrayUnenforcedSet<V>(partition1), (Set<V>) new ArrayUnenforcedSet<V>(partition2));
+        this(graph, (Set<V>) new ArrayUnenforcedSet<V>(partition1), 
+                (Set<V>) new ArrayUnenforcedSet<V>(partition2));
     }
 
+    /**
+     * Constructs a BipartiteInspector with graph and partitions
+     * 
+     * @param graph the graph
+     * @param partition1 first partition
+     * @param partition2 second partition
+     */
     public BipartiteInspector(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) {
         this.graph = graph;
         this.partition1 = partition1;
         this.partition2 = partition2;
     }
 
+    /**
+     * Ensures the graph and partitions form a valid bipartite graph
+     * 
+     * @return true if graph is bipartite, false if not
+     */
     public boolean isBipartite() {
         // Check the partitions match the vertices
         if (intersection(partition1, partition2).isEmpty()) {
             Set<V> union = union(partition1, partition2);
             if (difference(graph.vertexSet(), union).isEmpty()) {
                 if (difference(union, graph.vertexSet()).isEmpty()) {
-                    return graph.edgeSet().stream().noneMatch((e) -> ((partition1.contains(graph.getEdgeSource(e))
+                    // Check the edges are all between partitions
+                    return graph.edgeSet().stream().noneMatch(
+                            (e) -> ((partition1.contains(graph.getEdgeSource(e))
                             && partition1.contains(graph.getEdgeTarget(e)))
                             || (partition2.contains(graph.getEdgeSource(e))
                                     && partition2.contains(graph.getEdgeTarget(e)))));
@@ -65,7 +87,7 @@ public class BipartiteInspector<V, E> {
     /**
      * Gets the edges from the bipartite matching
      *
-     * @param matching
+     * @param matching Matching from a bipartite MatchingAlgorithm
      * @return Set of edges
      */
     public Set<E> getMatchedEdges(Matching<V, E> matching) {
@@ -75,7 +97,7 @@ public class BipartiteInspector<V, E> {
     /**
      * Gets the vertices from the bipartite matching
      *
-     * @param matching
+     * @param matching Matching from a bipartite MatchingAlgorithm
      * @return Set of vertices
      */
     public Set<V> getMatchedVertices(Matching<V, E> matching) {
@@ -92,7 +114,7 @@ public class BipartiteInspector<V, E> {
     /**
      * Gets the edges not matched in the bipartite matching
      *
-     * @param matching
+     * @param matching Matching from a bipartite MatchingAlgorithm
      * @return Set of edges
      */
     public Set<E> getUnmatchedEdges(Matching<V, E> matching) {
@@ -102,25 +124,46 @@ public class BipartiteInspector<V, E> {
     /**
      * Gets the vertices not matched in the bipartite matching
      *
-     * @param matching
+     * @param matching Matching from a bipartite MatchingAlgorithm
      * @return Set of vertices
      */
     public Set<V> getUnmatchedVertices(Matching<V, E> matching) {
         return difference(graph.vertexSet(), getMatchedVertices(matching));
     }
 
+    /**
+     * Set difference
+     * @param <T> Vertex type
+     * @param set1 first set
+     * @param set2 second set
+     * @return Set of objects in set1 and not in set2
+     */
     protected static <T> Set<T> difference(Set<T> set1, Set<T> set2) {
         Set<T> diff = new HashSet<>(set1);
         diff.removeAll(set2);
         return diff;
     }
 
+    /**
+     * Set union
+     * @param <T> Vertex type
+     * @param set1 first set
+     * @param set2 second set
+     * @return Set of objects in either set1 or set2
+     */
     protected static <T> Set<T> union(Set<T> set1, Set<T> set2) {
         Set<T> union = new HashSet<>(set1);
         union.addAll(set2);
         return union;
     }
 
+    /**
+     * Set intersection
+     * @param <T> Vertex type
+     * @param set1 first set
+     * @param set2 second set
+     * @return Set of objects in both set1 and set2
+     */
     protected static <T> Set<T> intersection(Set<T> set1, Set<T> set2) {
         Set<T> inter = new HashSet<>(set1);
         inter.retainAll(set2);
