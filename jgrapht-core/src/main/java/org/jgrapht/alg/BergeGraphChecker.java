@@ -1,45 +1,52 @@
-package org.jgrapht.alg;
+/*
+ * (C) Copyright 2016-2018, by Philipp S. K&aumlsgen and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+package main.java.org.jgrapht.alg;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.generate.ComplementGraphGenerator;
-import org.jgrapht.graph.GraphPathImpl;
+import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.UndirectedSubgraph;
+
 
 /**
- * <p>Checker for Bergeness as described in the famous paper "Recognizing Berge Graphs" (2003) by Chudnovsky, Cornuejols, Liu, Seymour and Vuskovic.
+ * <p>Checker for Bergeness as described in the famous paper:
+ * M. Chudnovsky, G. Cornuejols, X. Liu, P. Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2): 143--186, 2003.
  * 
- * <p>Testing for Bergeness may come in handy as this graph class is equivalent to the perfect graph class. If a graph is Berge 
- * many problems such as the Clique Problems or the Maximum Independent Set Problem can be solved in polynomial time.
- * @author Philipp S. K&aumlsgen
+ * <p>Special Thanks to Maria Chudnovsky for her kind help.
+ * 
+ * @author Philipp S. K&aumlsgen (pkaesgen@freenet.de)
+ * @since 2018
  *
- * @param <V> Generic for vertices
- * @param <E> Generic for edges
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  */
 public class BergeGraphChecker<V,E>{
-	private final SimpleGraph<V,E> g;
-	
-	/**
-	 * Constructor of the BergeGraphChecker which requires a SimpleGraph
-	 * @param graph
-	 */
-	public BergeGraphChecker(SimpleGraph<V,E> graph){//maybe also input complementgraph of graph
-		super();
-		g = graph;
-	}
 	
 	/**
 	 * Checks whether two vertices are neighbours
@@ -48,8 +55,8 @@ public class BergeGraphChecker<V,E>{
 	 * @param v2
 	 * @return
 	 */
-	private boolean hasEdge(SimpleGraph<V,E> g,V v1, V v2){
-		return g.containsEdge(v1, v2)||g.containsEdge(v2,v1);
+	protected boolean hasEdge(Graph<V,E> g,V v1, V v2){
+		return g.containsEdge(v1, v2);
 	}
 	
 	/**
@@ -60,30 +67,16 @@ public class BergeGraphChecker<V,E>{
 	 * @param m
 	 * @return
 	 */
-	private boolean haveNoEdgeDisregardingM(SimpleGraph<V,E> g,GraphPath<V,E> s1, GraphPath<V,E> s2,V m){
-		for (V v1 : V(g,s1))
+	protected boolean haveNoEdgeDisregardingM(Graph<V,E> g,GraphPath<V,E> s1, GraphPath<V,E> s2,V m){
+		for (V v1 : s1.getVertexList())
 			if (v1 != m)
-				for (V v2 : V(g,s2))
+				for (V v2 : s2.getVertexList())
 					if (v2 != m&&!hasEdge(g,v1,v2))
 						return true;
 						
 		return false;
 	}
 	
-	/**
-	 * Extracts the vertices of a given Path
-	 * @param g
-	 * @param p
-	 * @return
-	 */
-	private Set<V> V(UndirectedGraph<V,E> g,GraphPath<V,E> p){
-		Set<V> res = new HashSet<V>();
-		for (E e : p.getEdgeList()){
-			res.add(g.getEdgeSource(e));
-			res.add(g.getEdgeTarget(e));
-		}
-		return res;
-	}
 	
 	/**
 	 * Lists the vertices which are covered by two paths
@@ -92,10 +85,10 @@ public class BergeGraphChecker<V,E>{
 	 * @param p2
 	 * @return
 	 */
-	private Set<V> intersectGraphPaths(SimpleGraph<V,E> g,GraphPath<V,E> p1, GraphPath<V,E> p2){
-		Set<V> res = V(g,p1);
-		Set<V> temp = V(g,p2);
-		res.retainAll(temp);
+	protected Set<V> intersectGraphPaths(Graph<V,E> g,GraphPath<V,E> p1, GraphPath<V,E> p2){
+		Set<V> res = new HashSet<V>();
+		res.addAll(p1.getVertexList());
+		res.retainAll(p2.getVertexList());
 		return res;
 	}
 	
@@ -114,7 +107,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param s3
 	 * @return
 	 */
-	private GraphPath<V,E> P(SimpleGraph<V,E> g,GraphPath<V,E> S, GraphPath<V,E> T, Set<V> M, V m, V b1, V b2, V b3, V s1, V s2, V s3){
+	protected GraphPath<V,E> P(Graph<V,E> g,GraphPath<V,E> S, GraphPath<V,E> T, Set<V> M, V m, V b1, V b2, V b3, V s1, V s2, V s3){
 		if (S!=null&&T!=null){
 			if (s1==b1){
 				if (b1==m){
@@ -137,7 +130,7 @@ public class BergeGraphChecker<V,E>{
 	
 						@Override
 						public List<E> getEdgeList() {
-							List<E> res = new ArrayList<E>();
+							List<E> res = new LinkedList<E>();
 							res.add(g.getEdge(s1, b1));
 							res.add(g.getEdge(b1, s1));
 							return res;
@@ -162,10 +155,30 @@ public class BergeGraphChecker<V,E>{
 							intersection.size()==1&&intersection.contains(m)
 							&&haveNoEdgeDisregardingM(g,S, T, m)
 							){
-						List<E> edgeList =new ArrayList<E>();
+						List<E> edgeList =new LinkedList<E>();
 						edgeList.addAll(S.getEdgeList());
 						edgeList.addAll(T.getEdgeList());
-						return new GraphPathImpl<V,E>(g, b1, s1, edgeList, 0);
+						return new GraphPath<V,E>(){
+
+							@Override
+							public V getEndVertex() {
+								return s1;
+							}
+
+							@Override
+							public Graph<V, E> getGraph() {
+								return g;
+							}
+
+							@Override
+							public V getStartVertex() {
+								return b1;
+							}
+
+							@Override
+							public double getWeight() {
+								return 0;
+							}};//g, b1, s1, edgeList, 0)
 					}
 					else{
 						return null;
@@ -185,172 +198,192 @@ public class BergeGraphChecker<V,E>{
 	
 	/**
 	 * Checks whether a graph contains a pyramid. Running time: O(|V(g)|^9)
-	 * @param g SimpleGraph
+	 * @param g Graph
 	 * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g contains no pyramid
 	 */
-	private boolean containsPyramid(SimpleGraph<V,E> g){
+	protected boolean containsPyramid(Graph<V,E> g){
 		 /*b3,*/ 
-		Set<Set<E>> visitedTriangles = new HashSet<Set<E>>();
+		Set<Set<V>> visitedTriangles = new HashSet<Set<V>>();
 		for (E e1 : g.edgeSet()){
 			V b1= g.getEdgeSource(e1), b2= g.getEdgeTarget(e1);
+			if (b1==b2) continue;
 			for (E e2 : g.edgesOf(b1)){
 				V b3 = g.getEdgeSource(e2);
 				if (b3==b1)
 					b3 = g.getEdgeTarget(e2);
-				if (e1!=e2&&hasEdge(g,b2,b3)){//Triangle detected
-					Set<E> triangles = new HashSet<E>();
-					triangles.add(e1);
-					triangles.add(e2);
-					triangles.add(g.getEdge(b3, b2));
-					triangles.add(g.getEdge(b2, b3));
-					if (!visitedTriangles.contains(triangles)){
-					visitedTriangles.add(triangles);
+				if (b3==b1||b3==b2||!hasEdge(g,b2,b3)) continue;
 					
-					for (V aCandidate : g.vertexSet()){
-						if (g.edgesOf(aCandidate).size()>2){
-							for (E e4 : g.edgesOf(aCandidate)){
-								V s1 = g.getEdgeSource(e4);
-								if (s1==aCandidate)
-									s1 = g.getEdgeTarget(e4);
-								if (b1==s1||!(hasEdge(g,s1,b2)||hasEdge(g,s1,b3))){
-									for (E e5 : g.edgesOf(aCandidate)){
-										if (e5!=e4){
-											V s2 = g.getEdgeSource(e5);
-											if (s2==aCandidate)
-												s2 = g.getEdgeTarget(e5);
-											if (b1!=s1&&b2==s2||!(hasEdge(g,s2,b1)||hasEdge(g,s2,b3)||hasEdge(g,s2,s1))){
-												for (E e6 : g.edgesOf(aCandidate)){
-													if (e6!=e5&&e6!=e4){
-														V s3 = g.getEdgeSource(e6);
-														if (s3==aCandidate)
-															s3 = g.getEdgeTarget(e6);
-														if (b1!=s1&&b2!=s2&&b3==s3||!(hasEdge(g,s3,b1)||hasEdge(g,s3,b2)||hasEdge(g,s3,s1)||hasEdge(g,s3,s2))){
-															Set<V> M = new HashSet<V>(),M1 = new HashSet<V>(),M2 = new HashSet<V>(),M3 = new HashSet<V>();
-															M.addAll(g.vertexSet());
-															M.remove(b1);
-															M.remove(b2);
-															M.remove(b3);
-															M.remove(s1);
-															M.remove(s2);
-															M.remove(s3);
-															M.remove(aCandidate);
-															M1.addAll(M);
-															M2.addAll(M);
-															M3.addAll(M);
-															M1.add(b1);
-															M2.add(b2);
-															M3.add(b3);
-															
-															Map<V,DijkstraShortestPath<V, E>> S1=new HashMap<V,DijkstraShortestPath<V,E>>(),S2=new HashMap<V,DijkstraShortestPath<V,E>>(),S3=new HashMap<V,DijkstraShortestPath<V,E>>(),T1=new HashMap<V,DijkstraShortestPath<V,E>>(),T2=new HashMap<V,DijkstraShortestPath<V,E>>(),T3=new HashMap<V,DijkstraShortestPath<V,E>>();
+				//Triangle detected
+				Set<V> triangles = new HashSet<V>();
+				triangles.add(b1);
+				triangles.add(b2);
+				triangles.add(b3);
+				if (visitedTriangles.contains(triangles)){
+					continue;
+				}
+				visitedTriangles.add(triangles);
+				
+				for (V aCandidate : g.vertexSet()){
+					if (//g.edgesOf(aCandidate).size()<3 ||
+							aCandidate==b1||aCandidate==b2||aCandidate==b3||
+							//a is adjacent to at most one of b1,b2,b3
+							hasEdge(g,aCandidate,b1)&&hasEdge(g,aCandidate,b2)||
+							hasEdge(g,aCandidate,b2)&&hasEdge(g,aCandidate,b3)||
+							hasEdge(g,aCandidate,b1)&&hasEdge(g,aCandidate,b3)){
+						continue;
+					}
+					
+					for (E e4 : g.edgesOf(aCandidate)){
+						V s1 = g.getEdgeSource(e4);
+						if (s1==aCandidate)
+							s1 = g.getEdgeTarget(e4);
+						if (s1==b2||s1==b3||s1!=b1&&(hasEdge(g,s1,b2)||hasEdge(g,s1,b3))){
+							continue;
+						}
+						
+						for (E e5 : g.edgesOf(aCandidate)){
+							V s2 = g.getEdgeSource(e5);
+							if (s2==aCandidate)
+								s2 = g.getEdgeTarget(e5);
+							if (hasEdge(g,s1,s2)||s1==s2||s2==b1||s2==b3||s2!=b2&&(hasEdge(g,s2,b1)||hasEdge(g,s2,b3))){
+								continue;
+							}
+							
+							for (E e6 : g.edgesOf(aCandidate)){
+								V s3 = g.getEdgeSource(e6);
+								if (s3==aCandidate)
+									s3 = g.getEdgeTarget(e6);
+								if (hasEdge(g,s3,s2)||s1==s3||s3==s2||hasEdge(g,s1,s3)||s3==b1||s3==b2||s3!=b3&&(hasEdge(g,s3,b1)||hasEdge(g,s3,b2))){
+									continue;
+								}
+								
+								Set<V> M = new HashSet<V>(),M1 = new HashSet<V>(),M2 = new HashSet<V>(),M3 = new HashSet<V>();
+								M.addAll(g.vertexSet());
+								M.remove(b1);
+								M.remove(b2);
+								M.remove(b3);
+								M.remove(s1);
+								M.remove(s2);
+								M.remove(s3);
+								M1.addAll(M);
+								M2.addAll(M);
+								M3.addAll(M);
+								M1.add(b1);
+								M2.add(b2);
+								M3.add(b3);
+								
+								Map<V,GraphPath<V, E>> 	S1=new HashMap<V,GraphPath<V,E>>(),
+														S2=new HashMap<V,GraphPath<V,E>>(),
+														S3=new HashMap<V,GraphPath<V,E>>(),
+														T1=new HashMap<V,GraphPath<V,E>>(),
+														T2=new HashMap<V,GraphPath<V,E>>(),
+														T3=new HashMap<V,GraphPath<V,E>>();
 
-															for (V m1 : M){
-																Set<V> validInterior = new HashSet<V>();
-																validInterior.addAll(M);
-																Set<V> toRemove = new HashSet<V>();
-																for (V i : validInterior){
-																	if (hasEdge(g,i,b2)||hasEdge(g,i,s2)||hasEdge(g,i,b3)||hasEdge(g,i,s3)){
-																		toRemove.add(i);
-																	}
-																}
-																validInterior.removeAll(toRemove);
-																validInterior.add(s1);
-																UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,validInterior,null);
-																if (subg.containsVertex(s1)&&subg.containsVertex(m1)){
-																	S1.put(m1,new DijkstraShortestPath<V, E>(subg,s1,m1));
-																	validInterior.remove(s1);
-																	validInterior.add(b1);
-																	subg = new UndirectedSubgraph<V,E>(g,validInterior,null);
-																	if (subg.containsVertex(b1)&&subg.containsVertex(m1)){
-																		T1.put(m1, new DijkstraShortestPath<V, E>(subg,b1,m1));
-																	}
-																	else {
-																		S1.remove(m1);
-																	}
-																}
-															}
-															for (V m2 : M){
-																Set<V> validInterior = new HashSet<V>();
-																validInterior.addAll(M);
-																Set<V> toRemove = new HashSet<V>();
-																for (V i : validInterior){
-																	if (hasEdge(g,i,b1)||hasEdge(g,i,s1)||hasEdge(g,i,b3)||hasEdge(g,i,s3)){
-																		toRemove.add(i);
-																	}
-																}
-																validInterior.removeAll(toRemove);
-																validInterior.add(s2);
-																UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,validInterior,null);
-																if (subg.containsVertex(s2)&&subg.containsVertex(m2)){
-																	S2.put(m2,new DijkstraShortestPath<V, E>(subg,s2,m2));
-																	validInterior.remove(s2);
-																	validInterior.add(b2);
-																	subg = new UndirectedSubgraph<V,E>(g,validInterior,null);
-																	if (subg.containsVertex(b2)&&subg.containsVertex(m2)){
-																		T2.put(m2,new DijkstraShortestPath<V, E>(subg,b2,m2));
-																	}
-																	else {
-																		S2.remove(m2);
-																	}
-																}
-															}
-															for (V m3 : M){
-																Set<V> validInterior = new HashSet<V>();
-																validInterior.addAll(M);
-																Set<V> toRemove = new HashSet<V>();
-																for (V i : validInterior){
-																	if (hasEdge(g,i,b1)||hasEdge(g,i,s1)||hasEdge(g,i,b2)||hasEdge(g,i,s2)){
-																		toRemove.add(i);
-																	}
-																}
-																validInterior.removeAll(toRemove);
-																validInterior.add(s3);
-																UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,validInterior,null);
-																if (subg.containsVertex(s3)&&subg.containsVertex(m3)){
-																	S3.put(m3,new DijkstraShortestPath<V, E>(subg,s3,m3));
-																	validInterior.remove(s3);
-																	validInterior.add(b3);
-																	subg = new UndirectedSubgraph<V,E>(g,validInterior,null);
-																	if (subg.containsVertex(b3)&&subg.containsVertex(m3)){
-																		T3.put(m3,new DijkstraShortestPath<V, E>(subg,b3,m3));
-																	}
-																	else {
-																		S3.remove(m3);
-																	}
-																}
-															}
-															
-															
-															//Set<VertexPair<V>> good12Pairs=new HashSet<VertexPair<V>>(),good13Pairs=new HashSet<VertexPair<V>>(),good23Pairs=new HashSet<VertexPair<V>>();
-															for (V m1 : S1.keySet()){
-																GraphPath<V,E> P1 = P(g,S1.get(m1).getPath(),T1.get(m1).getPath(),M,m1,b1,b2,b3,s1,s2,s3);
-																if (P1!=null){
-																	for (V m2 : S2.keySet()){
-																		GraphPath<V,E> P2 = P(g,S2.get(m2).getPath(),T2.get(m2).getPath(),M,m2,b2,b1,b3,s2,s1,s3);
-																		if (P2!=null){
-																			//good12Pairs.add(new VertexPair<V>(m1,m2));
-																			for (V m3 : S3.keySet()){
-																				GraphPath<V,E> P3 = P(g,S3.get(m3).getPath(),T3.get(m3).getPath(),M,m3,b3,b1,b2,s3,s1,s2);
-																				if (P3!=null){
-																					//good13Pairs.add(new VertexPair<V>(m1,m3));
-																					System.err.println("Pyramid detected :"+b1+b2+b3+s1+s2+s3+aCandidate);
-																					return true;
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
+								for (V m1 : M){
+									Set<V> validInterior = new HashSet<V>();
+									validInterior.addAll(M);
+									Set<V> toRemove = new HashSet<V>();
+									for (V i : validInterior){
+										if (hasEdge(g,i,b2)||hasEdge(g,i,s2)||hasEdge(g,i,b3)||hasEdge(g,i,s3)){
+											toRemove.add(i);
+										}
+									}
+									validInterior.removeAll(toRemove);	
+									validInterior.add(s1);
+									Graph<V,E> subg = new AsSubgraph<V,E>(g,validInterior,null);
+									if (subg.containsVertex(s1)&&subg.containsVertex(m1)){
+										S1.put(m1,new DijkstraShortestPath<V, E>(subg).getPath(s1,m1));
+										validInterior.remove(s1);
+										validInterior.add(b1);
+										subg = new AsSubgraph<V,E>(g,validInterior,null);
+										if (subg.containsVertex(b1)&&subg.containsVertex(m1)){
+											T1.put(m1, new DijkstraShortestPath<V, E>(subg).getPath(b1,m1));
+										}
+										else {
+											S1.remove(m1);
+										}
+									}
+								}
+								for (V m2 : M){
+									Set<V> validInterior = new HashSet<V>();
+									validInterior.addAll(M);
+									Set<V> toRemove = new HashSet<V>();
+									for (V i : validInterior){
+										if (hasEdge(g,i,b1)||hasEdge(g,i,s1)||hasEdge(g,i,b3)||hasEdge(g,i,s3)){
+											toRemove.add(i);
+										}
+									}
+									validInterior.removeAll(toRemove);
+									validInterior.add(s2);
+									Graph<V,E> subg = new AsSubgraph<V,E>(g,validInterior,null);
+									if (subg.containsVertex(s2)&&subg.containsVertex(m2)){
+										S2.put(m2,new DijkstraShortestPath<V, E>(subg).getPath(s2,m2));
+										validInterior.remove(s2);
+										validInterior.add(b2);
+										subg = new AsSubgraph<V,E>(g,validInterior,null);
+										if (subg.containsVertex(b2)&&subg.containsVertex(m2)){
+											T2.put(m2,new DijkstraShortestPath<V, E>(subg).getPath(b2,m2));
+										}
+										else {
+											S2.remove(m2);
+										}
+									}
+								}
+								for (V m3 : M){
+									Set<V> validInterior = new HashSet<V>();
+									validInterior.addAll(M);
+									Set<V> toRemove = new HashSet<V>();
+									for (V i : validInterior){
+										if (hasEdge(g,i,b1)||hasEdge(g,i,s1)||hasEdge(g,i,b2)||hasEdge(g,i,s2)){
+											toRemove.add(i);
+										}
+									}
+									validInterior.removeAll(toRemove);
+									validInterior.add(s3);
+									Graph<V,E> subg = new AsSubgraph<V,E>(g,validInterior,null);
+									if (subg.containsVertex(s3)&&subg.containsVertex(m3)){
+										S3.put(m3,new DijkstraShortestPath<V, E>(subg).getPath(s3,m3));
+										validInterior.remove(s3);
+										validInterior.add(b3);
+										subg = new AsSubgraph<V,E>(g,validInterior,null);
+										if (subg.containsVertex(b3)&&subg.containsVertex(m3)){
+											T3.put(m3,new DijkstraShortestPath<V, E>(subg).getPath(b3,m3));
+										}
+										else {
+											S3.remove(m3);
+										}
+									}
+								}
+								
+								
+								for (V m1 : S1.keySet()){
+									GraphPath<V,E> P1 = P(g,S1.get(m1),T1.get(m1),M,m1,b1,b2,b3,s1,s2,s3);
+									if (P1!=null){
+										for (V m2 : S2.keySet()){
+											GraphPath<V,E> P2 = P(g,S2.get(m2),T2.get(m2),M,m2,b2,b1,b3,s2,s1,s3);
+											if (P2!=null){
+												for (V m3 : S3.keySet()){
+													GraphPath<V,E> P3 = P(g,S3.get(m3),T3.get(m3),M,m3,b3,b1,b2,s3,s1,s2);
+													if (P3!=null){
+														System.err.println("Pyramid found");
+														return true;
 													}
 												}
 											}
 										}
 									}
+								
 								}
+								
+								
 							}
+							
 						}
+						
 					}
-				}
+							
+						
+					
 				}
 			}
 		}
@@ -364,27 +397,16 @@ public class BergeGraphChecker<V,E>{
 	 * @param F
 	 * @return
 	 */
-	private List<Set<V>> findAllComponents(SimpleGraph<V,E> g, Set<V> F){
-		return new ConnectivityInspector<V,E>(new UndirectedSubgraph<V,E>(g,F,null)).connectedSets();
+	protected List<Set<V>> findAllComponents(Graph<V,E> g, Set<V> F){
+		return new ConnectivityInspector<V,E>(new AsSubgraph<V,E>(g,F,null)).connectedSets();
 	}
-	
-
-	private boolean hasANeighbourInF(SimpleGraph<V,E> g, V v, Set<V> F){
-		for (V f : F){
-			if (hasEdge(g,v,f)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	
 	/**
 	 * Checks whether a graph contains a Jewel. Running time: O(|V(g)|^6)
-	 * @param g SimpleGraph
+	 * @param g Graph
 	 * @return Decides whether there is a jewel in g
 	 */
-	private boolean containsJewel(final SimpleGraph<V,E> g){
+	protected boolean containsJewel(Graph<V,E> g){
 		for (E e23 : g.edgeSet()){
 			V v2 = g.getEdgeSource(e23);
 			V v3 = g.getEdgeTarget(e23);
@@ -408,10 +430,10 @@ public class BergeGraphChecker<V,E>{
 					
 					for (V v1 : X1){
 						for (Set<V> FPrime : componentsOfF){
-							if (hasANeighbourInF(g, v1, FPrime)){
+							if (hasANeighbour(g, FPrime, v1)){
 								for (V v4 : X2){
-									if (v1!=v4&&!hasEdge(g,v1,v4)&&hasANeighbourInF(g,v4,FPrime)){
-										System.err.println("Jewel detected: "+v1+", "+v2+", "+v3+", "+v4+", "+v5+", "+FPrime);
+									if (v1!=v4&&!hasEdge(g,v1,v4)&&hasANeighbour(g,FPrime,v4)){
+										System.err.println("Jewel found");
 										return true;
 									}
 								}
@@ -426,106 +448,111 @@ public class BergeGraphChecker<V,E>{
 	
 	/**
 	 * Checks whether a graph contains a clean shortest odd hole. Running time: O(|V(g)|^4)
-	 * @param g SimpleGraph containing no pyramid or jewel
+	 * @param g Graph containing no pyramid or jewel
 	 * @return Decides whether g contains a clean shortest odd hole
 	 */
-	private boolean containsCleanShortestOddHole(SimpleGraph<V,E> g){
-		Set<V> inTheRing = new HashSet<V>();
+	protected boolean containsCleanShortestOddHole(Graph<V,E> g){
 		for (V u : g.vertexSet()){
 			for (V v : g.vertexSet()){
-				if (u!=v){
-					DijkstraShortestPath<V, E> puv = new DijkstraShortestPath<V, E>(g, u, v);
-					if (puv.getPath()!=null){
-						inTheRing.addAll(V(g,puv.getPath()));
-						for (V w : g.vertexSet()){
-							if (u!=w&&v!=w&&!inTheRing.contains(w)){
-								DijkstraShortestPath<V, E> pvw = getPathAvoidingX(g, v, w, inTheRing);//new DijkstraShortestPath<V, E>(g, v, w);
-								if (pvw.getPath()!=null){
-									inTheRing.addAll(V(g,pvw.getPath()));
-									
-									DijkstraShortestPath<V, E> pwu = getPathAvoidingX(g, w, u, inTheRing);//new DijkstraShortestPath<V, E>(subg, w, u);
-									if (pwu.getPath()!=null){
-										Set<V> uvwVertices = new HashSet<V>();
-										uvwVertices.addAll(V(g,puv.getPath()));
-										uvwVertices.addAll(V(g,pvw.getPath()));
-										uvwVertices.addAll(V(g,pwu.getPath()));
-										UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,uvwVertices,null);
-										
-										int length = subg.edgeSet().size();
-										
-										if (length==subg.vertexSet().size()&&length>6&&length%2==1){
-											System.err.println("Clean shortest odd hole detected: "+u+", "+v+", "+w+": "+puv.getPathEdgeList()+pvw.getPathEdgeList()+pwu.getPathEdgeList());
-											return true;
-										}
-									}
-									inTheRing.removeAll(V(g,pvw.getPath()));
-								}
-							}
+				if (u==v||hasEdge(g,u,v)) continue;
+				
+				GraphPath<V, E> puv = new DijkstraShortestPath<V, E>(g).getPath( u, v);
+				if (puv==null) continue;
+				
+				for (V w : g.vertexSet()){
+					if (w==u||w==v||hasEdge(g,w,u)||hasEdge(g,w,v)) continue;
+					GraphPath<V,E> pvw = new DijkstraShortestPath<V,E>(g).getPath(v, w);
+					if (pvw==null) continue;
+					GraphPath<V,E> pwu = new DijkstraShortestPath<V,E>(g).getPath(w, u);
+					if (pwu==null) continue;
+					Set<V> set = new HashSet<V>();
+					set.addAll(puv.getVertexList());
+					set.addAll(pvw.getVertexList());
+					set.addAll(pwu.getVertexList());
+					Graph<V,E> subg = new AsSubgraph<>(g,set);
+					if (set.size()<7||subg.vertexSet().size()!=set.size()||subg.edgeSet().size()!=subg.vertexSet().size()||subg.vertexSet().size()%2==0) continue;
+					boolean isCircle=true;
+					for (V t : subg.vertexSet()){
+						if (subg.edgesOf(t).size()!=2){
+							isCircle=false;
+							break;
 						}
-						inTheRing.clear();
 					}
+					if (!isCircle) continue;
+					System.err.println("clean shortest odd hole");
+					
+					return true;
+					
 				}
+				
 			}
 		}
 		return false;
 	}
 	
-	
-	private DijkstraShortestPath<V, E> getPathAvoidingX(SimpleGraph<V, E> g, V start, V end, Set<V> X){
+	/**
+	 * Returns a path in g from start to end avoiding the vertices in X
+	 * @param g
+	 * @param start
+	 * @param end
+	 * @param X
+	 * @return
+	 */
+	protected GraphPath<V, E> getPathAvoidingX(Graph<V, E> g, V start, V end, Set<V> X){
 		Set<V> vertexSet = new HashSet<V>();
 		vertexSet.addAll(g.vertexSet());
 		vertexSet.removeAll(X);
 		vertexSet.add(start);
 		vertexSet.add(end);
-		UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,vertexSet,null);
-		return new DijkstraShortestPath<V, E>(subg,start,end);
+		Graph<V,E> subg = new AsSubgraph<V,E>(g,vertexSet,null);
+		return new DijkstraShortestPath<V, E>(subg).getPath(start,end);
 	}
 	
 	/**
 	 * Checks whether the vertex set of a graph without a vertex set X contains a shortest odd hole. Running time: O(|V(g)|^4)
-	 * @param g SimpleGraph containing no pyramid or jewel
+	 * @param g Graph containing neither pyramid nor jewel
 	 * @param X Subset of V(g)
 	 * @return Determines whether g has an odd hole such that X is a near-cleaner for it
 	 */
-	private boolean containsShortestOddHole(SimpleGraph<V,E> g,Set<V> X){
+	protected boolean containsShortestOddHole(Graph<V,E> g,Set<V> X){
 		for (V y1 : g.vertexSet()){
-			if (!X.contains(y1)){
-				for(E e13 : g.edgeSet()){
-					V x1 = g.getEdgeSource(e13);
-					V x3 = g.getEdgeTarget(e13);
-					if (x1!=y1&&x3!=y1){
-						for (E e32 : g.edgesOf(x3)){
-							V x2 = g.getEdgeTarget(e32);
-							if (x2==x3){
-								x2 = g.getEdgeSource(e32);
-							}
-							if (x2!=x1&&x2!=y1&&!hasEdge(g,x2,x1)){
-								DijkstraShortestPath<V, E> rx1y1 = getPathAvoidingX(g, x1, y1, X);
-								DijkstraShortestPath<V, E> rx2y1 = getPathAvoidingX(g, x2, y1, X);
-								
-								double n;
-								if (rx1y1.getPath()!=null&&rx2y1.getPath()!=null){
-									V y2 = null;
-									for (V y2Candidate : V(g,rx2y1.getPath())){
-										if (hasEdge(g,y1,y2Candidate)&&y2Candidate!=x1&&y2Candidate!=x2&&y2Candidate!=x3){
-											y2=y2Candidate;
-											break;
-										}
-									}
-									if (y2!=null){
-										DijkstraShortestPath<V, E> rx3y1 = getPathAvoidingX(g, x3, y1, X);
-										DijkstraShortestPath<V, E> rx3y2 = getPathAvoidingX(g, x3, y2, X);
-										DijkstraShortestPath<V, E> rx1y2 = getPathAvoidingX(g, x1, y2, X);
-										if (rx3y1.getPath()!=null&&rx3y2.getPath()!=null&&rx1y2.getPath()!=null&& rx2y1.getPathLength()==(n=rx1y1.getPathLength()+1) && n==rx1y2.getPathLength() && rx3y1.getPathLength()>=n && rx3y2.getPathLength()>=n){
-											System.err.println("Shortest odd hole detected: "+y1+", "+y2+", "+x1+", "+x2+", "+x3+": "+V(g,rx1y1.getPath())+V(g,rx2y1.getPath())+V(g,rx3y1.getPath())+V(g,rx1y2.getPath())+V(g,rx3y2.getPath())+" with near-scleaner "+X);
-											return true;
-										}
-											
-									}
-								}
-							}
+			if (X.contains(y1)) continue;
+			
+			for(E e13 : g.edgeSet()){
+				V x1 = g.getEdgeSource(e13);
+				V x3 = g.getEdgeTarget(e13);
+				if (x1==x3||x1==y1||x3==y1) continue;
+				
+				for (E e32 : g.edgesOf(x3)){
+					V x2 = g.getEdgeTarget(e32);
+					if (x2==x3){
+						x2 = g.getEdgeSource(e32);
+					}
+					if (x2==x3||x2==x1||x2==y1||hasEdge(g,x2,x1)) continue;
+					
+					GraphPath<V, E> rx1y1 = getPathAvoidingX(g, x1, y1, X);
+					GraphPath<V, E> rx2y1 = getPathAvoidingX(g, x2, y1, X);
+					
+					double n;
+					if (rx1y1==null||rx2y1==null) continue;
+					
+					V y2 = null;
+					for (V y2Candidate : rx2y1.getVertexList()){
+						if (hasEdge(g,y1,y2Candidate)&&y2Candidate!=x1&&y2Candidate!=x2&&y2Candidate!=x3){
+							y2=y2Candidate;
+							break;
 						}
 					}
+					if (y2==null) continue;
+					
+					GraphPath<V, E> rx3y1 = getPathAvoidingX(g, x3, y1, X);
+					GraphPath<V, E> rx3y2 = getPathAvoidingX(g, x3, y2, X);
+					GraphPath<V, E> rx1y2 = getPathAvoidingX(g, x1, y2, X);
+					if (rx3y1!=null&&rx3y2!=null&&rx1y2!=null&& rx2y1.getLength()==(n=rx1y1.getLength()+1) && n==rx1y2.getLength() && rx3y1.getLength()>=n && rx3y2.getLength()>=n){
+						System.err.println("shortest odd hole");
+						return true;
+					}
+					
 				}
 			}
 		}
@@ -538,7 +565,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param X A subset X of V(g)
 	 * @return Returns whether g has an odd hole or there is no shortest odd hole in C such that X is a near-cleaner for C.
 	 */
-	private boolean routine1(SimpleGraph<V,E> g,Set<V> X){
+	protected boolean routine1(Graph<V,E> g,Set<V> X){
 		return containsCleanShortestOddHole(g)||containsShortestOddHole(g, X);	
 	}
 	//=======================================================================================================================
@@ -546,45 +573,28 @@ public class BergeGraphChecker<V,E>{
 	
 	/**
 	 * Checks whether a graph has a configuration of type 1. A configuration of type 1 in g is a hole of length 5
-	 * @param g SimpleGraph
+	 * @param g Graph
 	 * @return
 	 */
-	private boolean hasConfigurationType1(SimpleGraph<V,E> g){
-		Set<V> inTheRing = new HashSet<V>();
-		for (E e12 : g.edgeSet()){
-			V v1 = g.getEdgeSource(e12), v2 = g.getEdgeTarget(e12);
-			inTheRing.add(v1);
-			inTheRing.add(v2);
-			for (E e23 : g.edgesOf(v2)){
-				V v3 = g.getEdgeSource(e23);
-				if (v2==v3)
-					v3 = g.getEdgeTarget(e23);
-				if (!inTheRing.contains(v3)&&!hasEdge(g,v1,v3)){
-					inTheRing.add(v3);
-					for (E e34 : g.edgesOf(v3)){
-						V v4 = g.getEdgeSource(e34);
-						if (v4==v3)
-							v4 = g.getEdgeTarget(e34);
-						if (!inTheRing.contains(v4)&&!hasEdge(g,v4,v1)&&!hasEdge(g,v4,v2)){
-							inTheRing.add(v4);
-							for (E e45 : g.edgesOf(v4)){
-								V v5 = g.getEdgeSource(e45);
-								if (v5==v4)
-									v5 = g.getEdgeTarget(e45);
-								if (!inTheRing.contains(v5)&&!hasEdge(g,v5,v2)&&!hasEdge(g,v5,v3)&&hasEdge(g,v5,v1)){
-									inTheRing.add(v5);
-									System.err.println("5-Cycle detected: "+inTheRing);
-									return true;
-								}
-							}
-							inTheRing.remove(v4);
+	protected boolean hasConfigurationType1(Graph<V,E> g){
+		for (V v1 : g.vertexSet()){
+			Set<V> temp = new ConnectivityInspector<V, E>(g).connectedSetOf(v1);
+			for (V v2 : temp){
+				if (v1==v2||!hasEdge(g,v1,v2)) continue;
+				for (V v3 : temp){
+					if (v3==v1||v3==v2||!hasEdge(g,v2,v3)||hasEdge(g,v1,v3)) continue;
+					for (V v4 : temp){
+						if (v4==v1||v4==v2||v4==v3||hasEdge(g,v1,v4)||hasEdge(g,v2,v4)||!hasEdge(g,v3,v4)) continue;
+						for (V v5 : temp){
+							if (v5==v1||v5==v2||v5==v3||v5==v4||hasEdge(g,v2,v5)||hasEdge(g,v3,v5)||!hasEdge(g,v1,v5)||!hasEdge(g,v4,v5)) continue;
+							System.err.println("5-cycle found");
+							return true;
 						}
 					}
-					inTheRing.remove(v3);
 				}
 			}
-			inTheRing.clear();
 		}
+		
 		
 		return false;
 	}
@@ -597,7 +607,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param X
 	 * @return
 	 */
-	private boolean isYXComplete(SimpleGraph<V,E> g, V y,Set<V> X){
+	protected boolean isYXComplete(Graph<V,E> g, V y,Set<V> X){
 		if (g.vertexSet().contains(y)&&!X.contains(y)){
 			for (V x : X){
 				if (!hasEdge(g,y,x)){
@@ -612,16 +622,20 @@ public class BergeGraphChecker<V,E>{
 	
 	
 	/**
-	 * Returns all anticomponents of a graph and a vertex set. (A set X contained in V(G) is connected if G\X is connected (so the empty set is connected); and
+	 * Returns all anticomponents of a graph and a vertex set. 
+	 * (A set X contained in V(G) is connected if G\X is connected (so the empty set is connected); and
 	 * anticonnected if the complement graph of G without X is connected)
 	 * @param g
 	 * @param Y
 	 * @return
 	 */
-	private List<Set<V>> findAllAnticomponentsOfY(SimpleGraph<V,E> g, Set<V> Y){
-		SimpleGraph<V,E> temp = new SimpleGraph<V,E>(g.getEdgeFactory());
-		new ComplementGraphGenerator<V,E>(new UndirectedSubgraph<V,E>(g, Y, null)).generateGraph(temp, null, null);
-		return findAllComponents(temp, Y);
+	protected List<Set<V>> findAllAnticomponentsOfY(Graph<V,E> g, Set<V> Y){
+		Graph<V,E> target;
+		if (g.getType().isSimple()) target = new SimpleGraph<>(g.getEdgeFactory());
+		else target = new Multigraph<>(g.getEdgeFactory());
+		new ComplementGraphGenerator<>(g).generateGraph(target);
+		
+		return new ConnectivityInspector<V,E>(new AsSubgraph<V,E>(target,Y)).connectedSets();
 	}
 	
 	/**
@@ -635,72 +649,79 @@ public class BergeGraphChecker<V,E>{
 	 * @param g
 	 * @return
 	 */
-	private boolean hasConfigurationType2(SimpleGraph<V,E> g){
+	protected boolean hasConfigurationType2(Graph<V,E> g){
 		for (E e12 : g.edgeSet()){
 			V v1 = g.getEdgeSource(e12);
 			V v2 = g.getEdgeTarget(e12);
+			if (v1==v2) continue;
 			
 			for (E e23 : g.edgesOf(v2)){
 				V v3 = g.getEdgeTarget(e23);
 				if (v3==v2){
 					v3 = g.getEdgeSource(e23);
 				}
-				if (v3!=v1){
-					for (E e34 : g.edgesOf(v3)){
-						V v4 = g.getEdgeTarget(e34);
-						if(v4==v3){
-							v4 = g.getEdgeSource(e34);
+				if (v3==v2||v1==v3) continue;
+				if (hasEdge(g,v2,v3)) continue;//TODO
+				
+				for (E e34 : g.edgesOf(v3)){
+					V v4 = g.getEdgeTarget(e34);
+					if(v4==v3){
+						v4 = g.getEdgeSource(e34);
+					}
+					if (v4==v1||v4==v2||v4==v3) continue;
+					if (hasEdge(g,v4,v2)||hasEdge(g,v4,v1)) continue; //TODO
+					
+					Set<V> temp = new HashSet<V>();
+					temp.add(v1);
+					temp.add(v2);
+					temp.add(v4);
+					Set<V> Y = new HashSet<V>();
+					for (V y : g.vertexSet()){
+						if (isYXComplete(g, y, temp)){
+							Y.add(y);
 						}
-						if (v4!=v1&&v4!=v2){
-							Set<V> temp = new HashSet<V>();
-							temp.add(v1);
-							temp.add(v2);
-							temp.add(v4);
-							Set<V> Y = new HashSet<V>();
-							for (V y : g.vertexSet()){
-								if (y!=v3&&isYXComplete(g, y, temp)){
-									Y.add(y);
+					}
+					List<Set<V>> anticomponentsOfY = findAllAnticomponentsOfY(g, Y);
+					for (Set<V> X : anticomponentsOfY){
+						Set<V> v2v3 = new HashSet<V>();
+						v2v3.addAll(g.vertexSet());
+						v2v3.remove(v2);
+						v2v3.remove(v3);
+						v2v3.removeAll(X);
+						if (!v2v3.contains(v1)||!v2v3.contains(v4))continue;
+						
+						boolean cont = false;
+						for (Set<V> P : new ConnectivityInspector<>(new AsSubgraph<>(g,v2v3)).connectedSets()){
+							
+							if (!P.contains(v1)||!P.contains(v4)||!(new ConnectivityInspector<>(new AsSubgraph<>(g,v2v3)).pathExists(v1, v4))) continue;
+							cont = true;
+							for (V p : P){
+								if (p!=v1&&p!=v4&&(hasEdge(g,p,v2)||hasEdge(g,p,v3)||isYXComplete(g,p,X))) {
+									cont=false; break;
 								}
 							}
-							List<Set<V>> anticomponentsOfY = findAllAnticomponentsOfY(g, Y);
-							for (Set<V> X : anticomponentsOfY){
-								Set<V> v2v3 = new HashSet<V>();
-								v2v3.add(v2);
-								v2v3.add(v3);
-								v2v3.addAll(X);
-								DijkstraShortestPath<V, E> P = getPathAvoidingX(g, v1, v4, v2v3);
-								if (P.getPath()!=null&&P.getPathLength()>1){
-									Set<V> nodesOfP = V(g,P.getPath());
-									nodesOfP.remove(v1);
-									nodesOfP.remove(v4);
-									boolean nonadjacentToV2V3AndNotXComplete = false;
-									for (V p : nodesOfP){
-										nonadjacentToV2V3AndNotXComplete = !hasEdge(g,p,v2)&&!hasEdge(g,p,v3)&&!isYXComplete(g, p, X);
-										if (!nonadjacentToV2V3AndNotXComplete) break;
-									}
-									if (nonadjacentToV2V3AndNotXComplete){
-										if (P.getPathLength()%2==0){
-											if (!hasEdge(g,v1,v3)&&!hasEdge(g,v2,v4)){
-												System.err.println("Configuration Type 2 detected: "+v1+v2+v3+v4+P.getPathEdgeList()+", i.e. path nodes "+nodesOfP+", with anticomponent "+X);
-												return true;
-											}											
-										}
-										else{
-											System.err.println("Configuration Type 2 detected: "+v1+v2+v3+v4+P.getPathEdgeList()+", i.e. path nodes "+nodesOfP+", with anticomponent "+X);
-											return true;	
-										}
-									}
-								}
+							if (cont){
+								System.err.println("T2 found");
+								return true;
+								
 							}
 						}
 					}
 				}
+				
 			}
 		}
 		return false;
 	}
 	
-	private boolean hasEdge(SimpleGraph<V,E> g, Set<V> set, V v){
+	/**
+	 * Reports whether v has at least one neighbour in set
+	 * @param g
+	 * @param set
+	 * @param v
+	 * @return
+	 */
+	protected boolean hasANeighbour(Graph<V,E> g, Set<V> set, V v){
 		boolean res = false;
 		for (V s : set){
 			if (hasEdge(g,s,v)){
@@ -712,31 +733,22 @@ public class BergeGraphChecker<V,E>{
 	}
 	
 	/**
-	 * For each anticomponent X, find the maximal connected subset F' containing v5 with the properties that v1,v2 have no neighbours in F'
-	 * and no vertex of F'\v5 is X-complete
+	 * For each anticomponent X, find the maximal connected subset F' containing v5 with the 
+	 * properties that v1,v2 have no neighbours in F' and no vertex of F'\v5 is X-complete
 	 */
-	private Set<V> findMaximalConnectedSubset(SimpleGraph<V,E> g, Set<V> X, V v1, V v2, V v5){
-		UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,X, null);
-		List<Set<V>> listOfConnectedVertexSets = new ConnectivityInspector<V,E>(subg).connectedSets();
-		Set<V> FPrime = new HashSet<V>();
-		for (Set<V> FPrimeCandidate : listOfConnectedVertexSets){
-			if (FPrimeCandidate.size()>FPrime.size()&&FPrimeCandidate.contains(v5)&&hasEdge(g,FPrimeCandidate,v5)){
-				V fail = null;
-				for (V f : FPrimeCandidate){
-					if (f!=v5&&isYXComplete(g, f, X)){
-						fail = f;
-						break;
-					}
-				}
-				if (fail==null){
-					FPrime=FPrimeCandidate;
-				}
+	protected Set<V> findMaximalConnectedSubset(Graph<V,E> g, Set<V> X, V v1, V v2, V v5){
+		Set<V> FPrime = new ConnectivityInspector<V,E>(g).connectedSetOf(v5);
+		Set<V> toBeRemoved = new HashSet<V>();
+		for (V f : FPrime){
+			if (f!=v5&&isYXComplete(g, f, X)||v1==f||v2==f||hasEdge(g,v1,f)||hasEdge(g,v2,f)){
+				toBeRemoved.add(f);
 			}
 		}
+		FPrime.removeAll(toBeRemoved);
 		return FPrime;
 	}
 	
-	private boolean hasANonneighbourInX(SimpleGraph<V,E> g, V v, Set<V> X){
+	protected boolean hasANonneighbourInX(Graph<V,E> g, V v, Set<V> X){
 		for (V x : X){
 			if (!hasEdge(g,v,x)){
 				return true;
@@ -757,11 +769,12 @@ public class BergeGraphChecker<V,E>{
 	 * @param g
 	 * @return
 	 */
-	private boolean hasConfigurationType3(SimpleGraph<V,E> g){
-		for (E e12 : g.edgeSet()){
-			V v1 = g.getEdgeSource(e12), v2 = g.getEdgeTarget(e12);
-			for (V v5 : g.vertexSet()){
-				if (v1!=v5&&v2!=v5&&!hasEdge(g,v1,v5)&&!hasEdge(g,v2,v5)){
+	protected boolean hasConfigurationType3(Graph<V,E> g){
+		for (V v1 : g.vertexSet()){
+			for (V v2 : g.vertexSet()){
+				if (v1==v2||!hasEdge(g,v1,v2)) continue;
+				for (V v5 : g.vertexSet()){
+					if (v1==v5||v2==v5||hasEdge(g,v1,v5)||hasEdge(g,v2,v5)) continue;
 					Set<V> triple = new HashSet<V>();
 					triple.add(v1);
 					triple.add(v2);
@@ -777,40 +790,41 @@ public class BergeGraphChecker<V,E>{
 						Set<V> FPrime = findMaximalConnectedSubset(g, X, v1, v2, v5);
 						Set<V> F = new HashSet<V>();
 						F.addAll(FPrime);
-						for (V toAdd : g.vertexSet()){
-							if (isYXComplete(g, toAdd, X)&&!hasEdge(g,v1,toAdd)&&!hasEdge(g,v2,toAdd)&&!hasEdge(g,v5,toAdd)&&hasANeighbourInF(g, toAdd, FPrime)){
-								F.add(toAdd);
-							}
-						}
-						for (E e41 : g.edgesOf(v1)){
-							V v4 = g.getEdgeSource(e41);
-							if (v4==v1)
-								v4 = g.getEdgeTarget(e41);
-							if (!hasEdge(g,v2,v4)&&!hasEdge(g,v5,v4)&&hasANeighbourInF(g, v4, F)&&hasANonneighbourInX(g, v4, X)){
-								for (E e23 : g.edgesOf(v2)){
-									V v3 = g.getEdgeSource(e23);
-									if (v3==v2)
-										v3 = g.getEdgeTarget(e23);
-									if (hasEdge(g,v3,v4)&&hasEdge(g,v5,v3)&&!hasEdge(g,v1,v3)&&hasANonneighbourInX(g, v3, X)){
-										for (V v6 : F){
-											if (v6!=v1&&v6!=v2&&v6!=v3&&v6!=v4&&v6!=v5&&hasEdge(g,v4,v6)){
-												Set<V> verticesForPv5v6 = new HashSet<V>();
-												verticesForPv5v6.addAll(FPrime);
-												verticesForPv5v6.add(v5);
-												verticesForPv5v6.add(v6);
-												UndirectedSubgraph<V,E> subg = new UndirectedSubgraph<V,E>(g,verticesForPv5v6, null);
-												DijkstraShortestPath<V, E> P = new DijkstraShortestPath<V, E>(subg, v6, v5);
-												if (P!=null){
-													System.err.println("Configuration Type 3 detected: "+v1+", "+v2+", "+v3+", "+v4+", "+v5+", "+v6+" and Path vertices "+V(g,P.getPath())+" and anticomponent "+X);
-													return true;
-												}
-											}
-										}
-									}
-								}
-							}
+						for (V x : X){
+							if (!hasEdge(g,x,v1)&&!hasEdge(g,x,v2)&&!hasEdge(g,x,v5)&&hasANeighbour(g,FPrime,x))
+								F.add(x);
 						}
 						
+						for (V v4 : g.vertexSet()){
+							if (v4==v1||v4==v2||v4==v5||hasEdge(g,v2,v4)||hasEdge(g,v5,v4)||!hasEdge(g,v1,v4)||
+									!hasANeighbour(g, F, v4)||
+									!hasANonneighbourInX(g, v4, X)||isYXComplete(g, v4, X)) continue;
+							
+							for (V v3 : g.vertexSet()){
+								if (v3==v1||v3==v2||v3==v4||v3==v5||!hasEdge(g,v2,v3)||!hasEdge(g,v3,v4)||!hasEdge(g,v5,v3)||hasEdge(g,v1,v3)||!hasANonneighbourInX(g, v3, X)||isYXComplete(g, v3, X)) continue;
+								for (V v6 : F){
+									if (v6==v1||v6==v2||v6==v3||v6==v4||v6==v5||!hasEdge(g,v4,v6)||hasEdge(g,v1,v6)||hasEdge(g,v2,v6)||hasEdge(g,v5,v6)&&!isYXComplete(g, v6, X)) continue;
+									Set<V> verticesForPv5v6 = new HashSet<V>();
+									verticesForPv5v6.addAll(FPrime);
+									verticesForPv5v6.add(v5);
+									verticesForPv5v6.add(v6);
+									verticesForPv5v6.remove(v1);
+									verticesForPv5v6.remove(v2);
+									verticesForPv5v6.remove(v3);
+									verticesForPv5v6.remove(v4);
+		
+									if (new ConnectivityInspector<V,E>(new AsSubgraph<V,E>(g,verticesForPv5v6)).pathExists(v6, v5)){
+										System.err.println("T3 found");
+										return true;
+									}
+								
+								}
+								
+								
+							}
+							
+						
+						}
 					}
 				}
 			}
@@ -823,8 +837,8 @@ public class BergeGraphChecker<V,E>{
 	 * @param g
 	 * @return
 	 */
-	private boolean routine2(SimpleGraph<V,E> g){
-		return hasConfigurationType1(g)||hasConfigurationType2(g)/*||hasConfigurationType3(g)*/||containsPyramid(g)||containsJewel(g);
+	protected boolean routine2(Graph<V,E> g){
+		return containsPyramid(g)||containsJewel(g)||hasConfigurationType1(g)||hasConfigurationType2(g)||hasConfigurationType3(g);
 	}
 	//=======================================================================================================================
 	
@@ -835,18 +849,14 @@ public class BergeGraphChecker<V,E>{
 	 * @param b
 	 * @return
 	 */
-	private Set<V> N(SimpleGraph<V,E> g, V a, V b){
+	protected Set<V> N(Graph<V,E> g, V a, V b){
 		Set<V> res = new HashSet<V>();
-		for (E ea : g.edgesOf(a)){
-			if (hasEdge(g,b,g.getEdgeSource(ea))){
-				res.add(g.getEdgeSource(ea));
-			}
-			if (hasEdge(g,b,g.getEdgeTarget(ea))){
-				res.add(g.getEdgeTarget(ea));
-			}
+		Set<V> ab = new HashSet<V>();
+		ab.add(a);
+		ab.add(b);
+		for (V c : g.vertexSet()){
+			if (isYXComplete(g, c, ab)) res.add(c);
 		}
-		res.remove(a);
-		res.remove(b);
 		return res;
 	}
 	
@@ -858,15 +868,13 @@ public class BergeGraphChecker<V,E>{
 	 * @param c
 	 * @return
 	 */
-	private int r(SimpleGraph<V,E> g, Set<V> Nab, V c){
+	protected int r(Graph<V,E> g, Set<V> Nab, V c){
+		if (isYXComplete(g,c,Nab)) return 0;
 		List<Set<V>> anticomponents = findAllAnticomponentsOfY(g, Nab);
 		int res = 0;
 		for (Set<V> set : anticomponents){
-			Iterator<V> it = set.iterator();
-			V nonneighbour = null;
-			while (it.hasNext()&&hasEdge(g,(nonneighbour = it.next()),c)){};
-			if (!hasEdge(g,nonneighbour,c)&&res<set.size())
-				res = set.size();
+			if (!hasANonneighbourInX(g, c, set)) continue;
+			if (set.size()>res) res=set.size();
 		}
 		return res;
 	}
@@ -879,7 +887,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param c
 	 * @return
 	 */
-	private Set<V> Y(SimpleGraph<V,E> g, Set<V> Nab, V c){
+	protected Set<V> Y(Graph<V,E> g, Set<V> Nab, V c){
 		int cutoff = r(g,Nab,c);
 		List<Set<V>> anticomponents = findAllAnticomponentsOfY(g, Nab);
 		Set<V> res = new HashSet<V>();
@@ -899,7 +907,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param c
 	 * @return
 	 */
-	private Set<V> W(SimpleGraph<V,E> g, Set<V> Nab, V c){
+	protected Set<V> W(Graph<V,E> g, Set<V> Nab, V c){
 		Set<V> temp = new HashSet<V>();
 		temp.addAll(Nab);
 		temp.add(c);
@@ -918,7 +926,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param c
 	 * @return
 	 */
-	private Set<V> Z(SimpleGraph<V,E> g, Set<V> Nab, V c){
+	protected Set<V> Z(Graph<V,E> g, Set<V> Nab, V c){
 		Set<V> temp = new HashSet<V>();
 		temp.addAll(Y(g,Nab,c));
 		temp.addAll(W(g,Nab,c));
@@ -938,7 +946,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param c
 	 * @return
 	 */
-	private Set<V> X(SimpleGraph<V,E> g, Set<V> Nab, V c){
+	protected Set<V> X(Graph<V,E> g, Set<V> Nab, V c){
 		Set<V> res = new HashSet<V>();
 		res.addAll(Y(g,Nab,c));
 		res.addAll(Z(g,Nab,c));
@@ -954,7 +962,7 @@ public class BergeGraphChecker<V,E>{
 	 * @param c
 	 * @return
 	 */
-	private boolean isTripleRelevant(SimpleGraph<V,E> g, V a, V b, V c){
+	protected boolean isTripleRelevant(Graph<V,E> g, V a, V b, V c){
 		return a!=b&&!hasEdge(g,a,b)&&!N(g,a,b).contains(c);
 	}
 	
@@ -964,14 +972,19 @@ public class BergeGraphChecker<V,E>{
 	 * @param g
 	 * @return
 	 */
-	private Set<Set<V>> routine3(SimpleGraph<V,E> g){
+	protected Set<Set<V>> routine3(Graph<V,E> g){
 		Set<Set<V>> NuvList = new HashSet<Set<V>>();
-		for (E euv : g.edgeSet()){
-			NuvList.add(N(g,g.getEdgeSource(euv),g.getEdgeTarget(euv)));			
+		for (V u : g.vertexSet()){
+			for (V v : g.vertexSet()){
+				if (u==v||!hasEdge(g,u,v)) continue;
+				NuvList.add(N(g,u,v));
+			}
 		}
+		
 		Set<Set<V>> tripleList = new HashSet<Set<V>>();
 		for (V a : g.vertexSet()){
 			for (V b : g.vertexSet()){
+				if (a==b||hasEdge(g,a,b)) continue;
 				Set<V> Nab = N(g,a,b);
 				for (V c : g.vertexSet()){
 					if (isTripleRelevant(g,a,b,c)){
@@ -994,45 +1007,43 @@ public class BergeGraphChecker<V,E>{
 	
 	
 	/**
-	 * Performs the Berge Test for the graph specified during the instance construction.
+	 * Performs the Berge Recognition Algorithm.
 	 * <p> First this algorithm is used to test whether g or its complement contain a jewel, a pyramid or a configuration of type
-	 * 1, 2 or 3. If so, it is output that g is not Berge. If not, then every shortest odd hole in g is amenable. This asserted the near-cleaner subsets
-	 * of V(g) are determined. For each of them in turn it is checked if this subset is a near-cleaner and thus if there is an odd hole. If 
-	 * an odd hole is found this checker will output that g is not Berge. If no odd hole is found all near-cleaners for the complement graph are determined
-	 * and it will be proceeded as before. If again no odd hole is detected g is Berge.
+	 * 1, 2 or 3. If so, it is output that g is not Berge. If not, then every shortest odd hole in g is amenable. This asserted, the near-cleaner subsets
+	 * of V(g) are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
+	 * an odd hole is found, this checker will output that g is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
+	 * and it will be proceeded as before. If again no odd hole is detected, g is Berge.
 	 */
-	public boolean isBerge(){
-		long startTime = System.currentTimeMillis();
-		boolean isBerge = true;
-		SimpleGraph<V,E> complementGraph = new SimpleGraph<V,E>(g.getEdgeFactory());
-		new ComplementGraphGenerator<V,E>(g).generateGraph(complementGraph, null, null);
-		System.out.print(Calendar.getInstance().getTime()+"  ");
-		System.out.println("Phase 1...  Checking for Pyramids and Jewels");
-		if ((isBerge=!routine2(g)&&!routine2(complementGraph))){
-			System.out.print(Calendar.getInstance().getTime()+"  ");
-			System.out.println("Phase 2...  Gathering possible Near-Cleaners");
-			Iterator<Set<V>> it = routine3(g).iterator();
-			System.out.print(Calendar.getInstance().getTime()+"  ");
-			System.out.println("Phase 3...  Checking for Odd Holes");
-			while (it.hasNext()&&(isBerge =!routine1(g,it.next()))){}
-			if (isBerge){
-				System.out.print(Calendar.getInstance().getTime()+"  ");
-				System.out.println("Phase 4...  Gathering possible Near-Cleaners of the Complement Graph");
-				it = routine3(complementGraph).iterator();
-				System.out.print(Calendar.getInstance().getTime()+"  ");
-				System.out.println("Phase 5...  Checking for Odd Holes within the Complement Graph");
-				while (it.hasNext()&&(isBerge =!routine1(complementGraph,it.next()))){}
-				
+	public boolean isBerge(Graph<V,E> g){
+		Graph<V,E> complementGraph;
+		if (g.getType().isSimple()) complementGraph = new SimpleGraph<V,E>(g.getEdgeFactory());
+		else complementGraph = new Multigraph<V,E>(g.getEdgeFactory());
+		new ComplementGraphGenerator<V,E>(g).generateGraph(complementGraph);
+		
+		if (routine2(g)) {
+			System.err.print("Routine 2 failed");
+			return false;
+		}
+		if (routine2(complementGraph)) {
+			System.err.println("Routine 2 failed on complement");
+			return false;
+		}
+		
+		for (Set<V> it : routine3(g)){
+			if (routine1(g,it)) {
+				System.err.println("Routine 1 failed");
+				return false;
 			}
 		}
-		System.out.println("Elapsed Time: "+(System.currentTimeMillis()-startTime)+"ms");
-		if (isBerge){
-			System.out.println("Graph is Berge and therefor perfect");
+		
+		for (Set<V> it : routine3(complementGraph)){
+			if (routine1(complementGraph,it)){
+				System.err.println("Routine 1 failed on complement");
+				return false;
+			}
 		}
-		else{
-			System.out.println("Graph is not Berge and therefor not perfect");
-		}
-		return isBerge;
+		
+		return true;
 		
 	}
 	
