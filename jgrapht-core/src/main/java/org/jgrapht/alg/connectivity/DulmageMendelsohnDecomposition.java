@@ -45,6 +45,7 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * 
  * The implementation is based on:
  * Bunus P., Fritzson P., Methods for Structural Analysis and Debugging of Modelica Models, 2nd International Modelica Conference 2002
+ * It has a running time of $O(V + E)$.
  * 
  * @author Peter Harman
  * @param <V> Vertex type
