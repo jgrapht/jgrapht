@@ -39,12 +39,12 @@ public class Pair<A, B>
     /**
      * The first pair element
      */
-    protected final A first;
+    protected A first;
 
     /**
      * The second pair element
      */
-    protected final B second;
+    protected B second;
 
     /**
      * Create a new pair
@@ -76,6 +76,28 @@ public class Pair<A, B>
     public B getSecond()
     {
         return second;
+    }
+
+    /**
+     * Set the first element of the pair.
+     *
+     * @param f the element to be assigned.
+     */
+
+    public void setFirst(A f)
+    {
+        first = f;
+    }
+
+    /**
+     * Set the second element of the pair.
+     *
+     * @param s the element to be assigned.
+     */
+
+    public void setSecond(B s)
+    {
+        second = s;
     }
 
     /**
