@@ -1,25 +1,24 @@
 package org.jgrapht.alg.blossom;
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-class Tree implements Iterable<Node> {
+class Tree {
     private static int currentId = 1;
-    FibonacciHeap<Edge> plusPlusEdges;
-    FibonacciHeap<Edge> plusInftyEdges;
-    FibonacciHeap<Node> minusBlossoms;
     TreeEdge[] first;
     TreeEdge currentEdge;
     int currentDirection;
     double eps;
     double accumulatedEps;  // accumulates dual changes in dual updates
     Node root;
+    FibonacciHeap<Edge> plusPlusEdges;
+    FibonacciHeap<Edge> plusInfinityEdges;
+    FibonacciHeap<Node> minusBlossoms;
     private int id;
 
     public Tree(Node root) {
@@ -28,25 +27,9 @@ class Tree implements Iterable<Node> {
         root.isTreeRoot = true;
         first = new TreeEdge[2];
         plusPlusEdges = new FibonacciHeap<>();
-        plusInftyEdges = new FibonacciHeap<>();
+        plusInfinityEdges = new FibonacciHeap<>();
         minusBlossoms = new FibonacciHeap<>();
         this.id = currentId++;
-        BlossomPerfectMatching<Integer, DefaultEdge> matcher = new BlossomPerfectMatching<>(new DefaultUndirectedWeightedGraph<>(DefaultEdge.class));
-
-    }
-
-    static TreeEdge addTreeEdge(Tree from, Tree to) {
-        TreeEdge treeEdge = new TreeEdge(from, to);
-
-        treeEdge.next[0] = from.first[0];
-        treeEdge.next[1] = to.first[1];
-
-        from.first[0] = treeEdge;
-        to.first[1] = treeEdge;
-
-        to.currentEdge = treeEdge;
-        to.currentDirection = 0;
-        return treeEdge;
     }
 
     @Override
@@ -54,46 +37,55 @@ class Tree implements Iterable<Node> {
         return "Tree id=" + id;
     }
 
-    public FibonacciHeapNode<Edge> addInftyEdge(Edge edge) {
+    public FibonacciHeapNode<Edge> addInfinityEdge(Edge edge, double key) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
-        plusInftyEdges.insert(edgeNode, edge.slack);
+        plusInfinityEdges.insert(edgeNode, key);
         return edgeNode;
     }
 
-    public FibonacciHeapNode<Node> addMinusBlossom(Node blossom) {
+    public FibonacciHeapNode<Node> addMinusBlossom(Node blossom, double key) {
         FibonacciHeapNode<Node> blossomNode = new FibonacciHeapNode<>(blossom);
         blossom.fibNode = blossomNode;
-        minusBlossoms.insert(blossomNode, blossom.dual);
+        minusBlossoms.insert(blossomNode, key);
         return blossomNode;
     }
 
-    public FibonacciHeapNode<Edge> addPlusPlusEdge(Edge edge) {
+    public FibonacciHeapNode<Edge> addPlusPlusEdge(Edge edge, double key) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
-        plusPlusEdges.insert(edgeNode, edge.slack);
+        plusPlusEdges.insert(edgeNode, key);
         return edgeNode;
     }
 
+    public void removePlusInfinityEdge(Edge edge) {
+        plusInfinityEdges.delete(edge.fibNode);
+        edge.fibNode = null;
+    }
+
+    public void removeMinusBlossom(Node blossom) {
+        minusBlossoms.delete(blossom.fibNode);
+        blossom.fibNode = null;
+    }
+
+    public void removePlusPlusEdge(Edge edge) {
+        plusPlusEdges.delete(edge.fibNode);
+        edge.fibNode = null;
+    }
+
     public void forEachTreeEdge(BiConsumer<TreeEdge, Integer> action) {
-        TreeEdge treeEdge = first[0];
-        while (treeEdge != null) {
-            action.accept(treeEdge, 0);
-            treeEdge = treeEdge.next[0];
-        }
-        treeEdge = first[1];
-        while (treeEdge != null) {
-            action.accept(treeEdge, 1);
-            treeEdge = treeEdge.next[1];
+        for (TreeEdgeIterator iterator = treeEdgeIterator(); iterator.hasNext(); ) {
+            action.accept(iterator.next(), iterator.getCurrentDirection());
         }
     }
 
-    public Node getRoot() {
-        return root;
+    public void forEachTreeNode(Consumer<Node> action) {
+        for (TreeNodeIterator iterator = treeNodeIterator(); iterator.hasNext(); ) {
+            action.accept(iterator.next());
+        }
     }
 
-    @Override
-    public Iterator<Node> iterator() {
+    public TreeNodeIterator treeNodeIterator() {
         return new TreeNodeIterator();
     }
 

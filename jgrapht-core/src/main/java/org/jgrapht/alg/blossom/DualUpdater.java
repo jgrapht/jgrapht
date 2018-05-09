@@ -3,7 +3,7 @@ package org.jgrapht.alg.blossom;
 import org.jgrapht.util.FibonacciHeap;
 
 import static org.jgrapht.alg.blossom.BlossomPerfectMatching.EPS;
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFTY;
+import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFINITY;
 
 class DualUpdater<V, E> {
     private State<V, E> state;
@@ -15,7 +15,7 @@ class DualUpdater<V, E> {
     }
 
     boolean updateDuals(DualUpdateType type) {
-        // going through all tree roots
+        // going through all trees roots
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
             double eps = getEps(tree);
@@ -26,7 +26,7 @@ class DualUpdater<V, E> {
         }
 
         double dualChange = 0;
-        // updating tree.eps with respect to the accumulated eps
+        // updating trees.eps with respect to the accumulated eps
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             if (root.tree.accumulatedEps > 0) {
                 dualChange += root.tree.accumulatedEps;
@@ -37,10 +37,10 @@ class DualUpdater<V, E> {
     }
 
     double getEps(Tree tree) {
-        double eps = INFTY;
+        double eps = INFINITY;
         Edge varEdge;
         // checking minimum slack of the plus-infinity edges
-        if (!tree.plusInftyEdges.isEmpty() && (varEdge = tree.plusInftyEdges.min().getData()).slack < eps) {
+        if (!tree.plusInfinityEdges.isEmpty() && (varEdge = tree.plusInfinityEdges.min().getData()).slack < eps) {
             eps = varEdge.slack;
         }
         Node varNode;
@@ -56,7 +56,7 @@ class DualUpdater<V, E> {
             if (true) {
                 break;
             }
-            tree.plusPlusEdges.delete(varEdge.fibNode);
+            tree.removePlusPlusEdge(varEdge);
         }
         if (varEdge != null && 2 * eps > varEdge.slack) {
             eps = varEdge.slack / 2;
@@ -66,7 +66,7 @@ class DualUpdater<V, E> {
 
     boolean updateDualsSingle(Tree tree) {
         double eps = getEps(tree);
-        double eps_augment = INFTY;
+        double eps_augment = INFINITY;
         Edge varEdge;
         Edge augmentEdge = null;
         Node varNode;
@@ -99,7 +99,7 @@ class DualUpdater<V, E> {
     }
 
     void multipleTreeFixedDelta() {
-        double eps = INFTY;
+        double eps = INFINITY;
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
             double treeEps = tree.eps;

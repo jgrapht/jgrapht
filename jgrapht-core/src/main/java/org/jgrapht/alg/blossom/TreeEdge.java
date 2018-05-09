@@ -4,6 +4,9 @@ import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
 class TreeEdge {
+    private static int ID = 0;
+    int id;
+
     Tree[] head;
     TreeEdge[] next;
     FibonacciHeap<Edge> plusPlusEdges;
@@ -11,28 +14,54 @@ class TreeEdge {
     FibonacciHeap<Edge> plusMinusEdges1;
 
 
-    public TreeEdge(Tree from, Tree to) {
+    public TreeEdge() {
         this.head = new Tree[2];
-        head[0] = to;
-        head[1] = from;
         this.next = new TreeEdge[2];
         this.plusPlusEdges = new FibonacciHeap<>();
         this.plusMinusEdges0 = new FibonacciHeap<>();
         this.plusMinusEdges1 = new FibonacciHeap<>();
+        id = ID++;
     }
 
-    public FibonacciHeapNode<Edge> addToCurrentMinusPlusHeap(Edge edge, int direction) {
+    @Override
+    public String toString() {
+        return "TreeEdge id = " + id;
+    }
+
+    public FibonacciHeapNode<Edge> addToCurrentMinusPlusHeap(Edge edge, double key, int direction) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
-        getCurrentMinusPlusHeap(direction).insert(edgeNode, edge.slack);
+        getCurrentMinusPlusHeap(direction).insert(edgeNode, key);
         return edgeNode;
     }
 
-    public FibonacciHeapNode<Edge> addToCurrentPlusMinusHeap(Edge edge, int direction) {
+    public FibonacciHeapNode<Edge> addToCurrentPlusMinusHeap(Edge edge, double key, int direction) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
-        getCurrentPlusMinusHeap(direction).insert(edgeNode, edge.slack);
+        getCurrentPlusMinusHeap(direction).insert(edgeNode, key);
         return edgeNode;
+    }
+
+    public FibonacciHeapNode<Edge> addPlusPlusEdge(Edge edge, double key) {
+        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
+        edge.fibNode = edgeNode;
+        this.plusPlusEdges.insert(edgeNode, key);
+        return edgeNode;
+    }
+
+    public void removeFromCurrentMinusPlusHeap(Edge edge, int direction) {
+        getCurrentMinusPlusHeap(direction).delete(edge.fibNode);
+        edge.fibNode = null;
+    }
+
+    public void removeFromCurrentPlusMinusHeap(Edge edge, int direction) {
+        getCurrentPlusMinusHeap(direction).delete(edge.fibNode);
+        edge.fibNode = null;
+    }
+
+    public void removeFromPlusPlusHeap(Edge edge) {
+        plusPlusEdges.delete(edge.fibNode);
+        edge.fibNode = null;
     }
 
     public FibonacciHeap<Edge> getCurrentMinusPlusHeap(int currentDir) {
@@ -41,12 +70,5 @@ class TreeEdge {
 
     public FibonacciHeap<Edge> getCurrentPlusMinusHeap(int currentDir) {
         return currentDir == 0 ? plusMinusEdges1 : plusMinusEdges0;
-    }
-
-    public FibonacciHeapNode<Edge> addPlusPlusEdge(Edge edge) {
-        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
-        edge.fibNode = edgeNode;
-        this.plusPlusEdges.insert(edgeNode, edge.slack);
-        return edgeNode;
     }
 }

@@ -5,11 +5,10 @@ import org.jgrapht.Graph;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFTY;
+import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFINITY;
 
-class BlossomInitializer<V, E> {
+class Initializer<V, E> {
     private final Graph<V, E> graph;
     private int nodeNum;
     private int edgeNum;
@@ -19,13 +18,16 @@ class BlossomInitializer<V, E> {
     private Tree[] trees;
     private Map<V, Node> vertexMap;
     private Map<E, Edge> edgeMap;
+    private State<V, E> state;
 
-    public BlossomInitializer(Graph<V, E> graph) {
+    public Initializer(Graph<V, E> graph) {
         this.graph = graph;
     }
 
     public State<V, E> initialize(InitializationType type) {
         initGraph();
+        state = new State<>(nodes, edges, null, nodeNum, edgeNum, 0, new BlossomPerfectMatching.Statistics(), vertexMap, edgeMap);
+
         int treeNum;
         if (type == InitializationType.GREEDY) {
             treeNum = initGreedy();
@@ -33,23 +35,25 @@ class BlossomInitializer<V, E> {
             treeNum = nodeNum;
         }
         allocateTrees(treeNum);
+        state.trees = trees;
+        state.treeNum = treeNum;
         initAuxiliaryGraph();
 
-        return new State<>(nodes, edges, trees, nodeNum, edgeNum, treeNum, vertexMap, edgeMap);
+        return state;
     }
 
     void initAuxiliaryGraph() {
-        forEachTreeRoot(root -> {
+        state.forEachTreeRoot(root -> {
             Tree tree = root.tree;
             root.forAllEdges((edge, dir) -> {
                 Node opposite = edge.head[dir];
                 if (opposite.isInftyNode()) {
-                    tree.addInftyEdge(edge);
+                    tree.addInfinityEdge(edge, edge.slack);
                 } else if (!opposite.isProcessed) {
                     if (opposite.tree.currentEdge == null) {
-                        Tree.addTreeEdge(tree, opposite.tree);
+                        State.addTreeEdge(tree, opposite.tree);
                     }
-                    opposite.tree.currentEdge.addPlusPlusEdge(edge);
+                    opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
                 }
             });
             root.isProcessed = true;
@@ -59,9 +63,9 @@ class BlossomInitializer<V, E> {
 
     private int initGreedy() {
         // set all dual variables to infinity
-        forEachNode(node -> node.dual = INFTY);
+        state.forEachNode(node -> node.dual = INFINITY);
         // set dual variables to the minimum weight of the incident edges
-        forEachEdge(edge -> {
+        state.forEachEdge(edge -> {
             if (edge.head[0].dual > edge.slack) {
                 edge.head[0].dual = edge.slack;
             }
@@ -70,7 +74,7 @@ class BlossomInitializer<V, E> {
             }
         });
         // divide dual variables by to, decrease edge slack accordingly
-        forEachEdge(edge -> {
+        state.forEachEdge(edge -> {
             Node source = edge.head[0];
             Node target = edge.head[1];
             if (!source.isOuter) {
@@ -92,7 +96,7 @@ class BlossomInitializer<V, E> {
         for (int i = 0; i < nodeNum; i++) {
             Node node = nodes[i];
             if (!node.isInftyNode()) {
-                double minSlack = INFTY;
+                double minSlack = INFINITY;
                 for (Edge edge : node) {
                     if (edge.slack < minSlack) {
                         minSlack = edge.slack;
@@ -142,38 +146,20 @@ class BlossomInitializer<V, E> {
         edges = new Edge[edgeNum];
         vertexMap = new HashMap<>(nodeNum);
         edgeMap = new HashMap<>(edgeNum);
+        int i = 0;
         for (V vertex : graph.vertexSet()) {
-            nodes[nodeNum] = new Node();
-            vertexMap.put(vertex, nodes[nodeNum]);
-            ++nodeNum;
+            nodes[i] = new Node();
+            vertexMap.put(vertex, nodes[i]);
+            i++;
         }
+        i = 0;
         for (E e : graph.edgeSet()) {
             Node source = vertexMap.get(graph.getEdgeSource(e));
             Node target = vertexMap.get(graph.getEdgeTarget(e));
-            Edge edge = new Edge(source, target, graph.getEdgeWeight(e));
-            edges[edgeNum] = edge;
+            Edge edge = State.addEdge(source, target, graph.getEdgeWeight(e));
+            edges[i] = edge;
             edgeMap.put(e, edge);
-            source.addEdge(edges[edgeNum], 0);
-            target.addEdge(edges[edgeNum], 1);
-            ++edgeNum;
-        }
-    }
-
-    void forEachNode(Consumer<Node> action) {
-        for (int i = 0; i < nodeNum; i++) {
-            action.accept(nodes[i]);
-        }
-    }
-
-    void forEachEdge(Consumer<Edge> action) {
-        for (int i = 0; i < edgeNum; i++) {
-            action.accept(edges[i]);
-        }
-    }
-
-    void forEachTreeRoot(Consumer<Node> action) {
-        for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-            action.accept(root);
+            i++;
         }
     }
 

@@ -2,6 +2,9 @@ package org.jgrapht.alg.blossom;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import static org.junit.Assert.*;
 
 public class NodeTest {
@@ -58,6 +61,16 @@ public class NodeTest {
         to.forAllEdges((edge, dir) -> {
             assertSame(edge.head[dir], from);
         });
+    }
+
+    @Test
+    public void testAdjacentEdgeIterator1(){
+        Node node1 = new Node();
+        Node node2 = new Node();
+        Node node3 = new Node();
+        Edge edge1 = State.addEdge(node1, node2, 0);
+        Edge edge2 = State.addEdge(node1, node3, 0);
+        assertEquals(new HashSet<>(Arrays.asList(edge1, edge2)), State.edgesOf(node1));
     }
 
 }

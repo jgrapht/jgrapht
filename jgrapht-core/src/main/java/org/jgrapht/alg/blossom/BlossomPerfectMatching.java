@@ -10,9 +10,9 @@ import java.util.Objects;
 
 public class BlossomPerfectMatching<V, E> {
     public static final Options DEFAULT_OPTIONS = new Options(SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE,
-            DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA, BlossomInitializer.InitializationType.GREEDY);
+            DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.GREEDY);
     public static final double EPS = 10e-12;
-    public static final int INFTY = Integer.MAX_VALUE;
+    public static final int INFINITY = Integer.MAX_VALUE;
 
     private final Graph<V, E> graph;
     State<V, E> state;
@@ -20,7 +20,6 @@ public class BlossomPerfectMatching<V, E> {
     private int m;
     private PrimalUpdater primalUpdater;
     private DualUpdater dualUpdater;
-    private Statistics statistics;
     private Options options;
 
 
@@ -41,10 +40,10 @@ public class BlossomPerfectMatching<V, E> {
     }
 
     public MatchingAlgorithm.Matching<V, E> solve() {
-        BlossomInitializer<V, E> initializer = new BlossomInitializer<>(graph);
+        Initializer<V, E> initializer = new Initializer<>(graph);
         this.state = initializer.initialize(options.initializationType);
-        this.primalUpdater = new PrimalUpdater(state);
-        this.dualUpdater = new DualUpdater(state, primalUpdater);
+        this.primalUpdater = new PrimalUpdater<>(state);
+        this.dualUpdater = new DualUpdater<>(state, primalUpdater);
 
         Node root1 = null;
         Node root2 = null;
@@ -64,8 +63,8 @@ public class BlossomPerfectMatching<V, E> {
                 ////////////////////////////////////////////////////////////
                 /////////////////////// first phase ////////////////////////
                 ////////////////////////////////////////////////////////////
-                // going through all adjacent trees via tree edges directing to them and
-                // setting tree.currentEdge = treeEdge
+                // going through all adjacent trees via trees edges directing to them and
+                // setting trees.currentEdge = treeEdge
                 tree.forEachTreeEdge((treeEdge, dir) -> {
                     Tree tree2 = treeEdge.head[1 - dir];
                     tree2.currentEdge = treeEdge;
@@ -83,9 +82,9 @@ public class BlossomPerfectMatching<V, E> {
                 while (treeNum1 == state.treeNum) {
                     Edge edge;
                     Node node;
-                    // can grow tree
-                    if ((edge = tree.plusInftyEdges.min().getData()) != null && edge.slack <= 0) {
-                        tree.plusInftyEdges.removeMin();
+                    // can grow trees
+                    if ((edge = tree.plusInfinityEdges.min().getData()) != null && edge.slack <= 0) {
+                        tree.removePlusInfinityEdge(edge);
                         primalUpdater.grow(edge);
                     }
                     // can shrink blossom
@@ -104,9 +103,8 @@ public class BlossomPerfectMatching<V, E> {
                 ///////////////////////// third phase ////////////////////////
                 //////////////////////////////////////////////////////////////
                 if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER) {
-                    boolean progress = dualUpdater.updateDualsSingle(tree);
-                    if (progress) {
-                        // continue with the same tree
+                    if (dualUpdater.updateDualsSingle(tree)) {
+                        // continue with the same trees
                         continue;
                     }
                 }
@@ -129,8 +127,8 @@ public class BlossomPerfectMatching<V, E> {
         return null;
     }
 
-    Node getNode(V vertex) {
-        return (Node) state.vertexMap.get(vertex);
+    public Statistics getStatistics() {
+        return state.statistics;
     }
 
     enum SingleTreeDualUpdatePhase {
@@ -141,12 +139,49 @@ public class BlossomPerfectMatching<V, E> {
     public static class Options {
         SingleTreeDualUpdatePhase singleTreeDualUpdatePhase;
         DualUpdater.DualUpdateType dualUpdateType;
-        BlossomInitializer.InitializationType initializationType;
+        Initializer.InitializationType initializationType;
 
-        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, BlossomInitializer.InitializationType initializationType) {
+        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, Initializer.InitializationType initializationType) {
             this.singleTreeDualUpdatePhase = singleTreeDualUpdatePhase;
             this.dualUpdateType = dualUpdateType;
             this.initializationType = initializationType;
+        }
+    }
+
+    public static class Statistics {
+        int shrinkNum = 0;
+        int expandNum = 0;
+        int growNum = 0;
+
+        double augmentTime = 0;
+        double expandTime = 0;
+        double shrinkTime = 0;
+        double growTime = 0;
+
+        public int getShrinkNum() {
+            return shrinkNum;
+        }
+
+        public int getExpandNum() {
+            return expandNum;
+        }
+
+        public int getGrowNum() {
+            return growNum;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("Statistics{");
+            sb.append("shrinkNum=").append(shrinkNum);
+            sb.append(", expandNum=").append(expandNum);
+            sb.append(", growNum=").append(growNum);
+            sb.append(", augmentTime=").append(augmentTime);
+            sb.append(", expandTime=").append(expandTime);
+            sb.append(", shrinkTime=").append(shrinkTime);
+            sb.append(", growTime=").append(growTime);
+            sb.append('}');
+            return sb.toString();
         }
     }
 
@@ -175,24 +210,6 @@ public class BlossomPerfectMatching<V, E> {
 
         private Node advance() {
             return ++pos < state.nodeNum ? (current = state.nodes[pos]) : null;
-        }
-    }
-
-    public class Statistics {
-        int shrinkNum;
-        int expandNum;
-        int growNum;
-
-        public int getShrinkNum() {
-            return shrinkNum;
-        }
-
-        public int getExpandNum() {
-            return expandNum;
-        }
-
-        public int getGrowNum() {
-            return growNum;
         }
     }
 }

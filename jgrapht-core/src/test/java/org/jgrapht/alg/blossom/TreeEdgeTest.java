@@ -13,7 +13,7 @@ public class TreeEdgeTest {
         Node root2 = new Node();
         Tree tree1 = new Tree(root1);
         Tree tree2 = new Tree(root2);
-        TreeEdge treeEdge = Tree.addTreeEdge(tree1, tree2);
+        TreeEdge treeEdge = State.addTreeEdge(tree1, tree2);
 
         assertNotSame(treeEdge.getCurrentMinusPlusHeap(0), treeEdge.getCurrentPlusMinusHeap(0));
         assertNotSame(treeEdge.getCurrentMinusPlusHeap(1), treeEdge.getCurrentPlusMinusHeap(1));

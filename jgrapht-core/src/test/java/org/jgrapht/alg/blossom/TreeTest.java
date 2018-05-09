@@ -31,7 +31,7 @@ public class TreeTest {
         node2.addChild(node4);
         node2.addChild(node3);
 
-        Iterator<Node> iterator = tree.iterator();
+        Tree.TreeNodeIterator iterator = tree.treeNodeIterator();
         assertSame(iterator.next(), node1);
         assertSame(iterator.next(), node2);
         assertSame(iterator.next(), node3);
@@ -53,10 +53,10 @@ public class TreeTest {
         Tree tree3 = new Tree(node3);
         Tree tree4 = new Tree(node4);
         Tree tree5 = new Tree(node5);
-        TreeEdge treeEdge1 = Tree.addTreeEdge(tree1, tree2);
-        TreeEdge treeEdge2 = Tree.addTreeEdge(tree1, tree3);
-        TreeEdge treeEdge3 = Tree.addTreeEdge(tree4, tree1);
-        TreeEdge treeEdge4 = Tree.addTreeEdge(tree5, tree1);
+        TreeEdge treeEdge1 = State.addTreeEdge(tree1, tree2);
+        TreeEdge treeEdge2 = State.addTreeEdge(tree1, tree3);
+        TreeEdge treeEdge3 = State.addTreeEdge(tree4, tree1);
+        TreeEdge treeEdge4 = State.addTreeEdge(tree5, tree1);
         Set<TreeEdge> expectedOutEdges = new HashSet<>(Arrays.asList(treeEdge1, treeEdge2));
         Set<TreeEdge> expectedInEdges = new HashSet<>(Arrays.asList(treeEdge3, treeEdge4));
         Set<TreeEdge> actualOutEdges = new HashSet<>();
@@ -76,35 +76,12 @@ public class TreeTest {
     }
 
     @Test
-    public void testTreeEdgeAddition() {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
-        Node rootFrom = new Node();
-        Node rootTo = new Node();
-        Tree from = new Tree(rootFrom);
-        Tree to = new Tree(rootTo);
-        BlossomPerfectMatching<Integer, DefaultEdge> matcher = new BlossomPerfectMatching<>(graph);
-        TreeEdge edge = Tree.addTreeEdge(from, to);
-
-        assertSame(from.first[0], edge);
-        assertSame(to.first[1], edge);
-        assertNull(from.first[1]);
-        assertNull(to.first[0]);
-
-        from.forEachTreeEdge((treeEdge, dir) -> {
-            assertSame(treeEdge.head[dir], to);
-        });
-        to.forEachTreeEdge(((treeEdge, dir) -> {
-            assertSame(treeEdge.head[dir], from);
-        }));
-    }
-
-    @Test
     public void testAddMinusBlossom() {
         Node root = new Node();
         Tree tree = new Tree(root);
 
-        Node blossom = new Node(true, false, true, true, false, Node.Label.MINUS);
-        tree.addMinusBlossom(blossom);
+        Node blossom = new Node(true, false, true, false, Node.Label.MINUS);
+        tree.addMinusBlossom(blossom, blossom.dual);
 
         assertNotNull(blossom.fibNode);
         assertSame(blossom.fibNode.getData(), blossom);

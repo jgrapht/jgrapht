@@ -9,19 +9,20 @@ import java.util.function.BiConsumer;
 import static org.jgrapht.alg.blossom.Node.Label.*;
 
 class Node implements Comparable<Node>, Iterable<Edge> {
-    private static int currentId = 1;
+    private static int currentId = 0;
     FibonacciHeapNode<Node> fibNode;
-    boolean isPseudonode;
     boolean isTreeRoot;
     boolean isBlossom;
     boolean isOuter;
     boolean isProcessed;
+    boolean isMarked;
     Label label;
     Edge[] first;
     Edge matched;
     Tree tree;
     double dual;
     Node parent;
+    Edge parentEdge;
     Node firstTreeChild;
     Node treeSiblingNext;
     Node treeSiblingPrev;
@@ -30,15 +31,14 @@ class Node implements Comparable<Node>, Iterable<Edge> {
     private int id;
 
     public Node() {
-        this(false, false, false, true, false, PLUS);
+        this(false, false, true, false, PLUS);
     }
 
     public Node(Label label) {
-        this(false, false, false, true, false, label);
+        this(false, false, true, false, label);
     }
 
-    public Node(boolean isPseudonode, boolean isTreeRoot, boolean isBlossom, boolean isOuter, boolean isProcessed, Label label) {
-        this.isPseudonode = isPseudonode;
+    public Node(boolean isTreeRoot, boolean isBlossom, boolean isOuter, boolean isProcessed, Label label) {
         this.isTreeRoot = isTreeRoot;
         this.isBlossom = isBlossom;
         this.isOuter = isOuter;
@@ -64,27 +64,6 @@ class Node implements Comparable<Node>, Iterable<Edge> {
         return "Node id = " + id;
     }
 
-    public void forAllEdges(BiConsumer<Edge, Integer> action) {
-        Edge edge = first[0];
-        if (edge != null) {
-            action.accept(edge, 0);
-            edge = edge.next[0];
-            while (edge != first[0]) {
-                action.accept(edge, 0);
-                edge = edge.next[0];
-            }
-        }
-        edge = first[1];
-        if (edge != null) {
-            action.accept(edge, 1);
-            edge = edge.next[1];
-            while (edge != first[1]) {
-                action.accept(edge, 1);
-                edge = edge.next[1];
-            }
-        }
-    }
-
     public void addEdge(Edge edge, int dir) {
         if (first[dir] == null) {
             first[dir] = edge.next[dir] = edge.prev[dir] = edge;
@@ -95,6 +74,18 @@ class Node implements Comparable<Node>, Iterable<Edge> {
             first[dir].prev[dir] = edge;
         }
         edge.head[1 - dir] = this;
+    }
+
+    public void removeEdge(Edge edge, int dir) {
+        if (edge.prev[dir].next[dir] == edge) {
+            // its the only edge of this node in the direction dir
+            first[dir] = null;
+        } else {
+            // remove edge from the linked list
+            edge.prev[dir].next[dir] = edge.next[dir];
+            edge.next[dir].prev[dir] = edge.prev[dir];
+            first[dir] = edge.next[dir]; // avoid checking whether edge is the first edge of this node in the direction dir
+        }
     }
 
     public void addChild(Node child) {
@@ -109,6 +100,19 @@ class Node implements Comparable<Node>, Iterable<Edge> {
             firstTreeChild.treeSiblingPrev = child;
         }
         firstTreeChild = child;
+    }
+
+    void removeFromChildList() {
+        if (treeSiblingNext == null) {
+            parent.firstTreeChild.treeSiblingPrev = treeSiblingPrev;
+        } else {
+            treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
+        }
+        if (treeSiblingPrev.treeSiblingNext != null) {
+            treeSiblingPrev.treeSiblingNext = treeSiblingNext;
+        } else {
+            parent.firstTreeChild = treeSiblingNext;
+        }
     }
 
     public boolean isPlusNode() {
@@ -141,8 +145,19 @@ class Node implements Comparable<Node>, Iterable<Edge> {
         this.tree = tree;
     }
 
+    public void forAllEdges(BiConsumer<Edge, Integer> action) {
+        for (AdjacentEdgeIterator iterator = adjacentEdgesIterator(); iterator.hasNext(); ) {
+            Edge edge = iterator.next();
+            action.accept(edge, iterator.getDir());
+        }
+    }
+
     @Override
     public Iterator<Edge> iterator() {
+        return new AdjacentEdgeIterator();
+    }
+
+    public AdjacentEdgeIterator adjacentEdgesIterator() {
         return new AdjacentEdgeIterator();
     }
 
@@ -165,6 +180,10 @@ class Node implements Comparable<Node>, Iterable<Edge> {
                 this.dir = 0;
             }
             current = currentEdge;
+        }
+
+        public int getDir() {
+            return dir;
         }
 
         @Override
