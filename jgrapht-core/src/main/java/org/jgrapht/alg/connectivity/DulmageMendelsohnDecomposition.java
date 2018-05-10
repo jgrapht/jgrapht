@@ -21,8 +21,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching;
@@ -42,11 +45,11 @@ import org.jgrapht.traverse.DepthFirstIterator;
  *
  * A fine decomposition can be performed that additionally performs a
  * strongly-connected-components algorithm on the remaining subset.
- * 
- * The implementation is based on:
- * Bunus P., Fritzson P., Methods for Structural Analysis and Debugging of Modelica Models, 2nd International Modelica Conference 2002
- * It has a running time of $O(V + E)$.
- * 
+ *
+ * The implementation is based on: Bunus P., Fritzson P., Methods for Structural
+ * Analysis and Debugging of Modelica Models, 2nd International Modelica
+ * Conference 2002 It has a running time of $O(V + E)$.
+ *
  * @author Peter Harman
  * @param <V> Vertex type
  * @param <E> Edge type
@@ -58,27 +61,31 @@ public class DulmageMendelsohnDecomposition<V, E> {
     private final Set<V> partition2;
 
     /**
-     * Construct the algorithm for a given (bipartite) graph and it's partitions
+     * Construct the algorithm for a given bipartite graph $G=(V_1,V_2,E)$ and 
+     * it's partitions $V_1$ and $V_2$, where $V_1\cap V_2=\emptyset$.
      *
      * @param graph bipartite graph
      * @param partition1 the first partition of vertices in the bipartite graph
      * @param partition2 the second partition of vertices in the bipartite graph
      */
     public DulmageMendelsohnDecomposition(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) {
-        this.graph = graph;
+        this.graph = Objects.requireNonNull(graph);
         this.partition1 = partition1;
         this.partition2 = partition2;
+        assert GraphTests.isBipartite(graph);
     }
 
     /**
      * Perform the decomposition, using Hopcroft-Karp for the matching
      *
-     * @param fine true if the fine decomposition is required
-     * @return the Decomposition
+     * @param fine true if the fine decomposition is required, false if the 
+     * coarse decomposition is required
+     * @return the {@link Decomposition}
      */
-    public Decomposition<V, E> decompose(boolean fine) {
+    public Decomposition<V, E> getDecomposition(boolean fine) {
         // Get a maximum matching to the bipartite problem
-        HopcroftKarpMaximumCardinalityBipartiteMatching<V, E> hopkarp = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(graph, partition1, partition2);
+        HopcroftKarpMaximumCardinalityBipartiteMatching<V, E> hopkarp = 
+                new HopcroftKarpMaximumCardinalityBipartiteMatching<>(graph, partition1, partition2);
         Matching<V, E> matching = hopkarp.getMatching();
         return decompose(matching, fine);
     }
@@ -86,9 +93,9 @@ public class DulmageMendelsohnDecomposition<V, E> {
     /**
      * Perform the decomposition, using a precalculated bipartite matching
      *
-     * @param matching the matching from a MatchingAlgorithm
+     * @param matching the matching from a {@link MatchingAlgorithm}
      * @param fine true if the fine decomposition is required
-     * @return the Decomposition
+     * @return the {@link Decomposition}
      */
     public Decomposition<V, E> decompose(Matching<V, E> matching, boolean fine) {
         // Determine the unmatched vertices from both partitions
@@ -127,11 +134,11 @@ public class DulmageMendelsohnDecomposition<V, E> {
         if (fine) {
             List<Set<V>> out = new ArrayList<>();
             // Build a directed graph between edges of the matching in subset3
-            Graph<E, DefaultEdge> H = asDirectedEdgeGraph(matching, subset3);
+            Graph<E, DefaultEdge> graphH = asDirectedEdgeGraph(matching, subset3);
 
             // Perform strongly-connected-components on the graph
             StrongConnectivityAlgorithm<E, DefaultEdge> sci
-                    = new KosarajuStrongConnectivityInspector<>(H);
+                    = new KosarajuStrongConnectivityInspector<>(graphH);
             // Divide into sets of vertices
             for (Set<E> edgeSet : sci.stronglyConnectedSets()) {
                 Set<V> vertexSet = new HashSet<>();
@@ -152,8 +159,8 @@ public class DulmageMendelsohnDecomposition<V, E> {
     /**
      * The output of a decomposition operation
      *
-     * @param <V>
-     * @param <E>
+     * @param <V> vertex type
+     * @param <E> edge type
      */
     public static class Decomposition<V, E> {
 
@@ -236,18 +243,21 @@ public class DulmageMendelsohnDecomposition<V, E> {
         unmatched1.addAll(partition1);
         unmatched2.addAll(partition2);
         matching.forEach((e) -> {
-            if (partition1.contains(graph.getEdgeSource(e))) {
-                unmatched1.remove(graph.getEdgeSource(e));
-                unmatched2.remove(graph.getEdgeTarget(e));
+            V source = graph.getEdgeSource(e);
+            V target = graph.getEdgeTarget(e);
+            if (partition1.contains(source)) {
+                unmatched1.remove(source);
+                unmatched2.remove(target);
             } else {
-                unmatched2.remove(graph.getEdgeSource(e));
-                unmatched1.remove(graph.getEdgeTarget(e));
+                unmatched2.remove(source);
+                unmatched1.remove(target);
             }
         });
     }
 
     private Graph<V, DefaultEdge> asDirectedGraph(Matching<V, E> matching) {
-        GraphBuilder<V, DefaultEdge, ? extends DefaultDirectedGraph<V, DefaultEdge>> builder = DefaultDirectedGraph.createBuilder(DefaultEdge.class);
+        GraphBuilder<V, DefaultEdge, ? extends DefaultDirectedGraph<V, DefaultEdge>> builder 
+                = DefaultDirectedGraph.createBuilder(DefaultEdge.class);
         graph.vertexSet().forEach((v) -> {
             builder.addVertex(v);
         });
@@ -270,34 +280,35 @@ public class DulmageMendelsohnDecomposition<V, E> {
     }
 
     private Graph<E, DefaultEdge> asDirectedEdgeGraph(Matching<V, E> matching, Set<V> subset) {
-        GraphBuilder<E, DefaultEdge, ? extends DefaultDirectedGraph<E, DefaultEdge>> H = DefaultDirectedGraph.createBuilder(DefaultEdge.class);
+        GraphBuilder<E, DefaultEdge, ? extends DefaultDirectedGraph<E, DefaultEdge>> graphHBuilder 
+                = DefaultDirectedGraph.createBuilder(DefaultEdge.class);
         for (E e : graph.edgeSet()) {
             V v1 = graph.getEdgeSource(e);
             V v2 = graph.getEdgeTarget(e);
             if (subset.contains(v1) && subset.contains(v2)) {
                 if (matching.getEdges().contains(e)) {
-                    H.addVertex(e);
+                    graphHBuilder.addVertex(e);
                 } else {
                     E e1 = null;
                     E e2 = null;
                     for (E other : graph.edgesOf(v1)) {
                         if (matching.getEdges().contains(other)) {
                             e1 = other;
-                            H.addVertex(e1);
+                            graphHBuilder.addVertex(e1);
                             break;
                         }
                     }
                     for (E other : graph.edgesOf(v2)) {
                         if (matching.getEdges().contains(other)) {
                             e2 = other;
-                            H.addVertex(e2);
+                            graphHBuilder.addVertex(e2);
                             break;
                         }
                     }
-                    H.addEdge(e1, e2);
+                    graphHBuilder.addEdge(e1, e2);
                 }
             }
         }
-        return H.build();
+        return graphHBuilder.build();
     }
 }
