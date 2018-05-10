@@ -61,9 +61,9 @@ public class DulmageMendelsohnDecompositionTest {
 
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 graph, new HashSet<>(partition1), new HashSet<>(partition2));
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == graph.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == graph.vertexSet().size());
 
     }
@@ -88,9 +88,9 @@ public class DulmageMendelsohnDecompositionTest {
 
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 graph, new HashSet<>(partition1), new HashSet<>(partition2));
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == graph.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == graph.vertexSet().size());
 
     }
@@ -107,9 +107,9 @@ public class DulmageMendelsohnDecompositionTest {
         Graphs.addAllVertices(graph, partition2);
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 graph, new HashSet<>(partition1), new HashSet<>(partition2));
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == graph.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == graph.vertexSet().size());
 
     }
@@ -128,9 +128,9 @@ public class DulmageMendelsohnDecompositionTest {
 
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 graph, partition1, partition2);
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == graph.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == graph.vertexSet().size());
 
     }
@@ -150,9 +150,9 @@ public class DulmageMendelsohnDecompositionTest {
 
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 graph, partition1, partition2);
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == graph.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == graph.vertexSet().size());
 
     }
@@ -175,9 +175,9 @@ public class DulmageMendelsohnDecompositionTest {
 
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 g, left, right);
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == g.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == g.vertexSet().size());
     }
 
@@ -194,9 +194,9 @@ public class DulmageMendelsohnDecompositionTest {
         }
         DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                 graph, partition1, partition2);
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
         assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == graph.vertexSet().size());
-        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+        DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
         assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == graph.vertexSet().size());
     }
 
@@ -213,9 +213,9 @@ public class DulmageMendelsohnDecompositionTest {
             generator.generateGraph(graph);
             DulmageMendelsohnDecomposition<Integer, DefaultEdge> dm = new DulmageMendelsohnDecomposition<>(
                     graph, generator.getFirstPartition(), generator.getSecondPartition());
-            DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.decompose(false);
+            DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> course = dm.getDecomposition(false);
             assertTrue(course.getPartition1DominatedSet().size() + course.getPartition2DominatedSet().size() + course.getPerfectMatchedSets().get(0).size() == vertices * 2);
-            DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.decompose(true);
+            DulmageMendelsohnDecomposition.Decomposition<Integer, DefaultEdge> fine = dm.getDecomposition(true);
             assertTrue(fine.getPartition1DominatedSet().size() + fine.getPartition2DominatedSet().size() + count(fine.getPerfectMatchedSets()) == vertices * 2);
         }
     }
