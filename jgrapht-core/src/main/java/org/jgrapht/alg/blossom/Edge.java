@@ -3,14 +3,12 @@ package org.jgrapht.alg.blossom;
 import org.jgrapht.util.FibonacciHeapNode;
 
 class Edge {
-    private static int ID = 0;
     FibonacciHeapNode<Edge> fibNode;
     double slack;
     Node[] headOriginal;
     Node[] head;
     Edge[] next;
     Edge[] prev;
-    private int id;
 
     public Edge(Node from, Node to, double slack) {
         headOriginal = new Node[2];
@@ -21,7 +19,10 @@ class Edge {
         head[0] = headOriginal[0] = from;
         head[1] = headOriginal[1] = to;
         this.slack = slack;
-        id = ID++;
+    }
+
+    public Node getOppositeOriginal(Node endPoint){
+        return headOriginal[0] == endPoint ? headOriginal[1] : headOriginal[0];
     }
 
     public Edge(Node from, Node to) {
@@ -34,7 +35,7 @@ class Edge {
 
     @Override
     public String toString() {
-        return "Edge id = " + id;
+        return "Edge (" + headOriginal[0].id + "," + headOriginal[1].id + ")";
     }
 
     public Node getOuterHead(int direction) {

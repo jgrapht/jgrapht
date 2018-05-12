@@ -35,6 +35,13 @@ class State<V, E> {
         treeEdge.head[0] = to;
         treeEdge.head[1] = from;
 
+        if (from.first[0] != null) {
+            from.first[0].prev[0] = treeEdge;
+        }
+        if (to.first[1] != null) {
+            to.first[1].prev[1] = treeEdge;
+        }
+
         treeEdge.next[0] = from.first[0];
         treeEdge.next[1] = to.first[1];
 
@@ -53,19 +60,9 @@ class State<V, E> {
         return edge;
     }
 
-    // debug only
-    public static Set<Edge> edgesOf(Node node) {
-        Set<Edge> edges = new HashSet<>();
-        node.forAllEdges((edge, dir) -> edges.add(edge));
-        return edges;
-    }
-
-    public static Set<TreeEdge> treeEdgesOf(Tree tree) {
-        Set<TreeEdge> result = new HashSet<>();
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
-            result.add(iterator.next());
-        }
-        return result;
+    public void moveEdge(Node from, Node to, Edge edge, int dir) {
+        from.removeEdge(edge, dir);
+        to.addEdge(edge, dir);
     }
 
     public TreeRootsIterator treeRootsIterator() {
@@ -74,11 +71,6 @@ class State<V, E> {
 
     public BlossomNodesIterator blossomNodesIterator(Node root, Edge blossomFormingEdge) {
         return new BlossomNodesIterator(root, blossomFormingEdge);
-    }
-
-    public void moveEdge(Node from, Node to, Edge edge, int dir) {
-        from.removeEdge(edge, dir);
-        to.addEdge(edge, dir);
     }
 
     // debug only
@@ -138,7 +130,6 @@ class State<V, E> {
         }
     }
 
-
     public class BlossomNodesIterator implements Iterator<Node> {
         private Node root;
         private Node currentNode;
@@ -149,6 +140,8 @@ class State<V, E> {
         public BlossomNodesIterator(Node root, Edge blossomFormingEdge) {
             this.root = root;
             this.blossomFormingEdge = blossomFormingEdge;
+            currentNode = current = blossomFormingEdge.head[0];
+            currentDirection = 0;
         }
 
         @Override
@@ -158,6 +151,10 @@ class State<V, E> {
             }
             current = advance();
             return current != null;
+        }
+
+        public int getCurrentDirection() {
+            return currentDirection;
         }
 
         @Override
@@ -173,17 +170,13 @@ class State<V, E> {
         private Node advance() {
             if (currentNode == null) {
                 return null;
+            } else if (currentNode == root && currentDirection == 0) {
+                currentDirection = 1;
+                return currentNode = blossomFormingEdge.head[1];
+            } else if (currentNode.treeParent == root && currentDirection == 1) {
+                return currentNode = null;
             } else {
-                if (currentNode == root) {
-                    if (currentDirection == 1) {
-                        return currentNode = null;
-                    } else {
-                        currentDirection = 1;
-                        return currentNode = blossomFormingEdge.head[1];
-                    }
-                } else {
-                    return currentNode = currentNode.parent;
-                }
+                return currentNode = currentNode.treeParent;
             }
         }
 

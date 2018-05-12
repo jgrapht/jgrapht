@@ -36,8 +36,8 @@ public class InitializerTest {
         assertEquals(0, state.treeNum);
 
         assertEquals(new HashSet<>(), state.treeRoots());
-        assertEquals(new HashSet<>(Collections.singletonList(edge12)), state.edgesOf(node1));
-        assertEquals(new HashSet<>(Collections.singletonList(edge12)), state.edgesOf(node2));
+        assertEquals(new HashSet<>(Collections.singletonList(edge12)), Debugger.edgesOf(node1));
+        assertEquals(new HashSet<>(Collections.singletonList(edge12)), Debugger.edgesOf(node2));
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -103,21 +103,21 @@ public class InitializerTest {
         assertEquals(expectedRoots.size(), actualRoots.size());
         assertTrue(actualRoots.containsAll(expectedRoots));
 
-        assertEquals(new HashSet<>(Collections.singletonList(edge12)), State.edgesOf(node1));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23, edge25)), State.edgesOf(node2));
-        assertEquals(new HashSet<>(Collections.singletonList(edge23)), State.edgesOf(node3));
-        assertEquals(new HashSet<>(Collections.singletonList(edge45)), State.edgesOf(node4));
-        assertEquals(new HashSet<>(Arrays.asList(edge25, edge45, edge56)), State.edgesOf(node5));
-        assertEquals(new HashSet<>(Collections.singletonList(edge56)), State.edgesOf(node6));
-        assertEquals(new HashSet<>(), State.edgesOf(node7));
+        assertEquals(new HashSet<>(Collections.singletonList(edge12)), Debugger.edgesOf(node1));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23, edge25)), Debugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Collections.singletonList(edge23)), Debugger.edgesOf(node3));
+        assertEquals(new HashSet<>(Collections.singletonList(edge45)), Debugger.edgesOf(node4));
+        assertEquals(new HashSet<>(Arrays.asList(edge25, edge45, edge56)), Debugger.edgesOf(node5));
+        assertEquals(new HashSet<>(Collections.singletonList(edge56)), Debugger.edgesOf(node6));
+        assertEquals(new HashSet<>(), Debugger.edgesOf(node7));
 
-        assertEquals(1, State.treeEdgesOf(tree1).size());
-        assertEquals(3, State.treeEdgesOf(tree2).size());
-        assertEquals(1, State.treeEdgesOf(tree3).size());
-        assertEquals(1, State.treeEdgesOf(tree4).size());
-        assertEquals(3, State.treeEdgesOf(tree5).size());
-        assertEquals(1, State.treeEdgesOf(tree6).size());
-        assertEquals(0, State.treeEdgesOf(tree7).size());
+        assertEquals(1, Debugger.treeEdgesOf(tree1).size());
+        assertEquals(3, Debugger.treeEdgesOf(tree2).size());
+        assertEquals(1, Debugger.treeEdgesOf(tree3).size());
+        assertEquals(1, Debugger.treeEdgesOf(tree4).size());
+        assertEquals(3, Debugger.treeEdgesOf(tree5).size());
+        assertEquals(1, Debugger.treeEdgesOf(tree6).size());
+        assertEquals(0, Debugger.treeEdgesOf(tree7).size());
     }
 
 

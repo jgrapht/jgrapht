@@ -1,10 +1,17 @@
 package org.jgrapht.alg.blossom;
 
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
+import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class NodeTest {
@@ -15,13 +22,13 @@ public class NodeTest {
         Node child = new Node();
         parent.addChild(child);
         assertSame(parent.firstTreeChild, child);
-        assertSame(child.parent, parent);
+        assertSame(child.treeParent, parent);
         assertNull(child.treeSiblingNext);
         assertSame(child.treeSiblingPrev, child);
     }
 
     @Test
-    public void testAddChild2(){
+    public void testAddChild2() {
         Node parent = new Node();
         Node firstChild = new Node();
         Node secondChild = new Node();
@@ -29,16 +36,19 @@ public class NodeTest {
         parent.addChild(secondChild);
 
         assertSame(parent.firstTreeChild, secondChild);
-        assertSame(firstChild.parent, parent);
-        assertSame(secondChild.parent, parent);
+        assertSame(firstChild.treeParent, parent);
+        assertSame(secondChild.treeParent, parent);
         assertNull(firstChild.treeSiblingNext);
         assertSame(firstChild.treeSiblingPrev, secondChild);
         assertSame(secondChild.treeSiblingNext, firstChild);
         assertSame(secondChild.treeSiblingPrev, firstChild);
     }
 
+    /**
+     * Tests correct edge addition and correct edge direction
+     */
     @Test
-    public void testEdgeAddition() {
+    public void testAddEdge() {
         Node from = new Node();
         Node to = new Node();
         Edge nodeEdge = new Edge(from, to, 0);
@@ -63,14 +73,168 @@ public class NodeTest {
         });
     }
 
+    /**
+     * Tests iteration over all incident edges and correct edge direction
+     */
     @Test
-    public void testAdjacentEdgeIterator1(){
-        Node node1 = new Node();
-        Node node2 = new Node();
-        Node node3 = new Node();
-        Edge edge1 = State.addEdge(node1, node2, 0);
-        Edge edge2 = State.addEdge(node1, node3, 0);
-        assertEquals(new HashSet<>(Arrays.asList(edge1, edge2)), State.edgesOf(node1));
+    public void testAdjacentEdgeIterator1() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+        DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge14 = state.edgeMap.get(e14);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge24 = state.edgeMap.get(e24);
+        Edge edge34 = state.edgeMap.get(e34);
+
+        testAdjacentEdgeIteratorOf(node1, new HashSet<>(Arrays.asList(edge12, edge14)));
+        testAdjacentEdgeIteratorOf(node2, new HashSet<>(Arrays.asList(edge12, edge23, edge24)));
+        testAdjacentEdgeIteratorOf(node3, new HashSet<>(Arrays.asList(edge23, edge34)));
+        testAdjacentEdgeIteratorOf(node4, new HashSet<>(Arrays.asList(edge14, edge24, edge34)));
+    }
+
+    /**
+     * Tests {@link Node.AdjacentEdgeIterator} for a particular node
+     *
+     * @param node                  node whose adjacent edge iterator is been tested
+     * @param expectedIncidentEdges expected incident edges of the {@code node}
+     */
+    private void testAdjacentEdgeIteratorOf(Node node, Set<Edge> expectedIncidentEdges) {
+        Set<Edge> adj = new HashSet<>();
+        for (Node.AdjacentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
+            Edge edge = iterator.next();
+            assertEquals(node, edge.head[1 - iterator.getDir()]);
+            adj.add(edge);
+        }
+        assertEquals(adj, expectedIncidentEdges);
+    }
+
+    /**
+     * Tests the proper removal of nodes from their child lists including removal of tree roots from
+     * tree roots linked list
+     */
+    @Test
+    public void testRemoveFromChildList() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+        DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+        DefaultWeightedEdge e16 = Graphs.addEdgeWithVertices(graph, 1, 6, 0);
+
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+        Node node5 = state.vertexMap.get(5);
+        Node node6 = state.vertexMap.get(6);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge14 = state.edgeMap.get(e14);
+        Edge edge45 = state.edgeMap.get(e45);
+        Edge edge16 = state.edgeMap.get(e16);
+
+        primalUpdater.augment(edge23);
+        primalUpdater.augment(edge45);
+        primalUpdater.grow(edge12, false);
+        primalUpdater.grow(edge14, false);
+
+        Set<Node> empty = new HashSet<>();
+
+        assertEquals(new HashSet<>(Collections.singletonList(node3)), Debugger.childrenOf(node2));
+        node3.removeFromChildList();
+        assertEquals(empty, Debugger.childrenOf(node2));
+
+        assertEquals(new HashSet<>(Collections.singletonList(node5)), Debugger.childrenOf(node4));
+        node5.removeFromChildList();
+        assertEquals(empty, Debugger.childrenOf(node4));
+
+        assertEquals(new HashSet<>(Arrays.asList(node2, node4)), Debugger.childrenOf(node1));
+        node4.removeFromChildList();
+        assertEquals(new HashSet<>(Collections.singletonList(node2)), Debugger.childrenOf(node1));
+        node2.removeFromChildList();
+        assertEquals(empty, Debugger.childrenOf(node1));
+
+        assertEquals(new HashSet<>(Arrays.asList(node1, node6)), Debugger.treeRoots(state));
+        node1.removeFromChildList();
+        assertEquals(new HashSet<>(Collections.singletonList(node6)), Debugger.treeRoots(state));
+        node6.removeFromChildList();
+        assertEquals(empty, Debugger.treeRoots(state));
+    }
+
+    /**
+     * Tests proper moving of child lists
+     */
+    @Test
+    public void testMoveChildrenTo() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+        DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+        DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
+        DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+        Node node5 = state.vertexMap.get(5);
+        Node node6 = state.vertexMap.get(6);
+        Node node7 = state.vertexMap.get(7);
+        Node node8 = state.vertexMap.get(8);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge14 = state.edgeMap.get(e14);
+        Edge edge45 = state.edgeMap.get(e45);
+        Edge edge67 = state.edgeMap.get(e67);
+        Edge edge78 = state.edgeMap.get(e78);
+
+        // building tree structures
+        primalUpdater.augment(edge23);
+        primalUpdater.augment(edge45);
+        primalUpdater.augment(edge78);
+        primalUpdater.grow(edge12, false);
+        primalUpdater.grow(edge14, false);
+        primalUpdater.grow(edge67, false);
+
+        // node5 and node4 have no children
+        node5.moveChildrenTo(node3);
+        assertEquals(new HashSet<>(), Debugger.childrenOf(node3));
+
+        // moving child list of size 1 to empty list
+        node2.moveChildrenTo(node4);
+        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), Debugger.childrenOf(node4));
+        //moving child list of size 2 to empty list
+        node4.moveChildrenTo(node2);
+        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), Debugger.childrenOf(node2));
+
+        // moving child list to non-empty child list
+        node1.moveChildrenTo(node6);
+        assertEquals(new HashSet<>(Arrays.asList(node2, node4, node7)), Debugger.childrenOf(node6));
     }
 
 }

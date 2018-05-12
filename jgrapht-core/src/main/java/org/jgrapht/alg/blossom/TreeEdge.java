@@ -8,6 +8,7 @@ class TreeEdge {
     int id;
 
     Tree[] head;
+    TreeEdge[] prev;
     TreeEdge[] next;
     FibonacciHeap<Edge> plusPlusEdges;
     FibonacciHeap<Edge> plusMinusEdges0;
@@ -16,6 +17,7 @@ class TreeEdge {
 
     public TreeEdge() {
         this.head = new Tree[2];
+        this.prev = new TreeEdge[2];
         this.next = new TreeEdge[2];
         this.plusPlusEdges = new FibonacciHeap<>();
         this.plusMinusEdges0 = new FibonacciHeap<>();
@@ -23,9 +25,24 @@ class TreeEdge {
         id = ID++;
     }
 
+    public void removeFromTreeEdgeList() {
+        for (int dir = 0; dir < 2; dir++) {
+            if (prev[dir] != null) {
+                prev[dir].next[dir] = next[dir];
+            } else {
+                // this is the first edge in this direction
+                head[1 - dir].first[dir] = next[dir];
+            }
+            if (next[dir] != null) {
+                next[dir].prev[dir] = prev[dir];
+            }
+        }
+        head[0] = head[1] = null;
+    }
+
     @Override
     public String toString() {
-        return "TreeEdge id = " + id;
+        return "TreeEdge (" + head[0].id + ":" + head[1].id + "), id = " + id;
     }
 
     public FibonacciHeapNode<Edge> addToCurrentMinusPlusHeap(Edge edge, double key, int direction) {

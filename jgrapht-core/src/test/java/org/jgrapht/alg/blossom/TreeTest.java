@@ -1,13 +1,9 @@
 package org.jgrapht.alg.blossom;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import static org.junit.Assert.*;

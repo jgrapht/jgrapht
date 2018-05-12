@@ -1,14 +1,17 @@
 package org.jgrapht.alg.blossom;
 
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeapNode;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import static org.jgrapht.alg.blossom.Node.Label.*;
 
-class Node implements Comparable<Node>, Iterable<Edge> {
+class Node implements Iterable<Edge> {
     private static int currentId = 0;
     FibonacciHeapNode<Node> fibNode;
     boolean isTreeRoot;
@@ -21,14 +24,16 @@ class Node implements Comparable<Node>, Iterable<Edge> {
     Edge matched;
     Tree tree;
     double dual;
-    Node parent;
+    double blossomEps;
+    Node treeParent;
     Edge parentEdge;
     Node firstTreeChild;
     Node treeSiblingNext;
     Node treeSiblingPrev;
     Node blossomParent;
     Node blossomGrandparent;
-    private int id;
+    Node blossomSibling;
+    int id;
 
     public Node() {
         this(false, false, true, false, PLUS);
@@ -48,22 +53,6 @@ class Node implements Comparable<Node>, Iterable<Edge> {
         this.id = currentId++;
     }
 
-    static Edge addEdgeBetween(Node node1, Node node2) {
-        return addEdgeBetween(node1, node2, 0);
-    }
-
-    static Edge addEdgeBetween(Node node1, Node node2, double slack) {
-        Edge edge = new Edge(node1, node2, slack);
-        node1.addEdge(edge, 0);
-        node2.addEdge(edge, 1);
-        return edge;
-    }
-
-    @Override
-    public String toString() {
-        return "Node id = " + id;
-    }
-
     public void addEdge(Edge edge, int dir) {
         if (first[dir] == null) {
             first[dir] = edge.next[dir] = edge.prev[dir] = edge;
@@ -74,6 +63,15 @@ class Node implements Comparable<Node>, Iterable<Edge> {
             first[dir].prev[dir] = edge;
         }
         edge.head[1 - dir] = this;
+    }
+
+    public Set<Pair<Edge, Integer>> getEdges() {
+        Set<Pair<Edge, Integer>> edges = new HashSet<>();
+        for (AdjacentEdgeIterator iterator = adjacentEdgesIterator(); iterator.hasNext(); ) {
+            Edge edge = iterator.next();
+            edges.add(new Pair<>(edge, iterator.getDir()));
+        }
+        return edges;
     }
 
     public void removeEdge(Edge edge, int dir) {
@@ -89,7 +87,7 @@ class Node implements Comparable<Node>, Iterable<Edge> {
     }
 
     public void addChild(Node child) {
-        child.parent = this;
+        child.treeParent = this;
         child.tree = tree;
         child.firstTreeChild = null;
         child.treeSiblingNext = firstTreeChild;
@@ -104,15 +102,61 @@ class Node implements Comparable<Node>, Iterable<Edge> {
 
     void removeFromChildList() {
         if (treeSiblingNext == null) {
-            parent.firstTreeChild.treeSiblingPrev = treeSiblingPrev;
+            if (treeParent != null) {
+                treeParent.firstTreeChild.treeSiblingPrev = treeSiblingPrev;
+            }
         } else {
             treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
         }
         if (treeSiblingPrev.treeSiblingNext != null) {
             treeSiblingPrev.treeSiblingNext = treeSiblingNext;
         } else {
-            parent.firstTreeChild = treeSiblingNext;
+            treeParent.firstTreeChild = treeSiblingNext;
         }
+    }
+
+    void moveChildrenTo(Node blossom) {
+        if (firstTreeChild != null) {
+            if (blossom.firstTreeChild == null) {
+                blossom.firstTreeChild = firstTreeChild;
+            } else {
+                Node first = firstTreeChild;
+                first.treeSiblingPrev.treeSiblingNext = blossom.firstTreeChild;
+                first.treeSiblingPrev = blossom.firstTreeChild.treeSiblingPrev;
+                blossom.firstTreeChild.treeSiblingPrev = first.treeSiblingPrev;
+                blossom.firstTreeChild = first;
+            }
+            firstTreeChild = null; // for debug purposes
+        }
+    }
+
+    public Node getPenultimateBlossom() {
+        if (treeParent == null) {
+            return null;
+        } else {
+            Node current = this;
+            while (true) {
+                if (!current.blossomGrandparent.isOuter) {
+                    current = current.blossomGrandparent;
+                } else if (current.blossomGrandparent != current.blossomParent) {
+                    // we make this to apply path compression for the latest shrinks
+                    current.blossomGrandparent = current.blossomParent;
+                } else {
+                    break;
+                }
+            }
+            // do path compression
+            Node prev = this;
+            Node next;
+            while (prev != current) {
+                next = prev.blossomGrandparent;
+                prev.blossomGrandparent = current;
+                prev = next;
+            }
+
+            return current;
+        }
+
     }
 
     public boolean isPlusNode() {
@@ -127,22 +171,8 @@ class Node implements Comparable<Node>, Iterable<Edge> {
         return label == INFTY;
     }
 
-    @Override
-    public int compareTo(Node o) {
-        return Double.compare(dual, o.dual);
-    }
-
     public void setLabel(Label label) {
         this.label = label;
-    }
-
-    public Tree getTree() {
-        return tree;
-    }
-
-    public void setTree(Tree tree) {
-
-        this.tree = tree;
     }
 
     public void forAllEdges(BiConsumer<Edge, Integer> action) {
@@ -159,6 +189,11 @@ class Node implements Comparable<Node>, Iterable<Edge> {
 
     public AdjacentEdgeIterator adjacentEdgesIterator() {
         return new AdjacentEdgeIterator();
+    }
+
+    @Override
+    public String toString() {
+        return "Node id = " + id;
     }
 
     enum Label {

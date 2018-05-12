@@ -66,7 +66,7 @@ public class BlossomPerfectMatching<V, E> {
                 // going through all adjacent trees via trees edges directing to them and
                 // setting trees.currentEdge = treeEdge
                 tree.forEachTreeEdge((treeEdge, dir) -> {
-                    Tree tree2 = treeEdge.head[1 - dir];
+                    Tree tree2 = treeEdge.head[dir];
                     tree2.currentEdge = treeEdge;
                     tree2.currentDirection = dir;
                 });
@@ -85,7 +85,7 @@ public class BlossomPerfectMatching<V, E> {
                     // can grow trees
                     if ((edge = tree.plusInfinityEdges.min().getData()) != null && edge.slack <= 0) {
                         tree.removePlusInfinityEdge(edge);
-                        primalUpdater.grow(edge);
+                        primalUpdater.grow(edge, true);
                     }
                     // can shrink blossom
                     else if ((edge = tree.plusPlusEdges.min().getData()) != null && edge.slack <= 0) {

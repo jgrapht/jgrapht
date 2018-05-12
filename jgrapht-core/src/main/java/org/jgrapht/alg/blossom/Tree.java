@@ -19,7 +19,7 @@ class Tree {
     FibonacciHeap<Edge> plusPlusEdges;
     FibonacciHeap<Edge> plusInfinityEdges;
     FibonacciHeap<Node> minusBlossoms;
-    private int id;
+    int id;
 
     public Tree(Node root) {
         this.root = root;
@@ -182,7 +182,7 @@ class Tree {
                 return currentNode = currentNode.firstTreeChild;
             } else {
                 while (currentNode != root && currentNode.treeSiblingNext == null) {
-                    currentNode = currentNode.parent;
+                    currentNode = currentNode.treeParent;
                 }
                 currentNode = currentNode.treeSiblingNext;
                 return currentNode == stop ? currentNode = null : currentNode;

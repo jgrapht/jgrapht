@@ -91,8 +91,8 @@ public class DualUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        primalUpdater.grow(edge12);
-        primalUpdater.grow(edge56);
+        primalUpdater.grow(edge12, true);
+        primalUpdater.grow(edge56, true);
 
         assertTrue(dualUpdater.updateDualsSingle(node1.tree));
         assertEquals(2, node1.tree.eps, EPS);

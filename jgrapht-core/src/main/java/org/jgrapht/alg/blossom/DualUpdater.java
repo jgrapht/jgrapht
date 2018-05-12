@@ -69,7 +69,6 @@ class DualUpdater<V, E> {
         double eps_augment = INFINITY;
         Edge varEdge;
         Edge augmentEdge = null;
-        Node varNode;
         double delta = 0;
         for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             TreeEdge treeEdge = iterator.next();
