@@ -14,25 +14,31 @@ import static org.jgrapht.alg.blossom.Node.Label.*;
 class Node implements Iterable<Edge> {
     private static int currentId = 0;
     FibonacciHeapNode<Node> fibNode;
+
     boolean isTreeRoot;
     boolean isBlossom;
     boolean isOuter;
     boolean isProcessed;
     boolean isMarked;
+
     Label label;
     Edge[] first;
-    Edge matched;
-    Tree tree;
     double dual;
     double blossomEps;
-    Node treeParent;
+
     Edge parentEdge;
+    Edge matched;
+
+    Tree tree;
+    Node treeParent;
     Node firstTreeChild;
     Node treeSiblingNext;
     Node treeSiblingPrev;
+
     Node blossomParent;
     Node blossomGrandparent;
     Node blossomSibling;
+
     int id;
 
     public Node() {

@@ -1,5 +1,7 @@
 package org.jgrapht.alg.blossom;
 
+import org.jgrapht.util.FibonacciHeap;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +38,17 @@ public class Debugger {
         return null;
     }
 
+    public static Set<TreeEdge> getTreeEdgesBetween(Tree from, Tree to) {
+        Set<TreeEdge> result = new HashSet<>();
+        for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
+            TreeEdge treeEdge = iterator.next();
+            if (treeEdge.head[iterator.getCurrentDirection()] == to) {
+                result.add(treeEdge);
+            }
+        }
+        return result;
+    }
+
     public static Tree getOppositeTree(TreeEdge treeEdge, Tree tree) {
         return treeEdge.head[0] == tree ? treeEdge.head[1] : treeEdge.head[0];
     }
@@ -62,6 +75,14 @@ public class Debugger {
 
     public static int dirToOpposite(TreeEdge treeEdge, Tree tree) {
         return treeEdge.head[0] == tree ? 1 : 0;
+    }
+
+    public static FibonacciHeap<Edge> getPlusMinusHeap(TreeEdge treeEdge, Tree tree) {
+        return treeEdge.head[0] == tree ? treeEdge.getCurrentPlusMinusHeap(1) : treeEdge.getCurrentPlusMinusHeap(0);
+    }
+
+    public static FibonacciHeap<Edge> getMinusPlusHeap(TreeEdge treeEdge, Tree tree) {
+        return treeEdge.head[0] == tree ? treeEdge.getCurrentMinusPlusHeap(1) : treeEdge.getCurrentMinusPlusHeap(0);
     }
 
     public static Node getOpposite(Edge edge, Node node) {

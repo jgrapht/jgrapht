@@ -37,6 +37,7 @@ class PrimalUpdater<V, E> {
         nodeInTheTree.addChild(minusNode);
         minusNode.addChild(plusNode);
 
+
         handleMinusNode(minusNode);
         handlePlusNode(plusNode, manyGrows);
 
@@ -44,12 +45,15 @@ class PrimalUpdater<V, E> {
 
     void handleMinusNode(Node minusNode) {
         // maintaining heap of "-" blossoms
+        double eps = minusNode.tree.eps;
+        minusNode.dual += eps;
         if (minusNode.isBlossom) {
             minusNode.tree.addMinusBlossom(minusNode, minusNode.dual);
         }
         // maintaining minus-plus edges in the minus-plus heaps in the tree edges
         minusNode.forAllEdges((edge, dir) -> {
             Node opposite = edge.head[dir];
+            edge.slack -= eps;
             if (opposite.isPlusNode() && opposite.tree != minusNode.tree) {
                 if (opposite.tree.currentEdge == null) {
                     State.addTreeEdge(minusNode.tree, opposite.tree);
@@ -62,11 +66,14 @@ class PrimalUpdater<V, E> {
     }
 
     void handlePlusNode(Node plusNode, boolean manyGrows) {
+        double eps = plusNode.tree.eps;
+        plusNode.dual -= eps;
         plusNode.forAllEdges((edge, dir) -> {
             Node opposite = edge.head[dir];
             // maintaining heap of plus-infinity edges
+            edge.slack += eps;
             if (opposite.isInftyNode()) {
-                if (edge.slack > 0 || !manyGrows) {
+                if (edge.slack > eps || !manyGrows) {
                     plusNode.tree.addInfinityEdge(edge, edge.slack);
                 } else {
                     recursiveGrow(edge, manyGrows);
@@ -77,6 +84,7 @@ class PrimalUpdater<V, E> {
                     // this is a (+,+) edge
                     if (opposite.tree == plusNode.tree) {
                         // this is blossom-forming edge
+                        plusNode.tree.removePlusInfinityEdge(edge);
                         plusNode.tree.addPlusPlusEdge(edge, edge.slack);
                     } else {
                         // this is plus-plus edge to another trees
@@ -154,9 +162,10 @@ class PrimalUpdater<V, E> {
         Tree tree = root.tree;
         Node blossom = new Node();
         // initializing blossom
+        blossom.tree = tree;
         blossom.isBlossom = true;
         blossom.isTreeRoot = root.isTreeRoot;
-        blossom.dual -= tree.eps;
+        blossom.dual = tree.eps;
         if (blossom.isTreeRoot) {
             tree.root = blossom;
         } else {
@@ -261,6 +270,8 @@ class PrimalUpdater<V, E> {
                     // cross-tree edge
 
                 }
+            } else if (opposite.isPlusNode()) {
+                edge.slack -= eps;
             }
         }
 
@@ -367,9 +378,12 @@ class PrimalUpdater<V, E> {
 
                 }
             });
+            node.setLabel(Node.Label.INFTY);
+            node.tree = null;
         });
 
-        // since this tree is
+        // adding all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and
+        // deleting tree edges
         tree.forEachTreeEdge(((treeEdge, dir) -> {
             Tree opposite = treeEdge.head[dir];
             opposite.currentEdge = null;
@@ -378,19 +392,6 @@ class PrimalUpdater<V, E> {
             opposite.plusInfinityEdges = FibonacciHeap.union(opposite.plusInfinityEdges, treeEdge.getCurrentMinusPlusHeap(dir));
             treeEdge.removeFromTreeEdgeList();
         }));
-
-        // updating labels and dual variables by applying trees.eps to each node
-        // according to its label and changing its label to infinity
-        for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
-            Node current = iterator.next();
-            if (current.isPlusNode()) {
-                current.dual += eps;
-            } else {
-                current.dual -= eps;
-            }
-            current.setLabel(Node.Label.INFTY);
-            current.tree = null;
-        }
 
         // updating matching
         if (!firstNode.isTreeRoot) {
