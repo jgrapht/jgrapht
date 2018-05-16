@@ -69,10 +69,6 @@ public class Debugger {
         return treeRoots;
     }
 
-    public static int dirToOpposite(Edge edge, Node node) {
-        return edge.head[0] == node ? 1 : 0;
-    }
-
     public static int dirToOpposite(TreeEdge treeEdge, Tree tree) {
         return treeEdge.head[0] == tree ? 1 : 0;
     }

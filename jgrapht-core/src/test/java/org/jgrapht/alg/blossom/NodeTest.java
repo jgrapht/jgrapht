@@ -51,7 +51,9 @@ public class NodeTest {
     public void testAddEdge() {
         Node from = new Node();
         Node to = new Node();
-        Edge nodeEdge = new Edge(from, to, 0);
+        Edge nodeEdge = new Edge();
+        nodeEdge.headOriginal[0] = to;
+        nodeEdge.headOriginal[1] = from;
 
         from.addEdge(nodeEdge, 0);
         to.addEdge(nodeEdge, 1);

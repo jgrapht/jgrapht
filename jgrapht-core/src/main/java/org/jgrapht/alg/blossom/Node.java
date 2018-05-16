@@ -20,6 +20,7 @@ class Node implements Iterable<Edge> {
     boolean isOuter;
     boolean isProcessed;
     boolean isMarked;
+    boolean isRemoved;
 
     Label label;
     Edge[] first;
@@ -37,7 +38,7 @@ class Node implements Iterable<Edge> {
 
     Node blossomParent;
     Node blossomGrandparent;
-    Node blossomSibling;
+    Edge blossomSibling;
 
     int id;
 
@@ -95,7 +96,6 @@ class Node implements Iterable<Edge> {
     public void addChild(Node child) {
         child.treeParent = this;
         child.tree = tree;
-        child.firstTreeChild = null;
         child.treeSiblingNext = firstTreeChild;
         if (firstTreeChild == null) {
             child.treeSiblingPrev = child;
@@ -107,16 +107,22 @@ class Node implements Iterable<Edge> {
     }
 
     void removeFromChildList() {
-        if (treeSiblingNext == null) {
-            if (treeParent != null) {
+        if (treeSiblingNext != null) {
+            // this vertex isn't the last child
+            treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
+        } else {
+            // this vertex is the last child
+            if (treeParent != null && treeParent.firstTreeChild != null) {
                 treeParent.firstTreeChild.treeSiblingPrev = treeSiblingPrev;
             }
-        } else {
-            treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
         }
         if (treeSiblingPrev.treeSiblingNext != null) {
+            // this vertex isn't the first child
             treeSiblingPrev.treeSiblingNext = treeSiblingNext;
         } else {
+            // this vertex is the first child
+            // we don't have to check whether treeParent is null since if this node
+            // is root then treeSiblingPrev.treeSiblingNext != null
             treeParent.firstTreeChild = treeSiblingNext;
         }
     }
@@ -137,7 +143,7 @@ class Node implements Iterable<Edge> {
     }
 
     public Node getPenultimateBlossom() {
-        if (treeParent == null) {
+        if (blossomParent == null) {
             return null;
         } else {
             Node current = this;
@@ -186,6 +192,13 @@ class Node implements Iterable<Edge> {
             Edge edge = iterator.next();
             action.accept(edge, iterator.getDir());
         }
+    }
+
+    public double getTrueDual() {
+        if (tree == null || !isOuter) {
+            return dual;
+        }
+        return isPlusNode() ? dual + tree.eps : dual - tree.eps;
     }
 
     @Override

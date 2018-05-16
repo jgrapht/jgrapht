@@ -39,15 +39,16 @@ public class StateTest {
         Edge edge13 = state.edgeMap.get(e13);
         Edge edge23 = state.edgeMap.get(e23);
 
-        int dir12 = Debugger.dirToOpposite(edge12, node1);
-        int dir13 = Debugger.dirToOpposite(edge13, node1);
-        int dir23 = Debugger.dirToOpposite(edge23, node2);
+        int dir12 = edge12.getDirTo(node1);
+        int dir31 = edge13.getDirTo(node1);
+        int dir23 = edge23.getDirTo(node2);
 
-        state.moveEdge(node1, node3, edge12, dir12);
-        assertEquals(node3, edge12.head[1 - dir12]);
+        state.moveEdge(node2, node3, edge12);
+        assertEquals(node3, edge12.getOpposite(node1));
 
-        state.moveEdge(node3, node2, edge13, 1 - dir13);
-        assertEquals(node2, edge13.head[dir13]);
+
+        state.moveEdge(node3, node2, edge13);
+        assertEquals(node2, edge13.getOpposite(node3));
     }
 
 }

@@ -54,13 +54,17 @@ class State<V, E> {
     }
 
     public static Edge addEdge(Node from, Node to, double slack) {
-        Edge edge = new Edge(from, to, slack);
+        Edge edge = new Edge();
+        edge.slack = slack;
+        edge.headOriginal[0] = to;
+        edge.headOriginal[1] = from;
         from.addEdge(edge, 0);
         to.addEdge(edge, 1);
         return edge;
     }
 
-    public void moveEdge(Node from, Node to, Edge edge, int dir) {
+    public void moveEdge(Node from, Node to, Edge edge) {
+        int dir = edge.getDirFrom(from);
         from.removeEdge(edge, dir);
         to.addEdge(edge, dir);
     }
@@ -172,7 +176,11 @@ class State<V, E> {
                 return null;
             } else if (currentNode == root && currentDirection == 0) {
                 currentDirection = 1;
-                return currentNode = blossomFormingEdge.head[1];
+                currentNode = blossomFormingEdge.head[1];
+                if (currentNode == root) {
+                    return currentNode = null;
+                }
+                return currentNode;
             } else if (currentNode.treeParent == root && currentDirection == 1) {
                 return currentNode = null;
             } else {
