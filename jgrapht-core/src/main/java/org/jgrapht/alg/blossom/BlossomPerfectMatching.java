@@ -65,11 +65,7 @@ public class BlossomPerfectMatching<V, E> {
                 ////////////////////////////////////////////////////////////
                 // going through all adjacent trees via trees edges directing to them and
                 // setting trees.currentEdge = treeEdge
-                tree.forEachTreeEdge((treeEdge, dir) -> {
-                    Tree tree2 = treeEdge.head[dir];
-                    tree2.currentEdge = treeEdge;
-                    tree2.currentDirection = dir;
-                });
+                state.setCurrentEdges(tree);
 
                 if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE) {
                     dualUpdater.updateDualsSingle(tree);
@@ -109,7 +105,9 @@ public class BlossomPerfectMatching<V, E> {
                     }
                 }
                 // clearing current edge pointers
-                tree.forEachTreeEdge((treeEdge, dir) -> treeEdge.head[1 - dir] = null);
+                for(Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext();){
+                    iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
+                }
 
             }
             root1 = root2;
@@ -182,34 +180,6 @@ public class BlossomPerfectMatching<V, E> {
             sb.append(", growTime=").append(growTime);
             sb.append('}');
             return sb.toString();
-        }
-    }
-
-    class NodeIterator implements Iterator<Node> {
-        int pos = 0;
-        Node current = state.nodes[0];
-
-        @Override
-        public boolean hasNext() {
-            if (current != null) {
-                return true;
-            }
-            current = advance();
-            return current != null;
-        }
-
-        @Override
-        public Node next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            Node result = current;
-            current = null;
-            return result;
-        }
-
-        private Node advance() {
-            return ++pos < state.nodeNum ? (current = state.nodes[pos]) : null;
         }
     }
 }

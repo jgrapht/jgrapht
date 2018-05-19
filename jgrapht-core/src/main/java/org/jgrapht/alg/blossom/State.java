@@ -1,7 +1,6 @@
 package org.jgrapht.alg.blossom;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 class State<V, E> {
     Node[] nodes;
@@ -63,6 +62,16 @@ class State<V, E> {
         return edge;
     }
 
+    public void setCurrentEdges(Tree tree) {
+        TreeEdge treeEdge;
+        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+            treeEdge = iterator.next();
+            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
+            opposite.currentEdge = treeEdge;
+            opposite.currentDirection = iterator.getCurrentDirection();
+        }
+    }
+
     public void moveEdge(Node from, Node to, Edge edge) {
         int dir = edge.getDirFrom(from);
         from.removeEdge(edge, dir);
@@ -77,29 +86,21 @@ class State<V, E> {
         return new BlossomNodesIterator(root, blossomFormingEdge);
     }
 
+    public NodesIterator nodesIterator() {
+        return new NodesIterator();
+    }
+
+    public EdgesIterator edgesIterator() {
+        return new EdgesIterator();
+    }
+
     // debug only
     public Set<Node> treeRoots() {
         Set<Node> roots = new HashSet<>(treeNum);
-        forEachTreeRoot(roots::add);
+        for (TreeRootsIterator iterator = treeRootsIterator(); iterator.hasNext(); ) {
+            roots.add(iterator.next());
+        }
         return roots;
-    }
-
-    void forEachNode(Consumer<Node> action) {
-        for (int i = 0; i < nodeNum; i++) {
-            action.accept(nodes[i]);
-        }
-    }
-
-    void forEachEdge(Consumer<Edge> action) {
-        for (int i = 0; i < edgeNum; i++) {
-            action.accept(edges[i]);
-        }
-    }
-
-    void forEachTreeRoot(Consumer<Node> action) {
-        for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-            action.accept(root);
-        }
     }
 
     public class TreeRootsIterator implements Iterator<Node> {
@@ -186,6 +187,53 @@ class State<V, E> {
             } else {
                 return currentNode = currentNode.treeParent;
             }
+        }
+
+    }
+
+    class NodesIterator implements Iterator<Node> {
+        Node current = nodes[0];
+        // TODO simplify
+        private int pos = 0;
+
+        @Override
+        public boolean hasNext() {
+            if (current != null) {
+                return true;
+            }
+            current = advance();
+            return current != null;
+        }
+
+        @Override
+        public Node next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            Node result = current;
+            current = null;
+            return result;
+        }
+
+        private Node advance() {
+            return ++pos < nodeNum ? (current = nodes[pos]) : null;
+        }
+    }
+
+    public class EdgesIterator implements Iterator<Edge> {
+        private int current = 0;
+
+        @Override
+        public boolean hasNext() {
+            return edges.length > current;
+        }
+
+        @Override
+        public Edge next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return edges[current++];
         }
 
     }

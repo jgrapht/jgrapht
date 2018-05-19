@@ -82,7 +82,7 @@ class Node implements Iterable<Edge> {
     }
 
     public void removeEdge(Edge edge, int dir) {
-        if (edge.prev[dir].next[dir] == edge) {
+        if (edge.prev[dir] == edge) {
             // its the only edge of this node in the direction dir
             first[dir] = null;
         } else {

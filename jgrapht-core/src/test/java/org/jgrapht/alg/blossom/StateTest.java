@@ -6,6 +6,11 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
 import static org.junit.Assert.assertEquals;
 
@@ -39,16 +44,17 @@ public class StateTest {
         Edge edge13 = state.edgeMap.get(e13);
         Edge edge23 = state.edgeMap.get(e23);
 
-        int dir12 = edge12.getDirTo(node1);
-        int dir31 = edge13.getDirTo(node1);
-        int dir23 = edge23.getDirTo(node2);
-
         state.moveEdge(node2, node3, edge12);
         assertEquals(node3, edge12.getOpposite(node1));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), Debugger.edgesOf(node1));
+        assertEquals(new HashSet<>(Collections.singletonList(edge23)), Debugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), Debugger.edgesOf(node3));
 
-
-        state.moveEdge(node3, node2, edge13);
-        assertEquals(node2, edge13.getOpposite(node3));
+        state.moveEdge(node2, node1, edge23);
+        assertEquals(node1, edge13.getOpposite(node3));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), Debugger.edgesOf(node1));
+        assertEquals(new HashSet<>(), Debugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), Debugger.edgesOf(node3));
     }
 
 }

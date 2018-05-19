@@ -4,7 +4,6 @@ import org.jgrapht.Graph;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFINITY;
 
@@ -42,39 +41,54 @@ class Initializer<V, E> {
         return state;
     }
 
-    void initAuxiliaryGraph() {
-        state.forEachTreeRoot(root -> {
-            Tree tree = root.tree;
-            root.forAllEdges((edge, dir) -> {
-                Node opposite = edge.head[dir];
+    private void initAuxiliaryGraph() {
+        Node root, opposite;
+        Tree tree;
+        Edge edge;
+        TreeEdge treeEdge;
+        for (State.TreeRootsIterator iterator = state.treeRootsIterator(); iterator.hasNext(); ) {
+            root = iterator.next();
+            tree = root.tree;
+            for (Node.AdjacentEdgeIterator edgeIterator = root.adjacentEdgesIterator(); edgeIterator.hasNext(); ) {
+                edge = edgeIterator.next();
+                opposite = edge.head[edgeIterator.getDir()];
                 if (opposite.isInftyNode()) {
-                    tree.addInfinityEdge(edge, edge.slack);
+                    tree.addPlusInfinityEdge(edge, edge.slack);
                 } else if (!opposite.isProcessed) {
                     if (opposite.tree.currentEdge == null) {
                         State.addTreeEdge(tree, opposite.tree);
                     }
                     opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
                 }
-            });
+            }
             root.isProcessed = true;
-            tree.forEachTreeEdge((treeEdge, dir) -> treeEdge.head[dir].currentEdge = null);
-        });
+            for (Tree.TreeEdgeIterator treeEdgeIterator = tree.treeEdgeIterator(); treeEdgeIterator.hasNext(); ) {
+                treeEdge = treeEdgeIterator.next();
+                treeEdge.head[treeEdgeIterator.getCurrentDirection()].currentEdge = null;
+            }
+        }
     }
 
     private int initGreedy() {
+        Edge edge;
+        int dir;
         // set all dual variables to infinity
-        state.forEachNode(node -> node.dual = INFINITY);
+        for (int i = 0; i < nodeNum; i++) {
+            nodes[i].dual = INFINITY;
+        }
         // set dual variables to the minimum weight of the incident edges
-        state.forEachEdge(edge -> {
+        for (Edge edge2 : edges) {
+            edge = edge2;
             if (edge.head[0].dual > edge.slack) {
                 edge.head[0].dual = edge.slack;
             }
             if (edge.head[1].dual > edge.slack) {
                 edge.head[1].dual = edge.slack;
             }
-        });
+        }
         // divide dual variables by to, decrease edge slack accordingly
-        state.forEachEdge(edge -> {
+        for (Edge edge1 : edges) {
+            edge = edge1;
             Node source = edge.head[0];
             Node target = edge.head[1];
             if (!source.isOuter) {
@@ -87,40 +101,41 @@ class Initializer<V, E> {
                 target.dual /= 2;
             }
             edge.slack -= target.dual;
-        });
+        }
 
         // go through all vertices, greedily increase their dual variables to the minimum slack of incident edges
         // if there exist an tight unmatched edge in the neighborhood, match it
         treeNum = nodeNum;
-        AtomicInteger atomicTreeNum = new AtomicInteger(nodeNum);
-        for (int i = 0; i < nodeNum; i++) {
-            Node node = nodes[i];
+        int treeNum = nodeNum;
+        for (Node node : nodes) {
             if (!node.isInftyNode()) {
                 double minSlack = INFINITY;
-                for (Edge edge : node) {
+                for (Node.AdjacentEdgeIterator adjacentEdgeIterator = node.adjacentEdgesIterator(); adjacentEdgeIterator.hasNext(); ) {
+                    edge = adjacentEdgeIterator.next();
                     if (edge.slack < minSlack) {
                         minSlack = edge.slack;
                     }
                 }
                 node.dual += minSlack;
                 double resultMinSlack = minSlack;
-                node.forAllEdges((edge, dir) -> {
+                for (Node.AdjacentEdgeIterator adjacentEdgeIterator = node.adjacentEdgesIterator(); adjacentEdgeIterator.hasNext(); ) {
+                    edge = adjacentEdgeIterator.next();
+                    dir = adjacentEdgeIterator.getDir();
                     if (edge.slack <= resultMinSlack && node.isPlusNode() && edge.head[dir].isPlusNode()) {
                         node.setLabel(Node.Label.INFTY);
                         edge.head[dir].setLabel(Node.Label.INFTY);
                         node.matched = edge;
                         edge.head[dir].matched = edge;
-                        atomicTreeNum.addAndGet(-2);
+                        treeNum -= 2;
                     }
                     edge.slack -= resultMinSlack;
-                });
+                }
             }
         }
-        // TODO remove atomic integer
-        return atomicTreeNum.get();
+        return treeNum;
     }
 
-    void allocateTrees(int treeNumToAllocate) {
+    private void allocateTrees(int treeNumToAllocate) {
         treeNum = 0;
         trees = new Tree[treeNumToAllocate];
         Node lastRoot = nodes[nodeNum];
@@ -138,7 +153,7 @@ class Initializer<V, E> {
         lastRoot.treeSiblingNext = null;
     }
 
-    void initGraph() {
+    private void initGraph() {
         nodeNum = graph.vertexSet().size();
         edgeNum = graph.edgeSet().size();
         nodes = new Node[nodeNum + 1];

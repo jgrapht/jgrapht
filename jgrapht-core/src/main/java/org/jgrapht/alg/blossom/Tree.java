@@ -37,7 +37,7 @@ class Tree {
         return "Tree id=" + id;
     }
 
-    public FibonacciHeapNode<Edge> addInfinityEdge(Edge edge, double key) {
+    public FibonacciHeapNode<Edge> addPlusInfinityEdge(Edge edge, double key) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
         plusInfinityEdges.insert(edgeNode, key);
@@ -71,18 +71,6 @@ class Tree {
     public void removePlusPlusEdge(Edge edge) {
         plusPlusEdges.delete(edge.fibNode);
         edge.fibNode = null;
-    }
-
-    public void forEachTreeEdge(BiConsumer<TreeEdge, Integer> action) {
-        for (TreeEdgeIterator iterator = treeEdgeIterator(); iterator.hasNext(); ) {
-            action.accept(iterator.next(), iterator.getCurrentDirection());
-        }
-    }
-
-    public void forEachTreeNode(Consumer<Node> action) {
-        for (TreeNodeIterator iterator = treeNodeIterator(); iterator.hasNext(); ) {
-            action.accept(iterator.next());
-        }
     }
 
     public TreeNodeIterator treeNodeIterator() {

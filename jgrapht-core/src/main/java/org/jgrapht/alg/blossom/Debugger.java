@@ -8,7 +8,9 @@ import java.util.Set;
 public class Debugger {
     public static Set<Edge> edgesOf(Node node) {
         Set<Edge> edges = new HashSet<>();
-        node.forAllEdges((edge, dir) -> edges.add(edge));
+        for (Node.AdjacentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
+            edges.add(iterator.next());
+        }
         return edges;
     }
 
@@ -21,11 +23,13 @@ public class Debugger {
     }
 
     public static void setCurrentEdges(Tree tree) {
-        tree.forEachTreeEdge((treeEdge, dir) -> {
-            Tree opposite = treeEdge.head[dir];
+        TreeEdge treeEdge;
+        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+            treeEdge = iterator.next();
+            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
             opposite.currentEdge = treeEdge;
-            opposite.currentDirection = dir;
-        });
+            opposite.currentDirection = iterator.getCurrentDirection();
+        }
     }
 
     public static TreeEdge getTreeEdge(Tree from, Tree to) {

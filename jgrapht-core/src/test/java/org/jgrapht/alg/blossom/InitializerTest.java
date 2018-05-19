@@ -97,9 +97,8 @@ public class InitializerTest {
         assertEquals(4, edge45.slack, EPS);
         assertEquals(5, edge56.slack, EPS);
 
-        Set<Node> actualRoots = new HashSet<>();
+        Set<Node> actualRoots = Debugger.treeRoots(state);
         Collection<Node> expectedRoots = state.vertexMap.values();
-        state.forEachTreeRoot(actualRoots::add);
         assertEquals(expectedRoots.size(), actualRoots.size());
         assertTrue(actualRoots.containsAll(expectedRoots));
 

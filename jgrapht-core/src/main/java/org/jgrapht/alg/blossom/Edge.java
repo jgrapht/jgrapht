@@ -7,6 +7,8 @@ class Edge {
     double slack;
     Node[] headOriginal;
     Node[] head;
+
+    // next edges in the doubly linked circular lists of edges
     Edge[] next;
     Edge[] prev;
 
