@@ -17,11 +17,13 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.connectivity.BiconnectivityInspector;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.cycle.*;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -39,6 +41,8 @@ public abstract class GraphTests
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
     private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
     private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
+    private static final String GRAPH_MUST_BE_A_TREE = "Graph must be a tree";
+    private static final String GRAPH_MUST_BE_A_DAG = "Graph must be a directed and acyclic";
 
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
@@ -564,12 +568,18 @@ public abstract class GraphTests
         return true;
     }
 
+    public static <V, E> boolean isDAG(Graph<V, E> graph){
+        requireDirected(graph);
+
+        return !(new CycleDetector<>(graph).detectCycles());
+    }
+
     /**
      * Checks that the specified graph is directed and throws a customized
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for beeing directed and not null
+     * @param graph the graph reference to check for being directed and not null
      * @param message detail message to be used in the event that an exception is thrown
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -592,7 +602,7 @@ public abstract class GraphTests
      * it is not. Also checks that the graph reference is not {@code null} and throws a
      * {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for beeing directed and not null
+     * @param graph the graph reference to check for being directed and not null
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return {@code graph} if directed and not {@code null}
@@ -649,7 +659,7 @@ public abstract class GraphTests
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for beeing directed or undirected and not null
+     * @param graph the graph reference to check for being directed or undirected and not null
      * @param message detail message to be used in the event that an exception is thrown
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -672,7 +682,7 @@ public abstract class GraphTests
      * it is not. Also checks that the graph reference is not {@code null} and throws a
      * {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for beeing directed and not null
+     * @param graph the graph reference to check for being directed and not null
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return {@code graph} if directed and not {@code null}
