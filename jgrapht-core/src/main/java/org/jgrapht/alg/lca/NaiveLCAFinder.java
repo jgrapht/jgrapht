@@ -15,10 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
+import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
 
@@ -64,8 +65,7 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  */
-@Deprecated
-public class NaiveLcaFinder<V, E>
+public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
 {
     private Graph<V, E> graph;
 
@@ -74,9 +74,14 @@ public class NaiveLcaFinder<V, E>
      * 
      * @param graph the input graph
      */
-    public NaiveLcaFinder(Graph<V, E> graph)
-    {
-        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
+    public NaiveLCAFinder(Graph<V, E> graph) {
+        assert GraphTests.isDAG(graph);
+        this.graph = graph;
+    }
+
+    @Override
+    public V getLCA(V a, V b) {
+        return findLca(a, b);
     }
 
     /**
