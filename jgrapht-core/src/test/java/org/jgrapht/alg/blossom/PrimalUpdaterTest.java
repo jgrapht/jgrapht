@@ -31,17 +31,21 @@ public class PrimalUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
 
-        primalUpdater.augment(state.edgeMap.get(e23));
-        primalUpdater.grow(state.edgeMap.get(e12), false);
-
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);
         Node node3 = state.vertexMap.get(3);
-        Tree tree = node1.tree;
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+
+        primalUpdater.augment(edge23);
+        Debugger.setCurrentEdges(node1.tree);
+        primalUpdater.grow(edge12, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(1, state.treeNum);
-        assertEquals(tree, node2.tree);
-        assertEquals(tree, node3.tree);
+        assertEquals(node1.tree, node2.tree);
+        assertEquals(node1.tree, node3.tree);
 
         assertTrue(node2.isMinusNode());
         assertTrue(node3.isPlusNode());
@@ -88,8 +92,9 @@ public class PrimalUpdaterTest {
         assertEquals(1, node6.tree.plusInfinityEdges.size());
 
         primalUpdater.augment(state.edgeMap.get(edge67));
-
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(state.edgeMap.get(edge12), true);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(tree, node2.tree);
         assertEquals(tree, node3.tree);
@@ -125,10 +130,12 @@ public class PrimalUpdaterTest {
     @Test
     public void testGrow3() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // tree edges
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+        // other edges
         DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 0);
         DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 0);
         DefaultWeightedEdge e46 = Graphs.addEdgeWithVertices(graph, 4, 6, 0);
@@ -161,6 +168,7 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge45);
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         Set<TreeEdge> treeEdges1 = Debugger.getTreeEdgesBetween(node1.tree, node6.tree);
         assertEquals(1, treeEdges1.size());
@@ -168,7 +176,9 @@ public class PrimalUpdaterTest {
         assertEquals(1, treeEdge1.plusPlusEdges.size());
         assertEquals(1, Debugger.getMinusPlusHeap(treeEdge1, node1.tree).size());
 
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge34, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         Set<TreeEdge> treeEdges2 = Debugger.getTreeEdgesBetween(node1.tree, node6.tree);
         assertEquals(1, treeEdges2.size());
@@ -190,12 +200,14 @@ public class PrimalUpdaterTest {
     @Test
     public void testGrow4() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // in-tree edges
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
         DefaultWeightedEdge e46 = Graphs.addEdgeWithVertices(graph, 4, 6, 0);
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 0);
+        // cross-tree and infinity edges
         DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0);
         DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 1);
         DefaultWeightedEdge e35 = Graphs.addEdgeWithVertices(graph, 3, 5, 0);
@@ -236,12 +248,14 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge78);
         Debugger.setCurrentEdges(node4.tree);
         primalUpdater.grow(edge45, false);
+        Debugger.clearCurrentEdges(node4.tree);
 
         assertEquals(4, node4.tree.plusInfinityEdges.size());
         assertEquals(1, node4.tree.plusPlusEdges.size());
 
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(1, node4.tree.plusInfinityEdges.size());
         assertEquals(1, node4.tree.plusPlusEdges.size());
@@ -303,6 +317,7 @@ public class PrimalUpdaterTest {
         node4.tree.eps = 3;
         Debugger.setCurrentEdges(node4.tree);
         primalUpdater.grow(edge45, false);
+        Debugger.clearCurrentEdges(node4.tree);
 
         assertEquals(4, node5.dual, EPS);
         assertEquals(-2, node6.dual, EPS);
@@ -324,6 +339,7 @@ public class PrimalUpdaterTest {
         node1.tree.eps = 3;
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(4, node2.dual, EPS);
         assertEquals(-2, node3.dual, EPS);
@@ -364,6 +380,8 @@ public class PrimalUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = new Initializer<>(graph).initialize(NONE);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
 
+        Node node1 = state.vertexMap.get(1);
+
         Edge edge12 = state.edgeMap.get(e12);
         Edge edge23 = state.edgeMap.get(e23);
         Edge edge34 = state.edgeMap.get(e34);
@@ -376,11 +394,12 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
 
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge34, false);
         primalUpdater.grow(edge16, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
-        Node node1 = state.vertexMap.get(1);
         node1.tree.eps = 1; // now edge57 becomes tight
 
         Node root = primalUpdater.findBlossomRoot(edge57);
@@ -459,6 +478,7 @@ public class PrimalUpdaterTest {
         assertEquals(3, edge34.slack, EPS);
         assertEquals(1, node1.tree.plusInfinityEdges.size());
         assertEquals(1, node4.tree.plusInfinityEdges.size());
+        assertTrue(Debugger.treeEdgesOf(node1.tree).isEmpty());
 
         node4.tree.eps = 1;
         node5.tree.eps = 2;
@@ -471,19 +491,21 @@ public class PrimalUpdaterTest {
         assertEquals(0, edge45.slack, EPS);
         assertEquals(2, edge56.slack, EPS);
         assertEquals(1, node6.tree.plusInfinityEdges.size());
+        assertTrue(Debugger.treeEdgesOf(node6.tree).isEmpty());
 
         node1.tree.eps = 2;
         node6.tree.eps = 2;
 
-        primalUpdater.grow(edge12, true);
+        Debugger.setCurrentEdges(node1.tree);
+        primalUpdater.grow(edge12, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(node1.tree, node2.tree);
         assertEquals(node1.tree, node3.tree);
 
-        primalUpdater.grow(edge56, true);
-
-        assertEquals(node6.tree, node5.tree);
-        assertEquals(node6.tree, node4.tree);
+        Debugger.setCurrentEdges(node6.tree);
+        primalUpdater.grow(edge56, false);
+        Debugger.clearCurrentEdges(node6.tree);
 
         node1.tree.eps += 1;
         node1.tree.eps += 1;
@@ -508,10 +530,6 @@ public class PrimalUpdaterTest {
 
     @Test
     public void testAugment3() {
-    }
-
-    @Test
-    public void testAugment4() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
@@ -553,8 +571,10 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge89);
 
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge18, true);
         primalUpdater.grow(edge12, true);
+        Debugger.clearCurrentEdges(node1.tree);
 
         node1.tree.eps = 2;
 
@@ -575,7 +595,7 @@ public class PrimalUpdaterTest {
     }
 
     @Test
-    public void testAugment5() {
+    public void testAugment4() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
@@ -635,6 +655,7 @@ public class PrimalUpdaterTest {
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         Node blossom = primalUpdater.shrink(edge13);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), Debugger.edgesOf(node1));
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), Debugger.edgesOf(node2));
@@ -699,8 +720,10 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge23);
         Debugger.setCurrentEdges(tree1);
         node1.tree.eps = 3;
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         Node blossom = primalUpdater.shrink(edge13);
+        Debugger.clearCurrentEdges(node1.tree);
 
         assertEquals(0, edge12.slack, EPS);
         assertEquals(0, edge13.slack, EPS);
@@ -722,16 +745,22 @@ public class PrimalUpdaterTest {
         assertEquals(-3, blossom.dual, EPS);
     }
 
+    /**
+     * Tests dual part of the shrink operation
+     */
     @Test
     public void testShrink3() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // blossom edges
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 2);
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 6);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 4);
         DefaultWeightedEdge e51 = Graphs.addEdgeWithVertices(graph, 5, 1, 7);
+        // neighbor tree edges
         DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 3);
         DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 2);
+        // cross-tree edges
         DefaultWeightedEdge e16 = Graphs.addEdgeWithVertices(graph, 1, 6, 10);
         DefaultWeightedEdge e57 = Graphs.addEdgeWithVertices(graph, 5, 7, 8);
         DefaultWeightedEdge e58 = Graphs.addEdgeWithVertices(graph, 5, 8, 9);
@@ -770,15 +799,19 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge45);
         Debugger.setCurrentEdges(node1.tree);
         node1.tree.eps = 4;
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge51, false);
+        Debugger.clearCurrentEdges(node1.tree);
         node1.tree.eps += 2;
 
         node8.tree.eps = 2;
         primalUpdater.augment(edge78);
         Debugger.setCurrentEdges(node6.tree);
         node6.tree.eps = 3;
+        Debugger.setCurrentEdges(node6.tree);
         primalUpdater.grow(edge67, false);
+        Debugger.clearCurrentEdges(node6.tree);
 
         Debugger.setCurrentEdges(node1.tree);
         Node blossom = primalUpdater.shrink(edge34);
@@ -877,10 +910,13 @@ public class PrimalUpdaterTest {
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge51, false);
+        Debugger.clearCurrentEdges(node1.tree);
         Debugger.setCurrentEdges(node6.tree);
         primalUpdater.grow(edge67, false);
+        Debugger.clearCurrentEdges(node6.tree);
         Debugger.setCurrentEdges(node1.tree);
         Node blossom = primalUpdater.shrink(edge34);
+        Debugger.clearCurrentEdges(blossom.tree);
 
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge51)), Debugger.edgesOf(node1));
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), Debugger.edgesOf(node2));
@@ -928,8 +964,10 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge51, false);
+        Debugger.clearCurrentEdges(node1.tree);
         Node blossom = primalUpdater.shrink(edge34);
 
         assertEquals(blossom, node1.blossomParent);
@@ -960,6 +998,7 @@ public class PrimalUpdaterTest {
     @Test
     public void testShrink6() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // first tree edges
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
@@ -967,8 +1006,10 @@ public class PrimalUpdaterTest {
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
         DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 0);
         DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
+        // neighbor tree edges
         DefaultWeightedEdge e89 = Graphs.addEdgeWithVertices(graph, 8, 9, 0);
         DefaultWeightedEdge e910 = Graphs.addEdgeWithVertices(graph, 9, 10, 0);
+        // cross-tree edges
         DefaultWeightedEdge e18 = Graphs.addEdgeWithVertices(graph, 1, 8, 0);
         DefaultWeightedEdge e19 = Graphs.addEdgeWithVertices(graph, 1, 9, 0);
         DefaultWeightedEdge e28 = Graphs.addEdgeWithVertices(graph, 2, 8, 0);
@@ -1007,16 +1048,18 @@ public class PrimalUpdaterTest {
         Edge edge39 = state.edgeMap.get(e39);
         Edge edge310 = state.edgeMap.get(e310);
 
-        // setting up the tree structure
+        // setting up the test case structure
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge910);
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge34, false);
         primalUpdater.grow(edge36, false);
         primalUpdater.grow(edge89, false);
         Node blossom = primalUpdater.shrink(edge13);
+        Debugger.clearCurrentEdges(blossom.tree);
 
         // validating the tree structure
         assertEquals(blossom, node4.treeParent);
@@ -1040,14 +1083,17 @@ public class PrimalUpdaterTest {
     @Test
     public void testShrink7() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // main tree edges
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 4);
         DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 4);
+        DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 3);
+        // neighbor tree edges
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 4);
+        DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 4);
+        // cross-tree edges
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 2);
         DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 3);
         DefaultWeightedEdge e25 = Graphs.addEdgeWithVertices(graph, 2, 5, 3);
-        DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 3);
-        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 4);
-        DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 4);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
@@ -1076,6 +1122,7 @@ public class PrimalUpdaterTest {
         node1.tree.eps = 3;
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
+        Debugger.clearCurrentEdges(node1.tree);
 
         node5.tree.eps = 2;
         node6.tree.eps = 2;
@@ -1084,6 +1131,7 @@ public class PrimalUpdaterTest {
         node4.tree.eps = 2;
         Debugger.setCurrentEdges(node4.tree);
         primalUpdater.grow(edge45, false);
+        Debugger.clearCurrentEdges(node4.tree);
 
         Debugger.setCurrentEdges(node1.tree);
         Node blossom = primalUpdater.shrink(edge13);
@@ -1158,12 +1206,14 @@ public class PrimalUpdaterTest {
         primalUpdater.augment(edge67);
 
         node1.tree.eps = 2;
+        Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge71, false);
         node1.tree.eps += 1;
         primalUpdater.grow(edge34, false);
         node1.tree.eps += 1;
         Node blossom = primalUpdater.shrink(edge56);
+        Debugger.clearCurrentEdges(blossom.tree);
 
         assertEquals(7, edge24.slack, EPS);
         assertEquals(5, edge26.slack, EPS);
@@ -1204,11 +1254,13 @@ public class PrimalUpdaterTest {
         Debugger.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         Node blossom = primalUpdater.shrink(edge13);
+        Debugger.clearCurrentEdges(blossom.tree);
         primalUpdater.augment(edge35);
 
         Debugger.setCurrentEdges(node4.tree);
         primalUpdater.grow(edge34, false);
         primalUpdater.expand(blossom);
+        Debugger.clearCurrentEdges(node4.tree);
 
         // checking tree structure
         assertEquals(node4.tree, node3.tree);
@@ -1300,8 +1352,10 @@ public class PrimalUpdaterTest {
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge51, false);
         Node blossom = primalUpdater.shrink(edge34);
+        Debugger.clearCurrentEdges(blossom.tree);
         Debugger.setCurrentEdges(node8.tree);
         primalUpdater.grow(edge89, false);
+        Debugger.clearCurrentEdges(node8.tree);
 
         primalUpdater.augment(edge37);
         Debugger.setCurrentEdges(node6.tree);
@@ -1397,14 +1451,16 @@ public class PrimalUpdaterTest {
         node1.tree.eps = 3;
         primalUpdater.grow(edge12, false);
         Node blossom = primalUpdater.shrink(edge13);
+        Debugger.clearCurrentEdges(blossom.tree);
 
         node5.tree.eps = 2;
         blossom.tree.eps += 2;
         primalUpdater.augment(edge35);
-        Debugger.setCurrentEdges(node4.tree);
         node4.tree.eps = 2;
+        Debugger.setCurrentEdges(node4.tree);
         primalUpdater.grow(edge34, false);
         primalUpdater.expand(blossom);
+        Debugger.clearCurrentEdges(node4.tree);
 
         assertEquals(3, node1.dual, EPS);
         assertEquals(1, node2.dual, EPS);
@@ -1501,6 +1557,7 @@ public class PrimalUpdaterTest {
         primalUpdater.grow(edge51, false);
         node1.tree.eps += 1;
         Node blossom = primalUpdater.shrink(edge34);
+        Debugger.clearCurrentEdges(blossom.tree);
 
 
         // setting up the "-" blossom's tree structure
@@ -1511,14 +1568,17 @@ public class PrimalUpdaterTest {
         node6.tree.eps = 2;
         Debugger.setCurrentEdges(node6.tree);
         primalUpdater.grow(edge65, false);
+        Debugger.clearCurrentEdges(node6.tree);
 
         // setting up the structure of the neighbor tree
         primalUpdater.augment(edge910);
         Debugger.setCurrentEdges(node8.tree);
         primalUpdater.grow(edge89, false);
+        Debugger.setCurrentEdges(node8.tree);
 
         Debugger.setCurrentEdges(node6.tree);
         primalUpdater.expand(blossom);
+        Debugger.clearCurrentEdges(node6.tree);
         TreeEdge treeEdge = Debugger.getTreeEdge(node6.tree, node8.tree);
 
 

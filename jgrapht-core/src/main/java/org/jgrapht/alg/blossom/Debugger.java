@@ -32,6 +32,15 @@ public class Debugger {
         }
     }
 
+    public static void clearCurrentEdges(Tree tree) {
+        TreeEdge treeEdge;
+        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+            treeEdge = iterator.next();
+            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
+            opposite.currentEdge = null;
+        }
+    }
+
     public static TreeEdge getTreeEdge(Tree from, Tree to) {
         for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
             TreeEdge treeEdge = iterator.next();

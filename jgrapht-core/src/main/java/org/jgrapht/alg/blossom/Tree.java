@@ -14,12 +14,19 @@ class Tree {
     TreeEdge currentEdge;
     int currentDirection;
     double eps;
-    double accumulatedEps;  // accumulates dual changes in dual updates
+    /**
+     * Accumulates dual changes in the dual update phase
+     */
+    double accumulatedEps;
     Node root;
+    Tree nextTree;
     FibonacciHeap<Edge> plusPlusEdges;
     FibonacciHeap<Edge> plusInfinityEdges;
     FibonacciHeap<Node> minusBlossoms;
     int id;
+
+    public Tree(){
+    }
 
     public Tree(Node root) {
         this.root = root;

@@ -23,6 +23,7 @@ class PrimalUpdater<V, E> {
 
     public void augment(Edge augmentEdge) {
         Node node;
+        // augmenting trees on both sides
         for (int dir = 0; dir < 2; dir++) {
             node = augmentEdge.head[dir];
             augmentBranch(node);
@@ -280,65 +281,71 @@ class PrimalUpdater<V, E> {
         // maintaining heap of "-" blossoms
         double eps = minusNode.tree.eps;
         minusNode.dual += eps;
+        Edge edge;
+        int dir;
+        // maintaining heap of "-" blossoms
         if (minusNode.isBlossom) {
             minusNode.tree.addMinusBlossom(minusNode, minusNode.dual);
         }
         // maintaining minus-plus edges in the minus-plus heaps in the tree edges
-        minusNode.forAllEdges((edge, dir) -> {
+        for (Node.AdjacentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+            edge = iterator.next();
+            dir = iterator.getDir();
             Node opposite = edge.head[dir];
             edge.slack -= eps;
             if (opposite.isPlusNode() && opposite.tree != minusNode.tree) {
+                // encountered (-,+) cross-tree edge
                 if (opposite.tree.currentEdge == null) {
                     State.addTreeEdge(minusNode.tree, opposite.tree);
                 }
                 opposite.tree.removePlusInfinityEdge(edge);
                 opposite.tree.currentEdge.addToCurrentMinusPlusHeap(edge, edge.slack, opposite.tree.currentDirection);
             }
-
-        });
+        }
     }
 
     private void processPlusNodeGrow(Node plusNode, boolean manyGrows) {
         double eps = plusNode.tree.eps;
         plusNode.dual -= eps;
-        plusNode.forAllEdges((edge, dir) -> {
+        Edge edge;
+        int dir;
+        for (Node.AdjacentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+            edge = iterator.next();
+            dir = iterator.getDir();
             Node opposite = edge.head[dir];
             // maintaining heap of plus-infinity edges
             edge.slack += eps;
-            if (opposite.isInftyNode()) {
+            if (opposite.isPlusNode()) {
+                // this is a (+,+) edge
+                if (opposite.tree == plusNode.tree) {
+                    // this is blossom-forming edge
+                    plusNode.tree.removePlusInfinityEdge(edge);
+                    plusNode.tree.addPlusPlusEdge(edge, edge.slack);
+                } else {
+                    // this is plus-plus edge to another trees
+                    if (opposite.tree.currentEdge == null) {
+                        State.addTreeEdge(plusNode.tree, opposite.tree);
+                    }
+                    opposite.tree.removePlusInfinityEdge(edge);
+                    opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
+                }
+            } else if (opposite.isMinusNode()) {
+                // this is a (+,-) edge
+                if (opposite.tree != plusNode.tree) {
+                    // this is (+,-) edge to another trees
+                    if (opposite.tree.currentEdge == null) {
+                        State.addTreeEdge(plusNode.tree, opposite.tree);
+                    }
+                    opposite.tree.currentEdge.addToCurrentPlusMinusHeap(edge, edge.slack, opposite.tree.currentDirection);
+                }
+            } else if (opposite.isInftyNode()) {
                 if (edge.slack > eps || !manyGrows) {
                     plusNode.tree.addPlusInfinityEdge(edge, edge.slack);
                 } else {
                     recursiveGrow(edge, manyGrows);
                 }
-
-            } else {
-                if (opposite.isPlusNode()) {
-                    // this is a (+,+) edge
-                    if (opposite.tree == plusNode.tree) {
-                        // this is blossom-forming edge
-                        plusNode.tree.removePlusInfinityEdge(edge);
-                        plusNode.tree.addPlusPlusEdge(edge, edge.slack);
-                    } else {
-                        // this is plus-plus edge to another trees
-                        if (opposite.tree.currentEdge == null) {
-                            State.addTreeEdge(plusNode.tree, opposite.tree);
-                        }
-                        opposite.tree.removePlusInfinityEdge(edge);
-                        opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
-                    }
-                } else {
-                    // this is a (+,-) edge
-                    if (opposite.tree != plusNode.tree) {
-                        // this is (+,-) edge to another trees
-                        if (opposite.tree.currentEdge == null) {
-                            State.addTreeEdge(plusNode.tree, opposite.tree);
-                        }
-                        opposite.tree.currentEdge.addToCurrentPlusMinusHeap(edge, edge.slack, opposite.tree.currentDirection);
-                    }
-                }
             }
-        });
+        }
     }
 
     private void augmentBranch(Node firstNode) {
@@ -356,6 +363,7 @@ class PrimalUpdater<V, E> {
         // applying tree.eps to all tree nodes and updating slacks of all incident edges
         for (Tree.TreeNodeIterator treeNodeIterator = tree.treeNodeIterator(); treeNodeIterator.hasNext(); ) {
             node = treeNodeIterator.next();
+            // applying lazy delta spreading
             if (node.isPlusNode()) {
                 node.dual += eps;
             } else {
@@ -367,20 +375,20 @@ class PrimalUpdater<V, E> {
                 Node opposite = edge.head[dir];
                 Tree oppositeTree = opposite.tree;
                 if (node.isPlusNode()) {
-                    // if this edge is a cross-trees edge
+                    edge.slack -= eps;
                     if (oppositeTree != null && oppositeTree != tree) {
+                        // if this edge is a cross-tree edge
                         treeEdge = oppositeTree.currentEdge;
                         int currentDir = oppositeTree.currentDirection;
                         if (opposite.isPlusNode()) {
-                            // this is a (+,+) cross-trees edge
+                            // this is a (+,+) cross-tree edge
                             treeEdge.removeFromPlusPlusHeap(edge);
-                            oppositeTree.addPlusInfinityEdge(edge, edge.slack - eps);
+                            oppositeTree.addPlusInfinityEdge(edge, edge.slack);
                         } else if (opposite.isMinusNode()) {
-                            // this is a (+,-) cross-trees edge
+                            // this is a (+,-) cross-tree edge
                             treeEdge.removeFromCurrentPlusMinusHeap(edge, currentDir);
                         }
                     }
-                    edge.slack -= eps;
                 } else {
                     // current node is a "-" node
                     if (oppositeTree != null && oppositeTree != tree && opposite.isPlusNode()) {

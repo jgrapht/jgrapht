@@ -4,8 +4,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.AsUndirectedGraph;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class BlossomPerfectMatching<V, E> {
@@ -105,7 +103,7 @@ public class BlossomPerfectMatching<V, E> {
                     }
                 }
                 // clearing current edge pointers
-                for(Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext();){
+                for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
                     iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
                 }
 
@@ -116,7 +114,7 @@ public class BlossomPerfectMatching<V, E> {
             }
 
             if (state.nodeNum == 0) break;
-            if (!dualUpdater.updateDuals(options.dualUpdateType)) {
+            if (dualUpdater.updateDuals(options.dualUpdateType) <= 0) {
                 dualUpdater.updateDuals(DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA);
             }
         }

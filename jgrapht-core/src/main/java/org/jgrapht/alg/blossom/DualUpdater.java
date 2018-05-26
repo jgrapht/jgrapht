@@ -14,15 +14,17 @@ class DualUpdater<V, E> {
         this.primalUpdater = primalUpdater;
     }
 
-    boolean updateDuals(DualUpdateType type) {
+    double updateDuals(DualUpdateType type) {
         // going through all trees roots
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
             double eps = getEps(tree);
             tree.accumulatedEps = eps - tree.eps;
         }
-        if(type == DualUpdateType.MULTIPLE_TREE_FIXED_DELTA){
+        if (type == DualUpdateType.MULTIPLE_TREE_FIXED_DELTA) {
             multipleTreeFixedDelta();
+        } else if (type == DualUpdateType.MULTIPLE_TREE_CONNECTED_COMPONENTS) {
+            updateDualsConnectedComponents();
         }
 
         double dualChange = 0;
@@ -33,7 +35,7 @@ class DualUpdater<V, E> {
                 root.tree.eps += root.tree.accumulatedEps;
             }
         }
-        return dualChange > 0;
+        return dualChange;
     }
 
     double getEps(Tree tree) {
@@ -95,6 +97,106 @@ class DualUpdater<V, E> {
         } else {
             return delta > EPS;
         }
+    }
+
+    boolean updateDualsConnectedComponents() {
+        Node root;
+        Tree startTree;
+        Tree currentTree;
+        Tree opposite;
+        Tree dummyTree = new Tree();
+        Tree connectedComponentLast;
+        TreeEdge currentEdge;
+
+        double eps;
+        double oppositeEps;
+        for (root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+            root.tree.nextTree = null;
+        }
+        for (root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+            startTree = root.tree;
+            if (startTree.nextTree != null) {
+                // this tree is present in some connected component and has been processed already
+                continue;
+            }
+            eps = startTree.accumulatedEps;
+
+            startTree.nextTree = connectedComponentLast = currentTree = startTree;
+
+            while (true) {
+                for (int dir = 0; dir < 2; ++dir) {
+                    for (currentEdge = currentTree.first[dir]; currentEdge != null; currentEdge = currentEdge.next[dir]) {
+                        opposite = currentEdge.head[dir];
+                        double plusPlusEps = INFINITY;
+
+                        if (!currentEdge.plusPlusEdges.isEmpty()) {
+                            plusPlusEps = currentEdge.plusPlusEdges.min().getKey() - currentTree.eps - opposite.eps;
+                        }
+                        if (opposite.nextTree != null && opposite.nextTree != dummyTree) {
+                            // opposite tree is in the same connected component
+                            // since the trees in the same connected component have the same dual change
+                            // we don't have to check (-, +) edges in this tree edge
+                            if (2 * eps > plusPlusEps) {
+                                eps = plusPlusEps / 2;
+                            }
+                            continue;
+                        }
+
+                        double[] plusMinusEps = new double[2];
+                        plusMinusEps[0] = INFINITY;
+                        if (!currentEdge.getCurrentPlusMinusHeap(0).isEmpty()) {
+                            plusMinusEps[0] = currentEdge.getCurrentPlusMinusHeap(0).min().getKey() - currentTree.eps + opposite.eps;
+                        }
+                        plusMinusEps[1] = INFINITY;
+                        if (!currentEdge.getCurrentPlusMinusHeap(1).isEmpty()) {
+                            plusMinusEps[1] = currentEdge.getCurrentPlusMinusHeap(1).min().getKey() - opposite.eps + currentTree.eps;
+                        }
+                        if (opposite.nextTree == dummyTree) {
+                            // opposite tree is in another connected component and has valid accumulated eps
+                            oppositeEps = opposite.accumulatedEps;
+                        } else if (plusMinusEps[0] > 0 && plusMinusEps[1] > 0) {
+                            // this tree edge doesn't contain any tight (-, +) cross-tree edge and opposite tree
+                            // hasn't been processed yet.
+                            oppositeEps = 0;
+                        } else {
+                            // opposite hasn't been processed and there is a tight (-, +) cross-tree edge between
+                            // current tree and opposite tree => we add opposite to the current connected component
+                            connectedComponentLast.nextTree = opposite;
+                            connectedComponentLast = opposite.nextTree = opposite;
+                            if (eps > opposite.accumulatedEps) {
+                                // eps of the connected component can't be greater than the minimum
+                                // accumulated eps among trees in the connected component
+                                eps = opposite.accumulatedEps;
+                            }
+                            continue;
+                        }
+                        if (eps > plusPlusEps - oppositeEps) {
+                            // bounded by the resulting slack of a (+, +) cross-tree edge
+                            eps = plusPlusEps - oppositeEps;
+                        }
+                        if (eps > plusMinusEps[dir] + oppositeEps) {
+                            // bounded by the resulting slack of a (+, -) cross-tree edge in the current direction
+                            eps = plusMinusEps[dir] + oppositeEps;
+                        }
+
+                    }
+                }
+                if (currentTree.nextTree == currentTree) {
+                    // the end of the connected component
+                    break;
+                }
+                currentTree = currentTree.nextTree;
+            }
+
+            Tree nextTree = startTree;
+            do {
+                currentTree = nextTree;
+                nextTree = nextTree.nextTree;
+                currentTree.nextTree = dummyTree;
+                currentTree.accumulatedEps = eps;
+            } while (currentTree != nextTree);
+        }
+        return false;
     }
 
     void multipleTreeFixedDelta() {
