@@ -24,7 +24,7 @@ public abstract class LCATestBase {
     }
 
     @Test
-    public void testDisconnectSmalGraph(){
+    public void testDisconnectSmallGraph(){
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
         g.addVertex("b");
@@ -35,6 +35,46 @@ public abstract class LCATestBase {
         Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
         Assert.assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
         Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
+    }
+
+    @Test
+    public void testGraphAllPossibleQueries(){
+        final int N = 100;
+
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+
+        Random random = new Random(0x88);
+
+        for (int i = 0; i < N; i++){
+            g.addVertex(i);
+
+            if (i > 0){
+                g.addEdge(i, random.nextInt(i));
+            }
+        }
+
+        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, 0);
+        LCAAlgorithm<Integer> lcaAlgorithm2;
+
+        if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
+            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, 0);
+        else
+            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, 0);
+
+        List<Pair<Integer, Integer>> queries = new ArrayList<>(N * N);
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                queries.add(Pair.of(i, j));
+            }
+        }
+
+        List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
+        List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+
+        for (int i = 0; i < queries.size(); i++) {
+            Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+        }
     }
 
     @Test
