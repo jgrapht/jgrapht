@@ -47,7 +47,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
      * @param root the root of the graph
      */
     public TarjanLCAFinder(Graph<V, E> graph, V root) {
-        assert GraphTests.isTree(graph);
+        assert GraphTests.isForest(graph);
         this.graph = graph;
         this.root = root;
 

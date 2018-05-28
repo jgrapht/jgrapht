@@ -18,7 +18,6 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
@@ -75,13 +74,8 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      * @param graph the input graph
      */
     public NaiveLCAFinder(Graph<V, E> graph) {
-        assert GraphTests.isDAG(graph);
+//        TODO: assert GraphTests.isDAG(graph);
         this.graph = graph;
-    }
-
-    @Override
-    public V getLCA(V a, V b) {
-        return findLca(a, b);
     }
 
     /**
@@ -92,7 +86,8 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      *
      * @return the first found LCA of a and b, or null if there is no LCA.
      */
-    public V findLca(V a, V b)
+    @Override
+    public V getLCA(V a, V b)
     {
         return findLca(
             Collections.singleton(a), Collections.singleton(b), new LinkedHashSet<>(),
@@ -108,7 +103,7 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      * @return the set of all LCAs of a and b, or empty set if there is no LCA.
      */
     @SuppressWarnings("unchecked")
-    public Set<V> findLcas(V a, V b)
+    public Set<V> getAllLCAs(V a, V b)
     {
         Set<V>[] visitedSets = new Set[2];
         // set of nodes visited from a
