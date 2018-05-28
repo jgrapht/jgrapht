@@ -1,22 +1,28 @@
 package org.jgrapht.alg.blossom;
 
+import org.jgrapht.Graph;
+
 import java.util.*;
 
 class State<V, E> {
+    Graph<V, E> graph;
     Node[] nodes;
     Edge[] edges;
     Tree[] trees;
     int nodeNum;
     int edgeNum;
     int treeNum;
+    int removedNum;
     BlossomPerfectMatching.Statistics statistics;
     Map<V, Node> vertexMap;
     Map<E, Edge> edgeMap;
+    Map<Edge, E> backEdgeMap;
 
-    public State(Node[] nodes, Edge[] edges, Tree[] trees,
+    public State(Graph<V, E> graph, Node[] nodes, Edge[] edges, Tree[] trees,
                  int nodeNum, int edgeNum, int treeNum,
                  BlossomPerfectMatching.Statistics statistics,
                  Map<V, Node> vertexMap, Map<E, Edge> edgeMap) {
+        this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;
         this.trees = trees;
@@ -26,6 +32,10 @@ class State<V, E> {
         this.statistics = statistics;
         this.vertexMap = vertexMap;
         this.edgeMap = edgeMap;
+        backEdgeMap = new HashMap<>();
+        for (Map.Entry<E, Edge> entry : edgeMap.entrySet()) {
+            backEdgeMap.put(entry.getValue(), entry.getKey());
+        }
     }
 
     public static TreeEdge addTreeEdge(Tree from, Tree to) {
@@ -69,6 +79,12 @@ class State<V, E> {
             Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
             opposite.currentEdge = treeEdge;
             opposite.currentDirection = iterator.getCurrentDirection();
+        }
+    }
+
+    public void clearCurrentEdges(Tree tree) {
+        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+            iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
         }
     }
 

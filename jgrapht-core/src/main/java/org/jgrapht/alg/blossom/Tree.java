@@ -41,7 +41,7 @@ class Tree {
 
     @Override
     public String toString() {
-        return "Tree id=" + id;
+        return "Tree id=" + id + ", eps = " + eps + ", root = " + root;
     }
 
     public FibonacciHeapNode<Edge> addPlusInfinityEdge(Edge edge, double key) {

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.jgrapht.alg.blossom.Node.Label.MINUS;
 import static org.junit.Assert.*;
 
 public class TreeTest {
@@ -76,7 +77,10 @@ public class TreeTest {
         Node root = new Node();
         Tree tree = new Tree(root);
 
-        Node blossom = new Node(true, false, true, false, Node.Label.MINUS);
+        Node blossom = new Node();
+        blossom.label = MINUS;
+        blossom.isOuter = true;
+        blossom.isBlossom = true;
         tree.addMinusBlossom(blossom, blossom.dual);
 
         assertNotNull(blossom.fibNode);

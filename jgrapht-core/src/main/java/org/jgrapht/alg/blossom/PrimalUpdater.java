@@ -1,8 +1,12 @@
 package org.jgrapht.alg.blossom;
 
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeap;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import static org.jgrapht.alg.blossom.Node.Label.*;
@@ -22,11 +26,12 @@ class PrimalUpdater<V, E> {
     }
 
     public void augment(Edge augmentEdge) {
+        System.out.println("Augmenting edge " + augmentEdge);
         Node node;
         // augmenting trees on both sides
         for (int dir = 0; dir < 2; dir++) {
             node = augmentEdge.head[dir];
-            augmentBranch(node);
+            augmentBranch(node, augmentEdge);
             node.matched = augmentEdge;
         }
 
@@ -39,6 +44,7 @@ class PrimalUpdater<V, E> {
         // initializing blossom
         blossom.tree = tree;
         blossom.isBlossom = true;
+        blossom.isOuter = true;
         blossom.isTreeRoot = blossomRoot.isTreeRoot;
         blossom.dual = -tree.eps;
         if (blossom.isTreeRoot) {
@@ -68,6 +74,7 @@ class PrimalUpdater<V, E> {
     }
 
     public void expand(Node blossom) {
+        System.out.println("Expanding blossom " + blossom);
         Tree tree = blossom.tree;
         double eps = tree.eps;
         blossom.dual -= eps;
@@ -115,6 +122,72 @@ class PrimalUpdater<V, E> {
             current.isMarked = true;
             current = current.blossomSibling.getOpposite(current);
         } while (current != blossomRoot);
+
+        state.statistics.expandNum++;
+        state.removedNum++;
+        if (state.removedNum > 4 * state.nodeNum) {
+            freeRemoved();
+        }
+    }
+
+    public MatchingAlgorithm.Matching<V, E> finish() {
+        Set<E> edges = new HashSet<>();
+        double weight = 0;
+        Node[] nodes = state.nodes;
+        Node blossomRoot;
+        Node node;
+        Node nextNode;
+        Node blossomPrev;
+        Node blossom;
+        E edge;
+
+        for (int i = 0; i < state.nodeNum; i++) {
+            if (nodes[i].matched == null) {
+                // changing the matching in the blossoms
+                blossomPrev = null;
+                blossom = nodes[i];
+                do {
+                    blossom.isMarked = true;
+                    blossom.blossomGrandparent = blossomPrev;
+                    blossomPrev = blossom;
+                    blossom = blossomPrev.blossomParent;
+                } while (!blossom.isOuter && !blossom.blossomParent.isMarked);
+                blossom.isMarked = true;
+                // now node.blossomGrandparent points to the previous blossom in the hierarchy except for the blossom node
+                while (true) {
+                    for (blossomRoot = blossom.matched.getCurrentOriginal(blossom); blossomRoot.blossomParent != blossom; blossomRoot = blossomRoot.blossomParent) {
+                    }
+                    blossomRoot.matched = blossom.matched;
+                    node = blossomRoot.blossomSibling.getOpposite(blossomRoot);
+                    // changing the matching in the blossom
+                    while (node != blossomRoot) {
+                        node.matched = node.blossomSibling;
+                        nextNode = node.blossomSibling.getOpposite(node);
+                        nextNode.matched = node.matched;
+                        node = nextNode.blossomSibling.getOpposite(nextNode);
+                    }
+
+                    blossom = blossomPrev;
+                    if (!blossom.isBlossom) {
+                        break;
+                    }
+                    blossomPrev = blossom.blossomGrandparent;
+                }
+            }
+        }
+        for (int i = 0; i < state.nodeNum; i++) {
+            edge = state.backEdgeMap.get(nodes[i].matched);
+            if (edge == null) {
+                System.out.println("Node " + i + " is unmatched");
+                throw new RuntimeException();
+            } else {
+                if (!edges.contains(edge)) {
+                    edges.add(edge);
+                    weight += state.graph.getEdgeWeight(edge);
+                }
+            }
+        }
+        return new MatchingAlgorithm.MatchingImpl<>(state.graph, edges, weight);
     }
 
     private void processEvenBranchExpand(Node blossomRoot, Node branchesEndpoint, Node blossom) {
@@ -254,6 +327,7 @@ class PrimalUpdater<V, E> {
     }
 
     private void recursiveGrow(Edge edge, boolean manyGrows) {
+        System.out.println("Growing edge " + edge);
         int dirToMinusNode = edge.head[0].isInftyNode() ? 0 : 1;
         Node nodeInTheTree = edge.head[1 - dirToMinusNode];
 
@@ -309,6 +383,7 @@ class PrimalUpdater<V, E> {
         plusNode.dual -= eps;
         Edge edge;
         int dir;
+        List<Edge> growEdges = new LinkedList<>();
         for (Node.AdjacentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             dir = iterator.getDir();
@@ -342,13 +417,17 @@ class PrimalUpdater<V, E> {
                 if (edge.slack > eps || !manyGrows) {
                     plusNode.tree.addPlusInfinityEdge(edge, edge.slack);
                 } else {
-                    recursiveGrow(edge, manyGrows);
+                    growEdges.add(edge);
                 }
             }
         }
+        for (Edge growEdge : growEdges) {
+            recursiveGrow(growEdge, false);
+        }
+        state.statistics.growNum++;
     }
 
-    private void augmentBranch(Node firstNode) {
+    private void augmentBranch(Node firstNode, Edge augmentEdge) {
         Tree tree = firstNode.tree;
         double eps = tree.eps;
         Node root = tree.root;
@@ -420,15 +499,18 @@ class PrimalUpdater<V, E> {
         }
 
         // updating matching
-        if (!firstNode.isTreeRoot) {
-            Node minusNode = firstNode.treeParent;
-            Node plusNode = minusNode.treeParent;
-            while (minusNode != null) {
-                plusNode.matched = minusNode.matched = minusNode.parentEdge;
-                plusNode = minusNode.treeParent;
-                minusNode = plusNode.treeParent;
-            }
+
+        Edge matchedEdge = augmentEdge;
+        Node plusNode = firstNode;
+        Node minusNode = plusNode.treeParent;
+        while (minusNode != null) {
+            plusNode.matched = matchedEdge;
+            matchedEdge = minusNode.parentEdge;
+            minusNode.matched = matchedEdge;
+            plusNode = minusNode.treeParent;
+            minusNode = plusNode.treeParent;
         }
+        root.matched = matchedEdge;
 
         // removing root from the linked list of roots;
         root.treeSiblingPrev.treeSiblingNext = root.treeSiblingNext;
@@ -547,7 +629,7 @@ class PrimalUpdater<V, E> {
                 } else {
                     if (varNode.isBlossom) {
                         // TODO: update slack of the edge and dual variable of the blossom
-                        tree.removeMinusBlossom(blossom);
+                        tree.removeMinusBlossom(varNode);
                     }
                     shrinkMinusNode(varNode, blossom);
                     varNode.removeFromChildList();
@@ -660,5 +742,26 @@ class PrimalUpdater<V, E> {
             current = current.blossomSibling.getOpposite(current);
         }
         return (hops & 1) == 0;
+    }
+
+    private void freeRemoved() {
+        Node[] nodes = state.nodes;
+        Node iterNode;
+        Node jumpNode;
+        for (int i = 0; i < state.nodeNum; i++) {
+            iterNode = nodes[i];
+            for (jumpNode = iterNode; !jumpNode.isOuter && !jumpNode.isMarked; jumpNode = jumpNode.blossomParent) {
+                jumpNode.isMarked = true;
+                if (jumpNode.blossomGrandparent.isRemoved) {
+                    jumpNode.blossomGrandparent = jumpNode.blossomParent;
+                }
+            }
+        }
+        for (int i = 0; i < state.nodeNum; i++) {
+            iterNode = nodes[i];
+            for (jumpNode = iterNode; !jumpNode.isOuter && jumpNode.isMarked; jumpNode = jumpNode.blossomParent) {
+                jumpNode.isMarked = false;
+            }
+        }
     }
 }

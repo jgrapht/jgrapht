@@ -4,20 +4,26 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.AsUndirectedGraph;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+
+import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA;
 
 public class BlossomPerfectMatching<V, E> {
     public static final Options DEFAULT_OPTIONS = new Options(SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE,
-            DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.GREEDY);
+            MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.NONE);
     public static final double EPS = 10e-12;
     public static final int INFINITY = Integer.MAX_VALUE;
 
     private final Graph<V, E> graph;
-    State<V, E> state;
+    private State<V, E> state;
+    private MatchingAlgorithm.Matching<V, E> matching;
     private int n;
     private int m;
-    private PrimalUpdater primalUpdater;
-    private DualUpdater dualUpdater;
+    private PrimalUpdater<V, E> primalUpdater;
+    private DualUpdater<V, E> dualUpdater;
     private Options options;
 
 
@@ -42,85 +48,146 @@ public class BlossomPerfectMatching<V, E> {
         this.state = initializer.initialize(options.initializationType);
         this.primalUpdater = new PrimalUpdater<>(state);
         this.dualUpdater = new DualUpdater<>(state, primalUpdater);
+        printMap();
 
-        Node root1 = null;
-        Node root2 = null;
-        Node root3 = null;
+        Node currentRoot;
+        Node nextRoot;
+        Node nextNextRoot = null;
         Tree tree;
 
         while (true) {
+            int startTreeNum = state.treeNum;
 
-            for (root1 = state.nodes[n].treeSiblingNext; root1 != null; ) {
+            for (currentRoot = state.nodes[n].treeSiblingNext; currentRoot != null; ) {
                 // initializing variables
-                root2 = root1.treeSiblingNext;
-                if (root2 != null) {
-                    root3 = root2.treeSiblingNext;
+                nextRoot = currentRoot.treeSiblingNext;
+                if (nextRoot != null) {
+                    nextNextRoot = nextRoot.treeSiblingNext;
                 }
-                tree = root1.tree;
+                tree = currentRoot.tree;
+                int iterationTreeNum = state.treeNum;
 
-                ////////////////////////////////////////////////////////////
-                /////////////////////// first phase ////////////////////////
-                ////////////////////////////////////////////////////////////
-                // going through all adjacent trees via trees edges directing to them and
-                // setting trees.currentEdge = treeEdge
+                printState();
+
+                // first phase
                 state.setCurrentEdges(tree);
 
                 if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE) {
                     dualUpdater.updateDualsSingle(tree);
                 }
 
-                /////////////////////////////////////////////////////////////
-                ////////////////////// second phase /////////////////////////
-                /////////////////////////////////////////////////////////////
-                int treeNum1 = state.treeNum;
-                while (treeNum1 == state.treeNum) {
+                // second phase
+                // applying primal operations to the current tree while it is possible
+                while (iterationTreeNum == state.treeNum) {
+                    printState();
+                    System.out.println("Current tree is " + tree + ", current root is " + currentRoot);
                     Edge edge;
                     Node node;
-                    // can grow trees
-                    if ((edge = tree.plusInfinityEdges.min().getData()) != null && edge.slack <= 0) {
-                        tree.removePlusInfinityEdge(edge);
-                        primalUpdater.grow(edge, true);
+                    if (!tree.plusInfinityEdges.isEmpty()) {
+                        // can grow tree
+                        edge = tree.plusInfinityEdges.min().getData();
+                        if (edge.slack <= tree.eps) {
+                            primalUpdater.grow(edge, true);
+                            continue;
+                        }
                     }
-                    // can shrink blossom
-                    else if ((edge = tree.plusPlusEdges.min().getData()) != null && edge.slack <= 0) {
-                        primalUpdater.shrink(edge);
+                    if (!tree.plusPlusEdges.isEmpty()) {
+                        // can shrink blossom
+                        edge = tree.plusPlusEdges.min().getData();
+                        if (edge.slack <= 2 * tree.eps) {
+                            primalUpdater.shrink(edge);
+                            continue;
+                        }
                     }
-                    //
-                    else if ((node = tree.minusBlossoms.min().getData()) != null && node.dual <= 0) {
-
+                    if (!tree.minusBlossoms.isEmpty()) {
+                        // can expand blossom
+                        node = tree.minusBlossoms.min().getData();
+                        if (node.dual <= tree.eps) {
+                            primalUpdater.expand(node);
+                            continue;
+                        }
                     }
-
+                    // can't do anything
+                    System.out.println("Can't do anything");
+                    break;
                 }
+                printState();
 
-
-                //////////////////////////////////////////////////////////////
-                ///////////////////////// third phase ////////////////////////
-                //////////////////////////////////////////////////////////////
+                // third phase
                 if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER) {
                     if (dualUpdater.updateDualsSingle(tree)) {
-                        // continue with the same trees
+                        // since some progress has been made, continue with the same trees
                         continue;
                     }
                 }
                 // clearing current edge pointers
-                for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
-                    iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
+                state.clearCurrentEdges(tree);
+
+                currentRoot = nextRoot;
+                if (nextRoot != null && nextRoot.isInftyNode()) {
+                    currentRoot = nextNextRoot;
                 }
-
-            }
-            root1 = root2;
-            if (root1 != null && !root1.isTreeRoot) {
-                root1 = root3;
             }
 
-            if (state.nodeNum == 0) break;
-            if (dualUpdater.updateDuals(options.dualUpdateType) <= 0) {
-                dualUpdater.updateDuals(DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA);
+            printTrees();
+            printState();
+
+            if (state.treeNum == 0) {
+                // we are done
+                break;
+            }
+
+            if (startTreeNum == state.treeNum) {
+                if (dualUpdater.updateDuals(options.dualUpdateType) <= 0) {
+                    dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA);
+                }
             }
         }
+        return matching = primalUpdater.finish();
+    }
 
+    private void printState() {
+        Node[] nodes = state.nodes;
+        Edge[] edges = state.edges;
+        System.out.println();
+        for (int i = 0; i < 20; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+        Set<Edge> matched = new HashSet<>();
+        for (int i = 0; i < state.nodeNum; i++) {
+            Node node = nodes[i];
+            if (node.matched != null) {
+                Edge matchedEdge = node.matched;
+                matched.add(node.matched);
+                if (matchedEdge.head[0].matched == null || matchedEdge.head[1].matched == null) {
+                    System.out.println("Problem with edge " + matchedEdge);
+                    throw new RuntimeException();
+                }
+            }
+            System.out.println(nodes[i]);
+        }
+        for (int i = 0; i < 20; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+        for (int i = 0; i < state.edgeNum; i++) {
+            System.out.println(edges[i] + (matched.contains(edges[i]) ? ", matched" : "") + (edges[i].slack == 0 ? ", tight" : ""));
+        }
+    }
 
-        return null;
+    private void printTrees() {
+        for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+            Tree tree = root.tree;
+            System.out.println(tree);
+        }
+    }
+
+    private void printMap() {
+        System.out.println(state.nodeNum + " " + state.edgeNum);
+        for (Map.Entry<V, Node> entry : state.vertexMap.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
     }
 
     public Statistics getStatistics() {

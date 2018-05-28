@@ -19,8 +19,16 @@ class Edge {
         prev = new Edge[2];
     }
 
+    public Node getOpposite(Node node) {
+        return head[0] == node ? head[1] : head[0];
+    }
+
     public Node getOppositeOriginal(Node endPoint) {
         return headOriginal[0] == endPoint ? headOriginal[1] : headOriginal[0];
+    }
+
+    public Node getCurrentOriginal(Node node) {
+        return head[0] == node ? headOriginal[0] : headOriginal[1];
     }
 
     public int getDirTo(Node current) {
@@ -31,41 +39,30 @@ class Edge {
         return head[0] == current ? 1 : 0;
     }
 
-    public Node getOpposite(Node node) {
-        return head[0] == node ? head[1] : head[0];
-    }
-
     @Override
     public String toString() {
-        return "Edge (" + headOriginal[0].id + "," + headOriginal[1].id + ")";
-    }
-
-    public Node getOuterHead(int direction) {
-        // TODO: fix
-        return head[direction];
+        return "Edge (" + headOriginal[0].id + "," + headOriginal[1].id + "), slack: " + slack + ", true slack: " + getTrueSlack();
     }
 
     public double getTrueSlack() {
         double result = slack;
-        if (!head[0].isOuter && head[1].isOuter) {
-            return result;
-        } else {
-            if (head[0].tree != null) {
-                if (head[0].isPlusNode()) {
-                    result -= head[0].tree.eps;
-                } else {
-                    result += head[0].tree.eps;
-                }
+
+        if (head[0].tree != null) {
+            if (head[0].isPlusNode()) {
+                result -= head[0].tree.eps;
+            } else {
+                result += head[0].tree.eps;
             }
-            if (head[1].tree != null) {
-                if (head[1].isPlusNode()) {
-                    result -= head[1].tree.eps;
-                } else {
-                    result += head[1].tree.eps;
-                }
-            }
-            return result;
         }
+        if (head[1].tree != null) {
+            if (head[1].isPlusNode()) {
+                result -= head[1].tree.eps;
+            } else {
+                result += head[1].tree.eps;
+            }
+        }
+        return result;
+
     }
 }
 

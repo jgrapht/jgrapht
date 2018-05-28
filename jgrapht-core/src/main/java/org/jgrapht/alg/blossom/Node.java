@@ -43,20 +43,8 @@ class Node implements Iterable<Edge> {
     int id;
 
     public Node() {
-        this(false, false, true, false, PLUS);
-    }
-
-    public Node(Label label) {
-        this(false, false, true, false, label);
-    }
-
-    public Node(boolean isTreeRoot, boolean isBlossom, boolean isOuter, boolean isProcessed, Label label) {
-        this.isTreeRoot = isTreeRoot;
-        this.isBlossom = isBlossom;
-        this.isOuter = isOuter;
-        this.isProcessed = isProcessed;
-        this.label = label;
         this.first = new Edge[2];
+        this.label = PLUS;
         this.id = currentId++;
     }
 
@@ -212,7 +200,7 @@ class Node implements Iterable<Edge> {
 
     @Override
     public String toString() {
-        return "Node id = " + id;
+        return "Node id = " + id + ", dual: " + dual + ", true dual: " + getTrueDual() + ", label: " + label;
     }
 
     enum Label {

@@ -15,6 +15,7 @@ class DualUpdater<V, E> {
     }
 
     double updateDuals(DualUpdateType type) {
+        System.out.println("Start updating duals");
         // going through all trees roots
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
@@ -83,17 +84,18 @@ class DualUpdater<V, E> {
             if (!currentPlusMinusHeap.isEmpty() && (varEdge = currentPlusMinusHeap.min().getData()).slack + opposite.eps < eps) {
                 eps = varEdge.slack + opposite.eps;
             }
-            if (eps > eps_augment) {
-                eps = eps_augment;
-            }
-            if (eps > tree.eps) {
-                delta = eps - tree.eps;
-                tree.eps = eps;
-            }
+        }
+        if (eps > eps_augment) {
+            eps = eps_augment;
+        }
+        if (eps > tree.eps) {
+            delta = eps - tree.eps;
+            tree.eps = eps;
+            System.out.println("Updating duals: now eps of " + tree + " is " + eps);
         }
         if (augmentEdge != null && eps_augment <= tree.eps) {
             primalUpdater.augment(augmentEdge);
-            return false;
+            return true;
         } else {
             return delta > EPS;
         }

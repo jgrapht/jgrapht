@@ -12,6 +12,7 @@ import static org.jgrapht.alg.blossom.BlossomPerfectMatching.EPS;
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.GREEDY;
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class InitializerTest {
@@ -30,6 +31,12 @@ public class InitializerTest {
 
         assertEquals(5, node1.dual + node2.dual, EPS);
         assertEquals(0, edge12.slack, EPS);
+
+        assertTrue(node1.isOuter);
+        assertTrue(node2.isOuter);
+
+        assertFalse(node1.isTreeRoot);
+        assertFalse(node2.isTreeRoot);
 
         assertEquals(2, state.nodeNum);
         assertEquals(1, state.edgeNum);
@@ -90,6 +97,22 @@ public class InitializerTest {
         assertEquals(0, node5.dual, EPS);
         assertEquals(0, node6.dual, EPS);
         assertEquals(0, node7.dual, EPS);
+
+        assertTrue(node1.isOuter);
+        assertTrue(node2.isOuter);
+        assertTrue(node3.isOuter);
+        assertTrue(node4.isOuter);
+        assertTrue(node5.isOuter);
+        assertTrue(node6.isOuter);
+        assertTrue(node7.isOuter);
+
+        assertTrue(node1.isTreeRoot);
+        assertTrue(node2.isTreeRoot);
+        assertTrue(node3.isTreeRoot);
+        assertTrue(node4.isTreeRoot);
+        assertTrue(node5.isTreeRoot);
+        assertTrue(node6.isTreeRoot);
+        assertTrue(node7.isTreeRoot);
 
         assertEquals(1, edge12.slack, EPS);
         assertEquals(2, edge23.slack, EPS);
