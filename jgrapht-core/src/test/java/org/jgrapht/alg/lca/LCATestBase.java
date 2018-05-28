@@ -24,6 +24,20 @@ public abstract class LCATestBase {
     }
 
     @Test
+    public void testDisconnectSmalGraph(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("a");
+        g.addVertex("b");
+
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, "a");
+
+        Assert.assertNull(lcaAlgorithm.getLCA("a", "b"));
+        Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
+        Assert.assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
+        Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
+    }
+
+    @Test
     public void testLongChain(){
         final int N = 2_000;
         final int Q = 100_000;
@@ -106,6 +120,51 @@ public abstract class LCATestBase {
         Assert.assertEquals((int)lcaAlgorithm.getLCA(5, 11), 1);
         Assert.assertEquals((int)lcaAlgorithm.getLCA(5, 6), 2);
         Assert.assertEquals((int)lcaAlgorithm.getLCA(4, 2), 2);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(4, 5), 2);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(2, 2), 2);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(8, 6), 2);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(7, 8), 4);
+    }
+
+    @Test
+    public void testSmallTree2(){
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        for (int i = 1; i <= 20; i++)
+            graph.addVertex(i);
+
+        graph.addEdge(2, 1);
+        graph.addEdge(3, 1);
+        graph.addEdge(4, 1);
+        graph.addEdge(5, 1);
+        graph.addEdge(6, 2);
+        graph.addEdge(7, 5);
+        graph.addEdge(8, 7);
+        graph.addEdge(9, 3);
+        graph.addEdge(10, 2);
+        graph.addEdge(11, 9);
+        graph.addEdge(12, 6);
+        graph.addEdge(13, 4);
+        graph.addEdge(14, 6);
+        graph.addEdge(15, 2);
+        graph.addEdge(16, 10);
+        graph.addEdge(17, 15);
+        graph.addEdge(18, 6);
+        graph.addEdge(19, 14);
+        graph.addEdge(20, 11);
+
+        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, 1);
+
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(9, 14), 1);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(10, 9), 1);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(15, 15), 15);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(1, 17), 1);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(3, 3), 3);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(3, 1), 1);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(11, 14), 1);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(18, 19), 6);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(12, 2), 2);
+        Assert.assertEquals((int)lcaAlgorithm.getLCA(16, 14), 2);
     }
 
     @Test

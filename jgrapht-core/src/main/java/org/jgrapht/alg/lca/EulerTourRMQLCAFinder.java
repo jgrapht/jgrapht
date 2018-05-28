@@ -119,17 +119,17 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     public V getLCA(V a, V b) {
         computeAncestorsStructure();
 
-        assert vertexMap.containsKey(a);
-        assert vertexMap.containsKey(b);
-
-        int x = representative[vertexMap.get(a)];
-        int y = representative[vertexMap.get(b)];
-
-        if (x == -1 || y == -1)
-            return null;
+        int x = vertexMap.get(a);
+        int y = vertexMap.get(b);
 
         if (x == y)
             return a;
+
+        x = representative[x];
+        y = representative[y];
+
+        if (x == -1 || y == -1)
+            return null;
 
         if (x > y) {
             int t = x;

@@ -56,26 +56,29 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     public V getLCA(V a, V b) {
         computeAncestorMatrix();
 
-        int indA = vertexMap.get(a);
-        int indB = vertexMap.get(b);
+        int x = vertexMap.get(a);
+        int y = vertexMap.get(b);
 
-        if (timeIn[indA] == 0 || timeIn[indB] == 0)
-            return null;
-
-        if (isAncestor(indA, indB))
+        if (x == y)
             return a;
 
-        if (isAncestor(indB, indA))
+        if (timeIn[x] == 0 || timeIn[y] == 0)
+            return null;
+
+        if (isAncestor(x, y))
+            return a;
+
+        if (isAncestor(y, x))
             return b;
 
         for (int l = MAX_LEVEL - 1; l >= 0; l--)
-            if (ancestors[l][indA] != -1 && !isAncestor(ancestors[l][indA], indB))
-                indA = ancestors[l][indA];
+            if (ancestors[l][x] != -1 && !isAncestor(ancestors[l][x], y))
+                x = ancestors[l][x];
 
-        if (ancestors[0][indA] == -1)
+        if (ancestors[0][x] == -1)
             return null;
         else
-            return indexList.get(ancestors[0][indA]);
+            return indexList.get(ancestors[0][x]);
     }
 
     public static int log2(int n){

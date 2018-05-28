@@ -110,7 +110,10 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
             queryOccurs.addToSet(a, i);
             queryOccurs.addToSet(b, i);
 
-            this.lowestCommonAncestors.add(null);
+            if (a.equals(b))
+                this.lowestCommonAncestors.add(a);
+            else
+                this.lowestCommonAncestors.add(null);
         }
 
         TarjanOLCA(root, null);
