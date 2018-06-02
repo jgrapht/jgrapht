@@ -34,7 +34,7 @@ public class StateTest {
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(NONE));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);

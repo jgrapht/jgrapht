@@ -177,7 +177,7 @@ class Tree {
                 return currentNode = currentNode.firstTreeChild;
             } else {
                 while (currentNode != root && currentNode.treeSiblingNext == null) {
-                    currentNode = currentNode.treeParent;
+                    currentNode = currentNode.parentEdge.getOpposite(currentNode);
                 }
                 currentNode = currentNode.treeSiblingNext;
                 return currentNode == stop ? currentNode = null : currentNode;

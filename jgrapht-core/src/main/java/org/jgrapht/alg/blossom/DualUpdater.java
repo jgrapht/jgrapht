@@ -95,7 +95,7 @@ class DualUpdater<V, E> {
         }
         if (augmentEdge != null && eps_augment <= tree.eps) {
             primalUpdater.augment(augmentEdge);
-            return true;
+            return false;
         } else {
             return delta > EPS;
         }

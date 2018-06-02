@@ -31,7 +31,6 @@ class Node implements Iterable<Edge> {
     Edge matched;
 
     Tree tree;
-    Node treeParent;
     Node firstTreeChild;
     Node treeSiblingNext;
     Node treeSiblingPrev;
@@ -81,8 +80,17 @@ class Node implements Iterable<Edge> {
         }
     }
 
-    public void addChild(Node child) {
-        child.treeParent = this;
+    public Node getTreeGrandparent() {
+        Node t = parentEdge.getOpposite(this);
+        return t.parentEdge.getOpposite(t);
+    }
+
+    public Node getTreeParent() {
+        return parentEdge == null ? null : parentEdge.getOpposite(this);
+    }
+
+    public void addChild(Node child, Edge parentEdge) {
+        child.parentEdge = parentEdge;
         child.tree = tree;
         child.treeSiblingNext = firstTreeChild;
         if (firstTreeChild == null) {
@@ -100,8 +108,8 @@ class Node implements Iterable<Edge> {
             treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
         } else {
             // this vertex is the last child
-            if (treeParent != null && treeParent.firstTreeChild != null) {
-                treeParent.firstTreeChild.treeSiblingPrev = treeSiblingPrev;
+            if (parentEdge != null && parentEdge.getOpposite(this).firstTreeChild != null) {
+                parentEdge.getOpposite(this).firstTreeChild.treeSiblingPrev = treeSiblingPrev;
             }
         }
         if (treeSiblingPrev.treeSiblingNext != null) {
@@ -111,7 +119,7 @@ class Node implements Iterable<Edge> {
             // this vertex is the first child
             // we don't have to check whether treeParent is null since if this node
             // is root then treeSiblingPrev.treeSiblingNext != null
-            treeParent.firstTreeChild = treeSiblingNext;
+            parentEdge.getOpposite(this).firstTreeChild = treeSiblingNext;
         }
     }
 
@@ -200,7 +208,7 @@ class Node implements Iterable<Edge> {
 
     @Override
     public String toString() {
-        return "Node id = " + id + ", dual: " + dual + ", true dual: " + getTrueDual() + ", label: " + label;
+        return "Node id = " + id + ", dual: " + dual + ", true dual: " + getTrueDual() + ", label: " + label + (isMarked ? ", marked" : "");
     }
 
     enum Label {

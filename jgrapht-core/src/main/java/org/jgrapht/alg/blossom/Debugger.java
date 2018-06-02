@@ -22,25 +22,6 @@ public class Debugger {
         return result;
     }
 
-    public static void setCurrentEdges(Tree tree) {
-        TreeEdge treeEdge;
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
-            treeEdge = iterator.next();
-            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
-            opposite.currentEdge = treeEdge;
-            opposite.currentDirection = iterator.getCurrentDirection();
-        }
-    }
-
-    public static void clearCurrentEdges(Tree tree) {
-        TreeEdge treeEdge;
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
-            treeEdge = iterator.next();
-            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
-            opposite.currentEdge = null;
-        }
-    }
-
     public static TreeEdge getTreeEdge(Tree from, Tree to) {
         for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
             TreeEdge treeEdge = iterator.next();
@@ -80,6 +61,14 @@ public class Debugger {
             treeRoots.add(root);
         }
         return treeRoots;
+    }
+
+    public static Set<Node> getTreeNodes(Tree tree) {
+        Set<Node> nodes = new HashSet<>();
+        for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
+            nodes.add(iterator.next());
+        }
+        return nodes;
     }
 
     public static int dirToOpposite(TreeEdge treeEdge, Tree tree) {

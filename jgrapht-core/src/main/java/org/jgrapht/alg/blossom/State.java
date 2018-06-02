@@ -17,11 +17,12 @@ class State<V, E> {
     Map<V, Node> vertexMap;
     Map<E, Edge> edgeMap;
     Map<Edge, E> backEdgeMap;
+    BlossomPerfectMatching.Options options;
 
     public State(Graph<V, E> graph, Node[] nodes, Edge[] edges, Tree[] trees,
                  int nodeNum, int edgeNum, int treeNum,
                  BlossomPerfectMatching.Statistics statistics,
-                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap) {
+                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap, BlossomPerfectMatching.Options options) {
         this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;
@@ -32,6 +33,7 @@ class State<V, E> {
         this.statistics = statistics;
         this.vertexMap = vertexMap;
         this.edgeMap = edgeMap;
+        this.options = options;
         backEdgeMap = new HashMap<>();
         for (Map.Entry<E, Edge> entry : edgeMap.entrySet()) {
             backEdgeMap.put(entry.getValue(), entry.getKey());
@@ -83,6 +85,7 @@ class State<V, E> {
     }
 
     public void clearCurrentEdges(Tree tree) {
+        tree.currentEdge = null;
         for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
         }
@@ -198,10 +201,10 @@ class State<V, E> {
                     return currentNode = null;
                 }
                 return currentNode;
-            } else if (currentNode.treeParent == root && currentDirection == 1) {
+            } else if (currentNode.parentEdge.getOpposite(currentNode) == root && currentDirection == 1) {
                 return currentNode = null;
             } else {
-                return currentNode = currentNode.treeParent;
+                return currentNode = currentNode.parentEdge.getOpposite(currentNode);
             }
         }
 

@@ -16,33 +16,8 @@ import static org.junit.Assert.*;
 
 public class NodeTest {
 
-    @org.junit.Test
-    public void testAddChild1() {
-        Node parent = new Node();
-        Node child = new Node();
-        parent.addChild(child);
-        assertSame(parent.firstTreeChild, child);
-        assertSame(child.treeParent, parent);
-        assertNull(child.treeSiblingNext);
-        assertSame(child.treeSiblingPrev, child);
-    }
+    private BlossomPerfectMatching.Options noneOptions;
 
-    @Test
-    public void testAddChild2() {
-        Node parent = new Node();
-        Node firstChild = new Node();
-        Node secondChild = new Node();
-        parent.addChild(firstChild);
-        parent.addChild(secondChild);
-
-        assertSame(parent.firstTreeChild, secondChild);
-        assertSame(firstChild.treeParent, parent);
-        assertSame(secondChild.treeParent, parent);
-        assertNull(firstChild.treeSiblingNext);
-        assertSame(firstChild.treeSiblingPrev, secondChild);
-        assertSame(secondChild.treeSiblingNext, firstChild);
-        assertSame(secondChild.treeSiblingPrev, firstChild);
-    }
 
     /**
      * Tests correct edge addition and correct edge direction
@@ -88,7 +63,7 @@ public class NodeTest {
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);
@@ -138,7 +113,7 @@ public class NodeTest {
 
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
 
         Node node1 = state.vertexMap.get(1);
@@ -196,7 +171,7 @@ public class NodeTest {
         DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
 
         Node node1 = state.vertexMap.get(1);

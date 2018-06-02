@@ -22,7 +22,7 @@ public class InitializerTest {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(GREEDY);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(GREEDY));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);
@@ -61,7 +61,7 @@ public class InitializerTest {
         graph.addVertex(7);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(NONE));
 
         assertEquals(7, state.nodeNum);
         assertEquals(7, state.treeNum);

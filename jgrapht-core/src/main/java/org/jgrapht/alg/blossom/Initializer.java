@@ -23,9 +23,10 @@ class Initializer<V, E> {
         this.graph = graph;
     }
 
-    public State<V, E> initialize(InitializationType type) {
+    public State<V, E> initialize(BlossomPerfectMatching.Options options) {
+        InitializationType type = options.initializationType;
         initGraph();
-        state = new State<>(graph, nodes, edges, null, nodeNum, edgeNum, 0, new BlossomPerfectMatching.Statistics(), vertexMap, edgeMap);
+        state = new State<>(graph, nodes, edges, null, nodeNum, edgeNum, 0, new BlossomPerfectMatching.Statistics(), vertexMap, edgeMap, options);
 
         int treeNum;
         if (type == InitializationType.GREEDY) {

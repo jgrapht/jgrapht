@@ -14,13 +14,15 @@ import static org.junit.Assert.*;
 
 public class DualUpdaterTest {
 
+    private BlossomPerfectMatching.Options noneOptions = new BlossomPerfectMatching.Options(NONE);
+
     @org.junit.Test
     public void testUpdateDuals1() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
         assertTrue(dualUpdater.updateDuals(DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA) > 0);
         for (State.TreeRootsIterator iterator = state.treeRootsIterator(); iterator.hasNext(); ) {
@@ -36,7 +38,7 @@ public class DualUpdaterTest {
         Graphs.addEdgeWithVertices(graph, 1, 3, 7);
         Graphs.addEdgeWithVertices(graph, 2, 3, 10);
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
         dualUpdater.updateDuals(DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA);
         for (State.TreeRootsIterator iterator = state.treeRootsIterator(); iterator.hasNext(); ) {
@@ -51,7 +53,7 @@ public class DualUpdaterTest {
         DefaultEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2);
         graph.setEdgeWeight(edge, 5);
         Initializer<Integer, DefaultEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
         Tree tree = state.vertexMap.get(1).tree;
         dualUpdater.updateDualsSingle(tree);
@@ -70,7 +72,7 @@ public class DualUpdaterTest {
         DefaultWeightedEdge e35 = Graphs.addEdgeWithVertices(graph, 3, 5, 4);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
 
@@ -92,12 +94,12 @@ public class DualUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        Debugger.setCurrentEdges(node1.tree);
+        state.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, true);
-        Debugger.clearCurrentEdges(node1.tree);
-        Debugger.setCurrentEdges(node6.tree);
+        state.clearCurrentEdges(node1.tree);
+        state.setCurrentEdges(node6.tree);
         primalUpdater.grow(edge56, true);
-        Debugger.clearCurrentEdges(node6.tree);
+        state.clearCurrentEdges(node6.tree);
 
         assertTrue(dualUpdater.updateDualsSingle(node1.tree));
         assertEquals(2, node1.tree.eps, EPS);
@@ -120,7 +122,7 @@ public class DualUpdaterTest {
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 0); // matched free edge
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
 
@@ -133,9 +135,9 @@ public class DualUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge56);
-        Debugger.setCurrentEdges(node1.tree);
+        state.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
-        Debugger.clearCurrentEdges(node1.tree);
+        state.clearCurrentEdges(node1.tree);
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
         assertEquals(10, dualChange, EPS);
@@ -162,7 +164,7 @@ public class DualUpdaterTest {
         DefaultWeightedEdge e37 = Graphs.addEdgeWithVertices(graph, 3, 7, 5); // (+, -) cross-tree edge
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
 
@@ -179,12 +181,12 @@ public class DualUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
-        Debugger.setCurrentEdges(node1.tree);
+        state.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
-        Debugger.clearCurrentEdges(node1.tree);
-        Debugger.setCurrentEdges(node8.tree);
+        state.clearCurrentEdges(node1.tree);
+        state.setCurrentEdges(node8.tree);
         primalUpdater.grow(edge78, false);
-        Debugger.clearCurrentEdges(node8.tree);
+        state.clearCurrentEdges(node8.tree);
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
         assertEquals(dualChange, 7, EPS);
@@ -211,7 +213,7 @@ public class DualUpdaterTest {
         DefaultWeightedEdge e28 = Graphs.addEdgeWithVertices(graph, 2, 8, 6); // not tight (-, +) cross-tree edge
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(NONE);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
 
@@ -243,13 +245,13 @@ public class DualUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge910);
-        Debugger.setCurrentEdges(node1.tree);
+        state.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
-        Debugger.clearCurrentEdges(node1.tree);
+        state.clearCurrentEdges(node1.tree);
         TreeEdge treeEdge = Debugger.getTreeEdge(node1.tree, node8.tree);
-        Debugger.setCurrentEdges(node5.tree);
+        state.setCurrentEdges(node5.tree);
         primalUpdater.grow(edge56, false);
-        Debugger.clearCurrentEdges(node5.tree);
+        state.clearCurrentEdges(node5.tree);
 
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);

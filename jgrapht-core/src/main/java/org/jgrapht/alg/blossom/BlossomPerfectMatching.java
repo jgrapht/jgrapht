@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA;
 
 public class BlossomPerfectMatching<V, E> {
-    public static final Options DEFAULT_OPTIONS = new Options(SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE,
-            MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.NONE);
+    public static final Options DEFAULT_OPTIONS = new Options();
     public static final double EPS = 10e-12;
     public static final int INFINITY = Integer.MAX_VALUE;
 
@@ -45,7 +45,7 @@ public class BlossomPerfectMatching<V, E> {
 
     public MatchingAlgorithm.Matching<V, E> solve() {
         Initializer<V, E> initializer = new Initializer<>(graph);
-        this.state = initializer.initialize(options.initializationType);
+        this.state = initializer.initialize(options);
         this.primalUpdater = new PrimalUpdater<>(state);
         this.dualUpdater = new DualUpdater<>(state, primalUpdater);
         printMap();
@@ -56,7 +56,7 @@ public class BlossomPerfectMatching<V, E> {
         Tree tree;
 
         while (true) {
-            int startTreeNum = state.treeNum;
+            int cycleTreeNum = state.treeNum;
 
             for (currentRoot = state.nodes[n].treeSiblingNext; currentRoot != null; ) {
                 // initializing variables
@@ -114,14 +114,18 @@ public class BlossomPerfectMatching<V, E> {
                 printState();
 
                 // third phase
-                if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER) {
-                    if (dualUpdater.updateDualsSingle(tree)) {
-                        // since some progress has been made, continue with the same trees
-                        continue;
+                if (state.treeNum == iterationTreeNum) {
+                    tree.currentEdge = null;
+                    if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER) {
+                        if (dualUpdater.updateDualsSingle(tree)) {
+                            // since some progress has been made, continue with the same trees
+                            continue;
+                        }
                     }
+                    // clearing current edge pointers
+                    state.clearCurrentEdges(tree);
                 }
-                // clearing current edge pointers
-                state.clearCurrentEdges(tree);
+
 
                 currentRoot = nextRoot;
                 if (nextRoot != null && nextRoot.isInftyNode()) {
@@ -137,12 +141,13 @@ public class BlossomPerfectMatching<V, E> {
                 break;
             }
 
-            if (startTreeNum == state.treeNum) {
+            if (cycleTreeNum == state.treeNum) {
                 if (dualUpdater.updateDuals(options.dualUpdateType) <= 0) {
                     dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA);
                 }
             }
         }
+
         return matching = primalUpdater.finish();
     }
 
@@ -200,14 +205,45 @@ public class BlossomPerfectMatching<V, E> {
     }
 
     public static class Options {
+        public static final SingleTreeDualUpdatePhase DEFAULT_PHASE = SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+        public static final DualUpdater.DualUpdateType DEfAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_CONNECTED_COMPONENTS;
+        public static final Initializer.InitializationType DEFAULT_INITIALIZATION_TYPE = Initializer.InitializationType.GREEDY;
+        public static final boolean DEFAULT_VERBOSE = true;
+
         SingleTreeDualUpdatePhase singleTreeDualUpdatePhase;
         DualUpdater.DualUpdateType dualUpdateType;
         Initializer.InitializationType initializationType;
+        boolean verbose;
 
-        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, Initializer.InitializationType initializationType) {
+        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, Initializer.InitializationType initializationType, boolean verbose) {
             this.singleTreeDualUpdatePhase = singleTreeDualUpdatePhase;
             this.dualUpdateType = dualUpdateType;
             this.initializationType = initializationType;
+            this.verbose = verbose;
+        }
+
+        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, Initializer.InitializationType initializationType) {
+            this(singleTreeDualUpdatePhase, dualUpdateType, initializationType, DEFAULT_VERBOSE);
+        }
+
+        public Options(DualUpdater.DualUpdateType updateType) {
+            this(DEFAULT_PHASE, updateType, DEFAULT_INITIALIZATION_TYPE);
+        }
+
+        public Options() {
+            this(DEFAULT_PHASE, DEfAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE);
+        }
+
+        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase) {
+            this(singleTreeDualUpdatePhase, DEfAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE, DEFAULT_VERBOSE);
+        }
+
+        public Options(Initializer.InitializationType initializationType) {
+            this(DEFAULT_PHASE, DEfAULT_DUAL_UPDATE_TYPE, initializationType, DEFAULT_VERBOSE);
+        }
+
+        public Options(boolean verbose) {
+            this(DEFAULT_PHASE, DEfAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE, verbose);
         }
     }
 

@@ -10,33 +10,6 @@ import static org.jgrapht.alg.blossom.Node.Label.MINUS;
 import static org.junit.Assert.*;
 
 public class TreeTest {
-    @Test
-    public void testTreeNodeIterator() {
-        Node node1 = new Node();
-        Node node2 = new Node();
-        Node node3 = new Node();
-        Node node4 = new Node();
-        Node node5 = new Node();
-        Node node6 = new Node();
-        Node node7 = new Node();
-
-        Tree tree = new Tree(node1);
-        node1.addChild(node7);
-        node1.addChild(node6);
-        node1.addChild(node2);
-        node2.addChild(node5);
-        node2.addChild(node4);
-        node2.addChild(node3);
-
-        Tree.TreeNodeIterator iterator = tree.treeNodeIterator();
-        assertSame(iterator.next(), node1);
-        assertSame(iterator.next(), node2);
-        assertSame(iterator.next(), node3);
-        assertSame(iterator.next(), node4);
-        assertSame(iterator.next(), node5);
-        assertSame(iterator.next(), node6);
-        assertSame(iterator.next(), node7);
-    }
 
     @Test
     public void testTreeEdgeIterator() {
