@@ -20,6 +20,9 @@ class Edge {
     }
 
     public Node getOpposite(Node node) {
+        if (head[0] != node && head[1] != node) {
+            return null;
+        }
         return head[0] == node ? head[1] : head[0];
     }
 
@@ -41,7 +44,8 @@ class Edge {
 
     @Override
     public String toString() {
-        return "Edge (" + headOriginal[0].id + "," + headOriginal[1].id + "), slack: " + slack + ", true slack: " + getTrueSlack();
+        return "Edge (" + head[0].id + "," + head[1].id + "), original: [" + headOriginal[0].id + "," + headOriginal[1].id + "], slack: " + slack + ", true slack: " + getTrueSlack()
+                + (getTrueSlack() == 0 ? ", tight" : "");
     }
 
     public double getTrueSlack() {

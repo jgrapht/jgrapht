@@ -111,7 +111,7 @@ class Initializer<V, E> {
         int treeNum = nodeNum;
         Edge edge;
         for (Node node : nodes) {
-            if (!node.isInftyNode()) {
+            if (!node.isInfinityNode()) {
                 double minSlack = INFINITY;
                 for (Node.AdjacentEdgeIterator adjacentEdgeIterator = node.adjacentEdgesIterator(); adjacentEdgeIterator.hasNext(); ) {
                     edge = adjacentEdgeIterator.next();
@@ -150,7 +150,7 @@ class Initializer<V, E> {
             for (Node.AdjacentEdgeIterator edgeIterator = root.adjacentEdgesIterator(); edgeIterator.hasNext(); ) {
                 edge = edgeIterator.next();
                 opposite = edge.head[edgeIterator.getDir()];
-                if (opposite.isInftyNode()) {
+                if (opposite.isInfinityNode()) {
                     tree.addPlusInfinityEdge(edge, edge.slack);
                 } else if (!opposite.isProcessed) {
                     if (opposite.tree.currentEdge == null) {

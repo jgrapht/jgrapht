@@ -45,6 +45,8 @@ public class PrimalUpdaterTest {
         primalUpdater.grow(edge12, false);
         state.clearCurrentEdges(node1.tree);
 
+        assertEquals(1, state.statistics.growNum);
+
         assertEquals(1, state.treeNum);
         assertEquals(node1.tree, node2.tree);
         assertEquals(node1.tree, node3.tree);
@@ -737,6 +739,11 @@ public class PrimalUpdaterTest {
         Node blossom = primalUpdater.shrink(edge13);
         state.clearCurrentEdges(node1.tree);
 
+        assertEquals(1, state.statistics.shrinkNum);
+        assertEquals(1, state.blossomNum);
+
+        assertFalse(node1.isTreeRoot);
+
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), Debugger.edgesOf(node1));
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), Debugger.edgesOf(node2));
         assertEquals(new HashSet<>(Arrays.asList(edge14, edge24)), Debugger.edgesOf(blossom));
@@ -1344,6 +1351,8 @@ public class PrimalUpdaterTest {
         primalUpdater.expand(blossom);
         state.clearCurrentEdges(node4.tree);
 
+        assertEquals(1, state.statistics.expandNum);
+
         // checking tree structure
         assertEquals(node4.tree, node3.tree);
         assertEquals(node4, node3.getTreeParent());
@@ -1369,8 +1378,8 @@ public class PrimalUpdaterTest {
         assertFalse(node5.isMarked);
 
         // checking the labeling and isOuter flag
-        assertTrue(node1.isInftyNode());
-        assertTrue(node2.isInftyNode());
+        assertTrue(node1.isInfinityNode());
+        assertTrue(node2.isInfinityNode());
         assertTrue(node3.isMinusNode());
         assertTrue(node1.isOuter);
         assertTrue(node2.isOuter);
@@ -1509,7 +1518,7 @@ public class PrimalUpdaterTest {
         assertEquals(new HashSet<>(Collections.singletonList(node4)), Debugger.childrenOf(node5));
         assertEquals(new HashSet<>(Collections.singletonList(node3)), Debugger.childrenOf(node4));
         assertEquals(new HashSet<>(Collections.singletonList(node7)), Debugger.childrenOf(node3));
-        assertEquals(new HashSet<>(Arrays.asList(node6,node2, node1, node5, node4, node3, node7)), Debugger.getTreeNodes(node6.tree));
+        assertEquals(new HashSet<>(Arrays.asList(node6, node2, node1, node5, node4, node3, node7)), Debugger.getTreeNodes(node6.tree));
     }
 
     /**
@@ -1738,6 +1747,131 @@ public class PrimalUpdaterTest {
         assertEquals(1, node8.tree.plusInfinityEdges.size());
         assertEquals(0, node8.tree.plusPlusEdges.size());
         assertEquals(0, node8.tree.minusBlossoms.size());
+    }
+
+    @Test
+    public void testExpand5() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+    }
+
+    /**
+     * Tests preserving the state of the blossom, inner and infinity edges after shrink and expand operations
+     */
+    @Test
+    public void testExpand6() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // blossom edges
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 3);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 4);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 4);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 4);
+        DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 6);
+        DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 4);
+        DefaultWeightedEdge e71 = Graphs.addEdgeWithVertices(graph, 7, 1, 3);
+        // tree edges
+        DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 1);
+        DefaultWeightedEdge e39 = Graphs.addEdgeWithVertices(graph, 3, 9, 3);
+        // inner blossom edges
+        DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 8); // (-, inf) edge
+        DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 8); // (+, inf) edge
+        DefaultWeightedEdge e35 = Graphs.addEdgeWithVertices(graph, 3, 5, 8); // (-, -) edge
+        DefaultWeightedEdge e46 = Graphs.addEdgeWithVertices(graph, 4, 6, 8); // (+, +) edge
+        DefaultWeightedEdge e47 = Graphs.addEdgeWithVertices(graph, 4, 7, 8); // (+, -) edge
+        // matched edge
+        DefaultWeightedEdge e1011 = Graphs.addEdgeWithVertices(graph, 10, 11, 0);
+        // infinity edges
+        DefaultWeightedEdge e510 = Graphs.addEdgeWithVertices(graph, 5, 10, 8); // (-, inf) edge
+        DefaultWeightedEdge e610 = Graphs.addEdgeWithVertices(graph, 6, 10, 8); // (+, inf) edge
+        DefaultWeightedEdge e211 = Graphs.addEdgeWithVertices(graph, 2, 11, 8); // (inf, inf) edge
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+        Node node5 = state.vertexMap.get(5);
+        Node node6 = state.vertexMap.get(6);
+        Node node7 = state.vertexMap.get(7);
+        Node node8 = state.vertexMap.get(8);
+        Node node9 = state.vertexMap.get(9);
+        Node node10 = state.vertexMap.get(10);
+        Node node11 = state.vertexMap.get(11);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge34 = state.edgeMap.get(e34);
+        Edge edge45 = state.edgeMap.get(e45);
+        Edge edge56 = state.edgeMap.get(e56);
+        Edge edge67 = state.edgeMap.get(e67);
+        Edge edge71 = state.edgeMap.get(e71);
+
+        Edge edge78 = state.edgeMap.get(e78);
+        Edge edge39 = state.edgeMap.get(e39);
+
+        Edge edge13 = state.edgeMap.get(e13);
+        Edge edge26 = state.edgeMap.get(e26);
+        Edge edge35 = state.edgeMap.get(e35);
+        Edge edge46 = state.edgeMap.get(e46);
+        Edge edge47 = state.edgeMap.get(e47);
+
+        Edge edge510 = state.edgeMap.get(e510);
+        Edge edge610 = state.edgeMap.get(e610);
+        Edge edge211 = state.edgeMap.get(e211);
+
+        node1.tree.eps = 2;
+        node2.tree.eps = 1;
+        node3.tree.eps = 3;
+        node4.tree.eps = 1;
+        node5.tree.eps = 3;
+        node6.tree.eps = 3;
+        node7.tree.eps = 1;
+
+        primalUpdater.augment(edge23);
+        primalUpdater.augment(edge45);
+        primalUpdater.augment(edge67);
+        state.setCurrentEdges(node1.tree);
+        primalUpdater.grow(edge12, false);
+        primalUpdater.grow(edge34, false);
+        primalUpdater.grow(edge71, false);
+        Node blossom = primalUpdater.shrink(edge56);
+        state.clearCurrentEdges(blossom.tree);
+        primalUpdater.augment(edge39);
+        state.setCurrentEdges(node8.tree);
+        primalUpdater.grow(edge78, false);
+
+        primalUpdater.expand(blossom);
+
+        assertEquals(node7, edge78.getOpposite(node8));
+        assertEquals(node3, edge39.getOpposite(node9));
+        assertEquals(node5, edge510.getOpposite(node10));
+        assertEquals(node6, edge610.getOpposite(node10));
+        assertEquals(node2, edge211.getOpposite(node11));
+
+        // tight edges
+        assertEquals(0, edge12.slack, EPS);
+        assertEquals(0, edge23.slack, EPS);
+        assertEquals(0, edge34.slack, EPS);
+        assertEquals(0, edge45.slack, EPS);
+        assertEquals(0, edge56.slack, EPS);
+        assertEquals(0, edge67.slack, EPS);
+        assertEquals(0, edge71.slack, EPS);
+        assertEquals(0, edge78.slack, EPS);
+        assertEquals(0, edge39.slack, EPS);
+
+        // inner edges
+        assertEquals(3, edge13.slack, EPS);
+        assertEquals(4, edge26.slack, EPS);
+        assertEquals(2, edge35.slack, EPS);
+        assertEquals(4, edge46.slack, EPS);
+        assertEquals(6, edge47.slack, EPS);
+        // boundary edges
+        assertEquals(7, edge211.slack, EPS);
+        assertEquals(5, edge510.slack, EPS);
+        assertEquals(5, edge610.slack, EPS);
     }
 
     @Test

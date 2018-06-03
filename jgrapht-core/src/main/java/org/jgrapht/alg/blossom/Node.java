@@ -102,28 +102,41 @@ class Node implements Iterable<Edge> {
         firstTreeChild = child;
     }
 
-    void removeFromChildList() {
-        if (treeSiblingNext != null) {
-            // this vertex isn't the last child
-            treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
-        } else {
-            // this vertex is the last child
-            if (parentEdge != null && parentEdge.getOpposite(this).firstTreeChild != null) {
-                parentEdge.getOpposite(this).firstTreeChild.treeSiblingPrev = treeSiblingPrev;
-            }
-        }
-        if (treeSiblingPrev.treeSiblingNext != null) {
-            // this vertex isn't the first child
+    /**
+     * If this node is a tree root then removes this nodes from tree roots linked list.
+     * Otherwise, removes this vertex from the linked list of tree children and updates
+     * parent.firstTreeChild accordingly.
+     */
+    public void removeFromChildList() {
+        if (isTreeRoot) {
             treeSiblingPrev.treeSiblingNext = treeSiblingNext;
+            if (treeSiblingNext != null) {
+                treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
+            }
         } else {
-            // this vertex is the first child
-            // we don't have to check whether treeParent is null since if this node
-            // is root then treeSiblingPrev.treeSiblingNext != null
-            parentEdge.getOpposite(this).firstTreeChild = treeSiblingNext;
+            if (treeSiblingPrev.treeSiblingNext == null) {
+                // this vertex is the first child => we have to update parent.firstTreeChild
+                parentEdge.getOpposite(this).firstTreeChild = treeSiblingNext;
+            } else {
+                treeSiblingPrev.treeSiblingNext = treeSiblingNext;
+            }
+            if (treeSiblingNext == null) {
+                // this vertex is the last child => we have to set treeSiblingPrev of the firstChild
+                if (parentEdge.getOpposite(this).firstTreeChild != null) {
+                    parentEdge.getOpposite(this).firstTreeChild.treeSiblingPrev = treeSiblingPrev;
+                }
+            } else {
+                treeSiblingNext.treeSiblingPrev = treeSiblingPrev;
+            }
         }
     }
 
-    void moveChildrenTo(Node blossom) {
+    /**
+     * Appends the child list of this node to the beginning of the child of the {@code blossom} node.
+     *
+     * @param blossom the node to which the children of current node are moved
+     */
+    public void moveChildrenTo(Node blossom) {
         if (firstTreeChild != null) {
             if (blossom.firstTreeChild == null) {
                 blossom.firstTreeChild = firstTreeChild;
@@ -134,7 +147,7 @@ class Node implements Iterable<Edge> {
                 blossom.firstTreeChild.treeSiblingPrev = first.treeSiblingPrev;
                 blossom.firstTreeChild = first;
             }
-            firstTreeChild = null; // for debug purposes
+            firstTreeChild = null;
         }
     }
 
@@ -175,7 +188,7 @@ class Node implements Iterable<Edge> {
         return label == MINUS;
     }
 
-    public boolean isInftyNode() {
+    public boolean isInfinityNode() {
         return label == INFTY;
     }
 

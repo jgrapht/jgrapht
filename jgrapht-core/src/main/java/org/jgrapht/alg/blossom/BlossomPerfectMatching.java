@@ -46,9 +46,11 @@ public class BlossomPerfectMatching<V, E> {
     public MatchingAlgorithm.Matching<V, E> solve() {
         Initializer<V, E> initializer = new Initializer<>(graph);
         this.state = initializer.initialize(options);
+        System.out.println("Initialized");
         this.primalUpdater = new PrimalUpdater<>(state);
         this.dualUpdater = new DualUpdater<>(state, primalUpdater);
-        printMap();
+        if(options.verbose)
+            printMap();
 
         Node currentRoot;
         Node nextRoot;
@@ -67,6 +69,7 @@ public class BlossomPerfectMatching<V, E> {
                 tree = currentRoot.tree;
                 int iterationTreeNum = state.treeNum;
 
+                if(options.verbose)
                 printState();
 
                 // first phase
@@ -79,8 +82,12 @@ public class BlossomPerfectMatching<V, E> {
                 // second phase
                 // applying primal operations to the current tree while it is possible
                 while (iterationTreeNum == state.treeNum) {
-                    printState();
-                    System.out.println("Current tree is " + tree + ", current root is " + currentRoot);
+                    System.out.println(state.treeNum);
+                    if(options.verbose){
+                        printState();
+                        System.out.println("Current tree is " + tree + ", current root is " + currentRoot);
+                    }
+
                     Edge edge;
                     Node node;
                     if (!tree.plusInfinityEdges.isEmpty()) {
@@ -108,10 +115,14 @@ public class BlossomPerfectMatching<V, E> {
                         }
                     }
                     // can't do anything
-                    System.out.println("Can't do anything");
+                    if(options.verbose){
+                        System.out.println("Can't do anything");
+                    }
                     break;
                 }
-                printState();
+                if(options.verbose){
+                    printState();
+                }
 
                 // third phase
                 if (state.treeNum == iterationTreeNum) {
@@ -128,27 +139,33 @@ public class BlossomPerfectMatching<V, E> {
 
 
                 currentRoot = nextRoot;
-                if (nextRoot != null && nextRoot.isInftyNode()) {
+                if (nextRoot != null && nextRoot.isInfinityNode()) {
                     currentRoot = nextNextRoot;
                 }
             }
 
-            printTrees();
-            printState();
+            if(options.verbose){
+                printTrees();
+                printState();
+            }
 
             if (state.treeNum == 0) {
                 // we are done
                 break;
             }
-
             if (cycleTreeNum == state.treeNum) {
                 if (dualUpdater.updateDuals(options.dualUpdateType) <= 0) {
-                    dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA);
+                    // don't understand why MULTIPLE_TREE_FIXED_DELTA is used in blossom V code in this case
+                    dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
                 }
             }
         }
 
         return matching = primalUpdater.finish();
+    }
+
+    public void getDualSolution(){
+
     }
 
     private void printState() {
@@ -177,11 +194,12 @@ public class BlossomPerfectMatching<V, E> {
         }
         System.out.println();
         for (int i = 0; i < state.edgeNum; i++) {
-            System.out.println(edges[i] + (matched.contains(edges[i]) ? ", matched" : "") + (edges[i].slack == 0 ? ", tight" : ""));
+            System.out.println(edges[i] + (matched.contains(edges[i]) ? ", matched" : ""));
         }
     }
 
     private void printTrees() {
+        System.out.println("Printing trees");
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
             System.out.println(tree);

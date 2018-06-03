@@ -36,6 +36,11 @@ class DualUpdater<V, E> {
                 root.tree.eps += root.tree.accumulatedEps;
             }
         }
+        if (state.options.verbose) {
+            for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+                System.out.println("Updating duals: now eps of " + root.tree + " is " + (root.tree.eps));
+            }
+        }
         return dualChange;
     }
 
@@ -91,7 +96,9 @@ class DualUpdater<V, E> {
         if (eps > tree.eps) {
             delta = eps - tree.eps;
             tree.eps = eps;
-            System.out.println("Updating duals: now eps of " + tree + " is " + eps);
+            if (state.options.verbose) {
+                System.out.println("Updating duals: now eps of " + tree + " is " + eps);
+            }
         }
         if (augmentEdge != null && eps_augment <= tree.eps) {
             primalUpdater.augment(augmentEdge);
@@ -202,6 +209,9 @@ class DualUpdater<V, E> {
     }
 
     void multipleTreeFixedDelta() {
+        if (state.options.verbose) {
+            System.out.println("Multiple tree fixed delta approach");
+        }
         double eps = INFINITY;
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;

@@ -1,15 +1,67 @@
 package org.jgrapht.alg.blossom;
 
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
 import static org.jgrapht.alg.blossom.Node.Label.MINUS;
 import static org.junit.Assert.*;
 
 public class TreeTest {
+
+    private BlossomPerfectMatching.Options noneOptions = new BlossomPerfectMatching.Options(NONE);
+
+    @Test
+    public void testTreeNodeIterator() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+        DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 0);
+        DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+        Node node5 = state.vertexMap.get(5);
+        Node node6 = state.vertexMap.get(6);
+        Node node7 = state.vertexMap.get(7);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge34 = state.edgeMap.get(e34);
+        Edge edge45 = state.edgeMap.get(e45);
+        Edge edge36 = state.edgeMap.get(e36);
+        Edge edge67 = state.edgeMap.get(e67);
+
+        primalUpdater.augment(edge23);
+        primalUpdater.augment(edge45);
+        primalUpdater.augment(edge67);
+        state.setCurrentEdges(node1.tree);
+        primalUpdater.grow(edge12, true);
+
+        int i = 0;
+        Set<Node> actualNodes = new HashSet<>();
+        for (Tree.TreeNodeIterator iterator = node1.tree.treeNodeIterator(); iterator.hasNext(); ) {
+            i++;
+            actualNodes.add(iterator.next());
+        }
+        assertEquals(7, i);
+        assertEquals(new HashSet<>(Arrays.asList(node1, node2, node3, node4, node5, node6, node7)), actualNodes);
+    }
 
     @Test
     public void testTreeEdgeIterator() {

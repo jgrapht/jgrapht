@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class NodeTest {
 
-    private BlossomPerfectMatching.Options noneOptions;
+    private BlossomPerfectMatching.Options noneOptions = new BlossomPerfectMatching.Options(NONE);
 
 
     /**

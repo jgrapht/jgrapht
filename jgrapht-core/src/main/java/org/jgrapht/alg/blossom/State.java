@@ -13,6 +13,7 @@ class State<V, E> {
     int edgeNum;
     int treeNum;
     int removedNum;
+    int blossomNum;
     BlossomPerfectMatching.Statistics statistics;
     Map<V, Node> vertexMap;
     Map<E, Edge> edgeMap;
@@ -103,14 +104,6 @@ class State<V, E> {
 
     public BlossomNodesIterator blossomNodesIterator(Node root, Edge blossomFormingEdge) {
         return new BlossomNodesIterator(root, blossomFormingEdge);
-    }
-
-    public NodesIterator nodesIterator() {
-        return new NodesIterator();
-    }
-
-    public EdgesIterator edgesIterator() {
-        return new EdgesIterator();
     }
 
     // debug only
@@ -210,50 +203,4 @@ class State<V, E> {
 
     }
 
-    class NodesIterator implements Iterator<Node> {
-        Node current = nodes[0];
-        // TODO simplify
-        private int pos = 0;
-
-        @Override
-        public boolean hasNext() {
-            if (current != null) {
-                return true;
-            }
-            current = advance();
-            return current != null;
-        }
-
-        @Override
-        public Node next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            Node result = current;
-            current = null;
-            return result;
-        }
-
-        private Node advance() {
-            return ++pos < nodeNum ? (current = nodes[pos]) : null;
-        }
-    }
-
-    public class EdgesIterator implements Iterator<Edge> {
-        private int current = 0;
-
-        @Override
-        public boolean hasNext() {
-            return edges.length > current;
-        }
-
-        @Override
-        public Edge next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            return edges[current++];
-        }
-
-    }
 }
