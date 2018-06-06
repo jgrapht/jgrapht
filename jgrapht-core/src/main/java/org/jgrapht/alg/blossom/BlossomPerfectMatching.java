@@ -4,6 +4,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.AsUndirectedGraph;
 
+import javax.swing.text.html.Option;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +27,6 @@ public class BlossomPerfectMatching<V, E> {
     private DualUpdater<V, E> dualUpdater;
     private Options options;
 
-
     public BlossomPerfectMatching(Graph<V, E> graph) {
         this(graph, DEFAULT_OPTIONS);
     }
@@ -46,7 +46,6 @@ public class BlossomPerfectMatching<V, E> {
     public MatchingAlgorithm.Matching<V, E> solve() {
         Initializer<V, E> initializer = new Initializer<>(graph);
         this.state = initializer.initialize(options);
-        System.out.println("Initialized");
         this.primalUpdater = new PrimalUpdater<>(state);
         this.dualUpdater = new DualUpdater<>(state, primalUpdater);
         if(options.verbose)
@@ -82,7 +81,6 @@ public class BlossomPerfectMatching<V, E> {
                 // second phase
                 // applying primal operations to the current tree while it is possible
                 while (iterationTreeNum == state.treeNum) {
-                    System.out.println(state.treeNum);
                     if(options.verbose){
                         printState();
                         System.out.println("Current tree is " + tree + ", current root is " + currentRoot);

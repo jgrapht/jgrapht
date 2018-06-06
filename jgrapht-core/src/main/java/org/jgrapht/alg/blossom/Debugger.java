@@ -63,6 +63,22 @@ public class Debugger {
         return treeRoots;
     }
 
+    public static void printTreeNodes(Tree tree) {
+        System.out.println("Printing tree nodes");
+        for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
+            System.out.println(iterator.next());
+        }
+    }
+
+    public static void printBlossonNodes(Node blossomNode) {
+        System.out.println("Printing blossom nodes");
+        Node current = blossomNode;
+        do {
+            System.out.println(current);
+            current = current.blossomSibling.getOpposite(current);
+        } while (current != blossomNode);
+    }
+
     public static Set<Node> getTreeNodes(Tree tree) {
         Set<Node> nodes = new HashSet<>();
         for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {

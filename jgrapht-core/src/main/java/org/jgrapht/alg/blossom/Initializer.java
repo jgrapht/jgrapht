@@ -41,6 +41,9 @@ class Initializer<V, E> {
         state.trees = trees;
         state.treeNum = treeNum;
         initAuxiliaryGraph();
+        for (Node root = nodes[nodeNum]; root != null; root = root.treeSiblingNext) {
+            root.isProcessed = false;
+        }
 
         return state;
     }

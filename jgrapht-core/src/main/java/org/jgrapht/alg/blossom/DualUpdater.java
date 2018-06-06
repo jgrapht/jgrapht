@@ -15,7 +15,9 @@ class DualUpdater<V, E> {
     }
 
     double updateDuals(DualUpdateType type) {
-        System.out.println("Start updating duals");
+        if (state.options.verbose) {
+            System.out.println("Start updating duals");
+        }
         // going through all trees roots
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
@@ -137,6 +139,7 @@ class DualUpdater<V, E> {
                     for (currentEdge = currentTree.first[dir]; currentEdge != null; currentEdge = currentEdge.next[dir]) {
                         opposite = currentEdge.head[dir];
                         double plusPlusEps = INFINITY;
+                        int dirRev = 1-dir;
 
                         if (!currentEdge.plusPlusEdges.isEmpty()) {
                             plusPlusEps = currentEdge.plusPlusEdges.min().getKey() - currentTree.eps - opposite.eps;
@@ -152,13 +155,13 @@ class DualUpdater<V, E> {
                         }
 
                         double[] plusMinusEps = new double[2];
-                        plusMinusEps[0] = INFINITY;
-                        if (!currentEdge.getCurrentPlusMinusHeap(0).isEmpty()) {
-                            plusMinusEps[0] = currentEdge.getCurrentPlusMinusHeap(0).min().getKey() - currentTree.eps + opposite.eps;
+                        plusMinusEps[dir] = INFINITY;
+                        if (!currentEdge.getCurrentPlusMinusHeap(dir).isEmpty()) {
+                            plusMinusEps[dir] = currentEdge.getCurrentPlusMinusHeap(dir).min().getKey() - currentTree.eps + opposite.eps;
                         }
-                        plusMinusEps[1] = INFINITY;
-                        if (!currentEdge.getCurrentPlusMinusHeap(1).isEmpty()) {
-                            plusMinusEps[1] = currentEdge.getCurrentPlusMinusHeap(1).min().getKey() - opposite.eps + currentTree.eps;
+                        plusMinusEps[dirRev] = INFINITY;
+                        if (!currentEdge.getCurrentPlusMinusHeap(dirRev).isEmpty()) {
+                            plusMinusEps[dirRev] = currentEdge.getCurrentPlusMinusHeap(dirRev).min().getKey() - opposite.eps + currentTree.eps;
                         }
                         if (opposite.nextTree == dummyTree) {
                             // opposite tree is in another connected component and has valid accumulated eps
@@ -222,7 +225,7 @@ class DualUpdater<V, E> {
             for (TreeEdge outgoingTreeEdge = tree.first[0]; outgoingTreeEdge != null; outgoingTreeEdge = outgoingTreeEdge.next[0]) {
                 if (!outgoingTreeEdge.plusPlusEdges.isEmpty()) {
                     Edge minEdge = outgoingTreeEdge.plusPlusEdges.min().getData();
-                    double oppositeTreeEps = minEdge.head[0].tree.eps;
+                    double oppositeTreeEps = outgoingTreeEdge.head[0].eps;
                     if (2 * eps > minEdge.slack - treeEps - oppositeTreeEps) {
                         eps = (minEdge.slack - treeEps - oppositeTreeEps) / 2;
                     }

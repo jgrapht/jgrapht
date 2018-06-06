@@ -307,7 +307,6 @@ public class BlossomPerfectMatchingTest {
 
     @Test
     public void testSolve14() {
-        options = new BlossomPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, NONE);
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 0, 9);
         Graphs.addEdgeWithVertices(graph, 2, 0, 8);
@@ -351,46 +350,489 @@ public class BlossomPerfectMatchingTest {
     @Test
     public void testSolve16() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 10);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 7);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 4);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 1);
+
+        Graphs.addEdgeWithVertices(graph, 1, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 1);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 2);
+        Graphs.addEdgeWithVertices(graph, 3, 5, 1);
+
+        Graphs.addEdgeWithVertices(graph, 4, 5, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 5, 2);
+        Graphs.addEdgeWithVertices(graph, 4, 6, 3);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 3);
+
+        Graphs.addEdgeWithVertices(graph, 1, 6, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 7, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 7, 6);
+        Graphs.addEdgeWithVertices(graph, 5, 8, 2);
+
+        Graphs.addEdgeWithVertices(graph, 6, 8, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 8, 4);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 3);
+        Graphs.addEdgeWithVertices(graph, 7, 9, 3);
+
+        Graphs.addEdgeWithVertices(graph, 0, 9, 7);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 8);
+
 
         BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(16, matching.getWeight(), EPS);
     }
 
     @Test
     public void testSolve17() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 6);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 4);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 4);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 6);
+
+        Graphs.addEdgeWithVertices(graph, 1, 3, 4);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 1);
+        Graphs.addEdgeWithVertices(graph, 0, 5, 5);
+
+        Graphs.addEdgeWithVertices(graph, 2, 5, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 6, 8);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 9);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 6);
+
+        Graphs.addEdgeWithVertices(graph, 3, 7, 7);
+        Graphs.addEdgeWithVertices(graph, 4, 7, 8);
+        Graphs.addEdgeWithVertices(graph, 6, 7, 5);
+        Graphs.addEdgeWithVertices(graph, 6, 8, 5);
+
+        Graphs.addEdgeWithVertices(graph, 7, 8, 5);
+        Graphs.addEdgeWithVertices(graph, 6, 9, 8);
+        Graphs.addEdgeWithVertices(graph, 5, 9, 11);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 9);
+
+        Graphs.addEdgeWithVertices(graph, 0, 9, 15);
 
         BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(23, matching.getWeight(), EPS);
     }
 
     @Test
     public void testSolve18() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 4);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 4);
+
+        Graphs.addEdgeWithVertices(graph, 0, 4, 7);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 4);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 7);
+        Graphs.addEdgeWithVertices(graph, 2, 5, 7);
+
+        Graphs.addEdgeWithVertices(graph, 3, 5, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 5, 10);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 6);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 7);
+
+        Graphs.addEdgeWithVertices(graph, 4, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 5, 7, 8);
+        Graphs.addEdgeWithVertices(graph, 6, 7, 2);
+        Graphs.addEdgeWithVertices(graph, 4, 8, 7);
+
+        Graphs.addEdgeWithVertices(graph, 1, 8, 13);
+        Graphs.addEdgeWithVertices(graph, 6, 8, 4);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 3);
+        Graphs.addEdgeWithVertices(graph, 7, 9, 3);
+
+        Graphs.addEdgeWithVertices(graph, 8, 9, 3);
+        Graphs.addEdgeWithVertices(graph, 5, 9, 10);
+        options.verbose = true;
 
         BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+        System.out.println(matching);
+
+        assertEquals(19, matching.getWeight(), EPS);
     }
 
     @Test
     public void testSolve19() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 10);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 8);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 0, 3, 7);
+
+        Graphs.addEdgeWithVertices(graph, 2, 3, 2);
+        Graphs.addEdgeWithVertices(graph, 0, 4, 7);
+        Graphs.addEdgeWithVertices(graph, 0, 5, 6);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 7);
+
+        Graphs.addEdgeWithVertices(graph, 3, 5, 4);
+        Graphs.addEdgeWithVertices(graph, 2, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 6, 6);
+
+        Graphs.addEdgeWithVertices(graph, 5, 7, 4);
+        Graphs.addEdgeWithVertices(graph, 4, 7, 6);
+        Graphs.addEdgeWithVertices(graph, 5, 8, 6);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 7);
+
+        Graphs.addEdgeWithVertices(graph, 3, 8, 7);
+        Graphs.addEdgeWithVertices(graph, 6, 8, 5);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 7);
+        Graphs.addEdgeWithVertices(graph, 7, 9, 2);
+
+        Graphs.addEdgeWithVertices(graph, 4, 9, 8);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(21, matching.getWeight(), EPS);
+    }
+
+    /**
+     * Test on a big complete graph
+     */
+    @Test
+    public void testSolve20() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(20);
+        generator.generateGraph(graph, new IntegerVertexFactory());
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(10, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve21() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 0, 7);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 8);
+        Graphs.addEdgeWithVertices(graph, 0, 4, 6);
+        Graphs.addEdgeWithVertices(graph, 0, 5, 7);
+
+        Graphs.addEdgeWithVertices(graph, 4, 5, 3);
+        Graphs.addEdgeWithVertices(graph, 4, 6, 4);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 3);
+        Graphs.addEdgeWithVertices(graph, 4, 7, 6);
+
+        Graphs.addEdgeWithVertices(graph, 6, 7, 4);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 8, 8);
+        Graphs.addEdgeWithVertices(graph, 3, 7, 8);
+
+        Graphs.addEdgeWithVertices(graph, 1, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 1, 7, 9);
+        Graphs.addEdgeWithVertices(graph, 3, 8, 7);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 5);
+
+        Graphs.addEdgeWithVertices(graph, 7, 9, 4);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 5);
+        Graphs.addEdgeWithVertices(graph, 6, 9, 7);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(21, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve22() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 0, 14);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 12);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 7);
+        Graphs.addEdgeWithVertices(graph, 0, 3, 7);
+
+        Graphs.addEdgeWithVertices(graph, 2, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 9);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 6);
+        Graphs.addEdgeWithVertices(graph, 2, 5, 7);
+
+        Graphs.addEdgeWithVertices(graph, 4, 5, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 5);
+
+        Graphs.addEdgeWithVertices(graph, 4, 7, 4);
+        Graphs.addEdgeWithVertices(graph, 1, 7, 9);
+        Graphs.addEdgeWithVertices(graph, 5, 7, 4);
+        Graphs.addEdgeWithVertices(graph, 5, 8, 3);
+
+        Graphs.addEdgeWithVertices(graph, 7, 8, 5);
+        Graphs.addEdgeWithVertices(graph, 6, 8, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 9, 7);
+        Graphs.addEdgeWithVertices(graph, 6, 9, 2);
+
+        Graphs.addEdgeWithVertices(graph, 8, 9, 3);
+        Graphs.addEdgeWithVertices(graph, 7, 9, 8);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(25, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve23() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 3, 8);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 6);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 9);
+
+        Graphs.addEdgeWithVertices(graph, 1, 3, 7);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 5, 2);
+
+        Graphs.addEdgeWithVertices(graph, 4, 5, 2);
+        Graphs.addEdgeWithVertices(graph, 1, 5, 9);
+        Graphs.addEdgeWithVertices(graph, 4, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 2, 6, 8);
+
+        Graphs.addEdgeWithVertices(graph, 4, 7, 4);
+        Graphs.addEdgeWithVertices(graph, 5, 7, 5);
+        Graphs.addEdgeWithVertices(graph, 6, 7, 5);
+        Graphs.addEdgeWithVertices(graph, 5, 8, 5);
+
+        Graphs.addEdgeWithVertices(graph, 1, 8, 12);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 4);
+        Graphs.addEdgeWithVertices(graph, 7, 9, 3);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 3);
+
+        Graphs.addEdgeWithVertices(graph, 6, 9, 7);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(22, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve24() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 8);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 10);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 0, 3, 8);
+
+        Graphs.addEdgeWithVertices(graph, 1, 3, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 2);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 3);
+
+        Graphs.addEdgeWithVertices(graph, 3, 5, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 6);
+        Graphs.addEdgeWithVertices(graph, 0, 6, 11);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 5);
+
+        Graphs.addEdgeWithVertices(graph, 1, 7, 7);
+        Graphs.addEdgeWithVertices(graph, 4, 7, 6);
+        Graphs.addEdgeWithVertices(graph, 2, 7, 6);
+        Graphs.addEdgeWithVertices(graph, 5, 8, 5);
+
+        Graphs.addEdgeWithVertices(graph, 6, 8, 4);
+        Graphs.addEdgeWithVertices(graph, 5, 9, 8);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 10);
+        Graphs.addEdgeWithVertices(graph, 4, 9, 8);
+
+        Graphs.addEdgeWithVertices(graph, 7, 9, 5);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(23, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve25() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 1, 3, 4);
+
+        Graphs.addEdgeWithVertices(graph, 2, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 6);
+        Graphs.addEdgeWithVertices(graph, 0, 4, 5);
+
+        Graphs.addEdgeWithVertices(graph, 3, 5, 5);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 6);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 5);
+
+        Graphs.addEdgeWithVertices(graph, 1, 6, 10);
+        Graphs.addEdgeWithVertices(graph, 5, 7, 9);
+        Graphs.addEdgeWithVertices(graph, 4, 7, 8);
+        Graphs.addEdgeWithVertices(graph, 0, 7, 12);
+
+        Graphs.addEdgeWithVertices(graph, 5, 8, 5);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 11);
+        Graphs.addEdgeWithVertices(graph, 6, 8, 2);
+        Graphs.addEdgeWithVertices(graph, 7, 9, 13);
+
+        Graphs.addEdgeWithVertices(graph, 8, 9, 5);
+        Graphs.addEdgeWithVertices(graph, 6, 9, 5);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(26, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve26() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 3, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 3);
+
+        Graphs.addEdgeWithVertices(graph, 2, 5, 5);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 6);
+        Graphs.addEdgeWithVertices(graph, 0, 5, 6);
+
+        Graphs.addEdgeWithVertices(graph, 3, 5, 4);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 5);
+        Graphs.addEdgeWithVertices(graph, 3, 6, 3);
+        Graphs.addEdgeWithVertices(graph, 1, 6, 5);
+
+        Graphs.addEdgeWithVertices(graph, 5, 7, 7);
+        Graphs.addEdgeWithVertices(graph, 6, 7, 3);
+        Graphs.addEdgeWithVertices(graph, 1, 7, 7);
+        Graphs.addEdgeWithVertices(graph, 5, 8, 7);
+
+        Graphs.addEdgeWithVertices(graph, 7, 8, 7);
+        Graphs.addEdgeWithVertices(graph, 4, 8, 9);
+        Graphs.addEdgeWithVertices(graph, 8, 9, 7);
+        Graphs.addEdgeWithVertices(graph, 4, 9, 7);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(22, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve27() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 0, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 0, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 0, 1, 17);
+
+        Graphs.addEdgeWithVertices(graph, 0, 4, 13);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 10);
+        Graphs.addEdgeWithVertices(graph, 4, 5, 9);
+
+        Graphs.addEdgeWithVertices(graph, 1, 5, 8);
+        Graphs.addEdgeWithVertices(graph, 5, 7, 6);
+        Graphs.addEdgeWithVertices(graph, 4, 7, 12);
+        Graphs.addEdgeWithVertices(graph, 5, 6, 6);
+
+        Graphs.addEdgeWithVertices(graph, 6, 7, 2);
+        Graphs.addEdgeWithVertices(graph, 6, 8, 3);
+        Graphs.addEdgeWithVertices(graph, 7, 8, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 9, 16);
+
+        Graphs.addEdgeWithVertices(graph, 3, 9, 15);
+        Graphs.addEdgeWithVertices(graph, 0, 9, 18);
+        Graphs.addEdgeWithVertices(graph, 2, 10, 16);
+        Graphs.addEdgeWithVertices(graph, 4, 10, 15);
+
+        Graphs.addEdgeWithVertices(graph, 9, 10, 12);
+        Graphs.addEdgeWithVertices(graph, 7, 10, 13);
+        Graphs.addEdgeWithVertices(graph, 8, 10, 12);
+        Graphs.addEdgeWithVertices(graph, 5, 11, 14);
+
+        Graphs.addEdgeWithVertices(graph, 6, 11, 9);
+        Graphs.addEdgeWithVertices(graph, 8, 11, 8);
+        Graphs.addEdgeWithVertices(graph, 8, 12, 7);
+        Graphs.addEdgeWithVertices(graph, 11, 12, 7);
+
+        Graphs.addEdgeWithVertices(graph, 8, 13, 10);
+        Graphs.addEdgeWithVertices(graph, 10, 13, 5);
+        Graphs.addEdgeWithVertices(graph, 12, 13, 4);
+        Graphs.addEdgeWithVertices(graph, 10, 14, 5);
+
+        Graphs.addEdgeWithVertices(graph, 13, 14, 2);
+        Graphs.addEdgeWithVertices(graph, 10, 15, 8);
+        Graphs.addEdgeWithVertices(graph, 14, 15, 9);
+        Graphs.addEdgeWithVertices(graph, 9, 15, 9);
+
+        Graphs.addEdgeWithVertices(graph, 12, 16, 7);
+        Graphs.addEdgeWithVertices(graph, 11, 16, 5);
+        Graphs.addEdgeWithVertices(graph, 14, 17, 4);
+        Graphs.addEdgeWithVertices(graph, 15, 17, 11);
+
+        Graphs.addEdgeWithVertices(graph, 12, 17, 5);
+        Graphs.addEdgeWithVertices(graph, 16, 17, 8);
+        Graphs.addEdgeWithVertices(graph, 13, 17, 5);
+        Graphs.addEdgeWithVertices(graph, 17, 18, 13);
+
+        Graphs.addEdgeWithVertices(graph, 15, 18, 6);
+        Graphs.addEdgeWithVertices(graph, 16, 18, 21);
+        Graphs.addEdgeWithVertices(graph, 15, 19, 9);
+        Graphs.addEdgeWithVertices(graph, 9, 19, 12);
+
+        Graphs.addEdgeWithVertices(graph, 18, 19, 5);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+
+        assertEquals(57, matching.getWeight(), EPS);
+    }
+
+    @Test
+    public void testSolve28() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
     }
 
     @Test
-    public void testSolve20() {
+    public void testSolve29() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(10);
-        generator.generateGraph(graph, new IntegerVertexFactory());
 
         BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
-
-        assertEquals(5, matching.getWeight(), EPS);
     }
 
+    @Test
+    public void testSolve30() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+    }
+
+    @Test
+    public void testSolve31() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+    }
+
+    @Test
+    public void testSolve32() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        BlossomPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new BlossomPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.solve();
+    }
 
 }

@@ -142,9 +142,12 @@ class Node implements Iterable<Edge> {
                 blossom.firstTreeChild = firstTreeChild;
             } else {
                 Node first = firstTreeChild;
+                Node t = blossom.firstTreeChild.treeSiblingPrev;
+                // concatenating child lists
                 first.treeSiblingPrev.treeSiblingNext = blossom.firstTreeChild;
-                first.treeSiblingPrev = blossom.firstTreeChild.treeSiblingPrev;
                 blossom.firstTreeChild.treeSiblingPrev = first.treeSiblingPrev;
+                // setting reference to the last child and updating firstTreeChild reference of the blossom
+                first.treeSiblingPrev = t;
                 blossom.firstTreeChild = first;
             }
             firstTreeChild = null;
@@ -221,7 +224,8 @@ class Node implements Iterable<Edge> {
 
     @Override
     public String toString() {
-        return "Node id = " + id + ", dual: " + dual + ", true dual: " + getTrueDual() + ", label: " + label + (isMarked ? ", marked" : "");
+        return "Node id = " + id + ", dual: " + dual + ", true dual: " + getTrueDual()
+                + ", label: " + label + (isMarked ? ", marked" : "") + (isProcessed ? ", processed" : "");
     }
 
     enum Label {

@@ -194,9 +194,13 @@ public class NodeTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge78);
+        state.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         primalUpdater.grow(edge14, false);
+        state.clearCurrentEdges(node1.tree);
+        state.setCurrentEdges(node6.tree);
         primalUpdater.grow(edge67, false);
+        state.setCurrentEdges(node6.tree);
 
         // node5 and node4 have no children
         node5.moveChildrenTo(node3);
@@ -204,6 +208,11 @@ public class NodeTest {
 
         // moving child list of size 1 to empty list
         node2.moveChildrenTo(node4);
+        assertNull(node5.treeSiblingNext);
+        assertEquals(node4, node5.treeSiblingPrev);
+        assertEquals(node5, node3.treeSiblingPrev);
+        assertEquals(node5, node3.treeSiblingNext);
+
         assertEquals(new HashSet<>(Arrays.asList(node3, node5)), Debugger.childrenOf(node4));
         //moving child list of size 2 to empty list
         node4.moveChildrenTo(node2);

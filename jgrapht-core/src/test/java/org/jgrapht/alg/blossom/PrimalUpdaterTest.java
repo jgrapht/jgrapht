@@ -1377,6 +1377,12 @@ public class PrimalUpdaterTest {
         assertFalse(node4.isMarked);
         assertFalse(node5.isMarked);
 
+        assertFalse(node1.isProcessed);
+        assertFalse(node2.isProcessed);
+        assertFalse(node3.isProcessed);
+        assertFalse(node4.isProcessed);
+        assertFalse(node5.isProcessed);
+
         // checking the labeling and isOuter flag
         assertTrue(node1.isInfinityNode());
         assertTrue(node2.isInfinityNode());
@@ -1585,7 +1591,7 @@ public class PrimalUpdaterTest {
     /**
      * Tests dual part of the expand operation
      */
-    @Test(timeout = 1000)
+    @Test
     public void testExpand4() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         // blossom edges
