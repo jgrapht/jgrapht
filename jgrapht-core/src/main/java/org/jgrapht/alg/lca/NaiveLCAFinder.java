@@ -75,7 +75,7 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      */
     public NaiveLCAFinder(Graph<V, E> graph) {
 //        TODO: assert GraphTests.isDAG(graph);
-        this.graph = graph;
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
     /**

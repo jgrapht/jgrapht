@@ -33,12 +33,22 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Alexandru Valeanu
- * @author Leo Crawford
  */
 public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
 {
     private Graph<V, E> graph;
     private V root;
+
+    private UnionFind<V> unionFind;
+
+    private Map<V, V> ancestors;
+
+    private Set<V> blackNodes;
+
+    private HashMap<V, Set<Integer>> queryOccurs;
+    private List<V> lowestCommonAncestors;
+
+    private List<Pair<V, V>> queries;
 
     /**
      * Create an instance with a reference to the graph that we will find LCAs for
@@ -48,8 +58,8 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
      */
     public TarjanLCAFinder(Graph<V, E> graph, V root) {
         assert GraphTests.isForest(graph);
-        this.graph = graph;
-        this.root = root;
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.root = Objects.requireNonNull(root, "Root cannot be null");
 
         if (!graph.containsVertex(root)){
             throw new IllegalArgumentException("root not contained in graph");
@@ -58,10 +68,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
 
     @Override
     public V getLCA(V a, V b) {
-        List<Pair<V, V>> pairs = new ArrayList<>();
-        pairs.add(new Pair<>(a, b));
-
-        return getLCAs(pairs).get(0);
+        return getLCAs(Collections.singletonList(Pair.of(a,b))).get(0);
     }
 
     @Override
@@ -69,22 +76,11 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
         return computeTarjan(queries);
     }
 
-    private UnionFind<V> unionFind;
-
-    private Map<V, V> ancestors;
-
-    private Set<V> blackNodes;
-
-    private MultiMap<V> queryOccurs;
-    private List<V> lowestCommonAncestors;
-
-    private List<Pair<V, V>> queries;
-
     private void initialize(){
         unionFind = new UnionFind<>(Collections.emptySet());
         ancestors = new HashMap<>();
         blackNodes = new HashSet<>();
-        queryOccurs = new MultiMap<>();
+        queryOccurs = new HashMap<>();
     }
 
     private void clear(){
@@ -107,8 +103,8 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
             V a = this.queries.get(i).getFirst();
             V b = this.queries.get(i).getSecond();
 
-            queryOccurs.addToSet(a, i);
-            queryOccurs.addToSet(b, i);
+            queryOccurs.computeIfAbsent(a, x -> new HashSet<>()).add(i);
+            queryOccurs.computeIfAbsent(b, x -> new HashSet<>()).add(i);
 
             if (a.equals(b))
                 this.lowestCommonAncestors.add(a);
@@ -140,7 +136,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
 
         blackNodes.add(u);
 
-        for (int index: queryOccurs.getOrCreate(u)){
+        for (int index: queryOccurs.computeIfAbsent(u, x -> new HashSet<>())){
             Pair<V, V> query = queries.get(index);
             V v;
 
@@ -155,18 +151,18 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
         }
     }
 
-    private static final class MultiMap<V> extends HashMap<V, Set<Integer>> {
-
-        void addToSet(V key, Integer n){
-            getOrCreate(key).add(n);
-        }
-
-        Set<Integer> getOrCreate(V key) {
-            if (!containsKey(key)) {
-                put(key, new HashSet<>());
-            }
-
-            return get(key);
-        }
-    }
+//    private static final class MultiMap<V> extends HashMap<V, Set<Integer>> {
+//
+//        void addToSet(V key, Integer n){
+//            getOrCreate(key).add(n);
+//        }
+//
+//        Set<Integer> getOrCreate(V key) {
+//            if (!containsKey(key)) {
+//                put(key, new HashSet<>());
+//            }
+//
+//            return get(key);
+//        }
+//    }
 }

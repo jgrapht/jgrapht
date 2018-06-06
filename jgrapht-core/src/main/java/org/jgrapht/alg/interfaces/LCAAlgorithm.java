@@ -2,8 +2,8 @@ package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.alg.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FunctionalInterface
 public interface LCAAlgorithm<V> {
@@ -25,12 +25,6 @@ public interface LCAAlgorithm<V> {
      * @return a list L of LCAs where L(i) is the LCA of pair queries(i)
      */
     default List<V> getLCAs(List<Pair<V, V>> queries){
-        List<V> lcas = new ArrayList<>(queries.size());
-
-        for (Pair<V, V> query : queries) {
-            lcas.add(getLCA(query.getFirst(), query.getSecond()));
-        }
-
-        return lcas;
+        return queries.stream().map(p -> getLCA(p.getFirst(), p.getSecond())).collect(Collectors.toList());
     }
 }

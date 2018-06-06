@@ -22,8 +22,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     public BinaryLiftingLCAFinder(Graph<V, E> graph, V root){
         assert GraphTests.isForest(graph);
 
-        this.graph = graph;
-        this.root = root;
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.root = Objects.requireNonNull(root, "Root cannot be null");
         this.MAX_LEVEL = log2(graph.vertexSet().size());
     }
 
