@@ -1,6 +1,7 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnionFind;
@@ -10,17 +11,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class LCATestBase {
 
-    abstract <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, V root);
+    abstract <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
 
     @Test
     public void testOneNode() {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
 
-        Assert.assertEquals("a", createSolver(g, "a").getLCA("a", "a"));
+        Assert.assertEquals("a", createSolver(g, Collections.singleton("a")).getLCA("a", "a"));
     }
 
     @Test
@@ -29,7 +31,7 @@ public abstract class LCATestBase {
         g.addVertex("a");
         g.addVertex("b");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, "a");
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertNull(lcaAlgorithm.getLCA("a", "b"));
         Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
@@ -53,7 +55,7 @@ public abstract class LCATestBase {
             }
         }
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, 0);
+        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(0));
         LCAAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
@@ -101,7 +103,7 @@ public abstract class LCATestBase {
             queries.add(Pair.of(a, b));
         }
 
-        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(g, N);
+        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(g, Collections.singleton(N));
 
         List<Integer> lcas = lcaAlgorithm.getLCAs(queries);
 
@@ -128,7 +130,7 @@ public abstract class LCATestBase {
         g.addEdge("b", "d");
         g.addEdge("d", "e");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, "a");
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertEquals("b", lcaAlgorithm.getLCA("c", "e"));
         Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "d"));
@@ -153,7 +155,7 @@ public abstract class LCATestBase {
         graph.addEdge(3, 10);
         graph.addEdge(3, 11);
 
-        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, 1);
+        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
 
         Assert.assertEquals((int)lcaAlgorithm.getLCA(10, 11), 3);
         Assert.assertEquals((int)lcaAlgorithm.getLCA(8, 9), 2);
@@ -193,7 +195,7 @@ public abstract class LCATestBase {
         graph.addEdge(19, 14);
         graph.addEdge(20, 11);
 
-        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, 1);
+        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
 
         Assert.assertEquals((int)lcaAlgorithm.getLCA(9, 14), 1);
         Assert.assertEquals((int)lcaAlgorithm.getLCA(10, 9), 1);
@@ -233,7 +235,7 @@ public abstract class LCATestBase {
         g.addEdge("c", "i");
         g.addEdge("i", "j");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, "a");
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "h"));
         Assert.assertEquals("b", lcaAlgorithm.getLCA("j", "f"));
@@ -251,7 +253,7 @@ public abstract class LCATestBase {
         Assert.assertEquals(Arrays.asList("b", "b", "c"), lcas);
 
         // test it the other way around and starting from b
-        Assert.assertEquals("b", createSolver(g, "b").getLCA("h", "b"));
+        Assert.assertEquals("b", createSolver(g, Collections.singleton("b")).getLCA("h", "b"));
     }
 
     private void generateConnectedTree(int N, Random random, Graph<Integer, DefaultEdge> g, List<Integer> vertices){
@@ -293,7 +295,7 @@ public abstract class LCATestBase {
     @Test
     public void randomHugeConnectedTree(){
         final int N = 100_000;
-        final int Q = 100_000;
+        final int Q = 200_000;
 
         Random random = new Random(0x88);
 
@@ -306,7 +308,7 @@ public abstract class LCATestBase {
 
         generateConnectedTree(N, random, g, vertices);
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, vertices.get(0));
+        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(vertices.get(0)));
         LCAAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
@@ -334,7 +336,7 @@ public abstract class LCATestBase {
     @Test
     public void randomHugePossiblyDisconnectedTree(){
         final int N = 100_000;
-        final int Q = 100_000;
+        final int Q = 200_000;
 
         Random random = new Random(0x55);
 
@@ -347,13 +349,19 @@ public abstract class LCATestBase {
 
         generatePossiblyDisconnectedTree(N, random, g, vertices);
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, vertices.get(0));
+        ConnectivityInspector<Integer, DefaultEdge> connectivityInspector = new ConnectivityInspector<>(g);
+
+        List<Set<Integer>> connectedComponents = connectivityInspector.connectedSets();
+
+        Set<Integer> roots = connectedComponents.stream().map(component -> component.iterator().next()).collect(Collectors.toSet());
+
+        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
         LCAAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
-            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, vertices.get(0));
+            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, roots);
         else
-            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, vertices.get(0));
+            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
         List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
 

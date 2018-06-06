@@ -5,10 +5,10 @@ import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.Set;
 
-public class BinaryLiftingLCAFinderTest extends LCATestBase {
+public class HeavyPathLCAFinderTest extends LCATestBase {
 
     @Override
     <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots) {
-        return new BinaryLiftingLCAFinder<>(graph, roots);
+        return new HeavyPathLCAFinder<>(graph, roots);
     }
 }

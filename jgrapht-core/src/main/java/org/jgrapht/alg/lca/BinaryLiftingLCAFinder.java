@@ -87,10 +87,12 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
             if (ancestors[l][x] != -1 && !isAncestor(ancestors[l][x], y))
                 x = ancestors[l][x];
 
-        if (ancestors[0][x] == -1)
+        int lca = ancestors[0][x];
+
+        if (lca == -1 || !isAncestor(lca, x) || !isAncestor(lca, y))
             return null;
         else
-            return indexList.get(ancestors[0][x]);
+            return indexList.get(lca);
     }
 
     public static int log2(int n){

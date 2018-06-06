@@ -19,7 +19,9 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
 
     private int[] eulerTour;
     private int sizeTour;
-    private boolean[] visited;
+
+    private int numberComponent;
+    private int[] component;
 
     private int[] level;
     private int[] representative;
@@ -63,7 +65,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void dfs(int u, int parent, int lvl) {
-        visited[u] = true;
+        component[u] = numberComponent;
         eulerTour[sizeTour] = u;
         level[sizeTour] = lvl;
         sizeTour++;
@@ -115,13 +117,15 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
         eulerTour = new int[2 * graph.vertexSet().size()];
         level = new int[2 * graph.vertexSet().size()];
         representative = new int[graph.vertexSet().size()];
-        visited = new boolean[graph.vertexSet().size()];
+        component = new int[graph.vertexSet().size()];
 
         for (V root: roots){
             int u = vertexMap.get(root);
 
-            if (!visited[u])
+            if (component[u] == 0) {
+                numberComponent++;
                 dfs(u, -1, 0);
+            }
         }
 
         Arrays.fill(representative, -1);
@@ -144,11 +148,11 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
         if (x == y)
             return a;
 
+        if (component[x] == 0 || component[y] == 0 || component[x] != component[y])
+            return null;
+
         x = representative[x];
         y = representative[y];
-
-        if (x == -1 || y == -1)
-            return null;
 
         if (x > y) {
             int t = x;

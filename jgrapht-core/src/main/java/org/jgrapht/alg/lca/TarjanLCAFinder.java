@@ -90,7 +90,6 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
         unionFind = new UnionFind<>(Collections.emptySet());
         ancestors = new HashMap<>();
         blackNodes = new HashSet<>();
-        queryOccurs = new HashMap<>();
     }
 
     private void clear(){
@@ -109,6 +108,8 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
         this.queries = queries;
         this.lowestCommonAncestors = new ArrayList<>(queries.size());
 
+        this.queryOccurs = new HashMap<>();
+
         for (int i = 0; i < queries.size(); i++){
             V a = this.queries.get(i).getFirst();
             V b = this.queries.get(i).getSecond();
@@ -122,9 +123,13 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
                 this.lowestCommonAncestors.add(null);
         }
 
+        Set<V> visited = new HashSet<>();
+
         for (V root: roots)
-            if (!blackNodes.contains(root))
-                TarjanOLCA(root, null);
+            if (!visited.contains(root)) {
+                initialize();
+                TarjanOLCA(root, null, visited);
+            }
 
         List<V> tmpRef = lowestCommonAncestors;
         clear();
@@ -132,7 +137,8 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
         return tmpRef;
     }
 
-    private void TarjanOLCA(V u, V p){
+    private void TarjanOLCA(V u, V p, Set<V> visited){
+        visited.add(u);
         unionFind.addElement(u);
         ancestors.put(u, u);
 
@@ -140,7 +146,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
             V v = Graphs.getOppositeVertex(graph, edge, u);
 
             if (!v.equals(p)){
-                TarjanOLCA(v, u);
+                TarjanOLCA(v, u, visited);
                 unionFind.union(u, v);
                 ancestors.put(unionFind.find(u), u);
             }
