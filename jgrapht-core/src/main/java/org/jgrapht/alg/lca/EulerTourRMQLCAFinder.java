@@ -11,7 +11,7 @@ import static org.jgrapht.alg.lca.BinaryLiftingLCAFinder.log2;
 
 public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     private final Graph<V, E> graph;
-    private final V root;
+    private final Set<V> roots;
     private final int MAX_LEVEL;
 
     private Map<V, Integer> vertexMap;
@@ -19,6 +19,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
 
     private int[] eulerTour;
     private int sizeTour;
+    private boolean[] visited;
 
     private int[] level;
     private int[] representative;
@@ -30,8 +31,19 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
         assert GraphTests.isForest(graph);
 
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.root = Objects.requireNonNull(root, "Root cannot be null");
+        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
         this.MAX_LEVEL = log2(graph.vertexSet().size());
+    }
+
+    public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots){
+        assert GraphTests.isForest(graph);
+
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
+        this.MAX_LEVEL = log2(graph.vertexSet().size());
+
+        if (this.roots.isEmpty())
+            throw new IllegalArgumentException("Roots cannot be empty");
     }
 
     private void normalizeGraph(){
@@ -51,6 +63,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void dfs(int u, int parent, int lvl) {
+        visited[u] = true;
         eulerTour[sizeTour] = u;
         level[sizeTour] = lvl;
         sizeTour++;
@@ -102,8 +115,14 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
         eulerTour = new int[2 * graph.vertexSet().size()];
         level = new int[2 * graph.vertexSet().size()];
         representative = new int[graph.vertexSet().size()];
+        visited = new boolean[graph.vertexSet().size()];
 
-        dfs(vertexMap.get(root), -1, 0);
+        for (V root: roots){
+            int u = vertexMap.get(root);
+
+            if (!visited[u])
+                dfs(u, -1, 0);
+        }
 
         Arrays.fill(representative, -1);
         for (int i = 0; i < sizeTour; i++){

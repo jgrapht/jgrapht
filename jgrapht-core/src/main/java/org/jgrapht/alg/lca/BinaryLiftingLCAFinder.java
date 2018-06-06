@@ -9,7 +9,7 @@ import java.util.*;
 
 public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     private final Graph<V, E> graph;
-    private final V root;
+    private final Set<V> roots;
     private final int MAX_LEVEL;
 
     private Map<V, Integer> vertexMap;
@@ -23,7 +23,19 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
         assert GraphTests.isForest(graph);
 
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.root = Objects.requireNonNull(root, "Root cannot be null");
+        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
+        this.MAX_LEVEL = log2(graph.vertexSet().size());
+    }
+
+    public BinaryLiftingLCAFinder(Graph<V, E> graph, Set<V> roots){
+        assert GraphTests.isForest(graph);
+
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
+
+        if (this.roots.isEmpty())
+            throw new IllegalArgumentException("Roots cannot be empty");
+
         this.MAX_LEVEL = log2(graph.vertexSet().size());
     }
 
@@ -117,6 +129,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
             }
         }
 
-        dfs(vertexMap.get(root), -1);
+        for (V root: roots)
+            if (timeIn[vertexMap.get(root)] == 0)
+                dfs(vertexMap.get(root), -1);
     }
 }

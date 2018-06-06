@@ -34,10 +34,9 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
-{
+public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
     private Graph<V, E> graph;
-    private V root;
+    private Set<V> roots;
 
     private UnionFind<V> unionFind;
 
@@ -59,11 +58,22 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
     public TarjanLCAFinder(Graph<V, E> graph, V root) {
         assert GraphTests.isForest(graph);
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.root = Objects.requireNonNull(root, "Root cannot be null");
+        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
+    }
 
-        if (!graph.containsVertex(root)){
-            throw new IllegalArgumentException("root not contained in graph");
-        }
+    /**
+     * Create an instance with a reference to the graph that we will find LCAs for
+     *
+     * @param graph the input graph
+     * @param roots the roots of the graph
+     */
+    public TarjanLCAFinder(Graph<V, E> graph, Set<V> roots) {
+        assert GraphTests.isForest(graph);
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
+
+        if (this.roots.isEmpty())
+            throw new IllegalArgumentException("Roots cannot be empty");
     }
 
     @Override
@@ -112,7 +122,9 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
                 this.lowestCommonAncestors.add(null);
         }
 
-        TarjanOLCA(root, null);
+        for (V root: roots)
+            if (!blackNodes.contains(root))
+                TarjanOLCA(root, null);
 
         List<V> tmpRef = lowestCommonAncestors;
         clear();
@@ -150,19 +162,4 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V>
             }
         }
     }
-
-//    private static final class MultiMap<V> extends HashMap<V, Set<Integer>> {
-//
-//        void addToSet(V key, Integer n){
-//            getOrCreate(key).add(n);
-//        }
-//
-//        Set<Integer> getOrCreate(V key) {
-//            if (!containsKey(key)) {
-//                put(key, new HashSet<>());
-//            }
-//
-//            return get(key);
-//        }
-//    }
 }
