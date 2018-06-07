@@ -5,8 +5,12 @@ import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnionFind;
+import org.jgrapht.generate.BarabasiAlbertForestGenerator;
+import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -95,13 +99,7 @@ public abstract class LCATestBase {
             g.addEdge(i, i + 1);
 
         List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-
-        for (int i = 0; i < Q; i++) {
-            int a = 1 + random.nextInt(N);
-            int b = 1 + random.nextInt(N);
-
-            queries.add(Pair.of(a, b));
-        }
+        generateQueries(queries, new ArrayList<>(g.vertexSet()), random, Q);
 
         LCAAlgorithm<Integer> lcaAlgorithm = createSolver(g, Collections.singleton(N));
 
@@ -256,6 +254,7 @@ public abstract class LCATestBase {
         Assert.assertEquals("b", createSolver(g, Collections.singleton("b")).getLCA("h", "b"));
     }
 
+    // TODO: remove?
     private void generateConnectedTree(int N, Random random, Graph<Integer, DefaultEdge> g, List<Integer> vertices){
         Collections.shuffle(vertices, random);
 
@@ -267,6 +266,42 @@ public abstract class LCATestBase {
                 int v = vertices.get(random.nextInt(i));
                 g.addEdge(u, v);
             }
+        }
+    }
+
+    @Test
+    public void randomHugeConnectedTree(){
+        final int N = 100_000;
+        final int Q = 200_000;
+
+        Random random = new Random(0x88);
+
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertForestGenerator<>(1, N, random);
+
+        generator.generateGraph(g, null);
+
+        List<Integer> vertexList = new ArrayList<>(g.vertexSet());
+
+        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(vertexList.get(0)));
+        LCAAlgorithm<Integer> lcaAlgorithm2;
+
+        if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
+            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, vertexList.get(0));
+        else
+            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, vertexList.get(0));
+
+        List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
+        generateQueries(queries, vertexList, random, Q);
+
+        List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
+        List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+
+        for (int i = 0; i < Q; i++) {
+            Assert.assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
 
@@ -292,44 +327,12 @@ public abstract class LCATestBase {
         }
     }
 
-    @Test
-    public void randomHugeConnectedTree(){
-        final int N = 100_000;
-        final int Q = 200_000;
-
-        Random random = new Random(0x88);
-
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        List<Integer> vertices = new ArrayList<>();
-        for (int i = 0; i < N; i++){
-            vertices.add(i);
-        }
-
-        generateConnectedTree(N, random, g, vertices);
-
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(vertices.get(0)));
-        LCAAlgorithm<Integer> lcaAlgorithm2;
-
-        if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
-            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, vertices.get(0));
-        else
-            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, vertices.get(0));
-
-        List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-
+    private static <V> void generateQueries(List<Pair<V, V>> queries, List<V> vertexList, Random random, int Q){
         for (int i = 0; i < Q; i++) {
-            int a = vertices.get(random.nextInt(N));
-            int b = vertices.get(random.nextInt(N));
+            V a = vertexList.get(random.nextInt(vertexList.size()));
+            V b = vertexList.get(random.nextInt(vertexList.size()));
 
             queries.add(Pair.of(a, b));
-        }
-
-        List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
-        List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
-
-        for (int i = 0; i < Q; i++) {
-            Assert.assertEquals(lcas1.get(i), lcas2.get(i));
         }
     }
 
@@ -340,14 +343,17 @@ public abstract class LCATestBase {
 
         Random random = new Random(0x55);
 
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        final int NUM_TREES = 100 + random.nextInt(200);
 
-        List<Integer> vertices = new ArrayList<>();
-        for (int i = 0; i < N; i++){
-            vertices.add(i);
-        }
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        generatePossiblyDisconnectedTree(N, random, g, vertices);
+        BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertForestGenerator<>(NUM_TREES, N, random);
+
+        generator.generateGraph(g, null);
+
+        List<Integer> vertexList = new ArrayList<>(g.vertexSet());
 
         ConnectivityInspector<Integer, DefaultEdge> connectivityInspector = new ConnectivityInspector<>(g);
 
@@ -364,19 +370,52 @@ public abstract class LCATestBase {
             lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
         List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-
-        for (int i = 0; i < Q; i++) {
-            int a = vertices.get(random.nextInt(N));
-            int b = vertices.get(random.nextInt(N));
-
-            queries.add(Pair.of(a, b));
-        }
+        generateQueries(queries, vertexList, random, Q);
 
         List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
         List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
 
         for (int i = 0; i < Q; i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+        }
+    }
+
+    @Test
+    public void testSmallConnectedTrees(){
+        Random random = new Random(0x88);
+        final int TESTS = 10_000;
+        final int Q = 50;
+
+        for (int test = 0; test < TESTS; test++) {
+            final int N = 10 + random.nextInt(100);
+
+            GraphGenerator<Integer, DefaultEdge, Integer> gen =
+                    new BarabasiAlbertGraphGenerator<>(1, 1, N, random.nextInt());
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+            gen.generateGraph(g);
+
+            List<Integer> vertexList = new ArrayList<>(g.vertexSet());
+            Set<Integer> roots = Collections.singleton(vertexList.get(0));
+
+            LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
+            LCAAlgorithm<Integer> lcaAlgorithm2;
+
+            if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
+                lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, roots);
+            else
+                lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
+
+            List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
+            generateQueries(queries, vertexList, random, Q);
+
+            List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
+            List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+
+            for (int i = 0; i < Q; i++) {
+                Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+            }
         }
     }
 }
