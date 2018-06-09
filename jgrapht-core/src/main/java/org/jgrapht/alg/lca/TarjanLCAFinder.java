@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2018, by Leo Crawford and Contributors.
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -66,7 +66,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
      * @param roots the roots of the graph
      */
     public TarjanLCAFinder(Graph<V, E> graph, Set<V> roots) {
-        assert GraphTests.isForest(graph);
+//  TODO:      assert GraphTests.isForest(graph);
 
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
@@ -131,7 +131,6 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         for (V root: roots)
             if (!visited.contains(root)) {
-//                initialize();
                 blackNodes.clear();
                 TarjanOLCA(root, null, visited);
             }

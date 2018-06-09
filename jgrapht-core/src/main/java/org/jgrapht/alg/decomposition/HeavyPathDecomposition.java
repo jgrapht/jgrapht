@@ -3,6 +3,7 @@ package org.jgrapht.alg.decomposition;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,13 +17,12 @@ public class HeavyPathDecomposition<V, E> {
 
     private int numberOfPaths;
     private int[] sizeSubtree, father, depth;
+    private int[] component;
     private int[] path, lengthPath, positionInPath, firstNodePath;
 
     private List<List<V>> paths;
 
     private Set<E> heavyEdges;
-
-    private int[] component;
 
     public HeavyPathDecomposition(Graph<V, E> graph, V root) {
         assert GraphTests.isForest(graph);
@@ -126,13 +126,15 @@ public class HeavyPathDecomposition<V, E> {
         Arrays.fill(path, -1);
         Arrays.fill(depth, -1);
 
-        int color = 0;
+        int numberComponent = 0;
 
         for (V root: roots){
             int u = vertexMap.get(root);
 
-            if (father[u] == -1)
-                dfs(u, -1, ++color);
+            if (father[u] == -1) {
+                numberComponent++;
+                dfs(u, -1, numberComponent);
+            }
         }
 
         for (int i = 0; i < graph.vertexSet().size(); i++){
@@ -199,6 +201,15 @@ public class HeavyPathDecomposition<V, E> {
         return map;
     }
 
+    public V getFather(V vertex){
+        int index = vertexMap.getOrDefault(vertex, -1);
+
+        if (index == -1 || father[index] == -1)
+            return null;
+        else
+            return indexList.get(father[index]);
+    }
+
     public Map<V, Integer> getDepth(){
         Map<V, Integer> map = new HashMap<>();
 
@@ -207,6 +218,15 @@ public class HeavyPathDecomposition<V, E> {
         }
 
         return map;
+    }
+
+    public int getDepth(V vertex){
+        int index = vertexMap.getOrDefault(vertex, -1);
+
+        if (index == -1)
+            return -1;
+        else
+            return depth[index];
     }
 
     public Map<V, Integer> getSizeSubtree(){
@@ -219,6 +239,15 @@ public class HeavyPathDecomposition<V, E> {
         return map;
     }
 
+    public int getSizeSubTree(V vertex){
+        int index = vertexMap.getOrDefault(vertex, -1);
+
+        if (index == -1)
+            return 0;
+        else
+            return sizeSubtree[index];
+    }
+
     public Map<V, Integer> getComponent(){
         Map<V, Integer> map = new HashMap<>();
 
@@ -227,5 +256,18 @@ public class HeavyPathDecomposition<V, E> {
         }
 
         return map;
+    }
+
+    public int getComponent(V vertex){
+        int index = vertexMap.getOrDefault(vertex, -1);
+
+        if (index == -1)
+            return 0;
+        else
+            return component[index];
+    }
+
+    public Pair<Map<V, Integer>, List<V>> getNormalizedGraph(){
+        return Pair.of(vertexMap, indexList);
     }
 }

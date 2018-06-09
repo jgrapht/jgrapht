@@ -18,13 +18,12 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.alg.decomposition.HeavyPathDecomposition;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
 
-public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
+public class OPTHeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
     private final Graph<V, E> graph;
     private final Set<V> roots;
     private HeavyPathDecomposition<V, E> heavyPath;
@@ -35,7 +34,7 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
      * @param graph the input graph
      * @param root the root of the graph
      */
-    public HeavyPathLCAFinder(Graph<V, E> graph, V root){
+    public OPTHeavyPathLCAFinder(Graph<V, E> graph, V root){
         this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
     }
 
@@ -47,7 +46,7 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
-    public HeavyPathLCAFinder(Graph<V, E> graph, Set<V> roots){
+    public OPTHeavyPathLCAFinder(Graph<V, E> graph, Set<V> roots){
 //    TODO:    assert GraphTests.isForest(graph);
 
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
@@ -60,39 +59,63 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
             throw new IllegalArgumentException("At least one root is not a valid vertex");
     }
 
-    private Map<V, V> father;
-    private Map<V, Integer> depth;
+    private int[] father;
+    private int[] depth;
 
-    private Map<V, Integer> path;
-    private Map<V, Integer> positionInPath;
-    private Map<V, Integer> component;
+    private int[] path;
+    private int[] positionInPath;
+    private int[] component;
 
-    private V[] firstNode;
+    private int[] firstNode;
 
-    @SuppressWarnings("unchecked")
+    private Map<V, Integer> vertexMap;
+    private List<V> indexList;
+
+    private void normalizeGraph(){
+        vertexMap = heavyPath.getNormalizedGraph().getFirst();
+        indexList = heavyPath.getNormalizedGraph().getSecond();
+    }
+
     private void computeHeavyPathDecomposition(){
         if (heavyPath != null)
             return;
 
         heavyPath = new HeavyPathDecomposition<>(graph, roots);
 
-        father = heavyPath.getFather();
-        depth = heavyPath.getDepth();
-        component = heavyPath.getComponent();
+        normalizeGraph();
 
-        path = new HashMap<>();
-        positionInPath = new HashMap<>();
+        father = new int[graph.vertexSet().size()];
+        depth = new int[graph.vertexSet().size()];
+        component = new int[graph.vertexSet().size()];
+
+        for (V v: graph.vertexSet()){
+            int indexV = vertexMap.get(v);
+            V u = heavyPath.getFather(v);
+
+            if (u == null)
+                father[indexV] = -1;
+            else
+                father[indexV] = vertexMap.get(u);
+
+            depth[indexV] = heavyPath.getDepth(v);
+            component[indexV] = heavyPath.getComponent(v);
+        }
+
+        path = new int[graph.vertexSet().size()];
+        positionInPath = new int[graph.vertexSet().size()];
 
         List<List<V>> paths = heavyPath.getPaths();
-        firstNode = (V[]) new Object[paths.size()];
+        firstNode = new int[paths.size()];
 
         for (int i = 0; i < paths.size(); i++){
             List<V> p = paths.get(i);
-            firstNode[i] = p.get(0);
+            firstNode[i] = vertexMap.get(p.get(0));
 
             for (int j = 0; j < p.size(); j++) {
-                positionInPath.put(p.get(j), j);
-                path.put(p.get(j), i);
+                int ind = vertexMap.get(p.get(j));
+
+                path[ind] = i;
+                positionInPath[ind] = j;
             }
         }
     }
@@ -104,29 +127,32 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         computeHeavyPathDecomposition();
 
-        int componentA = component.get(a);
-        int componentB = component.get(b);
+        int indexA = vertexMap.get(a);
+        int indexB = vertexMap.get(b);
+
+        int componentA = component[indexA];
+        int componentB = component[indexB];
 
         if (componentA != componentB || componentA == 0)
             return null;
 
-        int pathA = path.get(a);
-        int pathB = path.get(b);
+        int pathA = path[indexA];
+        int pathB = path[indexB];
 
         while (pathA != pathB){
-            V firstNodePathA = firstNode[pathA];
-            V firstNodePathB = firstNode[pathB];
+            int firstNodePathA = firstNode[pathA];
+            int firstNodePathB = firstNode[pathB];
             
-            if (depth.get(firstNodePathA) < depth.get(firstNodePathB)) {
-                b = father.get(firstNodePathB);
-                pathB = path.get(b);
+            if (depth[firstNodePathA] < depth[firstNodePathB]) {
+                indexB = father[firstNodePathB];
+                pathB = path[indexB];
             }
             else {
-                a = father.get(firstNodePathA);
-                pathA = path.get(a);
+                indexA = father[firstNodePathA];
+                pathA = path[indexA];
             }
         }
 
-        return positionInPath.get(a) < positionInPath.get(b) ? a : b;
+        return positionInPath[indexA] < positionInPath[indexB] ? indexList.get(indexA) : indexList.get(indexB);
     }
 }

@@ -15,6 +15,8 @@ import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link BarabasiAlbertForestGenerator}.
+ *
+ * @author Alexandru Valeanu
  */
 public class BarabasiAlbertForestGeneratorTest {
 

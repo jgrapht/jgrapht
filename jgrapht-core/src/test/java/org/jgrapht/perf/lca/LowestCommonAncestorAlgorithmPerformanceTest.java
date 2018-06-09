@@ -41,8 +41,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class LowestCommonAncestorAlgorithmPerformanceTest
-{
+
+public class LowestCommonAncestorAlgorithmPerformanceTest {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 100_000;
     public static final int PERF_BENCHMARK_QUERIES_COUNT = 300_000;
@@ -127,12 +127,6 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
-//    @State(Scope.Benchmark)
-//    private static abstract class RandomForestBenchmarkBase
-//    {
-//
-//    }
-
     public static class BinaryLiftingLCARandomTreeBenchmark extends RandomTreeBenchmarkBase{
 
         @Override
@@ -162,6 +156,14 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         @Override
         LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
             return new HeavyPathLCAFinder<>(tree, root);
+        }
+    }
+
+    public static class OPTHeavyPathRandomTreeBenchmark extends RandomTreeBenchmarkBase{
+
+        @Override
+        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
+            return new OPTHeavyPathLCAFinder<>(tree, root);
         }
     }
 
@@ -197,6 +199,14 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
         }
     }
 
+    public static class OPTHeavyPathRandomForestBenchmark extends RandomForestBenchmarkBase{
+
+        @Override
+        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
+            return new OPTHeavyPathLCAFinder<>(tree, roots);
+        }
+    }
+
     @Test
     public void testRandomTreeBenchmark() throws RunnerException {
         Options opt = new OptionsBuilder()
@@ -204,6 +214,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
             .include(".*" + EulerTourRMQLCARandomTreeBenchmark.class.getSimpleName() + ".*")
             .include(".*" + TarjanLCARandomTreeBenchmark.class.getSimpleName() + ".*")
             .include(".*" + HeavyPathRandomTreeBenchmark.class.getSimpleName() + ".*")
+            .include(".*" + OPTHeavyPathRandomTreeBenchmark.class.getSimpleName() + ".*")
 
             .mode(Mode.AverageTime).timeUnit(TimeUnit.NANOSECONDS).warmupTime(TimeValue.seconds(1))
             .warmupIterations(3).measurementTime(TimeValue.seconds(1)).measurementIterations(5)
@@ -219,6 +230,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
                 .include(".*" + EulerTourRMQLCARandomForestBenchmark.class.getSimpleName() + ".*")
                 .include(".*" + TarjanLCARandomForestBenchmark.class.getSimpleName() + ".*")
                 .include(".*" + HeavyPathRandomForestBenchmark.class.getSimpleName() + ".*")
+                .include(".*" + OPTHeavyPathRandomForestBenchmark.class.getSimpleName() + ".*")
 
                 .mode(Mode.AverageTime).timeUnit(TimeUnit.NANOSECONDS).warmupTime(TimeValue.seconds(1))
                 .warmupIterations(3).measurementTime(TimeValue.seconds(1)).measurementIterations(5)

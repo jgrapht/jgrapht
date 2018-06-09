@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2018, by Leo Crawford, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2013-2018, by Leo Crawford and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,6 +18,7 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
@@ -74,7 +75,7 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      * @param graph the input graph
      */
     public NaiveLCAFinder(Graph<V, E> graph) {
-//        TODO: assert GraphTests.isDAG(graph);
+        // TODO: assert GraphTests.isDAG(graph);
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 

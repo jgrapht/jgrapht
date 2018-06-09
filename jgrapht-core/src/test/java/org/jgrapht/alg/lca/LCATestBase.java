@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
@@ -17,6 +34,11 @@ import org.junit.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Tests for LCA algorithms on trees and forests
+ *
+ * @author Alexandru Valeanu
+ */
 public abstract class LCATestBase {
 
     abstract <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
@@ -27,6 +49,24 @@ public abstract class LCATestBase {
         g.addVertex("a");
 
         Assert.assertEquals("a", createSolver(g, Collections.singleton("a")).getLCA("a", "a"));
+    }
+
+    @Test
+    public void testTwoRootsInTheSameTree(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("b");
+        g.addVertex("a");
+        g.addVertex("c");
+        g.addVertex("d");
+
+        g.addEdge("a", "b");
+        g.addEdge("c", "d");
+
+        // Either a or b is a valid answer
+
+        String lca = createSolver(g, g.vertexSet()).getLCA("a", "b");
+
+        Assert.assertTrue(lca.equals("a") || lca.equals("b"));
     }
 
     @Test
@@ -73,29 +113,37 @@ public abstract class LCATestBase {
         LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.emptySet());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testRootNotInGraph(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("a");
+
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("b"));
+    }
+
     @Test
     public void testGraphAllPossibleQueries(){
         final int N = 100;
 
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Random random = new Random(0x88_88);
 
-        Random random = new Random(0x88);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(0), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        for (int i = 0; i < N; i++){
-            g.addVertex(i);
+        BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertForestGenerator<>(1, N, random);
 
-            if (i > 0){
-                g.addEdge(i, random.nextInt(i));
-            }
-        }
+        generator.generateGraph(g, null);
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(0));
+        Integer root = g.vertexSet().iterator().next();
+
+        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(root));
         LCAAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
-            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, 0);
+            lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, Collections.singleton(root));
         else
-            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, 0);
+            lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, Collections.singleton(root));
 
         List<Pair<Integer, Integer>> queries = new ArrayList<>(N * N);
 
@@ -284,21 +332,7 @@ public abstract class LCATestBase {
         Assert.assertEquals("b", createSolver(g, Collections.singleton("b")).getLCA("h", "b"));
     }
 
-    // TODO: remove?
-    private void generateConnectedTree(int N, Random random, Graph<Integer, DefaultEdge> g, List<Integer> vertices){
-        Collections.shuffle(vertices, random);
-
-        for (int i = 0; i < N; i++) {
-            int u = vertices.get(i);
-            g.addVertex(u);
-
-            if (i > 0){
-                int v = vertices.get(random.nextInt(i));
-                g.addEdge(u, v);
-            }
-        }
-    }
-
+    // TODO: keep?
     public Graph<Integer, DefaultEdge> generateForest(int t, int n, Random random){
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
@@ -313,16 +347,6 @@ public abstract class LCATestBase {
         generator.generateGraph(g, null);
 
         return g;
-    }
-
-    @Test
-    public void test(){
-//        Random random = new Random(0x88);
-//
-//        Graph<Integer, DefaultEdge> g = generateForest(4, 10, random);
-//
-//        System.out.println(g.vertexSet().size());
-//        System.out.println(new ConnectivityInspector<>(g).connectedSets());
     }
 
     @Test
