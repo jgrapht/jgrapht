@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
 import static org.jgrapht.alg.blossom.Node.Label.*;
 
 class Node implements Iterable<Edge> {
-    private static int currentId = 0;
+    private static int currentId = 2109;
     FibonacciHeapNode<Node> fibNode;
 
     boolean isTreeRoot;
@@ -25,7 +25,6 @@ class Node implements Iterable<Edge> {
     Label label;
     Edge[] first;
     double dual;
-    double blossomEps;
 
     Edge parentEdge;
     Edge matched;
@@ -207,7 +206,7 @@ class Node implements Iterable<Edge> {
     }
 
     public double getTrueDual() {
-        if (tree == null || !isOuter) {
+        if (isInfinityNode() || !isOuter) {
             return dual;
         }
         return isPlusNode() ? dual + tree.eps : dual - tree.eps;

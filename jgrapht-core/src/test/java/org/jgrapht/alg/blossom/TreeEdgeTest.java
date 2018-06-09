@@ -36,7 +36,7 @@ public class TreeEdgeTest {
         Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(NONE));
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(NONE));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);
@@ -46,9 +46,9 @@ public class TreeEdgeTest {
         Tree tree2 = node2.tree;
         Tree tree3 = node3.tree;
 
-        TreeEdge treeEdge12 = Debugger.getTreeEdge(tree1, tree2);
-        TreeEdge treeEdge13 = Debugger.getTreeEdge(tree1, tree3);
-        TreeEdge treeEdge23 = Debugger.getTreeEdge(tree2, tree3);
+        TreeEdge treeEdge12 = BlossomVDebugger.getTreeEdge(tree1, tree2);
+        TreeEdge treeEdge13 = BlossomVDebugger.getTreeEdge(tree1, tree3);
+        TreeEdge treeEdge23 = BlossomVDebugger.getTreeEdge(tree2, tree3);
 
         assertNotNull(treeEdge12);
         assertNotNull(treeEdge13);
@@ -56,19 +56,19 @@ public class TreeEdgeTest {
 
         treeEdge12.removeFromTreeEdgeList();
 
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge13)), Debugger.treeEdgesOf(tree1));
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), Debugger.treeEdgesOf(tree2));
+        assertEquals(new HashSet<>(Collections.singletonList(treeEdge13)), BlossomVDebugger.treeEdgesOf(tree1));
+        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), BlossomVDebugger.treeEdgesOf(tree2));
 
         treeEdge13.removeFromTreeEdgeList();
 
-        assertTrue(Debugger.treeEdgesOf(tree1).isEmpty());
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), Debugger.treeEdgesOf(tree2));
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), Debugger.treeEdgesOf(tree3));
+        assertTrue(BlossomVDebugger.treeEdgesOf(tree1).isEmpty());
+        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), BlossomVDebugger.treeEdgesOf(tree2));
+        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), BlossomVDebugger.treeEdgesOf(tree3));
 
         treeEdge23.removeFromTreeEdgeList();
 
-        assertTrue(Debugger.treeEdgesOf(tree2).isEmpty());
-        assertTrue(Debugger.treeEdgesOf(tree3).isEmpty());
+        assertTrue(BlossomVDebugger.treeEdgesOf(tree2).isEmpty());
+        assertTrue(BlossomVDebugger.treeEdgesOf(tree3).isEmpty());
 
     }
 }

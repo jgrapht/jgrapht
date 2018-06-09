@@ -7,14 +7,14 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.EPS;
+import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class DualUpdaterTest {
 
-    private BlossomPerfectMatching.Options noneOptions = new BlossomPerfectMatching.Options(NONE);
+    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(NONE);
 
     @org.junit.Test
     public void testUpdateDuals1() {
@@ -248,7 +248,7 @@ public class DualUpdaterTest {
         state.setCurrentEdges(node1.tree);
         primalUpdater.grow(edge12, false);
         state.clearCurrentEdges(node1.tree);
-        TreeEdge treeEdge = Debugger.getTreeEdge(node1.tree, node8.tree);
+        TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node8.tree);
         state.setCurrentEdges(node5.tree);
         primalUpdater.grow(edge56, false);
         state.clearCurrentEdges(node5.tree);

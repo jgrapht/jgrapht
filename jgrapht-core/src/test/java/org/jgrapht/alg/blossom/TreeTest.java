@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class TreeTest {
 
-    private BlossomPerfectMatching.Options noneOptions = new BlossomPerfectMatching.Options(NONE);
+    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(NONE);
 
     @Test
     public void testTreeNodeIterator() {

@@ -2,8 +2,8 @@ package org.jgrapht.alg.blossom;
 
 import org.jgrapht.util.FibonacciHeap;
 
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.EPS;
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFINITY;
+import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 class DualUpdater<V, E> {
     private State<V, E> state;
@@ -58,18 +58,12 @@ class DualUpdater<V, E> {
         if (!tree.minusBlossoms.isEmpty() && (varNode = tree.minusBlossoms.min().getData()).dual < eps) {
             eps = varNode.dual;
         }
-        varEdge = null;
         // checking minimum slack of the (+, +) edges
-        while (!tree.plusPlusEdges.isEmpty()) {
+        if (!tree.plusPlusEdges.isEmpty()) {
             varEdge = tree.plusPlusEdges.min().getData();
-            // TODO: when there are contracted blossoms, need to process this (+, +) edge
-            if (true) {
-                break;
+            if (2 * eps > varEdge.slack) {
+                eps = varEdge.slack / 2;
             }
-            tree.removePlusPlusEdge(varEdge);
-        }
-        if (varEdge != null && 2 * eps > varEdge.slack) {
-            eps = varEdge.slack / 2;
         }
         return eps;
     }
@@ -139,7 +133,7 @@ class DualUpdater<V, E> {
                     for (currentEdge = currentTree.first[dir]; currentEdge != null; currentEdge = currentEdge.next[dir]) {
                         opposite = currentEdge.head[dir];
                         double plusPlusEps = INFINITY;
-                        int dirRev = 1-dir;
+                        int dirRev = 1 - dir;
 
                         if (!currentEdge.plusPlusEdges.isEmpty()) {
                             plusPlusEps = currentEdge.plusPlusEdges.min().getKey() - currentTree.eps - opposite.eps;

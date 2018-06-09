@@ -6,7 +6,6 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,7 +33,7 @@ public class StateTest {
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(NONE));
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(NONE));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);
@@ -46,15 +45,15 @@ public class StateTest {
 
         state.moveEdge(node2, node3, edge12);
         assertEquals(node3, edge12.getOpposite(node1));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), Debugger.edgesOf(node1));
-        assertEquals(new HashSet<>(Collections.singletonList(edge23)), Debugger.edgesOf(node2));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), Debugger.edgesOf(node3));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), BlossomVDebugger.edgesOf(node1));
+        assertEquals(new HashSet<>(Collections.singletonList(edge23)), BlossomVDebugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), BlossomVDebugger.edgesOf(node3));
 
         state.moveEdge(node2, node1, edge23);
         assertEquals(node1, edge13.getOpposite(node3));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), Debugger.edgesOf(node1));
-        assertEquals(new HashSet<>(), Debugger.edgesOf(node2));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), Debugger.edgesOf(node3));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), BlossomVDebugger.edgesOf(node1));
+        assertEquals(new HashSet<>(), BlossomVDebugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge23)), BlossomVDebugger.edgesOf(node3));
     }
 
 }

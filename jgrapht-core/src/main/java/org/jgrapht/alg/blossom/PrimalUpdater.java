@@ -1,6 +1,5 @@
 package org.jgrapht.alg.blossom;
 
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeap;
 
@@ -112,7 +111,7 @@ class PrimalUpdater<V, E> {
         Node branchesEndpoint = parentEdge.headOriginal[dirToBlossomFromParent].getPenultimateBlossom();
 
         if (state.options.verbose) {
-            Debugger.printBlossonNodes(branchesEndpoint);
+            State.printBlossonNodes(branchesEndpoint);
         }
 
         Edge matchedEdge = blossom.matched;
@@ -155,79 +154,15 @@ class PrimalUpdater<V, E> {
             current.isProcessed = false;
             current = current.blossomSibling.getOpposite(current);
         } while (current != blossomRoot);
-
+        blossom.isRemoved = true;
         state.statistics.expandNum++;
         state.removedNum++;
         if (state.removedNum > 4 * state.nodeNum) {
             freeRemoved();
         }
         if (state.options.verbose) {
-            Debugger.printTreeNodes(tree);
+            State.printTreeNodes(tree);
         }
-    }
-
-    public MatchingAlgorithm.Matching<V, E> finish() {
-        Set<E> edges = new HashSet<>();
-        double weight = 0;
-        Node[] nodes = state.nodes;
-        Node blossomRoot;
-        Node node;
-        Node nextNode;
-        Node blossomPrev;
-        Node blossom;
-        E edge;
-
-        if (state.options.verbose) {
-            System.out.println("Finishing matching");
-        }
-
-        for (int i = 0; i < state.nodeNum; i++) {
-            if (nodes[i].matched == null) {
-                // changing the matching in the blossoms
-                blossomPrev = null;
-                blossom = nodes[i];
-                do {
-                    blossom.isMarked = true;
-                    blossom.blossomGrandparent = blossomPrev;
-                    blossomPrev = blossom;
-                    blossom = blossomPrev.blossomParent;
-                } while (!blossom.isOuter && !blossom.blossomParent.isMarked);
-                blossom.isMarked = true;
-                // now node.blossomGrandparent points to the previous blossom in the hierarchy except for the blossom node
-                while (true) {
-                    for (blossomRoot = blossom.matched.getCurrentOriginal(blossom); blossomRoot.blossomParent != blossom; blossomRoot = blossomRoot.blossomParent) {
-                    }
-                    blossomRoot.matched = blossom.matched;
-                    state.moveEdge(blossom, blossomRoot, blossom.matched);
-                    node = blossomRoot.blossomSibling.getOpposite(blossomRoot);
-                    // changing the matching in the blossom
-                    while (node != blossomRoot) {
-                        node.matched = node.blossomSibling;
-                        nextNode = node.blossomSibling.getOpposite(node);
-                        nextNode.matched = node.matched;
-                        node = nextNode.blossomSibling.getOpposite(nextNode);
-                    }
-                    if (!blossomPrev.isBlossom) {
-                        break;
-                    }
-                    blossom = blossomPrev;
-                    blossomPrev = blossom.blossomGrandparent;
-                }
-            }
-        }
-        for (int i = 0; i < state.nodeNum; i++) {
-            edge = state.backEdgeMap.get(nodes[i].matched);
-            if (edge == null) { // TODO remove
-                System.out.println("Node " + i + " is unmatched");
-                throw new RuntimeException();
-            } else {
-                if (!edges.contains(edge)) {
-                    edges.add(edge);
-                    weight += state.graph.getEdgeWeight(edge);
-                }
-            }
-        }
-        return new MatchingAlgorithm.MatchingImpl<>(state.graph, edges, weight);
     }
 
     private void processEvenBranchExpand(Node blossomRoot, Node branchesEndpoint, Node blossom) {
@@ -592,6 +527,7 @@ class PrimalUpdater<V, E> {
                 break;
             }
             endPoints[branch] = endPoints[branch].getTreeGrandparent();
+            branch = 1 - branch;
         }
         varNode = root;
         while (varNode != upperBound) {
@@ -639,7 +575,6 @@ class PrimalUpdater<V, E> {
         // handling all blossom nodes except for the blossom root
         for (State.BlossomNodesIterator iterator = state.blossomNodesIterator(blossomRoot, blossomFormingEdge); iterator.hasNext(); ) {
             varNode = iterator.next();
-            varNode.blossomEps = eps;
             if (varNode != blossomRoot) {
                 if (varNode.isPlusNode()) {
                     // substituting varNode with the blossom in the tree structure
@@ -649,7 +584,6 @@ class PrimalUpdater<V, E> {
                     varNode.isProcessed = true;
                 } else {
                     if (varNode.isBlossom) {
-                        // TODO: update slack of the edge and dual variable of the blossom
                         tree.removeMinusBlossom(varNode);
                     }
                     varNode.removeFromChildList();

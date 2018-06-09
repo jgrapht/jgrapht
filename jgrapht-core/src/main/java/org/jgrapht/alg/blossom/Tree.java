@@ -5,8 +5,6 @@ import org.jgrapht.util.FibonacciHeapNode;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 class Tree {
     private static int currentId = 1;
@@ -25,7 +23,7 @@ class Tree {
     FibonacciHeap<Node> minusBlossoms;
     int id;
 
-    public Tree(){
+    public Tree() {
     }
 
     public Tree(Node root) {

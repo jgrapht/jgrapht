@@ -14,16 +14,17 @@ class State<V, E> {
     int treeNum;
     int removedNum;
     int blossomNum;
-    BlossomPerfectMatching.Statistics statistics;
+    KolmogorovMinimumWeightPerfectMatching.Statistics statistics;
     Map<V, Node> vertexMap;
+    Map<Node, V> backVertexMap;
     Map<E, Edge> edgeMap;
     Map<Edge, E> backEdgeMap;
-    BlossomPerfectMatching.Options options;
+    KolmogorovMinimumWeightPerfectMatching.Options options;
 
     public State(Graph<V, E> graph, Node[] nodes, Edge[] edges, Tree[] trees,
                  int nodeNum, int edgeNum, int treeNum,
-                 BlossomPerfectMatching.Statistics statistics,
-                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap, BlossomPerfectMatching.Options options) {
+                 KolmogorovMinimumWeightPerfectMatching.Statistics statistics,
+                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap, KolmogorovMinimumWeightPerfectMatching.Options options) {
         this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;
@@ -36,8 +37,12 @@ class State<V, E> {
         this.edgeMap = edgeMap;
         this.options = options;
         backEdgeMap = new HashMap<>();
+        backVertexMap = new HashMap<>();
         for (Map.Entry<E, Edge> entry : edgeMap.entrySet()) {
             backEdgeMap.put(entry.getValue(), entry.getKey());
+        }
+        for (Map.Entry<V, Node> entry : vertexMap.entrySet()) {
+            backVertexMap.put(entry.getValue(), entry.getKey());
         }
     }
 
@@ -113,6 +118,22 @@ class State<V, E> {
             roots.add(iterator.next());
         }
         return roots;
+    }
+
+    public static void printTreeNodes(Tree tree) {
+        System.out.println("Printing tree nodes");
+        for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
+            System.out.println(iterator.next());
+        }
+    }
+
+    public static void printBlossonNodes(Node blossomNode) {
+        System.out.println("Printing blossom nodes");
+        Node current = blossomNode;
+        do {
+            System.out.println(current);
+            current = current.blossomSibling.getOpposite(current);
+        } while (current != blossomNode);
     }
 
     public class TreeRootsIterator implements Iterator<Node> {

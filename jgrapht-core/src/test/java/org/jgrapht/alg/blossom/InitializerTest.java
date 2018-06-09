@@ -8,12 +8,10 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.EPS;
+import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.GREEDY;
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class InitializerTest {
 
@@ -22,7 +20,7 @@ public class InitializerTest {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(GREEDY));
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(GREEDY));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);
@@ -43,8 +41,8 @@ public class InitializerTest {
         assertEquals(0, state.treeNum);
 
         assertEquals(new HashSet<>(), state.treeRoots());
-        assertEquals(new HashSet<>(Collections.singletonList(edge12)), Debugger.edgesOf(node1));
-        assertEquals(new HashSet<>(Collections.singletonList(edge12)), Debugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.edgesOf(node1));
+        assertEquals(new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.edgesOf(node2));
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -61,7 +59,7 @@ public class InitializerTest {
         graph.addVertex(7);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomPerfectMatching.Options(NONE));
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(NONE));
 
         assertEquals(7, state.nodeNum);
         assertEquals(7, state.treeNum);
@@ -120,26 +118,26 @@ public class InitializerTest {
         assertEquals(4, edge45.slack, EPS);
         assertEquals(5, edge56.slack, EPS);
 
-        Set<Node> actualRoots = Debugger.treeRoots(state);
+        Set<Node> actualRoots = BlossomVDebugger.treeRoots(state);
         Collection<Node> expectedRoots = state.vertexMap.values();
         assertEquals(expectedRoots.size(), actualRoots.size());
         assertTrue(actualRoots.containsAll(expectedRoots));
 
-        assertEquals(new HashSet<>(Collections.singletonList(edge12)), Debugger.edgesOf(node1));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23, edge25)), Debugger.edgesOf(node2));
-        assertEquals(new HashSet<>(Collections.singletonList(edge23)), Debugger.edgesOf(node3));
-        assertEquals(new HashSet<>(Collections.singletonList(edge45)), Debugger.edgesOf(node4));
-        assertEquals(new HashSet<>(Arrays.asList(edge25, edge45, edge56)), Debugger.edgesOf(node5));
-        assertEquals(new HashSet<>(Collections.singletonList(edge56)), Debugger.edgesOf(node6));
-        assertEquals(new HashSet<>(), Debugger.edgesOf(node7));
+        assertEquals(new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.edgesOf(node1));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23, edge25)), BlossomVDebugger.edgesOf(node2));
+        assertEquals(new HashSet<>(Collections.singletonList(edge23)), BlossomVDebugger.edgesOf(node3));
+        assertEquals(new HashSet<>(Collections.singletonList(edge45)), BlossomVDebugger.edgesOf(node4));
+        assertEquals(new HashSet<>(Arrays.asList(edge25, edge45, edge56)), BlossomVDebugger.edgesOf(node5));
+        assertEquals(new HashSet<>(Collections.singletonList(edge56)), BlossomVDebugger.edgesOf(node6));
+        assertEquals(new HashSet<>(), BlossomVDebugger.edgesOf(node7));
 
-        assertEquals(1, Debugger.treeEdgesOf(tree1).size());
-        assertEquals(3, Debugger.treeEdgesOf(tree2).size());
-        assertEquals(1, Debugger.treeEdgesOf(tree3).size());
-        assertEquals(1, Debugger.treeEdgesOf(tree4).size());
-        assertEquals(3, Debugger.treeEdgesOf(tree5).size());
-        assertEquals(1, Debugger.treeEdgesOf(tree6).size());
-        assertEquals(0, Debugger.treeEdgesOf(tree7).size());
+        assertEquals(1, BlossomVDebugger.treeEdgesOf(tree1).size());
+        assertEquals(3, BlossomVDebugger.treeEdgesOf(tree2).size());
+        assertEquals(1, BlossomVDebugger.treeEdgesOf(tree3).size());
+        assertEquals(1, BlossomVDebugger.treeEdgesOf(tree4).size());
+        assertEquals(3, BlossomVDebugger.treeEdgesOf(tree5).size());
+        assertEquals(1, BlossomVDebugger.treeEdgesOf(tree6).size());
+        assertEquals(0, BlossomVDebugger.treeEdgesOf(tree7).size());
     }
 
 

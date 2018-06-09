@@ -5,7 +5,7 @@ import org.jgrapht.Graph;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.jgrapht.alg.blossom.BlossomPerfectMatching.INFINITY;
+import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 class Initializer<V, E> {
     private final Graph<V, E> graph;
@@ -23,10 +23,10 @@ class Initializer<V, E> {
         this.graph = graph;
     }
 
-    public State<V, E> initialize(BlossomPerfectMatching.Options options) {
+    public State<V, E> initialize(KolmogorovMinimumWeightPerfectMatching.Options options) {
         InitializationType type = options.initializationType;
         initGraph();
-        state = new State<>(graph, nodes, edges, null, nodeNum, edgeNum, 0, new BlossomPerfectMatching.Statistics(), vertexMap, edgeMap, options);
+        state = new State<>(graph, nodes, edges, null, nodeNum, edgeNum, 0, new KolmogorovMinimumWeightPerfectMatching.Statistics(), vertexMap, edgeMap, options);
 
         int treeNum;
         if (type == InitializationType.GREEDY) {

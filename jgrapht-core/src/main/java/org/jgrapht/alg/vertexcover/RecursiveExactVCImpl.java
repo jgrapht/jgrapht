@@ -224,7 +224,7 @@ public class RecursiveExactVCImpl<V, E>
             neighbors.stream().map(vertexIDDictionary::get).collect(Collectors.toList());
         rightCover.addAllVertices(neighborsIndices, weight);
 
-        // Left branch (vertex v is added to the cover, and we solve for G_{v}):
+        // Left branch (vertex v is added to the cover, and we getMatching for G_{v}):
         BitSet visitedLeftBranch = (BitSet) visited.clone();
         visitedLeftBranch.set(indexNextVertex);
 
