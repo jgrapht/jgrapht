@@ -56,9 +56,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
      * @param root the root of the graph
      */
     public TarjanLCAFinder(Graph<V, E> graph, V root) {
-        assert GraphTests.isForest(graph);
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
     }
 
     /**
@@ -69,11 +67,15 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
      */
     public TarjanLCAFinder(Graph<V, E> graph, Set<V> roots) {
         assert GraphTests.isForest(graph);
+
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("Roots cannot be empty");
+
+        if (!graph.vertexSet().containsAll(roots))
+            throw new IllegalArgumentException("At least one root is not a valid vertex");
     }
 
     @Override
@@ -114,20 +116,23 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
             V a = this.queries.get(i).getFirst();
             V b = this.queries.get(i).getSecond();
 
-            queryOccurs.computeIfAbsent(a, x -> new HashSet<>()).add(i);
-            queryOccurs.computeIfAbsent(b, x -> new HashSet<>()).add(i);
-
             if (a.equals(b))
                 this.lowestCommonAncestors.add(a);
-            else
+            else{
+                queryOccurs.computeIfAbsent(a, x -> new HashSet<>()).add(i);
+                queryOccurs.computeIfAbsent(b, x -> new HashSet<>()).add(i);
+
                 this.lowestCommonAncestors.add(null);
+            }
+
         }
 
         Set<V> visited = new HashSet<>();
 
         for (V root: roots)
             if (!visited.contains(root)) {
-                initialize();
+//                initialize();
+                blackNodes.clear();
                 TarjanOLCA(root, null, visited);
             }
 

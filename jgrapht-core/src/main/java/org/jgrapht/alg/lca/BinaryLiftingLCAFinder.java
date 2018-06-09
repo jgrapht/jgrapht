@@ -20,11 +20,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     private int clock = 0;
 
     public BinaryLiftingLCAFinder(Graph<V, E> graph, V root){
-        assert GraphTests.isForest(graph);
-
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
-        this.MAX_LEVEL = log2(graph.vertexSet().size());
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
     }
 
     public BinaryLiftingLCAFinder(Graph<V, E> graph, Set<V> roots){
@@ -32,11 +28,13 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
+        this.MAX_LEVEL = log2(graph.vertexSet().size());
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("Roots cannot be empty");
 
-        this.MAX_LEVEL = log2(graph.vertexSet().size());
+        if (!graph.vertexSet().containsAll(roots))
+            throw new IllegalArgumentException("At least one root is not a valid vertex");
     }
 
     private void dfs(int u, int parent){

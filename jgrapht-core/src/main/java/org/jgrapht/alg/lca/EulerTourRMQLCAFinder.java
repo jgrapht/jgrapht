@@ -30,11 +30,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     private int[] log2;
 
     public EulerTourRMQLCAFinder(Graph<V, E> graph, V root){
-        assert GraphTests.isForest(graph);
-
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
-        this.MAX_LEVEL = log2(graph.vertexSet().size());
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
     }
 
     public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots){
@@ -46,6 +42,9 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("Roots cannot be empty");
+
+        if (!graph.vertexSet().containsAll(roots))
+            throw new IllegalArgumentException("At least one root is not a valid vertex");
     }
 
     private void normalizeGraph(){

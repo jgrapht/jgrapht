@@ -13,10 +13,7 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
     private HeavyPathDecomposition<V, E> heavyPath;
 
     public HeavyPathLCAFinder(Graph<V, E> graph, V root){
-        assert GraphTests.isForest(graph);
-
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Collections.singleton(Objects.requireNonNull(root, "Root cannot be null"));
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
     }
 
     public HeavyPathLCAFinder(Graph<V, E> graph, Set<V> roots){
@@ -27,6 +24,9 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("Roots cannot be empty");
+
+        if (!graph.vertexSet().containsAll(roots))
+            throw new IllegalArgumentException("At least one root is not a valid vertex");
     }
 
     private Map<V, V> father;
@@ -85,7 +85,10 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
         if (a.equals(b))
             return a;
 
-        if (component.get(a).intValue() != component.get(b).intValue())
+        int componentA = component.get(a);
+        int componentB = component.get(b);
+
+        if (componentA == 0 || componentB == 0 || componentA != componentB)
             return null;
 
         while (true){

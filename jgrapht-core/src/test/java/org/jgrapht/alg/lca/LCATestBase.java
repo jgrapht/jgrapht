@@ -44,6 +44,36 @@ public abstract class LCATestBase {
     }
 
     @Test
+    public void testDisconnectSmallGraph2(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("a");
+        g.addVertex("b");
+        g.addVertex("c");
+
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+
+        Assert.assertNull(lcaAlgorithm.getLCA("b", "c"));
+        Assert.assertNull(lcaAlgorithm.getLCA("c", "b"));
+        Assert.assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
+        Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyGraph(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptySetOfRoots(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("a");
+
+        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.emptySet());
+    }
+
+    @Test
     public void testGraphAllPossibleQueries(){
         final int N = 100;
 
@@ -162,7 +192,7 @@ public abstract class LCATestBase {
         Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(4, 5));
         Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(2, 2));
         Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(8, 6));
-        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(7, 8));
+        Assert.assertEquals(4, (int)lcaAlgorithm.getLCA(7, 8));
     }
 
     @Test
@@ -418,7 +448,8 @@ public abstract class LCATestBase {
             final int N = 10 + random.nextInt(100);
 
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
-                    new BarabasiAlbertGraphGenerator<>(1, 1, N, random.nextInt());
+                    new BarabasiAlbertForestGenerator<>(1, N, random.nextInt());
+
             Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
                     SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
@@ -436,6 +467,45 @@ public abstract class LCATestBase {
                 lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
             List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
+
+            List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
+            List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+
+            for (int i = 0; i < Q; i++) {
+                Assert.assertEquals(lcas1.get(i), lcas2.get(i));
+            }
+        }
+    }
+
+    @Test
+    public void testSmallDisconnectedTrees(){
+        Random random = new Random(0x88);
+        final int TESTS = 10_000;
+        final int Q = 50;
+
+        for (int test = 0; test < TESTS; test++) {
+            final int N = 10 + random.nextInt(200);
+
+            GraphGenerator<Integer, DefaultEdge, Integer> gen =
+                    new BarabasiAlbertForestGenerator<>(N / 10, N, random.nextInt());
+
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+            gen.generateGraph(g);
+
+            Set<Integer> roots = new ConnectivityInspector<>(g).connectedSets().stream()
+                    .map(x -> x.iterator().next()).collect(Collectors.toSet());
+
+            LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
+            LCAAlgorithm<Integer> lcaAlgorithm2;
+
+            if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
+                lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, roots);
+            else
+                lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
+
+            List<Pair<Integer, Integer>> queries = generateQueries(Q, new ArrayList<>(g.vertexSet()), random);
 
             List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
             List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
