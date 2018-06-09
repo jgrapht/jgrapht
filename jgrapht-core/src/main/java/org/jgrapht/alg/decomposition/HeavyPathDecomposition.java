@@ -22,6 +22,8 @@ public class HeavyPathDecomposition<V, E> {
 
     private Set<E> heavyEdges;
 
+    private int[] component;
+
     public HeavyPathDecomposition(Graph<V, E> graph, V root) {
         assert GraphTests.isForest(graph);
 
@@ -56,6 +58,8 @@ public class HeavyPathDecomposition<V, E> {
         firstNodePath = new int[n];
 
         heavyEdges = new HashSet<>();
+
+        component = new int[n];
     }
 
     private void normalizeGraph(){
@@ -74,7 +78,9 @@ public class HeavyPathDecomposition<V, E> {
         }
     }
 
-    private void dfs(int u, int parent) {
+    private void dfs(int u, int parent, int c) {
+        component[u] = c;
+
         sizeSubtree[u] = 1;
         int heavySon = -1;
         E heavyEdge = null;
@@ -87,7 +93,7 @@ public class HeavyPathDecomposition<V, E> {
                 father[son] = u;
                 depth[son] = depth[u] + 1;
 
-                dfs(son, u);
+                dfs(son, u, c);
 
                 sizeSubtree[u] += sizeSubtree[son];
 
@@ -120,11 +126,13 @@ public class HeavyPathDecomposition<V, E> {
         Arrays.fill(path, -1);
         Arrays.fill(depth, -1);
 
+        int color = 0;
+
         for (V root: roots){
             int u = vertexMap.get(root);
 
             if (father[u] == -1)
-                dfs(u, -1);
+                dfs(u, -1, ++color);
         }
 
         for (int i = 0; i < graph.vertexSet().size(); i++){
@@ -206,6 +214,16 @@ public class HeavyPathDecomposition<V, E> {
 
         for (int i = 0; i < graph.vertexSet().size(); i++){
             map.put(indexList.get(i), sizeSubtree[i]);
+        }
+
+        return map;
+    }
+
+    public Map<V, Integer> getComponent(){
+        Map<V, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < graph.vertexSet().size(); i++){
+            map.put(indexList.get(i), component[i]);
         }
 
         return map;

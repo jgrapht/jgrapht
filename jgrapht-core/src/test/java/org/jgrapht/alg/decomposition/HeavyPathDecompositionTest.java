@@ -30,4 +30,8 @@ public class HeavyPathDecompositionTest {
         System.out.println(heavyPathDecomposition.getPaths());
     }
 
+    @Test
+    public void testRandomGraph(){
+        
+    }
 }

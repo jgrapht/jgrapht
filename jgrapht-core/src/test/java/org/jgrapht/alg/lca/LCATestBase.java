@@ -98,8 +98,7 @@ public abstract class LCATestBase {
         for (int i = 1; i < N; i++)
             g.addEdge(i, i + 1);
 
-        List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-        generateQueries(queries, new ArrayList<>(g.vertexSet()), random, Q);
+        List<Pair<Integer, Integer>> queries = generateQueries(Q, new ArrayList<>(g.vertexSet()), random);
 
         LCAAlgorithm<Integer> lcaAlgorithm = createSolver(g, Collections.singleton(N));
 
@@ -155,15 +154,15 @@ public abstract class LCATestBase {
 
         LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
 
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(10, 11), 3);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(8, 9), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(5, 11), 1);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(5, 6), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(4, 2), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(4, 5), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(2, 2), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(8, 6), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(7, 8), 4);
+        Assert.assertEquals(3, (int)lcaAlgorithm.getLCA(10, 11));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(8, 9));
+        Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(5, 11));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(5, 6));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(4, 2));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(4, 5));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(2, 2));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(8, 6));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(7, 8));
     }
 
     @Test
@@ -195,16 +194,17 @@ public abstract class LCATestBase {
 
         LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
 
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(9, 14), 1);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(10, 9), 1);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(15, 15), 15);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(1, 17), 1);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(3, 3), 3);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(3, 1), 1);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(11, 14), 1);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(18, 19), 6);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(12, 2), 2);
-        Assert.assertEquals((int)lcaAlgorithm.getLCA(16, 14), 2);
+
+        Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(9, 14));
+        Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(10, 9));
+        Assert.assertEquals(15, (int)lcaAlgorithm.getLCA(15, 15));
+        Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(1, 17));
+        Assert.assertEquals(3, (int)lcaAlgorithm.getLCA(3, 3));
+        Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(3, 1));
+        Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(11, 14));
+        Assert.assertEquals(6, (int)lcaAlgorithm.getLCA(18, 19));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(12, 2));
+        Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(16, 14));
     }
 
     @Test
@@ -269,6 +269,32 @@ public abstract class LCATestBase {
         }
     }
 
+    public Graph<Integer, DefaultEdge> generateForest(int t, int n, Random random){
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        for (int i = 0; i < t - 1; i++) {
+            g.addVertex();
+        }
+
+        BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertGraphGenerator<>(100, 1, n - t + 1, random);
+
+        generator.generateGraph(g, null);
+
+        return g;
+    }
+
+    @Test
+    public void test(){
+//        Random random = new Random(0x88);
+//
+//        Graph<Integer, DefaultEdge> g = generateForest(4, 10, random);
+//
+//        System.out.println(g.vertexSet().size());
+//        System.out.println(new ConnectivityInspector<>(g).connectedSets());
+    }
+
     @Test
     public void randomHugeConnectedTree(){
         final int N = 100_000;
@@ -294,8 +320,7 @@ public abstract class LCATestBase {
         else
             lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, vertexList.get(0));
 
-        List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-        generateQueries(queries, vertexList, random, Q);
+        List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
 
         List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
         List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
@@ -327,13 +352,17 @@ public abstract class LCATestBase {
         }
     }
 
-    private static <V> void generateQueries(List<Pair<V, V>> queries, List<V> vertexList, Random random, int Q){
+    public static <V> List<Pair<V, V>> generateQueries(int Q, List<V> vertexList, Random random){
+        List<Pair<V, V>> queries = new ArrayList<>(Q);
+
         for (int i = 0; i < Q; i++) {
             V a = vertexList.get(random.nextInt(vertexList.size()));
             V b = vertexList.get(random.nextInt(vertexList.size()));
 
             queries.add(Pair.of(a, b));
         }
+
+        return queries;
     }
 
     @Test
@@ -369,8 +398,7 @@ public abstract class LCATestBase {
         else
             lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
-        List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-        generateQueries(queries, vertexList, random, Q);
+        List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
 
         List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
         List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
@@ -407,8 +435,7 @@ public abstract class LCATestBase {
             else
                 lcaAlgorithm2 = new EulerTourRMQLCAFinder<>(g, roots);
 
-            List<Pair<Integer, Integer>> queries = new ArrayList<>(Q);
-            generateQueries(queries, vertexList, random, Q);
+            List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
 
             List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
             List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);

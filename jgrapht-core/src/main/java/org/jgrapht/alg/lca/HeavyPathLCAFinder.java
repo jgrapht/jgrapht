@@ -34,6 +34,8 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
 
     private Map<V, Integer> path;
     private Map<V, Integer> positionInPath;
+    private Map<V, Integer> component;
+
     private List<V> firstNode;
 
     private void computeHeavyPathDecomposition(){
@@ -44,6 +46,7 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         father = heavyPath.getFather();
         depth = heavyPath.getDepth();
+        component = heavyPath.getComponent();
 
         path = new HashMap<>();
         positionInPath = new HashMap<>();
@@ -82,10 +85,10 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
         if (a.equals(b))
             return a;
 
-        while (true){
-            if (!path.containsKey(a) || !path.containsKey(b))
-                return null;
+        if (component.get(a).intValue() != component.get(b).intValue())
+            return null;
 
+        while (true){
             int pathA = path.get(a);
             int pathB = path.get(b);
 
