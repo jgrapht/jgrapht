@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.alg.util.Pair;
@@ -106,17 +123,13 @@ class PrimalUpdater<V, E> {
         blossom.dual -= eps;
         blossom.tree.removeMinusBlossom(blossom);
 
-        Edge parentEdge = blossom.parentEdge;
-        int dirToBlossomFromParent = parentEdge.getDirTo(blossom);  // (parentEdge + dirToBlossom) points to blossom
-        Node branchesEndpoint = parentEdge.headOriginal[dirToBlossomFromParent].getPenultimateBlossom();
+        Node branchesEndpoint = blossom.parentEdge.getCurrentOriginal(blossom).getPenultimateBlossom();
 
         if (state.options.verbose) {
-            State.printBlossonNodes(branchesEndpoint);
+            State.printBlossomNodes(branchesEndpoint);
         }
 
-        Edge matchedEdge = blossom.matched;
-        int dirToBlossomFromMatched = matchedEdge.getDirTo(blossom);
-        Node blossomRoot = matchedEdge.headOriginal[dirToBlossomFromMatched].getPenultimateBlossom();
+        Node blossomRoot = blossom.matched.getCurrentOriginal(blossom).getPenultimateBlossom();
 
         // marking blossom nodes
         Node current = blossomRoot;
@@ -132,8 +145,8 @@ class PrimalUpdater<V, E> {
         for (Pair<Edge, Integer> pair : edges) {
             edge = pair.getFirst();
             int dir = pair.getSecond();
-            Node penultimateChild = edge.headOriginal[1 - dir].getPenultimateBlossom();
-            state.moveEdge(blossom, penultimateChild, edge);
+            Node penultimateChild = edge.headOriginal[1 - dir].getPenultimateBlossomAndFixBlossomGrandparent();
+            state.moveEdgeTail(blossom, penultimateChild, edge);
         }
 
         // reversing the circular blossomSibling references so that the first branch in even branch
@@ -215,14 +228,14 @@ class PrimalUpdater<V, E> {
         Node current = branchesEndpoint.blossomSibling.getOpposite(branchesEndpoint);
         Edge prevMatched;
         while (current != blossomRoot) {
-            current.label = INFTY;
+            current.label = INFINITY;
             current.isOuter = true;
             current.tree = null;
             current.matched = prevMatched = current.blossomSibling;
             processInfinityNodeExpand(current, eps, tree);
             current = current.blossomSibling.getOpposite(current);
 
-            current.label = INFTY;
+            current.label = INFINITY;
             current.isOuter = true;
             current.tree = null;
             current.matched = prevMatched;
@@ -234,7 +247,7 @@ class PrimalUpdater<V, E> {
     private void processPlusNodeExpand(Node plusNode, double eps) {
         plusNode.dual -= eps; // applying lazy delta spreading
         Edge edge;
-        for (Node.AdjacentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             Node opposite = edge.head[iterator.getDir()];
             if (opposite.isMarked && opposite.isPlusNode()) {
@@ -286,7 +299,7 @@ class PrimalUpdater<V, E> {
         }
         Edge edge;
         Node opposite;
-        for (Node.AdjacentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             opposite = edge.head[iterator.getDir()];
             if (opposite.isMarked && !opposite.isPlusNode()) {
@@ -298,7 +311,7 @@ class PrimalUpdater<V, E> {
 
     private void processInfinityNodeExpand(Node infinityNode, double eps, Tree tree) {
         Edge edge;
-        for (Node.AdjacentEdgeIterator iterator = infinityNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = infinityNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             Node opposite = edge.head[iterator.getDir()];
             if (!opposite.isMarked) {
@@ -325,7 +338,7 @@ class PrimalUpdater<V, E> {
             minusNode.tree.addMinusBlossom(minusNode, minusNode.dual);
         }
         // maintaining minus-plus edges in the minus-plus heaps in the tree edges
-        for (Node.AdjacentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             dir = iterator.getDir();
             Node opposite = edge.head[dir];
@@ -352,7 +365,7 @@ class PrimalUpdater<V, E> {
         Edge edge;
         int dir;
         List<Edge> growEdges = new LinkedList<>();
-        for (Node.AdjacentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             dir = iterator.getDir();
             Node opposite = edge.head[dir];
@@ -419,9 +432,9 @@ class PrimalUpdater<V, E> {
             } else {
                 node.dual -= eps;
             }
-            for (Node.AdjacentEdgeIterator adjacentEdgeIterator = node.adjacentEdgesIterator(); adjacentEdgeIterator.hasNext(); ) {
-                edge = adjacentEdgeIterator.next();
-                dir = adjacentEdgeIterator.getDir();
+            for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                edge = incidentEdgeIterator.next();
+                dir = incidentEdgeIterator.getDir();
                 Node opposite = edge.head[dir];
                 Tree oppositeTree = opposite.tree;
                 if (node.isPlusNode()) {
@@ -452,7 +465,7 @@ class PrimalUpdater<V, E> {
 
                 }
             }
-            node.setLabel(Node.Label.INFTY);
+            node.setLabel(Node.Label.INFINITY);
         }
 
         // adding all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and
@@ -622,7 +635,7 @@ class PrimalUpdater<V, E> {
 
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
-                state.moveEdge(node, blossom, edge);
+                state.moveEdgeTail(node, blossom, edge);
                 if (opposite.tree == tree) {
                     // edge to the node from the same tree
                 } else if (opposite.tree != null) {
@@ -655,7 +668,7 @@ class PrimalUpdater<V, E> {
 
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
-                state.moveEdge(node, blossom, edge);
+                state.moveEdgeTail(node, blossom, edge);
                 edge.slack += 2 * eps;
                 if (opposite.tree == tree) {
                     // edge to the node from the same tree, need only to add it to "++" heap if opposite is "+" node

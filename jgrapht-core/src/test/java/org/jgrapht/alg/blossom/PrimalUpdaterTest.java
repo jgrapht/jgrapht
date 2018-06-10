@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
@@ -11,9 +28,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.blossom.Node.Label.INFTY;
+import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.blossom.Node.Label.INFINITY;
 import static org.junit.Assert.*;
 
 public class PrimalUpdaterTest {
@@ -461,8 +478,8 @@ public class PrimalUpdaterTest {
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
-        assertEquals(INFTY, node1.label);
-        assertEquals(INFTY, node2.label);
+        assertEquals(INFINITY, node1.label);
+        assertEquals(INFINITY, node2.label);
         assertEquals(0, state.treeNum);
         assertEquals(0, edge12.slack, EPS);
         assertEquals(1, node1.dual, EPS);
@@ -503,8 +520,8 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge23);
 
-        assertEquals(INFTY, node2.label);
-        assertEquals(INFTY, node3.label);
+        assertEquals(INFINITY, node2.label);
+        assertEquals(INFINITY, node3.label);
         assertEquals(2, edge12.slack, EPS);
         assertEquals(0, edge23.slack, EPS);
         assertEquals(3, edge34.slack, EPS);
@@ -517,8 +534,8 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge45);
 
-        assertEquals(INFTY, node4.label);
-        assertEquals(INFTY, node5.label);
+        assertEquals(INFINITY, node4.label);
+        assertEquals(INFINITY, node5.label);
         assertEquals(2, edge34.slack, EPS);
         assertEquals(0, edge45.slack, EPS);
         assertEquals(2, edge56.slack, EPS);
@@ -544,12 +561,12 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge34);
 
-        assertEquals(INFTY, node1.label);
-        assertEquals(INFTY, node2.label);
-        assertEquals(INFTY, node3.label);
-        assertEquals(INFTY, node4.label);
-        assertEquals(INFTY, node5.label);
-        assertEquals(INFTY, node6.label);
+        assertEquals(INFINITY, node1.label);
+        assertEquals(INFINITY, node2.label);
+        assertEquals(INFINITY, node3.label);
+        assertEquals(INFINITY, node4.label);
+        assertEquals(INFINITY, node5.label);
+        assertEquals(INFINITY, node6.label);
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -622,16 +639,16 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge710);
 
-        assertEquals(INFTY, node1.label);
-        assertEquals(INFTY, node2.label);
-        assertEquals(INFTY, node3.label);
-        assertEquals(INFTY, node4.label);
-        assertEquals(INFTY, node5.label);
-        assertEquals(INFTY, node6.label);
-        assertEquals(INFTY, node7.label);
-        assertEquals(INFTY, node8.label);
-        assertEquals(INFTY, node9.label);
-        assertEquals(INFTY, node10.label);
+        assertEquals(INFINITY, node1.label);
+        assertEquals(INFINITY, node2.label);
+        assertEquals(INFINITY, node3.label);
+        assertEquals(INFINITY, node4.label);
+        assertEquals(INFINITY, node5.label);
+        assertEquals(INFINITY, node6.label);
+        assertEquals(INFINITY, node7.label);
+        assertEquals(INFINITY, node8.label);
+        assertEquals(INFINITY, node9.label);
+        assertEquals(INFINITY, node10.label);
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -723,13 +740,13 @@ public class PrimalUpdaterTest {
         assertEquals(blossom, node2.blossomGrandparent);
         assertEquals(blossom, node3.blossomGrandparent);
 
-        assertEquals(node1, edge14.getOppositeOriginal(node4));
-        assertEquals(node4, edge14.getOppositeOriginal(node1));
+        assertEquals(node1, BlossomVDebugger.getOppositeOriginal(edge14, node4));
+        assertEquals(node4, BlossomVDebugger.getOppositeOriginal(edge14, node1));
         assertEquals(blossom, edge14.getOpposite(node4));
         assertEquals(node4, edge14.getOpposite(blossom));
 
-        assertEquals(node4, edge24.getOppositeOriginal(node2));
-        assertEquals(node2, edge24.getOppositeOriginal(node4));
+        assertEquals(node4, BlossomVDebugger.getOppositeOriginal(edge24, node2));
+        assertEquals(node2, BlossomVDebugger.getOppositeOriginal(edge24, node4));
         assertEquals(blossom, edge24.getOpposite(node4));
         assertEquals(node4, edge24.getOpposite(blossom));
 

@@ -1,12 +1,30 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedPseudograph;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -1560,9 +1578,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching37() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
         CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(20);
-        generator.generateGraph(graph, new IntegerVertexFactory());
+        generator.generateGraph(graph);
 
         KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
@@ -1794,21 +1813,74 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
         checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
     }
 
+    /**
+     * Test on a small pseudograph
+     */
+    @Test
+    public void testGetMatching39() {
+        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        Graphs.addEdgeWithVertices(graph, 1, 1, 1);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 10);
+
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(5, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Test on a pseudograph
+     */
+    @Test
+    public void testGetMatching40() {
+        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        Graphs.addEdgeWithVertices(graph, 1, 1, 1);
+        Graphs.addEdgeWithVertices(graph, 2, 2, 1);
+        Graphs.addEdgeWithVertices(graph, 3, 3, 1);
+        Graphs.addEdgeWithVertices(graph, 4, 4, 1);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 10);
+        Graphs.addEdgeWithVertices(graph, 1, 3, 2);
+        Graphs.addEdgeWithVertices(graph, 1, 3, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 4);
+        Graphs.addEdgeWithVertices(graph, 1, 4, 6);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 4);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 6);
+        Graphs.addEdgeWithVertices(graph, 2, 4, 8);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 1);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 3);
+
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(6, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
     private <V, E> void checkMatchingAndDualSolution(MatchingAlgorithm.Matching<V, E> matching,
                                                      KolmogorovMinimumWeightPerfectMatching<V, E>.DualSolution dualSolution) {
         Graph<V, E> graph = dualSolution.getGraph();
         assertEquals(graph.vertexSet().size(), 2 * matching.getEdges().size());
-        Set<E> edges = matching.getEdges();
+        Set<E> matchedEdges = matching.getEdges();
         Set<V> vertices = new HashSet<>();
         Map<E, Double> slacks = new HashMap<>();
-        for (E edge : edges) {
+        for (E edge : matchedEdges) {
             V source = graph.getEdgeSource(edge);
             V target = graph.getEdgeTarget(edge);
-            assertFalse(vertices.contains(source));
-            assertFalse(vertices.contains(target));
-            vertices.add(source);
-            vertices.add(target);
-            slacks.put(edge, graph.getEdgeWeight(edge));
+            if (source != target) {
+                assertFalse(vertices.contains(source));
+                assertFalse(vertices.contains(target));
+                vertices.add(source);
+                vertices.add(target);
+                slacks.put(edge, graph.getEdgeWeight(edge));
+            }
         }
         assertEquals(graph.vertexSet(), vertices);
 
@@ -1821,7 +1893,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
             }
             for (V vertex : entry.getKey()) {
                 for (E edge : graph.edgesOf(vertex)) {
-                    if (edges.contains(edge) && !entry.getKey().contains(Graphs.getOppositeVertex(graph, edge, vertex))) {
+                    if (matchedEdges.contains(edge) && !entry.getKey().contains(Graphs.getOppositeVertex(graph, edge, vertex))) {
                         slacks.put(edge, slacks.get(edge) - dualVariable);
                     }
                 }

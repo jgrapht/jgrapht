@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
@@ -42,12 +59,17 @@ public class NodeTest {
         assertSame(nodeEdge.head[0], to);
         assertSame(nodeEdge.head[1], from);
 
-        from.forAllEdges((edge, dir) -> {
+        for (Node.IncidentEdgeIterator iterator = from.adjacentEdgesIterator(); iterator.hasNext(); ) {
+            Edge edge = iterator.next();
+            int dir = iterator.getDir();
             assertSame(edge.head[dir], to);
-        });
-        to.forAllEdges((edge, dir) -> {
+        }
+
+        for (Node.IncidentEdgeIterator iterator = to.adjacentEdgesIterator(); iterator.hasNext(); ) {
+            Edge edge = iterator.next();
+            int dir = iterator.getDir();
             assertSame(edge.head[dir], from);
-        });
+        }
     }
 
     /**
@@ -83,14 +105,14 @@ public class NodeTest {
     }
 
     /**
-     * Tests {@link Node.AdjacentEdgeIterator} for a particular node
+     * Tests {@link Node.IncidentEdgeIterator} for a particular node
      *
      * @param node                  node whose adjacent edge iterator is been tested
      * @param expectedIncidentEdges expected incident edges of the {@code node}
      */
     private void testAdjacentEdgeIteratorOf(Node node, Set<Edge> expectedIncidentEdges) {
         Set<Edge> adj = new HashSet<>();
-        for (Node.AdjacentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
             assertEquals(node, edge.head[1 - iterator.getDir()]);
             adj.add(edge);

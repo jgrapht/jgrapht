@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.util.FibonacciHeap;
@@ -8,7 +25,7 @@ import java.util.Set;
 public class BlossomVDebugger {
     public static Set<Edge> edgesOf(Node node) {
         Set<Edge> edges = new HashSet<>();
-        for (Node.AdjacentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
             edges.add(iterator.next());
         }
         return edges;
@@ -85,5 +102,9 @@ public class BlossomVDebugger {
 
     public static Node getOpposite(Edge edge, Node node) {
         return edge.head[0] == node ? edge.head[1] : edge.head[0];
+    }
+
+    public static Node getOppositeOriginal(Edge edge, Node endPoint) {
+        return edge.headOriginal[0] == endPoint ? edge.headOriginal[1] : edge.headOriginal[0];
     }
 }

@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
@@ -25,8 +42,7 @@ public class DualUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
         assertTrue(dualUpdater.updateDuals(DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA) > 0);
-        for (State.TreeRootsIterator iterator = state.treeRootsIterator(); iterator.hasNext(); ) {
-            Node root = iterator.next();
+        for (Node root = state.nodes[state.nodeNum]; root != null; root = root.treeSiblingNext ) {
             assertEquals(root.tree.eps, 2.5, EPS);
         }
     }
@@ -41,9 +57,8 @@ public class DualUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
         dualUpdater.updateDuals(DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA);
-        for (State.TreeRootsIterator iterator = state.treeRootsIterator(); iterator.hasNext(); ) {
-            Tree tree = iterator.next().tree;
-            assertEquals(tree.eps, 3, EPS);
+        for (Node root = state.nodes[state.nodeNum]; root != null; root = root.treeSiblingNext ) {
+            assertEquals(root.tree.eps, 3, EPS);
         }
     }
 

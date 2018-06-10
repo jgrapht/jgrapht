@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
@@ -236,21 +253,23 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             double error = 0;
             Set<E> matched = matching.getEdges();
             for (E e : graph.edgeSet()) {
-                Edge edge = state.edgeMap.get(e);
-                double slack = graph.getEdgeWeight(e);
-                Node a = edge.headOriginal[0];
-                Node b = edge.headOriginal[1];
-                Pair<Node, Node> lca = lca(a, b);
-                slack -= totalDual(a, lca.getFirst());
-                slack -= totalDual(b, lca.getSecond());
-                if (lca.getFirst() == lca.getSecond()) {
-                    slack += 2 * lca.getFirst().getTrueDual();
-                }
-                if (slack + EPS < 0) {
-                    return false;
-                }
-                if (matched.contains(e)) {
-                    error += Math.abs(slack);
+                if (graph.getEdgeSource(e) != graph.getEdgeTarget(e)) {
+                    Edge edge = state.edgeMap.get(e);
+                    double slack = graph.getEdgeWeight(e);
+                    Node a = edge.headOriginal[0];
+                    Node b = edge.headOriginal[1];
+                    Pair<Node, Node> lca = lca(a, b);
+                    slack -= totalDual(a, lca.getFirst());
+                    slack -= totalDual(b, lca.getSecond());
+                    if (lca.getFirst() == lca.getSecond()) {
+                        slack += 2 * lca.getFirst().getTrueDual();
+                    }
+                    if (slack + EPS < 0) {
+                        return false;
+                    }
+                    if (matched.contains(e)) {
+                        error += Math.abs(slack);
+                    }
                 }
             }
             return error < EPS;
@@ -455,7 +474,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     for (blossomRoot = blossom.matched.getCurrentOriginal(blossom); blossomRoot.blossomParent != blossom; blossomRoot = blossomRoot.blossomParent) {
                     }
                     blossomRoot.matched = blossom.matched;
-                    state.moveEdge(blossom, blossomRoot, blossom.matched);
+                    state.moveEdgeTail(blossom, blossomRoot, blossom.matched);
                     node = blossomRoot.blossomSibling.getOpposite(blossomRoot);
                     // changing the matching in the blossom
                     while (node != blossomRoot) {

@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
@@ -7,26 +24,68 @@ import java.util.Map;
 
 import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
+/**
+ * Is used to start the Kolmogorov's Blossom V algorithm.
+ * Performs initialization of the algorithm's internal data structures and finds an initial matching
+ * according to the strategy specified in {@code options}
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @author Timofey Chudakov
+ * @see KolmogorovMinimumWeightPerfectMatching
+ * @since June 2018
+ */
 class Initializer<V, E> {
+    /**
+     * The graph to search matching in
+     */
     private final Graph<V, E> graph;
+    /**
+     * Number of nodes in the graph
+     */
     private int nodeNum;
+    /**
+     * Number of edges in the graph
+     */
     private int edgeNum;
-    private int treeNum;
+    /**
+     * An array of nodes that will be passes to the resulting state object
+     */
     private Node[] nodes;
+    /**
+     * An array of edges that will be passes to the resulting state object
+     */
     private Edge[] edges;
-    private Tree[] trees;
+    /**
+     * A mapping from initial graph's vertices to nodes that will be passes to the resulting state object
+     */
     private Map<V, Node> vertexMap;
+    /**
+     * A mapping from the initial graph's edges to the internal edge representations that will be passes
+     * to the resulting state object
+     */
     private Map<E, Edge> edgeMap;
-    private State<V, E> state;
 
+    /**
+     * Creates a new Initializer instance
+     *
+     * @param graph the graph to search matching in
+     */
     public Initializer(Graph<V, E> graph) {
         this.graph = graph;
     }
 
+    /**
+     * Converts the generic graph representation into the data structure form convenient for the algorithm
+     * and initializes the matching according to the strategy specified in {@code options}
+     *
+     * @param options the options of the algorithm
+     * @return the state object with all necessary for the algorithm information
+     */
     public State<V, E> initialize(KolmogorovMinimumWeightPerfectMatching.Options options) {
         InitializationType type = options.initializationType;
         initGraph();
-        state = new State<>(graph, nodes, edges, null, nodeNum, edgeNum, 0, new KolmogorovMinimumWeightPerfectMatching.Statistics(), vertexMap, edgeMap, options);
+        State<V, E> state = new State<>(graph, nodes, edges, nodeNum, edgeNum, 0, vertexMap, edgeMap, options);
 
         int treeNum;
         if (type == InitializationType.GREEDY) {
@@ -37,11 +96,10 @@ class Initializer<V, E> {
                 node.isOuter = true;
             }
         }
-        allocateTrees(treeNum);
-        state.trees = trees;
+        allocateTrees();
         state.treeNum = treeNum;
         initAuxiliaryGraph();
-        for (Node root = nodes[nodeNum]; root != null; root = root.treeSiblingNext) {
+        for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             root.isProcessed = false;
         }
 
@@ -50,10 +108,9 @@ class Initializer<V, E> {
 
     private void initGraph() {
         nodeNum = graph.vertexSet().size();
-        edgeNum = graph.edgeSet().size();
         nodes = new Node[nodeNum + 1];
-        nodes[nodeNum] = new Node();
-        edges = new Edge[edgeNum];
+        nodes[nodeNum] = new Node();  // helper node to keep track of the first item in the linked list of tree roots
+        edges = new Edge[graph.edgeSet().size()];
         vertexMap = new HashMap<>(nodeNum);
         edgeMap = new HashMap<>(edgeNum);
         int i = 0;
@@ -66,21 +123,26 @@ class Initializer<V, E> {
         for (E e : graph.edgeSet()) {
             Node source = vertexMap.get(graph.getEdgeSource(e));
             Node target = vertexMap.get(graph.getEdgeTarget(e));
-            Edge edge = State.addEdge(source, target, graph.getEdgeWeight(e));
-            edges[i] = edge;
-            edgeMap.put(e, edge);
-            i++;
+            if (source != target) {
+                edgeNum++;
+                Edge edge = State.addEdge(source, target, graph.getEdgeWeight(e));
+                edges[i] = edge;
+                edgeMap.put(e, edge);
+                i++;
+            }
         }
     }
 
     private int initGreedy() {
         int dir;
+        Edge edge;
         // set all dual variables to infinity
         for (int i = 0; i < nodeNum; i++) {
             nodes[i].dual = INFINITY;
         }
         // set dual variables to the minimum weight of the incident edges
-        for (Edge edge : edges) {
+        for (int i = 0; i < edgeNum; i++) {
+            edge = edges[i];
             if (edge.head[0].dual > edge.slack) {
                 edge.head[0].dual = edge.slack;
             }
@@ -89,7 +151,8 @@ class Initializer<V, E> {
             }
         }
         // divide dual variables by to, decrease edge slack accordingly
-        for (Edge edge : edges) {
+        for (int i = 0; i < edgeNum; i++) {
+            edge = edges[i];
             Node source = edge.head[0];
             Node target = edge.head[1];
             if (!source.isOuter) {
@@ -103,33 +166,26 @@ class Initializer<V, E> {
             }
             edge.slack -= target.dual;
         }
-        for (Edge edge1 : edges) {
-            if (edge1.slack < 0) {
-                throw new RuntimeException();
-            }
-        }
         // go through all vertices, greedily increase their dual variables to the minimum slack of incident edges
         // if there exist an tight unmatched edge in the neighborhood, match it
-        treeNum = nodeNum;
         int treeNum = nodeNum;
-        Edge edge;
         for (Node node : nodes) {
             if (!node.isInfinityNode()) {
                 double minSlack = INFINITY;
-                for (Node.AdjacentEdgeIterator adjacentEdgeIterator = node.adjacentEdgesIterator(); adjacentEdgeIterator.hasNext(); ) {
-                    edge = adjacentEdgeIterator.next();
+                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                    edge = incidentEdgeIterator.next();
                     if (edge.slack < minSlack) {
                         minSlack = edge.slack;
                     }
                 }
                 node.dual += minSlack;
                 double resultMinSlack = minSlack;
-                for (Node.AdjacentEdgeIterator adjacentEdgeIterator = node.adjacentEdgesIterator(); adjacentEdgeIterator.hasNext(); ) {
-                    edge = adjacentEdgeIterator.next();
-                    dir = adjacentEdgeIterator.getDir();
+                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                    edge = incidentEdgeIterator.next();
+                    dir = incidentEdgeIterator.getDir();
                     if (edge.slack <= resultMinSlack && node.isPlusNode() && edge.head[dir].isPlusNode()) {
-                        node.setLabel(Node.Label.INFTY);
-                        edge.head[dir].setLabel(Node.Label.INFTY);
+                        node.setLabel(Node.Label.INFINITY);
+                        edge.head[dir].setLabel(Node.Label.INFINITY);
                         node.matched = edge;
                         edge.head[dir].matched = edge;
                         treeNum -= 2;
@@ -143,14 +199,13 @@ class Initializer<V, E> {
     }
 
     private void initAuxiliaryGraph() {
-        Node root, opposite;
+        Node opposite;
         Tree tree;
         Edge edge;
         TreeEdge treeEdge;
-        for (State.TreeRootsIterator iterator = state.treeRootsIterator(); iterator.hasNext(); ) {
-            root = iterator.next();
+        for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             tree = root.tree;
-            for (Node.AdjacentEdgeIterator edgeIterator = root.adjacentEdgesIterator(); edgeIterator.hasNext(); ) {
+            for (Node.IncidentEdgeIterator edgeIterator = root.adjacentEdgesIterator(); edgeIterator.hasNext(); ) {
                 edge = edgeIterator.next();
                 opposite = edge.head[edgeIterator.getDir()];
                 if (opposite.isInfinityNode()) {
@@ -170,9 +225,7 @@ class Initializer<V, E> {
         }
     }
 
-    private void allocateTrees(int treeNumToAllocate) {
-        treeNum = 0;
-        trees = new Tree[treeNumToAllocate];
+    private void allocateTrees() {
         Node lastRoot = nodes[nodeNum];
         for (int i = 0; i < nodeNum; i++) {
             Node node = nodes[i];
@@ -180,9 +233,7 @@ class Initializer<V, E> {
                 node.treeSiblingPrev = lastRoot;
                 lastRoot.treeSiblingNext = node;
                 lastRoot = node;
-
-                Tree tree = new Tree(node);
-                trees[treeNum++] = tree;
+                new Tree(node);
             }
         }
         lastRoot.treeSiblingNext = null;

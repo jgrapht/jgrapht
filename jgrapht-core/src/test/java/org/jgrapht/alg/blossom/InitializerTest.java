@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.blossom;
 
 import org.jgrapht.Graph;
@@ -40,7 +57,7 @@ public class InitializerTest {
         assertEquals(1, state.edgeNum);
         assertEquals(0, state.treeNum);
 
-        assertEquals(new HashSet<>(), state.treeRoots());
+        assertEquals(Collections.emptySet(), BlossomVDebugger.treeRoots(state));
         assertEquals(new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.edgesOf(node1));
         assertEquals(new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.edgesOf(node2));
 
