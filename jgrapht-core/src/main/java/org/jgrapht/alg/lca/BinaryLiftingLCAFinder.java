@@ -24,6 +24,16 @@ import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
 
+/**
+ * Algorithm for computing lowest common ancestors in forests using the binary lifting method.
+ *
+ * Preprocessing Time complexity: $O(|V| log(|V|))
+ * Preprocessing Memory complexity:  $O(|V| log(|V|))
+ * Query complexity: $O(log(|V|))$
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
 
     private final Graph<V, E> graph;

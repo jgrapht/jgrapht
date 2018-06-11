@@ -27,12 +27,20 @@ import org.jgrapht.alg.util.UnionFind;
 import java.util.*;
 
 /**
- * Used to calculate Tarjan's Lowest Common Ancestors Algorithm
+ * Tarjan's offline algorithm for computing lowest common ancestors in forests.
+ *
+ * <p>
+ * See the article on
+ * <a href="https://en.wikipedia.org/wiki/Tarjan%27s_off-line_lowest_common_ancestors_algorithm">wikipedia</a> for more
+ * information on the algorithm.
+ *
+ * </p>
+ *
+ * Query complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries
+ * Memory complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
- * @author Alexandru Valeanu
  */
 public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
     private Graph<V, E> graph;

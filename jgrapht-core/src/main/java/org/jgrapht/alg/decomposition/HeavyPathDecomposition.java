@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
@@ -8,6 +25,12 @@ import org.jgrapht.alg.util.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Heavy-path decomposition of a forest.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class HeavyPathDecomposition<V, E> {
     private final Graph<V, E> graph;
     private final Set<V> roots;
@@ -24,6 +47,12 @@ public class HeavyPathDecomposition<V, E> {
 
     private Set<E> heavyEdges;
 
+    /**
+     * Create an instance with a reference to the graph that we will decompose
+     *
+     * @param graph the input graph
+     * @param root the root of the graph
+     */
     public HeavyPathDecomposition(Graph<V, E> graph, V root) {
         assert GraphTests.isForest(graph);
 
@@ -36,6 +65,12 @@ public class HeavyPathDecomposition<V, E> {
         decompose();
     }
 
+    /**
+     * Create an instance with a reference to the graph that we will decompose
+     *
+     * @param graph the input graph
+     * @param roots the roots of the graph
+     */
     public HeavyPathDecomposition(Graph<V, E> graph, Set<V> roots) {
         assert GraphTests.isForest(graph);
 
@@ -172,22 +207,37 @@ public class HeavyPathDecomposition<V, E> {
         this.paths = Collections.unmodifiableList(paths);
     }
 
+    /**
+     * @return the path decomposition
+     */
     public List<List<V>> getPaths(){
         return this.paths;
     }
 
+    /**
+     * @return the number of paths in the decomposition
+     */
     public int numberOfPaths(){
         return this.paths.size();
     }
 
+    /**
+     * @return the set of heavy edges
+     */
     public Set<E> getHeavyEdges(){
         return this.heavyEdges;
     }
 
+    /**
+     * @return the set of light edges
+     */
     public Set<E> getLightEdges(){
         return graph.edgeSet().stream().filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet());
     }
 
+    /**
+     * @return a map such that map(vertex v) = father of v in the DFS tree
+     */
     public Map<V, V> getFather(){
         Map<V, V> map = new HashMap<>();
 
@@ -201,8 +251,12 @@ public class HeavyPathDecomposition<V, E> {
         return map;
     }
 
-    public V getFather(V vertex){
-        int index = vertexMap.getOrDefault(vertex, -1);
+    /**
+     * @param v a vertex
+     * @return the father of vertex v in the DFS tree
+     */
+    public V getFather(V v){
+        int index = vertexMap.getOrDefault(v, -1);
 
         if (index == -1 || father[index] == -1)
             return null;
@@ -210,6 +264,9 @@ public class HeavyPathDecomposition<V, E> {
             return indexList.get(father[index]);
     }
 
+    /**
+     * @return a map such that map(vertex v) = father of v in the DFS tree
+     */
     public Map<V, Integer> getDepth(){
         Map<V, Integer> map = new HashMap<>();
 

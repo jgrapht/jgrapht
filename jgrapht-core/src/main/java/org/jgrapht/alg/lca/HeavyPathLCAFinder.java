@@ -24,6 +24,18 @@ import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
 
+/**
+ * Algorithm for computing lowest common ancestors in forests based on heavy-path decomposition.
+ *
+ * Preprocessing Time complexity: $O(|V|)$
+ * Preprocessing Memory complexity:  $O(|V|)$
+ * Query complexity: $O(log(|V|))$
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @see HeavyPathDecomposition
+ */
 public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
     private final Graph<V, E> graph;
     private final Set<V> roots;
