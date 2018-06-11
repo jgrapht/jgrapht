@@ -15,14 +15,14 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.blossom;
+package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.INFINITY;
+import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 /**
  * Is used to start the Kolmogorov's Blossom V algorithm.
@@ -98,32 +98,34 @@ class Initializer<V, E> {
         }
         allocateTrees();
         state.treeNum = treeNum;
+        // initializing tree edges and adding cross-tree edges to corresponding heaps
         initAuxiliaryGraph();
-        for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-            root.isProcessed = false;
-        }
-
         return state;
     }
 
+    /**
+     * Helper method to convert the generic graph representation into the form convenient for the algorithm
+     */
     private void initGraph() {
         nodeNum = graph.vertexSet().size();
         nodes = new Node[nodeNum + 1];
-        nodes[nodeNum] = new Node();  // helper node to keep track of the first item in the linked list of tree roots
+        nodes[nodeNum] = new Node();  // auxiliary node to keep track of the first item in the linked list of tree roots
         edges = new Edge[graph.edgeSet().size()];
         vertexMap = new HashMap<>(nodeNum);
         edgeMap = new HashMap<>(edgeNum);
         int i = 0;
+        // mapping nodes
         for (V vertex : graph.vertexSet()) {
             nodes[i] = new Node();
             vertexMap.put(vertex, nodes[i]);
             i++;
         }
         i = 0;
+        // mapping edges
         for (E e : graph.edgeSet()) {
             Node source = vertexMap.get(graph.getEdgeSource(e));
             Node target = vertexMap.get(graph.getEdgeTarget(e));
-            if (source != target) {
+            if (source != target) { // we avoid self-loops in order to support pseudographs
                 edgeNum++;
                 Edge edge = State.addEdge(source, target, graph.getEdgeWeight(e));
                 edges[i] = edge;
@@ -133,6 +135,15 @@ class Initializer<V, E> {
         }
     }
 
+    /**
+     * Method for greedy matching initialization.
+     * <p>
+     * For every node we choose an incident edge of minimum slack and set its dual to the half of this slack.
+     * This maintains the nonnegativity of edge slacks. After that we go through all nodes again, greedily
+     * increase their dual variables and match them if it is possible.
+     *
+     * @return the number of unmatched nodes, which equals to the number of trees
+     */
     private int initGreedy() {
         int dir;
         Edge edge;
@@ -140,7 +151,7 @@ class Initializer<V, E> {
         for (int i = 0; i < nodeNum; i++) {
             nodes[i].dual = INFINITY;
         }
-        // set dual variables to the minimum weight of the incident edges
+        // set dual variables to the half of the minimum weight of the incident edges
         for (int i = 0; i < edgeNum; i++) {
             edge = edges[i];
             if (edge.head[0].dual > edge.slack) {
@@ -150,7 +161,8 @@ class Initializer<V, E> {
                 edge.head[1].dual = edge.slack;
             }
         }
-        // divide dual variables by to, decrease edge slack accordingly
+        // divide dual variables by to, this ensures nonnegativity of all slacks
+        // decrease edge slacks accordingly
         for (int i = 0; i < edgeNum; i++) {
             edge = edges[i];
             Node source = edge.head[0];
@@ -167,11 +179,14 @@ class Initializer<V, E> {
             edge.slack -= target.dual;
         }
         // go through all vertices, greedily increase their dual variables to the minimum slack of incident edges
-        // if there exist an tight unmatched edge in the neighborhood, match it
+        // if there exist a tight unmatched edge in the neighborhood, match it
         int treeNum = nodeNum;
-        for (Node node : nodes) {
+        Node node;
+        for (int i = 0; i < nodeNum; i++) {
+            node = nodes[i];
             if (!node.isInfinityNode()) {
                 double minSlack = INFINITY;
+                // find the minimum slack of incident edges
                 for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
                     edge = incidentEdgeIterator.next();
                     if (edge.slack < minSlack) {
@@ -180,6 +195,7 @@ class Initializer<V, E> {
                 }
                 node.dual += minSlack;
                 double resultMinSlack = minSlack;
+                // subtract minimum slack from the slacks of all incident edges
                 for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
                     edge = incidentEdgeIterator.next();
                     dir = incidentEdgeIterator.getDir();
@@ -198,11 +214,19 @@ class Initializer<V, E> {
         return treeNum;
     }
 
+    /**
+     * Initializes an auxiliary graph by adding tree edges between trees and adding (+, +) cross-tree edges
+     * and (+, inf) edges to the appropriate heaps
+     */
     private void initAuxiliaryGraph() {
         Node opposite;
         Tree tree;
         Edge edge;
         TreeEdge treeEdge;
+        // go through all tree roots and visit all incident edges of those roots.
+        // if a (+, inf) edge is encountered => add it to the infinity heap
+        // if a (+, +) edge is encountered and the opposite node hasn't been processed yet =>
+        // add this edge to the heap of (+, +) cross-tree edges
         for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             tree = root.tree;
             for (Node.IncidentEdgeIterator edgeIterator = root.adjacentEdgesIterator(); edgeIterator.hasNext(); ) {
@@ -223,8 +247,18 @@ class Initializer<V, E> {
                 treeEdge.head[treeEdgeIterator.getCurrentDirection()].currentEdge = null;
             }
         }
+        // clearing isProcessed flags
+        for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+            root.isProcessed = false;
+        }
     }
 
+    /**
+     * Helper method for allocating trees. Initializes the doubly linked list of tree roots
+     * via treeSiblingPrev and treeSiblingNext. The same mechanism is used for keeping track
+     * of the children of a node in the tree. The node nodes[nodeNum] is used to quichly find
+     * the first root in the linked list
+     */
     private void allocateTrees() {
         Node lastRoot = nodes[nodeNum];
         for (int i = 0; i < nodeNum; i++) {
@@ -239,6 +273,9 @@ class Initializer<V, E> {
         lastRoot.treeSiblingNext = null;
     }
 
+    /**
+     * Enum for types of matching initialization
+     */
     enum InitializationType {
         GREEDY, NONE,
     }

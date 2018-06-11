@@ -15,10 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.blossom;
+package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.matching.*;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
@@ -27,8 +28,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.blossom.Node.Label.MINUS;
+import static org.jgrapht.alg.matching.Initializer.InitializationType.NONE;
+import static org.jgrapht.alg.matching.Node.Label.MINUS;
 import static org.junit.Assert.*;
 
 public class TreeTest {

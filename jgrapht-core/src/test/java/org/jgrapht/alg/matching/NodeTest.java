@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.blossom;
+package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
+import static org.jgrapht.alg.matching.Initializer.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class NodeTest {
@@ -230,10 +230,6 @@ public class NodeTest {
 
         // moving child list of size 1 to empty list
         node2.moveChildrenTo(node4);
-        assertNull(node5.treeSiblingNext);
-        assertEquals(node4, node5.treeSiblingPrev);
-        assertEquals(node5, node3.treeSiblingPrev);
-        assertEquals(node5, node3.treeSiblingNext);
 
         assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.childrenOf(node4));
         //moving child list of size 2 to empty list

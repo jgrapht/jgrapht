@@ -15,11 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.blossom;
+package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -34,13 +35,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_FIXED_DELTA;
-import static org.jgrapht.alg.blossom.Initializer.InitializationType.GREEDY;
-import static org.jgrapht.alg.blossom.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER;
-import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+import static org.jgrapht.alg.matching.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
+import static org.jgrapht.alg.matching.Initializer.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.Initializer.InitializationType.NONE;
+import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER;
+import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
@@ -54,14 +55,14 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
     @Parameterized.Parameters
     public static Object[] params() {
         return new Object[]{
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, NONE, false),  // [0]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, GREEDY, false),  // [1]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_CONNECTED_COMPONENTS, NONE, false), // [2]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_CONNECTED_COMPONENTS, GREEDY, false),  // [3]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_FIXED_DELTA, NONE, false),  // [4]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_FIXED_DELTA, GREEDY, false),  // [5]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_CONNECTED_COMPONENTS, NONE, false),  // [6]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_CONNECTED_COMPONENTS, GREEDY, false),  // [7]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, NONE),  // [0]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, GREEDY),  // [1]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_CONNECTED_COMPONENTS, NONE), // [2]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_CONNECTED_COMPONENTS, GREEDY),  // [3]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_FIXED_DELTA, NONE),  // [4]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_FIXED_DELTA, GREEDY),  // [5]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_CONNECTED_COMPONENTS, NONE),  // [6]
+                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_CONNECTED_COMPONENTS, GREEDY),  // [7]
         };
     }
 

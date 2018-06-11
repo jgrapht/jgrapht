@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.blossom;
+package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
@@ -24,9 +24,9 @@ import org.jgrapht.graph.AsUndirectedGraph;
 
 import java.util.*;
 
-import static org.jgrapht.alg.blossom.DualUpdater.DualUpdateType.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.blossom.Initializer.InitializationType.GREEDY;
-import static org.jgrapht.alg.blossom.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+import static org.jgrapht.alg.matching.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.Initializer.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
 
 /**
  * TODO: write complete class description
@@ -44,7 +44,19 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Default infinity value used in the algorithm
      */
-    public static final int INFINITY = Integer.MAX_VALUE;
+    public static final double INFINITY = Integer.MAX_VALUE;
+    /**
+     * Defines the threshold for throwing an exception about no perfect matching existence
+     */
+    public static final double NO_PERFECT_MATCHING_THRESHOLD = INFINITY / 2;
+    /**
+     * Variable for debug purposes
+     */
+    static final boolean DEBUG = false;
+    /**
+     * Message about no perfect matching
+     */
+    static final String NO_PERFECT_MATCHING = "There is no perfect matching in the specified graph";
     /**
      * Default options
      */
@@ -106,6 +118,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
 
     /**
      * Computes and returns a minimum weight perfect matching in the {@code graph}.
+     * TODO: add profound description
      *
      * @return the perfect matching in the {@code graph} of minimum weight
      */
@@ -115,7 +128,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         this.state = initializer.initialize(options);
         this.primalUpdater = new PrimalUpdater<>(state);
         this.dualUpdater = new DualUpdater<>(state, primalUpdater);
-        if (options.verbose)
+        if (DEBUG)
             printMap();
 
         Node currentRoot;
@@ -135,7 +148,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 tree = currentRoot.tree;
                 int iterationTreeNum = state.treeNum;
 
-                if (options.verbose)
+                if (DEBUG)
                     printState();
 
                 // first phase
@@ -148,7 +161,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 // second phase
                 // applying primal operations to the current tree while it is possible
                 while (iterationTreeNum == state.treeNum) {
-                    if (options.verbose) {
+                    if (DEBUG) {
                         printState();
                         System.out.println("Current tree is " + tree + ", current root is " + currentRoot);
                     }
@@ -180,12 +193,12 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                         }
                     }
                     // can't do anything
-                    if (options.verbose) {
+                    if (DEBUG) {
                         System.out.println("Can't do anything");
                     }
                     break;
                 }
-                if (options.verbose) {
+                if (DEBUG) {
                     printState();
                 }
 
@@ -207,7 +220,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 }
             }
 
-            if (options.verbose) {
+            if (DEBUG) {
                 printTrees();
                 printState();
             }
@@ -217,7 +230,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 break;
             }
             if (cycleTreeNum == state.treeNum) {
-                if (dualUpdater.updateDuals(options.dualUpdateType) <= 0) {
+                if (dualUpdater.updateDuals(options.dualUpdateStrategy) <= 0) {
                     // don't understand why MULTIPLE_TREE_FIXED_DELTA is used in blossom V code in this case
                     dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
                 }
@@ -303,7 +316,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * The sum of all duals from {@code start} inclusive to {@code end} inclusive
+     * Computes the sum of all duals from {@code start} inclusive to {@code end} inclusive
      *
      * @param start the node to start from
      * @param end   the node to end with
@@ -440,7 +453,23 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         }
     }
 
+    /**
+     * This method finishes the algorithm after all nodes are matched. The main problem it solves is that
+     * the matching after the end of primal and dual operations can be not valid in the contracted blossoms.
+     * <p>
+     * Property: if a matching is changed in the parent blossom, the matching in all lower blossoms can become invalid.
+     * Therefore, we traverse all nodes, find an unmatched node (it is necessarily contracted), go up to the first
+     * blossom, whose matching hasn't been fixed (we set blossomGrandparent references to point to the previous nodes on
+     * the path). Then we start to change the matching accordingly all the way down to the initial node.
+     * <p>
+     * Let's call an edge that is matched to a blossom root a "blossom edge". To make the matching valid we move the
+     * blossom edge one layer down at a time so that in the end its endpoints are valid initial nodes of the graph.
+     * After this transformation we can't traverse the blossomSibling references no more. That is why we initially compute
+     * a mapping of every pseudonode to the set of nodes that are contracted in it. This map is needed to
+     * construct a dual solution after the matching in the graph becomes valid.
+     */
     private void finish() {
+        // compute the mapping from pseudonodes to the set of vertices of initial graph
         Map<Node, Set<V>> nodesInBlossoms = computeNodesInBlossoms();
 
         Set<E> edges = new HashSet<>();
@@ -453,15 +482,15 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         Node blossom;
         E edge;
 
-        if (state.options.verbose) {
+        if (DEBUG) {
             System.out.println("Finishing matching");
         }
 
         for (int i = 0; i < state.nodeNum; i++) {
             if (nodes[i].matched == null) {
-                // changing the matching in the blossoms
                 blossomPrev = null;
                 blossom = nodes[i];
+                // traversing the path from unmatched node to the first unprocessed pseudonode
                 do {
                     blossom.isMarked = true;
                     blossom.blossomGrandparent = blossomPrev;
@@ -471,6 +500,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 blossom.isMarked = true;
                 // now node.blossomGrandparent points to the previous blossom in the hierarchy except for the blossom node
                 while (true) {
+                    // finding the root of the blossom. This can be a pseudonode
                     for (blossomRoot = blossom.matched.getCurrentOriginal(blossom); blossomRoot.blossomParent != blossom; blossomRoot = blossomRoot.blossomParent) {
                     }
                     blossomRoot.matched = blossom.matched;
@@ -492,6 +522,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             }
         }
         clearMarked();
+        // compute the final matching
         for (int i = 0; i < state.nodeNum; i++) {
             edge = state.backEdgeMap.get(nodes[i].matched);
             if (!edges.contains(edge)) {
@@ -503,6 +534,10 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         dualSolution = computeDualSolution(nodesInBlossoms);
     }
 
+    /**
+     * Setting the blossomGrandparent references so that from a pseudonode we can make
+     * one step down to some node that belongs to that pseudonode
+     */
     private void prepareForDualSolution() {
         Node[] nodes = state.nodes;
         Node current;
@@ -520,12 +555,20 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         clearMarked();
     }
 
+    /**
+     * Computes a solution to a dual linear program formulated on the initial graph. This method
+     * uses a mapping from pseudonodes to the set of vertices in contains
+     *
+     * @param nodesInBlossoms a mapping from pseudonodes to the set of vertices it contains
+     * @return the solution to the dual linear program
+     */
     private DualSolution computeDualSolution(Map<Node, Set<V>> nodesInBlossoms) {
         Map<Set<V>, Double> dualMap = new HashMap<>();
         Node[] nodes = state.nodes;
         Node current;
         for (int i = 0; i < state.nodeNum; i++) {
             current = nodes[i];
+            // jump up while the first already processed node in encountered
             do {
                 if (current.isBlossom) {
                     if (Math.abs(current.dual) > EPS) {
@@ -542,6 +585,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         return new DualSolution(graph, dualMap);
     }
 
+    /**
+     * Debug method
+     */
     private void printState() {
         Node[] nodes = state.nodes;
         Edge[] edges = state.edges;
@@ -572,6 +618,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         }
     }
 
+    /**
+     * Debug method
+     */
     private void printTrees() {
         System.out.println("Printing trees");
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
@@ -580,6 +629,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         }
     }
 
+    /**
+     * Debug method
+     */
     private void printMap() {
         System.out.println(state.nodeNum + " " + state.edgeNum);
         for (Map.Entry<V, Node> entry : state.vertexMap.entrySet()) {
@@ -587,78 +639,176 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         }
     }
 
+    /**
+     * Returns the statistics describing the performance characteristics of the algorithm.
+     *
+     * @return the statistics describing the algorithms characteristics
+     */
     public Statistics getStatistics() {
         return state.statistics;
     }
 
+    /**
+     * Enum for choosing a phase for single tree dual updates
+     */
     enum SingleTreeDualUpdatePhase {
+        /**
+         * Update the duals of the tree before processing it
+         */
         UPDATE_DUAL_BEFORE,
+        /**
+         * Update the duals of the tree after processing it with an opportunity to processes it immediately
+         * again if some dual progress has been made
+         */
         UPDATE_DUAL_AFTER
     }
 
+    /**
+     * Options that define the strategies to use during the algorithm for updating duals and initializing the matching
+     */
     public static class Options {
         private static final SingleTreeDualUpdatePhase DEFAULT_PHASE = UPDATE_DUAL_BEFORE;
-        private static final DualUpdater.DualUpdateType DEFAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_CONNECTED_COMPONENTS;
+        private static final DualUpdater.DualUpdateStrategy DEFAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_CONNECTED_COMPONENTS;
         private static final Initializer.InitializationType DEFAULT_INITIALIZATION_TYPE = GREEDY;
-        private static final boolean DEFAULT_VERBOSE = true;
 
+        /**
+         * When to update the duals of a single tree: either before or after processing it
+         */
         SingleTreeDualUpdatePhase singleTreeDualUpdatePhase;
-        DualUpdater.DualUpdateType dualUpdateType;
+        /**
+         * What greedy strategy to use to perform a global dual update
+         */
+        DualUpdater.DualUpdateStrategy dualUpdateStrategy;
+        /**
+         * What strategy to choose to initialize the matching before the main phase of the algorithm
+         */
         Initializer.InitializationType initializationType;
-        boolean verbose;
 
-        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, Initializer.InitializationType initializationType, boolean verbose) {
+        /**
+         * Constructs a custom options for the algorithm
+         *
+         * @param singleTreeDualUpdatePhase phase of a single tree dual updates
+         * @param dualUpdateStrategy        greedy strategy to update dual variables globally
+         * @param initializationType        strategy for initializing the matching
+         */
+        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateStrategy dualUpdateStrategy, Initializer.InitializationType initializationType) {
             this.singleTreeDualUpdatePhase = singleTreeDualUpdatePhase;
-            this.dualUpdateType = dualUpdateType;
+            this.dualUpdateStrategy = dualUpdateStrategy;
             this.initializationType = initializationType;
-            this.verbose = verbose;
         }
 
-        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateType dualUpdateType, Initializer.InitializationType initializationType) {
-            this(singleTreeDualUpdatePhase, dualUpdateType, initializationType, DEFAULT_VERBOSE);
+        /**
+         * Construct a new options instance with a {@code initializationType}
+         *
+         * @param initializationType defines a strategy to use to initialize the matching
+         */
+        public Options(Initializer.InitializationType initializationType) {
+            this.initializationType = initializationType;
         }
 
-        public Options(DualUpdater.DualUpdateType updateType) {
-            this(DEFAULT_PHASE, updateType, DEFAULT_INITIALIZATION_TYPE);
-        }
+        /**
+         * Construct a default options for the algorithm
+         */
 
         public Options() {
             this(DEFAULT_PHASE, DEFAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE);
         }
 
-        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase) {
-            this(singleTreeDualUpdatePhase, DEFAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE, DEFAULT_VERBOSE);
-        }
-
-        public Options(Initializer.InitializationType initializationType) {
-            this(DEFAULT_PHASE, DEFAULT_DUAL_UPDATE_TYPE, initializationType, DEFAULT_VERBOSE);
-        }
-
-        public Options(boolean verbose) {
-            this(DEFAULT_PHASE, DEFAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE, verbose);
-        }
     }
 
+    /**
+     * Describes the performance characteristics of the algorithm and numeric data about the number
+     * of performed dual operations during the main phase of the algorithm
+     */
     public static class Statistics {
+        /**
+         * Number of shrink operations
+         */
         int shrinkNum = 0;
+        /**
+         * Number of expand operations
+         */
         int expandNum = 0;
+        /**
+         * Number of grow operations
+         */
         int growNum = 0;
 
-        double augmentTime = 0;
-        double expandTime = 0;
-        double shrinkTime = 0;
-        double growTime = 0;
+        /**
+         * Time spent during the augment operation in nano seconds
+         */
+        long augmentTime = 0;
+        /**
+         * Time spent during the expand operation in nano seconds
+         */
+        long expandTime = 0;
+        /**
+         * Time spent during the shrink operation in nano seconds
+         */
+        long shrinkTime = 0;
+        /**
+         * Time spent during the grow operation in nano seconds
+         */
+        long growTime = 0;
+        /**
+         * Time spent during the dual update phase (either single tree or global) in nano seconds
+         */
+        long dualUpdatesTime = 0;
 
+        /**
+         * @return the number of shrink operations
+         */
         public int getShrinkNum() {
             return shrinkNum;
         }
 
+        /**
+         * @return the number of expand operations
+         */
         public int getExpandNum() {
             return expandNum;
         }
 
+        /**
+         * @return the number of grow operations
+         */
         public int getGrowNum() {
             return growNum;
+        }
+
+        /**
+         * @return the time spent during the augment operation in nano seconds
+         */
+        public long getAugmentTime() {
+            return augmentTime;
+        }
+
+        /**
+         * @return the time spent during the expand operation in nano seconds
+         */
+        public long getExpandTime() {
+            return expandTime;
+        }
+
+        /**
+         * @return the time spent during the shrink operation in nano seconds
+         */
+        public long getShrinkTime() {
+            return shrinkTime;
+        }
+
+        /**
+         * @return the time spent during the grow operation in nano seconds
+         */
+        public long getGrowTime() {
+            return growTime;
+        }
+
+        /**
+         * @return the time spent during the dual update phase (either single tree or global) in nano seconds
+         */
+        public long getDualUpdatesTime() {
+            return dualUpdatesTime;
         }
 
         @Override
@@ -676,20 +826,45 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         }
     }
 
+    /**
+     * A solution to the dual linear program formulated on the  {@code graph}
+     */
     public class DualSolution {
+        /**
+         * The graph on which both primal and dual linear programs are formulated
+         */
         Graph<V, E> graph;
 
+        /**
+         * Mapping from sets of vertices of odd cardinality to their dual variables. Represents a solution
+         * to the dual linear program
+         */
         Map<Set<V>, Double> dualVariables;
 
+        /**
+         * Constructs a new solution for the dual linear program
+         *
+         * @param graph         the graph on which linear program is formulated
+         * @param dualVariables the mapping from sets of vertices of odd cardinality to their dual variables
+         */
         public DualSolution(Graph<V, E> graph, Map<Set<V>, Double> dualVariables) {
             this.graph = graph;
             this.dualVariables = dualVariables;
         }
 
+        /**
+         * @return the graph on which the linear program is formulated
+         */
         public Graph<V, E> getGraph() {
             return graph;
         }
 
+        /**
+         * The mapping from sets of vertices of odd cardinality to their dual variables, which
+         * represents a solution to the dual linear program
+         *
+         * @return the mapping from sets of vertices of odd cardinality to their dual variables
+         */
         public Map<Set<V>, Double> getDualVariables() {
             return dualVariables;
         }
