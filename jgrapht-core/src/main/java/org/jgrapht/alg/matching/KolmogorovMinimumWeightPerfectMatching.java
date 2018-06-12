@@ -108,7 +108,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      */
     public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph, Options options) {
         Objects.requireNonNull(graph);
-        if (graph.getType().isDirected()) {
+        if ((graph.vertexSet().size() & 1) == 1) {
+            throw new IllegalArgumentException(NO_PERFECT_MATCHING);
+        } else if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
         } else {
             this.graph = graph;
