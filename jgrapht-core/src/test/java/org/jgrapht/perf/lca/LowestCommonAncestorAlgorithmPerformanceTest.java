@@ -159,14 +159,6 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
         }
     }
 
-    public static class OPTHeavyPathRandomTreeBenchmark extends RandomTreeBenchmarkBase{
-
-        @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
-            return new OPTHeavyPathLCAFinder<>(tree, root);
-        }
-    }
-
     public static class BinaryLiftingLCARandomForestBenchmark extends RandomForestBenchmarkBase{
 
         @Override
@@ -199,14 +191,6 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
         }
     }
 
-    public static class OPTHeavyPathRandomForestBenchmark extends RandomForestBenchmarkBase{
-
-        @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
-            return new OPTHeavyPathLCAFinder<>(tree, roots);
-        }
-    }
-
     @Test
     public void testRandomTreeBenchmark() throws RunnerException {
         Options opt = new OptionsBuilder()
@@ -214,7 +198,6 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
             .include(".*" + EulerTourRMQLCARandomTreeBenchmark.class.getSimpleName() + ".*")
             .include(".*" + TarjanLCARandomTreeBenchmark.class.getSimpleName() + ".*")
             .include(".*" + HeavyPathRandomTreeBenchmark.class.getSimpleName() + ".*")
-            .include(".*" + OPTHeavyPathRandomTreeBenchmark.class.getSimpleName() + ".*")
 
             .mode(Mode.AverageTime).timeUnit(TimeUnit.NANOSECONDS).warmupTime(TimeValue.seconds(1))
             .warmupIterations(3).measurementTime(TimeValue.seconds(1)).measurementIterations(5)
@@ -230,7 +213,6 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
                 .include(".*" + EulerTourRMQLCARandomForestBenchmark.class.getSimpleName() + ".*")
                 .include(".*" + TarjanLCARandomForestBenchmark.class.getSimpleName() + ".*")
                 .include(".*" + HeavyPathRandomForestBenchmark.class.getSimpleName() + ".*")
-                .include(".*" + OPTHeavyPathRandomForestBenchmark.class.getSimpleName() + ".*")
 
                 .mode(Mode.AverageTime).timeUnit(TimeUnit.NANOSECONDS).warmupTime(TimeValue.seconds(1))
                 .warmupIterations(3).measurementTime(TimeValue.seconds(1)).measurementIterations(5)

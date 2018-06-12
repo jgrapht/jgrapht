@@ -41,7 +41,7 @@ public class HeavyPathDecomposition<V, E> {
     private int numberOfPaths;
     private int[] sizeSubtree, father, depth;
     private int[] component;
-    private int[] path, lengthPath, positionInPath, firstNodePath;
+    private int[] path, lengthPath, positionInPath, firstNodeInPath;
 
     private List<List<V>> paths;
 
@@ -90,7 +90,7 @@ public class HeavyPathDecomposition<V, E> {
         path = new int[n];
         lengthPath = new int[n];
         positionInPath = new int[n];
-        firstNodePath = new int[n];
+        firstNodeInPath = new int[n];
 
         heavyEdges = new HashSet<>();
 
@@ -113,6 +113,70 @@ public class HeavyPathDecomposition<V, E> {
         }
     }
 
+    private void dfsIterative(int u, int parent, int c){
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        Set<Integer> explored = new HashSet<>();
+
+        stack.push(u);
+
+        while (!stack.isEmpty()){
+            u = stack.poll();
+
+            if (!explored.contains(u)){
+                explored.add(u);
+
+                // simulate the return from recursion
+                stack.push(u);
+
+                component[u] = c;
+                sizeSubtree[u] = 1;
+
+                V vertexU = indexList.get(u);
+                for (E edge: graph.edgesOf(vertexU)){
+                    int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
+
+                    if (!explored.contains(son)){
+                        father[son] = u;
+                        depth[son] = depth[u] + 1;
+
+                        stack.push(son);
+                    }
+                }
+            }
+            else{
+                int heavySon = -1;
+                E heavyEdge = null;
+
+                V vertexU = indexList.get(u);
+
+                for (E edge: graph.edgesOf(vertexU)){
+                    int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
+
+                    if (son != father[u]){
+
+                        sizeSubtree[u] += sizeSubtree[son];
+
+                        if (heavySon == -1 || sizeSubtree[heavySon] < sizeSubtree[son]) {
+                            heavySon = son;
+                            heavyEdge = edge;
+                        }
+                    }
+                }
+
+                if (heavyEdge != null)
+                    heavyEdges.add(heavyEdge);
+
+                if (heavySon == -1)
+                    path[u] = numberOfPaths++;
+                else
+                    path[u] = path[heavySon];
+
+                positionInPath[u] = lengthPath[path[u]]++;
+            }
+        }
+    }
+
+    // TODO: remove?
     private void dfs(int u, int parent, int c) {
         component[u] = c;
 
@@ -166,9 +230,9 @@ public class HeavyPathDecomposition<V, E> {
         for (V root: roots){
             int u = vertexMap.get(root);
 
-            if (father[u] == -1) {
+            if (sizeSubtree[u] == 0) {
                 numberComponent++;
-                dfs(u, -1, numberComponent);
+                dfsIterative(u, -1, numberComponent);
             }
         }
 
@@ -177,9 +241,8 @@ public class HeavyPathDecomposition<V, E> {
                 positionInPath[i] = lengthPath[path[i]] - positionInPath[i] - 1;
 
                 if (positionInPath[i] == 0)
-                    firstNodePath[path[i]] = i;
+                    firstNodeInPath[path[i]] = i;
             }
-//            System.out.println(i + " " + indexList.get(i) + " " + positionInPath[i]);
         }
 
         List<List<V>> paths = new ArrayList<>(numberOfPaths);
@@ -236,20 +299,59 @@ public class HeavyPathDecomposition<V, E> {
                 graph.edgeSet().stream().filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet()));
     }
 
+    private int[] cloneArray(int[] array){
+        int[] clone = new int[array.length];
+        System.arraycopy(array, 0, clone, 0, array.length);
+        return clone;
+    }
+
     /**
-     * @return a map such that map(vertex v) = father of v in the DFS tree
+     * @return the father array
      */
-    public Map<V, V> getFather(){
-        Map<V, V> map = new HashMap<>();
+    public int[] getFatherArray(){
+        return cloneArray(father);
+    }
 
-        for (int i = 0; i < graph.vertexSet().size(); i++){
-            if (father[i] != -1)
-                map.put(indexList.get(i), indexList.get(father[i]));
-            else
-                map.put(indexList.get(i), null);
-        }
+    /**
+     * @return the depth array
+     */
+    public int[] getDepthArray(){
+        return cloneArray(depth);
+    }
 
-        return map;
+    /**
+     * @return the sizeSubtree array
+     */
+    public int[] getSizeSubtreeArray(){
+        return cloneArray(sizeSubtree);
+    }
+
+    /**
+     * @return the component array
+     */
+    public int[] getComponentArray(){
+        return cloneArray(component);
+    }
+
+    /**
+     * @return the path array
+     */
+    public int[] getPathArray(){
+        return cloneArray(path);
+    }
+
+    /**
+     * @return the positionInPath array
+     */
+    public int[] getPositionInPathArray(){
+        return cloneArray(positionInPath);
+    }
+
+    /**
+     * @return the firstNodeInPath array
+     */
+    public int[] getFirstNodeInPathArray(){
+        return cloneArray(firstNodeInPath);
     }
 
     /**
@@ -266,20 +368,11 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * @return a map such that map(vertex v) = father of v in the DFS tree
+     * @param v a vertex
+     * @return the depth of vertex v in the DFS tree
      */
-    public Map<V, Integer> getDepth(){
-        Map<V, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < graph.vertexSet().size(); i++){
-            map.put(indexList.get(i), depth[i]);
-        }
-
-        return map;
-    }
-
-    public int getDepth(V vertex){
-        int index = vertexMap.getOrDefault(vertex, -1);
+    public int getDepth(V v){
+        int index = vertexMap.getOrDefault(v, -1);
 
         if (index == -1)
             return -1;
@@ -287,18 +380,12 @@ public class HeavyPathDecomposition<V, E> {
             return depth[index];
     }
 
-    public Map<V, Integer> getSizeSubtree(){
-        Map<V, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < graph.vertexSet().size(); i++){
-            map.put(indexList.get(i), sizeSubtree[i]);
-        }
-
-        return map;
-    }
-
-    public int getSizeSubTree(V vertex){
-        int index = vertexMap.getOrDefault(vertex, -1);
+    /**
+     * @param v a vertex
+     * @return the size of vertex v's subtree in the DFS tree
+     */
+    public int getSizeSubTree(V v){
+        int index = vertexMap.getOrDefault(v, -1);
 
         if (index == -1)
             return 0;
@@ -306,18 +393,12 @@ public class HeavyPathDecomposition<V, E> {
             return sizeSubtree[index];
     }
 
-    public Map<V, Integer> getComponent(){
-        Map<V, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < graph.vertexSet().size(); i++){
-            map.put(indexList.get(i), component[i]);
-        }
-
-        return map;
-    }
-
-    public int getComponent(V vertex){
-        int index = vertexMap.getOrDefault(vertex, -1);
+    /**
+     * @param v a vertex
+     * @return the component of vertex v in the DFS tree
+     */
+    public int getComponent(V v){
+        int index = vertexMap.getOrDefault(v, -1);
 
         if (index == -1)
             return 0;
@@ -325,7 +406,12 @@ public class HeavyPathDecomposition<V, E> {
             return component[index];
     }
 
+    /**
+     * Returned the normalized version of the input graph.
+     *
+     * @return a pair which consists of the vertexMap and the indexList
+     */
     public Pair<Map<V, Integer>, List<V>> getNormalizedGraph(){
-        return Pair.of(vertexMap, indexList);
+        return Pair.of(Collections.unmodifiableMap(vertexMap), Collections.unmodifiableList(indexList));
     }
 }

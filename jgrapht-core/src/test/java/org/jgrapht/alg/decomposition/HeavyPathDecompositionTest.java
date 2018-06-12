@@ -18,6 +18,7 @@
 package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
 import org.jgrapht.graph.DefaultEdge;
@@ -25,6 +26,7 @@ import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,7 +40,6 @@ public class HeavyPathDecompositionTest {
 
     private boolean SHOW_MAX_CHAIN_DEPTH = false;
 
-
     public static int log2(int n) // returns 0 for n=0
     {
         int log = 0;
@@ -49,7 +50,8 @@ public class HeavyPathDecompositionTest {
         return log + ( n >>> 1 );
     }
 
-    private static <V, E> int countMaxPath(Set<V> vertexSet, Map<V, V> father, List<List<V>> paths){
+    public static <V, E> int countMaxPath(Set<V> vertexSet, HeavyPathDecomposition<V, E> decomposition){
+        List<List<V>> paths = decomposition.getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
 
         for (int i = 0; i < paths.size(); i++) {
@@ -73,7 +75,7 @@ public class HeavyPathDecompositionTest {
                         cnt++;
                     }
 
-                    v = father.getOrDefault(v, null);
+                    v = decomposition.getFather(v);
                 }
 
                 maxim = Math.max(maxim, cnt);
@@ -83,7 +85,7 @@ public class HeavyPathDecompositionTest {
         return maxim;
     }
 
-    private static <V, E> boolean isValidDecomposition(Graph<V, E> graph, Set<V> roots,
+    public static <V, E> boolean isValidDecomposition(Graph<V, E> graph, Set<V> roots,
                                                        HeavyPathDecomposition<V, E> decomposition){
         Set<E> heavyEdges = decomposition.getHeavyEdges();
         Set<E> lightEdges = decomposition.getLightEdges();
@@ -209,8 +211,8 @@ public class HeavyPathDecompositionTest {
         Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
 
         if (SHOW_MAX_CHAIN_DEPTH) {
-            System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition.getFather(),
-                    heavyPathDecomposition.getPaths()) + " | " + log2(graph.vertexSet().size()));
+            System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
+                    log2(graph.vertexSet().size()));
         }
     }
 
@@ -242,7 +244,7 @@ public class HeavyPathDecompositionTest {
 
             BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
                     new BarabasiAlbertForestGenerator<>(1,
-                            4096 + random.nextInt(1 << 13), random);
+                            1024 + random.nextInt(1 << 12), random);
 
             generator.generateGraph(graph, null);
 
@@ -254,8 +256,8 @@ public class HeavyPathDecompositionTest {
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
 
             if (SHOW_MAX_CHAIN_DEPTH) {
-                System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition.getFather(),
-                        heavyPathDecomposition.getPaths()) + " | " + log2(graph.vertexSet().size()));
+                System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
+                        log2(graph.vertexSet().size()));
             }
         }
     }
@@ -285,9 +287,36 @@ public class HeavyPathDecompositionTest {
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
 
             if (SHOW_MAX_CHAIN_DEPTH) {
-                System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition.getFather(),
-                        heavyPathDecomposition.getPaths()) + " | " + log2(graph.vertexSet().size()));
+                System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
+                        log2(graph.vertexSet().size()));
             }
+        }
+    }
+
+    @Category(SlowTests.class)
+    @Test
+    public void testHugeTree(){
+        Random random = new Random(0x118811);
+
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(0), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertForestGenerator<>(1,
+                        1 << 19, random);
+
+        generator.generateGraph(graph, null);
+
+        Set<Integer> roots = Collections.singleton(graph.vertexSet().iterator().next());
+
+        HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(graph, roots);
+
+        Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
+
+        if (SHOW_MAX_CHAIN_DEPTH) {
+            System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
+                    log2(graph.vertexSet().size()));
         }
     }
 }
