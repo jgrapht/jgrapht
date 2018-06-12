@@ -568,8 +568,22 @@ public abstract class GraphTests
         return true;
     }
 
+    /**
+     * Tests whether a graph is a DAG (directed acyclic graph).
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @return true if the graph is a DAG, false otherwise
+     */
     public static <V, E> boolean isDAG(Graph<V, E> graph){
-        requireDirected(graph);
+        if (graph == null)
+            throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
+
+        if (!graph.getType().isDirected()) {
+            return false;
+        }
 
         return !(new CycleDetector<>(graph).detectCycles());
     }
