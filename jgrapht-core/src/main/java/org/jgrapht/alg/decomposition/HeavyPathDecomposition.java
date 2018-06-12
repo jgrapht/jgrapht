@@ -225,14 +225,15 @@ public class HeavyPathDecomposition<V, E> {
      * @return the set of heavy edges
      */
     public Set<E> getHeavyEdges(){
-        return this.heavyEdges;
+        return Collections.unmodifiableSet(this.heavyEdges);
     }
 
     /**
      * @return the set of light edges
      */
     public Set<E> getLightEdges(){
-        return graph.edgeSet().stream().filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet());
+        return Collections.unmodifiableSet(
+                graph.edgeSet().stream().filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet()));
     }
 
     /**
