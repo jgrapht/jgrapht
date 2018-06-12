@@ -30,7 +30,7 @@ import java.util.*;
  *
  * @author Leo Crawford
  *
- * @see org.jgrapht.alg.lca.TarjanLCAFinder
+ * @deprecated Replaced by {@link org.jgrapht.alg.lca.TarjanLCAFinder}
  */
 @Deprecated public class TarjanLowestCommonAncestor<V, E>
 {
