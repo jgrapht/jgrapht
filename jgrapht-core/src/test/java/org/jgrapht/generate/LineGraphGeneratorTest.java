@@ -19,6 +19,7 @@ package org.jgrapht.generate;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.util.*;
@@ -47,6 +48,23 @@ public class LineGraphGeneratorTest {
     }
 
     @Test
+    public void testStarGraph()
+    {
+        // Line Graph of a star graph is a complete graph
+        Graph<Integer, DefaultEdge> starGraph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        GraphGenerator<Integer, DefaultEdge, Integer> generator = new StarGraphGenerator<>(5);
+        Map<String, Integer> resultMap = new HashMap<>();
+        generator.generateGraph(starGraph, resultMap);
+
+        LineGraphGenerator<Integer, DefaultEdge> lgg = new LineGraphGenerator<>(starGraph);
+        Graph<Integer, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
+        lgg.generateGraph(target, null);
+
+        assertTrue(GraphTests.isComplete(target));
+    }
+
+    @Test
     public void testUndirectedGraph()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -64,6 +82,29 @@ public class LineGraphGeneratorTest {
 
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(9, target.edgeSet().size());
+
+        //Constructing expected graph
+        Graph<DefaultEdge, DefaultEdge> expectedGraph = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(expectedGraph, g.edgeSet());
+        List<DefaultEdge> vertexList = new ArrayList<>(expectedGraph.vertexSet());
+
+        expectedGraph.addEdge(vertexList.get(0), vertexList.get(1));
+        expectedGraph.addEdge(vertexList.get(0), vertexList.get(3));
+        expectedGraph.addEdge(vertexList.get(0), vertexList.get(5));
+        expectedGraph.addEdge(vertexList.get(1), vertexList.get(2));
+        expectedGraph.addEdge(vertexList.get(2), vertexList.get(3));
+        expectedGraph.addEdge(vertexList.get(2), vertexList.get(4));
+        expectedGraph.addEdge(vertexList.get(3), vertexList.get(5));
+        expectedGraph.addEdge(vertexList.get(3), vertexList.get(4));
+        expectedGraph.addEdge(vertexList.get(4), vertexList.get(5));
+
+        List<DefaultEdge> edgeListExpected = new ArrayList<>(expectedGraph.edgeSet());
+        List<DefaultEdge> edgeListActual = new ArrayList<>(target.edgeSet());
+
+        assertEquals(edgeListExpected.size(), edgeListActual.size());
+        for(int i=0; i<edgeListExpected.size(); i++) {
+            assertEquals(edgeListExpected.get(i).toString(), edgeListActual.get(i).toString());
+        }
     }
 
     @Test
@@ -85,5 +126,31 @@ public class LineGraphGeneratorTest {
 
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(12, target.edgeSet().size());
+
+        //Constructing expected graph
+        Graph<DefaultEdge, DefaultEdge> expectedGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(expectedGraph, g.edgeSet());
+        List<DefaultEdge> vertexList = new ArrayList<>(expectedGraph.vertexSet());
+
+        expectedGraph.addEdge(vertexList.get(3), vertexList.get(0));
+        expectedGraph.addEdge(vertexList.get(3), vertexList.get(1));
+        expectedGraph.addEdge(vertexList.get(0), vertexList.get(2));
+        expectedGraph.addEdge(vertexList.get(4), vertexList.get(2));
+        expectedGraph.addEdge(vertexList.get(2), vertexList.get(3));
+        expectedGraph.addEdge(vertexList.get(2), vertexList.get(4));
+        expectedGraph.addEdge(vertexList.get(2), vertexList.get(5));
+        expectedGraph.addEdge(vertexList.get(6), vertexList.get(3));
+        expectedGraph.addEdge(vertexList.get(6), vertexList.get(4));
+        expectedGraph.addEdge(vertexList.get(6), vertexList.get(5));
+        expectedGraph.addEdge(vertexList.get(1), vertexList.get(6));
+        expectedGraph.addEdge(vertexList.get(5), vertexList.get(6));
+
+        List<DefaultEdge> edgeListExpected = new ArrayList<>(expectedGraph.edgeSet());
+        List<DefaultEdge> edgeListActual = new ArrayList<>(target.edgeSet());
+
+        assertEquals(edgeListExpected.size(), edgeListActual.size());
+        for(int i=0; i<edgeListExpected.size(); i++) {
+            assertEquals(edgeListExpected.get(i).toString(), edgeListActual.get(i).toString());
+        }
     }
 }
