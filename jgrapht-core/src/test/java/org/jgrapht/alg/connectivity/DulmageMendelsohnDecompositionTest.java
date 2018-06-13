@@ -20,11 +20,11 @@ package org.jgrapht.alg.connectivity;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching;
-import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.Graph;
+import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
@@ -39,6 +39,8 @@ import org.junit.Test;
  * @author Peter Harman
  * @author Joris Kinable
  */
+
+
 public class DulmageMendelsohnDecompositionTest {
 
     @Test
