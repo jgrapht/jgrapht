@@ -65,7 +65,7 @@ The files below make up the table of contents for a release distribution archive
     - `antlr4-runtime-x.y.jar` ANTLR parser runtime
     - `commons-lang3-x.y.jar` Apache Commons Lang library
     - `guava-x.y-jre.jar` Guava library
-- `source/` complete source trees used to build this release
+- `source/` complete source tree used to build this release
 
 ## Getting Started ##
 The JGraphT [wiki](https://github.com/jgrapht/jgrapht/wiki) provides various helpful pages for new users, including a [How to use JGraphT in your projects](https://github.com/jgrapht/jgrapht/wiki/How-to-use-JGraphT-as-a-dependency-in-your-projects) page.
