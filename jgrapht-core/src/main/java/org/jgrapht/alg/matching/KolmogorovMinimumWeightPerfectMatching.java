@@ -126,6 +126,13 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      */
     @Override
     public MatchingAlgorithm.Matching<V, E> getMatching() {
+        if (matching == null) {
+            solve();
+        }
+        return matching;
+    }
+
+    private void solve() {
         Initializer<V, E> initializer = new Initializer<>(graph);
         this.state = initializer.initialize(options);
         this.primalUpdater = new PrimalUpdater<>(state);
@@ -140,7 +147,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
 
         while (true) {
             int cycleTreeNum = state.treeNum;
-
             for (currentRoot = state.nodes[state.nodeNum].treeSiblingNext; currentRoot != null; ) {
                 // initializing variables
                 nextRoot = currentRoot.treeSiblingNext;
@@ -239,7 +245,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             }
         }
         finish();
-        return matching;
     }
 
     /**
@@ -254,19 +259,34 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
 
     /**
      * Performs an optimality test after the perfect matching is computed. More precisely,
-     * checks whether dual variables of all pseudonodes are non-negative and whether the resulting
-     * slacks of all edges are non-negative
+     * checks whether dual variables of all pseudonodes and resulting slacks of all edges are non-negative and
+     * that slacks of all matched edges are exactly 0. Since the algorithm uses floating point arithmetic,
+     * this check is done with precision of {@link KolmogorovMinimumWeightPerfectMatching#EPS}
      *
      * @return true iff the assigned dual variable satisfy the dual linear program formulation and
-     * complementary slackness conditions are satisfied
+     * complementary slackness conditions are also satisfied. The total error must not exceed EPS
      */
     public boolean testOptimality() {
+        if (matching == null) {
+            return false;
+        }
+        return getError() < EPS; // getError() won't return -1 since matching != null
+    }
+
+    /**
+     * Computes the error in the solution to the dual linear program. More precisely, the total error
+     * equals to the sum of:
+     * <ul>
+     * <li>Absolute value of edge slack if it negative or the edge is matched</li>
+     * <li>Absolute value of pseudonode variable if it is negative</li>
+     * </ul>
+     *
+     * @return the total numeric error
+     */
+    public double getError() {
         if (matching != null) {
-            if (!testNonNegativity()) {
-                return false;
-            }
-            double error = 0;
-            Set<E> matched = matching.getEdges();
+            double error = testNonNegativity();
+            Set<E> matchedEdges = matching.getEdges();
             for (E e : graph.edgeSet()) {
                 if (graph.getEdgeSource(e) != graph.getEdgeTarget(e)) {
                     Edge edge = state.edgeMap.get(e);
@@ -277,36 +297,36 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     slack -= totalDual(a, lca.getFirst());
                     slack -= totalDual(b, lca.getSecond());
                     if (lca.getFirst() == lca.getSecond()) {
+                        // if a and b have a common ancestor, its dual is subtracted from edge's slack
                         slack += 2 * lca.getFirst().getTrueDual();
                     }
-                    if (slack + EPS < 0) {
-                        return false;
-                    }
-                    if (matched.contains(e)) {
+                    if (slack < 0 || matchedEdges.contains(e)) {
                         error += Math.abs(slack);
                     }
                 }
             }
-            return error < EPS;
+            return error;
         } else {
-            return false;
+            return -1;
         }
     }
+
 
     /**
      * Tests whether a non-negative dual variable is assigned to every blossom
      *
      * @return true iff the condition described above holds
      */
-    private boolean testNonNegativity() {
+    private double testNonNegativity() {
         Node[] nodes = state.nodes;
         Node node;
         boolean nonNegative = true;
+        double error = 0;
         for (int i = 0; i < state.nodeNum && nonNegative; i++) {
             node = nodes[i].blossomParent;
             while (node != null && !node.isMarked) {
-                if (node.dual + EPS < 0) {
-                    nonNegative = false;
+                if (node.dual < 0) {
+                    error += Math.abs(node.dual);
                     break;
                 }
                 node.isMarked = true;
@@ -314,7 +334,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             }
         }
         clearMarked();
-        return nonNegative;
+        return error;
     }
 
     /**
