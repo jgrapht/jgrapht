@@ -20,16 +20,16 @@ package org.jgrapht.alg.isomorphism;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * This class represents a GraphMapping between two isomorphic trees.
+ * This class represents a GraphMapping between two isomorphic trees (forests).
  *
- * @param <V> the type of the vertices
- * @param <E> the type of the edges
+ * @author Alexandru Valeanu
+ * @since June 2018
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  */
 public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
 
@@ -39,12 +39,21 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
     private final Graph<V, E> graph1;
     private final Graph<V, E> graph2;
 
-    public IsomorphicTreeMapping(Map<V, V> forwardMapping, Map<V, V> backwardMapping, Graph<V, E> graph1, Graph<V, E> graph2) {
-        this.forwardMapping = forwardMapping;
-        this.backwardMapping = backwardMapping;
+    /**
+     * Construct a new isomorphic tree (forest) mapping.
+     *
+     * @param forwardMapping the mapping from graph1 to graph2
+     * @param backwardMapping the mapping from graph2 to graph1 (inverse of forwardMapping)
+     * @param graph1 the first tree (forest)
+     * @param graph2 the second tree (forest)
 
-        this.graph1 = graph1;
-        this.graph2 = graph2;
+     */
+    public IsomorphicTreeMapping(Map<V, V> forwardMapping, Map<V, V> backwardMapping, Graph<V, E> graph1, Graph<V, E> graph2) {
+        this.forwardMapping = Objects.requireNonNull(forwardMapping);
+        this.backwardMapping = Objects.requireNonNull(backwardMapping);
+
+        this.graph1 = Objects.requireNonNull(graph1);
+        this.graph2 = Objects.requireNonNull(graph2);
     }
 
 
@@ -58,7 +67,6 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
 
     @Override
     public E getEdgeCorrespondence(E e, boolean forward) {
-
         if (forward) {
             V u = graph1.getEdgeSource(e);
             V v = graph1.getEdgeTarget(e);
@@ -73,28 +81,75 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
         }
     }
 
+    /**
+     * Get an unmodifiable version of the forward mapping function.
+     *
+     * @return the unmodifiable forward mapping function
+     */
     public Map<V, V> getForwardMapping(){
         return Collections.unmodifiableMap(forwardMapping);
     }
 
+    /**
+     * Get an unmodifiable version of the backward mapping function.
+     *
+     * @return the unmodifiable backward mapping function
+     */
     public Map<V, V> getBackwardMapping(){
         return Collections.unmodifiableMap(backwardMapping);
     }
 
+    /**
+     * Get the active domain of the isomorphism.
+     *
+     * @return the set of vertices $v$ for which the mapping is defined
+     */
     public Set<V> getMappingDomain(){
         return forwardMapping.keySet();
     }
 
+    /**
+     * Get the range of the isomorphism.
+     *
+     * @return the set of vertices $v$ for which a preimage exists
+     */
     public Set<V> getMappingRange(){
         return backwardMapping.keySet();
     }
-
 
     @Override
     public String toString() {
         return forwardMapping.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IsomorphicTreeMapping<?, ?> that = (IsomorphicTreeMapping<?, ?>) o;
+        return Objects.equals(forwardMapping, that.forwardMapping) &&
+                Objects.equals(backwardMapping, that.backwardMapping);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(forwardMapping, backwardMapping);
+    }
+
+    /**
+     * Computes the composition of two isomorphism.
+     * Let $f : V_{G_1} \rightarrow V_{G_2}$ be an isomorphism from $V_{G_1}$ to $V_{G_2}$ and
+     * $g : V_{G_2} \rightarrow V_{G_3}$ one from $V_{G_2}$ to $V_{G_3}$.
+     *
+     * This method computes an isomorphism $h : V_{G_1} \rightarrow V_{G_3}$ from $V_{G_1}$ to $V_{G_3}$.
+     *
+     * Note: The composition $g ∘ f$ can be built only if $f$'s codomain equals $g$'s domain;
+     * this implementation only requires that the former is a subset of the latter.
+     *
+     * @param treeMapping the other isomorphism (i.e. function $g$)
+     * @return the composition of the two isomorphism
+     */
     public IsomorphicTreeMapping<V, E> compose(IsomorphicTreeMapping<V, E> treeMapping){
         Map<V, V> fMap = new HashMap<>(forwardMapping.size());
         Map<V, V> bMap = new HashMap<>(forwardMapping.size());
@@ -108,6 +163,14 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
         return new IsomorphicTreeMapping<>(fMap, bMap, graph1, treeMapping.graph2);
     }
 
+    /**
+     * Computes an automorphism (i.e. an isomorphism mapping from a graph to itself).
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a mapping from graph to graph
+     */
     public static <V, E> IsomorphicTreeMapping<V, E> identity(Graph<V, E> graph){
         Map<V, V> fMap = new HashMap<>(graph.vertexSet().size());
         Map<V, V> bMap = new HashMap<>(graph.vertexSet().size());
