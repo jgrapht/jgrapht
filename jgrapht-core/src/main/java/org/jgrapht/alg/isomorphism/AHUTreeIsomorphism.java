@@ -1,14 +1,14 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphMetrics;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.shortestpath.GraphMeasurer;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.shortestpath.TreeMeasurer;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.util.RadixSort;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class AHUTreeIsomorphism<V, E> {
     private final Graph<V, E> graph1;
@@ -117,8 +117,7 @@ public class AHUTreeIsomorphism<V, E> {
                         }
                     }
 
-                    //TODO: optimize (switch to counting/radix sort)
-                    //list.sort(Integer::compareTo);
+//                    list.sort(Integer::compareTo);
                     RadixSort.sort(list);
 
                     StringBuilder sb = new StringBuilder();
@@ -169,6 +168,12 @@ public class AHUTreeIsomorphism<V, E> {
             }
         }
 
+        if (forwardMapping.size() != graph1.vertexSet().size()){
+            forwardMapping.clear();
+            backwardMapping.clear();
+            return false;
+        }
+
         return true;
     }
 
@@ -183,10 +188,6 @@ public class AHUTreeIsomorphism<V, E> {
 
             TreeMeasurer<V, E> graphMeasurer2 = new TreeMeasurer<>(graph2);
             V[] centers2 = (V[]) graphMeasurer2.getGraphCenter().toArray();
-//
-//            System.out.println(graph1);
-//            System.out.println(graph2);
-//            System.out.println(graphMeasurer1.getGraphCenter() + " " + graphMeasurer2.getGraphCenter());
 
             if (centers1.length == 1 && centers2.length == 1){
                 return isomorphismExists(centers1[0], centers2[0]);
@@ -219,5 +220,70 @@ public class AHUTreeIsomorphism<V, E> {
             return null;
         else
             return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, graph1, graph2);
+    }
+
+    private V getFreshVertex(Graph<V, E> graph){
+        Supplier<V> supplier = graph.getVertexSupplier();
+
+        if (Objects.isNull(supplier))
+            throw new IllegalArgumentException("vertex supplier cannot be null");
+
+        while (true){
+            V v = supplier.get();
+
+            if (!graph.containsVertex(v))
+                return v;
+        }
+    }
+
+    public boolean isomorphismExistsForest(){
+        return getIsomorphismForest() != null;
+    }
+
+    public IsomorphicTreeMapping<V, E> getIsomorphismForest(){
+        ConnectivityInspector<V, E> connectivityInspector1 = new ConnectivityInspector<>(graph1);
+        List<Set<V>> trees1 = connectivityInspector1.connectedSets();
+
+        ConnectivityInspector<V, E> connectivityInspector2 = new ConnectivityInspector<>(graph2);
+        List<Set<V>> trees2 = connectivityInspector2.connectedSets();
+
+        if (trees1.size() <= 1 && trees2.size() <= 1)
+            return getIsomorphism();
+
+        V fresh1 = getFreshVertex(graph1);
+        V fresh2 = getFreshVertex(graph2);
+
+        graph1.addVertex(fresh1);
+
+        for (Set<V> tree: trees1)
+            graph1.addEdge(fresh1, tree.iterator().next());
+
+        graph2.addVertex(fresh2);
+
+        for (Set<V> tree: trees2)
+            graph2.addEdge(fresh2, tree.iterator().next());
+
+        IsomorphicTreeMapping<V, E> mapping = new AHUTreeIsomorphism<>(graph1, fresh1, graph2, fresh2).getIsomorphism();
+
+        for (Set<V> tree: trees1)
+            graph1.removeEdge(fresh1, tree.iterator().next());
+
+        for (Set<V> tree: trees2)
+            graph2.removeEdge(fresh2, tree.iterator().next());
+
+        graph1.removeVertex(fresh1);
+        graph2.removeVertex(fresh2);
+
+        if (mapping != null){
+            Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
+            Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping());
+
+            newForwardMapping.remove(fresh1);
+            newBackwardMapping.remove(fresh2);
+
+            return new IsomorphicTreeMapping<>(newForwardMapping, newBackwardMapping, graph1, graph2);
+        }
+
+        return null;
     }
 }

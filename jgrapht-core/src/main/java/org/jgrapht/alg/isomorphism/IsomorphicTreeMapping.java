@@ -107,4 +107,16 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
 
         return new IsomorphicTreeMapping<>(fMap, bMap, graph1, treeMapping.graph2);
     }
+
+    public static <V, E> IsomorphicTreeMapping<V, E> identity(Graph<V, E> graph){
+        Map<V, V> fMap = new HashMap<>(graph.vertexSet().size());
+        Map<V, V> bMap = new HashMap<>(graph.vertexSet().size());
+
+        for (V v: graph.vertexSet()){
+            fMap.put(v, v);
+            bMap.put(v, v);
+        }
+
+        return new IsomorphicTreeMapping<>(fMap, bMap, graph, graph);
+    }
 }

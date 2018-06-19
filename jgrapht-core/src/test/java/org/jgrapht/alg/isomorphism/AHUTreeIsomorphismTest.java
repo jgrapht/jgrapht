@@ -72,6 +72,18 @@ public class AHUTreeIsomorphismTest {
         return containsAllEdges(graph2, graph1);
     }
 
+    private static Graph<Integer, DefaultEdge> generateTree(int N, Random random){
+        BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
+
+        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        generator.generateGraph(tree);
+
+        return tree;
+    }
+
     @Test
     public void testEmptyGraph(){
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -130,6 +142,14 @@ public class AHUTreeIsomorphismTest {
     public void testNullGraphs(){
         AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
                 new AHUTreeIsomorphism<>(null, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testOnlyOneNullGraph(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, null);
     }
 
     @Test
@@ -249,7 +269,8 @@ public class AHUTreeIsomorphismTest {
         tree1.addEdge(9, 12);
         tree1.addEdge(9, 13);
 
-        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair = generateIsomorphismTree(tree1, new Random(0x88));
+        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
+                generateIsomorphismTree(tree1, new Random(0x88));
 
         Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
         Map<Integer, Integer> mapping = pair.getSecond();
@@ -262,16 +283,70 @@ public class AHUTreeIsomorphismTest {
         Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
     }
 
-    private static Graph<Integer, DefaultEdge> generateTree(int N, Random random){
-        BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
+    @Test
+    public void testDisconnectedTree(){
+        Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        tree1.addVertex(1);
+        tree1.addVertex(2);
+        tree1.addVertex(3);
 
-        generator.generateGraph(tree);
+        tree1.addEdge(1, 2);
 
-        return tree;
+        Graph<Integer, DefaultEdge> tree2 = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        tree2.addVertex(11);
+        tree2.addVertex(21);
+        tree2.addVertex(31);
+
+        tree2.addEdge(11, 21);
+
+        AHUTreeIsomorphism<Integer, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, 1, tree2, 11);
+
+        Assert.assertFalse(isomorphism.isomorphismExists());
+        Assert.assertNull(isomorphism.getIsomorphism());
+
+        // Test as forest
+
+        Assert.assertTrue(isomorphism.isomorphismExistsForest());
+        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getIsomorphismForest();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+    }
+
+    @Test
+    public void testCompositionOfMappings(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        tree1.addVertex("1");
+        tree1.addVertex("2");
+        tree1.addEdge("1", "2");
+
+        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+        tree2.addVertex("a");
+        tree2.addVertex("b");
+        tree2.addEdge("a", "b");
+
+        Graph<String, DefaultEdge> tree3 = new SimpleGraph<>(DefaultEdge.class);
+        tree3.addVertex("A");
+        tree3.addVertex("B");
+        tree3.addEdge("A", "B");
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, tree2);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> mapping12 = isomorphism.getIsomorphism();
+
+        isomorphism = new AHUTreeIsomorphism<>(tree2, tree3);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> mapping23 = isomorphism.getIsomorphism();
+
+        IsomorphicTreeMapping<String, DefaultEdge> mapping13 = mapping12.compose(mapping23);
+
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree3, mapping13.getBackwardMapping())));
     }
 
     @Test
@@ -287,7 +362,35 @@ public class AHUTreeIsomorphismTest {
             tree1.addEdge(i, i + 1);
         }
 
-        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair = generateIsomorphismTree(tree1, new Random(0x88));
+        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
+                generateIsomorphismTree(tree1, new Random(0x88));
+
+        Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
+        Map<Integer, Integer> mapping = pair.getSecond();
+
+        AHUTreeIsomorphism<Integer, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, 1, tree2, mapping.get(1));
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+    }
+
+    @Test
+    public void testHugeNumberOfChildren(){
+        final int N = 100_000;
+        Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+
+        for (int i = 1; i <= N; i++) {
+            tree1.addVertex(i);
+        }
+
+        for (int i = 2; i <= N; i++) {
+            tree1.addEdge(1, i);
+        }
+
+        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
+                generateIsomorphismTree(tree1, new Random(0x2882));
 
         Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
         Map<Integer, Integer> mapping = pair.getSecond();
@@ -305,7 +408,8 @@ public class AHUTreeIsomorphismTest {
         final int N = 50_000;
         Graph<Integer, DefaultEdge> tree1 = generateTree(N, new Random(0x88));
 
-        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair = generateIsomorphismTree(tree1, new Random(0x88));
+        Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair =
+                generateIsomorphismTree(tree1, new Random(0x88));
 
         Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
         Map<Integer, Integer> mapping = pair.getSecond();
@@ -327,7 +431,7 @@ public class AHUTreeIsomorphismTest {
     @Test
     public void testRandomTrees(){
         Random random = new Random(0x88_88);
-        final int NUM_TESTS = 500;
+        final int NUM_TESTS = 1500;
 
         for (int test = 0; test < NUM_TESTS; test++) {
             final int N = 10 + random.nextInt(100);
