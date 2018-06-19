@@ -73,6 +73,99 @@ public class AHUTreeIsomorphismTest {
     }
 
     @Test
+    public void testEmptyGraph(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, tree1);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree1, treeMapping.getBackwardMapping())));
+    }
+
+    @Test
+    public void testUnrootedIsomorphism(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        tree1.addVertex("1");
+        tree1.addVertex("2");
+        tree1.addVertex("3");
+
+        tree1.addEdge("1", "2");
+        tree1.addEdge("2", "3");
+
+        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+        tree2.addVertex("A");
+        tree2.addVertex("B");
+        tree2.addVertex("C");
+
+        tree2.addEdge("A", "B");
+        tree2.addEdge("B", "C");
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, tree2);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+    }
+
+    @Test
+    public void testSingleVertex(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        tree1.addVertex("1");
+
+        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+        tree2.addVertex("A");
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, tree2);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNullGraphs(){
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(null, null);
+    }
+
+    @Test
+    public void testNonIsomorphicAsUnrootedButAsRooted(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+
+        for (char c = 'A'; c <= 'C'; c++) {
+            tree1.addVertex(String.valueOf(c));
+            tree2.addVertex(String.valueOf((char)(c + ' ')));
+        }
+
+        tree1.addEdge("A", "B");
+        tree1.addEdge("B", "C");
+
+        tree2.addEdge("a", "b");
+        tree2.addEdge("b", "c");
+
+        // They are not isomorphic as rooted trees
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, "A", tree2, "b");
+
+        Assert.assertFalse(isomorphism.isomorphismExists());
+        Assert.assertNull(isomorphism.getIsomorphism());
+
+        // But they are isomorphic as unrooted trees
+
+        isomorphism = new AHUTreeIsomorphism<>(tree1, tree2);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+    }
+
+    @Test
     public void testNonIsomorphic(){
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
         Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
@@ -93,6 +186,8 @@ public class AHUTreeIsomorphismTest {
         tree2.addEdge("c", "f");
         tree2.addEdge("c", "d");
         tree2.addEdge("c", "e");
+
+        // They are not isomorphic as rooted trees
 
         AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
                 new AHUTreeIsomorphism<>(tree1, "A", tree2, "a");
@@ -207,7 +302,7 @@ public class AHUTreeIsomorphismTest {
 
     @Test
     public void testHugeRandomTree(){
-        final int N = 100_000;
+        final int N = 50_000;
         Graph<Integer, DefaultEdge> tree1 = generateTree(N, new Random(0x88));
 
         Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair = generateIsomorphismTree(tree1, new Random(0x88));
@@ -221,5 +316,34 @@ public class AHUTreeIsomorphismTest {
         Assert.assertTrue(isomorphism.isomorphismExists());
         IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
         Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+
+        isomorphism = new AHUTreeIsomorphism<>(tree1, tree2);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+    }
+
+    @Test
+    public void testRandomTrees(){
+        Random random = new Random(0x88_88);
+        final int NUM_TESTS = 500;
+
+        for (int test = 0; test < NUM_TESTS; test++) {
+            final int N = 10 + random.nextInt(100);
+
+            Graph<Integer, DefaultEdge> tree1 = generateTree(N, random);
+
+            Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> pair = generateIsomorphismTree(tree1, random);
+
+            Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
+
+            AHUTreeIsomorphism<Integer, DefaultEdge> isomorphism =
+                    new AHUTreeIsomorphism<>(tree1, tree2);
+
+            Assert.assertTrue(isomorphism.isomorphismExists());
+            IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+            Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
+        }
     }
 }

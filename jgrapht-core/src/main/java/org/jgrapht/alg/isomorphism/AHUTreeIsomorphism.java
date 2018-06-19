@@ -1,13 +1,14 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMetrics;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
+import org.jgrapht.alg.shortestpath.TreeMeasurer;
 import org.jgrapht.traverse.BreadthFirstIterator;
+import org.jgrapht.util.RadixSort;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AHUTreeIsomorphism<V, E> {
     private final Graph<V, E> graph1;
@@ -20,15 +21,12 @@ public class AHUTreeIsomorphism<V, E> {
     private Map<V, V> backwardMapping;
 
     public AHUTreeIsomorphism(Graph<V, E> graph1, Graph<V, E> graph2){
-
-        this.graph1 = graph1;
-        this.graph2 = graph2;
+        this(graph1, null, graph2, null);
     }
 
     public AHUTreeIsomorphism(Graph<V, E> graph1, V root1, Graph<V, E> graph2, V root2){
-
-        this.graph1 = graph1;
-        this.graph2 = graph2;
+        this.graph1 = Objects.requireNonNull(graph1);
+        this.graph2 = Objects.requireNonNull(graph2);
 
         this.root1 = root1;
         this.root2 = root2;
@@ -54,9 +52,13 @@ public class AHUTreeIsomorphism<V, E> {
         return levels;
     }
 
-    boolean isomorphismExists(){
+    private boolean isomorphismExists(V root1, V root2){
         this.forwardMapping = new HashMap<>();
         this.backwardMapping = new HashMap<>();
+
+        // Are both graphs empty?
+        if (Objects.isNull(root1) && Objects.isNull(root2))
+            return true;
 
         @SuppressWarnings("unchecked")
         Map<V, Integer>[] canonicalName = new Map[2];
@@ -116,7 +118,8 @@ public class AHUTreeIsomorphism<V, E> {
                     }
 
                     //TODO: optimize (switch to counting/radix sort)
-                    list.sort(Integer::compareTo);
+                    //list.sort(Integer::compareTo);
+                    RadixSort.sort(list);
 
                     StringBuilder sb = new StringBuilder();
                     sb.append(1);
@@ -167,6 +170,41 @@ public class AHUTreeIsomorphism<V, E> {
         }
 
         return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean isomorphismExists(){
+        if (this.root1 == null || this.root2 == null){
+            if (graph1.vertexSet().isEmpty() && graph2.vertexSet().isEmpty())
+                return isomorphismExists(null, null);
+
+            TreeMeasurer<V, E> graphMeasurer1 = new TreeMeasurer<>(graph1);
+            V[] centers1 = (V[]) graphMeasurer1.getGraphCenter().toArray();
+
+            TreeMeasurer<V, E> graphMeasurer2 = new TreeMeasurer<>(graph2);
+            V[] centers2 = (V[]) graphMeasurer2.getGraphCenter().toArray();
+//
+//            System.out.println(graph1);
+//            System.out.println(graph2);
+//            System.out.println(graphMeasurer1.getGraphCenter() + " " + graphMeasurer2.getGraphCenter());
+
+            if (centers1.length == 1 && centers2.length == 1){
+                return isomorphismExists(centers1[0], centers2[0]);
+            }
+            else if (centers1.length == 2 && centers2.length == 2){
+                if (!isomorphismExists(centers1[0], centers2[0])){
+                    return isomorphismExists(centers1[1], centers2[1]);
+                }
+                else{
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
+        return isomorphismExists(this.root1, this.root2);
     }
 
     public IsomorphicTreeMapping<V, E> getIsomorphism(){

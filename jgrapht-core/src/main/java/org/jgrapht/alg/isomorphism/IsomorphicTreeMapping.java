@@ -23,6 +23,7 @@ import org.jgrapht.GraphMapping;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents a GraphMapping between two isomorphic trees.
@@ -78,6 +79,14 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
 
     public Map<V, V> getBackwardMapping(){
         return Collections.unmodifiableMap(backwardMapping);
+    }
+
+    public Set<V> getMappingDomain(){
+        return forwardMapping.keySet();
+    }
+
+    public Set<V> getMappingRange(){
+        return backwardMapping.keySet();
     }
 
 
