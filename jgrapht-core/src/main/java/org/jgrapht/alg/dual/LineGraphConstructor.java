@@ -15,11 +15,9 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.generate;
+package org.jgrapht.alg.dual;
 
 import org.jgrapht.Graph;
-
-import java.util.*;
 
 /**
  * Generator which produces the
@@ -45,55 +43,54 @@ import java.util.*;
  *
  *
  * @param <V> vertex type
- * @param <E> edge type
+ * @param <E1> edge type
+ * @param <E2> edge type
+ *
  */
-public class LineGraphGenerator <V, E>
-        implements
-        GraphGenerator<V, E, V>
+public class LineGraphConstructor<V, E1, E2>
 {
 
-    private final Graph<V, E> graph;
+    private final Graph<V, E1> graph;
 
     /**
      * Line Graph Generator
      *
      * @param graph input graph
      */
-    public LineGraphGenerator(Graph<V, E> graph)
+    public LineGraphConstructor(Graph<V, E1> graph)
     {
         this.graph = graph;
     }
 
-    @Override
-    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<E1, E2> target)
     {
         if (graph.getType().isDirected()) {
 
             for(V vertex : graph.vertexSet()){
-                for(E edge1 : graph.incomingEdgesOf(vertex)){
-                    for(E edge2 : graph.outgoingEdgesOf(vertex)){
-                        target.addVertex((V) edge1);
-                        target.addVertex((V) edge2);
-                        target.addEdge((V) edge1, (V) edge2);
+                for(E1 edge1 : graph.incomingEdgesOf(vertex)){
+                    for(E1 edge2 : graph.outgoingEdgesOf(vertex)){
+                        target.addVertex(edge1);
+                        target.addVertex(edge2);
+                        target.addEdge(edge1, edge2);
                     }
                 }
             }
         } else{ // undirected graph
 
-            for(E edge : graph.edgeSet()){
-                for(E edge1 : graph.incomingEdgesOf(graph.getEdgeTarget(edge))){
+            for(E1 edge : graph.edgeSet()){
+                for(E1 edge1 : graph.incomingEdgesOf(graph.getEdgeTarget(edge))){
                     if(edge != edge1){
-                        target.addVertex((V) edge);
-                        target.addVertex((V) edge1);
-                        target.addEdge((V)edge ,(V)edge1);
+                        target.addVertex(edge);
+                        target.addVertex(edge1);
+                        target.addEdge(edge ,edge1);
                     }
                 }
 
-                for(E edge1 : graph.incomingEdgesOf(graph.getEdgeSource(edge))){
+                for(E1 edge1 : graph.incomingEdgesOf(graph.getEdgeSource(edge))){
                     if(edge != edge1){
-                        target.addVertex((V) edge);
-                        target.addVertex((V) edge1);
-                        target.addEdge((V)edge ,(V)edge1);
+                        target.addVertex(edge);
+                        target.addVertex(edge1);
+                        target.addEdge(edge ,edge1);
                     }
                 }
             }

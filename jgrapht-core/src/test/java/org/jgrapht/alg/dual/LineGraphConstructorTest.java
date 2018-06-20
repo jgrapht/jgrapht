@@ -15,9 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.generate;
+package org.jgrapht.alg.dual;
 
 import org.jgrapht.*;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.generate.StarGraphGenerator;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
@@ -27,11 +29,12 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- * Tests for LineGraphGenerator
+ * Tests for LineGraphConstructor
  *
  * @author Nikhil Sharma
  */
-public class LineGraphGeneratorTest {
+public class LineGraphConstructorTest
+{
 
     @Test
     public void testEmptyGraph()
@@ -40,9 +43,9 @@ public class LineGraphGeneratorTest {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3));
 
-        LineGraphGenerator<Integer, DefaultEdge> lgg = new LineGraphGenerator<>(g);
-        Graph<Integer, DefaultEdge> target = new SimpleWeightedGraph<>(DefaultEdge.class);
-        lgg.generateGraph(target, null);
+        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
+        Graph<DefaultEdge, DefaultEdge> target = new SimpleWeightedGraph<>(DefaultEdge.class);
+        lgc.generateGraph(target);
 
         assertTrue(GraphTests.isEmpty(g));
     }
@@ -57,9 +60,9 @@ public class LineGraphGeneratorTest {
         Map<String, Integer> resultMap = new HashMap<>();
         generator.generateGraph(starGraph, resultMap);
 
-        LineGraphGenerator<Integer, DefaultEdge> lgg = new LineGraphGenerator<>(starGraph);
-        Graph<Integer, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
-        lgg.generateGraph(target, null);
+        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(starGraph);
+        Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
+        lgc.generateGraph(target);
 
         assertTrue(GraphTests.isComplete(target));
     }
@@ -76,9 +79,9 @@ public class LineGraphGeneratorTest {
         g.addEdge(4,3);
         g.addEdge(1,3);
 
-        LineGraphGenerator<Integer, DefaultEdge> lgg = new LineGraphGenerator<>(g);
-        Graph<Integer, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
-        lgg.generateGraph(target, null);
+        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
+        Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
+        lgc.generateGraph(target);
 
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(9, target.edgeSet().size());
@@ -120,9 +123,9 @@ public class LineGraphGeneratorTest {
         g.addEdge(3,4);
         g.addEdge(4,3);
 
-        LineGraphGenerator<Integer, DefaultEdge> lgg = new LineGraphGenerator<>(g);
-        Graph<Integer, DefaultEdge> target = new SimpleDirectedGraph<>(DefaultEdge.class);
-        lgg.generateGraph(target, null);
+        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
+        Graph<DefaultEdge, DefaultEdge> target = new SimpleDirectedGraph<>(DefaultEdge.class);
+        lgc.generateGraph(target);
 
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(12, target.edgeSet().size());
