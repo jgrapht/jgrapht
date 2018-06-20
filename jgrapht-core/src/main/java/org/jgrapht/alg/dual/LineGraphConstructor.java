@@ -53,7 +53,7 @@ public class LineGraphConstructor<V, E1, E2>
     private final Graph<V, E1> graph;
 
     /**
-     * Line Graph Generator
+     * Line Graph Constructor
      *
      * @param graph input graph
      */
@@ -62,7 +62,12 @@ public class LineGraphConstructor<V, E1, E2>
         this.graph = graph;
     }
 
-    public void generateGraph(Graph<E1, E2> target)
+    /**
+     * Constructs line graph of a given graph.
+     *
+     * @param target target graph
+     */
+    public void constructGraph(Graph<E1, E2> target)
     {
         if (graph.getType().isDirected()) {
 

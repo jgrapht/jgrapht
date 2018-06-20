@@ -45,7 +45,7 @@ public class LineGraphConstructorTest
 
         LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleWeightedGraph<>(DefaultEdge.class);
-        lgc.generateGraph(target);
+        lgc.constructGraph(target);
 
         assertTrue(GraphTests.isEmpty(g));
     }
@@ -62,7 +62,7 @@ public class LineGraphConstructorTest
 
         LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(starGraph);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
-        lgc.generateGraph(target);
+        lgc.constructGraph(target);
 
         assertTrue(GraphTests.isComplete(target));
     }
@@ -81,7 +81,7 @@ public class LineGraphConstructorTest
 
         LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
-        lgc.generateGraph(target);
+        lgc.constructGraph(target);
 
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(9, target.edgeSet().size());
@@ -125,7 +125,7 @@ public class LineGraphConstructorTest
 
         LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleDirectedGraph<>(DefaultEdge.class);
-        lgc.generateGraph(target);
+        lgc.constructGraph(target);
 
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(12, target.edgeSet().size());
