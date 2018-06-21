@@ -28,48 +28,46 @@ import java.util.stream.Collectors;
 /**
  * Heavy-path decomposition of a forest.
  *
+ * @author Alexandru Valeanu
+ * @since June 2018
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
 public class HeavyPathDecomposition<V, E> {
+
     private final Graph<V, E> graph;
     private final Set<V> roots;
 
     private Map<V, Integer> vertexMap;
     private List<V> indexList;
 
-    private int numberOfPaths;
-    private int[] sizeSubtree, father, depth;
-    private int[] component;
+    private int[] sizeSubtree, father, depth, component;
     private int[] path, lengthPath, positionInPath, firstNodeInPath;
 
+    private int numberOfPaths;
     private List<List<V>> paths;
 
     private Set<E> heavyEdges;
 
     /**
-     * Create an instance with a reference to the graph that we will decompose
+     * Create an instance with a reference to the tree that we will decompose and to the root of the tree.
      *
      * @param graph the input graph
      * @param root the root of the graph
      */
     public HeavyPathDecomposition(Graph<V, E> graph, V root) {
-        assert GraphTests.isForest(graph);
-
-        Set<V> roots = new HashSet<>();
-        roots.add(root);
-
-        this.graph = graph;
-        this.roots = roots;
-
-        decompose();
+        this(graph, Collections.singleton(root));
     }
 
     /**
-     * Create an instance with a reference to the graph that we will decompose
+     * Create an instance with a reference to the forest that we will decompose and to the sets of roots of the
+     * forest (one root per tree).
+     *
+     * Note: If two roots appear in the same tree, any one can be used as the actual root of that tree.
      *
      * @param graph the input graph
-     * @param roots the roots of the graph
+     * @param roots the set of roots of the graph
      */
     public HeavyPathDecomposition(Graph<V, E> graph, Set<V> roots) {
         assert GraphTests.isForest(graph);
@@ -80,21 +78,19 @@ public class HeavyPathDecomposition<V, E> {
         decompose();
     }
 
-    private void initialize(){
-        int n = graph.vertexSet().size();
+    private void allocateArrays(){
+        final int n = graph.vertexSet().size();
 
         sizeSubtree = new int[n];
         father = new int[n];
         depth = new int[n];
+        component = new int[n];
 
         path = new int[n];
         lengthPath = new int[n];
         positionInPath = new int[n];
-        firstNodeInPath = new int[n];
 
         heavyEdges = new HashSet<>();
-
-        component = new int[n];
     }
 
     private void normalizeGraph(){
@@ -113,10 +109,24 @@ public class HeavyPathDecomposition<V, E> {
         }
     }
 
-    private void dfsIterative(int u, int parent, int c){
-        ArrayDeque<Integer> stack = new ArrayDeque<>();
+    /**
+     * A iterative dfs implementation for computing the paths.
+     *
+     * For each node u we have to execute two sequences of operations:
+     *  1: before the 'recursive' call (the then part of the if-statement)
+     *  2: after the 'recursive' call (the else part of the if-statement)
+     *
+     * @param u the (normalized) vertex
+     * @param c the component number to be used for u's tree
+     */
+    private void dfsIterative(int u, int c){
+        /*
+            Set of vertices for which the the part of the if has been performed
+            (In other words: u ∈ explored iff dfs(u, c') has been called as some point)
+         */
         Set<Integer> explored = new HashSet<>();
 
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
         stack.push(u);
 
         while (!stack.isEmpty()){
@@ -125,7 +135,7 @@ public class HeavyPathDecomposition<V, E> {
             if (!explored.contains(u)){
                 explored.add(u);
 
-                // simulate the return from recursion
+                // simulate the return from recursion (the else part for u)
                 stack.push(u);
 
                 component[u] = c;
@@ -135,25 +145,36 @@ public class HeavyPathDecomposition<V, E> {
                 for (E edge: graph.edgesOf(vertexU)){
                     int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
+                    /*
+                        Check if son has not been explored (i.e. dfs(son, c) has not been called)
+                     */
                     if (!explored.contains(son)){
                         father[son] = u;
                         depth[son] = depth[u] + 1;
-
                         stack.push(son);
                     }
                 }
             }
             else{
+                /*
+                    For u compute heavySon. If it exists then u becomes part of heavySon's path.
+                    If not then start a new path with u.
+
+                    heavySon = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
+                    heavyEdge = edge(u, heavySon)
+                 */
+
                 int heavySon = -1;
                 E heavyEdge = null;
 
                 V vertexU = indexList.get(u);
-
                 for (E edge: graph.edgesOf(vertexU)){
                     int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
+                    /*
+                        Check if son if a descent of u and not its parent
+                     */
                     if (son != father[u]){
-
                         sizeSubtree[u] += sizeSubtree[son];
 
                         if (heavySon == -1 || sizeSubtree[heavySon] < sizeSubtree[son]) {
@@ -163,79 +184,58 @@ public class HeavyPathDecomposition<V, E> {
                     }
                 }
 
-                if (heavyEdge != null)
-                    heavyEdges.add(heavyEdge);
-
                 if (heavySon == -1)
                     path[u] = numberOfPaths++;
-                else
+                else {
+                    heavyEdges.add(heavyEdge);
                     path[u] = path[heavySon];
+                }
 
+                /*
+                    Compute the positions in reverse order: the first node in the path is the first one that was
+                    added (the order will be reversed in decompose).
+                 */
                 positionInPath[u] = lengthPath[path[u]]++;
             }
         }
     }
 
-    // TODO: remove?
-    private void dfs(int u, int parent, int c) {
-        component[u] = c;
-
-        sizeSubtree[u] = 1;
-        int heavySon = -1;
-        E heavyEdge = null;
-
-        V vertexU = indexList.get(u);
-        for (E edge: graph.edgesOf(vertexU)){
-            int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
-
-            if (son != parent){
-                father[son] = u;
-                depth[son] = depth[u] + 1;
-
-                dfs(son, u, c);
-
-                sizeSubtree[u] += sizeSubtree[son];
-
-                if (heavySon == -1 || sizeSubtree[heavySon] < sizeSubtree[son]) {
-                    heavySon = son;
-                    heavyEdge = edge;
-                }
-            }
-        }
-
-        if (heavyEdge != null)
-            heavyEdges.add(heavyEdge);
-
-        if (heavySon == -1)
-            path[u] = numberOfPaths++;
-        else
-            path[u] = path[heavySon];
-
-        positionInPath[u] = lengthPath[path[u]]++;
-    }
-
     private void decompose(){
+        /*
+            If we already have a decomposition stop.
+         */
         if (path != null)
             return;
 
         normalizeGraph();
-        initialize();
+        allocateArrays();
 
         Arrays.fill(father, -1);
         Arrays.fill(path, -1);
         Arrays.fill(depth, -1);
+        Arrays.fill(component, -1);
+        Arrays.fill(positionInPath, -1);
 
+        /*
+            Iterative through all roots and compute the paths for each tree individually
+         */
         int numberComponent = 0;
-
         for (V root: roots){
             int u = vertexMap.get(root);
 
-            if (sizeSubtree[u] == 0) {
-                numberComponent++;
-                dfsIterative(u, -1, numberComponent);
+            if (component[u] == -1) {
+                dfsIterative(u, numberComponent++);
             }
         }
 
+        firstNodeInPath = new int[numberOfPaths];
+
+        /*
+            Reverse the position of all vertices that are present in some path.
+            After this the positionInPath[u] = 0 if u is the first node in the path (i.e. the node closest to the root)
+
+            Also compute firstNodeInPath[i] = u such that path[u] = i and positionInPath[u] = 0
+         */
         for (int i = 0; i < graph.vertexSet().size(); i++){
             if (path[i] != -1){
                 positionInPath[i] = lengthPath[path[i]] - positionInPath[i] - 1;
@@ -245,6 +245,9 @@ public class HeavyPathDecomposition<V, E> {
             }
         }
 
+        /*
+            Compute the paths as unmodifiable data structures (list)
+         */
         List<List<V>> paths = new ArrayList<>(numberOfPaths);
 
         for (int i = 0; i < numberOfPaths; i++) {
@@ -271,92 +274,40 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * @return the path decomposition
+     * @return (immutable) path decomposition
      */
     public List<List<V>> getPaths(){
         return this.paths;
     }
 
     /**
-     * @return the number of paths in the decomposition
+     * @return number of paths in the decomposition
      */
     public int numberOfPaths(){
         return this.paths.size();
     }
 
     /**
-     * @return the set of heavy edges
+     * @return (immutable) set of heavy edges
      */
     public Set<E> getHeavyEdges(){
         return Collections.unmodifiableSet(this.heavyEdges);
     }
 
     /**
-     * @return the set of light edges
+     * @return (immutable) set of light edges
      */
     public Set<E> getLightEdges(){
         return Collections.unmodifiableSet(
                 graph.edgeSet().stream().filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet()));
     }
 
-    private int[] cloneArray(int[] array){
-        int[] clone = new int[array.length];
-        System.arraycopy(array, 0, clone, 0, array.length);
-        return clone;
-    }
-
     /**
-     * @return the father array
-     */
-    public int[] getFatherArray(){
-        return cloneArray(father);
-    }
-
-    /**
-     * @return the depth array
-     */
-    public int[] getDepthArray(){
-        return cloneArray(depth);
-    }
-
-    /**
-     * @return the sizeSubtree array
-     */
-    public int[] getSizeSubtreeArray(){
-        return cloneArray(sizeSubtree);
-    }
-
-    /**
-     * @return the component array
-     */
-    public int[] getComponentArray(){
-        return cloneArray(component);
-    }
-
-    /**
-     * @return the path array
-     */
-    public int[] getPathArray(){
-        return cloneArray(path);
-    }
-
-    /**
-     * @return the positionInPath array
-     */
-    public int[] getPositionInPathArray(){
-        return cloneArray(positionInPath);
-    }
-
-    /**
-     * @return the firstNodeInPath array
-     */
-    public int[] getFirstNodeInPathArray(){
-        return cloneArray(firstNodeInPath);
-    }
-
-    /**
-     * @param v a vertex
-     * @return the father of vertex v in the DFS tree
+     * Returns the father of vertex $v$ in the internal DFS tree/forest.
+     * If the vertex $v$ has not been explored or it is the root of its tree, $null$ will be returned.
+     *
+     * @param v vertex
+     * @return father of vertex $v$ in the DFS tree/forest
      */
     public V getFather(V v){
         int index = vertexMap.getOrDefault(v, -1);
@@ -368,8 +319,16 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * @param v a vertex
-     * @return the depth of vertex v in the DFS tree
+     * Returns the depth of vertex $v$ in the internal DFS tree/forest.
+     *
+     * <p> The depth of a vertex $v$ is defined as the number of edges traversed on
+     * the path from the root of the DFS tree to vertex $v$. The root of each DFS tree has depth 0.
+     *
+     * <p>
+     * If the vertex $v$ has not been explored, $-1$ will be returned.
+     *
+     * @param v vertex
+     * @return depth of vertex $v$ in the DFS tree/forest
      */
     public int getDepth(V v){
         int index = vertexMap.getOrDefault(v, -1);
@@ -381,10 +340,19 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * @param v a vertex
-     * @return the size of vertex v's subtree in the DFS tree
+     * Returns the size of vertex $v$'s subtree in the internal DFS tree/forest.
+     *
+     * <p>
+     * The size of a vertex $v$'s subtree is
+     * defined as the number of vertices in the subtree rooted at $v$ (including $v).
+     *
+     * <p>
+     * If the vertex $v$ has not been explored, $0$ will be returned.
+     *
+     * @param v vertex
+     * @return size of vertex $v$'s subtree in the DFS tree/forest
      */
-    public int getSizeSubTree(V v){
+    public int getSizeSubtree(V v){
         int index = vertexMap.getOrDefault(v, -1);
 
         if (index == -1)
@@ -394,24 +362,119 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * @param v a vertex
-     * @return the component of vertex v in the DFS tree
+     * Returns the component id of vertex $v$ in the internal DFS tree/forest. For two vertices $u$ and $v$,
+     * $component[u] = component[v]$ iff $u$ and $v$ are in the same tree.
+     *
+     * <p>
+     * The component ids are numbers between $0$ and $numberOfTrees - 1$.
+     *
+     * <p>
+     * If the vertex $v$ has not been explored, $-1$ will be returned.
+     *
+     * @param v vertex
+     * @return component id of vertex $v$ in the DFS tree/forest
      */
     public int getComponent(V v){
         int index = vertexMap.getOrDefault(v, -1);
 
         if (index == -1)
-            return 0;
+            return -1;
         else
             return component[index];
     }
 
     /**
-     * Returned the normalized version of the input graph.
+     * Return the normalized version of the input graph: a map from vertices to unique integers and the reverse
+     * mapping as a list.
+     *
+     * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
+     * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
+     *
+     * Note: The two structures returned are immutable.
      *
      * @return a pair which consists of the vertexMap and the indexList
      */
     public Pair<Map<V, Integer>, List<V>> getNormalizedGraph(){
         return Pair.of(Collections.unmodifiableMap(vertexMap), Collections.unmodifiableList(indexList));
+    }
+
+
+    /**
+     * Return a copy of the internal father array.
+     * For each vertex $v \in V$, $fatherArray[normalizeVertex(v)] = normalizeVertex(u)$ if $getFather(v) = u$ or
+     * $-1$ if $getFather(v) = null$.
+     *
+     * @return internal father array
+     */
+    public int[] getFatherArray(){
+        return father.clone();
+    }
+
+    /**
+     * Return a copy of the internal depth array.
+     * For each vertex $v \in V$, $depthArray[normalizeVertex(v)] = getDepth(v)$
+     *
+     * @return internal depth array
+     */
+    public int[] getDepthArray(){
+        return depth.clone();
+    }
+
+    /**
+     * Return a copy of the internal sizeSubtree array.
+     * For each vertex $v$, $sizeSubtreeArray[normalizeVertex(v)] = getSizeSubtree(v)$
+     *
+     * @return internal sizeSubtree array
+     */
+    public int[] getSizeSubtreeArray(){
+        return sizeSubtree.clone();
+    }
+
+    /**
+     * Return a copy of the internal component array.
+     * For each vertex $v$, $componentArray[normalizeVertex(v)] = getComponent(v)$
+     *
+     * @return internal component array
+     */
+    public int[] getComponentArray(){
+        return component.clone();
+    }
+
+    /**
+     * Return a copy of the internal path array.
+     * For each vertex $v$, $pathArray[normalizeVertex(v)] = i$ iff $v$ appears on path $i$ or $-1$
+     * if $v$ doesn't belong to any path.
+     *
+     * <p>
+     * Note: the indexing of paths is consistent with {@link #getPaths()}.
+     *
+     * @return internal path array
+     */
+    public int[] getPathArray(){
+        return path.clone();
+    }
+
+    /**
+     * Return a copy of the internal positionInPath array.
+     * For each vertex $v$, $positionInPathArray[normalizeVertex(v)] = k$ iff $v$ appears as the $k-th$ vertex on its
+     * path (0-indexed) or $-1$ if $v$ doesn't belong to any path.
+     *
+     * @return internal positionInPath array
+     */
+    public int[] getPositionInPathArray(){
+        return positionInPath.clone();
+    }
+
+    /**
+     * Return a copy of the internal firstNodeInPath array.
+     * For each path $i$, $firstNodeInPath[i] = normalizeVertex(v)$ iff $v$ appears as the first vertex on the path.
+     *
+     * <p>
+     * Note: the indexing of paths is consistent with {@link #getPaths()}.
+     *
+     * @return internal firstNodeInPath array
+     */
+    public int[] getFirstNodeInPathArray(){
+        return firstNodeInPath.clone();
     }
 }
