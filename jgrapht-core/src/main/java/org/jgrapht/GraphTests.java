@@ -17,13 +17,11 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.connectivity.BiconnectivityInspector;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.cycle.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -41,8 +39,7 @@ public abstract class GraphTests
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
     private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
     private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
-    private static final String GRAPH_MUST_BE_A_TREE = "Graph must be a tree";
-    private static final String GRAPH_MUST_BE_A_DAG = "Graph must be a directed and acyclic";
+    private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
@@ -569,31 +566,11 @@ public abstract class GraphTests
     }
 
     /**
-     * Tests whether a graph is a DAG (directed acyclic graph).
-     *
-     * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @throws NullPointerException if {@code graph} is {@code null}
-     * @return true if the graph is a DAG, false otherwise
-     */
-    public static <V, E> boolean isDAG(Graph<V, E> graph){
-        if (graph == null)
-            throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
-
-        if (!graph.getType().isDirected()) {
-            return false;
-        }
-
-        return !(new CycleDetector<>(graph).detectCycles());
-    }
-
-    /**
      * Checks that the specified graph is directed and throws a customized
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for being directed and not null
+     * @param graph the graph reference to check for beeing directed and not null
      * @param message detail message to be used in the event that an exception is thrown
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -616,7 +593,7 @@ public abstract class GraphTests
      * it is not. Also checks that the graph reference is not {@code null} and throws a
      * {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for being directed and not null
+     * @param graph the graph reference to check for beeing directed and not null
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return {@code graph} if directed and not {@code null}
@@ -673,7 +650,7 @@ public abstract class GraphTests
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for being directed or undirected and not null
+     * @param graph the graph reference to check for beeing directed or undirected and not null
      * @param message detail message to be used in the event that an exception is thrown
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -696,7 +673,7 @@ public abstract class GraphTests
      * it is not. Also checks that the graph reference is not {@code null} and throws a
      * {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for being directed and not null
+     * @param graph the graph reference to check for beeing directed and not null
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return {@code graph} if directed and not {@code null}
@@ -724,6 +701,27 @@ public abstract class GraphTests
         return new BergeGraphInspector<V, E>().isBerge(graph);
     }
 
+    /**
+     * Checks that the specified graph is weighted and throws a customized
+     * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
+     * {@code null} and throws a {@link NullPointerException} if it is.
+     *
+     * @param graph the graph reference to check for being weighted and not null
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return {@code graph} if directed and not {@code null}
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws IllegalArgumentException if {@code graph} is not weighted
+     */
+    public static <V, E> Graph<V, E> requireWeighted(Graph<V, E> graph)
+    {
+        if (graph == null)
+            throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
+        if (!graph.getType().isWeighted()) {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_WEIGHTED);
+        }
+        return graph;
+    }
 }
 
 // End GraphTests.java

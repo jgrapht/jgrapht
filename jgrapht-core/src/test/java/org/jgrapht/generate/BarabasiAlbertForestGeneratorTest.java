@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.generate;
 
 import org.jgrapht.Graph;
@@ -21,8 +38,7 @@ import static org.junit.Assert.fail;
 public class BarabasiAlbertForestGeneratorTest {
 
     @Test
-    public void testBadParameters()
-    {
+    public void testBadParameters() {
         try {
             new BarabasiAlbertForestGenerator<>(0, 10, 100);
             fail("Bad parameter");
@@ -43,8 +59,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test
-    public void testUndirected()
-    {
+    public void testUndirected() {
         final long seed = 5;
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -58,8 +73,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test
-    public void testNoAdditionalNodes()
-    {
+    public void testNoAdditionalNodes() {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new BarabasiAlbertForestGenerator<>(20, 20);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
@@ -71,8 +85,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test
-    public void testUndirectedWithOneInitialNode()
-    {
+    public void testUndirectedWithOneInitialNode() {
         final long seed = 7;
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -86,8 +99,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDirected()
-    {
+    public void testDirected() {
         final long seed = 5;
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -100,8 +112,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDirectedWithOneInitialNode()
-    {
+    public void testDirectedWithOneInitialNode() {
         final long seed = 13;
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -114,8 +125,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test
-    public void testUndirectedWithGraphWhichAlreadyHasSomeVertices()
-    {
+    public void testUndirectedWithGraphWhichAlreadyHasSomeVertices() {
         final long seed = 5;
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -131,8 +141,7 @@ public class BarabasiAlbertForestGeneratorTest {
     }
 
     @Test
-    public void testRandomTrees()
-    {
+    public void testRandomTrees() {
         Random random = new Random(0x88);
 
         final int NUM_TESTS = 10_000;
