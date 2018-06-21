@@ -17,35 +17,19 @@
  */
 package org.jgrapht;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.generate.StarGraphGenerator;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.*;
+
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test class GraphTests.

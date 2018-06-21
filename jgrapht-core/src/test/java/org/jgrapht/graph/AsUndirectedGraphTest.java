@@ -17,12 +17,16 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A unit test for the AsDirectedGraph view.
