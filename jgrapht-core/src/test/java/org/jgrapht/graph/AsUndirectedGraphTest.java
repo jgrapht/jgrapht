@@ -17,16 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A unit test for the AsDirectedGraph view.
@@ -47,25 +43,6 @@ public class AsUndirectedGraphTest
     private String v3 = "v3";
     private String v4 = "v4";
     private Graph<String, DefaultEdge> undirected;
-
-    /**
-     * .
-     */
-    @Before
-    public void setUp()
-    {
-        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
-        undirected = new AsUndirectedGraph<>(directed);
-
-        directed.addVertex(v1);
-        directed.addVertex(v2);
-        directed.addVertex(v3);
-        directed.addVertex(v4);
-        e12 = directed.addEdge(v1, v2);
-        e23 = directed.addEdge(v2, v3);
-        e24 = directed.addEdge(v2, v4);
-        loop = directed.addEdge(v4, v4);
-    }
 
     /**
      * .
@@ -227,6 +204,25 @@ public class AsUndirectedGraphTest
             "([v1, v2, v3, v4], [(v1,v2), (v2,v3), (v2,v4), (v4,v4)])", directed.toString());
         assertEquals(
             "([v1, v2, v3, v4], [{v1,v2}, {v2,v3}, {v2,v4}, {v4,v4}])", undirected.toString());
+    }
+
+    /**
+     * .
+     */
+    @Before
+    public void setUp()
+    {
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
+        undirected = new AsUndirectedGraph<>(directed);
+
+        directed.addVertex(v1);
+        directed.addVertex(v2);
+        directed.addVertex(v3);
+        directed.addVertex(v4);
+        e12 = directed.addEdge(v1, v2);
+        e23 = directed.addEdge(v2, v3);
+        e24 = directed.addEdge(v2, v4);
+        loop = directed.addEdge(v4, v4);
     }
 }
 
