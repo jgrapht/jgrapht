@@ -10,6 +10,7 @@
 	<name>JGraphT - Core</name>
 	<properties>
 		<main.basedir>${project.parent.basedir}</main.basedir>
+		<excludedGroups>org.jgrapht.SlowTests,org.jgrapht.OptionalTests</excludedGroups>
 	</properties>
 	<licenses>
 		<license>
@@ -69,7 +70,7 @@
 							<excludes>
 								<exclude>**/perf/**</exclude>
 							</excludes>
-							<excludedGroups>org.jgrapht.SlowTests</excludedGroups>
+							<excludedGroups>${excludedGroups}</excludedGroups>
 						</configuration>
 					</execution>
 				</executions>
@@ -82,6 +83,7 @@
 						<include>**/*Test.java</include>
 					</includes>
 	        		<groups>org.jgrapht.SlowTests</groups>
+		                <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
 	        	</configuration>
       		</plugin>
 			<plugin>

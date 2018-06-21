@@ -4,6 +4,10 @@ Changes to JGraphT in each version:
 
 - **version 1.2.1** (under development):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
+    - Restored optional tests for `BergeGraphInspector` (contributed by Philipp Kaesgen)
+    - Use POSIX tar format for assembly (contributed by Mark Raynsford)
+    - Moved BrownBacktrackingColoring out of experimental, fixed bugs and wrote tests (contributed by Joris Kinable)
+    - Removed code not dual licensed under EPL-1.0 and LGPL-2.1-or-later: `AsUnweightedGraph` and `AsUnweightedDirectedGraph` are gone. (supported by Robert Höttger and Oliver Kopp)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

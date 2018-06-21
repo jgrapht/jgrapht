@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by John Sichi and Contributors.
+ * (C) Copyright 2018-2018, by Philipp Kaesgen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,20 +15,14 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
+    
 package org.jgrapht;
 
-import com.googlecode.junittoolbox.*;
-import org.junit.experimental.categories.*;
-import org.junit.runner.*;
-
 /**
- * Suite of fast unit tests only (as run by mvn test).
+ * Marker interface to designate an optional tests category.
  * 
- * @author John Sichi
- */
-@RunWith(ParallelSuite.class)
-@Categories.ExcludeCategory({SlowTests.class, OptionalTests.class})
-@SuiteClasses({ "**/*Test.class", "!**/perf/**" })
-public class FastTestSuite
-{
+ * @author Philipp Kaesgen
+**/
+public interface OptionalTests {    
+
 }

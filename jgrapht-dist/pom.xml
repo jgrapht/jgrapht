@@ -80,6 +80,7 @@
 							<finalName>jgrapht-${project.version}</finalName>
 							<descriptorSourceDirectory>${basedir}/src/assembly</descriptorSourceDirectory>
 							<appendAssemblyId>false</appendAssemblyId>
+							<tarLongFileMode>posix</tarLongFileMode>
 						</configuration>
 					</execution>
 				</executions>
