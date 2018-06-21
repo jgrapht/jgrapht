@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-
 import java.io.Serializable;
 import java.util.Objects;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
 
 /**
  * Algorithms designed for unweighted graphs should also work on weighted graphs. This class
