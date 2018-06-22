@@ -8,6 +8,7 @@ before_install:
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
   - etc/expandMarkdown.sh
+  - rm -f docs/guide/.gitignore
   - etc/downloadJavadoc.sh
   - mv target/site/apidocs docs/javadoc-SNAPSHOT
 after_success:

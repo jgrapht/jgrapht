@@ -39,6 +39,7 @@ public abstract class GraphTests
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
     private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
     private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
+    private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
@@ -700,6 +701,27 @@ public abstract class GraphTests
         return new BergeGraphInspector<V, E>().isBerge(graph);
     }
 
+    /**
+     * Checks that the specified graph is weighted and throws a customized
+     * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
+     * {@code null} and throws a {@link NullPointerException} if it is.
+     *
+     * @param graph the graph reference to check for being weighted and not null
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return {@code graph} if directed and not {@code null}
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws IllegalArgumentException if {@code graph} is not weighted
+     */
+    public static <V, E> Graph<V, E> requireWeighted(Graph<V, E> graph)
+    {
+        if (graph == null)
+            throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
+        if (!graph.getType().isWeighted()) {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_WEIGHTED);
+        }
+        return graph;
+    }
 }
 
 // End GraphTests.java

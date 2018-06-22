@@ -17,7 +17,7 @@
  */
 package org.jgrapht.generate;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 import java.util.*;
 
@@ -39,6 +39,9 @@ import java.util.*;
  * generator also works with directed networks where the probabilities are proportional to the sum
  * of incoming and outgoing degrees. For a more general discussion see the paper: M. E. J. Newman.
  * The Structure and Function of Complex Networks. SIAM Rev., 45(2):167--256, 2003.
+ *
+ * <p>
+ *  For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
  * 
  * @author Dimitrios Michail
  * @since February 2017

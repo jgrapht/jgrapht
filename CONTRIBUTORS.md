@@ -110,6 +110,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Gilles Gosuin](https://github.com/gilles-gosuin)
 - [Viktor Volkov](https://github.com/chupacabra007)
 - [Philipp Kaesgen](https://github.com/PhilippKaesgen)
+- [Lukas Harzenetter](https://github.com/lharzenetter)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
