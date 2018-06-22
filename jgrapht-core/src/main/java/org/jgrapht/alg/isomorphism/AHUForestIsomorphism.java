@@ -2,6 +2,7 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.graph.AsSubgraph;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -88,27 +89,17 @@ public class AHUForestIsomorphism<V, E> {
 
         V fresh1 = getFreshVertex(forest1);
         V fresh2 = getFreshVertex(forest2);
-
-        System.out.println(fresh1);
-        System.out.println(fresh2);
-
         forest1.addVertex(fresh1);
 
-        for (Set<V> tree: trees1)
-            forest1.addEdge(fresh1, tree.iterator().next());
+        for (V root: roots1)
+            forest1.addEdge(fresh1, root);
 
         forest2.addVertex(fresh2);
 
-        for (Set<V> tree: trees2)
-            forest2.addEdge(fresh2, tree.iterator().next());
+        for (V root: roots2)
+            forest2.addEdge(fresh2, root);
 
         IsomorphicTreeMapping<V, E> mapping = new AHUTreeIsomorphism<>(forest1, fresh1, forest2, fresh2).getIsomorphism();
-
-        for (Set<V> tree: trees1)
-            forest1.removeEdge(fresh1, tree.iterator().next());
-
-        for (Set<V> tree: trees2)
-            forest2.removeEdge(fresh2, tree.iterator().next());
 
         forest1.removeVertex(fresh1);
         forest2.removeVertex(fresh2);
@@ -116,11 +107,28 @@ public class AHUForestIsomorphism<V, E> {
         this.computed = true;
 
         if (mapping != null){
-            Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
-            Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping());
+            Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping().size());
+            Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping().size());
 
-            newForwardMapping.remove(fresh1);
-            newBackwardMapping.remove(fresh2);
+            for (V root1: roots1){
+                V root2 = mapping.getVertexCorrespondence(root1, true);
+
+                Graph<V, E> subgraph1 = new AsSubgraph<>(forest1, connectivityInspector1.connectedSetOf(root1));
+                Graph<V, E> subgraph2 = new AsSubgraph<>(forest2, connectivityInspector2.connectedSetOf(root2));
+
+                IsomorphicTreeMapping<V, E> tmpMapping =
+                        new AHUTreeIsomorphism<>(
+                                subgraph1, root1,
+                                subgraph2, root2
+                        ).getIsomorphism();
+
+                assert tmpMapping != null;
+                assert Collections.disjoint(newForwardMapping.keySet(), tmpMapping.getForwardMapping().keySet());
+                assert Collections.disjoint(newBackwardMapping.keySet(), tmpMapping.getBackwardMapping().keySet());
+
+                newForwardMapping.putAll(tmpMapping.getForwardMapping());
+                newBackwardMapping.putAll(tmpMapping.getBackwardMapping());
+            }
 
             isomorphicMapping = new IsomorphicTreeMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
         }

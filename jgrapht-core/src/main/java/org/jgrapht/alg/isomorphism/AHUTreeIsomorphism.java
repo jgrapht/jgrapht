@@ -3,6 +3,7 @@ package org.jgrapht.alg.isomorphism;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.TreeMeasurer;
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.util.RadixSort;
 
@@ -50,6 +51,48 @@ public class AHUTreeIsomorphism<V, E> {
         return levels;
     }
 
+    private void matchVerticesWithSameLabel(V root1, V root2,
+                                            Map<V, Integer>[] canonicalName){
+        Queue<Pair<V, V>> queue = new ArrayDeque<>();
+        queue.add(Pair.of(root1, root2));
+
+        while (!queue.isEmpty()){
+            Pair<V, V> pair = queue.poll();
+            V u = pair.getFirst();
+            V v = pair.getSecond();
+
+            forwardMapping.put(u, v);
+            backwardMapping.put(v, u);
+
+            Map<Integer, List<V>> labelList = new HashMap<>(graph1.degreeOf(u));
+
+            for (E edge: graph1.edgesOf(u)){
+                V next = Graphs.getOppositeVertex(graph1, edge, u);
+
+                if (!forwardMapping.containsKey(next)){
+                    labelList.computeIfAbsent(canonicalName[0].get(next), x -> new ArrayList<>()).add(next);
+                }
+            }
+
+            for (E edge: graph2.edgesOf(v)){
+                V next = Graphs.getOppositeVertex(graph2, edge, v);
+
+                if (!backwardMapping.containsKey(next)){
+                    List<V> list = labelList.get(canonicalName[1].get(next));
+
+                    if (list == null || list.isEmpty()){
+                        forwardMapping.clear();
+                        backwardMapping.clear();
+                        return;
+                    }
+
+                    V pairedNext = list.remove(list.size() - 1);
+                    queue.add(Pair.of(pairedNext, next));
+                }
+            }
+        }
+    }
+
     private boolean isomorphismExists(V root1, V root2){
         this.forwardMapping = new HashMap<>();
         this.backwardMapping = new HashMap<>();
@@ -74,27 +117,25 @@ public class AHUTreeIsomorphism<V, E> {
         @SuppressWarnings("unchecked")
         Map<String, Integer> canonicalNameToInt = new HashMap<>();
 
+        List<Map<Integer, List<V>>> sameLabelBagsByLevel = new ArrayList<>(nodesByLevel1.size());
+
         int freshName = 0;
+
         for (int lvl = MAX_LEVEL; lvl >= 0; lvl--) {
-
-            if (lvl % 2 == MAX_LEVEL % 2)
-                freshName = 0;
-
             @SuppressWarnings("unchecked")
             List<V>[] level = new List[2];
 
             level[0] = nodesByLevel1.get(lvl);
             level[1] = nodesByLevel2.get(lvl);
 
-            if (level[0].size() != level[1].size())
+            if (level[0].size() != level[1].size()) {
                 return false;
+            }
 
             final int n = level[0].size();
 
             @SuppressWarnings("unchecked")
-            List<List<V>>[] sameLabelBags = new List[2];
-            sameLabelBags[0] = new ArrayList<>(n);
-            sameLabelBags[1] = new ArrayList<>(n);
+            Map<Integer, List<V>> sameLabelBags = new HashMap<>(n);
 
             for (int k = 0; k < 2; k++) {
                 for (int i = 0; i < n; i++) {
@@ -119,10 +160,10 @@ public class AHUTreeIsomorphism<V, E> {
                     RadixSort.sort(list);
 
                     StringBuilder sb = new StringBuilder();
-                    sb.append(1);
+                    sb.append(1).append(",");
 
                     for (int x: list)
-                        sb.append(x);
+                        sb.append(x).append(",");
 
                     sb.append(0);
 
@@ -137,34 +178,19 @@ public class AHUTreeIsomorphism<V, E> {
 
                     canonicalName[k].put(u, intName);
 
-                    while (sameLabelBags[k].size() <= intName){
-                        sameLabelBags[k].add(new ArrayList<>());
+                    if (k == 1){
+                        List<V> bag = sameLabelBags.computeIfAbsent(intName, x -> new ArrayList<>());
+                        bag.add(u);
                     }
-
-                    sameLabelBags[k].get(intName).add(u);
                 }
             }
 
-            if (sameLabelBags[0].size() != sameLabelBags[1].size())
-                return false;
-
-            final int m = sameLabelBags[0].size();
-            for (int i = 0; i < m; i++) {
-                List<V> bag1 = sameLabelBags[0].get(i);
-                List<V> bag2 = sameLabelBags[1].get(i);
-
-                if (bag1.size() != bag2.size())
-                    return false;
-
-                for (int j = 0; j < bag1.size(); j++) {
-                    V u = bag1.get(j);
-                    V v = bag2.get(j);
-
-                    forwardMapping.put(u, v);
-                    backwardMapping.put(v, u);
-                }
-            }
+            sameLabelBagsByLevel.add(sameLabelBags);
         }
+
+        Collections.reverse(sameLabelBagsByLevel);
+
+        matchVerticesWithSameLabel(root1, root2, canonicalName);
 
         if (forwardMapping.size() != graph1.vertexSet().size()){
             forwardMapping.clear();
