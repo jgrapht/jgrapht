@@ -38,8 +38,6 @@ import java.util.stream.Collectors;
  */
 public class HeavyPathDecompositionTest {
 
-    private boolean SHOW_MAX_CHAIN_DEPTH = false;
-
     public static int log2(int n) // returns 0 for n=0
     {
         int log = 0;
@@ -50,6 +48,9 @@ public class HeavyPathDecompositionTest {
         return log + ( n >>> 1 );
     }
 
+    /*
+        Count the maximum number of distinct paths on any root-to-leaf path
+     */
     public static <V, E> int countMaxPath(Set<V> vertexSet, HeavyPathDecomposition<V, E> decomposition){
         List<List<V>> paths = decomposition.getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
@@ -156,6 +157,41 @@ public class HeavyPathDecompositionTest {
         return true;
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testNullGraph(){
+        HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(null, 1);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNullRoot(){
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        String s = null;
+
+        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(graph, s);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRootNotInTree(){
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex("a");
+
+        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(graph, "b");
+    }
+
+    @Test
+    public void testOneVertex(){
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex("a");
+
+        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(graph, "a");
+
+        Assert.assertEquals(1, heavyPathDecomposition.numberOfPaths());
+    }
+
     @Test
     public void testLineGraph(){
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -210,10 +246,8 @@ public class HeavyPathDecompositionTest {
 
         Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
 
-        if (SHOW_MAX_CHAIN_DEPTH) {
-            System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
-                    log2(graph.vertexSet().size()));
-        }
+        Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
+                <= log2(graph.vertexSet().size()));
     }
 
     @Test
@@ -255,10 +289,8 @@ public class HeavyPathDecompositionTest {
 
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
 
-            if (SHOW_MAX_CHAIN_DEPTH) {
-                System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
-                        log2(graph.vertexSet().size()));
-            }
+            Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
+                    <= log2(graph.vertexSet().size()));
         }
     }
 
@@ -286,10 +318,8 @@ public class HeavyPathDecompositionTest {
 
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
 
-            if (SHOW_MAX_CHAIN_DEPTH) {
-                System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
-                        log2(graph.vertexSet().size()));
-            }
+            Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
+                    <= log2(graph.vertexSet().size()));
         }
     }
 
@@ -314,9 +344,7 @@ public class HeavyPathDecompositionTest {
 
         Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
 
-        if (SHOW_MAX_CHAIN_DEPTH) {
-            System.out.println(countMaxPath(graph.vertexSet(), heavyPathDecomposition) + " | " +
-                    log2(graph.vertexSet().size()));
-        }
+        Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
+                <= log2(graph.vertexSet().size()));
     }
 }

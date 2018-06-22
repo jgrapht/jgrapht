@@ -26,7 +26,32 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Heavy-path decomposition of a forest.
+ * Algorithm for computing the heavy path decomposition of a tree/forest.
+ *
+ * <p>
+ *  Heavy path decomposition is a technique for decomposing a rooted tree/forest
+ *  into a set of disjoint paths.
+ *
+ * <p>
+ * In a heavy path decomposition,
+ * each non-leaf node selects one "heavy edge", the edge to the child that has the greatest
+ * number of descendants (breaking ties arbitrarily). The set of these edges form the paths of the decomposition.
+ *
+ * <p>
+ * If the edges of a tree/forest T are partitioned into a set of heavy edges and light edges,
+ * with one heavy edge from each non-leaf node to one of its children,
+ * then the subgraph formed by the heavy edges consists of a set of paths,
+ * with each non-leaf vertex belonging to exactly one path, the one containing its heavy edge.
+ * Leaf nodes of the tree that are not the endpoint of a heavy edge may be considered as forming paths of length zero.
+ * In this way, each vertex belongs to exactly one of the paths and each path has a head vertex, its topmost vertex.
+ *
+ * <p>
+ *  A benefit on this decomposition is that on any root-to-leaf path of a tree with n nodes,
+ *  there can be at most $log_2(n)$ light edges.
+ *
+ * <p>
+ *   This implementation runs in $O(|V|)$ time and requires $O(|V|)$ extra memory, where $|V|$ is the number of
+ *   vertices in the tree/forest.
  *
  * @author Alexandru Valeanu
  * @since June 2018
@@ -53,11 +78,13 @@ public class HeavyPathDecomposition<V, E> {
     /**
      * Create an instance with a reference to the tree that we will decompose and to the root of the tree.
      *
-     * @param graph the input graph
-     * @param root the root of the graph
+     * Note: The constructor will NOT check if the input tree is a valid tree.
+     *
+     * @param tree the input tree
+     * @param root the root of the tree
      */
-    public HeavyPathDecomposition(Graph<V, E> graph, V root) {
-        this(graph, Collections.singleton(root));
+    public HeavyPathDecomposition(Graph<V, E> tree, V root) {
+        this(tree, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
     /**
@@ -65,15 +92,16 @@ public class HeavyPathDecomposition<V, E> {
      * forest (one root per tree).
      *
      * Note: If two roots appear in the same tree, any one can be used as the actual root of that tree.
+     * Note: The constructor will NOT check if the input forest is a valid forest.
      *
-     * @param graph the input graph
+     * @param forest the input forest
      * @param roots the set of roots of the graph
      */
-    public HeavyPathDecomposition(Graph<V, E> graph, Set<V> roots) {
-        assert GraphTests.isForest(graph);
+    public HeavyPathDecomposition(Graph<V, E> forest, Set<V> roots) {
+        assert GraphTests.isForest(forest);
 
-        this.graph = graph;
-        this.roots = roots;
+        this.graph = Objects.requireNonNull(forest, "input tree/forrest cannot be null");
+        this.roots = Objects.requireNonNull(roots, "set of roots cannot be null");
 
         decompose();
     }
@@ -95,7 +123,7 @@ public class HeavyPathDecomposition<V, E> {
 
     private void normalizeGraph(){
         /*
-         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
+         * Normalize the graph: map each vertex to an integer (using a HashMap) keep the reverse
          * mapping (using an ArrayList)
          */
         vertexMap = new HashMap<>(graph.vertexSet().size());
@@ -221,7 +249,10 @@ public class HeavyPathDecomposition<V, E> {
          */
         int numberComponent = 0;
         for (V root: roots){
-            int u = vertexMap.get(root);
+            Integer u = vertexMap.get(root);
+
+            if (u == null)
+                throw new IllegalArgumentException("root: " + root + " not contained in graph");
 
             if (component[u] == -1) {
                 dfsIterative(u, numberComponent++);
