@@ -13,7 +13,7 @@ import java.util.*;
 
 public class AHUTreeIsomorphismTest {
     
-    private static <V> Graph<V, DefaultEdge> generatedMappedTree(Graph<V, DefaultEdge> tree,
+    public static <V> Graph<V, DefaultEdge> generatedMappedTree(Graph<V, DefaultEdge> tree,
                                                                    Map<V, V> mapping){
 
         Graph<V, DefaultEdge> isoTree = new SimpleGraph<>(DefaultEdge.class);
@@ -29,8 +29,8 @@ public class AHUTreeIsomorphismTest {
         
         return isoTree;
     }
-    
-    private static Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> 
+
+    public static Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>>
     generateIsomorphismTree(Graph<Integer, DefaultEdge> tree, Random random){
         List<Integer> permutation = new ArrayList<>(tree.vertexSet().size());
 
@@ -50,7 +50,7 @@ public class AHUTreeIsomorphismTest {
         return Pair.of(generatedMappedTree(tree, mapping), mapping);
     }
 
-    private static <V, E> boolean containsAllEdges(Graph<V, E> graph1, Graph<V, E> graph2) {
+    public static <V, E> boolean containsAllEdges(Graph<V, E> graph1, Graph<V, E> graph2) {
         for (E edge: graph1.edgeSet()){
             V u = graph1.getEdgeSource(edge);
             V v = graph1.getEdgeTarget(edge);
@@ -63,7 +63,7 @@ public class AHUTreeIsomorphismTest {
     }
 
 
-    private static <V, E> boolean areIdentical(Graph<V, E> graph1, Graph<V, E> graph2){
+    public static <V, E> boolean areIdentical(Graph<V, E> graph1, Graph<V, E> graph2){
         if (!graph1.vertexSet().equals(graph2.vertexSet()))
             return false;
 
@@ -72,7 +72,7 @@ public class AHUTreeIsomorphismTest {
         return containsAllEdges(graph2, graph1);
     }
 
-    private static Graph<Integer, DefaultEdge> generateTree(int N, Random random){
+    public static Graph<Integer, DefaultEdge> generateTree(int N, Random random){
         BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
                 new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
 
@@ -311,23 +311,12 @@ public class AHUTreeIsomorphismTest {
 
         // Test as forest
 
-        Assert.assertTrue(isomorphism.isomorphismExistsForest());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getIsomorphismForest();
+        AHUForestIsomorphism<Integer, DefaultEdge> forestIsomorphism =
+                new AHUForestIsomorphism<>(tree1, 1, tree2, 11);
+
+        Assert.assertTrue(forestIsomorphism.isomorphismExists());
+        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = forestIsomorphism.getIsomorphism();
         Assert.assertTrue(areIdentical(tree1, generatedMappedTree(tree2, treeMapping.getBackwardMapping())));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMissingSupplier(){
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("1");
-        tree1.addVertex("2");
-        tree1.addEdge("1", "2");
-        tree1.addVertex("3");
-
-        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
-                new AHUTreeIsomorphism<>(tree1, tree1);
-
-        isomorphism.isomorphismExistsForest();
     }
 
     @Test(expected = IllegalArgumentException.class)

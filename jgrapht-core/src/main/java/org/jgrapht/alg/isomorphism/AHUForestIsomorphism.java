@@ -1,0 +1,130 @@
+package org.jgrapht.alg.isomorphism;
+
+import org.jgrapht.Graph;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+
+import java.util.*;
+import java.util.function.Supplier;
+
+public class AHUForestIsomorphism<V, E> {
+    private final Graph<V, E> forest1;
+    private final Graph<V, E> forest2;
+
+    private Set<V> roots1;
+    private Set<V> roots2;
+
+    private boolean computed = false;
+    private IsomorphicTreeMapping<V, E> isomorphicMapping = null;
+
+    public AHUForestIsomorphism(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
+        this(tree1, Collections.singleton(Objects.requireNonNull(root1, "root cannot be null")),
+                tree2, Collections.singleton(Objects.requireNonNull(root2, "root cannot be null")));
+    }
+
+    public AHUForestIsomorphism(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
+        this.forest1 = Objects.requireNonNull(forest1, "input forest cannot be null");
+        this.forest2 = Objects.requireNonNull(forest2, "input forest cannot be null");
+
+        this.roots1 = Objects.requireNonNull(roots1, "set of roots cannot be null");
+        this.roots2 = Objects.requireNonNull(roots2, "set of roots cannot be null");
+
+        if (roots1.isEmpty()){
+            throw new IllegalArgumentException("root set cannot be empty");
+        }
+
+        if (roots2.isEmpty()){
+            throw new IllegalArgumentException("root set cannot be empty");
+        }
+
+        if (!forest1.vertexSet().containsAll(roots1)){
+            throw new IllegalArgumentException("root not contained in forest");
+        }
+
+        if (!forest2.vertexSet().containsAll(roots2)){
+            throw new IllegalArgumentException("root not contained in forest");
+        }
+    }
+
+    private V getFreshVertex(Graph<V, E> graph){
+        Supplier<V> supplier = graph.getVertexSupplier();
+
+        if (Objects.isNull(supplier))
+            throw new IllegalArgumentException("vertex supplier cannot be null");
+
+        while (true){
+            V v = supplier.get();
+
+            if (!graph.containsVertex(v))
+                return v;
+        }
+    }
+
+    public boolean isomorphismExists(){
+        if (!computed){
+            isomorphicMapping = getIsomorphism();
+        }
+
+        return isomorphicMapping != null;
+    }
+
+    public IsomorphicTreeMapping<V, E> getIsomorphism(){
+        if (computed)
+            return isomorphicMapping;
+
+        ConnectivityInspector<V, E> connectivityInspector1 = new ConnectivityInspector<>(forest1);
+        List<Set<V>> trees1 = connectivityInspector1.connectedSets();
+
+        ConnectivityInspector<V, E> connectivityInspector2 = new ConnectivityInspector<>(forest2);
+        List<Set<V>> trees2 = connectivityInspector2.connectedSets();
+
+        if (trees1.size() <= 1 && trees2.size() <= 1) {
+            V root1 = roots1.iterator().next();
+            V root2 = roots2.iterator().next();
+
+            computed = true;
+            isomorphicMapping = new AHUTreeIsomorphism<>(forest1, root1, forest2, root2).getIsomorphism();
+            return isomorphicMapping;
+        }
+
+        V fresh1 = getFreshVertex(forest1);
+        V fresh2 = getFreshVertex(forest2);
+
+        System.out.println(fresh1);
+        System.out.println(fresh2);
+
+        forest1.addVertex(fresh1);
+
+        for (Set<V> tree: trees1)
+            forest1.addEdge(fresh1, tree.iterator().next());
+
+        forest2.addVertex(fresh2);
+
+        for (Set<V> tree: trees2)
+            forest2.addEdge(fresh2, tree.iterator().next());
+
+        IsomorphicTreeMapping<V, E> mapping = new AHUTreeIsomorphism<>(forest1, fresh1, forest2, fresh2).getIsomorphism();
+
+        for (Set<V> tree: trees1)
+            forest1.removeEdge(fresh1, tree.iterator().next());
+
+        for (Set<V> tree: trees2)
+            forest2.removeEdge(fresh2, tree.iterator().next());
+
+        forest1.removeVertex(fresh1);
+        forest2.removeVertex(fresh2);
+
+        this.computed = true;
+
+        if (mapping != null){
+            Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
+            Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping());
+
+            newForwardMapping.remove(fresh1);
+            newBackwardMapping.remove(fresh2);
+
+            isomorphicMapping = new IsomorphicTreeMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
+        }
+
+        return isomorphicMapping;
+    }
+}

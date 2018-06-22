@@ -26,9 +26,13 @@ import java.util.ListIterator;
  *
  * This algorithms runs in $O(N + V)$ time and uses $O(N + V)$ extra memory, where $V = 256$.
  *
+ * If $N \leq RadixSort.CUT\_OFF$ then the standard Java sorting algorithm is used.
+ *
  * The specified list must be modifiable, but need not be resizable.
  */
 public class RadixSort {
+
+    public static int CUT_OFF = 40;
 
     private static final int MAX_DIGITS = 32;
     private static final int MAX_D = 4;
@@ -70,7 +74,7 @@ public class RadixSort {
 
         final int n = list.size();
 
-        if (n <= 40){
+        if (n <= CUT_OFF){
             list.sort(null);
             return;
         }
