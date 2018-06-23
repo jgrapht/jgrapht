@@ -18,7 +18,6 @@
 package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 
@@ -46,7 +45,7 @@ import java.util.stream.Collectors;
  * In this way, each vertex belongs to exactly one of the paths and each path has a head vertex, its topmost vertex.
  *
  * <p>
- *  A benefit on this decomposition is that on any root-to-leaf path of a tree with n nodes,
+ *  A benefit of this decomposition is that on any root-to-leaf path of a tree with n nodes,
  *  there can be at most $log_2(n)$ light edges.
  *
  * <p>
@@ -98,8 +97,6 @@ public class HeavyPathDecomposition<V, E> {
      * @param roots the set of roots of the graph
      */
     public HeavyPathDecomposition(Graph<V, E> forest, Set<V> roots) {
-        assert GraphTests.isForest(forest);
-
         this.graph = Objects.requireNonNull(forest, "input tree/forrest cannot be null");
         this.roots = Objects.requireNonNull(roots, "set of roots cannot be null");
 
@@ -138,7 +135,7 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * A iterative dfs implementation for computing the paths.
+     * An iterative dfs implementation for computing the paths.
      *
      * For each node u we have to execute two sequences of operations:
      *  1: before the 'recursive' call (the then part of the if-statement)
