@@ -1,8 +1,9 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -68,6 +69,24 @@ public class AHUForestIsomorphism<V, E> {
         return isomorphicMapping != null;
     }
 
+    private Graph<V, E> takeSubraph(Graph<V, E> graph, Set<V> vertices){
+        Graph<V, E> subgraph = new SimpleGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), false);
+
+        for (V v: vertices)
+            subgraph.addVertex(v);
+
+        for (V v: vertices){
+            for (E edge: graph.edgesOf(v)){
+                V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                if (vertices.contains(u))
+                    subgraph.addEdge(u, v);
+            }
+        }
+
+        return subgraph;
+    }
+
     public IsomorphicTreeMapping<V, E> getIsomorphism(){
         if (computed)
             return isomorphicMapping;
@@ -89,6 +108,7 @@ public class AHUForestIsomorphism<V, E> {
 
         V fresh1 = getFreshVertex(forest1);
         V fresh2 = getFreshVertex(forest2);
+
         forest1.addVertex(fresh1);
 
         for (V root: roots1)
@@ -113,8 +133,11 @@ public class AHUForestIsomorphism<V, E> {
             for (V root1: roots1){
                 V root2 = mapping.getVertexCorrespondence(root1, true);
 
-                Graph<V, E> subgraph1 = new AsSubgraph<>(forest1, connectivityInspector1.connectedSetOf(root1));
-                Graph<V, E> subgraph2 = new AsSubgraph<>(forest2, connectivityInspector2.connectedSetOf(root2));
+//                Graph<V, E> subgraph1 = new AsSubgraph<>(forest1, connectivityInspector1.connectedSetOf(root1));
+//                Graph<V, E> subgraph2 = new AsSubgraph<>(forest2, connectivityInspector2.connectedSetOf(root2));
+
+                Graph<V, E> subgraph1 = takeSubraph(forest1, connectivityInspector1.connectedSetOf(root1));
+                Graph<V, E> subgraph2 = takeSubraph(forest2, connectivityInspector2.connectedSetOf(root2));
 
                 IsomorphicTreeMapping<V, E> tmpMapping =
                         new AHUTreeIsomorphism<>(

@@ -106,6 +106,36 @@ public class AHUTreeIsomorphismTest {
     }
 
     @Test
+    public void testSingleVertex(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        tree1.addVertex("1");
+
+        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
+        tree2.addVertex("A");
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, tree2);
+
+        Assert.assertTrue(isomorphism.isomorphismExists());
+        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
+        Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNullGraphs(){
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(null, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testOnlyOneNullGraph(){
+        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+
+        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
+                new AHUTreeIsomorphism<>(tree1, null);
+    }
+
+    @Test
     public void testUnrootedIsomorphism(){
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
         tree1.addVertex("1");
@@ -132,7 +162,7 @@ public class AHUTreeIsomorphismTest {
     }
 
     @Test
-    public void test210(){
+    public void testCornerCase(){
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
         for (int i = 0; i <= 10; i++)
@@ -182,7 +212,7 @@ public class AHUTreeIsomorphismTest {
     }
 
     @Test
-    public void test21(){
+    public void testCornerCase2(){
 //        ([1, 2, 5, 6, 8, 9, 10, 11, 14, 15], [{2,1}, {5,1}, {6,1}, {8,1}, {9,6}, {10,1}, {11,6}, {14,5}, {15,1}])
 //        ([1, 18, 3, 19, 4, 5, 8, 9, 12, 13], [{8,12}, {3,12}, {18,12}, {9,12}, {5,18}, {19,12}, {13,12}, {4,13}, {1,18}])
 
@@ -203,7 +233,7 @@ public class AHUTreeIsomorphismTest {
     }
 
     @Test
-    public void test211(){
+    public void testCornerCase3(){
 //        ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], [{1,0}, {2,0}, {3,0}, {4,2}, {5,0}, {6,5}, {7,2}, {8,5}, {9,4}, {10,6}, {11,4}, {12,0}, {13,0}])
 //        ([10, 2, 12, 7, 5, 3, 4, 0, 6, 1, 13, 9, 8, 11], [{2,10}, {12,10}, {7,10}, {5,12}, {3,10}, {4,3}, {0,12}, {6,3}, {1,5}, {13,4}, {9,5}, {8,10}, {11,10}])
 
@@ -221,36 +251,6 @@ public class AHUTreeIsomorphismTest {
         Assert.assertTrue(isomorphism.isomorphismExists());
         IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
-    }
-
-    @Test
-    public void testSingleVertex(){
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-        tree1.addVertex("1");
-
-        Graph<String, DefaultEdge> tree2 = new SimpleGraph<>(DefaultEdge.class);
-        tree2.addVertex("A");
-
-        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
-                new AHUTreeIsomorphism<>(tree1, tree2);
-
-        Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getIsomorphism();
-        Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testNullGraphs(){
-        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
-                new AHUTreeIsomorphism<>(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testOnlyOneNullGraph(){
-        Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
-
-        AHUTreeIsomorphism<String, DefaultEdge> isomorphism =
-                new AHUTreeIsomorphism<>(tree1, null);
     }
 
     @Test
