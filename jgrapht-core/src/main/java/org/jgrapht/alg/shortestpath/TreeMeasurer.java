@@ -18,17 +18,12 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.*;
 
 /**
- * Algorithm class which computes a number of distance related metrics for trees. A summary of various
- * distance metrics can be found
- * <a href="https://en.wikipedia.org/wiki/Distance_(graph_theory)">here</a>.
+ * Algorithm class which computes a number of distance related metrics for trees.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -41,8 +36,7 @@ public class TreeMeasurer<V, E> {
     private final Graph<V, E> graph;
 
     /**
-     * Constructs a new instance of GraphMeasurer. {@link FloydWarshallShortestPaths} is used as the
-     * default shortest path algorithm.
+     * Constructs a new instance of TreeMeasurer.
      *
      * @param graph input graph
      */
