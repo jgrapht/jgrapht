@@ -206,7 +206,7 @@ class BlossomVTree {
      * @return new TreeNodeIterator for this tree
      */
     public TreeNodeIterator treeNodeIterator() {
-        return new TreeNodeIterator();
+        return new TreeNodeIterator(root);
     }
 
     /**
@@ -216,6 +216,82 @@ class BlossomVTree {
      */
     public TreeEdgeIterator treeEdgeIterator() {
         return new TreeEdgeIterator();
+    }
+
+    /**
+     * An iterator over tree nodes. This iterator traverses the nodes of the tree in a depth-first order.
+     */
+    public static class TreeNodeIterator implements Iterator<BlossomVNode> {
+        /**
+         * The node this iterator is currently on
+         */
+        private BlossomVNode currentNode;
+        /**
+         * Support variable to determine whether {@code currentNode} has been returned or not
+         */
+        private BlossomVNode current;
+        /**
+         * Stores next tree root with respect to the root of this tree
+         */
+        private BlossomVNode treeRoot;
+
+        /**
+         * Constructs a new TreeNodeIterator for a {@code root}.
+         * <p>
+         * <b>Note:</b> {@code root} doesn't need to be a root of some tree, this iterator also
+         * works with subtrees.
+         *
+         * @param root node of a tree to start dfs traversal from.
+         */
+        public TreeNodeIterator(BlossomVNode root) {
+            this.currentNode = this.current = root;
+            this.treeRoot = root;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (current != null) {
+                return true;
+            }
+            current = advance();
+            return current != null;
+        }
+
+        @Override
+        public BlossomVNode next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            BlossomVNode result = current;
+            current = null;
+            return result;
+        }
+
+        /**
+         * Advances the iterator to the next tree node
+         *
+         * @return the next tree node
+         */
+        private BlossomVNode advance() {
+            if (currentNode == null) {
+                return null;
+            } else if (currentNode.firstTreeChild != null) {
+                // advance deeper
+                currentNode = currentNode.firstTreeChild;
+                return currentNode;
+            } else {
+                // advance to the next unvisited sibling of the current node or
+                // of some of its ancestors
+                while (currentNode != treeRoot && currentNode.treeSiblingNext == null) {
+                    currentNode = currentNode.parentEdge.getOpposite(currentNode);
+                }
+                currentNode = currentNode.treeSiblingNext;
+                if(currentNode == treeRoot.treeSiblingNext){
+                    currentNode = null;
+                }
+                return currentNode;
+            }
+        }
     }
 
     /**
@@ -293,73 +369,6 @@ class BlossomVTree {
                 currentEdge = first[1];
             }
             return currentEdge;
-        }
-    }
-
-    /**
-     * An iterator over tree nodes. This iterator traverses the nodes of the tree in a depth-first order.
-     */
-    public class TreeNodeIterator implements Iterator<BlossomVNode> {
-        /**
-         * The node this iterator is currently on
-         */
-        private BlossomVNode currentNode;
-        /**
-         * Support variable to determine whether {@code currentNode} has been returned or not
-         */
-        private BlossomVNode current;
-        /**
-         * Stores next tree root with respect to the root of this tree
-         */
-        private BlossomVNode stop;
-
-        /**
-         * Constructs a new TreeNodeIterator
-         */
-        public TreeNodeIterator() {
-            this.currentNode = this.current = root;
-            this.stop = root.treeSiblingNext;
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (current != null) {
-                return true;
-            }
-            current = advance();
-            return current != null;
-        }
-
-        @Override
-        public BlossomVNode next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            BlossomVNode result = current;
-            current = null;
-            return result;
-        }
-
-        /**
-         * Advances the iterator to the next tree node
-         *
-         * @return the next tree node
-         */
-        private BlossomVNode advance() {
-            if (currentNode == null) {
-                return null;
-            } else if (currentNode.firstTreeChild != null) {
-                // advance deeper
-                return currentNode = currentNode.firstTreeChild;
-            } else {
-                // advance to the next unvisited sibling of the current node or
-                // of some of its ancestors
-                while (currentNode != root && currentNode.treeSiblingNext == null) {
-                    currentNode = currentNode.parentEdge.getOpposite(currentNode);
-                }
-                currentNode = currentNode.treeSiblingNext;
-                return currentNode == stop ? currentNode = null : currentNode;
-            }
         }
     }
 }

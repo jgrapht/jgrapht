@@ -19,9 +19,7 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
@@ -228,12 +226,12 @@ class BlossomVState<V, E> {
      * (+,+) edge and goes up to the blossom root. These two paths to the blossom root are called branches.
      * The branch of the blossomFormingEdge.head[0] has direction 0, another one has direction 1.
      * <p>
-     * <b>BlossomVNode:</b> the nodes returned by this iterator aren't consecutive
+     * <b>Note:</b> the nodes returned by this iterator aren't consecutive
      * <p>
      * <b>Note:</b> this iterator must return the blossom root in the first branch, i.e. when the
      * direction if 0. This feature is needed to setup the blossomSibling references correctly
      */
-    public class BlossomNodesIterator implements Iterator<BlossomVNode> {
+    public static class BlossomNodesIterator implements Iterator<BlossomVNode> {
         /**
          * Blossom's root
          */
@@ -309,15 +307,15 @@ class BlossomVState<V, E> {
                 currentDirection = 1;
                 currentNode = blossomFormingEdge.head[1];
                 if (currentNode == root) {
-                    return currentNode = null;
+                    currentNode = null;
                 }
-                return currentNode;
             } else if (currentNode.getTreeParent() == root && currentDirection == 1) {
                 // we have just finished traversing the blossom's nodes
-                return currentNode = null;
+                currentNode = null;
             } else {
-                return currentNode = currentNode.getTreeParent();
+                currentNode = currentNode.getTreeParent();
             }
+            return currentNode;
         }
     }
 }

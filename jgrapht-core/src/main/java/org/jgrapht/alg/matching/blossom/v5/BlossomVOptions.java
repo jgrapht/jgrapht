@@ -19,6 +19,7 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.FRACTIONAL;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.GREEDY;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 
@@ -33,22 +34,30 @@ public class BlossomVOptions {
      * All possible options
      */
     public static final BlossomVOptions[] ALL_OPTIONS = new BlossomVOptions[]{
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, true), //[0]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, false), //[1]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, true), //[2]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, false), //[3]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[4]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[5]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[6]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[7]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, true), //[8]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, false), //[9]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[10]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[11]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[12]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[13]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[14]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[15]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[0]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[1]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[2]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[3]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, true), //[4]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, false), //[5]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, true), //[6]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, false), //[7]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[8]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[9]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[10]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[11]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, true), //[12]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, false), //[13]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[14]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[15]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[16]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[17]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[18]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[19]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_FIXED_DELTA, true, true), //[20]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_FIXED_DELTA, true, false), //[21]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_FIXED_DELTA, false, true), //[22]
+            new BlossomVOptions(FRACTIONAL, MULTIPLE_TREE_FIXED_DELTA, false, true), //[23]
     };
     /**
      * Default algorithm initialization type
@@ -199,6 +208,12 @@ public class BlossomVOptions {
             @Override
             public String toString() {
                 return "None";
+            }
+        },
+        FRACTIONAL {
+            @Override
+            public String toString() {
+                return "Fractional matching initializations";
             }
         };
 

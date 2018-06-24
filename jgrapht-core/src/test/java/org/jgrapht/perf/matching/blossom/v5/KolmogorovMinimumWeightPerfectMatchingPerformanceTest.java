@@ -4,19 +4,18 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching;
 import org.jgrapht.alg.matching.blossom.v5.BlossomVOptions;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.alg.matching.blossom.v5.MatchingMain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.openjdk.jmh.annotations.*;
 
-import java.util.Random;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Fork(value = 1, warmups = 0)
 @BenchmarkMode(Mode.SampleTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Warmup(iterations = 3, timeUnit = TimeUnit.MINUTES, time = 1)
-@Measurement(iterations = 10, timeUnit = TimeUnit.MINUTES, time = 1)
+@Warmup(iterations = 1, timeUnit = TimeUnit.MINUTES, time = 1)
+@Measurement(iterations = 5, timeUnit = TimeUnit.MINUTES, time = 2)
 public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
 
     private MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> testBlossomV(Data data, BlossomVOptions options) {
@@ -35,15 +34,10 @@ public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
         @Param({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"})
         public int optionNum;
 
-        @Setup
-        public void generate() {
-            CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(size);
-            Random random = new Random(System.nanoTime());
-            graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            generator.generateGraph(graph);
-            for (DefaultWeightedEdge edge : graph.edgeSet()) {
-                graph.setEdgeWeight(edge, random.nextInt(upperBound));
-            }
+        @Setup(Level.Iteration)
+        public void generate() throws IOException {
+            MatchingMain.generateTriangulation(1000, 1, 1000000, false, false);
+            graph = MatchingMain.readEdgeList();
         }
     }
 }

@@ -19,16 +19,19 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
 import java.util.*;
 
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.FRACTIONAL;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatchingTest.checkMatchingAndDualSolution;
+import static org.junit.Assert.*;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.GREEDY;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
-import static org.junit.Assert.*;
 
 /**
  * Unit tests for the {@link BlossomVInitializer}
@@ -37,6 +40,11 @@ import static org.junit.Assert.*;
  */
 public class BlossomVInitializerTest {
 
+    private BlossomVOptions fractionalOptions = new BlossomVOptions(FRACTIONAL);
+
+    /**
+     * Tests greedy initialization
+     */
     @Test
     public void testGreedyInitialization() {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -73,8 +81,11 @@ public class BlossomVInitializerTest {
         assertEquals(edge12, node2.matched);
     }
 
+    /**
+     * Tests simple initialization
+     */
     @Test
-    public void testInitializeNone() {
+    public void testSimpleInitialization() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 1);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 2);
@@ -169,5 +180,193 @@ public class BlossomVInitializerTest {
 
 
 
+    /**
+     * Tests fractional matching initialization on a bipartite graph with $V = {0,1,2}\cup{4,5,6}$
+     */
+    @Test
+    public void testFractionalInitialization1() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 3, 8}, {0, 4, 3}, {0, 5, 3}, {1, 3, 2}, {1, 4, 5}, {1, 5, 2}, {2, 3, 7}, {2, 4, 3},
+                {2, 5, 4}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+        KolmogorovMinimumWeightPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
+
+        assertEquals(8, matching.getWeight(), EPS);
+        assertEquals(0, statistics.growNum);
+        assertEquals(0, statistics.shrinkNum);
+        assertEquals(0, statistics.expandNum);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on a bipartite graph with $V = {0,1,2}\cup{4,5,6}$
+     */
+    @Test
+    public void testFractionalInitialization2() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 3, 4}, {0, 4, 4}, {0, 5, 4}, {1, 3, 5}, {1, 4, 8}, {1, 5, 10}, {2, 3, 4}, {2, 4, 6},
+                {2, 5, 5}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+        KolmogorovMinimumWeightPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
+
+        assertEquals(14, matching.getWeight(), EPS);
+        assertEquals(0, statistics.growNum);
+        assertEquals(0, statistics.shrinkNum);
+        assertEquals(0, statistics.expandNum);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on a bipartite graph with $V = {0,1,2,3}\cup{4,5,6,7}$
+     */
+    @Test
+    public void testFractionalInitialization3() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 5, 6}, {0, 6, 8}, {1, 5, 5}, {1, 6, 5}, {1, 7, 3}, {2, 4, 2}, {2, 5, 1}, {2, 6, 8},
+                {3, 5, 5}, {3, 7, 9}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+        KolmogorovMinimumWeightPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
+
+        assertEquals(18, matching.getWeight(), EPS);
+        assertEquals(0, statistics.growNum);
+        assertEquals(0, statistics.shrinkNum);
+        assertEquals(0, statistics.expandNum);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on a bipartite graph with $V = {0,1,2,3}\cup{4,5,6,7}$
+     */
+    @Test
+    public void testFractionalInitialization4() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 5, 2}, {0, 6, 2}, {0, 7, 1}, {1, 4, 6}, {1, 7, 10}, {2, 4, 7}, {2, 6, 8}, {2, 7, 10},
+                {3, 4, 5}, {3, 5, 9}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+        KolmogorovMinimumWeightPerfectMatching.Statistics statistics = perfectMatching.getStatistics();
+
+        assertEquals(24, matching.getWeight(), EPS);
+        assertEquals(0, statistics.growNum);
+        assertEquals(0, statistics.shrinkNum);
+        assertEquals(0, statistics.expandNum);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on triangulation of 8 points
+     */
+    @Test
+    public void testFractionalInitialization5() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{1, 0, 2}, {1, 2, 5}, {0, 2, 4}, {1, 4, 5}, {2, 4, 2}, {1, 3, 2}, {1, 5, 4}, {3, 5, 3},
+                {4, 5, 5}, {3, 6, 4}, {5, 6, 2}, {5, 7, 3}, {6, 7, 4}, {4, 7, 4}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(11, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on triangulation of 8 points
+     */
+    @Test
+    public void testFractionalInitialization6() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 1, 5}, {0, 2, 9}, {1, 2, 6}, {2, 3, 4}, {2, 4, 5}, {3, 4, 3}, {1, 4, 8}, {1, 5, 8},
+                {0, 5, 11}, {4, 5, 7}, {4, 6, 3}, {5, 6, 5}, {6, 7, 3}, {5, 7, 6}, {4, 7, 6}, {3, 7, 9}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(18, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+
+    }
+
+    /**
+     * Tests fractional matching initialization on triangulation of 8 points
+     */
+    @Test
+    public void testFractionalInitialization7() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 1, 2}, {0, 2, 8}, {1, 2, 7}, {0, 4, 8}, {1, 4, 7}, {2, 4, 6}, {2, 3, 9}, {2, 5, 6},
+                {3, 5, 6}, {2, 6, 6}, {5, 6, 5}, {4, 6, 2}, {5, 7, 9}, {6, 7, 7}, {3, 7, 14}, {4, 7, 7}, {0, 7, 15}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(21, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on triangulation of 8 points
+     */
+    @Test
+    public void testFractionalInitialization8() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 1, 7}, {0, 2, 8}, {0, 3, 8}, {1, 3, 4}, {1, 5, 9}, {1, 6, 13}, {2, 4, 6}, {2, 3, 11},
+                {3, 4, 10}, {3, 5, 6}, {4, 5, 8}, {4, 7, 7}, {5, 6, 4}, {5, 7, 4}, {6, 7, 1}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(20, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Tests fractional matching initialization on triangulation of 8 points
+     */
+    @Test
+    public void testFractionalInitialization9() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 1, 4}, {0, 2, 4}, {0, 5, 14}, {1, 2, 3}, {1, 3, 1}, {1, 5, 11}, {2, 3, 4}, {2, 4, 4},
+                {2, 7, 11}, {3, 4, 1}, {3, 5, 10}, {4, 5, 10}, {4, 6, 10}, {4, 7, 9}, {5, 6, 3}, {6, 7, 8}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(17, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+
+    }
 
 }
