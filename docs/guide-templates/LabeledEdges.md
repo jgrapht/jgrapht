@@ -8,7 +8,7 @@ with each edge.  This can be accomplished efficiently via a custom edge class:
 JGraphT's default graph and edge implementations take care of
 maintaining the connectivity information between vertices, so the
 custom edge subclass only needs to store the label.  Since the custom
-edge class does not override equals/hashCode, each edge object is
+edge class does not override `equals`/`hashCode`, each edge object is
 distinct from every other edge object (regardless of whether they
 share the same label).  Consequently, labels do not have to be
 unique within the same graph.

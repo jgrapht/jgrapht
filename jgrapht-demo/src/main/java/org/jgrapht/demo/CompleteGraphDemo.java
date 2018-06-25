@@ -26,11 +26,11 @@ import org.jgrapht.util.SupplierUtil;
 import java.util.*;
 import java.util.function.Supplier;
 
-//@example:class:begin
 /**
  * Demonstrates how to create a complete graph and perform a depth first search on it.
  *
  */
+//@example:class:begin
 public final class CompleteGraphDemo
 {
     // number of vertices
