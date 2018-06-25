@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching;
+package org.jgrapht.alg.matching.blossom_v;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeap;
@@ -25,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.DEBUG;
-import static org.jgrapht.alg.matching.Node.Label.*;
+import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.DEBUG;
+import static org.jgrapht.alg.matching.blossom_v.Node.Label.*;
 
 /**
  * Is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal operations: grow, augment,
@@ -700,7 +700,7 @@ class PrimalUpdater<V, E> {
 
                 }
             }
-            node.setLabel(Node.Label.INFINITY);
+            node.setLabel(INFINITY);
         }
 
         // adding all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and

@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching;
+package org.jgrapht.alg.matching.blossom_v;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -34,13 +34,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.matching.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
-import static org.jgrapht.alg.matching.Initializer.InitializationType.GREEDY;
-import static org.jgrapht.alg.matching.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER;
-import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+import static org.jgrapht.alg.matching.blossom_v.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom_v.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
+import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER;
+import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)

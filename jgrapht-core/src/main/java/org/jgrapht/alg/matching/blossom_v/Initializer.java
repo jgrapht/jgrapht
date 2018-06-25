@@ -15,14 +15,14 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching;
+package org.jgrapht.alg.matching.blossom_v;
 
 import org.jgrapht.Graph;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.jgrapht.alg.matching.KolmogorovMinimumWeightPerfectMatching.INFINITY;
+import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 /**
  * Is used to start the Kolmogorov's Blossom V algorithm.
