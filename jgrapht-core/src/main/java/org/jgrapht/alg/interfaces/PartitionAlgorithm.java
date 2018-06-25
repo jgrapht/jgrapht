@@ -38,7 +38,7 @@ public interface PartitionAlgorithm<V> {
     Partition<V> getPartition();
 
     /**
-     * Check if the input partition is valid.
+     * Check if the given vertex partition is valid.
      *
      * @param partition the input vertex partition
      * @return true if the input partition is valid, false otherwise
