@@ -42,6 +42,9 @@ public final class HelloJGraphT
      * The starting point for the demo.
      *
      * @param args ignored.
+     *
+     * @throws MalformedURLException if invalid URL is constructed.
+     * @throws ExportException if graph cannot be exported.
      */
     public static void main(String[] args)
         throws MalformedURLException, ExportException
