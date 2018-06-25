@@ -15,11 +15,10 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.matching.blossom_v.*;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
@@ -28,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.NONE;
 import static org.junit.Assert.assertEquals;
 
 public class StateTest {
@@ -51,7 +49,7 @@ public class StateTest {
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(NONE));
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(Initializer.InitializationType.NONE));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);

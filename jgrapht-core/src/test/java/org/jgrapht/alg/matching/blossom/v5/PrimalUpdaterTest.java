@@ -15,12 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -28,14 +29,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.blossom_v.Node.Label.INFINITY;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
 public class PrimalUpdaterTest {
 
-    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(NONE);
+    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(Initializer.InitializationType.NONE);
 
     /**
      * Tests one grow operation
@@ -478,8 +477,8 @@ public class PrimalUpdaterTest {
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
-        assertEquals(INFINITY, node1.label);
-        assertEquals(INFINITY, node2.label);
+        Assert.assertEquals(Node.Label.INFINITY, node1.label);
+        Assert.assertEquals(Node.Label.INFINITY, node2.label);
         assertEquals(0, state.treeNum);
         assertEquals(0, edge12.slack, EPS);
         assertEquals(1, node1.dual, EPS);
@@ -520,8 +519,8 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge23);
 
-        assertEquals(INFINITY, node2.label);
-        assertEquals(INFINITY, node3.label);
+        Assert.assertEquals(Node.Label.INFINITY, node2.label);
+        Assert.assertEquals(Node.Label.INFINITY, node3.label);
         assertEquals(2, edge12.slack, EPS);
         assertEquals(0, edge23.slack, EPS);
         assertEquals(3, edge34.slack, EPS);
@@ -534,8 +533,8 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge45);
 
-        assertEquals(INFINITY, node4.label);
-        assertEquals(INFINITY, node5.label);
+        Assert.assertEquals(Node.Label.INFINITY, node4.label);
+        Assert.assertEquals(Node.Label.INFINITY, node5.label);
         assertEquals(2, edge34.slack, EPS);
         assertEquals(0, edge45.slack, EPS);
         assertEquals(2, edge56.slack, EPS);
@@ -561,12 +560,12 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge34);
 
-        assertEquals(INFINITY, node1.label);
-        assertEquals(INFINITY, node2.label);
-        assertEquals(INFINITY, node3.label);
-        assertEquals(INFINITY, node4.label);
-        assertEquals(INFINITY, node5.label);
-        assertEquals(INFINITY, node6.label);
+        Assert.assertEquals(Node.Label.INFINITY, node1.label);
+        Assert.assertEquals(Node.Label.INFINITY, node2.label);
+        Assert.assertEquals(Node.Label.INFINITY, node3.label);
+        Assert.assertEquals(Node.Label.INFINITY, node4.label);
+        Assert.assertEquals(Node.Label.INFINITY, node5.label);
+        Assert.assertEquals(Node.Label.INFINITY, node6.label);
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -639,16 +638,16 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge710);
 
-        assertEquals(INFINITY, node1.label);
-        assertEquals(INFINITY, node2.label);
-        assertEquals(INFINITY, node3.label);
-        assertEquals(INFINITY, node4.label);
-        assertEquals(INFINITY, node5.label);
-        assertEquals(INFINITY, node6.label);
-        assertEquals(INFINITY, node7.label);
-        assertEquals(INFINITY, node8.label);
-        assertEquals(INFINITY, node9.label);
-        assertEquals(INFINITY, node10.label);
+        Assert.assertEquals(Node.Label.INFINITY, node1.label);
+        Assert.assertEquals(Node.Label.INFINITY, node2.label);
+        Assert.assertEquals(Node.Label.INFINITY, node3.label);
+        Assert.assertEquals(Node.Label.INFINITY, node4.label);
+        Assert.assertEquals(Node.Label.INFINITY, node5.label);
+        Assert.assertEquals(Node.Label.INFINITY, node6.label);
+        Assert.assertEquals(Node.Label.INFINITY, node7.label);
+        Assert.assertEquals(Node.Label.INFINITY, node8.label);
+        Assert.assertEquals(Node.Label.INFINITY, node9.label);
+        Assert.assertEquals(Node.Label.INFINITY, node10.label);
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);

@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeapNode;
@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.blossom_v.Node.Label.*;
+import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
 
 /**
  * This class is a supporting data structure for Kolmogorov's Blossom V algorithm. Represents

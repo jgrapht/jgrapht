@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -25,9 +25,9 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.GREEDY;
-import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.Initializer.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.blossom.v5.Initializer.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
 public class InitializerTest {

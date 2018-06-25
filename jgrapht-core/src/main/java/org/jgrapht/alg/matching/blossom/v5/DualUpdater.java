@@ -15,12 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeap;
 
 import static java.lang.Math.abs;
-import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.*;
 
 /**
  * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates, thus creating
@@ -65,7 +64,7 @@ class DualUpdater<V, E> {
     public double updateDuals(DualUpdateStrategy type) {
         long start = System.nanoTime();
 
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Start updating duals");
         }
         // going through all trees roots
@@ -83,12 +82,12 @@ class DualUpdater<V, E> {
         double dualChange = 0;
         // updating trees.eps with respect to the accumulated eps
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-            if (abs(root.tree.accumulatedEps) > EPS) {
+            if (abs(root.tree.accumulatedEps) > KolmogorovMinimumWeightPerfectMatching.EPS) {
                 dualChange += root.tree.accumulatedEps;
                 root.tree.eps += root.tree.accumulatedEps;
             }
         }
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
                 System.out.println("Updating duals: now eps of " + root.tree + " is " + (root.tree.eps));
             }
@@ -110,7 +109,7 @@ class DualUpdater<V, E> {
      * @return a value which can be safely assigned to tree.eps
      */
     private double getEps(Tree tree) {
-        double eps = INFINITY;
+        double eps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
         Edge varEdge;
         // checking minimum slack of the plus-infinity edges
         if (!tree.plusInfinityEdges.isEmpty() && (varEdge = tree.plusInfinityEdges.min().getData()).slack < eps) {
@@ -142,7 +141,7 @@ class DualUpdater<V, E> {
         long start = System.nanoTime();
 
         double eps = getEps(tree);  // include only constraints on (+,+) in-tree edges, (+, inf) edges and "-' blossoms
-        double eps_augment = INFINITY; // takes into account constraints of the cross-tree edges
+        double eps_augment = KolmogorovMinimumWeightPerfectMatching.INFINITY; // takes into account constraints of the cross-tree edges
         Edge augmentEdge = null; // the (+, +) cross-tree edge of minimum slack
         Edge varEdge;
         double delta = 0;
@@ -162,13 +161,13 @@ class DualUpdater<V, E> {
             eps = eps_augment;
         }
         // now eps takes into account all the constraints
-        if (eps > NO_PERFECT_MATCHING_THRESHOLD) {
-            throw new IllegalArgumentException(NO_PERFECT_MATCHING);
+        if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
+            throw new IllegalArgumentException(KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
         }
         if (eps > tree.eps) {
             delta = eps - tree.eps;
             tree.eps = eps;
-            if (DEBUG) {
+            if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
                 System.out.println("Updating duals: now eps of " + tree + " is " + eps);
             }
         }
@@ -179,7 +178,7 @@ class DualUpdater<V, E> {
             primalUpdater.augment(augmentEdge);
             return false; // can't proceed with the same tree
         } else {
-            return delta > EPS;
+            return delta > KolmogorovMinimumWeightPerfectMatching.EPS;
         }
     }
 
@@ -217,7 +216,7 @@ class DualUpdater<V, E> {
                 for (int dir = 0; dir < 2; ++dir) {
                     for (currentEdge = currentTree.first[dir]; currentEdge != null; currentEdge = currentEdge.next[dir]) {
                         opposite = currentEdge.head[dir];
-                        double plusPlusEps = INFINITY;
+                        double plusPlusEps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                         int dirRev = 1 - dir;
 
                         if (!currentEdge.plusPlusEdges.isEmpty()) {
@@ -234,11 +233,11 @@ class DualUpdater<V, E> {
                         }
 
                         double[] plusMinusEps = new double[2];
-                        plusMinusEps[dir] = INFINITY;
+                        plusMinusEps[dir] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                         if (!currentEdge.getCurrentPlusMinusHeap(dir).isEmpty()) {
                             plusMinusEps[dir] = currentEdge.getCurrentPlusMinusHeap(dir).min().getKey() - currentTree.eps + opposite.eps;
                         }
-                        plusMinusEps[dirRev] = INFINITY;
+                        plusMinusEps[dirRev] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                         if (!currentEdge.getCurrentPlusMinusHeap(dirRev).isEmpty()) {
                             plusMinusEps[dirRev] = currentEdge.getCurrentPlusMinusHeap(dirRev).min().getKey() - opposite.eps + currentTree.eps;
                         }
@@ -279,8 +278,8 @@ class DualUpdater<V, E> {
                 currentTree = currentTree.nextTree;
             }
 
-            if (eps > NO_PERFECT_MATCHING_THRESHOLD) {
-                throw new IllegalArgumentException(NO_PERFECT_MATCHING);
+            if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
+                throw new IllegalArgumentException(KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
             }
 
             // applying dual change to all trees in the connected component
@@ -299,11 +298,11 @@ class DualUpdater<V, E> {
      * can fail if there are circular constraints on (+, -) cross-tree edges.
      */
     private void multipleTreeFixedDelta() {
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Multiple tree fixed delta approach");
         }
         Edge varEdge;
-        double eps = INFINITY;
+        double eps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             Tree tree = root.tree;
             double treeEps = tree.eps;
@@ -322,8 +321,8 @@ class DualUpdater<V, E> {
                 }
             }
         }
-        if (eps > NO_PERFECT_MATCHING_THRESHOLD) {
-            throw new IllegalArgumentException(NO_PERFECT_MATCHING);
+        if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
+            throw new IllegalArgumentException(KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
         }
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             root.tree.accumulatedEps = eps;

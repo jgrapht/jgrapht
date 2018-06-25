@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -24,14 +24,13 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
-import static org.jgrapht.alg.matching.blossom_v.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.NONE;
-import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
 public class DualUpdaterTest {
 
-    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(NONE);
+    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(Initializer.InitializationType.NONE);
 
     @org.junit.Test
     public void testUpdateDuals1() {

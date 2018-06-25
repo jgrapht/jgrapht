@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
@@ -24,9 +24,8 @@ import org.jgrapht.graph.AsUndirectedGraph;
 
 import java.util.*;
 
-import static org.jgrapht.alg.matching.blossom_v.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.matching.blossom_v.Initializer.InitializationType.GREEDY;
-import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+import static org.jgrapht.alg.matching.blossom.v5.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
 
 /**
  * TODO: write complete class description
@@ -691,7 +690,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     public static class Options {
         private static final SingleTreeDualUpdatePhase DEFAULT_PHASE = UPDATE_DUAL_BEFORE;
         private static final DualUpdater.DualUpdateStrategy DEFAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_CONNECTED_COMPONENTS;
-        private static final Initializer.InitializationType DEFAULT_INITIALIZATION_TYPE = GREEDY;
+        private static final Initializer.InitializationType DEFAULT_INITIALIZATION_TYPE = Initializer.InitializationType.GREEDY;
 
         /**
          * When to update the duals of a single tree: either before or after processing it

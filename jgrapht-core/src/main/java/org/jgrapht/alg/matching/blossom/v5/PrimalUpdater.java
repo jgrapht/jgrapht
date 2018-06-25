@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.blossom_v;
+package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeap;
@@ -24,9 +24,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import static org.jgrapht.alg.matching.blossom_v.KolmogorovMinimumWeightPerfectMatching.DEBUG;
-import static org.jgrapht.alg.matching.blossom_v.Node.Label.*;
 
 /**
  * Is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal operations: grow, augment,
@@ -110,7 +107,7 @@ class PrimalUpdater<V, E> {
     public void augment(Edge augmentEdge) {
         long start = System.nanoTime();
 
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Augmenting edge " + augmentEdge);
         }
         Node node;
@@ -149,7 +146,7 @@ class PrimalUpdater<V, E> {
      */
     public Node shrink(Edge blossomFormingEdge) {
         long start = System.nanoTime();
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Shrinking edge " + blossomFormingEdge);
         }
         Node blossomRoot = findBlossomRoot(blossomFormingEdge);
@@ -220,7 +217,7 @@ class PrimalUpdater<V, E> {
      */
     public void expand(Node blossom) {
         long start = System.nanoTime();
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Expanding blossom " + blossom);
         }
         Tree tree = blossom.tree;
@@ -230,7 +227,7 @@ class PrimalUpdater<V, E> {
 
         Node branchesEndpoint = blossom.parentEdge.getCurrentOriginal(blossom).getPenultimateBlossom();
 
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             State.printBlossomNodes(branchesEndpoint);
         }
 
@@ -280,7 +277,7 @@ class PrimalUpdater<V, E> {
         if (state.removedNum > 4 * state.nodeNum) {
             freeRemoved();
         }
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             State.printTreeNodes(tree);
         }
 
@@ -294,7 +291,7 @@ class PrimalUpdater<V, E> {
      * @param manyGrows specifies whether to perform recursive growing
      */
     private void recursiveGrow(Edge growEdge, boolean manyGrows) {
-        if (DEBUG) {
+        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Growing edge " + growEdge);
         }
         int dirToMinusNode = growEdge.head[0].isInfinityNode() ? 0 : 1;
@@ -303,8 +300,8 @@ class PrimalUpdater<V, E> {
         Node minusNode = growEdge.head[dirToMinusNode];
         Node plusNode = minusNode.matched.getOpposite(minusNode);
 
-        minusNode.setLabel(MINUS);
-        plusNode.setLabel(PLUS);
+        minusNode.setLabel(Node.Label.MINUS);
+        plusNode.setLabel(Node.Label.PLUS);
 
         minusNode.parentEdge = growEdge;
         plusNode.parentEdge = plusNode.matched;
@@ -446,7 +443,7 @@ class PrimalUpdater<V, E> {
         blossomRoot.addChild(blossom.matched.getOpposite(blossomRoot), blossomRoot.matched);
 
         Node current = blossomRoot;
-        current.label = MINUS;
+        current.label = Node.Label.MINUS;
         current.isOuter = true;
         current.parentEdge = blossom.parentEdge;
         Edge prevMatched;
@@ -456,7 +453,7 @@ class PrimalUpdater<V, E> {
         while (current != branchesEndpoint) {
             // processing "+" node
             current = current.blossomSibling.getOpposite(current);
-            current.label = PLUS;
+            current.label = Node.Label.PLUS;
             current.isOuter = true;
             current.tree = tree;
             current.matched = prevMatched = current.blossomSibling;
@@ -465,7 +462,7 @@ class PrimalUpdater<V, E> {
 
             // processing "-" node
             current = current.blossomSibling.getOpposite(current);
-            current.label = MINUS;
+            current.label = Node.Label.MINUS;
             current.isOuter = true;
             current.tree = tree;
             current.matched = prevMatched;
@@ -507,14 +504,14 @@ class PrimalUpdater<V, E> {
         // the traversal if done from branchesEndpoint to blossomRoot, i.e. from
         // lower layers to higher
         while (current != blossomRoot) {
-            current.label = INFINITY;
+            current.label = Node.Label.INFINITY;
             current.isOuter = true;
             current.tree = null;
             current.matched = prevMatched = current.blossomSibling;
             expandInfinityNode(current, tree);
             current = current.blossomSibling.getOpposite(current);
 
-            current.label = INFINITY;
+            current.label = Node.Label.INFINITY;
             current.isOuter = true;
             current.tree = null;
             current.matched = prevMatched;
@@ -700,7 +697,7 @@ class PrimalUpdater<V, E> {
 
                 }
             }
-            node.setLabel(INFINITY);
+            node.setLabel(Node.Label.INFINITY);
         }
 
         // adding all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and
