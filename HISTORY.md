@@ -10,6 +10,11 @@ Changes to JGraphT in each version:
     - Removed code not dual licensed under EPL-1.0 and LGPL-2.1-or-later: `AsUnweightedGraph` and `AsUnweightedDirectedGraph` are gone. (supported by Robert Höttger and Oliver Kopp)
     - Added forest generator based on the Barabasi-Albert model (contributed by Alexandru Văleanu)
     - Added new implementation of `AsUnweightedGraph` (contributed by Lukas Harzenetter)
+    - Added pull request template (contributed by Oliver Kopp)
+    - Added `GraphSpecificsStrategy` and use the same edge set factory consistently (contributed by Dimitrios Michail)
+    - Added user overview doc (contributed by John Sichi)
+    - Clarified definition of `SimpleGraph` (contributed by Joris Kinable)
+    - Added O(m^1.5) algorithm for counting triangles in undirected graphs (contributed by Alexandru Văleanu)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

@@ -17,25 +17,27 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.cycle.TarjanSimpleCycles;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for GraphMetrics
  * 
  * @author Joris Kinable
+ * @author Alexandru Valeanu
  */
 public class GraphMetricsTest
 {
 
-    private final double EPSILON = 0.000000001;
+    private final static double EPSILON = 0.000000001;
 
     @Test
     public void testGraphDiameter()
@@ -233,5 +235,103 @@ public class GraphMetricsTest
 
             assertEquals(minCycle, GraphMetrics.getGirth(graph));
         }
+    }
+
+    private static long naiveCountTriangles(Graph<Integer, DefaultEdge> graph){
+        return GraphMetrics.naiveCountTriangles(graph, new ArrayList<>(graph.vertexSet()));
+    }
+
+    @Test
+    public void testCountTriangles(){
+        final int NUM_TESTS = 300;
+        Random random = new Random(0x88_88);
+
+        for (int test = 0; test < NUM_TESTS; test++) {
+            final int N = 20 + random.nextInt(100);
+
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+            BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
+                    new BarabasiAlbertGraphGenerator<>(10 + random.nextInt(10), 1 + random.nextInt(7), N, random);
+
+            generator.generateGraph(graph);
+
+            Assert.assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
+        }
+    }
+
+    @Test
+    public void testCountTriangles2(){
+        final int NUM_TESTS = 100;
+        Random random = new Random(0x88_88);
+
+        for (int test = 0; test < NUM_TESTS; test++) {
+            final int N = 1 + random.nextInt(100);
+
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+            GraphGenerator<Integer, DefaultEdge, Integer> generator =
+                    new GnpRandomGraphGenerator<>(N, .55, random.nextInt());
+
+            generator.generateGraph(graph);
+
+            Assert.assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
+        }
+    }
+
+    @Test
+    public void testCountTriangles3(){
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        // Complete graph: expected (|V| choose 3)
+
+        GraphGenerator<Integer, DefaultEdge, Integer> generator = new CompleteGraphGenerator<>(50);
+        generator.generateGraph(graph);
+
+        Assert.assertEquals(50 * 49 * 48 / 6, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(50 * 49 * 48 / 6, naiveCountTriangles(graph));
+
+        // Wheel graph: expected |V|-1 triangles
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        generator = new WheelGraphGenerator<>(50);
+        generator.generateGraph(graph);
+
+        Assert.assertEquals(49, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(49, naiveCountTriangles(graph));
+
+        // Named graphs
+
+        NamedGraphGenerator<Integer, DefaultEdge> gen = new NamedGraphGenerator<>();
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generatePetersenGraph(graph);
+
+        Assert.assertEquals(0, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(0, naiveCountTriangles(graph));
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generateDiamondGraph(graph);
+
+        Assert.assertEquals(2, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(2, naiveCountTriangles(graph));
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generateGoldnerHararyGraph(graph);
+
+        Assert.assertEquals(25, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(25, naiveCountTriangles(graph));
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generateKlein7RegularGraph(graph);
+
+        Assert.assertEquals(56, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(56, naiveCountTriangles(graph));
     }
 }

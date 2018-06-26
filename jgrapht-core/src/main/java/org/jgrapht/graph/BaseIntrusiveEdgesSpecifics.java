@@ -44,10 +44,12 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
 
     /**
      * Constructor
+     * 
+     * @param edgeMap the map to use for storage
      */
-    public BaseIntrusiveEdgesSpecifics()
+    public BaseIntrusiveEdgesSpecifics(Map<E, IE> edgeMap)
     {
-        this.edgeMap = new LinkedHashMap<>();
+        this.edgeMap = Objects.requireNonNull(edgeMap);
     }
 
     /**

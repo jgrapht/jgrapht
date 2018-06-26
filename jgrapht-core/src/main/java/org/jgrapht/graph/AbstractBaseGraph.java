@@ -26,15 +26,18 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * The most general implementation of the {@link org.jgrapht.Graph} interface. Its subclasses add
- * various restrictions to get more specific graphs. The decision whether it is directed or
- * undirected is decided at construction time and cannot be later modified (see constructor for
- * details).
- *
+ * The most general implementation of the {@link org.jgrapht.Graph} interface.
+ * 
  * <p>
- * This graph implementation guarantees deterministic vertex and edge set ordering (via
- * {@link LinkedHashMap} and {@link LinkedHashSet}).
- * </p>
+ * Its subclasses add various restrictions to get more specific graphs. The decision whether it is
+ * directed or undirected is decided at construction time and cannot be later modified (see
+ * constructor for details).
+ * 
+ * <p>
+ * The behavior of this class can be adjusted by changing the {@link GraphSpecificsStrategy} that is
+ * provided from the constructor. All implemented strategies guarantee deterministic vertex and edge
+ * set ordering (via {@link LinkedHashMap} and {@link LinkedHashSet}). The defaults are reasonable
+ * for most use-cases, only change if you know what you are doing.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -44,12 +47,8 @@ import java.util.function.*;
  * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
-    extends
-    AbstractGraph<V, E>
-    implements
-    Graph<V, E>,
-    Cloneable,
-    Serializable
+    extends AbstractGraph<V, E>
+    implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -3582386521833998627L;
 
@@ -61,10 +60,11 @@ public abstract class AbstractBaseGraph<V, E>
 
     private Supplier<V> vertexSupplier;
     private Supplier<E> edgeSupplier;
-
     private GraphType type;
+
     private Specifics<V, E> specifics;
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
+    private GraphSpecificsStrategy<V, E> graphSpecificsStrategy;
 
     /**
      * Construct a new graph.
@@ -78,16 +78,55 @@ public abstract class AbstractBaseGraph<V, E>
     protected AbstractBaseGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type)
     {
+        /*
+         * Replace with the following code after the next release
+         * 
+         * this(vertexSupplier, edgeSupplier, type, new FastLookupGraphSpecificsStrategy());
+         */
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.type = Objects.requireNonNull(type);
         if (type.isMixed()) {
             throw new IllegalArgumentException("Mixed graph not supported");
         }
-        this.specifics = Objects
-            .requireNonNull(createSpecifics(type.isDirected()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.graphSpecificsStrategy = new BackwardsCompatibleGraphSpecificsStrategy();
+        this.specifics = Objects.requireNonNull(
+            graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
+            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
         this.intrusiveEdgesSpecifics = Objects.requireNonNull(
-            createIntrusiveEdgesSpecifics(type.isWeighted()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+            graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
+            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+    }
+
+    /**
+     * Construct a new graph.
+     *
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     * @param type the graph type
+     * @param graphSpecificsStrategy strategy for constructing low-level graph specifics
+     *
+     * @throws IllegalArgumentException if the graph type is mixed
+     */
+    protected AbstractBaseGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type,
+        GraphSpecificsStrategy<V, E> graphSpecificsStrategy)
+    {
+        this.vertexSupplier = vertexSupplier;
+        this.edgeSupplier = edgeSupplier;
+        this.type = Objects.requireNonNull(type);
+        if (type.isMixed()) {
+            throw new IllegalArgumentException("Mixed graph not supported");
+        }
+
+        this.graphSpecificsStrategy =
+            Objects.requireNonNull(graphSpecificsStrategy, "Graph specifics strategy required");
+        this.specifics = Objects.requireNonNull(
+            graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
+            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
+            graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
+            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -287,15 +326,18 @@ public abstract class AbstractBaseGraph<V, E>
 
             newGraph.vertexSupplier = this.vertexSupplier;
             newGraph.edgeSupplier = this.edgeSupplier;
-
+            newGraph.type = type;
             newGraph.unmodifiableVertexSet = null;
+
+            newGraph.graphSpecificsStrategy = this.graphSpecificsStrategy;
 
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
-            newGraph.specifics = newGraph.createSpecifics(this.getType().isDirected());
-            newGraph.intrusiveEdgesSpecifics =
-                newGraph.createIntrusiveEdgesSpecifics(this.getType().isWeighted());
+            newGraph.specifics = newGraph.graphSpecificsStrategy
+                .getSpecificsFactory().apply(newGraph, newGraph.type);
+            newGraph.intrusiveEdgesSpecifics = newGraph.graphSpecificsStrategy
+                .getIntrusiveEdgesSpecificsFactory().apply(newGraph.type);
 
             Graphs.addGraph(newGraph, this);
 
@@ -502,7 +544,10 @@ public abstract class AbstractBaseGraph<V, E>
      * @param directed if true the specifics should adjust the behavior to a directed graph
      *        otherwise undirected
      * @return the specifics used by this graph
+     * 
+     * @deprecated In favor of using factories
      */
+    @Deprecated
     protected Specifics<V, E> createSpecifics(boolean directed)
     {
         if (directed) {
@@ -517,13 +562,39 @@ public abstract class AbstractBaseGraph<V, E>
      * 
      * @param weighted if true the specifics should support weighted edges
      * @return the specifics used for the edge set of this graph
+     * 
+     * @deprecated In favor of using factories
      */
+    @Deprecated
     protected IntrusiveEdgesSpecifics<V, E> createIntrusiveEdgesSpecifics(boolean weighted)
     {
         if (weighted) {
             return new WeightedIntrusiveEdgesSpecifics<>();
         } else {
             return new UniformIntrusiveEdgesSpecifics<>();
+        }
+    }
+
+    /*
+     * Added for backwards compatibility, remove after next release.
+     */
+    @Deprecated
+    class BackwardsCompatibleGraphSpecificsStrategy
+        implements GraphSpecificsStrategy<V, E>
+    {
+        @Override
+        public Function<GraphType,
+            IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
+        {
+            return (type) -> createIntrusiveEdgesSpecifics(type.isWeighted());
+        }
+
+        @Override
+        public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
+        {
+            return (graph, type) -> {
+                return createSpecifics(type.isDirected());
+            };
         }
     }
 

@@ -17,11 +17,16 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.connectivity.*;
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.connectivity.BiconnectivityInspector;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.cycle.BergeGraphInspector;
+import org.jgrapht.alg.cycle.ChordalityInspector;
+import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
+import org.jgrapht.alg.cycle.WeakChordalityInspector;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -29,6 +34,7 @@ import java.util.stream.*;
  * @author Barak Naveh
  * @author Dimitrios Michail
  * @author Joris Kinable
+ * @author Alexandru Valeanu
  */
 public abstract class GraphTests
 {
@@ -394,7 +400,7 @@ public abstract class GraphTests
                     if (!odd.contains(v)) {
                         odd.add(n);
                     }
-                } else if (!(odd.contains(v) ^ odd.contains(n))) {
+                } else if (odd.contains(v) == odd.contains(n)) {
                     return false;
                 }
             }
@@ -566,6 +572,37 @@ public abstract class GraphTests
     }
 
     /**
+     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a triangle of edges).
+     *
+     * The implementation of this method uses {@link GraphMetrics#getNumberOfTriangles(Graph)}.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is triangle-free, false otherwise
+     */
+    public static <V, E> boolean isTriangleFree(Graph<V, E> graph)
+    {
+        return GraphMetrics.getNumberOfTriangles(graph) == 0;
+    }
+
+    /**
+     * Checks that the specified graph is perfect. Due to the Strong Perfect Graph Theorem Berge
+     * Graphs are the same as perfect Graphs. The implementation of this method is delegated to
+     * {@link org.jgrapht.alg.cycle.BergeGraphInspector}
+     *
+     * @param graph the graph reference to check for being perfect or not
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is perfect, false otherwise
+     */
+    public static <V, E> boolean isPerfect(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new BergeGraphInspector<V, E>().isBerge(graph);
+    }
+
+    /**
      * Checks that the specified graph is directed and throws a customized
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
@@ -683,22 +720,6 @@ public abstract class GraphTests
     public static <V, E> Graph<V, E> requireDirectedOrUndirected(Graph<V, E> graph)
     {
         return requireDirectedOrUndirected(graph, GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
-    }
-
-    /**
-     * Checks that the specified graph is perfect. Due to the Strong Perfect Graph Theorem Berge
-     * Graphs are the same as perfect Graphs. The implementation of this method is delegated to
-     * {@link org.jgrapht.alg.cycle.BergeGraphInspector}
-     * 
-     * @param graph the graph reference to check for being perfect or not
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return {@code boolean} if {@code graph} is perfect
-     */
-    public static <V, E> boolean isPerfect(Graph<V, E> graph)
-    {
-        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return new BergeGraphInspector<V, E>().isBerge(graph);
     }
 
     /**

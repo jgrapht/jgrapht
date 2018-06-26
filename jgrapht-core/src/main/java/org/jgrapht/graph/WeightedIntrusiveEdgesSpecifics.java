@@ -17,6 +17,9 @@
  */
 package org.jgrapht.graph;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * A weighted variant of the intrusive edges specifics.
  * 
@@ -40,10 +43,23 @@ public class WeightedIntrusiveEdgesSpecifics<V, E>
 
     /**
      * Constructor
+     * 
+     * @deprecated Since default strategies should be decided at a higher level.
      */
+    @Deprecated
     public WeightedIntrusiveEdgesSpecifics()
     {
-        super();
+        this(new LinkedHashMap<>());
+    }
+    
+    /**
+     * Constructor
+     * 
+     * @param map the map to use for storage
+     */
+    public WeightedIntrusiveEdgesSpecifics(Map<E, IntrusiveWeightedEdge> map)
+    {
+        super(map);
     }
 
     @Override
