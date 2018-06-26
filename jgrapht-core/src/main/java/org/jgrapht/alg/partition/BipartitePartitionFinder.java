@@ -34,6 +34,7 @@ import static org.jgrapht.GraphTests.isEmpty;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
+ * @author Dimitrios Michail
  * @author Alexandru Valeanu
  * @since June 2018
  */
