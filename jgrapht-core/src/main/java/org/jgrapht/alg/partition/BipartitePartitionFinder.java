@@ -53,7 +53,7 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
      * @param graph the input graph;
      */
     public BipartitePartitionFinder(Graph<V, E> graph){
-        this.graph = Objects.requireNonNull(graph);
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
     /**
@@ -122,13 +122,13 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
 
     @Override
     public boolean isValidPartition(Partition<V> partition){
-        Objects.requireNonNull(partition);
+        Objects.requireNonNull(partition, "Partition cannot be null");
 
         Set<V> firstPartition = partition.getFirstPartition();
         Set<V> secondPartition = partition.getSecondPartition();
 
-        Objects.requireNonNull(firstPartition);
-        Objects.requireNonNull(secondPartition);
+        Objects.requireNonNull(firstPartition, "First component of partition cannot be null");
+        Objects.requireNonNull(secondPartition, "Second component of partition cannot be null");
 
         if (graph.vertexSet().size() != firstPartition.size() + secondPartition.size()) {
             return false;
