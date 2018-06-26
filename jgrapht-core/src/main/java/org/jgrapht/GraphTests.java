@@ -366,6 +366,7 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is bipartite, false otherwise
+     * @see BipartitePartitionFinder#isBipartite()
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
@@ -381,6 +382,7 @@ public abstract class GraphTests
      * @return true if the partition is a bipartite partition, false otherwise
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @see BipartitePartitionFinder#isValidPartition(PartitionAlgorithm.Partition)
      */
     @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
