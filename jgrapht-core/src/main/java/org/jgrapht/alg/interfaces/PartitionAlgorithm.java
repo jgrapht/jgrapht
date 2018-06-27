@@ -116,9 +116,21 @@ public interface PartitionAlgorithm<V> {
                     .collect(Collectors.toList()));
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public List<Set<V>> getPartitionClasses() {
             return classes;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString()
+        {
+            return "Partition [number-of-partitions=" + getNumberPartitions() + ", partitions=" + classes + "]";
         }
     }
 }
