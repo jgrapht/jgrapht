@@ -134,7 +134,7 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
             return false;
 
         Set<V> firstPartition = partition.getPartitionClass(0);
-        Set<V> secondPartition = partition.getPartitionClass(0);
+        Set<V> secondPartition = partition.getPartitionClass(1);
 
         Objects.requireNonNull(firstPartition, "First component of partition cannot be null");
         Objects.requireNonNull(secondPartition, "Second component of partition cannot be null");
