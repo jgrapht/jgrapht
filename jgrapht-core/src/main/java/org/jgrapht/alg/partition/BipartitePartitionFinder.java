@@ -80,6 +80,9 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
         return this.getPartition() != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Partition<V> getPartition() {
         if (computed)
@@ -116,16 +119,22 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
         even.removeAll(odd);
 
         computed = true;
-        cachedPartition = new PartitionImpl<>(even, odd);
+        cachedPartition = new PartitionImpl<>(Arrays.asList(even, odd));
         return cachedPartition;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isValidPartition(Partition<V> partition){
         Objects.requireNonNull(partition, "Partition cannot be null");
 
-        Set<V> firstPartition = partition.getFirstPartition();
-        Set<V> secondPartition = partition.getSecondPartition();
+        if (partition.getNumberPartitions() != 2)
+            return false;
+
+        Set<V> firstPartition = partition.getPartitionClass(0);
+        Set<V> secondPartition = partition.getPartitionClass(0);
 
         Objects.requireNonNull(firstPartition, "First component of partition cannot be null");
         Objects.requireNonNull(secondPartition, "Second component of partition cannot be null");

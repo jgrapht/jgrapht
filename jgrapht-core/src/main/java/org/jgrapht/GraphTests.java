@@ -389,7 +389,7 @@ public abstract class GraphTests
             Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
         return new BipartitePartitionFinder<>(graph).isValidPartition(
-                new PartitionAlgorithm.PartitionImpl<>((Set<V>) firstPartition, (Set<V>) secondPartition));
+                new PartitionAlgorithm.PartitionImpl<>(Arrays.asList((Set<V>)firstPartition, (Set<V>)secondPartition)));
     }
 
     /**
