@@ -184,7 +184,7 @@ class Node {
      */
     public Set<Pair<Edge, Integer>> getEdges() {
         Set<Pair<Edge, Integer>> edges = new HashSet<>();
-        for (IncidentEdgeIterator iterator = adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (IncidentEdgeIterator iterator = incidentEdgesIterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
             edges.add(new Pair<>(edge, iterator.getDir()));
         }
@@ -234,11 +234,16 @@ class Node {
      *
      * @param child      the new child of this node
      * @param parentEdge the edge between this node and {@code child}
+     * @param grow       true if {@code child} is being grown
      */
-    public void addChild(Node child, Edge parentEdge) {
+    public void addChild(Node child, Edge parentEdge, boolean grow) {
         child.parentEdge = parentEdge;
         child.tree = tree;
         child.treeSiblingNext = firstTreeChild;
+        if (grow) {
+            // if child is being grown => we have to overwrite all its tree structure data
+            child.firstTreeChild = null;
+        }
         if (firstTreeChild == null) {
             child.treeSiblingPrev = child;
         } else {
@@ -431,7 +436,7 @@ class Node {
      *
      * @return a new instance of IncidentEdgeIterator for this node
      */
-    public IncidentEdgeIterator adjacentEdgesIterator() {
+    public IncidentEdgeIterator incidentEdgesIterator() {
         return new IncidentEdgeIterator();
     }
 

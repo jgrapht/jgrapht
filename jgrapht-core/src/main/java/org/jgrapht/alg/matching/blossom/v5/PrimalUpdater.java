@@ -306,8 +306,8 @@ class PrimalUpdater<V, E> {
         minusNode.parentEdge = growEdge;
         plusNode.parentEdge = plusNode.matched;
 
-        nodeInTheTree.addChild(minusNode, growEdge);
-        minusNode.addChild(plusNode, minusNode.matched);
+        nodeInTheTree.addChild(minusNode, growEdge, true);
+        minusNode.addChild(plusNode, minusNode.matched, true);
 
 
         processMinusNodeGrow(minusNode);
@@ -331,7 +331,7 @@ class PrimalUpdater<V, E> {
             minusNode.tree.addMinusBlossom(minusNode, minusNode.dual);
         }
         // maintaining minus-plus edges in the minus-plus heaps in the tree edges
-        for (Node.IncidentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             dir = iterator.getDir();
             Node opposite = edge.head[dir];
@@ -372,7 +372,7 @@ class PrimalUpdater<V, E> {
         Edge edge;
         int dir;
         List<Edge> growEdges = new LinkedList<>();
-        for (Node.IncidentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = plusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             dir = iterator.getDir();
             Node opposite = edge.head[dir];
@@ -440,7 +440,7 @@ class PrimalUpdater<V, E> {
         Tree tree = blossom.tree;
         blossomRoot.matched = blossom.matched;
         blossomRoot.tree = tree;
-        blossomRoot.addChild(blossom.matched.getOpposite(blossomRoot), blossomRoot.matched);
+        blossomRoot.addChild(blossom.matched.getOpposite(blossomRoot), blossomRoot.matched, false);
 
         Node current = blossomRoot;
         current.label = Node.Label.MINUS;
@@ -457,7 +457,7 @@ class PrimalUpdater<V, E> {
             current.isOuter = true;
             current.tree = tree;
             current.matched = prevMatched = current.blossomSibling;
-            current.addChild(prevNode, prevNode.blossomSibling);
+            current.addChild(prevNode, prevNode.blossomSibling, false);
             prevNode = current;
 
             // processing "-" node
@@ -466,10 +466,10 @@ class PrimalUpdater<V, E> {
             current.isOuter = true;
             current.tree = tree;
             current.matched = prevMatched;
-            current.addChild(prevNode, prevNode.blossomSibling);
+            current.addChild(prevNode, prevNode.blossomSibling, false);
             prevNode = current;
         }
-        blossom.parentEdge.getOpposite(branchesEndpoint).addChild(branchesEndpoint, blossom.parentEdge);
+        blossom.parentEdge.getOpposite(branchesEndpoint).addChild(branchesEndpoint, blossom.parentEdge, false);
 
         // second traversal, updating edges' slacks and their presence in heaps
         current = blossomRoot;
@@ -536,7 +536,7 @@ class PrimalUpdater<V, E> {
         double eps = plusNode.tree.eps; // the plusNode.tree is assumed to be correct
         plusNode.dual -= eps; // applying lazy delta spreading
         Edge edge;
-        for (Node.IncidentEdgeIterator iterator = plusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = plusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             Node opposite = edge.head[iterator.getDir()];
             // update slack of the edge
@@ -597,7 +597,7 @@ class PrimalUpdater<V, E> {
         }
         Edge edge;
         Node opposite;
-        for (Node.IncidentEdgeIterator iterator = minusNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             opposite = edge.head[iterator.getDir()];
             if (opposite.isMarked && !opposite.isPlusNode()) {
@@ -616,7 +616,7 @@ class PrimalUpdater<V, E> {
     private void expandInfinityNode(Node infinityNode, Tree tree) {
         double eps = tree.eps;
         Edge edge;
-        for (Node.IncidentEdgeIterator iterator = infinityNode.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = infinityNode.incidentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
             Node opposite = edge.head[iterator.getDir()];
             if (!opposite.isMarked) {
@@ -664,7 +664,7 @@ class PrimalUpdater<V, E> {
             } else {
                 node.dual -= eps;
             }
-            for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+            for (Node.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
                 edge = incidentEdgeIterator.next();
                 dir = incidentEdgeIterator.getDir();
                 Node opposite = edge.head[dir];
@@ -727,22 +727,8 @@ class PrimalUpdater<V, E> {
         root.matched = matchedEdge;
 
         // removing root from the linked list of roots;
-        root.treeSiblingPrev.treeSiblingNext = root.treeSiblingNext;
-        if (root.treeSiblingNext != null) {
-            root.treeSiblingNext.treeSiblingPrev = root.treeSiblingPrev;
-        }
+        root.removeFromChildList();
         root.isTreeRoot = false;
-        // destroying tree structure
-        Set<Node> treeNodes = new HashSet<>();
-        for (Tree.TreeNodeIterator iterator = firstNode.tree.treeNodeIterator(); iterator.hasNext(); ) {
-            treeNodes.add(iterator.next());
-        }
-        for (Node treeNode : treeNodes) {
-            treeNode.tree = null;
-            treeNode.firstTreeChild = null;
-            treeNode.treeSiblingPrev = null;
-            treeNode.treeSiblingNext = null;
-        }
 
         state.treeNum--;
     }
@@ -786,7 +772,7 @@ class PrimalUpdater<V, E> {
         // substituting varNode with the blossom in the tree structure
         blossomRoot.removeFromChildList();
         if (!blossomRoot.isTreeRoot) {
-            blossomRoot.getTreeParent().addChild(blossom, blossomRoot.parentEdge);
+            blossomRoot.getTreeParent().addChild(blossom, blossomRoot.parentEdge, false);
         } else {
             // substituting blossomRoot with blossom in the linked list of tree roots
             blossom.treeSiblingNext = blossomRoot.treeSiblingNext;

@@ -25,7 +25,7 @@ import java.util.Set;
 public class BlossomVDebugger {
     public static Set<Edge> edgesOf(Node node) {
         Set<Edge> edges = new HashSet<>();
-        for (Node.IncidentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
             edges.add(iterator.next());
         }
         return edges;

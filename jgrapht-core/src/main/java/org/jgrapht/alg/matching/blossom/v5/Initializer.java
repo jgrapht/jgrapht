@@ -187,7 +187,7 @@ class Initializer<V, E> {
             if (!node.isInfinityNode()) {
                 double minSlack = INFINITY;
                 // find the minimum slack of incident edges
-                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
                     edge = incidentEdgeIterator.next();
                     if (edge.slack < minSlack) {
                         minSlack = edge.slack;
@@ -196,7 +196,7 @@ class Initializer<V, E> {
                 node.dual += minSlack;
                 double resultMinSlack = minSlack;
                 // subtract minimum slack from the slacks of all incident edges
-                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.adjacentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
                     edge = incidentEdgeIterator.next();
                     dir = incidentEdgeIterator.getDir();
                     if (edge.slack <= resultMinSlack && node.isPlusNode() && edge.head[dir].isPlusNode()) {
@@ -229,7 +229,7 @@ class Initializer<V, E> {
         // add this edge to the heap of (+, +) cross-tree edges
         for (Node root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             tree = root.tree;
-            for (Node.IncidentEdgeIterator edgeIterator = root.adjacentEdgesIterator(); edgeIterator.hasNext(); ) {
+            for (Node.IncidentEdgeIterator edgeIterator = root.incidentEdgesIterator(); edgeIterator.hasNext(); ) {
                 edge = edgeIterator.next();
                 opposite = edge.head[edgeIterator.getDir()];
                 if (opposite.isInfinityNode()) {

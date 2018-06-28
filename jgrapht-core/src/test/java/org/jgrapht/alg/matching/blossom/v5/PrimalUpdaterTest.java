@@ -573,14 +573,6 @@ public class PrimalUpdaterTest {
         assertEquals(edge34, node4.matched);
         assertEquals(edge56, node5.matched);
         assertEquals(edge56, node6.matched);
-
-        assertTrue(BlossomVDebugger.childrenOf(node1).isEmpty());
-        assertTrue(BlossomVDebugger.childrenOf(node2).isEmpty());
-        assertTrue(BlossomVDebugger.childrenOf(node3).isEmpty());
-        assertTrue(BlossomVDebugger.childrenOf(node4).isEmpty());
-        assertTrue(BlossomVDebugger.childrenOf(node5).isEmpty());
-        assertTrue(BlossomVDebugger.childrenOf(node6).isEmpty());
-
     }
 
     /**

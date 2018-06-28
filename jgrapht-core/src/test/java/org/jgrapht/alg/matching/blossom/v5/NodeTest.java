@@ -58,13 +58,13 @@ public class NodeTest {
         assertSame(nodeEdge.head[0], to);
         assertSame(nodeEdge.head[1], from);
 
-        for (Node.IncidentEdgeIterator iterator = from.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = from.incidentEdgesIterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
             int dir = iterator.getDir();
             assertSame(edge.head[dir], to);
         }
 
-        for (Node.IncidentEdgeIterator iterator = to.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = to.incidentEdgesIterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
             int dir = iterator.getDir();
             assertSame(edge.head[dir], from);
@@ -111,7 +111,7 @@ public class NodeTest {
      */
     private void testAdjacentEdgeIteratorOf(Node node, Set<Edge> expectedIncidentEdges) {
         Set<Edge> adj = new HashSet<>();
-        for (Node.IncidentEdgeIterator iterator = node.adjacentEdgesIterator(); iterator.hasNext(); ) {
+        for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
             assertEquals(node, edge.head[1 - iterator.getDir()]);
             adj.add(edge);
