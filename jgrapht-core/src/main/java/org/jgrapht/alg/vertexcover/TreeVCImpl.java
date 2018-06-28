@@ -55,9 +55,19 @@ import java.util.stream.Collectors;
  */
 public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
 
+    /*
+        Input graph
+     */
     private final Graph<V, E> graph;
+
+    /*
+        Input set of roots (one root per tree)
+     */
     private final Set<V> roots;
 
+    /*
+        Cached minimum vertex cover
+     */
     private VertexCover<V> minVertexCover = null;
 
     /**
@@ -74,6 +84,8 @@ public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
 
     /**
      * Creates a new TreeVCImpl instance.
+     *
+     * Note: If two roots correspond to the same tree, then only one of them will be used.
      *
      * @param graph the input graph
      * @param roots the input root

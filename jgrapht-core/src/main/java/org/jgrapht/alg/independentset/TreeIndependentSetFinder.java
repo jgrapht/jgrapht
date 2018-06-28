@@ -49,9 +49,19 @@ import java.util.Set;
  */
 public class TreeIndependentSetFinder<V, E> implements IndependentSetAlgorithm<V> {
 
+    /*
+        Input graph
+     */
     private final Graph<V, E> graph;
+
+    /*
+        Input set of roots
+     */
     private final Set<V> roots;
 
+    /*
+        Cached independent set
+     */
     private IndependentSetAlgorithm.IndependentSet<V> maxIndSet = null;
 
     /**
@@ -68,6 +78,8 @@ public class TreeIndependentSetFinder<V, E> implements IndependentSetAlgorithm<V
 
     /**
      * Creates a new TreeIndependentSetFinder instance.
+     *
+     * Note: If two roots correspond to the same tree, then only one of them will be used.
      *
      * @param graph the input graph
      * @param roots the input root
