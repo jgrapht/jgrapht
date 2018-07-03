@@ -41,9 +41,10 @@ public class LineGraphConstructorTest
     {
         // Line Graph of an empty graph should be empty
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        //System.out.println(g.getType());
         Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3));
 
-        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
+        LineGraphConstructor<Integer, DefaultEdge> lgc = new LineGraphConstructor<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleWeightedGraph<>(DefaultEdge.class);
         lgc.constructGraph(target);
 
@@ -60,7 +61,7 @@ public class LineGraphConstructorTest
         Map<String, Integer> resultMap = new HashMap<>();
         generator.generateGraph(starGraph, resultMap);
 
-        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(starGraph);
+        LineGraphConstructor<Integer, DefaultEdge> lgc = new LineGraphConstructor<>(starGraph);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
         lgc.constructGraph(target);
 
@@ -72,17 +73,17 @@ public class LineGraphConstructorTest
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
-        g.addEdge(1,2);
-        g.addEdge(2,5);
-        g.addEdge(5,4);
-        g.addEdge(4,1);
-        g.addEdge(4,3);
-        g.addEdge(1,3);
+        DefaultEdge e0 = g.addEdge(1,2);
+        DefaultEdge e1 = g.addEdge(2,5);
+        DefaultEdge e2 = g.addEdge(5,4);
+        DefaultEdge e3 = g.addEdge(4,1);
+        DefaultEdge e4 = g.addEdge(4,3);
+        DefaultEdge e5 = g.addEdge(1,3);
 
-        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
+        LineGraphConstructor<Integer, DefaultEdge> lgc = new LineGraphConstructor<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
         lgc.constructGraph(target);
-
+        target  = GraphTests.requireUndirected(target);
         assertTrue(target.vertexSet().equals(g.edgeSet()));
         assertEquals(9, target.edgeSet().size());
 
@@ -91,15 +92,15 @@ public class LineGraphConstructorTest
         Graphs.addAllVertices(expectedGraph, g.edgeSet());
         List<DefaultEdge> vertexList = new ArrayList<>(expectedGraph.vertexSet());
 
-        expectedGraph.addEdge(vertexList.get(0), vertexList.get(1));
-        expectedGraph.addEdge(vertexList.get(0), vertexList.get(3));
-        expectedGraph.addEdge(vertexList.get(0), vertexList.get(5));
-        expectedGraph.addEdge(vertexList.get(1), vertexList.get(2));
-        expectedGraph.addEdge(vertexList.get(2), vertexList.get(3));
-        expectedGraph.addEdge(vertexList.get(2), vertexList.get(4));
-        expectedGraph.addEdge(vertexList.get(3), vertexList.get(5));
-        expectedGraph.addEdge(vertexList.get(3), vertexList.get(4));
-        expectedGraph.addEdge(vertexList.get(4), vertexList.get(5));
+        expectedGraph.addEdge(e0, e1);
+        expectedGraph.addEdge(e0, e3);
+        expectedGraph.addEdge(e0, e5);
+        expectedGraph.addEdge(e1, e2);
+        expectedGraph.addEdge(e2, e3);
+        expectedGraph.addEdge(e2, e4);
+        expectedGraph.addEdge(e3, e5);
+        expectedGraph.addEdge(e3, e4);
+        expectedGraph.addEdge(e4, e5);
 
         List<DefaultEdge> edgeListExpected = new ArrayList<>(expectedGraph.edgeSet());
         List<DefaultEdge> edgeListActual = new ArrayList<>(target.edgeSet());
@@ -115,15 +116,15 @@ public class LineGraphConstructorTest
     {
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
-        g.addEdge(1,2);
-        g.addEdge(1,4);
-        g.addEdge(2,3);
-        g.addEdge(3,1);
-        g.addEdge(3,2);
-        g.addEdge(3,4);
-        g.addEdge(4,3);
+        DefaultEdge e0 = g.addEdge(1,2);
+        DefaultEdge e1 = g.addEdge(1,4);
+        DefaultEdge e2 = g.addEdge(2,3);
+        DefaultEdge e3 = g.addEdge(3,1);
+        DefaultEdge e4 = g.addEdge(3,2);
+        DefaultEdge e5 = g.addEdge(3,4);
+        DefaultEdge e6 = g.addEdge(4,3);
 
-        LineGraphConstructor<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConstructor<>(g);
+        LineGraphConstructor<Integer, DefaultEdge> lgc = new LineGraphConstructor<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleDirectedGraph<>(DefaultEdge.class);
         lgc.constructGraph(target);
 
@@ -135,18 +136,18 @@ public class LineGraphConstructorTest
         Graphs.addAllVertices(expectedGraph, g.edgeSet());
         List<DefaultEdge> vertexList = new ArrayList<>(expectedGraph.vertexSet());
 
-        expectedGraph.addEdge(vertexList.get(3), vertexList.get(0));
-        expectedGraph.addEdge(vertexList.get(3), vertexList.get(1));
-        expectedGraph.addEdge(vertexList.get(0), vertexList.get(2));
-        expectedGraph.addEdge(vertexList.get(4), vertexList.get(2));
-        expectedGraph.addEdge(vertexList.get(2), vertexList.get(3));
-        expectedGraph.addEdge(vertexList.get(2), vertexList.get(4));
-        expectedGraph.addEdge(vertexList.get(2), vertexList.get(5));
-        expectedGraph.addEdge(vertexList.get(6), vertexList.get(3));
-        expectedGraph.addEdge(vertexList.get(6), vertexList.get(4));
-        expectedGraph.addEdge(vertexList.get(6), vertexList.get(5));
-        expectedGraph.addEdge(vertexList.get(1), vertexList.get(6));
-        expectedGraph.addEdge(vertexList.get(5), vertexList.get(6));
+        expectedGraph.addEdge(e3, e0);
+        expectedGraph.addEdge(e3, e1);
+        expectedGraph.addEdge(e0, e2);
+        expectedGraph.addEdge(e4, e2);
+        expectedGraph.addEdge(e2, e3);
+        expectedGraph.addEdge(e2, e4);
+        expectedGraph.addEdge(e2, e5);
+        expectedGraph.addEdge(e6, e3);
+        expectedGraph.addEdge(e6, e4);
+        expectedGraph.addEdge(e6, e5);
+        expectedGraph.addEdge(e1, e6);
+        expectedGraph.addEdge(e5, e6);
 
         List<DefaultEdge> edgeListExpected = new ArrayList<>(expectedGraph.edgeSet());
         List<DefaultEdge> edgeListActual = new ArrayList<>(target.edgeSet());

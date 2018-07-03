@@ -18,6 +18,10 @@
 package org.jgrapht.alg.dual;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+
+import java.util.Objects;
 
 /**
  * Generator which produces the
@@ -29,13 +33,15 @@ import org.jgrapht.Graph;
  * corresponds to the arc set of $G$ and having an arc directed from an edge $e_1$ to an
  * edge $e_2$ if in $G$, the head of $e_1$ meets the tail of $e_2$
  *
- * The runtime complexity is $O(|V|+|E|)$.
+ * The runtime complexity is $O(|E|)$.
  *
  * <p>
  * More formally, let $G = (V, E)$ be a graph then its line graph $L(G)$ is such that
- * - each vertex of $L(G)$ represents an edge of $G$; and
- * - two vertices of $L(G)$ are adjacent if and only if their corresponding edges share
- *   a common endpoint ("are incident") in $G$.
+ * <ul>
+ * <li>Each vertex of $L(G)$ represents an edge of $G$</li>
+ * <li>Two vertices of $L(G)$ are adjacent if and only if their corresponding edges share
+ * a common endpoint ("are incident") in $G$ </li>
+ * </ul>
  * <p>
  *
  * @author Nikhil Sharma
@@ -43,23 +49,22 @@ import org.jgrapht.Graph;
  *
  *
  * @param <V> vertex type
- * @param <E1> edge type
- * @param <E2> edge type
+ * @param <E> edge type
  *
  */
-public class LineGraphConstructor<V, E1, E2>
+public class LineGraphConstructor<V, E>
 {
 
-    private final Graph<V, E1> graph;
+    private final Graph<V, E> graph;
 
     /**
      * Line Graph Constructor
      *
      * @param graph input graph
      */
-    public LineGraphConstructor(Graph<V, E1> graph)
+    public LineGraphConstructor(Graph<V, E> graph)
     {
-        this.graph = graph;
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
     /**
@@ -67,34 +72,31 @@ public class LineGraphConstructor<V, E1, E2>
      *
      * @param target target graph
      */
-    public void constructGraph(Graph<E1, E2> target)
+    public void constructGraph(Graph<E, E> target)
     {
+        Graphs.addAllVertices(target, graph.edgeSet());
         if (graph.getType().isDirected()) {
 
+            GraphTests.requireDirected(target, "Graph must be directed");
             for(V vertex : graph.vertexSet()){
-                for(E1 edge1 : graph.incomingEdgesOf(vertex)){
-                    for(E1 edge2 : graph.outgoingEdgesOf(vertex)){
-                        target.addVertex(edge1);
-                        target.addVertex(edge2);
+                for(E edge1 : graph.incomingEdgesOf(vertex)){
+                    for(E edge2 : graph.outgoingEdgesOf(vertex)){
                         target.addEdge(edge1, edge2);
                     }
                 }
             }
         } else{ // undirected graph
 
-            for(E1 edge : graph.edgeSet()){
-                for(E1 edge1 : graph.incomingEdgesOf(graph.getEdgeTarget(edge))){
+            GraphTests.requireUndirected(target, "Graph must be undirected");
+            for(E edge : graph.edgeSet()){
+                for(E edge1 : graph.incomingEdgesOf(graph.getEdgeTarget(edge))){
                     if(edge != edge1){
-                        target.addVertex(edge);
-                        target.addVertex(edge1);
                         target.addEdge(edge ,edge1);
                     }
                 }
 
-                for(E1 edge1 : graph.incomingEdgesOf(graph.getEdgeSource(edge))){
+                for(E edge1 : graph.incomingEdgesOf(graph.getEdgeSource(edge))){
                     if(edge != edge1){
-                        target.addVertex(edge);
-                        target.addVertex(edge1);
                         target.addEdge(edge ,edge1);
                     }
                 }
