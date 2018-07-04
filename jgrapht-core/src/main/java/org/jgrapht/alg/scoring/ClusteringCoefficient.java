@@ -110,14 +110,14 @@ public class ClusteringCoefficient<V, E>
     private void compute(V v)
     {
         // we count each neighbor only once
-        Set<V> neighboursSet = Graphs.successorListOf(graph, v).stream().collect(Collectors.toSet());
+        Set<V> neighboursSet = Graphs.successorListOf(graph, v).stream().filter(u -> u != v).collect(Collectors.toSet());
 
         double actualEdgesCount = 0.0;
         List<V> neighbourhood = new ArrayList<>(neighboursSet);
         for (V u : neighbourhood) {
             for (V w : neighbourhood) {       
                 //self edges are not counted.
-                if (v == w) {
+                if (u == w) {
                     continue;
                 }
                 //multiple edges are not counted

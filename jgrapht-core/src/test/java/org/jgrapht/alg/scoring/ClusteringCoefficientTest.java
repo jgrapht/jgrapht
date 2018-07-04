@@ -134,16 +134,39 @@ public class ClusteringCoefficientTest
     @Test
     public void testUndirected1()
     {
-        int order = 4;
+        Graph<Integer, DefaultEdge> g = createUndirected();
+        VertexScoringAlgorithm<Integer, Double> alg = new ClusteringCoefficient<>(g);
         
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
-            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        GraphGenerator<Integer, DefaultEdge, Integer> generator = new CompleteGraphGenerator<>(order);
-        Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, resultMap);
+        Map<Integer, Double> scores = alg.getScores();
         
-        g.removeEdge(2, 3);
-        g.removeEdge(2, 4);
+        assertEquals(0.333, scores.get(1), 0.001);
+        assertEquals(0.0, scores.get(2), 0.0);
+        assertEquals(1.0, scores.get(3), 0.0);
+        assertEquals(1.0, scores.get(4), 0.0);
+    }
+    
+    @Test
+    public void testMultipleEdgesDoNotCount()
+    {
+        Graph<Integer, DefaultEdge> g = createUndirected();
+        g.addEdge(1, 2);
+        g.addEdge(1, 4);
+        VertexScoringAlgorithm<Integer, Double> alg = new ClusteringCoefficient<>(g);
+        
+        Map<Integer, Double> scores = alg.getScores();
+        
+        assertEquals(0.333, scores.get(1), 0.001);
+        assertEquals(0.0, scores.get(2), 0.0);
+        assertEquals(1.0, scores.get(3), 0.0);
+        assertEquals(1.0, scores.get(4), 0.0);
+    }
+    
+    @Test
+    public void testSelfLoopDoNotCount()
+    {
+        Graph<Integer, DefaultEdge> g = createUndirected();
+        g.addEdge(1, 1);
+        g.addEdge(2, 2);
         VertexScoringAlgorithm<Integer, Double> alg = new ClusteringCoefficient<>(g);
         
         Map<Integer, Double> scores = alg.getScores();
@@ -206,6 +229,20 @@ public class ClusteringCoefficientTest
         assertEquals(0.800, scores.get(8), 0.001);
         assertEquals(1.000, scores.get(9), 0.001);
         assertEquals(0.800, scores.get(10), 0.001);
+    }
+    
+    private Graph<Integer, DefaultEdge> createUndirected()
+    {
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        GraphGenerator<Integer, DefaultEdge, Integer> generator = new CompleteGraphGenerator<>(4);
+        Map<String, Integer> resultMap = new HashMap<>();
+        generator.generateGraph(g, resultMap);
+        
+        g.removeEdge(2, 3);
+        g.removeEdge(2, 4);
+        
+        return g;
     }
     
     private Graph<Integer, DefaultEdge> createUndirected2()
