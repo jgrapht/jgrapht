@@ -8,15 +8,15 @@ import org.jgrapht.util.FibonacciHeapNode;
 
 import java.util.*;
 
-import static org.jgrapht.alg.flow.CapacityScalingMinimumCostFlow.LabelType.PERMANENTLY_LABELED;
-import static org.jgrapht.alg.flow.CapacityScalingMinimumCostFlow.LabelType.TEMPORARILY_LABELED;
-
 public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgorithm<V, E> {
+    public static final double EPS = 10e-12;
+    public static final double INFINITY = 10e9;
     private static final String INFEASIBLE_SUPPLY = "Total node supply isn't equal to 0";
     private static final String NO_FEASIBLE_FLOW = "Specified flow network problem has no feasible solution";
     private static final String NEGATIVE_CAPACITY = "Negative edge capacities are not allowed";
     private static final String LOWER_EXCEEDS_UPPER = "Lower edge capacity must not exceed upper edge capacity";
-    private static final double EPS = 10e-12;
+    private static final boolean DEBUG = false;
+    private static int counter = 1;
     private Graph<V, E> graph;
     private MinimumCostFLow<V, E> minimumCostFLow;
     private Map<E, Double> upperCapacityMap;
@@ -64,7 +64,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         return minimumCostFLow;
     }
 
-    private void init(Map<V, Double> supplyMap, Map<E, Double> lowerCapacityMap, Map<E, Double> upperCapacityMap) {
+    private void init(Map<V, Double> supplyMap, Map<E, Double> upperCapacityMap, Map<E, Double> lowerCapacityMap) {
         double supply;
         boolean undirected = graph.getType().isUndirected();
         this.lowerCapacityMap = lowerCapacityMap;
@@ -77,7 +77,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         nodes = new Node[n];
         int i = 0;
         for (V vertex : graph.vertexSet()) {
-            supply = supplyMap.get(vertex);
+            if (supplyMap.containsKey(vertex)) {
+                supply = supplyMap.get(vertex);
+            } else {
+                supply = 0;
+            }
             supplySum += supply;
             nodes[i] = new Node(i, supply);
             nodeMap.put(vertex, nodes[i]);
@@ -87,7 +91,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             }
             ++i;
         }
-        if (Math.abs(supplySum - EPS) > 0) {
+        if (Math.abs(supplySum) > EPS) {
             throw new IllegalArgumentException(INFEASIBLE_SUPPLY);
         }
         Node node, opposite;
@@ -116,15 +120,24 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
                 edgeMap.put(edge, new Pair<>(arc, arc));
             }
         }
+        if (DEBUG) {
+            System.out.println("Printing mapping");
+            for (int j = 0; j < n; j++) {
+                System.out.println(vertices.get(j) + " -> " + nodes[j].id);
+            }
+        }
     }
 
     private void pushDijkstra(Node start) {
         Node currentNode, opposite;
         Arc currentArc;
-        FibonacciHeapNode<Node> currentFibNode;
         double distance;
+        FibonacciHeapNode<Node> currentFibNode;
+        int TEMPORARILY_LABELED = counter++;
+        int PERMANENTLY_LABELED = counter++;
         FibonacciHeap<Node> heap = new FibonacciHeap<>();
         List<Node> permanentlyLabeled = new LinkedList<>();
+        start.parentArc = null;
         insertIntoHeap(heap, start, 0);
         while (!heap.isEmpty()) {
             currentFibNode = heap.removeMin();
@@ -132,21 +145,20 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             distance = currentFibNode.getKey();
             if (currentNode.excess < 0) {
                 double delta = augmentPath(start, currentNode);
+                cost += delta * (distance + start.potential - currentNode.potential);
                 for (Node node : permanentlyLabeled) {
                     node.potential += distance;
                 }
-                cost += delta * (distance + start.potential - currentNode.potential);
                 return;
             }
             currentNode.labelType = PERMANENTLY_LABELED;
             permanentlyLabeled.add(currentNode); // varNode becomes permanently labeled
-            currentNode.potential -= distance;
             for (currentArc = currentNode.firstNonsaturated; currentArc != null; currentArc = currentArc.next) {
                 opposite = currentArc.head;
                 if (opposite.labelType != PERMANENTLY_LABELED) {
                     if (opposite.labelType == TEMPORARILY_LABELED) {
                         if (distance + currentArc.getReducedCost() < opposite.fibNode.getKey()) {
-                            insertIntoHeap(heap, opposite, distance + currentArc.getReducedCost());
+                            heap.decreaseKey(opposite.fibNode, distance + currentArc.getReducedCost());
                             opposite.parentArc = currentArc;
                         }
                     } else {
@@ -156,6 +168,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
                     }
                 }
             }
+            currentNode.potential -= distance;
         }
         throw new IllegalArgumentException(NO_FEASIBLE_FLOW);
     }
@@ -164,6 +177,18 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         double delta = Math.min(start.excess, -end.excess);
         for (Arc arc = end.parentArc; arc != null; arc = arc.revArc.head.parentArc) {
             delta = Math.min(delta, arc.residualCapacity);
+        }
+        if (DEBUG) {
+            ArrayList<Node> stack = new ArrayList<>();
+            for (Arc arc = end.parentArc; arc != null; arc = arc.revArc.head.parentArc) {
+                stack.add(arc.head);
+            }
+            stack.add(start);
+            System.out.println("Printing augmenting path");
+            for (int i = stack.size() - 1; i > 0; i--) {
+                System.out.print(stack.get(i).id + " -> ");
+            }
+            System.out.println(stack.get(0).id + ", delta = " + delta);
         }
         end.excess += delta;
         for (Arc arc = end.parentArc; arc != null; arc = arc.head.parentArc) {
@@ -184,6 +209,9 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         while (!positiveExcessNodes.isEmpty()) {
             Node node = positiveExcessNodes.get(positiveExcessNodes.size() - 1);
             pushDijkstra(node);
+            if (node.excess < EPS) {
+                positiveExcessNodes.remove(positiveExcessNodes.size() - 1);
+            }
         }
         return minimumCostFLow = finish();
     }
@@ -211,19 +239,17 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         return new MinimumCostFlowImpl<>(cost, flowMap);
     }
 
-    enum LabelType {
-        PERMANENTLY_LABELED, TEMPORARILY_LABELED,
-    }
-
     private static class Node {
+        private static int ID = 1;
         final int position;
         FibonacciHeapNode<Node> fibNode;
         Arc parentArc;
-        LabelType labelType;
+        int labelType;
         double excess;
         double potential;
         Arc firstSaturated;
         Arc firstNonsaturated;
+        private int id = ID++;
 
         public Node(int position, double excess) {
             this.position = position;
@@ -244,7 +270,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
                     firstNonsaturated.prev = forwardArc;
                 }
                 forwardArc.next = firstNonsaturated;
-                firstNonsaturated = forwardArc.next;
+                firstNonsaturated = forwardArc;
             }
             Arc reverseArc = new Arc(this, 0, -cost);
             if (opposite.firstSaturated != null) {
@@ -257,6 +283,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             reverseArc.revArc = forwardArc;
 
             return forwardArc;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Id = %d, excess = %.1f, potential = %.1f", id, excess, potential);
         }
     }
 
@@ -320,6 +351,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
                 prev = null;
             }
             residualCapacity += delta;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Residual capacity = %.1f, reduced cost = %.1f, cost = %.1f, head = %s", residualCapacity, getReducedCost(), cost, head.toString());
         }
     }
 }
