@@ -253,6 +253,10 @@ class Node {
         firstTreeChild = child;
     }
 
+    public Node getOppositeMatched(){
+        return matched.getOpposite(this);
+    }
+
     /**
      * If this node is a tree root then removes this nodes from the tree roots doubly linked list.
      * Otherwise, removes this vertex from the doubly linked list of tree children and updates
