@@ -19,7 +19,7 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeap;
 
-import static java.lang.Math.abs;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 
 /**
  * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates, thus creating
@@ -82,7 +82,7 @@ class DualUpdater<V, E> {
         double dualChange = 0;
         // updating trees.eps with respect to the accumulated eps
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-            if (abs(root.tree.accumulatedEps) > KolmogorovMinimumWeightPerfectMatching.EPS) {
+            if (root.tree.accumulatedEps > EPS) {
                 dualChange += root.tree.accumulatedEps;
                 root.tree.eps += root.tree.accumulatedEps;
             }
@@ -178,7 +178,7 @@ class DualUpdater<V, E> {
             primalUpdater.augment(augmentEdge);
             return false; // can't proceed with the same tree
         } else {
-            return delta > KolmogorovMinimumWeightPerfectMatching.EPS;
+            return delta > EPS;
         }
     }
 

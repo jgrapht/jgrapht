@@ -205,7 +205,9 @@ class Node {
             // remove edge from the linked list
             edge.prev[dir].next[dir] = edge.next[dir];
             edge.next[dir].prev[dir] = edge.prev[dir];
-            first[dir] = edge.next[dir]; // avoid checking whether edge is the first edge of this node in the direction dir
+            if (first[dir] == edge) {
+                first[dir] = edge.next[dir];
+            }
         }
     }
 
@@ -253,7 +255,7 @@ class Node {
         firstTreeChild = child;
     }
 
-    public Node getOppositeMatched(){
+    public Node getOppositeMatched() {
         return matched.getOpposite(this);
     }
 
@@ -474,48 +476,45 @@ class Node {
     public class IncidentEdgeIterator implements Iterator<Edge> {
 
         /**
-         * The direction of currentEdge
+         * The direction of the edge returned by the {@code IncidentEdgeIterator}
          */
-        private int dir;
+        private int currentDir;
         /**
-         * The edge this iterator is currently on
+         * Direction of the {@code nextEdge}
          */
-        private Edge currentEdge;
+        private int nextDir;
         /**
-         * Support variable to identify whether an edge has been returned by this iterator
+         * The edge that will be returned after the next call to {@link IncidentEdgeIterator#next()}.
+         * Is null if all edges of the current node have been traversed.
          */
-        private Edge current;
+        private Edge nextEdge;
 
         /**
-         * Constructs a ner instance of an IncidentEdgeIterator.
+         * Constructs a new instance of the IncidentEdgeIterator.
          */
         public IncidentEdgeIterator() {
             if (first[0] == null) {
-                this.currentEdge = first[1];
-                this.dir = 1;
+                nextEdge = first[1];
+                nextDir = 1;
+
             } else {
-                this.currentEdge = first[0];
-                this.dir = 0;
+                nextEdge = first[0];
+                nextDir = 0;
             }
-            current = currentEdge;
         }
 
         /**
-         * Returns the direction of {@code currentEdge}
+         * Returns the direction of the edge returned by this iterator
          *
-         * @return the direction of {@code currentEdge}
+         * @return the direction of the edge returned by this iterator
          */
         public int getDir() {
-            return dir;
+            return currentDir;
         }
 
         @Override
         public boolean hasNext() {
-            if (current != null) {
-                return true;
-            }
-            current = advance();
-            return current != null;
+            return nextEdge != null;
         }
 
         @Override
@@ -523,32 +522,24 @@ class Node {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Edge result = current;
-            current = null;
+            Edge result = nextEdge;
+            advance();
             return result;
         }
 
         /**
          * Advances this iterator to the next incident edge. If previous edge was the last one with direction
          * 0, then the direction of this iterator is changes. If previous edge was the last incident edge, then
-         * currentEdge becomes null.
-         *
-         * @return the next incident edge or null if all edges have been processed already
+         * {@code nextEdge} becomes null.
          */
-        private Edge advance() {
-            if (currentEdge == null) {
-                return null;
-            }
-            currentEdge = currentEdge.next[dir];
-            if (currentEdge == first[0]) {
-                // that was the last outgoing edge
-                dir = 1;
-                return currentEdge = first[1]; // if there is no incoming edges, currentEdge becomes null
-            } else if (currentEdge == first[1]) {
-                // that was the last incoming edge
-                return currentEdge = null;
-            } else {
-                return currentEdge;
+        private void advance() {
+            currentDir = nextDir;
+            nextEdge = nextEdge.next[nextDir];
+            if (nextEdge == first[0]) {
+                nextEdge = first[1];
+                nextDir = 1;
+            } else if (nextEdge == first[1]) {
+                nextEdge = null;
             }
         }
     }

@@ -17,10 +17,7 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeap;
-
-import java.util.Set;
 
 import static org.jgrapht.alg.matching.blossom.v5.Node.Label.MINUS;
 import static org.jgrapht.alg.matching.blossom.v5.Node.Label.PLUS;
@@ -185,6 +182,8 @@ class PrimalUpdater<V, E> {
      * @param blossom the blossom to expand
      */
     public void expand(Node blossom) {
+        Edge edge;
+        int dir;
         long start = System.nanoTime();
         if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Expanding blossom " + blossom);
@@ -212,12 +211,9 @@ class PrimalUpdater<V, E> {
 
         // moving all edge from blossom to penultimate children
         blossom.removeFromChildList();
-        // TODO: improve to use only internal data structures
-        Set<Pair<Edge, Integer>> edges = blossom.getEdges();
-        Edge edge;
-        for (Pair<Edge, Integer> pair : edges) {
-            edge = pair.getFirst();
-            int dir = pair.getSecond();
+        for (Node.IncidentEdgeIterator iterator = blossom.incidentEdgesIterator(); iterator.hasNext(); ) {
+            edge = iterator.next();
+            dir = iterator.getDir();
             Node penultimateChild = edge.headOriginal[1 - dir].getPenultimateBlossomAndFixBlossomGrandparent();
             state.moveEdgeTail(blossom, penultimateChild, edge);
         }
@@ -798,15 +794,15 @@ class PrimalUpdater<V, E> {
      * @param blossom  a newly created pseudonode
      */
     private void shrinkPlusNode(Node plusNode, Node blossom) {
+        Edge edge;
+        Node opposite;
         Tree tree = plusNode.tree;
         double eps = tree.eps;
         plusNode.dual += eps;
 
-        Set<Pair<Edge, Integer>> edges = plusNode.getEdges();
-        for (Pair<Edge, Integer> pair : edges) {
-            Edge edge = pair.getFirst();
-            int direction = pair.getSecond();
-            Node opposite = edge.head[direction];
+        for (Node.IncidentEdgeIterator iterator = plusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
+            edge = iterator.next();
+            opposite = edge.head[iterator.getDir()];
 
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
@@ -820,7 +816,6 @@ class PrimalUpdater<V, E> {
                 edge.slack -= eps;
             }
         }
-
     }
 
     /**
@@ -831,16 +826,17 @@ class PrimalUpdater<V, E> {
      * @param blossom   a newly create pseudonode
      */
     private void shrinkMinusNode(Node minusNode, Node blossom) {
+        Edge edge;
+        Node opposite;
+        Tree oppositeTree;
         Tree tree = minusNode.tree;
         double eps = tree.eps;
         minusNode.dual -= eps;
 
-        Set<Pair<Edge, Integer>> edges = minusNode.getEdges();
-        for (Pair<Edge, Integer> pair : edges) {
-            Edge edge = pair.getFirst();
-            int direction = pair.getSecond();
-            Node opposite = edge.head[direction];
-            Tree oppositeTree = opposite.tree;
+        for (Node.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
+            edge = iterator.next();
+            opposite = edge.head[iterator.getDir()];
+            oppositeTree = opposite.tree;
 
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom

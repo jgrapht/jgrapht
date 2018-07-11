@@ -724,7 +724,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
          * @param initializationType defines a strategy to use to initialize the matching
          */
         public Options(Initializer.InitializationType initializationType) {
-            this.initializationType = initializationType;
+            this(DEFAULT_PHASE, DEFAULT_DUAL_UPDATE_TYPE, initializationType);
         }
 
         /**

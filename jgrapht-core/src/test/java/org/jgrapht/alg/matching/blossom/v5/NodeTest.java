@@ -75,7 +75,7 @@ public class NodeTest {
      * Tests iteration over all incident edges and correct edge direction
      */
     @Test
-    public void testAdjacentEdgeIterator1() {
+    public void testIncidentEdgeIterator1() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
@@ -97,10 +97,10 @@ public class NodeTest {
         Edge edge24 = state.edgeMap.get(e24);
         Edge edge34 = state.edgeMap.get(e34);
 
-        testAdjacentEdgeIteratorOf(node1, new HashSet<>(Arrays.asList(edge12, edge14)));
-        testAdjacentEdgeIteratorOf(node2, new HashSet<>(Arrays.asList(edge12, edge23, edge24)));
-        testAdjacentEdgeIteratorOf(node3, new HashSet<>(Arrays.asList(edge23, edge34)));
-        testAdjacentEdgeIteratorOf(node4, new HashSet<>(Arrays.asList(edge14, edge24, edge34)));
+        testIncidentEdgeIteratorOf(node1, new HashSet<>(Arrays.asList(edge12, edge14)));
+        testIncidentEdgeIteratorOf(node2, new HashSet<>(Arrays.asList(edge12, edge23, edge24)));
+        testIncidentEdgeIteratorOf(node3, new HashSet<>(Arrays.asList(edge23, edge34)));
+        testIncidentEdgeIteratorOf(node4, new HashSet<>(Arrays.asList(edge14, edge24, edge34)));
     }
 
     /**
@@ -109,7 +109,7 @@ public class NodeTest {
      * @param node                  node whose adjacent edge iterator is been tested
      * @param expectedIncidentEdges expected incident edges of the {@code node}
      */
-    private void testAdjacentEdgeIteratorOf(Node node, Set<Edge> expectedIncidentEdges) {
+    private void testIncidentEdgeIteratorOf(Node node, Set<Edge> expectedIncidentEdges) {
         Set<Edge> adj = new HashSet<>();
         for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
