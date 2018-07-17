@@ -28,11 +28,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class NodeTest {
 
-    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(Initializer.InitializationType.NONE);
+    private Options noneOptions = new Options(NONE);
 
 
     /**

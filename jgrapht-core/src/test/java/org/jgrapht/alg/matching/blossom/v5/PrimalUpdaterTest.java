@@ -30,11 +30,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class PrimalUpdaterTest {
 
-    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(Initializer.InitializationType.NONE);
+    private Options noneOptions = new Options(NONE);
 
     /**
      * Tests one grow operation

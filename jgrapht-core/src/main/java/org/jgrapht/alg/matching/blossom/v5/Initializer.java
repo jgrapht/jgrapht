@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.GREEDY;
 
 /**
  * Is used to start the Kolmogorov's Blossom V algorithm.
@@ -82,13 +83,13 @@ class Initializer<V, E> {
      * @param options the options of the algorithm
      * @return the state object with all necessary for the algorithm information
      */
-    public State<V, E> initialize(KolmogorovMinimumWeightPerfectMatching.Options options) {
-        InitializationType type = options.initializationType;
+    public State<V, E> initialize(Options options) {
+        Options.InitializationType type = options.initializationType;
         initGraph();
         State<V, E> state = new State<>(graph, nodes, edges, nodeNum, edgeNum, 0, vertexMap, edgeMap, options);
 
         int treeNum;
-        if (type == InitializationType.GREEDY) {
+        if (type == GREEDY) {
             treeNum = initGreedy();
         } else {
             treeNum = nodeNum;
@@ -273,10 +274,5 @@ class Initializer<V, E> {
         lastRoot.treeSiblingNext = null;
     }
 
-    /**
-     * Enum for types of matching initialization
-     */
-    enum InitializationType {
-        GREEDY, NONE,
-    }
+
 }

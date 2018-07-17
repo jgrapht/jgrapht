@@ -34,33 +34,58 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.blossom.v5.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.matching.blossom.v5.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class KolmogorovMinimumWeightPerfectMatchingTest {
-    private KolmogorovMinimumWeightPerfectMatching.Options options;
+    private Options options;
 
-    public KolmogorovMinimumWeightPerfectMatchingTest(KolmogorovMinimumWeightPerfectMatching.Options options) {
+    public KolmogorovMinimumWeightPerfectMatchingTest(Options options) {
         this.options = options;
     }
 
     @Parameterized.Parameters
     public static Object[] params() {
-        return new Object[]{
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.NONE),  // [0]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.GREEDY),  // [1]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_CONNECTED_COMPONENTS, Initializer.InitializationType.NONE), // [2]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_BEFORE, MULTIPLE_TREE_CONNECTED_COMPONENTS, Initializer.InitializationType.GREEDY),  // [3]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.NONE),  // [4]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_FIXED_DELTA, Initializer.InitializationType.GREEDY),  // [5]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_CONNECTED_COMPONENTS, Initializer.InitializationType.NONE),  // [6]
-                new KolmogorovMinimumWeightPerfectMatching.Options(UPDATE_DUAL_AFTER, MULTIPLE_TREE_CONNECTED_COMPONENTS, Initializer.InitializationType.GREEDY),  // [7]
+        return new Options[]{
+                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[0]
+                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[1]
+                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[2]
+                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[3]
+                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, true, true), //[4]
+                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, true, false), //[5]
+                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, false, true), //[6]
+                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, false, false), //[7]
+                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[8]
+                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[9]
+                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[10]
+                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[11]
+                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, true), //[12]
+                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, false), //[13]
+                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[14]
+                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[15]
         };
+    }
+
+    @Test
+    public void testGetMatching0() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        int[][] edges = new int[][]{{0, 1, 8}, {0, 2, 10}, {1, 2, 8}, {0, 3, 11}, {1, 3, 5}, {2, 5, 3}, {1, 5, 6}, {2, 4, 3},
+                {4, 5, 1}, {1, 6, 5}, {3, 6, 4}, {3, 7, 5}, {6, 7, 2}, {5, 7, 6}, {4, 7, 7},
+                {1, 7, 5}};
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+
+        assertEquals(18, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
     }
 
     /**
@@ -2002,9 +2027,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {13, 15, 87}, {8, 10, 51}, {9, 10, 44}, {8, 11, 96}, {9, 11, 95}, {10, 11, 9}, {8, 14, 86},
                 {9, 14, 56}, {14, 15, 36}};
         for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-
         KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
         perfectMatching.getMatching();
     }

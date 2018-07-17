@@ -178,20 +178,6 @@ class Node {
     }
 
     /**
-     * Returns a set of incident to this node edges with their directions
-     *
-     * @return a set of incident to this node edges with their directions
-     */
-    public Set<Pair<Edge, Integer>> getEdges() {
-        Set<Pair<Edge, Integer>> edges = new HashSet<>();
-        for (IncidentEdgeIterator iterator = incidentEdgesIterator(); iterator.hasNext(); ) {
-            Edge edge = iterator.next();
-            edges.add(new Pair<>(edge, iterator.getDir()));
-        }
-        return edges;
-    }
-
-    /**
      * Removes the {@code edge} from the linked list of edges. Updates the first[dir] reference is needed
      *
      * @param edge the edge to remove

@@ -24,8 +24,7 @@ import org.jgrapht.graph.AsUndirectedGraph;
 
 import java.util.*;
 
-import static org.jgrapht.alg.matching.blossom.v5.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.SingleTreeDualUpdatePhase.UPDATE_DUAL_BEFORE;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 
 /**
  * TODO: write complete class description
@@ -43,11 +42,11 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Default infinity value used in the algorithm
      */
-    public static final double INFINITY = Integer.MAX_VALUE;
+    public static final double INFINITY = 1e100;
     /**
      * Defines the threshold for throwing an exception about no perfect matching existence
      */
-    public static final double NO_PERFECT_MATCHING_THRESHOLD = INFINITY / 2;
+    public static final double NO_PERFECT_MATCHING_THRESHOLD = 1e10;
     /**
      * Variable for debug purposes
      */
@@ -65,6 +64,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * The graph we are matching on
      */
     private final Graph<V, E> graph;
+
     /**
      * Current state of the algorithm
      */
@@ -155,13 +155,14 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 tree = currentRoot.tree;
                 int iterationTreeNum = state.treeNum;
 
-                if (DEBUG)
+                if (DEBUG) {
                     printState();
+                }
 
                 // first phase
-                state.setCurrentEdges(tree);
+                setCurrentEdgesAndTryToAugment(tree);
 
-                if (options.singleTreeDualUpdatePhase == UPDATE_DUAL_BEFORE) {
+                if (iterationTreeNum == state.treeNum && options.updateDualsBefore) {
                     dualUpdater.updateDualsSingle(tree);
                 }
 
@@ -212,7 +213,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 // third phase
                 if (state.treeNum == iterationTreeNum) {
                     tree.currentEdge = null;
-                    if (options.singleTreeDualUpdatePhase == SingleTreeDualUpdatePhase.UPDATE_DUAL_AFTER) {
+                    if (options.updateDualsAfter) {
                         if (dualUpdater.updateDualsSingle(tree)) {
                             // since some progress has been made, continue with the same trees
                             continue;
@@ -310,6 +311,28 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         }
     }
 
+    /**
+     * Sets the currentEdge and currentDirection variables for all adjacent to the {@code tree} trees
+     *
+     * @param tree the tree whose adjacent trees' variables are modified
+     */
+    private void setCurrentEdgesAndTryToAugment(Tree tree) {
+        Edge edge;
+        TreeEdge treeEdge;
+        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+            treeEdge = iterator.next();
+            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
+            if (!treeEdge.plusPlusEdges.isEmpty()) {
+                edge = treeEdge.plusPlusEdges.min().getData();
+                if (edge.slack <= tree.eps + opposite.eps) {
+                    primalUpdater.augment(edge);
+                    break;
+                }
+            }
+            opposite.currentEdge = treeEdge;
+            opposite.currentDirection = iterator.getCurrentDirection();
+        }
+    }
 
     /**
      * Tests whether a non-negative dual variable is assigned to every blossom
@@ -669,73 +692,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         return state.statistics;
     }
 
-    /**
-     * Enum for choosing a phase for single tree dual updates
-     */
-    enum SingleTreeDualUpdatePhase {
-        /**
-         * Update the duals of the tree before processing it
-         */
-        UPDATE_DUAL_BEFORE,
-        /**
-         * Update the duals of the tree after processing it with an opportunity to processes it immediately
-         * again if some dual progress has been made
-         */
-        UPDATE_DUAL_AFTER
-    }
-
-    /**
-     * Options that define the strategies to use during the algorithm for updating duals and initializing the matching
-     */
-    public static class Options {
-        private static final SingleTreeDualUpdatePhase DEFAULT_PHASE = UPDATE_DUAL_BEFORE;
-        private static final DualUpdater.DualUpdateStrategy DEFAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_CONNECTED_COMPONENTS;
-        private static final Initializer.InitializationType DEFAULT_INITIALIZATION_TYPE = Initializer.InitializationType.GREEDY;
-
-        /**
-         * When to update the duals of a single tree: either before or after processing it
-         */
-        SingleTreeDualUpdatePhase singleTreeDualUpdatePhase;
-        /**
-         * What greedy strategy to use to perform a global dual update
-         */
-        DualUpdater.DualUpdateStrategy dualUpdateStrategy;
-        /**
-         * What strategy to choose to initialize the matching before the main phase of the algorithm
-         */
-        Initializer.InitializationType initializationType;
-
-        /**
-         * Constructs a custom options for the algorithm
-         *
-         * @param singleTreeDualUpdatePhase phase of a single tree dual updates
-         * @param dualUpdateStrategy        greedy strategy to update dual variables globally
-         * @param initializationType        strategy for initializing the matching
-         */
-        public Options(SingleTreeDualUpdatePhase singleTreeDualUpdatePhase, DualUpdater.DualUpdateStrategy dualUpdateStrategy, Initializer.InitializationType initializationType) {
-            this.singleTreeDualUpdatePhase = singleTreeDualUpdatePhase;
-            this.dualUpdateStrategy = dualUpdateStrategy;
-            this.initializationType = initializationType;
-        }
-
-        /**
-         * Construct a new options instance with a {@code initializationType}
-         *
-         * @param initializationType defines a strategy to use to initialize the matching
-         */
-        public Options(Initializer.InitializationType initializationType) {
-            this(DEFAULT_PHASE, DEFAULT_DUAL_UPDATE_TYPE, initializationType);
-        }
-
-        /**
-         * Construct a default options for the algorithm
-         */
-
-        public Options() {
-            this(DEFAULT_PHASE, DEFAULT_DUAL_UPDATE_TYPE, DEFAULT_INITIALIZATION_TYPE);
-        }
-
-    }
 
     /**
      * Describes the performance characteristics of the algorithm and numeric data about the number

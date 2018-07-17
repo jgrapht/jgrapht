@@ -26,7 +26,7 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static org.jgrapht.alg.matching.blossom.v5.Initializer.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class TreeEdgeTest {
@@ -53,7 +53,7 @@ public class TreeEdgeTest {
         Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new KolmogorovMinimumWeightPerfectMatching.Options(NONE));
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(NONE));
 
         Node node1 = state.vertexMap.get(1);
         Node node2 = state.vertexMap.get(2);

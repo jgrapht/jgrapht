@@ -20,6 +20,8 @@ package org.jgrapht.alg.matching.blossom.v5;
 import org.jgrapht.util.FibonacciHeap;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
 
 /**
  * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates, thus creating
@@ -61,7 +63,7 @@ class DualUpdater<V, E> {
      * @param type the strategy to use in dual update
      * @return the sum of all changes of dual variables of the trees
      */
-    public double updateDuals(DualUpdateStrategy type) {
+    public double updateDuals(Options.DualUpdateStrategy type) {
         long start = System.nanoTime();
 
         if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
@@ -73,9 +75,9 @@ class DualUpdater<V, E> {
             double eps = getEps(tree);
             tree.accumulatedEps = eps - tree.eps;
         }
-        if (type == DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA) {
+        if (type == MULTIPLE_TREE_FIXED_DELTA) {
             multipleTreeFixedDelta();
-        } else if (type == DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS) {
+        } else if (type == MULTIPLE_TREE_CONNECTED_COMPONENTS) {
             updateDualsConnectedComponents();
         }
 
@@ -329,11 +331,5 @@ class DualUpdater<V, E> {
         }
     }
 
-    /**
-     * Enum for choosing dual update strategy
-     */
-    enum DualUpdateStrategy {
-        MULTIPLE_TREE_FIXED_DELTA,
-        MULTIPLE_TREE_CONNECTED_COMPONENTS,
-    }
+
 }

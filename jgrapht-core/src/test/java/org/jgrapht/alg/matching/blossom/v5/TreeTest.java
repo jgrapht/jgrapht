@@ -27,13 +27,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.blossom.v5.Initializer.InitializationType.NONE;
 import static org.jgrapht.alg.matching.blossom.v5.Node.Label.MINUS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class TreeTest {
 
-    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(NONE);
+    private Options noneOptions = new Options(NONE);
 
     @Test
     public void testTreeNodeIterator() {

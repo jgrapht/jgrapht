@@ -24,13 +24,15 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
-import static org.jgrapht.alg.matching.blossom.v5.DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 public class DualUpdaterTest {
 
-    private KolmogorovMinimumWeightPerfectMatching.Options noneOptions = new KolmogorovMinimumWeightPerfectMatching.Options(Initializer.InitializationType.NONE);
+    private Options noneOptions = new Options(NONE);
 
     @org.junit.Test
     public void testUpdateDuals1() {
@@ -40,7 +42,7 @@ public class DualUpdaterTest {
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
-        assertTrue(dualUpdater.updateDuals(DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA) > 0);
+        assertTrue(dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA) > 0);
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             assertEquals(root.tree.eps, 2.5, EPS);
         }
@@ -55,7 +57,7 @@ public class DualUpdaterTest {
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
-        dualUpdater.updateDuals(DualUpdater.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA);
+        dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA);
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             assertEquals(root.tree.eps, 3, EPS);
         }

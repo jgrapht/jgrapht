@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
+
 /**
  * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
  * {@link PrimalUpdater} and {@link DualUpdater} during the course of the algorithm.
@@ -78,7 +80,7 @@ class State<V, E> {
     /**
      * Options used to determine the strategies used in the algorithm
      */
-    KolmogorovMinimumWeightPerfectMatching.Options options;
+    Options options;
     /**
      * Mapping from initial vertices to nodes
      */
@@ -111,7 +113,7 @@ class State<V, E> {
      */
     public State(Graph<V, E> graph, Node[] nodes, Edge[] edges,
                  int nodeNum, int edgeNum, int treeNum,
-                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap, KolmogorovMinimumWeightPerfectMatching.Options options) {
+                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap, Options options) {
         this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;
@@ -196,20 +198,6 @@ class State<V, E> {
     }
 
     /**
-     * Method for debug purposes. Prints {@code blossomNode} and all its blossom siblings
-     *
-     * @param blossomNode the node to start from
-     */
-    public static void printBlossomNodes(Node blossomNode) {
-        System.out.println("Printing blossom nodes");
-        Node current = blossomNode;
-        do {
-            System.out.println(current);
-            current = current.blossomSibling.getOpposite(current);
-        } while (current != blossomNode);
-    }
-
-    /**
      * Sets the currentEdge and currentDirection variables for all adjacent to the {@code tree} trees
      *
      * @param tree the tree whose adjacent trees' variables are modified
@@ -234,6 +222,20 @@ class State<V, E> {
         for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
         }
+    }
+
+    /**
+     * Method for debug purposes. Prints {@code blossomNode} and all its blossom siblings
+     *
+     * @param blossomNode the node to start from
+     */
+    public static void printBlossomNodes(Node blossomNode) {
+        System.out.println("Printing blossom nodes");
+        Node current = blossomNode;
+        do {
+            System.out.println(current);
+            current = current.blossomSibling.getOpposite(current);
+        } while (current != blossomNode);
     }
 
     /**

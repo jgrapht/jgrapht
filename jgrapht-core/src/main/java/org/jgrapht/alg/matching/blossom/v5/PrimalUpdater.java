@@ -19,8 +19,8 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeap;
 
-import static org.jgrapht.alg.matching.blossom.v5.Node.Label.MINUS;
-import static org.jgrapht.alg.matching.blossom.v5.Node.Label.PLUS;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.DEBUG;
+import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
 
 /**
  * Is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal operations: grow, augment,
@@ -50,6 +50,76 @@ class PrimalUpdater<V, E> {
 
 
     /**
+     * One of the four primal operations. Is invoked on the plus-infinity {@code growEdge}, which connects
+     * a "+" node in the tree and an infinity matched node. The {@code growEdge} and the matched free edge
+     * are added to the tree structure. Two new nodes are added to the tree: minus and plus node. Let's call
+     * the node incident to the {@code growEdge} and opposite to the minusNode the "tree node".
+     * <p>
+     * As the result, following actions are performed:
+     * <ul>
+     * <li>Adding new child to the children of tree node and minus node</li>
+     * <li>Setting parent edges of minus and plus nodes</li>
+     * <li>If minus node is a blossom, add it to the heap of "-" blossoms</li>
+     * <li>Remove growEdge from the heap of infinity edges</li>
+     * <li>Remove former infinity edges and add new (+, +) in-tree and cross-tree edges, (+, -) cross tree edges
+     * to the appropriate heaps (due to the changes of the labels of the minus and plus nodes)</li>
+     * <li>Add new infinity edge from the plus node</li>
+     * <li>Add new tree edges is necessary</li>
+     * <li>Subtract tree.eps from the slacks of all edges incident to the minus node</li>
+     * <li>Add tree.eps to the slacks of all edges incident to the plus node</li>
+     * </ul>
+     * <p>
+     * If the {@code manyGrows} flag is true, performs recursive growing of the tree.
+     *
+     * @param growEdge  the tight edge between node in the tree and minus node
+     * @param manyGrows specifies whether to perform recursive growing
+     */
+    public void grow(Edge growEdge, boolean manyGrows) {
+        if (DEBUG) {
+            System.out.println("Growing edge " + growEdge);
+        }
+        int initialTreeNum = state.treeNum;
+        long start = System.nanoTime();
+        int dirToMinusNode = growEdge.head[0].isInfinityNode() ? 0 : 1;
+
+        Node nodeInTheTree = growEdge.head[1 - dirToMinusNode];
+        Node minusNode = growEdge.head[dirToMinusNode];
+        Node plusNode = minusNode.getOppositeMatched();
+
+        nodeInTheTree.addChild(minusNode, growEdge, true);
+        minusNode.addChild(plusNode, minusNode.matched, true);
+
+        Node stop = plusNode;
+
+        while (true) {
+            minusNode.label = MINUS;
+            plusNode.label = PLUS;
+            minusNode.isMarked = plusNode.isMarked = false;
+            processMinusNodeGrow(minusNode);
+            processPlusNodeGrow(plusNode, manyGrows);
+            if (initialTreeNum != state.treeNum) {
+                break;
+            }
+
+            if (plusNode.firstTreeChild != null) {
+                minusNode = plusNode.firstTreeChild;
+                plusNode = minusNode.getOppositeMatched();
+            } else {
+                while (plusNode != stop && plusNode.treeSiblingNext == null) {
+                    plusNode = plusNode.getTreeParent();
+                }
+                if (plusNode.isMinusNode()) {
+                    minusNode = plusNode.treeSiblingNext;
+                    plusNode = minusNode.getOppositeMatched();
+                } else {
+                    break;
+                }
+            }
+        }
+        state.statistics.growTime += System.nanoTime() - start;
+    }
+
+    /**
      * One of the four primal operations. Is invoked on a tight (+, +) cross-tree edge.
      * Increases the matching by 1. Converts the trees on both sides into the set of
      * free matched edges. Applies lazy delta spreading.
@@ -73,7 +143,7 @@ class PrimalUpdater<V, E> {
     public void augment(Edge augmentEdge) {
         long start = System.nanoTime();
 
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (DEBUG) {
             System.out.println("Augmenting edge " + augmentEdge);
         }
         Node node;
@@ -112,9 +182,10 @@ class PrimalUpdater<V, E> {
      */
     public Node shrink(Edge blossomFormingEdge) {
         long start = System.nanoTime();
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (DEBUG) {
             System.out.println("Shrinking edge " + blossomFormingEdge);
         }
+        Edge zeroSlackEdge;
         Node blossomRoot = findBlossomRoot(blossomFormingEdge);
         Tree tree = blossomRoot.tree;
         Node blossom = new Node();
@@ -136,7 +207,7 @@ class PrimalUpdater<V, E> {
         }
 
         // move edges and children, change slacks if necessary
-        updateTreeStructure(blossomRoot, blossomFormingEdge, blossom);
+        zeroSlackEdge = updateTreeStructure(blossomRoot, blossomFormingEdge, blossom);
 
         // create circular linked list of circuit nodes
         setBlossomSiblings(blossomRoot, blossomFormingEdge);
@@ -154,6 +225,10 @@ class PrimalUpdater<V, E> {
         state.blossomNum++;
 
         state.statistics.shrinkTime += System.nanoTime() - start;
+        if (zeroSlackEdge != null) {
+            //System.out.println("Bingo shrink");
+            augment(zeroSlackEdge);
+        }
         return blossom;
     }
 
@@ -185,7 +260,7 @@ class PrimalUpdater<V, E> {
         Edge edge;
         int dir;
         long start = System.nanoTime();
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (DEBUG) {
             System.out.println("Expanding blossom " + blossom);
         }
         Tree tree = blossom.tree;
@@ -195,7 +270,7 @@ class PrimalUpdater<V, E> {
 
         Node branchesEndpoint = blossom.parentEdge.getCurrentOriginal(blossom).getPenultimateBlossom();
 
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (DEBUG) {
             State.printBlossomNodes(branchesEndpoint);
         }
 
@@ -242,79 +317,11 @@ class PrimalUpdater<V, E> {
         if (state.removedNum > 4 * state.nodeNum) {
             freeRemoved();
         }
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (DEBUG) {
             State.printTreeNodes(tree);
         }
 
         state.statistics.expandTime += System.nanoTime() - start;
-    }
-
-
-    /**
-     * One of the four primal operations. Is invoked on the plus-infinity {@code growEdge}, which connects
-     * a "+" node in the tree and an infinity matched node. The {@code growEdge} and the matched free edge
-     * are added to the tree structure. Two new nodes are added to the tree: minus and plus node. Let's call
-     * the node incident to the {@code growEdge} and opposite to the minusNode the "tree node".
-     * <p>
-     * As the result, following actions are performed:
-     * <ul>
-     * <li>Adding new child to the children of tree node and minus node</li>
-     * <li>Setting parent edges of minus and plus nodes</li>
-     * <li>If minus node is a blossom, add it to the heap of "-" blossoms</li>
-     * <li>Remove growEdge from the heap of infinity edges</li>
-     * <li>Remove former infinity edges and add new (+, +) in-tree and cross-tree edges, (+, -) cross tree edges
-     * to the appropriate heaps (due to the changes of the labels of the minus and plus nodes)</li>
-     * <li>Add new infinity edge from the plus node</li>
-     * <li>Add new tree edges is necessary</li>
-     * <li>Subtract tree.eps from the slacks of all edges incident to the minus node</li>
-     * <li>Add tree.eps to the slacks of all edges incident to the plus node</li>
-     * </ul>
-     * <p>
-     * If the {@code manyGrows} flag is true, performs recursive growing of the tree.
-     * TODO: make this operation iterative rather then recursive
-     *
-     * @param growEdge  the tight edge between node in the tree and minus node
-     * @param manyGrows specifies whether to perform recursive growing
-     */
-    public void grow(Edge growEdge, boolean manyGrows) {
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
-            System.out.println("Growing edge " + growEdge);
-        }
-        long start = System.nanoTime();
-        int dirToMinusNode = growEdge.head[0].isInfinityNode() ? 0 : 1;
-
-        Node nodeInTheTree = growEdge.head[1 - dirToMinusNode];
-        Node minusNode = growEdge.head[dirToMinusNode];
-        Node plusNode = minusNode.getOppositeMatched();
-
-        nodeInTheTree.addChild(minusNode, growEdge, true);
-        minusNode.addChild(plusNode, minusNode.matched, true);
-
-        Node stop = plusNode;
-
-        while (true) {
-            minusNode.label = MINUS;
-            plusNode.label = PLUS;
-            minusNode.isMarked = plusNode.isMarked = false;
-            processMinusNodeGrow(minusNode);
-            processPlusNodeGrow(plusNode, manyGrows);
-
-            if (plusNode.firstTreeChild != null) {
-                minusNode = plusNode.firstTreeChild;
-                plusNode = minusNode.getOppositeMatched();
-            } else {
-                while (plusNode != stop && plusNode.treeSiblingNext == null) {
-                    plusNode = plusNode.getTreeParent();
-                }
-                if (plusNode.isMinusNode()) {
-                    minusNode = plusNode.treeSiblingNext;
-                    plusNode = minusNode.getOppositeMatched();
-                } else {
-                    break;
-                }
-            }
-        }
-        state.statistics.growTime += System.nanoTime() - start;
     }
 
     /**
@@ -369,6 +376,7 @@ class PrimalUpdater<V, E> {
     private void processPlusNodeGrow(Node node, boolean manyGrows) {
         Node minusNode, plusNode;
         Edge edge;
+        Edge zeroSlackEdge = null;
         double eps = node.tree.eps;
         node.dual -= eps;
         for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
@@ -389,6 +397,9 @@ class PrimalUpdater<V, E> {
                     }
                     opposite.tree.removePlusInfinityEdge(edge);
                     opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
+                    if (edge.slack <= node.tree.eps + opposite.tree.eps) {
+                        zeroSlackEdge = edge;
+                    }
                 }
             } else if (opposite.isMinusNode()) {
                 // this is a (+,-) edge
@@ -405,6 +416,9 @@ class PrimalUpdater<V, E> {
                 // it can be the case when this edge can't be grown because opposite vertex is already added
                 // to this tree via some other grow operation
                 if (edge.slack <= eps && !edge.getOpposite(node).isMarked && manyGrows) {
+                    if (DEBUG) {
+                        System.out.println("Growing edge " + edge);
+                    }
                     minusNode = edge.getOpposite(node);
                     plusNode = minusNode.getOppositeMatched();
                     minusNode.isMarked = plusNode.isMarked = true;
@@ -412,6 +426,10 @@ class PrimalUpdater<V, E> {
                     minusNode.addChild(plusNode, minusNode.matched, true);
                 }
             }
+        }
+        if (zeroSlackEdge != null) {
+            //System.out.println("Bingo grow");
+            augment(zeroSlackEdge);
         }
         state.statistics.growNum++;
     }
@@ -656,46 +674,52 @@ class PrimalUpdater<V, E> {
         // applying tree.eps to all tree nodes and updating slacks of all incident edges
         for (Tree.TreeNodeIterator treeNodeIterator = tree.treeNodeIterator(); treeNodeIterator.hasNext(); ) {
             node = treeNodeIterator.next();
-            // applying lazy delta spreading
-            if (node.isPlusNode()) {
-                node.dual += eps;
-            } else {
-                node.dual -= eps;
-            }
-            for (Node.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
-                edge = incidentEdgeIterator.next();
-                dir = incidentEdgeIterator.getDir();
-                Node opposite = edge.head[dir];
-                Tree oppositeTree = opposite.tree;
+            if (!node.isMarked) {
+                // applying lazy delta spreading
                 if (node.isPlusNode()) {
-                    edge.slack -= eps;
-                    if (oppositeTree != null && oppositeTree != tree) {
-                        // if this edge is a cross-tree edge
-                        treeEdge = oppositeTree.currentEdge;
-                        int currentDir = oppositeTree.currentDirection;
-                        if (opposite.isPlusNode()) {
-                            // this is a (+,+) cross-tree edge
-                            treeEdge.removeFromPlusPlusHeap(edge);
-                            oppositeTree.addPlusInfinityEdge(edge, edge.slack);
-                        } else if (opposite.isMinusNode()) {
-                            // this is a (+,-) cross-tree edge
-                            treeEdge.removeFromCurrentPlusMinusHeap(edge, currentDir);
-                        }
-                    }
+                    node.dual += eps;
                 } else {
-                    // current node is a "-" node
-                    if (oppositeTree != null && oppositeTree != tree && opposite.isPlusNode()) {
-                        // this is a (-,+) cross-tree edge
-                        treeEdge = oppositeTree.currentEdge;
-                        int currentDir = oppositeTree.currentDirection;
-                        treeEdge.removeFromCurrentMinusPlusHeap(edge, currentDir);
-                        oppositeTree.addPlusInfinityEdge(edge, edge.slack + eps);
-                    }
-                    edge.slack += eps;
-
+                    node.dual -= eps;
                 }
+                for (Node.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                    edge = incidentEdgeIterator.next();
+                    dir = incidentEdgeIterator.getDir();
+                    Node opposite = edge.head[dir];
+                    Tree oppositeTree = opposite.tree;
+                    if (node.isPlusNode()) {
+                        edge.slack -= eps;
+                        if (oppositeTree != null && oppositeTree != tree) {
+                            // if this edge is a cross-tree edge
+                            treeEdge = oppositeTree.currentEdge;
+                            int currentDir = oppositeTree.currentDirection;
+                            if (opposite.isPlusNode()) {
+                                // this is a (+,+) cross-tree edge
+                                treeEdge.removeFromPlusPlusHeap(edge);
+                                oppositeTree.addPlusInfinityEdge(edge, edge.slack);
+                            } else if (opposite.isMinusNode()) {
+                                // this is a (+,-) cross-tree edge
+                                treeEdge.removeFromCurrentPlusMinusHeap(edge, currentDir);
+                            }
+                        }
+                    } else {
+                        // current node is a "-" node
+                        if (oppositeTree != null && oppositeTree != tree && opposite.isPlusNode()) {
+                            // this is a (-,+) cross-tree edge
+                            treeEdge = oppositeTree.currentEdge;
+                            int currentDir = oppositeTree.currentDirection;
+                            treeEdge.removeFromCurrentMinusPlusHeap(edge, currentDir);
+                            oppositeTree.addPlusInfinityEdge(edge, edge.slack + eps);
+                        }
+                        edge.slack += eps;
+
+                    }
+                }
+                node.label = INFINITY;
+            } else {
+                // this node was added to the tree by the grow operation,
+                // but it hasn't been processed, so we don't need to process it here
+                node.isMarked = false;
             }
-            node.setLabel(Node.Label.INFINITY);
         }
 
         // adding all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and
@@ -740,8 +764,10 @@ class PrimalUpdater<V, E> {
      * @param blossomFormingEdge a tight (+, +) edge
      * @param blossom            the node that is being inserted into the tree structure
      */
-    private void updateTreeStructure(Node blossomRoot, Edge blossomFormingEdge, Node blossom) {
+    private Edge updateTreeStructure(Node blossomRoot, Edge blossomFormingEdge, Node blossom) {
         Node varNode;
+        Edge zeroSlackEdge = null;
+        Edge edge;
         Tree tree = blossomRoot.tree;
         // going through every vertex in the blossom and moving its child list to
         // blossom child list
@@ -755,7 +781,10 @@ class PrimalUpdater<V, E> {
                     // substituting varNode with the blossom in the tree structure
                     varNode.removeFromChildList();
                     varNode.moveChildrenTo(blossom);
-                    shrinkPlusNode(varNode, blossom);
+                    edge = shrinkPlusNode(varNode, blossom);
+                    if (edge != null) {
+                        zeroSlackEdge = edge;
+                    }
                     varNode.isProcessed = true;
                 } else {
                     if (varNode.isBlossom) {
@@ -782,8 +811,13 @@ class PrimalUpdater<V, E> {
         }
         // finally process blossomRoot
         blossomRoot.moveChildrenTo(blossom);
-        shrinkPlusNode(blossomRoot, blossom);
+        edge = shrinkPlusNode(blossomRoot, blossom);
+        if (edge != null) {
+            zeroSlackEdge = edge;
+        }
         blossomRoot.isTreeRoot = false;
+
+        return zeroSlackEdge;
     }
 
     /**
@@ -793,8 +827,9 @@ class PrimalUpdater<V, E> {
      * @param plusNode a plus node from an odd circuit
      * @param blossom  a newly created pseudonode
      */
-    private void shrinkPlusNode(Node plusNode, Node blossom) {
+    private Edge shrinkPlusNode(Node plusNode, Node blossom) {
         Edge edge;
+        Edge zeroSlackEdge = null;
         Node opposite;
         Tree tree = plusNode.tree;
         double eps = tree.eps;
@@ -807,6 +842,9 @@ class PrimalUpdater<V, E> {
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
                 state.moveEdgeTail(plusNode, blossom, edge);
+                if (opposite.tree != tree && opposite.isPlusNode() && edge.slack <= tree.eps + opposite.tree.eps) {
+                    zeroSlackEdge = edge;
+                }
             } else if (opposite.isPlusNode()) {
                 // inner edge, subtract eps only in the case the opposite node is a "+" node
                 if (!opposite.isProcessed) { // here we rely on the proper setting of the isProcessed flag
@@ -816,6 +854,7 @@ class PrimalUpdater<V, E> {
                 edge.slack -= eps;
             }
         }
+        return zeroSlackEdge;
     }
 
     /**
