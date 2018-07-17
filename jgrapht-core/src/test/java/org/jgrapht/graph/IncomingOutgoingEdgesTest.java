@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.junit.*;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static org.junit.Assert.*;
 
@@ -32,13 +33,9 @@ import static org.junit.Assert.*;
 public class IncomingOutgoingEdgesTest
 {
 
-    /**
-     * Test the most general version of the directed graph.
-     */
-    @Test
-    public void testDirectedGraph()
+    public static void testDirectedGraph(Supplier<Graph<String, DefaultEdge>> graphSupplier)
     {
-        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = graphSupplier.get();
         g.addVertex("v1");
         g.addVertex("v2");
         g.addVertex("v3");
@@ -91,12 +88,20 @@ public class IncomingOutgoingEdgesTest
     }
 
     /**
-     * Test the most general version of the undirected graph.
+     * Test the most general version of the directed graph.
      */
     @Test
-    public void testUndirectedGraph()
+    public void testDirectedGraph()
     {
-        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        testDirectedGraph(() -> new DirectedPseudograph<>(DefaultEdge.class));
+    }
+
+    /**
+     * Test the most general version of the undirected graph.
+     */
+    public static void testUndirectedGraph(Supplier<Graph<String, DefaultEdge>> graphSupplier)
+    {
+        Graph<String, DefaultEdge> g = graphSupplier.get();
         g.addVertex("v1");
         g.addVertex("v2");
         g.addVertex("v3");
@@ -148,6 +153,15 @@ public class IncomingOutgoingEdgesTest
         assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.outgoingEdgesOf("v3"));
         assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.outgoingEdgesOf("v4"));
         assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.outgoingEdgesOf("v5"));
+    }
+
+    /**
+     * Test the most general version of the undirected graph.
+     */
+    @Test
+    public void testUndirectedGraph()
+    {
+        testUndirectedGraph(() -> new Pseudograph<>(DefaultEdge.class));
     }
 
 }

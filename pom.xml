@@ -59,6 +59,12 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>jgrapht-core</artifactId>
+				<type>test-jar</type>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>jgrapht-io</artifactId>
 				<version>${project.version}</version>
             </dependency>
@@ -72,6 +78,11 @@
                 <artifactId>jgrapht-guava</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>jgrapht-opt</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>jgrapht-demo</artifactId>
@@ -216,6 +227,7 @@
 	<modules>
 		<module>jgrapht-core</module>
 		<module>jgrapht-io</module>
+		<module>jgrapht-opt</module>
 		<module>jgrapht-ext</module>
 		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>

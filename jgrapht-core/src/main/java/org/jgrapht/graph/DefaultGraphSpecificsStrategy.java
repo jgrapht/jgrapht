@@ -2,7 +2,6 @@ package org.jgrapht.graph;
 
 import java.io.Serializable;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
@@ -30,26 +29,6 @@ public class DefaultGraphSpecificsStrategy<V, E>
     implements GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = 7615319421753562075L;
-
-    /**
-     * Get a function which creates the intrusive edges specifics. The factory will accept the graph
-     * type as a parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
-    @Override
-    public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
-    {
-        return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
-            if (type.isWeighted()) {
-                return new WeightedIntrusiveEdgesSpecifics<V, E>(
-                    this.<E, IntrusiveWeightedEdge> getPredictableOrderMapFactory().get());
-            } else {
-                return new UniformIntrusiveEdgesSpecifics<>(
-                    this.<E, IntrusiveEdge> getPredictableOrderMapFactory().get());
-            }
-        };
-    }
 
     /**
      * Get a function which creates the specifics. The factory will accept the graph type as a

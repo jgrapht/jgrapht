@@ -34,7 +34,17 @@ public interface GraphSpecificsStrategy<V, E> extends Serializable
      * 
      * @return a function which creates intrusive edges specifics.
      */
-    Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory();
+    default Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory() { 
+        return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
+            if (type.isWeighted()) {
+                return new WeightedIntrusiveEdgesSpecifics<V, E>(
+                    this.<E, IntrusiveWeightedEdge> getPredictableOrderMapFactory().get());
+            } else {
+                return new UniformIntrusiveEdgesSpecifics<>(
+                    this.<E, IntrusiveEdge> getPredictableOrderMapFactory().get());
+            }
+        };
+    }
     
     /**
      * Get a function which creates the specifics. The factory will accept the graph type as a
