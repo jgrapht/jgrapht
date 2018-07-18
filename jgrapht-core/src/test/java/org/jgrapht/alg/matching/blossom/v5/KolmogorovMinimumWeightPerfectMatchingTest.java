@@ -35,10 +35,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
-import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.GREEDY;
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
@@ -51,24 +47,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
 
     @Parameterized.Parameters
     public static Object[] params() {
-        return new Options[]{
-                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[0]
-                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[1]
-                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[2]
-                new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[3]
-                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, true, true), //[4]
-                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, true, false), //[5]
-                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, false, true), //[6]
-                new Options(NONE, MULTIPLE_TREE_FIXED_DELTA, false, false), //[7]
-                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[8]
-                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[9]
-                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[10]
-                new Options(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[11]
-                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, true), //[12]
-                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, false), //[13]
-                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[14]
-                new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[15]
-        };
+        return Options.ALL_OPTIONS;
     }
 
     @Test
