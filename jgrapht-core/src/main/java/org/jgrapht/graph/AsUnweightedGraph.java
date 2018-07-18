@@ -24,6 +24,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
 /**
+ * Provides an unweighted view on a graph.
+ *
  * Algorithms designed for unweighted graphs should also work on weighted graphs. This class
  * emulates an unweighted graph based on a weighted one by returning <code>Graph.DEFAULT_EDGE_WEIGHT
  * </code> for each edge weight. The underlying weighted graph is provided at the constructor.

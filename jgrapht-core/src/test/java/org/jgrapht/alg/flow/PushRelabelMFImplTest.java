@@ -17,12 +17,16 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.junit.Assert;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PushRelabelMFImplTest
     extends
@@ -33,6 +37,38 @@ public class PushRelabelMFImplTest
         Graph<Integer, DefaultWeightedEdge> network)
     {
         return new PushRelabelMFImpl<>(network);
+    }
+
+    @Test
+    public void testSimpleDirectedWeightedGraph(){
+        SimpleDirectedWeightedGraph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(-1);
+        graph.addVertex(-2);
+        graph.addVertex(0);
+        graph.addVertex(1);
+
+        graph.addEdge(-1, 0);
+        graph.setEdgeWeight(graph.getEdge(-1, 0), 1.0);
+
+        graph.addEdge(0, -2);
+        graph.setEdgeWeight(graph.getEdge(0, -2), 0.9999999999999999);
+
+        graph.addEdge(-1, 1);
+        graph.setEdgeWeight(graph.getEdge(-1, 1), 1.0);
+
+        graph.addEdge(1, -2);
+        graph.setEdgeWeight(graph.getEdge(1, -2), 1.66498);
+
+        graph.addEdge(0, 1);
+        graph.setEdgeWeight(graph.getEdge(0, 1), 0.66498);
+
+        graph.addEdge(1, 0);
+        graph.setEdgeWeight(graph.getEdge(1, 0), 0.66498);
+
+        PushRelabelMFImpl<Integer, DefaultEdge> mf = new PushRelabelMFImpl<>(graph);
+
+        Assert.assertEquals(2.0, mf.calculateMinCut(-1, -2), 1e-9);
     }
 
     @Test
@@ -54,7 +90,7 @@ public class PushRelabelMFImplTest
         g1.addEdge("v2", "v1");
 
         MaximumFlowAlgorithm<String, DefaultEdge> mf1 = new PushRelabelMFImpl<>(g1);
-        String sourceFlow = "v" + new String("v3").substring(1);
+        String sourceFlow = "v3";
         String sinkFlow = "v0";
         double flow = mf1.calculateMaximumFlow(sourceFlow, sinkFlow);
         assertEquals(0.0, flow, 0);

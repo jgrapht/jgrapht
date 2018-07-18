@@ -1,4 +1,4 @@
 /**
- * Algorithms for computing tree decompositions.
+ * Algorithms for computing decompositions.
  */
 package org.jgrapht.alg.decomposition;

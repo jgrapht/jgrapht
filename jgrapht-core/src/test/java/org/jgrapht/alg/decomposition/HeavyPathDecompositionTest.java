@@ -18,11 +18,14 @@
 package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 import org.jgrapht.SlowTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +34,8 @@ import org.junit.experimental.categories.Category;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.jgrapht.util.MathUtil.log2;
+
 /**
  * Tests for {@link HeavyPathDecomposition}
  *
@@ -38,45 +43,43 @@ import java.util.stream.Collectors;
  */
 public class HeavyPathDecompositionTest {
 
-    public static int log2(int n) // returns 0 for n=0
-    {
-        int log = 0;
-        if( ( n & 0xffff0000 ) != 0 ) { n >>>= 16; log = 16; }
-        if( n >= 256 ) { n >>>= 8; log += 8; }
-        if( n >= 16  ) { n >>>= 4; log += 4; }
-        if( n >= 4   ) { n >>>= 2; log += 2; }
-        return log + ( n >>> 1 );
-    }
-
-    /*
-        Count the maximum number of distinct paths on any root-to-leaf path
-     */
-    public static <V, E> int countMaxPath(Set<V> vertexSet, HeavyPathDecomposition<V, E> decomposition){
-        List<List<V>> paths = decomposition.getPaths();
+    // Count the maximum number of light edges on any root-to-leaf path
+    public static <V, E> int countMaxPath(Graph<V, E> graph, HeavyPathDecomposition<V, E> decomposition){
+        Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
 
-        for (int i = 0; i < paths.size(); i++) {
-            List<V> path = paths.get(i);
+        int i = 0;
+        for (GraphPath<V, E> path: paths) {
+            List<V> vertexList = path.getVertexList();
 
-            for (int j = 0; j < path.size(); j++) {
-                whichPath.put(path.get(j), i);
+            for (int j = 0; j < vertexList.size(); j++) {
+                whichPath.put(vertexList.get(j), i);
             }
+
+            i++;
         }
 
         int maxim = 0;
+        HeavyPathDecomposition<V, E>.InternalState state = decomposition.getInternalState();
 
-        for (V v: vertexSet){
+        for (V v: graph.vertexSet()){
             if (whichPath.containsKey(v)){
-                int lastPath = -1;
                 int cnt = 0;
 
-                while (v != null){
-                    if (lastPath != whichPath.get(v)){
-                        lastPath = whichPath.get(v);
-                        cnt++;
-                    }
+                while (true){
+                    V u = state.getParent(v);
 
-                    v = decomposition.getFather(v);
+                    if (u != null){
+                        E edge = graph.getEdge(u, v);
+
+                        if (decomposition.getLightEdges().contains(edge)){
+                            cnt++;
+                        }
+
+                        v = u;
+                    }
+                    else
+                        break;
                 }
 
                 maxim = Math.max(maxim, cnt);
@@ -87,7 +90,7 @@ public class HeavyPathDecompositionTest {
     }
 
     public static <V, E> boolean isValidDecomposition(Graph<V, E> graph, Set<V> roots,
-                                                       HeavyPathDecomposition<V, E> decomposition){
+                                                      HeavyPathDecomposition<V, E> decomposition){
         Set<E> heavyEdges = decomposition.getHeavyEdges();
         Set<E> lightEdges = decomposition.getLightEdges();
 
@@ -99,49 +102,28 @@ public class HeavyPathDecompositionTest {
         if (!allEdges.equals(graph.edgeSet()))
             return false;
 
-        List<List<V>> paths = decomposition.getPaths();
+        Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
-        Set<E> edgesInPaths = new HashSet<>();
 
-        for (int i = 0; i < paths.size(); i++) {
-            List<V> path = paths.get(i);
+        int i = 0;
+        for (GraphPath<V, E> path: paths) {
+            List<V> vertexList = path.getVertexList();
 
-            for (int j = 0; j < path.size(); j++) {
+            for (int j = 0; j < vertexList.size(); j++) {
                 // Check if a vertex appear more than once in the decomposition
-                if (whichPath.containsKey(path.get(j)))
+                if (whichPath.containsKey(vertexList.get(j)))
                     return false;
 
-                whichPath.put(path.get(j), i);
+                whichPath.put(vertexList.get(j), i);
 
                 // Check if the path is actually a valid path in the graph
                 if (j > 0){
-                    if (!graph.containsEdge(path.get(j - 1), path.get(j)))
+                    if (!graph.containsEdge(vertexList.get(j - 1), vertexList.get(j)))
                         return false;
-
-                    E edge = graph.getEdge(path.get(j - 1), path.get(j));
-
-                    if (!heavyEdges.contains(edge))
-                        return false;
-
-                    edgesInPaths.add(edge);
                 }
             }
-        }
 
-        for (E edge: graph.edgeSet()){
-            if (edgesInPaths.contains(edge)){
-                // edge must be a heavy edge
-
-                if (!heavyEdges.contains(edge))
-                    return false;
-            }
-            else{
-                // edge must be a light edge
-
-                if (!lightEdges.contains(edge)){
-                    return false;
-                }
-            }
+            i++;
         }
 
         ConnectivityInspector<V, E> connectivityInspector = new ConnectivityInspector<>(graph);
@@ -154,7 +136,51 @@ public class HeavyPathDecompositionTest {
                 }
         }
 
-        return true;
+        for (V root: roots){
+            BreadthFirstIterator<V, E> bfs = new BreadthFirstIterator<>(graph, root);
+
+            List<V> postOrder = new ArrayList<>();
+
+            while (bfs.hasNext()){
+                V v = bfs.next();
+                postOrder.add(v);
+            }
+
+            Collections.reverse(postOrder);
+
+            Map<V, Integer> sizeSubtree = new HashMap<>(graph.vertexSet().size());
+            for (V v: postOrder){
+                sizeSubtree.put(v, 1);
+
+                for (E edge: graph.edgesOf(v)){
+                    V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                    if (!u.equals(bfs.getParent(v))){
+                        int sizeU = sizeSubtree.get(u);
+                        sizeSubtree.put(v, sizeSubtree.get(v) + sizeU);
+                    }
+                }
+
+                for (E edge: graph.edgesOf(v)){
+                    if (lightEdges.contains(edge)){
+                        V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                        if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) > sizeSubtree.get(v)) {
+                            return false;
+                        }
+                    }
+                    else{ // edge is heavy
+                        V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                        if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) <= sizeSubtree.get(v)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return countMaxPath(graph, decomposition) <= log2(graph.vertexSet().size());
     }
 
     @Test(expected = NullPointerException.class)
@@ -182,6 +208,25 @@ public class HeavyPathDecompositionTest {
     }
 
     @Test
+    public void testNoHeavyEdges(){
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex("1");
+        graph.addVertex("2");
+        graph.addVertex("3");
+        graph.addVertex("4");
+
+        graph.addEdge("1", "2");
+        graph.addEdge("1", "3");
+        graph.addEdge("1", "4");
+
+        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(graph, "1");
+
+        Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton("1"), heavyPathDecomposition));
+    }
+
+    @Test
     public void testOneVertex(){
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         graph.addVertex("a");
@@ -189,7 +234,8 @@ public class HeavyPathDecompositionTest {
         HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
                 new HeavyPathDecomposition<>(graph, "a");
 
-        Assert.assertEquals(1, heavyPathDecomposition.numberOfPaths());
+        Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton("a"), heavyPathDecomposition));
     }
 
     @Test
@@ -204,8 +250,8 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
+        Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
         Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
-        Assert.assertEquals(1, heavyPathDecomposition.numberOfPaths());
     }
 
     @Test
@@ -220,8 +266,8 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 5);
 
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
-        Assert.assertEquals(2, heavyPathDecomposition.numberOfPaths());
+        Assert.assertEquals(2, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
     }
 
     @Test
@@ -245,9 +291,6 @@ public class HeavyPathDecompositionTest {
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
         Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
-
-        Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                <= log2(graph.vertexSet().size()));
     }
 
     @Test
@@ -263,8 +306,9 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
-        Assert.assertEquals(1, heavyPathDecomposition.numberOfPaths());
+        Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
+        Assert.assertEquals(1, heavyPathDecomposition.getLightEdges().size());
     }
 
     @Test
@@ -282,15 +326,12 @@ public class HeavyPathDecompositionTest {
 
             generator.generateGraph(graph, null);
 
-           Set<Integer> roots = Collections.singleton(graph.vertexSet().iterator().next());
+            Set<Integer> roots = Collections.singleton(graph.vertexSet().iterator().next());
 
             HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
                     new HeavyPathDecomposition<>(graph, roots);
 
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
-
-            Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                    <= log2(graph.vertexSet().size()));
         }
     }
 
@@ -317,9 +358,6 @@ public class HeavyPathDecompositionTest {
                     new HeavyPathDecomposition<>(graph, roots);
 
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
-
-            Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                    <= log2(graph.vertexSet().size()));
         }
     }
 
@@ -343,8 +381,5 @@ public class HeavyPathDecompositionTest {
                 new HeavyPathDecomposition<>(graph, roots);
 
         Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
-
-        Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                <= log2(graph.vertexSet().size()));
     }
 }

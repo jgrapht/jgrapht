@@ -20,7 +20,8 @@ USER_BRANCH=${1:-jgrapht/jgrapht/master}
 pushd ${TRAVIS_BUILD_DIR}/docs/guide-templates
 
 for file in *.md; do
-    outfile="${TRAVIS_BUILD_DIR}/docs/guide/EX-${file}"
+    outfile="${TRAVIS_BUILD_DIR}/docs/guide/${file}"
+    rm -f ${outfile}
     echo "Expanding ${file} to ${outfile}"
     sed -e "s#raw/master#raw/user/${USER_BRANCH}#g" < ${file} | \
         hercule --stdin -o ${outfile}

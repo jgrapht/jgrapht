@@ -434,13 +434,14 @@ public class BhandariKDisjointShortestPathsTest
     }
 
     /**
-     * Tests three joint paths from 1 to 5 Edges expected in path 1 ---------------
-     * {@literal 1 --> 4}, w=4 {@literal 4 --> 5}, w=1
-     * 
+     * Tests three joint paths from 1 to 5. 
+     * <p>
+     * Edges expected in path 1 --------------- {@literal 1 --> 4}, w=4 {@literal 4 --> 5}, w=1
+     * <p>
      * Edges expected in path 2 --------------- {@literal 1 --> 2}, w=1 {@literal 2 --> 5}, w=6
-     * 
+     * <p>
      * Edges expected in path 3 --------------- {@literal 1 --> 3}, w=4 {@literal 3 --> 5}, w=5
-     * 
+     * <p>
      * Edges expected in no path --------------- {@literal 2 --> 3}, w=1 {@literal 3 --> 4}, w=1
      */
     @Test

@@ -7,11 +7,9 @@ before_install:
   - npm install -g hercule
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
-  - etc/expandMarkdown.sh
-  - etc/downloadJavadoc.sh
-  - mv target/site/apidocs docs/javadoc-SNAPSHOT
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then etc/prepareDocs.sh; fi
 after_success:
-  - test $TRAVIS_BRANCH = "master" && mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml; fi
 deploy:
   provider: pages
   skip-cleanup: true

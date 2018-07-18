@@ -17,11 +17,12 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.alg.util.extension.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
+import org.jgrapht.alg.util.extension.ExtensionFactory;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -84,6 +85,8 @@ public class PushRelabelMFImpl<V, E>
 
     // number of relabels already performed
     private int relabelCounter;
+
+    private static ToleranceDoubleComparator comparator = new ToleranceDoubleComparator();
 
     /**
      * Construct a new push-relabel algorithm.
@@ -525,7 +528,7 @@ public class PushRelabelMFImpl<V, E>
 
         private boolean hasExcess()
         {
-            return excess > 0;
+            return comparator.compare(excess, 0.0) > 0;
         }
 
         @Override

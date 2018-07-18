@@ -56,13 +56,13 @@ public class DefaultAttribute<T>
     @Override
     public String getValue()
     {
-        return value.toString();
+        return String.valueOf(value);
     }
 
     @Override
     public String toString()
     {
-        return value.toString();
+        return String.valueOf(value);
     }
 
     /**

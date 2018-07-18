@@ -17,10 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 
+import java.io.Serializable;
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Function;
 
 /**
  * A walk in a graph is an alternating sequence of vertices and edges, starting and ending at a
@@ -50,6 +53,9 @@ import java.util.function.*;
  * the sequence of edges or the sequence of vertices provided during construction forms an actual
  * walk. It is the responsibility of the invoking class to provide correct input data.
  *
+ * <p>
+ *     Note: Serialization of a GraphWalk implies the serialization of the entire underlying graph.
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -59,8 +65,9 @@ import java.util.function.*;
  */
 public class GraphWalk<V, E>
     implements
-    GraphPath<V, E>
+    GraphPath<V, E>, Serializable
 {
+    private static final long serialVersionUID = 7663410644865380676L;
     protected Graph<V, E> graph;
 
     protected List<V> vertexList;

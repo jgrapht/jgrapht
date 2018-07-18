@@ -17,17 +17,16 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
 
 import java.util.function.*;
 
 /**
- * A simple graph. A simple graph is an undirected graph for which at most one edge connects any two
- * vertices, and loops are not permitted. If you're unsure about simple graphs, see:
- * <a href="http://mathworld.wolfram.com/SimpleGraph.html">
- * http://mathworld.wolfram.com/SimpleGraph.html</a>.
+ * Implementation of a <a href=http://mathworld.wolfram.com/SimpleGraph.html>Simple Graph</a>.
+ * A Simple Graph is an undirected graph containing no <a href="http://mathworld.wolfram.com/GraphLoop.html">graph loops</a> or
+ * <a href="http://mathworld.wolfram.com/MultipleEdge.html">multiple edges</a>. This particular implementation supports
+ * both weighted and unweighted edges.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

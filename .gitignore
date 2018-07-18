@@ -35,4 +35,3 @@ pom.xml.releaseBackup
 .classpath
 docs/javadoc*
 docs/_site
-docs/guide/EX-*

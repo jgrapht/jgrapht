@@ -17,6 +17,8 @@
  */
 package org.jgrapht.demo;
 
+//@example:full:begin
+
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
 import org.jgrapht.*;
@@ -108,5 +110,6 @@ public class JGraphXAdapterDemo
         // that's all there is to it!...
     }
 }
+//@example:full:end
 
 // End JGraphXAdapterDemo.java

@@ -17,11 +17,20 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import org.jgrapht.alg.util.VertexDegreeComparator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * The Floyd-Warshall algorithm.
@@ -42,11 +51,15 @@ import java.util.*;
  * @author Dimitrios Michail
  */
 public class FloydWarshallShortestPaths<V, E>
-    extends
-    BaseShortestPathAlgorithm<V, E>
+    extends BaseShortestPathAlgorithm<V, E>
 {
     private final List<V> vertices;
+    private final List<Integer> degrees;
     private final Map<V, Integer> vertexIndices;
+    // minimum vertex with degree at least 1
+    private final int minDegreeOne;
+    // minimum vertex with degree at least 2    
+    private final int minDegreeTwo;
 
     private double[][] d = null;
     private Object[][] backtrace = null;
@@ -60,12 +73,40 @@ public class FloydWarshallShortestPaths<V, E>
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
         super(graph);
+
+        /*
+         * Sort vertices by degree in ascending order and index them. Also compute the minimum
+         * vertex which has degree at least one and at least two.
+         */
         this.vertices = new ArrayList<>(graph.vertexSet());
+        Collections.sort(
+            vertices, new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
+        this.degrees = new ArrayList<>();
         this.vertexIndices = new HashMap<>(this.vertices.size());
+        
         int i = 0;
+        int minDegreeOne = vertices.size();
+        int minDegreeTwo = vertices.size();
         for (V vertex : vertices) {
-            vertexIndices.put(vertex, i++);
+            vertexIndices.put(vertex, i);
+            int degree = graph.degreeOf(vertex);
+            degrees.add(degree);
+            
+            if (degree > 1) {
+                if (i < minDegreeOne) {
+                    minDegreeOne = i;
+                }
+                if (i < minDegreeTwo) {
+                    minDegreeTwo = i;
+                }
+            } else if (i < minDegreeOne && degree == 1) {
+                minDegreeOne = i;
+            }
+            
+            ++i;
         }
+        this.minDegreeOne = minDegreeOne;
+        this.minDegreeTwo = minDegreeTwo;
     }
 
     /**
@@ -270,9 +311,16 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         // run fw alg
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
+        for (int k = minDegreeTwo; k < n; k++) {
+            for (int i = minDegreeOne; i < n; i++) {
+                if (i == k) { 
+                    continue;
+                }
+                for (int j = minDegreeOne; j < n; j++) {
+                    if (i == j || j == k) { 
+                        continue;
+                    }
+                    
                     double ik_kj = d[i][k] + d[k][j];
                     if (Double.compare(ik_kj, d[i][j]) < 0) {
                         d[i][j] = ik_kj;
@@ -318,8 +366,7 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     class FloydWarshallSingleSourcePaths
-        implements
-        SingleSourcePaths<V, E>
+        implements SingleSourcePaths<V, E>
     {
         private V source;
 
@@ -343,49 +390,14 @@ public class FloydWarshallShortestPaths<V, E>
         @Override
         public double getWeight(V sink)
         {
-            if (!graph.containsVertex(source)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
-            }
-            if (!graph.containsVertex(sink)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
-            }
-
-            lazyCalculateMatrix();
-
-            return d[vertexIndices.get(source)][vertexIndices.get(sink)];
+            return FloydWarshallShortestPaths.this.getPathWeight(source, sink);
         }
 
         @Override
         public GraphPath<V, E> getPath(V sink)
         {
-            if (!graph.containsVertex(source)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
-            }
-            if (!graph.containsVertex(sink)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
-            }
-
-            lazyCalculateMatrix();
-
-            int v_a = vertexIndices.get(source);
-            int v_b = vertexIndices.get(sink);
-
-            if (backtrace[v_a][v_b] == null) { // No path exists
-                return createEmptyPath(source, sink);
-            }
-
-            // Reconstruct the path
-            List<E> edges = new ArrayList<>();
-            V u = source;
-            while (!u.equals(sink)) {
-                int v_u = vertexIndices.get(u);
-                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b]);
-                edges.add(e);
-                u = Graphs.getOppositeVertex(graph, e, u);
-            }
-            return new GraphWalk<>(graph, source, sink, null, edges, d[v_a][v_b]);
+            return FloydWarshallShortestPaths.this.getPath(source, sink);
         }
-
     }
 
 }
