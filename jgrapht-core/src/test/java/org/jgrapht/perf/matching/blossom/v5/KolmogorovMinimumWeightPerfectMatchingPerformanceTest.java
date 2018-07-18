@@ -2,15 +2,13 @@ package org.jgrapht.perf.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching;
-import org.jgrapht.alg.matching.blossom.v5.MatchingMain;
 import org.jgrapht.alg.matching.blossom.v5.Options;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.annotations.State;
 
-import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Fork(value = 1, warmups = 0)
@@ -111,12 +109,18 @@ public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
         Graph<Integer, DefaultWeightedEdge> graph;
         @Param({"200", "500", "1000"})
         private int size;
+        @Param({"1000", "10000", "1000000"})
+        private int upperBound;
 
         @Setup
-        public void generate() throws IOException {
+        public void generate() {
             CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(size);
+            Random random = new Random(System.nanoTime());
             graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
             generator.generateGraph(graph);
+            for (DefaultWeightedEdge edge : graph.edgeSet()) {
+                graph.setEdgeWeight(edge, random.nextInt(upperBound));
+            }
         }
     }
 }
