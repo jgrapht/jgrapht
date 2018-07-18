@@ -111,10 +111,10 @@ public class DualUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         state.setCurrentEdges(node1.tree);
-        primalUpdater.grow(edge12, true);
+        primalUpdater.grow(edge12, true, false);
         state.clearCurrentEdges(node1.tree);
         state.setCurrentEdges(node6.tree);
-        primalUpdater.grow(edge56, true);
+        primalUpdater.grow(edge56, true, false);
         state.clearCurrentEdges(node6.tree);
 
         assertTrue(dualUpdater.updateDualsSingle(node1.tree));
@@ -152,7 +152,7 @@ public class DualUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge56);
         state.setCurrentEdges(node1.tree);
-        primalUpdater.grow(edge12, false);
+        primalUpdater.grow(edge12, false, false);
         state.clearCurrentEdges(node1.tree);
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
@@ -198,10 +198,10 @@ public class DualUpdaterTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
         state.setCurrentEdges(node1.tree);
-        primalUpdater.grow(edge12, false);
+        primalUpdater.grow(edge12, false, false);
         state.clearCurrentEdges(node1.tree);
         state.setCurrentEdges(node8.tree);
-        primalUpdater.grow(edge78, false);
+        primalUpdater.grow(edge78, false, false);
         state.clearCurrentEdges(node8.tree);
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
@@ -262,11 +262,11 @@ public class DualUpdaterTest {
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge910);
         state.setCurrentEdges(node1.tree);
-        primalUpdater.grow(edge12, false);
+        primalUpdater.grow(edge12, false, false);
         state.clearCurrentEdges(node1.tree);
         TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node8.tree);
         state.setCurrentEdges(node5.tree);
-        primalUpdater.grow(edge56, false);
+        primalUpdater.grow(edge56, false, false);
         state.clearCurrentEdges(node5.tree);
 
 

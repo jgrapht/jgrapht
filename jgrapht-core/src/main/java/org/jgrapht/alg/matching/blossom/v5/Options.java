@@ -9,6 +9,9 @@ import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NON
  * Options that define the strategies to use during the algorithm for updating duals and initializing the matching
  */
 public class Options {
+    /**
+     * All possible options
+     */
     public static final Options[] ALL_OPTIONS = new Options[]{
             new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[0]
             new Options(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[1]
@@ -27,12 +30,22 @@ public class Options {
             new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[14]
             new Options(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[15]
     };
-    private static final boolean DEFAULT_UPDATE_DUALS_BEFORE = false;
-    private static final boolean DEFAULT_UPDATE_DUALS_AFTER = false;
-    private static final DualUpdateStrategy DEFAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_FIXED_DELTA;
+    /**
+     * Default algorithm initialization type
+     */
     private static final InitializationType DEFAULT_INITIALIZATION_TYPE = GREEDY;
-    boolean updateDualsBefore;
-    boolean updateDualsAfter;
+    /**
+     * Default dual updates strategy
+     */
+    private static final DualUpdateStrategy DEFAULT_DUAL_UPDATE_TYPE = MULTIPLE_TREE_FIXED_DELTA;
+    /**
+     * Default value for the flag {@link Options#updateDualsBefore}
+     */
+    private static final boolean DEFAULT_UPDATE_DUALS_BEFORE = true;
+    /**
+     * Default value for the flag {@link Options#updateDualsAfter}
+     */
+    private static final boolean DEFAULT_UPDATE_DUALS_AFTER = false;
     /**
      * What greedy strategy to use to perform a global dual update
      */
@@ -41,14 +54,22 @@ public class Options {
      * What strategy to choose to initialize the matching before the main phase of the algorithm
      */
     InitializationType initializationType;
+    /**
+     * Whether to update duals of the tree before growth
+     */
+    boolean updateDualsBefore;
+    /**
+     * Whether to update duals of the tree after growth
+     */
+    boolean updateDualsAfter;
 
     /**
      * Constructs a custom options for the algorithm
      *
      * @param dualUpdateStrategy greedy strategy to update dual variables globally
      * @param initializationType strategy for initializing the matching
-     * @param updateDualsBefore
-     * @param updateDualsAfter
+     * @param updateDualsBefore  whether to update duals of the tree before growth
+     * @param updateDualsAfter   whether to update duals of the tree after growth
      */
     public Options(InitializationType initializationType, DualUpdateStrategy dualUpdateStrategy, boolean updateDualsBefore, boolean updateDualsAfter) {
         this.dualUpdateStrategy = dualUpdateStrategy;
@@ -85,24 +106,44 @@ public class Options {
         return sb.toString();
     }
 
+    /**
+     * Getter for {@link Options#updateDualsBefore} flag
+     *
+     * @return the flag {@link Options#updateDualsBefore}
+     */
     public boolean isUpdateDualsBefore() {
         return updateDualsBefore;
     }
 
+    /**
+     * Getter for {@link Options#updateDualsAfter} flag
+     *
+     * @return the flag {@link Options#updateDualsAfter}
+     */
     public boolean isUpdateDualsAfter() {
         return updateDualsAfter;
     }
 
+    /**
+     * Returns dual updates strategy
+     *
+     * @return dual updates strategy
+     */
     public DualUpdateStrategy getDualUpdateStrategy() {
         return dualUpdateStrategy;
     }
 
+    /**
+     * Returns initialization type
+     *
+     * @return initialization type
+     */
     public InitializationType getInitializationType() {
         return initializationType;
     }
 
     /**
-     * Enum for choosing dual update strategy
+     * Enum for choosing dual updates strategy
      */
     public enum DualUpdateStrategy {
         MULTIPLE_TREE_FIXED_DELTA {
@@ -118,6 +159,11 @@ public class Options {
             }
         };
 
+        /**
+         * Returns the name of the dual updates strategy
+         *
+         * @return the name of the dual updates strategy
+         */
         public abstract String toString();
     }
 
@@ -137,6 +183,11 @@ public class Options {
             }
         };
 
+        /**
+         * Returns the name of the initialization type
+         *
+         * @return the name of the initialization type
+         */
         public abstract String toString();
     }
 }

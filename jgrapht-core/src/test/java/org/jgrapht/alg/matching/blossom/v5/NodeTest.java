@@ -153,8 +153,8 @@ public class NodeTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        primalUpdater.grow(edge12, false);
-        primalUpdater.grow(edge14, false);
+        primalUpdater.grow(edge12, false, false);
+        primalUpdater.grow(edge14, false, false);
 
         Set<Node> empty = new HashSet<>();
 
@@ -217,11 +217,11 @@ public class NodeTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge78);
         state.setCurrentEdges(node1.tree);
-        primalUpdater.grow(edge12, false);
-        primalUpdater.grow(edge14, false);
+        primalUpdater.grow(edge12, false, false);
+        primalUpdater.grow(edge14, false, false);
         state.clearCurrentEdges(node1.tree);
         state.setCurrentEdges(node6.tree);
-        primalUpdater.grow(edge67, false);
+        primalUpdater.grow(edge67, false, false);
         state.setCurrentEdges(node6.tree);
 
         // node5 and node4 have no children

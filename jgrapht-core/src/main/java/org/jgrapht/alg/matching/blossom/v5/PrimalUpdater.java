@@ -48,7 +48,6 @@ class PrimalUpdater<V, E> {
         this.state = state;
     }
 
-
     /**
      * One of the four primal operations. Is invoked on the plus-infinity {@code growEdge}, which connects
      * a "+" node in the tree and an infinity matched node. The {@code growEdge} and the matched free edge
@@ -71,10 +70,12 @@ class PrimalUpdater<V, E> {
      * <p>
      * If the {@code manyGrows} flag is true, performs recursive growing of the tree.
      *
-     * @param growEdge  the tight edge between node in the tree and minus node
-     * @param manyGrows specifies whether to perform recursive growing
+     * @param growEdge         the tight edge between node in the tree and minus node
+     * @param recursiveGrow    specifies whether to perform recursive growing
+     * @param immediateAugment a flag that indicates whether to perform immediate augmentation if a
+     *                         tight (+, +) cross-tree edge is encountered
      */
-    public void grow(Edge growEdge, boolean manyGrows) {
+    public void grow(Edge growEdge, boolean recursiveGrow, boolean immediateAugment) {
         if (DEBUG) {
             System.out.println("Growing edge " + growEdge);
         }
@@ -96,7 +97,7 @@ class PrimalUpdater<V, E> {
             plusNode.label = PLUS;
             minusNode.isMarked = plusNode.isMarked = false;
             processMinusNodeGrow(minusNode);
-            processPlusNodeGrow(plusNode, manyGrows);
+            processPlusNodeGrow(plusNode, recursiveGrow, immediateAugment);
             if (initialTreeNum != state.treeNum) {
                 break;
             }
@@ -178,9 +179,11 @@ class PrimalUpdater<V, E> {
      * </ul>
      *
      * @param blossomFormingEdge the tight (+, +) in-tree edge
+     * @param immediateAugment   a flag that indicates whether to perform immediate augmentation if a
+     *                           tight (+, +) cross-tree edge is encountered
      * @return the newly created blossom
      */
-    public Node shrink(Edge blossomFormingEdge) {
+    public Node shrink(Edge blossomFormingEdge, boolean immediateAugment) {
         long start = System.nanoTime();
         if (DEBUG) {
             System.out.println("Shrinking edge " + blossomFormingEdge);
@@ -225,8 +228,10 @@ class PrimalUpdater<V, E> {
         state.blossomNum++;
 
         state.statistics.shrinkTime += System.nanoTime() - start;
-        if (zeroSlackEdge != null) {
-            //System.out.println("Bingo shrink");
+        if (zeroSlackEdge != null && immediateAugment) {
+            if (DEBUG) {
+                System.out.println("Bingo shrink");
+            }
             augment(zeroSlackEdge);
         }
         return blossom;
@@ -254,9 +259,12 @@ class PrimalUpdater<V, E> {
      * lazy delta spreading and their presence in heaps also changes</li>
      * </ul>
      *
-     * @param blossom the blossom to expand
+     * @param blossom          the blossom to expand
+     * @param immediateAugment a flag that indicates whether to perform immediate augmentation if a
+     *                         tight (+, +) cross-tree edge is encountered
      */
-    public void expand(Node blossom) {
+    public void expand(Node blossom, boolean immediateAugment) {
+        Edge zeroSlackEdge;
         Edge edge;
         int dir;
         long start = System.nanoTime();
@@ -302,7 +310,7 @@ class PrimalUpdater<V, E> {
         expandOddBranch(blossomRoot, branchesEndpoint, tree);
 
         // changing the matching, the labeling and dual information on the even branch
-        expandEvenBranch(blossomRoot, branchesEndpoint, blossom);
+        zeroSlackEdge = expandEvenBranch(blossomRoot, branchesEndpoint, blossom);
 
         // resetting marks of blossom nodes
         current = blossomRoot;
@@ -319,6 +327,12 @@ class PrimalUpdater<V, E> {
         }
         if (DEBUG) {
             State.printTreeNodes(tree);
+        }
+        if (immediateAugment && zeroSlackEdge != null) {
+            if (DEBUG) {
+                System.out.println("Bingo expand");
+            }
+            augment(zeroSlackEdge);
         }
 
         state.statistics.expandTime += System.nanoTime() - start;
@@ -370,10 +384,12 @@ class PrimalUpdater<V, E> {
      * <b>Note:</b> this operation can be implemented recursively and without linked list of tight edges to grow,
      * this is a todo
      *
-     * @param node      a plus endpoint of the matched edge that is being appended to the tree
-     * @param manyGrows a flag that indicates whether to grow the tree recursively
+     * @param node             a plus endpoint of the matched edge that is being appended to the tree
+     * @param recursiveGrow    a flag that indicates whether to grow the tree recursively
+     * @param immediateAugment a flag that indicates whether to perform immediate augmentation if a
+     *                         tight (+, +) cross-tree edge is encountered
      */
-    private void processPlusNodeGrow(Node node, boolean manyGrows) {
+    private void processPlusNodeGrow(Node node, boolean recursiveGrow, boolean immediateAugment) {
         Node minusNode, plusNode;
         Edge edge;
         Edge zeroSlackEdge = null;
@@ -415,7 +431,7 @@ class PrimalUpdater<V, E> {
                 // this edge can be grown as well
                 // it can be the case when this edge can't be grown because opposite vertex is already added
                 // to this tree via some other grow operation
-                if (edge.slack <= eps && !edge.getOpposite(node).isMarked && manyGrows) {
+                if (recursiveGrow && edge.slack <= eps && !edge.getOpposite(node).isMarked) {
                     if (DEBUG) {
                         System.out.println("Growing edge " + edge);
                     }
@@ -427,8 +443,10 @@ class PrimalUpdater<V, E> {
                 }
             }
         }
-        if (zeroSlackEdge != null) {
-            //System.out.println("Bingo grow");
+        if (immediateAugment && zeroSlackEdge != null) {
+            if (DEBUG) {
+                System.out.println("Bingo grow");
+            }
             augment(zeroSlackEdge);
         }
         state.statistics.growNum++;
@@ -451,8 +469,10 @@ class PrimalUpdater<V, E> {
      * @param blossomRoot      the node of the blossom which is matched from the outside
      * @param branchesEndpoint the common endpoint of the even and odd branches
      * @param blossom          the node that is being expanded
+     * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
-    private void expandEvenBranch(Node blossomRoot, Node branchesEndpoint, Node blossom) {
+    private Edge expandEvenBranch(Node blossomRoot, Node branchesEndpoint, Node blossom) {
+        Edge edge, zeroSlackEdge = null;
         Tree tree = blossom.tree;
         blossomRoot.matched = blossom.matched;
         blossomRoot.tree = tree;
@@ -492,12 +512,16 @@ class PrimalUpdater<V, E> {
         expandMinusNode(current);
         while (current != branchesEndpoint) {
             current = current.blossomSibling.getOpposite(current);
-            expandPlusNode(current);
+            edge = expandPlusNode(current);
+            if (edge != null) {
+                zeroSlackEdge = edge;
+            }
             current.isProcessed = true; // this is needed for correct processing of (+, +) edges connecting two node on the branch
 
             current = current.blossomSibling.getOpposite(current);
             expandMinusNode(current);
         }
+        return zeroSlackEdge;
     }
 
     /**
@@ -547,8 +571,10 @@ class PrimalUpdater<V, E> {
      * we have to update the slacks of the boundary edges incindent to the {@code plusNode}.
      *
      * @param plusNode the "+" node from the even branch
+     * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
-    private void expandPlusNode(Node plusNode) {
+    private Edge expandPlusNode(Node plusNode) {
+        Edge zeroSlackEdge = null;
         double eps = plusNode.tree.eps; // the plusNode.tree is assumed to be correct
         plusNode.dual -= eps; // applying lazy delta spreading
         Edge edge;
@@ -582,6 +608,9 @@ class PrimalUpdater<V, E> {
                     // opposite is from another tree since it's label is "+"
                     opposite.tree.currentEdge.removeFromCurrentMinusPlusHeap(edge, opposite.tree.currentDirection);
                     opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
+                    if (edge.slack <= eps + opposite.tree.eps) {
+                        zeroSlackEdge = edge;
+                    }
                 }
             } else if (opposite.isMinusNode()) {
                 if (opposite.tree != plusNode.tree) {
@@ -597,6 +626,7 @@ class PrimalUpdater<V, E> {
                 plusNode.tree.addPlusInfinityEdge(edge, edge.slack); // updating edge's key
             }
         }
+        return zeroSlackEdge;
     }
 
     /**
@@ -763,6 +793,7 @@ class PrimalUpdater<V, E> {
      * @param blossomRoot        the node that is matched from the outside or is a tree root
      * @param blossomFormingEdge a tight (+, +) edge
      * @param blossom            the node that is being inserted into the tree structure
+     * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
     private Edge updateTreeStructure(Node blossomRoot, Edge blossomFormingEdge, Node blossom) {
         Node varNode;
@@ -826,6 +857,7 @@ class PrimalUpdater<V, E> {
      *
      * @param plusNode a plus node from an odd circuit
      * @param blossom  a newly created pseudonode
+     * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
     private Edge shrinkPlusNode(Node plusNode, Node blossom) {
         Edge edge;
@@ -842,7 +874,7 @@ class PrimalUpdater<V, E> {
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
                 state.moveEdgeTail(plusNode, blossom, edge);
-                if (opposite.tree != tree && opposite.isPlusNode() && edge.slack <= tree.eps + opposite.tree.eps) {
+                if (opposite.tree != tree && opposite.isPlusNode() && edge.slack <= eps + opposite.tree.eps) {
                     zeroSlackEdge = edge;
                 }
             } else if (opposite.isPlusNode()) {

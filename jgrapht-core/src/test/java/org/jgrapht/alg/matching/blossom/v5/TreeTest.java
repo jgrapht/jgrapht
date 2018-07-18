@@ -68,7 +68,7 @@ public class TreeTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
         state.setCurrentEdges(node1.tree);
-        primalUpdater.grow(edge12, true);
+        primalUpdater.grow(edge12, true, false);
 
         int i = 0;
         Set<Node> actualNodes = new HashSet<>();

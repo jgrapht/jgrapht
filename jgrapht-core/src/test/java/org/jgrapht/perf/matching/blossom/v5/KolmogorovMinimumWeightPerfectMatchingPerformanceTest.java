@@ -1,6 +1,11 @@
-package org.jgrapht.alg.matching.blossom.v5;
+package org.jgrapht.perf.matching.blossom.v5;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching;
+import org.jgrapht.alg.matching.blossom.v5.MatchingMain;
+import org.jgrapht.alg.matching.blossom.v5.Options;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.annotations.State;
@@ -13,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @Warmup(iterations = 3, timeUnit = TimeUnit.MINUTES, time = 1)
 @Measurement(iterations = 10, timeUnit = TimeUnit.MINUTES, time = 1)
-public class Benchmarks {
+public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
 
     @Benchmark
     public void options0(Data data) {
@@ -104,11 +109,14 @@ public class Benchmarks {
     public static class Data {
         public Options[] options = Options.ALL_OPTIONS;
         Graph<Integer, DefaultWeightedEdge> graph;
+        @Param({"200", "500", "1000"})
+        private int size;
 
         @Setup
         public void generate() throws IOException {
-            MatchingMain.generateTriangulation(1000, 1, 1000000, false);
-            graph = MatchingMain.readEdgeList(MatchingMain.EDGE_LIST_PATH);
+            CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(size);
+            graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            generator.generateGraph(graph);
         }
     }
 }

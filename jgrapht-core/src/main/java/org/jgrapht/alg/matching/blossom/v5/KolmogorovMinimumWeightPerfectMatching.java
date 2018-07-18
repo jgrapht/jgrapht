@@ -180,7 +180,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                         // can grow tree
                         edge = tree.plusInfinityEdges.min().getData();
                         if (edge.slack <= tree.eps) {
-                            primalUpdater.grow(edge, true);
+                            primalUpdater.grow(edge, true, true);
                             continue;
                         }
                     }
@@ -188,7 +188,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                         // can shrink blossom
                         edge = tree.plusPlusEdges.min().getData();
                         if (edge.slack <= 2 * tree.eps) {
-                            primalUpdater.shrink(edge);
+                            primalUpdater.shrink(edge, true);
                             continue;
                         }
                     }
@@ -196,7 +196,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                         // can expand blossom
                         node = tree.minusBlossoms.min().getData();
                         if (node.dual <= tree.eps) {
-                            primalUpdater.expand(node);
+                            primalUpdater.expand(node, true);
                             continue;
                         }
                     }
@@ -325,6 +325,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             if (!treeEdge.plusPlusEdges.isEmpty()) {
                 edge = treeEdge.plusPlusEdges.min().getData();
                 if (edge.slack <= tree.eps + opposite.eps) {
+                    if(DEBUG){
+                        System.out.println("Bingo traverse");
+                    }
                     primalUpdater.augment(edge);
                     break;
                 }
