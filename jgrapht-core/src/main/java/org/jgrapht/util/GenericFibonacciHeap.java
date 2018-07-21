@@ -21,7 +21,7 @@ import java.util.*;
 
 /**
  * A Fibonacci heap data structure with a custom comparator.
- * 
+ *
  * Much of the code in this class is based on the algorithms in the "Introduction to Algorithms" by
  * Cormen, Leiserson, and Rivest in Chapter 21. The amortized running time of most of these methods
  * is O(1), making it a very fast data structure. Several have an actual running time of O(1).
@@ -35,7 +35,7 @@ import java.util.*;
  * encapsulates the set.
  * </p>
  *
- * 
+ *
  * @param <K> key type
  * @param <T> data type
  *
@@ -332,17 +332,18 @@ public class GenericFibonacciHeap<K, T>
     {
         Node z = y.parent;
 
-        // if there's a parent...
-        if (z != null) {
-            // if y is unmarked, set it marked
-            if (!y.mark) {
+        // while there's a parent...
+        while(z != null){
+            // if y is unmarked, set it marked and stop
+            if(!y.mark){
                 y.mark = true;
-            } else {
-                // it's marked, cut it from parent
+                return;
+            }else{
+                // y is marked, cut it from parent and continue cascading cut with z
                 cut(y, z);
-
-                // cut its parent as well
-                cascadingCut(z);
+                // proceed
+                y = z;
+                z = z.parent;
             }
         }
     }
@@ -590,7 +591,7 @@ public class GenericFibonacciHeap<K, T>
 
         /**
          * Obtain the data for this node.
-         * 
+         *
          * @return the data
          */
         public T getData()
@@ -600,7 +601,7 @@ public class GenericFibonacciHeap<K, T>
 
         /**
          * Set the data of this node
-         * 
+         *
          * @param data the new data
          */
         public void setData(T data)

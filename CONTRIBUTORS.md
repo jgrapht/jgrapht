@@ -111,9 +111,13 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Viktor Volkov](https://github.com/chupacabra007)
 - [Philipp Kaesgen](https://github.com/PhilippKaesgen)
 - [Lukas Harzenetter](https://github.com/lharzenetter)
+- [Christoph Grüne](https://github.com/christophgruene)
+- [Daniel Mock](https://github.com/danielmock)
+- [Oliver Feith](https://github.com/Watercrystal)
+- [Abdallah Atouani](https://github.com/AbdallahAt)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
-Other people have also helped in different ways: reporting bugs,requesting features, commenting, and by merely asking very good questions.
+Other people have also helped in different ways: reporting bugs, requesting features, commenting, and by merely asking very good questions.
 
 Many thanks to all of you.

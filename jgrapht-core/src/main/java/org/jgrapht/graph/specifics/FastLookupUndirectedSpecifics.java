@@ -17,17 +17,17 @@
  */
 package org.jgrapht.graph.specifics;
 
+import org.jgrapht.Graph;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 
 import java.util.*;
 
 /**
  * Fast implementation of UndirectedSpecifics. This class uses additional data structures to improve
  * the performance of methods which depend on edge retrievals, e.g. getEdge(V u, V v),
- * containsEdge(V u, V v),addEdge(V u, V v). A disadvantage is an increase in memory consumption. If
- * memory utilization is an issue, use a {@link DirectedSpecifics} instead.
+ * containsEdge(V u, V v), addEdge(V u, V v). A disadvantage is an increase in memory consumption.
+ * If memory utilization is an issue, use a {@link UndirectedSpecifics} instead.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -35,66 +35,93 @@ import java.util.*;
  * @author Joris Kinable
  */
 public class FastLookupUndirectedSpecifics<V, E>
-    extends
-    UndirectedSpecifics<V, E>
+    extends UndirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 225772727571597846L;
 
-    /*
-     * Maps a pair of vertices <u,v> to a set of edges {(u,v)}. In case of a multigraph, all edges
-     * which touch both u,v are included in the set
+    /**
+     * Maps a pair of vertices &lt;u,v&gt; to a set of edges {(u,v)}. In case of a multigraph, all edges
+     * which touch both u and v are included in the set.
      */
-    protected Map<Pair<V, V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
+    protected Map<Pair<V, V>, Set<E>> touchingVerticesToEdgeMap;
 
     /**
      * Construct a new fast lookup undirected specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param graph the graph for which these specifics are for
+     * @deprecated Since default strategies should be decided at a higher level.
      */
-    public FastLookupUndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
+    @Deprecated
+    public FastLookupUndirectedSpecifics(Graph<V, E> graph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
+        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new fast lookup undirected specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets
+     * @deprecated Since default strategies should be decided at a higher level.
      */
+    @Deprecated
     public FastLookupUndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+        Graph<V, E> graph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
-        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new fast lookup undirected specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
+     * @param graph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
+     *        iteration order.
+     * @param edgeSetFactory factory for the creation of vertex edge sets
+     * @deprecated Since default strategies should be decided at a higher level. 
+     */
+    @Deprecated
+    public FastLookupUndirectedSpecifics(
+        Graph<V, E> graph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        EdgeSetFactory<V, E> edgeSetFactory)
+    {
+        this(graph, vertexMap, new HashMap<>(), edgeSetFactory);
+    }
+
+    /**
+     * Construct a new fast lookup undirected specifics.
+     * 
+     * @param graph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
+     *        iteration order.
+     * @param touchingVerticesToEdgeMap Additional map for caching. No need for a predictable iteration order.        
      * @param edgeSetFactory factory for the creation of vertex edge sets
      */
     public FastLookupUndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        Graph<V, E> graph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        Map<Pair<V, V>, Set<E>> touchingVerticesToEdgeMap,
         EdgeSetFactory<V, E> edgeSetFactory)
     {
-        super(abstractBaseGraph, vertexMap, edgeSetFactory);
-        this.touchingVerticesToEdgeMap = new HashMap<>();
+        super(graph, vertexMap, edgeSetFactory);
+        this.touchingVerticesToEdgeMap = Objects.requireNonNull(touchingVerticesToEdgeMap);
     }
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        if (abstractBaseGraph.containsVertex(sourceVertex)
-            && abstractBaseGraph.containsVertex(targetVertex))
-        {
+        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
             Set<E> edges =
                 touchingVerticesToEdgeMap.get(new UnorderedPair<>(sourceVertex, targetVertex));
-            return edges == null ? Collections.emptySet() : new ArrayUnenforcedSet<>(edges);
+            if (edges == null) { 
+                return Collections.emptySet();
+            } else { 
+                Set<E> edgeSet = edgeSetFactory.createEdgeSet(sourceVertex);
+                edgeSet.addAll(edges);
+                return edgeSet;
+            }
         } else {
             return null;
         }
@@ -106,12 +133,12 @@ public class FastLookupUndirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        List<E> edges =
+        Set<E> edges =
             touchingVerticesToEdgeMap.get(new UnorderedPair<>(sourceVertex, targetVertex));
         if (edges == null || edges.isEmpty())
             return null;
         else
-            return edges.get(0);
+            return edges.iterator().next();
     }
 
     /**
@@ -120,18 +147,18 @@ public class FastLookupUndirectedSpecifics<V, E>
     @Override
     public void addEdgeToTouchingVertices(E e)
     {
-        V source = abstractBaseGraph.getEdgeSource(e);
-        V target = abstractBaseGraph.getEdgeTarget(e);
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
 
         getEdgeContainer(source).addEdge(e);
 
         // Add edge to touchingVerticesToEdgeMap for the UnorderedPair {u,v}
         Pair<V, V> vertexPair = new UnorderedPair<>(source, target);
-        ArrayUnenforcedSet<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
+        Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null)
             edgeSet.add(e);
         else {
-            edgeSet = new ArrayUnenforcedSet<>(1);
+            edgeSet = edgeSetFactory.createEdgeSet(source);
             edgeSet.add(e);
             touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
         }
@@ -147,19 +174,20 @@ public class FastLookupUndirectedSpecifics<V, E>
     @Override
     public void removeEdgeFromTouchingVertices(E e)
     {
-        V source = abstractBaseGraph.getEdgeSource(e);
-        V target = abstractBaseGraph.getEdgeTarget(e);
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
 
         getEdgeContainer(source).removeEdge(e);
 
         if (!source.equals(target))
             getEdgeContainer(target).removeEdge(e);
 
-        // Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
-        // for a pair
-        // of touching vertices, remove the pair from the map.
+        /*
+         * Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
+         * for a pair of touching vertices, remove the pair from the map.
+         */
         Pair<V, V> vertexPair = new UnorderedPair<>(source, target);
-        ArrayUnenforcedSet<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
+        Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null) {
             edgeSet.remove(e);
             if (edgeSet.isEmpty())

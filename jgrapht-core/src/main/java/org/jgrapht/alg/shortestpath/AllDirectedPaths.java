@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * A Dijkstra-like algorithm to find all paths between two sets of nodes in a directed graph, with
@@ -37,7 +38,7 @@ public class AllDirectedPaths<V, E>
     private final Graph<V, E> graph;
 
     /**
-     * Create a new instance
+     * Create a new instance.
      *
      * @param graph the input graph
      * @throws IllegalArgumentException if the graph is not directed
@@ -266,7 +267,7 @@ public class AllDirectedPaths<V, E>
                         assert sourceVertices.contains(completePath.getStartVertex());
                         assert targetVertices.contains(completePath.getEndVertex());
                         assert (maxPathLength == null)
-                            || (completePath.getWeight() <= maxPathLength);
+                            || (completePath.getLength() <= maxPathLength);
                         completePaths.add(completePath);
                     }
 
@@ -287,7 +288,10 @@ public class AllDirectedPaths<V, E>
     }
 
     /**
-     * Transform an ordered list of edges into a GraphPath
+     * Transform an ordered list of edges into a GraphPath.
+     *
+     * The weight of the generated GraphPath is set to the sum of the
+     * weights of the edges.
      *
      * @param edges the edges
      *
@@ -297,7 +301,7 @@ public class AllDirectedPaths<V, E>
     {
         V source = graph.getEdgeSource(edges.get(0));
         V target = graph.getEdgeTarget(edges.get(edges.size() - 1));
-        double weight = edges.size();
+        double weight = edges.stream().mapToDouble(edge -> graph.getEdgeWeight(edge)).sum();
         return new GraphWalk<>(graph, source, target, edges, weight);
     }
 }
