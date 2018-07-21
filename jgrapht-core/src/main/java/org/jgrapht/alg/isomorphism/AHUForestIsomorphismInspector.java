@@ -44,6 +44,11 @@ import java.util.function.Supplier;
  *      For an implementation that supports both unrooted and rooted trees see {@link AHUTreeIsomorphismInspector}.
  * </p>
  *
+ * <p>
+ *     Note: This implementation requires the input graphs to be modifiable and to have valid vertex suppliers
+ *     (see {@link Graph#getVertexSupplier()}).
+ * </p>
+ *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  *
@@ -122,14 +127,6 @@ public class AHUForestIsomorphismInspector<V, E> {
         }
     }
 
-    public boolean isomorphismExists(){
-        if (!computed){
-            isomorphicMapping = getIsomorphism();
-        }
-
-        return isomorphicMapping != null;
-    }
-
     private Graph<V, E> takeSubraph(Graph<V, E> graph, Set<V> vertices){
         Graph<V, E> subgraph = new SimpleGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), false);
 
@@ -148,7 +145,25 @@ public class AHUForestIsomorphismInspector<V, E> {
         return subgraph;
     }
 
-    public IsomorphicTreeMapping<V, E> getIsomorphism(){
+    /**
+     * Check if an isomorphism exists.
+     *
+     * @return true if there is an isomorphism, false if there is no isomorphism
+     */
+    public boolean isomorphismExists(){
+        if (!computed){
+            isomorphicMapping = getMapping();
+        }
+
+        return isomorphicMapping != null;
+    }
+
+    /**
+     * Get an isomorphism between the input forest or {@code null} if none exists.
+     *
+     * @return isomorphic mapping, {@code null} is none exists
+     */
+    public IsomorphicTreeMapping<V, E> getMapping(){
         if (computed)
             return isomorphicMapping;
 
@@ -163,7 +178,7 @@ public class AHUForestIsomorphismInspector<V, E> {
             V root2 = roots2.iterator().next();
 
             computed = true;
-            isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getIsomorphism();
+            isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
             return isomorphicMapping;
         }
 
@@ -180,7 +195,8 @@ public class AHUForestIsomorphismInspector<V, E> {
         for (V root: roots2)
             forest2.addEdge(fresh2, root);
 
-        IsomorphicTreeMapping<V, E> mapping = new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getIsomorphism();
+        IsomorphicTreeMapping<V, E> mapping =
+                new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getMapping();
 
         forest1.removeVertex(fresh1);
         forest2.removeVertex(fresh2);
@@ -201,7 +217,7 @@ public class AHUForestIsomorphismInspector<V, E> {
                         new AHUTreeIsomorphismInspector<>(
                                 subgraph1, root1,
                                 subgraph2, root2
-                        ).getIsomorphism();
+                        ).getMapping();
 
                 assert tmpMapping != null;
                 assert Collections.disjoint(newForwardMapping.keySet(), tmpMapping.getForwardMapping().keySet());

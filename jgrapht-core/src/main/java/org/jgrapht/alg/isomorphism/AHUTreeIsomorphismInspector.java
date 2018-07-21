@@ -259,7 +259,12 @@ public class AHUTreeIsomorphismInspector<V, E> {
         return true;
     }
 
-
+    /**
+     * Check if an isomorphism exists.
+     *
+     * @return true if there is an isomorphism, false if there is no isomorphism
+     */
+    @SuppressWarnings("unchecked")
     public boolean isomorphismExists(){
         if (this.root1 == null || this.root2 == null){
             if (tree1.vertexSet().isEmpty() && tree2.vertexSet().isEmpty())
@@ -290,7 +295,12 @@ public class AHUTreeIsomorphismInspector<V, E> {
         return isomorphismExists(this.root1, this.root2);
     }
 
-    public IsomorphicTreeMapping<V, E> getIsomorphism(){
+    /**
+     * Get an isomorphism between the input trees or {@code null} if none exists.
+     *
+     * @return isomorphic mapping, {@code null} is none exists
+     */
+    public IsomorphicTreeMapping<V, E> getMapping(){
         if (forwardMapping == null){
             if (isomorphismExists())
                 return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, tree1, tree2);
