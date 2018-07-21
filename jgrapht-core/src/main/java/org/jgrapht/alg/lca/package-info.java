@@ -1,4 +1,4 @@
 /**
- * Algorithms for computing lowest common ancestors in trees, forests and DAGs.
+ * Algorithms for computing lowest common ancestors in graphs.
  */
 package org.jgrapht.alg.lca;

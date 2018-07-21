@@ -18,21 +18,26 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
 
+import static org.jgrapht.util.MathUtil.log2;
+
 /**
- * Algorithm for computing lowest common ancestors in forests using the binary lifting method.
+ * Algorithm for computing lowest common ancestors in rooted trees and forests using the Euler tour approached
+ * introduced in <i>Berkman, Omer; Vishkin, Uzi (1993), "Recursive Star-Tree Parallel Data Structure",
+ * SIAM Journal on Computing, 22 (2): 221–242, doi:10.1137/0222017</i>
  *
  * Preprocessing Time complexity: $O(|V| log(|V|))
  * Preprocessing Memory complexity:  $O(|V| log(|V|))
- * Query complexity: $O(log(|V|))$
+ * Query complexity: $O(1)$
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
+ * @author Alexandru Valeanu
  */
 public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     private final Graph<V, E> graph;
@@ -57,42 +62,36 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     /**
      * Construct a new instance of the algorithm.
      *
+     * Note: The constructor will NOT check if the input graph is a valid tree.
+     *
      * @param graph the input graph
      * @param root the root of the graph
      */
     public EulerTourRMQLCAFinder(Graph<V, E> graph, V root){
-        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
     /**
      * Construct a new instance of the algorithm.
      *
-     * Note: If two roots are in the same connected component, then either one can be used by the algorithm.
+     * Note: If two roots appear in the same tree, an error will be thrown.
+     * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
     public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots){
-//    TODO:    assert GraphTests.isForest(graph);
-
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
-        this.MAX_LEVEL = log2(graph.vertexSet().size());
+        this.graph = Objects.requireNonNull(graph, "graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "roots cannot be null");
+        this.MAX_LEVEL = 1 + log2(graph.vertexSet().size());
 
         if (this.roots.isEmpty())
-            throw new IllegalArgumentException("Roots cannot be empty");
+            throw new IllegalArgumentException("roots cannot be empty");
 
         if (!graph.vertexSet().containsAll(roots))
-            throw new IllegalArgumentException("At least one root is not a valid vertex");
-    }
+            throw new IllegalArgumentException("at least one root is not a valid vertex");
 
-    private static int log2(int n){
-        int result = 1;
-
-        while ((1 << result) <= n)
-            ++result;
-
-        return result;
+        computeAncestorsStructure();
     }
 
     private void normalizeGraph(){
@@ -155,9 +154,6 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void computeAncestorsStructure(){
-        if (rmq != null)
-            return;
-
         normalizeGraph();
 
         eulerTour = new int[2 * graph.vertexSet().size()];
@@ -174,6 +170,9 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
                 numberComponent++;
                 dfs(u, -1, 0);
             }
+            else{
+                throw new IllegalArgumentException("multiple roots in the same tree");
+            }
         }
 
         Arrays.fill(representative, -1);
@@ -186,35 +185,42 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
         computeRMQ();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V getLCA(V a, V b) {
+        int indexA = vertexMap.getOrDefault(a, -1);
+        if (indexA == -1)
+            throw new IllegalArgumentException("invalid vertex: " + a);
+
+        int indexB = vertexMap.getOrDefault(b, -1);
+        if (indexB == -1)
+            throw new IllegalArgumentException("invalid vertex: " + b);
+
+        // Check if a == b because lca(a, a) == a
         if (a.equals(b))
             return a;
 
-        computeAncestorsStructure();
-
-        int x = vertexMap.get(a);
-        int y = vertexMap.get(b);
-
-        // if x or y hasn't been explored or they are not in the same tree
-        if (component[x] != component[y] || component[x] == 0)
+        // If a and b are in different components then they do not have a lca
+        if (component[indexA] != component[indexB] || component[indexA] == 0)
             return null;
 
-        x = representative[x];
-        y = representative[y];
+        indexA = representative[indexA];
+        indexB = representative[indexB];
 
-        if (x > y) {
-            int t = x;
-            x = y;
-            y = t;
+        if (indexA > indexB) {
+            int t = indexA;
+            indexA = indexB;
+            indexB = t;
         }
 
-        int l = log2[y - x + 1];
+        int l = log2[indexB - indexA + 1];
         int pwl = 1 << l;
-        int sol = rmq[l][x];
+        int sol = rmq[l][indexA];
 
-        if(level[sol] > level[rmq[l][y - pwl + 1]])
-            sol = rmq[l][y - pwl + 1];
+        if(level[sol] > level[rmq[l][indexB - pwl + 1]])
+            sol = rmq[l][indexB - pwl + 1];
 
         return indexList.get(eulerTour[sol]);
     }

@@ -18,7 +18,6 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.independentset.ChordalGraphIndependentSetFinder;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.Set;

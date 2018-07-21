@@ -18,7 +18,6 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
@@ -63,7 +62,9 @@ import java.util.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
+ * @author Leo Crawford
+ * @author Alexandru Valeanu
  */
 public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
 {
@@ -75,21 +76,21 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      * @param graph the input graph
      */
     public NaiveLCAFinder(Graph<V, E> graph) {
-        // TODO: assert GraphTests.isDAG(graph);
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
     /**
-     * Return the first found LCA of a and b
-     *
-     * @param a the first element to find LCA for
-     * @param b the other element to find the LCA for
-     *
-     * @return the first found LCA of a and b, or null if there is no LCA.
+     * {@inheritDoc}
      */
     @Override
     public V getLCA(V a, V b)
     {
+        if (!graph.vertexSet().contains(a))
+            throw new IllegalArgumentException("invalid vertex: " + a);
+
+        if (!graph.vertexSet().contains(b))
+            throw new IllegalArgumentException("invalid vertex: " + b);
+
         return findLca(
             Collections.singleton(a), Collections.singleton(b), new LinkedHashSet<>(),
             new LinkedHashSet<>());

@@ -18,7 +18,6 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 import org.jgrapht.alg.util.Pair;
@@ -27,7 +26,7 @@ import org.jgrapht.alg.util.UnionFind;
 import java.util.*;
 
 /**
- * Tarjan's offline algorithm for computing lowest common ancestors in forests.
+ * Tarjan's offline algorithm for computing lowest common ancestors in rooted trees and forests.
  *
  * <p>
  * See the article on
@@ -36,11 +35,15 @@ import java.util.*;
  *
  * </p>
  *
- * Query complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries
- * Memory complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries
+ * Preprocessing Time complexity: $O(1)$
+ * Preprocessing Memory complexity:  $O(1)$
+ * Query Time complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries
+ * Query Memory complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
+ * @author Alexandru Valeanu
  */
 public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
     private Graph<V, E> graph;
@@ -58,8 +61,10 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
     private List<Pair<V, V>> queries;
 
     /**
-     * Create an instance with a reference to the graph that we will find LCAs for
-     * 
+     * Construct a new instance of the algorithm.
+     *
+     * Note: The constructor will NOT check if the input graph is a valid tree.
+     *
      * @param graph the input graph
      * @param root the root of the graph
      */
@@ -68,29 +73,36 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     /**
-     * Create an instance with a reference to the graph that we will find LCAs for
+     * Construct a new instance of the algorithm.
+     *
+     * Note: If two roots appear in the same tree, an error will be thrown.
+     * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
-     * @param roots the roots of the graph
+     * @param roots the set of roots of the graph
      */
     public TarjanLCAFinder(Graph<V, E> graph, Set<V> roots) {
-//  TODO:      assert GraphTests.isForest(graph);
-
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
+        this.graph = Objects.requireNonNull(graph, "graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "roots cannot be null");
 
         if (this.roots.isEmpty())
-            throw new IllegalArgumentException("Roots cannot be empty");
+            throw new IllegalArgumentException("roots cannot be empty");
 
         if (!graph.vertexSet().containsAll(roots))
-            throw new IllegalArgumentException("At least one root is not a valid vertex");
+            throw new IllegalArgumentException("at least one root is not a valid vertex");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V getLCA(V a, V b) {
         return getLCAs(Collections.singletonList(Pair.of(a,b))).get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<V> getLCAs(List<Pair<V, V>> queries) {
         return computeTarjan(queries);
@@ -124,6 +136,12 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
             V a = this.queries.get(i).getFirst();
             V b = this.queries.get(i).getSecond();
 
+            if (!graph.vertexSet().contains(a))
+                throw new IllegalArgumentException("invalid vertex: " + a);
+
+            if (!graph.vertexSet().contains(b))
+                throw new IllegalArgumentException("invalid vertex: " + b);
+
             if (a.equals(b))
                 this.lowestCommonAncestors.add(a);
             else{
@@ -132,16 +150,17 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
 
                 this.lowestCommonAncestors.add(null);
             }
-
         }
 
         Set<V> visited = new HashSet<>();
 
-        for (V root: roots)
-            if (!visited.contains(root)) {
-                blackNodes.clear();
-                TarjanOLCA(root, null, visited);
-            }
+        for (V root: roots){
+            if (visited.contains(root))
+                throw new IllegalArgumentException("multiple roots in the same tree");
+
+            blackNodes.clear();
+            TarjanOLCA(root, null, visited);
+        }
 
         List<V> tmpRef = lowestCommonAncestors;
         clear();

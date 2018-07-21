@@ -18,14 +18,15 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
 import java.util.*;
 
+import static org.jgrapht.util.MathUtil.log2;
+
 /**
- * Algorithm for computing lowest common ancestors in forests using the binary lifting method.
+ * Algorithm for computing lowest common ancestors in rooted trees and forests using the binary lifting method.
  *
  * Preprocessing Time complexity: $O(|V| log(|V|))
  * Preprocessing Memory complexity:  $O(|V| log(|V|))
@@ -33,6 +34,8 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
+ * @author Alexandru Valeanu
  */
 public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
 
@@ -55,33 +58,52 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     /**
      * Construct a new instance of the algorithm.
      *
+     * Note: The constructor will NOT check if the input graph is a valid tree.
+     *
      * @param graph the input graph
      * @param root the root of the graph
      */
     public BinaryLiftingLCAFinder(Graph<V, E> graph, V root){
-        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
     /**
      * Construct a new instance of the algorithm.
      *
-     * Note: If two roots are in the same connected component, then either one can be used by the algorithm.
+     * Note: If two roots appear in the same tree, an error will be thrown.
+     * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
     public BinaryLiftingLCAFinder(Graph<V, E> graph, Set<V> roots){
-//  TODO      assert GraphTests.isForest(graph);
-
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Objects.requireNonNull(roots, "Roots cannot be null");
+        this.graph = Objects.requireNonNull(graph, "graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "roots cannot be null");
         this.MAX_LEVEL = log2(graph.vertexSet().size());
 
         if (this.roots.isEmpty())
-            throw new IllegalArgumentException("Roots cannot be empty");
+            throw new IllegalArgumentException("roots cannot be empty");
 
         if (!graph.vertexSet().containsAll(roots))
-            throw new IllegalArgumentException("At least one root is not a valid vertex");
+            throw new IllegalArgumentException("at least one root is not a valid vertex");
+
+        computeAncestorMatrix();
+    }
+
+    private void normalizeGraph(){
+        /*
+         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
+         * mapping (using an ArrayList)
+         */
+        vertexMap = new HashMap<>(graph.vertexSet().size());
+        indexList = new ArrayList<>(graph.vertexSet().size());
+
+        for (V v : graph.vertexSet()) {
+            if (!vertexMap.containsKey(v)) {
+                vertexMap.put(v, vertexMap.size());
+                indexList.add(v);
+            }
+        }
     }
 
     private void dfs(int u, int parent){
@@ -106,73 +128,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
         timeOut[u] = ++clock;
     }
 
-    private boolean isAncestor(int ancestor, int descendant) {
-        return timeIn[ancestor] <= timeIn[descendant] && timeOut[descendant] <= timeOut[ancestor];
-    }
-
-    @Override
-    public V getLCA(V a, V b) {
-        if (a.equals(b))
-            return a;
-
-        computeAncestorMatrix();
-
-        int x = vertexMap.get(a);
-        int y = vertexMap.get(b);
-
-        // if x or y hasn't been explored or they are not in the same tree
-        if (component[x] != component[y] || component[x] == 0)
-            return null;
-
-        if (isAncestor(x, y))
-            return a;
-
-        if (isAncestor(y, x))
-            return b;
-
-        for (int l = MAX_LEVEL - 1; l >= 0; l--)
-            if (ancestors[l][x] != -1 && !isAncestor(ancestors[l][x], y))
-                x = ancestors[l][x];
-
-        int lca = ancestors[0][x];
-
-        // if lca is null
-        if (lca == -1)
-            return null;
-        else
-            return indexList.get(lca);
-    }
-
-    private static int log2(int n){
-        int result = 1;
-
-        while ((1 << result) <= n)
-            ++result;
-
-        return result;
-    }
-
-    private void normalizeGraph(){
-        /*
-         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
-         */
-        vertexMap = new HashMap<>(graph.vertexSet().size());
-        indexList = new ArrayList<>(graph.vertexSet().size());
-
-        for (V v : graph.vertexSet()) {
-            if (!vertexMap.containsKey(v)) {
-                vertexMap.put(v, vertexMap.size());
-                indexList.add(v);
-            }
-        }
-    }
-
     private void computeAncestorMatrix(){
-        if (ancestors != null)
-            return;
-
-        ancestors = new int[MAX_LEVEL][graph.vertexSet().size()];
+        ancestors = new int[MAX_LEVEL + 1][graph.vertexSet().size()];
 
         for (int l = 0; l < MAX_LEVEL; l++) {
             Arrays.fill(ancestors[l], -1);
@@ -180,6 +137,11 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         timeIn = new int[graph.vertexSet().size()];
         timeOut = new int[graph.vertexSet().size()];
+
+        // Ensure that isAncestor(x, y) == false if either x and y hasn't been explored yet
+        for (int i = 0; i < graph.vertexSet().size(); i++) {
+            timeIn[i] = timeOut[i] = -(i + 1);
+        }
 
         numberComponent = 0;
         component = new int[graph.vertexSet().size()];
@@ -191,5 +153,52 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
                 numberComponent++;
                 dfs(vertexMap.get(root), -1);
             }
+            else{
+                throw new IllegalArgumentException("multiple roots in the same tree");
+            }
+    }
+
+    private boolean isAncestor(int ancestor, int descendant) {
+        return timeIn[ancestor] <= timeIn[descendant] && timeOut[descendant] <= timeOut[ancestor];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V getLCA(V a, V b) {
+        int indexA = vertexMap.getOrDefault(a, -1);
+        if (indexA == -1)
+            throw new IllegalArgumentException("invalid vertex: " + a);
+
+        int indexB = vertexMap.getOrDefault(b, -1);
+        if (indexB == -1)
+            throw new IllegalArgumentException("invalid vertex: " + b);
+
+        // Check if a == b because lca(a, a) == a
+        if (a.equals(b))
+            return a;
+
+        // if a and b are in different components then they do not have a lca
+        if (component[indexA] != component[indexB] || component[indexA] == 0)
+            return null;
+
+        if (isAncestor(indexA, indexB))
+            return a;
+
+        if (isAncestor(indexB, indexA))
+            return b;
+
+        for (int l = MAX_LEVEL - 1; l >= 0; l--)
+            if (ancestors[l][indexA] != -1 && !isAncestor(ancestors[l][indexA], indexB))
+                indexA = ancestors[l][indexA];
+
+        int lca = ancestors[0][indexA];
+
+        // if lca is null
+        if (lca == -1)
+            return null;
+        else
+            return indexList.get(lca);
     }
 }

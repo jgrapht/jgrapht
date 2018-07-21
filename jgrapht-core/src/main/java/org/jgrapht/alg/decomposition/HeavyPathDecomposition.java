@@ -79,7 +79,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     /**
      * Create an instance with a reference to the tree that we will decompose and to the root of the tree.
      *
-     * Note: The constructor will NOT check if the input tree is a valid tree.
+     * Note: The constructor will NOT check if the input graph is a valid tree.
      *
      * @param tree the input tree
      * @param root the root of the tree
@@ -93,7 +93,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
      * forest (one root per tree).
      *
      * Note: If two roots appear in the same tree, an error will be thrown.
-     * Note: The constructor will NOT check if the input forest is a valid forest.
+     * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param forest the input forest
      * @param roots the set of roots of the graph
@@ -513,6 +513,17 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
          */
         public int[] getFirstNodeInPathArray(){
             return firstNodeInPath;
+        }
+
+        /**
+         * Return the internal parent array.
+         * For each vertex $v \in V$, $parentArray[normalizeVertex(v)] = normalizeVertex(u)$ if $getParent(v) = u$ or
+         * $-1$ if $getParent(v) = null$.
+         *
+         * @return internal parent array
+         */
+        public int[] getParentArray(){
+            return parent.clone();
         }
     }
 }

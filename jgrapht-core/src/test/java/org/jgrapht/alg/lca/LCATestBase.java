@@ -35,13 +35,40 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Tests for LCA algorithms on trees and forests
+ * Tests for LCA algorithms on rooted trees and forests
  *
  * @author Alexandru Valeanu
  */
 public abstract class LCATestBase {
 
     abstract <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidNode(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("b");
+        g.addVertex("a");
+        g.addVertex("c");
+
+        g.addEdge("a", "b");
+        g.addEdge("a", "c");
+
+        String lca = createSolver(g, Collections.singleton("a")).getLCA("d", "d");
+    }
+
+    @Test
+    public void testNotExploredNode(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("b");
+        g.addVertex("a");
+        g.addVertex("c");
+        g.addVertex("d");
+
+        g.addEdge("a", "b");
+        g.addEdge("a", "c");
+
+        Assert.assertNull(createSolver(g, Collections.singleton("a")).getLCA("a", "d"));
+    }
 
     @Test
     public void testOneNode() {
@@ -51,7 +78,7 @@ public abstract class LCATestBase {
         Assert.assertEquals("a", createSolver(g, Collections.singleton("a")).getLCA("a", "a"));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testTwoRootsInTheSameTree(){
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("b");
@@ -62,11 +89,29 @@ public abstract class LCATestBase {
         g.addEdge("a", "b");
         g.addEdge("c", "d");
 
-        // Either a or b is a valid answer
+        LinkedHashSet<String> roots = new LinkedHashSet<>();
+        roots.add("a");
+        roots.add("b");
 
-        String lca = createSolver(g, g.vertexSet()).getLCA("a", "b");
+        createSolver(g, roots).getLCA("a", "b");
+    }
 
-        Assert.assertTrue(lca.equals("a") || lca.equals("b"));
+    @Test(expected = IllegalArgumentException.class)
+    public void testTwoRootsInTheSameTree2(){
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex("b");
+        g.addVertex("a");
+        g.addVertex("c");
+        g.addVertex("d");
+
+        g.addEdge("a", "b");
+        g.addEdge("c", "d");
+
+        LinkedHashSet<String> roots = new LinkedHashSet<>();
+        roots.add("b");
+        roots.add("a");
+
+        createSolver(g, roots).getLCA("a", "b");
     }
 
     @Test
@@ -94,6 +139,10 @@ public abstract class LCATestBase {
 
         Assert.assertNull(lcaAlgorithm.getLCA("b", "c"));
         Assert.assertNull(lcaAlgorithm.getLCA("c", "b"));
+        Assert.assertNull(lcaAlgorithm.getLCA("c", "a"));
+        Assert.assertNull(lcaAlgorithm.getLCA("a", "c"));
+        Assert.assertNull(lcaAlgorithm.getLCA("a", "b"));
+        Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
         Assert.assertEquals("a", lcaAlgorithm.getLCA("a", "a"));
         Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "b"));
     }
