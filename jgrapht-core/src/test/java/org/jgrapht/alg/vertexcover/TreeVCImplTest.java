@@ -28,6 +28,7 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
@@ -51,6 +52,27 @@ public class TreeVCImplTest {
         }
 
         return true;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNullGraph(){
+        new TreeVCImpl<Integer, DefaultEdge>(null, Collections.emptySet()).getVertexCover();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoRoots(){
+        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
+        new TreeVCImpl<>(tree, Collections.emptySet()).getVertexCover();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testMultipleRootsInTheSameTree(){
+        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
+        tree.addVertex(1);
+        tree.addVertex(2);
+        tree.addEdge(1, 2);
+
+        new TreeVCImpl<>(tree, tree.vertexSet()).getVertexCover();
     }
 
     @Test

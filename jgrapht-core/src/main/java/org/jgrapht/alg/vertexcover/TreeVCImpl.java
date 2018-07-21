@@ -51,59 +51,73 @@ import java.util.stream.Collectors;
  * @param <E> the graph edge type.
  *
  * @author Alexandru Valeanu
- * @since June 2018
  */
 public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
 
-    /*
-        Input graph
-     */
+    // Input graph
     private final Graph<V, E> graph;
 
-    /*
-        Input set of roots (one root per tree)
-     */
+    // Input set of roots (one root per tree)
     private final Set<V> roots;
 
-    /*
-        Cached minimum vertex cover
-     */
-    private VertexCover<V> minVertexCover = null;
+    // Cached minimum vertex cover
+    private VertexCover<V> minVertexCover;
 
     /**
      * Creates a new TreeVCImpl instance.
+     *
+     * <p>
+     *      Note: The constructor does NOT check if the input graph is a valid tree.
+     * </p>
+     *
+     * <p>
+     *      Note: The vertex cover is computed lazily, when needed.
+     * </p>
      *
      * @param graph the input graph
      * @param root the input root
      * @throws NullPointerException if {@code graph} is {@code null}
      * @throws NullPointerException if {@code root} is {@code null}
+     * @throws IllegalArgumentException if {@code root} is an invalid vertex
      */
     public TreeVCImpl(Graph<V, E> graph, V root){
-        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
     /**
      * Creates a new TreeVCImpl instance.
      *
-     * Note: If two roots correspond to the same tree, then only one of them will be used.
+     * <p>
+     *      Note: The constructor does NOT check if the input graph is a valid tree.
+     * </p>
+     *
+     * <p>
+     *     Note: If two roots correspond to the same tree, an error will be thrown.
+     * </p>
+     *
+     * <p>
+     *      Note: The vertex cover is computed lazily, when needed.
+     * </p>
      *
      * @param graph the input graph
      * @param roots the input root
      * @throws NullPointerException if {@code graph} is {@code null}
      * @throws NullPointerException if {@code roots} is {@code null}
      * @throws IllegalArgumentException if {@code roots} is empty
+     * @throws IllegalArgumentException if {@code roots} contains an invalid vertex
      */
     public TreeVCImpl(Graph<V, E> graph, Set<V> roots) {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
-        this.roots = Objects.requireNonNull(roots, "Set of roots cannot be null");
+        this.graph = Objects.requireNonNull(graph, "graph cannot be null");
+        this.roots = Objects.requireNonNull(roots, "set of roots cannot be null");
 
         if (this.roots.isEmpty())
-            throw new IllegalArgumentException("Set of roots cannot be empty");
+            throw new IllegalArgumentException("set of roots cannot be empty");
+
+        if (!this.graph.vertexSet().containsAll(roots))
+            throw new IllegalArgumentException("invalid set of roots");
     }
 
-    /*
-        Populate parent map by iterating through the BFS tree of root
-     */
+    // Populate parent map by iterating through the BFS tree of root
     private void bfs(V root, Set<V> visited, Map<V, V> parent){
         BreadthFirstIterator<V, E> bfs = new BreadthFirstIterator<>(graph, root);
 
@@ -124,6 +138,8 @@ public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
         for (V root: roots)
             if (!visited.contains(root))
                 bfs(root, visited, parent);
+            else
+                throw new IllegalArgumentException("multiple roots in the same tree");
 
         Set<V> leaves = new HashSet<>();
         Set<V> vc = new HashSet<>();
