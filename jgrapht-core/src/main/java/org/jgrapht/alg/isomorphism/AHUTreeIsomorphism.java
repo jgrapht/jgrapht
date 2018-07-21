@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
@@ -10,8 +27,8 @@ import org.jgrapht.util.RadixSort;
 import java.util.*;
 
 public class AHUTreeIsomorphism<V, E> {
-    private final Graph<V, E> graph1;
-    private final Graph<V, E> graph2;
+    private final Graph<V, E> tree1;
+    private final Graph<V, E> tree2;
 
     private V root1;
     private V root2;
@@ -19,13 +36,13 @@ public class AHUTreeIsomorphism<V, E> {
     private Map<V, V> forwardMapping;
     private Map<V, V> backwardMapping;
 
-    public AHUTreeIsomorphism(Graph<V, E> graph1, Graph<V, E> graph2){
-        this(graph1, null, graph2, null);
+    public AHUTreeIsomorphism(Graph<V, E> tree1, Graph<V, E> tree2){
+        this(tree1, null, tree2, null);
     }
 
-    public AHUTreeIsomorphism(Graph<V, E> graph1, V root1, Graph<V, E> graph2, V root2){
-        this.graph1 = Objects.requireNonNull(graph1);
-        this.graph2 = Objects.requireNonNull(graph2);
+    public AHUTreeIsomorphism(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
+        this.tree1 = Objects.requireNonNull(tree1, "tree1 cannot be null");
+        this.tree2 = Objects.requireNonNull(tree2, "tree2 cannot be null");
 
         this.root1 = root1;
         this.root2 = root2;
@@ -64,18 +81,18 @@ public class AHUTreeIsomorphism<V, E> {
             forwardMapping.put(u, v);
             backwardMapping.put(v, u);
 
-            Map<Integer, List<V>> labelList = new HashMap<>(graph1.degreeOf(u));
+            Map<Integer, List<V>> labelList = new HashMap<>(tree1.degreeOf(u));
 
-            for (E edge: graph1.edgesOf(u)){
-                V next = Graphs.getOppositeVertex(graph1, edge, u);
+            for (E edge: tree1.edgesOf(u)){
+                V next = Graphs.getOppositeVertex(tree1, edge, u);
 
                 if (!forwardMapping.containsKey(next)){
                     labelList.computeIfAbsent(canonicalName[0].get(next), x -> new ArrayList<>()).add(next);
                 }
             }
 
-            for (E edge: graph2.edgesOf(v)){
-                V next = Graphs.getOppositeVertex(graph2, edge, v);
+            for (E edge: tree2.edgesOf(v)){
+                V next = Graphs.getOppositeVertex(tree2, edge, v);
 
                 if (!backwardMapping.containsKey(next)){
                     List<V> list = labelList.get(canonicalName[1].get(next));
@@ -103,11 +120,11 @@ public class AHUTreeIsomorphism<V, E> {
 
         @SuppressWarnings("unchecked")
         Map<V, Integer>[] canonicalName = new Map[2];
-        canonicalName[0] = new HashMap<>(graph1.vertexSet().size());
-        canonicalName[1] = new HashMap<>(graph2.vertexSet().size());
+        canonicalName[0] = new HashMap<>(tree1.vertexSet().size());
+        canonicalName[1] = new HashMap<>(tree2.vertexSet().size());
 
-        List<List<V>> nodesByLevel1 = computeLevels(graph1, root1);
-        List<List<V>> nodesByLevel2 = computeLevels(graph2, root2);
+        List<List<V>> nodesByLevel1 = computeLevels(tree1, root1);
+        List<List<V>> nodesByLevel2 = computeLevels(tree2, root2);
 
         if (nodesByLevel1.size() != nodesByLevel2.size())
             return false;
@@ -141,10 +158,10 @@ public class AHUTreeIsomorphism<V, E> {
                 for (int i = 0; i < n; i++) {
                     V u = level[k].get(i);
 
-                    Graph<V, E> graph = graph1;
+                    Graph<V, E> graph = tree1;
 
                     if (k == 1)
-                        graph = graph2;
+                        graph = tree2;
 
                     List<Integer> list = new ArrayList<>();
                     for (E edge: graph.edgesOf(u)){
@@ -156,7 +173,6 @@ public class AHUTreeIsomorphism<V, E> {
                         }
                     }
 
-//                    list.sort(Integer::compareTo);
                     RadixSort.sort(list);
 
                     StringBuilder sb = new StringBuilder();
@@ -192,7 +208,7 @@ public class AHUTreeIsomorphism<V, E> {
 
         matchVerticesWithSameLabel(root1, root2, canonicalName);
 
-        if (forwardMapping.size() != graph1.vertexSet().size()){
+        if (forwardMapping.size() != tree1.vertexSet().size()){
             forwardMapping.clear();
             backwardMapping.clear();
             return false;
@@ -204,13 +220,13 @@ public class AHUTreeIsomorphism<V, E> {
     @SuppressWarnings("unchecked")
     public boolean isomorphismExists(){
         if (this.root1 == null || this.root2 == null){
-            if (graph1.vertexSet().isEmpty() && graph2.vertexSet().isEmpty())
+            if (tree1.vertexSet().isEmpty() && tree2.vertexSet().isEmpty())
                 return isomorphismExists(null, null);
 
-            TreeMeasurer<V, E> graphMeasurer1 = new TreeMeasurer<>(graph1);
+            TreeMeasurer<V, E> graphMeasurer1 = new TreeMeasurer<>(tree1);
             V[] centers1 = (V[]) graphMeasurer1.getGraphCenter().toArray();
 
-            TreeMeasurer<V, E> graphMeasurer2 = new TreeMeasurer<>(graph2);
+            TreeMeasurer<V, E> graphMeasurer2 = new TreeMeasurer<>(tree2);
             V[] centers2 = (V[]) graphMeasurer2.getGraphCenter().toArray();
 
             if (centers1.length == 1 && centers2.length == 1){
@@ -235,14 +251,14 @@ public class AHUTreeIsomorphism<V, E> {
     public IsomorphicTreeMapping<V, E> getIsomorphism(){
         if (forwardMapping == null){
             if (isomorphismExists())
-                return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, graph1, graph2);
+                return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, tree1, tree2);
             else
                 return null;
         }
 
-        if (forwardMapping.size() != graph1.vertexSet().size())
+        if (forwardMapping.size() != tree1.vertexSet().size())
             return null;
         else
-            return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, graph1, graph2);
+            return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, tree1, tree2);
     }
 }
