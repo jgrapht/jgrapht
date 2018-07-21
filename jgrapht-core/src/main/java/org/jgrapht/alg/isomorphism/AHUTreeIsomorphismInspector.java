@@ -26,7 +26,31 @@ import org.jgrapht.util.RadixSort;
 
 import java.util.*;
 
-public class AHUTreeIsomorphism<V, E> {
+/**
+ * This is an implementation of the AHU algorithm for detecting an isomorphism between two trees.
+ * Please see <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">mathworld.wolfram.com</a> for a complete
+ * definition of the isomorphism problem for general graphs.
+ *
+ * <p>
+ *     The original algorithm was first presented in "Alfred V. Aho and John E. Hopcroft. 1974.
+ *     The Design and Analysis of Computer Algorithms (1st ed.). Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA."
+ * </p>
+ *
+ * <p>
+ *     This implementation runs in linear time (in the number of vertices of the input trees)
+ *     while using a linear amount of memory.
+ * </p>
+ *
+ * <p>
+ *      For an implementation that supports rooted forests see {@link AHUForestIsomorphismInspector}.
+ * </p>
+ *
+ * @param <V> the type of the vertices
+ * @param <E> the type of the edges
+ *
+ * @author Alexandru Valeanu
+ */
+public class AHUTreeIsomorphismInspector<V, E> {
     private final Graph<V, E> tree1;
     private final Graph<V, E> tree2;
 
@@ -36,11 +60,29 @@ public class AHUTreeIsomorphism<V, E> {
     private Map<V, V> forwardMapping;
     private Map<V, V> backwardMapping;
 
-    public AHUTreeIsomorphism(Graph<V, E> tree1, Graph<V, E> tree2){
+    /**
+     * Construct a new AHU unrooted tree isomorphism inspector.
+     *
+     * Note: The constructor does NOT check if the input trees are valid.
+     *
+     * @param tree1 the first tree
+     * @param tree2 the second tree
+     */
+    public AHUTreeIsomorphismInspector(Graph<V, E> tree1, Graph<V, E> tree2){
         this(tree1, null, tree2, null);
     }
 
-    public AHUTreeIsomorphism(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
+    /**
+     * Construct a new AHU rooted tree isomorphism inspector.
+     *
+     * Note: The constructor does NOT check if the input trees are valid.
+     *
+     * @param tree1 the first rooted tree
+     * @param root1 the root of the first tree
+     * @param tree2 the second rooted tree
+     * @param root2 the root of the second tree
+     */
+    public AHUTreeIsomorphismInspector(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
         this.tree1 = Objects.requireNonNull(tree1, "tree1 cannot be null");
         this.tree2 = Objects.requireNonNull(tree2, "tree2 cannot be null");
 
@@ -217,17 +259,17 @@ public class AHUTreeIsomorphism<V, E> {
         return true;
     }
 
-    @SuppressWarnings("unchecked")
+
     public boolean isomorphismExists(){
         if (this.root1 == null || this.root2 == null){
             if (tree1.vertexSet().isEmpty() && tree2.vertexSet().isEmpty())
                 return isomorphismExists(null, null);
 
-            TreeMeasurer<V, E> graphMeasurer1 = new TreeMeasurer<>(tree1);
-            V[] centers1 = (V[]) graphMeasurer1.getGraphCenter().toArray();
+            TreeMeasurer<V, E> treeMeasurer1 = new TreeMeasurer<>(tree1);
+            V[] centers1 = (V[]) treeMeasurer1.getGraphCenter().toArray();
 
-            TreeMeasurer<V, E> graphMeasurer2 = new TreeMeasurer<>(tree2);
-            V[] centers2 = (V[]) graphMeasurer2.getGraphCenter().toArray();
+            TreeMeasurer<V, E> treeMeasurer2 = new TreeMeasurer<>(tree2);
+            V[] centers2 = (V[]) treeMeasurer2.getGraphCenter().toArray();
 
             if (centers1.length == 1 && centers2.length == 1){
                 return isomorphismExists(centers1[0], centers2[0]);

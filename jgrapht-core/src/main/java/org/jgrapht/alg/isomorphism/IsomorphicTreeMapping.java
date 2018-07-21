@@ -23,13 +23,12 @@ import org.jgrapht.GraphMapping;
 import java.util.*;
 
 /**
- * This class represents a GraphMapping between two isomorphic trees (forests).
- *
- * @author Alexandru Valeanu
- * @since June 2018
+ * This class represents a GraphMapping between two isomorphic trees or forests.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
+ * @author Alexandru Valeanu
  */
 public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
 
@@ -40,7 +39,7 @@ public class IsomorphicTreeMapping<V, E> implements GraphMapping<V, E> {
     private final Graph<V, E> graph2;
 
     /**
-     * Construct a new isomorphic tree (forest) mapping.
+     * Construct a new isomorphic tree (or forest) mapping.
      *
      * @param forwardMapping the mapping from graph1 to graph2
      * @param backwardMapping the mapping from graph2 to graph1 (inverse of forwardMapping)

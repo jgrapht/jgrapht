@@ -25,7 +25,31 @@ import org.jgrapht.graph.SimpleGraph;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class AHUForestIsomorphism<V, E> {
+/**
+ * This is an implementation of the AHU algorithm for detecting an isomorphism between two rooted forests.
+ * Please see <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">mathworld.wolfram.com</a> for a complete
+ * definition of the isomorphism problem for general graphs.
+ *
+ * <p>
+ *     The original algorithm was first presented in "Alfred V. Aho and John E. Hopcroft. 1974.
+ *     The Design and Analysis of Computer Algorithms (1st ed.). Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA."
+ * </p>
+ *
+ * <p>
+ *     This implementation runs in linear time (in the number of vertices of the input forests)
+ *     while using a linear amount of memory.
+ * </p>
+ *
+ * <p>
+ *      For an implementation that supports both unrooted and rooted trees see {@link AHUTreeIsomorphismInspector}.
+ * </p>
+ *
+ * @param <V> the type of the vertices
+ * @param <E> the type of the edges
+ *
+ * @author Alexandru Valeanu
+ */
+public class AHUForestIsomorphismInspector<V, E> {
     private final Graph<V, E> forest1;
     private final Graph<V, E> forest2;
 
@@ -35,12 +59,32 @@ public class AHUForestIsomorphism<V, E> {
     private boolean computed = false;
     private IsomorphicTreeMapping<V, E> isomorphicMapping = null;
 
-    public AHUForestIsomorphism(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
+    /**
+     * Construct a new AHU rooted tree isomorphism inspector.
+     *
+     * Note: The constructor does NOT check if the input trees are valid.
+     *
+     * @param tree1 the first rooted tree
+     * @param root1 the root of the first tree
+     * @param tree2 the second rooted tree
+     * @param root2 the root of the second tree
+     */
+    public AHUForestIsomorphismInspector(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
         this(tree1, Collections.singleton(Objects.requireNonNull(root1, "root cannot be null")),
                 tree2, Collections.singleton(Objects.requireNonNull(root2, "root cannot be null")));
     }
 
-    public AHUForestIsomorphism(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
+    /**
+     * Construct a new AHU rooted forest isomorphism inspector.
+     *
+     * Note: The constructor does NOT check if the input forests are valid.
+     *
+     * @param forest1 the first rooted forest
+     * @param roots1 the roots of the first forest
+     * @param forest2 the second rooted forest
+     * @param roots2 the roots of the second forest
+     */
+    public AHUForestIsomorphismInspector(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
         this.forest1 = Objects.requireNonNull(forest1, "input forest cannot be null");
         this.forest2 = Objects.requireNonNull(forest2, "input forest cannot be null");
 
@@ -119,7 +163,7 @@ public class AHUForestIsomorphism<V, E> {
             V root2 = roots2.iterator().next();
 
             computed = true;
-            isomorphicMapping = new AHUTreeIsomorphism<>(forest1, root1, forest2, root2).getIsomorphism();
+            isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getIsomorphism();
             return isomorphicMapping;
         }
 
@@ -136,7 +180,7 @@ public class AHUForestIsomorphism<V, E> {
         for (V root: roots2)
             forest2.addEdge(fresh2, root);
 
-        IsomorphicTreeMapping<V, E> mapping = new AHUTreeIsomorphism<>(forest1, fresh1, forest2, fresh2).getIsomorphism();
+        IsomorphicTreeMapping<V, E> mapping = new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getIsomorphism();
 
         forest1.removeVertex(fresh1);
         forest2.removeVertex(fresh2);
@@ -150,14 +194,11 @@ public class AHUForestIsomorphism<V, E> {
             for (V root1: roots1){
                 V root2 = mapping.getVertexCorrespondence(root1, true);
 
-//                Graph<V, E> subgraph1 = new AsSubgraph<>(forest1, connectivityInspector1.connectedSetOf(root1));
-//                Graph<V, E> subgraph2 = new AsSubgraph<>(forest2, connectivityInspector2.connectedSetOf(root2));
-
                 Graph<V, E> subgraph1 = takeSubraph(forest1, connectivityInspector1.connectedSetOf(root1));
                 Graph<V, E> subgraph2 = takeSubraph(forest2, connectivityInspector2.connectedSetOf(root2));
 
                 IsomorphicTreeMapping<V, E> tmpMapping =
-                        new AHUTreeIsomorphism<>(
+                        new AHUTreeIsomorphismInspector<>(
                                 subgraph1, root1,
                                 subgraph2, root2
                         ).getIsomorphism();
