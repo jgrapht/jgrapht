@@ -17,13 +17,10 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeapNode;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
 
@@ -366,7 +363,7 @@ class Node {
             Node nextNode;
             while (prevNode != prev) {
                 nextNode = prevNode.blossomGrandparent;
-                prevNode.blossomGrandparent = prev;
+                prevNode.blossomGrandparent = current;
                 prevNode = nextNode;
             }
         }
@@ -399,15 +396,6 @@ class Node {
      */
     public boolean isInfinityNode() {
         return label == INFINITY;
-    }
-
-    /**
-     * Updates the label of this node
-     *
-     * @param label the new label of this node
-     */
-    public void setLabel(Label label) {
-        this.label = label;
     }
 
     /**

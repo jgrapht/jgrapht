@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
@@ -35,6 +36,45 @@ public class NodeTest {
 
     private Options noneOptions = new Options(NONE);
 
+    @Test
+    public void testLabels() {
+        Node node = new Node();
+
+        node.label = INFINITY;
+        assertTrue(node.isInfinityNode());
+
+        node.label = PLUS;
+        assertTrue(node.isPlusNode());
+
+        node.label = MINUS;
+        assertTrue(node.isMinusNode());
+
+    }
+
+    @Test
+    public void testAncestors() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+
+        primalUpdater.augment(edge23);
+        primalUpdater.grow(edge12, false, false);
+
+        assertEquals(node1, node2.getTreeParent());
+        assertEquals(node2, node3.getTreeParent());
+        assertEquals(node1, node3.getTreeGrandparent());
+    }
 
     /**
      * Tests correct edge addition and correct edge direction
@@ -70,6 +110,30 @@ public class NodeTest {
             int dir = iterator.getDir();
             assertSame(edge.head[dir], from);
         }
+    }
+
+    /**
+     * Tests correct edge removal from linked lists of incidents edges
+     */
+    @Test
+    public void testRemoveEdge() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+
+        Edge edge12 = state.edgeMap.get(e12);
+
+        int dir = edge12.getDirFrom(node1);
+        node1.removeEdge(edge12, dir);
+        assertEquals(Collections.emptySet(), BlossomVDebugger.edgesOf(node1));
+
+        node2.removeEdge(edge12, 1 - dir);
+        assertEquals(Collections.emptySet(), BlossomVDebugger.edgesOf(node2));
     }
 
     /**
@@ -239,6 +303,113 @@ public class NodeTest {
         // moving child list to non-empty child list
         node1.moveChildrenTo(node6);
         assertEquals(new HashSet<>(Arrays.asList(node2, node4, node7)), BlossomVDebugger.childrenOf(node6));
+    }
+
+    /**
+     * Tests correct search of penultimate blossom
+     */
+    @Test
+    public void testGetPenultimateBlossom() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+        DefaultWeightedEdge e15 = Graphs.addEdgeWithVertices(graph, 1, 5, 0);
+        DefaultWeightedEdge e16 = Graphs.addEdgeWithVertices(graph, 1, 6, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+        Node node5 = state.vertexMap.get(5);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge13 = state.edgeMap.get(e13);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge16 = state.edgeMap.get(e16);
+        Edge edge34 = state.edgeMap.get(e34);
+        Edge edge45 = state.edgeMap.get(e45);
+        Edge edge15 = state.edgeMap.get(e15);
+
+        state.setCurrentEdges(node1.tree);
+        primalUpdater.augment(edge23);
+        primalUpdater.augment(edge45);
+        primalUpdater.grow(edge12, true, false);
+        Node blossom1 = primalUpdater.shrink(edge13, false);
+        primalUpdater.shrink(edge15, false);
+
+        assertEquals(blossom1, node1.getPenultimateBlossom());
+        assertEquals(blossom1, node2.getPenultimateBlossom());
+        assertEquals(blossom1, node3.getPenultimateBlossom());
+        assertEquals(node4, node4.getPenultimateBlossom());
+        assertEquals(node5, node5.getPenultimateBlossom());
+    }
+
+
+    @Test
+    public void testGetPenultimateBlossomAndFixBlossomGrandparent() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+        DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+        DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 0);
+        DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
+        DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 0);
+        DefaultWeightedEdge e15 = Graphs.addEdgeWithVertices(graph, 1, 5, 0);
+        DefaultWeightedEdge e17 = Graphs.addEdgeWithVertices(graph, 1, 7, 0);
+        DefaultWeightedEdge e18 = Graphs.addEdgeWithVertices(graph, 1, 8, 0);
+        DefaultWeightedEdge e19 = Graphs.addEdgeWithVertices(graph, 1, 9, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+
+        Node node1 = state.vertexMap.get(1);
+        Node node2 = state.vertexMap.get(2);
+        Node node3 = state.vertexMap.get(3);
+        Node node4 = state.vertexMap.get(4);
+        Node node5 = state.vertexMap.get(5);
+        Node node6 = state.vertexMap.get(6);
+        Node node7 = state.vertexMap.get(7);
+        Node node8 = state.vertexMap.get(8);
+
+        Edge edge12 = state.edgeMap.get(e12);
+        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge34 = state.edgeMap.get(e34);
+        Edge edge45 = state.edgeMap.get(e45);
+        Edge edge56 = state.edgeMap.get(e56);
+        Edge edge67 = state.edgeMap.get(e67);
+        Edge edge13 = state.edgeMap.get(e13);
+        Edge edge15 = state.edgeMap.get(e15);
+        Edge edge17 = state.edgeMap.get(e17);
+        Edge edge18 = state.edgeMap.get(e18);
+        Edge edge19 = state.edgeMap.get(e19);
+
+        state.setCurrentEdges(node1.tree);
+        primalUpdater.augment(edge23);
+        primalUpdater.augment(edge45);
+        primalUpdater.augment(edge67);
+        primalUpdater.grow(edge12, true, false);
+        Node blossom1 = primalUpdater.shrink(edge13, false);
+        Node blossom2 = primalUpdater.shrink(edge15, false);
+        Node blossom3 = primalUpdater.shrink(edge17, false);
+        state.clearCurrentEdges(blossom3.tree);
+        state.setCurrentEdges(node8.tree);
+        primalUpdater.augment(edge19);
+        primalUpdater.grow(edge18, false, false);
+
+        // let's assume the worst case: all blossomGrandparent references point to blossom3
+        node1.blossomGrandparent = blossom1.blossomGrandparent = blossom2.blossomGrandparent = blossom3;
+        assertEquals(blossom2, node1.getPenultimateBlossomAndFixBlossomGrandparent());
+        assertEquals(blossom2, node1.blossomGrandparent);
+        assertEquals(blossom2, blossom1.blossomGrandparent);
     }
 
 }

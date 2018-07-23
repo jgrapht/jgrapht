@@ -296,8 +296,7 @@ class PrimalUpdater<V, E> {
         blossom.removeFromChildList();
         for (Node.IncidentEdgeIterator iterator = blossom.incidentEdgesIterator(); iterator.hasNext(); ) {
             edge = iterator.next();
-            dir = iterator.getDir();
-            Node penultimateChild = edge.headOriginal[1 - dir].getPenultimateBlossomAndFixBlossomGrandparent();
+            Node penultimateChild = edge.headOriginal[1 - iterator.getDir()].getPenultimateBlossomAndFixBlossomGrandparent();
             state.moveEdgeTail(blossom, penultimateChild, edge);
         }
 

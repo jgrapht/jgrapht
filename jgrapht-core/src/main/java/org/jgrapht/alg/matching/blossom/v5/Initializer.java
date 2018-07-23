@@ -201,8 +201,8 @@ class Initializer<V, E> {
                     edge = incidentEdgeIterator.next();
                     dir = incidentEdgeIterator.getDir();
                     if (edge.slack <= resultMinSlack && node.isPlusNode() && edge.head[dir].isPlusNode()) {
-                        node.setLabel(Node.Label.INFINITY);
-                        edge.head[dir].setLabel(Node.Label.INFINITY);
+                        node.label = Node.Label.INFINITY;
+                        edge.head[dir].label = Node.Label.INFINITY;
                         node.matched = edge;
                         edge.head[dir].matched = edge;
                         treeNum -= 2;
