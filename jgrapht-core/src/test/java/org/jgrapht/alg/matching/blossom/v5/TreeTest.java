@@ -123,7 +123,7 @@ public class TreeTest {
         blossom.label = MINUS;
         blossom.isOuter = true;
         blossom.isBlossom = true;
-        tree.addMinusBlossom(blossom, blossom.dual);
+        tree.addMinusBlossom(blossom);
 
         assertNotNull(blossom.fibNode);
         assertSame(blossom.fibNode.getData(), blossom);

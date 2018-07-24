@@ -24,9 +24,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * This class is a supporting data structure for Kolmogorov's Blossom V algorithm. Represents an alternating
- * tree of tight edges which is used to find an augmenting path of tight edges in order to perform an augmentation
- * and increase the cardinality of the matching.
+ * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
+ * <p>
+ * Represents an alternating tree of tight edges which is used to find an augmenting path of tight edges
+ * in order to perform an augmentation and increase the cardinality of the matching.
  *
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
@@ -43,7 +44,12 @@ class Tree {
      */
     TreeEdge[] first;
     /**
-     * Used to quickly determine the edge between two trees during primal operations.
+     * This variable is used to quickly determine the edge between two trees during primal operations.
+     * <p>
+     * Let $T$ be a tree that is being processed in the main loop. For every tree $T'$ that is adjacent
+     * to $T$ this variable is set to the {@code TreeEdge} that connects both trees. This variable also
+     * helps to indicate whether a pair of trees is adjacent or not. This variable is set to {@code null}
+     * when no primal operation can be applied to the tree $T$.
      */
     TreeEdge currentEdge;
     /**
@@ -115,36 +121,33 @@ class Tree {
      * Helper method to ensure correct addition of an edge to the heap
      *
      * @param edge a (+, +) edge
-     * @param key  edge's key in the heap
      */
-    public void addPlusPlusEdge(Edge edge, double key) {
+    public void addPlusPlusEdge(Edge edge) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
-        plusPlusEdges.insert(edgeNode, key);
+        plusPlusEdges.insert(edgeNode, edge.slack);
     }
 
     /**
      * Helper method to ensure correct addition of an edge to the heap
      *
      * @param edge a (+, inf) edge
-     * @param key  edge's key in the heap
      */
-    public void addPlusInfinityEdge(Edge edge, double key) {
+    public void addPlusInfinityEdge(Edge edge) {
         FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
         edge.fibNode = edgeNode;
-        plusInfinityEdges.insert(edgeNode, key);
+        plusInfinityEdges.insert(edgeNode, edge.slack);
     }
 
     /**
      * Helper method to ensure correct addition of a blossom to the heap
      *
      * @param blossom a "-" blossom
-     * @param key     blossom's key in the heap
      */
-    public void addMinusBlossom(Node blossom, double key) {
+    public void addMinusBlossom(Node blossom) {
         FibonacciHeapNode<Node> blossomNode = new FibonacciHeapNode<>(blossom);
         blossom.fibNode = blossomNode;
-        minusBlossoms.insert(blossomNode, key);
+        minusBlossoms.insert(blossomNode, blossom.dual);
     }
 
     /**

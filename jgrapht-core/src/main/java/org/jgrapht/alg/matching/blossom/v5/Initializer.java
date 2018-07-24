@@ -234,7 +234,7 @@ class Initializer<V, E> {
                 edge = edgeIterator.next();
                 opposite = edge.head[edgeIterator.getDir()];
                 if (opposite.isInfinityNode()) {
-                    tree.addPlusInfinityEdge(edge, edge.slack);
+                    tree.addPlusInfinityEdge(edge);
                 } else if (!opposite.isProcessed) {
                     if (opposite.tree.currentEdge == null) {
                         State.addTreeEdge(tree, opposite.tree);

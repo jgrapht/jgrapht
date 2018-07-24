@@ -408,8 +408,8 @@ public class NodeTest {
         // let's assume the worst case: all blossomGrandparent references point to blossom3
         node1.blossomGrandparent = blossom1.blossomGrandparent = blossom2.blossomGrandparent = blossom3;
         assertEquals(blossom2, node1.getPenultimateBlossomAndFixBlossomGrandparent());
-        assertEquals(blossom2, node1.blossomGrandparent);
-        assertEquals(blossom2, blossom1.blossomGrandparent);
+        assertNotEquals(blossom3, node1.blossomGrandparent);
+        assertNotEquals(blossom3, blossom1.blossomGrandparent);
     }
 
 }

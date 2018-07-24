@@ -349,7 +349,7 @@ class PrimalUpdater<V, E> {
         minusNode.dual += eps;
         // maintaining heap of "-" blossoms
         if (minusNode.isBlossom) {
-            minusNode.tree.addMinusBlossom(minusNode, minusNode.dual);
+            minusNode.tree.addMinusBlossom(minusNode);
         }
         // maintaining minus-plus edges in the minus-plus heaps in the tree edges
         for (Node.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
@@ -404,7 +404,7 @@ class PrimalUpdater<V, E> {
                 if (opposite.tree == node.tree) {
                     // this is blossom-forming edge
                     node.tree.removePlusInfinityEdge(edge);
-                    node.tree.addPlusPlusEdge(edge, edge.slack);
+                    node.tree.addPlusPlusEdge(edge);
                 } else {
                     // this is plus-plus edge to another trees
                     if (opposite.tree.currentEdge == null) {
@@ -426,7 +426,7 @@ class PrimalUpdater<V, E> {
                     opposite.tree.currentEdge.addToCurrentPlusMinusHeap(edge, edge.slack, opposite.tree.currentDirection);
                 }
             } else if (opposite.isInfinityNode()) {
-                node.tree.addPlusInfinityEdge(edge, edge.slack);
+                node.tree.addPlusInfinityEdge(edge);
                 // this edge can be grown as well
                 // it can be the case when this edge can't be grown because opposite vertex is already added
                 // to this tree via some other grow operation
@@ -601,7 +601,7 @@ class PrimalUpdater<V, E> {
                     if (!opposite.isProcessed) {
                         // if opposite.isProcessed = true => this is an inner (+, +) edge => its slack has been
                         // updated already and it has been added to the plus-plus edges heap already
-                        plusNode.tree.addPlusPlusEdge(edge, edge.slack);
+                        plusNode.tree.addPlusPlusEdge(edge);
                     }
                 } else {
                     // opposite is from another tree since it's label is "+"
@@ -622,7 +622,7 @@ class PrimalUpdater<V, E> {
             } else {
                 // this is either an inner edge, that becomes a (+, inf) edge, or it is a former (-, +) edge,
                 // that also becomes a (+, inf) edge
-                plusNode.tree.addPlusInfinityEdge(edge, edge.slack); // updating edge's key
+                plusNode.tree.addPlusInfinityEdge(edge); // updating edge's key
             }
         }
         return zeroSlackEdge;
@@ -638,7 +638,7 @@ class PrimalUpdater<V, E> {
         double eps = minusNode.tree.eps; // the minusNode.tree is assumed to be correct
         minusNode.dual += eps;
         if (minusNode.isBlossom) {
-            minusNode.tree.addMinusBlossom(minusNode, minusNode.dual);
+            minusNode.tree.addMinusBlossom(minusNode);
         }
         Edge edge;
         Node opposite;
@@ -671,7 +671,7 @@ class PrimalUpdater<V, E> {
                     if (opposite.tree != tree) {
                         opposite.tree.currentEdge.removeFromCurrentMinusPlusHeap(edge, opposite.tree.currentDirection);
                     }
-                    opposite.tree.addPlusInfinityEdge(edge, edge.slack);
+                    opposite.tree.addPlusInfinityEdge(edge);
                 }
             }
         }
@@ -724,7 +724,7 @@ class PrimalUpdater<V, E> {
                             if (opposite.isPlusNode()) {
                                 // this is a (+,+) cross-tree edge
                                 treeEdge.removeFromPlusPlusHeap(edge);
-                                oppositeTree.addPlusInfinityEdge(edge, edge.slack);
+                                oppositeTree.addPlusInfinityEdge(edge);
                             } else if (opposite.isMinusNode()) {
                                 // this is a (+,-) cross-tree edge
                                 treeEdge.removeFromCurrentPlusMinusHeap(edge, currentDir);
@@ -732,14 +732,15 @@ class PrimalUpdater<V, E> {
                         }
                     } else {
                         // current node is a "-" node
+                        edge.slack += eps;
                         if (oppositeTree != null && oppositeTree != tree && opposite.isPlusNode()) {
                             // this is a (-,+) cross-tree edge
                             treeEdge = oppositeTree.currentEdge;
                             int currentDir = oppositeTree.currentDirection;
                             treeEdge.removeFromCurrentMinusPlusHeap(edge, currentDir);
-                            oppositeTree.addPlusInfinityEdge(edge, edge.slack + eps);
+                            oppositeTree.addPlusInfinityEdge(edge);
                         }
-                        edge.slack += eps;
+
 
                     }
                 }
@@ -915,7 +916,7 @@ class PrimalUpdater<V, E> {
                 if (opposite.tree == tree) {
                     // edge to the node from the same tree, need only to add it to "++" heap if opposite is "+" node
                     if (opposite.isPlusNode()) {
-                        tree.addPlusPlusEdge(edge, edge.slack);
+                        tree.addPlusPlusEdge(edge);
                     }
                 } else {
                     // cross-tree edge or infinity edge
@@ -928,7 +929,7 @@ class PrimalUpdater<V, E> {
                         }
                         oppositeTree.currentEdge.addToCurrentPlusMinusHeap(edge, edge.slack, oppositeTree.currentDirection);
                     } else {
-                        tree.addPlusInfinityEdge(edge, edge.slack);
+                        tree.addPlusInfinityEdge(edge);
                     }
 
                 }

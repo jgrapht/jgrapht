@@ -25,11 +25,12 @@ import java.util.NoSuchElementException;
 import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
 
 /**
- * This class is a supporting data structure for Kolmogorov's Blossom V algorithm. Represents
- * a vertex of graph. Contains information about the current state of the node (i.e. whether
- * it is an outer node, etc.) and the information needed to maintain the alternating tree structure,
- * which is needed to find an augmenting path of tight edges in the graph to increase the cardinality of the
- * matching.
+ * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
+ * <p>
+ * Represents a vertex of graph. Contains information about the current state of the node
+ * (i.e. whether it is a blossom, etc.) and the information needed to maintain the alternating tree
+ * structure, which is needed to find an augmenting path which consists of tight edges in the graph
+ * to increase the cardinality of the matching.
  *
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
@@ -44,7 +45,6 @@ class Node {
      * The reference to the Fibonacci heap node this {@code Node} is stored in
      */
     FibonacciHeapNode<Node> fibNode;
-
     /**
      * True if this node is a tree root, implies that this node is outer
      */
@@ -54,17 +54,17 @@ class Node {
      */
     boolean isBlossom;
     /**
-     * True if this node is outer, i.e. it isn't contracted in some blossom
+     * True if this node is outer, i.e. it isn't contracted in some blossom and belongs to the surface graph
      */
     boolean isOuter;
     /**
-     * Support variable to identify the nodes which have been "processed" by the algorithm. Is used
-     * in the shrink and expand operations. Is similar to the {@link Node#isMarked}
+     * Support variable to identify the nodes which have been "processed" in some sense by the algorithm.
+     * Is used in the shrink and expand operations. Is similar to the {@link Node#isMarked}
      */
     boolean isProcessed;
     /**
-     * Support variable. In particular, is used in shrink and expand operation to identify the blossom nodes.
-     * Is similar to the {@link Node#isProcessed}
+     * Support variable. In particular, it is used in shrink and expand operation to quickly determine whether a
+     * node belongs to the current blossom or not. Is similar to the {@link Node#isProcessed}
      */
     boolean isMarked;
     /**
@@ -73,14 +73,13 @@ class Node {
      * reference.
      */
     boolean isRemoved;
-
     /**
      * Stores the current label of this node. Is valid if this node is outer.
      */
     Label label;
     /**
-     * References of the first elements in the linked lists of edges that incident to this node.
-     * first[0] is the first outgoing edge, first[1] is the first incoming edge.
+     * References of the first elements in the linked lists of edges that are incident to this node.
+     * first[0] is the first outgoing edge, first[1] is the first incoming edge, see {@link Edge}.
      */
     Edge[] first;
     /**
@@ -93,13 +92,12 @@ class Node {
      * An edge, which is incident to this node and currently belongs to the matching
      */
     Edge matched;
-
     /**
      * Reference to the tree this node belongs to
      */
     Tree tree;
     /**
-     * An edge to the parent of this node in the tree structure.
+     * An edge to the parent node in the tree structure.
      */
     Edge parentEdge;
     /**
@@ -111,7 +109,7 @@ class Node {
      * Reference of the next tree sibling in the doubly linked list of children of the node parentEdge.getOpposite(this).
      * Is null if this node is the last child of the parent node.
      * <p>
-     * If this node is a tree root, references the previous tree root in the doubly linked list of tree roots or
+     * If this node is a tree root, references the next tree root in the doubly linked list of tree roots or
      * is null if this is the last tree root.
      */
     Node treeSiblingNext;
@@ -120,17 +118,20 @@ class Node {
      * If this node is the first child of the parent node (i.e. parentEdge.getOpposite(this).firstTreeChild == this),
      * references the last sibling.
      * <p>
-     * If this node is a tree root, references the previous tree root in the doubly linked list of tree roots.
+     * If this node is a tree root, references the previous tree root in the doubly linked list of tree roots. The first
+     * element in the linked list of tree roots is a dummy node which is stored in {@code nodes[nodeNum]}. This is done
+     * to quickly determine the first actual tree root my {@code nodes[nodeNum].treeSiblingNext}.
      */
     Node treeSiblingPrev;
 
     /**
-     * Reference of the blossom this node is contained in
+     * Reference of the blossom this node is contained in. The blossom parent is always one layer higher
+     * than this node.
      */
     Node blossomParent;
     /**
-     * Reference of some blossom that is a grandparent to this node. Is subject to the path compression technique.
-     * Is used to quickly find the penultimate grandparent of this node, i.e. a grandparent, whose blossomParent is
+     * Reference of some blossom that is higher than this node. This variable is used for the path compression technique.
+     * It is used to quickly find the penultimate grandparent of this node, i.e. a grandparent, whose blossomParent is
      * an outer node.
      */
     Node blossomGrandparent;
@@ -145,7 +146,7 @@ class Node {
     int id;
 
     /**
-     * Constructs a new "+" node
+     * Constructs a new "+" node with a {@link Label#PLUS} label.
      */
     public Node() {
         this.first = new Edge[2];
@@ -169,13 +170,15 @@ class Node {
             first[dir].prev[dir].next[dir] = edge;
             first[dir].prev[dir] = edge;
         }
-        // this is used to maintain the following feature: if an edge has direction dir with respect to this
-        // node, then edge.head[dir] is the opposite node
+        /* this is used to maintain the following feature: if an edge has direction dir with respect to this
+         * node, then edge.head[dir] is the opposite node
+         */
         edge.head[1 - dir] = this;
     }
 
     /**
-     * Removes the {@code edge} from the linked list of edges. Updates the first[dir] reference is needed
+     * Removes the {@code edge} from the linked list of edges incident to this node.
+     * Updates the first[dir] reference if needed.
      *
      * @param edge the edge to remove
      * @param dir  the directions of the {@code edge} with respect to this node
@@ -215,7 +218,11 @@ class Node {
 
     /**
      * Appends the {@code child} to the end of the linked list of children of this node. The {@code parentEdge}
-     * becomes the parent edge of the {@code child}
+     * becomes the parent edge of the {@code child}.
+     * <p>
+     * Variable {@code grow} is used to determine whether the {@code child} was an infinity node and now is being
+     * added in tree structure. Then we have to set {@code child.firstTreeChild} to {@code null} so that all its
+     * tree structure variables are changed. This allows not to overwrite the fields during tree destroying.
      *
      * @param child      the new child of this node
      * @param parentEdge the edge between this node and {@code child}
@@ -238,12 +245,17 @@ class Node {
         firstTreeChild = child;
     }
 
+    /**
+     * Helper method, returns a node this node is matched to.
+     *
+     * @return a node this node is matched to.
+     */
     public Node getOppositeMatched() {
         return matched.getOpposite(this);
     }
 
     /**
-     * If this node is a tree root then removes this nodes from the tree roots doubly linked list.
+     * If this node is a tree root then this method removes this nodes from the tree root doubly linked list.
      * Otherwise, removes this vertex from the doubly linked list of tree children and updates
      * parent.firstTreeChild accordingly.
      */
@@ -363,7 +375,7 @@ class Node {
             Node nextNode;
             while (prevNode != prev) {
                 nextNode = prevNode.blossomGrandparent;
-                prevNode.blossomGrandparent = current;
+                prevNode.blossomGrandparent = prev;
                 prevNode = nextNode;
             }
         }
@@ -400,7 +412,9 @@ class Node {
 
     /**
      * Returns the true dual variable of this node. If this node is outer and belongs to some tree then
-     * it is subject to the laze delta spreading technique. Otherwise, its dual is valid.
+     * it is subject to the lazy delta spreading technique. Otherwise, its dual is valid.
+     * <p>
+     * If this node isn't
      *
      * @return the true dual variable of this node
      */
@@ -431,26 +445,29 @@ class Node {
      */
     public enum Label {
         /**
-         * The node is on the even layer in the tree (root has layer 0)
+         * The node is on an even layer in the tree (root has layer 0)
          */
         PLUS,
         /**
-         * The node is on the odd layer in the tree (root has layer 0)
+         * The node is on an odd layer in the tree (root has layer 0)
          */
         MINUS,
         /**
-         * This node doesn't belong to any tree
+         * This node doesn't belong to any tree and is matched to some other node
          */
         INFINITY
     }
 
     /**
-     * An iterator over incident edges of a node
+     * An iterator over incident edges of a node.
+     * <p>
+     * This iterator has a feature that during every step it knows the next edge it'll return to the caller.
+     * That's why it is safe to modify the current edge (move it to another node, for example).
      */
     public class IncidentEdgeIterator implements Iterator<Edge> {
 
         /**
-         * The direction of the edge returned by the {@code IncidentEdgeIterator}
+         * The direction of the current edge
          */
         private int currentDir;
         /**
@@ -459,7 +476,7 @@ class Node {
         private int nextDir;
         /**
          * The edge that will be returned after the next call to {@link IncidentEdgeIterator#next()}.
-         * Is null if all edges of the current node have been traversed.
+         * Is null if all incident edges of the current node have been traversed.
          */
         private Edge nextEdge;
 
@@ -503,7 +520,7 @@ class Node {
 
         /**
          * Advances this iterator to the next incident edge. If previous edge was the last one with direction
-         * 0, then the direction of this iterator is changes. If previous edge was the last incident edge, then
+         * 0, then the direction of this iterator changes. If previous edge was the last incident edge, then
          * {@code nextEdge} becomes null.
          */
         private void advance() {
