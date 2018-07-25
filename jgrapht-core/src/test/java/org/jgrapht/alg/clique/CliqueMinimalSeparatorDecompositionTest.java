@@ -508,7 +508,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             // 10% more than phase transition from disconnected to conntected.
             final int m = (int) Math.ceil(1.1 * Math.log(n) / n * (n * (n - 1) / 2));
 
-            // generate a connected random graph with n vertices and m edges
+            // generateGraph a connected random graph with n vertices and m edges
             GraphGenerator<Integer, DefaultEdge, Integer> generator;
             SimpleGraph<Integer, DefaultEdge> g;
             ConnectivityInspector<Integer, DefaultEdge> inspector;

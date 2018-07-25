@@ -1,6 +1,7 @@
 package org.jgrapht.perf.matching.blossom.v5;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching;
 import org.jgrapht.alg.matching.blossom.v5.Options;
 import org.jgrapht.generate.CompleteGraphGenerator;
@@ -18,89 +19,9 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 10, timeUnit = TimeUnit.MINUTES, time = 1)
 public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
 
-    @Benchmark
-    public void options0(Data data) {
-        testBlossomV(data, data.options[0]);
-    }
-
-    @Benchmark
-    public void options1(Data data) {
-        testBlossomV(data, data.options[1]);
-    }
-
-    @Benchmark
-    public void options2(Data data) {
-        testBlossomV(data, data.options[2]);
-    }
-
-    @Benchmark
-    public void options3(Data data) {
-        testBlossomV(data, data.options[3]);
-    }
-
-    @Benchmark
-    public void options4(Data data) {
-        testBlossomV(data, data.options[4]);
-    }
-
-    @Benchmark
-    public void options5(Data data) {
-        testBlossomV(data, data.options[5]);
-    }
-
-    @Benchmark
-    public void options6(Data data) {
-        testBlossomV(data, data.options[6]);
-    }
-
-    @Benchmark
-    public void options7(Data data) {
-        testBlossomV(data, data.options[7]);
-    }
-
-    @Benchmark
-    public void options8(Data data) {
-        testBlossomV(data, data.options[8]);
-    }
-
-    @Benchmark
-    public void options9(Data data) {
-        testBlossomV(data, data.options[9]);
-    }
-
-    @Benchmark
-    public void options10(Data data) {
-        testBlossomV(data, data.options[10]);
-    }
-
-    @Benchmark
-    public void options11(Data data) {
-        testBlossomV(data, data.options[11]);
-    }
-
-    @Benchmark
-    public void options12(Data data) {
-        testBlossomV(data, data.options[12]);
-    }
-
-    @Benchmark
-    public void options13(Data data) {
-        testBlossomV(data, data.options[13]);
-    }
-
-    @Benchmark
-    public void options14(Data data) {
-        testBlossomV(data, data.options[14]);
-    }
-
-    @Benchmark
-    public void options15(Data data) {
-        testBlossomV(data, data.options[15]);
-    }
-
-    private void testBlossomV(Data data, Options options) {
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> matching = new KolmogorovMinimumWeightPerfectMatching<>(data.graph, options);
-        matching.getMatching();
+    private MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> testBlossomV(Data data, Options options) {
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> matching = new KolmogorovMinimumWeightPerfectMatching<>(data.graph, data.options[data.optionNum]);
+        return matching.getMatching();
     }
 
     @State(Scope.Benchmark)
@@ -108,12 +29,14 @@ public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
         public Options[] options = Options.ALL_OPTIONS;
         Graph<Integer, DefaultWeightedEdge> graph;
         @Param({"200", "500", "1000"})
-        private int size;
+        public int size;
         @Param({"1000", "10000", "1000000"})
-        private int upperBound;
+        public int upperBound;
+        @Param({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"})
+        public int optionNum;
 
         @Setup
-        public void generate() {
+        public void generateGraph() {
             CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(size);
             Random random = new Random(System.nanoTime());
             graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
