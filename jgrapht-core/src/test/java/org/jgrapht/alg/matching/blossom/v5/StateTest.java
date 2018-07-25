@@ -26,6 +26,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.assertEquals;
@@ -34,8 +35,8 @@ public class StateTest {
 
     @Test
     public void testAddTreeEdge() {
-        Tree tree1 = new Tree(new Node());
-        Tree tree2 = new Tree(new Node());
+        Tree tree1 = new Tree(new Node(-1)); // TODO change this test
+        Tree tree2 = new Tree(new Node(-1));
         TreeEdge treeEdge = State.addTreeEdge(tree1, tree2);
         int currentDir = tree2.currentDirection;
         assertEquals(tree2, treeEdge.head[currentDir]);
@@ -51,14 +52,16 @@ public class StateTest {
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(NONE));
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node2 = state.vertexMap.get(2);
-        Node node3 = state.vertexMap.get(3);
+        Node node1 = vertexMap.get(1);
+        Node node2 = vertexMap.get(2);
+        Node node3 = vertexMap.get(3);
 
-        Edge edge12 = state.edgeMap.get(e12);
-        Edge edge13 = state.edgeMap.get(e13);
-        Edge edge23 = state.edgeMap.get(e23);
+        Edge edge12 = edgeMap.get(e12);
+        Edge edge13 = edgeMap.get(e13);
+        Edge edge23 = edgeMap.get(e23);
 
         state.moveEdgeTail(node2, node3, edge12);
         assertEquals(node3, edge12.getOpposite(node1));

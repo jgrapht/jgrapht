@@ -37,7 +37,7 @@ class Tree {
     /**
      * Variable for debug purposes, todo: remove
      */
-    private static int currentId = 1;
+    private int currentId = 1;
     /**
      * Two-element array of the first elements in the circular doubly linked lists of incident tree
      * edge in each direction.
@@ -114,7 +114,7 @@ class Tree {
 
     @Override
     public String toString() {
-        return "Tree id=" + id + ", eps = " + eps + ", root = " + root;
+        return "Tree pos=" + id + ", eps = " + eps + ", root = " + root;
     }
 
     /**

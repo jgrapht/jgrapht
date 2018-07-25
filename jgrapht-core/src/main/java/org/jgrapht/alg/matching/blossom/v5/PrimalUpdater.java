@@ -191,7 +191,10 @@ class PrimalUpdater<V, E> {
         Edge zeroSlackEdge;
         Node blossomRoot = findBlossomRoot(blossomFormingEdge);
         Tree tree = blossomRoot.tree;
-        Node blossom = new Node();
+        /* We don't actually need position of the blossom node since blossom nodes aren't stored in
+         * the state.nodes array. We use blossom's position as its id for debug purposes.
+         */
+        Node blossom = new Node(state.nodeNum + state.blossomNum);
         // initializing blossom
         blossom.tree = tree;
         blossom.isBlossom = true;
@@ -321,12 +324,11 @@ class PrimalUpdater<V, E> {
         blossom.isRemoved = true;
         state.statistics.expandNum++;
         state.removedNum++;
-        if (state.removedNum > 4 * state.nodeNum) {
-            freeRemoved();
-        }
         if (DEBUG) {
             State.printTreeNodes(tree);
         }
+        state.statistics.expandTime += System.nanoTime() - start;
+
         if (immediateAugment && zeroSlackEdge != null) {
             if (DEBUG) {
                 System.out.println("Bingo expand");
@@ -334,7 +336,6 @@ class PrimalUpdater<V, E> {
             augment(zeroSlackEdge);
         }
 
-        state.statistics.expandTime += System.nanoTime() - start;
     }
 
     /**
@@ -1058,30 +1059,5 @@ class PrimalUpdater<V, E> {
             current = current.blossomSibling.getOpposite(current);
         }
         return (hops & 1) == 0;
-    }
-
-    /**
-     * Updates all the blossomGrandparent references to points to the valid pseudonodes so that
-     * the removed blossoms can be deallocated by the garbage collector
-     */
-    private void freeRemoved() {
-        Node[] nodes = state.nodes;
-        Node iterNode;
-        Node jumpNode;
-        for (int i = 0; i < state.nodeNum; i++) {
-            iterNode = nodes[i];
-            for (jumpNode = iterNode; !jumpNode.isOuter && !jumpNode.isMarked; jumpNode = jumpNode.blossomParent) {
-                jumpNode.isMarked = true;
-                if (jumpNode.blossomGrandparent.isRemoved) {
-                    jumpNode.blossomGrandparent = jumpNode.blossomParent;
-                }
-            }
-        }
-        for (int i = 0; i < state.nodeNum; i++) {
-            iterNode = nodes[i];
-            for (jumpNode = iterNode; !jumpNode.isOuter && jumpNode.isMarked; jumpNode = jumpNode.blossomParent) {
-                jumpNode.isMarked = false;
-            }
-        }
     }
 }

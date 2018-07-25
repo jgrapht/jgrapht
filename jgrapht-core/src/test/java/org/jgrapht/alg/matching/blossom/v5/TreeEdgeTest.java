@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
@@ -33,8 +34,8 @@ public class TreeEdgeTest {
 
     @Test
     public void testGetCurrentPlusMinusHeap() {
-        Node root1 = new Node();
-        Node root2 = new Node();
+        Node root1 = new Node(-1); // TODO change this test
+        Node root2 = new Node(-1);
         Tree tree1 = new Tree(root1);
         Tree tree2 = new Tree(root2);
         TreeEdge treeEdge = State.addTreeEdge(tree1, tree2);
@@ -54,10 +55,11 @@ public class TreeEdgeTest {
 
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(NONE));
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node2 = state.vertexMap.get(2);
-        Node node3 = state.vertexMap.get(3);
+        Node node1 = vertexMap.get(1);
+        Node node2 = vertexMap.get(2);
+        Node node3 = vertexMap.get(3);
 
         Tree tree1 = node1.tree;
         Tree tree2 = node2.tree;

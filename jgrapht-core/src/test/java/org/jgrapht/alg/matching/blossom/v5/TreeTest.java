@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.jgrapht.alg.matching.blossom.v5.Node.Label.MINUS;
@@ -48,21 +49,24 @@ public class TreeTest {
         Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node2 = state.vertexMap.get(2);
-        Node node3 = state.vertexMap.get(3);
-        Node node4 = state.vertexMap.get(4);
-        Node node5 = state.vertexMap.get(5);
-        Node node6 = state.vertexMap.get(6);
-        Node node7 = state.vertexMap.get(7);
 
-        Edge edge12 = state.edgeMap.get(e12);
-        Edge edge23 = state.edgeMap.get(e23);
-        Edge edge34 = state.edgeMap.get(e34);
-        Edge edge45 = state.edgeMap.get(e45);
-        Edge edge36 = state.edgeMap.get(e36);
-        Edge edge67 = state.edgeMap.get(e67);
+        Node node1 = vertexMap.get(1);
+        Node node2 = vertexMap.get(2);
+        Node node3 = vertexMap.get(3);
+        Node node4 = vertexMap.get(4);
+        Node node5 = vertexMap.get(5);
+        Node node6 = vertexMap.get(6);
+        Node node7 = vertexMap.get(7);
+
+        Edge edge12 = edgeMap.get(e12);
+        Edge edge23 = edgeMap.get(e23);
+        Edge edge34 = edgeMap.get(e34);
+        Edge edge45 = edgeMap.get(e45);
+        Edge edge36 = edgeMap.get(e36);
+        Edge edge67 = edgeMap.get(e67);
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
@@ -82,11 +86,11 @@ public class TreeTest {
 
     @Test
     public void testTreeEdgeIterator() {
-        Node node1 = new Node();
-        Node node2 = new Node();
-        Node node3 = new Node();
-        Node node4 = new Node();
-        Node node5 = new Node();
+        Node node1 = new Node(-1); // TODO change this test
+        Node node2 = new Node(-1);
+        Node node3 = new Node(-1);
+        Node node4 = new Node(-1);
+        Node node5 = new Node(-1);
         Tree tree1 = new Tree(node1);
         Tree tree2 = new Tree(node2);
         Tree tree3 = new Tree(node3);
@@ -116,10 +120,10 @@ public class TreeTest {
 
     @Test
     public void testAddMinusBlossom() {
-        Node root = new Node();
+        Node root = new Node(-1);
         Tree tree = new Tree(root);
 
-        Node blossom = new Node();
+        Node blossom = new Node(-1);
         blossom.label = MINUS;
         blossom.isOuter = true;
         blossom.isBlossom = true;

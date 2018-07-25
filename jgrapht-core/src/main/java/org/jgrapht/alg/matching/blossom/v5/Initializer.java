@@ -19,8 +19,9 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.GREEDY;
@@ -44,11 +45,11 @@ class Initializer<V, E> {
     /**
      * Number of nodes in the graph
      */
-    private int nodeNum;
+    private int nodeNum = 0;
     /**
      * Number of edges in the graph
      */
-    private int edgeNum;
+    private int edgeNum = 0;
     /**
      * An array of nodes that will be passes to the resulting state object
      */
@@ -57,15 +58,9 @@ class Initializer<V, E> {
      * An array of edges that will be passes to the resulting state object
      */
     private Edge[] edges;
-    /**
-     * A mapping from initial graph's vertices to nodes that will be passes to the resulting state object
-     */
-    private Map<V, Node> vertexMap;
-    /**
-     * A mapping from the initial graph's edges to the internal edge representations that will be passes
-     * to the resulting state object
-     */
-    private Map<E, Edge> edgeMap;
+    //TODO
+    private List<V> graphVertices;
+    private List<E> graphEdges;
 
     /**
      * Creates a new Initializer instance
@@ -84,24 +79,22 @@ class Initializer<V, E> {
      * @return the state object with all necessary for the algorithm information
      */
     public State<V, E> initialize(Options options) {
-        Options.InitializationType type = options.initializationType;
         initGraph();
-        State<V, E> state = new State<>(graph, nodes, edges, nodeNum, edgeNum, 0, vertexMap, edgeMap, options);
-
         int treeNum;
+        Options.InitializationType type = options.initializationType;
         if (type == GREEDY) {
             treeNum = initGreedy();
         } else {
+            // simple initialization
             treeNum = nodeNum;
             for (Node node : nodes) {
                 node.isOuter = true;
             }
         }
         allocateTrees();
-        state.treeNum = treeNum;
         // initializing tree edges and adding cross-tree edges to corresponding heaps
         initAuxiliaryGraph();
-        return state;
+        return new State<>(graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
     }
 
     /**
@@ -109,18 +102,21 @@ class Initializer<V, E> {
      */
     private void initGraph() {
         nodeNum = graph.vertexSet().size();
+        int expectedEdgeNum = graph.edgeSet().size();
         nodes = new Node[nodeNum + 1];
-        nodes[nodeNum] = new Node();  // auxiliary node to keep track of the first item in the linked list of tree roots
-        edges = new Edge[graph.edgeSet().size()];
-        vertexMap = new HashMap<>(nodeNum);
-        edgeMap = new HashMap<>(edgeNum);
+        edges = new Edge[expectedEdgeNum];
+        graphVertices = new ArrayList<>(nodeNum);
+        graphEdges = new ArrayList<>(expectedEdgeNum);
+        HashMap<V, Node> vertexMap = new HashMap<>(nodeNum);
         int i = 0;
         // mapping nodes
         for (V vertex : graph.vertexSet()) {
-            nodes[i] = new Node();
+            nodes[i] = new Node(i);
+            graphVertices.add(vertex);
             vertexMap.put(vertex, nodes[i]);
             i++;
         }
+        nodes[nodeNum] = new Node(nodeNum);  // auxiliary node to keep track of the first item in the linked list of tree roots
         i = 0;
         // mapping edges
         for (E e : graph.edgeSet()) {
@@ -128,12 +124,33 @@ class Initializer<V, E> {
             Node target = vertexMap.get(graph.getEdgeTarget(e));
             if (source != target) { // we avoid self-loops in order to support pseudographs
                 edgeNum++;
-                Edge edge = State.addEdge(source, target, graph.getEdgeWeight(e));
+                Edge edge = addEdge(source, target, graph.getEdgeWeight(e), i);
                 edges[i] = edge;
-                edgeMap.put(e, edge);
+                graphEdges.add(e);
                 i++;
             }
         }
+    }
+
+    /**
+     * Adds a new edge between {@code from} and {@code to}. The resulting edge points from {@code from} \
+     * to {@code to}
+     *
+     * @param from  the tail of this edge
+     * @param to    the head of this edge
+     * @param slack the slack of the resulting edge
+     *              TODO fix
+     * @return the newly added edge
+     */
+    public Edge addEdge(Node from, Node to, double slack, int pos) {
+        Edge edge = new Edge(pos);
+        edge.slack = slack;
+        edge.headOriginal[0] = to;
+        edge.headOriginal[1] = from;
+        // the call to the Node#addEdge implies setting head[dir] reference
+        from.addEdge(edge, 0);
+        to.addEdge(edge, 1);
+        return edge;
     }
 
     /**

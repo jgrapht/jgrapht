@@ -71,7 +71,6 @@ class Edge {
      * opposite node via an edge by incidentEdgeIterator.next().head[incidentEdgeIterator.getDir()].
      */
     Node[] head;
-
     /**
      * A two-element array of references to the next elements in the circular doubly linked lists of edges.
      * Each list belongs to one of the <b>current</b> endpoints of this edge.
@@ -82,15 +81,17 @@ class Edge {
      * Each list belongs to one of the <b>current</b> endpoints of this edge.
      */
     Edge[] prev;
+    int pos;
 
     /**
      * Constructs a new edge by initializing the arrays
      */
-    public Edge() {
+    public Edge(int pos) {
         headOriginal = new Node[2];
         head = new Node[2];
         next = new Edge[2];
         prev = new Edge[2];
+        this.pos = pos;
     }
 
     /**
@@ -134,7 +135,7 @@ class Edge {
 
     @Override
     public String toString() {
-        return "Edge (" + head[0].id + "," + head[1].id + "), original: [" + headOriginal[0].id + "," + headOriginal[1].id + "], slack: " + slack + ", true slack: " + getTrueSlack()
+        return "Edge (" + head[0].pos + "," + head[1].pos + "), original: [" + headOriginal[0].pos + "," + headOriginal[1].pos + "], slack: " + slack + ", true slack: " + getTrueSlack()
                 + (getTrueSlack() == 0 ? ", tight" : "");
     }
 

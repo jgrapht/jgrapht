@@ -38,10 +38,6 @@ import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
  */
 class Node {
     /**
-     * Debug field, is used to set the node's id, todo: remove
-     */
-    private static int currentId = 0;
-    /**
      * The reference to the Fibonacci heap node this {@code Node} is stored in
      */
     FibonacciHeapNode<Node> fibNode;
@@ -139,19 +135,18 @@ class Node {
      * Reference of the next node in the blossom structure in the circular singly linked list of blossom nodes
      */
     Edge blossomSibling;
-
     /**
      * Debug variable. Todo: remove
      */
-    int id;
+    int pos;
 
     /**
      * Constructs a new "+" node with a {@link Label#PLUS} label.
      */
-    public Node() {
+    public Node(int pos) {
         this.first = new Edge[2];
         this.label = PLUS;
-        this.id = currentId++;
+        this.pos = pos;
     }
 
     /**
@@ -436,7 +431,7 @@ class Node {
 
     @Override
     public String toString() {
-        return "Node id = " + id + ", dual: " + dual + ", true dual: " + getTrueDual()
+        return "Node pos = " + pos + ", dual: " + dual + ", true dual: " + getTrueDual()
                 + ", label: " + label + (isMarked ? ", marked" : "") + (isProcessed ? ", processed" : "");
     }
 

@@ -19,10 +19,28 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeap;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class BlossomVDebugger {
+    public static <V, E> Map<V, Node> getVertexMap(State<V, E> state) {
+        Map<V, Node> vertexMap = new HashMap<>(state.nodeNum);
+        for (int i = 0; i < state.nodeNum; i++) {
+            vertexMap.put(state.graphVertices.get(i), state.nodes[i]);
+        }
+        return vertexMap;
+    }
+
+    public static <V, E> Map<E, Edge> getEdgeMap(State<V, E> state) {
+        Map<E, Edge> edgeMap = new HashMap<>(state.edgeNum);
+        for (int i = 0; i < state.edgeNum; i++) {
+            edgeMap.put(state.graphEdges.get(i), state.edges[i]);
+        }
+        return edgeMap;
+    }
+
     public static Set<Edge> edgesOf(Node node) {
         Set<Edge> edges = new HashSet<>();
         for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
@@ -58,10 +76,6 @@ public class BlossomVDebugger {
             }
         }
         return result;
-    }
-
-    public static Tree getOppositeTree(TreeEdge treeEdge, Tree tree) {
-        return treeEdge.head[0] == tree ? treeEdge.head[1] : treeEdge.head[0];
     }
 
     public static Set<Node> childrenOf(Node node) {

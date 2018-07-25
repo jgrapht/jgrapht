@@ -59,7 +59,7 @@ class TreeEdge {
 
     @Override
     public String toString() {
-        return "TreeEdge (" + head[0].id + ":" + head[1].id + "), id = " + id;
+        return "TreeEdge (" + head[0].id + ":" + head[1].id + "), pos = " + id;
     }
 
     public void addToCurrentMinusPlusHeap(Edge edge, double key, int direction) {

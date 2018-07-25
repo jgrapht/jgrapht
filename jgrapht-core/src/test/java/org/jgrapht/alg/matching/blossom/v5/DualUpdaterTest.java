@@ -24,6 +24,8 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
@@ -66,12 +68,15 @@ public class DualUpdaterTest {
     @Test
     public void testUpdateDualsSingle1() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
-        DefaultEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2);
-        graph.setEdgeWeight(edge, 5);
+        DefaultEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+
         Initializer<Integer, DefaultEdge> initializer = new Initializer<>(graph);
         State<Integer, DefaultEdge> state = initializer.initialize(noneOptions);
         DualUpdater<Integer, DefaultEdge> dualUpdater = new DualUpdater<>(state, new PrimalUpdater<>(state));
-        Tree tree = state.vertexMap.get(1).tree;
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+
+
+        Tree tree = vertexMap.get(1).tree;
         dualUpdater.updateDualsSingle(tree);
         assertEquals(5, tree.eps, EPS);
     }
@@ -91,22 +96,24 @@ public class DualUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node2 = state.vertexMap.get(2);
-        Node node3 = state.vertexMap.get(3);
-        Node node4 = state.vertexMap.get(4);
-        Node node5 = state.vertexMap.get(5);
-        Node node6 = state.vertexMap.get(6);
+        Node node1 = vertexMap.get(1);
+        Node node2 = vertexMap.get(2);
+        Node node3 = vertexMap.get(3);
+        Node node4 = vertexMap.get(4);
+        Node node5 = vertexMap.get(5);
+        Node node6 = vertexMap.get(6);
 
-        Edge edge12 = state.edgeMap.get(e12);
-        Edge edge23 = state.edgeMap.get(e23);
-        Edge edge24 = state.edgeMap.get(e24);
-        Edge edge25 = state.edgeMap.get(e25);
-        Edge edge34 = state.edgeMap.get(e34);
-        Edge edge35 = state.edgeMap.get(e35);
-        Edge edge45 = state.edgeMap.get(e45);
-        Edge edge56 = state.edgeMap.get(e56);
+        Edge edge12 = edgeMap.get(e12);
+        Edge edge23 = edgeMap.get(e23);
+        Edge edge24 = edgeMap.get(e24);
+        Edge edge25 = edgeMap.get(e25);
+        Edge edge34 = edgeMap.get(e34);
+        Edge edge35 = edgeMap.get(e35);
+        Edge edge45 = edgeMap.get(e45);
+        Edge edge56 = edgeMap.get(e56);
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
@@ -141,13 +148,15 @@ public class DualUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node4 = state.vertexMap.get(4);
+        Node node1 = vertexMap.get(1);
+        Node node4 = vertexMap.get(4);
 
-        Edge edge12 = state.edgeMap.get(e12);
-        Edge edge23 = state.edgeMap.get(e23);
-        Edge edge56 = state.edgeMap.get(e56);
+        Edge edge12 = edgeMap.get(e12);
+        Edge edge23 = edgeMap.get(e23);
+        Edge edge56 = edgeMap.get(e56);
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge56);
@@ -183,15 +192,17 @@ public class DualUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node8 = state.vertexMap.get(8);
+        Node node1 = vertexMap.get(1);
+        Node node8 = vertexMap.get(8);
 
-        Edge edge12 = state.edgeMap.get(e12);
-        Edge edge23 = state.edgeMap.get(e23);
-        Edge edge45 = state.edgeMap.get(e45);
-        Edge edge67 = state.edgeMap.get(e67);
-        Edge edge78 = state.edgeMap.get(e78);
+        Edge edge12 = edgeMap.get(e12);
+        Edge edge23 = edgeMap.get(e23);
+        Edge edge45 = edgeMap.get(e45);
+        Edge edge67 = edgeMap.get(e67);
+        Edge edge78 = edgeMap.get(e78);
 
         // setting up the test case structure
         primalUpdater.augment(edge23);
@@ -232,31 +243,33 @@ public class DualUpdaterTest {
         State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
         DualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new DualUpdater<>(state, primalUpdater);
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = state.vertexMap.get(1);
-        Node node2 = state.vertexMap.get(2);
-        Node node3 = state.vertexMap.get(3);
-        Node node4 = state.vertexMap.get(4);
-        Node node5 = state.vertexMap.get(5);
-        Node node6 = state.vertexMap.get(6);
-        Node node7 = state.vertexMap.get(7);
-        Node node8 = state.vertexMap.get(8);
-        Node node9 = state.vertexMap.get(9);
-        Node node10 = state.vertexMap.get(10);
+        Node node1 = vertexMap.get(1);
+        Node node2 = vertexMap.get(2);
+        Node node3 = vertexMap.get(3);
+        Node node4 = vertexMap.get(4);
+        Node node5 = vertexMap.get(5);
+        Node node6 = vertexMap.get(6);
+        Node node7 = vertexMap.get(7);
+        Node node8 = vertexMap.get(8);
+        Node node9 = vertexMap.get(9);
+        Node node10 = vertexMap.get(10);
 
-        Edge edge12 = state.edgeMap.get(e12);
-        Edge edge23 = state.edgeMap.get(e23);
-        Edge edge24 = state.edgeMap.get(e24);
-        Edge edge56 = state.edgeMap.get(e56);
-        Edge edge67 = state.edgeMap.get(e67);
-        Edge edge68 = state.edgeMap.get(e68);
-        Edge edge910 = state.edgeMap.get(e910);
-        Edge edge39 = state.edgeMap.get(e39);
-        Edge edge49 = state.edgeMap.get(e49);
-        Edge edge710 = state.edgeMap.get(e710);
-        Edge edge810 = state.edgeMap.get(e810);
-        Edge edge46 = state.edgeMap.get(e46);
-        Edge edge28 = state.edgeMap.get(e28);
+        Edge edge12 = edgeMap.get(e12);
+        Edge edge23 = edgeMap.get(e23);
+        Edge edge24 = edgeMap.get(e24);
+        Edge edge56 = edgeMap.get(e56);
+        Edge edge67 = edgeMap.get(e67);
+        Edge edge68 = edgeMap.get(e68);
+        Edge edge910 = edgeMap.get(e910);
+        Edge edge39 = edgeMap.get(e39);
+        Edge edge49 = edgeMap.get(e49);
+        Edge edge710 = edgeMap.get(e710);
+        Edge edge810 = edgeMap.get(e810);
+        Edge edge46 = edgeMap.get(e46);
+        Edge edge28 = edgeMap.get(e28);
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge67);

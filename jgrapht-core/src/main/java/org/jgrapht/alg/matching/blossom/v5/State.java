@@ -19,10 +19,7 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 
@@ -84,19 +81,9 @@ class State<V, E> {
     /**
      * Mapping from initial vertices to nodes
      */
-    Map<V, Node> vertexMap;
-    /**
-     * Mapping from nodes to corresponding initial vertices
-     */
-    Map<Node, V> backVertexMap;
-    /**
-     * Mapping from initial edges to the edges used in the algorithm
-     */
-    Map<E, Edge> edgeMap;
-    /**
-     * Mapping from edges used in the algorithm to the initial edges
-     */
-    Map<Edge, E> backEdgeMap;
+    List<V> graphVertices;
+
+    List<E> graphEdges;
 
     /**
      * Constructs an initial algorithm's state
@@ -107,31 +94,22 @@ class State<V, E> {
      * @param nodeNum   number of nodes in the graph
      * @param edgeNum   number of edges in the graph
      * @param treeNum   number of trees in the graph
-     * @param vertexMap the map from initial graph's vertices to node
-     * @param edgeMap   the map from initial graph's edges to the edges used in the algorithm
+     *                  TODO fix
      * @param options   default or user defined options
      */
     public State(Graph<V, E> graph, Node[] nodes, Edge[] edges,
                  int nodeNum, int edgeNum, int treeNum,
-                 Map<V, Node> vertexMap, Map<E, Edge> edgeMap, Options options) {
+                 List<V> graphVertices, List<E> graphEdges, Options options) {
         this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;
         this.nodeNum = nodeNum;
         this.edgeNum = edgeNum;
         this.treeNum = treeNum;
-        this.vertexMap = vertexMap;
-        this.edgeMap = edgeMap;
+        this.graphVertices = graphVertices;
+        this.graphEdges = graphEdges;
         this.options = options;
         this.statistics = new KolmogorovMinimumWeightPerfectMatching.Statistics();
-        backEdgeMap = new HashMap<>();
-        backVertexMap = new HashMap<>();
-        for (Map.Entry<E, Edge> entry : edgeMap.entrySet()) {
-            backEdgeMap.put(entry.getValue(), entry.getKey());
-        }
-        for (Map.Entry<V, Node> entry : vertexMap.entrySet()) {
-            backVertexMap.put(entry.getValue(), entry.getKey());
-        }
     }
 
     /**
@@ -163,26 +141,6 @@ class State<V, E> {
         to.currentEdge = treeEdge;
         to.currentDirection = 0;
         return treeEdge;
-    }
-
-    /**
-     * Adds a new edge between {@code from} and {@code to}. The resulting edge points from {@code from} \
-     * to {@code to}
-     *
-     * @param from  the tail of this edge
-     * @param to    the head of this edge
-     * @param slack the slack of the resulting edge
-     * @return the newly added edge
-     */
-    public static Edge addEdge(Node from, Node to, double slack) {
-        Edge edge = new Edge();
-        edge.slack = slack;
-        edge.headOriginal[0] = to;
-        edge.headOriginal[1] = from;
-        // the call to the Node#addEdge implies setting head[dir] reference
-        from.addEdge(edge, 0);
-        to.addEdge(edge, 1);
-        return edge;
     }
 
     /**
