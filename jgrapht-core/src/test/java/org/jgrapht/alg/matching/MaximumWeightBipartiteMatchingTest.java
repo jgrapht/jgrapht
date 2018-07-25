@@ -168,7 +168,7 @@ public class MaximumWeightBipartiteMatchingTest
     private void testRandomInstance(Random rng, int n, double p, int repeat)
     {
         for (int a = 0; a < repeat; a++) {
-            // generateGraph random bipartite
+            // generate random bipartite
             Graph<Integer, DefaultWeightedEdge> g =
                 new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 

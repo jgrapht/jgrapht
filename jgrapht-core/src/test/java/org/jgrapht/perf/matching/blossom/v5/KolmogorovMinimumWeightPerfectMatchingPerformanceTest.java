@@ -36,7 +36,7 @@ public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
         public int optionNum;
 
         @Setup
-        public void generateGraph() {
+        public void generate() {
             CompleteGraphGenerator<Integer, DefaultWeightedEdge> generator = new CompleteGraphGenerator<>(size);
             Random random = new Random(System.nanoTime());
             graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);

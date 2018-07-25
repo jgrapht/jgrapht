@@ -124,7 +124,7 @@ public class KSPPathValidatorTest
     public void testDisconnected()
     {
         int cliqueSize = 5;
-        // generateGraph graph of two cliques connected by single edge
+        // generate graph of two cliques connected by single edge
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
             KShortestSimplePaths<Integer, DefaultEdge> ksp =

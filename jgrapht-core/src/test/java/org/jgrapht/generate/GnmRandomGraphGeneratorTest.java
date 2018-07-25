@@ -395,9 +395,9 @@ public class GnmRandomGraphGeneratorTest
      * Generates 4 graphs with the same numOfVertex and numOfEdges. The first two are generated
      * using the same RandomGraphGenerator; the last two are generated using a new instance.
      *
-     * @param graphs array of graphs to generateGraph
-     * @param numOfVertex number of vertices to generateGraph per graph
-     * @param numOfEdges number of edges to generateGraph per graph
+     * @param graphs array of graphs to generate
+     * @param numOfVertex number of vertices to generate per graph
+     * @param numOfEdges number of edges to generate per graph
      */
     private static void generateGraphs(
         List<Graph<Integer, DefaultEdge>> graphs, int numOfVertex, int numOfEdges)
