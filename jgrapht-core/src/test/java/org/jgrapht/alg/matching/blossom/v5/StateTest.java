@@ -35,7 +35,7 @@ public class StateTest {
 
     @Test
     public void testAddTreeEdge() {
-        Tree tree1 = new Tree(new Node(-1)); // TODO change this test
+        Tree tree1 = new Tree(new Node(-1)); // positions doesn't matter here
         Tree tree2 = new Tree(new Node(-1));
         TreeEdge treeEdge = State.addTreeEdge(tree1, tree2);
         int currentDir = tree2.currentDirection;

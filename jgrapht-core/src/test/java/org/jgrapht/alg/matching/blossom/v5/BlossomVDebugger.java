@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.Assert.fail;
+
 public class BlossomVDebugger {
     public static <V, E> Map<V, Node> getVertexMap(State<V, E> state) {
         Map<V, Node> vertexMap = new HashMap<>(state.nodeNum);
@@ -58,13 +60,15 @@ public class BlossomVDebugger {
     }
 
     public static TreeEdge getTreeEdge(Tree from, Tree to) {
+        TreeEdge treeEdge = null;
         for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
-            TreeEdge treeEdge = iterator.next();
+            treeEdge = iterator.next();
             if (treeEdge.head[iterator.getCurrentDirection()] == to) {
                 return treeEdge;
             }
         }
-        return null;
+        fail();
+        return treeEdge;
     }
 
     public static Set<TreeEdge> getTreeEdgesBetween(Tree from, Tree to) {

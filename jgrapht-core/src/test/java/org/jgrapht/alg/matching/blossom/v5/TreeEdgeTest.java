@@ -34,11 +34,17 @@ public class TreeEdgeTest {
 
     @Test
     public void testGetCurrentPlusMinusHeap() {
-        Node root1 = new Node(-1); // TODO change this test
-        Node root2 = new Node(-1);
-        Tree tree1 = new Tree(root1);
-        Tree tree2 = new Tree(root2);
-        TreeEdge treeEdge = State.addTreeEdge(tree1, tree2);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 0);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(NONE));
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+
+        Node node1 = vertexMap.get(1);
+        Node node2 = vertexMap.get(2);
+
+        TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node2.tree);
 
         assertNotSame(treeEdge.getCurrentMinusPlusHeap(0), treeEdge.getCurrentPlusMinusHeap(0));
         assertNotSame(treeEdge.getCurrentMinusPlusHeap(1), treeEdge.getCurrentPlusMinusHeap(1));

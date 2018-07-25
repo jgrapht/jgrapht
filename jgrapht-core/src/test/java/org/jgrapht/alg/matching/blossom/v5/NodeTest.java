@@ -35,7 +35,15 @@ public class NodeTest {
 
     @Test
     public void testLabels() {
-        Node node = new Node(-1); // TODO change
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(1);
+
+        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
+        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
+        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
+
+        Node node = vertexMap.get(1); // position doesn't matter
 
         node.label = INFINITY;
         assertTrue(node.isInfinityNode());
