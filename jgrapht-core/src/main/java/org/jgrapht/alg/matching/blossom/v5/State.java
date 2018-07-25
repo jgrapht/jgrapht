@@ -94,7 +94,8 @@ class State<V, E> {
      * @param nodeNum   number of nodes in the graph
      * @param edgeNum   number of edges in the graph
      * @param treeNum   number of trees in the graph
-     *                  TODO fix
+     * @param graphVertices generic vertices of the {@code graph} in the same order as nodes in {@code nodes}
+     * @param graphEdges generic edges of the {@code graph} in the same order as edges in {@code edges}
      * @param options   default or user defined options
      */
     public State(Graph<V, E> graph, Node[] nodes, Edge[] edges,

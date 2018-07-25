@@ -81,6 +81,10 @@ class Edge {
      * Each list belongs to one of the <b>current</b> endpoints of this edge.
      */
     Edge[] prev;
+    /**
+     * Position of this edge in the array {@code state.edges}. This helps to determine generic counterpart of
+     * this edge in constant time.
+     */
     int pos;
 
     /**

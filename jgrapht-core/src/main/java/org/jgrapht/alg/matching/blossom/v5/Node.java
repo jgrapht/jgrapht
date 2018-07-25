@@ -136,7 +136,8 @@ class Node {
      */
     Edge blossomSibling;
     /**
-     * Debug variable. Todo: remove
+     * Position of this node in the array {@code state.nodes}. This helps to determine generic counterpart of
+     * this node in constant time.
      */
     int pos;
 

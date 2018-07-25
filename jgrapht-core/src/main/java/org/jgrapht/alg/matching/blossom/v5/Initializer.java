@@ -58,8 +58,17 @@ class Initializer<V, E> {
      * An array of edges that will be passes to the resulting state object
      */
     private Edge[] edges;
-    //TODO
+    /**
+     * Generic vertices of the {@code graph} in the same order as internal nodes in the array {@code nodes}.
+     * Since for each node in the {@code nodes} we know its position in the {@code nodes}, we can in constant
+     * time determine its generic counterpart.
+     */
     private List<V> graphVertices;
+    /**
+     * Generic edge of the {@code graph} in the same order as internal edges in the array {@code edges}.
+     * Since for each edge in the {@code edges} we know its position in the {@code edges}, we can in constant
+     * time determine its generic counterpart.
+     */
     private List<E> graphEdges;
 
     /**
@@ -139,7 +148,7 @@ class Initializer<V, E> {
      * @param from  the tail of this edge
      * @param to    the head of this edge
      * @param slack the slack of the resulting edge
-     *              TODO fix
+     * @param pos position of the resulting edge in the array {@code edges}
      * @return the newly added edge
      */
     public Edge addEdge(Node from, Node to, double slack, int pos) {

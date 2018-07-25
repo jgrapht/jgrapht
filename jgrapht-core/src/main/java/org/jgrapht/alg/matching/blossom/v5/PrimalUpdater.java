@@ -381,8 +381,6 @@ class PrimalUpdater<V, E> {
      * <p>
      * <b>Note:</b> the recursive grows must be done ofter the gro operation on the current edge is over.
      * This ensures correct state of the heaps and the edges' slacks.
-     * <b>Note:</b> this operation can be implemented recursively and without linked list of tight edges to grow,
-     * this is a todo
      *
      * @param node             a plus endpoint of the matched edge that is being appended to the tree
      * @param recursiveGrow    a flag that indicates whether to grow the tree recursively

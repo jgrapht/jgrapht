@@ -86,7 +86,7 @@ public class TreeTest {
 
     @Test
     public void testTreeEdgeIterator() {
-        Node node1 = new Node(-1); // TODO change this test
+        Node node1 = new Node(-1); // positions doesn't matter here
         Node node2 = new Node(-1);
         Node node3 = new Node(-1);
         Node node4 = new Node(-1);
