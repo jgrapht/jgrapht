@@ -50,6 +50,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
         return Options.ALL_OPTIONS;
     }
 
+    /**
+     * Test on a triangulation of 8 points
+     * Points: (2, 10), (9, 11), (10, 4), (11, 15), (12, 5), (12, 6), (13, 12), (14, 11)
+     */
     @Test
     public void testGetMatching0() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -61,10 +65,11 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
         }
         KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge>.DualSolution dualSolution = perfectMatching.getDualSolution();
 
         assertEquals(18, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, dualSolution);
     }
 
     /**
@@ -2282,6 +2287,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 vertices.add(source);
                 vertices.add(target);
                 slacks.put(edge, graph.getEdgeWeight(edge));
+            } else {
+                fail();
             }
         }
         assertEquals(graph.vertexSet(), vertices);

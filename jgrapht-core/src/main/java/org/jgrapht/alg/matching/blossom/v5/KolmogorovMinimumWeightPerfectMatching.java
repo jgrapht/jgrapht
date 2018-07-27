@@ -131,6 +131,19 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         return matching;
     }
 
+    /**
+     * Returns the computed solution to the dual linear program with respect to the
+     * minimum weight perfect matching linear program formulation.
+     *
+     * @return the solution to the dual linear program formulated on the {@code graph}
+     */
+    public DualSolution getDualSolution() {
+        if (dualSolution == null) {
+            dualSolution = computeDualSolution();
+        }
+        return dualSolution;
+    }
+
     private void solve() {
         Initializer<V, E> initializer = new Initializer<>(graph);
         this.state = initializer.initialize(options);
@@ -245,16 +258,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             }
         }
         finish();
-    }
-
-    /**
-     * Returns the computed solution to the dual linear program with respect to the
-     * minimum weight perfect matching linear program formulation.
-     *
-     * @return the solution to the dual linear program formulated on the {@code graph}
-     */
-    public DualSolution getDualSolution() {
-        return dualSolution;
     }
 
     /**
@@ -437,56 +440,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Computes and returns the map from blossoms to original graph's vertices contained in them
-     *
-     * @return the mapping from every pseudonode to the set of original nodes in the
-     * {@code graph} that are contained in it.
-     */
-    private Map<Node, Set<V>> computeNodesInBlossoms() {
-        prepareForDualSolution();
-        Map<Node, Set<V>> result = new HashMap<>();
-        Node[] nodes = state.nodes;
-        Node node;
-        for (int i = 0; i < state.nodeNum; i++) {
-            node = nodes[i].blossomParent;
-            while (node != null && !node.isMarked && !node.isRemoved) {
-                getBlossomNodes(node, result);
-                node = node.blossomParent;
-            }
-        }
-        clearMarked();
-        return result;
-    }
-
-    /**
-     * Helper method for {@link KolmogorovMinimumWeightPerfectMatching#computeNodesInBlossoms()}, computes
-     * the set of original contracted vertices in the {@code pseudonode} and puts computes value into the
-     * {@code blossomNodes}. If {@code node} contains other pseudonodes, which haven't been processed already,
-     * recursively computes the same set for them.
-     *
-     * @param pseudonode   the pseudonode whose contracted nodes are computed
-     * @param blossomNodes the mapping from pseudonodes to the original nodes contained in them
-     */
-    private void getBlossomNodes(Node pseudonode, Map<Node, Set<V>> blossomNodes) {
-        pseudonode.isMarked = true;
-        Set<V> result = new HashSet<>();
-        Node endNode = pseudonode.blossomGrandparent;
-        Node current = endNode;
-        do {
-            if (current.isBlossom) {
-                if (!blossomNodes.containsKey(current)) {
-                    getBlossomNodes(current, blossomNodes);
-                }
-                result.addAll(blossomNodes.get(current));
-            } else {
-                result.add(state.graphVertices.get(current.pos));
-            }
-            current = current.blossomSibling.getOpposite(current);
-        } while (current != endNode);
-        blossomNodes.put(pseudonode, result);
-    }
-
-    /**
      * Clears the marking of all nodes and pseudonodes
      */
     private void clearMarked() {
@@ -517,9 +470,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * construct a dual solution after the matching in the graph becomes valid.
      */
     private void finish() {
-        // compute the mapping from pseudonodes to the set of vertices of initial graph
-        Map<Node, Set<V>> nodesInBlossoms = computeNodesInBlossoms();
-
         Set<E> edges = new HashSet<>();
         double weight = 0;
         Node[] nodes = state.nodes;
@@ -534,25 +484,35 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             System.out.println("Finishing matching");
         }
 
+        List<Node> processed = new LinkedList<>();
+
         for (int i = 0; i < state.nodeNum; i++) {
             if (nodes[i].matched == null) {
                 blossomPrev = null;
                 blossom = nodes[i];
                 // traversing the path from unmatched node to the first unprocessed pseudonode
                 do {
-                    blossom.isMarked = true;
                     blossom.blossomGrandparent = blossomPrev;
                     blossomPrev = blossom;
                     blossom = blossomPrev.blossomParent;
-                } while (!blossom.isOuter && !blossom.blossomParent.isMarked);
-                blossom.isMarked = true;
+                } while (!blossom.isOuter);
                 // now node.blossomGrandparent points to the previous blossom in the hierarchy except for the blossom node
                 while (true) {
                     // finding the root of the blossom. This can be a pseudonode
-                    for (blossomRoot = blossom.matched.getCurrentOriginal(blossom); blossomRoot.blossomParent != blossom; blossomRoot = blossomRoot.blossomParent) {
+                    blossomRoot = blossom.matched.getCurrentOriginal(blossom);
+                    if (blossomRoot == null) {
+                        blossomRoot = blossom.matched.head[0].isProcessed ? blossom.matched.headOriginal[1] : blossom.matched.headOriginal[0];
+                    }
+                    while (blossomRoot.blossomParent != blossom) {
+                        blossomRoot = blossomRoot.blossomParent;
                     }
                     blossomRoot.matched = blossom.matched;
-                    state.moveEdgeTail(blossom, blossomRoot, blossom.matched);
+                    node = blossom.getOppositeMatched();
+                    if (node != null) {
+                        node.isProcessed = true;
+                        processed.add(node);
+                    }
+                    //blossom.matched = null;
                     node = blossomRoot.blossomSibling.getOpposite(blossomRoot);
                     // changing the matching in the blossom
                     while (node != blossomRoot) {
@@ -567,9 +527,12 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     blossom = blossomPrev;
                     blossomPrev = blossom.blossomGrandparent;
                 }
+                for (Node processedNode : processed) {
+                    processedNode.isProcessed = false;
+                }
+                processed.clear();
             }
         }
-        clearMarked();
         // compute the final matching
         for (int i = 0; i < state.nodeNum; i++) {
             graphEdge = state.graphEdges.get(nodes[i].matched.pos);
@@ -579,7 +542,6 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             }
         }
         matching = new MatchingAlgorithm.MatchingImpl<>(state.graph, edges, weight);
-        dualSolution = computeDualSolution(nodesInBlossoms);
     }
 
     /**
@@ -604,28 +566,62 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Computes a solution to a dual linear program formulated on the initial graph. This method
-     * uses a mapping from pseudonodes to the set of vertices in contains
+     * Computes the set of original contracted vertices in the {@code pseudonode} and puts computes value into
+     * the {@code blossomNodes}. If {@code node} contains other pseudonodes, which haven't been processed already,
+     * recursively computes the same set for them.
      *
-     * @param nodesInBlossoms a mapping from pseudonodes to the set of vertices it contains
+     * @param pseudonode   the pseudonode whose contracted nodes are computed
+     * @param blossomNodes the mapping from pseudonodes to the original nodes contained in them
+     */
+    private Set<V> getBlossomNodes(Node pseudonode, Map<Node, Set<V>> blossomNodes) {
+        if (blossomNodes.containsKey(pseudonode)) {
+            return blossomNodes.get(pseudonode);
+        }
+        Set<V> result = new HashSet<>();
+        Node endNode = pseudonode.blossomGrandparent;
+        Node current = endNode;
+        do {
+            if (current.isBlossom) {
+                if (!blossomNodes.containsKey(current)) {
+                    result.addAll(getBlossomNodes(current, blossomNodes));
+                } else {
+                    result.addAll(blossomNodes.get(current));
+                }
+            } else {
+                result.add(state.graphVertices.get(current.pos));
+            }
+            current = current.blossomSibling.getOpposite(current);
+        } while (current != endNode);
+        blossomNodes.put(pseudonode, result);
+        return result;
+    }
+
+    /**
+     * Computes a solution to a dual linear program formulated on the initial graph.
+     *
      * @return the solution to the dual linear program
      */
-    private DualSolution computeDualSolution(Map<Node, Set<V>> nodesInBlossoms) {
+    private DualSolution computeDualSolution() {
         Map<Set<V>, Double> dualMap = new HashMap<>();
+        Map<Node, Set<V>> nodesInBlossoms = new HashMap<>();
         Node[] nodes = state.nodes;
         Node current;
+        prepareForDualSolution();
         for (int i = 0; i < state.nodeNum; i++) {
             current = nodes[i];
             // jump up while the first already processed node in encountered
             do {
-                if (current.isBlossom) {
-                    if (Math.abs(current.dual) > EPS) {
-                        dualMap.put(nodesInBlossoms.get(current), current.getTrueDual());
+                if (Math.abs(current.getTrueDual()) > EPS) {
+                    if (current.isBlossom) {
+                        dualMap.put(getBlossomNodes(current, nodesInBlossoms), current.getTrueDual());
+                    } else {
+                        dualMap.put(Collections.singleton(state.graphVertices.get(current.pos)), current.getTrueDual());
                     }
-                } else {
-                    dualMap.put(new HashSet<>(Collections.singletonList(state.graphVertices.get(current.pos))), current.getTrueDual());
                 }
                 current.isMarked = true;
+                if(current.isOuter){
+                    break;
+                }
                 current = current.blossomParent;
             } while (current != null && !current.isMarked);
         }

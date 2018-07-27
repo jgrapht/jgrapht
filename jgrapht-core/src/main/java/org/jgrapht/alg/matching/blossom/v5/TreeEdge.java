@@ -22,7 +22,7 @@ import org.jgrapht.util.FibonacciHeapNode;
 
 class TreeEdge {
     private static int ID = 0;
-    int id;
+    private int id;
 
     Tree[] head;
     TreeEdge[] prev;

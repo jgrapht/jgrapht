@@ -433,7 +433,9 @@ class Node {
     @Override
     public String toString() {
         return "Node pos = " + pos + ", dual: " + dual + ", true dual: " + getTrueDual()
-                + ", label: " + label + (isMarked ? ", marked" : "") + (isProcessed ? ", processed" : "");
+                + ", label: " + label + (isMarked ? ", marked" : "") + (isProcessed ? ", processed" : "")
+                + (blossomParent == null || blossomParent.isRemoved ? "" : ", blossomParent = " + blossomParent.pos) +
+                (matched == null ? "" : ", matched = " + matched);
     }
 
     /**
