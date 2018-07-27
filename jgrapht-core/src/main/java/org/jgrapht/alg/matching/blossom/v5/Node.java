@@ -63,12 +63,7 @@ class Node {
      * node belongs to the current blossom or not. Is similar to the {@link Node#isProcessed}
      */
     boolean isMarked;
-    /**
-     * True if this node is a blossom and has been expanded so that it doesn't belong to the surface graph
-     * no more. Is used to lazily update the {@link Node#blossomParent} and {@link Node#blossomGrandparent}
-     * reference.
-     */
-    boolean isRemoved;
+
     /**
      * Stores the current label of this node. Is valid if this node is outer.
      */
@@ -434,7 +429,7 @@ class Node {
     public String toString() {
         return "Node pos = " + pos + ", dual: " + dual + ", true dual: " + getTrueDual()
                 + ", label: " + label + (isMarked ? ", marked" : "") + (isProcessed ? ", processed" : "")
-                + (blossomParent == null || blossomParent.isRemoved ? "" : ", blossomParent = " + blossomParent.pos) +
+                + (blossomParent == null || isOuter ? "" : ", blossomParent = " + blossomParent.pos) +
                 (matched == null ? "" : ", matched = " + matched);
     }
 

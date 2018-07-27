@@ -321,7 +321,6 @@ class PrimalUpdater<V, E> {
             current.isProcessed = false;
             current = current.blossomSibling.getOpposite(current);
         } while (current != blossomRoot);
-        blossom.isRemoved = true;
         state.statistics.expandNum++;
         state.removedNum++;
         if (DEBUG) {

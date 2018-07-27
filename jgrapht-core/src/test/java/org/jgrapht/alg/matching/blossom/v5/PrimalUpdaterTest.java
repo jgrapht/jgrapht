@@ -1886,7 +1886,6 @@ public class PrimalUpdaterTest {
         assertEquals(5, edge510.slack, EPS);
         assertEquals(5, edge610.slack, EPS);
 
-        assertTrue(blossom.isRemoved);
     }
 
 }
