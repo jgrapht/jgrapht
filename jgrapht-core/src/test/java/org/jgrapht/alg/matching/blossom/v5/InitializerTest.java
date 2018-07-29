@@ -30,6 +30,11 @@ import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.GRE
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link Initializer}
+ *
+ * @author Timofey Chudakov
+ */
 public class InitializerTest {
 
     @Test
@@ -161,6 +166,8 @@ public class InitializerTest {
         assertEquals(1, BlossomVDebugger.treeEdgesOf(tree6).size());
         assertEquals(0, BlossomVDebugger.treeEdgesOf(tree7).size());
     }
+
+
 
 
 }

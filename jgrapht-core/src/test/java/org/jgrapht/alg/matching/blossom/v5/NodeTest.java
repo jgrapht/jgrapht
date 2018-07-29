@@ -29,6 +29,11 @@ import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link Node}
+ *
+ * @author Timofey Chudakov
+ */
 public class NodeTest {
 
     private Options noneOptions = new Options(NONE);

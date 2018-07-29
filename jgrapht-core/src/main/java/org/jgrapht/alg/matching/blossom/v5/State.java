@@ -21,8 +21,6 @@ import org.jgrapht.Graph;
 
 import java.util.*;
 
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
-
 /**
  * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
  * {@link PrimalUpdater} and {@link DualUpdater} during the course of the algorithm.

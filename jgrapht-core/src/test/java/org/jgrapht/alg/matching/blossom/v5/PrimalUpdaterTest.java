@@ -30,6 +30,11 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link PrimalUpdater}
+ *
+ * @author Timofey Chudakov
+ */
 public class PrimalUpdaterTest {
 
     private Options noneOptions = new Options(NONE);

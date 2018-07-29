@@ -30,6 +30,11 @@ import java.util.Map;
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link TreeEdge}
+ *
+ * @author Timofey Chudakov
+ */
 public class TreeEdgeTest {
 
     @Test

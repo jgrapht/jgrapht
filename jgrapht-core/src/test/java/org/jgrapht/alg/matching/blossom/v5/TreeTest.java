@@ -32,6 +32,11 @@ import static org.jgrapht.alg.matching.blossom.v5.Node.Label.MINUS;
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link Tree}
+ *
+ * @author Timofey Chudakov
+ */
 public class TreeTest {
 
     private Options noneOptions = new Options(NONE);

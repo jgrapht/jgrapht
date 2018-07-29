@@ -31,6 +31,7 @@ import java.util.NoSuchElementException;
  *
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
+ * @see TreeEdge
  * @since June 2018
  */
 class Tree {

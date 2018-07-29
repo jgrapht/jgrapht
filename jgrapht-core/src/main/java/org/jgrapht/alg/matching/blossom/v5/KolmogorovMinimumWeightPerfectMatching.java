@@ -32,6 +32,8 @@ import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MUL
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
+ * @see PrimalUpdater
+ * @see DualUpdater
  * @since June 2018
  */
 public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlgorithm<V, E> {
@@ -619,7 +621,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     }
                 }
                 current.isMarked = true;
-                if(current.isOuter){
+                if (current.isOuter) {
                     break;
                 }
                 current = current.blossomParent;

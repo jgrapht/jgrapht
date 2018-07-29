@@ -114,13 +114,11 @@ public class Options {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Options{");
-        sb.append("initializationType=").append(initializationType);
-        sb.append(", dualUpdateStrategy=").append(dualUpdateStrategy);
-        sb.append(",updateDualsBefore=").append(updateDualsBefore);
-        sb.append(", updateDualsAfter=").append(updateDualsAfter);
-        sb.append('}');
-        return sb.toString();
+        return "Options{initializationType=" + initializationType +
+                ", dualUpdateStrategy=" + dualUpdateStrategy +
+                ", updateDualsBefore=" + updateDualsBefore +
+                ", updateDualsAfter=" + updateDualsAfter +
+                '}';
     }
 
     /**
@@ -181,6 +179,7 @@ public class Options {
          *
          * @return the name of the dual updates strategy
          */
+        @Override
         public abstract String toString();
     }
 
@@ -205,6 +204,7 @@ public class Options {
          *
          * @return the name of the initialization type
          */
+        @Override
         public abstract String toString();
     }
 }

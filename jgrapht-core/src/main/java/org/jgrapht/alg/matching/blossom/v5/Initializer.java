@@ -265,7 +265,7 @@ class Initializer<V, E> {
                     if (opposite.tree.currentEdge == null) {
                         State.addTreeEdge(tree, opposite.tree);
                     }
-                    opposite.tree.currentEdge.addPlusPlusEdge(edge, edge.slack);
+                    opposite.tree.currentEdge.addPlusPlusEdge(edge);
                 }
             }
             root.isProcessed = true;

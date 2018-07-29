@@ -29,11 +29,12 @@ import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
  * <p>
  * Represents a vertex of graph. Contains information about the current state of the node
  * (i.e. whether it is a blossom, etc.) and the information needed to maintain the alternating tree
- * structure, which is needed to find an augmenting path which consists of tight edges in the graph
+ * structure, which is needed to find an augmenting path, which consists of tight, edges in the graph
  * to increase the cardinality of the matching.
  *
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
+ * @
  * @since June 2018
  */
 class Node {

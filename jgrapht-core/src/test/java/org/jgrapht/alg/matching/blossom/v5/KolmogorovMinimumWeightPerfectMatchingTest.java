@@ -37,6 +37,11 @@ import java.util.Set;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link KolmogorovMinimumWeightPerfectMatching}
+ *
+ * @author Timofey Chudakov
+ */
 @RunWith(Parameterized.class)
 public class KolmogorovMinimumWeightPerfectMatchingTest {
     private Options options;

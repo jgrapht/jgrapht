@@ -26,6 +26,12 @@ import java.util.Set;
 
 import static org.junit.Assert.fail;
 
+/**
+ * This class contains auxiliary methods for testing {@link KolmogorovMinimumWeightPerfectMatching} and related
+ * classes
+ *
+ * @author Timofey Chudakov
+ */
 public class BlossomVDebugger {
     public static <V, E> Map<V, Node> getVertexMap(State<V, E> state) {
         Map<V, Node> vertexMap = new HashMap<>(state.nodeNum);

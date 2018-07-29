@@ -32,6 +32,11 @@ import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MUL
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for the {@link DualUpdater}
+ *
+ * @author Timofey Chudakov
+ */
 public class DualUpdaterTest {
 
     private Options noneOptions = new Options(NONE);

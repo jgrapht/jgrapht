@@ -72,15 +72,15 @@ class Edge {
      */
     Node[] head;
     /**
-     * A two-element array of references to the next elements in the circular doubly linked lists of edges.
-     * Each list belongs to one of the <b>current</b> endpoints of this edge.
-     */
-    Edge[] next;
-    /**
      * A two-element array of references to the previous elements in the circular doubly linked lists of edges.
      * Each list belongs to one of the <b>current</b> endpoints of this edge.
      */
     Edge[] prev;
+    /**
+     * A two-element array of references to the next elements in the circular doubly linked lists of edges.
+     * Each list belongs to one of the <b>current</b> endpoints of this edge.
+     */
+    Edge[] next;
     /**
      * Position of this edge in the array {@code state.edges}. This helps to determine generic counterpart of
      * this edge in constant time.

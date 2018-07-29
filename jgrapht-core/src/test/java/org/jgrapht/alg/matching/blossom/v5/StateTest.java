@@ -31,6 +31,11 @@ import java.util.Map;
 import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the {@link State}
+ *
+ * @author Timofey Chudakov
+ */
 public class StateTest {
 
     @Test
