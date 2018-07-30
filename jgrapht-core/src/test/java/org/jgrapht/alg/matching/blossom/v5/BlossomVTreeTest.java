@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class TreeTest {
+public class BlossomVTreeTest {
 
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 

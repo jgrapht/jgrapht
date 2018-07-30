@@ -70,7 +70,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Current state of the algorithm
      */
-    private BlossomVState<V, E> state;
+    BlossomVState<V, E> state;
     /**
      * Perform primal operations (grow, augment, shrink and expand)
      */

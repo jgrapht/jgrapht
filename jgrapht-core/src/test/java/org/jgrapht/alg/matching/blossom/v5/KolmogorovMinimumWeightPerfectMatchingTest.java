@@ -55,6 +55,25 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
         return BlossomVOptions.ALL_OPTIONS;
     }
 
+
+    @Test
+    public void testInvalidDualSolution() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 7);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 4);
+        Graphs.addEdgeWithVertices(graph, 3, 4, 3);
+        Graphs.addEdgeWithVertices(graph, 4, 1, 4);
+
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> matching = new KolmogorovMinimumWeightPerfectMatching<>(graph);
+        matching.getMatching();
+        Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(matching.state);
+
+        BlossomVNode node1 = vertexMap.get(1);
+        node1.dual += 1;
+
+        assertFalse(matching.testOptimality());
+    }
+
     /**
      * Test on a triangulation of 8 points
      * Points: (2, 10), (9, 11), (10, 4), (11, 15), (12, 5), (12, 6), (13, 12), (14, 11)
