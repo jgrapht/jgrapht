@@ -18,6 +18,7 @@
 package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeap;
+import org.jheaps.MergeableAddressableHeap;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,6 +34,15 @@ import static org.junit.Assert.fail;
  * @author Timofey Chudakov
  */
 public class BlossomVDebugger {
+
+    /**
+     * Returns the mapping from original graph vertices to the internal nodes used in the algortihm
+     *
+     * @param state the state of the algorithm
+     * @param <V>   graph vertex type
+     * @param <E>   graph edge type
+     * @return the mapping from original graph vertices to the internal nodes used in the algortihm
+     */
     public static <V, E> Map<V, Node> getVertexMap(State<V, E> state) {
         Map<V, Node> vertexMap = new HashMap<>(state.nodeNum);
         for (int i = 0; i < state.nodeNum; i++) {
@@ -41,6 +51,14 @@ public class BlossomVDebugger {
         return vertexMap;
     }
 
+    /**
+     * Returns the mapping from original graph edges to the internal edges used in the algorithm.
+     *
+     * @param state the state of the algorithm
+     * @param <V>   graph vertex type
+     * @param <E>   graph edge type
+     * @return the mapping from original graph edges to the internal edges used in the algorithm.
+     */
     public static <V, E> Map<E, Edge> getEdgeMap(State<V, E> state) {
         Map<E, Edge> edgeMap = new HashMap<>(state.edgeNum);
         for (int i = 0; i < state.edgeNum; i++) {
@@ -49,7 +67,13 @@ public class BlossomVDebugger {
         return edgeMap;
     }
 
-    public static Set<Edge> edgesOf(Node node) {
+    /**
+     * Returns all edge incident to {@code node}
+     *
+     * @param node some node
+     * @return all edge incident to {@code node}
+     */
+    public static Set<Edge> getEdgesOf(Node node) {
         Set<Edge> edges = new HashSet<>();
         for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
             edges.add(iterator.next());
@@ -57,7 +81,13 @@ public class BlossomVDebugger {
         return edges;
     }
 
-    public static Set<TreeEdge> treeEdgesOf(Tree tree) {
+    /**
+     * Returns all tree edges incident to {@code tree}
+     *
+     * @param tree some alternating tree
+     * @return all tree edges incident to {@code tree}
+     */
+    public static Set<TreeEdge> getTreeEdgesOf(Tree tree) {
         Set<TreeEdge> result = new HashSet<>();
         for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             result.add(iterator.next());
@@ -65,6 +95,14 @@ public class BlossomVDebugger {
         return result;
     }
 
+    /**
+     * Returns the first tree edge between {@code from} and {@code to}. If there is no tree edge between
+     * these two alternating trees, this method fails.
+     *
+     * @param from some alternating tree
+     * @param to   some alternating tree
+     * @return the first tree edge between {@code from} and {@code to}
+     */
     public static TreeEdge getTreeEdge(Tree from, Tree to) {
         TreeEdge treeEdge = null;
         for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
@@ -77,6 +115,13 @@ public class BlossomVDebugger {
         return treeEdge;
     }
 
+    /**
+     * Returns all tree edges between {@code from} and {@code to}
+     *
+     * @param from some alternating tree
+     * @param to   some alternating tree
+     * @return all tree edges between {@code from} and {@code to}
+     */
     public static Set<TreeEdge> getTreeEdgesBetween(Tree from, Tree to) {
         Set<TreeEdge> result = new HashSet<>();
         for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
@@ -88,7 +133,13 @@ public class BlossomVDebugger {
         return result;
     }
 
-    public static Set<Node> childrenOf(Node node) {
+    /**
+     * Returns all tree children of the {@code node}
+     *
+     * @param node some node
+     * @return all tree children of the {@code node}
+     */
+    public static Set<Node> getChildrenOf(Node node) {
         Set<Node> children = new HashSet<>();
         for (Node child = node.firstTreeChild; child != null; child = child.treeSiblingNext) {
             children.add(child);
@@ -96,7 +147,15 @@ public class BlossomVDebugger {
         return children;
     }
 
-    public static <V, E> Set<Node> treeRoots(State<V, E> state) {
+    /**
+     * Returns all tree roots of the alternating trees stored in the {@code state}
+     *
+     * @param state the state of the algorithm
+     * @param <V>   graph vertex type
+     * @param <E>   graph edge type
+     * @return all tree roots of the alternating trees stored in the {@code state}
+     */
+    public static <V, E> Set<Node> getTreeRoots(State<V, E> state) {
         Set<Node> treeRoots = new HashSet<>();
         for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             treeRoots.add(root);
@@ -104,6 +163,12 @@ public class BlossomVDebugger {
         return treeRoots;
     }
 
+    /**
+     * Returns a set of all nodes of the {@code tree}
+     *
+     * @param tree an alternating tree
+     * @return a set of all nodes of the {@code tree}
+     */
     public static Set<Node> getTreeNodes(Tree tree) {
         Set<Node> nodes = new HashSet<>();
         for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
@@ -112,23 +177,37 @@ public class BlossomVDebugger {
         return nodes;
     }
 
-    public static int dirToOpposite(TreeEdge treeEdge, Tree tree) {
+    /**
+     * Returns the direction from the {@code tree} to the opposite tree, that are connected via {@code treeEdge}.
+     * More precisely, returns {@code dir} such that {@code treeEdge.head[dir] != tree}.
+     *
+     * @param treeEdge tree edge incident to {@code tree}
+     * @param tree     an alternating tree
+     * @return dir such that {@code treeEdge.head[dir] != tree}
+     */
+    public static int getDirToOpposite(TreeEdge treeEdge, Tree tree) {
         return treeEdge.head[0] == tree ? 1 : 0;
     }
 
-    public static FibonacciHeap<Edge> getPlusMinusHeap(TreeEdge treeEdge, Tree tree) {
+    /**
+     * Returns current heap of (+, -) cross-tree edges if {@code tree} is considered as the current tree.
+     *
+     * @param treeEdge tree edge incident to the {@code tree}
+     * @param tree some alternating tree
+     * @return current heap of (+, -) cross-tree edges if {@code tree} is considered as the current tree.
+     */
+    public static MergeableAddressableHeap<Double, Edge> getPlusMinusHeap(TreeEdge treeEdge, Tree tree) {
         return treeEdge.head[0] == tree ? treeEdge.getCurrentPlusMinusHeap(1) : treeEdge.getCurrentPlusMinusHeap(0);
     }
 
-    public static FibonacciHeap<Edge> getMinusPlusHeap(TreeEdge treeEdge, Tree tree) {
+    /**
+     * Returns current heap of (-, +) cross-tree edges if {@code tree} is considered as the current tree.
+     *
+     * @param treeEdge tree edge incident to the {@code tree}
+     * @param tree some alternating tree
+     * @return current heap of (-, +) cross-tree edges if {@code tree} is considered as the current tree.
+     */
+    public static MergeableAddressableHeap<Double, Edge> getMinusPlusHeap(TreeEdge treeEdge, Tree tree) {
         return treeEdge.head[0] == tree ? treeEdge.getCurrentMinusPlusHeap(1) : treeEdge.getCurrentMinusPlusHeap(0);
-    }
-
-    public static Node getOpposite(Edge edge, Node node) {
-        return edge.head[0] == node ? edge.head[1] : edge.head[0];
-    }
-
-    public static Node getOppositeOriginal(Edge edge, Node endPoint) {
-        return edge.headOriginal[0] == endPoint ? edge.headOriginal[1] : edge.headOriginal[0];
     }
 }

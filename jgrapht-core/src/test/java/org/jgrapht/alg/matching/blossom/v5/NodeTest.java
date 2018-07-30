@@ -144,10 +144,10 @@ public class NodeTest {
 
         int dir = edge12.getDirFrom(node1);
         node1.removeEdge(edge12, dir);
-        assertEquals(Collections.emptySet(), BlossomVDebugger.edgesOf(node1));
+        assertEquals(Collections.emptySet(), BlossomVDebugger.getEdgesOf(node1));
 
         node2.removeEdge(edge12, 1 - dir);
-        assertEquals(Collections.emptySet(), BlossomVDebugger.edgesOf(node2));
+        assertEquals(Collections.emptySet(), BlossomVDebugger.getEdgesOf(node2));
     }
 
     /**
@@ -240,25 +240,25 @@ public class NodeTest {
 
         Set<Node> empty = new HashSet<>();
 
-        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.childrenOf(node2));
+        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.getChildrenOf(node2));
         node3.removeFromChildList();
-        assertEquals(empty, BlossomVDebugger.childrenOf(node2));
+        assertEquals(empty, BlossomVDebugger.getChildrenOf(node2));
 
-        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.childrenOf(node4));
+        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.getChildrenOf(node4));
         node5.removeFromChildList();
-        assertEquals(empty, BlossomVDebugger.childrenOf(node4));
+        assertEquals(empty, BlossomVDebugger.getChildrenOf(node4));
 
-        assertEquals(new HashSet<>(Arrays.asList(node2, node4)), BlossomVDebugger.childrenOf(node1));
+        assertEquals(new HashSet<>(Arrays.asList(node2, node4)), BlossomVDebugger.getChildrenOf(node1));
         node4.removeFromChildList();
-        assertEquals(new HashSet<>(Collections.singletonList(node2)), BlossomVDebugger.childrenOf(node1));
+        assertEquals(new HashSet<>(Collections.singletonList(node2)), BlossomVDebugger.getChildrenOf(node1));
         node2.removeFromChildList();
-        assertEquals(empty, BlossomVDebugger.childrenOf(node1));
+        assertEquals(empty, BlossomVDebugger.getChildrenOf(node1));
 
-        assertEquals(new HashSet<>(Arrays.asList(node1, node6)), BlossomVDebugger.treeRoots(state));
+        assertEquals(new HashSet<>(Arrays.asList(node1, node6)), BlossomVDebugger.getTreeRoots(state));
         node1.removeFromChildList();
-        assertEquals(new HashSet<>(Collections.singletonList(node6)), BlossomVDebugger.treeRoots(state));
+        assertEquals(new HashSet<>(Collections.singletonList(node6)), BlossomVDebugger.getTreeRoots(state));
         node6.removeFromChildList();
-        assertEquals(empty, BlossomVDebugger.treeRoots(state));
+        assertEquals(empty, BlossomVDebugger.getTreeRoots(state));
     }
 
     /**
@@ -310,19 +310,19 @@ public class NodeTest {
 
         // node5 and node4 have no children
         node5.moveChildrenTo(node3);
-        assertEquals(new HashSet<>(), BlossomVDebugger.childrenOf(node3));
+        assertEquals(new HashSet<>(), BlossomVDebugger.getChildrenOf(node3));
 
         // moving child list of size 1 to empty list
         node2.moveChildrenTo(node4);
 
-        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.childrenOf(node4));
+        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.getChildrenOf(node4));
         //moving child list of size 2 to empty list
         node4.moveChildrenTo(node2);
-        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.childrenOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.getChildrenOf(node2));
 
         // moving child list to non-empty child list
         node1.moveChildrenTo(node6);
-        assertEquals(new HashSet<>(Arrays.asList(node2, node4, node7)), BlossomVDebugger.childrenOf(node6));
+        assertEquals(new HashSet<>(Arrays.asList(node2, node4, node7)), BlossomVDebugger.getChildrenOf(node6));
     }
 
     /**

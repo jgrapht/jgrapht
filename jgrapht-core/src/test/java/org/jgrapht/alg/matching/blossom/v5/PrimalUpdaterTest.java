@@ -268,7 +268,7 @@ public class PrimalUpdaterTest {
 
         TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node4.tree);
         assertNotNull(treeEdge);
-        int dir = BlossomVDebugger.dirToOpposite(treeEdge, node1.tree);
+        int dir = BlossomVDebugger.getDirToOpposite(treeEdge, node1.tree);
 
         assertEquals(2, treeEdge.getCurrentMinusPlusHeap(dir).size());
         assertEquals(1, treeEdge.getCurrentPlusMinusHeap(dir).size());
@@ -335,9 +335,9 @@ public class PrimalUpdaterTest {
         assertEquals(4, edge36.slack, EPS);
 
         // edge35 is (-, inf) edge, so it isn't present in any heap
-        assertEquals(4, edge24.fibNode.getKey(), EPS);
-        assertEquals(4, edge26.fibNode.getKey(), EPS);
-        assertEquals(4, edge26.fibNode.getKey(), EPS);
+        assertEquals(4, edge24.handle.getKey(), EPS);
+        assertEquals(4, edge26.handle.getKey(), EPS);
+        assertEquals(4, edge26.handle.getKey(), EPS);
 
         assertEquals(3, node4.tree.plusInfinityEdges.size());
 
@@ -356,10 +356,10 @@ public class PrimalUpdaterTest {
         assertEquals(1, edge35.slack, EPS);
         assertEquals(7, edge36.slack, EPS);
 
-        assertEquals(1, edge24.fibNode.getKey(), EPS);
-        assertEquals(1, edge26.fibNode.getKey(), EPS);
-        assertEquals(1, edge35.fibNode.getKey(), EPS);
-        assertEquals(7, edge36.fibNode.getKey(), EPS);
+        assertEquals(1, edge24.handle.getKey(), EPS);
+        assertEquals(1, edge26.handle.getKey(), EPS);
+        assertEquals(1, edge35.handle.getKey(), EPS);
+        assertEquals(7, edge36.handle.getKey(), EPS);
 
         TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node4.tree);
         assertNotNull(treeEdge);
@@ -547,7 +547,7 @@ public class PrimalUpdaterTest {
         assertEquals(3, edge34.slack, EPS);
         assertEquals(1, node1.tree.plusInfinityEdges.size());
         assertEquals(1, node4.tree.plusInfinityEdges.size());
-        assertTrue(BlossomVDebugger.treeEdgesOf(node1.tree).isEmpty());
+        assertTrue(BlossomVDebugger.getTreeEdgesOf(node1.tree).isEmpty());
 
         node4.tree.eps = 1;
         node5.tree.eps = 2;
@@ -560,7 +560,7 @@ public class PrimalUpdaterTest {
         assertEquals(0, edge45.slack, EPS);
         assertEquals(2, edge56.slack, EPS);
         assertEquals(1, node6.tree.plusInfinityEdges.size());
-        assertTrue(BlossomVDebugger.treeEdgesOf(node6.tree).isEmpty());
+        assertTrue(BlossomVDebugger.getTreeEdgesOf(node6.tree).isEmpty());
 
         node1.tree.eps = 2;
         node6.tree.eps = 2;
@@ -702,8 +702,8 @@ public class PrimalUpdaterTest {
 
         primalUpdater.augment(edge12);
 
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge34)), BlossomVDebugger.treeEdgesOf(tree3));
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge34)), BlossomVDebugger.treeEdgesOf(tree4));
+        assertEquals(new HashSet<>(Collections.singletonList(treeEdge34)), BlossomVDebugger.getTreeEdgesOf(tree3));
+        assertEquals(new HashSet<>(Collections.singletonList(treeEdge34)), BlossomVDebugger.getTreeEdgesOf(tree4));
     }
 
     /**
@@ -746,9 +746,9 @@ public class PrimalUpdaterTest {
 
         assertFalse(node1.isTreeRoot);
 
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), BlossomVDebugger.edgesOf(node1));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), BlossomVDebugger.edgesOf(node2));
-        assertEquals(new HashSet<>(Arrays.asList(edge14, edge24)), BlossomVDebugger.edgesOf(blossom));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13)), BlossomVDebugger.getEdgesOf(node1));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), BlossomVDebugger.getEdgesOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(edge14, edge24)), BlossomVDebugger.getEdgesOf(blossom));
 
         assertEquals(blossom, node1.blossomParent);
         assertEquals(blossom, node2.blossomParent);
@@ -758,13 +758,13 @@ public class PrimalUpdaterTest {
         assertEquals(blossom, node2.blossomGrandparent);
         assertEquals(blossom, node3.blossomGrandparent);
 
-        assertEquals(node1, BlossomVDebugger.getOppositeOriginal(edge14, node4));
-        assertEquals(node4, BlossomVDebugger.getOppositeOriginal(edge14, node1));
+        assertEquals(node1, edge14.getCurrentOriginal(blossom));
+        assertEquals(node4, edge14.getCurrentOriginal(node4));
         assertEquals(blossom, edge14.getOpposite(node4));
         assertEquals(node4, edge14.getOpposite(blossom));
 
-        assertEquals(node4, BlossomVDebugger.getOppositeOriginal(edge24, node2));
-        assertEquals(node2, BlossomVDebugger.getOppositeOriginal(edge24, node4));
+        assertEquals(node4, edge24.getCurrentOriginal(node4));
+        assertEquals(node2, edge24.getCurrentOriginal(blossom));
         assertEquals(blossom, edge24.getOpposite(node4));
         assertEquals(node4, edge24.getOpposite(blossom));
 
@@ -777,7 +777,7 @@ public class PrimalUpdaterTest {
     }
 
     /**
-     * Tests updating of the slacks after blossom shrinking and updating of the edge.fibNode.getKey()
+     * Tests updating of the slacks after blossom shrinking and updating of the edge.handle.getKey()
      */
     @Test
     public void testShrink2() {
@@ -823,8 +823,8 @@ public class PrimalUpdaterTest {
         assertEquals(4, edge14.slack, EPS);
         assertEquals(6, edge24.slack, EPS);
 
-        assertEquals(4, edge14.fibNode.getKey(), EPS);
-        assertEquals(6, edge24.fibNode.getKey(), EPS);
+        assertEquals(4, edge14.handle.getKey(), EPS);
+        assertEquals(6, edge24.handle.getKey(), EPS);
 
         TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(tree1, tree4);
         assertNotNull(treeEdge);
@@ -834,7 +834,7 @@ public class PrimalUpdaterTest {
     }
 
     /**
-     * Tests dual part of the shrink operation (updating edges' slacks, fibNode keys, etc.)
+     * Tests dual part of the shrink operation (updating edges' slacks, handle keys, etc.)
      */
     @Test
     public void testShrink3() {
@@ -923,10 +923,10 @@ public class PrimalUpdaterTest {
         assertEquals(15, edge58.slack, EPS);
         assertEquals(7, edge47.slack, EPS);
 
-        assertEquals(10, edge16.fibNode.getKey(), EPS);
-        assertEquals(10, edge57.fibNode.getKey(), EPS);
-        assertEquals(15, edge58.fibNode.getKey(), EPS);
-        assertEquals(7, edge47.fibNode.getKey(), EPS);
+        assertEquals(10, edge16.handle.getKey(), EPS);
+        assertEquals(10, edge57.handle.getKey(), EPS);
+        assertEquals(15, edge58.handle.getKey(), EPS);
+        assertEquals(7, edge47.handle.getKey(), EPS);
 
         Set<TreeEdge> treeEdges = BlossomVDebugger.getTreeEdgesBetween(blossom.tree, node6.tree);
         assertEquals(1, treeEdges.size());
@@ -1010,12 +1010,12 @@ public class PrimalUpdaterTest {
         Node blossom = primalUpdater.shrink(edge34, false);
         state.clearCurrentEdges(blossom.tree);
 
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge51)), BlossomVDebugger.edgesOf(node1));
-        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), BlossomVDebugger.edgesOf(node2));
-        assertEquals(new HashSet<>(Arrays.asList(edge13, edge23, edge34)), BlossomVDebugger.edgesOf(node3));
-        assertEquals(new HashSet<>(Arrays.asList(edge34, edge45)), BlossomVDebugger.edgesOf(node4));
-        assertEquals(new HashSet<>(Arrays.asList(edge45, edge51)), BlossomVDebugger.edgesOf(node5));
-        assertEquals(new HashSet<>(Arrays.asList(edge29, edge56, edge57, edge58, edge47, edge48)), BlossomVDebugger.edgesOf(blossom));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge51)), BlossomVDebugger.getEdgesOf(node1));
+        assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), BlossomVDebugger.getEdgesOf(node2));
+        assertEquals(new HashSet<>(Arrays.asList(edge13, edge23, edge34)), BlossomVDebugger.getEdgesOf(node3));
+        assertEquals(new HashSet<>(Arrays.asList(edge34, edge45)), BlossomVDebugger.getEdgesOf(node4));
+        assertEquals(new HashSet<>(Arrays.asList(edge45, edge51)), BlossomVDebugger.getEdgesOf(node5));
+        assertEquals(new HashSet<>(Arrays.asList(edge29, edge56, edge57, edge58, edge47, edge48)), BlossomVDebugger.getEdgesOf(blossom));
 
         TreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node6.tree);
         assertNotNull(treeEdge);
@@ -1161,15 +1161,15 @@ public class PrimalUpdaterTest {
         // validating the tree structure
         assertEquals(blossom, node4.getTreeParent());
         assertEquals(blossom, node6.getTreeParent());
-        assertEquals(new HashSet<>(Arrays.asList(node4, node6)), BlossomVDebugger.childrenOf(blossom));
+        assertEquals(new HashSet<>(Arrays.asList(node4, node6)), BlossomVDebugger.getChildrenOf(blossom));
 
         // validating the edges endpoints
-        assertEquals(blossom, BlossomVDebugger.getOpposite(edge18, node8));
-        assertEquals(blossom, BlossomVDebugger.getOpposite(edge19, node9));
-        assertEquals(blossom, BlossomVDebugger.getOpposite(edge28, node8));
-        assertEquals(blossom, BlossomVDebugger.getOpposite(edge29, node9));
-        assertEquals(blossom, BlossomVDebugger.getOpposite(edge39, node9));
-        assertEquals(blossom, BlossomVDebugger.getOpposite(edge310, node10));
+        assertEquals(blossom, edge18.getOpposite(node8));
+        assertEquals(blossom, edge19.getOpposite(node9));
+        assertEquals(blossom, edge28.getOpposite(node8));
+        assertEquals(blossom, edge29.getOpposite(node9));
+        assertEquals(blossom, edge39.getOpposite(node9));
+        assertEquals(blossom, edge310.getOpposite(node10));
 
     }
 
@@ -1245,9 +1245,9 @@ public class PrimalUpdaterTest {
         assertEquals(1, BlossomVDebugger.getPlusMinusHeap(treeEdge, node1.tree).size());
         assertEquals(2, treeEdge.plusPlusEdges.size());
 
-        assertEquals(5, edge24.fibNode.getKey(), EPS);
-        assertEquals(1, edge25.fibNode.getKey(), EPS);
-        assertEquals(5, edge26.fibNode.getKey(), EPS);
+        assertEquals(5, edge24.handle.getKey(), EPS);
+        assertEquals(1, edge25.handle.getKey(), EPS);
+        assertEquals(5, edge26.handle.getKey(), EPS);
     }
 
     /**
@@ -1367,9 +1367,9 @@ public class PrimalUpdaterTest {
         assertEquals(node4.tree, node3.tree);
         assertEquals(node4, node3.getTreeParent());
         assertEquals(node3, node5.getTreeParent());
-        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.childrenOf(node4));
-        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.childrenOf(node3));
-        assertEquals(new HashSet<>(Arrays.asList(edge34, edge35, edge23, edge13)), BlossomVDebugger.edgesOf(node3));
+        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.getChildrenOf(node4));
+        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.getChildrenOf(node3));
+        assertEquals(new HashSet<>(Arrays.asList(edge34, edge35, edge23, edge13)), BlossomVDebugger.getEdgesOf(node3));
 
 
         // checking edges new endpoints
@@ -1530,12 +1530,12 @@ public class PrimalUpdaterTest {
         assertEquals(node4, node3.getTreeParent());
         assertEquals(node3, node7.getTreeParent());
 
-        assertEquals(new HashSet<>(Collections.singletonList(node2)), BlossomVDebugger.childrenOf(node6));
-        assertEquals(new HashSet<>(Collections.singletonList(node1)), BlossomVDebugger.childrenOf(node2));
-        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.childrenOf(node1));
-        assertEquals(new HashSet<>(Collections.singletonList(node4)), BlossomVDebugger.childrenOf(node5));
-        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.childrenOf(node4));
-        assertEquals(new HashSet<>(Collections.singletonList(node7)), BlossomVDebugger.childrenOf(node3));
+        assertEquals(new HashSet<>(Collections.singletonList(node2)), BlossomVDebugger.getChildrenOf(node6));
+        assertEquals(new HashSet<>(Collections.singletonList(node1)), BlossomVDebugger.getChildrenOf(node2));
+        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.getChildrenOf(node1));
+        assertEquals(new HashSet<>(Collections.singletonList(node4)), BlossomVDebugger.getChildrenOf(node5));
+        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.getChildrenOf(node4));
+        assertEquals(new HashSet<>(Collections.singletonList(node7)), BlossomVDebugger.getChildrenOf(node3));
         assertEquals(new HashSet<>(Arrays.asList(node6, node2, node1, node5, node4, node3, node7)), BlossomVDebugger.getTreeNodes(node6.tree));
     }
 
@@ -1738,13 +1738,13 @@ public class PrimalUpdaterTest {
         assertEquals(6, edge29.slack, EPS);
 
         // validating keys of the cross-tree and infinity edges in the heaps
-        assertEquals(4, edge58.fibNode.getKey(), EPS);
-        assertEquals(7, edge48.fibNode.getKey(), EPS);
-        assertEquals(7, edge49.fibNode.getKey(), EPS);
-        assertEquals(6, edge210.fibNode.getKey(), EPS);
-        assertEquals(7, edge24.fibNode.getKey(), EPS);
-        assertEquals(8, edge47.fibNode.getKey(), EPS);
-        assertEquals(7, edge27.fibNode.getKey(), EPS);
+        assertEquals(4, edge58.handle.getKey(), EPS);
+        assertEquals(7, edge48.handle.getKey(), EPS);
+        assertEquals(7, edge49.handle.getKey(), EPS);
+        assertEquals(6, edge210.handle.getKey(), EPS);
+        assertEquals(7, edge24.handle.getKey(), EPS);
+        assertEquals(8, edge47.handle.getKey(), EPS);
+        assertEquals(7, edge27.handle.getKey(), EPS);
 
         // validating slacks of the edges on the odd branch
         assertEquals(-2, edge51.slack, EPS);

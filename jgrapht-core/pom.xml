@@ -53,6 +53,11 @@
 			<version>1.19</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jheaps</groupId>
+			<artifactId>jheaps</artifactId>
+			<version>0.7</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

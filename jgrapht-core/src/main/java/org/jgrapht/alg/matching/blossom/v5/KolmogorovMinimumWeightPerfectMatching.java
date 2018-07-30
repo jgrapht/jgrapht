@@ -193,7 +193,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     Node node;
                     if (!tree.plusInfinityEdges.isEmpty()) {
                         // can grow tree
-                        edge = tree.plusInfinityEdges.min().getData();
+                        edge = tree.plusInfinityEdges.findMin().getValue();
                         if (edge.slack <= tree.eps) {
                             primalUpdater.grow(edge, true, true);
                             continue;
@@ -201,7 +201,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     }
                     if (!tree.plusPlusEdges.isEmpty()) {
                         // can shrink blossom
-                        edge = tree.plusPlusEdges.min().getData();
+                        edge = tree.plusPlusEdges.findMin().getValue();
                         if (edge.slack <= 2 * tree.eps) {
                             primalUpdater.shrink(edge, true);
                             continue;
@@ -209,7 +209,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     }
                     if (!tree.minusBlossoms.isEmpty()) {
                         // can expand blossom
-                        node = tree.minusBlossoms.min().getData();
+                        node = tree.minusBlossoms.findMin().getValue();
                         if (node.dual <= tree.eps) {
                             primalUpdater.expand(node, true);
                             continue;
@@ -289,33 +289,32 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * @return the total numeric error
      */
     public double getError() {
-        if (matching != null) {
-            Edge edge;
-            E graphEdge;
-            Node a, b;
-            double error = testNonNegativity();
-            Set<E> matchedEdges = matching.getEdges();
-            for (int i = 0; i < state.graphEdges.size(); i++) {
-                graphEdge = state.graphEdges.get(i);
-                edge = state.edges[i];
-                double slack = graph.getEdgeWeight(graphEdge);
-                a = edge.headOriginal[0];
-                b = edge.headOriginal[1];
-                Pair<Node, Node> lca = lca(a, b);
-                slack -= totalDual(a, lca.getFirst());
-                slack -= totalDual(b, lca.getSecond());
-                if (lca.getFirst() == lca.getSecond()) {
-                    // if a and b have a common ancestor, its dual is subtracted from edge's slack
-                    slack += 2 * lca.getFirst().getTrueDual();
-                }
-                if (slack < 0 || matchedEdges.contains(graphEdge)) {
-                    error += Math.abs(slack);
-                }
-            }
-            return error;
-        } else {
+        if (matching == null) {
             return -1;
         }
+        Edge edge;
+        E graphEdge;
+        Node a, b;
+        double error = testNonNegativity();
+        Set<E> matchedEdges = matching.getEdges();
+        for (int i = 0; i < state.graphEdges.size(); i++) {
+            graphEdge = state.graphEdges.get(i);
+            edge = state.edges[i];
+            double slack = graph.getEdgeWeight(graphEdge);
+            a = edge.headOriginal[0];
+            b = edge.headOriginal[1];
+            Pair<Node, Node> lca = lca(a, b);
+            slack -= totalDual(a, lca.getFirst());
+            slack -= totalDual(b, lca.getSecond());
+            if (lca.getFirst() == lca.getSecond()) {
+                // if a and b have a common ancestor, its dual is subtracted from edge's slack
+                slack += 2 * lca.getFirst().getTrueDual();
+            }
+            if (slack < 0 || matchedEdges.contains(graphEdge)) {
+                error += Math.abs(slack);
+            }
+        }
+        return error;
     }
 
     /**
@@ -330,7 +329,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             treeEdge = iterator.next();
             Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
             if (!treeEdge.plusPlusEdges.isEmpty()) {
-                edge = treeEdge.plusPlusEdges.min().getData();
+                edge = treeEdge.plusPlusEdges.findMin().getValue();
                 if (edge.slack <= tree.eps + opposite.eps) {
                     if (DEBUG) {
                         System.out.println("Bingo traverse");
@@ -792,16 +791,13 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
 
         @Override
         public String toString() {
-            final StringBuilder sb = new StringBuilder("Statistics{");
-            sb.append("shrinkNum=").append(shrinkNum);
-            sb.append(", expandNum=").append(expandNum);
-            sb.append(", growNum=").append(growNum);
-            sb.append(", augmentTime=").append(augmentTime);
-            sb.append(", expandTime=").append(expandTime);
-            sb.append(", shrinkTime=").append(shrinkTime);
-            sb.append(", growTime=").append(growTime);
-            sb.append('}');
-            return sb.toString();
+            return "Statistics{shrinkNum=" + shrinkNum +
+                    ", expandNum=" + expandNum +
+                    ", growNum=" + growNum +
+                    ", augmentTime=" + augmentTime +
+                    ", expandTime=" + expandTime +
+                    ", shrinkTime=" + shrinkTime +
+                    ", growTime=" + growTime + '}';
         }
     }
 

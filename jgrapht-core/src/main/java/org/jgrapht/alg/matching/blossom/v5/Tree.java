@@ -17,8 +17,9 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
+import org.jheaps.MergeableAddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -77,15 +78,15 @@ class Tree {
     /**
      * The heap of (+,+) edges of this tree
      */
-    FibonacciHeap<Edge> plusPlusEdges;
+    MergeableAddressableHeap<Double, Edge> plusPlusEdges;
     /**
      * The heap of (+, inf) edges of this tree
      */
-    FibonacciHeap<Edge> plusInfinityEdges;
+    MergeableAddressableHeap<Double, Edge> plusInfinityEdges;
     /**
      * The heap of "-" blossoms of this tree
      */
-    FibonacciHeap<Node> minusBlossoms;
+    MergeableAddressableHeap<Double, Node> minusBlossoms;
     /**
      * Variable for debug purposes, todo: remove
      */
@@ -107,9 +108,9 @@ class Tree {
         root.tree = this;
         root.isTreeRoot = true;
         first = new TreeEdge[2];
-        plusPlusEdges = new FibonacciHeap<>();
-        plusInfinityEdges = new FibonacciHeap<>();
-        minusBlossoms = new FibonacciHeap<>();
+        plusPlusEdges = new PairingHeap<>();
+        plusInfinityEdges = new PairingHeap<>();
+        minusBlossoms = new PairingHeap<>();
         this.id = currentId++;
     }
 
@@ -124,9 +125,7 @@ class Tree {
      * @param edge a (+, +) edge
      */
     public void addPlusPlusEdge(Edge edge) {
-        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
-        edge.fibNode = edgeNode;
-        plusPlusEdges.insert(edgeNode, edge.slack);
+        edge.handle =  plusPlusEdges.insert(edge.slack, edge);
     }
 
     /**
@@ -135,9 +134,7 @@ class Tree {
      * @param edge a (+, inf) edge
      */
     public void addPlusInfinityEdge(Edge edge) {
-        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
-        edge.fibNode = edgeNode;
-        plusInfinityEdges.insert(edgeNode, edge.slack);
+        edge.handle = plusInfinityEdges.insert(edge.slack, edge);
     }
 
     /**
@@ -146,9 +143,7 @@ class Tree {
      * @param blossom a "-" blossom
      */
     public void addMinusBlossom(Node blossom) {
-        FibonacciHeapNode<Node> blossomNode = new FibonacciHeapNode<>(blossom);
-        blossom.fibNode = blossomNode;
-        minusBlossoms.insert(blossomNode, blossom.dual);
+        blossom.handle = minusBlossoms.insert(blossom.dual, blossom);
     }
 
     /**
@@ -157,8 +152,8 @@ class Tree {
      * @param edge the edge to remove
      */
     public void removePlusPlusEdge(Edge edge) {
-        plusPlusEdges.delete(edge.fibNode);
-        edge.fibNode = null; // strict mode, todo: remove
+        edge.handle.delete();
+        edge.handle = null; // strict mode, todo: remove
     }
 
     /**
@@ -167,8 +162,8 @@ class Tree {
      * @param edge the edge to remove
      */
     public void removePlusInfinityEdge(Edge edge) {
-        plusInfinityEdges.delete(edge.fibNode);
-        edge.fibNode = null; // strict mode, todo: remove
+        edge.handle.delete();
+        edge.handle = null; // strict mode, todo: remove
     }
 
     /**
@@ -177,8 +172,8 @@ class Tree {
      * @param blossom the blossom to remove
      */
     public void removeMinusBlossom(Node blossom) {
-        minusBlossoms.delete(blossom.fibNode);
-        blossom.fibNode = null; // strict mode: todo: remove
+        blossom.handle.delete();
+        blossom.handle = null; // strict mode: todo: remove
     }
 
     /**
@@ -267,14 +262,13 @@ class Tree {
         private TreeEdge advance() {
             if (currentEdge == null) {
                 return null;
-            } else {
-                currentEdge = currentEdge.next[currentDirection];
-                if (currentEdge == null && currentDirection == 0) {
-                    currentDirection = 1;
-                    currentEdge = first[1];
-                }
-                return currentEdge;
             }
+            currentEdge = currentEdge.next[currentDirection];
+            if (currentEdge == null && currentDirection == 0) {
+                currentDirection = 1;
+                currentEdge = first[1];
+            }
+            return currentEdge;
         }
     }
 

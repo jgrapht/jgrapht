@@ -18,6 +18,7 @@
 package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeapNode;
+import org.jheaps.AddressableHeap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -33,15 +34,15 @@ import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
  * to increase the cardinality of the matching.
  *
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
  * @
+ * @see KolmogorovMinimumWeightPerfectMatching
  * @since June 2018
  */
 class Node {
     /**
      * The reference to the Fibonacci heap node this {@code Node} is stored in
      */
-    FibonacciHeapNode<Node> fibNode;
+    AddressableHeap.Handle<Double, Node> handle;
     /**
      * True if this node is a tree root, implies that this node is outer
      */
@@ -70,7 +71,7 @@ class Node {
      */
     Label label;
     /**
-     * References of the first elements in the linked lists of edges that are incident to this node.
+     * Two-element array of references of the first elements in the linked lists of edges that are incident to this node.
      * first[0] is the first outgoing edge, first[1] is the first incoming edge, see {@link Edge}.
      */
     Edge[] first;
@@ -287,14 +288,13 @@ class Node {
             if (blossom.firstTreeChild == null) {
                 blossom.firstTreeChild = firstTreeChild;
             } else {
-                Node first = firstTreeChild;
                 Node t = blossom.firstTreeChild.treeSiblingPrev;
                 // concatenating child lists
-                first.treeSiblingPrev.treeSiblingNext = blossom.firstTreeChild;
-                blossom.firstTreeChild.treeSiblingPrev = first.treeSiblingPrev;
+                firstTreeChild.treeSiblingPrev.treeSiblingNext = blossom.firstTreeChild;
+                blossom.firstTreeChild.treeSiblingPrev = firstTreeChild.treeSiblingPrev;
                 // setting reference to the last child and updating firstTreeChild reference of the blossom
-                first.treeSiblingPrev = t;
-                blossom.firstTreeChild = first;
+                firstTreeChild.treeSiblingPrev = t;
+                blossom.firstTreeChild = firstTreeChild;
             }
             firstTreeChild = null; // now this node has no children
         }
@@ -310,31 +310,30 @@ class Node {
      */
     public Node getPenultimateBlossom() {
         if (blossomParent == null) {
-            return null;
-        } else {
-            Node current = this;
-            while (true) {
-                if (!current.blossomGrandparent.isOuter) {
-                    current = current.blossomGrandparent;
-                } else if (current.blossomGrandparent != current.blossomParent) {
-                    // this is the case when current.blossomGrandparent has been removed
-                    current.blossomGrandparent = current.blossomParent;
-                } else {
-                    break;
-                }
-            }
-            // now current references the penultimate blossom we were looking for
-            // now we change blossomParent references to point to current
-            Node prev = this;
-            Node next;
-            while (prev != current) {
-                next = prev.blossomGrandparent;
-                prev.blossomGrandparent = current; // apply path compression
-                prev = next;
-            }
-
-            return current;
+            return null; // strict mode, todo: remove
         }
+        Node current = this;
+        while (true) {
+            if (!current.blossomGrandparent.isOuter) {
+                current = current.blossomGrandparent;
+            } else if (current.blossomGrandparent != current.blossomParent) {
+                // this is the case when current.blossomGrandparent has been removed
+                current.blossomGrandparent = current.blossomParent;
+            } else {
+                break;
+            }
+        }
+        // now current references the penultimate blossom we were looking for
+        // now we change blossomParent references to point to current
+        Node prev = this;
+        Node next;
+        while (prev != current) {
+            next = prev.blossomGrandparent;
+            prev.blossomGrandparent = current; // apply path compression
+            prev = next;
+        }
+
+        return current;
     }
 
     /**
@@ -346,6 +345,9 @@ class Node {
      * @return the penultimate blossom of this node
      */
     public Node getPenultimateBlossomAndFixBlossomGrandparent() {
+        if (blossomParent == null) {
+            return null; // strict mode, todo: remove
+        }
         Node current = this;
         Node prev = null;
         while (true) {
@@ -371,7 +373,6 @@ class Node {
                 prevNode = nextNode;
             }
         }
-
         return current;
     }
 

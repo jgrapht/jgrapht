@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeap;
+import org.jheaps.MergeableAddressableHeap;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
@@ -114,17 +114,17 @@ class DualUpdater<V, E> {
         double eps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
         Edge varEdge;
         // checking minimum slack of the plus-infinity edges
-        if (!tree.plusInfinityEdges.isEmpty() && (varEdge = tree.plusInfinityEdges.min().getData()).slack < eps) {
+        if (!tree.plusInfinityEdges.isEmpty() && (varEdge = tree.plusInfinityEdges.findMin().getValue()).slack < eps) {
             eps = varEdge.slack;
         }
         Node varNode;
         // checking minimum dual variable of the "-" blossoms
-        if (!tree.minusBlossoms.isEmpty() && (varNode = tree.minusBlossoms.min().getData()).dual < eps) {
+        if (!tree.minusBlossoms.isEmpty() && (varNode = tree.minusBlossoms.findMin().getValue()).dual < eps) {
             eps = varNode.dual;
         }
         // checking minimum slack of the (+, +) edges
         if (!tree.plusPlusEdges.isEmpty()) {
-            varEdge = tree.plusPlusEdges.min().getData();
+            varEdge = tree.plusPlusEdges.findMin().getValue();
             if (2 * eps > varEdge.slack) {
                 eps = varEdge.slack / 2;
             }
@@ -143,24 +143,24 @@ class DualUpdater<V, E> {
         long start = System.nanoTime();
 
         double eps = getEps(tree);  // include only constraints on (+,+) in-tree edges, (+, inf) edges and "-' blossoms
-        double eps_augment = KolmogorovMinimumWeightPerfectMatching.INFINITY; // takes into account constraints of the cross-tree edges
+        double epsAugment = KolmogorovMinimumWeightPerfectMatching.INFINITY; // takes into account constraints of the cross-tree edges
         Edge augmentEdge = null; // the (+, +) cross-tree edge of minimum slack
         Edge varEdge;
         double delta = 0;
         for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             TreeEdge treeEdge = iterator.next();
             Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
-            if (!treeEdge.plusPlusEdges.isEmpty() && (varEdge = treeEdge.plusPlusEdges.min().getData()).slack - opposite.eps < eps_augment) {
-                eps_augment = varEdge.slack - opposite.eps;
+            if (!treeEdge.plusPlusEdges.isEmpty() && (varEdge = treeEdge.plusPlusEdges.findMin().getValue()).slack - opposite.eps < epsAugment) {
+                epsAugment = varEdge.slack - opposite.eps;
                 augmentEdge = varEdge;
             }
-            FibonacciHeap<Edge> currentPlusMinusHeap = treeEdge.getCurrentPlusMinusHeap(opposite.currentDirection);
-            if (!currentPlusMinusHeap.isEmpty() && (varEdge = currentPlusMinusHeap.min().getData()).slack + opposite.eps < eps) {
+            MergeableAddressableHeap<Double, Edge> currentPlusMinusHeap = treeEdge.getCurrentPlusMinusHeap(opposite.currentDirection);
+            if (!currentPlusMinusHeap.isEmpty() && (varEdge = currentPlusMinusHeap.findMin().getValue()).slack + opposite.eps < eps) {
                 eps = varEdge.slack + opposite.eps;
             }
         }
-        if (eps > eps_augment) {
-            eps = eps_augment;
+        if (eps > epsAugment) {
+            eps = epsAugment;
         }
         // now eps takes into account all the constraints
         if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
@@ -176,7 +176,7 @@ class DualUpdater<V, E> {
 
         state.statistics.dualUpdatesTime += System.nanoTime() - start;
 
-        if (augmentEdge != null && eps_augment <= tree.eps) {
+        if (augmentEdge != null && epsAugment <= tree.eps) {
             primalUpdater.augment(augmentEdge);
             return false; // can't proceed with the same tree
         } else {
@@ -222,7 +222,7 @@ class DualUpdater<V, E> {
                         int dirRev = 1 - dir;
 
                         if (!currentEdge.plusPlusEdges.isEmpty()) {
-                            plusPlusEps = currentEdge.plusPlusEdges.min().getKey() - currentTree.eps - opposite.eps;
+                            plusPlusEps = currentEdge.plusPlusEdges.findMin().getKey() - currentTree.eps - opposite.eps;
                         }
                         if (opposite.nextTree != null && opposite.nextTree != dummyTree) {
                             // opposite tree is in the same connected component
@@ -237,11 +237,11 @@ class DualUpdater<V, E> {
                         double[] plusMinusEps = new double[2];
                         plusMinusEps[dir] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                         if (!currentEdge.getCurrentPlusMinusHeap(dir).isEmpty()) {
-                            plusMinusEps[dir] = currentEdge.getCurrentPlusMinusHeap(dir).min().getKey() - currentTree.eps + opposite.eps;
+                            plusMinusEps[dir] = currentEdge.getCurrentPlusMinusHeap(dir).findMin().getKey() - currentTree.eps + opposite.eps;
                         }
                         plusMinusEps[dirRev] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                         if (!currentEdge.getCurrentPlusMinusHeap(dirRev).isEmpty()) {
-                            plusMinusEps[dirRev] = currentEdge.getCurrentPlusMinusHeap(dirRev).min().getKey() - opposite.eps + currentTree.eps;
+                            plusMinusEps[dirRev] = currentEdge.getCurrentPlusMinusHeap(dirRev).findMin().getKey() - opposite.eps + currentTree.eps;
                         }
                         if (opposite.nextTree == dummyTree) {
                             // opposite tree is in another connected component and has valid accumulated eps
@@ -315,7 +315,7 @@ class DualUpdater<V, E> {
             for (TreeEdge outgoingTreeEdge = tree.first[0]; outgoingTreeEdge != null; outgoingTreeEdge = outgoingTreeEdge.next[0]) {
                 // since all epsilons are equal we don't have to check (+, -) cross tree edges
                 if (!outgoingTreeEdge.plusPlusEdges.isEmpty()) {
-                    varEdge = outgoingTreeEdge.plusPlusEdges.min().getData();
+                    varEdge = outgoingTreeEdge.plusPlusEdges.findMin().getValue();
                     double oppositeTreeEps = outgoingTreeEdge.head[0].eps;
                     if (2 * eps > varEdge.slack - treeEps - oppositeTreeEps) {
                         eps = (varEdge.slack - treeEps - oppositeTreeEps) / 2;

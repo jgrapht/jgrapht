@@ -18,6 +18,7 @@
 package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.util.FibonacciHeapNode;
+import org.jheaps.AddressableHeap;
 
 /**
  * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
@@ -46,7 +47,7 @@ class Edge {
      * due to performance reasons. Therefore, no assumptions should be made about whether this edge belongs to some heap or not
      * based upon this variable being {@code null} or not.</em>
      */
-    FibonacciHeapNode<Edge> fibNode;
+    AddressableHeap.Handle<Double, Edge> handle;
     /**
      * The slack of this edge. If this edge is an outer edge and doesn't connect 2 infinity nodes,
      * then its slack is subject to lazy delta spreading technique. Otherwise, it has a valid slack.

@@ -19,7 +19,9 @@ package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.Graph;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
@@ -86,15 +88,15 @@ class State<V, E> {
     /**
      * Constructs an initial algorithm's state
      *
-     * @param graph     the graph to search matching in
-     * @param nodes     nodes used in the algorithm
-     * @param edges     edges used in the algorithm
-     * @param nodeNum   number of nodes in the graph
-     * @param edgeNum   number of edges in the graph
-     * @param treeNum   number of trees in the graph
+     * @param graph         the graph to search matching in
+     * @param nodes         nodes used in the algorithm
+     * @param edges         edges used in the algorithm
+     * @param nodeNum       number of nodes in the graph
+     * @param edgeNum       number of edges in the graph
+     * @param treeNum       number of trees in the graph
      * @param graphVertices generic vertices of the {@code graph} in the same order as nodes in {@code nodes}
-     * @param graphEdges generic edges of the {@code graph} in the same order as edges in {@code edges}
-     * @param options   default or user defined options
+     * @param graphEdges    generic edges of the {@code graph} in the same order as edges in {@code edges}
+     * @param options       default or user defined options
      */
     public State(Graph<V, E> graph, Node[] nodes, Edge[] edges,
                  int nodeNum, int edgeNum, int treeNum,
@@ -155,6 +157,20 @@ class State<V, E> {
     }
 
     /**
+     * Method for debug purposes. Prints {@code blossomNode} and all its blossom siblings
+     *
+     * @param blossomNode the node to start from
+     */
+    public static void printBlossomNodes(Node blossomNode) {
+        System.out.println("Printing blossom nodes");
+        Node current = blossomNode;
+        do {
+            System.out.println(current);
+            current = current.blossomSibling.getOpposite(current);
+        } while (current != blossomNode);
+    }
+
+    /**
      * Sets the currentEdge and currentDirection variables for all adjacent to the {@code tree} trees
      *
      * @param tree the tree whose adjacent trees' variables are modified
@@ -179,20 +195,6 @@ class State<V, E> {
         for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
         }
-    }
-
-    /**
-     * Method for debug purposes. Prints {@code blossomNode} and all its blossom siblings
-     *
-     * @param blossomNode the node to start from
-     */
-    public static void printBlossomNodes(Node blossomNode) {
-        System.out.println("Printing blossom nodes");
-        Node current = blossomNode;
-        do {
-            System.out.println(current);
-            current = current.blossomSibling.getOpposite(current);
-        } while (current != blossomNode);
     }
 
     /**
@@ -299,7 +301,8 @@ class State<V, E> {
         private Node advance() {
             if (currentNode == null) {
                 return null;
-            } else if (currentNode == root && currentDirection == 0) {
+            }
+            if (currentNode == root && currentDirection == 0) {
                 // we have just traversed blossom's root and now start to traverse the second branch
                 currentDirection = 1;
                 currentNode = blossomFormingEdge.head[1];

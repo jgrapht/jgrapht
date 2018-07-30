@@ -134,8 +134,8 @@ public class TreeTest {
         blossom.isBlossom = true;
         tree.addMinusBlossom(blossom);
 
-        assertNotNull(blossom.fibNode);
-        assertSame(blossom.fibNode.getData(), blossom);
+        assertNotNull(blossom.handle);
+        assertSame(blossom.handle.getValue(), blossom);
     }
 
 }

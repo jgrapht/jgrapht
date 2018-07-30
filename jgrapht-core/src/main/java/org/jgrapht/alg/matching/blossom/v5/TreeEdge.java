@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeap;
-import org.jgrapht.util.FibonacciHeapNode;
+import org.jheaps.MergeableAddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 /**
  * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
@@ -52,10 +52,6 @@ import org.jgrapht.util.FibonacciHeapNode;
  */
 class TreeEdge {
     /**
-     * Debug variable
-     */
-    private static int ID = 0;
-    /**
      * Two-element array of trees this edge is incident to.
      */
     Tree[] head;
@@ -74,19 +70,15 @@ class TreeEdge {
     /**
      * A heap of (+, +) cross-tree edges
      */
-    FibonacciHeap<Edge> plusPlusEdges;
+    MergeableAddressableHeap<Double, Edge> plusPlusEdges;
     /**
      * A heap of (-, +) cross-tree edges
      */
-    FibonacciHeap<Edge> plusMinusEdges0;
+    MergeableAddressableHeap<Double, Edge> plusMinusEdges0;
     /**
      * A heap of (+, -) cross-tree edges
      */
-    FibonacciHeap<Edge> plusMinusEdges1;
-    /**
-     * Debug variable
-     */
-    private int id;
+    MergeableAddressableHeap<Double, Edge> plusMinusEdges1;
 
     /**
      * Constructs a new tree edge by initializing arrays and heaps
@@ -95,10 +87,9 @@ class TreeEdge {
         this.head = new Tree[2];
         this.prev = new TreeEdge[2];
         this.next = new TreeEdge[2];
-        this.plusPlusEdges = new FibonacciHeap<>();
-        this.plusMinusEdges0 = new FibonacciHeap<>();
-        this.plusMinusEdges1 = new FibonacciHeap<>();
-        id = ID++;
+        this.plusPlusEdges = new PairingHeap<>();
+        this.plusMinusEdges0 = new PairingHeap<>();
+        this.plusMinusEdges1 = new PairingHeap<>();
     }
 
     /**
@@ -124,7 +115,7 @@ class TreeEdge {
      */
     @Override
     public String toString() {
-        return "TreeEdge (" + head[0].id + ":" + head[1].id + "), pos = " + id;
+        return "TreeEdge (" + head[0].id + ":" + head[1].id + ")";
     }
 
     /**
@@ -136,9 +127,7 @@ class TreeEdge {
      * @param direction direction of this tree edge wrt. current tree and opposite tree
      */
     public void addToCurrentMinusPlusHeap(Edge edge, int direction) {
-        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
-        edge.fibNode = edgeNode;
-        getCurrentMinusPlusHeap(direction).insert(edgeNode, edge.slack);
+        edge.handle = getCurrentMinusPlusHeap(direction).insert(edge.slack, edge);
     }
 
     /**
@@ -150,9 +139,7 @@ class TreeEdge {
      * @param direction direction of this tree edge wrt. current tree and opposite tree
      */
     public void addToCurrentPlusMinusHeap(Edge edge, int direction) {
-        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
-        edge.fibNode = edgeNode;
-        getCurrentPlusMinusHeap(direction).insert(edgeNode, edge.slack);
+        edge.handle = getCurrentPlusMinusHeap(direction).insert(edge.slack, edge);
     }
 
     /**
@@ -161,9 +148,7 @@ class TreeEdge {
      * @param edge an edge to add to the heap of (+, +) cross-tree edges
      */
     public void addPlusPlusEdge(Edge edge) {
-        FibonacciHeapNode<Edge> edgeNode = new FibonacciHeapNode<>(edge);
-        edge.fibNode = edgeNode;
-        this.plusPlusEdges.insert(edgeNode, edge.slack);
+        edge.handle = plusPlusEdges.insert(edge.slack, edge);
     }
 
     /**
@@ -171,12 +156,11 @@ class TreeEdge {
      * class description, this method chooses {@link TreeEdge#plusMinusEdges0} or {@link TreeEdge#plusMinusEdges1}
      * resting upon the {@code direction}.
      *
-     * @param edge      an edge to remove
-     * @param direction direction of this tree edge wrt. current tree and opposite tree
+     * @param edge an edge to remove
      */
-    public void removeFromCurrentMinusPlusHeap(Edge edge, int direction) {
-        getCurrentMinusPlusHeap(direction).delete(edge.fibNode);
-        edge.fibNode = null;
+    public void removeFromCurrentMinusPlusHeap(Edge edge) {
+        edge.handle.delete();
+        edge.handle = null;
     }
 
     /**
@@ -184,12 +168,11 @@ class TreeEdge {
      * class description, this method chooses {@link TreeEdge#plusMinusEdges0} or {@link TreeEdge#plusMinusEdges1}
      * resting upon the {@code direction}.
      *
-     * @param edge      an edge to remove
-     * @param direction direction of this tree edge wrt. current tree and opposite tree
+     * @param edge an edge to remove
      */
-    public void removeFromCurrentPlusMinusHeap(Edge edge, int direction) {
-        getCurrentPlusMinusHeap(direction).delete(edge.fibNode);
-        edge.fibNode = null;
+    public void removeFromCurrentPlusMinusHeap(Edge edge) {
+        edge.handle.delete();
+        edge.handle = null;
     }
 
     /**
@@ -198,8 +181,8 @@ class TreeEdge {
      * @param edge an edge to remove
      */
     public void removeFromPlusPlusHeap(Edge edge) {
-        plusPlusEdges.delete(edge.fibNode);
-        edge.fibNode = null;
+        edge.handle.delete();
+        edge.handle = null;
     }
 
     /**
@@ -209,7 +192,7 @@ class TreeEdge {
      * @param currentDir the current direction of this edge
      * @return returns current heap of (-, +) cross-tree edges
      */
-    public FibonacciHeap<Edge> getCurrentMinusPlusHeap(int currentDir) {
+    public MergeableAddressableHeap<Double, Edge> getCurrentMinusPlusHeap(int currentDir) {
         return currentDir == 0 ? plusMinusEdges0 : plusMinusEdges1;
     }
 
@@ -220,7 +203,7 @@ class TreeEdge {
      * @param currentDir the current direction of this edge
      * @return returns current heap of (+, -) cross-tree edges
      */
-    public FibonacciHeap<Edge> getCurrentPlusMinusHeap(int currentDir) {
+    public MergeableAddressableHeap<Double, Edge> getCurrentPlusMinusHeap(int currentDir) {
         return currentDir == 0 ? plusMinusEdges1 : plusMinusEdges0;
     }
 }
