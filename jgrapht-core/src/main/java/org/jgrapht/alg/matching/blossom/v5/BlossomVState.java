@@ -25,17 +25,17 @@ import java.util.NoSuchElementException;
 
 /**
  * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
- * {@link PrimalUpdater} and {@link DualUpdater} during the course of the algorithm.
+ * {@link BlossomVPrimalUpdater} and {@link BlossomVDualUpdater} during the course of the algorithm.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
- * @see PrimalUpdater
- * @see DualUpdater
+ * @see BlossomVPrimalUpdater
+ * @see BlossomVDualUpdater
  * @since June 2018
  */
-class State<V, E> {
+class BlossomVState<V, E> {
     /**
      * Number of nodes in the graph
      */
@@ -50,14 +50,14 @@ class State<V, E> {
     Graph<V, E> graph;
     /**
      * An array of nodes of the graph.
-     * Node: the size of the array is nodeNum + 1. The node nodes[nodeNum] is an auxiliary node that is used
+     * BlossomVNode: the size of the array is nodeNum + 1. The node nodes[nodeNum] is an auxiliary node that is used
      * as the first element in the linked list of tree roots
      */
-    Node[] nodes;
+    BlossomVNode[] nodes;
     /**
      * An array of edges of the graph
      */
-    Edge[] edges;
+    BlossomVEdge[] edges;
     /**
      * Helper variable to determine whether an augmentation has been performed
      */
@@ -75,9 +75,9 @@ class State<V, E> {
      */
     KolmogorovMinimumWeightPerfectMatching.Statistics statistics;
     /**
-     * Options used to determine the strategies used in the algorithm
+     * BlossomVOptions used to determine the strategies used in the algorithm
      */
-    Options options;
+    BlossomVOptions options;
     /**
      * Mapping from initial vertices to nodes
      */
@@ -98,9 +98,9 @@ class State<V, E> {
      * @param graphEdges    generic edges of the {@code graph} in the same order as edges in {@code edges}
      * @param options       default or user defined options
      */
-    public State(Graph<V, E> graph, Node[] nodes, Edge[] edges,
-                 int nodeNum, int edgeNum, int treeNum,
-                 List<V> graphVertices, List<E> graphEdges, Options options) {
+    public BlossomVState(Graph<V, E> graph, BlossomVNode[] nodes, BlossomVEdge[] edges,
+                         int nodeNum, int edgeNum, int treeNum,
+                         List<V> graphVertices, List<E> graphEdges, BlossomVOptions options) {
         this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;
@@ -120,8 +120,8 @@ class State<V, E> {
      * @param from the tail of the directed tree edge
      * @param to   the head of the directed tree edge
      */
-    public static TreeEdge addTreeEdge(Tree from, Tree to) {
-        TreeEdge treeEdge = new TreeEdge();
+    public static BlossomVTreeEdge addTreeEdge(BlossomVTree from, BlossomVTree to) {
+        BlossomVTreeEdge treeEdge = new BlossomVTreeEdge();
 
         treeEdge.head[0] = to;
         treeEdge.head[1] = from;
@@ -149,9 +149,9 @@ class State<V, E> {
      *
      * @param tree the tree whose nodes will be printed
      */
-    public static void printTreeNodes(Tree tree) {
+    public static void printTreeNodes(BlossomVTree tree) {
         System.out.println("Printing tree nodes");
-        for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
             System.out.println(iterator.next());
         }
     }
@@ -161,9 +161,9 @@ class State<V, E> {
      *
      * @param blossomNode the node to start from
      */
-    public static void printBlossomNodes(Node blossomNode) {
+    public static void printBlossomNodes(BlossomVNode blossomNode) {
         System.out.println("Printing blossom nodes");
-        Node current = blossomNode;
+        BlossomVNode current = blossomNode;
         do {
             System.out.println(current);
             current = current.blossomSibling.getOpposite(current);
@@ -175,11 +175,11 @@ class State<V, E> {
      *
      * @param tree the tree whose adjacent trees' variables are modified
      */
-    public void setCurrentEdges(Tree tree) {
-        TreeEdge treeEdge;
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+    public void setCurrentEdges(BlossomVTree tree) {
+        BlossomVTreeEdge treeEdge;
+        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             treeEdge = iterator.next();
-            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
+            BlossomVTree opposite = treeEdge.head[iterator.getCurrentDirection()];
             opposite.currentEdge = treeEdge;
             opposite.currentDirection = iterator.getCurrentDirection();
         }
@@ -190,9 +190,9 @@ class State<V, E> {
      *
      * @param tree the tree whose adjacent trees' currentEdges variable is modified
      */
-    public void clearCurrentEdges(Tree tree) {
+    public void clearCurrentEdges(BlossomVTree tree) {
         tree.currentEdge = null;
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
         }
     }
@@ -204,7 +204,7 @@ class State<V, E> {
      * @param to   the new edge's tail
      * @param edge the edge whose tail is being changed
      */
-    public void moveEdgeTail(Node from, Node to, Edge edge) {
+    public void moveEdgeTail(BlossomVNode from, BlossomVNode to, BlossomVEdge edge) {
         int dir = edge.getDirFrom(from);
         from.removeEdge(edge, dir);
         to.addEdge(edge, dir);
@@ -217,7 +217,7 @@ class State<V, E> {
      * @param blossomFormingEdge the (+,+) edge in the blossom
      * @return a new instance of blossom nodes iterator
      */
-    public BlossomNodesIterator blossomNodesIterator(Node root, Edge blossomFormingEdge) {
+    public BlossomNodesIterator blossomNodesIterator(BlossomVNode root, BlossomVEdge blossomFormingEdge) {
         return new BlossomNodesIterator(root, blossomFormingEdge);
     }
 
@@ -226,24 +226,24 @@ class State<V, E> {
      * (+,+) edge and goes up to the blossom root. These two paths to the blossom root are called branches.
      * The branch of the blossomFormingEdge.head[0] has direction 0, another one has direction 1.
      * <p>
-     * <b>Node:</b> the nodes returned by this iterator aren't consecutive
+     * <b>BlossomVNode:</b> the nodes returned by this iterator aren't consecutive
      * <p>
      * <b>Note:</b> this iterator must return the blossom root in the first branch, i.e. when the
      * direction if 0. This feature is needed to setup the blossomSibling references correctly
      */
-    public class BlossomNodesIterator implements Iterator<Node> {
+    public class BlossomNodesIterator implements Iterator<BlossomVNode> {
         /**
          * Blossom's root
          */
-        private Node root;
+        private BlossomVNode root;
         /**
          * The node this iterator is currently on
          */
-        private Node currentNode;
+        private BlossomVNode currentNode;
         /**
          * Helper variable, is used to determine whether currentNode has been returned or not
          */
-        private Node current;
+        private BlossomVNode current;
         /**
          * The current direction of this iterator
          */
@@ -251,7 +251,7 @@ class State<V, E> {
         /**
          * The (+, +) edge of the blossom
          */
-        private Edge blossomFormingEdge;
+        private BlossomVEdge blossomFormingEdge;
 
         /**
          * Constructs a new BlossomNodeIterator for the {@code root} and {@code blossomFormingEdge}
@@ -260,7 +260,7 @@ class State<V, E> {
          *                           node in the blossom)
          * @param blossomFormingEdge a (+, +) edge in the blossom
          */
-        public BlossomNodesIterator(Node root, Edge blossomFormingEdge) {
+        public BlossomNodesIterator(BlossomVNode root, BlossomVEdge blossomFormingEdge) {
             this.root = root;
             this.blossomFormingEdge = blossomFormingEdge;
             currentNode = current = blossomFormingEdge.head[0];
@@ -284,11 +284,11 @@ class State<V, E> {
         }
 
         @Override
-        public Node next() {
+        public BlossomVNode next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Node result = current;
+            BlossomVNode result = current;
             current = null;
             return result;
         }
@@ -298,7 +298,7 @@ class State<V, E> {
          *
          * @return an unvisited node in the blossom
          */
-        private Node advance() {
+        private BlossomVNode advance() {
             if (currentNode == null) {
                 return null;
             }

@@ -44,15 +44,15 @@ import static org.junit.Assert.*;
  */
 @RunWith(Parameterized.class)
 public class KolmogorovMinimumWeightPerfectMatchingTest {
-    private Options options;
+    private BlossomVOptions options;
 
-    public KolmogorovMinimumWeightPerfectMatchingTest(Options options) {
+    public KolmogorovMinimumWeightPerfectMatchingTest(BlossomVOptions options) {
         this.options = options;
     }
 
     @Parameterized.Parameters
     public static Object[] params() {
-        return Options.ALL_OPTIONS;
+        return BlossomVOptions.ALL_OPTIONS;
     }
 
     /**

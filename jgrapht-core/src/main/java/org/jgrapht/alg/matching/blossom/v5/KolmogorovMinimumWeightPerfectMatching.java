@@ -24,7 +24,7 @@ import org.jgrapht.graph.AsUndirectedGraph;
 
 import java.util.*;
 
-import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 
 /**
  * TODO: write complete class description
@@ -32,8 +32,8 @@ import static org.jgrapht.alg.matching.blossom.v5.Options.DualUpdateStrategy.MUL
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
- * @see PrimalUpdater
- * @see DualUpdater
+ * @see BlossomVPrimalUpdater
+ * @see BlossomVDualUpdater
  * @since June 2018
  */
 public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlgorithm<V, E> {
@@ -60,7 +60,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Default options
      */
-    private static final Options DEFAULT_OPTIONS = new Options();
+    private static final BlossomVOptions DEFAULT_OPTIONS = new BlossomVOptions();
 
     /**
      * The graph we are matching on
@@ -70,15 +70,15 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Current state of the algorithm
      */
-    private State<V, E> state;
+    private BlossomVState<V, E> state;
     /**
      * Perform primal operations (grow, augment, shrink and expand)
      */
-    private PrimalUpdater<V, E> primalUpdater;
+    private BlossomVPrimalUpdater<V, E> primalUpdater;
     /**
      * Performs dual updates using the strategy defined by the {@code options}
      */
-    private DualUpdater<V, E> dualUpdater;
+    private BlossomVDualUpdater<V, E> dualUpdater;
     /**
      * The computed matching of the {@code graph}
      */
@@ -88,9 +88,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      */
     private DualSolution dualSolution;
     /**
-     * Options used by the algorithm to getMatching the problem instance
+     * BlossomVOptions used by the algorithm to getMatching the problem instance
      */
-    private Options options;
+    private BlossomVOptions options;
 
     /**
      * Constructs a new instance of the algorithm with the default options for it.
@@ -107,7 +107,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * @param graph   the graph a minimum weight perfect matching would be searched in
      * @param options the options which define the strategies for the initialization and dual updates
      */
-    public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph, Options options) {
+    public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph, BlossomVOptions options) {
         Objects.requireNonNull(graph);
         if ((graph.vertexSet().size() & 1) == 1) {
             throw new IllegalArgumentException(NO_PERFECT_MATCHING);
@@ -147,17 +147,17 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     private void solve() {
-        Initializer<V, E> initializer = new Initializer<>(graph);
+        BlossomVInitializer<V, E> initializer = new BlossomVInitializer<>(graph);
         this.state = initializer.initialize(options);
-        this.primalUpdater = new PrimalUpdater<>(state);
-        this.dualUpdater = new DualUpdater<>(state, primalUpdater);
+        this.primalUpdater = new BlossomVPrimalUpdater<>(state);
+        this.dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
         if (DEBUG)
             printMap();
 
-        Node currentRoot;
-        Node nextRoot;
-        Node nextNextRoot = null;
-        Tree tree;
+        BlossomVNode currentRoot;
+        BlossomVNode nextRoot;
+        BlossomVNode nextNextRoot = null;
+        BlossomVTree tree;
 
         while (true) {
             int cycleTreeNum = state.treeNum;
@@ -189,8 +189,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                         System.out.println("Current tree is " + tree + ", current root is " + currentRoot);
                     }
 
-                    Edge edge;
-                    Node node;
+                    BlossomVEdge edge;
+                    BlossomVNode node;
                     if (!tree.plusInfinityEdges.isEmpty()) {
                         // can grow tree
                         edge = tree.plusInfinityEdges.findMin().getValue();
@@ -292,9 +292,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         if (matching == null) {
             return -1;
         }
-        Edge edge;
+        BlossomVEdge edge;
         E graphEdge;
-        Node a, b;
+        BlossomVNode a, b;
         double error = testNonNegativity();
         Set<E> matchedEdges = matching.getEdges();
         for (int i = 0; i < state.graphEdges.size(); i++) {
@@ -303,7 +303,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             double slack = graph.getEdgeWeight(graphEdge);
             a = edge.headOriginal[0];
             b = edge.headOriginal[1];
-            Pair<Node, Node> lca = lca(a, b);
+            Pair<BlossomVNode, BlossomVNode> lca = lca(a, b);
             slack -= totalDual(a, lca.getFirst());
             slack -= totalDual(b, lca.getSecond());
             if (lca.getFirst() == lca.getSecond()) {
@@ -322,12 +322,12 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @param tree the tree whose adjacent trees' variables are modified
      */
-    private void setCurrentEdgesAndTryToAugment(Tree tree) {
-        Edge edge;
-        TreeEdge treeEdge;
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+    private void setCurrentEdgesAndTryToAugment(BlossomVTree tree) {
+        BlossomVEdge edge;
+        BlossomVTreeEdge treeEdge;
+        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             treeEdge = iterator.next();
-            Tree opposite = treeEdge.head[iterator.getCurrentDirection()];
+            BlossomVTree opposite = treeEdge.head[iterator.getCurrentDirection()];
             if (!treeEdge.plusPlusEdges.isEmpty()) {
                 edge = treeEdge.plusPlusEdges.findMin().getValue();
                 if (edge.slack <= tree.eps + opposite.eps) {
@@ -349,8 +349,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * @return true iff the condition described above holds
      */
     private double testNonNegativity() {
-        Node[] nodes = state.nodes;
-        Node node;
+        BlossomVNode[] nodes = state.nodes;
+        BlossomVNode node;
         double error = 0;
         for (int i = 0; i < state.nodeNum; i++) {
             node = nodes[i].blossomParent;
@@ -374,12 +374,12 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * @param end   the node to end with
      * @return the sum = start.dual + start.blossomParent.dual + ... + end.dual
      */
-    private double totalDual(Node start, Node end) {
+    private double totalDual(BlossomVNode start, BlossomVNode end) {
         if (end == start) {
             return start.getTrueDual();
         } else {
             double result = 0;
-            Node current = start;
+            BlossomVNode current = start;
             do {
                 result += current.getTrueDual();
                 current = current.blossomParent;
@@ -397,11 +397,11 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * @param b a vertex to search a lca of
      * @return either an lca blossom of {@code a} and {@code b} or their outermost blossoms
      */
-    private Pair<Node, Node> lca(Node a, Node b) {
-        Node[] branches = new Node[]{a, b};
+    private Pair<BlossomVNode, BlossomVNode> lca(BlossomVNode a, BlossomVNode b) {
+        BlossomVNode[] branches = new BlossomVNode[]{a, b};
         int dir = 0;
-        Node varNode;
-        Pair<Node, Node> result;
+        BlossomVNode varNode;
+        Pair<BlossomVNode, BlossomVNode> result;
         while (true) {
             if (branches[dir].isMarked) {
                 result = new Pair<>(branches[dir], branches[dir]);
@@ -433,7 +433,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @param node the node to start from
      */
-    private void clearMarked(Node node) {
+    private void clearMarked(BlossomVNode node) {
         do {
             node.isMarked = false;
             node = node.blossomParent;
@@ -444,8 +444,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * Clears the marking of all nodes and pseudonodes
      */
     private void clearMarked() {
-        Node[] nodes = state.nodes;
-        Node current;
+        BlossomVNode[] nodes = state.nodes;
+        BlossomVNode current;
         for (int i = 0; i < state.nodeNum; i++) {
             current = nodes[i];
             do {
@@ -473,19 +473,19 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     private void finish() {
         Set<E> edges = new HashSet<>();
         double weight = 0;
-        Node[] nodes = state.nodes;
-        Node blossomRoot;
-        Node node;
-        Node nextNode;
-        Node blossomPrev;
-        Node blossom;
+        BlossomVNode[] nodes = state.nodes;
+        BlossomVNode blossomRoot;
+        BlossomVNode node;
+        BlossomVNode nextNode;
+        BlossomVNode blossomPrev;
+        BlossomVNode blossom;
         E graphEdge;
 
         if (DEBUG) {
             System.out.println("Finishing matching");
         }
 
-        List<Node> processed = new LinkedList<>();
+        List<BlossomVNode> processed = new LinkedList<>();
 
         for (int i = 0; i < state.nodeNum; i++) {
             if (nodes[i].matched == null) {
@@ -528,7 +528,7 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     blossom = blossomPrev;
                     blossomPrev = blossom.blossomGrandparent;
                 }
-                for (Node processedNode : processed) {
+                for (BlossomVNode processedNode : processed) {
                     processedNode.isProcessed = false;
                 }
                 processed.clear();
@@ -550,9 +550,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * one step down to some node that belongs to that pseudonode
      */
     private void prepareForDualSolution() {
-        Node[] nodes = state.nodes;
-        Node current;
-        Node prev;
+        BlossomVNode[] nodes = state.nodes;
+        BlossomVNode current;
+        BlossomVNode prev;
         for (int i = 0; i < state.nodeNum; i++) {
             current = nodes[i];
             prev = null;
@@ -574,13 +574,13 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * @param pseudonode   the pseudonode whose contracted nodes are computed
      * @param blossomNodes the mapping from pseudonodes to the original nodes contained in them
      */
-    private Set<V> getBlossomNodes(Node pseudonode, Map<Node, Set<V>> blossomNodes) {
+    private Set<V> getBlossomNodes(BlossomVNode pseudonode, Map<BlossomVNode, Set<V>> blossomNodes) {
         if (blossomNodes.containsKey(pseudonode)) {
             return blossomNodes.get(pseudonode);
         }
         Set<V> result = new HashSet<>();
-        Node endNode = pseudonode.blossomGrandparent;
-        Node current = endNode;
+        BlossomVNode endNode = pseudonode.blossomGrandparent;
+        BlossomVNode current = endNode;
         do {
             if (current.isBlossom) {
                 if (!blossomNodes.containsKey(current)) {
@@ -604,9 +604,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      */
     private DualSolution computeDualSolution() {
         Map<Set<V>, Double> dualMap = new HashMap<>();
-        Map<Node, Set<V>> nodesInBlossoms = new HashMap<>();
-        Node[] nodes = state.nodes;
-        Node current;
+        Map<BlossomVNode, Set<V>> nodesInBlossoms = new HashMap<>();
+        BlossomVNode[] nodes = state.nodes;
+        BlossomVNode current;
         prepareForDualSolution();
         for (int i = 0; i < state.nodeNum; i++) {
             current = nodes[i];
@@ -634,18 +634,18 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * Debug method
      */
     private void printState() {
-        Node[] nodes = state.nodes;
-        Edge[] edges = state.edges;
+        BlossomVNode[] nodes = state.nodes;
+        BlossomVEdge[] edges = state.edges;
         System.out.println();
         for (int i = 0; i < 20; i++) {
             System.out.print("-");
         }
         System.out.println();
-        Set<Edge> matched = new HashSet<>();
+        Set<BlossomVEdge> matched = new HashSet<>();
         for (int i = 0; i < state.nodeNum; i++) {
-            Node node = nodes[i];
+            BlossomVNode node = nodes[i];
             if (node.matched != null) {
-                Edge matchedEdge = node.matched;
+                BlossomVEdge matchedEdge = node.matched;
                 matched.add(node.matched);
                 if (matchedEdge.head[0].matched == null || matchedEdge.head[1].matched == null) {
                     System.out.println("Problem with edge " + matchedEdge);
@@ -668,8 +668,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      */
     private void printTrees() {
         System.out.println("Printing trees");
-        for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-            Tree tree = root.tree;
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+            BlossomVTree tree = root.tree;
             System.out.println(tree);
         }
     }

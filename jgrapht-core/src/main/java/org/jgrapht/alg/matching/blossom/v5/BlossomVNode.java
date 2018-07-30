@@ -17,13 +17,12 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeapNode;
 import org.jheaps.AddressableHeap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
 
 /**
  * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
@@ -38,11 +37,11 @@ import static org.jgrapht.alg.matching.blossom.v5.Node.Label.*;
  * @see KolmogorovMinimumWeightPerfectMatching
  * @since June 2018
  */
-class Node {
+class BlossomVNode {
     /**
-     * The reference to the Fibonacci heap node this {@code Node} is stored in
+     * The reference to the Fibonacci heap node this {@code BlossomVNode} is stored in
      */
-    AddressableHeap.Handle<Double, Node> handle;
+    AddressableHeap.Handle<Double, BlossomVNode> handle;
     /**
      * True if this node is a tree root, implies that this node is outer
      */
@@ -57,12 +56,12 @@ class Node {
     boolean isOuter;
     /**
      * Support variable to identify the nodes which have been "processed" in some sense by the algorithm.
-     * Is used in the shrink and expand operations. Is similar to the {@link Node#isMarked}
+     * Is used in the shrink and expand operations. Is similar to the {@link BlossomVNode#isMarked}
      */
     boolean isProcessed;
     /**
      * Support variable. In particular, it is used in shrink and expand operation to quickly determine whether a
-     * node belongs to the current blossom or not. Is similar to the {@link Node#isProcessed}
+     * node belongs to the current blossom or not. Is similar to the {@link BlossomVNode#isProcessed}
      */
     boolean isMarked;
 
@@ -72,9 +71,9 @@ class Node {
     Label label;
     /**
      * Two-element array of references of the first elements in the linked lists of edges that are incident to this node.
-     * first[0] is the first outgoing edge, first[1] is the first incoming edge, see {@link Edge}.
+     * first[0] is the first outgoing edge, first[1] is the first incoming edge, see {@link BlossomVEdge}.
      */
-    Edge[] first;
+    BlossomVEdge[] first;
     /**
      * Current dual variable of this node. If the node belongs to a tree and is an outer node, then this
      * value can be not valid. The true dual variable is $dual + tree.eps$ if this is a "+" node and
@@ -84,19 +83,19 @@ class Node {
     /**
      * An edge, which is incident to this node and currently belongs to the matching
      */
-    Edge matched;
+    BlossomVEdge matched;
     /**
      * Reference to the tree this node belongs to
      */
-    Tree tree;
+    BlossomVTree tree;
     /**
      * An edge to the parent node in the tree structure.
      */
-    Edge parentEdge;
+    BlossomVEdge parentEdge;
     /**
      * The first child in the linked list of children of this node.
      */
-    Node firstTreeChild;
+    BlossomVNode firstTreeChild;
 
     /**
      * Reference of the next tree sibling in the doubly linked list of children of the node parentEdge.getOpposite(this).
@@ -105,7 +104,7 @@ class Node {
      * If this node is a tree root, references the next tree root in the doubly linked list of tree roots or
      * is null if this is the last tree root.
      */
-    Node treeSiblingNext;
+    BlossomVNode treeSiblingNext;
     /**
      * Reference of the previous tree sibling in the doubly linked list of children of the node parentEdge.getOpposite(this).
      * If this node is the first child of the parent node (i.e. parentEdge.getOpposite(this).firstTreeChild == this),
@@ -115,23 +114,23 @@ class Node {
      * element in the linked list of tree roots is a dummy node which is stored in {@code nodes[nodeNum]}. This is done
      * to quickly determine the first actual tree root my {@code nodes[nodeNum].treeSiblingNext}.
      */
-    Node treeSiblingPrev;
+    BlossomVNode treeSiblingPrev;
 
     /**
      * Reference of the blossom this node is contained in. The blossom parent is always one layer higher
      * than this node.
      */
-    Node blossomParent;
+    BlossomVNode blossomParent;
     /**
      * Reference of some blossom that is higher than this node. This variable is used for the path compression technique.
      * It is used to quickly find the penultimate grandparent of this node, i.e. a grandparent, whose blossomParent is
      * an outer node.
      */
-    Node blossomGrandparent;
+    BlossomVNode blossomGrandparent;
     /**
      * Reference of the next node in the blossom structure in the circular singly linked list of blossom nodes
      */
-    Edge blossomSibling;
+    BlossomVEdge blossomSibling;
     /**
      * Position of this node in the array {@code state.nodes}. This helps to determine generic counterpart of
      * this node in constant time.
@@ -141,8 +140,8 @@ class Node {
     /**
      * Constructs a new "+" node with a {@link Label#PLUS} label.
      */
-    public Node(int pos) {
-        this.first = new Edge[2];
+    public BlossomVNode(int pos) {
+        this.first = new BlossomVEdge[2];
         this.label = PLUS;
         this.pos = pos;
     }
@@ -153,7 +152,7 @@ class Node {
      * @param edge edge to insert in the linked list of incident edge
      * @param dir  the direction of this edge with respect to this node
      */
-    public void addEdge(Edge edge, int dir) {
+    public void addEdge(BlossomVEdge edge, int dir) {
         if (first[dir] == null) {
             first[dir] = edge.next[dir] = edge.prev[dir] = edge;
         } else {
@@ -176,7 +175,7 @@ class Node {
      * @param edge the edge to remove
      * @param dir  the directions of the {@code edge} with respect to this node
      */
-    public void removeEdge(Edge edge, int dir) {
+    public void removeEdge(BlossomVEdge edge, int dir) {
         if (edge.prev[dir] == edge) {
             // it is the only edge of this node in the direction dir
             first[dir] = null;
@@ -195,8 +194,8 @@ class Node {
      *
      * @return the tree grandparent of this node
      */
-    public Node getTreeGrandparent() {
-        Node t = parentEdge.getOpposite(this);
+    public BlossomVNode getTreeGrandparent() {
+        BlossomVNode t = parentEdge.getOpposite(this);
         return t.parentEdge.getOpposite(t);
     }
 
@@ -205,7 +204,7 @@ class Node {
      *
      * @return node's tree parent or null if this node has no tree parent
      */
-    public Node getTreeParent() {
+    public BlossomVNode getTreeParent() {
         return parentEdge == null ? null : parentEdge.getOpposite(this);
     }
 
@@ -221,7 +220,7 @@ class Node {
      * @param parentEdge the edge between this node and {@code child}
      * @param grow       true if {@code child} is being grown
      */
-    public void addChild(Node child, Edge parentEdge, boolean grow) {
+    public void addChild(BlossomVNode child, BlossomVEdge parentEdge, boolean grow) {
         child.parentEdge = parentEdge;
         child.tree = tree;
         child.treeSiblingNext = firstTreeChild;
@@ -243,7 +242,7 @@ class Node {
      *
      * @return a node this node is matched to.
      */
-    public Node getOppositeMatched() {
+    public BlossomVNode getOppositeMatched() {
         return matched.getOpposite(this);
     }
 
@@ -283,12 +282,12 @@ class Node {
      *
      * @param blossom the node to which the children of the current node are moved
      */
-    public void moveChildrenTo(Node blossom) {
+    public void moveChildrenTo(BlossomVNode blossom) {
         if (firstTreeChild != null) {
             if (blossom.firstTreeChild == null) {
                 blossom.firstTreeChild = firstTreeChild;
             } else {
-                Node t = blossom.firstTreeChild.treeSiblingPrev;
+                BlossomVNode t = blossom.firstTreeChild.treeSiblingPrev;
                 // concatenating child lists
                 firstTreeChild.treeSiblingPrev.treeSiblingNext = blossom.firstTreeChild;
                 blossom.firstTreeChild.treeSiblingPrev = firstTreeChild.treeSiblingPrev;
@@ -308,11 +307,11 @@ class Node {
      *
      * @return the penultimate blossom of this node
      */
-    public Node getPenultimateBlossom() {
+    public BlossomVNode getPenultimateBlossom() {
         if (blossomParent == null) {
             return null; // strict mode, todo: remove
         }
-        Node current = this;
+        BlossomVNode current = this;
         while (true) {
             if (!current.blossomGrandparent.isOuter) {
                 current = current.blossomGrandparent;
@@ -325,8 +324,8 @@ class Node {
         }
         // now current references the penultimate blossom we were looking for
         // now we change blossomParent references to point to current
-        Node prev = this;
-        Node next;
+        BlossomVNode prev = this;
+        BlossomVNode next;
         while (prev != current) {
             next = prev.blossomGrandparent;
             prev.blossomGrandparent = current; // apply path compression
@@ -338,18 +337,18 @@ class Node {
 
     /**
      * Computes and returns the penultimate blossom of this node. The return value of this method
-     * always equals to the value returned by {@link Node#getPenultimateBlossom()}. However,
+     * always equals to the value returned by {@link BlossomVNode#getPenultimateBlossom()}. However,
      * the main difference is that this method changes the blossomGrandparent references to point
      * to the node that is previous to the resulting penultimate blossom.
      *
      * @return the penultimate blossom of this node
      */
-    public Node getPenultimateBlossomAndFixBlossomGrandparent() {
+    public BlossomVNode getPenultimateBlossomAndFixBlossomGrandparent() {
         if (blossomParent == null) {
             return null; // strict mode, todo: remove
         }
-        Node current = this;
-        Node prev = null;
+        BlossomVNode current = this;
+        BlossomVNode prev = null;
         while (true) {
             if (!current.blossomGrandparent.isOuter) {
                 prev = current;
@@ -365,8 +364,8 @@ class Node {
         // all the nodes, that are lower than prev, must have blossomGrandparent referencing
         // a node, that is not higher than prev
         if (prev != null) {
-            Node prevNode = this;
-            Node nextNode;
+            BlossomVNode prevNode = this;
+            BlossomVNode nextNode;
             while (prevNode != prev) {
                 nextNode = prevNode.blossomGrandparent;
                 prevNode.blossomGrandparent = prev;
@@ -429,7 +428,7 @@ class Node {
 
     @Override
     public String toString() {
-        return "Node pos = " + pos + ", dual: " + dual + ", true dual: " + getTrueDual()
+        return "BlossomVNode pos = " + pos + ", dual: " + dual + ", true dual: " + getTrueDual()
                 + ", label: " + label + (isMarked ? ", marked" : "") + (isProcessed ? ", processed" : "")
                 + (blossomParent == null || isOuter ? "" : ", blossomParent = " + blossomParent.pos) +
                 (matched == null ? "" : ", matched = " + matched);
@@ -459,7 +458,7 @@ class Node {
      * This iterator has a feature that during every step it knows the next edge it'll return to the caller.
      * That's why it is safe to modify the current edge (move it to another node, for example).
      */
-    public class IncidentEdgeIterator implements Iterator<Edge> {
+    public class IncidentEdgeIterator implements Iterator<BlossomVEdge> {
 
         /**
          * The direction of the current edge
@@ -473,7 +472,7 @@ class Node {
          * The edge that will be returned after the next call to {@link IncidentEdgeIterator#next()}.
          * Is null if all incident edges of the current node have been traversed.
          */
-        private Edge nextEdge;
+        private BlossomVEdge nextEdge;
 
         /**
          * Constructs a new instance of the IncidentEdgeIterator.
@@ -504,11 +503,11 @@ class Node {
         }
 
         @Override
-        public Edge next() {
+        public BlossomVEdge next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Edge result = nextEdge;
+            BlossomVEdge result = nextEdge;
             advance();
             return result;
         }

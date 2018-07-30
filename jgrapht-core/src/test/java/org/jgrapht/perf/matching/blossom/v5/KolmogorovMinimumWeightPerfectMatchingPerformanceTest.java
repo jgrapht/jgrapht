@@ -3,7 +3,7 @@ package org.jgrapht.perf.matching.blossom.v5;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching;
-import org.jgrapht.alg.matching.blossom.v5.Options;
+import org.jgrapht.alg.matching.blossom.v5.BlossomVOptions;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -19,14 +19,14 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 10, timeUnit = TimeUnit.MINUTES, time = 1)
 public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest {
 
-    private MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> testBlossomV(Data data, Options options) {
+    private MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> testBlossomV(Data data, BlossomVOptions options) {
         KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> matching = new KolmogorovMinimumWeightPerfectMatching<>(data.graph, data.options[data.optionNum]);
         return matching.getMatching();
     }
 
     @State(Scope.Benchmark)
     public static class Data {
-        public Options[] options = Options.ALL_OPTIONS;
+        public BlossomVOptions[] options = BlossomVOptions.ALL_OPTIONS;
         Graph<Integer, DefaultWeightedEdge> graph;
         @Param({"200", "500", "1000"})
         public int size;

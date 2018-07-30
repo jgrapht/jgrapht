@@ -17,7 +17,6 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeap;
 import org.jheaps.MergeableAddressableHeap;
 
 import java.util.HashMap;
@@ -43,8 +42,8 @@ public class BlossomVDebugger {
      * @param <E>   graph edge type
      * @return the mapping from original graph vertices to the internal nodes used in the algortihm
      */
-    public static <V, E> Map<V, Node> getVertexMap(State<V, E> state) {
-        Map<V, Node> vertexMap = new HashMap<>(state.nodeNum);
+    public static <V, E> Map<V, BlossomVNode> getVertexMap(BlossomVState<V, E> state) {
+        Map<V, BlossomVNode> vertexMap = new HashMap<>(state.nodeNum);
         for (int i = 0; i < state.nodeNum; i++) {
             vertexMap.put(state.graphVertices.get(i), state.nodes[i]);
         }
@@ -59,8 +58,8 @@ public class BlossomVDebugger {
      * @param <E>   graph edge type
      * @return the mapping from original graph edges to the internal edges used in the algorithm.
      */
-    public static <V, E> Map<E, Edge> getEdgeMap(State<V, E> state) {
-        Map<E, Edge> edgeMap = new HashMap<>(state.edgeNum);
+    public static <V, E> Map<E, BlossomVEdge> getEdgeMap(BlossomVState<V, E> state) {
+        Map<E, BlossomVEdge> edgeMap = new HashMap<>(state.edgeNum);
         for (int i = 0; i < state.edgeNum; i++) {
             edgeMap.put(state.graphEdges.get(i), state.edges[i]);
         }
@@ -73,9 +72,9 @@ public class BlossomVDebugger {
      * @param node some node
      * @return all edge incident to {@code node}
      */
-    public static Set<Edge> getEdgesOf(Node node) {
-        Set<Edge> edges = new HashSet<>();
-        for (Node.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
+    public static Set<BlossomVEdge> getEdgesOf(BlossomVNode node) {
+        Set<BlossomVEdge> edges = new HashSet<>();
+        for (BlossomVNode.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
             edges.add(iterator.next());
         }
         return edges;
@@ -87,9 +86,9 @@ public class BlossomVDebugger {
      * @param tree some alternating tree
      * @return all tree edges incident to {@code tree}
      */
-    public static Set<TreeEdge> getTreeEdgesOf(Tree tree) {
-        Set<TreeEdge> result = new HashSet<>();
-        for (Tree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+    public static Set<BlossomVTreeEdge> getTreeEdgesOf(BlossomVTree tree) {
+        Set<BlossomVTreeEdge> result = new HashSet<>();
+        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
             result.add(iterator.next());
         }
         return result;
@@ -103,9 +102,9 @@ public class BlossomVDebugger {
      * @param to   some alternating tree
      * @return the first tree edge between {@code from} and {@code to}
      */
-    public static TreeEdge getTreeEdge(Tree from, Tree to) {
-        TreeEdge treeEdge = null;
-        for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
+    public static BlossomVTreeEdge getTreeEdge(BlossomVTree from, BlossomVTree to) {
+        BlossomVTreeEdge treeEdge = null;
+        for (BlossomVTree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
             treeEdge = iterator.next();
             if (treeEdge.head[iterator.getCurrentDirection()] == to) {
                 return treeEdge;
@@ -122,10 +121,10 @@ public class BlossomVDebugger {
      * @param to   some alternating tree
      * @return all tree edges between {@code from} and {@code to}
      */
-    public static Set<TreeEdge> getTreeEdgesBetween(Tree from, Tree to) {
-        Set<TreeEdge> result = new HashSet<>();
-        for (Tree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
-            TreeEdge treeEdge = iterator.next();
+    public static Set<BlossomVTreeEdge> getTreeEdgesBetween(BlossomVTree from, BlossomVTree to) {
+        Set<BlossomVTreeEdge> result = new HashSet<>();
+        for (BlossomVTree.TreeEdgeIterator iterator = from.treeEdgeIterator(); iterator.hasNext(); ) {
+            BlossomVTreeEdge treeEdge = iterator.next();
             if (treeEdge.head[iterator.getCurrentDirection()] == to) {
                 result.add(treeEdge);
             }
@@ -139,9 +138,9 @@ public class BlossomVDebugger {
      * @param node some node
      * @return all tree children of the {@code node}
      */
-    public static Set<Node> getChildrenOf(Node node) {
-        Set<Node> children = new HashSet<>();
-        for (Node child = node.firstTreeChild; child != null; child = child.treeSiblingNext) {
+    public static Set<BlossomVNode> getChildrenOf(BlossomVNode node) {
+        Set<BlossomVNode> children = new HashSet<>();
+        for (BlossomVNode child = node.firstTreeChild; child != null; child = child.treeSiblingNext) {
             children.add(child);
         }
         return children;
@@ -155,9 +154,9 @@ public class BlossomVDebugger {
      * @param <E>   graph edge type
      * @return all tree roots of the alternating trees stored in the {@code state}
      */
-    public static <V, E> Set<Node> getTreeRoots(State<V, E> state) {
-        Set<Node> treeRoots = new HashSet<>();
-        for (Node root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+    public static <V, E> Set<BlossomVNode> getTreeRoots(BlossomVState<V, E> state) {
+        Set<BlossomVNode> treeRoots = new HashSet<>();
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
             treeRoots.add(root);
         }
         return treeRoots;
@@ -169,9 +168,9 @@ public class BlossomVDebugger {
      * @param tree an alternating tree
      * @return a set of all nodes of the {@code tree}
      */
-    public static Set<Node> getTreeNodes(Tree tree) {
-        Set<Node> nodes = new HashSet<>();
-        for (Tree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
+    public static Set<BlossomVNode> getTreeNodes(BlossomVTree tree) {
+        Set<BlossomVNode> nodes = new HashSet<>();
+        for (BlossomVTree.TreeNodeIterator iterator = tree.treeNodeIterator(); iterator.hasNext(); ) {
             nodes.add(iterator.next());
         }
         return nodes;
@@ -185,7 +184,7 @@ public class BlossomVDebugger {
      * @param tree     an alternating tree
      * @return dir such that {@code treeEdge.head[dir] != tree}
      */
-    public static int getDirToOpposite(TreeEdge treeEdge, Tree tree) {
+    public static int getDirToOpposite(BlossomVTreeEdge treeEdge, BlossomVTree tree) {
         return treeEdge.head[0] == tree ? 1 : 0;
     }
 
@@ -196,7 +195,7 @@ public class BlossomVDebugger {
      * @param tree some alternating tree
      * @return current heap of (+, -) cross-tree edges if {@code tree} is considered as the current tree.
      */
-    public static MergeableAddressableHeap<Double, Edge> getPlusMinusHeap(TreeEdge treeEdge, Tree tree) {
+    public static MergeableAddressableHeap<Double, BlossomVEdge> getPlusMinusHeap(BlossomVTreeEdge treeEdge, BlossomVTree tree) {
         return treeEdge.head[0] == tree ? treeEdge.getCurrentPlusMinusHeap(1) : treeEdge.getCurrentPlusMinusHeap(0);
     }
 
@@ -207,7 +206,7 @@ public class BlossomVDebugger {
      * @param tree some alternating tree
      * @return current heap of (-, +) cross-tree edges if {@code tree} is considered as the current tree.
      */
-    public static MergeableAddressableHeap<Double, Edge> getMinusPlusHeap(TreeEdge treeEdge, Tree tree) {
+    public static MergeableAddressableHeap<Double, BlossomVEdge> getMinusPlusHeap(BlossomVTreeEdge treeEdge, BlossomVTree tree) {
         return treeEdge.head[0] == tree ? treeEdge.getCurrentMinusPlusHeap(1) : treeEdge.getCurrentMinusPlusHeap(0);
     }
 }

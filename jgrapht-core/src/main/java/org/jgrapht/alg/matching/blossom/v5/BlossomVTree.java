@@ -17,7 +17,6 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeapNode;
 import org.jheaps.MergeableAddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
@@ -32,10 +31,10 @@ import java.util.NoSuchElementException;
  *
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
- * @see TreeEdge
+ * @see BlossomVTreeEdge
  * @since June 2018
  */
-class Tree {
+class BlossomVTree {
     /**
      * Variable for debug purposes, todo: remove
      */
@@ -44,16 +43,16 @@ class Tree {
      * Two-element array of the first elements in the circular doubly linked lists of incident tree
      * edge in each direction.
      */
-    TreeEdge[] first;
+    BlossomVTreeEdge[] first;
     /**
      * This variable is used to quickly determine the edge between two trees during primal operations.
      * <p>
      * Let $T$ be a tree that is being processed in the main loop. For every tree $T'$ that is adjacent
-     * to $T$ this variable is set to the {@code TreeEdge} that connects both trees. This variable also
+     * to $T$ this variable is set to the {@code BlossomVTreeEdge} that connects both trees. This variable also
      * helps to indicate whether a pair of trees is adjacent or not. This variable is set to {@code null}
      * when no primal operation can be applied to the tree $T$.
      */
-    TreeEdge currentEdge;
+    BlossomVTreeEdge currentEdge;
     /**
      * Used to quickly determine the opposite tree during primal operations.
      */
@@ -70,23 +69,23 @@ class Tree {
     /**
      * the root of this tree
      */
-    Node root;
+    BlossomVNode root;
     /**
      * Supporting variable, used in updating duals via connected components
      */
-    Tree nextTree;
+    BlossomVTree nextTree;
     /**
      * The heap of (+,+) edges of this tree
      */
-    MergeableAddressableHeap<Double, Edge> plusPlusEdges;
+    MergeableAddressableHeap<Double, BlossomVEdge> plusPlusEdges;
     /**
      * The heap of (+, inf) edges of this tree
      */
-    MergeableAddressableHeap<Double, Edge> plusInfinityEdges;
+    MergeableAddressableHeap<Double, BlossomVEdge> plusInfinityEdges;
     /**
      * The heap of "-" blossoms of this tree
      */
-    MergeableAddressableHeap<Double, Node> minusBlossoms;
+    MergeableAddressableHeap<Double, BlossomVNode> minusBlossoms;
     /**
      * Variable for debug purposes, todo: remove
      */
@@ -95,7 +94,7 @@ class Tree {
     /**
      * Empty constructor
      */
-    public Tree() {
+    public BlossomVTree() {
     }
 
     /**
@@ -103,11 +102,11 @@ class Tree {
      *
      * @param root the root of this tree
      */
-    public Tree(Node root) {
+    public BlossomVTree(BlossomVNode root) {
         this.root = root;
         root.tree = this;
         root.isTreeRoot = true;
-        first = new TreeEdge[2];
+        first = new BlossomVTreeEdge[2];
         plusPlusEdges = new PairingHeap<>();
         plusInfinityEdges = new PairingHeap<>();
         minusBlossoms = new PairingHeap<>();
@@ -116,7 +115,7 @@ class Tree {
 
     @Override
     public String toString() {
-        return "Tree pos=" + id + ", eps = " + eps + ", root = " + root;
+        return "BlossomVTree pos=" + id + ", eps = " + eps + ", root = " + root;
     }
 
     /**
@@ -124,7 +123,7 @@ class Tree {
      *
      * @param edge a (+, +) edge
      */
-    public void addPlusPlusEdge(Edge edge) {
+    public void addPlusPlusEdge(BlossomVEdge edge) {
         edge.handle =  plusPlusEdges.insert(edge.slack, edge);
     }
 
@@ -133,7 +132,7 @@ class Tree {
      *
      * @param edge a (+, inf) edge
      */
-    public void addPlusInfinityEdge(Edge edge) {
+    public void addPlusInfinityEdge(BlossomVEdge edge) {
         edge.handle = plusInfinityEdges.insert(edge.slack, edge);
     }
 
@@ -142,7 +141,7 @@ class Tree {
      *
      * @param blossom a "-" blossom
      */
-    public void addMinusBlossom(Node blossom) {
+    public void addMinusBlossom(BlossomVNode blossom) {
         blossom.handle = minusBlossoms.insert(blossom.dual, blossom);
     }
 
@@ -151,7 +150,7 @@ class Tree {
      *
      * @param edge the edge to remove
      */
-    public void removePlusPlusEdge(Edge edge) {
+    public void removePlusPlusEdge(BlossomVEdge edge) {
         edge.handle.delete();
         edge.handle = null; // strict mode, todo: remove
     }
@@ -161,7 +160,7 @@ class Tree {
      *
      * @param edge the edge to remove
      */
-    public void removePlusInfinityEdge(Edge edge) {
+    public void removePlusInfinityEdge(BlossomVEdge edge) {
         edge.handle.delete();
         edge.handle = null; // strict mode, todo: remove
     }
@@ -171,7 +170,7 @@ class Tree {
      *
      * @param blossom the blossom to remove
      */
-    public void removeMinusBlossom(Node blossom) {
+    public void removeMinusBlossom(BlossomVNode blossom) {
         blossom.handle.delete();
         blossom.handle = null; // strict mode: todo: remove
     }
@@ -197,7 +196,7 @@ class Tree {
     /**
      * An iterator over tree edges incident to this tree.
      */
-    public class TreeEdgeIterator implements Iterator<TreeEdge> {
+    public class TreeEdgeIterator implements Iterator<BlossomVTreeEdge> {
         /**
          * The direction of the {@code currentEdge}
          */
@@ -205,11 +204,11 @@ class Tree {
         /**
          * The tree edge this iterator is currently on
          */
-        private TreeEdge currentEdge;
+        private BlossomVTreeEdge currentEdge;
         /**
          * Auxiliary variable to determine whether currentEdge has been returned or not
          */
-        private TreeEdge result;
+        private BlossomVTreeEdge result;
 
         /**
          * Constructs a new TreeEdgeIterator
@@ -234,11 +233,11 @@ class Tree {
         }
 
         @Override
-        public TreeEdge next() {
+        public BlossomVTreeEdge next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            TreeEdge res = result;
+            BlossomVTreeEdge res = result;
             result = null;
             return res;
         }
@@ -259,7 +258,7 @@ class Tree {
          *
          * @return the next tree edge or null if all edges have been traversed already
          */
-        private TreeEdge advance() {
+        private BlossomVTreeEdge advance() {
             if (currentEdge == null) {
                 return null;
             }
@@ -275,19 +274,19 @@ class Tree {
     /**
      * An iterator over tree nodes
      */
-    public class TreeNodeIterator implements Iterator<Node> {
+    public class TreeNodeIterator implements Iterator<BlossomVNode> {
         /**
          * The node this iterator is currently on
          */
-        private Node currentNode;
+        private BlossomVNode currentNode;
         /**
          * Support variable to determine whether {@code currentNode} has been returned or not
          */
-        private Node current;
+        private BlossomVNode current;
         /**
          * Stores next tree root with respect to the root of this tree
          */
-        private Node stop;
+        private BlossomVNode stop;
 
         /**
          * Constructs a new TreeNodeIterator
@@ -307,11 +306,11 @@ class Tree {
         }
 
         @Override
-        public Node next() {
+        public BlossomVNode next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Node result = current;
+            BlossomVNode result = current;
             current = null;
             return result;
         }
@@ -321,7 +320,7 @@ class Tree {
          *
          * @return the next tree node
          */
-        private Node advance() {
+        private BlossomVNode advance() {
             if (currentNode == null) {
                 return null;
             } else if (currentNode.firstTreeChild != null) {

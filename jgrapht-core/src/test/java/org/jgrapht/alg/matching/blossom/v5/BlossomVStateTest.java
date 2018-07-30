@@ -28,21 +28,21 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for the {@link State}
+ * Unit tests for the {@link BlossomVState}
  *
  * @author Timofey Chudakov
  */
-public class StateTest {
+public class BlossomVStateTest {
 
     @Test
     public void testAddTreeEdge() {
-        Tree tree1 = new Tree(new Node(-1)); // positions doesn't matter here
-        Tree tree2 = new Tree(new Node(-1));
-        TreeEdge treeEdge = State.addTreeEdge(tree1, tree2);
+        BlossomVTree tree1 = new BlossomVTree(new BlossomVNode(-1)); // positions doesn't matter here
+        BlossomVTree tree2 = new BlossomVTree(new BlossomVNode(-1));
+        BlossomVTreeEdge treeEdge = BlossomVState.addTreeEdge(tree1, tree2);
         int currentDir = tree2.currentDirection;
         assertEquals(tree2, treeEdge.head[currentDir]);
         assertEquals(tree1, treeEdge.head[1 - currentDir]);
@@ -55,18 +55,18 @@ public class StateTest {
         DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
-        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(NONE));
-        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
-        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomVOptions(NONE));
+        Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = vertexMap.get(1);
-        Node node2 = vertexMap.get(2);
-        Node node3 = vertexMap.get(3);
+        BlossomVNode node1 = vertexMap.get(1);
+        BlossomVNode node2 = vertexMap.get(2);
+        BlossomVNode node3 = vertexMap.get(3);
 
-        Edge edge12 = edgeMap.get(e12);
-        Edge edge13 = edgeMap.get(e13);
-        Edge edge23 = edgeMap.get(e23);
+        BlossomVEdge edge12 = edgeMap.get(e12);
+        BlossomVEdge edge13 = edgeMap.get(e13);
+        BlossomVEdge edge23 = edgeMap.get(e23);
 
         state.moveEdgeTail(node2, node3, edge12);
         assertEquals(node3, edge12.getOpposite(node1));

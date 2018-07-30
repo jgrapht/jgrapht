@@ -26,31 +26,31 @@ import org.junit.Test;
 import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.GREEDY;
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 /**
- * Unit tests for the {@link Initializer}
+ * Unit tests for the {@link BlossomVInitializer}
  *
  * @author Timofey Chudakov
  */
-public class InitializerTest {
+public class BlossomVInitializerTest {
 
     @Test
     public void testGreedyInitialization() {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
 
-        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(GREEDY));
-        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
-        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomVOptions(GREEDY));
+        Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        Node node1 = vertexMap.get(1);
-        Node node2 = vertexMap.get(2);
+        BlossomVNode node1 = vertexMap.get(1);
+        BlossomVNode node2 = vertexMap.get(2);
 
-        Edge edge12 = edgeMap.get(e12);
+        BlossomVEdge edge12 = edgeMap.get(e12);
 
         assertEquals(5, node1.dual + node2.dual, EPS);
         assertEquals(0, edge12.slack, EPS);
@@ -83,37 +83,37 @@ public class InitializerTest {
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 5);
         graph.addVertex(7);
 
-        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(new Options(NONE));
-        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
-        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomVOptions(NONE));
+        Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
         assertEquals(7, state.nodeNum);
         assertEquals(7, state.treeNum);
         assertEquals(5, state.edgeNum);
 
-        Node node1 = vertexMap.get(1);
-        Node node2 = vertexMap.get(2);
-        Node node3 = vertexMap.get(3);
-        Node node4 = vertexMap.get(4);
-        Node node5 = vertexMap.get(5);
-        Node node6 = vertexMap.get(6);
-        Node node7 = vertexMap.get(7);
+        BlossomVNode node1 = vertexMap.get(1);
+        BlossomVNode node2 = vertexMap.get(2);
+        BlossomVNode node3 = vertexMap.get(3);
+        BlossomVNode node4 = vertexMap.get(4);
+        BlossomVNode node5 = vertexMap.get(5);
+        BlossomVNode node6 = vertexMap.get(6);
+        BlossomVNode node7 = vertexMap.get(7);
 
-        Tree tree1 = node1.tree;
-        Tree tree2 = node2.tree;
-        Tree tree3 = node3.tree;
-        Tree tree4 = node4.tree;
-        Tree tree5 = node5.tree;
-        Tree tree6 = node6.tree;
-        Tree tree7 = node7.tree;
+        BlossomVTree tree1 = node1.tree;
+        BlossomVTree tree2 = node2.tree;
+        BlossomVTree tree3 = node3.tree;
+        BlossomVTree tree4 = node4.tree;
+        BlossomVTree tree5 = node5.tree;
+        BlossomVTree tree6 = node6.tree;
+        BlossomVTree tree7 = node7.tree;
 
 
-        Edge edge12 = edgeMap.get(e12);
-        Edge edge23 = edgeMap.get(e23);
-        Edge edge25 = edgeMap.get(e25);
-        Edge edge45 = edgeMap.get(e45);
-        Edge edge56 = edgeMap.get(e56);
+        BlossomVEdge edge12 = edgeMap.get(e12);
+        BlossomVEdge edge23 = edgeMap.get(e23);
+        BlossomVEdge edge25 = edgeMap.get(e25);
+        BlossomVEdge edge45 = edgeMap.get(e45);
+        BlossomVEdge edge56 = edgeMap.get(e56);
 
         assertEquals(0, node1.dual, EPS);
         assertEquals(0, node2.dual, EPS);
@@ -145,8 +145,8 @@ public class InitializerTest {
         assertEquals(4, edge45.slack, EPS);
         assertEquals(5, edge56.slack, EPS);
 
-        Set<Node> actualRoots = BlossomVDebugger.getTreeRoots(state);
-        Collection<Node> expectedRoots = vertexMap.values();
+        Set<BlossomVNode> actualRoots = BlossomVDebugger.getTreeRoots(state);
+        Collection<BlossomVNode> expectedRoots = vertexMap.values();
         assertEquals(expectedRoots.size(), actualRoots.size());
         assertTrue(actualRoots.containsAll(expectedRoots));
 

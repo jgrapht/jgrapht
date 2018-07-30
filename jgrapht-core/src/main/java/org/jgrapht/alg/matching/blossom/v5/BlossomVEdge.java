@@ -17,7 +17,6 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.util.FibonacciHeapNode;
 import org.jheaps.AddressableHeap;
 
 /**
@@ -26,7 +25,7 @@ import org.jheaps.AddressableHeap;
  * Represents an edge between two nodes. Also, the minimum weight perfect matching problem is formulated on
  * an undirected graph, each edge has direction, i.e. it is an arc. According to this direction it is present in
  * two circular doubly linked lists of incident edges. The references to the next and previous edges of this list
- * are maintained via {@link Edge#next} and {@link Edge#prev} arrays.
+ * are maintained via {@link BlossomVEdge#next} and {@link BlossomVEdge#prev} arrays.
  * <p>
  * For example, let a $e = \{u, v\}$ be an edge in the graph $G = (V, E)$. Let's assume that after initialization
  * this edge has become directed from $u$ to $v$, i.e. now $e = (u, v)$. Then now edge $e$ belongs to the linked lists
@@ -39,7 +38,7 @@ import org.jheaps.AddressableHeap;
  * @see KolmogorovMinimumWeightPerfectMatching
  * @since June 2018
  */
-class Edge {
+class BlossomVEdge {
     /**
      * FibonacciHeapsNode of the FibonacciHeap this edge is stored in.
      * <p>
@@ -47,7 +46,7 @@ class Edge {
      * due to performance reasons. Therefore, no assumptions should be made about whether this edge belongs to some heap or not
      * based upon this variable being {@code null} or not.</em>
      */
-    AddressableHeap.Handle<Double, Edge> handle;
+    AddressableHeap.Handle<Double, BlossomVEdge> handle;
     /**
      * The slack of this edge. If this edge is an outer edge and doesn't connect 2 infinity nodes,
      * then its slack is subject to lazy delta spreading technique. Otherwise, it has a valid slack.
@@ -64,24 +63,24 @@ class Edge {
      * <p>
      * These values stay unchanged throughout the course of the algorithm.
      */
-    Node[] headOriginal;
+    BlossomVNode[] headOriginal;
     /**
      * A two-element array of current endpoints of this edge. These values change when previous endpoints are
      * contracted into blossoms or are expanded. For node head[0] this is an incoming edge (direction 1) and for
      * the node head[1] this is an outgoing edge (direction 0). This feature is used to be able to access the
      * opposite node via an edge by incidentEdgeIterator.next().head[incidentEdgeIterator.getDir()].
      */
-    Node[] head;
+    BlossomVNode[] head;
     /**
      * A two-element array of references to the previous elements in the circular doubly linked lists of edges.
      * Each list belongs to one of the <b>current</b> endpoints of this edge.
      */
-    Edge[] prev;
+    BlossomVEdge[] prev;
     /**
      * A two-element array of references to the next elements in the circular doubly linked lists of edges.
      * Each list belongs to one of the <b>current</b> endpoints of this edge.
      */
-    Edge[] next;
+    BlossomVEdge[] next;
     /**
      * Position of this edge in the array {@code state.edges}. This helps to determine generic counterpart of
      * this edge in constant time.
@@ -91,11 +90,11 @@ class Edge {
     /**
      * Constructs a new edge by initializing the arrays
      */
-    public Edge(int pos) {
-        headOriginal = new Node[2];
-        head = new Node[2];
-        next = new Edge[2];
-        prev = new Edge[2];
+    public BlossomVEdge(int pos) {
+        headOriginal = new BlossomVNode[2];
+        head = new BlossomVNode[2];
+        next = new BlossomVEdge[2];
+        prev = new BlossomVEdge[2];
         this.pos = pos;
     }
 
@@ -106,7 +105,7 @@ class Edge {
      * @param endpoint one of the current endpoints of this edge
      * @return node opposite to the {@code endpoint}
      */
-    public Node getOpposite(Node endpoint) {
+    public BlossomVNode getOpposite(BlossomVNode endpoint) {
         if (head[0] != endpoint && head[1] != endpoint) {
             return null; // strict mode, this code should never be executed
         }
@@ -120,7 +119,7 @@ class Edge {
      * @param endpoint one of the current endpoints of this edge
      * @return the original endpoint opposite to the {@code endpoint}
      */
-    public Node getCurrentOriginal(Node endpoint) {
+    public BlossomVNode getCurrentOriginal(BlossomVNode endpoint) {
         if (head[0] != endpoint && head[1] != endpoint) {
             return null; // strict mode, this code should never be executed
         }
@@ -134,13 +133,13 @@ class Edge {
      * @param current one of the current endpoint of this edge.
      * @return the direction from the {@code current}
      */
-    public int getDirFrom(Node current) {
+    public int getDirFrom(BlossomVNode current) {
         return head[0] == current ? 1 : 0;
     }
 
     @Override
     public String toString() {
-        return "Edge (" + head[0].pos + "," + head[1].pos + "), original: [" + headOriginal[0].pos + "," + headOriginal[1].pos + "], slack: " + slack + ", true slack: " + getTrueSlack()
+        return "BlossomVEdge (" + head[0].pos + "," + head[1].pos + "), original: [" + headOriginal[0].pos + "," + headOriginal[1].pos + "], slack: " + slack + ", true slack: " + getTrueSlack()
                 + (getTrueSlack() == 0 ? ", tight" : "");
     }
 

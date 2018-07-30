@@ -28,18 +28,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.blossom.v5.Node.Label.MINUS;
-import static org.jgrapht.alg.matching.blossom.v5.Options.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.MINUS;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 import static org.junit.Assert.*;
 
 /**
- * Unit tests for the {@link Tree}
+ * Unit tests for the {@link BlossomVTree}
  *
  * @author Timofey Chudakov
  */
 public class TreeTest {
 
-    private Options noneOptions = new Options(NONE);
+    private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
     @Test
     public void testTreeNodeIterator() {
@@ -51,27 +51,27 @@ public class TreeTest {
         DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 0);
         DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
 
-        Initializer<Integer, DefaultWeightedEdge> initializer = new Initializer<>(graph);
-        State<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        PrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new PrimalUpdater<>(state);
-        Map<Integer, Node> vertexMap = BlossomVDebugger.getVertexMap(state);
-        Map<DefaultWeightedEdge, Edge> edgeMap = BlossomVDebugger.getEdgeMap(state);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
+        Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
 
-        Node node1 = vertexMap.get(1);
-        Node node2 = vertexMap.get(2);
-        Node node3 = vertexMap.get(3);
-        Node node4 = vertexMap.get(4);
-        Node node5 = vertexMap.get(5);
-        Node node6 = vertexMap.get(6);
-        Node node7 = vertexMap.get(7);
+        BlossomVNode node1 = vertexMap.get(1);
+        BlossomVNode node2 = vertexMap.get(2);
+        BlossomVNode node3 = vertexMap.get(3);
+        BlossomVNode node4 = vertexMap.get(4);
+        BlossomVNode node5 = vertexMap.get(5);
+        BlossomVNode node6 = vertexMap.get(6);
+        BlossomVNode node7 = vertexMap.get(7);
 
-        Edge edge12 = edgeMap.get(e12);
-        Edge edge23 = edgeMap.get(e23);
-        Edge edge34 = edgeMap.get(e34);
-        Edge edge45 = edgeMap.get(e45);
-        Edge edge36 = edgeMap.get(e36);
-        Edge edge67 = edgeMap.get(e67);
+        BlossomVEdge edge12 = edgeMap.get(e12);
+        BlossomVEdge edge23 = edgeMap.get(e23);
+        BlossomVEdge edge34 = edgeMap.get(e34);
+        BlossomVEdge edge45 = edgeMap.get(e45);
+        BlossomVEdge edge36 = edgeMap.get(e36);
+        BlossomVEdge edge67 = edgeMap.get(e67);
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
@@ -80,8 +80,8 @@ public class TreeTest {
         primalUpdater.grow(edge12, true, false);
 
         int i = 0;
-        Set<Node> actualNodes = new HashSet<>();
-        for (Tree.TreeNodeIterator iterator = node1.tree.treeNodeIterator(); iterator.hasNext(); ) {
+        Set<BlossomVNode> actualNodes = new HashSet<>();
+        for (BlossomVTree.TreeNodeIterator iterator = node1.tree.treeNodeIterator(); iterator.hasNext(); ) {
             i++;
             actualNodes.add(iterator.next());
         }
@@ -91,26 +91,26 @@ public class TreeTest {
 
     @Test
     public void testTreeEdgeIterator() {
-        Node node1 = new Node(-1); // positions doesn't matter here
-        Node node2 = new Node(-1);
-        Node node3 = new Node(-1);
-        Node node4 = new Node(-1);
-        Node node5 = new Node(-1);
-        Tree tree1 = new Tree(node1);
-        Tree tree2 = new Tree(node2);
-        Tree tree3 = new Tree(node3);
-        Tree tree4 = new Tree(node4);
-        Tree tree5 = new Tree(node5);
-        TreeEdge treeEdge1 = State.addTreeEdge(tree1, tree2);
-        TreeEdge treeEdge2 = State.addTreeEdge(tree1, tree3);
-        TreeEdge treeEdge3 = State.addTreeEdge(tree4, tree1);
-        TreeEdge treeEdge4 = State.addTreeEdge(tree5, tree1);
-        Set<TreeEdge> expectedOutEdges = new HashSet<>(Arrays.asList(treeEdge1, treeEdge2));
-        Set<TreeEdge> expectedInEdges = new HashSet<>(Arrays.asList(treeEdge3, treeEdge4));
-        Set<TreeEdge> actualOutEdges = new HashSet<>();
-        Set<TreeEdge> actualInEdges = new HashSet<>();
-        for (Tree.TreeEdgeIterator iterator = tree1.treeEdgeIterator(); iterator.hasNext(); ) {
-            TreeEdge edge = iterator.next();
+        BlossomVNode node1 = new BlossomVNode(-1); // positions doesn't matter here
+        BlossomVNode node2 = new BlossomVNode(-1);
+        BlossomVNode node3 = new BlossomVNode(-1);
+        BlossomVNode node4 = new BlossomVNode(-1);
+        BlossomVNode node5 = new BlossomVNode(-1);
+        BlossomVTree tree1 = new BlossomVTree(node1);
+        BlossomVTree tree2 = new BlossomVTree(node2);
+        BlossomVTree tree3 = new BlossomVTree(node3);
+        BlossomVTree tree4 = new BlossomVTree(node4);
+        BlossomVTree tree5 = new BlossomVTree(node5);
+        BlossomVTreeEdge treeEdge1 = BlossomVState.addTreeEdge(tree1, tree2);
+        BlossomVTreeEdge treeEdge2 = BlossomVState.addTreeEdge(tree1, tree3);
+        BlossomVTreeEdge treeEdge3 = BlossomVState.addTreeEdge(tree4, tree1);
+        BlossomVTreeEdge treeEdge4 = BlossomVState.addTreeEdge(tree5, tree1);
+        Set<BlossomVTreeEdge> expectedOutEdges = new HashSet<>(Arrays.asList(treeEdge1, treeEdge2));
+        Set<BlossomVTreeEdge> expectedInEdges = new HashSet<>(Arrays.asList(treeEdge3, treeEdge4));
+        Set<BlossomVTreeEdge> actualOutEdges = new HashSet<>();
+        Set<BlossomVTreeEdge> actualInEdges = new HashSet<>();
+        for (BlossomVTree.TreeEdgeIterator iterator = tree1.treeEdgeIterator(); iterator.hasNext(); ) {
+            BlossomVTreeEdge edge = iterator.next();
             int currentDir = iterator.getCurrentDirection();
             if (currentDir == 0) {
                 actualOutEdges.add(edge);
@@ -125,10 +125,10 @@ public class TreeTest {
 
     @Test
     public void testAddMinusBlossom() {
-        Node root = new Node(-1);
-        Tree tree = new Tree(root);
+        BlossomVNode root = new BlossomVNode(-1);
+        BlossomVTree tree = new BlossomVTree(root);
 
-        Node blossom = new Node(-1);
+        BlossomVNode blossom = new BlossomVNode(-1);
         blossom.label = MINUS;
         blossom.isOuter = true;
         blossom.isBlossom = true;

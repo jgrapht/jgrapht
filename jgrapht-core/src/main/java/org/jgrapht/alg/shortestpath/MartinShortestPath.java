@@ -240,7 +240,7 @@ public class MartinShortestPath<V, E>
             }
             for (int i = 0; i < dim; i++) {
                 if (Double.compare(f[i], 0d) < 0) {
-                    throw new IllegalArgumentException("Edge weight must be non-negative");
+                    throw new IllegalArgumentException("BlossomVEdge weight must be non-negative");
                 }
             }
         }

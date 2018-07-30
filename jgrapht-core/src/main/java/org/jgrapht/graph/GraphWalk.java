@@ -423,7 +423,7 @@ public class GraphWalk<V, E>
                     V v = it.next();
                     if (graph.getEdge(u, v) == null)
                         throw new InvalidGraphWalkException(
-                            "The vertexList does not constitute to a feasible path. Edge (" + u
+                            "The vertexList does not constitute to a feasible path. BlossomVEdge (" + u
                                 + "," + v + " does not exist in the graph.");
                     u = v;
                 }
