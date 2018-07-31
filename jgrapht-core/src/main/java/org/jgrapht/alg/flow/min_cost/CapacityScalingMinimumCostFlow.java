@@ -65,6 +65,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         int supply, upperCap, lowerCap;
         double cost;
         int supplySum = 0;
+        Arc arc;
         Node node, opposite;
         List<E> graphEdges = new ArrayList<>(m);
         Arc[] arcs = new Arc[m];
@@ -113,14 +114,15 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
                 }
                 // remove non-zero lower capacity
                 node.excess -= lowerCap;
-                opposite.excess += upperCap;
+                opposite.excess += lowerCap;
                 // splitting the arc in order to have uncapacitated network
-                Node reductionNode = new Node(n + reductionNodeNum++, lowerCap - upperCap);
+                Node reductionNode = new Node(n + reductionNodeNum++, 0);
                 if (DEBUG) {
                     System.out.println(edge + " -> " + reductionNode);
                 }
                 arcs[i] = node.addArcTo(reductionNode, Math.abs(cost));
-                opposite.addArcTo(reductionNode, 0);
+                arc = opposite.addArcTo(reductionNode, 0);
+                arc.revArc.increaseResidualCapacity(upperCap - lowerCap);
             } else {
                 // this is an uncapacitated arc
                 if (cost < 0) {
