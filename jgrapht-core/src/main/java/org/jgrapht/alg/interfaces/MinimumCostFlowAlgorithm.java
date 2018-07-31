@@ -4,9 +4,7 @@ import java.util.Map;
 
 public interface MinimumCostFlowAlgorithm<V, E> {
 
-    double calculateMinimumCostFlow(Map<V, Double> supplyMap, Map<E, Double> upperCapacityMap);
-
-    double calculateMinimumCostFlow(Map<V, Double> supplyMap, Map<E, Double> upperCapacityMap, Map<E, Double> lowerCapacityMap);
+    double calculateMinimumCostFlow();
 
     default double getCost() {
         return getMinimumCostFlow().getCost();
@@ -21,22 +19,22 @@ public interface MinimumCostFlowAlgorithm<V, E> {
     interface MinimumCostFLow<V, E> {
         double getCost();
 
-        double getFlow(E edge);
+        int getFlow(E edge);
 
-        Map<E, Double> getFlow();
+        Map<E, Integer> getFlow();
     }
 
     class MinimumCostFlowImpl<V, E> implements MinimumCostFLow<V, E> {
         double cost;
-        private Map<E, Double> flowMap;
+        private Map<E, Integer> flowMap;
 
-        public MinimumCostFlowImpl(double cost, Map<E, Double> flowMap) {
+        public MinimumCostFlowImpl(double cost, Map<E, Integer> flowMap) {
             this.cost = cost;
             this.flowMap = flowMap;
         }
 
         @Override
-        public Map<E, Double> getFlow() {
+        public Map<E, Integer> getFlow() {
             return flowMap;
         }
 
@@ -46,7 +44,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
         }
 
         @Override
-        public double getFlow(E edge) {
+        public int getFlow(E edge) {
             return flowMap.get(edge);
         }
 

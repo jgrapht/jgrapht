@@ -1,131 +1,171 @@
-package org.jgrapht.alg.flow;
+package org.jgrapht.alg.flow.min_cost;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
 import java.util.*;
 
 public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgorithm<V, E> {
-    public static final double EPS = 10e-12;
-    public static final double INFINITY = 10e9;
+    public static final int INFINITY = 1000 * 1000 * 1000;
     private static final String INFEASIBLE_SUPPLY = "Total node supply isn't equal to 0";
     private static final String NO_FEASIBLE_FLOW = "Specified flow network problem has no feasible solution";
     private static final String NEGATIVE_CAPACITY = "Negative edge capacities are not allowed";
     private static final String LOWER_EXCEEDS_UPPER = "Lower edge capacity must not exceed upper edge capacity";
     private static final boolean DEBUG = false;
     private static int counter = 1;
-    private Graph<V, E> graph;
+
+    private MinimumCostFlowProblem<V, E> problem;
     private MinimumCostFLow<V, E> minimumCostFLow;
-    private Map<E, Double> upperCapacityMap;
-    private Map<E, Double> lowerCapacityMap;
-    private List<Node> positiveExcessNodes;
-    private Node[] nodes;
-    private List<V> vertices;
-    private Map<E, Pair<Arc, Arc>> edgeMap;
-    private double cost;
+    private MinimumCostFlowState state;
     private int n;
-    private boolean undirected;
+    private int m;
 
-    public CapacityScalingMinimumCostFlow(Graph<V, E> graph) {
-        this.graph = Objects.requireNonNull(graph);
-        undirected = graph.getType().isUndirected();
+    public CapacityScalingMinimumCostFlow(MinimumCostFlowProblem<V, E> problem) {
+        if (problem.graph.getType().isUndirected()) {
+            throw new IllegalArgumentException("The algorithm doesn't support undirected flow networks");
+        }
+        this.problem = problem;
+        n = problem.graph.vertexSet().size();
+        m = problem.graph.edgeSet().size();
     }
 
     @Override
-    public double calculateMinimumCostFlow(Map<V, Double> supplyMap, Map<E, Double> upperCapacityMap) {
-        return calculateMinimumCostFlow(supplyMap, upperCapacityMap, null);
-    }
-
-    @Override
-    public double calculateMinimumCostFlow(Map<V, Double> supplyMap, Map<E, Double> upperCapacityMap, Map<E, Double> lowerCapacityMap) {
-        init(supplyMap, upperCapacityMap, lowerCapacityMap);
+    public double calculateMinimumCostFlow() {
         return recalculateMinimumCostFlow().getCost();
     }
 
     @Override
     public V getFlowDirection(E edge) {
-        if (graph.getType().isUndirected()) {
-            Pair<Arc, Arc> arcs = edgeMap.get(edge);
-            if (arcs.getFirst().revArc.residualCapacity - EPS < 0) {
-                return vertices.get(arcs.getSecond().head.position);
-            } else {
-                return vertices.get(arcs.getFirst().head.position);
-            }
-        } else {
-            return graph.getEdgeTarget(edge);
-        }
+        return problem.graph.getEdgeTarget(edge);
     }
 
     @Override
     public MinimumCostFLow<V, E> getMinimumCostFlow() {
+        if (minimumCostFLow == null) {
+            recalculateMinimumCostFlow();
+        }
         return minimumCostFLow;
     }
 
-    private void init(Map<V, Double> supplyMap, Map<E, Double> upperCapacityMap, Map<E, Double> lowerCapacityMap) {
-        double supply;
-        boolean undirected = graph.getType().isUndirected();
-        this.lowerCapacityMap = lowerCapacityMap;
-        this.upperCapacityMap = upperCapacityMap;
-        double supplySum = 0;
-        positiveExcessNodes = new ArrayList<>();
-        n = graph.vertexSet().size();
+    private MinimumCostFLow<V, E> recalculateMinimumCostFlow() {
+        this.state = init();
+        while (!state.positiveExcessNodes.isEmpty()) {
+            Node node = state.positiveExcessNodes.get(state.positiveExcessNodes.size() - 1);
+            pushDijkstra(node);
+            if (node.excess == 0) {
+                state.positiveExcessNodes.remove(state.positiveExcessNodes.size() - 1);
+            }
+        }
+        return minimumCostFLow = finish();
+    }
+
+    private MinimumCostFlowState init() {
+        int supply, upperCap, lowerCap;
+        double cost;
+        int supplySum = 0;
+        Node node, opposite;
+        List<E> graphEdges = new ArrayList<>(m);
+        Arc[] arcs = new Arc[m];
         Map<V, Node> nodeMap = new HashMap<>(n);
-        vertices = new ArrayList<>(n);
-        nodes = new Node[n];
+        Graph<V, E> graph = problem.graph;
+        List<Node> positiveExcessNodes = new ArrayList<>();
+        int reductionNodeNum = 0;
+
         int i = 0;
         for (V vertex : graph.vertexSet()) {
-            if (supplyMap.containsKey(vertex)) {
-                supply = supplyMap.get(vertex);
-            } else {
-                supply = 0;
-            }
+            supply = problem.supplyMap.getOrDefault(vertex, 0);
             supplySum += supply;
-            nodes[i] = new Node(i, supply);
-            nodeMap.put(vertex, nodes[i]);
-            vertices.add(vertex);
-            if (supply > 0) {
-                positiveExcessNodes.add(nodes[i]);
+            node = new Node(i, supply);
+            nodeMap.put(vertex, node);
+            ++i;
+        }
+        if (Math.abs(supplySum) > 0) {
+            throw new IllegalArgumentException(INFEASIBLE_SUPPLY);
+        }
+        i = 0;
+        for (E edge : graph.edgeSet()) {
+            graphEdges.add(edge);
+            node = nodeMap.get(graph.getEdgeSource(edge));
+            opposite = nodeMap.get(graph.getEdgeTarget(edge));
+            upperCap = problem.upperCapacityMap.get(edge);
+            lowerCap = problem.lowerCapacityMap.getOrDefault(edge, 0);
+            cost = problem.graph.getEdgeWeight(edge);
+
+            if (upperCap < 0) {
+                throw new IllegalArgumentException(NEGATIVE_CAPACITY);
+            } else if (lowerCap > upperCap) {
+                throw new IllegalArgumentException(LOWER_EXCEEDS_UPPER);
+            } else if (lowerCap >= INFINITY) {
+                throw new IllegalArgumentException("The problem is unbounded due to the infinite lower capacity");
+            }
+
+            // add the cost of sending lowerCap flow across the arc
+            if (upperCap < INFINITY) {
+                // we have to do a reduction in order to have uncapacitated network
+                if (cost < 0) {
+                    node.excess -= upperCap - lowerCap;
+                    opposite.excess += upperCap - lowerCap;
+                    Node t = node;
+                    node = opposite;
+                    opposite = t;
+                }
+                // remove non-zero lower capacity
+                node.excess -= lowerCap;
+                opposite.excess += upperCap;
+                // splitting the arc in order to have uncapacitated network
+                Node reductionNode = new Node(n + reductionNodeNum++, lowerCap - upperCap);
+                if (DEBUG) {
+                    System.out.println(edge + " -> " + reductionNode);
+                }
+                arcs[i] = node.addArcTo(reductionNode, Math.abs(cost));
+                opposite.addArcTo(reductionNode, 0);
+            } else {
+                // this is an uncapacitated arc
+                if (cost < 0) {
+                    throw new IllegalArgumentException("The algorithm doesn't support infinite capacity arcs with negative cost");
+                }
+                // remove non-zero lower capacity
+                node.excess -= lowerCap;
+                opposite.excess += lowerCap;
+                arcs[i] = node.addArcTo(opposite, Math.abs(cost));
             }
             ++i;
         }
-        if (Math.abs(supplySum) > EPS) {
-            throw new IllegalArgumentException(INFEASIBLE_SUPPLY);
-        }
-        Node node, opposite;
-        Arc arc, secondArc;
-        double capacity;
-        edgeMap = new HashMap<>(graph.edgeSet().size());
-        for (E edge : graph.edgeSet()) {
-            node = nodeMap.get(graph.getEdgeSource(edge));
-            opposite = nodeMap.get(graph.getEdgeTarget(edge));
-            capacity = upperCapacityMap.get(edge);
-            if (lowerCapacityMap != null) {
-                capacity -= lowerCapacityMap.get(edge);
-            }
-            if (capacity < -EPS) {
-                if (upperCapacityMap.get(edge) < 0) {
-                    throw new IllegalArgumentException(NEGATIVE_CAPACITY);
-                } else {
-                    throw new IllegalArgumentException(LOWER_EXCEEDS_UPPER);
-                }
-            }
-            arc = node.addArcTo(opposite, capacity, graph.getEdgeWeight(edge));
-            if (undirected) {
-                secondArc = opposite.addArcTo(node, capacity, graph.getEdgeWeight(edge));
-                edgeMap.put(edge, new Pair<>(arc, secondArc));
-            } else {
-                edgeMap.put(edge, new Pair<>(arc, arc));
+        for (V vertex : graph.vertexSet()) {
+            node = nodeMap.get(vertex);
+            if (node.excess > 0) {
+                positiveExcessNodes.add(node);
             }
         }
         if (DEBUG) {
             System.out.println("Printing mapping");
-            for (int j = 0; j < n; j++) {
-                System.out.println(vertices.get(j) + " -> " + nodes[j].id);
+            for (Map.Entry<V, Node> entry : nodeMap.entrySet()) {
+                System.out.println(entry + " -> " + entry);
             }
         }
+        return new MinimumCostFlowState(arcs, graphEdges, positiveExcessNodes);
+    }
+
+    private MinimumCostFLow<V, E> finish() {
+        Map<E, Integer> flowMap = new HashMap<>(m);
+        E graphEdge;
+        Arc arc;
+        int flowOnArc;
+        double totalCost = 0;
+        for (int i = 0; i < m; i++) {
+            graphEdge = state.graphEdges.get(i);
+            arc = state.arcs[i];
+            flowOnArc = arc.revArc.residualCapacity;
+            flowOnArc += problem.lowerCapacityMap.getOrDefault(graphEdge, 0);
+            if (problem.graph.getEdgeWeight(graphEdge) < 0) {
+                flowOnArc = problem.upperCapacityMap.get(graphEdge) - flowOnArc;
+            }
+            flowMap.put(graphEdge, flowOnArc);
+            totalCost += flowOnArc * problem.graph.getEdgeWeight(graphEdge);
+        }
+        return new MinimumCostFlowImpl<>(totalCost, flowMap);
     }
 
     private void pushDijkstra(Node start) {
@@ -144,8 +184,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             currentNode = currentFibNode.getData();
             distance = currentFibNode.getKey();
             if (currentNode.excess < 0) {
-                double delta = augmentPath(start, currentNode);
-                cost += delta * (distance + start.potential - currentNode.potential);
+                augmentPath(start, currentNode);
                 for (Node node : permanentlyLabeled) {
                     node.potential += distance;
                 }
@@ -173,8 +212,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         throw new IllegalArgumentException(NO_FEASIBLE_FLOW);
     }
 
-    private double augmentPath(Node start, Node end) {
-        double delta = Math.min(start.excess, -end.excess);
+    private void augmentPath(Node start, Node end) {
+        int delta = Math.min(start.excess, -end.excess);
+        /*for (Arc arc = end.parentArc; arc != null; arc = arc.revArc.head.parentArc) {
+            delta = Math.min(delta, arc.residualCapacity);
+        }*/
         for (Arc arc = end.parentArc; arc != null; arc = arc.revArc.head.parentArc) {
             delta = Math.min(delta, arc.residualCapacity);
         }
@@ -197,46 +239,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             arc.increaseResidualCapacity(delta);
         }
         start.excess -= delta;
-        return delta;
     }
 
     private void insertIntoHeap(FibonacciHeap<Node> heap, Node node, double value) {
         node.fibNode = new FibonacciHeapNode<>(node);
         heap.insert(node.fibNode, value);
-    }
-
-    private MinimumCostFLow<V, E> recalculateMinimumCostFlow() {
-        while (!positiveExcessNodes.isEmpty()) {
-            Node node = positiveExcessNodes.get(positiveExcessNodes.size() - 1);
-            pushDijkstra(node);
-            if (node.excess < EPS) {
-                positiveExcessNodes.remove(positiveExcessNodes.size() - 1);
-            }
-        }
-        return minimumCostFLow = finish();
-    }
-
-    private MinimumCostFLow<V, E> finish() {
-        Map<E, Double> flowMap = new HashMap<>(graph.edgeSet().size());
-        Pair<Arc, Arc> pair;
-        Arc forward, backward;
-        for (E edge : graph.edgeSet()) {
-            pair = edgeMap.get(edge);
-            forward = pair.getFirst();
-            backward = pair.getSecond();
-            double flow = 0;
-            if (lowerCapacityMap != null) {
-                flow = lowerCapacityMap.get(edge);
-            }
-            if (undirected) {
-                flow += forward.revArc.residualCapacity += backward.revArc.residualCapacity;
-                flowMap.put(edge, flow);
-            } else {
-                flow += forward.revArc.residualCapacity;
-                flowMap.put(edge, flow);
-            }
-        }
-        return new MinimumCostFlowImpl<>(cost, flowMap);
     }
 
     private static class Node {
@@ -245,20 +252,20 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         FibonacciHeapNode<Node> fibNode;
         Arc parentArc;
         int labelType;
-        double excess;
-        double potential;
+        int excess;
+        int potential;
         Arc firstSaturated;
         Arc firstNonsaturated;
         private int id = ID++;
 
-        public Node(int position, double excess) {
+        public Node(int position, int excess) {
             this.position = position;
             this.excess = excess;
         }
 
-        Arc addArcTo(Node opposite, double capacity, double cost) {
-            Arc forwardArc = new Arc(opposite, capacity, cost);
-            if (capacity < EPS) {
+        Arc addArcTo(Node opposite, double cost) {
+            Arc forwardArc = new Arc(opposite, INFINITY, cost);
+            if (INFINITY < 0) {
                 // forward arc becomes the first arc in the linked list of saturated arcs
                 if (firstSaturated != null) {
                     firstSaturated.prev = forwardArc;
@@ -287,7 +294,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
 
         @Override
         public String toString() {
-            return String.format("Id = %d, excess = %.1f, potential = %.1f", id, excess, potential);
+            return String.format("Id = %d, position = %d, excess = %d, potential = %d", id, position, excess, potential);
         }
     }
 
@@ -297,9 +304,9 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         Arc revArc;
         Arc prev;
         Arc next;
-        double residualCapacity;
+        int residualCapacity;
 
-        Arc(Node head, double residualCapacity, double cost) {
+        Arc(Node head, int residualCapacity, double cost) {
             this.head = head;
             this.cost = cost;
             this.residualCapacity = residualCapacity;
@@ -309,9 +316,12 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             return cost + head.potential - revArc.head.potential;
         }
 
-        void decreaseResidualCapacity(double delta) {
+        void decreaseResidualCapacity(int delta) {
+            if (residualCapacity >= INFINITY) {
+                return;
+            }
             residualCapacity -= delta;
-            if (residualCapacity < EPS) { // epsilon precision
+            if (residualCapacity == 0) { // epsilon precision
                 // need to move this arc from list of non-saturated arcs to list of saturated arcs
                 Node tail = revArc.head;
                 if (next != null) {
@@ -331,8 +341,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             }
         }
 
-        void increaseResidualCapacity(double delta) {
-            if (residualCapacity < EPS) { // epsilon precision
+        void increaseResidualCapacity(int delta) {
+            if (residualCapacity >= INFINITY) {
+                return;
+            }
+            if (residualCapacity == 0) { // epsilon precision
                 // need to move this arc from list of saturated arcs to list of non-saturated arcs
                 Node tail = revArc.head;
                 if (next != null) {
@@ -355,7 +368,19 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
 
         @Override
         public String toString() {
-            return String.format("Residual capacity = %.1f, reduced cost = %.1f, cost = %.1f, head = %s", residualCapacity, getReducedCost(), cost, head.toString());
+            return String.format("(%d, %d), reduced cost = %.1f, cost = %.1f",revArc.head.id, head.id, getReducedCost(), cost);
+        }
+    }
+
+    private class MinimumCostFlowState {
+        private Arc[] arcs;
+        private List<E> graphEdges;
+        private List<Node> positiveExcessNodes;
+
+        public MinimumCostFlowState(Arc[] arcs, List<E> graphEdges, List<Node> positiveExcessNodes) {
+            this.arcs = arcs;
+            this.graphEdges = graphEdges;
+            this.positiveExcessNodes = positiveExcessNodes;
         }
     }
 }
