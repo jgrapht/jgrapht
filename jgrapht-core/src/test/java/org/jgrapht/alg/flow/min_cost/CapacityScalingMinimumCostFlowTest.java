@@ -4,18 +4,31 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(Parameterized.class)
+
 public class CapacityScalingMinimumCostFlowTest {
 
+    private int scalingFactor;
     private final double EPS = 1e-9;
+
+    @Parameterized.Parameters
+    public static Object[] params(){
+        return new Integer[]{1, 2, 3, 4, 5};
+    }
+
+    public CapacityScalingMinimumCostFlowTest(int scalingFactor) {
+        this.scalingFactor = scalingFactor;
+    }
 
     @Test
     public void testGetMinimumCostFlow1() {
@@ -26,7 +39,8 @@ public class CapacityScalingMinimumCostFlowTest {
         supplyMap.put(2, -3);
         Map<DefaultWeightedEdge, Integer> upperCapacityMap = new HashMap<>();
         upperCapacityMap.put(edge12, 4);
-        CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> flow = new CapacityScalingMinimumCostFlow<>(new MinimumCostFlowProblem<>(graph, supplyMap, upperCapacityMap));
+        CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> flow =
+                new CapacityScalingMinimumCostFlow<>(new MinimumCostFlowProblem<>(graph, supplyMap, upperCapacityMap), scalingFactor);
         MinimumCostFlowAlgorithm.MinimumCostFLow<Integer, DefaultWeightedEdge> minimumCostFLow = flow.getMinimumCostFlow();
         double cost = flow.calculateMinimumCostFlow();
         assertEquals(15, cost, EPS);
@@ -52,7 +66,8 @@ public class CapacityScalingMinimumCostFlowTest {
         upperCapacityMap.put(edge23, 1);
         upperCapacityMap.put(edge24, 5);
         upperCapacityMap.put(edge34, 4);
-        CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> flow = new CapacityScalingMinimumCostFlow<>(new MinimumCostFlowProblem<>(graph, supplyMap, upperCapacityMap));
+        CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> flow =
+                new CapacityScalingMinimumCostFlow<>(new MinimumCostFlowProblem<>(graph, supplyMap, upperCapacityMap),scalingFactor);
         double cost = flow.calculateMinimumCostFlow();
         MinimumCostFlowAlgorithm.MinimumCostFLow<Integer, DefaultWeightedEdge> minimumCostFLow = flow.getMinimumCostFlow();
         assertEquals(26, cost, EPS);
@@ -66,6 +81,7 @@ public class CapacityScalingMinimumCostFlowTest {
 
     @Test
     public void testGetMinimumCostFlow3() {
+        scalingFactor = 2;
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge edge15 = Graphs.addEdgeWithVertices(graph, 1, 5, 6);
         DefaultWeightedEdge edge36 = Graphs.addEdgeWithVertices(graph, 3, 6, 9);
@@ -92,7 +108,8 @@ public class CapacityScalingMinimumCostFlowTest {
         upperCapacityMap.put(edge46, 5);
         upperCapacityMap.put(edge41, 5);
         upperCapacityMap.put(edge43, 1);
-        CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> flow = new CapacityScalingMinimumCostFlow<>(new MinimumCostFlowProblem<>(graph, supplyMap, upperCapacityMap));
+        CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> flow =
+                new CapacityScalingMinimumCostFlow<>(new MinimumCostFlowProblem<>(graph, supplyMap, upperCapacityMap), scalingFactor);
         double cost = flow.calculateMinimumCostFlow();
         MinimumCostFlowAlgorithm.MinimumCostFLow<Integer, DefaultWeightedEdge> minimumCostFLow = flow.getMinimumCostFlow();
         assertEquals(112, cost, EPS);
