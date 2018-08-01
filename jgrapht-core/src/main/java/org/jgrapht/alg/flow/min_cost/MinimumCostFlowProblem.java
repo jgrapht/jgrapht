@@ -25,4 +25,20 @@ public class MinimumCostFlowProblem<V, E> {
     public MinimumCostFlowProblem(Graph<V, E> graph, Map<V, Integer> supplyMap, Map<E, Integer> upperCapacityMap) {
         this(graph, supplyMap, upperCapacityMap, null);
     }
+
+    public Graph<V, E> getGraph() {
+        return graph;
+    }
+
+    public Map<V, Integer> getSupplyMap() {
+        return supplyMap;
+    }
+
+    public Map<E, Integer> getLowerCapacityMap() {
+        return lowerCapacityMap;
+    }
+
+    public Map<E, Integer> getUpperCapacityMap() {
+        return upperCapacityMap;
+    }
 }
