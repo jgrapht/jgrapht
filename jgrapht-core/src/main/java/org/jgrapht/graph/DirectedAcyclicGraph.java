@@ -68,7 +68,7 @@ public class DirectedAcyclicGraph<V, E>
 {
     private static final long serialVersionUID = 4522128427004938150L;
 
-    private static final String EDGE_WOULD_INDUCE_A_CYCLE = "BlossomVEdge would induce a cycle";
+    private static final String EDGE_WOULD_INDUCE_A_CYCLE = "Edge would induce a cycle";
 
     private final Comparator<V> topoComparator;
     private final TopoOrderMap<V> topoOrderMap;
