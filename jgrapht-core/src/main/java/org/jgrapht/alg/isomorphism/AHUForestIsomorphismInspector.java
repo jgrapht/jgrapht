@@ -51,6 +51,10 @@ import java.util.function.Supplier;
  *     (see {@link Graph#getVertexSupplier()}).
  * </p>
  *
+ * <p>
+ *     Note: This inspector only returns a single mapping (chosen arbitrarily) rather than all possible mappings.
+ * </p>
+ *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  *

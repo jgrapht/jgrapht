@@ -46,6 +46,10 @@ import java.util.*;
  *      For an implementation that supports rooted forests see {@link AHUForestIsomorphismInspector}.
  * </p>
  *
+ * <p>
+ *     Note: This inspector only returns a single mapping (chosen arbitrarily) rather than all possible mappings.
+ * </p>
+ *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  *
