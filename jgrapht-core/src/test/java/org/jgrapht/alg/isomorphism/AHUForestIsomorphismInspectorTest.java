@@ -40,7 +40,7 @@ import static org.jgrapht.alg.isomorphism.AHUTreeIsomorphismInspectorTest.*;
 public class AHUForestIsomorphismInspectorTest {
 
     public static Graph<Integer, DefaultEdge> parseGraph(String vertices, String edges){
-        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(),
+        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(-100),
                 SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         vertices = vertices.substring(1, vertices.length() - 1);

@@ -113,13 +113,9 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
         if (Objects.isNull(supplier))
             throw new IllegalArgumentException("vertex supplier cannot be null");
 
-        while (true){
-            V v = supplier.get();
-
-            if (!graph.vertexSet().contains(v)){
-                return v;
-            }
-        }
+        V v = supplier.get();
+        assert !graph.vertexSet().contains(v);
+        return v;
     }
 
     private Graph<V, E> takeSubgraph(Graph<V, E> graph, Set<V> vertices){
