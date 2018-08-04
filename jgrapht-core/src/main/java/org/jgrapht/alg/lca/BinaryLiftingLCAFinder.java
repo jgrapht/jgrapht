@@ -30,10 +30,20 @@ import static org.jgrapht.util.MathUtil.log2;
  * Algorithm for computing lowest common ancestors in rooted trees and forests using the binary lifting method.
  *
  * <p>
- * See the article on
+ * The method appears in <i>Bender, Michael A., and Martın Farach-Colton. "The level ancestor problem
+ * simplified." Theoretical Computer Science 321.1 (2004): 5-12</i> and it is also nicely presented in
+ * the following article on
  * <a href="https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#Another%20easy%20solution%20in%20O(N%20logN,%20O(logN)">Topcoder</a>
  * for more details about the algorithm.
+ * </p>
  *
+ * <p>
+ * Algorithm idea:<br>
+ * We improve on the naive approach by using jump pointers. These are pointers at a node which reference one of the
+ * node’s ancestors. Each node stores jump pointers to ancestors at levels 1, 2, 4, . . . , 2^k. <br>
+ * Queries are answered by repeatedly jumping from node to node, each time jumping more than half of the
+ * remaining levels between the current ancestor and the goal ancestor (i.e. the lca).
+ * The worst-case number of jumps is $O(log(|V|))$.
  * </p>
  *
  * <p>
