@@ -20,6 +20,7 @@ package org.jgrapht.alg.lca;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -31,7 +32,13 @@ import java.util.*;
  * be the set of out-degree 0 nodes (leafs) in $G x,y$. The lowest common ancestors of $x$ and $y$
  * are the elements of SLCA (x, y). This naive algorithm simply starts at $a$ and $b$, recursing
  * upwards to the root(s) of the DAG. Wherever the recursion paths cross we have found our LCA.</i>
- * from http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
+ * from <i> Michael A. Bender, Martín Farach-Colton, Giridhar Pemmasani, Steven Skiena, Pavel Sumazin,
+ * Lowest common ancestors in trees and directed acyclic graphs,
+ * Journal of Algorithms, Volume 57, Issue 2, 2005, Pages 75-94, ISSN 0196-6774,
+ * https://doi.org/10.1016/j.jalgor.2005.08.001. </i>
+ *
+ * <p>
+ * The algorithm:
  *
  * <pre>
  * 1. Start at each of nodes you wish to find the lca for (a and b)
@@ -59,7 +66,15 @@ import java.util.*;
  * and b. Of course we may have to wait longer if the path to a is of length n, but the path to
  * b&gt;n. at the first loop we have a path of 0 length from the nodes we are considering as LCA to
  * their respective children which we wish to find the LCA for.
- * 
+ *
+ * <p>
+ *  Preprocessing Time complexity: $O(1)$<br>
+ *  Preprocessing Space complexity:  $O(1)$<br>
+ *  Query Time complexity: $O(|V|)$<br>
+ *  Query Space complexity: $O(|V|)$<br>
+ * </p>
+ *
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -104,10 +119,10 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      *
      * @return the set of all LCAs of a and b, or empty set if there is no LCA.
      */
-    @SuppressWarnings("unchecked")
     public Set<V> getAllLCAs(V a, V b)
     {
-        Set<V>[] visitedSets = new Set[2];
+        @SuppressWarnings("unchecked")
+        Set<V>[] visitedSets = (Set<V>[]) Array.newInstance(Set.class, 2);
         // set of nodes visited from a
         visitedSets[0] = new LinkedHashSet<>();
         // set of nodes visited from b
@@ -152,10 +167,10 @@ public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
      * has been visited from both a and b, it is no longer expanded in our search (we know that its
      * ancestors won't be part of the SLCA(x, y) set).
      */
-    @SuppressWarnings("unchecked")
     private void doubleBfs(V a, V b, Set<V>[] visitedSets)
     {
-        Queue<V>[] queues = new Queue[2];
+        @SuppressWarnings("unchecked")
+        Queue<V>[] queues = (Queue<V>[]) Array.newInstance(Queue.class, 2);
         queues[0] = new ArrayDeque<>();
         queues[1] = new ArrayDeque<>();
 

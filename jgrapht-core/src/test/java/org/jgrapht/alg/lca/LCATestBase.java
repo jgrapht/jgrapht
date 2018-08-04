@@ -21,7 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
 import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
@@ -53,7 +52,7 @@ public abstract class LCATestBase {
         g.addEdge("a", "b");
         g.addEdge("a", "c");
 
-        String lca = createSolver(g, Collections.singleton("a")).getLCA("d", "d");
+        createSolver(g, Collections.singleton("a")).getLCA("d", "d");
     }
 
     @Test
@@ -151,7 +150,7 @@ public abstract class LCATestBase {
     public void testEmptyGraph(){
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+        createSolver(g, Collections.singleton("a"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -159,7 +158,7 @@ public abstract class LCATestBase {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.emptySet());
+        createSolver(g, Collections.emptySet());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -167,7 +166,7 @@ public abstract class LCATestBase {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("b"));
+        createSolver(g, Collections.singleton("b"));
     }
 
     @Test
@@ -430,28 +429,6 @@ public abstract class LCATestBase {
 
         for (int i = 0; i < Q; i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
-        }
-    }
-
-    private void generatePossiblyDisconnectedTree(int N, Random random, Graph<Integer, DefaultEdge> g, List<Integer> vertices){
-        Collections.shuffle(vertices, random);
-        UnionFind<Integer> unionFind = new UnionFind<>(Collections.emptySet());
-
-        for (int i = 0; i < N; i++) {
-            g.addVertex(vertices.get(i));
-            unionFind.addElement(vertices.get(i));
-        }
-
-        int M = N / 2 + random.nextInt(N / 2);
-
-        for (int i = 0; i < M; i++) {
-            int a = vertices.get(random.nextInt(N));
-            int b = vertices.get(random.nextInt(N));
-
-            if (!unionFind.inSameSet(a, b)){
-                unionFind.union(a, b);
-                g.addEdge(a, b);
-            }
         }
     }
 

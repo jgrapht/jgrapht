@@ -20,6 +20,7 @@ package org.jgrapht.alg.lca;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
 
@@ -28,9 +29,20 @@ import static org.jgrapht.util.MathUtil.log2;
 /**
  * Algorithm for computing lowest common ancestors in rooted trees and forests using the binary lifting method.
  *
- * Preprocessing Time complexity: $O(|V| log(|V|))
- * Preprocessing Memory complexity:  $O(|V| log(|V|))
- * Query complexity: $O(log(|V|))$
+ * <p>
+ * See the article on
+ * <a href="https://www.topcoder.com/community/data-science/data-science-tutorials/
+ * range-minimum-query-and-lowest-common-ancestor/#Another%20easy%20
+ * solution%20in%20O(N%20logN,%20O(logN)">Topcoder</a> for more details about the algorithm.
+ *
+ * </p>
+ *
+ * <p>
+ *  Preprocessing Time complexity: $O(|V| log(|V|))$<br>
+ *  Preprocessing Space complexity:  $O(|V| log(|V|))$<br>
+ *  Query Time complexity: $O(log(|V|))$<br>
+ *  Query Space complexity: $O(1)$<br>
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -41,7 +53,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
 
     private final Graph<V, E> graph;
     private final Set<V> roots;
-    private final int MAX_LEVEL;
+    private final int maxLevel;
 
     private Map<V, Integer> vertexMap;
     private List<V> indexList;
@@ -79,7 +91,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     public BinaryLiftingLCAFinder(Graph<V, E> graph, Set<V> roots){
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
-        this.MAX_LEVEL = log2(graph.vertexSet().size());
+        this.maxLevel = log2(graph.vertexSet().size());
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("roots cannot be empty");
@@ -91,19 +103,9 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void normalizeGraph(){
-        /*
-         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
-         */
-        vertexMap = new HashMap<>(graph.vertexSet().size());
-        indexList = new ArrayList<>(graph.vertexSet().size());
-
-        for (V v : graph.vertexSet()) {
-            if (!vertexMap.containsKey(v)) {
-                vertexMap.put(v, vertexMap.size());
-                indexList.add(v);
-            }
-        }
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
+        vertexMap = vertexToIntegerMapping.getVertexMap();
+        indexList = vertexToIntegerMapping.getIndexList();
     }
 
     private void dfs(int u, int parent){
@@ -111,7 +113,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
         timeIn[u] = ++clock;
 
         ancestors[0][u] = parent;
-        for (int l = 1; l < MAX_LEVEL; l++) {
+        for (int l = 1; l < maxLevel; l++) {
             if (ancestors[l - 1][u] != -1)
                 ancestors[l][u] = ancestors[l - 1][ancestors[l - 1][u]];
         }
@@ -129,9 +131,9 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void computeAncestorMatrix(){
-        ancestors = new int[MAX_LEVEL + 1][graph.vertexSet().size()];
+        ancestors = new int[maxLevel + 1][graph.vertexSet().size()];
 
-        for (int l = 0; l < MAX_LEVEL; l++) {
+        for (int l = 0; l < maxLevel; l++) {
             Arrays.fill(ancestors[l], -1);
         }
 
@@ -148,14 +150,14 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
 
         normalizeGraph();
 
-        for (V root: roots)
+        for (V root: roots) {
             if (component[vertexMap.get(root)] == 0) {
                 numberComponent++;
                 dfs(vertexMap.get(root), -1);
-            }
-            else{
+            } else {
                 throw new IllegalArgumentException("multiple roots in the same tree");
             }
+        }
     }
 
     private boolean isAncestor(int ancestor, int descendant) {
@@ -189,7 +191,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
         if (isAncestor(indexB, indexA))
             return b;
 
-        for (int l = MAX_LEVEL - 1; l >= 0; l--)
+        for (int l = maxLevel - 1; l >= 0; l--)
             if (ancestors[l][indexA] != -1 && !isAncestor(ancestors[l][indexA], indexB))
                 indexA = ancestors[l][indexA];
 

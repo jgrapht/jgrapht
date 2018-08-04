@@ -65,7 +65,8 @@ import java.util.*;
  *
  * @deprecated Replaced by {@link org.jgrapht.alg.lca.NaiveLCAFinder}
  */
-@Deprecated public class NaiveLcaFinder<V, E>
+@Deprecated
+public class NaiveLcaFinder<V, E>
 {
     private Graph<V, E> graph;
 

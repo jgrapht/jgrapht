@@ -26,9 +26,12 @@ import java.util.*;
 /**
  * Algorithm for computing lowest common ancestors in rooted trees and forests based on {@link HeavyPathDecomposition}.
  *
- * Preprocessing Time complexity: $O(|V|)$
- * Preprocessing Memory complexity: $O(|V|)$
- * Query complexity: $O(log(|V|))$
+ * <p>
+ *  Preprocessing Time complexity: $O(|V|)$<br>
+ *  Preprocessing Space complexity:  $O(|V|)$<br>
+ *  Query Time complexity: $O(log(|V|))$<br>
+ *  Query Space complexity: $O(1)$<br>
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

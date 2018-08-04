@@ -20,19 +20,31 @@ package org.jgrapht.alg.lca;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
 
 import static org.jgrapht.util.MathUtil.log2;
 
 /**
- * Algorithm for computing lowest common ancestors in rooted trees and forests using the Euler tour approached
- * introduced in <i>Berkman, Omer; Vishkin, Uzi (1993), "Recursive Star-Tree Parallel Data Structure",
- * SIAM Journal on Computing, 22 (2): 221–242, doi:10.1137/0222017</i>
+ * Algorithm for computing lowest common ancestors in rooted trees and forests based on
+ * <i>Berkman, Omer; Vishkin, Uzi (1993), "Recursive Star-Tree Parallel Data Structure",
+ * SIAM Journal on Computing, 22 (2): 221–242, doi:10.1137/0222017</i>.
  *
- * Preprocessing Time complexity: $O(|V| log(|V|))
- * Preprocessing Memory complexity:  $O(|V| log(|V|))
- * Query complexity: $O(1)$
+ * <p>
+ *  The algorithm involves forming an Euler tour of a graph formed from the input tree by doubling every edge,
+ *  and using this tour to compute a sequence of level numbers of the nodes in the order the tour visits them.
+ *  A lowest common ancestor query can then be transformed into a query that seeks the minimum value occurring
+ *  within some subinterval of this sequence of numbers.
+ * </p>
+ *
+ * <p>
+ *  Preprocessing Time complexity: $O(|V| log(|V|))$<br>
+ *  Preprocessing Space complexity:  $O(|V| log(|V|))$<br>
+ *  Query Time complexity: $O(1)$<br>
+ *  Query Space complexity: $O(1)$<br>
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -42,7 +54,7 @@ import static org.jgrapht.util.MathUtil.log2;
 public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     private final Graph<V, E> graph;
     private final Set<V> roots;
-    private final int MAX_LEVEL;
+    private final int maxLevel;
 
     private Map<V, Integer> vertexMap;
     private List<V> indexList;
@@ -83,7 +95,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots){
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
-        this.MAX_LEVEL = 1 + log2(graph.vertexSet().size());
+        this.maxLevel = 1 + log2(graph.vertexSet().size());
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("roots cannot be empty");
@@ -95,17 +107,48 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void normalizeGraph(){
-        /*
-         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
-         */
-        vertexMap = new HashMap<>(graph.vertexSet().size());
-        indexList = new ArrayList<>(graph.vertexSet().size());
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
+        vertexMap = vertexToIntegerMapping.getVertexMap();
+        indexList = vertexToIntegerMapping.getIndexList();
+    }
 
-        for (V v : graph.vertexSet()) {
-            if (!vertexMap.containsKey(v)) {
-                vertexMap.put(v, vertexMap.size());
-                indexList.add(v);
+    private void dfsIterative(int u, int startLevel){
+        // set of vertices for which the the part of the if has been performed
+        // (in other words: u ∈ explored iff dfs(u, ...) has been called as some point)
+        Set<Integer> explored = new HashSet<>();
+
+        ArrayDeque<Pair<Integer, Integer>> stack = new ArrayDeque<>();
+        stack.push(Pair.of(u, startLevel));
+
+        while (!stack.isEmpty()){
+            Pair<Integer, Integer> pair = stack.poll();
+            u = pair.getFirst();
+            int lvl = pair.getSecond();
+
+            if (!explored.contains(u)){
+                explored.add(u);
+
+                component[u] = numberComponent;
+                eulerTour[sizeTour] = u;
+                level[sizeTour] = lvl;
+                sizeTour++;
+
+                V vertexU = indexList.get(u);
+                for (E edge: graph.edgesOf(vertexU)){
+                    int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
+
+                    // check if child has not been explored (i.e. dfs(child, ...) has not been called)
+                    if (!explored.contains(child)){
+                        // simulate the return from recursion
+                        stack.push(pair);
+                        stack.push(Pair.of(child, lvl + 1));
+                    }
+                }
+            }
+            else{
+                eulerTour[sizeTour] = u;
+                level[sizeTour] = lvl;
+                sizeTour++;
             }
         }
     }
@@ -131,26 +174,28 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
     }
 
     private void computeRMQ(){
-        rmq = new int[MAX_LEVEL + 1][sizeTour];
+        rmq = new int[maxLevel + 1][sizeTour];
         log2 = new int[sizeTour + 1];
 
-        for (int i = 0; i < sizeTour; i++)
+        for (int i = 0; i < sizeTour; i++) {
             rmq[0][i] = i;
+        }
 
-        for (int i = 1; (1 << i) <= sizeTour; i++)
-            for (int j = 0; j + ( 1 << i ) - 1 < sizeTour; j++) {
+        for (int i = 1; (1 << i) <= sizeTour; i++) {
+            for (int j = 0; j + (1 << i) - 1 < sizeTour; j++) {
                 int p = 1 << (i - 1);
 
-                if (level[rmq[i - 1][j]] < level[rmq[i - 1][j + p]]){
+                if (level[rmq[i - 1][j]] < level[rmq[i - 1][j + p]]) {
                     rmq[i][j] = rmq[i - 1][j];
-                }
-                else{
+                } else {
                     rmq[i][j] = rmq[i - 1][j + p];
                 }
             }
+        }
 
-        for (int i = 2; i <= sizeTour; ++i)
+        for (int i = 2; i <= sizeTour; ++i) {
             log2[i] = log2[i / 2] + 1;
+        }
     }
 
     private void computeAncestorsStructure(){
@@ -168,7 +213,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
 
             if (component[u] == 0) {
                 numberComponent++;
-                dfs(u, -1, 0);
+                dfsIterative(u, -1);
             }
             else{
                 throw new IllegalArgumentException("multiple roots in the same tree");

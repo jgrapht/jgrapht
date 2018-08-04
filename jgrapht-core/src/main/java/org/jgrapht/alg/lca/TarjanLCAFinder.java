@@ -35,10 +35,18 @@ import java.util.*;
  *
  * </p>
  *
- * Preprocessing Time complexity: $O(1)$
- * Preprocessing Memory complexity:  $O(1)$
- * Query Time complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries
- * Query Memory complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries
+ * <p>
+ *     The original algorithm can be found in <i>Gabow, H. N.; Tarjan, R. E. (1983),
+ *     "A linear-time algorithm for a special case of disjoint set union", Proceedings of the 15th
+ *     ACM Symposium on Theory of Computing (STOC), pp. 246–251, doi:10.1145/800061.808753</i>
+ * </p>
+ *
+ * <p>
+ *  Preprocessing Time complexity: $O(1)$<br>
+ *  Preprocessing Space complexity:  $O(1)$<br>
+ *  Query Time complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries<br>
+ *  Query Space complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries<br>
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -159,7 +167,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
                 throw new IllegalArgumentException("multiple roots in the same tree");
 
             blackNodes.clear();
-            TarjanOLCA(root, null, visited);
+            computeTarjanOLCA(root, null, visited);
         }
 
         List<V> tmpRef = lowestCommonAncestors;
@@ -168,7 +176,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
         return tmpRef;
     }
 
-    private void TarjanOLCA(V u, V p, Set<V> visited){
+    private void computeTarjanOLCA(V u, V p, Set<V> visited){
         visited.add(u);
         unionFind.addElement(u);
         ancestors.put(u, u);
@@ -177,7 +185,7 @@ public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
             V v = Graphs.getOppositeVertex(graph, edge, u);
 
             if (!v.equals(p)){
-                TarjanOLCA(v, u, visited);
+                computeTarjanOLCA(v, u, visited);
                 unionFind.union(u, v);
                 ancestors.put(unionFind.find(u), u);
             }

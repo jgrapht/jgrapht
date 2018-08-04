@@ -32,6 +32,12 @@ import java.util.*;
  *  into a set of disjoint paths.
  *
  * <p>
+ *  The techniques was first introduced in <i>Sleator, D. D.; Tarjan, R. E. (1983).
+ *  "A Data Structure for Dynamic Trees". Proceedings of the thirteenth annual ACM symposium on Theory of computing
+ *  - STOC '81 doi:10.1145/800076.802464 </i>
+ * </p>
+ *
+ * <p>
  * In a heavy path decomposition, the edges set is partitioned into two sets, a set of heavy edges and a
  * set of light ones according to the relative number of nodes in the vertex's subtree.
  *
@@ -521,7 +527,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
          * @return internal parent array
          */
         public int[] getParentArray(){
-            return parent.clone();
+            return parent;
         }
     }
 }
