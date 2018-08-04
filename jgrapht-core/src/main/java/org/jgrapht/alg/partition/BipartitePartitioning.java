@@ -19,7 +19,7 @@ package org.jgrapht.alg.partition;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.PartitionAlgorithm;
+import org.jgrapht.alg.interfaces.PartitioningAlgorithm;
 
 import java.util.*;
 
@@ -36,24 +36,23 @@ import static org.jgrapht.GraphTests.isEmpty;
  *
  * @author Dimitrios Michail
  * @author Alexandru Valeanu
- * @since June 2018
  */
-public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
+public class BipartitePartitioning<V, E> implements PartitioningAlgorithm<V> {
 
     /* Input graph */
     private Graph<V, E> graph;
 
-    /* Cached bipartite partition */
+    /* Cached bipartite partitioning */
     private boolean computed = false;
-    private Partition<V> cachedPartition;
+    private Partitioning<V> cachedPartitioning;
 
     /**
-     * Constructs a new bipartite partition finder.
+     * Constructs a new bipartite partitioning.
      *
      * @param graph the input graph;
      */
-    public BipartitePartitionFinder(Graph<V, E> graph){
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+    public BipartitePartitioning(Graph<V, E> graph){
+        this.graph = Objects.requireNonNull(graph, "graph cannot be null");
     }
 
     /**
@@ -77,16 +76,17 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
             // ignore
         }
 
-        return this.getPartition() != null;
+        return this.getPartitioning() != null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Partition<V> getPartition() {
-        if (computed)
-            return cachedPartition;
+    public Partitioning<V> getPartitioning() {
+        if (computed) {
+            return cachedPartitioning;
+        }
 
         Set<V> unknown = new HashSet<>(graph.vertexSet());
         Set<V> odd = new HashSet<>();
@@ -109,7 +109,7 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
                     }
                 } else if (odd.contains(v) == odd.contains(n)) {
                     computed = true;
-                    cachedPartition = null;
+                    cachedPartitioning = null;
                     return null;
                 }
             }
@@ -119,22 +119,22 @@ public class BipartitePartitionFinder<V, E> implements PartitionAlgorithm<V> {
         even.removeAll(odd);
 
         computed = true;
-        cachedPartition = new PartitionImpl<>(Arrays.asList(even, odd));
-        return cachedPartition;
+        cachedPartitioning = new PartitioningImpl<>(Arrays.asList(even, odd));
+        return cachedPartitioning;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isValidPartition(Partition<V> partition){
-        Objects.requireNonNull(partition, "Partition cannot be null");
+    public boolean isValidPartitioning(Partitioning<V> partitioning){
+        Objects.requireNonNull(partitioning, "Partition cannot be null");
 
-        if (partition.getNumberPartitions() != 2)
+        if (partitioning.getNumberPartitions() != 2)
             return false;
 
-        Set<V> firstPartition = partition.getPartitionClass(0);
-        Set<V> secondPartition = partition.getPartitionClass(1);
+        Set<V> firstPartition = partitioning.getPartition(0);
+        Set<V> secondPartition = partitioning.getPartition(1);
 
         Objects.requireNonNull(firstPartition, "First partition class cannot be null");
         Objects.requireNonNull(secondPartition, "Second partition class cannot be null");

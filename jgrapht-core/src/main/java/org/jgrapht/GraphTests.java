@@ -24,8 +24,8 @@ import org.jgrapht.alg.cycle.BergeGraphInspector;
 import org.jgrapht.alg.cycle.ChordalityInspector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 import org.jgrapht.alg.cycle.WeakChordalityInspector;
-import org.jgrapht.alg.interfaces.PartitionAlgorithm;
-import org.jgrapht.alg.partition.BipartitePartitionFinder;
+import org.jgrapht.alg.interfaces.PartitioningAlgorithm;
+import org.jgrapht.alg.partition.BipartitePartitioning;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -366,11 +366,11 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is bipartite, false otherwise
-     * @see BipartitePartitionFinder#isBipartite()
+     * @see BipartitePartitioning#isBipartite()
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
-        return new BipartitePartitionFinder<>(graph).isBipartite();
+        return new BipartitePartitioning<>(graph).isBipartite();
     }
 
     /**
@@ -382,14 +382,14 @@ public abstract class GraphTests
      * @return true if the partition is a bipartite partition, false otherwise
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @see BipartitePartitionFinder#isValidPartition(PartitionAlgorithm.Partition)
+     * @see BipartitePartitioning#isValidPartitioning(PartitioningAlgorithm.Partitioning)
      */
     @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
             Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
-        return new BipartitePartitionFinder<>(graph).isValidPartition(
-                new PartitionAlgorithm.PartitionImpl<>(Arrays.asList((Set<V>)firstPartition, (Set<V>)secondPartition)));
+        return new BipartitePartitioning<>(graph).isValidPartitioning(
+                new PartitioningAlgorithm.PartitioningImpl<>(Arrays.asList((Set<V>)firstPartition, (Set<V>)secondPartition)));
     }
 
     /**
