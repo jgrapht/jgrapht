@@ -139,7 +139,7 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      * @return the set of vertices $v$ for which the mapping is defined
      */
     public Set<V> getMappingDomain(){
-        return forwardMapping.keySet();
+        return Collections.unmodifiableSet(forwardMapping.keySet());
     }
 
     /**
@@ -148,7 +148,7 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      * @return the set of vertices $v$ for which a preimage exists
      */
     public Set<V> getMappingRange(){
-        return backwardMapping.keySet();
+        return Collections.unmodifiableSet(backwardMapping.keySet());
     }
 
     /**

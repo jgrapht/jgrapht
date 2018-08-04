@@ -285,25 +285,12 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
      */
     @Override
     public Iterator<GraphMapping<V, E>> getMappings() {
-        return new Iterator<GraphMapping<V, E>>() {
-            private IsomorphicGraphMapping<V, E> iterMapping = getMapping();
+        GraphMapping<V, E> iterMapping = getMapping();
 
-            @Override
-            public boolean hasNext() {
-                return iterMapping != null;
-            }
-
-            @Override
-            public GraphMapping<V, E> next() {
-                if (iterMapping == null){
-                    throw new NoSuchElementException("no mapping available");
-                }
-
-                IsomorphicGraphMapping<V, E> tmp = iterMapping;
-                iterMapping = null;
-                return tmp;
-            }
-        };
+        if (iterMapping == null)
+            return Collections.emptyIterator();
+        else
+            return Collections.singletonList(iterMapping).iterator();
     }
 
     /**
