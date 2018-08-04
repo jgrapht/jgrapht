@@ -31,9 +31,8 @@ import static org.jgrapht.util.MathUtil.log2;
  *
  * <p>
  * See the article on
- * <a href="https://www.topcoder.com/community/data-science/data-science-tutorials/
- * range-minimum-query-and-lowest-common-ancestor/#Another%20easy%20
- * solution%20in%20O(N%20logN,%20O(logN)">Topcoder</a> for more details about the algorithm.
+ * <a href="https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#Another%20easy%20solution%20in%20O(N%20logN,%20O(logN)">Topcoder</a>
+ * for more details about the algorithm.
  *
  * </p>
  *
