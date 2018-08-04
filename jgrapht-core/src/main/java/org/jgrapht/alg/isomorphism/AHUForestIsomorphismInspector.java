@@ -21,6 +21,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.AsGraphUnion;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
@@ -47,7 +49,7 @@ import java.util.function.Supplier;
  * </p>
  *
  * <p>
- *     Note: This implementation requires the input graphs to be modifiable and to have valid vertex suppliers
+ *     Note: This implementation requires the input graphs to have valid vertex suppliers
  *     (see {@link Graph#getVertexSupplier()}).
  * </p>
  *
@@ -165,15 +167,19 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
         return isomorphicMapping != null;
     }
 
-    private V addDummyRoot(Graph<V, E> forest, Set<V> roots){
-        V fresh = getFreshVertex(forest);
+    private Pair<V, Graph<V, E>> addDummyRoot(Graph<V, E> forest, Set<V> roots){
+        Graph<V, E> freshForest =
+                new SimpleGraph<>(forest.getVertexSupplier(), forest.getEdgeSupplier(), false);
 
-        forest.addVertex(fresh);
+        roots.forEach(freshForest::addVertex);
+        V freshVertex = getFreshVertex(forest);
+
+        freshForest.addVertex(freshVertex);
 
         for (V root: roots)
-            forest.addEdge(fresh, root);
+            freshForest.addEdge(freshVertex, root);
 
-        return fresh;
+        return Pair.of(freshVertex, new AsGraphUnion<>(freshForest, forest));
     }
 
     /**
@@ -199,14 +205,17 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
         }
         else{
-            V fresh1 = addDummyRoot(forest1, roots1);
-            V fresh2 = addDummyRoot(forest2, roots2);
+            Pair<V, Graph<V, E>> pair1 = addDummyRoot(forest1, roots1);
+            Pair<V, Graph<V, E>> pair2 = addDummyRoot(forest2, roots2);
+
+            V fresh1 = pair1.getFirst();
+            Graph<V, E> freshForest1 = pair1.getSecond();
+
+            V fresh2 = pair2.getFirst();
+            Graph<V, E> freshForest2 = pair2.getSecond();
 
             IsomorphicGraphMapping<V, E> mapping =
-                    new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getMapping();
-
-            forest1.removeVertex(fresh1);
-            forest2.removeVertex(fresh2);
+                    new AHUTreeIsomorphismInspector<>(freshForest1, fresh1, freshForest2, fresh2).getMapping();
 
             if (mapping != null){
                 Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
@@ -216,7 +225,8 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
                 newForwardMapping.remove(fresh1);
                 newBackwardMapping.remove(fresh2);
 
-                isomorphicMapping = new IsomorphicGraphMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
+                isomorphicMapping =
+                        new IsomorphicGraphMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
             }
         }
 
