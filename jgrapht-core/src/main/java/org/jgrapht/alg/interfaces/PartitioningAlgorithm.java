@@ -113,6 +113,25 @@ public interface PartitioningAlgorithm<V> {
         }
 
         /**
+         * Construct a new vertex partitioning.
+         *
+         * @param vertexToPartitionMap the vertex to partition index map
+         * @throws NullPointerException if {@code vertexToPartitionMap} is {@code null}
+         */
+        public PartitioningImpl(Map<V, Integer> vertexToPartitionMap){
+            Objects.requireNonNull(vertexToPartitionMap);
+
+            Map<Integer, Set<V>> partitionIndexToVertexMap = new HashMap<>();
+
+            for (Map.Entry<V, Integer> entry: vertexToPartitionMap.entrySet()){
+                partitionIndexToVertexMap.computeIfAbsent(entry.getValue(), x -> new HashSet<>()).add(entry.getKey());
+            }
+
+            this.classes = Collections.unmodifiableList(partitionIndexToVertexMap.values().stream()
+                    .map(Collections::unmodifiableSet).collect(Collectors.toList()));
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override
