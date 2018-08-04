@@ -18,6 +18,7 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMapping;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.SimpleGraph;
@@ -55,7 +56,7 @@ import java.util.function.Supplier;
  *
  * @author Alexandru Valeanu
  */
-public class AHUForestIsomorphismInspector<V, E> {
+public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector<V, E> {
     private final Graph<V, E> forest1;
     private final Graph<V, E> forest2;
 
@@ -140,10 +141,35 @@ public class AHUForestIsomorphismInspector<V, E> {
     }
 
     /**
-     * Check if an isomorphism exists.
-     *
-     * @return true if there is an isomorphism, false if there is no isomorphism
+     * {@inheritDoc}
      */
+    @Override
+    public Iterator<GraphMapping<V, E>> getMappings() {
+        return new Iterator<GraphMapping<V, E>>() {
+            private IsomorphicTreeMapping<V, E> iterMapping = getMapping();
+
+            @Override
+            public boolean hasNext() {
+                return iterMapping != null;
+            }
+
+            @Override
+            public GraphMapping<V, E> next() {
+                if (iterMapping == null){
+                    throw new NoSuchElementException("no mapping available");
+                }
+
+                IsomorphicTreeMapping<V, E> tmp = iterMapping;
+                iterMapping = null;
+                return tmp;
+            }
+        };
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isomorphismExists(){
         if (!computed){
             isomorphicMapping = getMapping();
