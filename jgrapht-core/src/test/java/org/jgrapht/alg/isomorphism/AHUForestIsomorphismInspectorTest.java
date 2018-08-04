@@ -120,7 +120,8 @@ public class AHUForestIsomorphismInspectorTest {
         tree2.addVertex("A");
 
         AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUForestIsomorphismInspector<>(tree1, "1", tree2, "A");
+                new AHUForestIsomorphismInspector<>(tree1, Collections.singleton("1"),
+                        tree2, Collections.singleton("A"));
 
         Assert.assertTrue(isomorphism.isomorphismExists());
         IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
@@ -129,8 +130,7 @@ public class AHUForestIsomorphismInspectorTest {
 
     @Test(expected = NullPointerException.class)
     public void testNullGraphs(){
-        AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null);
+        new AHUForestIsomorphismInspector<String, DefaultEdge>(null, new HashSet<>(), null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -142,7 +142,8 @@ public class AHUForestIsomorphismInspectorTest {
         tree1.addVertex("A");
 
         AHUForestIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUForestIsomorphismInspector<>(tree1, "b", tree2, "A");
+                new AHUForestIsomorphismInspector<>(tree1, Collections.singleton("b"),
+                        tree2, Collections.singleton("A"));
 
         isomorphism.getMapping();
     }
@@ -229,7 +230,8 @@ public class AHUForestIsomorphismInspectorTest {
         Map<Integer, Integer> mapping = pair.getSecond();
 
         AHUForestIsomorphismInspector<Integer, DefaultEdge> isomorphism =
-                new AHUForestIsomorphismInspector<>(tree1, 1, tree2, mapping.get(1));
+                new AHUForestIsomorphismInspector<>(tree1, Collections.singleton(1),
+                        tree2, Collections.singleton(mapping.get(1)));
 
         Assert.assertTrue(isomorphism.isomorphismExists());
         IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();

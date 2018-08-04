@@ -26,13 +26,14 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
- * This is an implementation of the AHU algorithm for detecting an isomorphism between two rooted forests.
+ * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between two rooted forests.
  * Please see <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">mathworld.wolfram.com</a> for a complete
  * definition of the isomorphism problem for general graphs.
  *
  * <p>
  *     The original algorithm was first presented in "Alfred V. Aho and John E. Hopcroft. 1974.
- *     The Design and Analysis of Computer Algorithms (1st ed.). Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA."
+ *     The Design and Analysis of Computer Algorithms (1st ed., page 84). Addison-Wesley
+ *     Longman Publishing Co., Inc., Boston, MA, USA."
  * </p>
  *
  * <p>
@@ -58,36 +59,28 @@ public class AHUForestIsomorphismInspector<V, E> {
     private final Graph<V, E> forest1;
     private final Graph<V, E> forest2;
 
-    private Set<V> roots1;
-    private Set<V> roots2;
+    private final Set<V> roots1;
+    private final Set<V> roots2;
 
     private boolean computed = false;
-    private IsomorphicTreeMapping<V, E> isomorphicMapping = null;
-
-    /**
-     * Construct a new AHU rooted tree isomorphism inspector.
-     *
-     * Note: The constructor does NOT check if the input trees are valid.
-     *
-     * @param tree1 the first rooted tree
-     * @param root1 the root of the first tree
-     * @param tree2 the second rooted tree
-     * @param root2 the root of the second tree
-     */
-    public AHUForestIsomorphismInspector(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
-        this(tree1, Collections.singleton(Objects.requireNonNull(root1, "root cannot be null")),
-                tree2, Collections.singleton(Objects.requireNonNull(root2, "root cannot be null")));
-    }
+    private IsomorphicTreeMapping<V, E> isomorphicMapping;
 
     /**
      * Construct a new AHU rooted forest isomorphism inspector.
      *
-     * Note: The constructor does NOT check if the input forests are valid.
+     * Note: The constructor does NOT check if the input forests are valid trees.
      *
      * @param forest1 the first rooted forest
      * @param roots1 the roots of the first forest
      * @param forest2 the second rooted forest
      * @param roots2 the roots of the second forest
+     * @throws NullPointerException if {@code forest1} is {@code null}
+     * @throws NullPointerException if {@code roots1} is {@code null}
+     * @throws NullPointerException if {@code forest2} is {@code null}
+     * @throws NullPointerException if {@code roots2} is {@code null}
+     * @throws IllegalArgumentException if {@code roots1} is empty
+     * @throws IllegalArgumentException if {@code roots2} is empty
+     * @throws IllegalArgumentException if either {@code roots1} or {@code roots2} contain an invalid vertex
      */
     public AHUForestIsomorphismInspector(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
         this.forest1 = Objects.requireNonNull(forest1, "input forest cannot be null");
@@ -97,11 +90,11 @@ public class AHUForestIsomorphismInspector<V, E> {
         this.roots2 = Objects.requireNonNull(roots2, "set of roots cannot be null");
 
         if (roots1.isEmpty()){
-            throw new IllegalArgumentException("root set cannot be empty");
+            throw new IllegalArgumentException("roots1 cannot be empty");
         }
 
         if (roots2.isEmpty()){
-            throw new IllegalArgumentException("root set cannot be empty");
+            throw new IllegalArgumentException("roots2 cannot be empty");
         }
 
         if (!forest1.vertexSet().containsAll(roots1)){
@@ -122,12 +115,13 @@ public class AHUForestIsomorphismInspector<V, E> {
         while (true){
             V v = supplier.get();
 
-            if (!graph.containsVertex(v))
+            if (!graph.vertexSet().contains(v)){
                 return v;
+            }
         }
     }
 
-    private Graph<V, E> takeSubraph(Graph<V, E> graph, Set<V> vertices){
+    private Graph<V, E> takeSubgraph(Graph<V, E> graph, Set<V> vertices){
         Graph<V, E> subgraph = new SimpleGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), false);
 
         for (V v: vertices)
@@ -158,14 +152,26 @@ public class AHUForestIsomorphismInspector<V, E> {
         return isomorphicMapping != null;
     }
 
+    private V addDummyRoot(Graph<V, E> forest, Set<V> roots){
+        V fresh = getFreshVertex(forest);
+
+        forest.addVertex(fresh);
+
+        for (V root: roots)
+            forest.addEdge(fresh, root);
+
+        return fresh;
+    }
+
     /**
      * Get an isomorphism between the input forest or {@code null} if none exists.
      *
      * @return isomorphic mapping, {@code null} is none exists
      */
     public IsomorphicTreeMapping<V, E> getMapping(){
-        if (computed)
+        if (computed) {
             return isomorphicMapping;
+        }
 
         ConnectivityInspector<V, E> connectivityInspector1 = new ConnectivityInspector<>(forest1);
         List<Set<V>> trees1 = connectivityInspector1.connectedSets();
@@ -177,59 +183,31 @@ public class AHUForestIsomorphismInspector<V, E> {
             V root1 = roots1.iterator().next();
             V root2 = roots2.iterator().next();
 
-            computed = true;
             isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
-            return isomorphicMapping;
         }
+        else{
+            V fresh1 = addDummyRoot(forest1, roots1);
+            V fresh2 = addDummyRoot(forest2, roots2);
 
-        V fresh1 = getFreshVertex(forest1);
-        V fresh2 = getFreshVertex(forest2);
+            IsomorphicTreeMapping<V, E> mapping =
+                    new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getMapping();
 
-        forest1.addVertex(fresh1);
+            forest1.removeVertex(fresh1);
+            forest2.removeVertex(fresh2);
 
-        for (V root: roots1)
-            forest1.addEdge(fresh1, root);
+            if (mapping != null){
+                Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
+                Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping());
 
-        forest2.addVertex(fresh2);
+                // remove the mapping from fresh1 to fresh 2 (and vice-versa)
+                newForwardMapping.remove(fresh1);
+                newBackwardMapping.remove(fresh2);
 
-        for (V root: roots2)
-            forest2.addEdge(fresh2, root);
-
-        IsomorphicTreeMapping<V, E> mapping =
-                new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getMapping();
-
-        forest1.removeVertex(fresh1);
-        forest2.removeVertex(fresh2);
-
-        this.computed = true;
-
-        if (mapping != null){
-            Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping().size());
-            Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping().size());
-
-            for (V root1: roots1){
-                V root2 = mapping.getVertexCorrespondence(root1, true);
-
-                Graph<V, E> subgraph1 = takeSubraph(forest1, connectivityInspector1.connectedSetOf(root1));
-                Graph<V, E> subgraph2 = takeSubraph(forest2, connectivityInspector2.connectedSetOf(root2));
-
-                IsomorphicTreeMapping<V, E> tmpMapping =
-                        new AHUTreeIsomorphismInspector<>(
-                                subgraph1, root1,
-                                subgraph2, root2
-                        ).getMapping();
-
-                assert tmpMapping != null;
-                assert Collections.disjoint(newForwardMapping.keySet(), tmpMapping.getForwardMapping().keySet());
-                assert Collections.disjoint(newBackwardMapping.keySet(), tmpMapping.getBackwardMapping().keySet());
-
-                newForwardMapping.putAll(tmpMapping.getForwardMapping());
-                newBackwardMapping.putAll(tmpMapping.getBackwardMapping());
+                isomorphicMapping = new IsomorphicTreeMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
             }
-
-            isomorphicMapping = new IsomorphicTreeMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
         }
 
+        computed = true;
         return isomorphicMapping;
     }
 }

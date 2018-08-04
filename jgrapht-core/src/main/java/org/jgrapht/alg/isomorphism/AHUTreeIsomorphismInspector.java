@@ -27,7 +27,7 @@ import org.jgrapht.util.RadixSort;
 import java.util.*;
 
 /**
- * This is an implementation of the AHU algorithm for detecting an isomorphism between two trees.
+ * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between two trees.
  * Please see <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">mathworld.wolfram.com</a> for a complete
  * definition of the isomorphism problem for general graphs.
  *
@@ -67,9 +67,12 @@ public class AHUTreeIsomorphismInspector<V, E> {
      *
      * @param tree1 the first tree
      * @param tree2 the second tree
+     * @throws NullPointerException if {@code tree1} is {@code null}
+     * @throws NullPointerException if {@code tree2} is {@code null}
      */
     public AHUTreeIsomorphismInspector(Graph<V, E> tree1, Graph<V, E> tree2){
-        this(tree1, null, tree2, null);
+        this.tree1 = Objects.requireNonNull(tree1, "tree1 cannot be null");
+        this.tree2 = Objects.requireNonNull(tree2, "tree2 cannot be null");
     }
 
     /**
@@ -81,13 +84,26 @@ public class AHUTreeIsomorphismInspector<V, E> {
      * @param root1 the root of the first tree
      * @param tree2 the second rooted tree
      * @param root2 the root of the second tree
+     * @throws NullPointerException if {@code tree1} is {@code null}
+     * @throws NullPointerException if {@code root1} is {@code null}
+     * @throws NullPointerException if {@code tree2} is {@code null}
+     * @throws NullPointerException if {@code root2} is {@code null}
+     * @throws IllegalArgumentException if either {@code root1} or {@code root2} contain an invalid vertex
      */
     public AHUTreeIsomorphismInspector(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
         this.tree1 = Objects.requireNonNull(tree1, "tree1 cannot be null");
         this.tree2 = Objects.requireNonNull(tree2, "tree2 cannot be null");
 
-        this.root1 = root1;
-        this.root2 = root2;
+        this.root1 = Objects.requireNonNull(root1, "root1 cannot be null");
+        this.root2 = Objects.requireNonNull(root2, "root2 cannot be null");
+
+        if (!tree1.vertexSet().contains(root1)){
+            throw new IllegalArgumentException("root not contained in forest");
+        }
+
+        if (!tree2.vertexSet().contains(root2)){
+            throw new IllegalArgumentException("root not contained in forest");
+        }
     }
 
     private void bfs(Graph<V, E> graph, V root, List<List<V>> levels){
