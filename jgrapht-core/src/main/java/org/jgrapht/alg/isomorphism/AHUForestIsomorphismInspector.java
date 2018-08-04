@@ -64,7 +64,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
     private final Set<V> roots2;
 
     private boolean computed = false;
-    private IsomorphicTreeMapping<V, E> isomorphicMapping;
+    private IsomorphicGraphMapping<V, E> isomorphicMapping;
 
     /**
      * Construct a new AHU rooted forest isomorphism inspector.
@@ -142,7 +142,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
     @Override
     public Iterator<GraphMapping<V, E>> getMappings() {
         return new Iterator<GraphMapping<V, E>>() {
-            private IsomorphicTreeMapping<V, E> iterMapping = getMapping();
+            private IsomorphicGraphMapping<V, E> iterMapping = getMapping();
 
             @Override
             public boolean hasNext() {
@@ -155,7 +155,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
                     throw new NoSuchElementException("no mapping available");
                 }
 
-                IsomorphicTreeMapping<V, E> tmp = iterMapping;
+                IsomorphicGraphMapping<V, E> tmp = iterMapping;
                 iterMapping = null;
                 return tmp;
             }
@@ -190,7 +190,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      *
      * @return isomorphic mapping, {@code null} is none exists
      */
-    public IsomorphicTreeMapping<V, E> getMapping(){
+    public IsomorphicGraphMapping<V, E> getMapping(){
         if (computed) {
             return isomorphicMapping;
         }
@@ -211,7 +211,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             V fresh1 = addDummyRoot(forest1, roots1);
             V fresh2 = addDummyRoot(forest2, roots2);
 
-            IsomorphicTreeMapping<V, E> mapping =
+            IsomorphicGraphMapping<V, E> mapping =
                     new AHUTreeIsomorphismInspector<>(forest1, fresh1, forest2, fresh2).getMapping();
 
             forest1.removeVertex(fresh1);
@@ -225,7 +225,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
                 newForwardMapping.remove(fresh1);
                 newBackwardMapping.remove(fresh2);
 
-                isomorphicMapping = new IsomorphicTreeMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
+                isomorphicMapping = new IsomorphicGraphMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
             }
         }
 

@@ -77,7 +77,7 @@ public class AHUTreeIsomorphismInspectorTest {
     }
 
     public static <V, E> boolean areIsomorphic(Graph<V, E> graph1, Graph<V, E> graph2,
-                                               IsomorphicTreeMapping<V, E> mapping){
+                                               IsomorphicGraphMapping<V, E> mapping){
         for (V v: graph1.vertexSet()){
             if (!mapping.getForwardMapping().containsKey(v) ||
                     !graph2.containsVertex(mapping.getForwardMapping().get(v)))
@@ -123,7 +123,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, tree1);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree1, treeMapping));
     }
 
@@ -139,7 +139,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, tree2);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -179,7 +179,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, tree2);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -229,7 +229,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 10, tree2, 11);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -247,7 +247,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 1, tree2, 12);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -265,7 +265,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 0, tree2, 10);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -298,7 +298,7 @@ public class AHUTreeIsomorphismInspectorTest {
         isomorphism = new AHUTreeIsomorphismInspector<>(tree1, tree2);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -357,7 +357,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, "A", tree2, "a");
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -396,7 +396,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 1, tree2, mapping.get(1));
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -433,7 +433,7 @@ public class AHUTreeIsomorphismInspectorTest {
                         tree2, new HashSet<>(Arrays.asList(11, 31)));
 
         Assert.assertTrue(forestIsomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = forestIsomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = forestIsomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -472,14 +472,14 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, tree2);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> mapping12 = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> mapping12 = isomorphism.getMapping();
 
         isomorphism = new AHUTreeIsomorphismInspector<>(tree2, tree3);
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<String, DefaultEdge> mapping23 = isomorphism.getMapping();
+        IsomorphicGraphMapping<String, DefaultEdge> mapping23 = isomorphism.getMapping();
 
-        IsomorphicTreeMapping<String, DefaultEdge> mapping13 = mapping12.compose(mapping23);
+        IsomorphicGraphMapping<String, DefaultEdge> mapping13 = mapping12.compose(mapping23);
 
         Assert.assertTrue(areIsomorphic(tree1, tree3, mapping13));
     }
@@ -499,12 +499,12 @@ public class AHUTreeIsomorphismInspectorTest {
             AHUTreeIsomorphismInspector<Integer, DefaultEdge> isomorphism =
                     new AHUTreeIsomorphismInspector<>(tree1, tree2);
 
-            IsomorphicTreeMapping<Integer, DefaultEdge> mapping12 = isomorphism.getMapping();
+            IsomorphicGraphMapping<Integer, DefaultEdge> mapping12 = isomorphism.getMapping();
 
             isomorphism = new AHUTreeIsomorphismInspector<>(tree2, tree3);
-            IsomorphicTreeMapping<Integer, DefaultEdge> mapping23 = isomorphism.getMapping();
+            IsomorphicGraphMapping<Integer, DefaultEdge> mapping23 = isomorphism.getMapping();
 
-            IsomorphicTreeMapping<Integer, DefaultEdge> mapping13 = mapping12.compose(mapping23);
+            IsomorphicGraphMapping<Integer, DefaultEdge> mapping13 = mapping12.compose(mapping23);
 
             Assert.assertTrue(areIsomorphic(tree1, tree3, mapping13));
         }
@@ -533,7 +533,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 1, tree2, mapping.get(1));
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -560,7 +560,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 1, tree2, mapping.get(1));
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
     }
 
@@ -579,7 +579,7 @@ public class AHUTreeIsomorphismInspectorTest {
                 new AHUTreeIsomorphismInspector<>(tree1, 1, tree2, mapping.get(1));
 
         Assert.assertTrue(isomorphism.isomorphismExists());
-        IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+        IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
         Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
 
         isomorphism = new AHUTreeIsomorphismInspector<>(tree1, tree2);
@@ -607,7 +607,7 @@ public class AHUTreeIsomorphismInspectorTest {
                     new AHUTreeIsomorphismInspector<>(tree1, tree2);
 
             Assert.assertTrue(isomorphism.isomorphismExists());
-            IsomorphicTreeMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
+            IsomorphicGraphMapping<Integer, DefaultEdge> treeMapping = isomorphism.getMapping();
             Assert.assertTrue(areIsomorphic(tree1, tree2, treeMapping));
         }
     }

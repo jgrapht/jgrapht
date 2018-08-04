@@ -282,7 +282,7 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
     @Override
     public Iterator<GraphMapping<V, E>> getMappings() {
         return new Iterator<GraphMapping<V, E>>() {
-            private IsomorphicTreeMapping<V, E> iterMapping = getMapping();
+            private IsomorphicGraphMapping<V, E> iterMapping = getMapping();
 
             @Override
             public boolean hasNext() {
@@ -295,7 +295,7 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
                     throw new NoSuchElementException("no mapping available");
                 }
 
-                IsomorphicTreeMapping<V, E> tmp = iterMapping;
+                IsomorphicGraphMapping<V, E> tmp = iterMapping;
                 iterMapping = null;
                 return tmp;
             }
@@ -342,10 +342,10 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
      *
      * @return isomorphic mapping, {@code null} is none exists
      */
-    public IsomorphicTreeMapping<V, E> getMapping(){
+    public IsomorphicGraphMapping<V, E> getMapping(){
         if (forwardMapping == null){
             if (isomorphismExists())
-                return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, tree1, tree2);
+                return new IsomorphicGraphMapping<>(forwardMapping, backwardMapping, tree1, tree2);
             else
                 return null;
         }
@@ -353,6 +353,6 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
         if (forwardMapping.size() != tree1.vertexSet().size())
             return null;
         else
-            return new IsomorphicTreeMapping<>(forwardMapping, backwardMapping, tree1, tree2);
+            return new IsomorphicGraphMapping<>(forwardMapping, backwardMapping, tree1, tree2);
     }
 }
