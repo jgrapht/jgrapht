@@ -42,7 +42,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Tom Conerly
 - Michele Mancioppi
 - Adrian Marte
-- Assaf Mizrachi
+- [Assaf Mizrachi](https://github.com/assimiz)
 - Harshal Vora
 - Matt Sarjent
 - Robby McKilliam

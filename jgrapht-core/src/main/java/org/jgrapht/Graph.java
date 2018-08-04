@@ -211,15 +211,16 @@ public interface Graph<V, E>
      * be equal to any other vertex in the graph. More formally, the graph must not contain any
      * vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>
      * v2</code> is found then the newly created vertex <code>v</code> is abandoned, the method
-     * leaves this graph unchanged and returns <code>null</code>.
+     * leaves this graph unchanged and throws an {@link IllegalArgumentException}.
      * 
      * <p>
      * If the underlying graph implementation's {@link #getVertexSupplier()} returns
      * <code>null</code>, then this method cannot create vertices and throws an
      * {@link UnsupportedOperationException}.
      *
-     * @return The newly created vertex if added to the graph, otherwise <code>null</code>.
+     * @return The newly created vertex if added to the graph.
      *
+     * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in the graph
      * @throws UnsupportedOperationException if the graph was not initialized with a vertex supplier
      *
      * @see #getVertexSupplier()

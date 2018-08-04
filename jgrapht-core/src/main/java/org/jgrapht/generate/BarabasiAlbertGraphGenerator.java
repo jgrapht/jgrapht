@@ -146,10 +146,6 @@ public class BarabasiAlbertGraphGenerator<V, E>
          */
         for (int i = m0; i < n; i++) {
             V v = target.addVertex();
-            if (v == null) {
-                throw new IllegalArgumentException(
-                    "Invalid vertex supplier (does not return unique vertices on each call).");
-            }
 
             List<V> newEndpoints = new ArrayList<>();
             int added = 0;

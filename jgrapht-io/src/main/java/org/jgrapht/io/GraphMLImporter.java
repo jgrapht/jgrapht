@@ -549,9 +549,17 @@ public class GraphMLImporter<V, E>
             throws SAXException
         {
             if (insideDefault) {
-                currentKey.defaultValue = new String(ch, start, length);
+                if (currentKey.defaultValue != null) {
+                    currentKey.defaultValue += new String(ch, start, length);
+                } else {
+                    currentKey.defaultValue = new String(ch, start, length);
+                }
             } else if (insideData) {
-                currentData.value = new String(ch, start, length);
+                if (currentData.value != null) {
+                    currentData.value += new String(ch, start, length);
+                } else {
+                    currentData.value = new String(ch, start, length);
+                }
             }
         }
 

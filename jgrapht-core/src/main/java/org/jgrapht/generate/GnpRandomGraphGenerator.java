@@ -136,8 +136,7 @@ public class GnpRandomGraphGenerator<V, E>
         int previousVertexSetSize = target.vertexSet().size();
         Map<Integer, V> vertices = new HashMap<>(n);
         for (int i = 0; i < n; i++) {
-            V v = target.addVertex();
-            vertices.put(i, v);
+            vertices.put(i, target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n) {

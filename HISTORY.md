@@ -26,6 +26,15 @@ Changes to JGraphT in each version:
     - Optimize `JohnsonShortestPaths` space usage (contributed by Dimitrios Michail)
     - Heuristics for `FloydWarshallShortestPaths` (suggested by shevek, contributed by Dimitrios Michail)
     - Added new `TreeToPathDecompositionAlgorithm` interface and implementation `HeavyPathDecomposition` (contributed by Alexandru Văleanu)
+    - Removed recursion from `FibonacciHeap` (contributed by Timofey Chudakov)
+    - Added `PruferTreeGenerator` for generating trees based on Prüfer sequences (contributed by Alexandru Văleanu)
+    - Added `VertexToIntegerMapping` utility class (contributed by Alexandru Văleanu)
+    - Handle maxLength=0 case in AllDirectedPaths (reported by Nikolas Havrikov, contributed by Andrew Gainer-Dewar)
+    - Added `SuurballeKDisjointShortestPaths` (contributed by Assaf Mizrachi)
+    - Make AsWeightedGraph propagate weight changes by default when backing graph is weighted (contributed by John Sichi)
+    - Fix assumptions about SAX `characters()` method calls in GraphML importers (contributed by Dimitrios Michail)
+    - Throw exception from no-arg `addVertex` when duplicate vertex generated (contributed by Dimitrios Michail)
+    - Replace `GenericFibonacciHeap` with dependency on jheaps library (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

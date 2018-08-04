@@ -18,7 +18,6 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.*;
 
 import java.util.*;
 

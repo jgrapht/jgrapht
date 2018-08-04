@@ -92,9 +92,6 @@ public class ScaleFreeGraphGenerator<V, E>
         int degreeSum = 0;
         for (int i = 0; i < size; i++) {
             V newVertex = target.addVertex();
-            if (newVertex == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
             int newDegree = 0;
             while ((newDegree == 0) && (i != 0)) // we want our graph to be connected
             {
