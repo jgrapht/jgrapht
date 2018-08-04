@@ -59,9 +59,16 @@ public class TreeVCImplTest {
         new TreeVCImpl<Integer, DefaultEdge>(null, Collections.emptySet()).getVertexCover();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoRoots(){
         Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
+        new TreeVCImpl<>(tree, Collections.emptySet()).getVertexCover();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoRoots2(){
+        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
+        tree.addVertex(1);
         new TreeVCImpl<>(tree, Collections.emptySet()).getVertexCover();
     }
 

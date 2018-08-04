@@ -103,14 +103,14 @@ public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
      * @param roots the input root
      * @throws NullPointerException if {@code graph} is {@code null}
      * @throws NullPointerException if {@code roots} is {@code null}
-     * @throws IllegalArgumentException if {@code roots} is empty
+     * @throws IllegalArgumentException if {@code roots} is empty is {@code graph} is not empty
      * @throws IllegalArgumentException if {@code roots} contains an invalid vertex
      */
     public TreeVCImpl(Graph<V, E> graph, Set<V> roots) {
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "set of roots cannot be null");
 
-        if (this.roots.isEmpty())
+        if (!this.graph.vertexSet().isEmpty() && this.roots.isEmpty())
             throw new IllegalArgumentException("set of roots cannot be empty");
 
         if (!this.graph.vertexSet().containsAll(roots))
@@ -132,33 +132,32 @@ public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
     }
 
     private void computeMinimumVertexCover(){
-        Map<V, V> parent =  new HashMap<>();
+        Map<V, V> parentMap =  new HashMap<>();
         Set<V> visited = new HashSet<>();
 
         for (V root: roots)
             if (!visited.contains(root))
-                bfs(root, visited, parent);
+                bfs(root, visited, parentMap);
             else
                 throw new IllegalArgumentException("multiple roots in the same tree");
 
-        Set<V> leaves = new HashSet<>();
+        Set<V> allParents = new HashSet<>(parentMap.values());
+
+        // A vertex v is a leaf iff there is no vertex u such that v is the parent of u
+        Set<V> leaves = graph.vertexSet().stream().filter(x -> !allParents.contains(x)).collect(Collectors.toSet());
         Set<V> vc = new HashSet<>();
         Set<V> deleted = new HashSet<>();
 
-        // A vertex v is a leaf iff there is no vertex u such that v is the parent of u
-        for (V v: graph.vertexSet())
-            if (!parent.values().contains(v))
-                leaves.add(v);
         do {
             Set<V> parents = new HashSet<>();
             Set<V> grandparents = new HashSet<>();
 
             for (V leaf: leaves){
-                V p = parent.get(leaf);
+                V p = parentMap.get(leaf);
 
                 if (p != null) {
                     parents.add(p);
-                    V pp = parent.get(p);
+                    V pp = parentMap.get(p);
 
                     if (pp != null && !deleted.contains(pp))
                         grandparents.add(pp);
@@ -171,7 +170,7 @@ public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
             vc.addAll(parents);
 
             grandparents.removeAll(parents);
-            grandparents.removeAll(grandparents.stream().map(parent::get).collect(Collectors.toSet()));
+            grandparents.removeAll(grandparents.stream().map(parentMap::get).collect(Collectors.toSet()));
 
             leaves = grandparents;
 
@@ -185,8 +184,9 @@ public class TreeVCImpl<V, E> implements VertexCoverAlgorithm<V> {
      */
     @Override
     public VertexCover<V> getVertexCover() {
-        if (minVertexCover == null)
+        if (minVertexCover == null) {
             computeMinimumVertexCover();
+        }
 
         return minVertexCover;
     }
