@@ -19,11 +19,9 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AsGraphUnion;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -124,24 +122,6 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
         return v;
     }
 
-    private Graph<V, E> takeSubgraph(Graph<V, E> graph, Set<V> vertices){
-        Graph<V, E> subgraph = new SimpleGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), false);
-
-        for (V v: vertices)
-            subgraph.addVertex(v);
-
-        for (V v: vertices){
-            for (E edge: graph.edgesOf(v)){
-                V u = Graphs.getOppositeVertex(graph, edge, v);
-
-                if (vertices.contains(u))
-                    subgraph.addEdge(u, v);
-            }
-        }
-
-        return subgraph;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -168,8 +148,10 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
     }
 
     private Pair<V, Graph<V, E>> addDummyRoot(Graph<V, E> forest, Set<V> roots){
-        Graph<V, E> freshForest =
-                new SimpleGraph<>(forest.getVertexSupplier(), forest.getEdgeSupplier(), false);
+        GraphTypeBuilder<V, E> graphTypeBuilder = GraphTypeBuilder.forGraph(forest);
+        graphTypeBuilder = graphTypeBuilder.weighted(false);
+
+        Graph<V, E> freshForest = graphTypeBuilder.buildGraph();
 
         roots.forEach(freshForest::addVertex);
         V freshVertex = getFreshVertex(forest);
@@ -183,7 +165,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
     }
 
     /**
-     * Get an isomorphism between the input forest or {@code null} if none exists.
+     * Get an isomorphism between the input forests or {@code null} if none exists.
      *
      * @return isomorphic mapping, {@code null} is none exists
      */
@@ -192,13 +174,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             return isomorphicMapping;
         }
 
-        ConnectivityInspector<V, E> connectivityInspector1 = new ConnectivityInspector<>(forest1);
-        List<Set<V>> trees1 = connectivityInspector1.connectedSets();
-
-        ConnectivityInspector<V, E> connectivityInspector2 = new ConnectivityInspector<>(forest2);
-        List<Set<V>> trees2 = connectivityInspector2.connectedSets();
-
-        if (trees1.size() <= 1 && trees2.size() <= 1) {
+        if (roots1.size() == 1 && roots1.size() == 1) {
             V root1 = roots1.iterator().next();
             V root2 = roots2.iterator().next();
 
