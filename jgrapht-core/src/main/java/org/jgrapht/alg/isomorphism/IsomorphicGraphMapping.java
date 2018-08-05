@@ -34,6 +34,8 @@ import java.util.*;
  */
 public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
 
+    public static final int NULL_NODE = -1;
+
     private final Map<V, V> forwardMapping;
     private final Map<V, V> backwardMapping;
 
@@ -59,7 +61,7 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
             int vNumber = g1.getVertexNumber(v);
             int uNumber = core1[vNumber];
 
-            if (uNumber != VF2State.NULL_NODE) {
+            if (uNumber != NULL_NODE) {
                 forwardMapping.put(v, g2.getVertex(uNumber));
             }
         }
@@ -68,7 +70,7 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
             int vNumber = g2.getVertexNumber(v);
             int uNumber = core2[vNumber];
 
-            if (uNumber != VF2State.NULL_NODE) {
+            if (uNumber != NULL_NODE) {
                 backwardMapping.put(v, g1.getVertex(uNumber));
             }
         }

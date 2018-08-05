@@ -135,10 +135,8 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
         return isomorphicMapping != null;
     }
 
-    private Pair<V, Graph<V, E>> addDummyRoot(Graph<V, E> forest, Set<V> roots){
-        GraphTypeBuilder<V, E> graphTypeBuilder = GraphTypeBuilder.forGraph(forest);
-
-        Graph<V, E> freshForest = graphTypeBuilder.buildGraph();
+    private Pair<V, Graph<V, E>> createSingleRootGraph(Graph<V, E> forest, Set<V> roots){
+        Graph<V, E> freshForest = GraphTypeBuilder.forGraph(forest).weighted(false).buildGraph();
 
         roots.forEach(freshForest::addVertex);
         V freshVertex = freshForest.addVertex();
@@ -168,8 +166,8 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
         }
         else{
-            Pair<V, Graph<V, E>> pair1 = addDummyRoot(forest1, roots1);
-            Pair<V, Graph<V, E>> pair2 = addDummyRoot(forest2, roots2);
+            Pair<V, Graph<V, E>> pair1 = createSingleRootGraph(forest1, roots1);
+            Pair<V, Graph<V, E>> pair2 = createSingleRootGraph(forest2, roots2);
 
             V fresh1 = pair1.getFirst();
             Graph<V, E> freshForest1 = pair1.getSecond();

@@ -25,6 +25,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.util.RadixSort;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -178,11 +179,11 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
         this.backwardMapping = new HashMap<>();
 
         // Are both graphs empty?
-        if (Objects.isNull(root1) && Objects.isNull(root2))
+        if (root1 == null && root2 == null)
             return true;
 
         @SuppressWarnings("unchecked")
-        Map<V, Integer>[] canonicalName = new Map[2];
+        Map<V, Integer>[] canonicalName = (Map<V, Integer>[]) Array.newInstance(Map.class, 2);
         canonicalName[0] = new HashMap<>(tree1.vertexSet().size());
         canonicalName[1] = new HashMap<>(tree2.vertexSet().size());
 
@@ -194,7 +195,6 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
 
         final int MAX_LEVEL = nodesByLevel1.size() - 1;
 
-        @SuppressWarnings("unchecked")
         Map<String, Integer> canonicalNameToInt = new HashMap<>();
 
         List<Map<Integer, List<V>>> sameLabelBagsByLevel = new ArrayList<>(nodesByLevel1.size());
@@ -203,7 +203,7 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
 
         for (int lvl = MAX_LEVEL; lvl >= 0; lvl--) {
             @SuppressWarnings("unchecked")
-            List<V>[] level = new List[2];
+            List<V>[] level = (List<V>[]) Array.newInstance(List.class, 2);
 
             level[0] = nodesByLevel1.get(lvl);
             level[1] = nodesByLevel2.get(lvl);
@@ -214,7 +214,6 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
 
             final int n = level[0].size();
 
-            @SuppressWarnings("unchecked")
             Map<Integer, List<V>> sameLabelBags = new HashMap<>(n);
 
             for (int k = 0; k < 2; k++) {
@@ -258,8 +257,7 @@ public class AHUTreeIsomorphismInspector<V, E> implements IsomorphismInspector<V
                     canonicalName[k].put(u, intName);
 
                     if (k == 1){
-                        List<V> bag = sameLabelBags.computeIfAbsent(intName, x -> new ArrayList<>());
-                        bag.add(u);
+                        sameLabelBags.computeIfAbsent(intName, x -> new ArrayList<>()).add(u);
                     }
                 }
             }
