@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.jgrapht.alg.isomorphism.AHUTreeIsomorphismInspectorTest.*;
+import static org.jgrapht.alg.isomorphism.AHURootedTreeIsomorphismInspectorTest.*;
 
 /**
  * Tests for {@link AHUForestIsomorphismInspector}

@@ -42,7 +42,7 @@ import java.util.*;
  * </p>
  *
  * <p>
- *      For an implementation that supports both unrooted and rooted trees see {@link AHUTreeIsomorphismInspector}.
+ *      For an implementation that supports both unrooted and rooted trees see {@link AHURootedTreeIsomorphismInspector}.
  * </p>
  *
  * <p>
@@ -163,7 +163,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             V root1 = roots1.iterator().next();
             V root2 = roots2.iterator().next();
 
-            isomorphicMapping = new AHUTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
+            isomorphicMapping = new AHURootedTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
         }
         else{
             Pair<V, Graph<V, E>> pair1 = createSingleRootGraph(forest1, roots1);
@@ -176,7 +176,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             Graph<V, E> freshForest2 = pair2.getSecond();
 
             IsomorphicGraphMapping<V, E> mapping =
-                    new AHUTreeIsomorphismInspector<>(freshForest1, fresh1, freshForest2, fresh2).getMapping();
+                    new AHURootedTreeIsomorphismInspector<>(freshForest1, fresh1, freshForest2, fresh2).getMapping();
 
             if (mapping != null){
                 Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
