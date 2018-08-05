@@ -83,7 +83,7 @@ public class AHUForestIsomorphismInspectorTest {
         return forest;
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testMissingSupplier(){
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
         tree1.addVertex("1");

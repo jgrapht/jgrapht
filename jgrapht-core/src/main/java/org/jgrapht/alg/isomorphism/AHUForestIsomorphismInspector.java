@@ -24,7 +24,6 @@ import org.jgrapht.graph.AsGraphUnion;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 /**
  * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between two rooted forests.
@@ -111,17 +110,6 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
         }
     }
 
-    private V getFreshVertex(Graph<V, E> graph){
-        Supplier<V> supplier = graph.getVertexSupplier();
-
-        if (Objects.isNull(supplier))
-            throw new IllegalArgumentException("vertex supplier cannot be null");
-
-        V v = supplier.get();
-        assert !graph.vertexSet().contains(v);
-        return v;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -149,12 +137,11 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
 
     private Pair<V, Graph<V, E>> addDummyRoot(Graph<V, E> forest, Set<V> roots){
         GraphTypeBuilder<V, E> graphTypeBuilder = GraphTypeBuilder.forGraph(forest);
-        graphTypeBuilder = graphTypeBuilder.weighted(false);
 
         Graph<V, E> freshForest = graphTypeBuilder.buildGraph();
 
         roots.forEach(freshForest::addVertex);
-        V freshVertex = getFreshVertex(forest);
+        V freshVertex = freshForest.addVertex();
 
         freshForest.addVertex(freshVertex);
 
@@ -174,7 +161,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             return isomorphicMapping;
         }
 
-        if (roots1.size() == 1 && roots1.size() == 1) {
+        if (roots1.size() == 1 && roots2.size() == 1) {
             V root1 = roots1.iterator().next();
             V root2 = roots2.iterator().next();
 
