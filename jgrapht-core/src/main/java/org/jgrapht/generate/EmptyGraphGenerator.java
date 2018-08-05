@@ -35,21 +35,19 @@ public class EmptyGraphGenerator<V, E>
     implements
     GraphGenerator<V, E, V>
 {
-    private int size;
+    private final int size;
 
     /**
      * Construct a new EmptyGraphGenerator.
      *
      * @param size number of vertices to be generated
-     *
      * @throws IllegalArgumentException if the specified size is negative.
      */
     public EmptyGraphGenerator(int size)
     {
         if (size < 0) {
-            throw new IllegalArgumentException("must be non-negative");
+            throw new IllegalArgumentException("size must be non-negative");
         }
-
         this.size = size;
     }
 

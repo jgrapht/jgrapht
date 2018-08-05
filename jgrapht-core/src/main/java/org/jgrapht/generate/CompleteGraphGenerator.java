@@ -38,7 +38,7 @@ public class CompleteGraphGenerator<V, E>
     implements
     GraphGenerator<V, E, V>
 {
-    private int size;
+    private final int size;
 
     /**
      * Construct a new CompleteGraphGenerator.
@@ -49,9 +49,8 @@ public class CompleteGraphGenerator<V, E>
     public CompleteGraphGenerator(int size)
     {
         if (size < 0) {
-            throw new IllegalArgumentException("must be non-negative");
+            throw new IllegalArgumentException("size must be non-negative");
         }
-
         this.size = size;
     }
 
@@ -76,11 +75,7 @@ public class CompleteGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            V newVertex = target.addVertex();
-            if (newVertex == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            nodes.add(newVertex);
+            nodes.add(target.addVertex());
         }
 
         /*

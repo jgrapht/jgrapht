@@ -20,6 +20,7 @@ package org.jgrapht.alg.decomposition;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.TreeToPathDecompositionAlgorithm;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
 
@@ -122,15 +123,12 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     private void normalizeGraph(){
-        // Normalize the graph: map each vertex to an integer (using a HashMap) keep the reverse
-        // mapping (using an ArrayList)
-        vertexMap = new HashMap<>(graph.vertexSet().size());
-        indexList = new ArrayList<>(graph.vertexSet().size());
-
-        for (V v : graph.vertexSet()) {
-            vertexMap.put(v, vertexMap.size());
-            indexList.add(v);
-        }
+        /*
+         * Normalize the graph by mapping each vertex to an integer.
+         */
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
+        vertexMap = vertexToIntegerMapping.getVertexMap();
+        indexList = vertexToIntegerMapping.getIndexList();
     }
 
     /**

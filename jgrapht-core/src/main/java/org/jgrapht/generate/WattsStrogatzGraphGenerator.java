@@ -161,9 +161,6 @@ public class WattsStrogatzGraphGenerator<V, E>
 
         for (int i = 0; i < n; i++) {
             V v = target.addVertex();
-            if (v == null) {
-                throw new IllegalArgumentException("Invalid vertex factory");
-            }
             ring.add(v);
             adj.put(v, new ArrayList<>(k));
         }

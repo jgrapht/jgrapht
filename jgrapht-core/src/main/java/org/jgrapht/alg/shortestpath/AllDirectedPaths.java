@@ -213,6 +213,10 @@ public class AllDirectedPaths<V, E>
                 completePaths.add(GraphWalk.singletonWalk(graph, source, 0d));
             }
 
+            if (maxPathLength != null && maxPathLength == 0) {
+                continue;
+            }
+
             for (E edge : graph.outgoingEdgesOf(source)) {
                 assert graph.getEdgeSource(edge).equals(source);
 

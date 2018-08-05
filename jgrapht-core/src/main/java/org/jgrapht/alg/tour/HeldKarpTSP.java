@@ -17,9 +17,12 @@
  */
 package org.jgrapht.alg.tour;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
 
@@ -129,26 +132,15 @@ public class HeldKarpTSP<V, E>
         }
 
         /*
-         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
+         * Normalize the graph by mapping each vertex to an integer.
          */
-        Map<V, Integer> vertexMap = new HashMap<>();
-        List<V> indexList = new ArrayList<>();
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
+        Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
+        List<V> indexList = vertexToIntegerMapping.getIndexList();
+
         for (E e : graph.edgeSet()) {
             V source = graph.getEdgeSource(e);
             V target = graph.getEdgeTarget(e);
-
-            // map 'source' if no mapping exists
-            if (!vertexMap.containsKey(source)) {
-                vertexMap.put(source, vertexMap.size());
-                indexList.add(source);
-            }
-
-            // map 'target' if no mapping exists
-            if (!vertexMap.containsKey(target)) {
-                vertexMap.put(target, vertexMap.size());
-                indexList.add(target);
-            }
 
             int u = vertexMap.get(source);
             int v = vertexMap.get(target);

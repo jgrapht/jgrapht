@@ -303,7 +303,7 @@ public class SimpleGraphMLImporter<V, E>
         private E currentEdge;
         private Key currentKey;
         private String currentDataKey;
-        private String currentDataValue;
+        private StringBuilder currentDataValue;
         private Map<String, Key> nodeValidKeys;
         private Map<String, Key> edgeValidKeys;
         private Map<String, Key> graphValidKeys;
@@ -329,7 +329,7 @@ public class SimpleGraphMLImporter<V, E>
             currentEdge = null;
             currentKey = null;
             currentDataKey = null;
-            currentDataValue = null;
+            currentDataValue = new StringBuilder();
             nodeValidKeys = new HashMap<>();
             edgeValidKeys = new HashMap<>();
             graphValidKeys = new HashMap<>();
@@ -438,7 +438,7 @@ public class SimpleGraphMLImporter<V, E>
             case DATA:
                 if (--insideData == 0) {
                     notifyData();
-                    currentDataValue = null;
+                    currentDataValue.setLength(0);
                     currentDataKey = null;
                 }
                 break;
@@ -452,7 +452,7 @@ public class SimpleGraphMLImporter<V, E>
             throws SAXException
         {
             if (insideData == 1) {
-                currentDataValue = new String(ch, start, length);
+                currentDataValue.append(ch, start, length);
             }
         }
 
@@ -488,7 +488,7 @@ public class SimpleGraphMLImporter<V, E>
 
         private void notifyData()
         {
-            if (currentDataKey == null || currentDataValue == null) {
+            if (currentDataKey == null || currentDataValue.length() == 0) {
                 return;
             }
 
@@ -497,7 +497,7 @@ public class SimpleGraphMLImporter<V, E>
                 if (key != null) {
                     notifyVertex(
                         currentNode, key.attributeName,
-                        new DefaultAttribute<>(currentDataValue, key.type));
+                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
                 }
             }
             if (currentEdge != null) {
@@ -508,21 +508,21 @@ public class SimpleGraphMLImporter<V, E>
                      */
                     if (isWeighted && key.attributeName.equals(edgeWeightAttributeName)) {
                         try {
-                            graph.setEdgeWeight(currentEdge, Double.parseDouble(currentDataValue));
+                            graph.setEdgeWeight(currentEdge, Double.parseDouble(currentDataValue.toString()));
                         } catch (NumberFormatException e) {
                             // ignore
                         }
                     }
                     notifyEdge(
                         currentEdge, key.attributeName,
-                        new DefaultAttribute<>(currentDataValue, key.type));
+                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
                 }
             }
             if (graph != null) {
                 Key key = graphValidKeys.get(currentDataKey);
                 if (key != null) {
                     notifyGraph(
-                        key.attributeName, new DefaultAttribute<>(currentDataValue, key.type));
+                        key.attributeName, new DefaultAttribute<>(currentDataValue.toString(), key.type));
                 }
             }
         }

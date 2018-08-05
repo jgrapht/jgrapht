@@ -41,7 +41,10 @@ import java.util.*;
  *
  * @author Nathan Fiedler
  * @author Dimitrios Michail
+ * 
+ * @deprecated In favor of using data structures from the jheaps library. 
  */
+@Deprecated
 public class GenericFibonacciHeap<K, T>
 {
     private static final double ONEOVERLOGPHI = 1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);

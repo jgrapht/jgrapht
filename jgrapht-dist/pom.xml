@@ -30,6 +30,12 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-core</artifactId>
+			<classifier>uber</classifier>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-io</artifactId>
 		</dependency>
 		<dependency>

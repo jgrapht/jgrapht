@@ -1,5 +1,5 @@
 <!-- describe the changes you have made here: what, why, …
-     Link issues by using the following pattern: [#333](https://github.com/JabRef/jabref/issues/333).
+     Link issues by using the following pattern: [#333](https://github.com/jgrapht/jgrapht/issues/333).
      The title of the PR must not reference an issue, because GitHub does not support autolinking there. -->
 
 ----

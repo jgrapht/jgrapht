@@ -66,6 +66,11 @@
 			<outputDirectory>3rd-party-licenses</outputDirectory>
 			<destName>commons-lang3-license.txt</destName>
 		</file>
+		<file>
+			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+			<outputDirectory>3rd-party-licenses</outputDirectory>
+			<destName>jheaps-license.txt</destName>
+		</file>
 	</files>
 
 	<fileSets>

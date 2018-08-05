@@ -15,6 +15,7 @@
 1. Run `mvn -Dmaven.artifact.threads=1 clean deploy` to push the latest snapshot to Sonatype.
 1. Run `mvn source:jar; mvn javadoc:jar; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central
 1. Publish the release [using the Sonatype UI](http://central.sonatype.org/pages/releasing-the-deployment.html).
+1. Before continuing, restart from a fresh clone to make sure your workspace is clean.  Otherwise, if you have old files lying around that are hidden by `.gitignore`, they may get accidentally included in the release archive.
 1. Run `mvn javadoc:aggregate; mvn install` from the new release branch to produce the release archive distribution
 1. Upload the release archive distribution to sourceforge using the File Release System.
 1. Add the javadocs for the new release to the [javadoc repository](https://github.com/jgrapht/jgrapht-javadoc).  To do this, push a commit which replaces the contents of the existing javadoc directory, and also [adds an identical copy](https://github.com/jgrapht/jgrapht/wiki/Website-Deployment#javadoc) under a new javadoc-x.y.z directory.

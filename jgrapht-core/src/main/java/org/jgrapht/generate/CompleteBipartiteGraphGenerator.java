@@ -36,18 +36,18 @@ public class CompleteBipartiteGraphGenerator<V, E>
     implements
     GraphGenerator<V, E, V>
 {
-    private int sizeA, sizeB;
+    private final int sizeA, sizeB;
 
     /**
      * Creates a new CompleteBipartiteGraphGenerator object.
      *
-     * @param partitionOne This is the number of vertices in the first partition
-     * @param partitionTwo This is the number of vertices in the second parition
+     * @param partitionOne number of vertices in the first partition
+     * @param partitionTwo number of vertices in the second partition
      */
     public CompleteBipartiteGraphGenerator(int partitionOne, int partitionTwo)
     {
-        if ((partitionOne < 0) || (partitionTwo < 0)) {
-            throw new IllegalArgumentException("must be non-negative");
+        if (partitionOne < 0 || partitionTwo < 0) {
+            throw new IllegalArgumentException("partition sizes must be non-negative");
         }
         this.sizeA = partitionOne;
         this.sizeB = partitionTwo;

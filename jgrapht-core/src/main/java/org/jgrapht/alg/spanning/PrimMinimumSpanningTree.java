@@ -17,11 +17,14 @@
  */
 package org.jgrapht.alg.spanning;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
+import org.jgrapht.util.FibonacciHeap;
+import org.jgrapht.util.FibonacciHeapNode;
+import org.jgrapht.util.VertexToIntegerMapping;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -69,15 +72,11 @@ public class PrimMinimumSpanningTree<V, E>
         final int N = g.vertexSet().size();
 
         /*
-         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
+         * Normalize the graph by mapping each vertex to an integer.
          */
-        Map<V, Integer> vertexMap = new HashMap<>();
-        List<V> indexList = new ArrayList<>();
-        for (V v : g.vertexSet()) {
-            vertexMap.put(v, vertexMap.size());
-            indexList.add(v);
-        }
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(g);
+        Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
+        List<V> indexList = vertexToIntegerMapping.getIndexList();
 
         VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
         FibonacciHeapNode<VertexInfo>[] fibNodes =

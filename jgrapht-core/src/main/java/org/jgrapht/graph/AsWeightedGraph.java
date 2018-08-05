@@ -33,8 +33,10 @@ import org.jgrapht.GraphType;
  * internally and passing all other operations on the underlying graph. As a consequence, the edges
  * returned are the edges of the original graph.
  *
- * Additionally, if the underlying graph is a weighted one, the weights can be propagated to it. The
- * default implementation does not propagate the changes, creating a weighted view only.
+ * Additionally, if the underlying graph is weighted, weight changes can be
+ * propagated to it. By default, this happens automatically when the backing
+ * graph is weighted; this behavior can be disabled via an optional constructor
+ * parameter.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -49,8 +51,9 @@ public class AsWeightedGraph<V, E>
     private final boolean writeWeightsThrough;
 
     /**
-     * Constructor for AsWeightedGraph creating a weighted view which does not change the backing
-     * graph's edge weights.
+     * Constructor for AsWeightedGraph which enables weight write propagation
+     * automatically if the backing graph is weighted (otherwise, weight changes
+     * only affect the weighted view).
      *
      * @param graph   the backing graph over which an weighted view is to be created.
      * @param weights the map containing the edge weights.
@@ -58,11 +61,12 @@ public class AsWeightedGraph<V, E>
      */
     public AsWeightedGraph(Graph<V, E> graph, Map<E, Double> weights)
     {
-        this(graph, weights, false);
+        this(graph, weights, graph.getType().isWeighted());
     }
 
     /**
-     * Constructor for AsWeightedGraph.
+     * Constructor for AsWeightedGraph which allows weight write propagation
+     * to be requested explicitly.
      *
      * @param graph               the backing graph over which an weighted view is to be created
      * @param weights             the map containing the edge weights

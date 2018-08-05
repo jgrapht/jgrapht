@@ -37,15 +37,19 @@ public class StarGraphGenerator<V, E>
 {
     public static final String CENTER_VERTEX = "Center Vertex";
 
-    private int order;
+    private final int order;
 
     /**
      * Creates a new StarGraphGenerator object.
      *
      * @param order number of total vertices including the center vertex
+     * @throws IllegalArgumentException if the order is negative
      */
     public StarGraphGenerator(int order)
     {
+        if (order < 0) { 
+            throw new IllegalArgumentException("Order must be non-negative");
+        }
         this.order = order;
     }
 
@@ -67,8 +71,7 @@ public class StarGraphGenerator<V, E>
 
         // Create other vertices
         for (int i = 0; i < (order - 1); i++) {
-            V newVertex = target.addVertex();
-            target.addEdge(newVertex, centerVertex);
+            target.addEdge(target.addVertex(), centerVertex);
         }
     }
 }
