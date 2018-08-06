@@ -21,6 +21,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedPseudograph;
@@ -80,20 +81,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching0() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 8}, {0, 2, 10}, {1, 2, 8}, {0, 3, 11}, {1, 3, 5}, {2, 5, 3}, {1, 5, 6}, {2, 4, 3},
                 {4, 5, 1}, {1, 6, 5}, {3, 6, 4}, {3, 7, 5}, {6, 7, 2}, {5, 7, 6}, {4, 7, 7},
                 {1, 7, 5}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge>.DualSolution dualSolution = perfectMatching.getDualSolution();
-
-        assertEquals(18, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, dualSolution);
+        test(edges, 18);
     }
 
     /**
@@ -102,7 +93,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
     @Test
     public void testGetMatching1() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-
         KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
 
@@ -116,15 +106,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching2() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
-
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(5, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        int[][] edges = new int[][]{{1, 2, 5}};
+        test(edges, 5);
     }
 
     /**
@@ -132,18 +115,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching3() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 8}, {2, 3, 8}, {3, 4, 8}, {4, 1, 8}, {2, 4, 2}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(16, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 16);
     }
 
     /**
@@ -151,18 +124,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching4() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 3, 11}, {1, 4, 8}, {2, 3, 8}, {2, 4, 2}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(13, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 13);
     }
 
     /**
@@ -170,18 +133,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching5() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 4, 7}, {1, 5, 5}, {1, 6, 2}, {2, 4, 1}, {2, 5, 3}, {2, 6, 4}, {3, 4, 7},
                 {3, 5, 10}, {3, 6, 7}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(12, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 12);
     }
 
     /**
@@ -189,18 +143,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching6() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 4, 7}, {1, 5, 3}, {1, 6, 9}, {2, 4, 8}, {2, 5, 2}, {2, 6, 9},
                 {3, 4, 6}, {3, 5, 1}, {3, 6, 10}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(17, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 17);
     }
 
     /**
@@ -208,17 +153,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching7() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 2}, {1, 3, 5}, {1, 4, 1}, {2, 3, 5}, {2, 4, 2}, {3, 4, 1}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(3, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 3);
     }
 
     /**
@@ -226,18 +162,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching8() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 1}, {1, 3, 4}, {1, 4, 7}, {1, 5, 10}, {2, 3, 5}, {2, 4, 7}, {2, 5, 10},
                 {3, 4, 10}, {3, 5, 2}, {4, 5, 3}, {3, 6, 8}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(12, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 12);
     }
 
     /**
@@ -245,18 +172,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching9() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 1}, {1, 3, 6}, {1, 4, 1}, {1, 5, 1}, {2, 3, 6}, {2, 4, 6}, {2, 5, 5},
                 {3, 4, 7}, {3, 5, 8}, {4, 5, 8}, {1, 6, 8}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(20, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 20);
     }
 
     /**
@@ -264,18 +182,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching10() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 4}, {1, 3, 4}, {1, 4, 6}, {1, 5, 8}, {2, 3, 8}, {2, 4, 10}, {2, 5, 8},
                 {3, 4, 4}, {3, 5, 9}, {4, 5, 4}, {1, 6, 9}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(21, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 21);
     }
 
     /**
@@ -283,18 +192,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching11() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 5}, {1, 3, 1}, {1, 4, 8}, {1, 5, 1}, {2, 3, 2}, {2, 4, 8}, {2, 5, 1},
                 {3, 4, 8}, {3, 5, 5}, {4, 5, 10}, {1, 6, 8}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(17, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 17);
     }
 
     /**
@@ -302,18 +202,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching12() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 2}, {1, 3, 6}, {1, 4, 3}, {1, 5, 2}, {2, 3, 7}, {2, 4, 7}, {2, 5, 7},
                 {3, 4, 4}, {3, 5, 4}, {4, 5, 2}, {1, 6, 2}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(11, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 11);
     }
 
     /**
@@ -321,18 +212,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching13() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{2, 0, 8}, {2, 0, 5}, {2, 1, 9}, {3, 0, 2}, {3, 1, 6}, {3, 2, 7}, {4, 0, 3},
                 {4, 1, 5}, {4, 2, 5}, {4, 3, 7}, {5, 4, 6}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(17, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 17);
     }
 
     /**
@@ -340,18 +222,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching14() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 0, 9}, {2, 0, 8}, {2, 1, 3}, {3, 0, 5}, {3, 1, 4}, {3, 2, 10}, {4, 0, 3},
                 {4, 1, 2}, {4, 2, 4}, {4, 3, 8}, {5, 1, 4}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(13, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 13);
     }
 
     /**
@@ -359,18 +232,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching15() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 0, 8}, {2, 0, 7}, {2, 1, 10}, {3, 0, 8}, {3, 1, 5}, {3, 2, 3}, {4, 0, 9},
                 {4, 1, 5}, {4, 2, 4}, {4, 3, 10}, {5, 1, 4}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(16, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 16);
     }
 
     /**
@@ -378,18 +242,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching16() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 3}, {1, 3, 2}, {1, 4, 8}, {1, 5, 10}, {1, 6, 8}, {2, 3, 1}, {2, 4, 4},
                 {2, 5, 8}, {2, 6, 0}, {3, 4, 8}, {3, 5, 5}, {3, 6, 0}, {4, 5, 7}, {4, 6, 0}, {5, 6, 0}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(6, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 6);
     }
 
     /**
@@ -397,18 +252,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching17() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 0, 7}, {1, 2, 3}, {0, 2, 7}, {0, 3, 9}, {0, 4, 9}, {3, 4, 2}, {0, 5, 9},
                 {4, 5, 8}, {2, 5, 6}, {5, 6, 5}, {2, 6, 6}, {1, 6, 9}, {3, 7, 8}, {4, 7, 6}, {5, 7, 5}, {6, 7, 9}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(20, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 20);
     }
 
     /**
@@ -416,19 +262,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching18() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 10}, {0, 2, 7}, {1, 2, 4}, {2, 3, 1}, {1, 3, 3}, {3, 4, 1}, {1, 4, 2},
                 {3, 5, 1}, {4, 5, 2}, {2, 5, 2}, {4, 6, 3}, {5, 6, 3}, {1, 6, 3}, {2, 7, 5}, {0, 7, 6}, {5, 8, 2},
                 {6, 8, 3}, {2, 8, 4}, {7, 8, 3}, {7, 9, 3}, {0, 9, 7}, {8, 9, 8}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(16, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 16);
     }
 
     /**
@@ -437,19 +274,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching19() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 6}, {0, 2, 4}, {1, 2, 4}, {2, 3, 6}, {1, 3, 4}, {1, 4, 5}, {3, 4, 1},
                 {0, 5, 5}, {2, 5, 3}, {2, 6, 8}, {3, 6, 9}, {5, 6, 6}, {3, 7, 7}, {4, 7, 8}, {6, 7, 5}, {6, 8, 5},
                 {7, 8, 5}, {6, 9, 8}, {5, 9, 11}, {8, 9, 9}, {0, 9, 15}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(23, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 23);
     }
 
     /**
@@ -458,19 +286,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching20() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{2, 3, 2}, {2, 4, 5}, {3, 4, 4}, {0, 2, 4}, {0, 4, 7}, {0, 1, 4}, {1, 4, 7},
                 {2, 5, 7}, {3, 5, 5}, {0, 5, 10}, {3, 6, 6}, {5, 6, 7}, {4, 6, 5}, {5, 7, 8}, {6, 7, 2}, {4, 8, 7},
                 {1, 8, 13}, {6, 8, 4}, {7, 8, 3}, {7, 9, 3}, {8, 9, 3}, {5, 9, 10}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(19, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 19);
     }
 
     /**
@@ -479,19 +298,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching21() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 10}, {0, 2, 8}, {1, 2, 3}, {0, 3, 7}, {2, 3, 2}, {0, 4, 7}, {0, 5, 6},
                 {4, 5, 7}, {3, 5, 4}, {2, 6, 5}, {3, 6, 5}, {1, 6, 6}, {5, 7, 4}, {4, 7, 6}, {5, 8, 6}, {7, 8, 7},
                 {3, 8, 7}, {6, 8, 5}, {8, 9, 7}, {7, 9, 2}, {4, 9, 8}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(21, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 21);
     }
 
     /**
@@ -500,19 +310,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching22() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 0, 7}, {1, 4, 8}, {0, 4, 6}, {0, 5, 7}, {4, 5, 3}, {4, 6, 4}, {5, 6, 3},
                 {4, 7, 6}, {6, 7, 4}, {2, 3, 2}, {2, 8, 8}, {3, 7, 8}, {1, 2, 3}, {1, 7, 9}, {3, 8, 7}, {7, 8, 5},
                 {7, 9, 4}, {8, 9, 5}, {6, 9, 7}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(21, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 21);
     }
 
     /**
@@ -521,19 +322,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching23() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 0, 14}, {1, 2, 12}, {0, 2, 7}, {0, 3, 7}, {2, 3, 3}, {2, 4, 9}, {1, 4, 6},
                 {2, 5, 7}, {4, 5, 3}, {2, 6, 5}, {3, 6, 5}, {5, 6, 5}, {4, 7, 4}, {1, 7, 9}, {5, 7, 4}, {5, 8, 3},
                 {7, 8, 5}, {6, 8, 3}, {3, 9, 7}, {6, 9, 2}, {8, 9, 3}, {7, 9, 8}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(25, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 25);
     }
 
     /**
@@ -542,19 +334,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching24() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 5}, {0, 3, 8}, {2, 3, 6}, {0, 1, 9}, {1, 3, 7}, {2, 4, 5}, {3, 4, 3},
                 {3, 5, 2}, {4, 5, 2}, {1, 5, 9}, {4, 6, 5}, {2, 6, 8}, {4, 7, 4}, {5, 7, 5}, {6, 7, 5}, {5, 8, 5},
                 {1, 8, 12}, {7, 8, 4}, {7, 9, 3}, {8, 9, 3}, {6, 9, 7}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(22, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 22);
     }
 
     /**
@@ -563,19 +346,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching25() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 8}, {0, 2, 10}, {1, 2, 3}, {0, 3, 8}, {1, 3, 5}, {1, 4, 5}, {3, 4, 2},
                 {4, 5, 3}, {3, 5, 3}, {3, 6, 6}, {0, 6, 11}, {5, 6, 5}, {1, 7, 7}, {4, 7, 6}, {2, 7, 6}, {5, 8, 5},
                 {6, 8, 4}, {5, 9, 8}, {8, 9, 10}, {4, 9, 8}, {7, 9, 5}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(23, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 23);
     }
 
     /**
@@ -583,19 +357,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching26() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 5}, {0, 2, 5}, {1, 2, 3}, {1, 3, 4}, {2, 3, 3}, {2, 4, 5}, {3, 4, 6},
                 {0, 4, 5}, {3, 5, 5}, {4, 5, 3}, {3, 6, 6}, {5, 6, 5}, {1, 6, 10}, {5, 7, 9}, {4, 7, 8}, {0, 7, 12},
                 {5, 8, 5}, {7, 8, 11}, {6, 8, 2}, {7, 9, 13}, {8, 9, 5}, {6, 9, 5}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(26, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 26);
     }
 
     /**
@@ -604,19 +369,10 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching27() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 5}, {0, 3, 5}, {1, 3, 3}, {2, 4, 3}, {2, 5, 5}, {4, 5, 5}, {0, 2, 6},
                 {0, 5, 6}, {3, 5, 4}, {5, 6, 5}, {3, 6, 3}, {1, 6, 5}, {5, 7, 7}, {6, 7, 3}, {1, 7, 7}, {5, 8, 7},
                 {7, 8, 7}, {4, 8, 9}, {8, 9, 7}, {4, 9, 7}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(22, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 22);
     }
 
     /**
@@ -626,7 +382,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching28() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 5}, {0, 3, 3}, {2, 3, 3}, {0, 1, 17}, {0, 4, 13}, {1, 4, 5}, {2, 4, 10},
                 {4, 5, 9}, {1, 5, 8}, {5, 7, 6}, {4, 7, 12}, {5, 6, 6}, {6, 7, 2}, {6, 8, 3}, {7, 8, 2}, {2, 9, 16},
                 {3, 9, 15}, {0, 8, 18}, {2, 10, 16}, {4, 10, 15}, {9, 10, 12}, {7, 10, 13}, {8, 10, 12}, {5, 11, 14},
@@ -634,15 +389,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {13, 14, 2}, {10, 15, 8}, {14, 15, 9}, {9, 15, 9}, {12, 16, 7}, {11, 16, 5}, {14, 17, 4}, {15, 17, 11},
                 {12, 17, 5}, {16, 17, 8}, {13, 17, 5}, {17, 18, 13}, {15, 18, 6}, {16, 18, 21}, {15, 19, 9}, {9, 19, 12},
                 {18, 19, 5}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(57, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 57);
     }
 
     /**
@@ -650,7 +397,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching29() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 44}, {0, 3, 50}, {2, 3, 6}, {2, 4, 6}, {3, 4, 7}, {3, 5, 6}, {4, 5, 5},
                 {0, 1, 16}, {0, 6, 15}, {1, 6, 15}, {0, 7, 21}, {6, 7, 22}, {2, 7, 30},
                 {4, 7, 30}, {6, 8, 5}, {1, 8, 16}, {4, 9, 16}, {5, 9, 13}, {3, 9, 18},
@@ -674,16 +420,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {19, 45, 60}, {42, 46, 19}, {45, 46, 29}, {38, 46, 21}, {36, 46, 24}, {36, 47, 35},
                 {46, 47, 37}, {35, 47, 26}, {43, 47, 6}, {46, 48, 63}, {47, 48, 26}, {43, 48, 24},
                 {40, 48, 18}, {44, 48, 8}, {44, 49, 8}, {48, 49, 1}};
-
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(279, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 279);
     }
 
     /**
@@ -691,7 +428,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching30() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 34}, {0, 2, 146}, {1, 2, 113}, {1, 3, 34}, {2, 3, 80}, {1, 5, 18}, {3, 5, 36},
                 {0, 5, 39}, {0, 4, 34}, {0, 7, 29}, {4, 7, 23}, {5, 7, 47}, {2, 8, 43},
                 {3, 8, 65}, {2, 6, 24}, {6, 8, 40}, {4, 9, 33}, {7, 9, 25}, {3, 10, 46},
@@ -716,15 +452,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {44, 47, 49}, {32, 47, 32}, {45, 48, 62}, {47, 48, 136}, {46, 48, 27}, {37, 48, 32},
                 {34, 48, 36}, {47, 49, 140}, {48, 49, 5}, {24, 49, 79}, {4, 49, 175}, {34, 49, 38}
         };
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(496, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 496);
     }
 
     /**
@@ -732,7 +460,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching31() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 118}, {0, 2, 125}, {1, 2, 7}, {0, 3, 66}, {1, 3, 54}, {0, 4, 41}, {3, 4, 27},
                 {0, 5, 19}, {4, 5, 30}, {5, 6, 16}, {0, 6, 19}, {1, 7, 13}, {3, 7, 44},
                 {5, 8, 29}, {4, 8, 6}, {4, 9, 11}, {3, 9, 19}, {8, 9, 10}, {1, 10, 15},
@@ -781,16 +508,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {20, 96, 150}, {92, 97, 12}, {94, 97, 22}, {96, 97, 3}, {94, 98, 34}, {97, 98, 54},
                 {89, 98, 16}, {90, 98, 15}, {91, 98, 15}, {93, 99, 41}, {95, 99, 12}, {97, 99, 128},
                 {98, 99, 74}, {91, 99, 63}, {87, 99, 22}, {84, 99, 37}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(693, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 693);
     }
 
     /**
@@ -798,7 +516,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching32() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 48}, {0, 3, 23}, {1, 3, 27}, {1, 6, 14}, {3, 6, 16}, {0, 2, 80}, {0, 7, 53},
                 {2, 7, 28}, {3, 8, 13}, {6, 8, 5}, {0, 9, 43}, {7, 9, 13}, {6, 10, 10},
                 {8, 10, 11}, {1, 10, 17}, {1, 4, 15}, {4, 10, 21}, {0, 11, 25}, {9, 11, 23},
@@ -846,15 +563,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {88, 95, 17}, {90, 96, 15}, {91, 96, 22}, {91, 97, 22}, {96, 97, 4}, {85, 98, 29},
                 {93, 98, 40}, {96, 98, 25}, {97, 98, 25}, {90, 98, 25}, {84, 98, 29}, {94, 99, 8},
                 {95, 99, 29}, {91, 99, 27}, {97, 99, 44}, {98, 99, 69}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(728, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 728);
     }
 
     /**
@@ -862,7 +571,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching33() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 47}, {1, 3, 33}, {2, 3, 15}, {1, 5, 18}, {3, 5, 16}, {1, 4, 26}, {1, 6, 68},
                 {4, 6, 43}, {1, 0, 129}, {0, 6, 63}, {4, 7, 11}, {6, 7, 32}, {0, 9, 16},
                 {0, 10, 11}, {9, 10, 9}, {3, 11, 9}, {5, 11, 11}, {3, 12, 10}, {11, 12, 13},
@@ -960,15 +668,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {194, 196, 13}, {193, 197, 20}, {196, 197, 1}, {194, 197, 14}, {191, 198, 30}, {195, 198, 39},
                 {178, 198, 34}, {195, 199, 42}, {198, 199, 4}, {193, 199, 80}, {197, 199, 98}, {184, 199, 48},
                 {175, 199, 46}, {176, 199, 40}, {178, 199, 35}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(974, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 974);
     }
 
     /**
@@ -976,7 +676,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching34() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 14}, {0, 6, 13}, {1, 6, 3}, {3, 4, 16}, {3, 7, 13}, {4, 7, 5}, {7, 8, 2},
                 {4, 8, 3}, {0, 10, 10}, {6, 10, 4}, {0, 9, 4}, {9, 10, 6}, {6, 11, 2},
                 {10, 11, 2}, {2, 3, 2}, {2, 12, 3}, {3, 12, 2}, {7, 13, 1}, {8, 13, 3},
@@ -1122,15 +821,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {295, 296, 1}, {286, 296, 3}, {291, 296, 3}, {291, 297, 1}, {296, 297, 2}, {291, 298, 4},
                 {297, 298, 3}, {251, 298, 7}, {266, 298, 7}, {281, 299, 4}, {282, 299, 5}, {266, 299, 6},
                 {298, 299, 3}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(316, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 316);
     }
 
     /**
@@ -1138,7 +829,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching35() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{3, 4, 8}, {3, 8, 8}, {4, 8, 2}, {4, 5, 4}, {4, 9, 3}, {5, 9, 3}, {5, 6, 2},
                 {5, 10, 2}, {6, 10, 2}, {9, 10, 3}, {6, 11, 2}, {10, 11, 2}, {6, 12, 8},
                 {11, 12, 6}, {6, 7, 24}, {7, 12, 18}, {12, 13, 10}, {7, 13, 8}, {13, 14, 2},
@@ -1334,15 +1024,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {381, 397, 3}, {396, 397, 8}, {371, 397, 3}, {372, 397, 4}, {382, 397, 6}, {391, 397, 7},
                 {397, 398, 10}, {391, 398, 5}, {384, 398, 4}, {385, 398, 3}, {373, 398, 3}, {373, 399, 4},
                 {398, 399, 1}, {316, 399, 11}, {220, 399, 21}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(367, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 367);
     }
 
     /**
@@ -1350,7 +1032,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching36() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{4, 5, 4}, {4, 14, 3}, {5, 14, 3}, {5, 6, 4}, {5, 15, 2}, {6, 15, 4}, {14, 15, 3},
                 {10, 11, 1}, {10, 16, 2}, {11, 16, 3}, {9, 10, 1}, {9, 16, 1}, {8, 9, 5},
                 {8, 16, 6}, {11, 12, 5}, {11, 17, 3}, {12, 17, 4}, {1, 0, 7}, {1, 18, 3},
@@ -1593,15 +1274,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {485, 496, 3}, {495, 496, 4}, {485, 497, 4}, {496, 497, 5}, {465, 497, 4}, {475, 497, 3},
                 {487, 498, 3}, {488, 498, 6}, {486, 498, 2}, {475, 498, 2}, {497, 498, 1}, {489, 499, 2},
                 {490, 499, 5}, {488, 499, 3}, {498, 499, 7}, {478, 499, 3}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(425, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 425);
     }
 
     /**
@@ -1627,7 +1300,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching38() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 0, 597}, {2, 0, 614}, {2, 1, 57}, {3, 0, 554}, {3, 1, 883}, {3, 2, 883}, {4, 0, 752},
                 {4, 1, 191}, {4, 2, 972}, {4, 3, 392}, {5, 0, 542}, {5, 1, 507}, {5, 2, 931},
                 {5, 3, 223}, {5, 4, 38}, {6, 0, 125}, {6, 1, 261}, {6, 2, 511}, {6, 3, 892},
@@ -1833,15 +1505,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
                 {49, 37, 961}, {49, 38, 739}, {49, 39, 408}, {49, 40, 951}, {49, 41, 28}, {49, 42, 346},
                 {49, 43, 335}, {49, 44, 681}, {49, 45, 38}, {49, 46, 172}, {49, 47, 144}, {49, 48, 164}
         };
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(933, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 933);
     }
 
     /**
@@ -1849,18 +1513,8 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching39() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
-
-        Graphs.addEdgeWithVertices(graph, 1, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
-        Graphs.addEdgeWithVertices(graph, 1, 2, 10);
-
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(5, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        int[][] edges = new int[][]{{1, 1, 1}, {1, 2, 5}, {1, 2, 10},};
+        test(edges, 5);
     }
 
     /**
@@ -1868,19 +1522,9 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching40() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 1, 1}, {2, 2, 1}, {3, 3, 1}, {4, 4, 1}, {1, 2, 5}, {1, 2, 10}, {1, 3, 2},
                 {1, 3, 5}, {1, 4, 4}, {1, 4, 6}, {2, 3, 3}, {2, 3, 4}, {2, 4, 6}, {2, 4, 8}, {3, 4, 1}, {3, 4, 3}};
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
-
-        assertEquals(6, matching.getWeight(), EPS);
-        assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        test(edges, 6);
     }
 
     /**
@@ -2294,7 +1938,33 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
         perfectMatching.getMatching();
     }
 
+    /**
+     * A method to run a test case.
+     *
+     * @param edges array of edges with their weights
+     * @param result the expected weight of a resulting matching
+     */
+    private void test(int[][] edges, double result) {
+        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching = perfectMatching.getMatching();
 
+        assertEquals(result, matching.getWeight(), EPS);
+        assertTrue(perfectMatching.testOptimality());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+    }
+
+    /**
+     * Checks complementary slackness conditions
+     *
+     * @param matching a matching
+     * @param dualSolution solution to a dual linear program
+     * @param <V> graph vertex type
+     * @param <E> graph edge type
+     */
     private <V, E> void checkMatchingAndDualSolution(MatchingAlgorithm.Matching<V, E> matching,
                                                      KolmogorovMinimumWeightPerfectMatching<V, E>.DualSolution dualSolution) {
         Graph<V, E> graph = dualSolution.getGraph();
