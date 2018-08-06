@@ -31,13 +31,13 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(Parameterized.class)
 
 /**
  * Unit tests for {@link CapacityScalingMinimumCostFlow}
  *
  * @author Timofey Chudakov
  */
+@RunWith(Parameterized.class)
 public class CapacityScalingMinimumCostFlowTest {
 
     private static final double EPS = 1e-9;
@@ -50,49 +50,6 @@ public class CapacityScalingMinimumCostFlowTest {
     @Parameterized.Parameters
     public static Object[] params() {
         return new Integer[]{1, 2, 3, 4, 5};
-    }
-
-    /**
-     * Test case generated with NETGEN generator
-     * params: vertices = 8, edges = 16,  sources = 2, sinks = 2, supply = 15, min. capacity = 1,
-     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
-     */
-    @Test
-    public void testGetMinimumCostFlow_2() {
-        int testCase[][] = new int[][]{{1, 635},{2, 980},{3, 1658},{4, -462},{5, -821},{6, -1123},{7, -13},{8, -854},{1, 5, 625, 2147483647, 10},
-                {1, 7, 1, 8, 2},{3, 4, 805, 2147483647, 10},{3, 6, 855, 2147483647, 3},{4, 8, 847, 2147483647, 5},{4, 7, 1, 9, 9},
-                {4, 5, 197, 2147483647, 4},{5, 3, 1, 9, 1},{5, 7, 1, 4, 3},{2, 6, 973, 2147483647, 10},{2, 4, 1, 4, 10},
-                {6, 7, 1, 6, 10},{6, 8, 1, 6, 8},{6, 3, 1, 6, 2},{6, 5, 1, 10, 5},{6, 4, 701, 2147483647, 2},
-        };
-        test(testCase, 33206);
-    }
-
-    /**
-     * Test case generated with NETGEN generator
-     * params: vertices = 6, edges = 12,  sources = 2, sinks = 2, supply = 10, min. capacity = 1,
-     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
-     */
-    @Test
-    public void testGetMinimumCostFlow_1() {
-        int testCase[][] = new int[][]{{1, 10}, {2, 6}, {3, -211}, {4, 506}, {5, -10}, {6, -301}, {1, 3, 1, 7, 10}, {1, 5, 1, 2, 4}, {1, 4, 1, 1, 6},
-                {3, 4, 1, 7, 3}, {3, 6, 295, 2147483647, 10}, {3, 5, 1, 8, 1}, {4, 5, 1, 7, 10}, {4, 3, 506, 2147483647, 8},
-                {4, 6, 1, 1, -10}, {2, 5, 1, 3, 2}, {2, 6, 1, 3, 10}, {2, 3, 1, 10, 10},
-        };
-        test(testCase, 7154);
-    }
-
-    /**
-     * Test case generated with NETGEN generator
-     * params: vertices = 6, edges = 12,  sources = 2, sinks = 2, supply = 10, min. capacity = 1,
-     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
-     */
-    @Test
-    public void testGetMinimumCostFlow0() {
-        int testCase[][] = new int[][]{{1, 2731}, {2, 414}, {3, -1264}, {4, 216}, {5, -1785}, {6, -312}, {1, 4, 910, 2147483647, 10}, {1, 5, 957, 2147483647, 1},
-                {1, 3, 863, 2147483647, 3}, {3, 5, 1, 1, -5}, {3, 6, 1, 1, 10}, {3, 4, 1, 9, 2}, {4, 3, 1, 1, 8}, {4, 5, 820, 2147483647, 4},
-                {4, 6, 306, 2147483647, 7}, {2, 5, 1, 9, 7}, {2, 6, 1, 9, 10}, {2, 3, 403, 2147483647, 6},
-        };
-        test(testCase, 20594);
     }
 
     @Test
@@ -119,10 +76,53 @@ public class CapacityScalingMinimumCostFlowTest {
     /**
      * Test case generated with NETGEN generator
      * params: vertices = 6, edges = 12,  sources = 2, sinks = 2, supply = 10, min. capacity = 1,
-     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 100%, seed = 1
+     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
      */
     @Test
     public void testGetMinimumCostFlow4() {
+        int testCase[][] = new int[][]{{1, 2731}, {2, 414}, {3, -1264}, {4, 216}, {5, -1785}, {6, -312}, {1, 4, 910, 2147483647, 10}, {1, 5, 957, 2147483647, 1},
+                {1, 3, 863, 2147483647, 3}, {3, 5, 1, 1, -5}, {3, 6, 1, 1, 10}, {3, 4, 1, 9, 2}, {4, 3, 1, 1, 8}, {4, 5, 820, 2147483647, 4},
+                {4, 6, 306, 2147483647, 7}, {2, 5, 1, 9, 7}, {2, 6, 1, 9, 10}, {2, 3, 403, 2147483647, 6},
+        };
+        test(testCase, 20594);
+    }
+
+    /**
+     * Test case generated with NETGEN generator
+     * params: vertices = 8, edges = 16,  sources = 2, sinks = 2, supply = 15, min. capacity = 1,
+     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
+     */
+    @Test
+    public void testGetMinimumCostFlow5() {
+        int testCase[][] = new int[][]{{1, 635}, {2, 980}, {3, 1658}, {4, -462}, {5, -821}, {6, -1123}, {7, -13}, {8, -854}, {1, 5, 625, 2147483647, 10},
+                {1, 7, 1, 8, 2}, {3, 4, 805, 2147483647, 10}, {3, 6, 855, 2147483647, 3}, {4, 8, 847, 2147483647, 5}, {4, 7, 1, 9, 9},
+                {4, 5, 197, 2147483647, 4}, {5, 3, 1, 9, 1}, {5, 7, 1, 4, 3}, {2, 6, 973, 2147483647, 10}, {2, 4, 1, 4, 10},
+                {6, 7, 1, 6, 10}, {6, 8, 1, 6, 8}, {6, 3, 1, 6, 2}, {6, 5, 1, 10, 5}, {6, 4, 701, 2147483647, 2},
+        };
+        test(testCase, 33206);
+    }
+
+    /**
+     * Test case generated with NETGEN generator
+     * params: vertices = 6, edges = 12,  sources = 2, sinks = 2, supply = 10, min. capacity = 1,
+     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
+     */
+    @Test
+    public void testGetMinimumCostFlow6() {
+        int testCase[][] = new int[][]{{1, 10}, {2, 6}, {3, -211}, {4, 506}, {5, -10}, {6, -301}, {1, 3, 1, 7, 10}, {1, 5, 1, 2, 4}, {1, 4, 1, 1, 6},
+                {3, 4, 1, 7, 3}, {3, 6, 295, 2147483647, 10}, {3, 5, 1, 8, 1}, {4, 5, 1, 7, 10}, {4, 3, 506, 2147483647, 8},
+                {4, 6, 1, 1, -10}, {2, 5, 1, 3, 2}, {2, 6, 1, 3, 10}, {2, 3, 1, 10, 10},
+        };
+        test(testCase, 7154);
+    }
+
+    /**
+     * Test case generated with NETGEN generator
+     * params: vertices = 6, edges = 12,  sources = 2, sinks = 2, supply = 10, min. capacity = 1,
+     * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 100%, seed = 1
+     */
+    @Test
+    public void testGetMinimumCostFlow7() {
         scalingFactor = 2;
         int testCase[][] = new int[][]{{1, 7}, {2, 1430}, {3, -1350}, {4, 840}, {5, -499}, {6, -428}, {1, 3, 1, 4, 10},
                 {1, 4, 1, 10, 10}, {1, 5, 1, 10, 9}, {3, 4, 1, 4, 10}, {3, 6, 1, 1, -3}, {3, 5, 489, 2147483647, 6},
@@ -138,7 +138,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 100%, seed = 1
      */
     @Test
-    public void testGetMinimumCostFlow5() {
+    public void testGetMinimumCostFlow8() {
         int testCase[][] = new int[][]{{1, 7}, {2, 1294}, {3, -332}, {4, 265}, {5, -460}, {6, -774}, {1, 3, 1, 4, 10},
                 {1, 4, 1, 10, 10}, {1, 5, 1, 10, 9}, {3, 4, 1, 4, 10}, {3, 6, 1, 8, 3}, {3, 5, 450, 2147483647, 6},
                 {4, 6, 1, 4, -10}, {4, 5, 1, 4, 1}, {4, 3, 265, 2147483647, 10}, {2, 6, 769, 2147483647, 10},
@@ -153,7 +153,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 10, min. cost = 1, max. cost = 10, capacitated = 50%, seed = 1
      */
     @Test
-    public void testGetMinimumCostFlow6() {
+    public void testGetMinimumCostFlow9() {
         int testCase[][] = new int[][]{{1, 7}, {2, 763}, {3, -637}, {4, 164}, {5, -138}, {6, -159}, {1, 3, 1, 4, 10},
                 {1, 4, 1, 2, -10}, {1, 5, 1, 10, 9}, {3, 4, 1, 4, 10}, {3, 6, 1, 8, 3}, {3, 5, 128, 2147483647, 6},
                 {4, 6, 1, 4, 10}, {4, 5, 1, 4, 1}, {4, 3, 164, 2147483647, 10}, {2, 6, 154, 2147483647, 10},
@@ -168,7 +168,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 50, min. cost = 1, max. cost = 50, capacitated = 50%, seed = 268101079
      */
     @Test
-    public void testGetMinimumCostFlow7() {
+    public void testGetMinimumCostFlow10() {
         int testCase[][] = new int[][]{{1, 8}, {2, 16}, {3, 6}, {8, -16}, {9, -6}, {10, -8}, {1, 5, 0, 2147483647, 50},
                 {1, 7, 0, 5, 32}, {1, 9, 0, 18, 33}, {1, 8, 0, 2147483647, 31}, {1, 4, 0, 45, 35},
                 {5, 6, 0, 8, 50}, {5, 10, 0, 2147483647, 2}, {5, 8, 0, 11, 18}, {5, 7, 0, 21, 44},
@@ -187,7 +187,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 50, min. cost = 1, max. cost = 100, capacitated = 50%, seed = 651272247
      */
     @Test
-    public void testGetMinimumCostFlow8() {
+    public void testGetMinimumCostFlow11() {
         int testCase[][] = new int[][]{{1, 1}, {2, 23}, {3, 6}, {8, -17}, {9, -9}, {10, -4}, {1, 7, 0, 1, 100}, {1, 6, 0, 10, 15},
                 {1, 4, 0, 37, 72}, {5, 10, 0, 2147483647, 81}, {5, 9, 0, 2147483647, 10},
                 {5, 8, 0, 1, 100}, {5, 6, 0, 27, 85}, {5, 4, 0, 2147483647, 87}, {7, 5, 0, 1, 100},
@@ -208,7 +208,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 100, min. cost = 1, max. cost = 100, capacitated = 100%, seed = 1685408561
      */
     @Test
-    public void testGetMinimumCostFlow9() {
+    public void testGetMinimumCostFlow12() {
         int testCase[][] = new int[][]{{1, 8}, {2, 10}, {3, 9}, {4, 18}, {5, 5}, {26, -9}, {27, -15}, {28, -4}, {29, -6},
                 {30, -16}, {1, 11, 0, 2147483647, 85}, {1, 18, 0, 12, 24}, {1, 24, 0, 2147483647, 92},
                 {1, 29, 0, 15, 48}, {1, 14, 0, 49, 80}, {11, 16, 0, 8, 100}, {11, 21, 0, 94, 18},
@@ -250,7 +250,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 100, min. cost = 1, max. cost = 100, capacitated = 50%, seed = 843930509
      */
     @Test
-    public void testGetMinimumCostFlow10() {
+    public void testGetMinimumCostFlow13() {
         int testCase[][] = new int[][]{{1, 1391}, {2, 790}, {3, 1671}, {4, 815}, {5, 342}, {6, -148}, {7, 1254}, {8, 848},
                 {9, 169}, {10, -282}, {11, 978}, {12, 956}, {13, 127}, {14, 493}, {15, -1432},
                 {16, 1224}, {17, 725}, {18, 286}, {19, 1092}, {20, -1069}, {21, -3223}, {22, 49},
@@ -295,7 +295,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 1000, min. cost = 1, max. cost = 100, capacitated = 10%, seed = 1342893451
      */
     @Test
-    public void testGetMinimumCostFlow11() {
+    public void testGetMinimumCostFlow14() {
         int testCase[][] = new int[][]{{1, 11}, {2, 25}, {3, 9}, {4, 10}, {5, 10}, {6, 5}, {7, 6}, {8, 10}, {9, 4}, {10, 18},
                 {11, 7}, {12, 9}, {13, 8}, {14, 19}, {15, 10}, {16, 13}, {17, 1}, {18, 7}, {19, 13},
                 {20, 5}, {31, -11}, {32, -5}, {33, -9}, {34, -2}, {35, -8}, {36, -2}, {37, -13},
@@ -355,7 +355,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 1000, min. cost = 1, max. cost = 100, capacitated = 70%, seed = 684190206
      */
     @Test
-    public void testGetMinimumCostFlow12() {
+    public void testGetMinimumCostFlow15() {
         int testCase[][] = new int[][]{{1, 2795}, {2, 756}, {3, 1215}, {4, 16}, {5, 1955}, {6, 334}, {7, 716}, {8, 1414},
                 {9, 482}, {10, 320}, {11, 369}, {12, 54}, {13, 1485}, {14, 563}, {15, 1871}, {16, 5},
                 {17, 554}, {18, 17}, {19, 134}, {20, 1582}, {21, 2107}, {22, 617}, {23, 676},
@@ -419,7 +419,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 1000, min. cost = 1, max. cost = 20, capacitated = 60%, seed = 1787733798
      */
     @Test
-    public void testGetMinimumCostFlow13() {
+    public void testGetMinimumCostFlow16() {
         int testCase[][] = new int[][]{{1, 4633}, {2, 2319}, {3, 4198}, {4, 5}, {5, 632}, {6, 712}, {7, 1391}, {8, 352},
                 {9, 451}, {10, 6187}, {11, 387}, {12, 2936}, {13, 1989}, {14, 498}, {15, 903},
                 {16, 1656}, {17, 6166}, {18, 3393}, {19, 2559}, {20, 1753}, {21, 493}, {22, 1992},
@@ -654,7 +654,7 @@ public class CapacityScalingMinimumCostFlowTest {
      * max. capacity = 10000, min. cost = 1, max. cost = 20, capacitated = 60%, seed = 346867034
      */
     @Test
-    public void testGetMinimumCostFlow14() {
+    public void testGetMinimumCostFlow17() {
         int testCase[][] = new int[][]{{1, 2474}, {2, 2676}, {3, 4366}, {4, 7126}, {5, 1006}, {6, 3683}, {7, 3081}, {8, 2395}, {9, 3372}, {10, 2421},
                 {11, 3762}, {12, 2197}, {13, 4288}, {14, 1488}, {15, 1118}, {16, 1746}, {17, 3126}, {18, 274}, {19, 5439}, {20, 2759},
                 {21, 3886}, {22, 4610}, {23, 4486}, {24, 4541}, {25, 258}, {26, 3060}, {27, 1463}, {28, 1104}, {29, 4864}, {30, 4064},
@@ -1064,3 +1064,5 @@ public class CapacityScalingMinimumCostFlowTest {
         assertTrue(minimumCostFlow.testOptimality(EPS));
     }
 }
+
+

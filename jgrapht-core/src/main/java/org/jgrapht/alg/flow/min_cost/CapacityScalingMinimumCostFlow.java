@@ -20,8 +20,9 @@ package org.jgrapht.alg.flow.min_cost;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 import java.util.*;
 
@@ -51,10 +52,10 @@ import java.util.*;
  * negative reduced cost the sum of the excesses is bounded by $2\Delta(m + n)$. Since the algorithm ensures that each
  * augmentation carries at least $\Delta$ units of flow, at most $\mathcal{O}(m)$ flow augmentations are performed during
  * each scaling phase. Therefore, the overall running time of the algorithm with capacity scaling is
- * $\mathcal{O}(m\log_a U(m + n\log n))$, which is a weakly polynomial time bound.
+ * $\mathcal{O}(m\log_a U(m + n)\log n)$, which is a weakly polynomial time bound.
  * <p>
  * If the algorithm is used without scaling, each flow augmentation carries at least $\mathcal{O}(1)$ flow units,
- * therefore the overall time complexity if $\mathcal{O}(nU(m + n\log n))$, which is a pseudo-polynomial time bound.
+ * therefore the overall time complexity if $\mathcal{O}(nU(m + n)\log n)$, which is a pseudo-polynomial time bound.
  * <p>
  * For more information about the capacity scaling algorithm see: <i>K. Ahuja, Ravindra &amp; L. Magnanti, Thomas &amp;
  * Orlin, James. (1993). Network Flows.</i> This implementation is based on the algorithm description presented
@@ -172,25 +173,34 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
-     * Tests the optimality conditions after a flow of minimum cost has been computed.
-     * <p>
-     * More precisely, tests, whether the reduced cost of every arc in the residual network is non-negative.
-     * This validation is performed with precision of {@code eps}. If the solution doesn't meet this condition,
-     * returns, false. Otherwise, returns true.
-     *
-     * @param eps the precision to use
-     * @return true, if the computed solution is optimal, false otherwise.
+     * Lazily calculated a solution to the specified minimum cost flow problem. If the scaling factor is greater than 1,
+     * performs scaling phases, otherwise uses simple capacity scaling algorithm.
      */
-    public boolean testOptimality(double eps) {
-        lazyCalculateMinimumCostFlow();
-        for (Node node : nodes) {
-            for (Arc arc = node.firstNonSaturated; arc != null; arc = arc.next) {
-                if (arc.getReducedCost() < -eps) {
-                    return false;
-                }
-            }
+    private void lazyCalculateMinimumCostFlow() {
+        if (minimumCostFLow != null) {
+            return;
         }
-        return true;
+        Pair<List<Node>, Set<Node>> pair;
+        init();
+        if (scalingFactor > 1) {
+            // run with scaling
+            int U = getU();
+            int delta = scalingFactor;
+            while (U >= delta) {
+                delta *= scalingFactor;
+            }
+            delta /= scalingFactor;
+            while (delta >= 1) {
+                pair = scale(delta);
+                pushAllFlow(pair.getFirst(), pair.getSecond(), delta);
+                delta /= scalingFactor;
+            }
+        } else {
+            // run without scaling
+            pair = scale(1);
+            pushAllFlow(pair.getFirst(), pair.getSecond(), 1);
+        }
+        minimumCostFLow = finish();
     }
 
     /**
@@ -284,54 +294,21 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
-     * Lazily calculated a solution to the specified minimum cost flow problem. If the scaling factor is greater than 1,
-     * performs scaling phases, otherwise uses simple capacity scaling algorithm.
-     */
-    private void lazyCalculateMinimumCostFlow() {
-        if (minimumCostFLow != null) {
-            return;
-        }
-        Pair<List<Node>, Set<Node>> pair;
-        init();
-        if (scalingFactor > 1) {
-            // run with scaling
-            int U = getU();
-            int delta = scalingFactor;
-            while (U >= delta) {
-                delta *= scalingFactor;
-            }
-            delta /= scalingFactor;
-            while (delta >= 1) {
-                pair = scale(delta);
-                pushAllFlow(pair.getFirst(), pair.getSecond(), delta);
-                delta /= scalingFactor;
-            }
-        } else {
-            // run without scaling
-            pair = scale(1);
-            pushAllFlow(pair.getFirst(), pair.getSecond(), 1);
-        }
-        minimumCostFLow = finish();
-    }
-
-    /**
-     * For every node in the {@code positiveExcessNodes} pushes all flow from it until its excess is less than
-     * {@code delta}. This is always possible due to the performed flow network reduction during the initialization
-     * phase.
+     * Returns the largest magnitude of any supply/demand or finite arc capacity.
      *
-     * @param positiveExcessNodes nodes from the network with positive excesses no less than {@code delta}
-     * @param negativeExcessNodes nodes from the network with negative excesses no greater than {@code delta}
-     * @param delta               the current value of $\Delta$
+     * @return the largest magnitude of any supply/demand or finite arc capacity.
      */
-    private void pushAllFlow(List<Node> positiveExcessNodes, Set<Node> negativeExcessNodes, int delta) {
-        for (Node node : positiveExcessNodes) {
-            while (node.excess >= delta) {
-                if (negativeExcessNodes.isEmpty()) {
-                    return;
-                }
-                pushDijkstra(node, negativeExcessNodes, delta);
+    private int getU() {
+        int result = 0;
+        for (Node node : nodes) {
+            result = Math.max(result, Math.abs(node.excess));
+        }
+        for (Arc arc : arcs) {
+            if (!arc.isInfiniteCapacityArc()) {
+                result = Math.max(result, arc.residualCapacity);
             }
         }
+        return result;
     }
 
     /**
@@ -382,21 +359,23 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
-     * Returns the largest magnitude of any supply/demand or finite arc capacity.
+     * For every node in the {@code positiveExcessNodes} pushes all flow from it until its excess is less than
+     * {@code delta}. This is always possible due to the performed flow network reduction during the initialization
+     * phase.
      *
-     * @return the largest magnitude of any supply/demand or finite arc capacity.
+     * @param positiveExcessNodes nodes from the network with positive excesses no less than {@code delta}
+     * @param negativeExcessNodes nodes from the network with negative excesses no greater than {@code delta}
+     * @param delta               the current value of $\Delta$
      */
-    private int getU() {
-        int result = 0;
-        for (Node node : nodes) {
-            result = Math.max(result, Math.abs(node.excess));
-        }
-        for (Arc arc : arcs) {
-            if (!arc.isInfiniteCapacityArc()) {
-                result = Math.max(result, arc.residualCapacity);
+    private void pushAllFlow(List<Node> positiveExcessNodes, Set<Node> negativeExcessNodes, int delta) {
+        for (Node node : positiveExcessNodes) {
+            while (node.excess >= delta) {
+                if (negativeExcessNodes.isEmpty()) {
+                    return;
+                }
+                pushDijkstra(node, negativeExcessNodes, delta);
             }
         }
-        return result;
     }
 
     /**
@@ -411,6 +390,12 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * <li>Satisfy optimality conditions in the $\Delta$-residual network</li>
      * <li>The reduced cost of the augmented path is equal to $0$</li>
      * </ul>
+     * <p>
+     * Let us denote some <em>permanently</em> labeled vertex as $u$, and the first <em>permanently</em>
+     * labeled vertex with negative excess as $v$. Let $dist(x)$ be the distance function in the
+     * residual network. Then we use the following formula to update the node potentials:
+     * $v.potential = v.potential + dist(v) - dist(u)$. The potentials of the temporarily labeled
+     * and unvisited vertices stay unchanged.
      *
      * @param start               the start node for Dijkstra's algorithm
      * @param negativeExcessNodes nodes from the network with negative excesses no greater than {@code delta}
@@ -420,18 +405,18 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         Node currentNode, opposite;
         Arc currentArc;
         double distance;
-        FibonacciHeapNode<Node> currentFibNode;
         int TEMPORARILY_LABELED = counter++;
         int PERMANENTLY_LABELED = counter++;
-        FibonacciHeap<Node> heap = new FibonacciHeap<>();
+        AddressableHeap.Handle<Double, Node> currentFibNode;
+        AddressableHeap<Double, Node> heap = new PairingHeap<>();
         List<Node> permanentlyLabeled = new LinkedList<>();
         start.parentArc = null;
-        insertIntoHeap(heap, start, 0);
+        start.handle = heap.insert(0d, start);
 
         while (!heap.isEmpty()) {
-            currentFibNode = heap.removeMin();
-            currentNode = currentFibNode.getData();
+            currentFibNode = heap.deleteMin();
             distance = currentFibNode.getKey();
+            currentNode = currentFibNode.getValue();
             if (negativeExcessNodes.contains(currentNode)) {
                 // the path to push at least delta units of flow is found
                 augmentPath(start, currentNode);
@@ -461,14 +446,14 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
                 if (opposite.labelType != PERMANENTLY_LABELED) {
                     if (opposite.labelType == TEMPORARILY_LABELED) {
                         // opposite has been labeled already
-                        if (distance + currentArc.getReducedCost() < opposite.fibNode.getKey()) {
-                            heap.decreaseKey(opposite.fibNode, distance + currentArc.getReducedCost());
+                        if (distance + currentArc.getReducedCost() < opposite.handle.getKey()) {
+                            opposite.handle.decreaseKey(distance + currentArc.getReducedCost());
                             opposite.parentArc = currentArc;
                         }
                     } else {
                         // opposite is encountered for the first time
                         opposite.labelType = TEMPORARILY_LABELED;
-                        insertIntoHeap(heap, opposite, distance + currentArc.getReducedCost());
+                        opposite.handle = heap.insert(distance + currentArc.getReducedCost(), opposite);
                         opposite.parentArc = currentArc;
                     }
                 }
@@ -512,18 +497,6 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
-     * Helper method for correct insertions of nodes into the Fibonacci heap.
-     *
-     * @param heap a heap to insert node into
-     * @param node a node to insert into the heap
-     * @param key  the key of the {@code node}
-     */
-    private void insertIntoHeap(FibonacciHeap<Node> heap, Node node, double key) {
-        node.fibNode = new FibonacciHeapNode<>(node);
-        heap.insert(node.fibNode, key);
-    }
-
-    /**
      * Finishes the computation by checking the flow feasibility, computing arc flows, and creating an instance
      * of {@link MinimumCostFLow}. The resulting flow mapping contains all edges of the specified minimum cost
      * flow problem.
@@ -559,6 +532,28 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
+     * Tests the optimality conditions after a flow of minimum cost has been computed.
+     * <p>
+     * More precisely, tests, whether the reduced cost of every arc in the residual network is non-negative.
+     * This validation is performed with precision of {@code eps}. If the solution doesn't meet this condition,
+     * returns, false. Otherwise, returns true.
+     *
+     * @param eps the precision to use
+     * @return true, if the computed solution is optimal, false otherwise.
+     */
+    public boolean testOptimality(double eps) {
+        lazyCalculateMinimumCostFlow();
+        for (Node node : nodes) {
+            for (Arc arc = node.firstNonSaturated; arc != null; arc = arc.next) {
+                if (arc.getReducedCost() < -eps) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * Supporting data structure for the {@link CapacityScalingMinimumCostFlow}.
      * <p>
      * Is used as an internal representation of the vertices of the flow network. Contains all information
@@ -575,7 +570,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         /**
          * Reference to the {@link FibonacciHeapNode} this node is contained in
          */
-        FibonacciHeapNode<Node> fibNode;
+        AddressableHeap.Handle<Double, Node> handle;
         /**
          * An arc on the augmenting path which head is this node.
          */
