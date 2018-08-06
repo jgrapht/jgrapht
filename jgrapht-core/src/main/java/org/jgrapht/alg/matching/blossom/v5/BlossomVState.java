@@ -26,6 +26,8 @@ import java.util.NoSuchElementException;
 /**
  * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
  * {@link BlossomVPrimalUpdater} and {@link BlossomVDualUpdater} during the course of the algorithm.
+ * <p>
+ * We refer to this object with all the data stores in nodes, edges, trees, and tree edges as the state of the algorithm
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

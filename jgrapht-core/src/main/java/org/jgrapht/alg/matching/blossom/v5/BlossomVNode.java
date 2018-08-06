@@ -27,23 +27,45 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
 /**
  * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
  * <p>
- * Represents a vertex of graph. Contains information about the current state of the node
- * (i.e. whether it is a blossom, etc.) and the information needed to maintain the alternating tree
- * structure, which is needed to find an augmenting path, which consists of tight, edges in the graph
- * to increase the cardinality of the matching.
+ * Represents a vertex of graph. Contains three major blocks of data needed for the algorithm.
+ * <ul>
+ * <li>Node's state information, i.e. {@link BlossomVNode#label}, {@link BlossomVNode#isTreeRoot}, etc.
+ * This information is maintained dynamically and is changed by {@link BlossomVPrimalUpdater}</li>
+ * <li>Information needed to maintain alternating tree structure. It is designed to be able to quickly plant
+ * subtrees, split and concatenate child lists, traverse the tree up and down</li>
+ * <li>information needed to maintain a "pyramid" of contracted nodes. The common use-cases are to traverse
+ * the nodes of a blossom, to move from some node up to the outer blossom (or penultimate blossom, if the outer
+ * one is being expanded)</li>
+ * </ul>
+ * <p>
+ * Each node has a dual variable. This is the only information that can be changed by the {@link BlossomVDualUpdater}.
+ * This variable is updated lazily due to performance reasons.
+ * <p>
+ * The edges incident to a node are stored in two linked lists. The first linked list is used for outgoing edges,
+ * the other - for incoming edges. The notions of outgoing and incoming edges are symmetric in the context of this
+ * algorithm since the initial graph is undirected. The first element in the list of outgoing edges is
+ * {@code BlossomVNode#first[0]}, the first element in the list of incoming edges - {@code BlossomVNode#first[1]}.
+ * <p>
+ * A node is called a <i>plus</i> node if it belongs to the even layer of some alternating tree (root has layer 0).
+ * Then its label is {@link Label#PLUS}. A node is called a <i>minus</i> node if it belongs to the odd layer of
+ * some alternating tree. Then its label is {@link Label#MINUS}. A node is called an <i>infinity</i> or <i>free</i>
+ * node if it doesn't belong to any alternating tree. A node is called <i>outer</i> it belongs to the surface graph, i.e.
+ * it is not contracted. A node is called a <i>blossom</i> or <i>pseudonode</i> if it emerged from contracting an odd
+ * circuit. This implies that this node doesn't belong to the original graph. A node is called <i>matched</i>, if it
+ * is matched to some other node. If a node is free, it means that it is matched. If a node is not a free node,
+ * then it necessarily belongs to some tree. If a node isn't matched, it necessarily is a tree root.
  *
  * @author Timofey Chudakov
- * @
  * @see KolmogorovMinimumWeightPerfectMatching
  * @since June 2018
  */
 class BlossomVNode {
     /**
-     * The reference to the Fibonacci heap node this {@code BlossomVNode} is stored in
+     * The reference to the node from the heap this node is store in
      */
     AddressableHeap.Handle<Double, BlossomVNode> handle;
     /**
-     * True if this node is a tree root, implies that this node is outer
+     * True if this node is a tree root, implies that this node is outer and that isn't matched
      */
     boolean isTreeRoot;
     /**
@@ -128,7 +150,8 @@ class BlossomVNode {
      */
     BlossomVNode blossomGrandparent;
     /**
-     * Reference of the next node in the blossom structure in the circular singly linked list of blossom nodes
+     * Reference of the next node in the blossom structure in the circular singly linked list of blossom nodes.
+     * Is used to traverse the blossom nodes in a cyclic order.
      */
     BlossomVEdge blossomSibling;
     /**
@@ -154,8 +177,10 @@ class BlossomVNode {
      */
     public void addEdge(BlossomVEdge edge, int dir) {
         if (first[dir] == null) {
+            // the list in the direction dir is empty
             first[dir] = edge.next[dir] = edge.prev[dir] = edge;
         } else {
+            // the list in the direction dir isn't empty
             // append this edge to the end of the linked list
             edge.prev[dir] = first[dir].prev[dir];
             edge.next[dir] = first[dir];
@@ -339,7 +364,8 @@ class BlossomVNode {
      * Computes and returns the penultimate blossom of this node. The return value of this method
      * always equals to the value returned by {@link BlossomVNode#getPenultimateBlossom()}. However,
      * the main difference is that this method changes the blossomGrandparent references to point
-     * to the node that is previous to the resulting penultimate blossom.
+     * to the node that is previous to the resulting penultimate blossom. This method is used
+     * during the expand operation.
      *
      * @return the penultimate blossom of this node
      */
@@ -405,10 +431,8 @@ class BlossomVNode {
     /**
      * Returns the true dual variable of this node. If this node is outer and belongs to some tree then
      * it is subject to the lazy delta spreading technique. Otherwise, its dual is valid.
-     * <p>
-     * If this node isn't
      *
-     * @return the true dual variable of this node
+     * @return the actual dual variable of this node
      */
     public double getTrueDual() {
         if (isInfinityNode() || !isOuter) {
@@ -453,7 +477,7 @@ class BlossomVNode {
     }
 
     /**
-     * An iterator over incident edges of a node.
+     * An iterator for traversing the edges incident to this node.
      * <p>
      * This iterator has a feature that during every step it knows the next edge it'll return to the caller.
      * That's why it is safe to modify the current edge (move it to another node, for example).

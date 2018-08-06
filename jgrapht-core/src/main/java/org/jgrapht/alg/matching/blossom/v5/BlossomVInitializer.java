@@ -23,13 +23,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.GREEDY;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 /**
- * Is used to start the Kolmogorov's Blossom V algorithm.
- * Performs initialization of the algorithm's internal data structures and finds an initial matching
- * according to the strategy specified in {@code options}
+ * Is used to start the Kolmogorov's Blossom V algorithm. Performs initialization of the algorithm's internal
+ * data structures and finds an initial matching according to the strategy specified in {@code options}.
+ * <p>
+ * The initialization process necessarily goes through converting the graph into internal representation, allocating
+ * trees for unmatched vertices, and creating auxiliary graph whose nodes correspond to alternating trees. The only
+ * part that differs is the strategy to find an initial matching to speed up the main part of the algorithm.
+ * <p>
+ * The simple initialization (option {@link BlossomVOptions.InitializationType#NONE}) doesn't find any matching
+ * and initializes the data structures by allocating $|V|$ single vertex trees. This is the fastest initialization
+ * strategy, also it slows the main algorithm down.
+ * <p>
+ * The greedy initialization runs in two phases. Firstly, for every node it determines an edge of minimum weight
+ * an assigns the half of that weight to the node's dual variable. This ensures that the slacks of all edges are
+ * non-negative. After that it goes through all nodes again, greedily increases its dual variable and chooses an
+ * incident matching edge if it is possible. After that every node is incident to at least one tight edge. The
+ * resulting matching is an output of this initialization strategy.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -148,7 +161,7 @@ class BlossomVInitializer<V, E> {
      * @param from  the tail of this edge
      * @param to    the head of this edge
      * @param slack the slack of the resulting edge
-     * @param pos position of the resulting edge in the array {@code edges}
+     * @param pos   position of the resulting edge in the array {@code edges}
      * @return the newly added edge
      */
     public BlossomVEdge addEdge(BlossomVNode from, BlossomVNode to, double slack, int pos) {

@@ -17,12 +17,41 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.DEBUG;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.DEBUG;
 
 /**
- * Is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal operations: grow, augment,
- * shrink and expand. The actions of this class don't change the actual dual variables of the nodes.
+ * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal operations: grow,
+ * augment, shrink and expand. This class operates on alternating trees, blossom structures, and node states.
+ * It changes them after applying any primal operation. Also, this class can add and subtract some values from
+ * nodes' dual variables, it never changes their actual dual variables.
+ * <p>
+ * The augment operation is used to increase the cardinality of the matching. It is applied to a tight (+, +)
+ * cross-tree edge. Its main purpose is alter the matching on the simple path between tree roots through
+ * the tight edge, destroy the previous tree structures, update the state of the node, and change the presence
+ * of edges in the priority queues. Now this operation doesn't destroy the tree structure, this technique is
+ * called <i>lazy tree structure destroying</i>. The information of the nodes from the tree structure block
+ * is overwritten when a node is being added to another tree. This operation doesn't change the matching in the
+ * contracted blossoms.
+ * <p>
+ * The grow operation is used to add new nodes to a given tree. This operation is applied only to tight infinity
+ * edges. It always adds even number of nodes. This operation can grow the tree recursively in the depth-first order.
+ * If it encounters a tight (+, +) cross-tree edge, it stops growing and performs immediate augmentation.
+ * <p>
+ * The shrink operation contracts an odd node circuit and introduces a new pseudonode. It is applied to tight
+ * (+, +) in-tree edges. It changes the state so than the contracted nodes don't appear in the surface graph.
+ * If during the changing of the endpoints of boundary edge a tight (+, +) cross-tree edge is encountered, an
+ * immediate augmentation is performed.
+ * <p>
+ * The expand operation brings the contracted in a blossom nodes to the surface graph. It is applied only to a
+ * "-" blossom with zero dual variable. The operation determines the two branched of a blossom: an even and an
+ * odd one. The first one contains even number of edges and can be empty, the later - odd number of edges an
+ * necessarily contains at least one edge. An even branch is inserted into the tree. The state of the algorithm
+ * is changes respectively (node duals, tree structure, etc.). If some boundary edge in a tight (+, +) cross-tree
+ * edge, an immediate augmentation is performed.
+ * <p>
+ * The immediate augmentations are used to speed up the algorithm. More detailed description of the primal
+ * operations can be found in their Javadoc.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -162,18 +191,18 @@ class BlossomVPrimalUpdater<V, E> {
      * node. This means that we consider the set of nodes of odd cardinality as a single
      * node.
      * <p>
-     * Let's call an edge connecting two nodes on the circuit an "inner edge". Let's call
-     * an edge connecting a node on the circuit and a node outside the circuit a "boundary edge".
      * In the shrink operation the following main actions are performed:
      * <ul>
      * <li>Lazy dual updates are applied to all inner edges and nodes on the circuit. Thus, the inner
      * edges and nodes in the pseudonodes have valid slacks and dual variables</li>
      * <li>The endpoints of the boundary edges are moved to the new blossom node, which
-     * has label {@link BlossomVNode.Label#PLUS}. If the former endpoint had
-     * label {@link BlossomVNode.Label#MINUS}, 2*tree.eps is added to its slack</li>
-     * <li>Children of circuit nodes are moved to the blossom, their parent edges are changed respectively</li>
+     * has label {@link BlossomVNode.Label#PLUS}
+     * <li>Lazy dual updates are applied to boundary edges and newly created blossom</li>
+     * <li>Children of blossom nodes are moved to the blossom, their parent edges are changed respectively</li>
      * <li>The blossomSibling references are set so that they form a circular linked list</li>
      * <li>If the blossom becomes a tree root, it substitutes the previous tree's root in the linked list of tree roots</li>
+     * <li>Since the newly created blossom with "+" label can change the classification of edges, their
+     * presence in heaps is updated</li>
      * </ul>
      *
      * @param blossomFormingEdge the tight (+, +) in-tree edge
@@ -267,7 +296,6 @@ class BlossomVPrimalUpdater<V, E> {
     public void expand(BlossomVNode blossom, boolean immediateAugment) {
         BlossomVEdge zeroSlackEdge;
         BlossomVEdge edge;
-        int dir;
         long start = System.nanoTime();
         if (DEBUG) {
             System.out.println("Expanding blossom " + blossom);
@@ -716,7 +744,6 @@ class BlossomVPrimalUpdater<V, E> {
                         if (oppositeTree != null && oppositeTree != tree) {
                             // if this edge is a cross-tree edge
                             treeEdge = oppositeTree.currentEdge;
-                            int currentDir = oppositeTree.currentDirection;
                             if (opposite.isPlusNode()) {
                                 // this is a (+,+) cross-tree edge
                                 treeEdge.removeFromPlusPlusHeap(edge);
@@ -732,7 +759,6 @@ class BlossomVPrimalUpdater<V, E> {
                         if (oppositeTree != null && oppositeTree != tree && opposite.isPlusNode()) {
                             // this is a (-,+) cross-tree edge
                             treeEdge = oppositeTree.currentEdge;
-                            int currentDir = oppositeTree.currentDirection;
                             treeEdge.removeFromCurrentMinusPlusHeap(edge);
                             oppositeTree.addPlusInfinityEdge(edge);
                         }

@@ -23,29 +23,32 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.Initialization
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 
 /**
- * BlossomVOptions that define the strategies to use during the algorithm for updating duals and initializing the matching
+ * BlossomVOptions that define the strategies to use during the algorithm for updating duals and initializing
+ * the matching
+ * <p>
+ * According to the experimental results, the greedy initialization substantially speeds up the algorithm.
  */
 public class BlossomVOptions {
     /**
      * All possible options
      */
     public static final BlossomVOptions[] ALL_OPTIONS = new BlossomVOptions[]{
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[0]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[1]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[2]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[3]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, true), //[4]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, false), //[5]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, true), //[6]
-            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, false), //[7]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[8]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[9]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[10]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[11]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, true), //[12]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, false), //[13]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[14]
-            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[15]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, true), //[0]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, true, false), //[1]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, true), //[2]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_FIXED_DELTA, false, false), //[3]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[4]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[5]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[6]
+            new BlossomVOptions(NONE, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[7]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, true), //[8]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, true, false), //[9]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[10]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_FIXED_DELTA, false, true), //[11]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, true), //[12]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, true, false), //[13]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, true), //[14]
+            new BlossomVOptions(GREEDY, MULTIPLE_TREE_CONNECTED_COMPONENTS, false, false), //[15]
     };
     /**
      * Default algorithm initialization type

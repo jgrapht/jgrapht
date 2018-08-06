@@ -26,12 +26,37 @@ import java.util.NoSuchElementException;
 /**
  * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
  * <p>
- * Represents an alternating tree of tight edges which is used to find an augmenting path of tight edges
- * in order to perform an augmentation and increase the cardinality of the matching.
+ * Represents an alternating tree of <em>tight</em> edges which is used to find an augmenting path of tight edges
+ * in order to perform an augmentation and increase the cardinality of the matching. The nodes on odd layers
+ * are connected to their children necessarily via matched edges. Thus, these nodes have always exatly one child.
+ * The nodes on even layers can have arbitrarily many children.
+ * <p>
+ * The tree structure information is contained in {@link BlossomVNode}, this class only contains the reference
+ * to the root of the tree. It also contains three heaps:
+ * <ul>
+ * <li>A heap of (+, inf) edges. These edges are also called infinity edges. If there exist a tight
+ * infinity edge, then it can be grown. Thus, this heap is used to determine an infinity edge of
+ * minimum slack.</li>
+ * <li>A heap of (+, +) in-tree edges. These are edges between "+" nodes from the same tree. If a (+, +)
+ * in-tree edges is tight, it can be used to perform the shrink operation and introduce a new blossom. Thus,
+ * this heap is used to determine a (+, +) in-tree edge of minimum slack in a given tree.</li>
+ * <li>A heap of "-" blossoms. If there exists a blossom with zero actual dual variable, it can be expanded.
+ * Thus, this heap is used to determine a "-" blossom with minimum dual variable</li>
+ * </ul>
+ * <p>
+ * Each tree contains a variable which accumulated dual change applied to it. The dual changes aren't spread until
+ * a tree is destroyed by an augmentation. For every node in the tree its true dual variable is equal to
+ * {@code node.dual + node.tree.eps} if it is a "+" node, or it equals {@code node.dual - node.tree.eps}. This applies
+ * only to the surface nodes that belong to some tree.
+ * <p>
+ * This class also contains implementations of two iterators: {@link TreeEdgeIterator} and {@link TreeNodeIterator}.
+ * They are used to conveniently traverse the tree edges incident to a particular tree, and to traverse the nodes
+ * of a tree in a depth-first order.
  *
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see BlossomVNode
  * @see BlossomVTreeEdge
+ * @see KolmogorovMinimumWeightPerfectMatching
  * @since June 2018
  */
 class BlossomVTree {
@@ -41,7 +66,7 @@ class BlossomVTree {
     private static int currentId = 1;
     /**
      * Two-element array of the first elements in the circular doubly linked lists of incident tree
-     * edge in each direction.
+     * edges in each direction.
      */
     BlossomVTreeEdge[] first;
     /**
@@ -67,7 +92,7 @@ class BlossomVTree {
      */
     double accumulatedEps;
     /**
-     * the root of this tree
+     * The root of this tree
      */
     BlossomVNode root;
     /**
@@ -124,7 +149,7 @@ class BlossomVTree {
      * @param edge a (+, +) edge
      */
     public void addPlusPlusEdge(BlossomVEdge edge) {
-        edge.handle =  plusPlusEdges.insert(edge.slack, edge);
+        edge.handle = plusPlusEdges.insert(edge.slack, edge);
     }
 
     /**
@@ -272,7 +297,7 @@ class BlossomVTree {
     }
 
     /**
-     * An iterator over tree nodes
+     * An iterator over tree nodes. This iterator traverses the nodes of the tree in a depth-first order.
      */
     public class TreeNodeIterator implements Iterator<BlossomVNode> {
         /**
