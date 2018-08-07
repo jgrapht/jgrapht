@@ -18,6 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.*;
@@ -39,10 +40,11 @@ public class TreeMeasurer<V, E> {
      * Constructs a new instance of TreeMeasurer.
      *
      * @param graph input graph
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws IllegalArgumentException if {@code graph} is not undirected
      */
-    public TreeMeasurer(Graph<V, E> graph)
-    {
-        this.graph = Objects.requireNonNull(graph);
+    public TreeMeasurer(Graph<V, E> graph) {
+        this.graph = GraphTests.requireUndirected(graph);
     }
 
     private V computeFarthestVertex(BreadthFirstIterator<V, E> bfs){

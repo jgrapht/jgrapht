@@ -77,6 +77,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     @Test(expected = NullPointerException.class)
     public void testOnlyOneNullGraph(){
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
+        tree1.addVertex("a");
 
         AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
                 new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);

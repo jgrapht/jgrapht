@@ -44,6 +44,11 @@ import java.util.*;
  * </p>
  *
  * <p>
+ *     Note: If the input graph is directed, it effectively considers only the subtree reachable from the
+ *     specified root.
+ * </p>
+ *
+ * <p>
  *      For an implementation that supports unrooted trees see {@link AHUUnrootedTreeIsomorphismInspector}. <br>
  *      For an implementation that supports rooted forests see {@link AHUForestIsomorphismInspector}.
  * </p>
@@ -78,32 +83,32 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
      * @param root2 the root of the second tree
      * @throws NullPointerException if {@code tree1} is {@code null}
      * @throws NullPointerException if {@code root1} is {@code null}
+     * @throws IllegalArgumentException if {@code tree1} is empty
+     * @throws IllegalArgumentException if {@code root1} is an invalid vertex
      * @throws NullPointerException if {@code tree2} is {@code null}
      * @throws NullPointerException if {@code root2} is {@code null}
-     * @throws IllegalArgumentException if {@code tree1} is empty
      * @throws IllegalArgumentException if {@code tree2} is empty
-     * @throws IllegalArgumentException if either {@code root1} or {@code root2} contain an invalid vertex
+     * @throws IllegalArgumentException if {@code root2} is an invalid vertex
      */
     public AHURootedTreeIsomorphismInspector(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
-        this.tree1 = Objects.requireNonNull(tree1, "tree1 cannot be null");
-        this.tree2 = Objects.requireNonNull(tree2, "tree2 cannot be null");
+        validateTree(tree1, root1);
+        this.tree1 = tree1;
+        this.root1 = root1;
 
-        this.root1 = Objects.requireNonNull(root1, "root1 cannot be null");
-        this.root2 = Objects.requireNonNull(root2, "root2 cannot be null");
+        validateTree(tree2, root2);
+        this.tree2 = tree2;
+        this.root2 = root2;
+    }
 
-        if (tree1.vertexSet().isEmpty()){
-            throw new IllegalArgumentException("tree1 cannot be empty");
+    private void validateTree(Graph<V, E> tree, V root){
+        Objects.requireNonNull(tree, "input forest cannot be null");
+        Objects.requireNonNull(root, "root cannot be null");
+
+        if (tree.vertexSet().isEmpty()){
+            throw new IllegalArgumentException("tree cannot be empty");
         }
 
-        if (tree2.vertexSet().isEmpty()){
-            throw new IllegalArgumentException("tree2 cannot be empty");
-        }
-
-        if (!tree1.vertexSet().contains(root1)){
-            throw new IllegalArgumentException("root not contained in forest");
-        }
-
-        if (!tree2.vertexSet().contains(root2)){
+        if (!tree.vertexSet().contains(root)){
             throw new IllegalArgumentException("root not contained in forest");
         }
     }
@@ -190,7 +195,7 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
         if (nodesByLevel1.size() != nodesByLevel2.size())
             return false;
 
-        final int MAX_LEVEL = nodesByLevel1.size() - 1;
+        final int maxLevel = nodesByLevel1.size() - 1;
 
         Map<String, Integer> canonicalNameToInt = new HashMap<>();
 
@@ -198,7 +203,7 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
         int freshName = 0;
 
-        for (int lvl = MAX_LEVEL; lvl >= 0; lvl--) {
+        for (int lvl = maxLevel; lvl >= 0; lvl--) {
             @SuppressWarnings("unchecked")
             List<V>[] level = (List<V>[]) Array.newInstance(List.class, 2);
 

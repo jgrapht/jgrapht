@@ -19,11 +19,11 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.shortestpath.TreeMeasurer;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between two unrooted trees.
@@ -59,6 +59,7 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
     private final Graph<V, E> tree1;
     private final Graph<V, E> tree2;
 
+    private boolean computed;
     private AHURootedTreeIsomorphismInspector<V, E> ahuRootedTreeIsomorphismInspector;
 
     /**
@@ -69,20 +70,25 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
      * @param tree1 the first tree
      * @param tree2 the second tree
      * @throws NullPointerException if {@code tree1} is {@code null}
-     * @throws NullPointerException if {@code tree2} is {@code null}
+     * @throws IllegalArgumentException if {@code tree1} is not undirected
      * @throws IllegalArgumentException if {@code tree1} is empty
+     * @throws NullPointerException if {@code tree2} is {@code null}
+     * @throws IllegalArgumentException if {@code tree2} is not undirected
      * @throws IllegalArgumentException if {@code tree2} is empty
      */
     public AHUUnrootedTreeIsomorphismInspector(Graph<V, E> tree1, Graph<V, E> tree2){
-        this.tree1 = Objects.requireNonNull(tree1, "tree1 cannot be null");
-        this.tree2 = Objects.requireNonNull(tree2, "tree2 cannot be null");
+        validateTree(tree1);
+        this.tree1 = tree1;
 
-        if (tree1.vertexSet().isEmpty()){
-            throw new IllegalArgumentException("tree1 cannot be empty");
-        }
+        validateTree(tree2);
+        this.tree2 = tree2;
+    }
 
-        if (tree2.vertexSet().isEmpty()){
-            throw new IllegalArgumentException("tree2 cannot be empty");
+    private void validateTree(Graph<V, E> tree){
+        GraphTests.requireUndirected(tree);
+
+        if (tree.vertexSet().isEmpty()){
+            throw new IllegalArgumentException("tree cannot be empty");
         }
     }
 
@@ -105,9 +111,16 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
     @Override
     @SuppressWarnings("unchecked")
     public boolean isomorphismExists(){
-        if (ahuRootedTreeIsomorphismInspector != null){
-            return ahuRootedTreeIsomorphismInspector.isomorphismExists();
+        if (computed){
+            if (ahuRootedTreeIsomorphismInspector != null){
+                return ahuRootedTreeIsomorphismInspector.isomorphismExists();
+            }
+            else{
+                return false;
+            }
         }
+
+        computed = true;
 
         TreeMeasurer<V, E> treeMeasurer1 = new TreeMeasurer<>(tree1);
         V[] centers1 = (V[]) treeMeasurer1.getGraphCenter().toArray();

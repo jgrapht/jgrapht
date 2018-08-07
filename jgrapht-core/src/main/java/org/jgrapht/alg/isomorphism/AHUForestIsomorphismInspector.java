@@ -42,7 +42,8 @@ import java.util.*;
  * </p>
  *
  * <p>
- *      For an implementation that supports both unrooted and rooted trees see {@link AHURootedTreeIsomorphismInspector}.
+ *      For an implementation that supports rooted trees see {@link AHURootedTreeIsomorphismInspector} and for one
+ *      for unrooted trees see {@link AHUUnrootedTreeIsomorphismInspector}.
  * </p>
  *
  * <p>
@@ -80,32 +81,38 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      * @param roots2 the roots of the second forest
      * @throws NullPointerException if {@code forest1} is {@code null}
      * @throws NullPointerException if {@code roots1} is {@code null}
+     * @throws IllegalArgumentException if {@code forest1} is empty
+     * @throws IllegalArgumentException if {@code roots1} is empty
+     * @throws IllegalArgumentException if {@code roots1} contains an invalid vertex
      * @throws NullPointerException if {@code forest2} is {@code null}
      * @throws NullPointerException if {@code roots2} is {@code null}
-     * @throws IllegalArgumentException if {@code roots1} is empty
+     * @throws IllegalArgumentException if {@code forest2} is empty
      * @throws IllegalArgumentException if {@code roots2} is empty
-     * @throws IllegalArgumentException if either {@code roots1} or {@code roots2} contain an invalid vertex
+     * @throws IllegalArgumentException if {@code roots2} contains an invalid vertex
      */
     public AHUForestIsomorphismInspector(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
-        this.forest1 = Objects.requireNonNull(forest1, "input forest cannot be null");
-        this.forest2 = Objects.requireNonNull(forest2, "input forest cannot be null");
+        validateForest(forest1, roots1);
+        this.forest1 = forest1;
+        this.roots1 = roots1;
 
-        this.roots1 = Objects.requireNonNull(roots1, "set of roots cannot be null");
-        this.roots2 = Objects.requireNonNull(roots2, "set of roots cannot be null");
+        validateForest(forest2, roots2);
+        this.forest2 = forest2;
+        this.roots2 = roots2;
+    }
 
-        if (roots1.isEmpty()){
-            throw new IllegalArgumentException("roots1 cannot be empty");
+    private void validateForest(Graph<V, E> forest, Set<V> roots){
+        Objects.requireNonNull(forest, "input forest cannot be null");
+        Objects.requireNonNull(roots, "set of roots cannot be null");
+
+        if (forest.vertexSet().isEmpty()){
+            throw new IllegalArgumentException("input forest cannot be empty");
         }
 
-        if (roots2.isEmpty()){
-            throw new IllegalArgumentException("roots2 cannot be empty");
+        if (roots.isEmpty()){
+            throw new IllegalArgumentException("set of roots cannot be empty");
         }
 
-        if (!forest1.vertexSet().containsAll(roots1)){
-            throw new IllegalArgumentException("root not contained in forest");
-        }
-
-        if (!forest2.vertexSet().containsAll(roots2)){
+        if (!forest.vertexSet().containsAll(roots)){
             throw new IllegalArgumentException("root not contained in forest");
         }
     }
@@ -140,8 +147,6 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
 
         roots.forEach(freshForest::addVertex);
         V freshVertex = freshForest.addVertex();
-
-        freshForest.addVertex(freshVertex);
 
         for (V root: roots)
             freshForest.addEdge(freshVertex, root);
