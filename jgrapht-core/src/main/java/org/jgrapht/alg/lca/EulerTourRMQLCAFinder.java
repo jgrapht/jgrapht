@@ -72,7 +72,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
     private int[] log2;
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm..<br>
      *
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
@@ -84,9 +84,9 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
     }
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm..<br>
      *
-     * Note: If two roots appear in the same tree, an error will be thrown.
+     * Note: If two roots appear in the same tree, an error will be thrown..<br>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
@@ -268,5 +268,16 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
             sol = rmq[l][indexB - pwl + 1];
 
         return indexList.get(eulerTour[sol]);
+    }
+
+    /**
+     * Note: This operation is not supported.<br>
+     *
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException if the method is called
+     */
+    @Override
+    public Set<V> getLCASet(V a, V b){
+        throw new UnsupportedOperationException();
     }
 }

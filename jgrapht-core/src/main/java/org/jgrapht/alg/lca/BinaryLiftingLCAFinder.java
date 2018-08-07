@@ -77,7 +77,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
     private int[] component;
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm..<br>
      *
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
@@ -89,9 +89,9 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
     }
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm..<br>
      *
-     * Note: If two roots appear in the same tree, an error will be thrown.
+     * Note: If two roots appear in the same tree, an error will be thrown..<br>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
@@ -211,5 +211,16 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
             return null;
         else
             return indexList.get(lca);
+    }
+
+    /**
+     * Note: This operation is not supported.<br>
+     *
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException if the method is called
+     */
+    @Override
+    public Set<V> getLCASet(V a, V b){
+        throw new UnsupportedOperationException();
     }
 }

@@ -39,7 +39,7 @@ public class NaiveLCAFinderTest {
     private static <V,
             E> void checkLcas(NaiveLCAFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
     {
-        Set<V> lcaSet = finder.getAllLCAs(a, b);
+        Set<V> lcaSet = finder.getLCASet(a, b);
         Assert.assertTrue(lcaSet.containsAll(expectedSet));
         Assert.assertEquals(lcaSet.size(), expectedSet.size());
     }
@@ -109,7 +109,7 @@ public class NaiveLCAFinderTest {
         NaiveLCAFinder<String, DefaultEdge> finder = new NaiveLCAFinder<>(g);
 
         Assert.assertNull(finder.getLCA("i", "e"));
-        Assert.assertTrue(finder.getAllLCAs("i", "e").isEmpty());
+        Assert.assertTrue(finder.getLCASet("i", "e").isEmpty());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class NaiveLCAFinderTest {
         Assert.assertNull(finder.getLCA("a", "i"));
 
         checkLcas(finder, "h", "f", Arrays.asList("f"));
-        Assert.assertTrue(finder.getAllLCAs("a", "i").isEmpty());
+        Assert.assertTrue(finder.getLCASet("a", "i").isEmpty());
     }
 
     @Test

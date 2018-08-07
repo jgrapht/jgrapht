@@ -112,14 +112,10 @@ public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
     }
 
     /**
-     * Return all the LCAs of a and b.
-     *
-     * @param a the first element to find LCA for
-     * @param b the other element to find the LCA for
-     *
-     * @return the set of all LCAs of a and b, or empty set if there is no LCA.
+     * {@inheritDoc}
      */
-    public Set<V> getAllLCAs(V a, V b)
+    @Override
+    public Set<V> getLCASet(V a, V b)
     {
         @SuppressWarnings("unchecked")
         Set<V>[] visitedSets = (Set<V>[]) Array.newInstance(Set.class, 2);

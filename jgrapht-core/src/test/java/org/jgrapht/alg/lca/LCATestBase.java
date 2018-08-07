@@ -201,8 +201,8 @@ public abstract class LCATestBase {
             }
         }
 
-        List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
-        List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+        List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
+        List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
         for (int i = 0; i < queries.size(); i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
@@ -228,7 +228,7 @@ public abstract class LCATestBase {
 
         LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm = createSolver(g, Collections.singleton(N));
 
-        List<Integer> lcas = lcaAlgorithm.getLCAs(queries);
+        List<Integer> lcas = lcaAlgorithm.getBatchLCA(queries);
 
         for (int i = 0; i < Q; i++) {
             int a = queries.get(i).getFirst();
@@ -372,7 +372,7 @@ public abstract class LCATestBase {
         queries.add(Pair.of("j", "f"));
         queries.add(Pair.of("j", "h"));
 
-        List<String> lcas = lcaAlgorithm.getLCAs(queries);
+        List<String> lcas = lcaAlgorithm.getBatchLCA(queries);
 
         Assert.assertEquals(Arrays.asList("b", "b", "c"), lcas);
 
@@ -424,8 +424,8 @@ public abstract class LCATestBase {
 
         List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
 
-        List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
-        List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+        List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
+        List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
         for (int i = 0; i < Q; i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
@@ -480,8 +480,8 @@ public abstract class LCATestBase {
 
         List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
 
-        List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
-        List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+        List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
+        List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
         for (int i = 0; i < Q; i++) {
             Assert.assertEquals(lcas1.get(i), lcas2.get(i));
@@ -518,8 +518,8 @@ public abstract class LCATestBase {
 
             List<Pair<Integer, Integer>> queries = generateQueries(Q, vertexList, random);
 
-            List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
-            List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+            List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
+            List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
             for (int i = 0; i < Q; i++) {
                 Assert.assertEquals(lcas1.get(i), lcas2.get(i));
@@ -557,8 +557,8 @@ public abstract class LCATestBase {
 
             List<Pair<Integer, Integer>> queries = generateQueries(Q, new ArrayList<>(g.vertexSet()), random);
 
-            List<Integer> lcas1 = lcaAlgorithm1.getLCAs(queries);
-            List<Integer> lcas2 = lcaAlgorithm2.getLCAs(queries);
+            List<Integer> lcas1 = lcaAlgorithm1.getBatchLCA(queries);
+            List<Integer> lcas2 = lcaAlgorithm2.getBatchLCA(queries);
 
             for (int i = 0; i < Q; i++) {
                 Assert.assertEquals(lcas1.get(i), lcas2.get(i));

@@ -69,7 +69,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
     private List<Pair<V, V>> queries;
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm.<br>
      *
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
@@ -105,14 +105,14 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
      */
     @Override
     public V getLCA(V a, V b) {
-        return getLCAs(Collections.singletonList(Pair.of(a,b))).get(0);
+        return getBatchLCA(Collections.singletonList(Pair.of(a,b))).get(0);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<V> getLCAs(List<Pair<V, V>> queries) {
+    public List<V> getBatchLCA(List<Pair<V, V>> queries) {
         return computeTarjan(queries);
     }
 
@@ -206,5 +206,16 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
                 lowestCommonAncestors.set(index, ancestors.get(unionFind.find(v)));
             }
         }
+    }
+
+    /**
+     * Note: This operation is not supported.<br>
+     *
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException if the method is called
+     */
+    @Override
+    public Set<V> getLCASet(V a, V b){
+        throw new UnsupportedOperationException();
     }
 }

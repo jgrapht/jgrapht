@@ -54,7 +54,7 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
     private List<V> indexList;
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm..<br>
      *
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
@@ -66,9 +66,9 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
     }
 
     /**
-     * Construct a new instance of the algorithm.
+     * Construct a new instance of the algorithm..<br>
      *
-     * Note: If two roots appear in the same tree, an error will be thrown.
+     * Note: If two roots appear in the same tree, an error will be thrown..<br>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
@@ -161,5 +161,16 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
         }
 
         return positionInPath[indexA] < positionInPath[indexB] ? indexList.get(indexA) : indexList.get(indexB);
+    }
+
+    /**
+     * Note: This operation is not supported.<br>
+     *
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException if the method is called
+     */
+    @Override
+    public Set<V> getLCASet(V a, V b){
+        throw new UnsupportedOperationException();
     }
 }

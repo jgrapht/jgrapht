@@ -80,7 +80,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
         @Benchmark
         public void run()
         {
-            solver.getLCAs(queries);
+            solver.getBatchLCA(queries);
         }
     }
 
@@ -123,7 +123,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
         @Benchmark
         public void run()
         {
-            solver.getLCAs(queries);
+            solver.getBatchLCA(queries);
         }
     }
 
