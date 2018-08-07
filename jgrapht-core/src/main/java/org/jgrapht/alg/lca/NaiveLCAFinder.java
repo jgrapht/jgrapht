@@ -18,7 +18,7 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -81,7 +81,7 @@ import java.util.*;
  * @author Leo Crawford
  * @author Alexandru Valeanu
  */
-public class NaiveLCAFinder<V, E> implements LCAAlgorithm<V>
+public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
 {
     private Graph<V, E> graph;
 

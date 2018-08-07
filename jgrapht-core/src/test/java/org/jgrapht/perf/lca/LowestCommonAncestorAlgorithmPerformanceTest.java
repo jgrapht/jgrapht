@@ -19,7 +19,7 @@ package org.jgrapht.perf.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 import org.jgrapht.alg.lca.*;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
@@ -52,10 +52,10 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
 
         public static final long SEED = 111222111;
 
-        private LCAAlgorithm<Integer> solver;
+        private LowestCommonAncestorAlgorithm<Integer> solver;
         private List<Pair<Integer, Integer>> queries;
 
-        abstract LCAAlgorithm<Integer> createSolver(
+        abstract LowestCommonAncestorAlgorithm<Integer> createSolver(
             Graph<Integer, DefaultEdge> tree, Integer root);
 
         @Setup
@@ -90,10 +90,10 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
         public static final int NUMBER_TREES = 10 * PERF_BENCHMARK_VERTICES_COUNT / 100; // 10%
         public static final long SEED = 111222111;
 
-        private LCAAlgorithm<Integer> solver;
+        private LowestCommonAncestorAlgorithm<Integer> solver;
         private List<Pair<Integer, Integer>> queries;
 
-        abstract LCAAlgorithm<Integer> createSolver(
+        abstract LowestCommonAncestorAlgorithm<Integer> createSolver(
                 Graph<Integer, DefaultEdge> tree, Set<Integer> roots);
 
         @Setup
@@ -130,7 +130,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class BinaryLiftingLCARandomTreeBenchmark extends RandomTreeBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
             return new BinaryLiftingLCAFinder<>(tree, root);
         }
     }
@@ -138,7 +138,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class EulerTourRMQLCARandomTreeBenchmark extends RandomTreeBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
             return new EulerTourRMQLCAFinder<>(tree, root);
         }
     }
@@ -146,7 +146,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class TarjanLCARandomTreeBenchmark extends RandomTreeBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
             return new TarjanLCAFinder<>(tree, root);
         }
     }
@@ -154,7 +154,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class HeavyPathRandomTreeBenchmark extends RandomTreeBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Integer root) {
             return new HeavyPathLCAFinder<>(tree, root);
         }
     }
@@ -162,7 +162,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class BinaryLiftingLCARandomForestBenchmark extends RandomForestBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
             return new BinaryLiftingLCAFinder<>(tree, roots);
         }
     }
@@ -170,7 +170,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class EulerTourRMQLCARandomForestBenchmark extends RandomForestBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
             return new EulerTourRMQLCAFinder<>(tree, roots);
         }
     }
@@ -178,7 +178,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class TarjanLCARandomForestBenchmark extends RandomForestBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
             return new TarjanLCAFinder<>(tree, roots);
         }
     }
@@ -186,7 +186,7 @@ public class LowestCommonAncestorAlgorithmPerformanceTest {
     public static class HeavyPathRandomForestBenchmark extends RandomForestBenchmarkBase{
 
         @Override
-        LCAAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
+        LowestCommonAncestorAlgorithm<Integer> createSolver(Graph<Integer, DefaultEdge> tree, Set<Integer> roots) {
             return new HeavyPathLCAFinder<>(tree, roots);
         }
     }

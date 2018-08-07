@@ -19,7 +19,7 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
 import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 public abstract class LCATestBase {
 
-    abstract <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
+    abstract <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidNode(){
@@ -119,7 +119,7 @@ public abstract class LCATestBase {
         g.addVertex("a");
         g.addVertex("b");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+        LowestCommonAncestorAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertNull(lcaAlgorithm.getLCA("a", "b"));
         Assert.assertNull(lcaAlgorithm.getLCA("b", "a"));
@@ -134,7 +134,7 @@ public abstract class LCATestBase {
         g.addVertex("b");
         g.addVertex("c");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+        LowestCommonAncestorAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertNull(lcaAlgorithm.getLCA("b", "c"));
         Assert.assertNull(lcaAlgorithm.getLCA("c", "b"));
@@ -185,8 +185,8 @@ public abstract class LCATestBase {
 
         Integer root = g.vertexSet().iterator().next();
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(root));
-        LCAAlgorithm<Integer> lcaAlgorithm2;
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(root));
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
             lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, Collections.singleton(root));
@@ -226,7 +226,7 @@ public abstract class LCATestBase {
 
         List<Pair<Integer, Integer>> queries = generateQueries(Q, new ArrayList<>(g.vertexSet()), random);
 
-        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(g, Collections.singleton(N));
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm = createSolver(g, Collections.singleton(N));
 
         List<Integer> lcas = lcaAlgorithm.getLCAs(queries);
 
@@ -253,7 +253,7 @@ public abstract class LCATestBase {
         g.addEdge("b", "d");
         g.addEdge("d", "e");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+        LowestCommonAncestorAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertEquals("b", lcaAlgorithm.getLCA("c", "e"));
         Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "d"));
@@ -278,7 +278,7 @@ public abstract class LCATestBase {
         graph.addEdge(3, 10);
         graph.addEdge(3, 11);
 
-        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
 
         Assert.assertEquals(3, (int)lcaAlgorithm.getLCA(10, 11));
         Assert.assertEquals(2, (int)lcaAlgorithm.getLCA(8, 9));
@@ -318,7 +318,7 @@ public abstract class LCATestBase {
         graph.addEdge(19, 14);
         graph.addEdge(20, 11);
 
-        LCAAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm = createSolver(graph, Collections.singleton(1));
 
 
         Assert.assertEquals(1, (int)lcaAlgorithm.getLCA(9, 14));
@@ -359,7 +359,7 @@ public abstract class LCATestBase {
         g.addEdge("c", "i");
         g.addEdge("i", "j");
 
-        LCAAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
+        LowestCommonAncestorAlgorithm<String> lcaAlgorithm = createSolver(g, Collections.singleton("a"));
 
         Assert.assertEquals("b", lcaAlgorithm.getLCA("b", "h"));
         Assert.assertEquals("b", lcaAlgorithm.getLCA("j", "f"));
@@ -414,8 +414,8 @@ public abstract class LCATestBase {
 
         List<Integer> vertexList = new ArrayList<>(g.vertexSet());
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(vertexList.get(0)));
-        LCAAlgorithm<Integer> lcaAlgorithm2;
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, Collections.singleton(vertexList.get(0)));
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
             lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, vertexList.get(0));
@@ -470,8 +470,8 @@ public abstract class LCATestBase {
 
         Set<Integer> roots = connectedComponents.stream().map(component -> component.iterator().next()).collect(Collectors.toSet());
 
-        LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
-        LCAAlgorithm<Integer> lcaAlgorithm2;
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
+        LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;
 
         if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
             lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, roots);
@@ -508,8 +508,8 @@ public abstract class LCATestBase {
             List<Integer> vertexList = new ArrayList<>(g.vertexSet());
             Set<Integer> roots = Collections.singleton(vertexList.get(0));
 
-            LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
-            LCAAlgorithm<Integer> lcaAlgorithm2;
+            LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
+            LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;
 
             if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
                 lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, roots);
@@ -547,8 +547,8 @@ public abstract class LCATestBase {
             Set<Integer> roots = new ConnectivityInspector<>(g).connectedSets().stream()
                     .map(x -> x.iterator().next()).collect(Collectors.toSet());
 
-            LCAAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
-            LCAAlgorithm<Integer> lcaAlgorithm2;
+            LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm1 = createSolver(g, roots);
+            LowestCommonAncestorAlgorithm<Integer> lcaAlgorithm2;
 
             if (lcaAlgorithm1 instanceof EulerTourRMQLCAFinder)
                 lcaAlgorithm2 = new BinaryLiftingLCAFinder<>(g, roots);

@@ -18,7 +18,7 @@
 package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 
 import java.util.Set;
 
@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class TarjanLCAFinderTest extends LCATestBase {
     @Override
-    <V, E> LCAAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots) {
+    <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots) {
         return new TarjanLCAFinder<>(graph, roots);
     }
 }

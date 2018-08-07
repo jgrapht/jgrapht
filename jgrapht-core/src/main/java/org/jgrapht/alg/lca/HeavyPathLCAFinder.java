@@ -19,7 +19,7 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.decomposition.HeavyPathDecomposition;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 
 import java.util.*;
 
@@ -38,7 +38,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
+public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
 
     private final Graph<V, E> graph;
     private final Set<V> roots;
@@ -130,7 +130,7 @@ public class HeavyPathLCAFinder<V, E> implements LCAAlgorithm<V> {
             return null;
 
         /*
-         * Idea: Get a anb b on the same vertex path by 'jumping' from one path to another
+         * Idea: Get a and b on the same vertex path by 'jumping' from one path to another
          *
          *       while (a and b are on different paths) do
          *          if a's path starts lower than b's path (in the tree)

@@ -19,7 +19,7 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
@@ -58,7 +58,7 @@ import static org.jgrapht.util.MathUtil.log2;
  *
  * @author Alexandru Valeanu
  */
-public class BinaryLiftingLCAFinder<V, E> implements LCAAlgorithm<V> {
+public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
 
     private final Graph<V, E> graph;
     private final Set<V> roots;

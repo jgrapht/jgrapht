@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  *
  * @author Alexandru Valeanu
  */
-public interface LCAAlgorithm<V> {
+public interface LowestCommonAncestorAlgorithm<V> {
 
     /**
      * Return the LCA of a and b

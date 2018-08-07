@@ -19,7 +19,7 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnionFind;
 
@@ -53,7 +53,7 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinder<V, E> implements LCAAlgorithm<V> {
+public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
     private Graph<V, E> graph;
     private Set<V> roots;
 

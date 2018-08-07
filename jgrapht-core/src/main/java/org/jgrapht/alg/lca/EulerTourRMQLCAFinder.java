@@ -19,7 +19,7 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.LCAAlgorithm;
+import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.util.VertexToIntegerMapping;
 
@@ -51,7 +51,7 @@ import static org.jgrapht.util.MathUtil.log2;
  *
  * @author Alexandru Valeanu
  */
-public class EulerTourRMQLCAFinder<V, E> implements LCAAlgorithm<V> {
+public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
     private final Graph<V, E> graph;
     private final Set<V> roots;
     private final int maxLevel;
