@@ -502,14 +502,8 @@ class BlossomVNode {
          * Constructs a new instance of the IncidentEdgeIterator.
          */
         public IncidentEdgeIterator() {
-            if (first[0] == null) {
-                nextEdge = first[1];
-                nextDir = 1;
-
-            } else {
-                nextEdge = first[0];
-                nextDir = 0;
-            }
+            nextDir = first[0] == null ? 1 : 0;
+            nextEdge = first[nextDir];
         }
 
         /**

@@ -95,7 +95,7 @@ class BlossomVEdge {
      * Position of this edge in the array {@code state.edges}. This helps to determine generic counterpart of
      * this edge in constant time.
      */
-    int pos;
+    final int pos;
 
     /**
      * Constructs a new edge by initializing the arrays

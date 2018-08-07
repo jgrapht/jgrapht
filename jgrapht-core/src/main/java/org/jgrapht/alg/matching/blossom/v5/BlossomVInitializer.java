@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.GREEDY;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 /**
@@ -91,45 +90,72 @@ class BlossomVInitializer<V, E> {
      */
     public BlossomVInitializer(Graph<V, E> graph) {
         this.graph = graph;
+        nodeNum = graph.vertexSet().size();
     }
 
     /**
      * Converts the generic graph representation into the data structure form convenient for the algorithm
-     * and initializes the matching according to the strategy specified in {@code options}
+     * and initializes the matching according to the strategy specified in {@code options}.
      *
      * @param options the options of the algorithm
      * @return the state object with all necessary for the algorithm information
      */
     public BlossomVState<V, E> initialize(BlossomVOptions options) {
+        switch (options.initializationType) {
+            case GREEDY:
+                return simpleInitialization(options);
+            case NONE:
+                return greedyInitialization(options);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Performs simple initialization of the matching by allocating $|V|$ trees. The result of
+     * this type of initialization is an empty matching. That is why this is the most basic type
+     * of initialization.
+     *
+     * @param options the options of the algorithm
+     * @return the state object with all necessary for the algorithm information
+     */
+    private BlossomVState<V, E> simpleInitialization(BlossomVOptions options) {
         initGraph();
-        int treeNum;
-        BlossomVOptions.InitializationType type = options.initializationType;
-        if (type == GREEDY) {
-            treeNum = initGreedy();
-        } else {
-            // simple initialization
-            treeNum = nodeNum;
-            for (BlossomVNode node : nodes) {
-                node.isOuter = true;
-            }
+        for (BlossomVNode node : nodes) {
+            node.isOuter = true;
         }
         allocateTrees();
-        // initializing tree edges and adding cross-tree edges to corresponding heaps
+        initAuxiliaryGraph();
+        return new BlossomVState<>(graph, nodes, edges, nodeNum, edgeNum, nodeNum, graphVertices, graphEdges, options);
+    }
+
+    /**
+     * Performs greedy initialization of the algorithm. For the description of this initialization strategy
+     * see the class description.
+     *
+     * @param options the options of the algorithm
+     * @return the state object with all necessary for the algorithm information
+     */
+    private BlossomVState<V, E> greedyInitialization(BlossomVOptions options) {
+        initGraph();
+        int treeNum = initGreedy();
+        allocateTrees();
         initAuxiliaryGraph();
         return new BlossomVState<>(graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
     }
+
 
     /**
      * Helper method to convert the generic graph representation into the form convenient for the algorithm
      */
     private void initGraph() {
-        nodeNum = graph.vertexSet().size();
         int expectedEdgeNum = graph.edgeSet().size();
         nodes = new BlossomVNode[nodeNum + 1];
         edges = new BlossomVEdge[expectedEdgeNum];
         graphVertices = new ArrayList<>(nodeNum);
         graphEdges = new ArrayList<>(expectedEdgeNum);
         HashMap<V, BlossomVNode> vertexMap = new HashMap<>(nodeNum);
+
         int i = 0;
         // mapping nodes
         for (V vertex : graph.vertexSet()) {
