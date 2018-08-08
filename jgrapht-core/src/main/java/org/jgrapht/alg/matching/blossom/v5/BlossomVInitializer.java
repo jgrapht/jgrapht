@@ -103,9 +103,9 @@ class BlossomVInitializer<V, E> {
     public BlossomVState<V, E> initialize(BlossomVOptions options) {
         switch (options.initializationType) {
             case GREEDY:
-                return simpleInitialization(options);
-            case NONE:
                 return greedyInitialization(options);
+            case NONE:
+                return simpleInitialization(options);
             default:
                 return null;
         }
