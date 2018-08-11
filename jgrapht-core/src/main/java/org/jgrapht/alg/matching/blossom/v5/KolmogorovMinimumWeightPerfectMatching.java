@@ -247,8 +247,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         this.state = initializer.initialize(options);
         this.primalUpdater = new BlossomVPrimalUpdater<>(state);
         this.dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
-        if (DEBUG)
+        if (DEBUG) {
             printMap();
+        }
 
         BlossomVNode currentRoot;
         BlossomVNode nextRoot;
@@ -324,11 +325,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 // third phase
                 if (state.treeNum == iterationTreeNum) {
                     tree.currentEdge = null;
-                    if (options.updateDualsAfter) {
-                        if (dualUpdater.updateDualsSingle(tree)) {
-                            // since some progress has been made, continue with the same trees
-                            continue;
-                        }
+                    if (options.updateDualsAfter && dualUpdater.updateDualsSingle(tree)) {
+                        // since some progress has been made, continue with the same trees
+                        continue;
                     }
                     // clearing current edge pointers
                     state.clearCurrentEdges(tree);
@@ -348,11 +347,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 // we are done
                 break;
             }
-            if (cycleTreeNum == state.treeNum) {
-                if (dualUpdater.updateDuals(options.dualUpdateStrategy) <= 0) {
-                    // don't understand why MULTIPLE_TREE_FIXED_DELTA is used in blossom V code in this case
-                    dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
-                }
+            if (cycleTreeNum == state.treeNum && dualUpdater.updateDuals(options.dualUpdateStrategy) <= 0) {
+                // don't understand why MULTIPLE_TREE_FIXED_DELTA is used in blossom V code in this case
+                dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
             }
         }
         finish();

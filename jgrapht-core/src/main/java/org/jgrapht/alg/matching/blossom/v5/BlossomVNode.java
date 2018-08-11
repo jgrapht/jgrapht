@@ -106,6 +106,8 @@ class BlossomVNode {
      * An edge, which is incident to this node and currently belongs to the matching
      */
     BlossomVEdge matched;
+    BlossomVEdge bestEdge;
+
     /**
      * Reference to the tree this node belongs to
      */
@@ -250,7 +252,7 @@ class BlossomVNode {
         child.tree = tree;
         child.treeSiblingNext = firstTreeChild;
         if (grow) {
-            // if child is being grown => we have to overwrite all its tree structure data
+            // with this check we are able not to destroy tree structure during the augment operation
             child.firstTreeChild = null;
         }
         if (firstTreeChild == null) {

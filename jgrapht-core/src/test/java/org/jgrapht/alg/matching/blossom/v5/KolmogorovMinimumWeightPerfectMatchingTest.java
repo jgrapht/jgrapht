@@ -35,6 +35,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
+import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.FRACTIONAL;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
@@ -1965,7 +1967,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
-    private <V, E> void checkMatchingAndDualSolution(MatchingAlgorithm.Matching<V, E> matching,
+    static <V, E> void checkMatchingAndDualSolution(MatchingAlgorithm.Matching<V, E> matching,
                                                      KolmogorovMinimumWeightPerfectMatching<V, E>.DualSolution dualSolution) {
         Graph<V, E> graph = dualSolution.getGraph();
         assertEquals(graph.vertexSet().size(), 2 * matching.getEdges().size());
