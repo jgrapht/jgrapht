@@ -103,18 +103,32 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
 
     @Override
     public E getEdgeCorrespondence(E e, boolean forward) {
-        if (forward) {
-            V u = graph1.getEdgeSource(e);
-            V v = graph1.getEdgeTarget(e);
+        Graph<V, E> fromGraph;
+        Graph<V, E> toGraph;
 
-            return graph2.getEdge(forwardMapping.get(u), forwardMapping.get(v));
+        if (forward) {
+            fromGraph = graph1;
+            toGraph = graph2;
 
         } else {
-            V u = graph2.getEdgeSource(e);
-            V v = graph2.getEdgeTarget(e);
-
-            return graph1.getEdge(backwardMapping.get(u), backwardMapping.get(v));
+            fromGraph = graph2;
+            toGraph = graph1;
         }
+
+        V u = fromGraph.getEdgeSource(e);
+        V v = fromGraph.getEdgeTarget(e);
+
+        V uu = getVertexCorrespondence(u, forward);
+        if (uu == null){
+            return null;
+        }
+
+        V vv = getVertexCorrespondence(v, forward);
+        if (vv == null){
+            return null;
+        }
+
+        return toGraph.getEdge(uu, vv);
     }
 
     /**
@@ -181,13 +195,14 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
         if (o == null || getClass() != o.getClass()) return false;
         IsomorphicGraphMapping<?, ?> that = (IsomorphicGraphMapping<?, ?>) o;
         return Objects.equals(forwardMapping, that.forwardMapping) &&
-                Objects.equals(backwardMapping, that.backwardMapping);
+                Objects.equals(backwardMapping, that.backwardMapping) &&
+                Objects.equals(graph1, that.graph1) &&
+                Objects.equals(graph2, that.graph2);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(forwardMapping, backwardMapping);
+        return Objects.hash(forwardMapping, backwardMapping, graph1, graph2);
     }
 
     @Override
@@ -256,7 +271,7 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     /**
-     * Computes an automorphism (i.e. an isomorphism mapping from a graph to itself).
+     * Computes an identity automorphism (i.e. a self-mapping of a graph in which each vertex also maps to itself).
      *
      * @param graph the input graph
      * @param <V> the graph vertex type

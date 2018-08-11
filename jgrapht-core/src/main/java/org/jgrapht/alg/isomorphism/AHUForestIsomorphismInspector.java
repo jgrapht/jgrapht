@@ -135,11 +135,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      */
     @Override
     public boolean isomorphismExists(){
-        if (!computed){
-            isomorphicMapping = getMapping();
-        }
-
-        return isomorphicMapping != null;
+        return getMapping() != null;
     }
 
     private Pair<V, Graph<V, E>> createSingleRootGraph(Graph<V, E> forest, Set<V> roots){

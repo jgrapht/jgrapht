@@ -199,8 +199,6 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
         Map<String, Integer> canonicalNameToInt = new HashMap<>();
 
-        List<Map<Integer, List<V>>> sameLabelBagsByLevel = new ArrayList<>(nodesByLevel1.size());
-
         int freshName = 0;
 
         for (int lvl = maxLevel; lvl >= 0; lvl--) {
@@ -216,16 +214,11 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
             final int n = level[0].size();
 
-            Map<Integer, List<V>> sameLabelBags = new HashMap<>(n);
-
             for (int k = 0; k < 2; k++) {
+                Graph<V, E> graph = (k == 0) ? tree1  : tree2;
+
                 for (int i = 0; i < n; i++) {
                     V u = level[k].get(i);
-
-                    Graph<V, E> graph = tree1;
-
-                    if (k == 1)
-                        graph = tree2;
 
                     List<Integer> list = new ArrayList<>();
                     for (E edge: graph.edgesOf(u)){
@@ -239,15 +232,7 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
                     RadixSort.sort(list);
 
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(1).append(",");
-
-                    for (int x: list)
-                        sb.append(x).append(",");
-
-                    sb.append(0);
-
-                    String name = sb.toString();
+                    String name = list.toString();
                     Integer intName = canonicalNameToInt.get(name);
 
                     if (intName == null){
@@ -257,17 +242,9 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
                     }
 
                     canonicalName[k].put(u, intName);
-
-                    if (k == 1){
-                        sameLabelBags.computeIfAbsent(intName, x -> new ArrayList<>()).add(u);
-                    }
                 }
             }
-
-            sameLabelBagsByLevel.add(sameLabelBags);
         }
-
-        Collections.reverse(sameLabelBagsByLevel);
 
         matchVerticesWithSameLabel(root1, root2, canonicalName);
 

@@ -22,8 +22,10 @@ import org.jgrapht.GraphMapping;
 import org.jgrapht.GraphTests;
 import org.jgrapht.alg.shortestpath.TreeMeasurer;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between two unrooted trees.
@@ -109,7 +111,6 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public boolean isomorphismExists(){
         if (computed){
             if (ahuRootedTreeIsomorphismInspector != null){
@@ -123,22 +124,22 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
         computed = true;
 
         TreeMeasurer<V, E> treeMeasurer1 = new TreeMeasurer<>(tree1);
-        V[] centers1 = (V[]) treeMeasurer1.getGraphCenter().toArray();
+        List<V> centers1 = new ArrayList<>(treeMeasurer1.getGraphCenter());
 
         TreeMeasurer<V, E> treeMeasurer2 = new TreeMeasurer<>(tree2);
-        V[] centers2 = (V[]) treeMeasurer2.getGraphCenter().toArray();
+        List<V> centers2 = new ArrayList<>(treeMeasurer2.getGraphCenter());
 
-        if (centers1.length == 1 && centers2.length == 1){
+        if (centers1.size() == 1 && centers2.size() == 1){
             ahuRootedTreeIsomorphismInspector =
-                    new AHURootedTreeIsomorphismInspector<>(tree1, centers1[0], tree2, centers2[0]);
+                    new AHURootedTreeIsomorphismInspector<>(tree1, centers1.get(0), tree2, centers2.get(0));
         }
-        else if (centers1.length == 2 && centers2.length == 2){
+        else if (centers1.size() == 2 && centers2.size() == 2){
             ahuRootedTreeIsomorphismInspector =
-                    new AHURootedTreeIsomorphismInspector<>(tree1, centers1[0], tree2, centers2[0]);
+                    new AHURootedTreeIsomorphismInspector<>(tree1, centers1.get(0), tree2, centers2.get(0));
 
             if (!ahuRootedTreeIsomorphismInspector.isomorphismExists()){
                 ahuRootedTreeIsomorphismInspector =
-                        new AHURootedTreeIsomorphismInspector<>(tree1, centers1[1], tree2, centers2[0]);
+                        new AHURootedTreeIsomorphismInspector<>(tree1, centers1.get(1), tree2, centers2.get(0));
             }
         }
         else{
@@ -155,7 +156,11 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
      * @return isomorphic mapping, {@code null} is none exists
      */
     public IsomorphicGraphMapping<V, E> getMapping(){
-        isomorphismExists();
-        return ahuRootedTreeIsomorphismInspector.getMapping();
+        if (isomorphismExists()){
+            return ahuRootedTreeIsomorphismInspector.getMapping();
+        }
+        else{
+            return null;
+        }
     }
 }

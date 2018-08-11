@@ -41,27 +41,22 @@ public class TreeMeasurer<V, E> {
      *
      * @param graph input graph
      * @throws NullPointerException if {@code graph} is {@code null}
-     * @throws IllegalArgumentException if {@code graph} is not undirected
      */
     public TreeMeasurer(Graph<V, E> graph) {
-        this.graph = GraphTests.requireUndirected(graph);
+        this.graph = Objects.requireNonNull(graph);
     }
 
     private V computeFarthestVertex(BreadthFirstIterator<V, E> bfs){
-        Map<V, Integer> map = new HashMap<>();
+        V farthest = null;
+        int dist = Integer.MIN_VALUE;
 
         while (bfs.hasNext()){
             V v = bfs.next();
-            map.put(v, bfs.getDepth(v));
-        }
+            int depth = bfs.getDepth(v);
 
-        V farthest = null;
-        int dist = -1;
-
-        for (Map.Entry<V, Integer> entry: map.entrySet()){
-            if (farthest == null || dist < entry.getValue()){
-                farthest = entry.getKey();
-                dist = entry.getValue();
+            if (dist < depth){
+                farthest = v;
+                dist = depth;
             }
         }
 
@@ -72,9 +67,16 @@ public class TreeMeasurer<V, E> {
      * Compute the <a href="http://mathworld.wolfram.com/GraphCenter.html">graph center</a>. The
      * center of a graph is the set of vertices of graph eccentricity equal to the graph radius.
      *
+     * <p>
+     *     Note: The input graph must be undirected.
+     * </p>
+     *
      * @return the graph center
+     * @throws IllegalArgumentException if {@code graph} is not undirected
      */
     public Set<V> getGraphCenter() {
+        GraphTests.requireUndirected(graph);
+
         if (graph.vertexSet().isEmpty())
             return new LinkedHashSet<>();
 
@@ -98,11 +100,9 @@ public class TreeMeasurer<V, E> {
         if (diameterPath.size() % 2 == 1)
             graphCenter = Collections.singleton(diameterPath.get(diameterPath.size() / 2));
         else {
-            graphCenter = new LinkedHashSet<>();
+            graphCenter = new LinkedHashSet<>(2);
             graphCenter.add(diameterPath.get(diameterPath.size() / 2));
             graphCenter.add(diameterPath.get(diameterPath.size() / 2 - 1));
-
-            return graphCenter;
         }
 
         return graphCenter;

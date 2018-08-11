@@ -39,26 +39,26 @@ public class RadixSort {
     private static final int SIZE_RADIX = 1 << (MAX_DIGITS / MAX_D);
     private static final int MASK = SIZE_RADIX - 1;
 
-    private static int[] C = new int[SIZE_RADIX];
+    private static int[] count = new int[SIZE_RADIX];
 
     // Suppresses default constructor, ensuring non-instantiability.
     private RadixSort(){
     }
 
-    private static void radixSort(int A[], int N, int B[], int C[]) {
+    private static void radixSort(int array[], int n, int tempArray[], int cnt[]) {
         for (int d = 0, shift = 0; d < MAX_D; d++, shift += (MAX_DIGITS / MAX_D)) {
-            Arrays.fill(C, 0);
+            Arrays.fill(cnt, 0);
 
-            for (int i = 0; i < N; ++i)
-                C[(A[i] >> shift) & MASK]++;
+            for (int i = 0; i < n; ++i)
+                ++cnt[(array[i] >> shift) & MASK];
 
             for (int i = 1; i < SIZE_RADIX; ++i)
-                C[i] += C[i - 1];
+                cnt[i] += cnt[i - 1];
 
-            for (int i = N - 1; i >= 0; i--)
-                B[--C[(A[i] >> shift) & MASK]] = A[i];
+            for (int i = n - 1; i >= 0; i--)
+                tempArray[--cnt[(array[i] >> shift) & MASK]] = array[i];
 
-            System.arraycopy(B, 0, A, 0, N);
+            System.arraycopy(tempArray, 0, array, 0, n);
         }
     }
 
@@ -79,21 +79,20 @@ public class RadixSort {
             return;
         }
 
-        int[] A = new int[n];
-        int[] B = new int[n];
+        int[] array = new int[n];
 
         ListIterator<Integer> listIterator = list.listIterator();
 
         while (listIterator.hasNext()){
-            A[listIterator.nextIndex()] = listIterator.next();
+            array[listIterator.nextIndex()] = listIterator.next();
         }
-        radixSort(A, n, B, C);
+        radixSort(array, n, new int[n], count);
 
         listIterator = list.listIterator();
 
         while (listIterator.hasNext()){
             listIterator.next();
-            listIterator.set(A[listIterator.previousIndex()]);
+            listIterator.set(array[listIterator.previousIndex()]);
         }
     }
 }

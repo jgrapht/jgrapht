@@ -29,6 +29,8 @@ import org.junit.Test;
 import java.util.*;
 
 import static org.jgrapht.alg.isomorphism.AHUForestIsomorphismInspectorTest.parseGraph;
+import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.areIsomorphic;
+import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.generateMappedGraph;
 
 /**
  * Tests for {@link AHURootedTreeIsomorphismInspector}
@@ -36,25 +38,6 @@ import static org.jgrapht.alg.isomorphism.AHUForestIsomorphismInspectorTest.pars
  * @author Alexandru Valeanu
  */
 public class AHURootedTreeIsomorphismInspectorTest {
-    
-    public static <V> Graph<V, DefaultEdge> generateMappedGraph(Graph<V, DefaultEdge> graph,
-                                                                Map<V, V> mapping){
-
-        SimpleGraph<V, DefaultEdge> isoGraph = new SimpleGraph<>(graph.getVertexSupplier(),
-                graph.getEdgeSupplier(), false);
-
-        for (V v: graph.vertexSet())
-            isoGraph.addVertex(mapping.get(v));
-        
-        for (DefaultEdge edge: graph.edgeSet()){
-            V u = graph.getEdgeSource(edge);
-            V v = graph.getEdgeTarget(edge);
-
-            isoGraph.addEdge(mapping.get(u), mapping.get(v));
-        }
-        
-        return isoGraph;
-    }
 
     public static Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>>
     generateIsomorphicGraph(Graph<Integer, DefaultEdge> graph, Random random){
@@ -74,33 +57,6 @@ public class AHURootedTreeIsomorphismInspectorTest {
         }
         
         return Pair.of(generateMappedGraph(graph, mapping), mapping);
-    }
-
-    public static <V, E> boolean areIsomorphic(Graph<V, E> graph1, Graph<V, E> graph2,
-                                               IsomorphicGraphMapping<V, E> mapping){
-        for (V v: graph1.vertexSet()){
-            if (!mapping.getForwardMapping().containsKey(v) ||
-                    !graph2.containsVertex(mapping.getForwardMapping().get(v)))
-                return false;
-        }
-
-        for (V v: graph2.vertexSet()){
-            if (!mapping.getBackwardMapping().containsKey(v) ||
-                    !graph1.containsVertex(mapping.getBackwardMapping().get(v)))
-                return false;
-        }
-
-        for (E edge: graph1.edgeSet()){
-            if (!graph2.containsEdge(mapping.getEdgeCorrespondence(edge, true)))
-                return false;
-        }
-
-        for (E edge: graph2.edgeSet()){
-            if (!graph1.containsEdge(mapping.getEdgeCorrespondence(edge, false)))
-                return false;
-        }
-
-        return true;
     }
 
     public static Graph<Integer, DefaultEdge> generateTree(int N, Random random){

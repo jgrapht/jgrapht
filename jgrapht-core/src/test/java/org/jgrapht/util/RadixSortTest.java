@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the {@link RadixSort} class.
@@ -32,13 +32,24 @@ import static org.junit.Assert.*;
  */
 public class RadixSortTest {
 
-    private static boolean isSorted(List<Integer> list){
+    /**
+     * Check if the input list is sorted in ascending order.
+     *
+     * @param list the input list
+     * @return true if the list is sorted in ascending order, false otherwise
+     */
+    public static boolean isSorted(List<Integer> list){
         for (int i = 0; i < list.size() - 1; i++) {
             if (!(list.get(i) <= list.get(i + 1)))
                 return false;
         }
 
         return true;
+    }
+
+    @Test
+    public void testNullArray(){
+        RadixSort.sort(null);
     }
 
     @Test

@@ -31,7 +31,9 @@ import java.util.Map;
 import java.util.Random;
 
 import static org.jgrapht.alg.isomorphism.AHUForestIsomorphismInspectorTest.parseGraph;
-import static org.jgrapht.alg.isomorphism.AHURootedTreeIsomorphismInspectorTest.*;
+import static org.jgrapht.alg.isomorphism.AHURootedTreeIsomorphismInspectorTest.generateIsomorphicGraph;
+import static org.jgrapht.alg.isomorphism.AHURootedTreeIsomorphismInspectorTest.generateTree;
+import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.areIsomorphic;
 
 /**
  * Tests for {@link AHUUnrootedTreeIsomorphismInspector}
