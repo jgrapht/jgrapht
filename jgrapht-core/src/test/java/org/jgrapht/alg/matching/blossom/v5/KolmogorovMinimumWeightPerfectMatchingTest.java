@@ -58,7 +58,6 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
         return BlossomVOptions.ALL_OPTIONS;
     }
 
-
     @Test
     public void testInvalidDualSolution() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);

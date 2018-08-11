@@ -220,6 +220,7 @@ class BlossomVTree {
 
     /**
      * An iterator over tree nodes. This iterator traverses the nodes of the tree in a depth-first order.
+     * Note: this iterator can be used to iterate the nodes of some subtree a of a tree.
      */
     public static class TreeNodeIterator implements Iterator<BlossomVNode> {
         /**
