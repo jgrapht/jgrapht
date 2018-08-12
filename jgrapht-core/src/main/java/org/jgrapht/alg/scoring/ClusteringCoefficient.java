@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2018-2018, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,7 +41,7 @@ import org.jgrapht.alg.interfaces.*;
  * @param <E> the graph edge type
  * 
  * @author Assaf Mizrachi
- * @since June 2018
+ * @since December 2018
  */
 public class ClusteringCoefficient<V, E>
     implements VertexScoringAlgorithm<V, Double>
