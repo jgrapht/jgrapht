@@ -27,8 +27,8 @@ import org.jgrapht.alg.interfaces.*;
  * Clustering coefficient.
  * 
  * <p>
- * Computes the clustering coefficient of each vertex of a graph. The clustering coefficient of a
- * node $v$ in a directed graph is given by the expression: $C_i = \frac{|\{e_{jk}: v_j,v_k \in N_i, e_{jk} \in E\}|}{k_i(k_i-1)}$
+ * Computes the local clustering coefficient of a vertex of a graph. The clustering coefficient of a
+ * vertex $v$ in a directed graph is given by the expression: $C_i = \frac{|\{e_{jk}: v_j,v_k \in N_i, e_{jk} \in E\}|}{k_i(k_i-1)}$
  * where $N_i$ is the vertex neighborhood: $N_i = \{v_j : e_{ij} \in E \or e_{ji} \in E\}$. For undirected graphs,
  * $e_{ij}$ and $e_{ji}$ are considered identical hence the clustering coefficient is given by:
  * $C_i = \frac{2|\{e_{jk}: v_j,v_k \in N_i, e_{jk} \in E\}|}{k_i(k_i-1)}$. 
