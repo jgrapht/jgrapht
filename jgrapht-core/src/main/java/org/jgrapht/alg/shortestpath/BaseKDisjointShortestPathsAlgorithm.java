@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
@@ -118,33 +119,26 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         if (!originalGraph.containsVertex(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
         }   
-        
-        //first path calculation can be done on original graph.
-        this.workingGraph = this.originalGraph;
-        this.pathList = new ArrayList<>();
-        this.singleSourcePaths = getShortestPathAlgorithm().getPaths(startVertex);
-                
         // Create a working graph copy to avoid modifying the underlying graph. This gets
-        // reinitialized for every call to getPaths since previous calls may have modified it. Since
-        // the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
-        // (even when the graph copy is already weighted) to avoid writing weight changes through to
-        // the underlying graph.
-        Set<V> connectedComponent = new HashSet<>();
-        GraphPath<V, E> path;
-        for (V sink : this.originalGraph.vertexSet()) {
-            path = this.singleSourcePaths.getPath(sink);
-            if (path != null) {
-                connectedComponent.addAll(path.getVertexList());
-            }
-        }
+        // reinitialized for every call to getPaths since previous calls may have modified it.
         
-        Graph<V, E> connectedComponentGraph = new AsSubgraph<>(this.originalGraph, connectedComponent);
+        // Since shortest paths calculations are not expected to exceed the boundaries of the 
+        // connected component of the start vertex, we are inducing the working graph from
+        // the connected component.
+        Graph<V, E> connectedComponentGraph = new AsSubgraph<>(this.originalGraph, 
+            new ConnectivityInspector<>(this.originalGraph).connectedSetOf(startVertex));
+        
+        // Since the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
+        // (even when the graph copy is already weighted) to avoid writing weight changes through to
+        // the underlying graph.        
         this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
             connectedComponentGraph.getVertexSupplier(), connectedComponentGraph.getEdgeSupplier()), 
             new HashMap<>(), false);
         Graphs.addGraph(workingGraph, connectedComponentGraph);     
         
+        this.singleSourcePaths = getShortestPathAlgorithm().getPaths(startVertex);        
         GraphPath<V, E> currentPath = this.singleSourcePaths.getPath(endVertex);
+        this.pathList = new ArrayList<>();
         if (currentPath != null) {
             pathList.add(currentPath.getEdgeList());
             
