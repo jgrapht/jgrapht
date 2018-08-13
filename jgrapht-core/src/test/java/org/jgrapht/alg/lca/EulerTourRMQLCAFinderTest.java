@@ -27,7 +27,7 @@ import java.util.Set;
  *
  * @author Alexandru Valeanu
  */
-public class EulerTourRMQLCAFinderTest extends LCATestBase {
+public class EulerTourRMQLCAFinderTest extends LCATreeTestBase {
 
     @Override
     <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots) {

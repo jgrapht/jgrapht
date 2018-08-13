@@ -74,6 +74,10 @@ import java.util.*;
  *  Query Space complexity: $O(|V|)$<br>
  * </p>
  *
+ * <p>
+ *     For trees or forests please use either {@link BinaryLiftingLCAFinder}, {@link HeavyPathLCAFinder},
+ *     {@link EulerTourRMQLCAFinder} or {@link TarjanLCAFinder}.
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

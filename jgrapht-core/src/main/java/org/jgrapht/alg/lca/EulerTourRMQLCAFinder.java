@@ -25,8 +25,6 @@ import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
 
-import static org.jgrapht.util.MathUtil.log2;
-
 /**
  * Algorithm for computing lowest common ancestors in rooted trees and forests based on
  * <i>Berkman, Omer; Vishkin, Uzi (1993), "Recursive Star-Tree Parallel Data Structure",
@@ -44,6 +42,16 @@ import static org.jgrapht.util.MathUtil.log2;
  *  Preprocessing Space complexity:  $O(|V| log(|V|))$<br>
  *  Query Time complexity: $O(1)$<br>
  *  Query Space complexity: $O(1)$<br>
+ * </p>
+ *
+ * <p>
+ *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
+ *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
+ *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
+ *     since it provides $O(1)$ per query.<br>
+ *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ *     For DAGs, use {@link NaiveLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -72,8 +80,9 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
     private int[] log2;
 
     /**
-     * Construct a new instance of the algorithm..<br>
+     * Construct a new instance of the algorithm.
      *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
      * @param graph the input graph
@@ -84,9 +93,12 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
     }
 
     /**
-     * Construct a new instance of the algorithm..<br>
+     * Construct a new instance of the algorithm.
      *
-     * Note: If two roots appear in the same tree, an error will be thrown..<br>
+     * <p>
+     * Note: If two roots appear in the same tree, an error will be thrown.
+     *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
@@ -95,7 +107,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
     public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots){
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
-        this.maxLevel = 1 + log2(graph.vertexSet().size());
+        this.maxLevel = 1 + org.jgrapht.util.MathUtil.log2(graph.vertexSet().size());
 
         if (this.roots.isEmpty())
             throw new IllegalArgumentException("roots cannot be empty");
@@ -113,7 +125,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
     }
 
     private void dfsIterative(int u, int startLevel){
-        // set of vertices for which the the part of the if has been performed
+        // set of vertices for which the part of the if has been performed
         // (in other words: u ∈ explored iff dfs(u, ...) has been called as some point)
         Set<Integer> explored = new HashSet<>();
 
@@ -134,7 +146,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
                 sizeTour++;
 
                 V vertexU = indexList.get(u);
-                for (E edge: graph.edgesOf(vertexU)){
+                for (E edge: graph.outgoingEdgesOf(vertexU)){
                     int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
                     // check if child has not been explored (i.e. dfs(child, ...) has not been called)
@@ -146,26 +158,6 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
                 }
             }
             else{
-                eulerTour[sizeTour] = u;
-                level[sizeTour] = lvl;
-                sizeTour++;
-            }
-        }
-    }
-
-    private void dfs(int u, int parent, int lvl) {
-        component[u] = numberComponent;
-        eulerTour[sizeTour] = u;
-        level[sizeTour] = lvl;
-        sizeTour++;
-
-        V vertexU = indexList.get(u);
-        for (E edge: graph.edgesOf(vertexU)){
-            int v = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
-
-            if (v != parent){
-                dfs(v, u, lvl + 1);
-
                 eulerTour[sizeTour] = u;
                 level[sizeTour] = lvl;
                 sizeTour++;

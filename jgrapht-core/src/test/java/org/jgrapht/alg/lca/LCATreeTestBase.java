@@ -22,7 +22,6 @@ import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
-import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * @author Alexandru Valeanu
  */
-public abstract class LCATestBase {
+public abstract class LCATreeTestBase {
 
     abstract <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots);
 
@@ -378,23 +377,6 @@ public abstract class LCATestBase {
 
         // test it the other way around and starting from b
         Assert.assertEquals("b", createSolver(g, Collections.singleton("b")).getLCA("h", "b"));
-    }
-
-    // TODO: keep?
-    public Graph<Integer, DefaultEdge> generateForest(int t, int n, Random random){
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        for (int i = 0; i < t - 1; i++) {
-            g.addVertex();
-        }
-
-        BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertGraphGenerator<>(100, 1, n - t + 1, random);
-
-        generator.generateGraph(g, null);
-
-        return g;
     }
 
     @Test

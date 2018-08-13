@@ -33,6 +33,16 @@ import java.util.*;
  *  Query Space complexity: $O(1)$<br>
  * </p>
  *
+ * <p>
+ *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
+ *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
+ *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
+ *     since it provides $O(1)$ per query.<br>
+ *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ *     For DAGs, use {@link NaiveLCAFinder}.
+ * </p>
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -54,8 +64,9 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
     private List<V> indexList;
 
     /**
-     * Construct a new instance of the algorithm..<br>
+     * Construct a new instance of the algorithm.
      *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
      * @param graph the input graph
@@ -66,9 +77,12 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
     }
 
     /**
-     * Construct a new instance of the algorithm..<br>
+     * Construct a new instance of the algorithm.
      *
-     * Note: If two roots appear in the same tree, an error will be thrown..<br>
+     * <p>
+     * Note: If two roots appear in the same tree, an error will be thrown.
+     *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph

@@ -48,6 +48,16 @@ import java.util.*;
  *  Query Space complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries<br>
  * </p>
  *
+ * <p>
+ *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
+ *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
+ *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
+ *     since it provides $O(1)$ per query.<br>
+ *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ *     For DAGs, use {@link NaiveLCAFinder}.
+ * </p>
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -69,21 +79,25 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
     private List<Pair<V, V>> queries;
 
     /**
-     * Construct a new instance of the algorithm.<br>
+     * Construct a new instance of the algorithm.
      *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
      * @param graph the input graph
      * @param root the root of the graph
      */
     public TarjanLCAFinder(Graph<V, E> graph, V root) {
-        this(graph, Collections.singleton(Objects.requireNonNull(root, "Root cannot be null")));
+        this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
     /**
      * Construct a new instance of the algorithm.
      *
+     * <p>
      * Note: If two roots appear in the same tree, an error will be thrown.
+     *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
@@ -181,7 +195,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
         unionFind.addElement(u);
         ancestors.put(u, u);
 
-        for (E edge: graph.edgesOf(u)){
+        for (E edge: graph.outgoingEdgesOf(u)){
             V v = Graphs.getOppositeVertex(graph, edge, u);
 
             if (!v.equals(p)){

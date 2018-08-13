@@ -46,11 +46,22 @@ import static org.jgrapht.util.MathUtil.log2;
  * The worst-case number of jumps is $O(log(|V|))$.
  * </p>
  *
+ *
  * <p>
  *  Preprocessing Time complexity: $O(|V| log(|V|))$<br>
  *  Preprocessing Space complexity:  $O(|V| log(|V|))$<br>
  *  Query Time complexity: $O(log(|V|))$<br>
  *  Query Space complexity: $O(1)$<br>
+ * </p>
+ *
+ * <p>
+ *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
+ *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
+ *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
+ *     since it provides $O(1)$ per query.<br>
+ *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ *     For DAGs, use {@link NaiveLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -77,8 +88,9 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
     private int[] component;
 
     /**
-     * Construct a new instance of the algorithm..<br>
+     * Construct a new instance of the algorithm.
      *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid tree.
      *
      * @param graph the input graph
@@ -89,9 +101,12 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
     }
 
     /**
-     * Construct a new instance of the algorithm..<br>
+     * Construct a new instance of the algorithm.
      *
-     * Note: If two roots appear in the same tree, an error will be thrown..<br>
+     * <p>
+     * Note: If two roots appear in the same tree, an error will be thrown.
+     *
+     * <p>
      * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param graph the input graph
@@ -128,7 +143,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
         }
 
         V vertexU = indexList.get(u);
-        for (E edge: graph.edgesOf(vertexU)){
+        for (E edge: graph.outgoingEdgesOf(vertexU)){
             int v = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
             if (v != parent){
