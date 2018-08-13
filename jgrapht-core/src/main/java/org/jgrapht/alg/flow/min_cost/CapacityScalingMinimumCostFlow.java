@@ -69,6 +69,7 @@ import java.util.*;
  * @since July 2018
  */
 public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgorithm<V, E> {
+
     /**
      * A capacity which is considered to be infinite. Every arc, which has upper capacity greater that or
      * equal to this value is considered to be an infinite capacity arc.
