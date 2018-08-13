@@ -71,12 +71,9 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
      *
      * @param tree1 the first tree
      * @param tree2 the second tree
-     * @throws NullPointerException if {@code tree1} is {@code null}
-     * @throws IllegalArgumentException if {@code tree1} is not undirected
-     * @throws IllegalArgumentException if {@code tree1} is empty
-     * @throws NullPointerException if {@code tree2} is {@code null}
-     * @throws IllegalArgumentException if {@code tree2} is not undirected
-     * @throws IllegalArgumentException if {@code tree2} is empty
+     * @throws NullPointerException if {@code tree1} or {@code tree2} is {@code null}
+     * @throws IllegalArgumentException if {@code tree1} or {@code tree2} is not undirected
+     * @throws IllegalArgumentException if {@code tree1} or {@code tree2} is empty
      */
     public AHUUnrootedTreeIsomorphismInspector(Graph<V, E> tree1, Graph<V, E> tree2){
         validateTree(tree1);

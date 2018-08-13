@@ -79,16 +79,11 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      * @param roots1 the roots of the first forest
      * @param forest2 the second rooted forest
      * @param roots2 the roots of the second forest
-     * @throws NullPointerException if {@code forest1} is {@code null}
-     * @throws NullPointerException if {@code roots1} is {@code null}
-     * @throws IllegalArgumentException if {@code forest1} is empty
-     * @throws IllegalArgumentException if {@code roots1} is empty
-     * @throws IllegalArgumentException if {@code roots1} contains an invalid vertex
-     * @throws NullPointerException if {@code forest2} is {@code null}
-     * @throws NullPointerException if {@code roots2} is {@code null}
-     * @throws IllegalArgumentException if {@code forest2} is empty
-     * @throws IllegalArgumentException if {@code roots2} is empty
-     * @throws IllegalArgumentException if {@code roots2} contains an invalid vertex
+     * @throws NullPointerException if {@code forest1} or {@code forest2} is {@code null}
+     * @throws NullPointerException if {@code roots1} or {@code roots2} is {@code null}
+     * @throws IllegalArgumentException if {@code forest1} or {@code forest2} is empty
+     * @throws IllegalArgumentException if {@code roots1} or {@code roots2}  is empty
+     * @throws IllegalArgumentException if {@code roots1} or {@code roots2} contain an invalid vertex
      */
     public AHUForestIsomorphismInspector(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
         validateForest(forest1, roots1);

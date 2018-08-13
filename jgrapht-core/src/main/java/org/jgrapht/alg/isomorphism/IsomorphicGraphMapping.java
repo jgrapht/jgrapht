@@ -196,13 +196,14 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
         IsomorphicGraphMapping<?, ?> that = (IsomorphicGraphMapping<?, ?>) o;
         return Objects.equals(forwardMapping, that.forwardMapping) &&
                 Objects.equals(backwardMapping, that.backwardMapping) &&
-                Objects.equals(graph1, that.graph1) &&
-                Objects.equals(graph2, that.graph2);
+                graph1 == that.graph1 &&
+                graph2 == that.graph2;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(forwardMapping, backwardMapping, graph1, graph2);
+        return Objects.hash(forwardMapping, backwardMapping,
+                System.identityHashCode(graph1), System.identityHashCode(graph2));
     }
 
     @Override

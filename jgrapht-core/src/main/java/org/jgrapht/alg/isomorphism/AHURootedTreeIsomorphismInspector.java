@@ -81,14 +81,10 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
      * @param root1 the root of the first tree
      * @param tree2 the second rooted tree
      * @param root2 the root of the second tree
-     * @throws NullPointerException if {@code tree1} is {@code null}
-     * @throws NullPointerException if {@code root1} is {@code null}
-     * @throws IllegalArgumentException if {@code tree1} is empty
-     * @throws IllegalArgumentException if {@code root1} is an invalid vertex
-     * @throws NullPointerException if {@code tree2} is {@code null}
-     * @throws NullPointerException if {@code root2} is {@code null}
-     * @throws IllegalArgumentException if {@code tree2} is empty
-     * @throws IllegalArgumentException if {@code root2} is an invalid vertex
+     * @throws NullPointerException if {@code tree1} or {@code tree2} is {@code null}
+     * @throws NullPointerException if {@code root1} or {@code root2} is {@code null}
+     * @throws IllegalArgumentException if {@code tree1} or {@code tree2}  is empty
+     * @throws IllegalArgumentException if {@code root1} or {@code root2} is an invalid vertex
      */
     public AHURootedTreeIsomorphismInspector(Graph<V, E> tree1, V root1, Graph<V, E> tree2, V root2){
         validateTree(tree1, root1);
@@ -148,15 +144,17 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
             Map<Integer, List<V>> labelList = new HashMap<>(tree1.degreeOf(u));
 
-            for (E edge: tree1.edgesOf(u)){
+            for (E edge: tree1.outgoingEdgesOf(u)){
                 V next = Graphs.getOppositeVertex(tree1, edge, u);
 
+                // The check if only needed when the input graph is undirected in order to
+                // avoid walking back "up" the tree.
                 if (!forwardMapping.containsKey(next)){
                     labelList.computeIfAbsent(canonicalName[0].get(next), x -> new ArrayList<>()).add(next);
                 }
             }
 
-            for (E edge: tree2.edgesOf(v)){
+            for (E edge: tree2.outgoingEdgesOf(v)){
                 V next = Graphs.getOppositeVertex(tree2, edge, v);
 
                 if (!backwardMapping.containsKey(next)){
@@ -197,7 +195,7 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
         final int maxLevel = nodesByLevel1.size() - 1;
 
-        Map<String, Integer> canonicalNameToInt = new HashMap<>();
+        Map<List<Integer>, Integer> canonicalNameToInt = new HashMap<>();
 
         int freshName = 0;
 
@@ -221,7 +219,7 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
                     V u = level[k].get(i);
 
                     List<Integer> list = new ArrayList<>();
-                    for (E edge: graph.edgesOf(u)){
+                    for (E edge: graph.outgoingEdgesOf(u)){
                         V v = Graphs.getOppositeVertex(graph, edge, u);
                         int name = canonicalName[k].getOrDefault(v, -1);
 
@@ -232,11 +230,10 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
 
                     RadixSort.sort(list);
 
-                    String name = list.toString();
-                    Integer intName = canonicalNameToInt.get(name);
+                    Integer intName = canonicalNameToInt.get(list);
 
                     if (intName == null){
-                        canonicalNameToInt.put(name, freshName);
+                        canonicalNameToInt.put(list, freshName);
                         intName = freshName;
                         freshName++;
                     }
@@ -274,7 +271,6 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public boolean isomorphismExists(){
         return isomorphismExists(this.root1, this.root2);
     }

@@ -20,7 +20,6 @@ package org.jgrapht.alg.isomorphism;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.generate.BarabasiAlbertForestGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
@@ -30,9 +29,7 @@ import org.junit.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.jgrapht.alg.isomorphism.AHURootedTreeIsomorphismInspectorTest.generateIsomorphicGraph;
-import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.areIsomorphic;
-import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.generateMappedGraph;
+import static org.jgrapht.alg.isomorphism.IsomorphismTestUtil.*;
 
 /**
  * Tests for {@link AHUForestIsomorphismInspector}
@@ -40,50 +37,6 @@ import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.generateMap
  * @author Alexandru Valeanu
  */
 public class AHUForestIsomorphismInspectorTest {
-
-    public static Graph<Integer, DefaultEdge> parseGraph(String vertices, String edges){
-        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(-100),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        vertices = vertices.substring(1, vertices.length() - 1);
-
-        for (String s: vertices.split(", "))
-            forest.addVertex(Integer.valueOf(s));
-
-        edges = edges.substring(1, edges.length() - 1);
-
-        for (String s: edges.split(", ")){
-            String[] ends = s.substring(1, s.length() - 1).split(",");
-            forest.addEdge(Integer.valueOf(ends[0]), Integer.valueOf(ends[1]));
-        }
-
-        return forest;
-    }
-
-    public static Pair<Graph<Integer, DefaultEdge>, Graph<Integer, DefaultEdge>> parseGraph(String vertices, String edges,
-                                                                              String mapping, Map<Integer, Integer> map){
-
-        Graph<Integer, DefaultEdge> forest = parseGraph(vertices, edges);
-
-        for (String s: mapping.substring(1, mapping.length() - 1).split(", ")){
-            String[] ends = s.split("=");
-            map.put(Integer.valueOf(ends[0]), Integer.valueOf(ends[1]));
-        }
-
-        return Pair.of(forest, generateMappedGraph(forest, map));
-    }
-
-    public static Graph<Integer, DefaultEdge> generateForest(int N, Random random){
-        BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertForestGenerator<>(N / 10, N, random);
-
-        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        generator.generateGraph(forest);
-
-        return forest;
-    }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testMissingSupplier(){

@@ -19,18 +19,18 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
 
-import static org.jgrapht.alg.isomorphism.AHUForestIsomorphismInspectorTest.parseGraph;
-import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.areIsomorphic;
-import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.generateMappedGraph;
+import static org.jgrapht.alg.isomorphism.IsomorphismTestUtil.*;
 
 /**
  * Tests for {@link AHURootedTreeIsomorphismInspector}
@@ -38,38 +38,6 @@ import static org.jgrapht.alg.isomorphism.IsomorphicGraphMappingTest.generateMap
  * @author Alexandru Valeanu
  */
 public class AHURootedTreeIsomorphismInspectorTest {
-
-    public static Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>>
-    generateIsomorphicGraph(Graph<Integer, DefaultEdge> graph, Random random){
-        List<Integer> permutation = new ArrayList<>(graph.vertexSet().size());
-
-        for (int i = 0; i < graph.vertexSet().size(); i++) {
-            permutation.add(i);
-        }
-
-        Collections.shuffle(permutation, random);
-        
-        List<Integer> vertexList = new ArrayList<>(graph.vertexSet());
-        Map<Integer, Integer> mapping = new HashMap<>();
-
-        for (int i = 0; i < graph.vertexSet().size(); i++) {
-            mapping.put(vertexList.get(i), vertexList.get(permutation.get(i)));
-        }
-        
-        return Pair.of(generateMappedGraph(graph, mapping), mapping);
-    }
-
-    public static Graph<Integer, DefaultEdge> generateTree(int N, Random random){
-        BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
-
-        Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-
-        generator.generateGraph(tree);
-
-        return tree;
-    }
 
     @Test
     public void testSingleVertex(){
