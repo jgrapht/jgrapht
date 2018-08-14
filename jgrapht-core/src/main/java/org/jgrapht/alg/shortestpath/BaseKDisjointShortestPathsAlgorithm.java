@@ -62,13 +62,11 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
      */
     protected Graph<V, E> workingGraph;
 
-    private List<List<E>> pathList;
+    protected List<List<E>> pathList;
 
-    private Set<E> overlappingEdges;
+    protected Set<E> overlappingEdges;
     
-    private Graph<V, E> originalGraph;
-    
-    protected ShortestPathAlgorithm.SingleSourcePaths<V, E> singleSourcePaths;
+    protected Graph<V, E> originalGraph;
 
     /**
      * Creates a new instance of the algorithm
@@ -119,6 +117,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         if (!originalGraph.containsVertex(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
         }   
+        
         // Create a working graph copy to avoid modifying the underlying graph. This gets
         // reinitialized for every call to getPaths since previous calls may have modified it.
         
@@ -130,22 +129,20 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         
         // Since the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
         // (even when the graph copy is already weighted) to avoid writing weight changes through to
-        // the underlying graph.        
+        // the underlying graph.
         this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
             connectedComponentGraph.getVertexSupplier(), connectedComponentGraph.getEdgeSupplier()), 
             new HashMap<>(), false);
         Graphs.addGraph(workingGraph, connectedComponentGraph);     
         
-        this.singleSourcePaths = getShortestPathAlgorithm().getPaths(startVertex);        
-        GraphPath<V, E> currentPath = this.singleSourcePaths.getPath(endVertex);
         this.pathList = new ArrayList<>();
+        GraphPath<V, E> currentPath = calculateShortestPath(startVertex, endVertex);
         if (currentPath != null) {
             pathList.add(currentPath.getEdgeList());
             
             for (int i = 0; i < k - 1; i++) {
                 transformGraph(this.pathList.get(i));
-                this.singleSourcePaths = getShortestPathAlgorithm().getPaths(startVertex);
-                currentPath = this.singleSourcePaths.getPath(endVertex);
+                currentPath = calculateShortestPath(startVertex, endVertex);   
                 
                 if (currentPath != null) {
                     pathList.add(currentPath.getEdgeList());
@@ -280,11 +277,16 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
     }
         
     /**
-     * Gets the shortest path algorithm to be used in each iteration.
+     * Calculates the shortest paths for the current iteration.
+     * Path is not final; rather, it is intended to be used in a "post-production" phase
+     * (see resolvePaths method).
      * 
-     * @return the shortest path algorithm to be used.
+     * @param startVertex the start vertex
+     * @param endVertex the end vertex
+     * 
+     * @return the shortest path between start and end vertices.
      */
-    protected abstract ShortestPathAlgorithm<V, E> getShortestPathAlgorithm();
+    protected abstract GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex);
     
     /**
      * Prepares the working graph for next iteration. To be called from the second iteration
