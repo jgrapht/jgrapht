@@ -62,11 +62,11 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
      */
     protected Graph<V, E> workingGraph;
 
-    protected List<List<E>> pathList;
+    private List<List<E>> pathList;
 
-    protected Set<E> overlappingEdges;
+    private Set<E> overlappingEdges;
     
-    protected Graph<V, E> originalGraph;
+    private Graph<V, E> originalGraph;
     
     protected ShortestPathAlgorithm.SingleSourcePaths<V, E> singleSourcePaths;
 
