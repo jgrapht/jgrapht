@@ -64,6 +64,8 @@ import org.jgrapht.alg.interfaces.*;
  */
 public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortestPathsAlgorithm<V, E> {
     
+    private ShortestPathAlgorithm.SingleSourcePaths<V, E> singleSourcePaths;
+    
     /**
      * Creates a new instance of the algorithm.
      *
@@ -110,9 +112,10 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
     }
 
     @Override
-    protected ShortestPathAlgorithm<V, E> getShortestPathAlgorithm()
+    protected GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex)
     {
-        return new DijkstraShortestPath<>(this.workingGraph);
+        this.singleSourcePaths = new DijkstraShortestPath<>(this.workingGraph).getPaths(startVertex);
+        return singleSourcePaths.getPath(endVertex);
     }
         
 }

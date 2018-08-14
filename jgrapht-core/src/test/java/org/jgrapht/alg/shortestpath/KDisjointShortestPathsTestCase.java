@@ -682,7 +682,7 @@ public abstract class KDisjointShortestPathsTestCase
             originalWeightMap.put(e, source.getEdgeWeight(e));
         }
 
-        getKShortestPathAlgorithm(source).getPaths(1, 5, 5);
+        getKShortestPathAlgorithm(source).getPaths(1, 3, 5);
 
         assertEquals(destination, source);
 
