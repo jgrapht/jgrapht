@@ -17,12 +17,17 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.generate.*;
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
+import org.jgrapht.generate.NamedGraphGenerator;
+import org.jgrapht.generate.StarGraphGenerator;
 import org.jgrapht.graph.*;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.*;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
@@ -555,6 +560,34 @@ public class GraphTestsTest
         assertFalse(GraphTests.isWeaklyChordal(graph));
         Graphs.addEdgeWithVertices(graph, 1, 3);
         assertTrue(GraphTests.isWeaklyChordal(graph));
+    }
+
+    @Test public void failRequireIsWeightedOnUnweightedGraph()
+    {
+        try {
+            Graph<String, DefaultWeightedEdge> graph =
+                    new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
+            GraphTests.requireWeighted(graph);
+            fail("Expected an IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), is("Graph must be weighted"));
+        }
+    }
+
+    @Test public void failRequireIsWeightedOnNull()
+    {
+        try {
+            GraphTests.requireWeighted(null);
+            fail("Expected an NullPointerException to be thrown");
+        } catch (NullPointerException e) {
+            assertThat(e.getMessage(), is("Graph cannot be null"));
+        }
+    }
+
+    @Test public void testRequireIsWeighted()
+    {
+        Graph graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
+        assertEquals(graph, GraphTests.requireWeighted(graph));
     }
 }
 
