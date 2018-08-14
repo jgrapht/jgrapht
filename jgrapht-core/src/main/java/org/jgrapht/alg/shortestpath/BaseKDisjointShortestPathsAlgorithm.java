@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
@@ -67,8 +66,6 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
     protected Set<E> overlappingEdges;
     
     protected Graph<V, E> originalGraph;
-    
-    protected ShortestPathAlgorithm.SingleSourcePaths<V, E> singleSourcePaths;
 
     /**
      * Creates a new instance of the algorithm
@@ -119,33 +116,26 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         if (!originalGraph.containsVertex(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
         }   
+        
         // Create a working graph copy to avoid modifying the underlying graph. This gets
-        // reinitialized for every call to getPaths since previous calls may have modified it.
-        
-        // Since shortest paths calculations are not expected to exceed the boundaries of the 
-        // connected component of the start vertex, we are inducing the working graph from
-        // the connected component.
-        Graph<V, E> connectedComponentGraph = new AsSubgraph<>(this.originalGraph, 
-            new ConnectivityInspector<>(this.originalGraph).connectedSetOf(startVertex));
-        
-        // Since the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
+        // reinitialized for every call to getPaths since previous calls may have modified it. Since
+        // the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
         // (even when the graph copy is already weighted) to avoid writing weight changes through to
-        // the underlying graph.        
+        // the underlying graph.
         this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
-            connectedComponentGraph.getVertexSupplier(), connectedComponentGraph.getEdgeSupplier()), 
+            this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier()), 
             new HashMap<>(), false);
-        Graphs.addGraph(workingGraph, connectedComponentGraph);     
-        
-        this.singleSourcePaths = getShortestPathAlgorithm().getPaths(startVertex);        
-        GraphPath<V, E> currentPath = this.singleSourcePaths.getPath(endVertex);
+        Graphs.addGraph(workingGraph, this.originalGraph);     
+
+
         this.pathList = new ArrayList<>();
+        GraphPath<V, E> currentPath = calculateShortestPath(startVertex, endVertex);
         if (currentPath != null) {
             pathList.add(currentPath.getEdgeList());
             
             for (int i = 0; i < k - 1; i++) {
                 transformGraph(this.pathList.get(i));
-                this.singleSourcePaths = getShortestPathAlgorithm().getPaths(startVertex);
-                currentPath = this.singleSourcePaths.getPath(endVertex);
+                currentPath = calculateShortestPath(startVertex, endVertex);   
                 
                 if (currentPath != null) {
                     pathList.add(currentPath.getEdgeList());
@@ -280,11 +270,16 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
     }
         
     /**
-     * Gets the shortest path algorithm to be used in each iteration.
+     * Calculates the shortest paths for the current iteration.
+     * Path is not final; rather, it is intended to be used in a "post-production" phase
+     * (see resolvePaths method).
      * 
-     * @return the shortest path algorithm to be used.
+     * @param startVertex the start vertex
+     * @param endVertex the end vertex
+     * 
+     * @return the shortest path between start and end vertices.
      */
-    protected abstract ShortestPathAlgorithm<V, E> getShortestPathAlgorithm();
+    protected abstract GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex);
     
     /**
      * Prepares the working graph for next iteration. To be called from the second iteration

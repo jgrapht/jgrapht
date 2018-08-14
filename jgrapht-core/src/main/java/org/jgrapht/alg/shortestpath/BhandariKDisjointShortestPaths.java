@@ -20,7 +20,6 @@ package org.jgrapht.alg.shortestpath;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
 
 /**
  * An implementation of Bhandari algorithm for finding $K$ edge-<em>disjoint</em> shortest paths.
@@ -80,11 +79,11 @@ public class BhandariKDisjointShortestPaths<V, E> extends BaseKDisjointShortestP
             workingGraph.setEdgeWeight(reversedEdge, -originalEdgeWeight);
         }
     }
-    
+
     @Override
-    protected ShortestPathAlgorithm<V, E> getShortestPathAlgorithm()
+    protected GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex)
     {
-        return new BellmanFordShortestPath<>(this.workingGraph);
+        return new BellmanFordShortestPath<>(this.workingGraph).getPath(startVertex, endVertex);
     }
     
 }
