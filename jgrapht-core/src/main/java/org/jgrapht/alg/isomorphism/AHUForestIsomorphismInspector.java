@@ -19,6 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AsGraphUnion;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
@@ -96,6 +97,7 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
     }
 
     private void validateForest(Graph<V, E> forest, Set<V> roots){
+        assert GraphTests.isSimple(forest);
         Objects.requireNonNull(forest, "input forest cannot be null");
         Objects.requireNonNull(roots, "set of roots cannot be null");
 

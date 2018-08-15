@@ -85,6 +85,7 @@ public class AHUUnrootedTreeIsomorphismInspector<V, E> implements IsomorphismIns
 
     private void validateTree(Graph<V, E> tree){
         GraphTests.requireUndirected(tree);
+        assert GraphTests.isSimple(tree);
 
         if (tree.vertexSet().isEmpty()){
             throw new IllegalArgumentException("tree cannot be empty");

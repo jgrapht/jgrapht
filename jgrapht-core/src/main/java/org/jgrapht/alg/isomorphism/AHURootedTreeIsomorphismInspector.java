@@ -19,6 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
+import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.traverse.BreadthFirstIterator;
@@ -97,6 +98,7 @@ public class AHURootedTreeIsomorphismInspector<V, E> implements IsomorphismInspe
     }
 
     private void validateTree(Graph<V, E> tree, V root){
+        assert GraphTests.isSimple(tree);
         Objects.requireNonNull(tree, "input forest cannot be null");
         Objects.requireNonNull(root, "root cannot be null");
 
