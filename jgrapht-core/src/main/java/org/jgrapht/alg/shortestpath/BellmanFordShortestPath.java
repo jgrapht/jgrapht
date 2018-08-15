@@ -20,7 +20,6 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -28,9 +27,7 @@ import java.util.*;
  *
  * <p>
  * Computes shortest paths from a single source vertex to all other vertices in a weighted graph.
- * The Bellman-Ford algorithm supports negative edge weights. Negative weight cycles are not allowed
- * and will be reported by the algorithm. This implies that negative edge weights are not allowed in
- * undirected graphs.
+ * The Bellman-Ford algorithm supports graphs with negative weight cycles.
  *
  * <p>
  * The running time is $O(|E||V|)$.
@@ -39,12 +36,15 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @author Miron Balcerzak
  */
 public class BellmanFordShortestPath<V, E>
     extends
     BaseShortestPathAlgorithm<V, E>
 {
     private final Comparator<Double> comparator;
+
+    private boolean allowNegativeWeightCycle = false;
 
     /**
      * Construct a new instance.
@@ -91,77 +91,72 @@ public class BellmanFordShortestPath<V, E>
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
 
-        /*
-         * Initialize distance and predecessor.
-         */
-        int n = graph.vertexSet().size();
-        Map<V, Double> distance = new HashMap<>();
-        Map<V, E> pred = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            distance.put(v, Double.POSITIVE_INFINITY);
+        // Initialize distance and predecessor.
+        Set<V> vertices = graph.vertexSet();
+        int n = vertices.size();
+        Map<V, Double> distances = new HashMap<>();
+        Map<V, E> predecessor = new HashMap<>();
+        for (V v : vertices) {
+            distances.put(v, Double.POSITIVE_INFINITY);
         }
-        distance.put(source, 0d);
+        distances.put(source, 0d);
 
-        /*
-         * Maintain two sets of vertices whose edges need relaxation. The first set is the current
-         * set of vertices while the second if the set for the subsequent iteration.
-         */
-        Set<V>[] updated = (Set<V>[]) Array.newInstance(Set.class, 2);
-        updated[0] = new LinkedHashSet<>();
-        updated[1] = new LinkedHashSet<>();
-        int curUpdated = 0;
-        updated[curUpdated].add(source);
-
-        /*
-         * Relax edges.
-         */
+        // Relax edges
         for (int i = 0; i < n - 1; i++) {
-            Set<V> curVertexSet = updated[curUpdated];
-            Set<V> nextVertexSet = updated[(curUpdated + 1) % 2];
-
-            for (V v : curVertexSet) {
-                for (E e : graph.outgoingEdgesOf(v)) {
-                    V u = Graphs.getOppositeVertex(graph, e, v);
-                    double newDist = distance.get(v) + graph.getEdgeWeight(e);
-                    if (comparator.compare(newDist, distance.get(u)) < 0) {
-                        distance.put(u, newDist);
-                        pred.put(u, e);
-                        nextVertexSet.add(u);
+            boolean updateDone = false;
+            for (V vSource : vertices) {
+                Double sourceDist = distances.get(vSource);
+                if (sourceDist == Double.POSITIVE_INFINITY) {
+                    continue;
+                }
+                for (E e : graph.outgoingEdgesOf(vSource)) {
+                    V vTarget = Graphs.getOppositeVertex(graph, e, vSource);
+                    Double newTargetDist = sourceDist + graph.getEdgeWeight(e);
+                    if (comparator.compare(newTargetDist, distances.get(vTarget)) < 0) {
+                        distances.put(vTarget, newTargetDist);
+                        predecessor.put(vTarget, e);
+                        updateDone = true;
                     }
                 }
             }
-
-            // swap next with current
-            curVertexSet.clear();
-            curUpdated = (curUpdated + 1) % 2;
-
-            // stop if no relaxation
-            if (nextVertexSet.isEmpty()) {
+            if (!updateDone) {
                 break;
             }
         }
 
-        /*
-         * Check for negative cycles
-         */
-        for (V v : updated[curUpdated]) {
-            for (E e : graph.outgoingEdgesOf(v)) {
-                V u = Graphs.getOppositeVertex(graph, e, v);
-                double newDist = distance.get(v) + graph.getEdgeWeight(e);
-                if (comparator.compare(newDist, distance.get(u)) < 0) {
-                    throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+        // Check for negative cycles
+        boolean negativeCycleDetected = false;
+        for (V vSource : distances.keySet()) {
+            for (E e : graph.outgoingEdgesOf(vSource)) {
+                V vTarget = graph.getEdgeTarget(e);
+                Double newTargetDist = distances.get(vSource) + graph.getEdgeWeight(e);
+                if (comparator.compare(newTargetDist, distances.get(vTarget)) < 0) {
+                    negativeCycleDetected = true;
                 }
             }
         }
 
-        /*
-         * Transform result
-         */
-        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            distanceAndPredecessorMap.put(v, Pair.of(distance.get(v), pred.get(v)));
+        if (negativeCycleDetected && !allowNegativeWeightCycle) {
+            throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+        }
+
+        // Transform result
+        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new LinkedHashMap<>();
+        for (V v : vertices) {
+            distanceAndPredecessorMap.put(v, Pair.of(distances.get(v), predecessor.get(v)));
         }
         return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
+    }
+
+    /**
+     * Permits negative weight cycles in a graph. Without that algo will raise an exception.
+     *
+     * @return returns instance of algo
+     */
+    public BellmanFordShortestPath<V, E> allowNegativeWeightCycle()
+    {
+        this.allowNegativeWeightCycle = true;
+        return this;
     }
 
     /**

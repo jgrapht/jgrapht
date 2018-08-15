@@ -34,11 +34,12 @@ import java.util.*;
  * in each invocation of the {@link #getPath(Object)} method. The complexity of
  * {@link #getPath(Object)} is linear to the number of edges of the path while the complexity of
  * {@link #getWeight(Object)} is $O(1)$.
- * 
- * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
+ * @author Dimitrios Michail
+ * @author Miron Balcerzak
  */
 public class TreeSingleSourcePathsImpl<V, E>
     implements
@@ -124,31 +125,42 @@ public class TreeSingleSourcePathsImpl<V, E>
     @Override
     public GraphPath<V, E> getPath(V targetVertex)
     {
-        if (source.equals(targetVertex)) {
-            return GraphWalk.singletonWalk(g, source, 0d);
-        }
-
-        LinkedList<E> edgeList = new LinkedList<>();
-
         V cur = targetVertex;
         Pair<Double, E> p = map.get(cur);
         if (p == null || p.getFirst().equals(Double.POSITIVE_INFINITY)) {
+            if (source.equals(targetVertex)) {
+                return GraphWalk.singletonWalk(g, source, 0d);
+            }
             return null;
         }
 
+        LinkedList<E> edgeList = new LinkedList<>();
+        LinkedList<V> vertexList = new LinkedList<>();
+
         double weight = 0d;
-        while (p != null && !cur.equals(source)) {
+        do {
             E e = p.getSecond();
             if (e == null) {
                 break;
             }
+            // detect and escape the cycle if needed
+            if (vertexList.contains(cur)) {
+                for (E inner : getGraph().incomingEdgesOf(cur)) {
+                    if (!edgeList.contains(inner)) {
+                        e = inner;
+                        break;
+                    }
+                }
+            }
             edgeList.addFirst(e);
+            vertexList.addFirst(cur);
             weight += g.getEdgeWeight(e);
             cur = Graphs.getOppositeVertex(g, e, cur);
             p = map.get(cur);
-        }
+        } while (p != null && !cur.equals(source));
 
-        return new GraphWalk<>(g, source, targetVertex, null, edgeList, weight);
+        vertexList.addFirst(source);
+        return new GraphWalk<>(g, source, targetVertex, vertexList, edgeList, weight);
     }
 
 }
