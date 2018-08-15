@@ -17,12 +17,26 @@
  */
 package org.jgrapht.alg.matching;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
-import java.math.*;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.FibonacciHeap;
 
 /**
  * Maximum weight matching in bipartite graphs.
@@ -51,6 +65,7 @@ public class MaximumWeightBipartiteMatching<V, E>
     private final Set<V> partition2;
 
     private final Comparator<BigDecimal> comparator;
+    private final Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal,V>> heapSupplier;
 
     // vertex potentials
     private Map<V, BigDecimal> pot;
@@ -58,8 +73,8 @@ public class MaximumWeightBipartiteMatching<V, E>
     private Map<V, E> matchedEdge;
 
     // shortest path related data structures
-    private GenericFibonacciHeap<BigDecimal, V> heap;
-    private Map<V, GenericFibonacciHeap<BigDecimal, V>.Node> nodeInHeap;
+    private AddressableHeap<BigDecimal, V> heap;
+    private Map<V, AddressableHeap.Handle<BigDecimal, V>> nodeInHeap;
     private Map<V, E> pred;
     private Map<V, BigDecimal> dist;
 
@@ -77,10 +92,25 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
+        this(graph, partition1, partition2, (comparator) -> new FibonacciHeap<>(comparator));
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
+     * @param heapSupplier a supplier for the addressable heap to use in the algorithm.
+     * @throws IllegalArgumentException if the graph is not undirected
+     */
+    public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal,V>> heapSupplier)
+    {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = Objects.requireNonNull(partition1, "Partition 1 cannot be null");
         this.partition2 = Objects.requireNonNull(partition2, "Partition 2 cannot be null");
         this.comparator = Comparator.<BigDecimal> naturalOrder();
+        this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
     }
 
     /**
@@ -112,7 +142,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         pot = new HashMap<>();
         dist = new HashMap<>();
         matchedEdge = new HashMap<>();
-        heap = new GenericFibonacciHeap<>(comparator);
+        heap = heapSupplier.apply(comparator);
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
         graph.vertexSet().forEach(v -> {
@@ -192,7 +222,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                     pred.put(b1, e1);
                     reachedB.push(b1);
 
-                    GenericFibonacciHeap<BigDecimal, V>.Node node = heap.insert(db1, b1);
+                    AddressableHeap.Handle<BigDecimal, V> node = heap.insert(db1, b1);
                     nodeInHeap.put(b1, node);
                 } else {
                     if (comparator.compare(db1, dist.get(b1)) < 0) {
@@ -211,7 +241,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             V b = null;
             BigDecimal db = BigDecimal.ZERO;
             if (!heap.isEmpty()) {
-                b = heap.removeMin().getData();
+                b = heap.deleteMin().getValue();
                 nodeInHeap.remove(b);
                 db = dist.get(b);
             }
@@ -252,8 +282,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                                 pred.put(b1, e1);
                                 reachedB.push(b1);
 
-                                GenericFibonacciHeap<BigDecimal, V>.Node node =
-                                    heap.insert(db1, b1);
+                                AddressableHeap.Handle<BigDecimal, V> node = heap.insert(db1, b1);
                                 nodeInHeap.put(b1, node);
                             } else {
                                 if (comparator.compare(db1, dist.get(b1)) < 0) {

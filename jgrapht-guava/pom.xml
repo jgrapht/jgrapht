@@ -27,41 +27,6 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<transformers>
-						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<manifestEntries>
-								<!-- Use unique OSGi bundle symbolic name for uber artifact. Otherwise 
-									e.g. jgrapht-guava-x.y.z.jar and jgrapht-guava-x.y.z-uber.jar could not be deployed 
-									to the same P2 repository. -->
-								<Bundle-SymbolicName>org.jgrapht.guava.uber</Bundle-SymbolicName>
-							</manifestEntries>
-						</transformer>
-						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-							<resource>META-INF/guava-license</resource>
-							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
-						</transformer>
-						<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
-                			</transformer>
-						<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
-							<addHeader>false</addHeader>
-						</transformer>
-					</transformers>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-					<shadedClassifierName>uber</shadedClassifierName>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>

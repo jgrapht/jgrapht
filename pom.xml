@@ -89,6 +89,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>jgrapht-bundle</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 			    <groupId>org.xmlunit</groupId>
 			    <artifactId>xmlunit-core</artifactId>
 			    <version>2.5.1</version>
@@ -161,7 +166,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
-					<version>1.5</version>
+					<version>3.1.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -178,10 +183,14 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.0.0</version>
 					<configuration>
-						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
 						<additionalJOption>--allow-script-in-comments</additionalJOption>
@@ -231,16 +240,11 @@
 		<module>jgrapht-ext</module>
 		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>
+		<module>jgrapht-bundle</module>
 		<module>jgrapht-dist</module>
 	</modules>
 
 	<profiles>
-		<profile>
-			<id>touchgraph</id>
-			<modules>
-				<module>jgrapht-touchgraph</module>
-			</modules>
-		</profile>
 		<profile>
 			<id>checkstyle</id>
 			<build>

@@ -43,9 +43,8 @@ public class GridGraphGenerator<V, E>
      */
     public static final String CORNER_VERTEX = "Corner Vertex";
 
-    private int rows;
-
-    private int cols;
+    private final int rows;
+    private final int cols;
 
     /**
      * Creates a new GridGraphGenerator object with rows x cols dimension.
@@ -77,7 +76,7 @@ public class GridGraphGenerator<V, E>
 
         // Adding all vertices to the set
         int cornerCtr = 0;
-        for (int i = 0; i < (rows * cols); i++) {
+        for (int i = 0; i < rows * cols; i++) {
             V vertex = target.addVertex();
             map.put(i + 1, vertex);
 

@@ -124,7 +124,7 @@ public class BarabasiAlbertForestGeneratorTest {
         assertEquals(20, g.vertexSet().size());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testUndirectedWithGraphWhichAlreadyHasSomeVertices() {
         final long seed = 5;
 

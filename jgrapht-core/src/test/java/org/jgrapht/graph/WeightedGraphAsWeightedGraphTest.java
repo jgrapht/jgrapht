@@ -56,9 +56,27 @@ public class WeightedGraphAsWeightedGraphTest
     private Graph<String, DefaultWeightedEdge> weightedGraph;
 
     /**
-     * Similar set up as created by {@link AsUndirectedGraphTest}.
+     * Set up using default writeWeightsThrough setting (false) for AsWeightedGraph.
+     */
+    private void setUp()
+    {
+        Map<DefaultWeightedEdge, Double> graphWeights = createBackingGraph();
+        this.weightedGraph =
+            new AsWeightedGraph<>(this.backingGraph, graphWeights);
+    }
+    
+    /**
+     * Set up using explicit writeWeightsThrough setting (false) for AsWeightedGraph.
      */
     private void setUp(boolean writeWeightsThrough)
+    {
+        Map<DefaultWeightedEdge, Double> graphWeights = createBackingGraph();
+        this.weightedGraph =
+            new AsWeightedGraph<>(this.backingGraph, graphWeights,
+                writeWeightsThrough);
+    }
+
+    private Map<DefaultWeightedEdge, Double> createBackingGraph()
     {
         this.backingGraph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
@@ -76,10 +94,9 @@ public class WeightedGraphAsWeightedGraphTest
         graphWeights.put(e23, e23Weight);
         graphWeights.put(e24, e24Weight);
 
-        this.weightedGraph =
-            new AsWeightedGraph<>(this.backingGraph, graphWeights, writeWeightsThrough);
+        return graphWeights;
     }
-
+    
     @Test public void testSetEdgeWeight()
     {
         this.setUp(false);
@@ -89,6 +106,17 @@ public class WeightedGraphAsWeightedGraphTest
 
         assertEquals(newEdgeWeight, this.weightedGraph.getEdgeWeight(e12), 0);
         assertEquals(this.defaultE12Weight, this.backingGraph.getEdgeWeight(e12), 0);
+    }
+
+    @Test public void testSetEdgeWeightDefaultPropagation()
+    {
+        this.setUp();
+
+        double newEdgeWeight = -999;
+        this.weightedGraph.setEdgeWeight(e12, newEdgeWeight);
+
+        assertEquals(newEdgeWeight, this.weightedGraph.getEdgeWeight(e12), 0);
+        assertEquals(newEdgeWeight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
     @Test public void testSetEdgePropagatesChangesToBackingGraph()

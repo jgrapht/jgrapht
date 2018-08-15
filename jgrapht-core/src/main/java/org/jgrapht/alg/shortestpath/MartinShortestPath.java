@@ -17,13 +17,24 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jheaps.Heap;
+import org.jheaps.array.DaryArrayHeap;
 
 /**
  * Martin's algorithm for the multi-objective shortest paths problem.
@@ -52,8 +63,8 @@ public class MartinShortestPath<V, E>
     // final labels for each node
     private final Map<V, LinkedList<Label>> nodeLabels;
     // temporary labels ordered lexicographically
-    private final GenericFibonacciHeap<Label, Void> heap;
-
+    private final Heap<Label> heap;
+    
     /**
      * Create a new shortest path algorithm
      * 
@@ -67,9 +78,9 @@ public class MartinShortestPath<V, E>
             Objects.requireNonNull(edgeWeightFunction, "Function cannot be null");
         this.objectives = validateEdgeWeightFunction(edgeWeightFunction);
         this.nodeLabels = new HashMap<>();
-        this.heap = new GenericFibonacciHeap<>(new LabelComparator());
+        this.heap = new DaryArrayHeap<>(3, new LabelComparator());
     }
-
+    
     @Override
     public List<GraphPath<V, E>> getPaths(V source, V sink)
     {
@@ -107,10 +118,10 @@ public class MartinShortestPath<V, E>
             nodeLabels.put(v, new LinkedList<>());
         }
         nodeLabels.get(source).add(sourceLabel);
-        heap.insert(sourceLabel, null);
+        heap.insert(sourceLabel);
 
         while (!heap.isEmpty()) {
-            Label curLabel = heap.removeMin().getKey();
+            Label curLabel = heap.deleteMin();
             V v = curLabel.node;
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
@@ -132,7 +143,7 @@ public class MartinShortestPath<V, E>
                 }
                 if (!isDominated) {
                     uLabels.add(newLabel);
-                    heap.insert(newLabel, null);
+                    heap.insert(newLabel);
                 }
             }
         }

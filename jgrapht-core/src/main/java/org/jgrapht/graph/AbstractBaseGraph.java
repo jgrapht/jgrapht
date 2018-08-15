@@ -55,7 +55,14 @@ public abstract class AbstractBaseGraph<V, E>
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
     private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
         "Graph specifics must not be null";
+    private static final String INVALID_VERTEX_SUPPLIER_DOES_NOT_RETURN_UNIQUE_VERTICES_ON_EACH_CALL =
+        "Invalid vertex supplier (does not return unique vertices on each call).";
+    private static final String MIXED_GRAPH_NOT_SUPPORTED = "Mixed graph not supported";
+    private static final String GRAPH_SPECIFICS_STRATEGY_REQUIRED = "Graph specifics strategy required";
+    private static final String THE_GRAPH_CONTAINS_NO_VERTEX_SUPPLIER = "The graph contains no vertex supplier";
+    private static final String THE_GRAPH_CONTAINS_NO_EDGE_SUPPLIER = "The graph contains no edge supplier";
 
+    
     private transient Set<V> unmodifiableVertexSet = null;
 
     private Supplier<V> vertexSupplier;
@@ -87,7 +94,7 @@ public abstract class AbstractBaseGraph<V, E>
         this.edgeSupplier = edgeSupplier;
         this.type = Objects.requireNonNull(type);
         if (type.isMixed()) {
-            throw new IllegalArgumentException("Mixed graph not supported");
+            throw new IllegalArgumentException(MIXED_GRAPH_NOT_SUPPORTED);
         }
         this.graphSpecificsStrategy = new BackwardsCompatibleGraphSpecificsStrategy();
         this.specifics = Objects.requireNonNull(
@@ -116,11 +123,11 @@ public abstract class AbstractBaseGraph<V, E>
         this.edgeSupplier = edgeSupplier;
         this.type = Objects.requireNonNull(type);
         if (type.isMixed()) {
-            throw new IllegalArgumentException("Mixed graph not supported");
+            throw new IllegalArgumentException(MIXED_GRAPH_NOT_SUPPORTED);
         }
 
         this.graphSpecificsStrategy =
-            Objects.requireNonNull(graphSpecificsStrategy, "Graph specifics strategy required");
+            Objects.requireNonNull(graphSpecificsStrategy, GRAPH_SPECIFICS_STRATEGY_REQUIRED);
         this.specifics = Objects.requireNonNull(
             graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
             GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
@@ -220,8 +227,9 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        if (edgeSupplier == null)
-            throw new UnsupportedOperationException("The graph contains no edge supplier");
+        if (edgeSupplier == null) {
+            throw new UnsupportedOperationException(THE_GRAPH_CONTAINS_NO_EDGE_SUPPLIER);
+        }
 
         E e = edgeSupplier.get();
         if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
@@ -264,15 +272,15 @@ public abstract class AbstractBaseGraph<V, E>
     public V addVertex()
     {
         if (vertexSupplier == null) {
-            throw new UnsupportedOperationException("The graph contains no vertex supplier");
+            throw new UnsupportedOperationException(THE_GRAPH_CONTAINS_NO_VERTEX_SUPPLIER);
         }
 
         V v = vertexSupplier.get();
 
-        if (specifics.addVertex(v)) {
-            return v;
+        if (!specifics.addVertex(v)) { 
+            throw new IllegalArgumentException(INVALID_VERTEX_SUPPLIER_DOES_NOT_RETURN_UNIQUE_VERTICES_ON_EACH_CALL);
         }
-        return null;
+        return v;
     }
 
     /**

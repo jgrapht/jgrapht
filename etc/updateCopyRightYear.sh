@@ -9,4 +9,3 @@ find ../jgrapht-core/ -name *.java -print -exec sed -i "s/\(\*\s(C)\sCopyright\s
 find ../jgrapht-demo/ -name *.java -print -exec sed -i "s/\(\*\s(C)\sCopyright\s[0-9]\{4\}-\)[0-9]\{4\},/\1"$year",/" {} \;
 find ../jgrapht-dist/ -name *.java -print -exec sed -i "s/\(\*\s(C)\sCopyright\s[0-9]\{4\}-\)[0-9]\{4\},/\1"$year",/" {} \;
 find ../jgrapht-ext/ -name *.java -print -exec sed -i "s/\(\*\s(C)\sCopyright\s[0-9]\{4\}-\)[0-9]\{4\},/\1"$year",/" {} \;
-find ../jgrapht-touchgraph/ -name *.java -print -exec sed -i "s/\(\*\s(C)\sCopyright\s[0-9]\{4\}-\)[0-9]\{4\},/\1"$year",/" {} \;

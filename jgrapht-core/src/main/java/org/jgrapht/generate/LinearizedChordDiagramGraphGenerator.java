@@ -29,10 +29,11 @@ import java.util.*;
  * The generator makes precise several unspecified mathematical details of the Barabási-Albert
  * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned
  * to a new node are added one by one, or simultaneously, etc. The generator is described in the
- * paper: Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
+ * paper: Bélaa Bollobás and Oliver Riordan. The Diameter of a Scale-Free Random Graph. Journal
+ * Combinatorica, 24(1): 5--34, 2004.
  * 
  * <p>
- * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allow for multiple
+ * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allows for multiple
  * edges (parallel-edges) and self-loops. They show, however, that their number will be small. This
  * means that this generator works only on graphs which allow multiple edges (parallel-edges) such
  * as {@link Pseudograph} or {@link DirectedPseudograph}.
@@ -121,9 +122,6 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
         for (int t = 0; t < n; t++) {
             // add node
             V vt = target.addVertex();
-            if (vt == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
 
             // add edges
             for (int j = 0; j < m; j++) {

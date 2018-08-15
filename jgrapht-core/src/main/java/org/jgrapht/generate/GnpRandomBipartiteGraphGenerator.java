@@ -128,14 +128,12 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
 
         partitionA = new LinkedHashMap<>(n1);
         for (int i = 0; i < n1; i++) {
-            V v = target.addVertex();
-            partitionA.put(i, v);
+            partitionA.put(i, target.addVertex());
         }
 
         partitionB = new LinkedHashMap<>(n2);
         for (int i = 0; i < n2; i++) {
-            V v = target.addVertex();
-            partitionB.put(i, v);
+            partitionB.put(i, target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n1 + n2) {
