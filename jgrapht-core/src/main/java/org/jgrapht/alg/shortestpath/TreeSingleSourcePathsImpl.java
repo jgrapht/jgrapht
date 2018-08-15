@@ -151,6 +151,9 @@ public class TreeSingleSourcePathsImpl<V, E>
                         break;
                     }
                 }
+                if (e == p.getSecond()) {
+                    break;
+                }
             }
             edgeList.addFirst(e);
             vertexList.addFirst(cur);
