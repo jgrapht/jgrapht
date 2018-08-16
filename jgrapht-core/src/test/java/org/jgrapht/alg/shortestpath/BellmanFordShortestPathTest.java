@@ -208,8 +208,8 @@ public class BellmanFordShortestPathTest
         // then
         assertEquals("0", tree.getStartVertex());
         assertEquals("3", tree.getEndVertex());
-        assertEquals(Arrays.asList(e01, e12, e23, e35, e54, e43), tree.getEdgeList());
-        assertEquals(Arrays.asList("0", "1", "2", "3", "5", "4", "3"), tree.getVertexList());
+        assertEquals(Arrays.asList(e01, e12, e25, e54, e43), tree.getEdgeList());
+        assertEquals(Arrays.asList("0", "1", "2", "5", "4", "3"), tree.getVertexList());
     }
 
 }

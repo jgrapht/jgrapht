@@ -20,6 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -36,7 +37,6 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
- * @author Miron Balcerzak
  */
 public class BellmanFordShortestPath<V, E>
     extends
@@ -91,48 +91,73 @@ public class BellmanFordShortestPath<V, E>
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
 
-        // Initialize distance and predecessor.
-        Set<V> vertices = graph.vertexSet();
-        int n = vertices.size();
-        Map<V, Double> distances = new HashMap<>();
-        Map<V, E> predecessor = new HashMap<>();
-        for (V v : vertices) {
-            distances.put(v, Double.POSITIVE_INFINITY);
+        /*
+         * Initialize distance and predecessor.
+         */
+        int n = graph.vertexSet().size();
+        Map<V, Double> distance = new HashMap<>();
+        Map<V, E> pred = new HashMap<>();
+        for (V v : graph.vertexSet()) {
+            distance.put(v, Double.POSITIVE_INFINITY);
         }
-        distances.put(source, 0d);
+        distance.put(source, 0d);
 
-        // Relax edges
+        /*
+         * Maintain two sets of vertices whose edges need relaxation. The first set is the current
+         * set of vertices while the second if the set for the subsequent iteration.
+         */
+        Set<V>[] updated = (Set<V>[]) Array.newInstance(Set.class, 2);
+        updated[0] = new LinkedHashSet<>();
+        updated[1] = new LinkedHashSet<>();
+        int curUpdated = 0;
+        updated[curUpdated].add(source);
+
+        /*
+         * Relax edges.
+         */
         for (int i = 0; i < n - 1; i++) {
-            boolean updateDone = false;
-            for (V vSource : vertices) {
-                Double sourceDist = distances.get(vSource);
-                if (sourceDist == Double.POSITIVE_INFINITY) {
+            Set<V> curVertexSet = updated[curUpdated];
+            Set<V> nextVertexSet = updated[(curUpdated + 1) % 2];
+
+            for (V vSource : curVertexSet) {
+                Double distSource = distance.get(vSource);
+                if (distSource == Double.POSITIVE_INFINITY) {
                     continue;
                 }
                 for (E e : graph.outgoingEdgesOf(vSource)) {
                     V vTarget = Graphs.getOppositeVertex(graph, e, vSource);
-                    Double newTargetDist = sourceDist + graph.getEdgeWeight(e);
-                    if (comparator.compare(newTargetDist, distances.get(vTarget)) < 0) {
-                        distances.put(vTarget, newTargetDist);
-                        predecessor.put(vTarget, e);
-                        updateDone = true;
+                    Double distTargetNew = distSource + graph.getEdgeWeight(e);
+                    if (comparator.compare(distTargetNew, distance.get(vTarget)) < 0) {
+                        distance.put(vTarget, distTargetNew);
+                        pred.put(vTarget, e);
+                        nextVertexSet.add(vTarget);
                     }
                 }
             }
-            if (!updateDone) {
+
+            // swap next with current
+            curVertexSet.clear();
+            curUpdated = (curUpdated + 1) % 2;
+
+            // stop if no relaxation
+            if (nextVertexSet.isEmpty()) {
                 break;
             }
         }
 
         // Check for negative cycles
         boolean negativeCycleDetected = false;
-        for (V vSource : distances.keySet()) {
+        for (V vSource : updated[curUpdated]) {
             for (E e : graph.outgoingEdgesOf(vSource)) {
                 V vTarget = graph.getEdgeTarget(e);
-                Double newTargetDist = distances.get(vSource) + graph.getEdgeWeight(e);
-                if (comparator.compare(newTargetDist, distances.get(vTarget)) < 0) {
+                Double distTargetNew = distance.get(vSource) + graph.getEdgeWeight(e);
+                if (comparator.compare(distTargetNew, distance.get(vTarget)) < 0) {
                     negativeCycleDetected = true;
+                    break;
                 }
+            }
+            if (negativeCycleDetected) {
+                break;
             }
         }
 
@@ -140,12 +165,14 @@ public class BellmanFordShortestPath<V, E>
             throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
         }
 
-        // Transform result
-        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new LinkedHashMap<>();
-        for (V v : vertices) {
-            distanceAndPredecessorMap.put(v, Pair.of(distances.get(v), predecessor.get(v)));
+        /*
+         * Transform result
+         */
+        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
+        for (V v : graph.vertexSet()) {
+            distanceAndPredecessorMap.put(v, Pair.of(distance.get(v), pred.get(v)));
         }
-        return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
+        return createSingleSourcePaths(graph, source, distanceAndPredecessorMap);
     }
 
     /**
@@ -160,12 +187,27 @@ public class BellmanFordShortestPath<V, E>
     }
 
     /**
+     * SingleSourcePaths factory method.
+     *
+     * @param graph     - graph
+     * @param vSource   - source vertex
+     * @param map       - distance and predecessor pap
+     *
+     * @return single source paths implementation
+     */
+    protected SingleSourcePaths<V,E> createSingleSourcePaths(
+        Graph<V, E> graph, V vSource, Map<V, Pair<Double, E>> map)
+    {
+        return new TreeSingleSourcePathsImpl<>(graph, vSource, map);
+    }
+
+    /**
      * Find a path between two vertices.
-     * 
+     *
      * @param graph the graph to be searched
      * @param source the vertex at which the path should start
      * @param sink the vertex at which the path should end
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
