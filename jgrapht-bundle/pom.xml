@@ -97,6 +97,10 @@
 							<resource>META-INF/jgraphx-license</resource>
 							<file>${main.basedir}/etc/licenses/jgraphx-license.txt</file>
 						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/fastutil-license</resource>
+							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
+						</transformer>
 						<transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
 							<resources>
 	                    		<resource>META-INF/NOTICE</resource>
@@ -132,6 +136,10 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-opt</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
