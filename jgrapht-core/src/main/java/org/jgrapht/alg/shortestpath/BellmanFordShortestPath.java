@@ -28,9 +28,7 @@ import java.util.*;
  *
  * <p>
  * Computes shortest paths from a single source vertex to all other vertices in a weighted graph.
- * The Bellman-Ford algorithm supports negative edge weights. Negative weight cycles are not allowed
- * and will be reported by the algorithm. This implies that negative edge weights are not allowed in
- * undirected graphs.
+ * The Bellman-Ford algorithm supports graphs with negative weight cycles.
  *
  * <p>
  * The running time is $O(|E||V|)$.
@@ -45,6 +43,8 @@ public class BellmanFordShortestPath<V, E>
     BaseShortestPathAlgorithm<V, E>
 {
     private final Comparator<Double> comparator;
+
+    private boolean allowNegativeWeightCycle = false;
 
     /**
      * Construct a new instance.
@@ -119,14 +119,18 @@ public class BellmanFordShortestPath<V, E>
             Set<V> curVertexSet = updated[curUpdated];
             Set<V> nextVertexSet = updated[(curUpdated + 1) % 2];
 
-            for (V v : curVertexSet) {
-                for (E e : graph.outgoingEdgesOf(v)) {
-                    V u = Graphs.getOppositeVertex(graph, e, v);
-                    double newDist = distance.get(v) + graph.getEdgeWeight(e);
-                    if (comparator.compare(newDist, distance.get(u)) < 0) {
-                        distance.put(u, newDist);
-                        pred.put(u, e);
-                        nextVertexSet.add(u);
+            for (V vSource : curVertexSet) {
+                Double distSource = distance.get(vSource);
+                if (distSource == Double.POSITIVE_INFINITY) {
+                    continue;
+                }
+                for (E e : graph.outgoingEdgesOf(vSource)) {
+                    V vTarget = Graphs.getOppositeVertex(graph, e, vSource);
+                    Double distTargetNew = distSource + graph.getEdgeWeight(e);
+                    if (comparator.compare(distTargetNew, distance.get(vTarget)) < 0) {
+                        distance.put(vTarget, distTargetNew);
+                        pred.put(vTarget, e);
+                        nextVertexSet.add(vTarget);
                     }
                 }
             }
@@ -141,17 +145,24 @@ public class BellmanFordShortestPath<V, E>
             }
         }
 
-        /*
-         * Check for negative cycles
-         */
-        for (V v : updated[curUpdated]) {
-            for (E e : graph.outgoingEdgesOf(v)) {
-                V u = Graphs.getOppositeVertex(graph, e, v);
-                double newDist = distance.get(v) + graph.getEdgeWeight(e);
-                if (comparator.compare(newDist, distance.get(u)) < 0) {
-                    throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+        // Check for negative cycles
+        boolean negativeCycleDetected = false;
+        for (V vSource : updated[curUpdated]) {
+            for (E e : graph.outgoingEdgesOf(vSource)) {
+                V vTarget = graph.getEdgeTarget(e);
+                Double distTargetNew = distance.get(vSource) + graph.getEdgeWeight(e);
+                if (comparator.compare(distTargetNew, distance.get(vTarget)) < 0) {
+                    negativeCycleDetected = true;
+                    break;
                 }
             }
+            if (negativeCycleDetected) {
+                break;
+            }
+        }
+
+        if (negativeCycleDetected && !allowNegativeWeightCycle) {
+            throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
         }
 
         /*
@@ -161,16 +172,42 @@ public class BellmanFordShortestPath<V, E>
         for (V v : graph.vertexSet()) {
             distanceAndPredecessorMap.put(v, Pair.of(distance.get(v), pred.get(v)));
         }
-        return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
+        return createSingleSourcePaths(graph, source, distanceAndPredecessorMap);
+    }
+
+    /**
+     * Permits negative weight cycles in a graph. Without that algo will raise an exception.
+     *
+     * @return returns instance of algo
+     */
+    public BellmanFordShortestPath<V, E> allowNegativeWeightCycle()
+    {
+        this.allowNegativeWeightCycle = true;
+        return this;
+    }
+
+    /**
+     * SingleSourcePaths factory method.
+     *
+     * @param graph     - graph
+     * @param vSource   - source vertex
+     * @param map       - distance and predecessor pap
+     *
+     * @return single source paths implementation
+     */
+    protected SingleSourcePaths<V,E> createSingleSourcePaths(
+        Graph<V, E> graph, V vSource, Map<V, Pair<Double, E>> map)
+    {
+        return new TreeSingleSourcePathsImpl<>(graph, vSource, map);
     }
 
     /**
      * Find a path between two vertices.
-     * 
+     *
      * @param graph the graph to be searched
      * @param source the vertex at which the path should start
      * @param sink the vertex at which the path should end
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *

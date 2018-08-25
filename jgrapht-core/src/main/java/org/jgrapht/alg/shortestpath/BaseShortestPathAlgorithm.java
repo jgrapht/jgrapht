@@ -38,17 +38,17 @@ abstract class BaseShortestPathAlgorithm<V, E>
     /**
      * Error message for reporting the existence of a negative-weight cycle.
      */
-    static final String GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE =
+    protected static final String GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE =
         "Graph contains a negative-weight cycle";
     /**
      * Error message for reporting that a source vertex is missing.
      */
-    static final String GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX =
+    protected static final String GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX =
         "Graph must contain the source vertex!";
     /**
      * Error message for reporting that a sink vertex is missing.
      */
-    static final String GRAPH_MUST_CONTAIN_THE_SINK_VERTEX = "Graph must contain the sink vertex!";
+    protected static final String GRAPH_MUST_CONTAIN_THE_SINK_VERTEX = "Graph must contain the sink vertex!";
 
     /**
      * The underlying graph.
