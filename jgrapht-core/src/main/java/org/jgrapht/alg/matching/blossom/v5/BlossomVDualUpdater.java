@@ -33,16 +33,16 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * of the {@link BlossomVOptions#updateDualsBefore} or {@link BlossomVOptions#updateDualsAfter} is true.
  * The later two are used to update the duals globally and are defined by the {@link BlossomVOptions}.
  * <p>
- * There are two type of constraints on a dual change of a tree: in-tree cross-tree. In-tree constrains are
+ * There are two type of constraints on a dual change of a tree: in-tree cross-tree. In-tree constraints are
  * imposed by the infinity edges, (+, +) in-tree edges and "-" blossoms. Cross-tree constraints are imposed
- * by (+, +), (+, -) and (-, +) cross-tree edges. With respect to this classification of constrains the following
+ * by (+, +), (+, -) and (-, +) cross-tree edges. With respect to this classification of constraints the following
  * strategies of changing the duals can be used:
  * <ul>
  * <li>Single tree strategy greedily increases the duals of the tree with respect to the in-tree and
  * cross-tree constraints. This can result in a zero-change update. If a tight (+, +) cross-tree edge
  * is encountered during this operation, an immediate augmentation is performed afterwards.</li>
  *
- * <li>Multiple tree fixed delta approach considers only in-tree constrains and constraints imposed by
+ * <li>Multiple tree fixed delta approach considers only in-tree constraints and constraints imposed by
  * the (+, +) cross-tree edges. Since this approach increases the trees' epsilons by the same amount,
  * it doesn't need to consider other two dual constraints. If a tight (+, +) cross-tree edge
  * is encountered during this operation, an immediate augmentation is performed afterwards.</li>
@@ -63,7 +63,7 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  */
 class BlossomVDualUpdater<V, E> {
     /**
-     * Store of the information needed for the algorithm
+     * State information needed for the algorithm
      */
     private BlossomVState<V, E> state;
     /**
@@ -133,7 +133,7 @@ class BlossomVDualUpdater<V, E> {
      * and the dual variables of the "-" nodes of {@code tree} can be decreased. This value is bounded
      * by constraints on (+, +) in-tree edges, "-" blossoms and (+, inf) edges of the {@code tree}. As the result of
      * the lazy delta spreading technique, this value already contains the value of tree.eps.The computed
-     * value can violate the constrains on the cross-tree edges and can be equal to
+     * value can violate the constraints on the cross-tree edges and can be equal to
      * {@link KolmogorovMinimumWeightPerfectMatching#INFINITY}.
      *
      * @param tree the tree to process
@@ -216,7 +216,7 @@ class BlossomVDualUpdater<V, E> {
     /**
      * Updates the duals via connected components. The connect components is a set of trees which
      * are connected via tight (+, -) cross tree edges. For these components the same dual change is
-     * chosen. As a result, the circular constrains are guaranteedly avoided. This is the point where
+     * chosen. As a result, the circular constraints are guaranteed to be avoided. This is the point where
      * the {@link BlossomVDualUpdater#updateDualsSingle} approach can fail.
      */
     private BlossomVEdge updateDualsConnectedComponents() {

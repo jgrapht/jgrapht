@@ -30,17 +30,17 @@ import org.jheaps.AddressableHeap;
  * or incoming edges.
  * <p>
  * For example, let a $e = \{u, v\}$ be an edge in the graph $G = (V, E)$. Let's assume that after initialization
- * this edge has become directed from $u$ to $v$, i.e. now $e = (u, v)$. Then now edge $e$ belongs to the linked lists
+ * this edge has become directed from $u$ to $v$, i.e. now $e = (u, v)$. Then edge $e$ belongs to the linked lists
  * {@code u.first[0]} and {@code v.first[1]}. In other words, $e$ is an outgoing edge of $u$ and an incoming edge
  * of $v$. For convenience during computation, {@code e.head[0] = v} and {@code e.head[1] = u}. Therefore, while
  * iterating over incident edges of a node {@code x} in the direction {@code dir}, we can easily access opposite node
  * by {@code x.head[dir]}.
  * <p>
- * An edge is called an <i>infinity</i> edge, if it connects a "+" node with an infinity node. An edge is called
- * <i>free</i>, if it connects two infinity nodes. An edge is called <i>matched</i>, if it belongs to the matching.
- * During the shrink or expand operations an edge is called an <i>inner</i> edge, if it connects two nodes of
- * the blossom. It is called a <i>boundary</i> edge, if it is incident to exactly one blossom node.
- * An edge is called <i>tight</i>, if its reduced cost (reduced weight, slack, all three notions are equivalent)
+ * An edge is called an <i>infinity</i> edge if it connects a "+" node with an infinity node. An edge is called
+ * <i>free</i> if it connects two infinity nodes. An edge is called <i>matched</i> if it belongs to the matching.
+ * During the shrink or expand operations an edge is called an <i>inner</i> edge if it connects two nodes of
+ * the blossom. It is called a <i>boundary</i> edge if it is incident to exactly one blossom node.
+ * An edge is called <i>tight</i> if its reduced cost (reduced weight, slack, all three notions are equivalent)
  * is zero. <em>Note:</em> in this algorithm we use lazy delta spreading, so the {@link BlossomVEdge#slack} isn't
  * necessarily equal to the actual slack of an edge.
  *
@@ -63,13 +63,13 @@ class BlossomVEdge {
      * <p>
      * The true slack of the edge can be computed as following: for each of its two current endpoints $\{u, v\}$
      * we subtract the endpoint.tree.eps if the endpoint is a "+" outer node or add this value if it is a "-" outer
-     * node. After that we have valid slack of this edge.
+     * node. After that we have valid slack for this edge.
      */
     double slack;
     /**
-     * A two-element array of original endpoints of this edge. The are used to quickly determine original endpoint
-     * of an edge and compute penultimate blossom. This is done while one of the current endpoints of this edge is
-     * being shrunk or expanded
+     * A two-element array of original endpoints of this edge. The are used to quickly determine original endpoints
+     * of an edge and compute the penultimate blossom. This is done while one of the current endpoints of this edge is
+     * being shrunk or expanded.
      * <p>
      * These values stay unchanged throughout the course of the algorithm.
      */
@@ -78,7 +78,7 @@ class BlossomVEdge {
      * A two-element array of current endpoints of this edge. These values change when previous endpoints are
      * contracted into blossoms or are expanded. For node head[0] this is an incoming edge (direction 1) and for
      * the node head[1] this is an outgoing edge (direction 0). This feature is used to be able to access the
-     * opposite node via an edge by incidentEdgeIterator.next().head[incidentEdgeIterator.getDir()].
+     * opposite node via an edge by {@code incidentEdgeIterator.next().head[incidentEdgeIterator.getDir()] }.
      */
     BlossomVNode[] head;
     /**
@@ -109,7 +109,7 @@ class BlossomVEdge {
     }
 
     /**
-     * Returns an opposite edge with respect to the {@code endpoint}. <b>Note:</b> here we assume that
+     * Returns the opposite edge with respect to the {@code endpoint}. <b>Note:</b> here we assume that
      * {@code endpoint} is one of the current endpoints. The first enforces this rule.
      *
      * @param endpoint one of the current endpoints of this edge
@@ -123,8 +123,7 @@ class BlossomVEdge {
     }
 
     /**
-     * Returns the original endpoint of this edge under the {@code endpoint}, which must be one of
-     * the current endpoints.
+     * Returns the original endpoint of this edge for some current {@code endpoint}.
      *
      * @param endpoint one of the current endpoints of this edge
      * @return the original endpoint opposite to the {@code endpoint}
@@ -179,5 +178,3 @@ class BlossomVEdge {
 
     }
 }
-
-

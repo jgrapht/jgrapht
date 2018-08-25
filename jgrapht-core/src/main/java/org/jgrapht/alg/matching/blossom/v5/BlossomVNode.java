@@ -41,10 +41,10 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
  * Each node has a dual variable. This is the only information that can be changed by the {@link BlossomVDualUpdater}.
  * This variable is updated lazily due to performance reasons.
  * <p>
- * The edges incident to a node are stored in two linked lists. The first linked list is used for outgoing edges,
- * the other - for incoming edges. The notions of outgoing and incoming edges are symmetric in the context of this
+ * The edges incident to a node are stored in two linked lists. The first linked list is used for outgoing edges;
+ * the other, for incoming edges. The notions of outgoing and incoming edges are symmetric in the context of this
  * algorithm since the initial graph is undirected. The first element in the list of outgoing edges is
- * {@code BlossomVNode#first[0]}, the first element in the list of incoming edges - {@code BlossomVNode#first[1]}.
+ * {@code BlossomVNode#first[0]}, the first element in the list of incoming edges is {@code BlossomVNode#first[1]}.
  * <p>
  * A node is called a <i>plus</i> node if it belongs to the even layer of some alternating tree (root has layer 0).
  * Then its label is {@link Label#PLUS}. A node is called a <i>minus</i> node if it belongs to the odd layer of
@@ -61,7 +61,7 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
  */
 class BlossomVNode {
     /**
-     * The reference to the node from the heap this node is store in
+     * The reference to the node from the heap this node is stored in
      */
     AddressableHeap.Handle<Double, BlossomVNode> handle;
     /**
@@ -98,14 +98,15 @@ class BlossomVNode {
     BlossomVEdge[] first;
     /**
      * Current dual variable of this node. If the node belongs to a tree and is an outer node, then this
-     * value can be not valid. The true dual variable is $dual + tree.eps$ if this is a "+" node and
+     * value may not be valid. The true dual variable is $dual + tree.eps$ if this is a "+" node and
      * $dual - tree.eps$ if this is a "-" node.
      */
     double dual;
     /**
-     * An edge, which is incident to this node and currently belongs to the matching
+     * An edge which is incident to this node and currently belongs to the matching
      */
     BlossomVEdge matched;
+
     BlossomVEdge bestEdge;
 
     /**
@@ -136,7 +137,7 @@ class BlossomVNode {
      * <p>
      * If this node is a tree root, references the previous tree root in the doubly linked list of tree roots. The first
      * element in the linked list of tree roots is a dummy node which is stored in {@code nodes[nodeNum]}. This is done
-     * to quickly determine the first actual tree root my {@code nodes[nodeNum].treeSiblingNext}.
+     * to quickly determine the first actual tree root via {@code nodes[nodeNum].treeSiblingNext}.
      */
     BlossomVNode treeSiblingPrev;
 
@@ -147,7 +148,7 @@ class BlossomVNode {
     BlossomVNode blossomParent;
     /**
      * Reference of some blossom that is higher than this node. This variable is used for the path compression technique.
-     * It is used to quickly find the penultimate grandparent of this node, i.e. a grandparent, whose blossomParent is
+     * It is used to quickly find the penultimate grandparent of this node, i.e. a grandparent whose blossomParent is
      * an outer node.
      */
     BlossomVNode blossomGrandparent;
@@ -174,7 +175,7 @@ class BlossomVNode {
     /**
      * Insert the {@code edge} into linked list of incident edges of this node in the specified direction {@code dir}
      *
-     * @param edge edge to insert in the linked list of incident edge
+     * @param edge edge to insert in the linked list of incident edges
      * @param dir  the direction of this edge with respect to this node
      */
     public void addEdge(BlossomVEdge edge, int dir) {
@@ -189,7 +190,7 @@ class BlossomVNode {
             first[dir].prev[dir].next[dir] = edge;
             first[dir].prev[dir] = edge;
         }
-        /* this is used to maintain the following feature: if an edge has direction dir with respect to this
+        /* this constraint is used to maintain the following feature: if an edge has direction dir with respect to this
          * node, then edge.head[dir] is the opposite node
          */
         edge.head[1 - dir] = this;
@@ -241,7 +242,7 @@ class BlossomVNode {
      * <p>
      * Variable {@code grow} is used to determine whether the {@code child} was an infinity node and now is being
      * added in tree structure. Then we have to set {@code child.firstTreeChild} to {@code null} so that all its
-     * tree structure variables are changed. This allows not to overwrite the fields during tree destroying.
+     * tree structure variables are changed. This allows us to avoid overwriting the fields during tree destroying.
      *
      * @param child      the new child of this node
      * @param parentEdge the edge between this node and {@code child}
@@ -252,7 +253,7 @@ class BlossomVNode {
         child.tree = tree;
         child.treeSiblingNext = firstTreeChild;
         if (grow) {
-            // with this check we are able not to destroy tree structure during the augment operation
+            // with this check we are able to avoid destroying the tree structure during the augment operation
             child.firstTreeChild = null;
         }
         if (firstTreeChild == null) {
@@ -274,7 +275,7 @@ class BlossomVNode {
     }
 
     /**
-     * If this node is a tree root then this method removes this nodes from the tree root doubly linked list.
+     * If this node is a tree root then this method removes this node from the tree root doubly linked list.
      * Otherwise, removes this vertex from the doubly linked list of tree children and updates
      * parent.firstTreeChild accordingly.
      */

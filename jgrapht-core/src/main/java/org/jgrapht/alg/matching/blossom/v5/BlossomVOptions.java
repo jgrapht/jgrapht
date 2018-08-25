@@ -93,7 +93,7 @@ public class BlossomVOptions {
     boolean updateDualsAfter;
 
     /**
-     * Constructs a custom options for the algorithm
+     * Constructs a custom set of options for the algorithm
      *
      * @param dualUpdateStrategy greedy strategy to update dual variables globally
      * @param initializationType strategy for initializing the matching
@@ -117,7 +117,7 @@ public class BlossomVOptions {
     }
 
     /**
-     * Construct a default options for the algorithm
+     * Construct a default set of options for the algorithm
      */
 
     public BlossomVOptions() {

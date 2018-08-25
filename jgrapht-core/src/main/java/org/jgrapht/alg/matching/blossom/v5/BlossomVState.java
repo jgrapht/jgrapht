@@ -22,7 +22,7 @@ import org.jgrapht.Graph;
 import java.util.*;
 
 /**
- * Stores data needed for the Kolmogorov's Blossom V algorithm is used by {@link KolmogorovMinimumWeightPerfectMatching},
+ * Stores data needed for the Kolmogorov's Blossom V algorithm; it is used by {@link KolmogorovMinimumWeightPerfectMatching},
  * {@link BlossomVPrimalUpdater} and {@link BlossomVDualUpdater} during the course of the algorithm.
  * <p>
  * We refer to this object with all the data stores in nodes, edges, trees, and tree edges as the state of the algorithm
@@ -45,7 +45,7 @@ class BlossomVState<V, E> {
      */
     final int edgeNum;
     /**
-     * The graph to search matching in
+     * The graph for which to find a matching
      */
     Graph<V, E> graph;
     /**
@@ -86,9 +86,9 @@ class BlossomVState<V, E> {
     List<E> graphEdges;
 
     /**
-     * Constructs an initial algorithm's state
+     * Constructs the algorithm's initial state
      *
-     * @param graph         the graph to search matching in
+     * @param graph         the graph for which to find a matching
      * @param nodes         nodes used in the algorithm
      * @param edges         edges used in the algorithm
      * @param nodeNum       number of nodes in the graph
@@ -222,14 +222,14 @@ class BlossomVState<V, E> {
     }
 
     /**
-     * A helper iterator, traverses all the nodes in the blossom. It starts from the endpoints of the
+     * A helper iterator which traverses all the nodes in the blossom. It starts from the endpoints of the
      * (+,+) edge and goes up to the blossom root. These two paths to the blossom root are called branches.
-     * The branch of the blossomFormingEdge.head[0] has direction 0, another one has direction 1.
+     * The branch of the blossomFormingEdge.head[0] has direction 0, the one has direction 1.
      * <p>
      * <b>Note:</b> the nodes returned by this iterator aren't consecutive
      * <p>
      * <b>Note:</b> this iterator must return the blossom root in the first branch, i.e. when the
-     * direction if 0. This feature is needed to setup the blossomSibling references correctly
+     * direction is 0. This feature is needed to setup the blossomSibling references correctly
      */
     public static class BlossomNodesIterator implements Iterator<BlossomVNode> {
         /**

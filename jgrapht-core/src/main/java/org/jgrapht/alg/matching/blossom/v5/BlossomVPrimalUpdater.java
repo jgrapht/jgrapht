@@ -24,12 +24,12 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal operations: grow,
  * augment, shrink and expand. This class operates on alternating trees, blossom structures, and node states.
  * It changes them after applying any primal operation. Also, this class can add and subtract some values from
- * nodes' dual variables, it never changes their actual dual variables.
+ * nodes' dual variables; it never changes their actual dual variables.
  * <p>
  * The augment operation is used to increase the cardinality of the matching. It is applied to a tight (+, +)
- * cross-tree edge. Its main purpose is alter the matching on the simple path between tree roots through
+ * cross-tree edge. Its main purpose is to alter the matching on the simple path between tree roots through
  * the tight edge, destroy the previous tree structures, update the state of the node, and change the presence
- * of edges in the priority queues. Now this operation doesn't destroy the tree structure, this technique is
+ * of edges in the priority queues. This operation doesn't destroy the tree structure; this technique is
  * called <i>lazy tree structure destroying</i>. The information of the nodes from the tree structure block
  * is overwritten when a node is being added to another tree. This operation doesn't change the matching in the
  * contracted blossoms.
@@ -43,9 +43,9 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * If during the changing of the endpoints of boundary edge a tight (+, +) cross-tree edge is encountered, an
  * immediate augmentation is performed.
  * <p>
- * The expand operation brings the contracted in a blossom nodes to the surface graph. It is applied only to a
- * "-" blossom with zero dual variable. The operation determines the two branched of a blossom: an even and an
- * odd one. The first one contains even number of edges and can be empty, the later - odd number of edges an
+ * The expand operation brings the contracted blossom nodes to the surface graph. It is applied only to a
+ * "-" blossom with zero dual variable. The operation determines the two branches of a blossom: an even and an
+ * odd one. The formercontains an even number of edges and can be empty, the latter contains an odd number of edges and
  * necessarily contains at least one edge. An even branch is inserted into the tree. The state of the algorithm
  * is changes respectively (node duals, tree structure, etc.). If some boundary edge in a tight (+, +) cross-tree
  * edge, an immediate augmentation is performed.
@@ -62,7 +62,7 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  */
 class BlossomVPrimalUpdater<V, E> {
     /**
-     * Store of the information needed for the algorithm
+     * State information needed for the algorithm
      */
     private BlossomVState<V, E> state;
 
@@ -76,15 +76,15 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * One of the four primal operations. Is invoked on the plus-infinity {@code growEdge}, which connects
+     * Primal grow operation. Is invoked on the plus-infinity {@code growEdge}, which connects
      * a "+" node in the tree and an infinity matched node. The {@code growEdge} and the matched free edge
-     * are added to the tree structure. Two new nodes are added to the tree: minus and plus node. Let's call
+     * are added to the tree structure. Two new nodes are added to the tree: minus node and plus node. Let's call
      * the node incident to the {@code growEdge} and opposite to the minusNode the "tree node".
      * <p>
      * As the result, following actions are performed:
      * <ul>
-     * <li>Adding new child to the children of tree node and minus node</li>
-     * <li>Setting parent edges of minus and plus nodes</li>
+     * <li>Add new child to the children of tree node and minus node</li>
+     * <li>Set parent edges of minus and plus nodes</li>
      * <li>If minus node is a blossom, add it to the heap of "-" blossoms</li>
      * <li>Remove growEdge from the heap of infinity edges</li>
      * <li>Remove former infinity edges and add new (+, +) in-tree and cross-tree edges, (+, -) cross tree edges
@@ -148,7 +148,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * One of the four primal operations. Is invoked on a tight (+, +) cross-tree edge.
+     * Primal augment operation. Is invoked on a tight (+, +) cross-tree edge.
      * Increases the matching by 1. Converts the trees on both sides into the set of
      * free matched edges. Applies lazy delta spreading.
      * <p>
@@ -186,7 +186,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * One of the four primal operations. Is invoked on a tight (+, +) in-tree edge.
+     * Primal shrink operation. Is invoked on a tight (+, +) in-tree edge.
      * The result of this operation is the substitution of an odd circuit with a single
      * node. This means that we consider the set of nodes of odd cardinality as a single
      * node.
@@ -268,7 +268,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * One of the four primal operations. Is invoked on a previously contracted pseudonode.
+     * Primal expand operation. Is invoked on a previously contracted pseudonode.
      * The result of this operation is bringing the nodes in the blossom to the surface graph.
      * An even branch of the blossom is inserted into the tree structure. Endpoints of the edges
      * incident to the blossom are moved one layer down. The slack of the inner and boundary edges
@@ -404,7 +404,7 @@ class BlossomVPrimalUpdater<V, E> {
      * edges. When the {@code manyGrows} flag is on, collects the tight (+, inf) edges on grows them
      * as well.
      * <p>
-     * <b>Note:</b> the recursive grows must be done ofter the gro operation on the current edge is over.
+     * <b>Note:</b> the recursive grows must be done ofter the grow operation on the current edge is over.
      * This ensures correct state of the heaps and the edges' slacks.
      *
      * @param node             a plus endpoint of the matched edge that is being appended to the tree
@@ -480,13 +480,13 @@ class BlossomVPrimalUpdater<V, E> {
      * blossomSiblings are directed in the way that the even branch goes from {@code blossomRoot}
      * to {@code branchesEndpoint}.
      * <p>
-     * The method traverses the nodes twice: firstly it changes the tree
+     * The method traverses the nodes twice: first it changes the tree
      * structure, updates the labeling and flags, adds children, and changes the matching. After that it
      * changes the slacks of the edges according to the lazy delta spreading and their presence in
-     * heaps. This operation is done in two step cause the later requires correct labeling of the nodes on
+     * heaps. This operation is done in two steps because the later step requires correct labeling of the nodes on
      * the branch.
      * <p>
-     * <b>Note:</b> this branch can consist only of one node. In this case {@code blossomRoot} and
+     * <b>Note:</b> this branch may consist of only one node. In this case {@code blossomRoot} and
      * {@code branchesEndpoint} are the same nodes
      *
      * @param blossomRoot      the node of the blossom which is matched from the outside
@@ -564,7 +564,7 @@ class BlossomVPrimalUpdater<V, E> {
     private void expandOddBranch(BlossomVNode blossomRoot, BlossomVNode branchesEndpoint, BlossomVTree tree) {
         BlossomVNode current = branchesEndpoint.blossomSibling.getOpposite(branchesEndpoint);
         BlossomVEdge prevMatched;
-        // the traversal if done from branchesEndpoint to blossomRoot, i.e. from
+        // the traversal is done from branchesEndpoint to blossomRoot, i.e. from
         // lower layers to higher
         while (current != blossomRoot) {
             current.label = BlossomVNode.Label.INFINITY;
@@ -808,7 +808,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Helper method for updating the tree structure in the shrink operation. Move the endpoints of the boundary edges
+     * Helper method for updating the tree structure in the shrink operation. Moves the endpoints of the boundary edges
      * to the {@code blossom}, moves the children of the nodes on the circuit to the blossom, updates edges's slacks
      * and presence in heaps accordingly.
      *
@@ -1050,7 +1050,7 @@ class BlossomVPrimalUpdater<V, E> {
     /**
      * Auxiliary method for reversing the direction of blossomSibling references
      *
-     * @param blossomNode some node on an off circuit
+     * @param blossomNode some node on an odd circuit
      */
     private void reverseBlossomSiblings(BlossomVNode blossomNode) {
         BlossomVEdge prevEdge = blossomNode.blossomSibling;

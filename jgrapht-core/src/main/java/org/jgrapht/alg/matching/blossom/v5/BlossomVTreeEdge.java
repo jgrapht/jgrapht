@@ -31,17 +31,17 @@ import org.jheaps.tree.PairingHeap;
  * <li>a heap of (+, -) cross-tree edges</li>
  * <li>a heap of (-, +) cross-tree edges</li>
  * </ol>
- * Note, that from the tree edge prospective there is no difference between a heap of (+, -) and (-, +)
- * cross-tree edges. That's we distinguish these heaps by the direction of the edge. Here the direction is considered
- * with respect to the trees $T$ and $T'$ resting upon the notation introduced above.
+ * Note, that from the tree edge perspective there is no difference between a heap of (+, -) and (-, +)
+ * cross-tree edges. That's why we distinguish these heaps by the direction of the edge. Here the direction is considered
+ * with respect to the trees $T$ and $T'$ based upon the notation introduced above.
  * <p>
  * Every tree edge is directed from one tree to another and every tree edge belongs to the two doubly
  * linked lists of tree edges. The presence of a tree edge in these lists in maintained by the two-element
- * arrays {@link BlossomVTreeEdge#prev} and {@link BlossomVTreeEdge#next}. For one tree the edge is an outgoing tree edge, for another -
- * an incoming. In the first case it belongs to the {@code tree.first[0]} linked list, in the second - to the
+ * arrays {@link BlossomVTreeEdge#prev} and {@link BlossomVTreeEdge#next}. For one tree the edge is an outgoing tree edge; for the other,
+ * an incoming. In the first case it belongs to the {@code tree.first[0]} linked list; in the second, to the
  * {@code tree.first[1]} linked list.
  * <p>
- * Let {@code tree} be a tail of the edge, {@code oppositeTree} - a head of the edge. Then
+ * Let {@code tree} be a tail of the edge, and {@code oppositeTree} a head of the edge. Then
  * {@code edge.head[0] == oppositeTree} and {@code edge.head[1] == tree}.
  *
  * @author Timofey Chudakov
@@ -120,7 +120,7 @@ class BlossomVTreeEdge {
 
     /**
      * Adds {@code edge} to the heap of (-, +) cross-tree edges. As explained in the class description, this method
-     * chooses {@link BlossomVTreeEdge#plusMinusEdges0} or {@link BlossomVTreeEdge#plusMinusEdges1} resting upon the {@code direction}.
+     * chooses {@link BlossomVTreeEdge#plusMinusEdges0} or {@link BlossomVTreeEdge#plusMinusEdges1} based upon the {@code direction}.
      * The key is edge.slack
      *
      * @param edge      an edge to add to the current heap of (-, +) cross-tree edges.
@@ -132,7 +132,7 @@ class BlossomVTreeEdge {
 
     /**
      * Adds {@code edge} to the heap of (+, -) cross-tree edges. As explained in the class description, this method
-     * chooses {@link BlossomVTreeEdge#plusMinusEdges0} or {@link BlossomVTreeEdge#plusMinusEdges1} resting upon the {@code direction}.
+     * chooses {@link BlossomVTreeEdge#plusMinusEdges0} or {@link BlossomVTreeEdge#plusMinusEdges1} based upon the {@code direction}.
      * The key is edge.slack
      *
      * @param edge      an edge to add to the current heap of (+, -) cross-tree edges.
@@ -154,7 +154,7 @@ class BlossomVTreeEdge {
     /**
      * Removes {@code edge} from the current heap of (-, +) cross-tree edges. As explained in the
      * class description, this method chooses {@link BlossomVTreeEdge#plusMinusEdges0} or {@link BlossomVTreeEdge#plusMinusEdges1}
-     * resting upon the {@code direction}.
+     * based upon the {@code direction}.
      *
      * @param edge an edge to remove
      */
@@ -166,7 +166,7 @@ class BlossomVTreeEdge {
     /**
      * Removes {@code edge} from the current heap of (+, -) cross-tree edges. As explained in the
      * class description, this method chooses {@link BlossomVTreeEdge#plusMinusEdges0} or {@link BlossomVTreeEdge#plusMinusEdges1}
-     * resting upon the {@code direction}.
+     * based upon the {@code direction}.
      *
      * @param edge an edge to remove
      */
@@ -186,8 +186,8 @@ class BlossomVTreeEdge {
     }
 
     /**
-     * Returns the current heap of (-, +) cross-tree edges. Always returns the different from
-     * {@code gerCurrentPlusMinusHeap(currentDir)}
+     * Returns the current heap of (-, +) cross-tree edges. Always returns a heap different from
+     * {@code getCurrentPlusMinusHeap(currentDir)}
      *
      * @param currentDir the current direction of this edge
      * @return returns current heap of (-, +) cross-tree edges
@@ -197,8 +197,8 @@ class BlossomVTreeEdge {
     }
 
     /**
-     * Returns the current heap of (+, -) cross-tree edges. Always returns the different from
-     * {@code gerCurrentMinusPlusHeap(currentDir)}
+     * Returns the current heap of (+, -) cross-tree edges. Always returns a heap different from
+     * {@code getCurrentMinusPlusHeap(currentDir)}
      *
      * @param currentDir the current direction of this edge
      * @return returns current heap of (+, -) cross-tree edges
