@@ -21,7 +21,7 @@ import org.jheaps.MergeableAddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
 /**
- * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
+ * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
  * Is used to maintain an auxiliary graph whose nodes correspond to alternating trees in the Blossom V algorithm.
  * Let's denote the current tree $T$ and some other tree $T'$. Every tree edge contains three heaps:<br>
@@ -31,7 +31,7 @@ import org.jheaps.tree.PairingHeap;
  * <li>a heap of (+, -) cross-tree edges</li>
  * <li>a heap of (-, +) cross-tree edges</li>
  * </ol>
- * Note, that from the tree edge perspective there is no difference between a heap of (+, -) and (-, +)
+ * <b>Note:</b> from the tree edge perspective there is no difference between a heap of (+, -) and (-, +)
  * cross-tree edges. That's why we distinguish these heaps by the direction of the edge. Here the direction is considered
  * with respect to the trees $T$ and $T'$ based upon the notation introduced above.
  * <p>

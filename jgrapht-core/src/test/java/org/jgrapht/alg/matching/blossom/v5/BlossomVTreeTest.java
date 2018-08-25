@@ -76,7 +76,7 @@ public class BlossomVTreeTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, true, false);
 
         int i = 0;
@@ -101,10 +101,10 @@ public class BlossomVTreeTest {
         BlossomVTree tree3 = new BlossomVTree(node3);
         BlossomVTree tree4 = new BlossomVTree(node4);
         BlossomVTree tree5 = new BlossomVTree(node5);
-        BlossomVTreeEdge treeEdge1 = BlossomVState.addTreeEdge(tree1, tree2);
-        BlossomVTreeEdge treeEdge2 = BlossomVState.addTreeEdge(tree1, tree3);
-        BlossomVTreeEdge treeEdge3 = BlossomVState.addTreeEdge(tree4, tree1);
-        BlossomVTreeEdge treeEdge4 = BlossomVState.addTreeEdge(tree5, tree1);
+        BlossomVTreeEdge treeEdge1 = BlossomVTree.addTreeEdge(tree1, tree2);
+        BlossomVTreeEdge treeEdge2 = BlossomVTree.addTreeEdge(tree1, tree3);
+        BlossomVTreeEdge treeEdge3 = BlossomVTree.addTreeEdge(tree4, tree1);
+        BlossomVTreeEdge treeEdge4 = BlossomVTree.addTreeEdge(tree5, tree1);
         Set<BlossomVTreeEdge> expectedOutEdges = new HashSet<>(Arrays.asList(treeEdge1, treeEdge2));
         Set<BlossomVTreeEdge> expectedInEdges = new HashSet<>(Arrays.asList(treeEdge3, treeEdge4));
         Set<BlossomVTreeEdge> actualOutEdges = new HashSet<>();

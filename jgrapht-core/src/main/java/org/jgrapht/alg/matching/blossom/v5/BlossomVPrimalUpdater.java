@@ -76,7 +76,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Primal grow operation. Is invoked on the plus-infinity {@code growEdge}, which connects
+     * Performs grow operation. Is invoked on the plus-infinity {@code growEdge}, which connects
      * a "+" node in the tree and an infinity matched node. The {@code growEdge} and the matched free edge
      * are added to the tree structure. Two new nodes are added to the tree: minus node and plus node. Let's call
      * the node incident to the {@code growEdge} and opposite to the minusNode the "tree node".
@@ -106,8 +106,8 @@ class BlossomVPrimalUpdater<V, E> {
         if (DEBUG) {
             System.out.println("Growing edge " + growEdge);
         }
-        int initialTreeNum = state.treeNum;
         long start = System.nanoTime();
+        int initialTreeNum = state.treeNum;
         int dirToMinusNode = growEdge.head[0].isInfinityNode() ? 0 : 1;
 
         BlossomVNode nodeInTheTree = growEdge.head[1 - dirToMinusNode];
@@ -148,7 +148,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Primal augment operation. Is invoked on a tight (+, +) cross-tree edge.
+     * Performs augment operation. Is invoked on a tight (+, +) cross-tree edge.
      * Increases the matching by 1. Converts the trees on both sides into the set of
      * free matched edges. Applies lazy delta spreading.
      * <p>
@@ -169,15 +169,14 @@ class BlossomVPrimalUpdater<V, E> {
      * @param augmentEdge the edge to augment
      */
     public void augment(BlossomVEdge augmentEdge) {
-        long start = System.nanoTime();
-
         if (DEBUG) {
             System.out.println("Augmenting edge " + augmentEdge);
         }
-        BlossomVNode node;
-        // augmenting trees on both sides
+        long start = System.nanoTime();
+
+        // augment trees on both sides
         for (int dir = 0; dir < 2; dir++) {
-            node = augmentEdge.head[dir];
+            BlossomVNode node = augmentEdge.head[dir];
             augmentBranch(node, augmentEdge);
             node.matched = augmentEdge;
         }
@@ -186,7 +185,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Primal shrink operation. Is invoked on a tight (+, +) in-tree edge.
+     * Performs shrink operation. Is invoked on a tight (+, +) in-tree edge.
      * The result of this operation is the substitution of an odd circuit with a single
      * node. This means that we consider the set of nodes of odd cardinality as a single
      * node.
@@ -215,14 +214,13 @@ class BlossomVPrimalUpdater<V, E> {
         if (DEBUG) {
             System.out.println("Shrinking edge " + blossomFormingEdge);
         }
-        BlossomVEdge zeroSlackEdge;
         BlossomVNode blossomRoot = findBlossomRoot(blossomFormingEdge);
         BlossomVTree tree = blossomRoot.tree;
         /* We don't actually need position of the blossom node since blossom nodes aren't stored in
          * the state.nodes array. We use blossom's position as its id for debug purposes.
          */
         BlossomVNode blossom = new BlossomVNode(state.nodeNum + state.blossomNum);
-        // initializing blossom
+        // initialize blossom node
         blossom.tree = tree;
         blossom.isBlossom = true;
         blossom.isOuter = true;
@@ -235,17 +233,17 @@ class BlossomVPrimalUpdater<V, E> {
         }
 
         // mark all blossom nodes
-        for (BlossomVState.BlossomNodesIterator iterator = state.blossomNodesIterator(blossomRoot, blossomFormingEdge); iterator.hasNext(); ) {
+        for (BlossomVEdge.BlossomNodesIterator iterator = blossomFormingEdge.blossomNodesIterator(blossomRoot); iterator.hasNext(); ) {
             iterator.next().isMarked = true;
         }
 
         // move edges and children, change slacks if necessary
-        zeroSlackEdge = updateTreeStructure(blossomRoot, blossomFormingEdge, blossom);
+        BlossomVEdge augmentEdge = updateTreeStructure(blossomRoot, blossomFormingEdge, blossom);
 
         // create circular linked list of circuit nodes
         setBlossomSiblings(blossomRoot, blossomFormingEdge);
 
-        // resetting marks of blossom nodes
+        // reset marks of blossom nodes
         blossomRoot.isMarked = false;
         blossomRoot.isProcessed = false;
         for (BlossomVNode current = blossomRoot.blossomSibling.getOpposite(blossomRoot); current != blossomRoot; current = current.blossomSibling.getOpposite(current)) {
@@ -258,23 +256,23 @@ class BlossomVPrimalUpdater<V, E> {
         state.blossomNum++;
 
         state.statistics.shrinkTime += System.nanoTime() - start;
-        if (zeroSlackEdge != null && immediateAugment) {
+        if (augmentEdge != null && immediateAugment) {
             if (DEBUG) {
                 System.out.println("Bingo shrink");
             }
-            augment(zeroSlackEdge);
+            augment(augmentEdge);
         }
         return blossom;
     }
 
     /**
-     * Primal expand operation. Is invoked on a previously contracted pseudonode.
+     * Performs expand operation. Is invoked on a previously contracted pseudonode.
      * The result of this operation is bringing the nodes in the blossom to the surface graph.
      * An even branch of the blossom is inserted into the tree structure. Endpoints of the edges
      * incident to the blossom are moved one layer down. The slack of the inner and boundary edges
      * are update according to the lazy delta spreading technique.
      * <p>
-     * <b>Note: </b> only "-" blossoms can be expanded. At that moment their dual variables are always zero.
+     * <b>Note:</b> only "-" blossoms can be expanded. At that moment their dual variables are always zero.
      * This is the reason why they don't need to be stored to compute the dual solution.
      * <p>
      * In the expand operation the following actions are performed:
@@ -294,12 +292,11 @@ class BlossomVPrimalUpdater<V, E> {
      *                         tight (+, +) cross-tree edge is encountered
      */
     public void expand(BlossomVNode blossom, boolean immediateAugment) {
-        BlossomVEdge zeroSlackEdge;
-        BlossomVEdge edge;
-        long start = System.nanoTime();
         if (DEBUG) {
             System.out.println("Expanding blossom " + blossom);
         }
+        long start = System.nanoTime();
+
         BlossomVTree tree = blossom.tree;
         double eps = tree.eps;
         blossom.dual -= eps;
@@ -308,39 +305,39 @@ class BlossomVPrimalUpdater<V, E> {
         BlossomVNode branchesEndpoint = blossom.parentEdge.getCurrentOriginal(blossom).getPenultimateBlossom();
 
         if (DEBUG) {
-            BlossomVState.printBlossomNodes(branchesEndpoint);
+            printBlossomNodes(branchesEndpoint);
         }
 
         // the node which is matched to the node from outside
         BlossomVNode blossomRoot = blossom.matched.getCurrentOriginal(blossom).getPenultimateBlossom();
 
-        // marking blossom nodes
+        // mark blossom nodes
         BlossomVNode current = blossomRoot;
         do {
             current.isMarked = true;
             current = current.blossomSibling.getOpposite(current);
         } while (current != blossomRoot);
 
-        // moving all edge from blossom to penultimate children
+        // move all edge from blossom to penultimate children
         blossom.removeFromChildList();
         for (BlossomVNode.IncidentEdgeIterator iterator = blossom.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
+            BlossomVEdge edge = iterator.next();
             BlossomVNode penultimateChild = edge.headOriginal[1 - iterator.getDir()].getPenultimateBlossomAndFixBlossomGrandparent();
-            state.moveEdgeTail(blossom, penultimateChild, edge);
+            edge.moveEdgeTail(blossom, penultimateChild);
         }
 
-        // reversing the circular blossomSibling references so that the first branch in even branch
+        // reverse the circular blossomSibling references so that the first branch in even branch
         if (!forwardDirection(blossomRoot, branchesEndpoint)) {
             reverseBlossomSiblings(blossomRoot);
         }
 
-        // changing the matching, the labeling and the dual information on the odd branch
+        // change the matching, the labeling and the dual information on the odd branch
         expandOddBranch(blossomRoot, branchesEndpoint, tree);
 
-        // changing the matching, the labeling and dual information on the even branch
-        zeroSlackEdge = expandEvenBranch(blossomRoot, branchesEndpoint, blossom);
+        // change the matching, the labeling and dual information on the even branch
+        BlossomVEdge augmentEdge = expandEvenBranch(blossomRoot, branchesEndpoint, blossom);
 
-        // resetting marks of blossom nodes
+        // reset marks of blossom nodes
         current = blossomRoot;
         do {
             current.isMarked = false;
@@ -350,15 +347,15 @@ class BlossomVPrimalUpdater<V, E> {
         state.statistics.expandNum++;
         state.removedNum++;
         if (DEBUG) {
-            BlossomVState.printTreeNodes(tree);
+            tree.printTreeNodes();
         }
         state.statistics.expandTime += System.nanoTime() - start;
 
-        if (immediateAugment && zeroSlackEdge != null) {
+        if (immediateAugment && augmentEdge != null) {
             if (DEBUG) {
                 System.out.println("Bingo expand");
             }
-            augment(zeroSlackEdge);
+            augment(augmentEdge);
         }
 
     }
@@ -370,23 +367,23 @@ class BlossomVPrimalUpdater<V, E> {
      * @param minusNode a minus endpoint of the matched edge that is being appended to the tree
      */
     private void processMinusNodeGrow(BlossomVNode minusNode) {
-        BlossomVEdge edge;
         double eps = minusNode.tree.eps;
         minusNode.dual += eps;
-        // maintaining heap of "-" blossoms
+
+        // maintain heap of "-" blossoms
         if (minusNode.isBlossom) {
             minusNode.tree.addMinusBlossom(minusNode);
         }
-        // maintaining minus-plus edges in the minus-plus heaps in the tree edges
+        // maintain minus-plus edges in the minus-plus heaps in the tree edges
         for (BlossomVNode.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
+            BlossomVEdge edge = iterator.next();
             BlossomVNode opposite = edge.head[iterator.getDir()];
             edge.slack -= eps;
             if (opposite.isPlusNode()) {
                 if (opposite.tree != minusNode.tree) {
                     // encountered (-,+) cross-tree edge
                     if (opposite.tree.currentEdge == null) {
-                        BlossomVState.addTreeEdge(minusNode.tree, opposite.tree);
+                        BlossomVTree.addTreeEdge(minusNode.tree, opposite.tree);
                     }
                     opposite.tree.removePlusInfinityEdge(edge);
                     opposite.tree.currentEdge.addToCurrentMinusPlusHeap(edge, opposite.tree.currentDirection);
@@ -413,15 +410,13 @@ class BlossomVPrimalUpdater<V, E> {
      *                         tight (+, +) cross-tree edge is encountered
      */
     private void processPlusNodeGrow(BlossomVNode node, boolean recursiveGrow, boolean immediateAugment) {
-        BlossomVNode minusNode, plusNode;
-        BlossomVEdge edge;
-        BlossomVEdge zeroSlackEdge = null;
         double eps = node.tree.eps;
         node.dual -= eps;
+        BlossomVEdge augmentEdge = null;
         for (BlossomVNode.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
+            BlossomVEdge edge = iterator.next();
             BlossomVNode opposite = edge.head[iterator.getDir()];
-            // maintaining heap of plus-infinity edges
+            // maintain heap of plus-infinity edges
             edge.slack += eps;
             if (opposite.isPlusNode()) {
                 // this is a (+,+) edge
@@ -432,12 +427,12 @@ class BlossomVPrimalUpdater<V, E> {
                 } else {
                     // this is plus-plus edge to another trees
                     if (opposite.tree.currentEdge == null) {
-                        BlossomVState.addTreeEdge(node.tree, opposite.tree);
+                        BlossomVTree.addTreeEdge(node.tree, opposite.tree);
                     }
                     opposite.tree.removePlusInfinityEdge(edge);
                     opposite.tree.currentEdge.addPlusPlusEdge(edge);
                     if (edge.slack <= node.tree.eps + opposite.tree.eps) {
-                        zeroSlackEdge = edge;
+                        augmentEdge = edge;
                     }
                 }
             } else if (opposite.isMinusNode()) {
@@ -445,7 +440,7 @@ class BlossomVPrimalUpdater<V, E> {
                 if (opposite.tree != node.tree) {
                     // this is (+,-) edge to another trees
                     if (opposite.tree.currentEdge == null) {
-                        BlossomVState.addTreeEdge(node.tree, opposite.tree);
+                        BlossomVTree.addTreeEdge(node.tree, opposite.tree);
                     }
                     opposite.tree.currentEdge.addToCurrentPlusMinusHeap(edge, opposite.tree.currentDirection);
                 }
@@ -458,33 +453,32 @@ class BlossomVPrimalUpdater<V, E> {
                     if (DEBUG) {
                         System.out.println("Growing edge " + edge);
                     }
-                    minusNode = edge.getOpposite(node);
-                    plusNode = minusNode.getOppositeMatched();
+                    BlossomVNode minusNode = edge.getOpposite(node);
+                    BlossomVNode plusNode = minusNode.getOppositeMatched();
                     minusNode.isMarked = plusNode.isMarked = true;
                     node.addChild(minusNode, edge, true);
                     minusNode.addChild(plusNode, minusNode.matched, true);
                 }
             }
         }
-        if (immediateAugment && zeroSlackEdge != null) {
+        if (immediateAugment && augmentEdge != null) {
             if (DEBUG) {
                 System.out.println("Bingo grow");
             }
-            augment(zeroSlackEdge);
+            augment(augmentEdge);
         }
         state.statistics.growNum++;
     }
 
     /**
-     * Helper method for expanding an even branch of the blossom. Here it is assumed that the
-     * blossomSiblings are directed in the way that the even branch goes from {@code blossomRoot}
-     * to {@code branchesEndpoint}.
+     * Expands an even branch of the blossom. Here it is assumed that the blossomSiblings are directed
+     * in the way that the even branch goes from {@code blossomRoot} to {@code branchesEndpoint}.
      * <p>
      * The method traverses the nodes twice: first it changes the tree
      * structure, updates the labeling and flags, adds children, and changes the matching. After that it
      * changes the slacks of the edges according to the lazy delta spreading and their presence in
-     * heaps. This operation is done in two steps because the later step requires correct labeling of the nodes on
-     * the branch.
+     * heaps. This operation is done in two steps because the later step requires correct labeling of the
+     * nodes on the branch.
      * <p>
      * <b>Note:</b> this branch may consist of only one node. In this case {@code blossomRoot} and
      * {@code branchesEndpoint} are the same nodes
@@ -495,31 +489,31 @@ class BlossomVPrimalUpdater<V, E> {
      * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
     private BlossomVEdge expandEvenBranch(BlossomVNode blossomRoot, BlossomVNode branchesEndpoint, BlossomVNode blossom) {
-        BlossomVEdge edge, zeroSlackEdge = null;
+        BlossomVEdge augmentEdge = null;
         BlossomVTree tree = blossom.tree;
         blossomRoot.matched = blossom.matched;
         blossomRoot.tree = tree;
         blossomRoot.addChild(blossom.matched.getOpposite(blossomRoot), blossomRoot.matched, false);
 
         BlossomVNode current = blossomRoot;
+        BlossomVNode prevNode = current;
         current.label = MINUS;
         current.isOuter = true;
         current.parentEdge = blossom.parentEdge;
-        BlossomVEdge prevMatched;
-        BlossomVNode prevNode = current;
         // first traversal. It is done from blossomRoot to branchesEndpoint, i.e. from higher
         // layers of the tree to the lower
         while (current != branchesEndpoint) {
-            // processing "+" node
+            // process "+" node
             current = current.blossomSibling.getOpposite(current);
             current.label = PLUS;
             current.isOuter = true;
             current.tree = tree;
-            current.matched = prevMatched = current.blossomSibling;
+            current.matched = current.blossomSibling;
+            BlossomVEdge prevMatched = current.blossomSibling;
             current.addChild(prevNode, prevNode.blossomSibling, false);
             prevNode = current;
 
-            // processing "-" node
+            // process "-" node
             current = current.blossomSibling.getOpposite(current);
             current.label = MINUS;
             current.isOuter = true;
@@ -530,27 +524,26 @@ class BlossomVPrimalUpdater<V, E> {
         }
         blossom.parentEdge.getOpposite(branchesEndpoint).addChild(branchesEndpoint, blossom.parentEdge, false);
 
-        // second traversal, updating edges' slacks and their presence in heaps
+        // second traversal, update edge slacks and their presence in heaps
         current = blossomRoot;
         expandMinusNode(current);
         while (current != branchesEndpoint) {
             current = current.blossomSibling.getOpposite(current);
-            edge = expandPlusNode(current);
+            BlossomVEdge edge = expandPlusNode(current);
             if (edge != null) {
-                zeroSlackEdge = edge;
+                augmentEdge = edge;
             }
             current.isProcessed = true; // this is needed for correct processing of (+, +) edges connecting two node on the branch
 
             current = current.blossomSibling.getOpposite(current);
             expandMinusNode(current);
         }
-        return zeroSlackEdge;
+        return augmentEdge;
     }
 
     /**
-     * Helper method for expanding the nodes on an odd branch. Here it is assumed that the
-     * blossomSiblings are directed in the way the odd branch goes from {@code branchesEndpoint}
-     * to {@code blossomRoot}.
+     * Expands the nodes on an odd branch. Here it is assumed that the blossomSiblings are directed in the
+     * way the odd branch goes from {@code branchesEndpoint} to {@code blossomRoot}.
      * <p>
      * The method traverses the nodes only once setting the labels,
      * flags, updating the matching, removing former (+, -) edges and creating new (+, inf)
@@ -563,14 +556,14 @@ class BlossomVPrimalUpdater<V, E> {
      */
     private void expandOddBranch(BlossomVNode blossomRoot, BlossomVNode branchesEndpoint, BlossomVTree tree) {
         BlossomVNode current = branchesEndpoint.blossomSibling.getOpposite(branchesEndpoint);
-        BlossomVEdge prevMatched;
         // the traversal is done from branchesEndpoint to blossomRoot, i.e. from
         // lower layers to higher
         while (current != blossomRoot) {
             current.label = BlossomVNode.Label.INFINITY;
             current.isOuter = true;
             current.tree = null;
-            current.matched = prevMatched = current.blossomSibling;
+            current.matched = current.blossomSibling;
+            BlossomVEdge prevMatched = current.blossomSibling;
             expandInfinityNode(current, tree);
             current = current.blossomSibling.getOpposite(current);
 
@@ -584,11 +577,11 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Helper method for changing dual information of the {@code plusNode} and edge incident to it.
-     * This method relies on the labeling produced by the first traversal of the
-     * {@link BlossomVPrimalUpdater#expandEvenBranch(BlossomVNode, BlossomVNode, BlossomVNode)} and on the isProcessed flags of the
-     * nodes on the even branch that have been traversed already. It also assumes that all blossom nodes
-     * are marked.
+     * Changes dual information of the {@code plusNode} and edge incident to it. This method relies on the
+     * labeling produced by the first traversal of the
+     * {@link BlossomVPrimalUpdater#expandEvenBranch(BlossomVNode, BlossomVNode, BlossomVNode)} and on the
+     * isProcessed flags of the nodes on the even branch that have been traversed already. It also assumes
+     * that all blossom nodes are marked.
      * <p>
      * Since one of endpoints of the edges previously incident to the blossom changes its label,
      * we have to update the slacks of the boundary edges incindent to the {@code plusNode}.
@@ -597,12 +590,11 @@ class BlossomVPrimalUpdater<V, E> {
      * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
     private BlossomVEdge expandPlusNode(BlossomVNode plusNode) {
-        BlossomVEdge zeroSlackEdge = null;
+        BlossomVEdge augmentEdge = null;
         double eps = plusNode.tree.eps; // the plusNode.tree is assumed to be correct
-        plusNode.dual -= eps; // applying lazy delta spreading
-        BlossomVEdge edge;
+        plusNode.dual -= eps; // apply lazy delta spreading
         for (BlossomVNode.IncidentEdgeIterator iterator = plusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
+            BlossomVEdge edge = iterator.next();
             BlossomVNode opposite = edge.head[iterator.getDir()];
             // update slack of the edge
             if (opposite.isMarked && opposite.isPlusNode()) {
@@ -632,14 +624,14 @@ class BlossomVPrimalUpdater<V, E> {
                     opposite.tree.currentEdge.removeFromCurrentMinusPlusHeap(edge);
                     opposite.tree.currentEdge.addPlusPlusEdge(edge);
                     if (edge.slack <= eps + opposite.tree.eps) {
-                        zeroSlackEdge = edge;
+                        augmentEdge = edge;
                     }
                 }
             } else if (opposite.isMinusNode()) {
                 if (opposite.tree != plusNode.tree) {
                     // this edge becomes a (+, -) cross-tree edge
                     if (opposite.tree.currentEdge == null) {
-                        BlossomVState.addTreeEdge(plusNode.tree, opposite.tree);
+                        BlossomVTree.addTreeEdge(plusNode.tree, opposite.tree);
                     }
                     opposite.tree.currentEdge.addToCurrentPlusMinusHeap(edge, opposite.tree.currentDirection);
                 }
@@ -649,12 +641,11 @@ class BlossomVPrimalUpdater<V, E> {
                 plusNode.tree.addPlusInfinityEdge(edge); // updating edge's key
             }
         }
-        return zeroSlackEdge;
+        return augmentEdge;
     }
 
     /**
-     * Helper method for expanding a minus node from the odd branch. It changes the slacks of inner
-     * (-,-) and (-, inf) edges.
+     * Expands a minus node from the odd branch. Changes the slacks of inner (-,-) and (-, inf) edges.
      *
      * @param minusNode a "-" node from the even branch
      */
@@ -664,11 +655,9 @@ class BlossomVPrimalUpdater<V, E> {
         if (minusNode.isBlossom) {
             minusNode.tree.addMinusBlossom(minusNode);
         }
-        BlossomVEdge edge;
-        BlossomVNode opposite;
         for (BlossomVNode.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
-            opposite = edge.head[iterator.getDir()];
+            BlossomVEdge edge = iterator.next();
+            BlossomVNode opposite = edge.head[iterator.getDir()];
             if (opposite.isMarked && !opposite.isPlusNode()) {
                 // this is a (-, inf) or (-, -) inner edge
                 edge.slack -= eps;
@@ -677,16 +666,15 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Helper method for expanding an infinity node from the odd branch
+     * Expands an infinity node from the odd branch
      *
      * @param infinityNode a node from the odd branch
      * @param tree         the tree the blossom was previously in
      */
     private void expandInfinityNode(BlossomVNode infinityNode, BlossomVTree tree) {
         double eps = tree.eps;
-        BlossomVEdge edge;
         for (BlossomVNode.IncidentEdgeIterator iterator = infinityNode.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
+            BlossomVEdge edge = iterator.next();
             BlossomVNode opposite = edge.head[iterator.getDir()];
             if (!opposite.isMarked) {
                 edge.slack += eps; // since edge's label changes to inf and this is a boundary edge
@@ -702,10 +690,9 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Method for converting a tree into a set of free matched edges. It changes the matching starting
-     * from {@code firstNode} all the way up to the firstNode.tree.root. It changes the labeling of the nodes,
-     * applies lazy delta spreading, updates edges' presence in the heaps. This method also deletes unnecessary
-     * tree edges.
+     * Converts a tree into a set of free matched edges. Changes the matching starting from {@code firstNode}
+     * all the way up to the firstNode.tree.root. It changes the labeling of the nodes, applies lazy delta
+     * spreading, updates edges' presence in the heaps. This method also deletes unnecessary tree edges.
      * <p>
      * This method doesn't change the nodes and edge contracted in the blossoms.
      *
@@ -716,34 +703,30 @@ class BlossomVPrimalUpdater<V, E> {
         BlossomVTree tree = firstNode.tree;
         double eps = tree.eps;
         BlossomVNode root = tree.root;
-        BlossomVTreeEdge treeEdge;
-        BlossomVEdge edge;
-        BlossomVNode node;
-        int dir;
 
-        // setting currentEdge and currentDirection of all opposite trees connected via treeEdge
-        state.setCurrentEdges(tree);
+        // set currentEdge and currentDirection of all opposite trees connected via treeEdge
+        tree.setCurrentEdges();
 
-        // applying tree.eps to all tree nodes and updating slacks of all incident edges
+        // apply tree.eps to all tree nodes and updating slacks of all incident edges
         for (BlossomVTree.TreeNodeIterator treeNodeIterator = tree.treeNodeIterator(); treeNodeIterator.hasNext(); ) {
-            node = treeNodeIterator.next();
+            BlossomVNode node = treeNodeIterator.next();
             if (!node.isMarked) {
-                // applying lazy delta spreading
+                // apply lazy delta spreading
                 if (node.isPlusNode()) {
                     node.dual += eps;
                 } else {
                     node.dual -= eps;
                 }
                 for (BlossomVNode.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
-                    edge = incidentEdgeIterator.next();
-                    dir = incidentEdgeIterator.getDir();
+                    BlossomVEdge edge = incidentEdgeIterator.next();
+                    int dir = incidentEdgeIterator.getDir();
                     BlossomVNode opposite = edge.head[dir];
                     BlossomVTree oppositeTree = opposite.tree;
                     if (node.isPlusNode()) {
                         edge.slack -= eps;
                         if (oppositeTree != null && oppositeTree != tree) {
                             // if this edge is a cross-tree edge
-                            treeEdge = oppositeTree.currentEdge;
+                            BlossomVTreeEdge treeEdge = oppositeTree.currentEdge;
                             if (opposite.isPlusNode()) {
                                 // this is a (+,+) cross-tree edge
                                 treeEdge.removeFromPlusPlusHeap(edge);
@@ -758,7 +741,7 @@ class BlossomVPrimalUpdater<V, E> {
                         edge.slack += eps;
                         if (oppositeTree != null && oppositeTree != tree && opposite.isPlusNode()) {
                             // this is a (-,+) cross-tree edge
-                            treeEdge = oppositeTree.currentEdge;
+                            BlossomVTreeEdge treeEdge = oppositeTree.currentEdge;
                             treeEdge.removeFromCurrentMinusPlusHeap(edge);
                             oppositeTree.addPlusInfinityEdge(edge);
                         }
@@ -774,11 +757,11 @@ class BlossomVPrimalUpdater<V, E> {
             }
         }
 
-        // adding all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and
-        // deleting tree edges
+        // add all elements from the (-,+) and (+,+) heaps to (+, inf) heaps of the opposite trees and
+        // delete tree edges
         for (BlossomVTree.TreeEdgeIterator treeEdgeIterator = tree.treeEdgeIterator(); treeEdgeIterator.hasNext(); ) {
-            treeEdge = treeEdgeIterator.next();
-            dir = treeEdgeIterator.getCurrentDirection();
+            BlossomVTreeEdge treeEdge = treeEdgeIterator.next();
+            int dir = treeEdgeIterator.getCurrentDirection();
             BlossomVTree opposite = treeEdge.head[dir];
             opposite.currentEdge = null;
 
@@ -787,7 +770,7 @@ class BlossomVPrimalUpdater<V, E> {
             treeEdge.removeFromTreeEdgeList();
         }
 
-        // updating matching
+        // update the matching
         BlossomVEdge matchedEdge = augmentEdge;
         BlossomVNode plusNode = firstNode;
         BlossomVNode minusNode = plusNode.getTreeParent();
@@ -800,7 +783,7 @@ class BlossomVPrimalUpdater<V, E> {
         }
         root.matched = matchedEdge;
 
-        // removing root from the linked list of roots;
+        // remove root from the linked list of roots;
         root.removeFromChildList();
         root.isTreeRoot = false;
 
@@ -808,9 +791,9 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Helper method for updating the tree structure in the shrink operation. Moves the endpoints of the boundary edges
-     * to the {@code blossom}, moves the children of the nodes on the circuit to the blossom, updates edges's slacks
-     * and presence in heaps accordingly.
+     * Updates the tree structure in the shrink operation. Moves the endpoints of the boundary edges
+     * to the {@code blossom}, moves the children of the nodes on the circuit to the blossom, updates
+     * edges's slacks and presence in heaps accordingly.
      *
      * @param blossomRoot        the node that is matched from the outside or is a tree root
      * @param blossomFormingEdge a tight (+, +) edge
@@ -818,43 +801,42 @@ class BlossomVPrimalUpdater<V, E> {
      * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
     private BlossomVEdge updateTreeStructure(BlossomVNode blossomRoot, BlossomVEdge blossomFormingEdge, BlossomVNode blossom) {
-        BlossomVNode varNode;
-        BlossomVEdge zeroSlackEdge = null;
-        BlossomVEdge edge;
+        BlossomVEdge augmentEdge = null;
         BlossomVTree tree = blossomRoot.tree;
-        // going through every vertex in the blossom and moving its child list to
-        // blossom child list
-        // handling all blossom nodes except for the blossom root
-        // the reason is we can't move root's correctly to the blossom
-        // until both children from the circuit are removed from the its children list
-        for (BlossomVState.BlossomNodesIterator iterator = state.blossomNodesIterator(blossomRoot, blossomFormingEdge); iterator.hasNext(); ) {
-            varNode = iterator.next();
-            if (varNode != blossomRoot) {
-                if (varNode.isPlusNode()) {
-                    // substituting varNode with the blossom in the tree structure
-                    varNode.removeFromChildList();
-                    varNode.moveChildrenTo(blossom);
-                    edge = shrinkPlusNode(varNode, blossom);
+        /**
+         * Go through every vertex in the blossom and move its child list to
+         * blossom child list. Handle all blossom nodes except for the blossom root.
+         * The reason is that we can't move root's correctly to the blossom
+         * until both children from the circuit are removed from the its children list
+         */
+        for (BlossomVEdge.BlossomNodesIterator iterator = blossomFormingEdge.blossomNodesIterator(blossomRoot); iterator.hasNext(); ) {
+            BlossomVNode blossomNode = iterator.next();
+            if (blossomNode != blossomRoot) {
+                if (blossomNode.isPlusNode()) {
+                    // substitute varNode with the blossom in the tree structure
+                    blossomNode.removeFromChildList();
+                    blossomNode.moveChildrenTo(blossom);
+                    BlossomVEdge edge = shrinkPlusNode(blossomNode, blossom);
                     if (edge != null) {
-                        zeroSlackEdge = edge;
+                        augmentEdge = edge;
                     }
-                    varNode.isProcessed = true;
+                    blossomNode.isProcessed = true;
                 } else {
-                    if (varNode.isBlossom) {
-                        tree.removeMinusBlossom(varNode);
+                    if (blossomNode.isBlossom) {
+                        tree.removeMinusBlossom(blossomNode);
                     }
-                    varNode.removeFromChildList(); // minus node have only one child and this child belongs to the circuit
-                    shrinkMinusNode(varNode, blossom);
+                    blossomNode.removeFromChildList(); // minus node have only one child and this child belongs to the circuit
+                    shrinkMinusNode(blossomNode, blossom);
                 }
             }
-            varNode.blossomGrandparent = varNode.blossomParent = blossom;
+            blossomNode.blossomGrandparent = blossomNode.blossomParent = blossom;
         }
-        // substituting varNode with the blossom in the tree structure
+        // substitute varNode with the blossom in the tree structure
         blossomRoot.removeFromChildList();
         if (!blossomRoot.isTreeRoot) {
             blossomRoot.getTreeParent().addChild(blossom, blossomRoot.parentEdge, false);
         } else {
-            // substituting blossomRoot with blossom in the linked list of tree roots
+            // substitute blossomRoot with blossom in the linked list of tree roots
             blossom.treeSiblingNext = blossomRoot.treeSiblingNext;
             blossom.treeSiblingPrev = blossomRoot.treeSiblingPrev;
             blossomRoot.treeSiblingPrev.treeSiblingNext = blossom;
@@ -864,40 +846,38 @@ class BlossomVPrimalUpdater<V, E> {
         }
         // finally process blossomRoot
         blossomRoot.moveChildrenTo(blossom);
-        edge = shrinkPlusNode(blossomRoot, blossom);
+        BlossomVEdge edge = shrinkPlusNode(blossomRoot, blossom);
         if (edge != null) {
-            zeroSlackEdge = edge;
+            augmentEdge = edge;
         }
         blossomRoot.isTreeRoot = false;
 
-        return zeroSlackEdge;
+        return augmentEdge;
     }
 
     /**
-     * Processes a plus node on an odd circuit in the shrink operation. Moves
-     * endpoints of the boundary edges, updates slacks of incident edges.
+     * Processes a plus node on an odd circuit in the shrink operation. Moves endpoints of the boundary
+     * edges, updates slacks of incident edges.
      *
      * @param plusNode a plus node from an odd circuit
      * @param blossom  a newly created pseudonode
      * @return a tight (+, +) cross-tree edge if it is encountered, null otherwise
      */
     private BlossomVEdge shrinkPlusNode(BlossomVNode plusNode, BlossomVNode blossom) {
-        BlossomVEdge edge;
-        BlossomVEdge zeroSlackEdge = null;
-        BlossomVNode opposite;
+        BlossomVEdge augmentEdge = null;
         BlossomVTree tree = plusNode.tree;
         double eps = tree.eps;
         plusNode.dual += eps;
 
         for (BlossomVNode.IncidentEdgeIterator iterator = plusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
-            opposite = edge.head[iterator.getDir()];
+            BlossomVEdge edge = iterator.next();
+            BlossomVNode opposite = edge.head[iterator.getDir()];
 
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
-                state.moveEdgeTail(plusNode, blossom, edge);
+                edge.moveEdgeTail(plusNode, blossom);
                 if (opposite.tree != tree && opposite.isPlusNode() && edge.slack <= eps + opposite.tree.eps) {
-                    zeroSlackEdge = edge;
+                    augmentEdge = edge;
                 }
             } else if (opposite.isPlusNode()) {
                 // inner edge, subtract eps only in the case the opposite node is a "+" node
@@ -908,32 +888,29 @@ class BlossomVPrimalUpdater<V, E> {
                 edge.slack -= eps;
             }
         }
-        return zeroSlackEdge;
+        return augmentEdge;
     }
 
     /**
-     * Processes a minus node from an odd circuit in the shrink operation. Moves
-     * the endpoints of the boundary edges, updates their slacks
+     * Processes a minus node from an odd circuit in the shrink operation. Moves the endpoints of the
+     * boundary edges, updates their slacks
      *
      * @param minusNode a minus node from an odd circuit
      * @param blossom   a newly create pseudonode
      */
     private void shrinkMinusNode(BlossomVNode minusNode, BlossomVNode blossom) {
-        BlossomVEdge edge;
-        BlossomVNode opposite;
-        BlossomVTree oppositeTree;
         BlossomVTree tree = minusNode.tree;
         double eps = tree.eps;
         minusNode.dual -= eps;
 
         for (BlossomVNode.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
-            edge = iterator.next();
-            opposite = edge.head[iterator.getDir()];
-            oppositeTree = opposite.tree;
+            BlossomVEdge edge = iterator.next();
+            BlossomVNode opposite = edge.head[iterator.getDir()];
+            BlossomVTree oppositeTree = opposite.tree;
 
             if (!opposite.isMarked) {
                 // opposite isn't a node inside the blossom
-                state.moveEdgeTail(minusNode, blossom, edge);
+                edge.moveEdgeTail(minusNode, blossom);
                 edge.slack += 2 * eps;
                 if (opposite.tree == tree) {
                     // edge to the node from the same tree, need only to add it to "++" heap if opposite is "+" node
@@ -947,7 +924,7 @@ class BlossomVPrimalUpdater<V, E> {
                         oppositeTree.currentEdge.addPlusPlusEdge(edge);
                     } else if (opposite.isMinusNode()) {
                         if (oppositeTree.currentEdge == null) {
-                            BlossomVState.addTreeEdge(tree, oppositeTree);
+                            BlossomVTree.addTreeEdge(tree, oppositeTree);
                         }
                         oppositeTree.currentEdge.addToCurrentPlusMinusHeap(edge, oppositeTree.currentDirection);
                     } else {
@@ -965,17 +942,17 @@ class BlossomVPrimalUpdater<V, E> {
     /**
      * Creates a circular linked list of blossom nodes.
      * <p>
-     * <b>BlossomVNode:</b> this method heavily relies on the property of the
-     * {@link BlossomVState.BlossomNodesIterator} that it returns the blossomRoot
+     * <b>Note:</b> this method heavily relies on the property of the
+     * {@link BlossomVEdge.BlossomNodesIterator} that it returns the blossomRoot
      * while processing the first branch (with direction 0).
      *
      * @param blossomRoot        the common endpoint of two branches
      * @param blossomFormingEdge a tight (+, +) in-tree edge
      */
     private void setBlossomSiblings(BlossomVNode blossomRoot, BlossomVEdge blossomFormingEdge) {
-        // setting blossom sibling nodes
+        // set blossom sibling nodes
         BlossomVEdge prevEdge = blossomFormingEdge;
-        for (BlossomVState.BlossomNodesIterator iterator = state.blossomNodesIterator(blossomRoot, blossomFormingEdge); iterator.hasNext(); ) {
+        for (BlossomVEdge.BlossomNodesIterator iterator = blossomFormingEdge.blossomNodesIterator(blossomRoot); iterator.hasNext(); ) {
             BlossomVNode current = iterator.next();
             if (iterator.getCurrentDirection() == 0) {
                 current.blossomSibling = prevEdge;
@@ -987,16 +964,14 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Finds a blossom root of the circuit created by the {@code edge}.
-     * More precisely, finds an lca of edge.head[0] and edge.head[1].
+     * Finds a blossom root of the circuit created by the {@code edge}. More precisely, finds an lca
+     * of edge.head[0] and edge.head[1].
      *
      * @param blossomFormingEdge a tight (+, +) in-tree edge
      * @return the lca of edge.head[0] and edge.head[1]
      */
     BlossomVNode findBlossomRoot(BlossomVEdge blossomFormingEdge) {
-        BlossomVNode root;
-        BlossomVNode upperBound;
-        BlossomVNode varNode;
+        BlossomVNode root, upperBound; // need to be scoped outside of the loop
         BlossomVNode[] endPoints = new BlossomVNode[2];
         endPoints[0] = blossomFormingEdge.head[0];
         endPoints[1] = blossomFormingEdge.head[1];
@@ -1010,20 +985,20 @@ class BlossomVPrimalUpdater<V, E> {
             endPoints[branch].isMarked = true;
             if (endPoints[branch].isTreeRoot) {
                 upperBound = endPoints[branch];
-                varNode = endPoints[1 - branch];
-                while (!varNode.isMarked) {
-                    varNode = varNode.getTreeGrandparent();
+                BlossomVNode jumpNode = endPoints[1 - branch];
+                while (!jumpNode.isMarked) {
+                    jumpNode = jumpNode.getTreeGrandparent();
                 }
-                root = varNode;
+                root = jumpNode;
                 break;
             }
             endPoints[branch] = endPoints[branch].getTreeGrandparent();
             branch = 1 - branch;
         }
-        varNode = root;
-        while (varNode != upperBound) {
-            varNode = varNode.getTreeGrandparent();
-            varNode.isMarked = false;
+        BlossomVNode jumpNode = root;
+        while (jumpNode != upperBound) {
+            jumpNode = jumpNode.getTreeGrandparent();
+            jumpNode.isMarked = false;
         }
         clearIsMarkedAndSetIsOuter(root, blossomFormingEdge.head[0]);
         clearIsMarkedAndSetIsOuter(root, blossomFormingEdge.head[1]);
@@ -1032,8 +1007,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Helper method for {@link BlossomVPrimalUpdater#findBlossomRoot(BlossomVEdge)}, traverses the nodes in the tree
-     * from {@code start} to {@code root} and sets isMarked and isOuter to false
+     * Traverses the nodes in the tree from {@code start} to {@code root} and sets isMarked and isOuter to false
      */
     private void clearIsMarkedAndSetIsOuter(BlossomVNode root, BlossomVNode start) {
         while (start != root) {
@@ -1048,17 +1022,16 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Auxiliary method for reversing the direction of blossomSibling references
+     * Reverses the direction of blossomSibling references
      *
      * @param blossomNode some node on an odd circuit
      */
     private void reverseBlossomSiblings(BlossomVNode blossomNode) {
         BlossomVEdge prevEdge = blossomNode.blossomSibling;
         BlossomVNode current = blossomNode;
-        BlossomVEdge tmpEdge;
         do {
             current = prevEdge.getOpposite(current);
-            tmpEdge = prevEdge;
+            BlossomVEdge tmpEdge = prevEdge;
             prevEdge = current.blossomSibling;
             current.blossomSibling = tmpEdge;
         } while (current != blossomNode);
@@ -1080,5 +1053,19 @@ class BlossomVPrimalUpdater<V, E> {
             current = current.blossomSibling.getOpposite(current);
         }
         return (hops & 1) == 0;
+    }
+
+    /**
+     * Prints {@code blossomNode} and all its blossom siblings. This method is for debug purposes.
+     *
+     * @param blossomNode the node to start from
+     */
+    public void printBlossomNodes(BlossomVNode blossomNode) {
+        System.out.println("Printing blossom nodes");
+        BlossomVNode current = blossomNode;
+        do {
+            System.out.println(current);
+            current = current.blossomSibling.getOpposite(current);
+        } while (current != blossomNode);
     }
 }

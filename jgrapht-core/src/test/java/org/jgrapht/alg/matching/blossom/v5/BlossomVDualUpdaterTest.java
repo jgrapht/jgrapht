@@ -122,12 +122,12 @@ public class BlossomVDualUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, true, false);
-        state.clearCurrentEdges(node1.tree);
-        state.setCurrentEdges(node6.tree);
+        node1.tree.clearCurrentEdges();
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge56, true, false);
-        state.clearCurrentEdges(node6.tree);
+        node6.tree.clearCurrentEdges();
 
         assertTrue(dualUpdater.updateDualsSingle(node1.tree));
         assertEquals(2, node1.tree.eps, EPS);
@@ -165,9 +165,9 @@ public class BlossomVDualUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge56);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
         assertEquals(10, dualChange, EPS);
@@ -213,12 +213,12 @@ public class BlossomVDualUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
-        state.setCurrentEdges(node8.tree);
+        node1.tree.clearCurrentEdges();
+        node8.tree.setCurrentEdges();
         primalUpdater.grow(edge78, false, false);
-        state.clearCurrentEdges(node8.tree);
+        node8.tree.clearCurrentEdges();
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
         assertEquals(dualChange, 7, EPS);
@@ -279,13 +279,12 @@ public class BlossomVDualUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge910);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
-        BlossomVTreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node1.tree, node8.tree);
-        state.setCurrentEdges(node5.tree);
+        node1.tree.clearCurrentEdges();
+        node5.tree.setCurrentEdges();
         primalUpdater.grow(edge56, false, false);
-        state.clearCurrentEdges(node5.tree);
+        node5.tree.clearCurrentEdges();
 
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);

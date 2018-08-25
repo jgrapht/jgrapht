@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
 
 /**
- * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
+ * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
  * Represents a vertex of graph. Contains three major blocks of data needed for the algorithm.
  * <ul>
@@ -61,7 +61,7 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
  */
 class BlossomVNode {
     /**
-     * The reference to the node from the heap this node is stored in
+     * Node from the heap this node is stored in
      */
     AddressableHeap.Handle<Double, BlossomVNode> handle;
     /**
@@ -78,7 +78,13 @@ class BlossomVNode {
     boolean isOuter;
     /**
      * Support variable to identify the nodes which have been "processed" in some sense by the algorithm.
-     * Is used in the shrink and expand operations. Is similar to the {@link BlossomVNode#isMarked}
+     * Is used in the shrink and expand operations.
+     * <p>
+     * For example, during the shrink operation we traverse the odd circuit and apply dual changes. All nodes
+     * from this odd circuit are marked, i.e. {@code node.isMarked == true}. When a node on this circuit is
+     * traversed, we set {@code node.isProcessed} to {@code true}. When a (+, +) inner edge is encountered, we can
+     * determine whether the opposite endpoint has been processed or not depending on the value of this variable.
+     * Without this variable inner (+, +) edges can be processed twice (which is wrong).
      */
     boolean isProcessed;
     /**
@@ -88,7 +94,7 @@ class BlossomVNode {
     boolean isMarked;
 
     /**
-     * Stores the current label of this node. Is valid if this node is outer.
+     * Current label of this node. Is valid if this node is outer.
      */
     Label label;
     /**
@@ -106,9 +112,14 @@ class BlossomVNode {
      * An edge which is incident to this node and currently belongs to the matching
      */
     BlossomVEdge matched;
-
+    /**
+     * A (+, inf) edge incident to this node. This variable is used during fractional matching initialization and
+     * is assigned only to the infinity nodes. In fact, it is used to determine for a particular infinity node the
+     * "cheapest" edge to connect it to the tree. The "cheapest" means the edge with minimum slack. When the dual
+     * change is bounded by the dual constraints on the (+, inf) edges, we choose the "cheapest" best edge, increase
+     * the duals of the tree if needed, and grow this edge.
+     */
     BlossomVEdge bestEdge;
-
     /**
      * Reference to the tree this node belongs to
      */
@@ -336,9 +347,6 @@ class BlossomVNode {
      * @return the penultimate blossom of this node
      */
     public BlossomVNode getPenultimateBlossom() {
-        if (blossomParent == null) {
-            return null; // strict mode, todo: remove
-        }
         BlossomVNode current = this;
         while (true) {
             if (!current.blossomGrandparent.isOuter) {
@@ -350,8 +358,10 @@ class BlossomVNode {
                 break;
             }
         }
-        // now current references the penultimate blossom we were looking for
-        // now we change blossomParent references to point to current
+        /*
+         * Current references the penultimate blossom we were looking for.
+         * Now we change blossomParent references to point to current
+         */
         BlossomVNode prev = this;
         BlossomVNode next;
         while (prev != current) {
@@ -373,9 +383,6 @@ class BlossomVNode {
      * @return the penultimate blossom of this node
      */
     public BlossomVNode getPenultimateBlossomAndFixBlossomGrandparent() {
-        if (blossomParent == null) {
-            return null; // strict mode, todo: remove
-        }
         BlossomVNode current = this;
         BlossomVNode prev = null;
         while (true) {
@@ -389,9 +396,11 @@ class BlossomVNode {
                 break;
             }
         }
-        // now current is the penultimate blossom, prev.blossomParent == current
-        // all the nodes, that are lower than prev, must have blossomGrandparent referencing
-        // a node, that is not higher than prev
+        /*
+         *  Now current node is the penultimate blossom, prev.blossomParent == current.
+         *  All the nodes, that are lower than prev, must have blossomGrandparent referencing
+         *  a node, that is not higher than prev
+         */
         if (prev != null) {
             BlossomVNode prevNode = this;
             BlossomVNode nextNode;

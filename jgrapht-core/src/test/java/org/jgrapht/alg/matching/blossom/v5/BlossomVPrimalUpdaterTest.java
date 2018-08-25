@@ -62,9 +62,9 @@ public class BlossomVPrimalUpdaterTest {
         BlossomVEdge edge23 = edgeMap.get(e23);
 
         primalUpdater.augment(edge23);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(1, state.statistics.growNum);
 
@@ -112,9 +112,9 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edgeMap.get(edge45));
         primalUpdater.augment(edgeMap.get(edge23));
         primalUpdater.augment(edgeMap.get(edge67));
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edgeMap.get(edge12), true, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(tree, node2.tree);
         assertEquals(tree, node3.tree);
@@ -180,9 +180,9 @@ public class BlossomVPrimalUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         Set<BlossomVTreeEdge> treeEdges1 = BlossomVDebugger.getTreeEdgesBetween(node1.tree, node6.tree);
         assertEquals(1, treeEdges1.size());
@@ -190,9 +190,9 @@ public class BlossomVPrimalUpdaterTest {
         assertEquals(1, treeEdge1.plusPlusEdges.size());
         assertEquals(1, BlossomVDebugger.getMinusPlusHeap(treeEdge1, node1.tree).size());
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge34, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         Set<BlossomVTreeEdge> treeEdges2 = BlossomVDebugger.getTreeEdgesBetween(node1.tree, node6.tree);
         assertEquals(1, treeEdges2.size());
@@ -249,16 +249,16 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge56);
         primalUpdater.augment(edge78);
-        state.setCurrentEdges(node4.tree);
+        node4.tree.setCurrentEdges();
         primalUpdater.grow(edge45, false, false);
-        state.clearCurrentEdges(node4.tree);
+        node4.tree.clearCurrentEdges();
 
         assertEquals(4, node4.tree.plusInfinityEdges.size());
         assertEquals(1, node4.tree.plusPlusEdges.size());
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(1, node4.tree.plusInfinityEdges.size());
         assertEquals(1, node4.tree.plusPlusEdges.size());
@@ -320,9 +320,9 @@ public class BlossomVPrimalUpdaterTest {
         node6.tree.eps = 1;
         primalUpdater.augment(edge56);
         node4.tree.eps = 3;
-        state.setCurrentEdges(node4.tree);
+        node4.tree.setCurrentEdges();
         primalUpdater.grow(edge45, false, false);
-        state.clearCurrentEdges(node4.tree);
+        node4.tree.clearCurrentEdges();
 
         assertEquals(4, node5.dual, EPS);
         assertEquals(-2, node6.dual, EPS);
@@ -342,9 +342,9 @@ public class BlossomVPrimalUpdaterTest {
         assertEquals(3, node4.tree.plusInfinityEdges.size());
 
         node1.tree.eps = 3;
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(4, node2.dual, EPS);
         assertEquals(-2, node3.dual, EPS);
@@ -404,14 +404,14 @@ public class BlossomVPrimalUpdaterTest {
 
 
         primalUpdater.augment(edge34);
-        state.setCurrentEdges(node2.tree);
+        node2.tree.setCurrentEdges();
         primalUpdater.grow(edge23, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge24, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
 
         assertEquals(3, node1.tree.plusInfinityEdges.size());
@@ -458,11 +458,11 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge34, false, false);
         primalUpdater.grow(edge16, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         BlossomVNode root = primalUpdater.findBlossomRoot(edge57);
 
@@ -565,16 +565,16 @@ public class BlossomVPrimalUpdaterTest {
         node1.tree.eps = 2;
         node6.tree.eps = 2;
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(node1.tree, node2.tree);
         assertEquals(node1.tree, node3.tree);
 
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge56, false, false);
-        state.clearCurrentEdges(node6.tree);
+        node6.tree.clearCurrentEdges();
 
         node1.tree.eps += 1;
         node1.tree.eps += 1;
@@ -644,10 +644,10 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge89);
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge18, true, false);
         primalUpdater.grow(edge12, true, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         node1.tree.eps = 2;
 
@@ -736,10 +736,10 @@ public class BlossomVPrimalUpdaterTest {
         BlossomVEdge edge24 = edgeMap.get(e24);
 
         primalUpdater.augment(edge23);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge13, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(1, state.statistics.shrinkNum);
         assertEquals(1, state.blossomNum);
@@ -810,12 +810,12 @@ public class BlossomVPrimalUpdaterTest {
         node2.tree.eps = 1;
         node3.tree.eps = 1;
         primalUpdater.augment(edge23);
-        state.setCurrentEdges(tree1);
+        tree1.setCurrentEdges();
         node1.tree.eps = 3;
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge13, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         assertEquals(0, edge12.slack, EPS);
         assertEquals(0, edge13.slack, EPS);
@@ -887,23 +887,23 @@ public class BlossomVPrimalUpdaterTest {
         node5.tree.eps = 3;
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         node1.tree.eps = 4;
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge51, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
         node1.tree.eps += 2;
 
         node8.tree.eps = 2;
         primalUpdater.augment(edge78);
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
         node6.tree.eps = 3;
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge67, false, false);
-        state.clearCurrentEdges(node6.tree);
+        node6.tree.clearCurrentEdges();
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         BlossomVNode blossom = primalUpdater.shrink(edge34, false);
 
         assertEquals(6, node1.dual, EPS);
@@ -999,16 +999,16 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge78);
         primalUpdater.augment(edge910);
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge51, false, false);
-        state.clearCurrentEdges(node1.tree);
-        state.setCurrentEdges(node6.tree);
+        node1.tree.clearCurrentEdges();
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge67, false, false);
-        state.clearCurrentEdges(node6.tree);
-        state.setCurrentEdges(node1.tree);
+        node6.tree.clearCurrentEdges();
+        node1.tree.setCurrentEdges();
         BlossomVNode blossom = primalUpdater.shrink(edge34, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge13, edge51)), BlossomVDebugger.getEdgesOf(node1));
         assertEquals(new HashSet<>(Arrays.asList(edge12, edge23)), BlossomVDebugger.getEdgesOf(node2));
@@ -1059,10 +1059,10 @@ public class BlossomVPrimalUpdaterTest {
 
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge51, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
         BlossomVNode blossom = primalUpdater.shrink(edge34, false);
 
         assertEquals(blossom, node1.blossomParent);
@@ -1150,13 +1150,13 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
         primalUpdater.augment(edge910);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge34, false, false);
         primalUpdater.grow(edge36, false, false);
         primalUpdater.grow(edge89, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge13, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
         // validating the tree structure
         assertEquals(blossom, node4.getTreeParent());
@@ -1219,20 +1219,20 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge23);
 
         node1.tree.eps = 3;
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
-        state.clearCurrentEdges(node1.tree);
+        node1.tree.clearCurrentEdges();
 
         node5.tree.eps = 2;
         node6.tree.eps = 2;
         primalUpdater.augment(edge56);
 
         node4.tree.eps = 2;
-        state.setCurrentEdges(node4.tree);
+        node4.tree.setCurrentEdges();
         primalUpdater.grow(edge45, false, false);
-        state.clearCurrentEdges(node4.tree);
+        node4.tree.clearCurrentEdges();
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         BlossomVNode blossom = primalUpdater.shrink(edge13, false);
 
         assertEquals(5, edge24.slack, EPS);
@@ -1303,14 +1303,14 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge67);
 
         node1.tree.eps = 2;
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge71, false, false);
         node1.tree.eps += 1;
         primalUpdater.grow(edge34, false, false);
         node1.tree.eps += 1;
         BlossomVNode blossom = primalUpdater.shrink(edge56, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
         assertEquals(7, edge24.slack, EPS);
         assertEquals(5, edge26.slack, EPS);
@@ -1350,16 +1350,16 @@ public class BlossomVPrimalUpdaterTest {
         BlossomVEdge edge35 = edgeMap.get(e35);
 
         primalUpdater.augment(edge23);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge13, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
         primalUpdater.augment(edge35);
 
-        state.setCurrentEdges(node4.tree);
+        node4.tree.setCurrentEdges();
         primalUpdater.grow(edge34, false, false);
         primalUpdater.expand(blossom, false);
-        state.clearCurrentEdges(node4.tree);
+        node4.tree.clearCurrentEdges();
 
         assertEquals(1, state.statistics.expandNum);
 
@@ -1468,18 +1468,18 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge910);
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge51, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge34, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
-        state.setCurrentEdges(node8.tree);
+        node8.tree.setCurrentEdges();
         primalUpdater.grow(edge89, false, false);
-        state.clearCurrentEdges(node8.tree);
+        node8.tree.clearCurrentEdges();
 
         primalUpdater.augment(edge37);
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge62, false, false);
         primalUpdater.expand(blossom, false);
 
@@ -1572,20 +1572,20 @@ public class BlossomVPrimalUpdaterTest {
         node2.tree.eps = 1;
         node3.tree.eps = 1;
         primalUpdater.augment(edge23);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         node1.tree.eps = 3;
         primalUpdater.grow(edge12, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge13, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
         node5.tree.eps = 2;
         blossom.tree.eps += 2;
         primalUpdater.augment(edge35);
         node4.tree.eps = 2;
-        state.setCurrentEdges(node4.tree);
+        node4.tree.setCurrentEdges();
         primalUpdater.grow(edge34, false, false);
         primalUpdater.expand(blossom, false);
-        state.clearCurrentEdges(node4.tree);
+        node4.tree.clearCurrentEdges();
 
         assertEquals(3, node1.dual, EPS);
         assertEquals(1, node2.dual, EPS);
@@ -1679,12 +1679,12 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         node1.tree.eps = 2;
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge51, false, false);
         node1.tree.eps += 1;
         BlossomVNode blossom = primalUpdater.shrink(edge34, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
 
 
         // setting up the "-" blossom's tree structure
@@ -1693,19 +1693,19 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge37);
 
         node6.tree.eps = 2;
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge65, false, false);
-        state.clearCurrentEdges(node6.tree);
+        node6.tree.clearCurrentEdges();
 
         // setting up the structure of the neighbor tree
         primalUpdater.augment(edge910);
-        state.setCurrentEdges(node8.tree);
+        node8.tree.setCurrentEdges();
         primalUpdater.grow(edge89, false, false);
-        state.setCurrentEdges(node8.tree);
+        node8.tree.setCurrentEdges();
 
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
         primalUpdater.expand(blossom, false);
-        state.clearCurrentEdges(node6.tree);
+        node6.tree.clearCurrentEdges();
         BlossomVTreeEdge treeEdge = BlossomVDebugger.getTreeEdge(node6.tree, node8.tree);
 
 
@@ -1851,14 +1851,14 @@ public class BlossomVPrimalUpdaterTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge34, false, false);
         primalUpdater.grow(edge71, false, false);
         BlossomVNode blossom = primalUpdater.shrink(edge56, false);
-        state.clearCurrentEdges(blossom.tree);
+        blossom.tree.clearCurrentEdges();
         primalUpdater.augment(edge39);
-        state.setCurrentEdges(node8.tree);
+        node8.tree.setCurrentEdges();
         primalUpdater.grow(edge78, false, false);
 
         primalUpdater.expand(blossom, false);

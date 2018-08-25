@@ -119,7 +119,6 @@ public class BlossomVOptions {
     /**
      * Construct a default set of options for the algorithm
      */
-
     public BlossomVOptions() {
         this(DEFAULT_INITIALIZATION_TYPE, DEFAULT_DUAL_UPDATE_TYPE, DEFAULT_UPDATE_DUALS_BEFORE, DEFAULT_UPDATE_DUALS_AFTER);
     }
@@ -134,7 +133,7 @@ public class BlossomVOptions {
     }
 
     /**
-     * Getter for {@link BlossomVOptions#updateDualsBefore} flag
+     * Returns the {@link BlossomVOptions#updateDualsBefore} flag
      *
      * @return the flag {@link BlossomVOptions#updateDualsBefore}
      */
@@ -143,7 +142,7 @@ public class BlossomVOptions {
     }
 
     /**
-     * Getter for {@link BlossomVOptions#updateDualsAfter} flag
+     * Returns the {@link BlossomVOptions#updateDualsAfter} flag
      *
      * @return the flag {@link BlossomVOptions#updateDualsAfter}
      */

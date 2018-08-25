@@ -300,13 +300,13 @@ public class BlossomVNodeTest {
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge78);
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.grow(edge12, false, false);
         primalUpdater.grow(edge14, false, false);
-        state.clearCurrentEdges(node1.tree);
-        state.setCurrentEdges(node6.tree);
+        node1.tree.clearCurrentEdges();
+        node6.tree.setCurrentEdges();
         primalUpdater.grow(edge67, false, false);
-        state.setCurrentEdges(node6.tree);
+        node6.tree.setCurrentEdges();
 
         // node5 and node4 have no children
         node5.moveChildrenTo(node3);
@@ -359,7 +359,7 @@ public class BlossomVNodeTest {
         BlossomVEdge edge45 = edgeMap.get(e45);
         BlossomVEdge edge15 = edgeMap.get(e15);
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.grow(edge12, true, false);
@@ -416,7 +416,7 @@ public class BlossomVNodeTest {
         BlossomVEdge edge18 = edgeMap.get(e18);
         BlossomVEdge edge19 = edgeMap.get(e19);
 
-        state.setCurrentEdges(node1.tree);
+        node1.tree.setCurrentEdges();
         primalUpdater.augment(edge23);
         primalUpdater.augment(edge45);
         primalUpdater.augment(edge67);
@@ -424,8 +424,8 @@ public class BlossomVNodeTest {
         BlossomVNode blossom1 = primalUpdater.shrink(edge13, false);
         BlossomVNode blossom2 = primalUpdater.shrink(edge15, false);
         BlossomVNode blossom3 = primalUpdater.shrink(edge17, false);
-        state.clearCurrentEdges(blossom3.tree);
-        state.setCurrentEdges(node8.tree);
+        blossom3.tree.clearCurrentEdges();
+        node8.tree.setCurrentEdges();
         primalUpdater.augment(edge19);
         primalUpdater.grow(edge18, false, false);
 

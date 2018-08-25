@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * This class is a supporting data structure for Kolmogorov's Blossom V algorithm.
+ * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
  * Represents an alternating tree of <em>tight</em> edges which is used to find an augmenting path of tight edges
  * in order to perform an augmentation and increase the cardinality of the matching. The nodes on odd layers
@@ -61,7 +61,7 @@ import java.util.NoSuchElementException;
  */
 class BlossomVTree {
     /**
-     * Variable for debug purposes, todo: remove
+     * Variable for debug purposes
      */
     private static int currentId = 1;
     /**
@@ -79,16 +79,16 @@ class BlossomVTree {
      */
     BlossomVTreeEdge currentEdge;
     /**
-     * Used to quickly determine the opposite tree during primal operations.
+     * Direction of the tree edge connecting this tree and the currently processed tree
      */
     int currentDirection;
     /**
-     * Stores the dual change that hasn't been spread among the nodes in this tree. This technique is called
+     * Dual change that hasn't been spread among the nodes in this tree. This technique is called
      * lazy delta spreading
      */
     double eps;
     /**
-     * Accumulates dual changes in the dual update phase
+     * Accumulated dual change. Is used during dual updates
      */
     double accumulatedEps;
     /**
@@ -96,7 +96,7 @@ class BlossomVTree {
      */
     BlossomVNode root;
     /**
-     * Supporting variable, used in updating duals via connected components
+     * Next tree in the connected component, is used during updating the duals via connected components
      */
     BlossomVTree nextTree;
     /**
@@ -112,7 +112,7 @@ class BlossomVTree {
      */
     MergeableAddressableHeap<Double, BlossomVNode> minusBlossoms;
     /**
-     * Variable for debug purposes, todo: remove
+     * Variable for debug purposes
      */
     int id;
 
@@ -138,13 +138,77 @@ class BlossomVTree {
         this.id = currentId++;
     }
 
+    /**
+     * Adds a new tree edge from {@code from} to {@code to}. Sets the to.currentEdge and to.currentDirection
+     * with respect to the tree {@code from}
+     *
+     * @param from the tail of the directed tree edge
+     * @param to   the head of the directed tree edge
+     */
+    public static BlossomVTreeEdge addTreeEdge(BlossomVTree from, BlossomVTree to) {
+        BlossomVTreeEdge treeEdge = new BlossomVTreeEdge();
+
+        treeEdge.head[0] = to;
+        treeEdge.head[1] = from;
+
+        if (from.first[0] != null) {
+            from.first[0].prev[0] = treeEdge;
+        }
+        if (to.first[1] != null) {
+            to.first[1].prev[1] = treeEdge;
+        }
+
+        treeEdge.next[0] = from.first[0];
+        treeEdge.next[1] = to.first[1];
+
+        from.first[0] = treeEdge;
+        to.first[1] = treeEdge;
+
+        to.currentEdge = treeEdge;
+        to.currentDirection = 0;
+        return treeEdge;
+    }
+
+    /**
+     * Sets the currentEdge and currentDirection variables for all trees adjacent to this tree
+     */
+    public void setCurrentEdges() {
+        BlossomVTreeEdge treeEdge;
+        for (BlossomVTree.TreeEdgeIterator iterator = treeEdgeIterator(); iterator.hasNext(); ) {
+            treeEdge = iterator.next();
+            BlossomVTree opposite = treeEdge.head[iterator.getCurrentDirection()];
+            opposite.currentEdge = treeEdge;
+            opposite.currentDirection = iterator.getCurrentDirection();
+        }
+    }
+
+    /**
+     * Clears the currentEdge variable of all adjacent to the {@code tree} trees
+     */
+    public void clearCurrentEdges() {
+        currentEdge = null;
+        for (TreeEdgeIterator iterator = treeEdgeIterator(); iterator.hasNext(); ) {
+            iterator.next().head[iterator.getCurrentDirection()].currentEdge = null;
+        }
+    }
+
+    /**
+     * Prints all the nodes of this tree
+     */
+    public void printTreeNodes() {
+        System.out.println("Printing tree nodes");
+        for (BlossomVTree.TreeNodeIterator iterator = treeNodeIterator(); iterator.hasNext(); ) {
+            System.out.println(iterator.next());
+        }
+    }
+
     @Override
     public String toString() {
         return "BlossomVTree pos=" + id + ", eps = " + eps + ", root = " + root;
     }
 
     /**
-     * Helper method to ensure correct addition of an edge to the heap
+     * Ensures correct addition of an edge to the heap
      *
      * @param edge a (+, +) edge
      */
@@ -153,7 +217,7 @@ class BlossomVTree {
     }
 
     /**
-     * Helper method to ensure correct addition of an edge to the heap
+     * Ensures correct addition of an edge to the heap
      *
      * @param edge a (+, inf) edge
      */
@@ -162,7 +226,7 @@ class BlossomVTree {
     }
 
     /**
-     * Helper method to ensure correct addition of a blossom to the heap
+     * Ensures correct addition of a blossom to the heap
      *
      * @param blossom a "-" blossom
      */
@@ -177,7 +241,6 @@ class BlossomVTree {
      */
     public void removePlusPlusEdge(BlossomVEdge edge) {
         edge.handle.delete();
-        edge.handle = null; // strict mode, todo: remove
     }
 
     /**
@@ -187,7 +250,6 @@ class BlossomVTree {
      */
     public void removePlusInfinityEdge(BlossomVEdge edge) {
         edge.handle.delete();
-        edge.handle = null; // strict mode, todo: remove
     }
 
     /**
@@ -197,7 +259,6 @@ class BlossomVTree {
      */
     public void removeMinusBlossom(BlossomVNode blossom) {
         blossom.handle.delete();
-        blossom.handle = null; // strict mode: todo: remove
     }
 
     /**
@@ -221,7 +282,7 @@ class BlossomVTree {
     /**
      * An iterator over tree nodes. This iterator traverses the nodes of the
      * tree in a depth-first order.
-     * Note: this iterator can also be used to iterate the nodes of some subtree of a tree.
+     * <b>Note:</b> this iterator can also be used to iterate the nodes of some subtree of a tree.
      */
     public static class TreeNodeIterator implements Iterator<BlossomVNode> {
         /**
@@ -229,11 +290,11 @@ class BlossomVTree {
          */
         private BlossomVNode currentNode;
         /**
-         * Support variable to determine whether {@code currentNode} has been returned or not
+         * Variable to determine whether {@code currentNode} has been returned or not
          */
         private BlossomVNode current;
         /**
-         * Stores next tree root with respect to the root of this tree
+         * A root of the subtree of a tree
          */
         private BlossomVNode treeRoot;
 
@@ -250,6 +311,9 @@ class BlossomVTree {
             this.treeRoot = root;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean hasNext() {
             if (current != null) {
@@ -259,6 +323,9 @@ class BlossomVTree {
             return current != null;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public BlossomVNode next() {
             if (!hasNext()) {
@@ -288,7 +355,7 @@ class BlossomVTree {
                     currentNode = currentNode.parentEdge.getOpposite(currentNode);
                 }
                 currentNode = currentNode.treeSiblingNext;
-                if(currentNode == treeRoot.treeSiblingNext){
+                if (currentNode == treeRoot.treeSiblingNext) {
                     currentNode = null;
                 }
                 return currentNode;
@@ -309,7 +376,7 @@ class BlossomVTree {
          */
         private BlossomVTreeEdge currentEdge;
         /**
-         * Auxiliary variable to determine whether currentEdge has been returned or not
+         * Variable to determine whether currentEdge has been returned or not
          */
         private BlossomVTreeEdge result;
 
@@ -326,6 +393,9 @@ class BlossomVTree {
             result = currentEdge;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean hasNext() {
             if (result != null) {
@@ -335,6 +405,9 @@ class BlossomVTree {
             return result != null;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public BlossomVTreeEdge next() {
             if (!hasNext()) {

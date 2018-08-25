@@ -35,8 +35,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
-import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.FRACTIONAL;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
@@ -1514,8 +1512,14 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching39() {
+        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 1, 1}, {1, 2, 5}, {1, 2, 10},};
-        test(edges, 5);
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> solver = new KolmogorovMinimumWeightPerfectMatching<>(graph);
+        checkMatchingAndDualSolution(solver.getMatching(), solver.getDualSolution());
     }
 
     /**
@@ -1523,9 +1527,15 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test
     public void testGetMatching40() {
+        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 1, 1}, {2, 2, 1}, {3, 3, 1}, {4, 4, 1}, {1, 2, 5}, {1, 2, 10}, {1, 3, 2},
                 {1, 3, 5}, {1, 4, 4}, {1, 4, 6}, {2, 3, 3}, {2, 3, 4}, {2, 4, 6}, {2, 4, 8}, {3, 4, 1}, {3, 4, 3}};
-        test(edges, 6);
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
+        }
+
+        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> solver = new KolmogorovMinimumWeightPerfectMatching<>(graph);
+        checkMatchingAndDualSolution(solver.getMatching(), solver.getDualSolution());
     }
 
     /**
@@ -1533,7 +1543,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching41() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
 
         KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching = new KolmogorovMinimumWeightPerfectMatching<>(graph, options);
@@ -1542,7 +1552,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching42() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
 
@@ -1556,7 +1566,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching43() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2, 1);
         Graphs.addEdgeWithVertices(graph, 1, 3, 2);
         Graphs.addEdgeWithVertices(graph, 2, 3, 3);
@@ -1574,7 +1584,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching44() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 3}, {1, 3, 5}, {2, 3, 7}, {1, 4, 6}, {3, 4, 1}, {1, 0, 11}, {0, 4, 7},
                 {3, 5, 3}, {4, 5, 2}, {4, 6, 3}, {5, 6, 1}, {4, 7, 3}, {0, 7, 7},
                 {6, 7, 1}, {6, 8, 9}, {5, 8, 8}, {7, 8, 10}, {3, 8, 7}, {2, 8, 4}};
@@ -1592,7 +1602,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching45() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 1, 8}, {0, 2, 9}, {1, 2, 1}, {0, 3, 4}, {1, 3, 5}, {0, 4, 4}, {3, 4, 2},
                 {0, 5, 5}, {4, 5, 2}, {4, 6, 7}, {5, 6, 6}, {1, 7, 9}, {2, 7, 9},
                 {3, 7, 8}, {4, 7, 7}, {6, 7, 2}, {6, 8, 4}, {7, 8, 2}, {2, 8, 10}
@@ -1611,7 +1621,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching46() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{1, 2, 22}, {1, 3, 8}, {2, 3, 16}, {0, 1, 46}, {0, 5, 24}, {1, 5, 24}, {0, 4, 20},
                 {4, 5, 4}, {0, 6, 5}, {0, 7, 7}, {6, 7, 3}, {0, 8, 19}, {6, 8, 16},
                 {0, 9, 17}, {4, 9, 8}, {0, 10, 10}, {7, 10, 6}, {9, 10, 11}, {4, 11, 10},
@@ -1674,7 +1684,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching47() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 18}, {1, 2, 27}, {0, 3, 68}, {1, 3, 15}, {2, 3, 19}, {0, 12, 93}, {1, 12, 13}, {12, 15, 85},
                 {4, 6, 50}, {5, 6, 6}, {4, 7, 79}, {5, 7, 95}, {6, 7, 95}, {4, 13, 40}, {5, 13, 6},
                 {13, 15, 87}, {8, 10, 51}, {9, 10, 44}, {8, 11, 96}, {9, 11, 95}, {10, 11, 9}, {8, 14, 86},
@@ -1691,7 +1701,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching48() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 72}, {1, 2, 85}, {0, 3, 5}, {1, 3, 59}, {0, 4, 96}, {1, 4, 38}, {2, 4, 94}, {3, 4, 17},
                 {0, 5, 54}, {1, 5, 49}, {2, 5, 81}, {3, 5, 56}, {0, 6, 69}, {1, 6, 82}, {2, 6, 18},
                 {3, 6, 53}, {4, 6, 25}, {5, 6, 9}, {0, 7, 24}, {1, 7, 70}, {2, 7, 72}, {3, 7, 19},
@@ -1737,7 +1747,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching49() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 87}, {1, 2, 56}, {0, 3, 21}, {1, 3, 81}, {0, 4, 26}, {1, 4, 94}, {2, 4, 36}, {3, 4, 28},
                 {0, 5, 32}, {1, 5, 94}, {2, 5, 12}, {3, 5, 86}, {0, 6, 52}, {1, 6, 78}, {2, 6, 93},
                 {3, 6, 89}, {4, 6, 11}, {5, 6, 4}, {0, 7, 64}, {1, 7, 93}, {2, 7, 16}, {3, 7, 70},
@@ -1816,7 +1826,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetMatching50() {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         int[][] edges = new int[][]{{0, 2, 44}, {1, 2, 27}, {0, 3, 2}, {1, 3, 73}, {0, 4, 11}, {1, 4, 4}, {2, 4, 98}, {3, 4, 28},
                 {0, 5, 0}, {1, 5, 53}, {2, 5, 19}, {3, 5, 41}, {0, 6, 27}, {1, 6, 8}, {2, 6, 21},
                 {3, 6, 91}, {4, 6, 88}, {5, 6, 37}, {0, 7, 6}, {1, 7, 84}, {2, 7, 92}, {3, 7, 71},
@@ -1946,7 +1956,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      * @param result the expected weight of a resulting matching
      */
     private void test(int[][] edges, double result) {
-        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
@@ -1967,7 +1977,7 @@ public class KolmogorovMinimumWeightPerfectMatchingTest {
      * @param <E> graph edge type
      */
     static <V, E> void checkMatchingAndDualSolution(MatchingAlgorithm.Matching<V, E> matching,
-                                                     KolmogorovMinimumWeightPerfectMatching<V, E>.DualSolution dualSolution) {
+                                                     KolmogorovMinimumWeightPerfectMatching.DualSolution<V, E> dualSolution) {
         Graph<V, E> graph = dualSolution.getGraph();
         assertEquals(graph.vertexSet().size(), 2 * matching.getEdges().size());
         Set<E> matchedEdges = matching.getEdges();
