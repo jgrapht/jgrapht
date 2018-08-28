@@ -1,17 +1,16 @@
 package org.jgrapht.graph;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.specifics.DirectedEdgeContainer;
 import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
 import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
 
 /**
  * The fast lookup specifics strategy implementation.
@@ -32,27 +31,28 @@ public class FastLookupGraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = -5490869870275054280L;
 
-    /**
-     * Get a function which creates the specifics. The factory will accept the graph type as a
-     * parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
+    @Override
+    public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory() { 
+        return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
+            if (type.isWeighted()) {
+                return new WeightedIntrusiveEdgesSpecifics<V, E>(new LinkedHashMap<>());
+            } else {
+                return new UniformIntrusiveEdgesSpecifics<>(new LinkedHashMap<>());
+            }
+        };
+    }
+    
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {
         return (BiFunction<Graph<V, E>, GraphType,
             Specifics<V, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
-                    return new FastLookupDirectedSpecifics<>(graph, this
-                        .<V, DirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
-                        .get(), this.<Pair<V, V>, Set<E>> getMapFactory().get(),
-                        getEdgeSetFactory());
+                    return new FastLookupDirectedSpecifics<>(
+                        graph, new LinkedHashMap<>(), new HashMap<>(), getEdgeSetFactory());
                 } else {
-                    return new FastLookupUndirectedSpecifics<>(graph, this
-                        .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
-                        .get(), this.<Pair<V, V>, Set<E>> getMapFactory().get(),
-                        getEdgeSetFactory());
+                    return new FastLookupUndirectedSpecifics<>(
+                        graph, new LinkedHashMap<>(), new HashMap<>(), getEdgeSetFactory());
                 }
             };
     }

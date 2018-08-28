@@ -1,26 +1,25 @@
 package org.jgrapht.opt.graph.fastutil;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.GraphSpecificsStrategy;
-import org.jgrapht.graph.specifics.DirectedEdgeContainer;
+import org.jgrapht.graph.IntrusiveEdgesSpecifics;
+import org.jgrapht.graph.UniformIntrusiveEdgesSpecifics;
+import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
 import org.jgrapht.graph.specifics.UndirectedSpecifics;
 
 import it.unimi.dsi.fastutil.ints.Int2ReferenceLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 /**
- * A specifics strategy implementation using fastutil maps for storage specialized for 
- * integer vertices.
+ * A specifics strategy implementation using fastutil maps for storage specialized for integer
+ * vertices.
  * 
  * @author Dimitrios Michail
  *
@@ -32,12 +31,6 @@ public class FastutilIntegerAnyGraphSpecificsStrategy<E>
 {
     private static final long serialVersionUID = 803286406699705306L;
 
-    /**
-     * Get a function which creates the specifics. The factory will accept the graph type as a
-     * parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
     @Override
     public BiFunction<Graph<Integer, E>, GraphType, Specifics<Integer, E>> getSpecificsFactory()
     {
@@ -45,29 +38,26 @@ public class FastutilIntegerAnyGraphSpecificsStrategy<E>
             Specifics<Integer, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
                     return new DirectedSpecifics<>(
-                        graph,
-                        new Int2ReferenceLinkedOpenHashMap<DirectedEdgeContainer<Integer, E>>(),
-                        getEdgeSetFactory());
+                        graph, new Int2ReferenceLinkedOpenHashMap<>(), getEdgeSetFactory());
                 } else {
                     return new UndirectedSpecifics<>(
-                        graph,
-                        new Int2ReferenceLinkedOpenHashMap<UndirectedEdgeContainer<Integer, E>>(),
-                        getEdgeSetFactory());
+                        graph, new Int2ReferenceLinkedOpenHashMap<>(), getEdgeSetFactory());
                 }
             };
     }
 
     @Override
-    public <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderMapFactory()
+    public Function<GraphType,
+        IntrusiveEdgesSpecifics<Integer, E>> getIntrusiveEdgesSpecificsFactory()
     {
-        return (Supplier<
-            Map<K1, V1>> & Serializable) () -> new Object2ObjectLinkedOpenHashMap<>();
-    }
-
-    @Override
-    public <K1, V1> Supplier<Map<K1, V1>> getMapFactory()
-    {
-        return (Supplier<Map<K1, V1>> & Serializable) () -> new Object2ObjectOpenHashMap<>();
+        return (Function<GraphType, IntrusiveEdgesSpecifics<Integer, E>> & Serializable) (type) -> {
+            if (type.isWeighted()) {
+                return new WeightedIntrusiveEdgesSpecifics<Integer, E>(
+                    new Object2ObjectLinkedOpenHashMap<>());
+            } else {
+                return new UniformIntrusiveEdgesSpecifics<>(new Object2ObjectLinkedOpenHashMap<>());
+            }
+        };
     }
 
 }

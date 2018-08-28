@@ -1,21 +1,20 @@
 package org.jgrapht.opt.graph.fastutil;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.GraphSpecificsStrategy;
-import org.jgrapht.graph.specifics.DirectedEdgeContainer;
+import org.jgrapht.graph.IntrusiveEdgesSpecifics;
+import org.jgrapht.graph.UniformIntrusiveEdgesSpecifics;
+import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
 import org.jgrapht.graph.specifics.UndirectedSpecifics;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 /**
  * A specifics strategy implementation using fastutil maps for storage.
@@ -38,12 +37,6 @@ public class FastutilGraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = -4319431062943632549L;
 
-    /**
-     * Get a function which creates the specifics. The factory will accept the graph type as a
-     * parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {
@@ -51,31 +44,25 @@ public class FastutilGraphSpecificsStrategy<V, E>
             Specifics<V, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
                     return new DirectedSpecifics<>(
-                        graph,
-                        this.<V, DirectedEdgeContainer<V, E>> getPredictableOrderMapFactory().get(),
-                        getEdgeSetFactory());
+                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
                 } else {
                     return new UndirectedSpecifics<>(
-                        graph,
-                        this
-                            .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
-                            .get(),
-                        getEdgeSetFactory());
+                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
                 }
             };
     }
 
     @Override
-    public <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderMapFactory()
+    public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
     {
-        return (Supplier<
-            Map<K1, V1>> & Serializable) () -> new Object2ObjectLinkedOpenHashMap<>();
-    }
-
-    @Override
-    public <K1, V1> Supplier<Map<K1, V1>> getMapFactory()
-    {
-        return (Supplier<Map<K1, V1>> & Serializable) () -> new Object2ObjectOpenHashMap<>();
+        return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
+            if (type.isWeighted()) {
+                return new WeightedIntrusiveEdgesSpecifics<V, E>(
+                    new Object2ObjectLinkedOpenHashMap<>());
+            } else {
+                return new UniformIntrusiveEdgesSpecifics<>(new Object2ObjectLinkedOpenHashMap<>());
+            }
+        };
     }
 
 }
