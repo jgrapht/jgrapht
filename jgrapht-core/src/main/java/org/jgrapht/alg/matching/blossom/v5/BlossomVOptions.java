@@ -62,7 +62,7 @@ public class BlossomVOptions {
     /**
      * Default algorithm initialization type
      */
-    private static final InitializationType DEFAULT_INITIALIZATION_TYPE = GREEDY;
+    private static final InitializationType DEFAULT_INITIALIZATION_TYPE = FRACTIONAL;
     /**
      * Default dual updates strategy
      */

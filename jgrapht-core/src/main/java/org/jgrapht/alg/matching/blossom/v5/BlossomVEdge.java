@@ -120,6 +120,9 @@ class BlossomVEdge {
      * @return node opposite to the {@code endpoint}
      */
     public BlossomVNode getOpposite(BlossomVNode endpoint) {
+        if (endpoint != head[0] && endpoint != head[1]) { // we need this check during finishing phase
+            return null;
+        }
         return head[0] == endpoint ? head[1] : head[0];
     }
 
@@ -131,6 +134,9 @@ class BlossomVEdge {
      * respect to this edge
      */
     public BlossomVNode getCurrentOriginal(BlossomVNode endpoint) {
+        if (endpoint != head[0] && endpoint != head[1]) { // we need this check during finishing phase
+            return null;
+        }
         return head[0] == endpoint ? headOriginal[0] : headOriginal[1];
     }
 
@@ -180,7 +186,8 @@ class BlossomVEdge {
 
     /**
      * Moves the tail of the {@code edge} from the node {@code from} to the node {@code to}
-     *  @param from the previous edge's tail
+     *
+     * @param from the previous edge's tail
      * @param to   the new edge's tail
      */
     public void moveEdgeTail(BlossomVNode from, BlossomVNode to) {
@@ -192,7 +199,7 @@ class BlossomVEdge {
     /**
      * Returns a new instance of blossom nodes iterator
      *
-     * @param root               the root of the blossom
+     * @param root the root of the blossom
      * @return a new instance of blossom nodes iterator
      */
     public BlossomVEdge.BlossomNodesIterator blossomNodesIterator(BlossomVNode root) {
