@@ -823,6 +823,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
 
     /**
      * A solution to the dual linear program formulated on the  {@code graph}
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     public static class DualSolution<V, E> {
         /**
