@@ -1,4 +1,4 @@
-package org.jgrapht.opt.graph;
+package org.jgrapht.opt.graph.fastutil;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -16,8 +16,8 @@ import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
 import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
 
-import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 /**
  * The fast lookup specifics strategy implementation using fastutil maps for storage..
@@ -66,13 +66,13 @@ public class FastutilFastLookupGraphSpecificsStrategy<V, E>
     @Override
     public <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderMapFactory()
     {
-        return (Supplier<Map<K1, V1>> & Serializable)() -> new Object2ReferenceLinkedOpenHashMap<>();
+        return (Supplier<Map<K1, V1>> & Serializable)() -> new Object2ObjectLinkedOpenHashMap<>();
     }
 
     @Override
     public <K1, V1> Supplier<Map<K1, V1>> getMapFactory()
     {
-        return (Supplier<Map<K1, V1>> & Serializable)() -> new Object2ReferenceOpenHashMap<>();
+        return (Supplier<Map<K1, V1>> & Serializable)() -> new Object2ObjectOpenHashMap<>();
     }
 
 }

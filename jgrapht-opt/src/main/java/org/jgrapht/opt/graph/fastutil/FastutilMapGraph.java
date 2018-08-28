@@ -1,4 +1,4 @@
-package org.jgrapht.opt.graph;
+package org.jgrapht.opt.graph.fastutil;
 
 import java.util.function.Supplier;
 

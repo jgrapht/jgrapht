@@ -1,7 +1,8 @@
-package org.jgrapht.opt.graph;
+package org.jgrapht.opt.graph.fastutil;
 
 import org.jgrapht.graph.DefaultGraphType;
 import org.jgrapht.graph.IncomingOutgoingEdgesTest;
+import org.jgrapht.opt.graph.fastutil.FastutilMapGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class FastUtilMapGraphTest
     {
         IncomingOutgoingEdgesTest.testDirectedGraph(
             () -> new FastutilMapGraph<>(
-                SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 DefaultGraphType.directedPseudograph()));
     }
 
@@ -32,7 +33,7 @@ public class FastUtilMapGraphTest
     {
         IncomingOutgoingEdgesTest.testUndirectedGraph(
             () -> new FastutilMapGraph<>(
-                SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 DefaultGraphType.pseudograph()));
     }
 
