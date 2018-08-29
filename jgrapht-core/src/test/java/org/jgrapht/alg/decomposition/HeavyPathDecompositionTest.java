@@ -312,6 +312,7 @@ public class HeavyPathDecompositionTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomTrees(){
         final int NUM_TESTS = 100;
         Random random = new Random(0x2882);
@@ -336,6 +337,7 @@ public class HeavyPathDecompositionTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomForests(){
         final int NUM_TESTS = 1000;
         Random random = new Random(0x1881);
@@ -361,8 +363,8 @@ public class HeavyPathDecompositionTest {
         }
     }
 
-    @Category(SlowTests.class)
     @Test
+    @Category(SlowTests.class)    
     public void testHugeTree(){
         Random random = new Random(0x118811);
 

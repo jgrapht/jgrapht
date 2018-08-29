@@ -2,16 +2,16 @@ package org.jgrapht.opt.graph.fastutil;
 
 import org.jgrapht.graph.DefaultGraphType;
 import org.jgrapht.graph.IncomingOutgoingEdgesTest;
-import org.jgrapht.opt.graph.fastutil.FastutilMapIntegerAnyGraph;
+import org.jgrapht.opt.graph.fastutil.FastutilMapIntVertexGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Tests for {@link FastutilIntegerAnyMapGraph}.
+ * Tests for {@link FastutilMapIntVertexGraph}.
  * 
  * @author Dimitrios Michail
  */
-public class FastUtilMapIntegerAnyGraphTest
+public class FastUtilMapIntVertexGraphTest
 {
     /**
      * Test in-out edges of directed graph
@@ -20,7 +20,7 @@ public class FastUtilMapIntegerAnyGraphTest
     public void testDirectedGraph()
     {
         IncomingOutgoingEdgesTest.testDirectedGraph(
-            () -> new FastutilMapIntegerAnyGraph<>(
+            () -> new FastutilMapIntVertexGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 DefaultGraphType.directedPseudograph()));
     }
@@ -32,7 +32,7 @@ public class FastUtilMapIntegerAnyGraphTest
     public void testUndirectedGraph()
     {
         IncomingOutgoingEdgesTest.testUndirectedGraph(
-            () -> new FastutilMapIntegerAnyGraph<>(
+            () -> new FastutilMapIntVertexGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 DefaultGraphType.pseudograph()));
     }

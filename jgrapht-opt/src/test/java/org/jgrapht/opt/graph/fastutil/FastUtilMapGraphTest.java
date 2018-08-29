@@ -2,7 +2,6 @@ package org.jgrapht.opt.graph.fastutil;
 
 import org.jgrapht.graph.DefaultGraphType;
 import org.jgrapht.graph.IncomingOutgoingEdgesTest;
-import org.jgrapht.opt.graph.fastutil.FastutilMapGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 

@@ -26,13 +26,13 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
  * Graphs constructed using this strategy use additional data structures to improve the performance
  * of methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V u, V
  * v),addEdge(V u, V v). A disadvantage is an increase in memory consumption. If memory utilization
- * is an issue, use the {@link FastutilIntegerAnyGraphSpecificsStrategy} instead.
+ * is an issue, use the {@link FastutilIntVertexGSS} instead.
  * 
  * @author Dimitrios Michail
  *
  * @param <E> the graph edge type
  */
-public class FastutilFastLookupIntegerAnyGraphSpecificsStrategy<E>
+public class FastutilFastLookupIntVertexGSS<E>
     implements
     GraphSpecificsStrategy<Integer, E>
 {

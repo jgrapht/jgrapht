@@ -7,11 +7,24 @@ import org.jgrapht.graph.AbstractBaseGraph;
 
 /**
  * A graph implementation using fastutil's map implementations for storage.
+ * 
+ * <p>The following example creates a simple undirected weighted graph: <blockquote>
+ * 
+ * <pre>
+ * Graph&lt;Integer,
+ *     DefaultWeightedEdge&gt; g = new FastutilMapGraph&lt;&gt;(
+ *         SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
+ *         DefaultGraphType.simple().asWeighted());
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>In case you have integer vertices, consider using the {@link FastutilMapIntVertexGraph}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
- * @see FastutilFastLookupGraphSpecificsStrategy
+ * @see FastutilMapIntVertexGraph
  * 
  * @author Dimitrios Michail
  */
@@ -36,12 +49,14 @@ public class FastutilMapGraph<V, E>
     {
         super(
             vertexSupplier, edgeSupplier, type,
-            fastLookups ? new FastutilFastLookupGraphSpecificsStrategy<>()
-                : new FastutilGraphSpecificsStrategy<>());
+            fastLookups ? new FastutilFastLookupGSS<>()
+                : new FastutilGSS<>());
     }
 
     /**
      * Construct a new graph.
+     * 
+     * <p>By default we index vertex pairs to allow (expected) constant time edge lookups.
      *
      * @param vertexSupplier the vertex supplier, can be null
      * @param edgeSupplier the edge supplier, can be null

@@ -10,32 +10,32 @@ import org.jgrapht.graph.GraphSpecificsStrategy;
 import org.jgrapht.graph.IntrusiveEdgesSpecifics;
 import org.jgrapht.graph.UniformIntrusiveEdgesSpecifics;
 import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
+import org.jgrapht.graph.specifics.DirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.graph.specifics.UndirectedSpecifics;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 /**
- * The fast lookup specifics strategy implementation using fastutil maps for storage..
+ * A specifics strategy implementation using fastutil maps for storage.
  * 
  * <p>
- * Graphs constructed using this strategy use additional data structures to improve the performance
- * of methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V u, V
- * v),addEdge(V u, V v). A disadvantage is an increase in memory consumption. If memory utilization
- * is an issue, use the {@link FastutilGraphSpecificsStrategy} instead.
+ * Graphs constructed using this strategy require the least amount of memory, at the expense of slow
+ * edge retrievals. Methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V
+ * u, V v), addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is
+ * high (dense graphs). For a fast implementation, use
+ * {@link FastutilFastLookupGSS}.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class FastutilFastLookupGraphSpecificsStrategy<V, E>
+public class FastutilGSS<V, E>
     implements
     GraphSpecificsStrategy<V, E>
 {
-    private static final long serialVersionUID = -1335362823522091418L;
+    private static final long serialVersionUID = -4319431062943632549L;
 
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
@@ -43,13 +43,11 @@ public class FastutilFastLookupGraphSpecificsStrategy<V, E>
         return (BiFunction<Graph<V, E>, GraphType,
             Specifics<V, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
-                    return new FastLookupDirectedSpecifics<>(
-                        graph, new Object2ObjectLinkedOpenHashMap<>(),
-                        new Object2ObjectOpenHashMap<>(), getEdgeSetFactory());
+                    return new DirectedSpecifics<>(
+                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
                 } else {
-                    return new FastLookupUndirectedSpecifics<>(
-                        graph, new Object2ObjectLinkedOpenHashMap<>(),
-                        new Object2ObjectOpenHashMap<>(), getEdgeSetFactory());
+                    return new UndirectedSpecifics<>(
+                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
                 }
             };
     }

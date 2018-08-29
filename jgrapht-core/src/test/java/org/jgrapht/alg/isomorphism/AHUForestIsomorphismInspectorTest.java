@@ -18,6 +18,7 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
@@ -25,6 +26,7 @@ import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -166,6 +168,7 @@ public class AHUForestIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeNumberOfChildren(){
         final int N = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -194,6 +197,7 @@ public class AHUForestIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomForests(){
         Random random = new Random(0x2312);
         final int NUM_TESTS = 1000;
@@ -223,6 +227,7 @@ public class AHUForestIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeRandomForest(){
         final int N = 50_000;
         Graph<Integer, DefaultEdge> tree1 = generateForest(N, new Random(0x88));

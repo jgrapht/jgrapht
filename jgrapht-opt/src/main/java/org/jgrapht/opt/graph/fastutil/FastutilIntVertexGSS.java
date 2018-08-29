@@ -25,7 +25,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
  *
  * @param <E> the graph edge type
  */
-public class FastutilIntegerAnyGraphSpecificsStrategy<E>
+public class FastutilIntVertexGSS<E>
     implements
     GraphSpecificsStrategy<Integer, E>
 {

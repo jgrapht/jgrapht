@@ -18,12 +18,14 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -69,8 +71,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
 
     @Test(expected = NullPointerException.class)
     public void testNullGraphs(){
-        AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUUnrootedTreeIsomorphismInspector<>(null, null);
+        new AHUUnrootedTreeIsomorphismInspector<>(null, null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -78,8 +79,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
         tree1.addVertex("a");
 
-        AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);
+        new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);
     }
 
     @Test
@@ -348,6 +348,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testLineGraph(){
         final int N = 20_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -364,7 +365,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
                 generateIsomorphicGraph(tree1, new Random(0x88));
 
         Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
-        Map<Integer, Integer> mapping = pair.getSecond();
+        pair.getSecond();
 
         AHUUnrootedTreeIsomorphismInspector<Integer, DefaultEdge> isomorphism =
                 new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree2);
@@ -375,6 +376,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeNumberOfChildren(){
         final int N = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -401,6 +403,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeRandomTree(){
         final int N = 50_000;
         Graph<Integer, DefaultEdge> tree1 = generateTree(N, new Random(0x88));

@@ -17,7 +17,9 @@
  */
 package org.jgrapht.util;
 
+import org.jgrapht.SlowTests;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +91,18 @@ public class RadixSortTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomArrays(){
-        Random random = new Random(0x88);
+        testRandomArrays(new Random(0x88));
+    }
+    
+    @Test
+    @Category(SlowTests.class)
+    public void testRandomArraysWithNoFixedSeed(){
+        testRandomArrays(new Random());
+    }
+    
+    private void testRandomArrays(Random random){
         final int NUM_TESTS = 500_000;
 
         for (int test = 0; test < NUM_TESTS; test++) {
@@ -106,4 +118,5 @@ public class RadixSortTest {
             assertTrue(isSorted(list));
         }
     }
+
 }
