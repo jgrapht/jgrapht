@@ -86,26 +86,25 @@ public class ColorRefinementAlgorithm<V, E>
         int n = graph.vertexSet().size();
 
         // number of colors used
-        k = alpha.getNumberColors();
+        k = alpha.getNumberColors() - 1;
 
         // mapping from all colors to their classes
-        HashMap<Integer, List<V>> colorClasses = new HashMap<>(n + 1);
+        HashMap<Integer, List<V>> colorClasses = new HashMap<>(n);
         // mapping from color to their classes, whereby every vertex in the classes has
         // colorDegree(v) >= 1
-        HashMap<Integer, List<V>> positiveDegreeColorClasses = new HashMap<>(n + 1);
+        HashMap<Integer, List<V>> positiveDegreeColorClasses = new HashMap<>(n);
 
         // mapping from color to its maximum color degree
-        int[] maxColorDegree = new int[n + 1];
+        int[] maxColorDegree = new int[n];
         // mapping from color to its minimum color degree
-        int[] minColorDegree = new int[n + 1];
-        // mapping from vertex to the color degree (number of neighbors with different colors) of
-        // the vertex
+        int[] minColorDegree = new int[n];
+        // mapping from vertex to the vertex color degree (number of neighbors with different
+        // colors) 
         Map<V, Integer> colorDegree = new HashMap<>();
-        // stores the coloring (that is returned in the end)
-        Map<V, Integer> coloring = new HashMap<>();
 
         // init coloring
-        for (int c = 1; c <= n; ++c) {
+        Map<V, Integer> coloring = new HashMap<>();
+        for (int c = 0; c < n; ++c) {
             colorClasses.put(c, new ArrayList<>());
             positiveDegreeColorClasses.put(c, new ArrayList<>());
         }
@@ -362,9 +361,9 @@ public class ColorRefinementAlgorithm<V, E>
                 return false;
             }
 
-            // ensure the colors lie in in the set {1, ..., maximumColor}
+            // ensure the colors lie in in the set {0, ..., maximumColor-1}
             Integer currentColor = alpha.getColors().get(v);
-            if (currentColor > alpha.getNumberColors() || currentColor < 1) {
+            if (currentColor + 1 > alpha.getNumberColors() || currentColor < 0) {
                 return false;
             }
         }
@@ -372,16 +371,16 @@ public class ColorRefinementAlgorithm<V, E>
     }
 
     /**
-     * Returns a coloring such that all vertices have color 1.
+     * Returns a coloring such that all vertices have color 0.
      *
      * @param vertices the vertices that should be colored
-     * @return the all-1 coloring
+     * @return the all-0 coloring
      */
     private static <V> Coloring<V> getDefaultAlpha(Set<V> vertices)
     {
         Map<V, Integer> alpha = new HashMap<>();
         for (V v : vertices) {
-            alpha.put(v, 1);
+            alpha.put(v, 0);
         }
         return new ColoringImpl<>(alpha, 1);
     }
@@ -397,7 +396,7 @@ public class ColorRefinementAlgorithm<V, E>
     {
         int numberColors = alpha.getNumberColors();
         Deque<Integer> stack = new ArrayDeque<>(graph.vertexSet().size());
-        for (int i = numberColors; i > 0; --i) {
+        for (int i = numberColors-1; i >= 0; --i) {
             stack.push(i);
         }
         return stack;
