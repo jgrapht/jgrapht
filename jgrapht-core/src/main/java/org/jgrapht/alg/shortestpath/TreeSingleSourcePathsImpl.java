@@ -101,6 +101,16 @@ public class TreeSingleSourcePathsImpl<V, E>
     }
 
     /**
+     * Get the internal map used for representing the paths.
+     * 
+     * @return the internal distance and predecessor map used for representing the paths.
+     */
+    public Map<V, Pair<Double, E>> getDistanceAndPredecessorMap()
+    {
+        return Collections.unmodifiableMap(map);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

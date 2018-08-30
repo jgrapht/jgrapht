@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -57,10 +58,11 @@ import org.jgrapht.util.TypeUtil;
  * @since February 2017
  */
 public class JohnsonShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private double[][] distance;
-    private E [][] pred;
+    private E[][] pred;
     private Map<V, Integer> vertexIndices;
 
     private final Comparator<Double> comparator;
@@ -92,6 +94,7 @@ public class JohnsonShortestPaths<V, E>
      *
      * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
      *         are already in the original graph
+     * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink)
@@ -102,24 +105,24 @@ public class JohnsonShortestPaths<V, E>
         if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
-        
+
         run();
-        
+
         if (source.equals(sink)) {
             return GraphWalk.singletonWalk(graph, source, 0d);
         }
-        
+
         int vSource = vertexIndices.get(source);
         int vSink = vertexIndices.get(sink);
-        
+
         V cur = sink;
         E e = pred[vSource][vSink];
-        if (e == null) { 
+        if (e == null) {
             return null;
         }
-        
+
         LinkedList<E> edgeList = new LinkedList<>();
-        while(e != null) { 
+        while (e != null) {
             edgeList.addFirst(e);
             cur = Graphs.getOppositeVertex(graph, e, cur);
             e = pred[vSource][vertexIndices.get(cur)];
@@ -152,6 +155,7 @@ public class JohnsonShortestPaths<V, E>
      *
      * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
      *         are already in the original graph
+     * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
@@ -170,17 +174,24 @@ public class JohnsonShortestPaths<V, E>
         }
         GraphTests.requireDirectedOrUndirected(graph);
 
-        boolean graphHasNegativeEdgeWeights = false;
+        E detectedNegativeEdge = null;
         for (E e : graph.edgeSet()) {
             if (comparator.compare(graph.getEdgeWeight(e), 0.0) < 0) {
-                graphHasNegativeEdgeWeights = true;
+                detectedNegativeEdge = e;
                 break;
             }
         }
 
-        if (graphHasNegativeEdgeWeights) {
+        if (detectedNegativeEdge != null) {
             if (graph.getType().isUndirected()) {
-                throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+                V source = graph.getEdgeSource(detectedNegativeEdge);
+                double weight = graph.getEdgeWeight(detectedNegativeEdge);
+                GraphWalk<V,
+                    E> cycle = new GraphWalk<>(
+                        graph, source, source,
+                        Arrays.asList(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
+                throw new NegativeCycleDetectedException(
+                    GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE, cycle);
             }
             runWithNegativeEdgeWeights(graph);
         } else {
@@ -358,7 +369,8 @@ public class JohnsonShortestPaths<V, E>
     }
 
     class JohnsonSingleSourcePaths
-        implements SingleSourcePaths<V, E>
+        implements
+        SingleSourcePaths<V, E>
     {
         private V source;
 

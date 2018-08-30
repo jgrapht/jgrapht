@@ -178,10 +178,11 @@ public class BellmanFordShortestPathTest
         try {
             alg.getPaths("s");
             fail("Negative-weight cycle not detected");
-        } catch (RuntimeException e) {
+        } catch (NegativeCycleDetectedException e) {
             assertEquals("Graph contains a negative-weight cycle", e.getMessage());
             
-            GraphPath<String, DefaultWeightedEdge> cycle = alg.getNegativeWeightCycle().get();
+            @SuppressWarnings("unchecked") 
+            GraphPath<String, DefaultWeightedEdge> cycle = (GraphPath<String, DefaultWeightedEdge>) e.getCycle();
             assertEquals("x", cycle.getStartVertex());
             assertEquals("x", cycle.getEndVertex());
             assertEquals(-1.0d, cycle.getWeight(), 1e-9);
@@ -224,10 +225,11 @@ public class BellmanFordShortestPathTest
         try {
             alg.getPaths("w");
             fail("Negative-weight cycle not detected");
-        } catch (RuntimeException e) {
+        } catch (NegativeCycleDetectedException e) {
             assertEquals("Graph contains a negative-weight cycle", e.getMessage());
             
-            GraphPath<String, DefaultWeightedEdge> cycle = alg.getNegativeWeightCycle().get();
+            @SuppressWarnings("unchecked") 
+            GraphPath<String, DefaultWeightedEdge> cycle = (GraphPath<String, DefaultWeightedEdge>) e.getCycle();
             assertEquals("x", cycle.getStartVertex());
             assertEquals("x", cycle.getEndVertex());
             assertEquals(-2.0d, cycle.getWeight(), 1e-9);
@@ -292,10 +294,12 @@ public class BellmanFordShortestPathTest
         try {
             alg.getPaths("1");
             fail("Negative-weight cycle not detected");
-        } catch (RuntimeException e) {
+        } catch (NegativeCycleDetectedException e) {
             assertEquals("Graph contains a negative-weight cycle", e.getMessage());
             
-            GraphPath<String, DefaultWeightedEdge> cycle = alg.getNegativeWeightCycle().get();
+            @SuppressWarnings("unchecked")
+            GraphPath<String, DefaultWeightedEdge> cycle = (GraphPath<String, DefaultWeightedEdge>) e.getCycle();
+            
             assertEquals("6", cycle.getStartVertex());
             assertEquals("6", cycle.getEndVertex());
             assertEquals(-3.0d, cycle.getWeight(), 1e-9);
@@ -318,7 +322,7 @@ public class BellmanFordShortestPathTest
         g.setEdgeWeight(g.addEdge("3", "4"), 1);
         g.setEdgeWeight(g.addEdge("4", "1"), -5);
 
-        int maxHops = 2;
+        int maxHops = 3;
         BellmanFordShortestPath<String, DefaultWeightedEdge> alg = new BellmanFordShortestPath<>(g, 1e-16, maxHops);
         GraphPath<String, DefaultWeightedEdge> path1 = alg.getPaths("1").getPath("3");
         assertEquals(2.0d, path1.getWeight(), 1e-9);
@@ -327,10 +331,12 @@ public class BellmanFordShortestPathTest
         try {
             alg1.getPaths("1");
             fail("Negative-weight cycle not detected");
-        } catch (RuntimeException e) {
+        } catch (NegativeCycleDetectedException e) {
             assertEquals("Graph contains a negative-weight cycle", e.getMessage());
             
-            GraphPath<String, DefaultWeightedEdge> cycle = alg1.getNegativeWeightCycle().get();
+            @SuppressWarnings("unchecked")
+            GraphPath<String, DefaultWeightedEdge> cycle = (GraphPath<String, DefaultWeightedEdge>) e.getCycle();
+            
             assertEquals("1", cycle.getStartVertex());
             assertEquals("1", cycle.getEndVertex());
             assertEquals(-2.0d, cycle.getWeight(), 1e-9);
