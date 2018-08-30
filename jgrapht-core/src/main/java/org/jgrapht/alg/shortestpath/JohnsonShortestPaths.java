@@ -50,6 +50,10 @@ import org.jgrapht.util.TypeUtil;
  * <p>
  * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
  * provide a graph which is initialized with a vertex supplier.
+ * 
+ * <p>
+ * In case the algorithm detects a negative weight cycle it will throw an exception of type
+ * {@link NegativeCycleDetectedException} which will contain the detected negative weight cycle.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

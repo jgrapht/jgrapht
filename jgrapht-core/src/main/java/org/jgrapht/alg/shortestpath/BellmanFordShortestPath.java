@@ -33,10 +33,10 @@ import java.util.*;
  * 
  * <p>
  * Negative weight cycles are not allowed and will be reported by the algorithm. This implies that
- * negative edge weights are not allowed in undirected graphs. In such cases, method
- * {@link #getNegativeWeightCycle()} can be used to obtain the negative weight cycle which was
- * detected. Note that the algorithm will not report or find negative weight cycles which are not
- * reachable from the source vertex.
+ * negative edge weights are not allowed in undirected graphs. In such cases the code will throw an
+ * exception of type {@link NegativeCycleDetectedException} which will contain the detected negative
+ * weight cycle. Note that the algorithm will not report or find negative weight cycles which are
+ * not reachable from the source vertex.
  *
  * <p>
  * The running time is $O(|E||V|)$.
@@ -80,8 +80,7 @@ public class BellmanFordShortestPath<V, E>
      * @param graph the input graph
      * @param epsilon tolerance when comparing floating point values
      * @param maxHops execute the algorithm for at most this many iterations. If this is smaller
-     *        than the number of vertices, then the negative cycle detection feature is
-     *        disabled.
+     *        than the number of vertices, then the negative cycle detection feature is disabled.
      * @throws IllegalArgumentException if the number of maxHops is not positive
      */
     public BellmanFordShortestPath(Graph<V, E> graph, double epsilon, int maxHops)
@@ -172,8 +171,8 @@ public class BellmanFordShortestPath<V, E>
         }
 
         /*
-         * Check for negative cycles. The user can disable this by providing
-         * a maxHops parameter smaller than the number of vertices.
+         * Check for negative cycles. The user can disable this by providing a maxHops parameter
+         * smaller than the number of vertices.
          */
         if (maxHops >= n) {
             for (V v : updated[curUpdated]) {
