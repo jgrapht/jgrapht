@@ -76,7 +76,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Performs grow operation. Is invoked on the plus-infinity {@code growEdge}, which connects
+     * Performs grow operation. This is invoked on the plus-infinity {@code growEdge}, which connects
      * a "+" node in the tree and an infinity matched node. The {@code growEdge} and the matched free edge
      * are added to the tree structure. Two new nodes are added to the tree: minus node and plus node. Let's call
      * the node incident to the {@code growEdge} and opposite to the minusNode the "tree node".
@@ -148,9 +148,9 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Performs augment operation. Is invoked on a tight (+, +) cross-tree edge.
-     * Increases the matching by 1. Converts the trees on both sides into the set of
-     * free matched edges. Applies lazy delta spreading.
+     * Performs augment operation. This is invoked on a tight (+, +) cross-tree edge.
+     * It increases the matching by 1, converts the trees on both sides into the set of
+     * free matched edges, and applies lazy delta spreading.
      * <p>
      * For each tree the following actions are performed:
      * <ul>
@@ -185,7 +185,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Performs shrink operation. Is invoked on a tight (+, +) in-tree edge.
+     * Performs shrink operation. This is invoked on a tight (+, +) in-tree edge.
      * The result of this operation is the substitution of an odd circuit with a single
      * node. This means that we consider the set of nodes of odd cardinality as a single
      * node.
@@ -266,7 +266,7 @@ class BlossomVPrimalUpdater<V, E> {
     }
 
     /**
-     * Performs expand operation. Is invoked on a previously contracted pseudonode.
+     * Performs expand operation. This is invoked on a previously contracted pseudonode.
      * The result of this operation is bringing the nodes in the blossom to the surface graph.
      * An even branch of the blossom is inserted into the tree structure. Endpoints of the edges
      * incident to the blossom are moved one layer down. The slack of the inner and boundary edges

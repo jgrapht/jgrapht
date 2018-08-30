@@ -25,13 +25,13 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 /**
- * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates, thus creating
+ * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates, thus
  * increasing the dual objective function value and creating new tight edges.
  * <p>
  * This class currently supports three types of dual updates: single tree, multiple trees fixed delta, and
- * multiple tree variable delta. The first one is used to updates duals of a single tree, when at least on
+ * multiple tree variable delta. The first one is used to updates duals of a single tree, when at least one
  * of the {@link BlossomVOptions#updateDualsBefore} or {@link BlossomVOptions#updateDualsAfter} is true.
- * The later two are used to update the duals globally and are defined by the {@link BlossomVOptions}.
+ * The latter two are used to update the duals globally and are defined by the {@link BlossomVOptions}.
  * <p>
  * There are two type of constraints on a dual change of a tree: in-tree and cross-tree. In-tree constraints
  * are imposed by the infinity edges, (+, +) in-tree edges and "-" blossoms. Cross-tree constraints are
@@ -68,7 +68,7 @@ class BlossomVDualUpdater<V, E> {
     private BlossomVState<V, E> state;
     /**
      * Instance of {@link BlossomVPrimalUpdater} for performing immediate augmentations after dual
-     * updates when they are applicable. These speeds the overall algorithm up.
+     * updates when they are applicable. These speed up the overall algorithm.
      */
     private BlossomVPrimalUpdater primalUpdater;
 
@@ -133,8 +133,8 @@ class BlossomVDualUpdater<V, E> {
     /**
      * Computes and returns the value which can be assigned to the {@code tree.eps} so that it doesn't violate
      * in-tree constraints. In other words, {@code getEps(tree) - tree.eps} is the resulting dual change wrt. in-tree
-     * constraints. The computed is always greater than or equal to the {@code tree.eps}, can violate the cross-tree
-     * constraints edges and can be equal to {@link KolmogorovMinimumWeightPerfectMatching#INFINITY}.
+     * constraints. The computed value is always greater than or equal to the {@code tree.eps}, can violate the cross-tree
+     * constraints, and can be equal to {@link KolmogorovMinimumWeightPerfectMatching#INFINITY}.
      *
      * @param tree the tree to process
      * @return a value which can be safely assigned to tree.eps
@@ -225,7 +225,7 @@ class BlossomVDualUpdater<V, E> {
     }
 
     /**
-     * Updates the duals via connected components. The connect components is a set of trees which
+     * Updates the duals via connected components. The connected components are a set of trees which
      * are connected via tight (+, -) cross tree edges. For these components the same dual change is
      * chosen. As a result, the circular constraints are guaranteed to be avoided. This is the point where
      * the {@link BlossomVDualUpdater#updateDualsSingle} approach can fail.

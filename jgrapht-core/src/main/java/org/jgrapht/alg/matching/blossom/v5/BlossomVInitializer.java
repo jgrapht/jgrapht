@@ -502,7 +502,7 @@ class BlossomVInitializer<V, E> {
     /**
      * Handles encountered infinity edges incident to "+" nodes of the alternating tree. This method
      * determines whether the {@code infinityEdge} is tight. If so, it applies grow operation to it. Otherwise,
-     * it determines whether has smaller slack than {@code criticalEps}. If so, this edge becomes the best edge
+     * it determines whether it has smaller slack than {@code criticalEps}. If so, this edge becomes the best edge
      * of the "+" node in the tree.
      *
      * @param heap         the heap of infinity edges incident to the currently processed tree

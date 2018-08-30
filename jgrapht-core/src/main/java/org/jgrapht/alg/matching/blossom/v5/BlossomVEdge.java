@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 /**
  * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
- * Represents an edge between two nodes. Even though the minimum weight perfect matching problem is formulated on
+ * It represents an edge between two nodes. Even though the minimum weight perfect matching problem is formulated on
  * an undirected graph, each edge has direction, i.e. it is an arc. According to this direction it is present in
  * two circular doubly linked lists of incident edges. The references to the next and previous edges of this list
  * are maintained via {@link BlossomVEdge#next} and {@link BlossomVEdge#prev} references. The direction of an edge
@@ -67,7 +67,7 @@ class BlossomVEdge {
     AddressableHeap.Handle<Double, BlossomVEdge> handle;
     /**
      * The slack of this edge. If an edge is an outer edge and doesn't connect 2 infinity nodes,
-     * then its slack is subject to lazy delta spreading technique. Otherwise, this variable equals to the edge's
+     * then its slack is subject to lazy delta spreading technique. Otherwise, this variable equals the edge's
      * true slack.
      * <p>
      * The true slack of the edge can be computed as following: for each of its two current endpoints $\{u, v\}$
@@ -76,7 +76,7 @@ class BlossomVEdge {
      */
     double slack;
     /**
-     * A two-element array of original endpoints of this edge. The are used to quickly determine original endpoints
+     * A two-element array of original endpoints of this edge. They are used to quickly determine original endpoints
      * of an edge and compute the penultimate blossom. This is done while one of the current endpoints of this edge is
      * being shrunk or expanded.
      * <p>

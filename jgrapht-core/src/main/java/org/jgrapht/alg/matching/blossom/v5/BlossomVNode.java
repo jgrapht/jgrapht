@@ -27,7 +27,7 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
 /**
  * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
- * Represents a vertex of graph. Contains three major blocks of data needed for the algorithm.
+ * It represents a vertex of graph, and contains three major blocks of data needed for the algorithm.
  * <ul>
  * <li>Node's state information, i.e. {@link BlossomVNode#label}, {@link BlossomVNode#isTreeRoot}, etc.
  * This information is maintained dynamically and is changed by {@link BlossomVPrimalUpdater}</li>
@@ -65,7 +65,7 @@ class BlossomVNode {
      */
     AddressableHeap.Handle<Double, BlossomVNode> handle;
     /**
-     * True if this node is a tree root, implies that this node is outer and that isn't matched
+     * True if this node is a tree root, implies that this node is outer and isn't matched
      */
     boolean isTreeRoot;
     /**

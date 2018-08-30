@@ -32,12 +32,14 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStra
  * Let $G = (V, E, c)$ be an undirected graph with a real-valued cost function defined on it. A matching is
  * an edge-disjoint subset of edges $M \subseteq E$. A matching is perfect if $2|M| = |V|$. In the minimum
  * weight perfect matching problem the goal is to minimize the weighted sum of the edges in the perfect matching.
- * If the graph isn't weighted, use {@link EdmondsMaximumCardinalityMatching} instead. This class supports
- * pseudographs, but a problem on a pseudograph can be easily reduced to a problem on a simple graph. Moreover,
- * this reduction can heavily influence the running time since only an edge with minimum weight between two
- * vertices can belong to the matching. Nevertheless, the users are responsible for doing this reduction themselves.
+ * This class supports pseudographs, but a problem on a pseudograph can be easily reduced to a problem on a simple graph.
+ * Moreover, this reduction can heavily influence the running time since only an edge with minimum weight between two
+ * vertices can belong to the matching. Currently, users are responsible for doing this reduction themselves
+ * before invoking the algorithm.
  * <p>
- * For more information about the the algorithm see the following paper:
+ * Note that if the graph is unweighted and dense, {@link EdmondsMaximumCardinalityMatching} may be a better choice.
+ * <p>
+ * For more information about the algorithm see the following paper:
  * <i>Kolmogorov, V. Math. Prog. Comp. (2009) 1: 43. https://doi.org/10.1007/s12532-009-0002-8</i>, and the
  * original implementation: <i>http://pub.ist.ac.at/~vnk/software/blossom5-v2.05.src.tar.gz</i>
  * <p>

@@ -108,7 +108,7 @@ public class BlossomVOptions {
     }
 
     /**
-     * Construct a new options instance with a {@code initializationType}
+     * Constructs a new options instance with a {@code initializationType}
      *
      * @param initializationType defines a strategy to use to initialize the matching
      */
@@ -117,7 +117,7 @@ public class BlossomVOptions {
     }
 
     /**
-     * Construct a default set of options for the algorithm
+     * Constructs a default set of options for the algorithm
      */
     public BlossomVOptions() {
         this(DEFAULT_INITIALIZATION_TYPE, DEFAULT_DUAL_UPDATE_TYPE, DEFAULT_UPDATE_DUALS_BEFORE, DEFAULT_UPDATE_DUALS_AFTER);
