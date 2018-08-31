@@ -11,9 +11,9 @@ import org.jgrapht.graph.AbstractBaseGraph;
  * <p>The following example creates a simple undirected weighted graph: <blockquote>
  * 
  * <pre>
- * Graph&lt;Integer,
+ * Graph&lt;String,
  *     DefaultWeightedEdge&gt; g = new FastutilMapGraph&lt;&gt;(
- *         SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
+ *         SupplierUtil.createStringSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier(),
  *         DefaultGraphType.simple().asWeighted());
  * </pre>
  * 
