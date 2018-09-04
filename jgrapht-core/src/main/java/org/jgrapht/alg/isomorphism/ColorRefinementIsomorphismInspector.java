@@ -19,9 +19,13 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.color.ColorRefinementAlgorithm;
+import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Implementation of the color refinement algorithm isomorphism test using its feature of detecting
@@ -135,18 +139,27 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
             return false;
         }
 
-        ColorRefinementAlgorithm<V, E> colorRefinementAlgorithm1 = new ColorRefinementAlgorithm<>(graph1);
-        ColorRefinementAlgorithm<V, E> colorRefinementAlgorithm2 = new ColorRefinementAlgorithm<>(graph2);
+        Graph<Pair<V, Integer>, Pair<E, Integer>> graph = new UnionGraph<>(graph1, graph2);
+        ColorRefinementAlgorithm<Pair<V, Integer>, Pair<E, Integer>> colorRefinementAlgorithm = new ColorRefinementAlgorithm<>(graph);
 
-        // execute color refinement for graph1
-        Coloring<V> coloring1 = colorRefinementAlgorithm1.getColoring();
-        // execute color refinement for graph2
-        Coloring<V> coloring2 = colorRefinementAlgorithm2.getColoring();
+        // execute color refinement for graph
+        Coloring<Pair<V, Integer>> coloring = colorRefinementAlgorithm.getColoring();
 
         isomorphismTestExecuted = true;
 
-        isIsomorphic = coarseColoringAreEqual(coloring1, coloring2);
+        isIsomorphic = coarseColoringAreEqual(coloring);
         return isIsomorphic;
+    }
+
+    private void AddGraph(SimpleGraph<Pair<V, Integer>, E> graph, Graph<V, E> sourceGraph, int index) {
+        for (V v : sourceGraph.vertexSet()) {
+            graph.addVertex(new Pair<>(v, index));
+        }
+        for(E e : sourceGraph.edgeSet()) {
+            V source = sourceGraph.getEdgeSource(e);
+            V target = sourceGraph.getEdgeTarget(e);
+            graph.addEdge(new Pair<>(source, index), new Pair<>(target, index));
+        }
     }
 
     /**
@@ -183,12 +196,14 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     /**
      * Checks whether two coarse colorings are equal. Furthermore, it sets <code>isColoringDiscrete</code> to true iff the colorings are discrete.
      *
-     * @param coloring1 the first coarse coloring
-     * @param coloring2 the second coarse coloring
+     * @param coloring the coarse coloring of the union graph
      * @return if the given coarse colorings are equal
      */
-    private boolean coarseColoringAreEqual(Coloring<V> coloring1, Coloring<V> coloring2) throws IsomorphismUndecidableException {
-        if(coloring1.getNumberColors() != coloring2.getNumberColors()) {
+    private boolean coarseColoringAreEqual(Coloring<Pair<V, Integer>> coloring) throws IsomorphismUndecidableException {
+        Pair<Coloring<V>, Coloring<V>> coloringPair = splitColoring(coloring);
+        Coloring<V> coloring1 = coloringPair.getFirst();
+        Coloring<V> coloring2 = coloringPair.getSecond();
+        if (coloring1.getNumberColors() != coloring2.getNumberColors()) {
             return false;
         }
 
@@ -249,6 +264,31 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
+     * Splits up the coloring of the union graph into the two colorings of the original graphs
+     *
+     * @param coloring the coloring to split up
+     * @return the two colorings of the original graphs
+     */
+     private Pair<Coloring<V>, Coloring<V>> splitColoring(Coloring<Pair<V, Integer>> coloring) {
+        Map<V, Integer> col1 = new HashMap<>();
+        Map<V, Integer> col2 = new HashMap<>();
+        int index = 0;
+        for(Set<Pair<V, Integer>> set1 : coloring.getColorClasses()) {
+            for (Pair<V, Integer> entry : set1) {
+                if (entry.getSecond() == 1) {
+                    col1.put(entry.getFirst(), index);
+                } else {
+                    col2.put(entry.getFirst(), index);
+                }
+            }
+            index++;
+        }
+        Coloring<V> coloring1 =  new VertexColoringAlgorithm.ColoringImpl<>(col1, col1.size());
+        Coloring<V> coloring2 =  new VertexColoringAlgorithm.ColoringImpl<>(col2, col2.size());
+        return new Pair<>(coloring1, coloring2);
+     }
+
+    /**
      * Sorts a list of color classes by the size and the color (integer representation of the color) and
      *
      * @param colorClasses the list of the color classes
@@ -302,5 +342,240 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         }
 
         isomorphicGraphMapping = new IsomorphicGraphMapping<>(graphOrdering1, graphOrdering2, core1, core2);
+    }
+
+    /**
+     * UnionGraph is an union graph version, which is optimized for the color refinement algorithm.
+     * It caches the vertex set of the union graph of the two input graph.
+     *
+     * @param <V> the vertex type of the graphs
+     * @param <E> the edge type of the graphs
+     */
+    class UnionGraph<V, E> implements Graph<Pair<V, Integer>, Pair<E, Integer>> {
+
+        Graph<V, E> graph1, graph2;
+        Set<Pair<V, Integer>> vertexSet;
+
+        public UnionGraph(Graph<V, E> graph1, Graph<V, E> graph2) {
+            this.graph1 = graph1;
+            this.graph2 = graph2;
+        }
+        @Override
+        public Set<Pair<E, Integer>> getAllEdges(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
+            return null;
+        }
+        @Override
+        public Pair<E, Integer> getEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
+            return null;
+        }
+        @Override
+        public Supplier<Pair<V, Integer>> getVertexSupplier() {
+            return null;
+        }
+        @Override
+        public Supplier<Pair<E, Integer>> getEdgeSupplier() {
+            return null;
+        }
+        @Override
+        public Pair<E, Integer> addEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
+            return null;
+        }
+        @Override
+        public boolean addEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex, Pair<E, Integer> e) {
+            return false;
+        }
+        @Override
+        public Pair<V, Integer> addVertex() {
+            return null;
+        }
+        @Override
+        public boolean addVertex(Pair<V, Integer> vIntegerTuple) {
+            return false;
+        }
+        @Override
+        public boolean containsEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
+            return false;
+        }
+        @Override
+        public boolean containsEdge(Pair<E, Integer> e) {
+            return false;
+        }
+        @Override
+        public boolean containsVertex(Pair<V, Integer> vIntegerTuple) {
+            return false;
+        }
+        @Override
+        public Set<Pair<E, Integer>> edgeSet() {
+            return null;
+        }
+        @Override
+        public int degreeOf(Pair<V, Integer> vertex) {
+            return 0;
+        }
+        @Override
+        public Set<Pair<E, Integer>> edgesOf(Pair<V, Integer> vertex) {
+            return null;
+        }
+        @Override
+        public int inDegreeOf(Pair<V, Integer> vertex) {
+            return 0;
+        }
+        @Override
+        public Set<Pair<E, Integer>> incomingEdgesOf(Pair<V, Integer> vertex) {
+            Graph<V, E> graph = vertex.getSecond() == 1 ? graph1 : graph2;
+            return new PairSet<>(graph.incomingEdgesOf(vertex.getFirst()), vertex.getSecond());
+        }
+        @Override
+        public int outDegreeOf(Pair<V, Integer> vertex) {
+            return 0;
+        }
+        @Override
+        public Set<Pair<E, Integer>> outgoingEdgesOf(Pair<V, Integer> vertex) {
+            return null;
+        }
+        @Override
+        public boolean removeAllEdges(Collection<? extends Pair<E, Integer>> edges) {
+            return false;
+        }
+        @Override
+        public Set<Pair<E, Integer>> removeAllEdges(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
+            return null;
+        }
+        @Override
+        public boolean removeAllVertices(Collection<? extends Pair<V, Integer>> vertices) {
+            return false;
+        }
+        @Override
+        public Pair<E, Integer> removeEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
+            return null;
+        }
+        @Override
+        public boolean removeEdge(Pair<E, Integer> e) {
+            return false;
+        }
+        @Override
+        public boolean removeVertex(Pair<V, Integer> vIntegerTuple) {
+            return false;
+        }
+        @Override
+        public Set<Pair<V, Integer>> vertexSet() {
+            if (vertexSet == null) {
+                vertexSet = new HashSet<>();
+                for (V v : graph1.vertexSet()) {
+                    vertexSet.add(new Pair<>(v, 1));
+                }
+                for (V v : graph2.vertexSet()) {
+                    vertexSet.add(new Pair<>(v, 2));
+                }
+            }
+            return vertexSet;
+        }
+        @Override
+        public Pair<V, Integer> getEdgeSource(Pair<E, Integer> e) {
+            if (e.getSecond() == 1){
+                return new Pair<>(graph1.getEdgeSource(e.getFirst()), 1);
+            } else {
+                return new Pair<>(graph2.getEdgeSource(e.getFirst()), 2);
+            }
+        }
+        @Override
+        public Pair<V, Integer> getEdgeTarget(Pair<E, Integer> e) {
+            if (e.getSecond() == 1){
+                return new Pair<>(graph1.getEdgeTarget(e.getFirst()), 1);
+            } else {
+                return new Pair<>(graph2.getEdgeTarget(e.getFirst()), 2);
+            }
+        }
+        @Override
+        public GraphType getType() {
+            return null;
+        }
+        @Override
+        public double getEdgeWeight(Pair<E, Integer> e) {
+            return 0;
+        }
+        @Override
+        public void setEdgeWeight(Pair<E, Integer> e, double weight) {
+        }
+    }
+
+    /**
+     * Implementation of a set of pairs. It is optimized for the usage of UnionGraph in the color refinement algorithm;
+     * it uses the innerSet of UnionGraph.
+     *
+     * @param <V> the vertex type of the graph
+     */
+    class PairSet<V> implements Set<Pair<V, Integer>> {
+        Set<V> innerSet;
+        Integer index;
+        public PairSet(Set<V> innerSet, Integer index) {
+            this.innerSet = innerSet;
+            this.index = index;
+        }
+        @Override
+        public int size() {
+            return innerSet.size();
+        }
+        @Override
+        public boolean isEmpty() {
+            return innerSet.isEmpty();
+        }
+        @Override
+        public boolean contains(Object o) {
+            Pair<V, Integer> val = (Pair<V, Integer>)o;
+            return val.getSecond() == index && innerSet.contains(val.getSecond());
+        }
+        @Override
+        public Iterator<Pair<V, Integer>> iterator() {
+            Iterator<V> innerIterator = innerSet.iterator();
+            return new Iterator<Pair<V, Integer>>() {
+                @Override
+                public boolean hasNext() {
+                    return innerIterator.hasNext();
+                }
+                @Override
+                public Pair<V, Integer> next() {
+                    return new Pair<>(innerIterator.next(), index);
+                }
+            };
+        }
+        @Override
+        public Object[] toArray() {
+            return new Object[0];
+        }
+        @Override
+        public <T> T[] toArray(T[] a) {
+            return null;
+        }
+        @Override
+        public boolean add(Pair<V, Integer> vIntegerTuple) {
+            if (index != vIntegerTuple.getSecond()) {
+                return false;
+            }
+            return innerSet.add(vIntegerTuple.getFirst());
+        }
+        @Override
+        public boolean remove(Object o) {
+            return false;
+        }
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            return false;
+        }
+        @Override
+        public boolean addAll(Collection<? extends Pair<V, Integer>> c) {
+            return false;
+        }
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return false;
+        }
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return false;
+        }
+        @Override
+        public void clear() {
+        }
     }
 }
