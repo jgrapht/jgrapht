@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Christoph Grüne and Contributors.
+ * (C) Copyright 2018-2018, by Christoph Grüne, Dennis Fischer and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,7 +22,6 @@ import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -39,6 +38,7 @@ import java.util.function.Supplier;
  * @param <E> the type of the edges
  *
  * @author Christoph Grüne
+ * @author Dennis Fischer
  */
 public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismInspector<V, E> {
 
@@ -149,17 +149,6 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
 
         isIsomorphic = coarseColoringAreEqual(coloring);
         return isIsomorphic;
-    }
-
-    private void AddGraph(SimpleGraph<Pair<V, Integer>, E> graph, Graph<V, E> sourceGraph, int index) {
-        for (V v : sourceGraph.vertexSet()) {
-            graph.addVertex(new Pair<>(v, index));
-        }
-        for(E e : sourceGraph.edgeSet()) {
-            V source = sourceGraph.getEdgeSource(e);
-            V target = sourceGraph.getEdgeTarget(e);
-            graph.addEdge(new Pair<>(source, index), new Pair<>(target, index));
-        }
     }
 
     /**
@@ -345,8 +334,8 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
-     * UnionGraph is an union graph version, which is optimized for the color refinement algorithm.
-     * It caches the vertex set of the union graph of the two input graph.
+     * UnionGraph is a special union graph version representing the disjoint union of two graphs, which is optimized for
+     * the color refinement algorithm. It caches the vertex set of the union graph of the two input graphs.
      *
      * @param <V> the vertex type of the graphs
      * @param <E> the edge type of the graphs
@@ -500,8 +489,8 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
-     * Implementation of a set of pairs. It is optimized for the usage of UnionGraph in the color refinement algorithm;
-     * it uses the innerSet of UnionGraph.
+     * Implementation of a set of pairs. It is optimized for the usage of class UnionGraph in the color refinement
+     * algorithm; it uses the innerSet of UnionGraph.
      *
      * @param <V> the vertex type of the graph
      */
@@ -523,7 +512,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         @Override
         public boolean contains(Object o) {
             Pair<V, Integer> val = (Pair<V, Integer>)o;
-            return val.getSecond() == index && innerSet.contains(val.getSecond());
+            return val.getSecond().equals(index) && innerSet.contains(val.getSecond());
         }
         @Override
         public Iterator<Pair<V, Integer>> iterator() {
@@ -549,7 +538,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         }
         @Override
         public boolean add(Pair<V, Integer> vIntegerTuple) {
-            if (index != vIntegerTuple.getSecond()) {
+            if (!index.equals(vIntegerTuple.getSecond())) {
                 return false;
             }
             return innerSet.add(vIntegerTuple.getFirst());
