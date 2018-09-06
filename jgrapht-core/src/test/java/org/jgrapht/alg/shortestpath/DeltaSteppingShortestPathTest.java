@@ -21,8 +21,9 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.util.SupplierUtil;
@@ -30,6 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -73,7 +75,7 @@ public class DeltaSteppingShortestPathTest {
 
     @Test
     public void testGetPath() {
-        Graph<String, DefaultWeightedEdge> graph = create();
+        Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
         assertEquals(Arrays.asList(s), new DeltaSteppingShortestPath<>(graph).getPath(s, s).getVertexList());
         assertEquals(Arrays.asList(s, y, t), new DeltaSteppingShortestPath<>(graph).getPath(s, t).getVertexList());
@@ -84,7 +86,7 @@ public class DeltaSteppingShortestPathTest {
 
     @Test
     public void testGetPaths1() {
-        Graph<String, DefaultWeightedEdge> graph = create();
+        Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
         ShortestPathAlgorithm.SingleSourcePaths<String, DefaultWeightedEdge> paths1 =
                 new DeltaSteppingShortestPath<>(graph, 0.999).getPaths(s);
@@ -125,28 +127,25 @@ public class DeltaSteppingShortestPathTest {
 
     @Test
     public void testGetPaths2() {
-        int n = 1000;
-        int p = 100;
-        int numOfIterations = 100;
+        int numOfVertices = 1000;
+        int vertexDegree = 100;
+        int numOfIterations = 10000;
         int source = 0;
-
-        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-                new GnpRandomGraphGenerator<>(n, p / n);
-        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph;
         for (int i = 0; i < numOfIterations; i++) {
-            graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
-            generator.generateGraph(graph);
-
-            ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> deltaSteppingShortestPaths =
-                    new DeltaSteppingShortestPath<>(graph).getPaths(source);
-            ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
-                    new DijkstraShortestPath<>(graph).getPaths(source);
-            assertEqualPaths(deltaSteppingShortestPaths, dijkstraShortestPaths, graph.vertexSet());
+            Graph<Integer, DefaultWeightedEdge> graph = generateRandomGraph(numOfVertices, vertexDegree * numOfVertices);
+            test(graph, source);
         }
     }
 
-    private Graph<String, DefaultWeightedEdge> create() {
+    private void test(Graph<Integer, DefaultWeightedEdge> graph, Integer source) {
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
+                new DijkstraShortestPath<>(graph).getPaths(source);
+        ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> deltaSteppingShortestPaths =
+                new DeltaSteppingShortestPath<>(graph).getPaths(source);
+        assertEqualPaths(dijkstraShortestPaths, deltaSteppingShortestPaths, graph.vertexSet());
+    }
+
+    private Graph<String, DefaultWeightedEdge> generateSimpleGraph() {
         Graph<String, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         Graphs.addAllVertices(graph, Arrays.asList(s, t, y, x, z));
@@ -169,16 +168,43 @@ public class DeltaSteppingShortestPathTest {
         return graph;
     }
 
-    private void assertEqualPaths(ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> paths1,
-                                  ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> paths2,
+    private Graph<Integer, DefaultWeightedEdge> generateRandomGraph(int numOfVertices, int numOfEdges) {
+        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
+
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
+                new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1);
+        generator.generateGraph(graph);
+        makeConnected(graph);
+        addEdgeWeights(graph);
+
+        return graph;
+    }
+
+    private void makeConnected(Graph<Integer, DefaultWeightedEdge> graph) {
+        Object[] vertices = graph.vertexSet().toArray();
+        for (int i = 0; i < vertices.length - 1; i++) {
+            graph.addEdge((Integer) vertices[i], (Integer) vertices[i + 1]);
+        }
+    }
+
+    private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph) {
+        for (DefaultWeightedEdge edge : graph.edgeSet()) {
+            graph.setEdgeWeight(edge, Math.random());
+        }
+    }
+
+    private void assertEqualPaths(ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> expected,
+                                  ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> actual,
                                   Set<Integer> vertexSet) {
         for (Integer sink : vertexSet) {
-            GraphPath<Integer, DefaultWeightedEdge> path1 = paths1.getPath(sink);
-            GraphPath<Integer, DefaultWeightedEdge> path2 = paths2.getPath(sink);
-            if(path1 == null){
+            GraphPath<Integer, DefaultWeightedEdge> path1 = expected.getPath(sink);
+            GraphPath<Integer, DefaultWeightedEdge> path2 = actual.getPath(sink);
+            if (path1 == null) {
                 assertNull(path2);
-            }else{
-                assertEquals(paths1.getPath(sink).getEdgeList(), paths2.getPath(sink).getEdgeList());
+            } else {
+                assertEquals(expected.getPath(sink).getWeight(), actual.getPath(sink).getWeight(), 1e-9);
             }
         }
     }
