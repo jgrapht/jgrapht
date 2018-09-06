@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A benchmark comparing {@link DeltaSteppingShortestPath} to {@link org.jgrapht.alg.shortestpath.DijkstraShortestPath}
  * and {@link org.jgrapht.alg.shortestpath.BellmanFordShortestPath}.
- * The benchmark test the algorithms on dense and sparse random graphs.
+ * The benchmark test the algorithms on random, dense and sparse graphs.
  *
  * @author Semen Chudakov
  */

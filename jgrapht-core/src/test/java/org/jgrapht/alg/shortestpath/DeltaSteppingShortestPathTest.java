@@ -129,7 +129,7 @@ public class DeltaSteppingShortestPathTest {
     public void testGetPaths2() {
         int numOfVertices = 1000;
         int vertexDegree = 100;
-        int numOfIterations = 10000;
+        int numOfIterations = 100;
         int source = 0;
         for (int i = 0; i < numOfIterations; i++) {
             Graph<Integer, DefaultWeightedEdge> graph = generateRandomGraph(numOfVertices, vertexDegree * numOfVertices);
