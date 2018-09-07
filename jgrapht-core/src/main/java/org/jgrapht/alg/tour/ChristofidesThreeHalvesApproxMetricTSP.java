@@ -33,6 +33,7 @@ import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.Pseudograph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A $3/2$-approximation algorithm for the metric TSP problem.
@@ -123,12 +124,8 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
                 e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
 
         // find odd degree vertices
-        Set<V> oddDegreeVertices = new HashSet<>();
-        mstAndMatching.vertexSet().forEach(v -> {
-            if ((mstAndMatching.edgesOf(v).size() & 1) == 1) { // if degree is odd
-                oddDegreeVertices.add(v);
-            }
-        });
+        Set<V> oddDegreeVertices = mstAndMatching.vertexSet().stream()
+                .filter(v -> (mstAndMatching.edgesOf(v).size() & 1) == 1).collect(Collectors.toSet());
 
         /*
          * Form an induced subgraph on odd degree vertices, find minimum weight perfect
@@ -144,12 +141,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
 
         // form a closed tour from the Hamiltonian cycle
         Set<V> visited = new HashSet<>(n);
-        List<V> tourVertices = new ArrayList<>(n);
-        eulerianCycle.getVertexList().forEach(v -> {
-            if (visited.add(v)) {
-                tourVertices.add(v);
-            }
-        });
+        List<V> tourVertices = eulerianCycle.getVertexList().stream().filter(visited::add).collect(Collectors.toList());
         tourVertices.add(tourVertices.get(0));
 
         // compute tour edges
