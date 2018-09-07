@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2018-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,6 +25,7 @@ import org.jgrapht.alg.interfaces.EulerianCycleAlgorithm;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.matching.KuhnMunkresMinimalWeightBipartitePerfectMatching;
+import org.jgrapht.alg.matching.blossom.v5.*;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnorderedPair;
@@ -32,7 +33,6 @@ import org.jgrapht.graph.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This class solves the Chinese Postman Problem (CPP), also known as the Route Inspection Problem.
@@ -68,7 +68,7 @@ import java.util.stream.IntStream;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- * @since March 2017
+ * @since September 2018
  */
 public class ChinesePostman<V, E>
     implements
@@ -77,6 +77,8 @@ public class ChinesePostman<V, E>
 
     /**
      * Solves the Chinese Postman Problem on the given graph.
+     * For Undirected graph, this implementation uses the @{@link KolmogorovMinimumWeightPerfectMatching} matching algorithm;
+     * for directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used instead.
      * 
      * @param graph the input graph (must be a strongly connected graph)
      * @return Eulerian circuit of minimum weight.
@@ -101,94 +103,56 @@ public class ChinesePostman<V, E>
 
     /**
      * Solves the CPP for undirected graphs
-     * 
+     *
      * @param graph input graph
      * @return Eulerian Circuit
      */
-    private GraphPath<V, E> solveCPPUndirected(Graph<V, E> graph)
-    {
+    private GraphPath<V,E> solveCPPUndirected(Graph<V, E> graph){
 
-        // 1. Find all odd degree vertices (there should be an odd number of those)
-        List<V> oddDegreeVertices =
-            graph.vertexSet().stream().filter(v -> graph.degreeOf(v) % 2 == 1).collect(
-                Collectors.toList());
+        //1. Find all odd degree vertices (there should be an odd number of those)
+        List<V> oddDegreeVertices=graph.vertexSet().stream().filter(v ->graph.degreeOf(v)%2==1).collect(Collectors.toList());
 
-        System.out.println("odd deg vertices: "+oddDegreeVertices);
-
-        // 2. Compute all pairwise shortest paths for the oddDegreeVertices
-        Map<Pair<V, V>, GraphPath<V, E>> shortestPaths = new HashMap<>();
-        ShortestPathAlgorithm<V, E> sp = new DijkstraShortestPath<>(graph);
-        for (int i = 0; i < oddDegreeVertices.size() - 1; i++) {
-            for (int j = i + 1; j < oddDegreeVertices.size(); j++) {
-                V u = oddDegreeVertices.get(i);
-                V v = oddDegreeVertices.get(j);
+        //2. Compute all pairwise shortest paths for the oddDegreeVertices
+        Map<Pair<V,V>, GraphPath<V,E>> shortestPaths=new HashMap<>();
+        ShortestPathAlgorithm<V,E> sp=new DijkstraShortestPath<>(graph);
+        for(int i=0; i<oddDegreeVertices.size()-1; i++){
+            for(int j=i+1; j<oddDegreeVertices.size(); j++){
+                V u=oddDegreeVertices.get(i);
+                V v=oddDegreeVertices.get(j);
                 shortestPaths.put(new UnorderedPair<>(u, v), sp.getPath(u, v));
             }
         }
 
-        // 3. Solve a matching problem. For that we create an auxiliary graph.
-        // NOTE: Ideally we solve a maximum weight matching on a complete graph using Edmonds
-        // matching algorithm, but jgrapht doesn't have an algorithm for this. We therefore
-        // duplicate the
-        // nodes and solve the problem on a complete bipartite graph. This obviously is inefficient
-        // and should be replaced as soon as we can solve matchings on complete graphs!
-        Graph<Integer, DefaultWeightedEdge> auxGraph =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Set<Integer> partition1 =
-            IntStream.range(0, oddDegreeVertices.size()).boxed().collect(Collectors.toSet());
-        Set<Integer> partition2 =
-            IntStream.range(oddDegreeVertices.size(), 2 * oddDegreeVertices.size()).boxed().collect(
-                Collectors.toSet());
+        //3. Solve a matching problem. For that we create an auxiliary graph.
+        Graph<V, DefaultWeightedEdge> auxGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(auxGraph, oddDegreeVertices);
 
-        Graphs.addAllVertices(auxGraph, partition1);
-        Graphs.addAllVertices(auxGraph, partition2);
-        System.out.println("partition1: "+partition1);
-        System.out.println("partition2: "+partition2);
-
-        for (int i = 0; i < oddDegreeVertices.size(); i++) {
-            for (int j = 0; j < oddDegreeVertices.size(); j++) {
-                if (i == j)
-                    Graphs.addEdge(auxGraph, i, j + oddDegreeVertices.size(), Double.MAX_VALUE);
-                else {
-                    V u = oddDegreeVertices.get(i);
-                    V v = oddDegreeVertices.get(j);
-                    Graphs.addEdge(
-                        auxGraph, i, j + oddDegreeVertices.size(),
-                        shortestPaths.get(new UnorderedPair<>(u, v)).getWeight());
-                    System.out.println("matching edge: ("+i+","+(j+oddDegreeVertices.size())+"): weight: "+shortestPaths.get(new UnorderedPair<>(u, v)).getWeight()+" u: "+u+" v: "+v);
-                }
+        for(V u : oddDegreeVertices){
+            for(V v : oddDegreeVertices){
+                if(u==v) continue;
+                Graphs.addEdge(auxGraph, u, v, shortestPaths.get(new UnorderedPair<>(u,v)).getWeight());
             }
         }
-        MatchingAlgorithm.Matching<DefaultWeightedEdge> matching =
-            new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(auxGraph, partition1, partition2)
-                .getMatching();
-        System.out.println("matching: "+matching);
+        MatchingAlgorithm.Matching<V, DefaultWeightedEdge> matching =new KolmogorovMinimumWeightPerfectMatching<>(auxGraph).getMatching();
 
-        // 4. On the original graph, add shortcuts between the odd vertices. These shortcuts have
-        // been identified by the matching algorithm. A shortcut from u to v
-        // indirectly implies duplicating all edges on the shortest path from u to v
-
-        Graph<V, E> eulerGraph = new Pseudograph<>(graph.getEdgeFactory());
-        Graphs.addAllVertices(eulerGraph, graph.vertexSet());
-        Graphs.addAllEdges(eulerGraph, graph, graph.edgeSet());
-        Map<E, GraphPath<V, E>> shortcutEdges = new HashMap<>();
-        for (DefaultWeightedEdge e : matching.getEdges()) {
-            int i = auxGraph.getEdgeSource(e);
-            int j = auxGraph.getEdgeTarget(e) - oddDegreeVertices.size();
-            if (j > i)
-                continue;
-            V u = oddDegreeVertices.get(i);
-            V v = oddDegreeVertices.get(j);
-            E shortcutEdge = eulerGraph.addEdge(u, v);
-            System.out.println("adding shortcut: "+shortcutEdge);
-            shortcutEdges.put(shortcutEdge, shortestPaths.get(new UnorderedPair<>(u, v)));
+        //4. On the original graph, add shortcuts between the odd vertices. These shortcuts have been
+        //identified by the matching algorithm. A shortcut from u to v
+        //indirectly implies duplicating all edges on the shortest path from u to v
+        Graph<V,E> eulerGraph=new Pseudograph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), graph.getType().isWeighted());
+        Graphs.addAllVertices(eulerGraph, graph.vertexSet()); Graphs.addAllEdges(eulerGraph, graph, graph.edgeSet());
+        Map<E, GraphPath<V,E>> shortcutEdges=new HashMap<>();
+        for(DefaultWeightedEdge e: matching.getEdges()){
+            V u=auxGraph.getEdgeSource(e);
+            V v=auxGraph.getEdgeTarget(e);
+            E shortcutEdge =eulerGraph.addEdge(u, v);
+            shortcutEdges.put(shortcutEdge, shortestPaths.get(new UnorderedPair<>(u,v)));
         }
-        System.out.println("eulergraph: "+eulerGraph);
 
-        EulerianCycleAlgorithm<V, E> eulerianCycleAlgorithm = new HierholzerEulerianCycle<>();
-        GraphPath<V, E> pathWithShortcuts = eulerianCycleAlgorithm.getEulerianCycle(eulerGraph);
+        EulerianCycleAlgorithm<V, E> eulerianCycleAlgorithm=new HierholzerEulerianCycle<>();
+        GraphPath<V,E> pathWithShortcuts=eulerianCycleAlgorithm.getEulerianCycle(eulerGraph);
         return replaceShortcutEdges(graph, pathWithShortcuts, shortcutEdges);
     }
+
 
     /**
      * Solves the CPP for directed graphs
@@ -262,7 +226,7 @@ public class ChinesePostman<V, E>
                 Graphs.addEdge(auxGraph, i, j, shortestPaths.get(new Pair<>(u, v)).getWeight());
             }
         }
-        MatchingAlgorithm.Matching<DefaultWeightedEdge> matching =
+        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(
                 auxGraph, negImbalancedPartition, postImbalancedPartition).getMatching();
 
@@ -270,7 +234,7 @@ public class ChinesePostman<V, E>
         // been identified by the matching algorithm. A shortcut from u to v
         // indirectly implies duplicating all edges on the shortest path from u to v
 
-        Graph<V, E> eulerGraph = new DirectedPseudograph<>(graph.getEdgeFactory());
+        Graph<V, E> eulerGraph = new DirectedPseudograph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), graph.getType().isWeighted());
         Graphs.addAllVertices(eulerGraph, graph.vertexSet());
         Graphs.addAllEdges(eulerGraph, graph, graph.edgeSet());
         Map<E, GraphPath<V, E>> shortcutEdges = new HashMap<>();
@@ -335,49 +299,4 @@ public class ChinesePostman<V, E>
         return new GraphWalk<>(
             inputGraph, startVertex, endVertex, vertexList, edgeList, pathWeight);
     }
-
 }
-
-/**
- * NOTE: below is a more efficient implementation which should replace the implementation above
- * (needs testing). This simplified version requires a matching algorithm for complete graphs which
- * is currently not present in JGraphT!
- *
- *
- * 
- * private GraphPath<V,E> solveCPPUndirected(Graph<V, E> graph){
- * 
- * //1. Find all odd degree vertices (there should be an odd number of those) List<V>
- * oddDegreeVertices=graph.vertexSet().stream().filter(v ->
- * graph.degreeOf(v)%2==1).collect(Collectors.toList());
- * 
- * //2. Compute all pairwise shortest paths for the oddDegreeVertices Map<Pair<V,V>, GraphPath<V,E>>
- * shortestPaths=new HashMap<>(); ShortestPathAlgorithm<V,E> sp=new DijkstraShortestPath<>(graph);
- * for(int i=0; i<oddDegreeVertices.size()-1; i++){ for(int j=i+1; j<oddDegreeVertices.size(); j++){
- * V u=oddDegreeVertices.get(i); V v=oddDegreeVertices.get(j); shortestPaths.put(new
- * UnorderedPair<>(u, v), sp.getPath(u, v)); } }
- * 
- * //3. Solve a matching problem. For that we create an auxiliary graph. Graph<V,
- * DefaultWeightedEdge> auxGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
- * Graphs.addAllVertices(auxGraph, oddDegreeVertices);
- * 
- * for(V u : oddDegreeVertices){ for(V v : oddDegreeVertices){ if(u==v) continue
- * Graphs.addEdge(auxGraph, u, v, shortestPaths.get(new UnorderedPair<>(u,v)).getWeight()); } } }
- * MatchingAlgorithm.Matching<DefaultWeightedEdge> matching =new
- * PerfectMatchingAlgorithm<>(auxGraph).getMatching();
- * 
- * //4. On the original graph, add shortcuts between the odd vertices. These shortcuts have been
- * identified by the matching algorithm. A shortcut from u to v //indirectly implies duplicating all
- * edges on the shortest path from u to v
- * 
- * Graph<V,E> eulerGraph=new Pseudograph<>(graph.getEdgeFactory());
- * Graphs.addAllVertices(eulerGraph, graph.vertexSet()); Graphs.addAllEdges(eulerGraph, graph,
- * graph.edgeSet()); Map<E, GraphPath<V,E>> shortcutEdges=new HashMap<>(); for(DefaultWeightedEdge e
- * : matching.getEdges()){ V u=auxGraph.getEdgeSource(e); V v=auxGraph.getEdgeTarget(e); E
- * shortcutEdge =eulerGraph.addEdge(u, v); shortcutEdges.put(shortcutEdge, shortestPaths.get(new
- * UnorderedPair<>(u,v))); }
- * 
- * EulerianCycleAlgorithm<V, E> eulerianCycleAlgorithm=new HierholzerEulerianCycle<>();
- * GraphPath<V,E> pathWithShortcuts=eulerianCycleAlgorithm.getEulerianCycle(eulerGraph); return
- * replaceShortcutEdges(graph, pathWithShortcuts, shortcutEdges); }
- **/
