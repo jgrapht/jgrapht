@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An edge set factory which creates {@link ArrayUnenforcedSet} of size 1, suitable for small degree
@@ -33,7 +33,9 @@ import org.jgrapht.util.*;
  * @author Barak Naveh
  */
 public class ArrayUnenforcedSetEdgeSetFactory<V, E>
-    implements EdgeSetFactory<V, E>, Serializable
+    implements
+    EdgeSetFactory<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 5936902837403445985L;
 

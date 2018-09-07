@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,13 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.vertexcover.util.*;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Greedy algorithm to find a vertex cover for a graph. A vertex cover is a set of vertices that
@@ -31,9 +33,9 @@ import org.jgrapht.alg.vertexcover.util.*;
  * <a href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
- * Note: this class supports pseudo-graphs Runtime: O(|E|*log|V|) This class produces often, but not
- * always, better solutions than the 2-approximation algorithms. Nevertheless, there are instances
- * where the solution is significantly worse. In those cases, consider using
+ * Note: this class supports pseudo-graphs Runtime: $O(|E| \log |V|)$ This class produces often, but
+ * not always, better solutions than the 2-approximation algorithms. Nevertheless, there are
+ * instances where the solution is significantly worse. In those cases, consider using
  * {@link ClarksonTwoApproxVCImpl}.
  *
  *
@@ -44,10 +46,38 @@ import org.jgrapht.alg.vertexcover.util.*;
  * @since Nov 6, 2003
  */
 public class GreedyVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>
+    implements
+    VertexCoverAlgorithm<V>
 {
 
     private static int vertexCounter = 0;
+
+    private final Graph<V, E> graph;
+    private final Map<V, Double> vertexWeightMap;
+
+    /**
+     * Constructs a new GreedyVCImpl instance where all vertices have uniform weights.
+     * 
+     * @param graph input graph
+     */
+    public GreedyVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = graph
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+    }
+
+    /**
+     * Constructs a new GreedyVCImpl instance
+     * 
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     */
+    public GreedyVCImpl(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = Objects.requireNonNull(vertexWeightMap);
+    }
 
     /**
      * Finds a greedy solution to the minimum weighted vertex cover problem. At each iteration, the
@@ -55,15 +85,11 @@ public class GreedyVCImpl<V, E>
      * to the cover. Next vertex v and all edges incident to it are removed. The process repeats
      * until all vertices are covered. Runtime: O(|E|*log|V|)
      *
-     * @param graph input graph
-     * @param vertexWeightMap mapping of vertex weights
      * @return greedy solution
      */
     @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
     {
-        GraphTests.requireUndirected(graph);
-
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
 
@@ -120,11 +146,10 @@ public class GreedyVCImpl<V, E>
             // Update cover
             cover.add(vx.v);
             weight += vertexWeightMap.get(vx.v);
-            assert (!workingGraph.parallelStream().anyMatch(
+            assert (workingGraph.parallelStream().noneMatch(
                 ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
         }
-
-        return new VertexCoverImpl<>(cover, weight);
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2015-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,9 @@ public interface Specifics<V, E>
      * Adds a vertex.
      *
      * @param vertex vertex to be added.
+     * @return true if the vertex was added, false if the vertex was already present
      */
-    void addVertex(V vertex);
+    boolean addVertex(V vertex);
 
     /**
      * Get the vertex set.

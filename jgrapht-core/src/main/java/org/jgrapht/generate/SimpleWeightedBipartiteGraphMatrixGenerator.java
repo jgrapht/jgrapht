@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * A simple weighted bipartite graph matrix generator.
@@ -28,8 +28,8 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
-    extends WeightedGraphGeneratorAdapter<V, E, V>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     protected List<V> first;
     protected List<V> second;
@@ -75,8 +75,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -105,19 +104,6 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
                 target.setEdgeWeight(target.addEdge(first.get(i), second.get(j)), weights[i][j]);
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated Not needed since {@link WeightedGraph} is deprecated.
-     */
-    @Override
-    @Deprecated
-    public void generateGraph(
-        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
-    {
-        generateGraph((Graph<V, E>) target, vertexFactory, resultMap);
     }
 }
 

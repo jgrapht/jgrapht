@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,8 +17,8 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * An interface for the set of intrusive edges of a graph.
@@ -32,8 +32,9 @@ import java.util.Set;
  *
  * @author Dimitrios Michail
  */
-interface IntrusiveEdgesSpecifics<V, E>
-    extends Serializable
+public interface IntrusiveEdgesSpecifics<V, E>
+    extends
+    Serializable
 {
     /**
      * Get the source vertex of an edge.
@@ -55,8 +56,11 @@ interface IntrusiveEdgesSpecifics<V, E>
      * Add a new edge.
      * 
      * @param e the edge to add
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @return true if the edge was added, false if the edge was already present
      */
-    void add(E e, V sourceVertex, V targetVertex);
+    boolean add(E e, V sourceVertex, V targetVertex);
 
     /**
      * Check if an edge exists

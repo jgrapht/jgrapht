@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2018, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,19 +17,19 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's algorithm.
  *
  * <p>
  * See:<br>
- * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed graph in O(n + m) per
- * cycle, Technical Report Series, #60, May 1974, Univ. of Newcastle upon Tyne, Newcastle upon Tyne,
- * England.
+ * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed graph in $O(n + m)$
+ * per cycle, Technical Report Series, #60, May 1974, Univ. of Newcastle upon Tyne, Newcastle upon
+ * Tyne, England.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -37,7 +37,8 @@ import org.jgrapht.alg.*;
  * @author Nikolay Ognyanov
  */
 public class SzwarcfiterLauerSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     // The graph.
     private Graph<V, E> graph;
@@ -75,18 +76,18 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * @return graph
      */
-    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * @param graph graph
      */
-    @Override
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
@@ -263,24 +264,14 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     {
         // B sets are typically not all
         // needed, so instantiate lazily.
-        Set<V> result = bSets.get(v);
-        if (result == null) {
-            result = new HashSet<>();
-            bSets.put(v, result);
-        }
-        return result;
+        return bSets.computeIfAbsent(v, k -> new HashSet<>());
     }
 
     private Set<V> getRemoved(V v)
     {
         // Removed sets typically not all
         // needed, so instantiate lazily.
-        Set<V> result = removed.get(v);
-        if (result == null) {
-            result = new HashSet<>();
-            removed.put(v, result);
-        }
-        return result;
+        return removed.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2008-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,27 +17,39 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.extension.*;
 
+import java.util.*;
+
 /**
- * A <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> is a directed graph
- * where each edge has a capacity and each edge receives a flow. The amount of flow on an edge can
- * not exceed the capacity of the edge (note, that all capacities must be non-negative). A flow must
- * satisfy the restriction that the amount of flow into a vertex equals the amount of flow out of
- * it, except when it is a source, which "produces" flow, or sink, which "consumes" flow.
+ * This class computes a maximum flow in a
+ * <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> using
+ * <a href = "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp algorithm</a>. Given
+ * is a weighted directed or undirected graph $G(V,E)$ with vertex set $V$ and edge set $E$. Each
+ * edge $e\in E$ has an associated non-negative capacity $u_e$. The maximum flow problem involves
+ * finding a feasible flow from a source vertex $s$ to a sink vertex $t$ which is maximum. The
+ * amount of flow $f_e$ through any edge $e$ cannot exceed capacity $u_e$. Moreover, flow
+ * conservation must hold: the sum of flows entering a node must equal the sum of flows exiting that
+ * node, except for the source and the sink nodes.
+ * <p>
+ * Mathematically, the maximum flow problem is stated as follows: \[ \begin{align} \max~&amp;
+ * \sum_{e\in \delta^+(s)}f_e &amp;\\ \mbox{s.t. }&amp;\sum_{e\in \delta^-(i)} f_e=\sum_{e\in
+ * \delta^+(i)} f_e &amp; \forall i\in V\setminus\{s,t\}\\ &amp;0\leq f_e \leq u_e &amp; \forall
+ * e\in E \end{align} \] Here $\delta^+(i)$ resp $\delta^-(i)$ denote resp the outgoing and incoming
+ * edges of vertex $i$.
+ * <p>
+ * When the input graph is undirected, an edge $(i,j)$ is treated as two directed arcs: $(i,j)$ and
+ * $(j,i)$. In such a case, there is the additional restriction that the flow can only go in one
+ * direction: the flow either goes form $i$ to $j$, or from $j$ to $i$, but there cannot be a
+ * positive flow on $(i,j)$ and $(j,i)$ simultaneously.
+ * <p>
+ * The runtime complexity of this class is $O(nm^2)$, where $n$ is the number of vertices and $m$
+ * the number of edges in the graph. For a more efficient algorithm, consider using
+ * {@link PushRelabelMFImpl} instead.
  *
  * <p>
- * This class computes maximum flow in a network using
- * <a href = "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp algorithm</a>. Be
- * careful: for large networks this algorithm may consume significant amount of time (its
- * upper-bound complexity is O(VE^2), where V - amount of vertices, E - amount of edges in the
- * network).
- *
- * <p>
- * This class can also computes minimum s-t cuts. Effectively, to compute a minimum s-t cut, the
+ * This class can also compute minimum s-t cuts. Effectively, to compute a minimum s-t cut, the
  * implementation first computes a minimum s-t flow, after which a BFS is run on the residual graph.
  *
  * <p>
@@ -53,7 +65,8 @@ import org.jgrapht.alg.util.extension.*;
  */
 
 public final class EdmondsKarpMFImpl<V, E>
-    extends MaximumFlowAlgorithmBase<V, E>
+    extends
+    MaximumFlowAlgorithmBase<V, E>
 {
 
     /* current source vertex */
@@ -272,7 +285,8 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     class VertexExtension
-        extends VertexExtensionBase
+        extends
+        VertexExtensionBase
     {
         boolean visited; // this mark is used during BFS to mark visited nodes
         List<AnnotatedFlowEdge> lastArcs; // last arc(-s) in the shortest path used to reach this

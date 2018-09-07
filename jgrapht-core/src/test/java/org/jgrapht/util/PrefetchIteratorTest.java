@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2017, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2018, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,17 @@
  */
 package org.jgrapht.util;
 
+import org.junit.*;
+
 import java.util.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 public class PrefetchIteratorTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testIteratorInterface()
     {
         Iterator<Integer> iterator = new IterateFrom1To99();
@@ -43,6 +45,7 @@ public class PrefetchIteratorTest
         assertTrue(exceptionThrown instanceof NoSuchElementException);
     }
 
+    @Test
     public void testEnumInterface()
     {
         Enumeration<Integer> enumuration = new IterateFrom1To99();
@@ -64,7 +67,9 @@ public class PrefetchIteratorTest
 
     // This test class supplies enumeration of integer from 1 till 100.
     public static class IterateFrom1To99
-        implements Enumeration<Integer>, Iterator<Integer>
+        implements
+        Enumeration<Integer>,
+        Iterator<Integer>
     {
         private int counter = 0;
         private PrefetchIterator<Integer> nextSupplier;

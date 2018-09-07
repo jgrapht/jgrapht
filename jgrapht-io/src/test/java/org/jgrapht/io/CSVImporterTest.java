@@ -17,19 +17,19 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import java.io.*;
+
+import static org.junit.Assert.*;
 
 /**
  * 
  * @author Dimitrios Michail
  */
 public class CSVImporterTest
-    extends TestCase
 {
     private static final String NL = System.getProperty("line.separator");
 
@@ -37,7 +37,7 @@ public class CSVImporterTest
         Graph<String, E> g, CSVFormat format, Character delimiter)
     {
         return new CSVImporter<>(
-            (l, a) -> l, (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t), format, delimiter);
+            (l, a) -> l, (f, t, l, a) -> g.getEdgeSupplier().get(), format, delimiter);
     }
 
     public <E> Graph<String, E> readGraph(
@@ -48,15 +48,15 @@ public class CSVImporterTest
         Graph<String, E> g;
         if (directed) {
             if (weighted) {
-                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
+                g = new DirectedWeightedPseudograph<>(edgeClass);
             } else {
-                g = new DirectedPseudograph<String, E>(edgeClass);
+                g = new DirectedPseudograph<>(edgeClass);
             }
         } else {
             if (weighted) {
-                g = new WeightedPseudograph<String, E>(edgeClass);
+                g = new WeightedPseudograph<>(edgeClass);
             } else {
-                g = new Pseudograph<String, E>(edgeClass);
+                g = new Pseudograph<>(edgeClass);
             }
         }
 
@@ -66,6 +66,7 @@ public class CSVImporterTest
         return g;
     }
 
+    @Test
     public void testEdgeListDirectedUnweighted()
         throws ImportException
     {
@@ -91,6 +92,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "1"));
     }
 
+    @Test
     public void testEdgeListDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -116,6 +118,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "1"));
     }
 
+    @Test
     public void testAdjacencyListDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -149,6 +152,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "6"));
     }
 
+    @Test
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -174,6 +178,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("who;;", "'john doe'"));
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdZeroNoEdgeWeighted()
         throws ImportException
     {
@@ -187,7 +192,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultWeightedEdge> g =
-            new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         CSVImporter<String, DefaultWeightedEdge> importer =
             createImporter(g, CSVFormat.MATRIX, ';');
@@ -224,6 +229,7 @@ public class CSVImporterTest
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "5")), 0.0001);
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdWeighted()
         throws ImportException
     {
@@ -237,7 +243,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultWeightedEdge> g =
-            new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         CSVImporter<String, DefaultWeightedEdge> importer =
             createImporter(g, CSVFormat.MATRIX, ',');
@@ -273,6 +279,7 @@ public class CSVImporterTest
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "5")), 0.0001);
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdZeroNoEdge()
         throws ImportException
     {
@@ -286,7 +293,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, true);
@@ -311,6 +318,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("5", "5"));
     }
 
+    @Test
     public void testDirectedMatrixNoNodeId()
         throws ImportException
     {
@@ -324,7 +332,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.importGraph(g, new StringReader(input));
@@ -349,6 +357,7 @@ public class CSVImporterTest
 
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdge()
         throws ImportException
     {
@@ -363,7 +372,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
@@ -390,6 +399,7 @@ public class CSVImporterTest
 
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffled()
         throws ImportException
     {
@@ -404,7 +414,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
@@ -430,6 +440,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("E", "E"));
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeWeightedShuffledZeroWeightsAsDouble()
         throws ImportException
     {
@@ -474,6 +485,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("E", "E"));
     }
 
+    @Test
     public void testDoubleOnUnweighted()
         throws ImportException
     {
@@ -500,6 +512,7 @@ public class CSVImporterTest
         }
     }
 
+    @Test
     public void testWrongHeaderNodeIds()
         throws ImportException
     {
@@ -526,6 +539,7 @@ public class CSVImporterTest
         }
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdMissingEntries()
         throws ImportException
     {
@@ -539,7 +553,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         try {
@@ -550,6 +564,7 @@ public class CSVImporterTest
         }
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffledAndTabDelimiter()
         throws ImportException
     {
@@ -564,7 +579,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, '\t');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);

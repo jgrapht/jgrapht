@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by France Telecom and Contributors.
+ * (C) Copyright 2010-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,11 +18,11 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 public class KSPDiscardsValidPathsTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -30,10 +30,11 @@ public class KSPDiscardsValidPathsTest
      * Example with a biconnected graph but not 3-connected. With a graph not 3-connected, the start
      * vertex and the end vertex can be disconnected by 2 paths.
      */
+    @Test
     public void testNot3connectedGraph()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
-        KShortestPaths<String, DefaultWeightedEdge> paths;
+        KShortestSimplePaths<String, DefaultWeightedEdge> paths;
 
         graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         graph.addVertex("S");
@@ -71,9 +72,9 @@ public class KSPDiscardsValidPathsTest
         this.addGraphEdge(graph, "K", "L", 1.0);
         this.addGraphEdge(graph, "L", "S", 1.0);
 
-        paths = new KShortestPaths<>(graph, 3);
+        paths = new KShortestSimplePaths<>(graph);
 
-        assertTrue(paths.getPaths("S", "T").size() == 3);
+        assertTrue(paths.getPaths("S", "T", 3).size() == 3);
     }
 
     /**
@@ -81,10 +82,11 @@ public class KSPDiscardsValidPathsTest
      * 2-connected. With a graph not 2-connected, the start vertex and the end vertex can be
      * disconnected by 1 path.
      */
+    @Test
     public void testBrunoMaoili()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
-        KShortestPaths<String, DefaultWeightedEdge> paths;
+        KShortestSimplePaths<String, DefaultWeightedEdge> paths;
 
         graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         graph.addVertex("A");
@@ -101,14 +103,14 @@ public class KSPDiscardsValidPathsTest
         this.addGraphEdge(graph, "B", "E", 1.0);
         this.addGraphEdge(graph, "C", "D", 1.0);
 
-        paths = new KShortestPaths<>(graph, 2);
-        assertTrue(paths.getPaths("A", "E").size() == 2);
+        paths = new KShortestSimplePaths<>(graph);
+        assertTrue(paths.getPaths("A", "E", 2).size() == 2);
 
-        paths = new KShortestPaths<>(graph, 3);
-        assertTrue(paths.getPaths("A", "E").size() == 3);
+        paths = new KShortestSimplePaths<>(graph);
+        assertTrue(paths.getPaths("A", "E", 3).size() == 3);
 
-        paths = new KShortestPaths<>(graph, 4);
-        assertTrue(paths.getPaths("A", "E").size() == 4);
+        paths = new KShortestSimplePaths<>(graph);
+        assertTrue(paths.getPaths("A", "E", 4).size() == 4);
     }
 
     private void addGraphEdge(

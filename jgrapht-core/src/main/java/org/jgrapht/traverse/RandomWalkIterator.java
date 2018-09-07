@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2016-2018, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * A random walk iterator for a directed or undirected graph.
@@ -50,7 +50,8 @@ import org.jgrapht.*;
  * @param <E> edge type
  */
 public class RandomWalkIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private V currentVertex;
     private final boolean isWeighted;

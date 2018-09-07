@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2006-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,27 +21,24 @@ package org.jgrapht.util;
  * TypeUtil isolates type-unsafety so that code which uses it for legitimate reasons can stay
  * warning-free.
  *
- * @param <T> the type of the result
- *
  * @author John V. Sichi
  */
-public class TypeUtil<T>
+public class TypeUtil
 {
     /**
      * Casts an object to a type.
      *
      * @param o object to be cast
-     * @param typeDecl conveys the target type information; the actual value is unused and can be
-     *        null since this is all just stupid compiler tricks
      * @param <T> the type of the result
      *
      * @return the result of the cast
      */
     @SuppressWarnings("unchecked")
-    public static <T> T uncheckedCast(Object o, TypeUtil<T> typeDecl)
+    public static <T> T uncheckedCast(Object o)
     {
         return (T) o;
     }
+
 }
 
 // End TypeUtil.java

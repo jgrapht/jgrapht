@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ * (C) Copyright 2015-2018, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,8 +20,9 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
  * Test class for AStarShortestPath implementation
@@ -30,7 +31,6 @@ import junit.framework.*;
  * @since Aug 21, 2015
  */
 public class AStarShortestPathTest
-    extends TestCase
 {
     private final String[] labyrinth1 =
         { ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
@@ -110,6 +110,7 @@ public class AStarShortestPathTest
     /**
      * Test on a graph with a path from the source node to the target node.
      */
+    @Test
     public void testLabyrinth1()
     {
         this.readLabyrinth(labyrinth1);
@@ -136,6 +137,7 @@ public class AStarShortestPathTest
     /**
      * Test on a graph where there is no path from the source node to the target node.
      */
+    @Test
     public void testLabyrinth2()
     {
         this.readLabyrinth(labyrinth2);
@@ -154,6 +156,7 @@ public class AStarShortestPathTest
      * query the shortest path, which is simply the cheapest edge between (A,B) plus the cheapest
      * edge between (B,C). The admissible heuristic in this test is not important.
      */
+    @Test
     public void testMultiGraph()
     {
         WeightedMultigraph<Node, DefaultWeightedEdge> multigraph =
@@ -179,6 +182,7 @@ public class AStarShortestPathTest
         assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
+    @Test
     public void testInconsistentHeuristic()
     {
         Graph<Integer, DefaultWeightedEdge> g =
@@ -237,7 +241,8 @@ public class AStarShortestPathTest
     }
 
     private class ManhattanDistance
-        implements AStarAdmissibleHeuristic<Node>
+        implements
+        AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)
@@ -248,7 +253,8 @@ public class AStarShortestPathTest
     }
 
     private class EuclideanDistance
-        implements AStarAdmissibleHeuristic<Node>
+        implements
+        AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)

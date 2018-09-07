@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2013-2018, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,10 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.List;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedSubgraph;
+import java.util.*;
 
 /**
  * A strong connectivity inspector algorithm.
@@ -60,18 +58,7 @@ public interface StrongConnectivityAlgorithm<V, E>
     /**
      * Computes a list of subgraphs of the given graph. Each subgraph will represent a strongly
      * connected component and will contain all vertices of that component. The subgraph will have
-     * an edge (u,v) iff u and v are contained in the strongly connected component.
-     *
-     * @return a list of subgraphs representing the strongly connected components
-     * @deprecated In favor of {@link #getStronglyConnectedComponents()}.
-     */
-    @Deprecated
-    List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs();
-
-    /**
-     * Computes a list of subgraphs of the given graph. Each subgraph will represent a strongly
-     * connected component and will contain all vertices of that component. The subgraph will have
-     * an edge (u,v) iff u and v are contained in the strongly connected component.
+     * an edge $(u,v)$ iff $u$ and $v$ are contained in the strongly connected component.
      *
      * @return a list of subgraphs representing the strongly connected components
      */

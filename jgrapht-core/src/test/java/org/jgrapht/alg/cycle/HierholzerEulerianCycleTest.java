@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,16 @@
  */
 package org.jgrapht.alg.cycle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests for class {@link HierholzerEulerianCycle}.
@@ -144,9 +143,10 @@ public class HierholzerEulerianCycleTest
     public void testUndirectedEulerian1()
     {
         // complete graph of 6 vertices
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(6);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g);
         Assert.assertFalse(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
@@ -229,9 +229,10 @@ public class HierholzerEulerianCycleTest
     public void testUndirectedEulerian7()
     {
         // complete graph of 5 vertices
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(5);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g);
         Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g));
     }
 
@@ -239,15 +240,17 @@ public class HierholzerEulerianCycleTest
     public void testDirectedEulerian1()
     {
         // complete graph of 6 vertices
-        Graph<Integer, DefaultEdge> g1 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen1 = new CompleteGraphGenerator<>(6);
-        gen1.generateGraph(g1, new IntegerVertexFactory(), null);
+        gen1.generateGraph(g1);
         Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g1));
 
         // complete graph of 7 vertices
-        Graph<Integer, DefaultEdge> g2 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g2 = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen2 = new CompleteGraphGenerator<>(7);
-        gen2.generateGraph(g2, new IntegerVertexFactory(), null);
+        gen2.generateGraph(g2);
         Assert.assertTrue(new HierholzerEulerianCycle<Integer, DefaultEdge>().isEulerian(g2));
     }
 
@@ -397,9 +400,10 @@ public class HierholzerEulerianCycleTest
         Random rng = new Random(seed);
         for (int size = 13; size < 52; size += 2) {
 
-            Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(size);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            gen.generateGraph(g);
             for (Integer v : g.vertexSet()) {
                 IntStream.rangeClosed(0, rng.nextInt(10)).forEach(i -> g.addEdge(v, v));
             }
@@ -458,8 +462,9 @@ public class HierholzerEulerianCycleTest
             new GnpRandomGraphGenerator<>(size, p, rng, true);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-            rgg.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            rgg.generateGraph(g);
 
             // add one extra copy for each edge
             List<DefaultEdge> edges = new ArrayList<>(g.edgeSet());
@@ -490,8 +495,9 @@ public class HierholzerEulerianCycleTest
             new GnpRandomGraphGenerator<>(size, p, seed);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-            rgg.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            rgg.generateGraph(g);
             List<DefaultEdge> edges = new ArrayList<>(g.edgeSet());
             for (DefaultEdge e : edges) {
                 g.addEdge(g.getEdgeTarget(e), g.getEdgeSource(e));
@@ -649,9 +655,10 @@ public class HierholzerEulerianCycleTest
         Random rng = new Random(seed);
 
         for (int size = 5; size < 52; size += 2) {
-            Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(size);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            gen.generateGraph(g);
             for (Integer v : g.vertexSet()) {
                 IntStream.rangeClosed(0, rng.nextInt(10)).forEach(i -> g.addEdge(v, v));
             }
@@ -682,8 +689,9 @@ public class HierholzerEulerianCycleTest
             new GnpRandomGraphGenerator<>(size, p, rng, true);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-            rgg.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            rgg.generateGraph(g);
             List<DefaultEdge> edges = new ArrayList<>(g.edgeSet());
             for (DefaultEdge e : edges) {
                 g.addEdge(g.getEdgeTarget(e), g.getEdgeSource(e));
@@ -712,8 +720,9 @@ public class HierholzerEulerianCycleTest
             new GnpRandomGraphGenerator<>(size, p, seed);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-            rgg.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            rgg.generateGraph(g);
             List<DefaultEdge> edges = new ArrayList<>(g.edgeSet());
             for (DefaultEdge e : edges) {
                 g.addEdge(g.getEdgeTarget(e), g.getEdgeSource(e));
@@ -724,11 +733,38 @@ public class HierholzerEulerianCycleTest
         }
     }
 
+    @Test
+    public void testPseudograph()
+    {
+        /*
+         * Test for issue 388 on github.
+         */
+        Graph<Character, DefaultWeightedEdge> g =
+            new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList('A', 'B', 'C', 'D', 'E'));
+        Graphs.addEdge(g, 'A', 'B', 8);
+        Graphs.addEdge(g, 'A', 'C', 5);
+        Graphs.addEdge(g, 'A', 'D', 6);
+        Graphs.addEdge(g, 'B', 'C', 5);
+        Graphs.addEdge(g, 'B', 'E', 6);
+        Graphs.addEdge(g, 'C', 'D', 5);
+        Graphs.addEdge(g, 'C', 'E', 5);
+        Graphs.addEdge(g, 'D', 'E', 8);
+        Graphs.addEdge(g, 'A', 'D', 8);
+        Graphs.addEdge(g, 'B', 'E', 8);
+
+        GraphPath<Character, DefaultWeightedEdge> gp =
+            new HierholzerEulerianCycle<Character, DefaultWeightedEdge>().getEulerianCycle(g);
+        assertEquals('E', gp.getStartVertex().charValue());
+        assertEquals("[E, B, E, D, A, D, C, B, A, C, E]", gp.getVertexList().toString());
+        assertEulerian(gp);
+    }
+
     // assert that a cycle is Eulerian
-    private void assertEulerian(GraphPath<Integer, DefaultEdge> cycle)
+    private static <V, E> void assertEulerian(GraphPath<V, E> cycle)
     {
         assertNotNull(cycle.getGraph());
-        Graph<Integer, DefaultEdge> g = cycle.getGraph();
+        Graph<V, E> g = cycle.getGraph();
         assertTrue(GraphTests.isEulerian(g));
 
         if (g.vertexSet().size() == 0) {
@@ -743,11 +779,11 @@ public class HierholzerEulerianCycleTest
             assertNotNull(cycle.getStartVertex());
             assertEquals(cycle.getStartVertex(), cycle.getEndVertex());
             assertEquals(g.edgeSet().size(), cycle.getLength());
-            DefaultEdge prev = null;
-            Iterator<DefaultEdge> it = cycle.getEdgeList().iterator();
-            Set<DefaultEdge> dupCheck = new HashSet<>();
+            E prev = null;
+            Iterator<E> it = cycle.getEdgeList().iterator();
+            Set<E> dupCheck = new HashSet<>();
             while (it.hasNext()) {
-                DefaultEdge cur = it.next();
+                E cur = it.next();
                 assertTrue(dupCheck.add(cur));
                 if (prev != null) {
                     if (isDirected) {

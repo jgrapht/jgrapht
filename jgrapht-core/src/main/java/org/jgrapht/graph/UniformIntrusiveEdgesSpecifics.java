@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,6 +17,9 @@
  */
 package org.jgrapht.graph;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * An uniform weights variant of the intrusive edges specifics.
  * 
@@ -30,22 +33,37 @@ package org.jgrapht.graph;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-class UniformIntrusiveEdgesSpecifics<V, E>
-    extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveEdge>
-    implements IntrusiveEdgesSpecifics<V, E>
+public class UniformIntrusiveEdgesSpecifics<V, E>
+    extends
+    BaseIntrusiveEdgesSpecifics<V, E, IntrusiveEdge>
+    implements
+    IntrusiveEdgesSpecifics<V, E>
 {
     private static final long serialVersionUID = -5736320893697031114L;
 
     /**
      * Constructor
+     * 
+     * @deprecated Since, default strategies should be decided at a higher level.
      */
+    @Deprecated
     public UniformIntrusiveEdgesSpecifics()
     {
-        super();
+        this(new LinkedHashMap<>());
+    }
+    
+    /**
+     * Constructor
+     * 
+     * @param map the map to use for storage
+     */
+    public UniformIntrusiveEdgesSpecifics(Map<E, IntrusiveEdge> map)
+    {
+        super(map);
     }
 
     @Override
-    public void add(E e, V sourceVertex, V targetVertex)
+    public boolean add(E e, V sourceVertex, V targetVertex)
     {
         IntrusiveEdge intrusiveEdge;
         if (e instanceof IntrusiveEdge) {
@@ -53,9 +71,11 @@ class UniformIntrusiveEdgesSpecifics<V, E>
         } else {
             intrusiveEdge = new IntrusiveEdge();
         }
+
         intrusiveEdge.source = sourceVertex;
         intrusiveEdge.target = targetVertex;
-        edgeMap.put(e, intrusiveEdge);
+
+        return edgeMap.putIfAbsent(e, intrusiveEdge) == null;
     }
 
     @Override

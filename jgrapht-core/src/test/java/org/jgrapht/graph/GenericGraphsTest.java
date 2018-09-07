@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by HartmutBenz and Contributors.
+ * (C) Copyright 2006-2018, by HartmutBenz and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,8 +18,10 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * A unit test for graph generic vertex/edge parameters.
@@ -27,7 +29,6 @@ import org.jgrapht.graph.specifics.Specifics;
  * @author Hartmut Benz
  */
 public class GenericGraphsTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -35,20 +36,7 @@ public class GenericGraphsTest
     Graph<FooVertex, FooEdge> fooFooGraph;
     Graph<BarVertex, BarEdge> barBarGraph;
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public GenericGraphsTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
-    // ~ Methods ---------------------------------------------------------------
-
+    @Test
     public void testLegalInsertStringGraph()
     {
         String v1 = "Vertex1";
@@ -58,6 +46,7 @@ public class GenericGraphsTest
         objectGraph.addEdge(v1, v2);
     }
 
+    @Test
     public void testLegalInsertFooGraph()
     {
         FooVertex v1 = new FooVertex();
@@ -76,6 +65,7 @@ public class GenericGraphsTest
         fooFooGraph.addEdge(vb1, vb2, new BarEdge());
     }
 
+    @Test
     public void testLegalInsertBarGraph()
     {
         BarVertex v1 = new BarVertex();
@@ -85,6 +75,7 @@ public class GenericGraphsTest
         barBarGraph.addEdge(v1, v2);
     }
 
+    @Test
     public void testLegalInsertFooBarGraph()
     {
         FooVertex v1 = new FooVertex();
@@ -100,6 +91,7 @@ public class GenericGraphsTest
         fooFooGraph.addEdge(v1, vb2);
     }
 
+    @Test
     public void testAlissaHacker()
     {
         Graph<String, CustomEdge> g = new DefaultDirectedGraph<>(CustomEdge.class);
@@ -111,6 +103,7 @@ public class GenericGraphsTest
         assertEquals("Alissa P. Hacker approves the edge from a to b", s);
     }
 
+    @Test
     public void testEqualButNotSameVertex()
     {
         EquivVertex v1 = new EquivVertex();
@@ -122,27 +115,12 @@ public class GenericGraphsTest
         assertEquals(2, g.degreeOf(v1));
         assertEquals(2, g.degreeOf(v2));
     }
-    
-    /*
-     * Test added in order to check that old style specifics override still works.
-     * Safely remove after next-release.
-     */
-    @Deprecated
-    public void testOldStyleSpecificsOverride()
-    {
-        DeprecatedSpecificsTestGraph g = new DeprecatedSpecificsTestGraph();
-        g.addVertex("1");
-        g.addVertex("2");
-        g.addEdge("1", "2");
-        assertTrue(g.containsEdge("2", "1"));
-        assertTrue(g.containsEdge("1", "2"));
-    }
 
     /**
      * .
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
     {
         objectGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
         fooFooGraph = new SimpleGraph<>(FooEdge.class);
@@ -152,7 +130,8 @@ public class GenericGraphsTest
     // ~ Inner Classes ----------------------------------------------------------
 
     public static class CustomEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
 
@@ -179,39 +158,23 @@ public class GenericGraphsTest
     }
 
     public static class EquivGraph
-        extends AbstractBaseGraph<EquivVertex, DefaultEdge>
+        extends
+        AbstractBaseGraph<EquivVertex, DefaultEdge>
     {
         private static final long serialVersionUID = 8647217182401022498L;
 
         public EquivGraph()
         {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, true, true, false);
-        }
-    }
-
-    /*
-     * Graph added for test to check for backward compatibility on specifics override. Safely remove
-     * after next-release.
-     */
-    @Deprecated
-    static class DeprecatedSpecificsTestGraph
-        extends Pseudograph<String, DefaultEdge>
-    {
-        private static final long serialVersionUID = 8647217182401022498L;
-
-        public DeprecatedSpecificsTestGraph()
-        {
-            super(DefaultEdge.class);
-        }
-
-        protected Specifics<String, DefaultEdge> createSpecifics()
-        {
-            return new FastLookupUndirectedSpecifics<>(this);
+            super(
+                SupplierUtil.createSupplier(EquivVertex.class),
+                SupplierUtil.createSupplier(DefaultEdge.class),
+                DefaultGraphType.directedPseudograph().asUnweighted());
         }
     }
 
     public static class FooEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
     }
@@ -238,13 +201,15 @@ public class GenericGraphsTest
     }
 
     public static class BarEdge
-        extends FooEdge
+        extends
+        FooEdge
     {
         private static final long serialVersionUID = 1L;
     }
 
     private class BarVertex
-        extends FooVertex
+        extends
+        FooVertex
     {
         public BarVertex()
         {

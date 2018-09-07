@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by Tom Conerly and Contributors.
+ * (C) Copyright 2010-2018, by Tom Conerly and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,14 +18,15 @@
 package org.jgrapht.alg.util;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * An implementation of <a href="http://en.wikipedia.org/wiki/Disjoint-set_data_structure">Union
  * Find</a> data structure. Union Find is a disjoint-set data structure. It supports two operations:
  * finding the set a specific element is in, and merging two sets. The implementation uses union by
- * rank and path compression to achieve an amortized cost of O(a(n)) per operation where a is the
- * inverse Ackermann function. UnionFind uses the hashCode and equals method of the elements it
- * operates on.
+ * rank and path compression to achieve an amortized cost of $O(\alpha(n))$ per operation where
+ * $\alpha$ is the inverse Ackermann function. UnionFind uses the hashCode and equals method of the
+ * elements it operates on.
  *
  * @param <T> element type
  *
@@ -34,8 +35,9 @@ import java.util.*;
  */
 public class UnionFind<T>
 {
-    private Map<T, T> parentMap;
-    private Map<T, Integer> rankMap;
+    private final Map<T, T> parentMap;
+    private final Map<T, Integer> rankMap;
+    private int count; // number of components
 
     /**
      * Creates a UnionFind instance with all the elements in separate sets.
@@ -44,12 +46,13 @@ public class UnionFind<T>
      */
     public UnionFind(Set<T> elements)
     {
-        parentMap = new HashMap<>();
+        parentMap = new LinkedHashMap<>();
         rankMap = new HashMap<>();
         for (T element : elements) {
             parentMap.put(element, element);
             rankMap.put(element, 0);
         }
+        count = elements.size();
     }
 
     /**
@@ -59,8 +62,12 @@ public class UnionFind<T>
      */
     public void addElement(T element)
     {
+        if (parentMap.containsKey(element))
+            throw new IllegalArgumentException(
+                "element is already contained in UnionFind: " + element);
         parentMap.put(element, element);
         rankMap.put(element, 0);
+        count++;
     }
 
     /**
@@ -86,24 +93,37 @@ public class UnionFind<T>
      *
      * @return The element representing the set the element is in.
      */
-    public T find(T element)
+    public T find(final T element)
     {
         if (!parentMap.containsKey(element)) {
-            throw new IllegalArgumentException("elements must be contained in given set");
+            throw new IllegalArgumentException(
+                "element is not contained in this UnionFind data structure: " + element);
         }
 
-        T parent = parentMap.get(element);
-        if (parent.equals(element)) {
-            return element;
+        T current = element;
+        while (true) {
+            T parent = parentMap.get(current);
+            if (parent.equals(current)) {
+                break;
+            }
+            current = parent;
+        }
+        final T root = current;
+
+        current = element;
+        while (!current.equals(root)) {
+            T parent = parentMap.get(current);
+            parentMap.put(current, root);
+            current = parent;
         }
 
-        T newParent = find(parent);
-        parentMap.put(element, newParent);
-        return newParent;
+        return root;
     }
 
     /**
-     * Merges the sets which contain element1 and element2.
+     * Merges the sets which contain element1 and element2. No guarantees are given as to which
+     * element becomes the representative of the resulting (merged) set: this can be either
+     * find(element1) or find(element2).
      *
      * @param element1 The first element to union.
      * @param element2 The second element to union.
@@ -132,6 +152,77 @@ public class UnionFind<T>
             parentMap.put(parent2, parent1);
             rankMap.put(parent1, rank1 + 1);
         }
+        count--;
+    }
+
+    /**
+     * Tests whether two elements are contained in the same set.
+     * 
+     * @param element1 first element
+     * @param element2 second element
+     * @return true if element1 and element2 are contained in the same set, false otherwise.
+     */
+    public boolean inSameSet(T element1, T element2)
+    {
+        return find(element1).equals(find(element2));
+    }
+
+    /**
+     * Returns the number of sets. Initially, all items are in their own set. The smallest number of
+     * sets equals one.
+     * 
+     * @return the number of sets
+     */
+    public int numberOfSets()
+    {
+        assert count >= 1 && count <= parentMap.keySet().size();
+        return count;
+    }
+
+    /**
+     * Returns the total number of elements in this data structure.
+     * 
+     * @return the total number of elements in this data structure.
+     */
+    public int size()
+    {
+        return parentMap.size();
+    }
+
+    /**
+     * Resets the UnionFind data structure: each element is placed in its own singleton set.
+     */
+    public void reset()
+    {
+        for (T element : parentMap.keySet()) {
+            parentMap.put(element, element);
+            rankMap.put(element, 0);
+        }
+        count = parentMap.size();
+    }
+
+    /**
+     * Returns a string representation of this data structure. Each component is represented as
+     * $\left{v_i:v_1,v_2,v_3,...v_n\right}$, where $v_i$ is the representative of the set.
+     * 
+     * @return string representation of this data structure
+     */
+    public String toString()
+    {
+        Map<T, Set<T>> setRep = new LinkedHashMap<>();
+        for (T t : parentMap.keySet()) {
+            T representative = find(t);
+            if (!setRep.containsKey(representative))
+                setRep.put(representative, new LinkedHashSet<>());
+            setRep.get(representative).add(t);
+        }
+
+        return setRep
+            .keySet().stream()
+            .map(
+                key -> "{" + key + ":" + setRep.get(key).stream().map(Objects::toString).collect(
+                    Collectors.joining(",")) + "}")
+            .collect(Collectors.joining(", ", "{", "}"));
     }
 }
 

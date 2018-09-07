@@ -17,9 +17,6 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
@@ -27,12 +24,15 @@ import org.apache.commons.lang3.*;
 import org.jgrapht.*;
 import org.jgrapht.io.GmlParser.*;
 
+import java.io.*;
+import java.util.*;
+
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
  * 
  * <p>
  * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
- * http://www. infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
+ * http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  *
  * <p>
  * Below is small example of a graph in GML format.
@@ -68,15 +68,40 @@ import org.jgrapht.io.GmlParser.*;
  * In case the graph is weighted then the importer also reads edge weights. Otherwise edge weights
  * are ignored. The importer also supports reading additional string attributes such as label or
  * custom user attributes. String attributes are unescaped as if they are Java strings.
- *
+ * 
+ * <p>
+ * The parser completely ignores elements from the input that are not related to vertices or edges
+ * of the graph. Moreover, complicated nested structures are simply returned as a whole. For
+ * example, in the following graph
+ * 
+ * <pre>
+ * graph [
+ *   node [ 
+ *     id 1
+ *   ]
+ *   node [ 
+ *     id 2
+ *   ]
+ *   edge [
+ *     source 1
+ *     target 2 
+ *     points [ x 1.0 y 2.0 ]
+ *   ]
+ * ]
+ * </pre>
+ * 
+ * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
+ * 
  * @param <V> the vertex type
  * @param <E> the edge type
  * 
  * @author Dimitrios Michail
  */
 public class GmlImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     /**
      * Constructs a new importer.
@@ -113,7 +138,7 @@ public class GmlImporter<V, E>
             ThrowingErrorListener errorListener = new ThrowingErrorListener();
 
             // create lexer
-            GmlLexer lexer = new GmlLexer(new ANTLRInputStream(input));
+            GmlLexer lexer = new GmlLexer(CharStreams.fromReader(input));
             lexer.removeErrorListeners();
             lexer.addErrorListener(errorListener);
 
@@ -142,7 +167,8 @@ public class GmlImporter<V, E>
     }
 
     private class ThrowingErrorListener
-        extends BaseErrorListener
+        extends
+        BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -157,7 +183,8 @@ public class GmlImporter<V, E>
 
     // create graph from parse tree
     private class CreateGraphGmlListener
-        extends GmlBaseListener
+        extends
+        GmlBaseListener
     {
         private static final String NODE = "node";
         private static final String EDGE = "edge";
@@ -177,7 +204,8 @@ public class GmlImporter<V, E>
         private Integer sourceId;
         private Integer targetId;
         private Double weight;
-        private Map<String, String> attributes;
+        private Map<String, Attribute> attributes;
+        private StringBuilder stringBuffer;
 
         // collected nodes and edges
         private Map<Integer, Node> nodes;
@@ -244,33 +272,70 @@ public class GmlImporter<V, E>
         @Override
         public void enterNumberKeyValue(GmlParser.NumberKeyValueContext ctx)
         {
-            String key = ctx.ID().getText();
-
-            if (insideNode && level == 2 && key.equals(ID)) {
-                try {
-                    nodeId = Integer.parseInt(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
-                }
-            } else if (insideEdge && level == 2 && key.equals(SOURCE)) {
-                try {
-                    sourceId = Integer.parseInt(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
-                }
-            } else if (insideEdge && level == 2 && key.equals(TARGET)) {
-                try {
-                    targetId = Integer.parseInt(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
-                }
-            } else if (insideEdge && level == 2 && key.equals(WEIGHT)) {
-                try {
-                    weight = Double.parseDouble(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
-                }
+            if (!insideNode && !insideEdge) {
+                return;
             }
+
+            if (level < 2) {
+                return;
+            }
+
+            String key = ctx.ID().getText();
+            String value = ctx.NUMBER().getText();
+
+            if (level == 2) {
+                if (insideNode) {
+                    if (key.equals(ID)) {
+                        try {
+                            nodeId = Integer.parseInt(value);
+                        } catch (NumberFormatException e) {
+                            // ignore error
+                        }
+                    } else {
+                        attributes.put(key, parseNumberAttribute(value));
+                    }
+                } else {
+                    // insideEdge
+                    assert insideEdge;
+
+                    switch (key) {
+                    case SOURCE:
+                        try {
+                            sourceId = Integer.parseInt(value);
+                        } catch (NumberFormatException e) {
+                            // ignore error
+                        }
+                        break;
+                    case TARGET:
+                        try {
+                            targetId = Integer.parseInt(value);
+                        } catch (NumberFormatException e) {
+                            // ignore error
+                        }
+                        break;
+                    case WEIGHT:
+                        try {
+                            weight = Double.parseDouble(value);
+                        } catch (NumberFormatException e) {
+                            // ignore error
+                        }
+                        break;
+                    default:
+                        attributes.put(key, parseNumberAttribute(value));
+                    }
+                }
+            } else {
+                assert level >= 3;
+                /*
+                 * Inside a list. We simply concatenate everything here to allow the user to do
+                 * something fancier in user-code.
+                 */
+                stringBuffer.append(' ');
+                stringBuffer.append(key);
+                stringBuffer.append(' ');
+                stringBuffer.append(value);
+            }
+
         }
 
         @Override
@@ -290,6 +355,16 @@ public class GmlImporter<V, E>
                 targetId = null;
                 weight = null;
                 attributes = new HashMap<>();
+            } else if (insideNode || insideEdge) {
+                if (level == 2) {
+                    stringBuffer = new StringBuilder();
+                    stringBuffer.append('[');
+                } else if (level >= 3) {
+                    stringBuffer.append(' ');
+                    stringBuffer.append(key);
+                    stringBuffer.append(' ');
+                    stringBuffer.append('[');
+                }
             }
             level++;
         }
@@ -315,42 +390,91 @@ public class GmlImporter<V, E>
                 }
                 insideEdge = false;
                 attributes = null;
+            } else if (insideNode || insideEdge) {
+                if (level == 2) {
+                    stringBuffer.append(' ');
+                    stringBuffer.append(']');
+                    attributes.put(
+                        key,
+                        new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
+                    stringBuffer = null;
+                } else if (level >= 3) {
+                    stringBuffer.append(' ');
+                    stringBuffer.append(']');
+                }
             }
         }
 
         @Override
         public void enterStringKeyValue(GmlParser.StringKeyValueContext ctx)
         {
-            if (!insideEdge && !insideNode && level != 2) {
+            if (!insideNode && !insideEdge) {
+                return;
+            }
+
+            if (level < 2) {
                 return;
             }
 
             String key = ctx.ID().getText();
-
-            if (key.equals(ID)) {
-                throw new IllegalArgumentException("Invalid type for attribute id: string");
-            } else if (key.equals(SOURCE)) {
-                throw new IllegalArgumentException("Invalid type for attribute source: string");
-            } else if (key.equals(TARGET)) {
-                throw new IllegalArgumentException("Invalid type for attribute target: string");
-            } else if (key.equals(WEIGHT)) {
-                throw new IllegalArgumentException("Invalid type for attribute weight: string");
-            }
-
             String text = ctx.STRING().getText();
             String noQuotes = text.subSequence(1, text.length() - 1).toString();
             String unescapedText = StringEscapeUtils.unescapeJava(noQuotes);
 
-            attributes.put(key, unescapedText);
+            if (level == 2) {
+                /*
+                 * Store attribute
+                 */
+                if (key.equals(ID)) {
+                    throw new IllegalArgumentException("Invalid type for attribute id: string");
+                } else if (key.equals(SOURCE)) {
+                    throw new IllegalArgumentException("Invalid type for attribute source: string");
+                } else if (key.equals(TARGET)) {
+                    throw new IllegalArgumentException("Invalid type for attribute target: string");
+                } else if (key.equals(WEIGHT)) {
+                    throw new IllegalArgumentException("Invalid type for attribute weight: string");
+                }
+
+                attributes.put(key, DefaultAttribute.createAttribute(unescapedText));
+            } else if (level >= 3) {
+                /*
+                 * Inside a list. We simply concatenate everything here to allow the user to do
+                 * something fancier in user-code.
+                 */
+                stringBuffer.append(' ');
+                stringBuffer.append(key);
+                stringBuffer.append(' ');
+                stringBuffer.append(text);
+            }
+        }
+
+        private Attribute parseNumberAttribute(String value)
+        {
+            try {
+                return DefaultAttribute.createAttribute(Integer.parseInt(value, 10));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            try {
+                return DefaultAttribute.createAttribute(Long.parseLong(value, 10));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            try {
+                return DefaultAttribute.createAttribute(Double.parseDouble(value));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            return DefaultAttribute.createAttribute(value);
         }
 
     }
 
     private class Node
     {
-        Map<String, String> attributes;
+        Map<String, Attribute> attributes;
 
-        public Node(Map<String, String> attributes)
+        public Node(Map<String, Attribute> attributes)
         {
             this.attributes = attributes;
         }
@@ -361,10 +485,10 @@ public class GmlImporter<V, E>
         Integer source;
         Integer target;
         Double weight;
-        Map<String, String> attributes;
+        Map<String, Attribute> attributes;
 
         public PartialEdge(
-            Integer source, Integer target, Double weight, Map<String, String> attributes)
+            Integer source, Integer target, Double weight, Map<String, Attribute> attributes)
         {
             this.source = source;
             this.target = target;

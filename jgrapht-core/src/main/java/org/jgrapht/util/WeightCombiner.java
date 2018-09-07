@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -35,12 +35,12 @@ public interface WeightCombiner
     /**
      * Minimum weight.
      */
-    WeightCombiner MIN = (a, b) -> Math.min(a, b);
+    WeightCombiner MIN = Math::min;
 
     /**
      * Maximum weight.
      */
-    WeightCombiner MAX = (a, b) -> Math.max(a, b);
+    WeightCombiner MAX = Math::max;
 
     /**
      * First weight.

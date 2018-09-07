@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * Provides a cross-connected-component traversal functionality for iterator subclasses.
@@ -33,7 +33,8 @@ import org.jgrapht.event.*;
  * @since Jan 31, 2004
  */
 public abstract class CrossComponentIterator<V, E, D>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private static final int CCS_BEFORE_COMPONENT = 1;
     private static final int CCS_WITHIN_COMPONENT = 2;
@@ -55,10 +56,15 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * Iterator which provides start vertices for cross-component iteration.
      */
+    private Iterator<V> entireGraphVertexIterator = null;
+
+    /**
+     * Iterator which provides start vertices for specified start vertices.
+     */
     private Iterator<V> startVertexIterator = null;
 
     /**
-     * The start vertex.
+     * The current vertex.
      */
     private V startVertex;
 
@@ -74,7 +80,7 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     public CrossComponentIterator(Graph<V, E> g)
     {
-        this(g, null);
+        this(g, (V) null);
     }
 
     /**
@@ -90,28 +96,49 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
+        this(g, startVertex == null ? null : Collections.singletonList(startVertex));
+    }
+
+    /**
+     * Creates a new iterator for the specified graph. Iteration will start at the specified start
+     * vertices. If the specified start vertices is <code>
+     * null</code>, Iteration will start at an arbitrary graph vertex.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     *
+     * @throws IllegalArgumentException if <code>g==null</code> or does not contain
+     *         <code>startVertex</code>
+     */
+    public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices)
+    {
         super(g);
+
+        /*
+         * Initialize crossComponentTraversal and test for containment
+         */
+        this.entireGraphVertexIterator = graph.vertexSet().iterator();
+        if (startVertices == null) {
+            this.crossComponentTraversal = true;
+        } else {
+            this.crossComponentTraversal = false;
+            this.startVertexIterator = startVertices.iterator();
+        }
 
         /*
          * Initialize start vertex
          */
-        this.startVertexIterator = graph.vertexSet().iterator();
-        if (startVertex == null) {
-            this.crossComponentTraversal = true;
-            // pick a start vertex if graph not empty
-            if (startVertexIterator.hasNext()) {
-                this.startVertex = startVertexIterator.next();
-            } else {
-                this.startVertex = null;
-            }
-        } else {
-            this.crossComponentTraversal = false;
-            if (graph.containsVertex(startVertex)) {
-                this.startVertex = startVertex;
-            } else {
+        Iterator<V> it = crossComponentTraversal ? entireGraphVertexIterator : startVertexIterator;
+        // pick a start vertex if possible
+        if (it.hasNext()) {
+            this.startVertex = it.next();
+            if (!graph.containsVertex(startVertex)) {
                 throw new IllegalArgumentException("graph must contain the start vertex");
             }
+        } else {
+            this.startVertex = null;
         }
+
     }
 
     @Override
@@ -129,22 +156,22 @@ public abstract class CrossComponentIterator<V, E, D>
                 }
             }
 
-            if (isCrossComponentTraversal()) {
-                while (startVertexIterator.hasNext()) {
-                    V v = startVertexIterator.next();
-
-                    if (!isSeenVertex(v)) {
-                        encounterVertex(v, null);
-                        state = CCS_BEFORE_COMPONENT;
-
-                        return true;
-                    }
+            Iterator<V> it =
+                isCrossComponentTraversal() ? entireGraphVertexIterator : startVertexIterator;
+            while (it != null && it.hasNext()) {
+                V v = it.next();
+                if (!graph.containsVertex(v)) {
+                    throw new IllegalArgumentException("graph must contain the start vertex");
                 }
+                if (!isSeenVertex(v)) {
+                    encounterVertex(v, null);
+                    state = CCS_BEFORE_COMPONENT;
 
-                return false;
-            } else {
-                return false;
+                    return true;
+                }
             }
+
+            return false;
         } else {
             return true;
         }

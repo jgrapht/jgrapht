@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2017, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2018, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -72,7 +72,9 @@ import java.util.*;
  * @author Assaf Lehr
  */
 public class PrefetchIterator<E>
-    implements Iterator<E>, Enumeration<E>
+    implements
+    Iterator<E>,
+    Enumeration<E>
 {
     private NextElementFunctor<E> innerEnum;
     private E getNextLastResult;

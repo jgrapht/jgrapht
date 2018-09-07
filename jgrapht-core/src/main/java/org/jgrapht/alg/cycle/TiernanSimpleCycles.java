@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2018, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Tiernan's algorithm.
@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @author Nikolay Ognyanov
  */
 public class TiernanSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     private Graph<V, E> graph;
 
@@ -60,18 +61,18 @@ public class TiernanSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * @return graph
      */
-    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * @param graph graph
      */
-    @Override
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
@@ -137,8 +138,7 @@ public class TiernanSimpleCycles<V, E>
             // circuit confirmation
             startOfPath = path.get(0);
             if (graph.containsEdge(endOfPath, startOfPath)) {
-                List<V> cycle = new ArrayList<>();
-                cycle.addAll(path);
+                List<V> cycle = new ArrayList<>(path);
                 cycles.add(cycle);
             }
 

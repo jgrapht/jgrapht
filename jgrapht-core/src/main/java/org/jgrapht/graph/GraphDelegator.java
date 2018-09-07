@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
+import java.util.function.*;
 
 /**
  * A graph backed by the the graph specified at the constructor, which delegates all its methods to
@@ -33,7 +34,8 @@ import org.jgrapht.*;
  * </p>
  *
  * <p>
- * This class is mostly used as a base for extending subclasses.
+ * This class is mostly used as a base for extending subclasses. It can also be used in order to
+ * override the vertex and edge supplier of a graph.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -43,25 +45,78 @@ import org.jgrapht.*;
  * @since Jul 20, 2003
  */
 public class GraphDelegator<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Graph<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -215068279981825448L;
-    
-    /**
+
+    /*
      * The graph to which operations are delegated.
      */
-    private Graph<V, E> delegate;
+    private final Graph<V, E> delegate;
+    private final Supplier<V> vertexSupplier;
+    private final Supplier<E> edgeSupplier;
 
     /**
-     * Constructor for GraphDelegator.
+     * Constructor
      *
-     * @param g the backing graph (the delegate).
+     * @param graph the backing graph (the delegate).
      */
-    public GraphDelegator(Graph<V, E> g)
+    public GraphDelegator(Graph<V, E> graph)
+    {
+        this(graph, null, null);
+    }
+
+    /**
+     * 
+     * @param graph the backing graph (the delegate).
+     * @param vertexSupplier vertex supplier for the delegator. Can be null in which case the
+     *        backing graph vertex supplier will be used.
+     * @param edgeSupplier edge supplier for the delegator. Can be null in which case the backing
+     *        graph edge supplier will be used.
+     */
+    public GraphDelegator(Graph<V, E> graph, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
         super();
-        delegate = Objects.requireNonNull(g, "g must not be null");
+        this.delegate = Objects.requireNonNull(graph, "graph must not be null");
+        this.vertexSupplier = vertexSupplier;
+        this.edgeSupplier = edgeSupplier;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * <p>
+     * Returns the delegator's vertex supplier or the backing graph's vertex supplier in case of
+     * null.
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        if (vertexSupplier != null) {
+            return vertexSupplier;
+        } else {
+            return delegate.getVertexSupplier();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * <p>
+     * Returns the delegator's edge supplier or the backing graph's edge supplier in case of null.
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        if (edgeSupplier != null) {
+            return edgeSupplier;
+        } else {
+            return delegate.getEdgeSupplier();
+        }
     }
 
     /**
@@ -86,17 +141,15 @@ public class GraphDelegator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return delegate.getEdgeFactory();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
+        /*
+         * Use our own edge supplier, if provided.
+         */
+        if (edgeSupplier != null) {
+            E e = edgeSupplier.get();
+            return this.addEdge(sourceVertex, targetVertex, e) ? e : null;
+        }
         return delegate.addEdge(sourceVertex, targetVertex);
     }
 
@@ -107,6 +160,22 @@ public class GraphDelegator<V, E>
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         return delegate.addEdge(sourceVertex, targetVertex, e);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V addVertex()
+    {
+        /*
+         * Use our own vertex supplier, if provided.
+         */
+        if (vertexSupplier != null) {
+            V v = vertexSupplier.get();
+            return this.addVertex(v) ? v : null;
+        }
+        return delegate.addVertex();
     }
 
     /**
@@ -290,6 +359,17 @@ public class GraphDelegator<V, E>
     {
         return delegate.getType();
     }
+
+    /**
+     * Return the backing graph (the delegate).
+     * 
+     * @return the backing graph (the delegate)
+     */
+    protected Graph<V, E> getDelegate()
+    {
+        return delegate;
+    }
+
 }
 
 // End GraphDelegator.java

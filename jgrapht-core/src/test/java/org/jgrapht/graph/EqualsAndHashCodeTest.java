@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2017, by Vladimir Kostyukov and Contributors.
+ * (C) Copyright 2012-2018, by Vladimir Kostyukov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,14 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
+import static org.junit.Assert.*;
 
 public class EqualsAndHashCodeTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -31,19 +33,10 @@ public class EqualsAndHashCodeTest
     private String v3 = "v3";
     private String v4 = "v4";
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public EqualsAndHashCodeTest(String name)
-    {
-        super(name);
-    }
-
     /**
      * Tests equals/hashCode methods for directed graphs.
      */
+    @Test
     public void testDefaultDirectedGraph()
     {
         Graph<String, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -81,6 +74,7 @@ public class EqualsAndHashCodeTest
     /**
      * Tests equals/hashCode methods for undirected graphs.
      */
+    @Test
     public void testSimpleGraph()
     {
         Graph<String, DefaultEdge> g1 = new SimpleGraph<>(DefaultEdge.class);
@@ -118,6 +112,7 @@ public class EqualsAndHashCodeTest
     /**
      * Tests equals/hashCode methods for graphs with non-Intrusive edges.
      */
+    @Test
     public void testGraphsWithNonIntrusiveEdge()
     {
         Graph<String, String> g1 = new DefaultDirectedGraph<>(String.class);
@@ -151,6 +146,7 @@ public class EqualsAndHashCodeTest
     /**
      * Tests equals/hashCode methods for graphs with multiple edges and loops.
      */
+    @Test
     public void testPseudograph()
     {
         Graph<String, DefaultEdge> g1 = new Pseudograph<>(DefaultEdge.class);
@@ -191,6 +187,7 @@ public class EqualsAndHashCodeTest
     /**
      * Tests equals/hashCode methods for graphs with custom edges.
      */
+    @Test
     public void testGrapshWithCustomEdges()
     {
         Graph<String, CustomEdge> g1 = new SimpleGraph<>(CustomEdge.class);
@@ -223,6 +220,7 @@ public class EqualsAndHashCodeTest
     /**
      * Tests equals/hashCode for graphs transformed to weighted.
      */
+    @Test
     public void testAsWeightedGraphs()
     {
         Graph<String, DefaultEdge> g1 = new SimpleGraph<>(DefaultEdge.class);
@@ -278,7 +276,8 @@ public class EqualsAndHashCodeTest
      * Simple custom edge class.
      */
     public static class CustomEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
         private String label;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Florian Buenzli and Contributors.
+ * (C) Copyright 2015-2018, by Florian Buenzli and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.clique;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.graph.builder.*;
+
 import java.util.*;
 import java.util.Map.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.*;
-import org.jgrapht.graph.*;
 
 /**
  * Clique Minimal Separator Decomposition using MCS-M+ and Atoms algorithm as described in Berry et
@@ -88,8 +88,8 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
 
     /**
      * Setup a clique minimal separator decomposition on undirected graph <code>
-     * g</code>. Loops and multiple edges are removed, i.e. the graph is transformed to a simple
-     * graph.
+     * g</code>. Loops and multiple (parallel) edges are removed, i.e. the graph is transformed to a
+     * simple graph.
      *
      * @param g The graph to decompose.
      */
@@ -107,7 +107,11 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private void computeMinimalTriangulation()
     {
         // initialize chordGraph with same vertices as graph
-        chordalGraph = new SimpleGraph<>(graph.getEdgeFactory());
+        chordalGraph = GraphTypeBuilder
+            .<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
+            .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
+            .allowingSelfLoops(false).buildGraph();
+
         for (V v : graph.vertexSet()) {
             chordalGraph.addVertex(v);
         }
@@ -159,7 +163,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
                             reached.add(z);
                             if (vertexLabels.get(z) > j) {
                                 Y.add(z);
-                                E fillEdge = graph.getEdgeFactory().createEdge(v, z);
+                                E fillEdge = graph.getEdgeSupplier().get();
                                 fillEdges.add(fillEdge);
                                 addToReach(vertexLabels.get(z), z, reach);
                             } else {
@@ -220,7 +224,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     }
 
     /**
-     * Compute the unique decomposition of the input graph G (atoms of G). Implementation of
+     * Compute the unique decomposition of the input graph $G$ (atoms of $G$). Implementation of
      * algorithm Atoms as described in Berry et al. (2010), DOI:10.3390/a3020197,
      * <a href="http://www.mdpi.com/1999-4893/3/2/197"> http://www.mdpi.com/1999-4893/3/2/197</a>
      */
@@ -260,7 +264,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
 
                     tmpGraph.removeAllVertices(separator);
                     ConnectivityInspector<V, E> con = new ConnectivityInspector<>(tmpGraph);
-                    if (con.isGraphConnected()) {
+                    if (con.isConnected()) {
                         throw new RuntimeException("separator did not separate the graph");
                     }
                     for (Set<V> component : con.connectedSets()) {
@@ -313,7 +317,11 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      */
     private static <V, E> Graph<V, E> copyAsSimpleGraph(Graph<V, E> graph)
     {
-        Graph<V, E> copy = new SimpleGraph<>(graph.getEdgeFactory());
+        Graph<V,
+            E> copy = GraphTypeBuilder
+                .<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
+                .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
+                .allowingSelfLoops(false).buildGraph();
 
         if (graph.getType().isSimple()) {
             Graphs.addGraph(copy, graph);

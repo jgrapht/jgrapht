@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,19 +17,20 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 
+import java.util.*;
+
 /**
- * A linear time 1/2-approximation algorithm for finding a maximum weight matching in an arbitrary
- * graph. Linear time here means O(m) where m is the cardinality of the edge set, even if the graph
- * contains isolated vertices. 1/2-approximation means that for any graph instance, the algorithm
- * computes a matching whose weight is at least half of the weight of a maximum weight matching. The
- * implementation accepts directed and undirected graphs which may contain self-loops and multiple
- * edges. There is no assumption on the edge weights, i.e. they can also be negative or zero.
+ * A linear time $\frac{1}{2}$-approximation algorithm for finding a maximum weight matching in an
+ * arbitrary graph. Linear time here means $O(m)$ where m is the cardinality of the edge set, even
+ * if the graph contains isolated vertices. $\frac{1}{2}$-approximation means that for any graph
+ * instance, the algorithm computes a matching whose weight is at least half of the weight of a
+ * maximum weight matching. The implementation accepts directed and undirected graphs which may
+ * contain self-loops and multiple edges. There is no assumption on the edge weights, i.e. they can
+ * also be negative or zero.
  * 
  * <p>
  * The algorithm is due to Drake and Hougardy, described in detail in the following paper:
@@ -61,7 +62,8 @@ import org.jgrapht.alg.util.*;
  * @since September 2016
  */
 public class PathGrowingWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     /**
      * Default value on whether to use extra heuristics to improve the result.
@@ -91,8 +93,8 @@ public class PathGrowingWeightedMatching<V, E>
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
-     *        approximation factor remains 1/2, in most cases the heuristics produce matchings of
-     *        higher quality.
+     *        approximation factor remains $\frac{1}{2}$, in most cases the heuristics produce
+     *        matchings of higher quality.
      */
     public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics)
     {
@@ -105,8 +107,8 @@ public class PathGrowingWeightedMatching<V, E>
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
-     *        approximation factor remains 1/2, in most cases the heuristics produce matchings of
-     *        higher quality.
+     *        approximation factor remains $\frac{1}{2}$, in most cases the heuristics produce
+     *        matchings of higher quality.
      * @param epsilon tolerance when comparing floating point values
      */
     public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics, double epsilon)
@@ -120,12 +122,12 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     /**
-     * Get a matching that is a 1/2-approximation of the maximum weighted matching.
+     * Get a matching that is a $\frac{1}{2}$-approximation of the maximum weighted matching.
      * 
      * @return a matching
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         if (useHeuristics) {
             return runWithHeuristics();
@@ -136,7 +138,7 @@ public class PathGrowingWeightedMatching<V, E>
 
     /**
      * Compute all vertices that have positive degree by iterating over the edges on purpose. This
-     * keeps the complexity to O(m) where m is the number of edges.
+     * keeps the complexity to $O(m)$ where $m$ is the number of edges.
      * 
      * @return set of vertices with positive degree
      */
@@ -155,7 +157,7 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     // the algorithm (no heuristics)
-    private Matching<E> run()
+    private Matching<V, E> run()
     {
         // lookup all relevant vertices
         Set<V> visibleVertex = initVisibleVertices();
@@ -217,14 +219,14 @@ public class PathGrowingWeightedMatching<V, E>
 
         // return best matching
         if (comparator.compare(m1Weight, m2Weight) > 0) {
-            return new MatchingImpl<E>(m1, m1Weight);
+            return new MatchingImpl<>(graph, m1, m1Weight);
         } else {
-            return new MatchingImpl<E>(m2, m2Weight);
+            return new MatchingImpl<>(graph, m2, m2Weight);
         }
     }
 
     // the algorithm (improved with additional heuristics)
-    private Matching<E> runWithHeuristics()
+    private Matching<V, E> runWithHeuristics()
     {
         // lookup all relevant vertices
         Set<V> visibleVertex = initVisibleVertices();
@@ -315,7 +317,7 @@ public class PathGrowingWeightedMatching<V, E>
         }
 
         // return extended matching
-        return new MatchingImpl<E>(matching, matchingWeight);
+        return new MatchingImpl<>(graph, matching, matchingWeight);
     }
 
     /**
@@ -347,7 +349,7 @@ public class PathGrowingWeightedMatching<V, E>
             switch (pathLength) {
             case 0:
                 // special case, empty path
-                return Pair.of(Double.valueOf(0d), Collections.emptySet());
+                return Pair.of(0d, Collections.emptySet());
             case 1:
                 // special case, one edge
                 E e = path.getFirst();
@@ -355,7 +357,7 @@ public class PathGrowingWeightedMatching<V, E>
                 if (comparator.compare(eWeight, 0d) > 0) {
                     return Pair.of(eWeight, Collections.singleton(e));
                 } else {
-                    return Pair.of(Double.valueOf(0d), Collections.emptySet());
+                    return Pair.of(0d, Collections.emptySet());
                 }
             }
 

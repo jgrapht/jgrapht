@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,6 +20,8 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
+import java.util.*;
+
 /**
  * A closest-first iterator for a directed or undirected graph. For this iterator to work correctly
  * the graph must not be modified during iteration. Currently there are no means to ensure that, nor
@@ -38,7 +40,8 @@ import org.jgrapht.util.*;
  * @since Sep 2, 2003
  */
 public class ClosestFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
+    extends
+    CrossComponentIterator<V, E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
 {
     /**
      * Priority queue of fringe vertices.
@@ -51,16 +54,6 @@ public class ClosestFirstIterator<V, E>
     private double radius = Double.POSITIVE_INFINITY;
 
     private boolean initialized = false;
-
-    /**
-     * Creates a new closest-first iterator for the specified graph.
-     *
-     * @param g the graph to be iterated.
-     */
-    public ClosestFirstIterator(Graph<V, E> g)
-    {
-        this(g, null);
-    }
 
     /**
      * Creates a new closest-first iterator for the specified graph. Iteration will start at the
@@ -77,6 +70,22 @@ public class ClosestFirstIterator<V, E>
     }
 
     /**
+     * Creates a new closest-first iterator for the specified graph. Iteration will start at the
+     * specified start vertices and will be limited to the subset of the graph reachable from those
+     * vertices. Iteration order is based on minimum distance from any of the start vertices,
+     * regardless of the order in which the start vertices are supplied. Because of this, the entire
+     * traversal is treated as if it were over a single connected component with respect to events
+     * fired.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     */
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
+    {
+        this(g, startVertices, Double.POSITIVE_INFINITY);
+    }
+
+    /**
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertex and will be limited to the subset of the connected
      * component which includes that vertex and is reachable via paths of weighted length less than
@@ -90,10 +99,44 @@ public class ClosestFirstIterator<V, E>
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
-        super(g, startVertex);
+        this(g, startVertex == null ? null : Collections.singletonList(startVertex), radius);
+    }
+
+    /**
+     * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
+     * start at the specified start vertices and will be limited to the subset of the graph
+     * reachable from those vertices via paths of weighted length less than or equal to the
+     * specified radius. The specified collection of start vertices may not be <code>null</code>.
+     * Iteration order is based on minimum distance from any of the start vertices, regardless of
+     * the order in which the start vertices are supplied. Because of this, the entire traversal is
+     * treated as if it were over a single connected component with respect to events fired.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     *        search.
+     */
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius)
+    {
+        super(g, startVertices);
         this.radius = radius;
         checkRadiusTraversal(isCrossComponentTraversal());
         initialized = true;
+        if (!crossComponentTraversal) {
+            // prime the heap by processing the first start vertex
+            hasNext();
+            Iterator<V> iter = startVertices.iterator();
+            if (iter.hasNext()) {
+                // discard the first since we already primed it above
+                iter.next();
+                // prime the heap with the rest of the start vertices so that
+                // we can process them all simultaneously
+                while (iter.hasNext()) {
+                    V v = iter.next();
+                    encounterVertex(v, null);
+                }
+            }
+        }
     }
 
     // override AbstractGraphIterator
@@ -135,7 +178,7 @@ public class ClosestFirstIterator<V, E>
      *
      * @param vertex the spanned vertex.
      *
-     * @return the spanning tree edge, or null if the vertex either has not been seen yet or is the
+     * @return the spanning tree edge, or null if the vertex either has not been seen yet or is a
      *         start vertex.
      */
     public E getSpanningTreeEdge(V vertex)

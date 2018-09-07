@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.TarjanLowestCommonAncestor.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 public class TarjanLowestCommonAncestorTest
 {

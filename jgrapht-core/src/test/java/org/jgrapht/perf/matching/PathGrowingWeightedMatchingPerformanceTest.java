@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,18 +17,18 @@
  */
 package org.jgrapht.perf.matching;
 
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
 
-import junit.framework.*;
+import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing matching algorithms.
@@ -36,7 +36,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class PathGrowingWeightedMatchingPerformanceTest
-    extends TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
@@ -62,18 +61,9 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
             }
 
-            graph = new Pseudograph<>(DefaultEdge.class);
-
-            generator.generateGraph(graph, new VertexFactory<Integer>()
-            {
-                int i;
-
-                @Override
-                public Integer createVertex()
-                {
-                    return ++i;
-                }
-            }, null);
+            graph = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
         }
 
         @Benchmark
@@ -84,7 +74,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class PathGrowingWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -94,7 +85,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class PathGrowingWeightedMatchingNoHeuristicsRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -105,25 +97,28 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class GreedyWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new GreedyWeightedMatching<>(graph);
+            return new GreedyWeightedMatching<>(graph, false);
         }
     }
 
-    public static class EdmondsBlossomShrinkingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+    public static class EdmondsMaximumCardinalityMatchingRandomGraphBenchmark
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsBlossomShrinking<>(graph);
+            return new EdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 
+    @Test
     public void testPathGrowingRandomGraphBenchmark()
         throws RunnerException
     {
@@ -135,7 +130,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     .getSimpleName() + ".*")
             .include(".*" + GreedyWeightedMatchingRandomGraphBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsBlossomShrinkingRandomGraphBenchmark.class.getSimpleName() + ".*")
+                ".*" + EdmondsMaximumCardinalityMatchingRandomGraphBenchmark.class.getSimpleName()
+                    + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

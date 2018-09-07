@@ -33,7 +33,7 @@ public interface ComponentUpdater<T>
      * @param component to update
      * @param attributes to add to the component
      */
-    void update(T component, Map<String, String> attributes);
+    void update(T component, Map<String, Attribute> attributes);
 }
 
 // End ComponentUpdater.java

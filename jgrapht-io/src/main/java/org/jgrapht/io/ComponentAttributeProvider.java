@@ -36,7 +36,7 @@ public interface ComponentAttributeProvider<T>
      *
      * @return key/value pairs, or null if no attributes should be supplied
      */
-    public Map<String, String> getComponentAttributes(T component);
+    public Map<String, Attribute> getComponentAttributes(T component);
 }
 
 // End ComponentAttributeProvider.java

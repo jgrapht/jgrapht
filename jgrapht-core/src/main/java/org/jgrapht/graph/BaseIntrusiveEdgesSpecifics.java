@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.util.TypeUtil;
+import java.io.*;
+import java.util.*;
 
 /**
  * A base implementation for the intrusive edges specifics.
@@ -36,20 +33,23 @@ import org.jgrapht.util.TypeUtil;
  * @param <E> the graph edge type
  * @param <IE> the intrusive edge type
  */
-abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
-    implements Serializable
+public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -7498268216742485L;
-    
+
     protected Map<E, IE> edgeMap;
     protected transient Set<E> unmodifiableEdgeSet = null;
 
     /**
      * Constructor
+     * 
+     * @param edgeMap the map to use for storage
      */
-    public BaseIntrusiveEdgesSpecifics()
+    public BaseIntrusiveEdgesSpecifics(Map<E, IE> edgeMap)
     {
-        this.edgeMap = new LinkedHashMap<>();
+        this.edgeMap = Objects.requireNonNull(edgeMap);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
         if (ie == null) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         }
-        return TypeUtil.uncheckedCast(ie.source, null);
+        return TypeUtil.uncheckedCast(ie.source);
     }
 
     /**
@@ -113,7 +113,7 @@ abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
         if (ie == null) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         }
-        return TypeUtil.uncheckedCast(ie.target, null);
+        return TypeUtil.uncheckedCast(ie.target);
     }
 
     /**
@@ -144,8 +144,9 @@ abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
      * @param e the edge
      * @param sourceVertex the source vertex of the edge
      * @param targetVertex the target vertex of the edge
+     * @return true if the edge was added, false if the edge was already present
      */
-    public abstract void add(E e, V sourceVertex, V targetVertex);
+    public abstract boolean add(E e, V sourceVertex, V targetVertex);
 
     /**
      * Get the intrusive edge of an edge.

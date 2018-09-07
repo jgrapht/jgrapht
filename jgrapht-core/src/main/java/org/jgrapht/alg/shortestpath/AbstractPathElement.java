@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by France Telecom and Contributors.
+ * (C) Copyright 2006-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * A new path is created from a path concatenated to an edge. It's like a linked list.<br>
@@ -31,7 +31,6 @@ import org.jgrapht.*;
  * NOTE jvs 1-Jan-2008: This is an internal data structure for use in algorithms. For returning
  * paths to callers, use the public {@link GraphPath} interface instead.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 abstract class AbstractPathElement<V, E>

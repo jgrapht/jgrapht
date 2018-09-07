@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,34 +17,44 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.GraphTests;
-import org.jgrapht.VertexFactory;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.graph.AsGraphUnion;
 import org.jgrapht.graph.AsWeightedGraph;
-import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * Johnson's all pairs shortest paths algorithm.
- * 
+ *
  * <p>
  * Finds the shortest paths between all pairs of vertices in a sparse graph. Edge weights can be
  * negative, but no negative-weight cycles may exist. It first executes the Bellman-Ford algorithm
  * to compute a transformation of the input graph that removes all negative weights, allowing
  * Dijkstra's algorithm to be used on the transformed graph.
+ *
+ * <p>
+ * Running time is $O(n m + n^2 \log n)$.
+ *
+ * <p>
+ * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
+ * provide a graph which is initialized with a vertex supplier.
  * 
  * <p>
- * Running time is O(|V||E| + |V|^2 log|V|).
- * 
+ * In case the algorithm detects a negative weight cycle it will throw an exception of type
+ * {@link NegativeCycleDetectedException} which will contain the detected negative weight cycle.
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -52,50 +62,43 @@ import org.jgrapht.graph.DirectedPseudograph;
  * @since February 2017
  */
 public class JohnsonShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
-    private Map<V, SingleSourcePaths<V, E>> paths;
-    private VertexFactory<V> vertexFactory;
+    private double[][] distance;
+    private E[][] pred;
+    private Map<V, Integer> vertexIndices;
+
     private final Comparator<Double> comparator;
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
-     * @param vertexClass the graph vertex class
      */
-    public JohnsonShortestPaths(Graph<V, E> graph, Class<? extends V> vertexClass)
+    public JohnsonShortestPaths(Graph<V, E> graph)
     {
-        this(graph, new ClassBasedVertexFactory<>(vertexClass));
+        this(graph, ToleranceDoubleComparator.DEFAULT_EPSILON);
     }
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
-     * @param vertexFactory the vertex factory of the graph
-     */
-    public JohnsonShortestPaths(Graph<V, E> graph, VertexFactory<V> vertexFactory)
-    {
-        this(graph, vertexFactory, ToleranceDoubleComparator.DEFAULT_EPSILON);
-    }
-
-    /**
-     * Construct a new instance.
-     * 
-     * @param graph the input graph
-     * @param vertexFactory the vertex factory of the graph
      * @param epsilon tolerance when comparing floating point values
      */
-    public JohnsonShortestPaths(Graph<V, E> graph, VertexFactory<V> vertexFactory, double epsilon)
+    public JohnsonShortestPaths(Graph<V, E> graph, double epsilon)
     {
         super(graph);
-        this.vertexFactory = Objects.requireNonNull(vertexFactory, "Vertex factory cannot be null");
         this.comparator = new ToleranceDoubleComparator(epsilon);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
+     *         are already in the original graph
+     * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink)
@@ -106,12 +109,37 @@ public class JohnsonShortestPaths<V, E>
         if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
+
         run();
-        return paths.get(source).getPath(sink);
+
+        if (source.equals(sink)) {
+            return GraphWalk.singletonWalk(graph, source, 0d);
+        }
+
+        int vSource = vertexIndices.get(source);
+        int vSink = vertexIndices.get(sink);
+
+        V cur = sink;
+        E e = pred[vSource][vSink];
+        if (e == null) {
+            return null;
+        }
+
+        LinkedList<E> edgeList = new LinkedList<>();
+        while (e != null) {
+            edgeList.addFirst(e);
+            cur = Graphs.getOppositeVertex(graph, e, cur);
+            e = pred[vSource][vertexIndices.get(cur)];
+        }
+
+        return new GraphWalk<>(graph, source, sink, null, edgeList, distance[vSource][vSink]);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
+     *         are already in the original graph
      */
     @Override
     public double getPathWeight(V source, V sink)
@@ -123,17 +151,21 @@ public class JohnsonShortestPaths<V, E>
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
         run();
-        return paths.get(source).getWeight(sink);
+        return distance[vertexIndices.get(source)][vertexIndices.get(sink)];
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
+     *         are already in the original graph
+     * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
     {
         run();
-        return paths.get(source);
+        return new JohnsonSingleSourcePaths(source);
     }
 
     /**
@@ -141,51 +173,80 @@ public class JohnsonShortestPaths<V, E>
      */
     private void run()
     {
-        if (paths != null) {
+        if (pred != null) {
             return;
         }
         GraphTests.requireDirectedOrUndirected(graph);
 
-        if (graph.getType().isDirected()) {
-            runDirected(graph);
-        } else {
-            runUndirected(graph);
-        }
-    }
-
-    /**
-     * Executes the algorithm for undirected graphs.
-     * 
-     * @param g the input graph
-     */
-    private void runUndirected(Graph<V, E> g)
-    {
-        /*
-         * Check that no negative edge weight exists, otherwise there is a negative-weight cycle.
-         */
-        for (E e : g.edgeSet()) {
-            double w = g.getEdgeWeight(e);
-            if (comparator.compare(w, 0.0) < 0) {
-                throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+        E detectedNegativeEdge = null;
+        for (E e : graph.edgeSet()) {
+            if (comparator.compare(graph.getEdgeWeight(e), 0.0) < 0) {
+                detectedNegativeEdge = e;
+                break;
             }
         }
 
-        /*
-         * Run Dijkstra for all vertices.
-         */
-        paths = new HashMap<>();
-        DijkstraShortestPath<V, E> dijkstraAlg = new DijkstraShortestPath<>(g);
-        for (V v : g.vertexSet()) {
-            paths.put(v, dijkstraAlg.getPaths(v));
+        if (detectedNegativeEdge != null) {
+            if (graph.getType().isUndirected()) {
+                V source = graph.getEdgeSource(detectedNegativeEdge);
+                double weight = graph.getEdgeWeight(detectedNegativeEdge);
+                GraphWalk<V,
+                    E> cycle = new GraphWalk<>(
+                        graph, source, source,
+                        Arrays.asList(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
+                throw new NegativeCycleDetectedException(
+                    GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE, cycle);
+            }
+            runWithNegativeEdgeWeights(graph);
+        } else {
+            runWithPositiveEdgeWeights(graph);
         }
     }
 
     /**
-     * Executes the algorithm for directed graphs.
-     * 
+     * Graph has no edges with negative weights. Only perform the last step of Johnson's algorithm:
+     * run Dijkstra's algorithm from every vertex.
+     *
      * @param g the input graph
      */
-    private void runDirected(Graph<V, E> g)
+    private void runWithPositiveEdgeWeights(Graph<V, E> g)
+    {
+        /*
+         * Create vertex numbering for array representation of results.
+         */
+        vertexIndices = computeVertexIndices(g);
+        final int n = g.vertexSet().size();
+        distance = new double[n][n];
+        pred = TypeUtil.uncheckedCast(new Object[n][n]);
+
+        /*
+         * Execute Dijkstra multiple times
+         */
+        for (V v : g.vertexSet()) {
+            DijkstraClosestFirstIterator<V, E> it =
+                new DijkstraClosestFirstIterator<>(g, v, Double.POSITIVE_INFINITY);
+            while (it.hasNext()) {
+                it.next();
+            }
+            Map<V, Pair<Double, E>> distanceAndPredecessorMap = it.getDistanceAndPredecessorMap();
+
+            // transform result
+            for (V u : g.vertexSet()) {
+                Pair<Double, E> pair = distanceAndPredecessorMap
+                    .getOrDefault(u, Pair.of(Double.POSITIVE_INFINITY, null));
+                distance[vertexIndices.get(v)][vertexIndices.get(u)] = pair.getFirst();
+                pred[vertexIndices.get(v)][vertexIndices.get(u)] = pair.getSecond();
+            }
+        }
+    }
+
+    /**
+     * Graph contains edges with negative weights. Transform the input graph, thereby ensuring that
+     * there are no edges with negative weights. Then run Dijkstra's algorithm for all vertices.
+     *
+     * @param g the input graph
+     */
+    private void runWithNegativeEdgeWeights(Graph<V, E> g)
     {
         /*
          * Compute vertex weights using Bellman-Ford
@@ -209,11 +270,17 @@ public class JohnsonShortestPaths<V, E>
         Graph<V, E> newEdgeWeightsGraph = new AsWeightedGraph<>(g, newEdgeWeights);
 
         /*
+         * Create vertex numbering, for array representation of results
+         */
+        vertexIndices = computeVertexIndices(g);
+        final int n = g.vertexSet().size();
+        distance = new double[n][n];
+        pred = TypeUtil.uncheckedCast(new Object[n][n]);
+
+        /*
          * Run Dijkstra using new weights for all vertices
          */
-        paths = new HashMap<>();
         for (V v : g.vertexSet()) {
-            // execute Dijkstra
             DijkstraClosestFirstIterator<V, E> it = new DijkstraClosestFirstIterator<>(
                 newEdgeWeightsGraph, v, Double.POSITIVE_INFINITY);
             while (it.hasNext()) {
@@ -222,40 +289,48 @@ public class JohnsonShortestPaths<V, E>
             Map<V, Pair<Double, E>> distanceAndPredecessorMap = it.getDistanceAndPredecessorMap();
 
             // transform distances to original weights
-            Map<V, Pair<Double, E>> newDistanceAndPredecessorMap = new HashMap<>();
             for (V u : g.vertexSet()) {
                 Pair<Double, E> oldPair = distanceAndPredecessorMap.get(u);
-                Pair<Double, E> newPair = Pair.of(
-                    oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                    oldPair.getSecond());
-                newDistanceAndPredecessorMap.put(u, newPair);
-            }
 
-            // store shortest path tree
-            paths.put(v, new TreeSingleSourcePathsImpl<>(g, v, newDistanceAndPredecessorMap));
+                Pair<Double, E> newPair;
+                if (oldPair != null) {
+                    newPair = Pair.of(
+                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                        oldPair.getSecond());
+                } else {
+                    newPair = Pair.of(Double.POSITIVE_INFINITY, null);
+                }
+
+                distance[vertexIndices.get(v)][vertexIndices.get(u)] = newPair.getFirst();
+                pred[vertexIndices.get(v)][vertexIndices.get(u)] = newPair.getSecond();
+            }
         }
 
     }
 
     /**
      * Compute vertex weights for edge re-weighting using Bellman-Ford.
-     * 
+     *
      * @param g the input graph
      * @return the vertex weights
      */
     private Map<V, Double> computeVertexWeights(Graph<V, E> g)
     {
-        GraphTests.requireDirected(g);
+        assert g.getType().isDirected();
 
         // create extra graph
-        Graph<V, E> extraGraph = new DirectedPseudograph<>(graph.getEdgeFactory());
+        Graph<V,
+            E> extraGraph = GraphTypeBuilder
+                .<V, E> directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .edgeSupplier(graph.getEdgeSupplier()).vertexSupplier(graph.getVertexSupplier())
+                .buildGraph();
 
         // add new vertex
-        V s = vertexFactory.createVertex();
-        if (g.containsVertex(s)) {
-            throw new IllegalArgumentException("Invalid vertex factory");
+        V s = extraGraph.addVertex();
+        if (s == null) {
+            throw new IllegalArgumentException(
+                "Invalid vertex supplier (does not return unique vertices on each call).");
         }
-        extraGraph.addVertex(s);
 
         // add new edges with zero weight
         Map<E, Double> zeroWeightFunction = new HashMap<>();
@@ -279,6 +354,59 @@ public class JohnsonShortestPaths<V, E>
             weights.put(v, paths.getWeight(v));
         }
         return weights;
+    }
+
+    /**
+     * Compute a unique integer for each vertex of the graph
+     * 
+     * @param g the graph
+     * @return a map with the result
+     */
+    private Map<V, Integer> computeVertexIndices(Graph<V, E> g)
+    {
+        Map<V, Integer> numbering = new HashMap<>();
+        int num = 0;
+        for (V v : g.vertexSet()) {
+            numbering.put(v, num++);
+        }
+        return numbering;
+    }
+
+    class JohnsonSingleSourcePaths
+        implements
+        SingleSourcePaths<V, E>
+    {
+        private V source;
+
+        public JohnsonSingleSourcePaths(V source)
+        {
+            this.source = source;
+        }
+
+        @Override
+        public Graph<V, E> getGraph()
+        {
+            return graph;
+        }
+
+        @Override
+        public V getSourceVertex()
+        {
+            return source;
+        }
+
+        @Override
+        public double getWeight(V sink)
+        {
+            return JohnsonShortestPaths.this.getPathWeight(source, sink);
+        }
+
+        @Override
+        public GraphPath<V, E> getPath(V sink)
+        {
+            return JohnsonShortestPaths.this.getPath(source, sink);
+        }
+
     }
 
 }

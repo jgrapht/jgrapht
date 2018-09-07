@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,12 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author Dimitrios Michail
@@ -73,8 +70,9 @@ public class KleinbergSmallWorldGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new KleinbergSmallWorldGraphGenerator<>(5, 2, 3, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(25, g.vertexSet().size());
     }
@@ -86,8 +84,9 @@ public class KleinbergSmallWorldGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new KleinbergSmallWorldGraphGenerator<>(5, 2, 3, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(25, g.vertexSet().size());
     }
@@ -99,8 +98,9 @@ public class KleinbergSmallWorldGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new KleinbergSmallWorldGraphGenerator<>(5, 2, 3, 0, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(25, g.vertexSet().size());
     }

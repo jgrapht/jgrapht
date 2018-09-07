@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2013-2018, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,24 +17,24 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * Kuhn-Munkres algorithm (named in honor of Harold Kuhn and James Munkres) solving <i>assignment
  * problem</i> also known as <a href=http://en.wikipedia.org/wiki/Hungarian_algorithm>hungarian
  * algorithm</a> (in the honor of hungarian mathematicians Dénes K?nig and Jen? Egerváry). It's
- * running time O(V^3).
+ * running time $O(V^3)$.
  *
  * <p>
  * <i>Assignment problem</i> could be set as follows:
  *
  * <p>
  * Given <a href=http://en.wikipedia.org/wiki/Complete_bipartite_graph> complete bipartite graph</a>
- * G = (S, T; E), such that |S| = |T|, and each edge has <i>non-negative</i> cost <i>c(i, j)</i>,
- * find <i>perfect</i> matching of <i>minimal cost</i>.
+ * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i,
+ * j)</i>, find <i>perfect</i> matching of <i>minimal cost</i>.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -43,7 +43,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Alexey Kudinkin
  */
 public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private Set<? extends V> partition1;
@@ -77,7 +78,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         // Validate graph being complete bipartite with equally-sized partitions
         if (partition1.size() != partition2.size()) {
@@ -121,7 +122,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
             edgeSet.add(e);
         }
 
-        return new MatchingImpl<>(edgeSet, weight);
+        return new MatchingImpl<>(graph, edgeSet, weight);
     }
 
     /**
@@ -150,12 +151,12 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         boolean[] columnsCovered;
 
         /**
-         * ``columnMatched[i]'' is the column # of the ZERO matched at the i-th row
+         * ``columnMatched[i]'' is the column # of the ZERO matched at the $i$-th row
          */
         private int[] columnMatched;
 
         /**
-         * ``rowMatched[j]'' is the row # of the ZERO matched at the j-th column
+         * ``rowMatched[j]'' is the row # of the ZERO matched at the $j$-th column
          */
         private int[] rowMatched;
 
@@ -376,7 +377,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
                 }
 
                 for (int j = 0; j < excessMatrix[i].length; ++j) {
-                    if (Double.valueOf(excessMatrix[i][j]).compareTo(0.) == 0) {
+                    if (Double.compare(excessMatrix[i][j], 0.) == 0) {
                         rowsCovered[i] = invertible[i] = true;
                         break;
                     }
@@ -389,7 +390,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
                 for (int i = 0; i < excessMatrix.length; ++i) {
                     if (rowsCovered[i]) {
                         for (int j = 0; j < excessMatrix[i].length; ++j) {
-                            if ((Double.valueOf(excessMatrix[i][j]).compareTo(0.) == 0)
+                            if ((Double.compare(excessMatrix[i][j], 0.) == 0)
                                 && !columnsCovered[j])
                             {
                                 columnsCovered[j] = true;
@@ -521,7 +522,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
                     if (colsCovered[j]) {
                         continue;
                     }
-                    if (Double.valueOf(excessMatrix[i][j]).compareTo(0.) == 0) {
+                    if (Double.compare(excessMatrix[i][j], 0.) == 0) {
                         ++uncoveredZero;
                     }
                 }
@@ -609,7 +610,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
                 for (int i = 0; i < excessMatrix.length; ++i) {
                     if ((excessMatrix[i][pathTailCol] == 0) && !rowsVisited[i]) {
-                        boolean extending = extendMatchingOL(i, // New tail to continue
+                        boolean extending = extendMatchingOL(
+                            i, // New tail to continue
                             pathTailCol //
                         );
                         if (extending) {

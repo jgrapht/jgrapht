@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2018, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,11 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.builder.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.
@@ -36,7 +37,8 @@ import org.jgrapht.graph.*;
  * @author Nikolay Ognyanov
  */
 public class JohnsonSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     // The graph.
     private Graph<V, E> graph;
@@ -58,13 +60,6 @@ public class JohnsonSimpleCycles<V, E>
     private Set<V> pathSet = null;
 
     /**
-     * Create a simple cycle finder with an unspecified graph.
-     */
-    public JohnsonSimpleCycles()
-    {
-    }
-
-    /**
      * Create a simple cycle finder for the specified graph.
      *
      * @param graph - the DirectedGraph in which to find cycles.
@@ -75,31 +70,15 @@ public class JohnsonSimpleCycles<V, E>
     public JohnsonSimpleCycles(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
+        if (GraphTests.hasMultipleEdges(graph)) {
+            throw new IllegalArgumentException("Graph should not have multiple (parallel) edges");
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGraph(Graph<V, E> graph)
-    {
-        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("unchecked")
     public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
@@ -110,10 +89,10 @@ public class JohnsonSimpleCycles<V, E>
         int startIndex = 0;
         int size = graph.vertexSet().size();
         while (startIndex < size) {
-            Object[] minSCCGResult = findMinSCSG(startIndex);
-            if (minSCCGResult[0] != null) {
-                startIndex = (Integer) minSCCGResult[1];
-                Graph<V, E> scg = (Graph<V, E>) minSCCGResult[0];
+            Pair<Graph<V, E>, Integer> minSCCGResult = findMinSCSG(startIndex);
+            if (minSCCGResult != null) {
+                startIndex = minSCCGResult.getSecond();
+                Graph<V, E> scg = minSCCGResult.getFirst();
                 V startV = toV(startIndex);
                 for (E e : scg.outgoingEdgesOf(startV)) {
                     V v = graph.getEdgeTarget(e);
@@ -132,19 +111,15 @@ public class JohnsonSimpleCycles<V, E>
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    private Object[] findMinSCSG(int startIndex)
+    private Pair<Graph<V, E>, Integer> findMinSCSG(int startIndex)
     {
-        // Per Johnson : "adjacency structure of strong
-        // component K with least vertex in subgraph of
-        // G induced by {s, s+ 1, n}".
-        // Or in contemporary terms: the strongly connected
-        // component of the subgraph induced by {v1,...,vn}
-        // which contains the minimum (among those SCCs)
-        // vertex index. We return that index together with
-        // the graph.
+        /*
+         * Per Johnson : "adjacency structure of strong component $K$ with least vertex in subgraph
+         * of $G$ induced by $(s, s + 1, n)$". Or in contemporary terms: the strongly connected
+         * component of the subgraph induced by $(v_1, \dotso ,v_n)$ which contains the minimum
+         * (among those SCCs) vertex index. We return that index together with the graph.
+         */
         initMinSCGState();
-        Object[] result = new Object[2];
 
         List<Set<V>> SCCs = findSCCS(startIndex);
 
@@ -161,30 +136,28 @@ public class JohnsonSimpleCycles<V, E>
             }
         }
         if (minSCC == null) {
-            return result;
+            return null;
         }
 
         // build a graph for the SCC found
-        Graph<V, E> resultGraph = new DefaultDirectedGraph<>(
-            new ClassBasedEdgeFactory<>((Class<? extends E>) DefaultEdge.class));
+        Graph<V,
+            E> resultGraph = GraphTypeBuilder
+                .<V, E> directed().edgeSupplier(graph.getEdgeSupplier())
+                .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
+                .allowingSelfLoops(true).buildGraph();
         for (V v : minSCC) {
             resultGraph.addVertex(v);
         }
         for (V v : minSCC) {
             for (V w : minSCC) {
-                if (graph.containsEdge(v, w)) {
-                    resultGraph.addEdge(v, w);
+                E edge = graph.getEdge(v, w);
+                if (edge != null) {
+                    resultGraph.addEdge(v, w, edge);
                 }
             }
         }
 
-        // It is ugly to return results in an array
-        // of Object but the idea is to restrict
-        // dependencies to JgraphT only and there is
-        // no utility pair container in JgraphT.
-        result[0] = resultGraph;
-        result[1] = minIndexFound;
-
+        Pair<Graph<V, E>, Integer> result = Pair.of(resultGraph, minIndexFound);
         clearMinSCCState();
         return result;
     }
@@ -258,8 +231,9 @@ public class JohnsonSimpleCycles<V, E>
 
     private boolean findCyclesInSCG(int startIndex, int vertexIndex, Graph<V, E> scg)
     {
-        // Find cycles in a strongly connected graph
-        // per Johnson.
+        /*
+         * Find cycles in a strongly connected graph per Johnson.
+         */
         boolean foundCycle = false;
         V vertex = toV(vertexIndex);
         stack.push(vertex);
@@ -269,8 +243,8 @@ public class JohnsonSimpleCycles<V, E>
             V successor = scg.getEdgeTarget(e);
             int successorIndex = toI(successor);
             if (successorIndex == startIndex) {
-                List<V> cycle = new ArrayList<>();
-                cycle.addAll(stack);
+                List<V> cycle = new ArrayList<>(stack.size());
+                stack.descendingIterator().forEachRemaining(cycle::add);
                 cycles.add(cycle);
                 foundCycle = true;
             } else if (!blocked.contains(successor)) {
@@ -363,12 +337,7 @@ public class JohnsonSimpleCycles<V, E>
     {
         // B sets typically not all needed,
         // so instantiate lazily.
-        Set<V> result = bSets.get(v);
-        if (result == null) {
-            result = new HashSet<>();
-            bSets.put(v, result);
-        }
-        return result;
+        return bSets.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
 

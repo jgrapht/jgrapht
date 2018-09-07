@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,16 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import java.util.*;
+import java.util.stream.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for the approximate weighted matching algorithms.
@@ -33,12 +34,12 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public abstract class ApproximateWeightedMatchingTest
-    extends TestCase
 {
 
     public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph);
 
+    @Test
     public void testPath1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -53,7 +54,7 @@ public abstract class ApproximateWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
 
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
         assertEquals(3, m.getEdges().size());
         assertEquals(3.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(m.getEdges().contains(g.getEdge(0, 1)));
@@ -62,6 +63,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testPath2()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -75,7 +77,7 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 4, 5, 1.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(2, m.getEdges().size());
         assertEquals(10.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -84,6 +86,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testNegativeAndZeroEdges()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -98,13 +101,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 0, 2, 0d);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(0, m.getEdges().size());
         assertEquals(0d, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testNegativeAndZeroEdges1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -119,13 +123,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 0, 2, -1.0d);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(0, m.getEdges().size());
         assertEquals(0d, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testNegativeAndZeroEdges2()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -146,13 +151,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 10, 12, 1.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertTrue(isMatching(g, m));
         assertTrue(m.getWeight() >= 2d);
         assertTrue(m.getEdges().size() >= 2);
     }
 
+    @Test
     public void testGraph1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -176,13 +182,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 5, 6, 5.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(7, m.getEdges().size());
         assertEquals(35.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void test3over4Approximation()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -200,13 +207,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 1.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(4, m.getEdges().size());
         assertEquals(4.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testSelfLoops()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -231,13 +239,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 4, 4, 0.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(4, m.getEdges().size());
         assertEquals(4.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testMultiGraph()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -265,7 +274,7 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 2.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // greedy finds maximum here 8.0
         assertEquals(4, m.getEdges().size());
@@ -273,6 +282,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testDirected()
     {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -300,13 +310,14 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 2.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(4, m.getEdges().size());
         assertEquals(8.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testDisconnectedAndIsolatedVertices()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -325,12 +336,32 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addAllVertices(g, Arrays.asList(8, 9, 10, 11));
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertTrue(m.getWeight() >= 2.0);
         assertTrue(isMatching(g, m));
     }
 
+    @Test
+    public void testSelfLoop()
+    {
+        WeightedPseudograph<Integer, DefaultWeightedEdge> g =
+            new WeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3));
+        Graphs.addEdge(g, 0, 1, 4.0);
+        Graphs.addEdge(g, 1, 2, 1.0);
+        Graphs.addEdge(g, 2, 3, 8.0);
+        Graphs.addEdge(g, 3, 0, 3.0);
+        Graphs.addEdge(g, 3, 3, 100.0);
+
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
+
+        assertTrue(isMatching(g, m));
+    }
+
+    @Test
     public void testBnGraph()
     {
         // create graphs which have a perfect matching
@@ -356,7 +387,7 @@ public abstract class ApproximateWeightedMatchingTest
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> maxAlg =
                 getApproximationAlgorithm(graph);
-            Matching<DefaultWeightedEdge> matching = maxAlg.getMatching();
+            Matching<Integer, DefaultWeightedEdge> matching = maxAlg.getMatching();
             double weight = matching.getWeight();
 
             assertTrue(isMatching(graph, matching));
@@ -364,7 +395,7 @@ public abstract class ApproximateWeightedMatchingTest
         }
     }
 
-    protected <V, E> boolean isMatching(Graph<V, E> g, Matching<E> m)
+    protected <V, E> boolean isMatching(Graph<V, E> g, Matching<V, E> m)
     {
         Set<V> matched = new HashSet<>();
         for (E e : m.getEdges()) {
@@ -379,7 +410,7 @@ public abstract class ApproximateWeightedMatchingTest
             }
             matched.add(target);
         }
-        return true;
+        return matched.size() == m.getEdges().size() * 2;
     }
 
 }

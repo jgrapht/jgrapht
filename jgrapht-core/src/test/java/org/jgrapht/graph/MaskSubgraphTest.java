@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.jgrapht.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for {@link MaskSubgraph} class.

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.util.Random;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
+import java.util.*;
 
 /**
  * Coloring tests
@@ -29,7 +29,8 @@ import org.jgrapht.graph.DefaultEdge;
  * @author Dimitrios Michail
  */
 public class RandomGreedyColoring2Test
-    extends BaseColoringTest
+    extends
+    BaseColoringTest
 {
 
     final long seed = 15;

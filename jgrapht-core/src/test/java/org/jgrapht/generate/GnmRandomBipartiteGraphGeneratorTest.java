@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,8 +19,10 @@ package org.jgrapht.generate;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -29,20 +31,22 @@ import junit.framework.*;
  * @since September 2016
  */
 public class GnmRandomBipartiteGraphGeneratorTest
-    extends TestCase
 {
     private static final long SEED = 5;
 
+    @Test
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomBipartiteGraphGenerator<>(0, 0, 10);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
     }
 
+    @Test
     public void testBadParameters()
     {
         try {
@@ -64,12 +68,14 @@ public class GnmRandomBipartiteGraphGeneratorTest
         }
     }
 
+    @Test
     public void testDirectedGraphGnm1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomBipartiteGraphGenerator<>(4, 4, 20, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         int[][] edges = { { 3, 5 }, { 6, 3 }, { 2, 8 }, { 7, 2 }, { 6, 2 }, { 4, 5 }, { 7, 4 },
             { 2, 5 }, { 6, 1 }, { 5, 1 }, { 2, 7 }, { 1, 7 }, { 2, 6 }, { 3, 6 }, { 1, 5 },
@@ -82,12 +88,14 @@ public class GnmRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnm1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomBipartiteGraphGenerator<>(4, 4, 10, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         int[][] edges = { { 3, 5 }, { 1, 7 }, { 2, 8 }, { 2, 6 }, { 3, 8 }, { 4, 8 }, { 1, 6 },
             { 4, 7 }, { 4, 6 }, { 4, 5 } };
@@ -99,13 +107,15 @@ public class GnmRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testGnmEdgesLimit()
     {
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomBipartiteGraphGenerator<>(4, 4, 17, SEED);
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
             fail("More edges than permitted");
         } catch (IllegalArgumentException e) {
         }
@@ -113,25 +123,13 @@ public class GnmRandomBipartiteGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomBipartiteGraphGenerator<>(4, 4, 33, SEED);
-            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
             fail("More edges than permitted");
         } catch (IllegalArgumentException e) {
         }
     }
-
-    private class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int id;
-
-        @Override
-        public Integer createVertex()
-        {
-            return ++id;
-        }
-    };
-
 }
 
 // End GnmRandomBipartiteGraphGeneratorTest.java

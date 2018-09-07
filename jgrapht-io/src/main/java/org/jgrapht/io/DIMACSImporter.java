@@ -18,10 +18,10 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Imports a graph specified in DIMACS format.
@@ -68,8 +68,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class DIMACSImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     private final double defaultWeight;
 
@@ -135,7 +137,7 @@ public class DIMACSImporter<V, E>
         Map<Integer, V> map = new HashMap<Integer, V>();
         for (int i = 0; i < size; i++) {
             Integer id = Integer.valueOf(i + 1);
-            V vertex = vertexProvider.buildVertex(id.toString(), new HashMap<String, String>());
+            V vertex = vertexProvider.buildVertex(id.toString(), new HashMap<String, Attribute>());
             map.put(id, vertex);
             graph.addVertex(vertex);
         }
@@ -173,8 +175,7 @@ public class DIMACSImporter<V, E>
                 }
 
                 try {
-
-                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
+                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, Attribute>());
                     graph.addEdge(from, to, e);
 
                     if (graph.getType().isWeighted()) {

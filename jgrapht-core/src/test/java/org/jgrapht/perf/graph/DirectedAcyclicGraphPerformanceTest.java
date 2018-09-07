@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2017, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2018, by Peter Giles and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,25 +17,16 @@
  */
 package org.jgrapht.perf.graph;
 
-import java.util.concurrent.TimeUnit;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.runner.*;
+import org.openjdk.jmh.runner.options.*;
 
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedAcyclicGraph;
-import org.jgrapht.graph.DirectedAcyclicGraphTest.LongVertexFactory;
-import org.jgrapht.graph.DirectedAcyclicGraphTest.RepeatableRandomGraphGenerator;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-
-import junit.framework.TestCase;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * A small benchmark comparing the different dag implementations.
@@ -44,7 +35,6 @@ import junit.framework.TestCase;
  * @author Dimitrios Michail
  */
 public class DirectedAcyclicGraphPerformanceTest
-    extends TestCase
 {
     @State(Scope.Benchmark)
     private static abstract class RandomGraphBenchmarkBase
@@ -74,7 +64,7 @@ public class DirectedAcyclicGraphPerformanceTest
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);
                         DirectedAcyclicGraph<Long, DefaultEdge> dag = createDAG();
-                        gen.generateGraph(dag, new LongVertexFactory(), null);
+                        gen.generateGraph(dag);
                     }
 
                 }
@@ -83,46 +73,55 @@ public class DirectedAcyclicGraphPerformanceTest
     }
 
     public static class ArrayDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
 
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new ArrayDAG<>(DefaultEdge.class);
+            return new ArrayDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
     public static class ArrayListDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new ArrayListDAG<>(DefaultEdge.class);
+            return new ArrayListDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
     public static class HashSetDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new HashSetDAG<>(DefaultEdge.class);
+            return new HashSetDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
     public static class BitSetDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new BitSetDAG<>(DefaultEdge.class);
+            return new BitSetDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
+    @Test
     public void testDirectedAcyclicGraphRandomGraphBenchmark()
         throws RunnerException
     {
@@ -141,20 +140,22 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the array visited strategy
      */
     private static class ArrayDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public ArrayDAG(Class<? extends E> edgeClass)
+        public ArrayDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedArrayImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedArrayImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 
@@ -162,20 +163,22 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the array list visited strategy
      */
     private static class ArrayListDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public ArrayListDAG(Class<? extends E> edgeClass)
+        public ArrayListDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedArrayListImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedArrayListImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 
@@ -183,20 +186,22 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the hash set visited strategy
      */
     private static class HashSetDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public HashSetDAG(Class<? extends E> edgeClass)
+        public HashSetDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedHashSetImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedHashSetImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 
@@ -204,20 +209,22 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the bitset visited strategy
      */
     private static class BitSetDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
         /**
          * Construct a directed acyclic graph.
          * 
-         * @param edgeClass the edge class
+         * @param vertexSupplier the vertex supplier
+         * @param edgeSupplier the edge supplier
          */
-        public BitSetDAG(Class<? extends E> edgeClass)
+        public BitSetDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                new ClassBasedEdgeFactory<>(edgeClass), new VisitedBitSetImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 

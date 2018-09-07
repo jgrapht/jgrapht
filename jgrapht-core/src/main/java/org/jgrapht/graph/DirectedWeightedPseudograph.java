@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,41 +17,44 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A directed weighted pseudograph. A directed weighted pseudograph is a non-simple directed graph
- * in which both graph loops and multiple edges are permitted, and edges have weights.
+ * in which both graph loops and multiple (parallel) edges are permitted, and edges have weights.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  */
 public class DirectedWeightedPseudograph<V, E>
-    extends DirectedPseudograph<V, E>
-    implements DirectedGraph<V, E>, WeightedGraph<V, E>
+    extends
+    DirectedPseudograph<V, E>
 {
     private static final long serialVersionUID = -4775269773843490859L;
 
     /**
-     * Creates a new directed weighted pseudograph.
+     * Creates a new weighted graph.
      *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public DirectedWeightedPseudograph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass));
     }
 
     /**
-     * Creates a new directed weighted pseudograph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
+     * Creates a new weighted graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
      */
-    public DirectedWeightedPseudograph(EdgeFactory<V, E> ef)
+    public DirectedWeightedPseudograph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(ef, true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -72,49 +75,18 @@ public class DirectedWeightedPseudograph<V, E>
     /**
      * Create a builder for this kind of graph.
      * 
-     * @param ef the edge factory of the new graph
+     * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
     public static <V,
         E> GraphBuilder<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
-            EdgeFactory<V, E> ef)
+            Supplier<E> edgeSupplier)
     {
-        return new GraphBuilder<>(new DirectedWeightedPseudograph<>(ef));
+        return new GraphBuilder<>(new DirectedWeightedPseudograph<>(null, edgeSupplier));
     }
 
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param edgeClass class on which to base factory for edges
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(Class)}.
-     */
-    @Deprecated
-    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
-        ? extends DirectedWeightedPseudograph<V, E>, ?> builder(Class<? extends E> edgeClass)
-    {
-        return new DirectedWeightedGraphBuilder<>(new DirectedWeightedPseudograph<>(edgeClass));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
-     */
-    @Deprecated
-    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
-        ? extends DirectedWeightedPseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
-    {
-        return new DirectedWeightedGraphBuilder<>(new DirectedWeightedPseudograph<>(ef));
-    }
 }
 
 // End DirectedWeightedPseudograph.java

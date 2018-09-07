@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,14 +27,15 @@ import org.jgrapht.graph.*;
  * @author Dimitrios Michail
  */
 public class GreedyWeightedMatchingTest
-    extends ApproximateWeightedMatchingTest
+    extends
+    ApproximateWeightedMatchingTest
 {
 
     @Override
     public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph)
     {
-        return new GreedyWeightedMatching<>(graph);
+        return new GreedyWeightedMatching<>(graph, false);
     };
 
 }

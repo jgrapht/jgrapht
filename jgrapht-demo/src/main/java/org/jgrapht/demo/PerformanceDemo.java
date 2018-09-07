@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.demo;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * A simple demo to test memory and CPU consumption on a graph with 3 million elements.

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Alexey Kudinkin, Joris Kinable and Contributors.
+ * (C) Copyright 2015-2018, by Alexey Kudinkin, Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.util.extension.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Base class backing algorithms allowing to derive
@@ -37,7 +37,9 @@ import org.jgrapht.alg.util.extension.*;
  * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmBase<V, E>
-    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
+    implements
+    MaximumFlowAlgorithm<V, E>,
+    MinimumSTCutAlgorithm<V, E>
 {
     /**
      * Default tolerance.
@@ -193,12 +195,12 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Increase flow in the direction denoted by edge (u,v). Any existing flow in the reverse
-     * direction (v,u) gets reduced first. More precisely, let f2 be the existing flow in the
-     * direction (v,u), and f1 be the desired increase of flow in direction (u,v). If
-     * {@literal f1 >= f2}, then the flow on (v,u) becomes 0, and the flow on (u,v) becomes f1-f2.
-     * Else, if {@literal f1<f2}, the flow in the direction (v,u) is reduced, i.e. the flow on (v,u)
-     * becomes f2-f1, whereas the flow on (u,v) remains zero.
+     * Increase flow in the direction denoted by edge $(u,v)$. Any existing flow in the reverse
+     * direction $(v,u)$ gets reduced first. More precisely, let $f_2$ be the existing flow in the
+     * direction $(v,u)$, and $f_1$ be the desired increase of flow in direction $(u,v)$. If $f_1
+     * \geq f_2$, then the flow on $(v,u)$ becomes $0$, and the flow on $(u,v)$ becomes $f_1-f_2$.
+     * Else, if $f_1 \textlptr f_2$, the flow in the direction $(v, u)$ is reduced, i.e. the flow on
+     * $(v, u)$ becomes $f_2 - f_1$, whereas the flow on $(u,v)$ remains zero.
      * 
      * @param edge desired direction in which the flow is increased
      * @param flow increase of flow in the the direction indicated by the forwardEdge
@@ -210,7 +212,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         assert ((comparator.compare(edge.flow, 0.0) == 0)
             || (comparator.compare(inverseEdge.flow, 0.0) == 0));
 
-        if (comparator.compare(inverseEdge.flow, flow) == -1) { // If f1 >= f2
+        if (comparator.compare(inverseEdge.flow, flow) < 0) { // If f_1 >= f_2
             double flowDifference = flow - inverseEdge.flow;
 
             edge.flow += flowDifference;
@@ -248,7 +250,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     class VertexExtensionBase
-        implements Extension
+        implements
+        Extension
     {
         private final List<AnnotatedFlowEdge> outgoing = new ArrayList<>();
 
@@ -263,7 +266,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     class AnnotatedFlowEdge
-        implements Extension
+        implements
+        Extension
     {
         /* Edge source */
         private VertexExtensionBase source;
@@ -364,10 +368,11 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns the direction of the flow on an edge (u,v). In case (u,v) is a directed edge (arc),
-     * this function will always return the edge target v. However, if (u,v) is an edge in an
-     * undirected graph, flow may go through the edge in either side. If the flow goes from u to v,
-     * we return v, otherwise u. If the flow on an edge equals 0, the returned value has no meaning.
+     * Returns the direction of the flow on an edge $(u,v)$. In case $(u,v)$ is a directed edge
+     * (arc), this function will always return the edge target $v$. However, if $(u,v)$ is an edge
+     * in an undirected graph, flow may go through the edge in either side. If the flow goes from
+     * $u$ to $v$, we return $v$, otherwise $u$. If the flow on an edge equals $0$, the returned
+     * value has no meaning.
      * 
      * @param e edge
      * @return the vertex where the flow leaves the edge
@@ -450,7 +455,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Calculate the set of reachable vertices from s in the residual graph.
+     * Calculate the set of reachable vertices from $s$ in the residual graph.
      */
     protected void calculateSourcePartition()
     {

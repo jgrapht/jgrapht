@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,19 +17,19 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dimitrios Michail
  * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpannerTest
-    extends TestCase
 {
 
     // ~ Static fields/initializers
@@ -155,7 +155,7 @@ public class GreedyMultiplicativeSpannerTest
 
     private <V, E> void runTest(Graph<V, E> g, int k, Set<E> correct)
     {
-        Set<E> result = new GreedyMultiplicativeSpanner<V, E>(g, k).getSpanner().getEdges();
+        Set<E> result = new GreedyMultiplicativeSpanner<>(g, k).getSpanner();
 
         assertEquals(correct.size(), result.size());
         for (E e : correct) {
@@ -163,6 +163,7 @@ public class GreedyMultiplicativeSpannerTest
         }
     }
 
+    @Test
     public void testGraph1()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -170,7 +171,7 @@ public class GreedyMultiplicativeSpannerTest
         createGraph1(g);
 
         // test 3-spanner using k = 2
-        Set<DefaultEdge> spanner3 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner3 = new HashSet<>();
         spanner3.add(g.getEdge(V0, V1));
         spanner3.add(g.getEdge(V1, V2));
         spanner3.add(g.getEdge(V0, V5));
@@ -184,7 +185,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
 
         // test 5-spanner using k = 3
-        Set<DefaultEdge> spanner5 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner5 = new HashSet<>();
         spanner5.add(g.getEdge(V0, V1));
         spanner5.add(g.getEdge(V1, V2));
         spanner5.add(g.getEdge(V0, V5));
@@ -197,7 +198,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 3, spanner5);
 
         // test 7-spanner using k = 4
-        Set<DefaultEdge> spanner7 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner7 = new HashSet<>();
         spanner7.add(g.getEdge(V0, V1));
         spanner7.add(g.getEdge(V1, V2));
         spanner7.add(g.getEdge(V0, V5));
@@ -212,6 +213,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 100, spanner7);
     }
 
+    @Test
     public void testGraph1WithLoops()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -223,7 +225,7 @@ public class GreedyMultiplicativeSpannerTest
         g.addEdge(V2, V2);
 
         // test 3-spanner using k = 2
-        Set<DefaultEdge> spanner3 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner3 = new HashSet<>();
         spanner3.add(g.getEdge(V0, V1));
         spanner3.add(g.getEdge(V1, V2));
         spanner3.add(g.getEdge(V0, V5));
@@ -237,6 +239,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
     }
 
+    @Test
     public void testGraph1WithMultipleEdges()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -248,7 +251,7 @@ public class GreedyMultiplicativeSpannerTest
         g.addEdge(V0, V5);
 
         // test 3-spanner using k = 2
-        Set<DefaultEdge> spanner3 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner3 = new HashSet<>();
         spanner3.add(g.getEdge(V0, V1));
         spanner3.add(g.getEdge(V1, V2));
         spanner3.add(g.getEdge(V0, V5));
@@ -262,6 +265,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
     }
 
+    @Test
     public void testGraph2()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -269,7 +273,7 @@ public class GreedyMultiplicativeSpannerTest
         createGraph2(g);
 
         // test 3-spanner using k = 2
-        Set<DefaultEdge> spanner3 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner3 = new HashSet<>();
         spanner3.add(g.getEdge(V0, V1));
         spanner3.add(g.getEdge(V0, V3));
         spanner3.add(g.getEdge(V0, V2));
@@ -289,7 +293,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
 
         // test 5-spanner using k = 3
-        Set<DefaultEdge> spanner5 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner5 = new HashSet<>();
         spanner5.add(g.getEdge(V0, V1));
         spanner5.add(g.getEdge(V0, V3));
         spanner5.add(g.getEdge(V0, V2));
@@ -309,7 +313,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 3, spanner5);
 
         // test 7-spanner using k = 4
-        Set<DefaultEdge> spanner7 = new HashSet<DefaultEdge>();
+        Set<DefaultEdge> spanner7 = new HashSet<>();
         spanner7.add(g.getEdge(V0, V1));
         spanner7.add(g.getEdge(V0, V3));
         spanner7.add(g.getEdge(V0, V2));
@@ -331,6 +335,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 100, spanner7);
     }
 
+    @Test
     public void testGraph3()
     {
         WeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -339,7 +344,7 @@ public class GreedyMultiplicativeSpannerTest
         createGraph3(g);
 
         // test 3-spanner using k = 2
-        Set<DefaultWeightedEdge> spanner3 = new HashSet<DefaultWeightedEdge>();
+        Set<DefaultWeightedEdge> spanner3 = new HashSet<>();
         spanner3.add(g.getEdge(V5, V4));
         spanner3.add(g.getEdge(V0, V1));
         spanner3.add(g.getEdge(V0, V5));
@@ -354,6 +359,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, Integer.MAX_VALUE, spanner3);
     }
 
+    @Test
     public void testNegativeWeightsGraph()
     {
         WeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -368,7 +374,7 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V2, V0), 1.0);
 
         try {
-            new GreedyMultiplicativeSpanner<String, DefaultWeightedEdge>(g, 2).getSpanner();
+            new GreedyMultiplicativeSpanner<>(g, 2).getSpanner();
             fail("Negative edge weights not permitted.");
         } catch (IllegalArgumentException e) {
         }

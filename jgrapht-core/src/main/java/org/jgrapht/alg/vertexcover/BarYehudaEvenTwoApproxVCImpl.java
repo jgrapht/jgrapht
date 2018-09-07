@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,22 +17,24 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by R. Bar-Yehuda and S.
  * Even. A linear time approximation algorithm for the weighted vertex cover problem. J. of
- * Algorithms 2:198-203, 1981. The solution is guaranteed to be within 2 times the optimum solution.
- * An easier-to-read version of this algorithm can be found here: <a href=
+ * Algorithms 2:198-203, 1981. The solution is guaranteed to be within $2$ times the optimum
+ * solution. An easier-to-read version of this algorithm can be found here: <a href=
  * "https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf">https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf</a>
  *
- * Note: this class supports pseudo-graphs Runtime: O(|E|) This is a fast algorithm, guaranteed to
- * give a 2-approximation. A solution of higher quality (same approximation ratio) at the expensive
- * of a higher runtime can be obtained using {@link BarYehudaEvenTwoApproxVCImpl}.
+ * Note: this class supports pseudo-graphs Runtime: $O(|E|)$ This is a fast algorithm, guaranteed to
+ * give a $2$-approximation. A solution of higher quality (same approximation ratio) at the
+ * expensive of a higher runtime can be obtained using {@link BarYehudaEvenTwoApproxVCImpl}.
  *
  *
  * TODO: Remove the UndirectedSubgraph dependency! Querying vertex degrees on these graphs is
@@ -45,14 +47,41 @@ import org.jgrapht.graph.*;
  * @author Joris Kinable
  */
 public class BarYehudaEvenTwoApproxVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>
+    implements
+    VertexCoverAlgorithm<V>
 {
 
-    @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
-    {
-        GraphTests.requireUndirected(graph);
+    private final Graph<V, E> graph;
+    private final Map<V, Double> vertexWeightMap;
 
+    /**
+     * Constructs a new BarYehudaEvenTwoApproxVCImpl instance where all vertices have uniform
+     * weights.
+     * 
+     * @param graph input graph
+     */
+    public BarYehudaEvenTwoApproxVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = graph
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+    }
+
+    /**
+     * Constructs a new BarYehudaEvenTwoApproxVCImpl instance
+     * 
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     */
+    public BarYehudaEvenTwoApproxVCImpl(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = Objects.requireNonNull(vertexWeightMap);
+    }
+
+    @Override
+    public VertexCoverAlgorithm.VertexCover getVertexCover()
+    {
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
         Graph<V, E> copy = new AsSubgraph<>(graph, null, null);
@@ -80,7 +109,7 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
                 copy.removeVertex(q);
             }
         }
-
-        return new VertexCoverImpl<>(cover, weight);
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
+
 }

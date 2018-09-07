@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by Lucas J Scharenbroich and Contributors.
+ * (C) Copyright 2018, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,82 +17,58 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import java.io.Serializable;
+import java.util.Objects;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
 
 /**
- * An unweighted view of a graph.
- * 
- * <p>
- * An unweighted view of the backing weighted graph specified in the constructor. This graph allows
- * modules to apply algorithms designed for unweighted graphs to a weighted graph by simply ignoring
- * edge weights. Query operations on this graph "read through" to the backing graph. Vertex
- * addition/removal and edge addition/removal are all supported (and immediately reflected in the
- * backing graph).
+ * Provides an unweighted view on a graph.
  *
- * <p>
- * Note that edges returned by this graph's accessors are really just the edges of the underlying
- * graph.
- *
- * <p>
- * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
- * serializable if the backing graph is serializable.
+ * Algorithms designed for unweighted graphs should also work on weighted graphs. This class
+ * emulates an unweighted graph based on a weighted one by returning <code>Graph.DEFAULT_EDGE_WEIGHT
+ * </code> for each edge weight. The underlying weighted graph is provided at the constructor.
+ * Modifying operations (adding/removing vertexes/edges) are also passed through to the underlying
+ * weighted graph. As edge weight, Graph.DEFAULT_EDGE_WEIGHT is used. Setting an edge weight is not
+ * supported. The edges are not modified. So, if an edge is asked for, the one from the underlying
+ * weighted graph is returned. In case the underlying graph is serializable, this one is
+ * serializable, too.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
- * @author Lucas J. Scharenbroich
- * @since Sep 7, 2007
  */
 public class AsUnweightedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable
+    implements Serializable, Graph<V, E>
 {
-    private static final long serialVersionUID = 7175505077601824663L;
+
+    private static final long serialVersionUID = -5186421272597767751L;
+    private static final String EDGE_WEIGHT_IS_NOT_SUPPORTED = "Edge weight is not supported";
 
     /**
-     * Constructor
+     * Constructor for AsUnweightedGraph.
      *
-     * @param g the backing graph over which an unweighted view is to be created.
+     * @param g the backing directed graph over which an undirected view is to be created.
+     * @throws NullPointerException if the graph is null
      */
     public AsUnweightedGraph(Graph<V, E> g)
     {
-        super(g);
+        super(Objects.requireNonNull(g));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getEdgeWeight(E e)
+    @Override public double getEdgeWeight(E e)
     {
-        if (e == null) {
-            throw new NullPointerException();
-        } else {
-            return Graph.DEFAULT_EDGE_WEIGHT;
-        }
+        return Graph.DEFAULT_EDGE_WEIGHT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setEdgeWeight(E e, double weight)
+    @Override public void setEdgeWeight(E e, double weight)
     {
-        throw new UnsupportedOperationException("Graph is unweighted");
+        throw new UnsupportedOperationException(EDGE_WEIGHT_IS_NOT_SUPPORTED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GraphType getType()
+    @Override public GraphType getType()
     {
         return super.getType().asUnweighted();
     }
-
 }
-
-// End AsUnweightedGraph.java

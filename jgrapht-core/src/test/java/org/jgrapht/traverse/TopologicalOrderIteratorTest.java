@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2005-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,21 +17,13 @@
  */
 package org.jgrapht.traverse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.EdgeReversedGraph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for TopologicalOrderIterator.

@@ -37,7 +37,7 @@ public interface EdgeProvider<V, E>
      *
      * @return the edge
      */
-    E buildEdge(V from, V to, String label, Map<String, String> attributes);
+    E buildEdge(V from, V to, String label, Map<String, Attribute> attributes);
 }
 
 // End EdgeProvider.java

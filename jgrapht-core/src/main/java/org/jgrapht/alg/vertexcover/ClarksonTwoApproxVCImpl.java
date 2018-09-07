@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,19 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.vertexcover.util.*;
 
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by Clarkson, Kenneth L.
  * "A modification of the greedy algorithm for vertex cover." Information Processing Letters 16.1
- * (1983): 23-25. The solution is guaranteed to be within 2 times the optimum solution. Runtime:
- * O(|E|*log|V|)
+ * (1983): 23-25. The solution is guaranteed to be within $2$ times the optimum solution. Runtime:
+ * $O(|E|\log |V|)$
  *
  * Note: this class supports pseudo-graphs
  *
@@ -37,16 +39,42 @@ import org.jgrapht.alg.vertexcover.util.*;
  * @author Joris Kinable
  */
 public class ClarksonTwoApproxVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>
+    implements
+    VertexCoverAlgorithm<V>
 {
 
     private static int vertexCounter = 0;
 
-    @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
-    {
-        GraphTests.requireUndirected(graph);
+    private final Graph<V, E> graph;
+    private final Map<V, Double> vertexWeightMap;
 
+    /**
+     * Constructs a new ClarksonTwoApproxVCImpl instance where all vertices have uniform weights.
+     * 
+     * @param graph input graph
+     */
+    public ClarksonTwoApproxVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = graph
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+    }
+
+    /**
+     * Constructs a new ClarksonTwoApproxVCImpl instance
+     * 
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     */
+    public ClarksonTwoApproxVCImpl(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = Objects.requireNonNull(vertexWeightMap);
+    }
+
+    @Override
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
+    {
         // Result
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
@@ -111,8 +139,7 @@ public class ClarksonTwoApproxVCImpl<V, E>
             assert (!workingGraph.parallelStream().anyMatch(
                 ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
         }
-
-        return new VertexCoverImpl<>(cover, weight);
-
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
+
 }

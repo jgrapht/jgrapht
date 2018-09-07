@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,15 +20,14 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+import org.junit.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class KShortestPathKValuesTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -47,22 +46,24 @@ public class KShortestPathKValuesTest
         }
     }
 
+    @Test
     public void testMaxSizeValueCompleteGraph6()
     {
         KShortestPathCompleteGraph6 graph = new KShortestPathCompleteGraph6();
 
         for (int maxSize = 1; maxSize <= calculateNbElementaryPathsForCompleteGraph(6); maxSize++) {
-            KShortestPaths<String, DefaultWeightedEdge> finder =
-                new KShortestPaths<>(graph, maxSize);
+            KShortestSimplePaths<String, DefaultWeightedEdge> finder =
+                new KShortestSimplePaths<>(graph);
 
-            assertEquals(finder.getPaths("vS", "v1").size(), maxSize);
-            assertEquals(finder.getPaths("vS", "v2").size(), maxSize);
-            assertEquals(finder.getPaths("vS", "v3").size(), maxSize);
-            assertEquals(finder.getPaths("vS", "v4").size(), maxSize);
-            assertEquals(finder.getPaths("vS", "v5").size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v1", maxSize).size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v2", maxSize).size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v3", maxSize).size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v4", maxSize).size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v5", maxSize).size(), maxSize);
         }
     }
 
+    @Test
     public void testNbReturnedPaths()
     {
         KShortestPathCompleteGraph4 kSPCompleteGraph4 = new KShortestPathCompleteGraph4();
@@ -98,11 +99,12 @@ public class KShortestPathKValuesTest
         int maxSize = Integer.MAX_VALUE;
 
         for (String sourceVertex : graph.vertexSet()) {
-            KShortestPaths<String, DefaultWeightedEdge> finder =
-                new KShortestPaths<>(graph, maxSize);
+            KShortestSimplePaths<String, DefaultWeightedEdge> finder =
+                new KShortestSimplePaths<>(graph);
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    assertEquals(finder.getPaths(sourceVertex, targetVertex).size(), nbPaths);
+                    assertEquals(
+                        finder.getPaths(sourceVertex, targetVertex, maxSize).size(), nbPaths);
                 }
             }
         }

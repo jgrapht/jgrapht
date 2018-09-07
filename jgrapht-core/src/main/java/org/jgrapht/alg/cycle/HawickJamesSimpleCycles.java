@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2014-2017, by Luiz Kill and Contributors.
+ * (C) Copyright 2014-2018, by Luiz Kill and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @author Luiz Kill
  */
 public class HawickJamesSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     private enum Operation
     {
@@ -158,13 +159,12 @@ public class HawickJamesSimpleCycles<V, E>
                 continue;
             }
 
-            if (w == start) {
+            if (Objects.equals(w, start)) {
                 if (o == Operation.ENUMERATE) {
                     List<V> cycle = new ArrayList<>(stack.size());
 
-                    Iterator<Integer> iteratorStack = stack.iterator();
-                    while (iteratorStack.hasNext()) {
-                        cycle.add(iToV[iteratorStack.next()]);
+                    for (Integer aStack : stack) {
+                        cycle.add(iToV[aStack]);
                     }
 
                     cycles.add(cycle);
@@ -234,7 +234,7 @@ public class HawickJamesSimpleCycles<V, E>
         Iterator<Integer> iterator = list.iterator();
         while (iterator.hasNext()) {
             Integer w = iterator.next();
-            if (w == u) {
+            if (Objects.equals(w, u)) {
                 nOccurrences++;
                 iterator.remove();
             }
@@ -244,18 +244,18 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * @return graph
      */
-    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * @param graph graph
      */
-    @Override
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");

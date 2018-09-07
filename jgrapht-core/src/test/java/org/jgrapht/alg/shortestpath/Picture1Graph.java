@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,11 +22,11 @@ import org.jgrapht.graph.*;
 /**
  * <img src="./Picture1.jpg">
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class Picture1Graph
-    extends SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
+    extends
+    SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

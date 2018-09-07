@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Leo Crawford and Contributors.
+ * (C) Copyright 2016-2018, by Leo Crawford and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.UnionFind;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import java.util.*;
 
 /**
  * Used to calculate Tarjan's Lowest Common Ancestors Algorithm
@@ -29,8 +29,10 @@ import org.jgrapht.alg.util.*;
  * @param <E> the graph edge type
  *
  * @author Leo Crawford
+ *
+ * @deprecated Replaced by {@link org.jgrapht.alg.lca.TarjanLCAFinder}
  */
-public class TarjanLowestCommonAncestor<V, E>
+@Deprecated public class TarjanLowestCommonAncestor<V, E>
 {
     private Graph<V, E> g;
 
@@ -61,9 +63,9 @@ public class TarjanLowestCommonAncestor<V, E>
     }
 
     /**
-     * Calculate the LCMs between a set of pairs (<code>a</code> and <code>
+     * Calculate the LCM's between a set of pairs (<code>a</code> and <code>
      * b</code>) treating <code>start</code> as the root we want to search from, and setting the LCA
-     * of each pair in its LCA field
+     * of each pair in its LCA field.
      * 
      * @param start the root of the subtree
      * @param lrr a list of requests-response objects. The answer if stored on these objects at the
@@ -219,7 +221,8 @@ public class TarjanLowestCommonAncestor<V, E>
 
     @SuppressWarnings("serial")
     private static final class MultiMap<V>
-        extends HashMap<V, Set<LcaRequestResponse<V>>>
+        extends
+        HashMap<V, Set<LcaRequestResponse<V>>>
     {
         public Set<LcaRequestResponse<V>> getOrCreate(V key)
         {
@@ -231,4 +234,4 @@ public class TarjanLowestCommonAncestor<V, E>
     }
 }
 
-// End TarjanLowestCommonAncestor.java
+// End TarjanLCAFinder.java

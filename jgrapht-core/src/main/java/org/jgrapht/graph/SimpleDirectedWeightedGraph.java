@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,6 +19,9 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A simple directed weighted graph. A simple directed weighted graph is a simple directed graph for
@@ -28,29 +31,30 @@ import org.jgrapht.graph.builder.*;
  * @param <E> the graph edge type
  */
 public class SimpleDirectedWeightedGraph<V, E>
-    extends SimpleDirectedGraph<V, E>
-    implements DirectedGraph<V, E>, WeightedGraph<V, E>
+    extends
+    SimpleDirectedGraph<V, E>
 {
     private static final long serialVersionUID = -3301373580757772501L;
 
     /**
-     * Creates a new simple directed weighted graph with the specified edge factory.
+     * Creates a new graph.
      *
-     * @param ef the edge factory of the new graph.
-     */
-    public SimpleDirectedWeightedGraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
-
-    /**
-     * Creates a new simple directed weighted graph.
-     *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public SimpleDirectedWeightedGraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass));
+    }
+
+    /**
+     * Creates a new graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     */
+    public SimpleDirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
+    {
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -71,49 +75,18 @@ public class SimpleDirectedWeightedGraph<V, E>
     /**
      * Create a builder for this kind of graph.
      * 
-     * @param ef the edge factory of the new graph
+     * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
     public static <V,
         E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
-            EdgeFactory<V, E> ef)
+            Supplier<E> edgeSupplier)
     {
-        return new GraphBuilder<>(new SimpleDirectedWeightedGraph<>(ef));
+        return new GraphBuilder<>(new SimpleDirectedWeightedGraph<>(null, edgeSupplier));
     }
 
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param edgeClass class on which to base factory for edges
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(Class)}.
-     */
-    @Deprecated
-    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
-        ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
-    {
-        return new DirectedWeightedGraphBuilder<>(new SimpleDirectedWeightedGraph<>(edgeClass));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
-     */
-    @Deprecated
-    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
-        ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
-    {
-        return new DirectedWeightedGraphBuilder<>(new SimpleDirectedWeightedGraph<>(ef));
-    }
 }
 
 // End SimpleDirectedWeightedGraph.java

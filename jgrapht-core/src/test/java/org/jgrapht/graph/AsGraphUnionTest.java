@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2003-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+import org.junit.*;
 
-import junit.framework.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit test for the {@link AsGraphUnion} class.
@@ -31,7 +32,6 @@ import junit.framework.*;
  * @since Aug 24, 2015
  */
 public class AsGraphUnionTest
-    extends TestCase
 {
 
     // ~ Instance fields --------------------------------------------------------
@@ -59,7 +59,7 @@ public class AsGraphUnionTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    @Override
+    @Before
     public void setUp()
     {
         undirectedGraph1 = new WeightedPseudograph<>(DefaultWeightedEdge.class);
@@ -96,6 +96,7 @@ public class AsGraphUnionTest
     /**
      * Create and test the union of two Undirected Graphs
      */
+    @Test
     public void testUndirectedGraphUnion()
     {
         Graph<String, DefaultWeightedEdge> graphUnion =
@@ -154,6 +155,7 @@ public class AsGraphUnionTest
     /**
      * Create and test the union of two Directed Graphs
      */
+    @Test
     public void testDirectedGraphUnion()
     {
         Graph<String, DefaultWeightedEdge> graphUnion =
@@ -213,6 +215,7 @@ public class AsGraphUnionTest
      * Create and test a Mixed-Graph, obtained by taking the union of a undirected and a directed
      * graph
      */
+    @Test
     public void testMixedGraphUnion()
     {
         Graph<String, DefaultWeightedEdge> graphUnion =
@@ -271,6 +274,7 @@ public class AsGraphUnionTest
     /**
      * Test the weight combiner for graphs having an edge in common.
      */
+    @Test
     public void testWeightCombiner()
     {
         // Create two graphs, both having the same vertices {0,1} and the same weighted edge (0,1)
@@ -291,34 +295,28 @@ public class AsGraphUnionTest
         weightMap.put(edge, 20.0);
         Graph<Integer, DefaultWeightedEdge> g2Masked = new AsWeightedGraph<>(g2, weightMap);
 
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionSum =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
-        assertEquals(30.0, graphUnionSum.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionFirst =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
-        assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionSecond =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
-        assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionMax =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
-        assertEquals(20.0, graphUnionMax.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionMin =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
-        assertEquals(10.0, graphUnionMin.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionMult =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
-        assertEquals(200.0, graphUnionMult.getEdgeWeight(edge));
+        Graph<Integer, DefaultWeightedEdge> graphUnionSum =
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
+        assertEquals(30.0, graphUnionSum.getEdgeWeight(edge), 0);
+        Graph<Integer, DefaultWeightedEdge> graphUnionFirst =
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
+        assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge), 0);
+        Graph<Integer, DefaultWeightedEdge> graphUnionSecond =
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
+        assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge), 0);
+        Graph<Integer, DefaultWeightedEdge> graphUnionMax =
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
+        assertEquals(20.0, graphUnionMax.getEdgeWeight(edge), 0);
+        Graph<Integer, DefaultWeightedEdge> graphUnionMin =
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
+        assertEquals(10.0, graphUnionMin.getEdgeWeight(edge), 0);
+        Graph<Integer, DefaultWeightedEdge> graphUnionMult =
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
+        assertEquals(200.0, graphUnionMult.getEdgeWeight(edge), 0);
 
-        assertEquals(10.0, g1.getEdgeWeight(edge));
-        assertEquals(10.0, g2.getEdgeWeight(edge));
-        assertEquals(20.0, g2Masked.getEdgeWeight(edge));
+        assertEquals(10.0, g1.getEdgeWeight(edge), 0);
+        assertEquals(10.0, g2.getEdgeWeight(edge), 0);
+        assertEquals(20.0, g2Masked.getEdgeWeight(edge), 0);
     }
 
 }

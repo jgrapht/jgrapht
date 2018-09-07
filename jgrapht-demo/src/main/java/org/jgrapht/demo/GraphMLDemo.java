@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,16 @@
  */
 package org.jgrapht.demo;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.io.*;
-import org.jgrapht.io.GraphMLExporter.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.io.*;
+import org.jgrapht.io.GraphMLExporter.*;
+import org.jgrapht.util.SupplierUtil;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in
@@ -32,14 +34,15 @@ import org.jgrapht.graph.*;
  * have a "weight" attribute as well as a "name" attribute.
  * 
  * The demo constructs a complete graph with random edge weights and exports it as GraphML. The
- * output is then re-imported into a second graph which is exported a second time.
+ * output is then re-imported into a second graph.
  */
 public final class GraphMLDemo
 {
-    // Number of vertices
+    // number of vertices
     private static final int SIZE = 6;
 
-    private static Random generator = new Random(17);
+    // random number generator
+    private static final Random GENERATOR = new Random(17);
 
     /**
      * Color
@@ -143,105 +146,132 @@ public final class GraphMLDemo
      */
     private static GraphExporter<CustomVertex, DefaultWeightedEdge> createExporter()
     {
-        // create GraphML exporter
-        GraphMLExporter<CustomVertex, DefaultWeightedEdge> exporter =
-            new GraphMLExporter<>(new ComponentNameProvider<CustomVertex>()
-            {
-                @Override
-                public String getName(CustomVertex v)
-                {
-                    return v.id;
-                }
-            }, null, new IntegerComponentNameProvider<>(), null);
+        /*
+         * Create vertex id provider.
+         *
+         * The exporter needs to generate for each vertex a unique identifier.
+         */
+        ComponentNameProvider<CustomVertex> vertexIdProvider = v -> v.id;
 
-        // set to export the internal edge weights
+        /*
+         * Create vertex label provider.
+         *
+         * The exporter may need to generate for each vertex a (not necessarily unique) label. If
+         * null the exporter does not output any labels.
+         */
+        ComponentNameProvider<CustomVertex> vertexLabelProvider = null;
+
+        /*
+         * The exporter may need to generate for each vertex a set of attributes. Attributes must
+         * also be registered as shown later on.
+         */
+        ComponentAttributeProvider<CustomVertex> vertexAttributeProvider = v -> {
+            Map<String, Attribute> m = new HashMap<>();
+            if (v.getColor() != null) {
+                m.put("color", DefaultAttribute.createAttribute(v.getColor().toString()));
+            }
+            m.put("name", DefaultAttribute.createAttribute("node-" + v.id));
+            return m;
+        };
+
+        /*
+         * Create edge id provider.
+         *
+         * The exporter needs to generate for each edge a unique identifier.
+         */
+        ComponentNameProvider<DefaultWeightedEdge> edgeIdProvider =
+            new IntegerComponentNameProvider<>();
+
+        /*
+         * Create edge label provider.
+         *
+         * The exporter may need to generate for each edge a (not necessarily unique) label. If null
+         * the exporter does not output any labels.
+         */
+        ComponentNameProvider<DefaultWeightedEdge> edgeLabelProvider = null;
+
+        /*
+         * The exporter may need to generate for each edge a set of attributes. Attributes must also
+         * be registered as shown later on.
+         */
+        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider = e -> {
+            Map<String, Attribute> m = new HashMap<>();
+            m.put("name", DefaultAttribute.createAttribute(e.toString()));
+            return m;
+        };
+
+        /*
+         * Create the exporter
+         */
+        GraphMLExporter<CustomVertex,
+            DefaultWeightedEdge> exporter = new GraphMLExporter<>(
+                vertexIdProvider, vertexLabelProvider, vertexAttributeProvider, edgeIdProvider,
+                edgeLabelProvider, edgeAttributeProvider);
+
+        /*
+         * Set to export the internal edge weights
+         */
         exporter.setExportEdgeWeights(true);
 
-        // register additional color attribute for vertices
+        /*
+         * Register additional color attribute for vertices
+         */
         exporter.registerAttribute("color", AttributeCategory.NODE, AttributeType.STRING);
 
-        // register additional name attribute for vertices and edges
+        /*
+         * Register additional name attribute for vertices and edges
+         */
         exporter.registerAttribute("name", AttributeCategory.ALL, AttributeType.STRING);
-
-        // create provider of vertex attributes
-        ComponentAttributeProvider<CustomVertex> vertexAttributeProvider =
-            new ComponentAttributeProvider<CustomVertex>()
-            {
-                @Override
-                public Map<String, String> getComponentAttributes(CustomVertex v)
-                {
-                    Map<String, String> m = new HashMap<String, String>();
-                    if (v.getColor() != null) {
-                        m.put("color", v.getColor().toString());
-                    }
-                    m.put("name", "node-" + v.id);
-                    return m;
-                }
-            };
-        exporter.setVertexAttributeProvider(vertexAttributeProvider);
-
-        // create provider of edge attributes
-        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider =
-            new ComponentAttributeProvider<DefaultWeightedEdge>()
-            {
-                @Override
-                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
-                {
-                    Map<String, String> m = new HashMap<String, String>();
-                    m.put("name", e.toString());
-                    return m;
-                }
-            };
-        exporter.setEdgeAttributeProvider(edgeAttributeProvider);
 
         return exporter;
     }
 
     /**
-     * Create importer
+     * Create the importer
      */
     private static GraphImporter<CustomVertex, DefaultWeightedEdge> createImporter()
     {
-        // create vertex provider
-        VertexProvider<CustomVertex> vertexProvider = new VertexProvider<CustomVertex>()
-        {
-            @Override
-            public CustomVertex buildVertex(String id, Map<String, String> attributes)
-            {
-                CustomVertex cv = new CustomVertex(id);
+        /*
+         * Create vertex provider.
+         *
+         * The importer reads vertices and calls a vertex provider to create them. The provider
+         * receives as input the unique id of each vertex and any additional attributes from the
+         * input stream.
+         */
+        VertexProvider<CustomVertex> vertexProvider = (id, attributes) -> {
+            CustomVertex cv = new CustomVertex(id);
 
-                // read color from attributes
-                String color = attributes.get("color");
-                if (color != null) {
-                    switch (color) {
-                    case "black":
-                        cv.setColor(Color.BLACK);
-                        break;
-                    case "white":
-                        cv.setColor(Color.WHITE);
-                        break;
-                    default:
-                        // ignore not supported color
-                    }
+            // read color from attributes map
+            if (attributes.containsKey("color")) {
+                String color = attributes.get("color").getValue();
+                switch (color) {
+                case "black":
+                    cv.setColor(Color.BLACK);
+                    break;
+                case "white":
+                    cv.setColor(Color.WHITE);
+                    break;
+                default:
+                    // ignore not supported color
                 }
-                return cv;
             }
+
+            return cv;
         };
 
-        // create edge provider
+        /*
+         * Create edge provider.
+         *
+         * The importer reads edges from the input stream and calls an edge provider to create them.
+         * The provider receives as input the source and target vertex of the edge, an edge label
+         * (which can be null) and a set of edge attributes all read from the input stream.
+         */
         EdgeProvider<CustomVertex, DefaultWeightedEdge> edgeProvider =
-            new EdgeProvider<CustomVertex, DefaultWeightedEdge>()
-            {
-                @Override
-                public DefaultWeightedEdge buildEdge(
-                    CustomVertex from, CustomVertex to, String label,
-                    Map<String, String> attributes)
-                {
-                    return new DefaultWeightedEdge();
-                }
-            };
+            (from, to, label, attributes) -> new DefaultWeightedEdge();
 
-        // create GraphML importer
+        /*
+         * Create the graph importer with a vertex and an edge provider.
+         */
         GraphMLImporter<CustomVertex, DefaultWeightedEdge> importer =
             new GraphMLImporter<>(vertexProvider, edgeProvider);
 
@@ -255,45 +285,44 @@ public final class GraphMLDemo
      */
     public static void main(String[] args)
     {
-        /*
-         * Generate complete graph.
-         * 
-         * Vertices have random colors and edges have random edge weights.
-         */
-        DirectedWeightedPseudograph<CustomVertex, DefaultWeightedEdge> graph1 =
-            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
-            new CompleteGraphGenerator<>(SIZE);
-        VertexFactory<CustomVertex> vFactory = new VertexFactory<CustomVertex>()
+
+        Supplier<CustomVertex> vSupplier = new Supplier<CustomVertex>()
         {
             private int id = 0;
 
             @Override
-            public CustomVertex createVertex()
+            public CustomVertex get()
             {
-                CustomVertex v = new CustomVertex(String.valueOf(id++));
-                if (generator.nextBoolean()) {
-                    v.setColor(Color.BLACK);
-                } else {
-                    v.setColor(Color.WHITE);
-                }
-                return v;
+                return new CustomVertex(
+                        String.valueOf(id++), GENERATOR.nextBoolean() ? Color.BLACK : Color.WHITE);
             }
-
         };
-        System.out.println("-- Generating complete graph");
-        completeGenerator.generateGraph(graph1, vFactory, null);
 
-        // assign random weights
+        /*
+         * Generate the complete graph. Vertices have random colors and edges have random edge
+         * weights.
+         */
+        Graph<CustomVertex, DefaultWeightedEdge> graph1 =
+                new DirectedWeightedPseudograph<>(vSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
+
+        CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
+            new CompleteGraphGenerator<>(SIZE);
+
+        System.out.println("-- Generating complete graph");
+        completeGenerator.generateGraph(graph1);
+
+        /*
+         * Assign random weights to the graph
+         */
         for (DefaultWeightedEdge e : graph1.edgeSet()) {
-            graph1.setEdgeWeight(e, generator.nextInt(100));
+            graph1.setEdgeWeight(e, GENERATOR.nextInt(100));
         }
 
-        // now export and import back again
         try {
-            // export as string
+            // now export and import back again
             System.out.println("-- Exporting graph as GraphML");
             GraphExporter<CustomVertex, DefaultWeightedEdge> exporter = createExporter();
+            // export as string
             Writer writer = new StringWriter();
             exporter.exportGraph(graph1, writer);
             String graph1AsGraphML = writer.toString();

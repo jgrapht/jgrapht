@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,8 @@ import org.jgrapht.*;
  * @since Jul 14, 2003
  */
 public class DefaultEdge
-    extends IntrusiveEdge
+    extends
+    IntrusiveEdge
 {
     private static final long serialVersionUID = 3258408452177932855L;
 

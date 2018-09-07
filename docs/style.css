@@ -1,0 +1,113 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Lead:  Barak Naveh (barak_naveh@users.sourceforge.net)
+ *
+ * (C) Copyright 2003, by Barak Naveh and Contributors.
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ */
+/* ~~~~~~~~~
+ * style.css
+ * ~~~~~~~~~
+ * (C) Copyright 2003, by Barak Naveh and Contributors.
+ *
+ * Original Author:  Barak Naveh
+ * Contributor(s):   -
+ *
+ * $Id:  $
+ *
+ * Changes
+ * ~~~~~~~
+ * 27-Jul-2003 : Initial revision (BN);
+ * 
+ */
+
+body {
+	font-family:Verdana;
+	text-align:left;
+	color:#000011;
+	background-color:#FAFBFF;
+}
+a {
+	COLOR: #336699; 
+	TEXT-DECORATION: underline;
+}
+a:visited {
+	color: #663366; 
+	TEXT-DECORATION: underline;
+}
+a:hover {
+	color: #FF9900; 
+	TEXT-DECORATION: underline;
+}
+code {
+	font-family:Courier New;
+	font-size:medium;
+}
+
+ul {
+	list-style:disc;
+}
+li {
+	list-style:disc;
+	margin-left:1em;
+	margin-right:1em;
+	line-height: 150%;
+}
+
+ol {
+	list-style:decimal;
+}
+
+p {
+	margin-left:1em;
+	margin-right:1em;
+	line-height: 140%;
+}
+
+h1 {
+	background-color:#7AA1E6;
+	border-left:1px solid #245BCB; 
+	border-right:1px solid #245BCB; 
+	border-top:1px solid #245BCB; 
+	border-bottom:1px solid #245BCB; 
+	color:#FFFFFF;
+	text-align:center;
+}
+ 
+h2 {
+	border-left:0px solid Black; 
+	border-right:0px solid Black; 
+	border-top:0px solid Black; 
+	border-bottom:2px solid #7AA1E6; 
+	margin-top:50;
+	color:#25507C;
+}
+ 
+h3 {
+	border-left:0px solid Black; 
+	border-right:0px solid Black; 
+	border-top:0px solid Black; 
+	border-bottom:2px solid #7AA1E6; 
+	margin-top:30;
+	color:#25507C;
+}
+
+table {
+	border-collapse: collapse;
+}

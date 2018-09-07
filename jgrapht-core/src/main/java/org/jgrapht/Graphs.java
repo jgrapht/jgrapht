@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,13 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.function.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.util.VertexToIntegerMapping;
 
-import org.jgrapht.graph.*;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -30,6 +33,7 @@ import org.jgrapht.graph.*;
  */
 public abstract class Graphs
 {
+
     /**
      * Creates a new edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.
@@ -43,19 +47,25 @@ public abstract class Graphs
      *
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
+     * 
+     * @throws UnsupportedOperationException if the graph has no edge supplier
      *
      * @see Graph#addEdge(Object, Object)
      */
     public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
-        EdgeFactory<V, E> ef = g.getEdgeFactory();
-        E e = ef.createEdge(sourceVertex, targetVertex);
+        Supplier<E> edgeSupplier = g.getEdgeSupplier();
+        if (edgeSupplier == null) {
+            throw new UnsupportedOperationException("Graph contains no edge supplier");
+        }
+        E e = edgeSupplier.get();
 
-        // we first create the edge and set the weight to make sure that
-        // listeners will see the correct weight upon addEdge.
-        g.setEdgeWeight(e, weight);
-
-        return g.addEdge(sourceVertex, targetVertex, e) ? e : null;
+        if (g.addEdge(sourceVertex, targetVertex, e)) {
+            g.setEdgeWeight(e, weight);
+            return e;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -250,7 +260,7 @@ public abstract class Graphs
     /**
      * Returns a list of vertices that are the neighbors of a specified vertex. If the graph is a
      * multigraph vertices may appear more than once in the returned list.
-     * 
+     *
      * <p>
      * The method uses {@link Graph#edgesOf(Object)} to traverse the graph.
      *
@@ -273,12 +283,32 @@ public abstract class Graphs
     }
 
     /**
+     * Returns a set of vertices that are neighbors of a specified vertex.
+     *
+     * @param g the graph to look for neighbors in
+     * @param vertex the vertex to get the neighbors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a set of the vertices that are neighbors of the specified vertex
+     */
+    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex)
+    {
+        Set<V> neighbors = new LinkedHashSet<>();
+
+        for (E e : g.edgesOf(vertex)) {
+            neighbors.add(Graphs.getOppositeVertex(g, e, vertex));
+        }
+
+        return neighbors;
+    }
+
+    /**
      * Returns a list of vertices that are the direct predecessors of a specified vertex. If the
      * graph is a multigraph, vertices may appear more than once in the returned list.
-     * 
+     *
      * <p>
      * The method uses {@link Graph#incomingEdgesOf(Object)} to traverse the graph.
-     * 
+     *
      * @param g the graph to look for predecessors in
      * @param vertex the vertex to get the predecessors of
      * @param <V> the graph vertex type
@@ -476,7 +506,7 @@ public abstract class Graphs
 
     /**
      * Add edges from one source vertex to multiple target vertices. Whether duplicates are created
-     * depends on the underlying {@link DirectedGraph} implementation.
+     * depends on the underlying {@link Graph} implementation.
      *
      * @param graph graph to be mutated
      * @param source source vertex of the new edges
@@ -548,6 +578,23 @@ public abstract class Graphs
     public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex)
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
+    }
+
+    /**
+     * Compute a new mapping from the vertices of a graph to the integer range $[0, n)$
+     * where $n$ is the number of vertices in the graph.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @throws NullPointerException if {@code graph} is {@code null}
+     *
+     * @return the mapping as an object containing the {@code vertexMap} and the {@code indexList}
+     *
+     * @see VertexToIntegerMapping
+     */
+    public static <V, E> VertexToIntegerMapping<V> getVertexToIntegerMapping(Graph<V, E> graph){
+        return new VertexToIntegerMapping<>(Objects.requireNonNull(graph).vertexSet());
     }
 }
 

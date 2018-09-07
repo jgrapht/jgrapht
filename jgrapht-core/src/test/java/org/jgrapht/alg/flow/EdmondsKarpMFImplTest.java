@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2008-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,18 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class EdmondsKarpMFImplTest
-    extends MaximumFlowAlgorithmTest
+    extends
+    MaximumFlowAlgorithmTest
 {
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -35,6 +39,7 @@ public class EdmondsKarpMFImplTest
 
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testCornerCases()
     {
         DirectedWeightedMultigraph<Integer, DefaultWeightedEdge> simple =

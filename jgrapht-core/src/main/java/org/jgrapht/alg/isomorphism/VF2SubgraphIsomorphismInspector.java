@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,33 +17,49 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 /**
- * This is an implementation of the VF2 algorithm using its feature of detecting
- * <a href="http://mathworld.wolfram.com/Vertex-InducedSubgraph.html">subgraph isomorphism between
- * two graphs</a> as described in Cordella et al. A (sub)graph isomorphism algorithm for matching
- * large graphs (2004), DOI:10.1109/TPAMI.2004.75,
+ * This is an implementation of the VF2 algorithm using its feature of detecting subgraph
+ * isomorphism between two graphs as described in Cordella et al. A (sub)graph isomorphism algorithm
+ * for matching large graphs (2004), DOI:10.1109/TPAMI.2004.75,
  * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
  * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
  *
  * <p>
- * This implementation of the VF2 algorithm does not support graphs with multiple edges.
+ * Note that this inspector only finds isomorphisms between a smaller graph and all
+ * <a href="http://mathworld.wolfram.com/Vertex-InducedSubgraph.html">induced subgraphs</a> of a
+ * larger graph. It does not find isomorphisms between the smaller graph and arbitrary subgraphs of
+ * the larger graph. For example, given as input the
+ * <a href="http://mathworld.wolfram.com/CubicalGraph.html">cubical graph</a> $Q_{3}$ and the
+ * <a href="http://mathworld.wolfram.com/SquareGraph.html">square graph</a>, isomorphic mappings
+ * will be found between the square and the faces of the cube. However, given the
+ * <a href="http://mathworld.wolfram.com/CompleteGraph.html">complete graph</a> $K_{5}$ and the
+ * square graph as input, no isomorphisms will be found since all induced subgraphs of a complete
+ * graph are themselves complete graphs.
+ *
+ * <p>
+ * Consequently, in the case where both input graphs have the same number of vertices, this
+ * algorithm is equivalent to running {@link VF2GraphIsomorphismInspector}.
+ *
+ * <p>
+ * This implementation of the VF2 algorithm does not support graphs with multiple (parallel) edges.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
 public class VF2SubgraphIsomorphismInspector<V, E>
-    extends VF2AbstractIsomorphismInspector<V, E>
+    extends
+    VF2AbstractIsomorphismInspector<V, E>
 {
 
     /**
-     * Construct a new VF2 isomorphism inspector.
+     * Construct a new VF2 subgraph isomorphism inspector.
      *
      * @param graph1 the first graph
-     * @param graph2 the second graph (possible subgraph of graph1)
+     * @param graph2 the second graph (possible induced subgraph of graph1)
      * @param vertexComparator comparator for semantic equivalence of vertices
      * @param edgeComparator comparator for semantic equivalence of edges
      * @param cacheEdges if true, edges get cached for faster access
@@ -56,10 +72,10 @@ public class VF2SubgraphIsomorphismInspector<V, E>
     }
 
     /**
-     * Construct a new VF2 isomorphism inspector.
+     * Construct a new VF2 subgraph isomorphism inspector.
      *
      * @param graph1 the first graph
-     * @param graph2 the second graph (possible subgraph of graph1)
+     * @param graph2 the second graph (possible induced subgraph of graph1)
      * @param vertexComparator comparator for semantic equivalence of vertices
      * @param edgeComparator comparator for semantic equivalence of edges
      */
@@ -71,10 +87,10 @@ public class VF2SubgraphIsomorphismInspector<V, E>
     }
 
     /**
-     * Construct a new VF2 isomorphism inspector.
+     * Construct a new VF2 subgraph isomorphism inspector.
      *
      * @param graph1 the first graph
-     * @param graph2 the second graph (possible subgraph of graph1)
+     * @param graph2 the second graph (possible induced subgraph of graph1)
      * @param cacheEdges if true, edges get cached for faster access
      */
     public VF2SubgraphIsomorphismInspector(
@@ -84,10 +100,10 @@ public class VF2SubgraphIsomorphismInspector<V, E>
     }
 
     /**
-     * Construct a new VF2 isomorphism inspector.
+     * Construct a new VF2 subgraph isomorphism inspector.
      *
      * @param graph1 the first graph
-     * @param graph2 the second graph (possible subgraph of graph1)
+     * @param graph2 the second graph (possible induced subgraph of graph1)
      */
     public VF2SubgraphIsomorphismInspector(Graph<V, E> graph1, Graph<V, E> graph2)
     {

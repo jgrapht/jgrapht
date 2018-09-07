@@ -6,7 +6,7 @@
 #Details about the formatter config file: http://help.eclipse.org/neon/topic/org.eclipse.jdt.doc.user/tasks/tasks-232.htm?cp=1_3_10_1
 
 #Path to eclipse. Needs eclipse Neon or newer.
-eclipse_path=/opt/eclipse/java-neon/eclipse/eclipse
+eclipse_path=/opt/eclipse/eclipse
 #Path to Java
 java_path=/usr/lib/jvm/java-8-oracle/bin/java
 #
@@ -16,4 +16,5 @@ find ../jgrapht-core/ -name *.java -print -exec $eclipse_path -nosplash -vm $jav
 find ../jgrapht-demo/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
 find ../jgrapht-dist/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
 find ../jgrapht-ext/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
-find ../jgrapht-touchgraph/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
+find ../jgrapht-guava/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
+find ../jgrapht-io/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;

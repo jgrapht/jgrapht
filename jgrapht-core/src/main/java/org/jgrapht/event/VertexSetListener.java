@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,8 @@ import java.util.*;
  * @since Jul 18, 2003
  */
 public interface VertexSetListener<V>
-    extends EventListener
+    extends
+    EventListener
 {
     /**
      * Notifies that a vertex has been added to the graph.

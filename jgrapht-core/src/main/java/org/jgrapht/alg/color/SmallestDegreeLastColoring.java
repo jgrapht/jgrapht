@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by Michael Behrisch, Dimitrios Michail and Contributors.
+ * (C) Copyright 2010-2018, by Michael Behrisch, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,25 +17,19 @@
  */
 package org.jgrapht.alg.color;
 
-import java.lang.reflect.Array;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * The smallest degree last greedy coloring algorithm.
  * 
  * <p>
  * This is the greedy coloring algorithm with the smallest-last ordering of the vertices. The basic
- * idea is as follows: Assuming that vertices {@code vk+1, ..., vn} have been already selected,
- * choose {@code v_k} so that the degree of {@code v_k} in the subgraph induced by {@code V - {vk+1,
- * ..., v_n}} is minimal. See the following paper for details.
+ * idea is as follows: Assuming that vertices $v_{k+1}, \dotso, v_n$ have been already selected,
+ * choose $v_k$ so that the degree of $v_k$ in the subgraph induced by $V - $(v_{k+1}, \dotso, v_n)$
+ * is minimal. See the following paper for details.
  * <ul>
  * <li>D. Matula, G. Marble, and J. Isaacson. Graph coloring algorithms in Graph Theory and
  * Computing. Academic Press, 104--122, 1972.</li>
@@ -48,7 +42,8 @@ import org.jgrapht.Graphs;
  * @author Dimitrios Michail
  */
 public class SmallestDegreeLastColoring<V, E>
-    extends GreedyColoring<V, E>
+    extends
+    GreedyColoring<V, E>
 {
     /**
      * Construct a new coloring algorithm.

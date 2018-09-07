@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import junit.framework.*;
+import java.util.*;
 
 /**
  * Test base class for the GusfieldGomoryHuCutTree and GusfieldEquivalentFlow implementations
@@ -31,7 +31,6 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public abstract class GusfieldTreeAlgorithmsTestBase
-    extends TestCase
 {
 
     public abstract void validateAlgorithm(
@@ -41,6 +40,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
      * Triangle graph example from the paper <it>Very simple methods for all pairs network flow
      * analysis</it> by Dan gusfield (Figure 1)
      */
+    @Test
     public void testTriangleGraph()
     {
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -56,6 +56,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
      * Square graph example from the paper <it>Very simple methods for all pairs network flow
      * analysis</it> by Dan gusfield (Figure 2)
      */
+    @Test
     public void testSquareGraph()
     {
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -74,6 +75,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
     /**
      * Graph example from the paper <it>Multi-Terminal Network Flows</it> by Gomory, R. and Hu, T.
      */
+    @Test
     public void testGomoryHuExampleGraph()
     {
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -93,6 +95,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
         validateAlgorithm(network);
     }
 
+    @Test
     public void testGraphWithNoEdges()
     {
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -104,6 +107,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
     /**
      * Some graph taken from the wikipedia article about Gomory-Hu trees
      */
+    @Test
     public void testWikipediaGraph()
     {
         // Example wikipedia
@@ -125,6 +129,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
     /**
      * Test disconnected graph
      */
+    @Test
     public void testDisconnectedGraph()
     {
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -137,17 +142,20 @@ public abstract class GusfieldTreeAlgorithmsTestBase
         validateAlgorithm(network);
     }
 
+    @Test
     public void testRandomGraphs()
     {
         Random rand = new Random(0);
         for (int i = 0; i < 10; i++) {
-            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            SimpleWeightedGraph<Integer,
+                DefaultWeightedEdge> randomGraph = new SimpleWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             int vertices = rand.nextInt((20 - 10) + 1) + 10; // 10-20 vertices
             double p = 0.01 * (rand.nextInt((85 - 50) + 1) + 50); // p=[0.5;0.85]
             GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen =
                 new GnpRandomGraphGenerator<>(vertices, p);
-            graphGen.generateGraph(randomGraph, new IntegerVertexFactory(0), null);
+            graphGen.generateGraph(randomGraph);
             for (DefaultWeightedEdge edge : randomGraph.edgeSet())
                 randomGraph.setEdgeWeight(edge, rand.nextInt(150));
             validateAlgorithm(randomGraph);

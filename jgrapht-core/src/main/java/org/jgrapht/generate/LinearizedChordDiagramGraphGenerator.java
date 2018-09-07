@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,35 +17,30 @@
  */
 package org.jgrapht.generate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.Pseudograph;
+import java.util.*;
 
 /**
  * The linearized chord diagram graph model generator.
  * 
  * <p>
  * The generator makes precise several unspecified mathematical details of the Barabási-Albert
- * model, such as the initial configuration of the first nodes, and whether the m links assigned to
- * a new node are added one by one, or simultaneously, etc. The generator is described in the paper:
- * Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
+ * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned
+ * to a new node are added one by one, or simultaneously, etc. The generator is described in the
+ * paper: Bélaa Bollobás and Oliver Riordan. The Diameter of a Scale-Free Random Graph. Journal
+ * Combinatorica, 24(1): 5--34, 2004.
  * 
  * <p>
- * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allow for multiple
+ * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allows for multiple
  * edges (parallel-edges) and self-loops. They show, however, that their number will be small. This
  * means that this generator works only on graphs which allow multiple edges (parallel-edges) such
  * as {@link Pseudograph} or {@link DirectedPseudograph}.
  * 
  * <p>
- * The generator starts with a graph of one node and grows the network by adding n-1 additional
- * nodes. The additional nodes are added one by one and each of them is connected to m previously
+ * The generator starts with a graph of one node and grows the network by adding $n-1$ additional
+ * nodes. The additional nodes are added one by one and each of them is connected to $m$ previously
  * added nodes (or to itself with a small probability), where the probability of connecting to a
  * node is proportional to its degree.
  * 
@@ -56,7 +51,8 @@ import org.jgrapht.graph.Pseudograph;
  * @param <E> the graph edge type
  */
 public class LinearizedChordDiagramGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int m;
@@ -112,13 +108,11 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
      * Generates an instance.
      * 
      * @param target the target graph, which must allow self-loops and parallel edges
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      * @throws IllegalArgumentException if the graph does not allow self-loops or parallel edges
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Add nodes by maintaining a list with vertex multiplicity equal to its degree for sampling
@@ -127,10 +121,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
         List<V> nodes = new ArrayList<>(2 * n * m);
         for (int t = 0; t < n; t++) {
             // add node
-            V vt = vertexFactory.createVertex();
-            if (!target.addVertex(vt)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
-            }
+            V vt = target.addVertex();
 
             // add edges
             for (int j = 0; j < m; j++) {

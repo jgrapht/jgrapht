@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,15 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dimitrios Michail
@@ -36,11 +37,13 @@ public class ListSingleSourcePathsTest
     public void test()
     {
         int n = 50;
-        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        DirectedPseudograph<Integer,
+            DefaultWeightedEdge> g = new DirectedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER,
+                false);
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(n, 0.7);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g);
 
         List<GraphPath<Integer, DefaultWeightedEdge>> p = new ArrayList<>();
         Map<Integer, GraphPath<Integer, DefaultWeightedEdge>> map = new HashMap<>();

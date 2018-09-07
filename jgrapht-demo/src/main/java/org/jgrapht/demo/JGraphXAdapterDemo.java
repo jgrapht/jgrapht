@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2013-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,16 +17,16 @@
  */
 package org.jgrapht.demo;
 
-import java.awt.*;
+//@example:full:begin
 
-import javax.swing.*;
-
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
-import com.mxgraph.layout.*;
-import com.mxgraph.swing.*;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on
@@ -35,9 +35,11 @@ import com.mxgraph.swing.*;
  * @since July 9, 2013
  */
 public class JGraphXAdapterDemo
-    extends JApplet
+    extends
+    JApplet
 {
     private static final long serialVersionUID = 2202072534703043194L;
+
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
     private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
@@ -55,15 +57,12 @@ public class JGraphXAdapterDemo
 
         JFrame frame = new JFrame();
         frame.getContentPane().add(applet);
-        frame.setTitle("JGraphT Adapter to JGraph Demo");
+        frame.setTitle("JGraphT Adapter to JGraphX Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void init()
     {
@@ -74,7 +73,11 @@ public class JGraphXAdapterDemo
         // create a visualization using JGraph, via an adapter
         jgxAdapter = new JGraphXAdapter<>(g);
 
-        getContentPane().add(new mxGraphComponent(jgxAdapter));
+        setPreferredSize(DEFAULT_SIZE);
+        mxGraphComponent component = new mxGraphComponent(jgxAdapter);
+        component.setConnectable(false);
+        component.getGraph().setAllowDanglingEdges(false);
+        getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
         String v1 = "v1";
@@ -95,10 +98,18 @@ public class JGraphXAdapterDemo
 
         // positioning via jgraphx layouts
         mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
-        layout.execute(jgxAdapter.getDefaultParent());
 
+        // center the circle
+        int radius = 100;
+        layout.setX0((DEFAULT_SIZE.width / 2.0) - radius);
+        layout.setY0((DEFAULT_SIZE.height / 2.0) - radius);
+        layout.setRadius(radius);
+        layout.setMoveCircle(true);
+
+        layout.execute(jgxAdapter.getDefaultParent());
         // that's all there is to it!...
     }
 }
+//@example:full:end
 
 // End JGraphXAdapterDemo.java

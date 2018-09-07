@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An implementation of {@link SingleSourcePaths} which stores one path per vertex.
@@ -37,7 +37,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class ListSingleSourcePathsImpl<V, E>
-    implements SingleSourcePaths<V, E>, Serializable
+    implements
+    SingleSourcePaths<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -60070018446561686L;
 
@@ -115,9 +117,7 @@ public class ListSingleSourcePathsImpl<V, E>
         GraphPath<V, E> p = paths.get(targetVertex);
         if (p == null) {
             if (source.equals(targetVertex)) {
-                return new GraphWalk<>(
-                    graph, source, targetVertex, Collections.singletonList(source),
-                    Collections.emptyList(), 0d);
+                return GraphWalk.singletonWalk(graph, source, 0d);
             } else {
                 return null;
             }

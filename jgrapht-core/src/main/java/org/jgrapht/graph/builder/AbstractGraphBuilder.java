@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Andrew Chen and Contributors.
+ * (C) Copyright 2015-2018, by Andrew Chen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -270,21 +270,6 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     public G build()
     {
         return this.graph;
-    }
-
-    /**
-     * Build an unmodifiable version graph. Calling any method (including this method) on this
-     * builder object after calling this method is undefined behaviour.
-     *
-     * @return the built unmodifiable graph.
-     *
-     * @see #build()
-     * @deprecated In favor of {@link #buildAsUnmodifiable()}.
-     */
-    @Deprecated
-    public UnmodifiableGraph<V, E> buildUnmodifiable()
-    {
-        return new UnmodifiableGraph<>(this.graph);
     }
 
     /**

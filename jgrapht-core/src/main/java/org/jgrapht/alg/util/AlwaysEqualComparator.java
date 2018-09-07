@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,8 @@ import java.util.*;
  * 
  */
 public class AlwaysEqualComparator<T>
-    implements Comparator<T>
+    implements
+    Comparator<T>
 {
     @Override
     public int compare(T arg0, T arg1)

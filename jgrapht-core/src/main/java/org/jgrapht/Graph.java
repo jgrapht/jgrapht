@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,6 +18,7 @@
 package org.jgrapht;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * The root interface in the graph hierarchy. A mathematical graph-theory graph object
@@ -93,12 +94,42 @@ public interface Graph<V, E>
     E getEdge(V sourceVertex, V targetVertex);
 
     /**
-     * Returns the edge factory using which this graph creates new edges. The edge factory is
-     * defined when the graph is constructed and must not be modified.
-     *
-     * @return the edge factory using which this graph creates new edges.
+     * Return the vertex supplier that the graph uses whenever it needs to create new vertices.
+     * 
+     * <p>
+     * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
+     * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
+     * {@link Graph#addVertex(Object)} to add the vertex.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * 
+     * @return the vertex supplier or <code>null</code> if the graph has no such supplier
      */
-    EdgeFactory<V, E> getEdgeFactory();
+    Supplier<V> getVertexSupplier();
+
+    /**
+     * Return the edge supplier that the graph uses whenever it needs to create new edges.
+     * 
+     * <p>
+     * A graph uses the edge supplier to create new edge objects whenever a user calls method
+     * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
+     * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the edge supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * 
+     * @return the edge supplier <code>null</code> if the graph has no such supplier
+     */
+    Supplier<E> getEdgeSupplier();
 
     /**
      * Creates a new edge in this graph, going from the source vertex to the target vertex, and
@@ -108,18 +139,21 @@ public interface Graph<V, E>
      *
      * <p>
      * The source and target vertices must already be contained in this graph. If they are not found
-     * in graph IllegalArgumentException is thrown.
-     * </p>
+     * in graph {@link IllegalArgumentException} is thrown.
      *
      * <p>
-     * This method creates the new edge <code>e</code> using this graph's <code>EdgeFactory</code>.
-     * For the new edge to be added <code>e</code> must <i>not</i> be equal to any other edge the
-     * graph (even if the graph allows edge-multiplicity). More formally, the graph must not contain
-     * any edge <code>e2</code> such that <code>e2.equals(e)</code>. If such <code>
+     * This method creates the new edge <code>e</code> using this graph's edge supplier (see
+     * {@link #getEdgeSupplier()}). For the new edge to be added <code>e</code> must <i>not</i> be
+     * equal to any other edge the graph (even if the graph allows edge-multiplicity). More
+     * formally, the graph must not contain any edge <code>e2</code> such that
+     * <code>e2.equals(e)</code>. If such <code>
      * e2</code> is found then the newly created edge <code>e</code> is abandoned, the method leaves
-     * this graph unchanged returns <code>
-     * null</code>.
-     * </p>
+     * this graph unchanged and returns <code>null</code>.
+     * 
+     * <p>
+     * If the underlying graph implementation's {@link #getEdgeSupplier()} returns
+     * <code>null</code>, then this method cannot create edges and throws an
+     * {@link UnsupportedOperationException}.
      *
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
@@ -128,10 +162,10 @@ public interface Graph<V, E>
      * null</code>.
      *
      * @throws IllegalArgumentException if source or target vertices are not found in the graph.
-     * @throws NullPointerException if any of the specified vertices is <code>
-     * null</code>.
+     * @throws NullPointerException if any of the specified vertices is <code>null</code>.
+     * @throws UnsupportedOperationException if the graph was not initialized with an edge supplier
      *
-     * @see #getEdgeFactory()
+     * @see #getEdgeSupplier()
      */
     E addEdge(V sourceVertex, V targetVertex);
 
@@ -164,9 +198,34 @@ public interface Graph<V, E>
      * null</code>.
      *
      * @see #addEdge(Object, Object)
-     * @see #getEdgeFactory()
+     * @see #getEdgeSupplier()
      */
     boolean addEdge(V sourceVertex, V targetVertex, E e);
+
+    /**
+     * Creates a new vertex in this graph and returns it.
+     *
+     * <p>
+     * This method creates the new vertex <code>v</code> using this graph's vertex supplier (see
+     * {@link #getVertexSupplier()}). For the new vertex to be added <code>v</code> must <i>not</i>
+     * be equal to any other vertex in the graph. More formally, the graph must not contain any
+     * vertex <code>v2</code> such that <code>v2.equals(v)</code>. If such <code>
+     * v2</code> is found then the newly created vertex <code>v</code> is abandoned, the method
+     * leaves this graph unchanged and throws an {@link IllegalArgumentException}.
+     * 
+     * <p>
+     * If the underlying graph implementation's {@link #getVertexSupplier()} returns
+     * <code>null</code>, then this method cannot create vertices and throws an
+     * {@link UnsupportedOperationException}.
+     *
+     * @return The newly created vertex if added to the graph.
+     *
+     * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in the graph
+     * @throws UnsupportedOperationException if the graph was not initialized with a vertex supplier
+     *
+     * @see #getVertexSupplier()
+     */
+    V addVertex();
 
     /**
      * Adds the specified vertex to this graph if not already present. More formally, adds the
@@ -250,6 +309,9 @@ public interface Graph<V, E>
      *
      * @param vertex vertex whose degree is to be calculated.
      * @return the degree of the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     int degreeOf(V vertex);
 
@@ -279,6 +341,9 @@ public interface Graph<V, E>
      *
      * @param vertex vertex whose degree is to be calculated.
      * @return the degree of the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     int inDegreeOf(V vertex);
 
@@ -291,6 +356,9 @@ public interface Graph<V, E>
      *
      * @param vertex the vertex for which the list of incoming edges to be returned.
      * @return a set of all edges incoming into the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> incomingEdgesOf(V vertex);
 
@@ -308,6 +376,9 @@ public interface Graph<V, E>
      *
      * @param vertex vertex whose degree is to be calculated.
      * @return the degree of the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     int outDegreeOf(V vertex);
 
@@ -320,6 +391,9 @@ public interface Graph<V, E>
      *
      * @param vertex the vertex for which the list of outgoing edges to be returned.
      * @return a set of all edges outgoing from the specified vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> outgoingEdgesOf(V vertex);
 
@@ -458,8 +532,8 @@ public interface Graph<V, E>
 
     /**
      * Get the graph type. The graph type can be used to query for additional metadata such as
-     * whether the graph supports directed or undirected edges, self-loops, parallel-edges, weights,
-     * etc.
+     * whether the graph supports directed or undirected edges, self-loops, multiple (parallel)
+     * edges, weights, etc.
      * 
      * @return the graph type
      */

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2006-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,14 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 /**
- * Provides an edge-reversed view g' of a directed graph g. The vertex sets for the two graphs are
- * the same, but g' contains an edge (v2, v1) iff g contains an edge (v1, v2). g' is backed by g, so
- * changes to g are reflected in g', and vice versa.
+ * Provides an edge-reversed view $g'$ of a directed graph $g$. The vertex sets for the two graphs
+ * are the same, but g' contains an edge $(v2, v1)$ iff g$$ contains an edge $(v1, v2)$. $g'$ is
+ * backed by $g$, so changes to $g$ are reflected in $g'$, and vice versa.
  *
  * <p>
  * This class allows you to use a directed graph algorithm in reverse. For example, suppose you have
@@ -39,8 +39,10 @@ import org.jgrapht.*;
  * @see AsUndirectedGraph
  */
 public class EdgeReversedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements DirectedGraph<V, E>
+    extends
+    GraphDelegator<V, E>
+    implements
+    Graph<V, E>
 {
     private static final long serialVersionUID = -3806030402468293063L;
 
@@ -91,7 +93,7 @@ public class EdgeReversedGraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#inDegreeOf(Object)
+     * @see Graph#inDegreeOf(Object)
      */
     @Override
     public int inDegreeOf(V vertex)
@@ -100,7 +102,7 @@ public class EdgeReversedGraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#outDegreeOf(Object)
+     * @see Graph#outDegreeOf(Object)
      */
     @Override
     public int outDegreeOf(V vertex)
@@ -109,7 +111,7 @@ public class EdgeReversedGraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * @see Graph#incomingEdgesOf(Object)
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
@@ -118,7 +120,7 @@ public class EdgeReversedGraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * @see Graph#outgoingEdgesOf(Object)
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)

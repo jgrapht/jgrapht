@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi, Dimitrios Michail and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A light-weight version of the closest-first iterator for a directed or undirected graphs. For
@@ -47,7 +47,8 @@ import org.jgrapht.util.*;
  * @author Dimitrios Michail
  */
 class DijkstraClosestFirstIterator<V, E>
-    implements Iterator<V>
+    implements
+    Iterator<V>
 {
     private final Graph<V, E> graph;
     private final V source;
@@ -187,11 +188,9 @@ class DijkstraClosestFirstIterator<V, E>
             node = new FibonacciHeapNode<>(new QueueEntry(e, v));
             heap.insert(node, distance);
             seen.put(v, node);
-        } else {
-            if (distance < node.getKey()) {
-                heap.decreaseKey(node, distance);
-                node.getData().e = e;
-            }
+        } else if (distance < node.getKey()) {
+            heap.decreaseKey(node, distance);
+            node.getData().e = e;
         }
     }
 

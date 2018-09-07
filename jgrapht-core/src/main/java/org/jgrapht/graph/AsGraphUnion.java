@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Read-only union of two graphs.
@@ -30,7 +31,7 @@ import org.jgrapht.util.*;
  * Read-only union of two graphs: G<sub>1</sub> and G<sub>2</sub>. If G<sub>1</sub> =
  * (V<sub>1</sub>, E<sub>1</sub>) and G<sub>2</sub> = (V<sub>2</sub>, E<sub>2</sub>) then their
  * union G = (V, E), where V is the union of V<sub>1</sub> and V<sub>2</sub>, and E is the union of
- * E<sub>1</sub> and E<sub>1</sub>. A {@link WeightCombiner} in order to calculate edge weights.
+ * E<sub>1</sub> and E<sub>2</sub>. A {@link WeightCombiner} in order to calculate edge weights.
  * 
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -104,14 +105,18 @@ public class AsGraphUnion<V, E>
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        Set<E> res = new LinkedHashSet<>();
-        if (g1.containsVertex(sourceVertex) && g1.containsVertex(targetVertex)) {
-            res.addAll(g1.getAllEdges(sourceVertex, targetVertex));
-        }
-        if (g2.containsVertex(sourceVertex) && g2.containsVertex(targetVertex)) {
-            res.addAll(g2.getAllEdges(sourceVertex, targetVertex));
-        }
-        return Collections.unmodifiableSet(res);
+        boolean inG1 = g1.containsVertex(sourceVertex) && g1.containsVertex(targetVertex);
+        boolean inG2 = g2.containsVertex(sourceVertex) && g2.containsVertex(targetVertex);
+
+        if (inG1 && inG2) {
+            return new UnmodifiableUnionSet<>(
+                g1.getAllEdges(sourceVertex, targetVertex), g2.getAllEdges(sourceVertex, targetVertex));
+        } else if (inG1) {
+            return Collections.unmodifiableSet(g1.getAllEdges(sourceVertex, targetVertex));
+        } else if (inG2) {
+            return Collections.unmodifiableSet(g2.getAllEdges(sourceVertex, targetVertex));
+        } 
+        return Collections.emptySet();
     }
 
     /**
@@ -136,7 +141,18 @@ public class AsGraphUnion<V, E>
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
-    public EdgeFactory<V, E> getEdgeFactory()
+    public Supplier<V> getVertexSupplier()
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
@@ -159,6 +175,17 @@ public class AsGraphUnion<V, E>
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public V addVertex()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
@@ -194,78 +221,74 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it involves copying the edge sets of the two
-     * underlying graphs.
      */
     @Override
     public Set<E> edgeSet()
     {
-        Set<E> res = new LinkedHashSet<>();
-        res.addAll(g1.edgeSet());
-        res.addAll(g2.edgeSet());
-        return Collections.unmodifiableSet(res);
+        return new UnmodifiableUnionSet<>(g1.edgeSet(), g2.edgeSet());
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it involves copying the edge sets of the two
-     * underlying graphs.
      */
     @Override
     public Set<E> edgesOf(V vertex)
     {
-        Set<E> res = new LinkedHashSet<>();
-        if (g1.containsVertex(vertex)) {
-            res.addAll(g1.edgesOf(vertex));
+        boolean inG1 = g1.containsVertex(vertex);
+        boolean inG2 = g2.containsVertex(vertex);
+
+        if (inG1 && inG2) {
+            return new UnmodifiableUnionSet<>(
+                g1.edgesOf(vertex), g2.edgesOf(vertex));
+        } else if (inG1) {
+            return Collections.unmodifiableSet(g1.edgesOf(vertex));
+        } else if (inG2) {
+            return Collections.unmodifiableSet(g2.edgesOf(vertex));
+        } else {
+            throw new IllegalArgumentException("no such vertex in graph: " + vertex.toString());
         }
-        if (g2.containsVertex(vertex)) {
-            res.addAll(g2.edgesOf(vertex));
-        }
-        return Collections.unmodifiableSet(res);
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it involves copying the edge sets of the two
-     * underlying graphs.
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        Set<E> res = new LinkedHashSet<>();
-        if (g1.containsVertex(vertex)) {
-            res.addAll(g1.incomingEdgesOf(vertex));
+        boolean inG1 = g1.containsVertex(vertex);
+        boolean inG2 = g2.containsVertex(vertex);
+
+        if (inG1 && inG2) {
+            return new UnmodifiableUnionSet<>(
+                g1.incomingEdgesOf(vertex), g2.incomingEdgesOf(vertex));
+        } else if (inG1) {
+            return Collections.unmodifiableSet(g1.incomingEdgesOf(vertex));
+        } else if (inG2) {
+            return Collections.unmodifiableSet(g2.incomingEdgesOf(vertex));
+        } else {
+            throw new IllegalArgumentException("no such vertex in graph: " + vertex.toString());
         }
-        if (g2.containsVertex(vertex)) {
-            res.addAll(g2.incomingEdgesOf(vertex));
-        }
-        return Collections.unmodifiableSet(res);
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it involves copying the edge sets of the two
-     * underlying graphs.
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        Set<E> res = new LinkedHashSet<>();
-        if (g1.containsVertex(vertex)) {
-            res.addAll(g1.outgoingEdgesOf(vertex));
+        boolean inG1 = g1.containsVertex(vertex);
+        boolean inG2 = g2.containsVertex(vertex);
+
+        if (inG1 && inG2) {
+            return new UnmodifiableUnionSet<>(
+                g1.outgoingEdgesOf(vertex), g2.outgoingEdgesOf(vertex));
+        } else if (inG1) {
+            return Collections.unmodifiableSet(g1.outgoingEdgesOf(vertex));
+        } else if (inG2) {
+            return Collections.unmodifiableSet(g2.outgoingEdgesOf(vertex));
+        } else {
+            throw new IllegalArgumentException("no such vertex in graph: " + vertex.toString());
         }
-        if (g2.containsVertex(vertex)) {
-            res.addAll(g2.outgoingEdgesOf(vertex));
-        }
-        return Collections.unmodifiableSet(res);
     }
 
     /**
@@ -378,18 +401,11 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the vertex sets of
-     * the two underlying graphs.
      */
     @Override
     public Set<V> vertexSet()
     {
-        Set<V> res = new HashSet<>();
-        res.addAll(g1.vertexSet());
-        res.addAll(g2.vertexSet());
-        return Collections.unmodifiableSet(res);
+        return new UnmodifiableUnionSet<>(g1.vertexSet(), g2.vertexSet());
     }
 
     /**

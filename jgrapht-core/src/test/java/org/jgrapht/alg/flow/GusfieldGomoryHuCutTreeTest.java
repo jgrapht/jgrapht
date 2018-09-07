@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,15 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test class for the GusfieldGomoryHuCutTree implementation
@@ -31,7 +33,8 @@ import org.jgrapht.graph.*;
  * @author Joris Kinable
  */
 public class GusfieldGomoryHuCutTreeTest
-    extends GusfieldTreeAlgorithmsTestBase
+    extends
+    GusfieldTreeAlgorithmsTestBase
 {
 
     @Override
@@ -50,8 +53,8 @@ public class GusfieldGomoryHuCutTreeTest
         double expectedMinimumCut = minimumCutAlg.minCutWeight();
         double cheapestEdge = gomoryHuTree
             .edgeSet().stream().mapToDouble(gomoryHuTree::getEdgeWeight).min().getAsDouble();
-        assertEquals(expectedMinimumCut, cheapestEdge);
-        assertEquals(expectedMinimumCut, alg.calculateMinCut());
+        assertEquals(expectedMinimumCut, cheapestEdge, 0);
+        assertEquals(expectedMinimumCut, alg.calculateMinCut(), 0);
         Set<Integer> partition = alg.getSourcePartition();
         double cutWeight = network
             .edgeSet().stream()
@@ -59,7 +62,7 @@ public class GusfieldGomoryHuCutTreeTest
                 e -> partition.contains(network.getEdgeSource(e))
                     ^ partition.contains(network.getEdgeTarget(e)))
             .mapToDouble(network::getEdgeWeight).sum();
-        assertEquals(expectedMinimumCut, cutWeight);
+        assertEquals(expectedMinimumCut, cutWeight, 0);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm =
             new PushRelabelMFImpl<>(network);
@@ -70,12 +73,12 @@ public class GusfieldGomoryHuCutTreeTest
 
                 // Check cut weights
                 double expectedCutWeight = minimumSTCutAlgorithm.calculateMinCut(i, j);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j));
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i));
-                assertEquals(expectedCutWeight, alg.getMaximumFlowValue());
-                assertEquals(expectedCutWeight, alg.calculateMinCut(j, i));
-                assertEquals(expectedCutWeight, alg.calculateMinCut(i, j));
-                assertEquals(expectedCutWeight, alg.getCutCapacity());
+                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j), 0);
+                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i), 0);
+                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(), 0);
+                assertEquals(expectedCutWeight, alg.calculateMinCut(j, i), 0);
+                assertEquals(expectedCutWeight, alg.calculateMinCut(i, j), 0);
+                assertEquals(expectedCutWeight, alg.getCutCapacity(), 0);
 
                 // Check cut partitions
                 Set<Integer> sourcePartition = alg.getSourcePartition();
@@ -91,7 +94,7 @@ public class GusfieldGomoryHuCutTreeTest
                         e -> sourcePartition.contains(network.getEdgeSource(e))
                             ^ sourcePartition.contains(network.getEdgeTarget(e)))
                     .mapToDouble(network::getEdgeWeight).sum();
-                assertEquals(expectedCutWeight, cutWeight);
+                assertEquals(expectedCutWeight, cutWeight, 0);
 
                 // Verify the correctness of the tree
                 // a. the cost of the cheapest edge in the path from i to j must equal the weight of
@@ -103,7 +106,7 @@ public class GusfieldGomoryHuCutTreeTest
                 DefaultWeightedEdge cheapestEdgeInPath = pathEdges
                     .stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
                     .orElseThrow(() -> new RuntimeException("path is empty?!"));
-                assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath));
+                assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath), 0);
             }
         }
     }

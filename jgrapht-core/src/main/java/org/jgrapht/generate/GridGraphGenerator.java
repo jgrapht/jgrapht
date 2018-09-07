@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011-2017, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2011-2018, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a bidirectional <a href="http://mathworld.wolfram.com/GridGraph.html">grid graph</a> of
@@ -35,16 +35,16 @@ import org.jgrapht.*;
  * @since Dec 29, 2010
  */
 public class GridGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the vertices at the corners.
      */
     public static final String CORNER_VERTEX = "Corner Vertex";
 
-    private int rows;
-
-    private int cols;
+    private final int rows;
+    private final int cols;
 
     /**
      * Creates a new GridGraphGenerator object with rows x cols dimension.
@@ -70,16 +70,14 @@ public class GridGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         Map<Integer, V> map = new TreeMap<>();
 
         // Adding all vertices to the set
         int cornerCtr = 0;
-        for (int i = 0; i < (rows * cols); i++) {
-            V vertex = vertexFactory.createVertex();
-            target.addVertex(vertex);
+        for (int i = 0; i < rows * cols; i++) {
+            V vertex = target.addVertex();
             map.put(i + 1, vertex);
 
             boolean isCorner = (i == 0) || (i == (cols - 1)) || (i == (cols * (rows - 1)))

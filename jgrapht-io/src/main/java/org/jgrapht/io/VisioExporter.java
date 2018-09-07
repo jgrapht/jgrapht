@@ -17,9 +17,9 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-
 import org.jgrapht.*;
+
+import java.io.*;
 
 /**
  * Exports a graph to a CSV format that can be imported into MS Visio.
@@ -41,8 +41,10 @@ import org.jgrapht.*;
  * @author Avner Linder
  */
 public class VisioExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     /**
      * Creates a new VisioExporter with the specified naming policy.

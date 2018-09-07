@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,16 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.lang.reflect.Array;
-import java.util.BitSet;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * The Dsatur greedy coloring algorithm.
@@ -49,12 +44,11 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
  * </ul>
  * 
  * <p>
- * This implementation requires O(n^2) running time and space. The following paper discusses
+ * This implementation requires $O(n^2)$ running time and space. The following paper discusses
  * possible improvements in the running time.
  * <ul>
- * <li>J. S. Turner. Almost all k-colorable graphs are easy to color. Journal of Algorithms.
- * 9(1):63--82, 1988.
- * </li>
+ * <li>J. S. Turner. Almost all $k$-colorable graphs are easy to color. Journal of Algorithms.
+ * 9(1):63--82, 1988.</li>
  * </ul>
  *
  * @param <V> the graph vertex type
@@ -63,7 +57,8 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
  * @author Dimitrios Michail
  */
 public class SaturationDegreeColoring<V, E>
-    implements VertexColoringAlgorithm<V>
+    implements
+    VertexColoringAlgorithm<V>
 {
     private final Graph<V, E> graph;
 
@@ -172,7 +167,8 @@ public class SaturationDegreeColoring<V, E>
      * degree (maximum is better in both cases).
      */
     private class DSaturComparator
-        implements Comparator<V>
+        implements
+        Comparator<V>
     {
         private Map<V, Integer> saturation;
         private Map<V, Integer> degree;

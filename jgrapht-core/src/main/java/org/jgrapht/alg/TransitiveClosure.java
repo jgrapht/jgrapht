@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by Vinayak R Borkar and Contributors.
+ * (C) Copyright 2007-2018, by Vinayak R Borkar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DirectedAcyclicGraph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.traverse.TopologicalOrderIterator;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Constructs the transitive closure of the input graph.
@@ -100,7 +96,7 @@ public class TransitiveClosure
     }
 
     /**
-     * Computes floor(log_2(n)) + 1
+     * Computes floor($\log_2 (n)$) $+ 1$
      */
     private int computeBinaryLog(int n)
     {
@@ -116,7 +112,7 @@ public class TransitiveClosure
     }
 
     /**
-     * Computes the transitive closure of a directed acyclic graph in O(n*m)
+     * Computes the transitive closure of a directed acyclic graph in $O(nm)$
      *
      * @param graph - Graph to compute transitive closure for.
      * @param <V> the graph vertex type

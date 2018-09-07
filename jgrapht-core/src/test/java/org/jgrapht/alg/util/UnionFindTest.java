@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by Tom Conerly and Contributors.
+ * (C) Copyright 2010-2018, by Tom Conerly and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg.util;
 
+import org.junit.*;
+
 import java.util.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -27,13 +29,13 @@ import junit.framework.*;
  * @author Tom Conerly
  */
 public class UnionFindTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
+    @Test
     public void testUnionFind()
     {
         TreeSet<String> set = new TreeSet<String>();
@@ -45,27 +47,42 @@ public class UnionFindTest
             sets.get(sets.size() - 1).add(str);
         }
         UnionFind<String> uf = new UnionFind<String>(set);
+        assertEquals(5, uf.size());
+        assertEquals(5, uf.numberOfSets());
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[1]);
+        assertEquals(4, uf.numberOfSets());
         union(sets, strs[0], strs[1]);
         testIdentical(strs, sets, uf);
+        assertTrue(uf.inSameSet("aaa", "bbb"));
+        assertFalse(uf.inSameSet("bbb", "ccc"));
 
         uf.union(strs[2], strs[3]);
+        assertEquals(3, uf.numberOfSets());
         union(sets, strs[2], strs[3]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[2], strs[4]);
+        assertEquals(2, uf.numberOfSets());
         union(sets, strs[2], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[2], strs[4]);
+        assertEquals(2, uf.numberOfSets());
         union(sets, strs[2], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[4]);
+        assertEquals(1, uf.numberOfSets());
         union(sets, strs[0], strs[4]);
         testIdentical(strs, sets, uf);
+
+        uf.addElement("fff");
+        assertEquals(2, uf.numberOfSets());
+        assertEquals(6, uf.size());
+        uf.reset();
+        assertEquals(6, uf.numberOfSets());
     }
 
     private void union(ArrayList<ArrayList<String>> sets, String a, String b)

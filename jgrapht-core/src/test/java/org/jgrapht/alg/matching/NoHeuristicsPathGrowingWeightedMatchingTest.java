@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,16 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
+
+import java.util.*;
+import java.util.stream.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for the PathGrowingWeightedMatching without heuristics algorithm
@@ -31,7 +34,8 @@ import org.jgrapht.graph.*;
  * @author Dimitrios Michail
  */
 public class NoHeuristicsPathGrowingWeightedMatchingTest
-    extends BasePathGrowingWeightedMatchingTest
+    extends
+    BasePathGrowingWeightedMatchingTest
 {
 
     @Override
@@ -42,6 +46,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     };
 
     @Override
+    @Test
     public void testGraph1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -65,7 +70,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 5, 6, 5.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(5, m.getEdges().size());
         assertEquals(22.5, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -73,6 +78,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void testSelfLoops()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -97,7 +103,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 4, 4, 0.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(3, m.getEdges().size());
         assertEquals(3.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -105,6 +111,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void test3over4Approximation()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -123,7 +130,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
             new PathGrowingWeightedMatching<>(g, false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // maximum here is 4.0
         // path growing algorithm gets 3.0
@@ -133,6 +140,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void testMultiGraph()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -161,7 +169,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
             new PathGrowingWeightedMatching<>(g, false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // maximum here is 8.0
         // path growing algorithm gets 6.0
@@ -171,6 +179,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void testDirected()
     {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -199,7 +208,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
             new PathGrowingWeightedMatching<>(g, false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // maximum here is 8.0
         // path growing algorithm gets 6.0

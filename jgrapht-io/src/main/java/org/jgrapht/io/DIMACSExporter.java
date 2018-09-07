@@ -17,10 +17,10 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Exports a graph into DIMACS format.
@@ -38,8 +38,10 @@ import org.jgrapht.*;
  * @since January 2017
  */
 public class DIMACSExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     /**
      * The default format used by the exporter.

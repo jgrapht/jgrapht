@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -30,7 +31,6 @@ import junit.framework.*;
  * @author John V. Sichi
  */
 public abstract class ShortestPathTestCase
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +54,7 @@ public abstract class ShortestPathTestCase
     /**
      * .
      */
+    @Test
     public void testPathBetween()
     {
         List<DefaultWeightedEdge> path;

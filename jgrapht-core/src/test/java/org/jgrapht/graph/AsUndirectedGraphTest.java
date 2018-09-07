@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,12 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
+import static org.junit.Assert.*;
 
 /**
  * A unit test for the AsDirectedGraph view.
@@ -27,7 +30,6 @@ import org.jgrapht.*;
  * @author John V. Sichi
  */
 public class AsUndirectedGraphTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -42,28 +44,16 @@ public class AsUndirectedGraphTest
     private String v4 = "v4";
     private Graph<String, DefaultEdge> undirected;
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public AsUndirectedGraphTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * .
      */
+    @Test
     public void testAddEdge()
     {
         try {
             undirected.addEdge(v3, v4);
-            assertFalse();
+            Assert.fail(); // should not get here
         } catch (UnsupportedOperationException e) {
-            assertTrue();
         }
 
         assertEquals(
@@ -73,6 +63,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testAddVertex()
     {
         String v5 = "v5";
@@ -85,6 +76,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testDegreeOf()
     {
         assertEquals(1, undirected.degreeOf(v1));
@@ -96,6 +88,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testEdgesOf()
     {
         assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.edgesOf(v1));
@@ -107,6 +100,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testInDegreeOf()
     {
         assertEquals(1, undirected.inDegreeOf(v1));
@@ -118,6 +112,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testIncomingEdgesOf()
     {
         assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.incomingEdgesOf(v1));
@@ -129,6 +124,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testOutDegreeOf()
     {
         assertEquals(1, undirected.outDegreeOf(v1));
@@ -140,6 +136,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testOutgoingEdgesOf()
     {
         assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.outgoingEdgesOf(v1));
@@ -151,6 +148,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testGetAllEdges()
     {
         Set<DefaultEdge> edges = undirected.getAllEdges(v3, v2);
@@ -165,6 +163,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testGetEdge()
     {
         assertEquals(directed.getEdge(v1, v2), undirected.getEdge(v1, v2));
@@ -176,6 +175,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testRemoveEdge()
     {
         undirected.removeEdge(loop);
@@ -186,6 +186,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testRemoveVertex()
     {
         undirected.removeVertex(v4);
@@ -196,6 +197,7 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testToString()
     {
         assertEquals(
@@ -207,8 +209,8 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
     {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);
         undirected = new AsUndirectedGraph<>(directed);

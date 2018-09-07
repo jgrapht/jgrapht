@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * A graph iterator.
@@ -31,7 +31,8 @@ import org.jgrapht.event.*;
  * @since Jul 31, 2003
  */
 public interface GraphIterator<V, E>
-    extends Iterator<V>
+    extends
+    Iterator<V>
 {
     /**
      * Test whether this iterator is set to traverse the graph across connected components.

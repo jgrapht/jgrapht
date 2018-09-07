@@ -21,7 +21,8 @@ package org.jgrapht.io;
  * An exception that the library throws in case of graph export errors.
  */
 public class ExportException
-    extends Exception
+    extends
+    Exception
 {
     private static final long serialVersionUID = 1L;
 

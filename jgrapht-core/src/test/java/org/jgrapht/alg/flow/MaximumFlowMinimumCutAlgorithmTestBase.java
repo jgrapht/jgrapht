@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2018, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,16 +17,16 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import junit.framework.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public abstract class MaximumFlowMinimumCutAlgorithmTestBase
-    extends TestCase
 {
 
     protected Graph<Integer, DefaultWeightedEdge> constructDirectedGraph(
@@ -930,8 +930,9 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new GnmRandomGraphGenerator<>(100, 500);
         Random rand = new Random();
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> directedGraph =
-            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        randomGraphGenerator.generateGraph(directedGraph, new IntegerVertexFactory(), null);
+            new SimpleDirectedWeightedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+        randomGraphGenerator.generateGraph(directedGraph);
         directedGraph
             .edgeSet().stream().forEach(e -> directedGraph.setEdgeWeight(e, rand.nextInt(100)));
         return directedGraph;
@@ -1473,8 +1474,9 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new GnmRandomGraphGenerator<>(100, 500);
         Random rand = new Random();
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> undirectedGraph =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        randomGraphGenerator.generateGraph(undirectedGraph, new IntegerVertexFactory(), null);
+            new SimpleWeightedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+        randomGraphGenerator.generateGraph(undirectedGraph);
         undirectedGraph
             .edgeSet().stream().forEach(e -> undirectedGraph.setEdgeWeight(e, rand.nextInt(100)));
         return undirectedGraph;

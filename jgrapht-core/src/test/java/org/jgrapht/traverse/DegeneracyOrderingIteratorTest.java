@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,19 +17,14 @@
  */
 package org.jgrapht.traverse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.event.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Arrays;
+import java.util.*;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.event.ConnectedComponentTraversalEvent;
-import org.jgrapht.event.EdgeTraversalEvent;
-import org.jgrapht.event.TraversalListener;
-import org.jgrapht.event.VertexTraversalEvent;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link DegeneracyOrderingIterator}.
@@ -81,7 +76,7 @@ public class DegeneracyOrderingIteratorTest
         g.addEdge("v2", "v10");
         g.addEdge("v9", "v10");
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         DegeneracyOrderingIterator<String, DefaultEdge> it = new DegeneracyOrderingIterator<>(g);
         while (it.hasNext()) {
             String v = it.next();
@@ -124,10 +119,11 @@ public class DegeneracyOrderingIteratorTest
     }
 
     private static class TestTraversalListener<V, E>
-        implements TraversalListener<V, E>
+        implements
+        TraversalListener<V, E>
     {
 
-        private StringBuffer sb = new StringBuffer();
+        private StringBuilder sb = new StringBuilder();
 
         @Override
         public void connectedComponentFinished(ConnectedComponentTraversalEvent e)

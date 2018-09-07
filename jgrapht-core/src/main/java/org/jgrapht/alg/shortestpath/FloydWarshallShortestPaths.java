@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2017, by Tom Larkworthy and Contributors.
+ * (C) Copyright 2009-2018, by Tom Larkworthy and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,21 +17,30 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
+import org.jgrapht.alg.util.VertexDegreeComparator;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * The Floyd-Warshall algorithm.
  * 
  * <p>
  * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm"> Floyd-Warshall algorithm</a>
- * finds all shortest paths (all n^2 of them) in O(n^3) time. It can also calculate the graph
- * diameter. Note that during construction time, no computations are performed! All computations are
- * performed the first time one of the member methods of this class is invoked. The results are
- * stored, so all subsequent calls to the same method are computationally efficient.
+ * finds all shortest paths (all $n^2$ of them) in $O(n^3)$ time. Note that during construction
+ * time, no computations are performed! All computations are performed the first time one of the
+ * member methods of this class is invoked. The results are stored, so all subsequent calls to the
+ * same method are computationally efficient.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -45,10 +54,13 @@ public class FloydWarshallShortestPaths<V, E>
     extends BaseShortestPathAlgorithm<V, E>
 {
     private final List<V> vertices;
+    private final List<Integer> degrees;
     private final Map<V, Integer> vertexIndices;
+    // minimum vertex with degree at least 1
+    private final int minDegreeOne;
+    // minimum vertex with degree at least 2    
+    private final int minDegreeTwo;
 
-    private int nShortestPaths = 0;
-    private double diameter = Double.NaN;
     private double[][] d = null;
     private Object[][] backtrace = null;
     private Object[][] lastHopMatrix = null;
@@ -61,12 +73,40 @@ public class FloydWarshallShortestPaths<V, E>
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
         super(graph);
+
+        /*
+         * Sort vertices by degree in ascending order and index them. Also compute the minimum
+         * vertex which has degree at least one and at least two.
+         */
         this.vertices = new ArrayList<>(graph.vertexSet());
+        Collections.sort(
+            vertices, new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
+        this.degrees = new ArrayList<>();
         this.vertexIndices = new HashMap<>(this.vertices.size());
+        
         int i = 0;
+        int minDegreeOne = vertices.size();
+        int minDegreeTwo = vertices.size();
         for (V vertex : vertices) {
-            vertexIndices.put(vertex, i++);
+            vertexIndices.put(vertex, i);
+            int degree = graph.degreeOf(vertex);
+            degrees.add(degree);
+            
+            if (degree > 1) {
+                if (i < minDegreeOne) {
+                    minDegreeOne = i;
+                }
+                if (i < minDegreeTwo) {
+                    minDegreeTwo = i;
+                }
+            } else if (i < minDegreeOne && degree == 1) {
+                minDegreeOne = i;
+            }
+            
+            ++i;
         }
+        this.minDegreeOne = minDegreeOne;
+        this.minDegreeTwo = minDegreeTwo;
     }
 
     /**
@@ -78,34 +118,18 @@ public class FloydWarshallShortestPaths<V, E>
     {
         lazyCalculateMatrix();
 
-        return nShortestPaths;
-    }
-
-    /**
-     * Compute the diameter of the graph.
-     * 
-     * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
-     *         contains no vertices, return {@link Double#NaN}. If there is no path between any two
-     *         vertices, return {@link Double#POSITIVE_INFINITY}.
-     */
-    public double getDiameter()
-    {
-        lazyCalculateMatrix();
-
-        if (!Double.isNaN(diameter)) {
-            return diameter;
-        }
-
+        // count shortest paths
         int n = vertices.size();
-        if (n > 0) {
-            diameter = 0.0;
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    diameter = Double.max(diameter, d[i][j]);
+        int nShortestPaths = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && Double.isFinite(d[i][j])) {
+                    nShortestPaths++;
                 }
             }
         }
-        return diameter;
+
+        return nShortestPaths;
     }
 
     /**
@@ -135,7 +159,7 @@ public class FloydWarshallShortestPaths<V, E>
         V u = a;
         while (!u.equals(b)) {
             int v_u = vertexIndices.get(u);
-            E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
+            E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b]);
             edges.add(e);
             u = Graphs.getOppositeVertex(graph, e, u);
         }
@@ -170,16 +194,16 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is
-     * O(1). If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next
-     * invocation would query the first hop on the shortest path from c to b, vertex d would be
-     * returned, etc. This method is computationally cheaper than calling
+     * Returns the first hop, i.e., the second node on the shortest path from $a$ to $b$. Lookup
+     * time is $O(1)$. If the shortest path from $a$ to $b$ is $a,c,d,e,b$, this method returns $c$.
+     * If the next invocation would query the first hop on the shortest path from $c$ to $b$, vertex
+     * $d$ would be returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the first vertex.
      * 
      * @param a source vertex
      * @param b target vertex
-     * @return next hop on the shortest path from a to b, or null when there exists no path from a
-     *         to b.
+     * @return next hop on the shortest path from a to b, or null when there exists no path from $a$
+     *         to $b$.
      */
     public V getFirstHop(V a, V b)
     {
@@ -191,23 +215,23 @@ public class FloydWarshallShortestPaths<V, E>
         if (backtrace[v_a][v_b] == null) { // No path exists
             return null;
         } else {
-            E e = TypeUtil.uncheckedCast(backtrace[v_a][v_b], null);
+            E e = TypeUtil.uncheckedCast(backtrace[v_a][v_b]);
             return Graphs.getOppositeVertex(graph, e, a);
         }
     }
 
     /**
-     * Returns the last hop, i.e., the second to last node on the shortest path from a to b. Lookup
-     * time is O(1). If the shortest path from a to b is a,c,d,e,b, this method returns e. If the
-     * next invocation would query the next hop on the shortest path from c to e, vertex d would be
-     * returned, etc. This method is computationally cheaper than calling
+     * Returns the last hop, i.e., the second to last node on the shortest path from $a$ to $b$.
+     * Lookup time is $O(1)$. If the shortest path from $a$ to $b$ is $a,c,d,e,b$, this method
+     * returns $e$. If the next invocation would query the next hop on the shortest path from $c$ to
+     * $e$, vertex $d$ would be returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the vertex. The first invocation of this
      * method populates a last hop matrix.
      * 
      * @param a source vertex
      * @param b target vertex
-     * @return last hop on the shortest path from a to b, or null when there exists no path from a
-     *         to b.
+     * @return last hop on the shortest path from $a$ to $b$, or null when there exists no path from
+     *         $a$ to $b$.
      */
     public V getLastHop(V a, V b)
     {
@@ -220,7 +244,7 @@ public class FloydWarshallShortestPaths<V, E>
             return null;
         } else {
             populateLastHopMatrix();
-            E e = TypeUtil.uncheckedCast(lastHopMatrix[v_a][v_b], null);
+            E e = TypeUtil.uncheckedCast(lastHopMatrix[v_a][v_b]);
             return Graphs.getOppositeVertex(graph, e, b);
         }
     }
@@ -287,24 +311,21 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         // run fw alg
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
+        for (int k = minDegreeTwo; k < n; k++) {
+            for (int i = minDegreeOne; i < n; i++) {
+                if (i == k) { 
+                    continue;
+                }
+                for (int j = minDegreeOne; j < n; j++) {
+                    if (i == j || j == k) { 
+                        continue;
+                    }
+                    
                     double ik_kj = d[i][k] + d[k][j];
                     if (Double.compare(ik_kj, d[i][j]) < 0) {
                         d[i][j] = ik_kj;
                         backtrace[i][j] = backtrace[i][k];
                     }
-                }
-            }
-        }
-
-        // count shortest paths
-        nShortestPaths = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != j && Double.isFinite(d[i][j])) {
-                    nShortestPaths++;
                 }
             }
         }
@@ -331,13 +352,11 @@ public class FloydWarshallShortestPaths<V, E>
                     continue;
 
                 // Reconstruct the path from i to j
-                List<E> edges = new ArrayList<>();
                 V u = vertices.get(i);
                 V b = vertices.get(j);
                 while (!u.equals(b)) {
                     int v_u = vertexIndices.get(u);
-                    E e = TypeUtil.uncheckedCast(backtrace[v_u][j], null);
-                    edges.add(e);
+                    E e = TypeUtil.uncheckedCast(backtrace[v_u][j]);
                     V other = Graphs.getOppositeVertex(graph, e, u);
                     lastHopMatrix[i][vertexIndices.get(other)] = e;
                     u = other;
@@ -371,49 +390,14 @@ public class FloydWarshallShortestPaths<V, E>
         @Override
         public double getWeight(V sink)
         {
-            if (!graph.containsVertex(source)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
-            }
-            if (!graph.containsVertex(sink)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
-            }
-
-            lazyCalculateMatrix();
-
-            return d[vertexIndices.get(source)][vertexIndices.get(sink)];
+            return FloydWarshallShortestPaths.this.getPathWeight(source, sink);
         }
 
         @Override
         public GraphPath<V, E> getPath(V sink)
         {
-            if (!graph.containsVertex(source)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
-            }
-            if (!graph.containsVertex(sink)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
-            }
-
-            lazyCalculateMatrix();
-
-            int v_a = vertexIndices.get(source);
-            int v_b = vertexIndices.get(sink);
-
-            if (backtrace[v_a][v_b] == null) { // No path exists
-                return createEmptyPath(source, sink);
-            }
-
-            // Reconstruct the path
-            List<E> edges = new ArrayList<>();
-            V u = source;
-            while (!u.equals(sink)) {
-                int v_u = vertexIndices.get(u);
-                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
-                edges.add(e);
-                u = Graphs.getOppositeVertex(graph, e, u);
-            }
-            return new GraphWalk<>(graph, source, sink, null, edges, d[v_a][v_b]);
+            return FloydWarshallShortestPaths.this.getPath(source, sink);
         }
-
     }
 
 }

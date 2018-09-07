@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
+import org.jgrapht.*;
+
+import java.io.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.jgrapht.*;
 
 /**
  * An unmodifiable subgraph induced by a vertex/edge masking function. The subgraph will keep track
@@ -33,11 +33,13 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class MaskSubgraph<V, E>
-    extends AbstractGraph<V, E> implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -7397441126669119179L;
 
@@ -84,6 +86,15 @@ public class MaskSubgraph<V, E>
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E edge)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V addVertex()
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -241,9 +252,18 @@ public class MaskSubgraph<V, E>
      * {@inheritDoc}
      */
     @Override
-    public EdgeFactory<V, E> getEdgeFactory()
+    public Supplier<V> getVertexSupplier()
     {
-        return base.getEdgeFactory();
+        return base.getVertexSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        return base.getEdgeSupplier();
     }
 
     /**

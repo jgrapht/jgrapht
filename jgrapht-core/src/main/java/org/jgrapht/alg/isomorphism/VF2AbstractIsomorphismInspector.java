@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Base implementation of the VF2 algorithm using its feature of detecting
@@ -36,7 +36,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public abstract class VF2AbstractIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+    implements
+    IsomorphismInspector<V, E>
 {
     protected Graph<V, E> graph1, graph2;
 
@@ -60,22 +61,22 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
     {
         GraphType type1 = graph1.getType();
         GraphType type2 = graph2.getType();
-        if (type1.isPseudograph() || type1.isMultigraph() || type2.isMultigraph() || type2.isPseudograph()) { 
-            throw new UnsupportedOperationException(
-                "graphs with multiple " + "edges are not supported");
+        if (type1.isAllowingMultipleEdges() || type2.isAllowingMultipleEdges()) {
+            throw new IllegalArgumentException(
+                "graphs with multiple (parallel) edges are not supported");
         }
 
-        if (type1.isMixed() || type2.isMixed()) { 
-            throw new UnsupportedOperationException(
-                "mixed graphs not supported");
+        if (type1.isMixed() || type2.isMixed()) {
+            throw new IllegalArgumentException("mixed graphs not supported");
         }
-        
-        if (type1.isUndirected() && type2.isDirected() || 
-            type1.isDirected() && type2.isUndirected()) { 
+
+        if (type1.isUndirected() && type2.isDirected()
+            || type1.isDirected() && type2.isUndirected())
+        {
             throw new IllegalArgumentException(
                 "can not match directed with " + "undirected graphs");
         }
-            
+
         this.graph1 = graph1;
         this.graph2 = graph2;
         this.vertexComparator = vertexComparator;

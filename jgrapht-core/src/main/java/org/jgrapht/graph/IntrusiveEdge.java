@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2006-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,9 @@ import java.io.*;
  * @author John V. Sichi
  */
 class IntrusiveEdge
-    implements Cloneable, Serializable
+    implements
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = 3258408452177932855L;
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Andrew Gainer-Dewar and Contributors.
+ * (C) Copyright 2016-2018, by Andrew Gainer-Dewar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,12 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for MaskEdgeSet.
@@ -27,7 +30,6 @@ import org.jgrapht.*;
  * @author Andrew Gainer-Dewar
  */
 public class MaskEdgeSetTest
-    extends EnhancedTestCase
 {
     private String v1 = "v1";
     private String v2 = "v2";
@@ -37,8 +39,8 @@ public class MaskEdgeSetTest
 
     private MaskEdgeSet<String, DefaultEdge> testMaskedEdgeSet;
 
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
     {
         Graph<String, DefaultEdge> directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -58,6 +60,7 @@ public class MaskEdgeSetTest
             new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v == v1, e -> e == e2);
     }
 
+    @Test
     public void testContains()
     {
         assertFalse(testMaskedEdgeSet.contains(e1));
@@ -70,11 +73,13 @@ public class MaskEdgeSetTest
         assertFalse(testMaskedEdgeSet.contains(v1));
     }
 
+    @Test
     public void testSize()
     {
         assertEquals(2, testMaskedEdgeSet.size());
     }
 
+    @Test
     public void testIterator()
     {
         Iterator<DefaultEdge> it = testMaskedEdgeSet.iterator();

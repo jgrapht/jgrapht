@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm with pivot.
@@ -41,8 +35,8 @@ import org.jgrapht.Graphs;
  * 
  * <p>
  * where the authors show that using that rule guarantees that the Bron-Kerbosch algorithm has
- * worst-case running time O(3^{n/3}) where n is the number of vertices of the graph, excluding time
- * to write the output, which is worst-case optimal.
+ * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding
+ * time to write the output, which is worst-case optimal.
  * 
  * <p>
  * The algorithm first computes all maximal cliques and then returns the result to the user. A
@@ -57,7 +51,8 @@ import org.jgrapht.Graphs;
  * @author Dimitrios Michail
  */
 public class PivotBronKerboschCliqueFinder<V, E>
-    extends BaseBronKerboschCliqueFinder<V, E>
+    extends
+    BaseBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.
@@ -191,10 +186,8 @@ public class PivotBronKerboschCliqueFinder<V, E>
                 vNeighbors.add(Graphs.getOppositeVertex(graph, e, v));
             }
 
-            Set<V> newP =
-                P.stream().filter(x -> vNeighbors.contains(x)).collect(Collectors.toSet());
-            Set<V> newX =
-                X.stream().filter(x -> vNeighbors.contains(x)).collect(Collectors.toSet());
+            Set<V> newP = P.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
+            Set<V> newX = X.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
             Set<V> newR = new HashSet<>(R);
             newR.add(v);
 

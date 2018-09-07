@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,20 +17,20 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
+import java.util.*;
+
 /**
  * An implementation of Hierholzer's algorithm for finding an Eulerian cycle in Eulerian graphs. The
  * algorithm works with directed and undirected graphs which may contain loops and/or multiple
- * edges. The running time is linear, i.e. O(|E|) where |E| is the cardinality of the edge set of
- * the graph.
+ * (parallel) edges. The running time is linear, i.e. $O(|E|)$ where $|E|$ is the cardinality of the
+ * edge set of the graph.
  * 
  * <p>
  * See the <a href="https://en.wikipedia.org/wiki/Eulerian_path">Wikipedia article</a> for details
@@ -46,7 +46,8 @@ import org.jgrapht.util.*;
  * @since October 2016
  */
 public class HierholzerEulerianCycle<V, E>
-    implements EulerianCycleAlgorithm<V, E>
+    implements
+    EulerianCycleAlgorithm<V, E>
 {
     /*
      * The input graph.
@@ -64,6 +65,10 @@ public class HierholzerEulerianCycle<V, E>
      * Result edge list head.
      */
     private EdgeNode eulerianHead;
+    /*
+     * Result first vertex in the tour.
+     */
+    private V startVertex;
 
     /**
      * Test whether a graph is Eulerian. An
@@ -111,7 +116,8 @@ public class HierholzerEulerianCycle<V, E>
                     return false;
                 }
             }
-            // check that at most one strongly connected component contains edges
+            // check that at most one strongly connected component contains
+            // edges
             boolean foundComponentWithEdges = false;
             for (Set<V> component : new KosarajuStrongConnectivityInspector<>(graph)
                 .stronglyConnectedSets())
@@ -144,7 +150,7 @@ public class HierholzerEulerianCycle<V, E>
         } else if (g.vertexSet().size() == 0) {
             throw new IllegalArgumentException("Null graph not permitted");
         } else if (GraphTests.isEmpty(g)) {
-            return new GraphWalk<>(g, null, null, Collections.emptyList(), 0d);
+            return GraphWalk.emptyWalk(g);
         }
 
         /*
@@ -206,6 +212,7 @@ public class HierholzerEulerianCycle<V, E>
         this.isDirected = g.getType().isDirected();
         this.verticesHead = null;
         this.eulerianHead = null;
+        this.startVertex = null;
 
         Map<V, VertexNode> vertices = new HashMap<>();
         for (V v : g.vertexSet()) {
@@ -234,6 +241,7 @@ public class HierholzerEulerianCycle<V, E>
         this.g = null;
         this.verticesHead = null;
         this.eulerianHead = null;
+        this.startVertex = null;
     }
 
     /**
@@ -244,6 +252,10 @@ public class HierholzerEulerianCycle<V, E>
      */
     private Pair<EdgeNode, EdgeNode> computePartialCycle()
     {
+        if (startVertex == null) {
+            // record global start vertex
+            startVertex = verticesHead.v;
+        }
         EdgeNode partialHead = null;
         EdgeNode partialTail = null;
         VertexNode v = verticesHead;
@@ -309,22 +321,6 @@ public class HierholzerEulerianCycle<V, E>
             result.add(it.e);
             totalWeight += g.getEdgeWeight(it.e);
             it = it.next;
-        }
-
-        V startVertex = null;
-        if (!result.isEmpty()) {
-            E firstEdge = result.get(0);
-            startVertex = g.getEdgeSource(firstEdge);
-
-            if (!isDirected && result.size() > 1) {
-                E secondEdge = result.get(1);
-                V other = g.getEdgeTarget(firstEdge);
-                if (!other.equals(g.getEdgeSource(secondEdge))
-                    && !other.equals(g.getEdgeTarget(secondEdge)))
-                {
-                    startVertex = other;
-                }
-            }
         }
         return new GraphWalk<>(g, startVertex, startVertex, result, totalWeight);
     }
@@ -495,7 +491,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            VertexNode other = TypeUtil.uncheckedCast(obj, null);
+            VertexNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.v, other.v);
         }
 
@@ -555,7 +551,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            EdgeNode other = TypeUtil.uncheckedCast(obj, null);
+            EdgeNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.e, other.e);
         }
 

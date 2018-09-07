@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,52 +17,49 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A directed multigraph. A directed multigraph is a non-simple directed graph in which no loops are
- * permitted, but multiple edges between any two vertices are.
+ * permitted, but multiple (parallel) edges between any two vertices are.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public class DirectedMultigraph<V, E>
-    extends AbstractBaseGraph<V, E>
-    implements DirectedGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = 2919338637676573948L;
 
     /**
-     * Creates a new directed multigraph.
+     * Creates a new graph.
      *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public DirectedMultigraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass), false);
     }
 
     /**
-     * Creates a new directed multigraph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
+     * Creates a new graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     * @param weighted whether the graph is weighted or not
      */
-    public DirectedMultigraph(EdgeFactory<V, E> ef)
+    public DirectedMultigraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
-        this(ef, false);
-    }
-
-    /**
-     * Creates a new directed multigraph with the specified edge factory.
-     *
-     * @param weighted if true the graph supports edge weights
-     * @param ef the edge factory of the new graph.
-     */
-    public DirectedMultigraph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        super(ef, true, true, false, weighted);
+        super(
+            vertexSupplier, edgeSupplier,
+            new DefaultGraphType.Builder()
+                .directed().allowMultipleEdges(true).allowSelfLoops(false).weighted(weighted)
+                .build());
     }
 
     /**
@@ -82,50 +79,17 @@ public class DirectedMultigraph<V, E>
     /**
      * Create a builder for this kind of graph.
      * 
-     * @param ef the edge factory of the new graph
+     * @param edgeSupplier the edge supplier of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
     public static <V, E> GraphBuilder<V, E, ? extends DirectedMultigraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
+        Supplier<E> edgeSupplier)
     {
-        return new GraphBuilder<>(new DirectedMultigraph<>(ef));
+        return new GraphBuilder<>(new DirectedMultigraph<>(null, edgeSupplier, false));
     }
 
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param edgeClass class on which to base factory for edges
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(Class)}.
-     */
-    @Deprecated
-    public static <V,
-        E> DirectedGraphBuilderBase<V, E, ? extends DirectedMultigraph<V, E>, ?> builder(
-            Class<? extends E> edgeClass)
-    {
-        return new DirectedGraphBuilder<>(new DirectedMultigraph<>(edgeClass));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
-     */
-    @Deprecated
-    public static <V,
-        E> DirectedGraphBuilderBase<V, E, ? extends DirectedMultigraph<V, E>, ?> builder(
-            EdgeFactory<V, E> ef)
-    {
-        return new DirectedGraphBuilder<>(new DirectedMultigraph<>(ef));
-    }
 }
 
 // End DirectedMultigraph.java

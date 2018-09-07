@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * IntrusiveEdge extension for weighted edges. IntrusiveWeightedEdge encapsulates the internals for
@@ -27,7 +27,8 @@ import org.jgrapht.Graph;
  * @author Dimitrios Michail
  */
 class IntrusiveWeightedEdge
-    extends IntrusiveEdge
+    extends
+    IntrusiveEdge
 {
     private static final long serialVersionUID = 2890534758523920741L;
 

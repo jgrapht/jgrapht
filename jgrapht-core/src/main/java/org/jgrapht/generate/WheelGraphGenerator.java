@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+import org.jgrapht.graph.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel graph</a> of any size.
@@ -34,7 +36,8 @@ import org.jgrapht.*;
  * @since Sep 16, 2003
  */
 public class WheelGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the hub vertex.
@@ -79,8 +82,7 @@ public class WheelGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -90,18 +92,20 @@ public class WheelGraphGenerator<V, E>
         // necessary since target may be initially non-empty, meaning we can't
         // rely on its vertex set after the rim is generated.
         final Collection<V> rim = new ArrayList<>();
-        VertexFactory<V> rimVertexFactory = () -> {
-            V vertex = vertexFactory.createVertex();
+        final Supplier<V> initialSupplier = target.getVertexSupplier();
+        Supplier<V> rimVertexSupplier = () -> {
+            V vertex = initialSupplier.get();
             rim.add(vertex);
-
             return vertex;
         };
 
-        RingGraphGenerator<V, E> ringGenerator = new RingGraphGenerator<>(size - 1);
-        ringGenerator.generateGraph(target, rimVertexFactory, resultMap);
+        Graph<V, E> targetWithRimVertexSupplier =
+            new GraphDelegator<>(target, rimVertexSupplier, null);
 
-        V hubVertex = vertexFactory.createVertex();
-        target.addVertex(hubVertex);
+        new RingGraphGenerator<V, E>(size - 1)
+            .generateGraph(targetWithRimVertexSupplier, resultMap);
+
+        V hubVertex = target.addVertex();
 
         if (resultMap != null) {
             resultMap.put(HUB_VERTEX, hubVertex);

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2016-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,14 @@
  */
 package org.jgrapht.ext;
 
-import static org.junit.Assert.fail;
-
-import java.util.*;
-
+import com.mxgraph.model.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import com.mxgraph.model.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test methods for the class JGraphXAdapter.

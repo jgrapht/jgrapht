@@ -17,11 +17,11 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Exports a graph to a plain text matrix format, which can be processed by matrix manipulation
@@ -41,8 +41,10 @@ import org.jgrapht.util.*;
  * @author Dimitrios Michail
  */
 public class MatrixExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     private final String delimiter = " ";
     private Format format;

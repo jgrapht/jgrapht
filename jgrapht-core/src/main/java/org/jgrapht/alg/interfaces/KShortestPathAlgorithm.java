@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 /**
- * An algorithm which computes k-shortest paths between vertices.
+ * An algorithm which computes $k$-shortest paths between vertices.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -33,13 +33,14 @@ public interface KShortestPathAlgorithm<V, E>
 {
 
     /**
-     * Get a list of shortest paths from a source vertex to a sink vertex. If no such paths exist
+     * Get a list of k-shortest paths from a source vertex to a sink vertex. If no such paths exist
      * this method returns an empty list.
      * 
      * @param source the source vertex
      * @param sink the target vertex
-     * @return a list of shortest paths
+     * @param k the number of shortest paths to return
+     * @return a list of the k-shortest paths
      */
-    List<GraphPath<V, E>> getPaths(V source, V sink);
+    List<GraphPath<V, E>> getPaths(V source, V sink, int k);
 
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,22 +17,13 @@
  */
 package org.jgrapht.alg.tour;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.interfaces.TSPAlgorithm;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.traverse.DepthFirstIterator;
+import java.util.*;
 
 /**
  * A 2-approximation algorithm for the metric TSP problem.
@@ -47,7 +38,7 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * This is an implementation of the folklore algorithm which returns a depth-first ordering of the
  * minimum spanning tree. The algorithm is a 2-approximation assuming that the instance satisfies
  * the triangle inequality. The implementation requires the input graph to be undirected and
- * complete. The running time is O(|V|^2 log|V|).
+ * complete. The running time is $O(|V|^2 \log |V|)$.
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">wikipedia</a> for more
@@ -59,7 +50,8 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * @author Dimitrios Michail
  */
 public class TwoApproxMetricTSP<V, E>
-    implements TSPAlgorithm<V, E>
+    implements
+        HamiltonianCycleAlgorithm<V, E>
 {
     /**
      * Construct a new instance
@@ -130,7 +122,7 @@ public class TwoApproxMetricTSP<V, E>
         /*
          * Explicitly build the path.
          */
-        List<E> tourEdges = new ArrayList<E>(n);
+        List<E> tourEdges = new ArrayList<>(n);
         double tourWeight = 0d;
         Iterator<V> tourIt = tour.iterator();
         V u = tourIt.next();

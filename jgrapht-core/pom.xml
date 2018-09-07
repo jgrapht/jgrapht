@@ -4,10 +4,14 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>1.2.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-core</artifactId>
 	<name>JGraphT - Core</name>
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+		<excludedGroups>org.jgrapht.SlowTests,org.jgrapht.OptionalTests</excludedGroups>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -22,20 +26,31 @@
 	</licenses>
 	<dependencies>
 		<dependency>
+			<groupId>org.jheaps</groupId>
+			<artifactId>jheaps</artifactId>
+			<version>0.8</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.googlecode.junit-toolbox</groupId>
+			<artifactId>junit-toolbox</artifactId>
+			<version>2.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>
-			<version>1.10.3</version>
+			<version>1.19</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-generator-annprocess</artifactId>
-			<version>1.10.3</version>
+			<version>1.19</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -44,7 +59,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -61,14 +82,25 @@
 							<excludes>
 								<exclude>**/perf/**</exclude>
 							</excludes>
+							<excludedGroups>${excludedGroups}</excludedGroups>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-failsafe-plugin</artifactId>
+		        <configuration>
+		        	<includes>
+						<include>**/*Test.java</include>
+					</includes>
+	        		<groups>org.jgrapht.SlowTests</groups>
+		                <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
+	        	</configuration>
+      		</plugin>
+			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
@@ -79,8 +111,8 @@
 				</executions>
 				<configuration>
 					<instructions>
-						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors (see
-							http://sourceforge.net/projects/jgrapht/)</Bundle-Vendor>
+						<Automatic-Module-Name>org.jgrapht.core</Automatic-Module-Name>
+						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
 					</instructions>
 				</configuration>
 			</plugin>

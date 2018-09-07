@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2018, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A depth-first iterator for a directed or undirected graph.
@@ -38,7 +38,8 @@ import org.jgrapht.util.*;
  * @since Jul 29, 2003
  */
 public class DepthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
+    extends
+    CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
 {
     /**
      * Sentinel object. Unfortunately, we can't use null, because ArrayDeque won't accept those. And
@@ -77,7 +78,7 @@ public class DepthFirstIterator<V, E>
      */
     public DepthFirstIterator(Graph<V, E> g)
     {
-        this(g, null);
+        this(g, (V) null);
     }
 
     /**
@@ -92,6 +93,20 @@ public class DepthFirstIterator<V, E>
     public DepthFirstIterator(Graph<V, E> g, V startVertex)
     {
         super(g, startVertex);
+    }
+
+    /**
+     * Creates a new depth-first iterator for the specified graph. Iteration will start at the
+     * specified start vertices and will be limited to the connected component that includes those
+     * vertices. If the specified start vertices is <code>null</code>, iteration will start at an
+     * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
+     *
+     * @param g the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     */
+    public DepthFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
+    {
+        super(g, startVertices);
     }
 
     @Override
@@ -157,7 +172,7 @@ public class DepthFirstIterator<V, E>
                 // Now carry on with another pop until we find a non-sentinel
             } else {
                 // Got a real vertex to start working on
-                v = TypeUtil.uncheckedCast(o, null);
+                v = TypeUtil.uncheckedCast(o);
                 break;
             }
         }
@@ -172,7 +187,7 @@ public class DepthFirstIterator<V, E>
 
     private void recordFinish()
     {
-        V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
+        V v = TypeUtil.uncheckedCast(stack.removeLast());
         putSeenData(v, VisitColor.BLACK);
         finishVertex(v);
     }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2003-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,10 @@ import java.util.*;
  * 
  */
 public class UnorderedPair<A, B>
-    extends Pair<A, B>
-    implements Serializable
+    extends
+    Pair<A, B>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -3110454174542533876L;
 

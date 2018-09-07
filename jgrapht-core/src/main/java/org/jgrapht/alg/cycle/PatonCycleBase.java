@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2018, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,79 +17,76 @@
  */
 package org.jgrapht.alg.cycle;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
-
 /**
- * Find a cycle base of an undirected graph using the Paton's algorithm.
- *
+ * Find a cycle basis of an undirected graph using a variant of Paton's algorithm.
+ * 
  * <p>
  * See:<br>
  * K. Paton, An algorithm for finding a fundamental set of cycles for an undirected linear graph,
  * Comm. ACM 12 (1969), pp. 514-518.
+ * 
+ * <p>
+ * Note that Paton's algorithm produces a fundamental cycle basis while this implementation produces
+ * a <a href=
+ * "https://en.wikipedia.org/wiki/Cycle_space#Fundamental_and_weakly_fundamental_bases">weakly
+ * fundamental cycle basis</a>. A cycle basis is called weakly fundamental if there exists a linear
+ * ordering of the cycles in a cycle basis such that each cycle includes at least one edge that is
+ * not part of any previous cycle. Every fundamental cycle basis is weakly fundamental (for all
+ * linear orderings) but not necessarily vice versa.
  *
- * @param <V> the vertex type.
- * @param <E> the edge type.
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Nikolay Ognyanov
  */
 public class PatonCycleBase<V, E>
-    implements UndirectedCycleBase<V, E>
+    implements
+    CycleBasisAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 
     /**
-     * Create a cycle base finder with an unspecified graph.
-     */
-    public PatonCycleBase()
-    {
-    }
-
-    /**
      * Create a cycle base finder for the specified graph.
      *
-     * @param graph - the DirectedGraph in which to find cycles.
-     *
-     * @throws IllegalArgumentException if the graph argument is <code>
-     * null</code>.
+     * @param graph the input graph
+     * @throws IllegalArgumentException if the graph argument is <code>null</code> or the graph is
+     *         not undirected
      */
     public PatonCycleBase(Graph<V, E> graph)
     {
-        this.graph = GraphTests.requireUndirected(graph, "Graph must be undirected");
+        this.graph = GraphTests.requireUndirected(graph);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
 
     /**
-     * {@inheritDoc}
+     * Return an undirected cycle basis of a graph. Works only for undirected graphs which do not
+     * have multiple (parallel) edges.
+     * 
+     * @return an undirected cycle basis
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if the graph contains multiple edges between two vertices
      */
     @Override
-    public void setGraph(Graph<V, E> graph)
+    public CycleBasis<V, E> getCycleBasis()
     {
-        this.graph = GraphTests.requireUndirected(graph, "Graph must be undirected");
-    }
+        GraphTests.requireUndirected(graph);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<List<V>> findCycleBase()
-    {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph.");
+        if (GraphTests.hasMultipleEdges(graph)) {
+            throw new IllegalArgumentException("Graphs with multiple edges not supported");
         }
-        Map<V, Set<V>> used = new HashMap<>();
-        Map<V, V> parent = new HashMap<>();
+
+        Map<V, Map<V, E>> used = new HashMap<>();
+        Map<V, E> parent = new HashMap<>();
         ArrayDeque<V> stack = new ArrayDeque<>();
-        List<List<V>> cycles = new ArrayList<>();
+
+        Set<List<E>> cycles = new LinkedHashSet<>();
+        int totalLength = 0;
+        double totalWeight = 0d;
 
         for (V root : graph.vertexSet()) {
             // Loop over the connected
@@ -103,8 +100,8 @@ public class PatonCycleBase<V, E>
             used.clear();
 
             // Prepare to walk the spanning tree.
-            parent.put(root, root);
-            used.put(root, new HashSet<>());
+            parent.put(root, null);
+            used.put(root, new HashMap<>());
             stack.push(root);
 
             // Do the walk. It is a BFS with
@@ -113,43 +110,55 @@ public class PatonCycleBase<V, E>
             // find the cycles in the tree.
             while (!stack.isEmpty()) {
                 V current = stack.pop();
-                Set<V> currentUsed = used.get(current);
+                Map<V, E> currentUsed = used.get(current);
                 for (E e : graph.edgesOf(current)) {
-                    V neighbor = graph.getEdgeTarget(e);
-                    if (neighbor.equals(current)) {
-                        neighbor = graph.getEdgeSource(e);
-                    }
+                    V neighbor = Graphs.getOppositeVertex(graph, e, current);
                     if (!used.containsKey(neighbor)) {
                         // found a new node
-                        parent.put(neighbor, current);
-                        Set<V> neighbourUsed = new HashSet<>();
-                        neighbourUsed.add(current);
+                        parent.put(neighbor, e);
+                        Map<V, E> neighbourUsed = new HashMap<>();
+                        neighbourUsed.put(current, e);
                         used.put(neighbor, neighbourUsed);
                         stack.push(neighbor);
                     } else if (neighbor.equals(current)) {
                         // found a self loop
-                        List<V> cycle = new ArrayList<>();
-                        cycle.add(current);
+                        List<E> cycle = new ArrayList<>();
+                        cycle.add(e);
+                        totalWeight += graph.getEdgeWeight(e);
+                        totalLength += 1;
                         cycles.add(cycle);
-                    } else if (!currentUsed.contains(neighbor)) {
+                    } else if (!currentUsed.containsKey(neighbor)) {
                         // found a cycle
-                        Set<V> neighbourUsed = used.get(neighbor);
-                        List<V> cycle = new ArrayList<>();
-                        cycle.add(neighbor);
-                        cycle.add(current);
-                        V p = parent.get(current);
-                        while (!neighbourUsed.contains(p)) {
+                        Map<V, E> neighbourUsed = used.get(neighbor);
+
+                        double weight = 0d;
+                        List<E> cycle = new ArrayList<>();
+
+                        cycle.add(e);
+                        weight += graph.getEdgeWeight(e);
+
+                        V v = current;
+                        while (!neighbourUsed.containsKey(v)) {
+                            E p = parent.get(v);
                             cycle.add(p);
-                            p = parent.get(p);
+                            weight += graph.getEdgeWeight(p);
+                            v = Graphs.getOppositeVertex(graph, p, v);
                         }
-                        cycle.add(p);
+                        E a = neighbourUsed.get(v);
+                        cycle.add(a);
+                        weight += graph.getEdgeWeight(a);
+
+                        neighbourUsed.put(current, e);
+
                         cycles.add(cycle);
-                        neighbourUsed.add(current);
+                        totalLength += cycle.size();
+                        totalWeight += weight;
                     }
                 }
             }
         }
-        return cycles;
+
+        return new CycleBasisImpl<V, E>(graph, cycles, totalLength, totalWeight);
     }
 }
 

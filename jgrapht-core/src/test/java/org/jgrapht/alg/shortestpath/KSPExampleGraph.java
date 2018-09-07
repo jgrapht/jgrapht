@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,8 @@ import org.jgrapht.graph.*;
  * <img src="./KSPExample.png">
  */
 public class KSPExampleGraph
-    extends SimpleWeightedGraph<String, DefaultWeightedEdge>
+    extends
+    SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

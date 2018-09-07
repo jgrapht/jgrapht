@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2002-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2002-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,8 +40,10 @@ package org.jgrapht.util;
  * @since May 27, 2004
  */
 public class ModifiableInteger
-    extends Number
-    implements Comparable<ModifiableInteger>
+    extends
+    Number
+    implements
+    Comparable<ModifiableInteger>
 {
     private static final long serialVersionUID = 3618698612851422261L;
 
@@ -132,7 +134,7 @@ public class ModifiableInteger
         int thisVal = this.value;
         int anotherVal = anotherInteger.value;
 
-        return (thisVal < anotherVal) ? -1 : ((thisVal == anotherVal) ? 0 : 1);
+        return Integer.compare(thisVal, anotherVal);
     }
 
     /**

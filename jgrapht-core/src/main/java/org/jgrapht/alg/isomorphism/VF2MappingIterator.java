@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,13 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 abstract class VF2MappingIterator<V, E>
-    implements Iterator<GraphMapping<V, E>>
+    implements
+    Iterator<GraphMapping<V, E>>
 {
     protected Comparator<V> vertexComparator;
     protected Comparator<E> edgeComparator;

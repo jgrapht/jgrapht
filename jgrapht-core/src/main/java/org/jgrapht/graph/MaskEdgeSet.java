@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,22 +17,23 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
-
 /**
  * Helper for {@link MaskSubgraph}.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 class MaskEdgeSet<V, E>
-    extends AbstractSet<E>
-    implements Serializable
+    extends
+    AbstractSet<E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = 4208908842850100708L;
 
@@ -59,7 +60,7 @@ class MaskEdgeSet<V, E>
         if (!edgeSet.contains(o)) {
             return false;
         }
-        E e = TypeUtil.uncheckedCast(o, null);
+        E e = TypeUtil.uncheckedCast(o);
 
         return !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
             && !vertexMask.test(graph.getEdgeTarget(e));

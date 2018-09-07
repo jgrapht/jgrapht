@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2018, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,86 +17,91 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.junit.Before;
+import org.junit.Test;
 
-/**
- * A unit test for the AsUnweighted[Directed]Graph views.
- *
- * @author John V. Sichi
- */
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
 public class AsUnweightedGraphTest
-    extends EnhancedTestCase
 {
-    // ~ Static fields/initializers ---------------------------------------------
 
-    private static final String v1 = "v1";
-    private static final String v2 = "v2";
-    private static final String v3 = "v3";
-
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public AsUnweightedGraphTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
+    private DefaultWeightedEdge loop;
+    private DefaultWeightedEdge e12;
+    private DefaultWeightedEdge e23;
+    private DefaultWeightedEdge e24;
+    private String v1 = "v1";
+    private String v2 = "v2";
+    private String v3 = "v3";
+    private String v4 = "v4";
+    private Graph<String, DefaultWeightedEdge> unweightedGraph;
 
     /**
-     * .
+     * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    public void testDirected()
+    @Before public void setUp()
     {
-        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> directed =
-            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        constructWeighted(directed);
+        Graph<String, DefaultWeightedEdge> undirectedWeightedGraph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        this.unweightedGraph = new AsUnweightedGraph<>(undirectedWeightedGraph);
 
-        Graph<String, DefaultWeightedEdge> unweighted =
-            new AsUnweightedGraph<>(directed);
-        checkView(directed, unweighted);
+        undirectedWeightedGraph.addVertex(v1);
+        undirectedWeightedGraph.addVertex(v2);
+        undirectedWeightedGraph.addVertex(v3);
+        undirectedWeightedGraph.addVertex(v4);
+        e12 = Graphs.addEdge(undirectedWeightedGraph, v1, v2, 6d);
+        e23 = Graphs.addEdge(undirectedWeightedGraph, v2, v3, 456d);
+        e24 = Graphs.addEdge(undirectedWeightedGraph, v2, v4, 0.587d);
+        loop = Graphs.addEdge(undirectedWeightedGraph, v4, v4, 6781234453486d);
     }
 
-    /**
-     * .
-     */
-    public void testWeightedGraph()
+    @Test public void getEdgeWeightOfE12()
     {
-        Graph<String, DefaultWeightedEdge> undirected =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        constructWeighted(undirected);
-
-        AsUnweightedGraph<String, DefaultWeightedEdge> unweighted =
-            new AsUnweightedGraph<>(undirected);
-        checkView(undirected, unweighted);
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e12), 0);
     }
 
-    private void constructWeighted(Graph<String, DefaultWeightedEdge> weighted)
+    @Test public void getEdgeWeightOfE23()
     {
-        weighted.addVertex(v1);
-        weighted.addVertex(v2);
-        weighted.addVertex(v3);
-        Graphs.addEdge(weighted, v1, v2, 3.0);
-        assertEquals(3.0, weighted.getEdgeWeight(weighted.getEdge(v1, v2)));
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e23), 0);
     }
 
-    private void checkView(
-        Graph<String, DefaultWeightedEdge> weighted, Graph<String, DefaultWeightedEdge> unweighted)
+    @Test public void getEdgeWeightOfE24()
     {
-        assertEquals(
-            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v1, v2)));
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e24), 0);
+    }
 
-        Graphs.addEdge(weighted, v2, v3, 5.0);
-        assertEquals(
-            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v2, v3)));
+    @Test public void getEdgeWeightOfLoop()
+    {
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(loop), 0);
+    }
 
-        unweighted.addEdge(v3, v1);
-        assertEquals(
-            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v3, v1)));
-        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, weighted.getEdgeWeight(weighted.getEdge(v3, v1)));
+    @Test public void setEdgeWeight()
+    {
+        try {
+            this.unweightedGraph.setEdgeWeight(e23, 81);
+        } catch (UnsupportedOperationException e) {
+            assertThat(e.getMessage(), is("Edge weight is not supported"));
+        }
+    }
+
+    @Test public void getType()
+    {
+        assertFalse(this.unweightedGraph.getType().isWeighted());
+    }
+
+    @Test public void failOnCreationOfUnweightedGraph()
+    {
+        try {
+            new AsUnweightedGraph<>(null);
+            fail("Expected an NullPointerException to be thrown");
+        } catch (NullPointerException e) {
+            assertNotNull(e);
+        }
     }
 }
-
-// End AsUnweightedGraphTest.java

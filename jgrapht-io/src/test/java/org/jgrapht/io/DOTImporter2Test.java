@@ -17,19 +17,14 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * 2nd part of tests for DOTImporter. See also {@link DOTImporter1Test}.
@@ -318,7 +313,7 @@ public class DOTImporter2Test
         // @formatter:on
 
         VertexProvider<String> vp = (a, b) -> a;
-        Map<DefaultEdge, Map<String, String>> edgeAttributes = new HashMap<>();
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
         EdgeProvider<String, DefaultEdge> ep = (f, t, l, a) -> {
             DefaultEdge e = new DefaultEdge();
             edgeAttributes.put(e, a);
@@ -340,7 +335,7 @@ public class DOTImporter2Test
         for (DefaultEdge e : edgeAttributes.keySet()) {
             String f = graph.getEdgeSource(e);
             String t = graph.getEdgeSource(e);
-            Map<String, String> attrs = edgeAttributes.get(e);
+            Map<String, Attribute> attrs = edgeAttributes.get(e);
             if (f.equals("a0") && t.equals("a1")) {
                 assertEquals("5.0", attrs.get("weight"));
             } else if (f.equals("a2") && t.equals("a3")) {
@@ -393,7 +388,7 @@ public class DOTImporter2Test
                        "}";
         // @formatter:on
 
-        Map<String, Map<String, String>> vertexAttributes = new HashMap<>();
+        Map<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         VertexProvider<String> vp = (label, attrs) -> {
             vertexAttributes.put(label, attrs);
             return label;
@@ -412,12 +407,12 @@ public class DOTImporter2Test
         expected.addEdge("a4", "a5");
         assertEquals(expected.toString(), graph.toString());
 
-        assertEquals("gray", vertexAttributes.get("a0").get("color"));
-        assertEquals("gray", vertexAttributes.get("a1").get("color"));
-        assertEquals("black", vertexAttributes.get("a2").get("color"));
-        assertEquals("black", vertexAttributes.get("a3").get("color"));
-        assertEquals("white", vertexAttributes.get("a4").get("color"));
-        assertEquals("gray", vertexAttributes.get("a5").get("color"));
+        assertEquals("gray", vertexAttributes.get("a0").get("color").getValue());
+        assertEquals("gray", vertexAttributes.get("a1").get("color").getValue());
+        assertEquals("black", vertexAttributes.get("a2").get("color").getValue());
+        assertEquals("black", vertexAttributes.get("a3").get("color").getValue());
+        assertEquals("white", vertexAttributes.get("a4").get("color").getValue());
+        assertEquals("gray", vertexAttributes.get("a5").get("color").getValue());
     }
 
     @Test
@@ -440,7 +435,7 @@ public class DOTImporter2Test
                        "}";
         // @formatter:on
 
-        Map<String, Map<String, String>> vertexAttributes = new HashMap<>();
+        Map<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         VertexProvider<String> vp = (label, attrs) -> {
             vertexAttributes.put(label, attrs);
             return label;
@@ -451,20 +446,22 @@ public class DOTImporter2Test
             new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
         importer.importGraph(graph, new StringReader(input));
 
-        assertEquals("myname", vertexAttributes.get("a0").get("name"));
-        assertEquals("name with ; semicolon", vertexAttributes.get("a1").get("name"));
-        assertEquals("myname", vertexAttributes.get("a3").get("name"));
-        assertEquals("name with \"internal\" quotes", vertexAttributes.get("a4").get("name"));
-        assertEquals("my\nname", vertexAttributes.get("a5").get("name"));
+        assertEquals("myname", vertexAttributes.get("a0").get("name").getValue());
+        assertEquals("name with ; semicolon", vertexAttributes.get("a1").get("name").getValue());
+        assertEquals("myname", vertexAttributes.get("a3").get("name").getValue());
         assertEquals(
-            "<a href=\"http:///www.jgrapht.org\"/>", vertexAttributes.get("a6").get("name"));
+            "name with \"internal\" quotes", vertexAttributes.get("a4").get("name").getValue());
+        assertEquals("my\nname", vertexAttributes.get("a5").get("name").getValue());
+        assertEquals(
+            "<a href=\"http:///www.jgrapht.org\"/>",
+            vertexAttributes.get("a6").get("name").getValue());
         assertEquals(
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>",
-            vertexAttributes.get("a7").get("name"));
-        assertEquals("<h2>name \u2705</h2>", vertexAttributes.get("a8").get("name"));
-        assertEquals("two\nlines", vertexAttributes.get("a9").get("name"));
-        assertEquals("", vertexAttributes.get("a10").get("name"));
-        assertEquals("\\\\\\\\", vertexAttributes.get("a11").get("name"));
+            vertexAttributes.get("a7").get("name").getValue());
+        assertEquals("<h2>name \u2705</h2>", vertexAttributes.get("a8").get("name").getValue());
+        assertEquals("two\nlines", vertexAttributes.get("a9").get("name").getValue());
+        assertEquals("", vertexAttributes.get("a10").get("name").getValue());
+        assertEquals("\\\\\\\\", vertexAttributes.get("a11").get("name").getValue());
     }
 
     @Test
@@ -477,7 +474,7 @@ public class DOTImporter2Test
                        "}";
         // @formatter:on
 
-        Map<String, Map<String, String>> vertexAttributes = new HashMap<>();
+        Map<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         VertexProvider<String> vp = (label, attrs) -> {
             vertexAttributes.put(label, attrs);
             return label;
@@ -503,7 +500,7 @@ public class DOTImporter2Test
                        "}";
         // @formatter:on
 
-        Map<String, Map<String, String>> vertexAttributes = new HashMap<>();
+        Map<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         VertexProvider<String> vp = (label, attrs) -> {
             vertexAttributes.put(label, attrs);
             return label;
@@ -514,7 +511,9 @@ public class DOTImporter2Test
             new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
         importer.importGraph(graph, new StringReader(input));
 
-        assertEquals("<h1/>", vertexAttributes.get("a0").get("name"));
+        Attribute attr = vertexAttributes.get("a0").get("name");
+        assertEquals("<h1/>", attr.getValue());
+        assertEquals(AttributeType.STRING, attr.getType());
     }
 
     @Test
@@ -534,7 +533,7 @@ public class DOTImporter2Test
         // @formatter:on
 
         VertexProvider<String> vp = (a, b) -> a;
-        Map<DefaultEdge, Map<String, String>> edgeAttributes = new HashMap<>();
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
         EdgeProvider<String, DefaultEdge> ep = (f, t, l, a) -> {
             DefaultEdge e = new DefaultEdge();
             if (f.equals("a2") && t.equals("a3")) {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * This test class is fairly small compared with the tests for the VF2SubgraphIsomorphismInspector

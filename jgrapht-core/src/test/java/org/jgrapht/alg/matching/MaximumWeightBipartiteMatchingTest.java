@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Graeme Ahokas and Contributors.
+ * (C) Copyright 2015-2018, by Graeme Ahokas and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,16 @@
  */
 package org.jgrapht.alg.matching;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-
+import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+import org.junit.experimental.categories.*;
+
+import java.math.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class MaximumWeightBipartiteMatchingTest
 {
@@ -67,7 +69,7 @@ public class MaximumWeightBipartiteMatchingTest
         DefaultWeightedEdge e1 = graph.addEdge("s1", "t1");
         graph.setEdgeWeight(e1, 1);
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
+        Matching<String, DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(1, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e1));
     }
@@ -81,7 +83,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e2, 2);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
+        Matching<String, DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(1, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e2));
     }
@@ -97,7 +99,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e3, 2);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
+        Matching<String, DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(2, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e2));
         assertTrue(matchings.getEdges().contains(e3));
@@ -114,7 +116,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e3, 1);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
+        Matching<String, DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(2, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e1));
         assertTrue(matchings.getEdges().contains(e3));
@@ -139,12 +141,115 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e7, 1);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
+        Matching<String, DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(4, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e1));
         assertTrue(matchings.getEdges().contains(e3));
         assertTrue(matchings.getEdges().contains(e5));
         assertTrue(matchings.getEdges().contains(e7));
+    }
+
+    @Test
+    @Category(SlowTests.class)
+    public void testRandomInstancesFixedSeed()
+    {
+        testRandomInstance(new Random(17), 100, 0.7, 2);
+    }
+
+    @Test
+    @Category(SlowTests.class)
+    public void testRandomInstances()
+    {
+        Random rng = new Random();
+        testRandomInstance(rng, 100, 0.8, 1);
+        testRandomInstance(rng, 1000, 0.8, 1);
+    }
+
+    private void testRandomInstance(Random rng, int n, double p, int repeat)
+    {
+        for (int a = 0; a < repeat; a++) {
+            // generate random bipartite
+            Graph<Integer, DefaultWeightedEdge> g =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+
+            Set<Integer> partitionA = new LinkedHashSet<>(n);
+            for (int i = 0; i < n; i++) {
+                g.addVertex(i);
+                partitionA.add(i);
+            }
+
+            Set<Integer> partitionB = new LinkedHashSet<>(n);
+            for (int i = 0; i < n; i++) {
+                g.addVertex(n + i);
+                partitionB.add(n + i);
+            }
+
+            // create edges
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    // s->t
+                    if (rng.nextDouble() < p) {
+                        g.addEdge(i, n + j);
+                    }
+                }
+            }
+
+            // assign random weights
+            for (DefaultWeightedEdge e : g.edgeSet()) {
+                g.setEdgeWeight(e, 1000 * rng.nextInt());
+            }
+
+            // compute maximum weight matching
+            MaximumWeightBipartiteMatching<Integer, DefaultWeightedEdge> alg =
+                new MaximumWeightBipartiteMatching<>(g, partitionA, partitionB);
+            Matching<Integer, DefaultWeightedEdge> matching = alg.getMatching();
+            Map<Integer, BigDecimal> pot = alg.getPotentials();
+            Comparator<BigDecimal> comparator = Comparator.<BigDecimal> naturalOrder();
+
+            // assert matching
+            Map<Integer, Integer> degree = new HashMap<>();
+            for (Integer v : g.vertexSet()) {
+                degree.put(v, 0);
+            }
+            for (DefaultWeightedEdge e : matching.getEdges()) {
+                Integer s = g.getEdgeSource(e);
+                Integer t = g.getEdgeTarget(e);
+                degree.put(s, degree.get(s) + 1);
+                degree.put(t, degree.get(t) + 1);
+            }
+            for (Integer v : g.vertexSet()) {
+                assertTrue(degree.get(v) <= 1);
+            }
+
+            // assert non-negative potentials
+            for (Integer v : g.vertexSet()) {
+                assertTrue(comparator.compare(pot.get(v), BigDecimal.ZERO) >= 0);
+            }
+
+            // assert non-negative reduced cost for edges
+            for (DefaultWeightedEdge e : g.edgeSet()) {
+                Integer s = g.getEdgeSource(e);
+                Integer t = g.getEdgeTarget(e);
+                BigDecimal w = BigDecimal.valueOf(g.getEdgeWeight(e));
+                assertTrue(comparator.compare(w, pot.get(s).add(pot.get(t))) <= 0);
+            }
+
+            // assert tight edges in matching
+            for (DefaultWeightedEdge e : matching.getEdges()) {
+                Integer s = g.getEdgeSource(e);
+                Integer t = g.getEdgeTarget(e);
+                BigDecimal w = BigDecimal.valueOf(g.getEdgeWeight(e));
+                assertTrue(comparator.compare(w, pot.get(s).add(pot.get(t))) == 0);
+            }
+
+            // assert free nodes have zero potential
+            for (Integer v : g.vertexSet()) {
+                if (degree.get(v) == 0) {
+                    assertEquals(pot.get(v), BigDecimal.ZERO);
+                }
+            }
+
+        }
     }
 
 }

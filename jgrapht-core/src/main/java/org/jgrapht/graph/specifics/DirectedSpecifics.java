@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2015-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,12 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
-import java.util.*;
-
+import org.jgrapht.Graph;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of
@@ -37,60 +38,71 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class DirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+    implements
+    Specifics<V, E>,
+    Serializable
 {
-    private static final long serialVersionUID = 8971725103718958232L;
+    private static final long serialVersionUID = 5964807709682219859L;
 
-    protected AbstractBaseGraph<V, E> abstractBaseGraph;
-    protected Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected;
+    protected Graph<V, E> graph;
+    protected Map<V, DirectedEdgeContainer<V, E>> vertexMap;
     protected EdgeSetFactory<V, E> edgeSetFactory;
 
     /**
      * Construct a new directed specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param graph the graph for which these specifics are for
+     * @deprecated Since default strategies should be decided at a higher level. 
      */
-    public DirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
+    @Deprecated
+    public DirectedSpecifics(Graph<V, E> graph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
+        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new directed specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets
+     * @deprecated Since default strategies should be decided at a higher level.
      */
+    @Deprecated    
     public DirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
+        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
     {
-        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new directed specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
+     * @param graph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
+     *        iteration order.
      * @param edgeSetFactory factory for the creation of vertex edge sets
      */
     public DirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
         EdgeSetFactory<V, E> edgeSetFactory)
     {
-        this.abstractBaseGraph = abstractBaseGraph;
-        this.vertexMapDirected = vertexMap;
-        this.edgeSetFactory = edgeSetFactory;
+        this.graph = Objects.requireNonNull(graph);
+        this.vertexMap = Objects.requireNonNull(vertexMap);
+        this.edgeSetFactory = Objects.requireNonNull(edgeSetFactory);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addVertex(V v)
+    public boolean addVertex(V v)
     {
-        // add with a lazy edge container entry
-        vertexMapDirected.put(v, null);
+        DirectedEdgeContainer<V, E> ec = vertexMap.get(v);
+        if (ec == null) {
+            vertexMap.put(v, new DirectedEdgeContainer<>(edgeSetFactory, v));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -99,7 +111,7 @@ public class DirectedSpecifics<V, E>
     @Override
     public Set<V> getVertexSet()
     {
-        return vertexMapDirected.keySet();
+        return vertexMap.keySet();
     }
 
     /**
@@ -110,15 +122,15 @@ public class DirectedSpecifics<V, E>
     {
         Set<E> edges = null;
 
-        if (abstractBaseGraph.containsVertex(sourceVertex)
-            && abstractBaseGraph.containsVertex(targetVertex))
+        if (graph.containsVertex(sourceVertex)
+            && graph.containsVertex(targetVertex))
         {
             edges = new ArrayUnenforcedSet<>();
 
             DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
 
             for (E e : ec.outgoing) {
-                if (abstractBaseGraph.getEdgeTarget(e).equals(targetVertex)) {
+                if (graph.getEdgeTarget(e).equals(targetVertex)) {
                     edges.add(e);
                 }
             }
@@ -133,13 +145,13 @@ public class DirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (abstractBaseGraph.containsVertex(sourceVertex)
-            && abstractBaseGraph.containsVertex(targetVertex))
+        if (graph.containsVertex(sourceVertex)
+            && graph.containsVertex(targetVertex))
         {
             DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
 
             for (E e : ec.outgoing) {
-                if (abstractBaseGraph.getEdgeTarget(e).equals(targetVertex)) {
+                if (graph.getEdgeTarget(e).equals(targetVertex)) {
                     return e;
                 }
             }
@@ -154,8 +166,8 @@ public class DirectedSpecifics<V, E>
     @Override
     public void addEdgeToTouchingVertices(E e)
     {
-        V source = abstractBaseGraph.getEdgeSource(e);
-        V target = abstractBaseGraph.getEdgeTarget(e);
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
 
         getEdgeContainer(source).addOutgoingEdge(e);
         getEdgeContainer(target).addIncomingEdge(e);
@@ -181,7 +193,7 @@ public class DirectedSpecifics<V, E>
         inAndOut.addAll(getEdgeContainer(vertex).outgoing);
 
         // we have two copies for each self-loop - remove one of them.
-        if (abstractBaseGraph.isAllowingLoops()) {
+        if (graph.getType().isAllowingSelfLoops()) {
             Set<E> loops = getAllEdges(vertex, vertex);
 
             for (int i = 0; i < inAndOut.size();) {
@@ -241,15 +253,15 @@ public class DirectedSpecifics<V, E>
     @Override
     public void removeEdgeFromTouchingVertices(E e)
     {
-        V source = abstractBaseGraph.getEdgeSource(e);
-        V target = abstractBaseGraph.getEdgeTarget(e);
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
 
         getEdgeContainer(source).removeOutgoingEdge(e);
         getEdgeContainer(target).removeIncomingEdge(e);
     }
 
     /**
-     * A lazy build of edge container for specified vertex.
+     * Get the edge container for specified vertex.
      *
      * @param vertex a vertex in this graph.
      *
@@ -257,11 +269,11 @@ public class DirectedSpecifics<V, E>
      */
     protected DirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
     {
-        DirectedEdgeContainer<V, E> ec = vertexMapDirected.get(vertex);
+        DirectedEdgeContainer<V, E> ec = vertexMap.get(vertex);
 
         if (ec == null) {
             ec = new DirectedEdgeContainer<>(edgeSetFactory, vertex);
-            vertexMapDirected.put(vertex, ec);
+            vertexMap.put(vertex, ec);
         }
 
         return ec;

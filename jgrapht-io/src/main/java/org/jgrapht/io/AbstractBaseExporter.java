@@ -17,7 +17,7 @@
  */
 package org.jgrapht.io;
 
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Base implementation for a graph exporter.

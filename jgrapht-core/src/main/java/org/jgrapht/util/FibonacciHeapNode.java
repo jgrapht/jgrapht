@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 1999-2017, by Nathan Fiedler and Contributors.
+ * (C) Copyright 1999-2018, by Nathan Fiedler and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

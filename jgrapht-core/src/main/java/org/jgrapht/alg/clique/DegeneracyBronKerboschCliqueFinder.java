@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,16 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import org.jgrapht.*;
+import org.jgrapht.traverse.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.traverse.DegeneracyOrderingIterator;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm with pivot and degeneracy ordering.
@@ -41,11 +36,11 @@ import org.jgrapht.traverse.DegeneracyOrderingIterator;
  * </ul>
  * 
  * <p>
- * and has running time O(d n 3^{d/3}) where n is the number of vertices of the graph and d is the
- * degeneracy of the graph. The algorithm looks for a maximal clique parameterized by degeneracy, a
- * frequently-used measure of the sparseness of a graph that is closely related to other common
- * sparsity measures such as arboricity and thickness, and that has previously been used for other
- * fixed-parameter problems.
+ * and has running time $O(d n 3^{d/3})$ where $n$ is the number of vertices of the graph and $d$ is
+ * the degeneracy of the graph. The algorithm looks for a maximal clique parameterized by
+ * degeneracy, a frequently-used measure of the sparseness of a graph that is closely related to
+ * other common sparsity measures such as arboricity and thickness, and that has previously been
+ * used for other fixed-parameter problems.
  * 
  * <p>
  * The algorithm first computes all maximal cliques and then returns the result to the user. A
@@ -60,7 +55,8 @@ import org.jgrapht.traverse.DegeneracyOrderingIterator;
  * @author Dimitrios Michail
  */
 public class DegeneracyBronKerboschCliqueFinder<V, E>
-    extends PivotBronKerboschCliqueFinder<V, E>
+    extends
+    PivotBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.

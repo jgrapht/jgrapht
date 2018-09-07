@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,8 @@ import java.util.*;
  * @since Aug 11, 2003
  */
 public class ConnectedComponentTraversalEvent
-    extends EventObject
+    extends
+    EventObject
 {
     private static final long serialVersionUID = 3834311717709822262L;
 

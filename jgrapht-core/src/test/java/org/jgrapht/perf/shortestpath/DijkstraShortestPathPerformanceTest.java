@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,20 +17,20 @@
  */
 package org.jgrapht.perf.shortestpath;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.runner.*;
 
-import junit.framework.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * A small benchmark comparing Dijkstra like algorithms. The benchmark creates a random graph and
@@ -39,7 +39,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class DijkstraShortestPathPerformanceTest
-    extends TestCase
 {
     private static final int PERF_BENCHMARK_VERTICES_COUNT = 250;
     private static final double PERF_BENCHMARK_EDGES_PROP = 0.3;
@@ -64,14 +63,15 @@ public class DijkstraShortestPathPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, rng, false);
             }
 
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedGraph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            this.graph = weightedGraph;
+            this.graph = GraphTypeBuilder
+                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).buildGraph();
 
-            generator.generateGraph(graph, new IntegerVertexFactory(), null);
+            generator.generateGraph(graph);
 
-            for (DefaultWeightedEdge e : weightedGraph.edgeSet()) {
-                weightedGraph.setEdgeWeight(e, rng.nextDouble());
+            for (DefaultWeightedEdge e : graph.edgeSet()) {
+                graph.setEdgeWeight(e, rng.nextDouble());
             }
         }
 
@@ -87,7 +87,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class DijkstraBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -104,7 +105,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class ClosestFirstIteratorBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -157,7 +159,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class BidirectionalDijkstraBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -175,7 +178,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class AStarNoHeuristicBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -193,7 +197,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class ALTBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         private int totalLandmarks;
 
@@ -221,6 +226,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
+    @Test
     public void testBenchmark()
         throws RunnerException
     {

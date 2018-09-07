@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2017, by Andrew Newell and Contributors.
+ * (C) Copyright 2008-2018, by Andrew Newell and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/StarGraph.html">star graph</a> of any size.
@@ -32,19 +32,24 @@ import org.jgrapht.*;
  * @since Dec 21, 2008
  */
 public class StarGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     public static final String CENTER_VERTEX = "Center Vertex";
 
-    private int order;
+    private final int order;
 
     /**
      * Creates a new StarGraphGenerator object.
      *
      * @param order number of total vertices including the center vertex
+     * @throws IllegalArgumentException if the order is negative
      */
     public StarGraphGenerator(int order)
     {
+        if (order < 0) { 
+            throw new IllegalArgumentException("Order must be non-negative");
+        }
         this.order = order;
     }
 
@@ -52,31 +57,21 @@ public class StarGraphGenerator<V, E>
      * Generates a star graph with the designated order from the constructor
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (order < 1) {
             return;
         }
 
         // Create center vertex
-        V centerVertex = vertexFactory.createVertex();
-        target.addVertex(centerVertex);
+        V centerVertex = target.addVertex();
         if (resultMap != null) {
             resultMap.put(CENTER_VERTEX, centerVertex);
         }
 
         // Create other vertices
         for (int i = 0; i < (order - 1); i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
-        }
-
-        // Add one edge between the center vertex and every other vertex
-        for (V v : target.vertexSet()) {
-            if (v != centerVertex) {
-                target.addEdge(v, centerVertex);
-            }
+            target.addEdge(target.addVertex(), centerVertex);
         }
     }
 }

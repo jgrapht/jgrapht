@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * An algorithm which computes a graph vertex coloring.
@@ -41,7 +36,7 @@ public interface VertexColoringAlgorithm<V>
     Coloring<V> getColoring();
 
     /**
-     * A coloring. The colors are between 0 and {@code n-1} where n is the number of vertices of the
+     * A coloring. The colors are between 0 and $n-1$ where $n$ is the number of vertices of the
      * graph.
      *
      * @param <V> the graph vertex type
@@ -78,7 +73,9 @@ public interface VertexColoringAlgorithm<V>
      * @param <V> the graph vertex type
      */
     class ColoringImpl<V>
-        implements Coloring<V>, Serializable
+        implements
+        Coloring<V>,
+        Serializable
     {
         private static final long serialVersionUID = -8456580091672353150L;
 
@@ -123,17 +120,11 @@ public interface VertexColoringAlgorithm<V>
         {
             Map<Integer, Set<V>> groups = new HashMap<>();
             colors.forEach((v, color) -> {
-                Set<V> g = groups.get(color);
-                if (g == null) {
-                    g = new HashSet<>();
-                    groups.put(color, g);
-                }
+                Set<V> g = groups.computeIfAbsent(color, k -> new HashSet<>());
                 g.add(v);
             });
             List<Set<V>> classes = new ArrayList<>(numberColors);
-            for (Set<V> c : groups.values()) {
-                classes.add(c);
-            }
+            classes.addAll(groups.values());
             return classes;
         }
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,8 @@ import org.jgrapht.graph.*;
  * @since Aug 8, 2003
  */
 public class IgnoreDirectionTest
-    extends AbstractGraphIteratorTest
+    extends
+    AbstractGraphIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

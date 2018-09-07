@@ -1,16 +1,21 @@
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public abstract class BasePathGrowingWeightedMatchingTest
-    extends ApproximateWeightedMatchingTest
+    extends
+    ApproximateWeightedMatchingTest
 {
 
     public BasePathGrowingWeightedMatchingTest()
@@ -21,6 +26,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
     public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph);
 
+    @Test
     public void testDynamicProgrammingOnPaths()
     {
         // test 0
@@ -87,6 +93,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
         assertTrue(matching3.contains(g.getEdge(10, 11)));
     }
 
+    @Test
     public void testApproximationFactorOnRandomInstances()
     {
         final int seed = 33;
@@ -99,20 +106,22 @@ public abstract class BasePathGrowingWeightedMatchingTest
                 numberVertices, edgeProbability, seed, false);
 
         for (int i = 0; i < repeat; i++) {
-            WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(DefaultWeightedEdge.class);
-            gg.generateGraph(g, new IntegerVertexFactory(), null);
+            WeightedPseudograph<Integer, DefaultWeightedEdge> g = new WeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            gg.generateGraph(g);
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =
                 new PathGrowingWeightedMatching<>(g);
-            Matching<DefaultWeightedEdge> m1 = alg1.getMatching();
+            Matching<Integer, DefaultWeightedEdge> m1 = alg1.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg2 =
                 new PathGrowingWeightedMatching<>(g, false);
-            Matching<DefaultWeightedEdge> m2 = alg2.getMatching();
-            MatchingAlgorithm<Integer, DefaultWeightedEdge> alg3 = new EdmondsBlossomShrinking<>(g);
-            Matching<DefaultWeightedEdge> m3 = alg3.getMatching();
-            MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 = new GreedyWeightedMatching<>(g);
-            Matching<DefaultWeightedEdge> m4 = alg4.getMatching();
+            Matching<Integer, DefaultWeightedEdge> m2 = alg2.getMatching();
+            MatchingAlgorithm<Integer, DefaultWeightedEdge> alg3 =
+                new EdmondsMaximumCardinalityMatching<>(g);
+            Matching<Integer, DefaultWeightedEdge> m3 = alg3.getMatching();
+            MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 =
+                new GreedyWeightedMatching<>(g, false);
+            Matching<Integer, DefaultWeightedEdge> m4 = alg4.getMatching();
 
             assertTrue(isMatching(g, m1));
             assertTrue(isMatching(g, m2));

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * General interface for graph and subgraph isomorphism.
@@ -30,16 +30,16 @@ import org.jgrapht.*;
 public interface IsomorphismInspector<V, E>
 {
     /**
-     * Get an iterator over all existing (isomorphic) mappings between two graphs.
+     * Get an iterator over all calculated (isomorphic) mappings between two graphs.
      * 
-     * @return an iterator over all existing (isomorphic) mappings between two graphs
+     * @return an iterator over all calculated (isomorphic) mappings between two graphs
      */
     Iterator<GraphMapping<V, E>> getMappings();
 
     /**
      * Check if an isomorphism exists.
-     * 
-     * @return true if there is an isomorphism, false otherwise
+     *
+     * @return true if there is an isomorphism, false if there is no isomorphism
      */
     boolean isomorphismExists();
 }

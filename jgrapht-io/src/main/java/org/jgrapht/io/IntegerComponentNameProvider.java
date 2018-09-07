@@ -29,7 +29,8 @@ import java.util.*;
  * @author Trevor Harmon
  */
 public class IntegerComponentNameProvider<T>
-    implements ComponentNameProvider<T>
+    implements
+    ComponentNameProvider<T>
 {
     private int nextID = 1;
     private final Map<T, Integer> idMap = new HashMap<>();

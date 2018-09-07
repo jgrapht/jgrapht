@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A base implementation of the shortest path interface.
@@ -32,22 +32,23 @@ import org.jgrapht.graph.*;
  * @author Dimitrios Michail
  */
 abstract class BaseShortestPathAlgorithm<V, E>
-    implements ShortestPathAlgorithm<V, E>
+    implements
+    ShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting the existence of a negative-weight cycle.
      */
-    static final String GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE =
+    protected static final String GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE =
         "Graph contains a negative-weight cycle";
     /**
      * Error message for reporting that a source vertex is missing.
      */
-    static final String GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX =
+    protected static final String GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX =
         "Graph must contain the source vertex!";
     /**
      * Error message for reporting that a sink vertex is missing.
      */
-    static final String GRAPH_MUST_CONTAIN_THE_SINK_VERTEX = "Graph must contain the sink vertex!";
+    protected static final String GRAPH_MUST_CONTAIN_THE_SINK_VERTEX = "Graph must contain the sink vertex!";
 
     /**
      * The underlying graph.
@@ -105,9 +106,7 @@ abstract class BaseShortestPathAlgorithm<V, E>
     protected final GraphPath<V, E> createEmptyPath(V source, V sink)
     {
         if (source.equals(sink)) {
-            return new GraphWalk<>(
-                graph, source, sink, Collections.singletonList(source), Collections.emptyList(),
-                0d);
+            return GraphWalk.singletonWalk(graph, source, 0d);
         } else {
             return null;
         }

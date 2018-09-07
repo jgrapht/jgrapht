@@ -17,28 +17,23 @@
  */
 package org.jgrapht.io;
 
-import java.io.ByteArrayOutputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.io.GraphMLExporter.*;
+import org.junit.*;
+import org.xmlunit.builder.*;
+import org.xmlunit.diff.*;
 
-import org.custommonkey.xmlunit.XMLAssert;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.GraphMLExporter.AttributeCategory;
-import org.jgrapht.io.GraphMLExporter.AttributeType;
+import java.io.*;
+import java.util.*;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 /**
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
 public class GraphMLExporterTest
-    extends TestCase
 {
     // ~ Static fields/initializers
     // ---------------------------------------------
@@ -52,11 +47,12 @@ public class GraphMLExporterTest
     // ~ Methods
     // ----------------------------------------------------------------
 
+    @Test
     public void testUndirected()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -83,15 +79,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
 
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeighted()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -122,14 +121,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testDirected()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -157,14 +160,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedUnweightedWithWeights()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -195,14 +202,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithWeights()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -236,14 +247,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithCustomNameWeights()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
                 + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -279,9 +294,13 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testNoRegisterWeightAttribute()
         throws Exception
     {
@@ -294,6 +313,7 @@ public class GraphMLExporterTest
         }
     }
 
+    @Test
     public void testRegisterWeightAttribute()
         throws Exception
     {
@@ -307,6 +327,7 @@ public class GraphMLExporterTest
         }
     }
 
+    @Test
     public void testNoAlreadyRegisteredAttributeAsWeightName()
         throws Exception
     {
@@ -320,18 +341,19 @@ public class GraphMLExporterTest
         }
     }
 
+    @Test
     public void testUndirectedWeightedWithWeightsAndLabels()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"vertex_label_key\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
-				+ "<key id=\"edge_label_key\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"vertex_label_key\" for=\"node\" attr.name=\"VertexLabel\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"edge_label_key\" for=\"edge\" attr.name=\"EdgeLabel\" attr.type=\"string\"/>" + NL
 				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL 
@@ -389,14 +411,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithWeightsAndLabelsAndCustomNames()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
                 + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -463,15 +489,18 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
 
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithWeightsAndColor()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
 				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -521,20 +550,20 @@ public class GraphMLExporterTest
             new ComponentAttributeProvider<String>()
             {
                 @Override
-                public Map<String, String> getComponentAttributes(String v)
+                public Map<String, Attribute> getComponentAttributes(String v)
                 {
-                    Map<String, String> map = new LinkedHashMap<>();
+                    Map<String, Attribute> map = new LinkedHashMap<>();
                     switch (v) {
                     case V1:
-                        map.put("color", "yellow");
-                        map.put("name", "V1");
+                        map.put("color", DefaultAttribute.createAttribute("yellow"));
+                        map.put("name", DefaultAttribute.createAttribute("V1"));
                         break;
                     case V2:
-                        map.put("color", "red");
-                        map.put("name", "V2");
+                        map.put("color", DefaultAttribute.createAttribute("red"));
+                        map.put("name", DefaultAttribute.createAttribute("V2"));
                         break;
                     case V3:
-                        map.put("name", "V3");
+                        map.put("name", DefaultAttribute.createAttribute("V3"));
                         break;
                     default:
                         break;
@@ -547,15 +576,15 @@ public class GraphMLExporterTest
             new ComponentAttributeProvider<DefaultWeightedEdge>()
             {
                 @Override
-                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
+                public Map<String, Attribute> getComponentAttributes(DefaultWeightedEdge e)
                 {
-                    Map<String, String> map = new LinkedHashMap<>();
+                    Map<String, Attribute> map = new LinkedHashMap<>();
                     if (e.equals(g.getEdge(V1, V2))) {
-                        map.put("color", "what?");
-                        map.put("name", "e12");
+                        map.put("color", DefaultAttribute.createAttribute("what?"));
+                        map.put("name", DefaultAttribute.createAttribute("e12"));
                     } else if (e.equals(g.getEdge(V3, V1))) {
-                        map.put("color", "I have no color!");
-                        map.put("name", "e31");
+                        map.put("color", DefaultAttribute.createAttribute("I have no color!"));
+                        map.put("name", DefaultAttribute.createAttribute("e31"));
                     }
                     return map;
                 }
@@ -567,22 +596,24 @@ public class GraphMLExporterTest
                 new IntegerComponentNameProvider<>(), null, edgeAttributeProvider);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
-            "color", GraphMLExporter.AttributeCategory.NODE, GraphMLExporter.AttributeType.STRING,
-            "yellow");
+            "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
         exporter.registerAttribute(
-            "name", GraphMLExporter.AttributeCategory.ALL, GraphMLExporter.AttributeType.STRING,
-            "johndoe");
+            "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithNullComponentProvider()
         throws Exception
     {
         String output =
-            // @formatter:off
+        // @formatter:off
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
                 + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
@@ -618,41 +649,22 @@ public class GraphMLExporterTest
         g.addEdge(V3, V1);
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
 
-        ComponentAttributeProvider<String> vertexAttributeProvider =
-            new ComponentAttributeProvider<String>()
-            {
-                @Override
-                public Map<String, String> getComponentAttributes(String v)
-                {
-                    return null;
-                }
-            };
-
-        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider =
-            new ComponentAttributeProvider<DefaultWeightedEdge>()
-            {
-                @Override
-                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
-                {
-                    return null;
-                }
-            };
-
         GraphMLExporter<String,
             DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-                new IntegerComponentNameProvider<>(), null, vertexAttributeProvider,
-                new IntegerComponentNameProvider<>(), null, edgeAttributeProvider);
+                new IntegerComponentNameProvider<>(), null, v -> null,
+                new IntegerComponentNameProvider<>(), null, e -> null);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
-            "color", GraphMLExporter.AttributeCategory.NODE, GraphMLExporter.AttributeType.STRING,
-            "yellow");
+            "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
         exporter.registerAttribute(
-            "name", GraphMLExporter.AttributeCategory.ALL, GraphMLExporter.AttributeType.STRING,
-            "johndoe");
+            "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        XMLAssert.assertXMLEqual(output, res);
+
+        Diff diff = DiffBuilder
+            .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
 }

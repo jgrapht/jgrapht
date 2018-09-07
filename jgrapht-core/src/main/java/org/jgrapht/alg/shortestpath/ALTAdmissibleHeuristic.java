@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * An admissible heuristic for the A* algorithm using a set of landmarks and the triangle
@@ -35,9 +35,9 @@ import org.jgrapht.graph.*;
  * algorithm, all distances to and from these landmark nodes are computed and stored. Afterwards,
  * the heuristic estimates the distance from a vertex to another vertex using the already computed
  * distances to and from the landmarks and the fact that shortest path distances obey the
- * triangle-inequality. The heuristic's space requirement is O(n) per landmark where n is the number
- * of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm execution is
- * performed per landmark.
+ * triangle-inequality. The heuristic's space requirement is $O(n)$ per landmark where n is the
+ * number of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm
+ * execution is performed per landmark.
  * 
  * <p>
  * The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
@@ -67,7 +67,8 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class ALTAdmissibleHeuristic<V, E>
-    implements AStarAdmissibleHeuristic<V>
+    implements
+    AStarAdmissibleHeuristic<V>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;

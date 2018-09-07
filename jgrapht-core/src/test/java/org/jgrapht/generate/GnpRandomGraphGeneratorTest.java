@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,8 +19,10 @@ package org.jgrapht.generate;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -29,20 +31,22 @@ import junit.framework.*;
  * @since September 2016
  */
 public class GnpRandomGraphGeneratorTest
-    extends TestCase
 {
 
     private static final long SEED = 5;
 
+    @Test
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GnpRandomGraphGenerator<>(0, 1d);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
         assertEquals(0, g.edgeSet().size());
         assertEquals(0, g.vertexSet().size());
     }
 
+    @Test
     public void testBadParameters()
     {
         try {
@@ -64,12 +68,14 @@ public class GnpRandomGraphGeneratorTest
         }
     }
 
+    @Test
     public void testDirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 0.5, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(2, 1));
@@ -94,23 +100,27 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(18, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 1.0, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertEquals(30, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp3()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 0.1, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(2, 1));
@@ -120,13 +130,15 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(3, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp4WithLoops()
     {
         final boolean allowLoops = true;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 0.2, SEED, allowLoops);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(1, 1));
@@ -140,12 +152,14 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(7, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 0.5, SEED);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(1, 3));
@@ -161,12 +175,14 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(9, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 1.0, SEED);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(1, 2));
@@ -188,12 +204,14 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(15, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp3()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 0.3, SEED);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(1, 3));
@@ -204,13 +222,15 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(4, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp4WithLoops()
     {
         final boolean allowLoops = true;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(6, 0.3, SEED, allowLoops);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsEdge(1, 2));
@@ -222,19 +242,6 @@ public class GnpRandomGraphGeneratorTest
 
         assertEquals(6, g.edgeSet().size());
     }
-
-    private class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int id;
-
-        @Override
-        public Integer createVertex()
-        {
-            return ++id;
-        }
-    };
-
 }
 
 // End GnpGraphGraphGeneratorTest.java

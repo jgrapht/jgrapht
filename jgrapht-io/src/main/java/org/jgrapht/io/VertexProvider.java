@@ -33,7 +33,7 @@ public interface VertexProvider<V>
      * @param attributes any other attributes of the vertex
      * @return the vertex
      */
-    V buildVertex(String id, Map<String, String> attributes);
+    V buildVertex(String id, Map<String, Attribute> attributes);
 }
 
 // End VertexProvider.java

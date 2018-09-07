@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,23 +17,30 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
+import org.jgrapht.*;
 
-import org.jgrapht.GraphType;
+import java.io.*;
 
 /**
  * Default implementation of the graph type.
  * 
  * <p>
  * The graph type describes various properties of a graph such as whether it is directed, undirected
- * or mixed, whether it contain self-loops (edges with the same source and target vertices), whether
- * it contain parallel-edges (multiple edges with the same source and target) and whether it is
- * weighted or not.
+ * or mixed, whether it contain self-loops (a self-loop is an edge where the source vertex is the
+ * same as the target vertex), whether it contain multiple (parallel) edges (multiple edges which
+ * connect the same pair of vertices) and whether it is weighted or not.
+ * 
+ * <p>
+ * The type of a graph can be queried on runtime using method {@link Graph#getType()}. This way, for
+ * example, an algorithm can have different behavior based on whether the input graph is directed or
+ * undirected, etc.
  * 
  * @author Dimitrios Michail
  */
 public class DefaultGraphType
-    implements GraphType, Serializable
+    implements
+    GraphType,
+    Serializable
 {
     private static final long serialVersionUID = 4291049312119347474L;
 
@@ -262,6 +269,14 @@ public class DefaultGraphType
             .weighted(false).build();
     }
 
+    @Override
+    public String toString()
+    {
+        return "DefaultGraphType [directed=" + directed + ", undirected=" + undirected
+            + ", self-loops=" + selfLoops + ", multiple-edges=" + multipleEdges + ", weighted="
+            + weighted + ", allows-cycles=" + allowsCycles + ", modifiable=" + modifiable + "]";
+    }
+
     /**
      * A builder for {@link DefaultGraphType}.
      * 
@@ -305,6 +320,27 @@ public class DefaultGraphType
             this.weighted = type.isWeighted();
             this.allowCycles = type.isAllowingCycles();
             this.modifiable = type.isModifiable();
+        }
+
+        /**
+         * Construct a new Builder.
+         * 
+         * @param directed whether the graph contains directed edges
+         * @param undirected whether the graph contains undirected edges
+         */
+        public Builder(boolean directed, boolean undirected)
+        {
+            if (!directed && !undirected) {
+                throw new IllegalArgumentException(
+                    "At least one of directed or undirected must be true");
+            }
+            this.directed = directed;
+            this.undirected = undirected;
+            this.allowSelfLoops = true;
+            this.allowMultipleEdges = true;
+            this.weighted = false;
+            this.allowCycles = true;
+            this.modifiable = true;
         }
 
         /**

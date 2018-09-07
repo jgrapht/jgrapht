@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,21 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmTest
-    extends MaximumFlowMinimumCutAlgorithmTestBase
+    extends
+    MaximumFlowMinimumCutAlgorithmTestBase
 {
 
     abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -50,8 +54,7 @@ public abstract class MaximumFlowAlgorithmTest
     }
 
     static void verifyDirected(
-        int source, int sink, double expectedResult,
-        Graph<Integer, DefaultWeightedEdge> network,
+        int source, int sink, double expectedResult, Graph<Integer, DefaultWeightedEdge> network,
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow)
     {
         Double flowValue = maxFlow.getValue();
@@ -94,8 +97,7 @@ public abstract class MaximumFlowAlgorithmTest
     }
 
     private void runTestUndirected(
-        Graph<Integer, DefaultWeightedEdge> graph, int source, int sink,
-        int expectedResult)
+        Graph<Integer, DefaultWeightedEdge> graph, int source, int sink, int expectedResult)
     {
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver = createSolver(graph);
 
@@ -103,8 +105,8 @@ public abstract class MaximumFlowAlgorithmTest
     }
 
     static void verifyUndirected(
-        Graph<Integer, DefaultWeightedEdge> graph, int source, int sink,
-        int expectedResult, MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver)
+        Graph<Integer, DefaultWeightedEdge> graph, int source, int sink, int expectedResult,
+        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver)
     {
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow =
             solver.getMaximumFlow(source, sink);
@@ -147,63 +149,75 @@ public abstract class MaximumFlowAlgorithmTest
 
     }
 
+    @Test
     public void testDirectedN0()
     {
         runTestDirected(getDirectedN0(), new int[] { 1 }, new int[] { 4 }, new double[] { 5.0 });
     }
 
+    @Test
     public void testDirectedN1()
     {
         runTestDirected(
             getDirectedN1(), new int[] { 1 }, new int[] { 4057218 }, new double[] { 0.0 });
     }
 
+    @Test
     public void testDirectedN2()
     {
         runTestDirected(getDirectedN2(), new int[] { 3 }, new int[] { 6 }, new double[] { 2 });
     }
 
+    @Test
     public void testDirectedN3()
     {
         runTestDirected(getDirectedN3(), new int[] { 5 }, new int[] { 6 }, new double[] { 4.0 });
     }
 
+    @Test
     public void testDirectedN4()
     {
         runTestDirected(
             getDirectedN4(), new int[] { 1 }, new int[] { 4 }, new double[] { 2000000000.0 });
     }
 
+    @Test
     public void testDirectedN6()
     {
         runTestDirected(getDirectedN6(), new int[] { 1 }, new int[] { 50 }, new double[] { 20.0 });
     }
 
+    @Test
     public void testDirectedN7()
     {
         runTestDirected(getDirectedN7(), new int[] { 1 }, new int[] { 50 }, new double[] { 31.0 });
     }
 
+    @Test
     public void testDirectedN8()
     {
         runTestDirected(getDirectedN8(), new int[] { 0 }, new int[] { 5 }, new double[] { 23 });
     }
 
+    @Test
     public void testDirectedN9()
     {
         runTestDirected(getDirectedN9(), new int[] { 0 }, new int[] { 8 }, new double[] { 22 });
     }
 
+    @Test
     public void testDirectedN10()
     {
         runTestDirected(getDirectedN10(), new int[] { 1 }, new int[] { 99 }, new double[] { 173 });
     }
 
+    @Test
     public void testDirectedN11()
     {
         runTestDirected(getDirectedN11(), new int[] { 1 }, new int[] { 99 }, new double[] { 450 });
     }
 
+    @Test
     public void testDirectedN12()
     {
         runTestDirected(getDirectedN12(), new int[] { 1 }, new int[] { 99 }, new double[] { 203 });
@@ -211,46 +225,55 @@ public abstract class MaximumFlowAlgorithmTest
 
     /*************** TEST CASES FOR UNDIRECTED GRAPHS ***************/
 
+    @Test
     public void testUndirectedN1()
     {
         runTestUndirected(getUndirectedN1(), 0, 8, 28);
     }
 
+    @Test
     public void testUndirectedN2()
     {
         runTestUndirected(getUndirectedN2(), 1, 4, 93);
     }
 
+    @Test
     public void testUndirectedN3()
     {
         runTestUndirected(getUndirectedN3(), 1, 49, 104);
     }
 
+    @Test
     public void testUndirectedN4()
     {
         runTestUndirected(getUndirectedN4(), 1, 99, 634);
     }
 
+    @Test
     public void testUndirectedN5()
     {
         runTestUndirected(getUndirectedN5(), 1, 49, 112);
     }
 
+    @Test
     public void testUndirectedN6()
     {
         runTestUndirected(getUndirectedN6(), 1, 69, 194);
     }
 
+    @Test
     public void testUndirectedN7()
     {
         runTestUndirected(getUndirectedN7(), 1, 69, 33);
     }
 
+    @Test
     public void testUndirectedN8()
     {
         runTestUndirected(getUndirectedN8(), 1, 99, 501);
     }
 
+    @Test
     public void testUndirectedN9()
     {
         runTestUndirected(getUndirectedN9(), 1, 2, 0);

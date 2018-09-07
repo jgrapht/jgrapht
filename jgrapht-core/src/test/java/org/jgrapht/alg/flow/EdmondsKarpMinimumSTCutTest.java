@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,19 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
+
+import java.util.*;
 
 /**
  * @author Joris Kinable
  */
 public class EdmondsKarpMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+    extends
+    MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -36,6 +38,7 @@ public class EdmondsKarpMinimumSTCutTest
         return new EdmondsKarpMFImpl<>(network);
     }
 
+    @Test
     public void testRandomDirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {
@@ -61,6 +64,7 @@ public class EdmondsKarpMinimumSTCutTest
         }
     }
 
+    @Test
     public void testRandomUndirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {

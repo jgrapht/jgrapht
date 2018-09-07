@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * An unmodifiable view of the backing graph specified in the constructor. This graph allows modules
@@ -41,11 +41,13 @@ import org.jgrapht.*;
  * @since Jul 24, 2003
  */
 public class AsUnmodifiableGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable
+    extends
+    GraphDelegator<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -8186686968362705760L;
-    
+
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
     /**

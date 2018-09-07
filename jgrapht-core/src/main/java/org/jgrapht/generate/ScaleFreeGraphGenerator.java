@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2008-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates directed or undirected
@@ -34,7 +34,8 @@ import org.jgrapht.*;
  * @author Ilya Razenshteyn
  */
 public class ScaleFreeGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final int size;
     private final Random rng;
@@ -81,21 +82,16 @@ public class ScaleFreeGraphGenerator<V, E>
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
-     * @param vertexFactory called to produce new vertices
      * @param resultMap unused parameter, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         List<V> vertexList = new ArrayList<>();
         List<Integer> degrees = new ArrayList<>();
         int degreeSum = 0;
         for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
-            if (!target.addVertex(newVertex)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
-            }
+            V newVertex = target.addVertex();
             int newDegree = 0;
             while ((newDegree == 0) && (i != 0)) // we want our graph to be connected
             {

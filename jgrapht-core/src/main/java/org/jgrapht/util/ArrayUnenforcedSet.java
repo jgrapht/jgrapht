@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2006-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -34,8 +34,10 @@ import java.util.*;
  * @author John V. Sichi
  */
 public class ArrayUnenforcedSet<E>
-    extends ArrayList<E>
-    implements Set<E>
+    extends
+    ArrayList<E>
+    implements
+    Set<E>
 {
     private static final long serialVersionUID = -7413250161201811238L;
 
@@ -85,7 +87,8 @@ public class ArrayUnenforcedSet<E>
      * Multiple inheritance helper.
      */
     private class SetForEquality
-        extends AbstractSet<E>
+        extends
+        AbstractSet<E>
     {
         @Override
         public Iterator<E> iterator()

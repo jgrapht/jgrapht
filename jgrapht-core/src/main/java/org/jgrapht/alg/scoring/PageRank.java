@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * PageRank implementation.
@@ -41,15 +41,15 @@ import org.jgrapht.alg.interfaces.*;
  * </p>
  *
  * <p>
- * Each iteration of the algorithm runs in linear time O(n+m) when n is the number of nodes and m
- * the number of edges of the graph. The maximum number of iterations can be adjusted by the caller.
- * The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
+ * Each iteration of the algorithm runs in linear time $O(n+m)$ when $n$ is the number of nodes and
+ * $m$ the number of edges of the graph. The maximum number of iterations can be adjusted by the
+ * caller. The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
  * </p>
  * 
  * <p>
  * If the graph is a weighted graph, a weighted variant is used where the probability of following
- * an edge e out of node v is equal to the weight of e over the sum of weights of all outgoing edges
- * of v.
+ * an edge e out of node $v$ is equal to the weight of $e$ over the sum of weights of all outgoing
+ * edges of $v$.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -59,7 +59,8 @@ import org.jgrapht.alg.interfaces.*;
  * @since August 2016
  */
 public final class PageRank<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+    implements
+    VertexScoringAlgorithm<V, Double>
 {
     /**
      * Default number of maximum iterations.

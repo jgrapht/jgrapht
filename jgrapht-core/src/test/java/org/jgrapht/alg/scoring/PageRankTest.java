@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,8 +19,9 @@ package org.jgrapht.alg.scoring;
 
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for PageRank
@@ -28,9 +29,9 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class PageRankTest
-    extends TestCase
 {
 
+    @Test
     public void testGraph2Nodes()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -45,6 +46,7 @@ public class PageRankTest
         assertEquals(pr.getVertexScore("1"), pr.getVertexScore("2"), 0.0001);
     }
 
+    @Test
     public void testGraph3Nodes()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -62,6 +64,7 @@ public class PageRankTest
         assertEquals(pr.getVertexScore("1"), pr.getVertexScore("3"), 0.0001);
     }
 
+    @Test
     public void testGraphWikipedia()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -111,6 +114,7 @@ public class PageRankTest
         assertEquals(pr.getVertexScore("5"), 0.01616, 0.0001);
     }
 
+    @Test
     public void testUndirectedGraphWikipedia()
     {
         Pseudograph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -160,6 +164,7 @@ public class PageRankTest
         assertEquals(pr.getVertexScore("5"), 0.0373, 0.0001);
     }
 
+    @Test
     public void testWeightedGraph1()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -182,6 +187,7 @@ public class PageRankTest
         assertEquals(pr.getVertexScore("c"), 0.2149, 0.0001);
     }
 
+    @Test
     public void testUnweightedGraph1()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -208,6 +214,7 @@ public class PageRankTest
         // }
     }
 
+    @Test
     public void testUnweightedGraph2()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -235,6 +242,7 @@ public class PageRankTest
         // }
     }
 
+    @Test
     public void testEmptyGraph()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -244,6 +252,7 @@ public class PageRankTest
         assertTrue(pr.getScores().isEmpty());
     }
 
+    @Test
     public void testNonExistantVertex()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -267,6 +276,7 @@ public class PageRankTest
         }
     }
 
+    @Test
     public void testBadParameters()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);

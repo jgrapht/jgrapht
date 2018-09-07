@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,16 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-
 import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
+
+import java.util.*;
 
 /**
  * Barabási-Albert growth and preferential attachment graph generator.
@@ -36,9 +29,9 @@ import org.jgrapht.VertexFactory;
  * random networks. Science, 286:509-512, 1999.
  * 
  * <p>
- * The generator starts with a complete graph of m0 nodes and grows the network by adding n-m0
- * additional nodes. The additional nodes are added one by one and each of them is connected to m
- * previously added nodes, where the probability of connecting to a node is proportional to its
+ * The generator starts with a complete graph of $m_0$ nodes and grows the network by adding $n -
+ * m_0$ additional nodes. The additional nodes are added one by one and each of them is connected to
+ * $m$ previously added nodes, where the probability of connecting to a node is proportional to its
  * degree.
  * 
  * <p>
@@ -46,6 +39,9 @@ import org.jgrapht.VertexFactory;
  * generator also works with directed networks where the probabilities are proportional to the sum
  * of incoming and outgoing degrees. For a more general discussion see the paper: M. E. J. Newman.
  * The Structure and Function of Complex Networks. SIAM Rev., 45(2):167--256, 2003.
+ *
+ * <p>
+ *  For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
  * 
  * @author Dimitrios Michail
  * @since February 2017
@@ -54,7 +50,8 @@ import org.jgrapht.VertexFactory;
  * @param <E> the graph edge type
  */
 public class BarabasiAlbertGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int m0;
@@ -122,19 +119,17 @@ public class BarabasiAlbertGraphGenerator<V, E>
      * Generates an instance.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Create complete graph with m0 nodes
          */
         Set<V> oldNodes = new HashSet<>(target.vertexSet());
         Set<V> newNodes = new HashSet<>();
-        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, vertexFactory, resultMap);
+        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, resultMap);
         target.vertexSet().stream().filter(v -> !oldNodes.contains(v)).forEach(newNodes::add);
 
         List<V> nodes = new ArrayList<>(n * m);
@@ -150,10 +145,7 @@ public class BarabasiAlbertGraphGenerator<V, E>
          * Grow network with preferential attachment
          */
         for (int i = m0; i < n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
-            }
+            V v = target.addVertex();
 
             List<V> newEndpoints = new ArrayList<>();
             int added = 0;

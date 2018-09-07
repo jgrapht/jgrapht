@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,12 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link BarabasiAlbertGraphGenerator}.
@@ -69,8 +66,9 @@ public class BarabasiAlbertGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new BarabasiAlbertGraphGenerator<>(3, 2, 10, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(10, g.vertexSet().size());
     }
@@ -82,8 +80,9 @@ public class BarabasiAlbertGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new BarabasiAlbertGraphGenerator<>(1, 1, 20, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(20, g.vertexSet().size());
     }
@@ -95,8 +94,9 @@ public class BarabasiAlbertGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new BarabasiAlbertGraphGenerator<>(3, 2, 10, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(10, g.vertexSet().size());
     }
@@ -108,12 +108,13 @@ public class BarabasiAlbertGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new BarabasiAlbertGraphGenerator<>(1, 1, 20, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(20, g.vertexSet().size());
     }
-    
+
     @Test
     public void testUndirectedWithGraphWhichAlreadyHasSomeVertices()
     {
@@ -121,12 +122,12 @@ public class BarabasiAlbertGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new BarabasiAlbertGraphGenerator<>(3, 2, 10, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         g.addVertex(1000);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g);
 
         assertEquals(11, g.vertexSet().size());
     }
-    
 
 }

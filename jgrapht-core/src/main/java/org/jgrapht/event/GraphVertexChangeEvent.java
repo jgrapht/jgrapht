@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -29,7 +29,8 @@ package org.jgrapht.event;
  * @since Aug 10, 2003
  */
 public class GraphVertexChangeEvent<V>
-    extends GraphChangeEvent
+    extends
+    GraphChangeEvent
 {
     private static final long serialVersionUID = 3690189962679104053L;
 

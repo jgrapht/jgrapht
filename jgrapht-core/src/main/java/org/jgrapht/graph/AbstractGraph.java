@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A skeletal implementation of the <tt>Graph</tt> interface, to minimize the effort required to
@@ -34,7 +34,8 @@ import org.jgrapht.util.*;
  * @see Graph
  */
 public abstract class AbstractGraph<V, E>
-    implements Graph<V, E>
+    implements
+    Graph<V, E>
 {
     /**
      * Construct a new empty graph object.
@@ -253,7 +254,7 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        Graph<V, E> g = TypeUtil.uncheckedCast(obj, null);
+        Graph<V, E> g = TypeUtil.uncheckedCast(obj);
 
         if (!vertexSet().equals(g.vertexSet())) {
             return false;

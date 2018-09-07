@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,7 +28,8 @@ package org.jgrapht.event;
  * @since Aug 6, 2003
  */
 public class TraversalListenerAdapter<V, E>
-    implements TraversalListener<V, E>
+    implements
+    TraversalListener<V, E>
 {
     /**
      * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)

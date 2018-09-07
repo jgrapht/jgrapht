@@ -1,0 +1,5 @@
+# Markdown files get expanded from ../guide-templates, so ignore
+# generated output here.  Do NOT try to git add .md files here;
+# put them in ../guide-templates instead.
+
+*.md

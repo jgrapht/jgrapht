@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2018, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,13 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link DepthFirstIteratorTest} class.
@@ -30,11 +33,12 @@ import org.jgrapht.graph.*;
  * the algorithm. This could cause false failures if the traversal implementation changes.
  * </p>
  *
- * @author Liviu Rau
+ * @author Liviu Rau, Patrick Sharp
  * @since Jul 30, 2003
  */
 public class DepthFirstIteratorTest
-    extends AbstractGraphIteratorTest
+    extends
+    CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -57,6 +61,37 @@ public class DepthFirstIteratorTest
     }
 
     @Override
+    String getExpectedCCStr1()
+    {
+        return "orphan";
+    }
+
+    @Override
+    String getExpectedCCStr2()
+    {
+        return "orphan,7,9,4,8,2";
+    }
+
+    @Override
+    String getExpectedCCStr3()
+    {
+        return "orphan,7,9,4,8,2,3,6,1,5";
+    }
+
+    @Override
+    String getExpectedCCFinishString()
+    {
+        return "orphan:4:9:2:8:7:1:6:5:3:";
+    }
+
+    @Override
+    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
+        Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex)
+    {
+        return new DepthFirstIterator<>(g, startVertex);
+    }
+
+    @Override
     AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
         Graph<String, DefaultWeightedEdge> g, String vertex)
     {
@@ -69,6 +104,7 @@ public class DepthFirstIteratorTest
     /**
      * See <a href="http://sf.net/projects/jgrapht">Sourceforge bug 1169182</a> for details.
      */
+    @Test
     public void testBug1169182()
     {
         Graph<String, DefaultEdge> dg = new DefaultDirectedGraph<>(DefaultEdge.class);

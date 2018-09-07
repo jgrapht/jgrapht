@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.jgrapht</groupId>
+		<artifactId>jgrapht</artifactId>
+		<version>1.2.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>jgrapht-bundle</artifactId>
+	<name>JGraphT - Bundle</name>
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+	</properties>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
+			<url>http://jgrapht.sourceforge.net/LGPL.html</url>
+			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>Eclipse Public License (EPL) 1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<instructions>
+						<Automatic-Module-Name>org.jgrapht.bundle</Automatic-Module-Name>
+						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformers>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/license-EPL</resource>
+							<file>${main.basedir}/license-EPL.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/license-LGPL</resource>
+							<file>${main.basedir}/license-LGPL.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/jheaps-license</resource>
+							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/guava-license</resource>
+							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/antlr-license</resource>
+							<file>${main.basedir}/etc/licenses/antlr-license.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/commons-lang3-license</resource>
+							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/jgraphx-license</resource>
+							<file>${main.basedir}/etc/licenses/jgraphx-license.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/fastutil-license</resource>
+							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+							<resources>
+	                    		<resource>META-INF/NOTICE</resource>
+	                    		<resource>META-INF/NOTICE.txt</resource>
+	                    		<resource>license.txt</resource>
+                    		</resources>
+                		</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
+                		</transformer>
+					</transformers>
+					<shadedArtifactAttached>false</shadedArtifactAttached>
+					<shadedClassifierName></shadedClassifierName>
+				</configuration>
+			</plugin>
+			<plugin>
+		     <groupId>org.apache.maven.plugins</groupId>
+		     <artifactId>maven-deploy-plugin</artifactId>
+		     <configuration>
+		       <skip>true</skip>
+		     </configuration>
+		   </plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-opt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-ext</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

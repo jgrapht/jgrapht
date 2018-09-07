@@ -17,11 +17,11 @@
  */
 package org.jgrapht.io;
 
+import org.apache.commons.lang3.*;
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.jgrapht.*;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).
@@ -41,8 +41,10 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class GmlExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     private static final String CREATOR = "JGraphT GML Exporter";
     private static final String VERSION = "1";

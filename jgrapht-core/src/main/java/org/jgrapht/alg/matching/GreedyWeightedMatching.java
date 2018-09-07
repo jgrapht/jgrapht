@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,31 +17,42 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 
+import java.util.*;
+
 /**
  * The greedy algorithm for computing a maximum weight matching in an arbitrary graph. The algorithm
- * is a 1/2-approximation algorithm and runs in O(n + m log n) where n is the number of vertices and
- * m is the number of edges of the graph. This implementation accepts directed and undirected graphs
- * which may contain self-loops and multiple edges. There is no assumption on the edge weights, i.e.
- * they can also be negative or zero.
+ * runs in $O(m + m \log n)$ where $n$ is the number of vertices and $m$ is the number of edges of
+ * the graph. This implementation accepts directed and undirected graphs which may contain
+ * self-loops and multiple (parallel) edges. There is no assumption on the edge weights, i.e. they
+ * can also be negative or zero.
  * 
  * <p>
- * The greedy algorithm is the algorithm that first orders the edge set in non-increasing order of
- * weights and then greedily constructs a maximal cardinality matching out of the edges with
- * positive weight. A maximal cardinality matching (not to be confused with maximum cardinality) is
- * a matching that cannot be increased in cardinality without removing an edge first.
+ * This algorithm can be run in two modes: with and without edge cost normalization. Without
+ * normalization, the algorithm first orders the edge set in non-increasing order of weights and
+ * then greedily constructs a maximal cardinality matching out of the edges with positive weight. A
+ * maximal cardinality matching (not to be confused with maximum cardinality) is a matching that
+ * cannot be increased in cardinality without removing an edge first. The resulting matching is
+ * guaranteed to be a $\frac{1}{2}$-Approximation. <br>
+ * With normalization, the edges are sorted in non-increasing order of their normalized costs
+ * $\frac{c(u,v)}{d(u)+d(v)}$ instead, after which the algorithm proceeds in the same manner. Here,
+ * $c(u,v)$ is the cost of edge $(u,v)$, and $d(u)$ resp $d(v)$ are the degrees of vertices $u$ resp
+ * $v$. Running this algorithm in normalized mode often (but not always!) produces a better result
+ * than running the algorithm without normalization. <i>Note however that the normalized version
+ * does NOT produce a $\frac{1}{2}$-approximation</i>. See <a href=
+ * "https://mathoverflow.net/questions/269526/is-greedy-matching-algorithm-with-normalized-edge-weights-a-2-approximation/269760#269760">this
+ * proof for details.</a> The runtime complexity remains the same, independent of whether
+ * normalization is used.
  *
  * <p>
  * For more information about approximation algorithms for the maximum weight matching problem in
  * arbitrary graphs see:
  * <ul>
- * <li>R. Preis, Linear Time 1/2-Approximation Algorithm for Maximum Weighted Matching in General
- * Graphs. Symposium on Theoretical Aspects of Computer Science, 259-269, 1999.</li>
+ * <li>R. Preis, Linear Time $\frac{1}{2}$-Approximation Algorithm for Maximum Weighted Matching in
+ * General Graphs. Symposium on Theoretical Aspects of Computer Science, 259-269, 1999.</li>
  * <li>D.E. Drake, S. Hougardy, A Simple Approximation Algorithm for the Weighted Matching Problem,
  * Information Processing Letters 85, 211-213, 2003.</li>
  * </ul>
@@ -55,55 +66,70 @@ import org.jgrapht.alg.util.*;
  * @since September 2016
  */
 public class GreedyWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
+    private final boolean normalizeEdgeCosts;
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm. Floating
      * point values are compared using {@link #DEFAULT_EPSILON} tolerance.
      * 
      * @param graph the input graph
+     * @param normalizeEdgeCosts boolean indicating whether edge normalization has to be used.
      */
-    public GreedyWeightedMatching(Graph<V, E> graph)
+    public GreedyWeightedMatching(Graph<V, E> graph, boolean normalizeEdgeCosts)
     {
-        this(graph, DEFAULT_EPSILON);
+        this(graph, normalizeEdgeCosts, DEFAULT_EPSILON);
     }
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm.
      * 
      * @param graph the input graph
+     * @param normalizeEdgeCosts boolean indicating whether edge normalization has to be used.
      * @param epsilon tolerance when comparing floating point values
      */
-    public GreedyWeightedMatching(Graph<V, E> graph, double epsilon)
+    public GreedyWeightedMatching(Graph<V, E> graph, boolean normalizeEdgeCosts, double epsilon)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
         }
         this.graph = graph;
         this.comparator = new ToleranceDoubleComparator(epsilon);
+        this.normalizeEdgeCosts = normalizeEdgeCosts;
     }
 
     /**
-     * Get a matching that is a 1/2-approximation of the maximum weighted matching.
+     * Get a matching that is a $\frac{1}{2}$-approximation of the maximum weighted matching.
      * 
      * @return a matching
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         // sort edges in non-decreasing order of weight
         // (the lambda uses e1 and e2 in the reverse order on purpose)
         List<E> allEdges = new ArrayList<>(graph.edgeSet());
-        Collections.sort(
-            allEdges,
-            (e1, e2) -> comparator.compare(graph.getEdgeWeight(e2), graph.getEdgeWeight(e1)));
+        if (normalizeEdgeCosts) {
+            allEdges.sort((e1, e2) -> {
+                double degreeE1 = graph.degreeOf(graph.getEdgeSource(e1))
+                    + graph.degreeOf(graph.getEdgeTarget(e1));
+                double degreeE2 = graph.degreeOf(graph.getEdgeSource(e2))
+                    + graph.degreeOf(graph.getEdgeTarget(e2));
+                return comparator.compare(
+                    graph.getEdgeWeight(e2) / degreeE2, graph.getEdgeWeight(e1) / degreeE1);
+            });
+        } else {
+            allEdges.sort(
+                (e1, e2) -> comparator.compare(graph.getEdgeWeight(e2), graph.getEdgeWeight(e1)));
+        }
 
         double matchingWeight = 0d;
         Set<E> matching = new HashSet<>();
-        Set<V> matchedVertices = new HashSet<V>();
+        Set<V> matchedVertices = new HashSet<>();
 
         // find maximal matching
         for (E e : allEdges) {
@@ -121,7 +147,7 @@ public class GreedyWeightedMatching<V, E>
         }
 
         // return matching
-        return new MatchingImpl<>(matching, matchingWeight);
+        return new MatchingImpl<>(graph, matching, matchingWeight);
     }
 
 }

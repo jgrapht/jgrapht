@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates an <a href="http://mathworld.wolfram.com/EmptyGraph.html">empty graph</a> of any size.
@@ -32,23 +32,22 @@ import org.jgrapht.*;
  * @since Sep 16, 2003
  */
 public class EmptyGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-    private int size;
+    private final int size;
 
     /**
      * Construct a new EmptyGraphGenerator.
      *
      * @param size number of vertices to be generated
-     *
      * @throws IllegalArgumentException if the specified size is negative.
      */
     public EmptyGraphGenerator(int size)
     {
         if (size < 0) {
-            throw new IllegalArgumentException("must be non-negative");
+            throw new IllegalArgumentException("size must be non-negative");
         }
-
         this.size = size;
     }
 
@@ -56,11 +55,10 @@ public class EmptyGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         for (int i = 0; i < size; ++i) {
-            target.addVertex(vertexFactory.createVertex());
+            target.addVertex();
         }
     }
 }

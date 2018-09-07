@@ -26,7 +26,8 @@ package org.jgrapht.io;
  * @author Trevor Harmon
  */
 public class StringComponentNameProvider<T>
-    implements ComponentNameProvider<T>
+    implements
+    ComponentNameProvider<T>
 {
 
     /**

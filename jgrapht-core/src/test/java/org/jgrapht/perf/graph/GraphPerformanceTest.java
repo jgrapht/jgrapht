@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2015-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,22 +17,23 @@
  */
 package org.jgrapht.perf.graph;
 
-import java.util.*;
-import java.util.concurrent.*;
-
-import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.specifics.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
 
-import junit.framework.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * Benchmark class to compare different graph implementations. The benchmark creates a graph, runs
@@ -43,7 +44,6 @@ import junit.framework.*;
  * multiple graphs. Not sure how to achieve that through the JMH framework.
  */
 public class GraphPerformanceTest
-    extends TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
@@ -70,7 +70,8 @@ public class GraphPerformanceTest
         @Setup
         public void setup()
         {
-            blackhole = new Blackhole();
+            blackhole = new Blackhole(
+                "Today's password is swordfish. I understand instantiating Blackholes directly is dangerous.");
         }
 
         /**
@@ -166,14 +167,17 @@ public class GraphPerformanceTest
      * optimized for low memory usage, but performs edge retrieval operations fairly slow.
      */
     public static class MemoryEfficientDirectedGraphBenchmark
-        extends DirectedGraphBenchmarkBase
+        extends
+        DirectedGraphBenchmarkBase
     {
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new MemoryEfficientDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            rgg.generateGraph(graph, new IntegerVertexFactory(1), null);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> graph = new MemoryEfficientDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            rgg.generateGraph(graph);
             return graph;
         }
     }
@@ -183,18 +187,22 @@ public class GraphPerformanceTest
      * perform quick edge retrievals.
      */
     public static class FastLookupDirectedGraphBenchmark
-        extends DirectedGraphBenchmarkBase
+        extends
+        DirectedGraphBenchmarkBase
     {
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            rgg.generateGraph(graph, new IntegerVertexFactory(1), null);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            rgg.generateGraph(graph);
             return graph;
         }
     }
 
+    @Test
     public void testRandomGraphBenchmark()
         throws RunnerException
     {
@@ -218,17 +226,19 @@ public class GraphPerformanceTest
      * @param <E> the graph edge type
      */
     public static class MemoryEfficientDirectedWeightedGraph<V, E>
-        extends SimpleDirectedWeightedGraph<V, E>
+        extends
+        SimpleDirectedWeightedGraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 
-        public MemoryEfficientDirectedWeightedGraph(Class<? extends E> edgeClass)
+        public MemoryEfficientDirectedWeightedGraph(
+            Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
-            super(edgeClass);
+            super(vertexSupplier, edgeSupplier);
         }
 
         @Override
-        protected Specifics<V, E> createSpecifics()
+        protected Specifics<V, E> createSpecifics(boolean directed)
         {
             return new DirectedSpecifics<>(this);
         }

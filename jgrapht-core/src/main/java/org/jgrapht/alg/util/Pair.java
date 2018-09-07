@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2018, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,8 @@ import java.util.*;
  * 
  */
 public class Pair<A, B>
-    implements Serializable
+    implements
+    Serializable
 {
     private static final long serialVersionUID = 8176288675989092842L;
 

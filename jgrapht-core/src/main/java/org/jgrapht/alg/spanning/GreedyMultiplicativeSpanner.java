@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,21 +17,22 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
 
+import java.util.*;
+
 /**
- * Greedy algorithm for (2k-1)-multiplicative spanner construction (for any integer
+ * Greedy algorithm for $(2k-1)$-multiplicative spanner construction (for any integer
  * {@literal k >= 1}).
  *
  * <p>
- * The spanner is guaranteed to contain O(n^{1+1/k}) edges and the shortest path distance between
- * any two vertices in the spanner is at most 2k-1 times the corresponding shortest path distance in
- * the original graph. Here n denotes the number of vertices of the graph.
+ * The spanner is guaranteed to contain $O(n^{1+1/k})$ edges and the shortest path distance between
+ * any two vertices in the spanner is at most $2k-1$ times the corresponding shortest path distance
+ * in the original graph. Here n denotes the number of vertices of the graph.
  *
  * <p>
  * The algorithm is described in: Althoefer, Das, Dobkin, Joseph, Soares.
@@ -39,14 +40,14 @@ import org.jgrapht.util.*;
  * Computational Geometry 9(1):81-100, 1993.
  *
  * <p>
- * If the graph is unweighted the algorithm runs in O(m n^{1+1/k}) time. Setting k to infinity will
- * result in a slow version of Kruskal's algorithm where cycle detection is performed by a BFS
+ * If the graph is unweighted the algorithm runs in $O(m n^{1+1/k})$ time. Setting $k$ to infinity
+ * will result in a slow version of Kruskal's algorithm where cycle detection is performed by a BFS
  * computation. In such a case use the implementation of Kruskal with union-find. Here n and m are
  * the number of vertices and edges of the graph respectively.
  *
  * <p>
- * If the graph is weighted the algorithm runs in O(m (n^{1+1/k} + nlogn)) time by using Dijkstra's
- * algorithm. Edge weights must be non-negative.
+ * If the graph is weighted the algorithm runs in $O(m (n^{1+1/k} + n \log n))$ time by using
+ * Dijkstra's algorithm. Edge weights must be non-negative.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -55,14 +56,15 @@ import org.jgrapht.util.*;
  * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpanner<V, E>
-    implements SpannerAlgorithm<E>
+    implements
+    SpannerAlgorithm<E>
 {
     private final Graph<V, E> graph;
     private final int k;
     private static final int MAX_K = 1 << 29;
 
     /**
-     * Constructs instance to compute a (2k-1)-spanner of an undirected graph.
+     * Constructs instance to compute a $(2k-1)$-spanner of an undirected graph.
      * 
      * @param graph an undirected graph
      * @param k positive integer.
@@ -104,9 +106,7 @@ public class GreedyMultiplicativeSpanner<V, E>
         {
             // sort edges
             ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
-            Collections.sort(
-                allEdges, (e1, e2) -> Double
-                    .valueOf(graph.getEdgeWeight(e1)).compareTo(graph.getEdgeWeight(e2)));
+            allEdges.sort(Comparator.comparingDouble(graph::getEdgeWeight));
 
             // check precondition
             double minWeight = graph.getEdgeWeight(allEdges.get(0));
@@ -137,7 +137,8 @@ public class GreedyMultiplicativeSpanner<V, E>
     }
 
     private class UnweightedSpannerAlgorithm
-        extends SpannerAlgorithmBase
+        extends
+        SpannerAlgorithmBase
     {
         protected Graph<V, E> spanner;
         protected Map<V, Integer> vertexDistance;
@@ -146,13 +147,15 @@ public class GreedyMultiplicativeSpanner<V, E>
 
         public UnweightedSpannerAlgorithm()
         {
-            spanner = new SimpleGraph<V, E>(graph.getEdgeFactory());
+            spanner = GraphTypeBuilder
+                .<V, E> undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
+                .edgeSupplier(graph.getEdgeSupplier()).buildGraph();
             touchedVertices = new ArrayDeque<V>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
                 touchedVertices.push(v);
             }
-            vertexDistance = new HashMap<V, Integer>(graph.vertexSet().size());
+            vertexDistance = new HashMap<>(graph.vertexSet().size());
             queue = new ArrayDeque<>();
         }
 
@@ -211,7 +214,8 @@ public class GreedyMultiplicativeSpanner<V, E>
     }
 
     private class WeightedSpannerAlgorithm
-        extends SpannerAlgorithmBase
+        extends
+        SpannerAlgorithmBase
     {
         protected Graph<V, DefaultWeightedEdge> spanner;
         protected FibonacciHeap<V> heap;
@@ -257,7 +261,7 @@ public class GreedyMultiplicativeSpanner<V, E>
                     double vDistance = uDistance + spanner.getEdgeWeight(e);
 
                     if (vNode == null) { // no distance
-                        vNode = new FibonacciHeapNode<V>(v);
+                        vNode = new FibonacciHeapNode<>(v);
                         nodes.put(v, vNode);
                         heap.insert(vNode, vDistance);
                     } else if (vDistance < vNode.getKey()) {

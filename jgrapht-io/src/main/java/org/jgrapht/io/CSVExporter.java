@@ -17,10 +17,10 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Exports a graph into a CSV Format or any other Delimiter-separated value format.
@@ -51,8 +51,10 @@ import org.jgrapht.*;
  * @since August 2016
  */
 public class CSVExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 

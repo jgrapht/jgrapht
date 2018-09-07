@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Christoph Zauner and Contributors.
+ * (C) Copyright 2003-2018, by Christoph Zauner and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,7 +24,8 @@ package org.jgrapht.graph;
  * @author Christoph Zauner
  */
 public class TestEdge
-    extends DefaultEdge
+    extends
+    DefaultEdge
 {
 
     private static final long serialVersionUID = 1L;
