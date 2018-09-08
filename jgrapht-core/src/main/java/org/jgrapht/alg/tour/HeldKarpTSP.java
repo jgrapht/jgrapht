@@ -179,7 +179,9 @@ public class HeldKarpTSP<V, E>
         for (int step = 1; step < n; step++) {
             int nextNode = -1;
             for (int node = 1; node < n; node++) {
-                if (Double.compare(C[node][lastState ^ (1 << node)] + W[lastNode][node], C[lastNode][lastState]) == 0) {
+                if ((lastState & (1 << node)) == 0 && W[lastNode][node] != Double.MAX_VALUE &&
+                        C[node][lastState ^ (1 << node)] != Double.MIN_VALUE &&
+                        Double.compare(C[node][lastState ^ (1 << node)] + W[lastNode][node], C[lastNode][lastState]) == 0) {
                     nextNode = node;
                     break;
                 }

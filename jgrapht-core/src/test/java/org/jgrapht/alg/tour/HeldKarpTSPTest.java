@@ -248,6 +248,37 @@ public class HeldKarpTSPTest
     }
 
     @Test
+    public void testDirectedWeightedPseudograph(){
+        Graph<Integer, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        int[][] weights = new int[5][];
+
+        weights[0] = new int[]{0, 9, 3, 3, 7};
+        weights[1] = new int[]{9, 0, 10, 7, 5};
+        weights[2] = new int[]{3, 10, 0, 1, 1};
+        weights[3] = new int[]{3, 7, 1, 0, 10};
+        weights[4] = new int[]{7, 5, 1, 10, 0};
+
+        for (int i = 0; i < 5; i++) {
+            g.addVertex(i);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                g.addEdge(i, j);
+                g.setEdgeWeight(g.getEdge(i, j), weights[i][j]);
+            }
+        }
+
+        GraphPath<Integer, DefaultWeightedEdge> tour =
+                new HeldKarpTSP<Integer, DefaultWeightedEdge>().getTour(g);
+
+        assertNotNull(tour);
+        assertHamiltonian(g, tour);
+        assertEquals(19d, tour.getWeight(), 1e-9);
+    }
+
+    @Test
     public void testWikiExampleSymmetric4Cities()
     {
         Graph<String, DefaultWeightedEdge> g = symmetric4CitiesGraph();
