@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * This is an implementation of the <a href="https://en.wikipedia.org/wiki/Christofides_algorithm">
  * Christofides algorithm</a>. The algorithms is a $3/2$-approximation assuming that the input graph
  * satisfies triangle inequality and all edge weights are nonnegative. The implementation requires the input
- * graph to be undirected and complete. The worst case running time complexity is $\mathcal{O}(V^3E)$.
+ * graph to be <i>undirected</i> and <i>complete</i>. The worst case running time complexity is $\mathcal{O}(V^3E)$.
  * <p>
  * The algorithm performs following steps to compute the resulting tour:
  * <ol>
@@ -66,8 +66,8 @@ import java.util.stream.Collectors;
  * the cost of the edges not from the matching is greater than or equal to the cost of the matching edges.</li>
  * </ul>
  * <p>
- * For more details, see <i>Christofides, Nicos. (1976). Worst-Case Analysis of a New Heuristic for the Traveling
- * Salesman Problem. Carnegie Mellon University. 10.</i>
+ * For more details, see <i>Christofides, N.: Worst-case analysis of a new heuristic for the travelling salesman
+ * problem. Graduate School of Industrial Administration, Carnegie Mellon University (1976).</i>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -98,7 +98,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
             throw new IllegalArgumentException("Graph must be undirected");
         }
         if (!GraphTests.isComplete(graph)) {
-            throw new IllegalArgumentException("Graph is not complete");
+            throw new IllegalArgumentException("Graph must be complete");
         }
         if (graph.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Graph contains no vertices");
