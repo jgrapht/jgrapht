@@ -17,10 +17,13 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -575,6 +578,23 @@ public abstract class Graphs
     public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex)
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
+    }
+
+    /**
+     * Compute a new mapping from the vertices of a graph to the integer range $[0, n)$
+     * where $n$ is the number of vertices in the graph.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @throws NullPointerException if {@code graph} is {@code null}
+     *
+     * @return the mapping as an object containing the {@code vertexMap} and the {@code indexList}
+     *
+     * @see VertexToIntegerMapping
+     */
+    public static <V, E> VertexToIntegerMapping<V> getVertexToIntegerMapping(Graph<V, E> graph){
+        return new VertexToIntegerMapping<>(Objects.requireNonNull(graph).vertexSet());
     }
 }
 

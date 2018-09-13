@@ -101,7 +101,7 @@ class SoftwarePackageVertex
     
     public boolean equals(Object o)
     {
-        return (o instanceof SoftwarePackageVertex) && (toString() == o.toString());
+        return (o instanceof SoftwarePackageVertex) && (toString().equals(o.toString()));
     }
 }
 ```
@@ -159,7 +159,7 @@ class SoftwarePackageVertex
     
     public boolean equals(Object o)
     {
-        return (o instanceof SoftwarePackageVertex) && (toString() == o.toString());
+        return (o instanceof SoftwarePackageVertex) && (toString().equals(o.toString()));
     }
 }
 

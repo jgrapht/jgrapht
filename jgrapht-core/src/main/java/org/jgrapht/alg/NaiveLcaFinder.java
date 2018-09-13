@@ -17,7 +17,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 
 import java.util.*;
 
@@ -61,8 +62,10 @@ import java.util.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
+ *
+ * @deprecated Replaced by {@link org.jgrapht.alg.lca.NaiveLCAFinder}
  */
+@Deprecated
 public class NaiveLcaFinder<V, E>
 {
     private Graph<V, E> graph;
@@ -259,4 +262,4 @@ public class NaiveLcaFinder<V, E>
     }
 }
 
-// End NaiveLcaFinder.java
+// End NaiveLCAFinder.java

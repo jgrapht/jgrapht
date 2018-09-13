@@ -30,8 +30,10 @@ build
 *.iml
 out/*
 **/out/*
+**/bin/*
 pom.xml.releaseBackup
 **/pom.xml.releaseBackup
+**/dependency-reduced-pom.xml
 .classpath
 docs/javadoc*
 docs/_site

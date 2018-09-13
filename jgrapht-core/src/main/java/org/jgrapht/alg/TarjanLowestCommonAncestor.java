@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.UnionFind;
 
 import java.util.*;
 
@@ -29,8 +29,10 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Leo Crawford
+ *
+ * @deprecated Replaced by {@link org.jgrapht.alg.lca.TarjanLCAFinder}
  */
-public class TarjanLowestCommonAncestor<V, E>
+@Deprecated public class TarjanLowestCommonAncestor<V, E>
 {
     private Graph<V, E> g;
 
@@ -232,4 +234,4 @@ public class TarjanLowestCommonAncestor<V, E>
     }
 }
 
-// End TarjanLowestCommonAncestor.java
+// End TarjanLCAFinder.java

@@ -36,7 +36,7 @@ public class RingGraphGenerator<V, E>
     implements
     GraphGenerator<V, E, V>
 {
-    private int size;
+    private final int size;
 
     /**
      * Construct a new RingGraphGenerator.
@@ -50,7 +50,6 @@ public class RingGraphGenerator<V, E>
         if (size < 0) {
             throw new IllegalArgumentException("must be non-negative");
         }
-
         this.size = size;
     }
 
@@ -64,9 +63,8 @@ public class RingGraphGenerator<V, E>
             return;
         }
 
-        LinearGraphGenerator<V, E> linearGenerator = new LinearGraphGenerator<>(size);
         Map<String, V> privateMap = new HashMap<>();
-        linearGenerator.generateGraph(target, privateMap);
+        new LinearGraphGenerator<V, E>(size).generateGraph(target, privateMap);
 
         V startVertex = privateMap.get(LinearGraphGenerator.START_VERTEX);
         V endVertex = privateMap.get(LinearGraphGenerator.END_VERTEX);

@@ -19,7 +19,6 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
@@ -27,12 +26,13 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
+ * Tests for {@link RandomRegularGraphGenerator}.
+ * 
  * @author Emilio Cruciani
  * @since March 2018
  */
 public class RandomRegularGraphGeneratorTest
 {
-
     private final long SEED = 5;
 
     @Test(expected = IllegalArgumentException.class)
@@ -79,7 +79,7 @@ public class RandomRegularGraphGeneratorTest
         int d = 20;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new RandomRegularGraphGenerator<>(n, d, SEED);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         for (Integer v : g.vertexSet()) {
             assertEquals(d, g.degreeOf(v));

@@ -1,15 +1,14 @@
 package org.jgrapht.graph;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
-import org.jgrapht.graph.specifics.DirectedEdgeContainer;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
 import org.jgrapht.graph.specifics.UndirectedSpecifics;
 
 /**
@@ -27,49 +26,34 @@ import org.jgrapht.graph.specifics.UndirectedSpecifics;
  * @param <E> the graph edge type
  */
 public class DefaultGraphSpecificsStrategy<V, E>
-    implements GraphSpecificsStrategy<V, E>
+    implements
+    GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = 7615319421753562075L;
 
-    /**
-     * Get a function which creates the intrusive edges specifics. The factory will accept the graph
-     * type as a parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
     @Override
     public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
     {
         return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
             if (type.isWeighted()) {
-                return new WeightedIntrusiveEdgesSpecifics<V, E>(
-                    this.<E, IntrusiveWeightedEdge> getPredictableOrderMapFactory().get());
+                return new WeightedIntrusiveEdgesSpecifics<V, E>(new LinkedHashMap<>());
             } else {
-                return new UniformIntrusiveEdgesSpecifics<>(
-                    this.<E, IntrusiveEdge> getPredictableOrderMapFactory().get());
+                return new UniformIntrusiveEdgesSpecifics<>(new LinkedHashMap<>());
             }
         };
     }
 
-    /**
-     * Get a function which creates the specifics. The factory will accept the graph type as a
-     * parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {
         return (BiFunction<Graph<V, E>, GraphType,
             Specifics<V, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
-                    return new DirectedSpecifics<>(graph, this
-                        .<V, DirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
-                        .get(), getEdgeSetFactory());
+                    return new DirectedSpecifics<V, E>(
+                        graph, new LinkedHashMap<>(), getEdgeSetFactory());
                 } else {
-                    return new UndirectedSpecifics<>(graph, this
-                        .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
-                        .get(), getEdgeSetFactory());
+                    return new UndirectedSpecifics<>(
+                        graph, new LinkedHashMap<>(), getEdgeSetFactory());
                 }
             };
     }

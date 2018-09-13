@@ -28,11 +28,13 @@ import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
 
+import java.util.*;
 import java.util.concurrent.*;
 
 public class MaximumFlowAlgorithmPerformanceTest
 {
 
+    public static final int NUMBER_OF_GRAPHS=20;
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
     public static final int PERF_BENCHMARK_EDGES_COUNT = 100000;
 
@@ -40,12 +42,9 @@ public class MaximumFlowAlgorithmPerformanceTest
     private static abstract class RandomGraphBenchmarkBase
     {
 
-        public static final long SEED = 1446523573696201013l;
+        public static final long SEED = 1446523573696201013L;
 
-        private MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver;
-
-        private Integer source;
-        private Integer sink;
+        private List<Graph<Integer,DefaultWeightedEdge>> graphs;
 
         abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> network);
@@ -53,29 +52,29 @@ public class MaximumFlowAlgorithmPerformanceTest
         @Setup
         public void setup()
         {
+            graphs=new ArrayList<>();
+
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> rgg =
-                new GnmRandomGraphGenerator<>(
-                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
+                    new GnmRandomGraphGenerator<>(
+                            PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
-            SimpleDirectedWeightedGraph<Integer,
-                DefaultWeightedEdge> network = new SimpleDirectedWeightedGraph<>(
-                    SupplierUtil.createIntegerSupplier(1),
-                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            for(int i=0; i< NUMBER_OF_GRAPHS; i++){
+                SimpleDirectedWeightedGraph<Integer,
+                        DefaultWeightedEdge> network = new SimpleDirectedWeightedGraph<>(
+                        SupplierUtil.createIntegerSupplier(0),
+                        SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
-            rgg.generateGraph(network);
-
-            solver = createSolver(network);
-
-            Object[] vs = network.vertexSet().toArray();
-
-            source = (Integer) vs[0];
-            sink = (Integer) vs[vs.length - 1];
+                rgg.generateGraph(network);
+                graphs.add(network);
+            }
         }
 
         @Benchmark
         public void run()
         {
-            solver.getMaximumFlow(source, sink);
+            for(Graph<Integer, DefaultWeightedEdge> g : graphs){
+                createSolver(g).getMaximumFlow(0, g.vertexSet().size()-1);
+            }
         }
     }
 

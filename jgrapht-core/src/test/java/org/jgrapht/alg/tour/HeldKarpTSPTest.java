@@ -17,18 +17,23 @@
  */
 package org.jgrapht.alg.tour;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.SlowTests;
 import org.jgrapht.graph.*;
-import org.junit.*;
-import org.junit.experimental.categories.*;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-import java.util.*;
+import java.util.Random;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
 import static org.junit.Assert.*;
 
 /**
+ * Tests for {@link HeldKarpTSP}
+ *
  * @author Alexandru Valeanu
+ *
  */
 @Category(SlowTests.class)
 public class HeldKarpTSPTest
@@ -209,6 +214,68 @@ public class HeldKarpTSPTest
         assertNotNull(tour);
         assertHamiltonian(g, tour);
         assertEquals(tour.getWeight(), 80d, 1e-9);
+    }
+
+    @Test
+    public void testUndirectedGraph2(){
+        Graph<Integer, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+
+        int[][] weights = new int[5][];
+
+        weights[0] = new int[]{0, 8, 7, 5, 6};
+        weights[1] = new int[]{8, 0, 3, 1, 7};
+        weights[2] = new int[]{7, 3, 0, 8, 6};
+        weights[3] = new int[]{5, 1, 8, 0, 1};
+        weights[4] = new int[]{6, 7, 6, 1, 0};
+
+        for (int i = 0; i < 5; i++) {
+            g.addVertex(i);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = i + 1; j < 5; j++) {
+                g.addEdge(i, j);
+                g.setEdgeWeight(g.getEdge(i, j), weights[i][j]);
+            }
+        }
+
+        GraphPath<Integer, DefaultWeightedEdge> tour =
+                new HeldKarpTSP<Integer, DefaultWeightedEdge>().getTour(g);
+
+        assertNotNull(tour);
+        assertHamiltonian(g, tour);
+        assertEquals(tour.getWeight(), 18d, 1e-9);
+    }
+
+    @Test
+    public void testDirectedWeightedPseudograph(){
+        Graph<Integer, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        int[][] weights = new int[5][];
+
+        weights[0] = new int[]{0, 9, 3, 3, 7};
+        weights[1] = new int[]{9, 0, 10, 7, 5};
+        weights[2] = new int[]{3, 10, 0, 1, 1};
+        weights[3] = new int[]{3, 7, 1, 0, 10};
+        weights[4] = new int[]{7, 5, 1, 10, 0};
+
+        for (int i = 0; i < 5; i++) {
+            g.addVertex(i);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                g.addEdge(i, j);
+                g.setEdgeWeight(g.getEdge(i, j), weights[i][j]);
+            }
+        }
+
+        GraphPath<Integer, DefaultWeightedEdge> tour =
+                new HeldKarpTSP<Integer, DefaultWeightedEdge>().getTour(g);
+
+        assertNotNull(tour);
+        assertHamiltonian(g, tour);
+        assertEquals(19d, tour.getWeight(), 1e-9);
     }
 
     @Test

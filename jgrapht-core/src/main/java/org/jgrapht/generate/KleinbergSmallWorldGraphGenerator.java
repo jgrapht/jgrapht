@@ -155,11 +155,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(n * n);
         for (int i = 0; i < n * n; i++) {
-            V v = target.addVertex();
-            if (v == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            nodes.add(v);
+            nodes.add(target.addVertex());
         }
 
         /*

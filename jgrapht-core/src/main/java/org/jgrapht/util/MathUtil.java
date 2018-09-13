@@ -40,6 +40,23 @@ public class MathUtil
         }
         return multi;
     }
+
+    /**
+     * Calculate the floor of the binary logarithm of $n$.
+     *
+     * @param n the input number
+     * @return the binary logarithm
+     */
+    public static int log2(int n)
+    {
+        // returns 0 for n=0
+        int log = 0;
+        if( ( n & 0xffff0000 ) != 0 ) { n >>>= 16; log = 16; }
+        if( n >= 256 ) { n >>>= 8; log += 8; }
+        if( n >= 16  ) { n >>>= 4; log += 4; }
+        if( n >= 4   ) { n >>>= 2; log += 2; }
+        return log + ( n >>> 1 );
+    }
 }
 
 // End MathUtil.java

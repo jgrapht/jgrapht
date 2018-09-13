@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import static junit.framework.TestCase.fail;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
@@ -39,7 +40,8 @@ import static org.junit.Assert.*;
 public class GraphTestsTest
 {
 
-    @Test public void testIsEmpty()
+    @Test
+    public void testIsEmpty()
     {
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         assertTrue(GraphTests.isEmpty(g));
@@ -53,7 +55,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isEmpty(g));
     }
 
-    @Test public void testIsSimple()
+    @Test
+    public void testIsSimple()
     {
         // test empty
         Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -88,7 +91,8 @@ public class GraphTestsTest
         assertFalse(GraphTests.isSimple(g4));
     }
 
-    @Test public void testHasSelfLoops()
+    @Test
+    public void testHasSelfLoops()
     {
         Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.hasSelfLoops(g1));
@@ -115,7 +119,8 @@ public class GraphTestsTest
         Assert.assertTrue(GraphTests.hasSelfLoops(g4));
     }
 
-    @Test public void testHasMultipleEdges()
+    @Test
+    public void testHasMultipleEdges()
     {
         Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.hasMultipleEdges(g1));
@@ -153,7 +158,8 @@ public class GraphTestsTest
 
     }
 
-    @Test public void testIsCompleteDirected()
+    @Test
+    public void testIsCompleteDirected()
     {
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         assertTrue(GraphTests.isComplete(g));
@@ -201,7 +207,8 @@ public class GraphTestsTest
         assertFalse(GraphTests.isComplete(g2));
     }
 
-    @Test public void testIsCompleteUndirected()
+    @Test
+    public void testIsCompleteUndirected()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         assertTrue(GraphTests.isComplete(g));
@@ -244,7 +251,8 @@ public class GraphTestsTest
         assertFalse(GraphTests.isComplete(g2));
     }
 
-    @Test public void testIsConnectedUndirected()
+    @Test
+    public void testIsConnectedUndirected()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         assertFalse(GraphTests.isConnected(g));
@@ -260,7 +268,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isConnected(g));
     }
 
-    @Test public void testIsConnectedDirected()
+    @Test
+    public void testIsConnectedDirected()
     {
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         assertFalse(GraphTests.isWeaklyConnected(g));
@@ -285,7 +294,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isStronglyConnected(g));
     }
 
-    @Test public void testIsTree()
+    @Test
+    public void testIsTree()
     {
         Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
         assertFalse(GraphTests.isTree(g));
@@ -311,7 +321,8 @@ public class GraphTestsTest
         assertFalse(GraphTests.isTree(g1));
     }
 
-    @Test public void testIsForest1()
+    @Test
+    public void testIsForest1()
     {
         Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
         assertFalse(GraphTests.isForest(g));
@@ -325,7 +336,8 @@ public class GraphTestsTest
         assertFalse(GraphTests.isForest(g));
     }
 
-    @Test public void testIsForest2()
+    @Test
+    public void testIsForest2()
     {
         Graph<Integer, DefaultEdge> g = GraphTestsUtils.createPseudograph();
         StarGraphGenerator<Integer, DefaultEdge> gen = new StarGraphGenerator<>(10);
@@ -334,7 +346,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isForest(g));
     }
 
-    @Test public void testIsOverfull()
+    @Test
+    public void testIsOverfull()
     {
         assertFalse(GraphTests.isOverfull(NamedGraphGenerator.clawGraph()));
         assertTrue(GraphTests.isOverfull(NamedGraphGenerator.doyleGraph()));
@@ -350,7 +363,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isOverfull(k7));
     }
 
-    @Test public void isSplit1()
+    @Test
+    public void isSplit1()
     {
         assertFalse(GraphTests.isSplit(NamedGraphGenerator.petersenGraph()));
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -371,7 +385,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isSplit(g));
     }
 
-    @Test public void isSplit2()
+    @Test
+    public void isSplit2()
     {
         // Create some random split graphs.
         Random rand = new Random(0);
@@ -404,7 +419,8 @@ public class GraphTestsTest
         assertFalse(GraphTests.isCubic(triangle));
     }
 
-    @Test public void testIsChordal()
+    @Test
+    public void testIsChordal()
     {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
@@ -418,7 +434,8 @@ public class GraphTestsTest
         assertTrue(GraphTests.isChordal(graph));
     }
 
-    @Test public void testIsWeaklyChordal()
+    @Test
+    public void testIsWeaklyChordal()
     {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
@@ -435,7 +452,7 @@ public class GraphTestsTest
     {
         try {
             Graph<String, DefaultWeightedEdge> graph =
-                new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
+                    new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
             GraphTests.requireWeighted(graph);
             fail("Expected an IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException e) {

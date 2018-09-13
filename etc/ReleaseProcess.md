@@ -15,13 +15,13 @@
 1. Run `mvn -Dmaven.artifact.threads=1 clean deploy` to push the latest snapshot to Sonatype.
 1. Run `mvn source:jar; mvn javadoc:jar; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central
 1. Publish the release [using the Sonatype UI](http://central.sonatype.org/pages/releasing-the-deployment.html).
+1. Before continuing, restart from a fresh clone to make sure your workspace is clean.  Otherwise, if you have old files lying around that are hidden by `.gitignore`, they may get accidentally included in the release archive.
 1. Run `mvn javadoc:aggregate; mvn install` from the new release branch to produce the release archive distribution
 1. Upload the release archive distribution to sourceforge using the File Release System.
 1. Add the javadocs for the new release to the [javadoc repository](https://github.com/jgrapht/jgrapht-javadoc).  To do this, push a commit which replaces the contents of the existing javadoc directory, and also [adds an identical copy](https://github.com/jgrapht/jgrapht/wiki/Website-Deployment#javadoc) under a new javadoc-x.y.z directory.
 1. Update [the website](../docs) with links to the new downloads, version numbers, etc.  Be sure to push this commit **after** the javadoc update from the previous step; this will make sure that the new javadoc gets released to the website at the same time.
 1. Announce the new version in the mailing lists: jgrapht-users@lists.sourceforge.net, jgrapht-announce@lists.sourceforge.net
-1. Update and commit the version number in HISTORY.md to reflect the beginning of development for the next version.  Also update the version in `jgrapht-touchgraph/pom.xml` since for whatever
-reason, this one is not done automatically by maven.  Finally, remove all existing deprecated methods.
+1. Update and commit the version number in HISTORY.md to reflect the beginning of development for the next version.  Finally, remove all existing deprecated methods.
 
 ## Notes
 * The release artifacts are signed with private keys. In order to sign this release, you'll need to make sure you've already [created and published your own key](http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven).

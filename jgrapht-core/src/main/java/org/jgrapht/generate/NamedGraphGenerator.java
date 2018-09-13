@@ -1736,11 +1736,7 @@ public class NamedGraphGenerator<V, E>
     private V addVertex(Graph<V, E> targetGraph, int i)
     {
         if (!vertexMap.containsKey(i)) {
-            V v = targetGraph.addVertex();
-            if (v == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            vertexMap.put(i, v);
+            vertexMap.put(i, targetGraph.addVertex());
         }
         return vertexMap.get(i);
     }

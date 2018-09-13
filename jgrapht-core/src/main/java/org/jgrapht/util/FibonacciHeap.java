@@ -17,7 +17,10 @@
  */
 package org.jgrapht.util;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * This class implements a Fibonacci heap data structure. Much of the code in this class is based on
@@ -405,17 +408,17 @@ public class FibonacciHeap<T>
     {
         FibonacciHeapNode<T> z = y.parent;
 
-        // if there's a parent...
-        if (z != null) {
-            // if y is unmarked, set it marked
+        // if there's a parent of y...
+        while (z != null) {
+            // if y is marked, set it marked and finish
             if (!y.mark) {
                 y.mark = true;
+                return;
             } else {
-                // it's marked, cut it from parent
+                // y is marked, cut it from parent and continue cascading cut with z
                 cut(y, z);
-
-                // cut its parent as well
-                cascadingCut(z);
+                y = z;
+                z = z.parent;
             }
         }
     }
