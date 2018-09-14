@@ -78,8 +78,6 @@ public class HeldKarpTSP<V, E>
             // check if there is a return edge we can use
             if (W[previousNode][0] != Double.MAX_VALUE)
                 totalCost = W[previousNode][0];
-            else
-                totalCost = Double.MAX_VALUE;
         } else {
             // try to find the 'best' next (i.e. unvisited and adjacent to previousNode) node in the
             // tour
@@ -180,10 +178,10 @@ public class HeldKarpTSP<V, E>
 
         for (int step = 1; step < n; step++) {
             int nextNode = -1;
-            for (int node = 0; node < n; node++) {
-                if (C[node][lastState ^ (1 << node)]
-                    + W[lastNode][node] == C[lastNode][lastState])
-                {
+            for (int node = 1; node < n; node++) {
+                if ((lastState & (1 << node)) == 0 && W[lastNode][node] != Double.MAX_VALUE &&
+                        C[node][lastState ^ (1 << node)] != Double.MIN_VALUE &&
+                        Double.compare(C[node][lastState ^ (1 << node)] + W[lastNode][node], C[lastNode][lastState]) == 0) {
                     nextNode = node;
                     break;
                 }

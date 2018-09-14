@@ -24,6 +24,8 @@ import org.jgrapht.alg.cycle.BergeGraphInspector;
 import org.jgrapht.alg.cycle.ChordalityInspector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 import org.jgrapht.alg.cycle.WeakChordalityInspector;
+import org.jgrapht.alg.interfaces.PartitioningAlgorithm;
+import org.jgrapht.alg.partition.BipartitePartitioning;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -364,48 +366,11 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is bipartite, false otherwise
+     * @see BipartitePartitioning#isBipartite()
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
-        if (isEmpty(graph)) {
-            return true;
-        }
-        try {
-            // at most n^2/4 edges
-            if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
-                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
-            {
-                return false;
-            }
-        } catch (ArithmeticException e) {
-            // ignore
-        }
-
-        Set<V> unknown = new HashSet<>(graph.vertexSet());
-        Set<V> odd = new HashSet<>();
-        Deque<V> queue = new LinkedList<>();
-
-        while (!unknown.isEmpty()) {
-            if (queue.isEmpty()) {
-                queue.add(unknown.iterator().next());
-            }
-
-            V v = queue.removeFirst();
-            unknown.remove(v);
-
-            for (E e : graph.edgesOf(v)) {
-                V n = Graphs.getOppositeVertex(graph, e, v);
-                if (unknown.contains(n)) {
-                    queue.add(n);
-                    if (!odd.contains(v)) {
-                        odd.add(n);
-                    }
-                } else if (odd.contains(v) == odd.contains(n)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return new BipartitePartitioning<>(graph).isBipartite();
     }
 
     /**
@@ -417,38 +382,14 @@ public abstract class GraphTests
      * @return true if the partition is a bipartite partition, false otherwise
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @see BipartitePartitioning#isValidPartitioning(PartitioningAlgorithm.Partitioning)
      */
+    @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
-        Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
+            Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
-        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        Objects.requireNonNull(firstPartition, FIRST_PARTITION_CANNOT_BE_NULL);
-        Objects.requireNonNull(secondPartition, SECOND_PARTITION_CANNOT_BE_NULL);
-
-        if (graph.vertexSet().size() != firstPartition.size() + secondPartition.size()) {
-            return false;
-        }
-
-        for (V v : graph.vertexSet()) {
-            Collection<? extends V> otherPartition;
-            if (firstPartition.contains(v)) {
-                otherPartition = secondPartition;
-            } else if (secondPartition.contains(v)) {
-                otherPartition = firstPartition;
-            } else {
-                // v does not belong to any of the two partitions
-                return false;
-            }
-
-            for (E e : graph.edgesOf(v)) {
-                V other = Graphs.getOppositeVertex(graph, e, v);
-                if (!otherPartition.contains(other)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return new BipartitePartitioning<>(graph).isValidPartitioning(
+                new PartitioningAlgorithm.PartitioningImpl<>(Arrays.asList((Set<V>)firstPartition, (Set<V>)secondPartition)));
     }
 
     /**
