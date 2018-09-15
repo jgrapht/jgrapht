@@ -80,7 +80,7 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
     }
 
     @Override
-    public VertexCoverAlgorithm.VertexCover getVertexCover()
+    public VertexCover<V> getVertexCover()
     {
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;

@@ -257,8 +257,8 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     private void sortColorClasses(List<Set<V>> colorClasses, Coloring<V> coloring) {
         colorClasses.sort((o1, o2) -> {
             if(o1.size() == o2.size()) {
-                Iterator it1 = o1.iterator();
-                Iterator it2 = o2.iterator();
+                Iterator<V> it1 = o1.iterator();
+                Iterator<V> it2 = o2.iterator();
                 if(!it1.hasNext() || !it2.hasNext()) {
                     return Integer.compare(o1.size(), o2.size());
                 }

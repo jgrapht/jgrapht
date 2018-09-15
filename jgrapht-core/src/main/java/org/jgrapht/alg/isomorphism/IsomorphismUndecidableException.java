@@ -22,6 +22,8 @@ package org.jgrapht.alg.isomorphism;
  */
 public class IsomorphismUndecidableException extends RuntimeException {
 
+    private static final long serialVersionUID = 4703220562690821852L;
+
     /**
      * Constructs a new exception with null as its detail message. The cause is not initialized,
      * and may subsequently be initialized by a call to Throwable.initCause(java.lang.Throwable).

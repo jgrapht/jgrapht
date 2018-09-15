@@ -70,7 +70,7 @@ class BlossomVDualUpdater<V, E> {
      * Instance of {@link BlossomVPrimalUpdater} for performing immediate augmentations after dual
      * updates when they are applicable. These speed up the overall algorithm.
      */
-    private BlossomVPrimalUpdater primalUpdater;
+    private BlossomVPrimalUpdater<V, E> primalUpdater;
 
     /**
      * Creates a new instance of the BlossomVDualUpdater
@@ -78,7 +78,7 @@ class BlossomVDualUpdater<V, E> {
      * @param state         the state common to {@link BlossomVPrimalUpdater}, {@link BlossomVDualUpdater} and {@link KolmogorovMinimumWeightPerfectMatching}
      * @param primalUpdater primal updater used by the algorithm
      */
-    public BlossomVDualUpdater(BlossomVState<V, E> state, BlossomVPrimalUpdater primalUpdater) {
+    public BlossomVDualUpdater(BlossomVState<V, E> state, BlossomVPrimalUpdater<V, E> primalUpdater) {
         this.state = state;
         this.primalUpdater = primalUpdater;
     }

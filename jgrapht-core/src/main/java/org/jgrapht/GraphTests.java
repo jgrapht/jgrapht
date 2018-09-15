@@ -45,8 +45,6 @@ public abstract class GraphTests
         "Graph must be directed or undirected";
     private static final String GRAPH_MUST_BE_UNDIRECTED = "Graph must be undirected";
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
-    private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
-    private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
     private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
@@ -245,11 +243,13 @@ public abstract class GraphTests
     }
 
     /**
-     * Test whether a directed graph is strongly connected.
+     * Test whether a graph is strongly connected.
      * 
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
+     * 
+     * <p>In case of undirected graphs this method delegated to {@link #isConnected(Graph)}.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -260,7 +260,11 @@ public abstract class GraphTests
     public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        if (graph.getType().isUndirected()) {
+            return isConnected(graph);
+        } else {
+            return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        }
     }
 
     /**
@@ -386,10 +390,11 @@ public abstract class GraphTests
      */
     @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
-            Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
+        Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
         return new BipartitePartitioning<>(graph).isValidPartitioning(
-                new PartitioningAlgorithm.PartitioningImpl<>(Arrays.asList((Set<V>)firstPartition, (Set<V>)secondPartition)));
+            new PartitioningAlgorithm.PartitioningImpl<>(
+                Arrays.asList((Set<V>) firstPartition, (Set<V>) secondPartition)));
     }
 
     /**
@@ -513,7 +518,8 @@ public abstract class GraphTests
     }
 
     /**
-     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a triangle of edges).
+     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a
+     * triangle of edges).
      *
      * The implementation of this method uses {@link GraphMetrics#getNumberOfTriangles(Graph)}.
      *

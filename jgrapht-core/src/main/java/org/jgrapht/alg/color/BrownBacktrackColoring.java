@@ -32,7 +32,6 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
  */
 public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
 {
-    private final Graph<V,E> graph;
     private final List<V> vertexList; //list of all vertices
     private final int[][] neighbors; //for every vertex v, neighbors[v] stores the neighbors of v
     private final Map<V, Integer> indexMap; //assigned unique index to each vertex. maps to vertex list
@@ -52,7 +51,7 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
      */
     public BrownBacktrackColoring(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        Objects.requireNonNull(graph, "Graph cannot be null");
         final int numVertices = graph.vertexSet().size();
         vertexList = new ArrayList<>(numVertices);
         neighbors = new int[numVertices][];
