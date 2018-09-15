@@ -41,16 +41,6 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testGraphNoEdges(){
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        g.addVertex(0);
-        g.addVertex(1);
-        EulerianCycleAlgorithm<Integer, DefaultEdge> alg=new ChinesePostman<>();
-        GraphPath<Integer, DefaultEdge> path=alg.getEulerianCycle(g);
-        Assert.assertTrue(path.getEdgeList().isEmpty());
-    }
-
-    @Test
     public void testSingleEdgeGraph(){
         Graph<Integer, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(0);
@@ -278,7 +268,16 @@ public class ChinesePostmanTest {
         this.verifyClosedPath(g, 22, 22);
     }
 
-
+    @Test
+    public void temp(){
+        EulerianCycleAlgorithm<Integer, DefaultEdge> alg=new ChinesePostman<>();
+        Graph<Integer, DefaultEdge> g=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+//        Graph<Integer, DefaultEdge> g=new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+        g.addVertex(0); g.addVertex(1);
+        g.addEdge(0,1);
+        g.addEdge(1,0);
+        GraphPath<Integer, DefaultEdge> path=alg.getEulerianCycle(g);
+    }
 
     private <V,E> void verifyClosedPath(Graph<V,E> graph, double expectedWeight, int expectedLength){
 

@@ -26,7 +26,7 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.matching.KuhnMunkresMinimalWeightBipartitePerfectMatching;
 import org.jgrapht.alg.matching.blossom.v5.*;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnorderedPair;
 import org.jgrapht.graph.*;
@@ -86,13 +86,14 @@ public class ChinesePostman<V, E>
     @Override
     public GraphPath<V, E> getEulerianCycle(Graph<V, E> graph)
     {
-
         // Mixed graphs are currently not supported. Solving the CPP for mixed graphs is NP-Hard
         GraphTests.requireDirectedOrUndirected(graph);
 
         // If graph has no vertices, or no edges, instantly return.
         if (graph.vertexSet().isEmpty() || graph.edgeSet().isEmpty())
             return new HierholzerEulerianCycle<V, E>().getEulerianCycle(graph);
+
+        assert (graph.getType().isDirected() && GraphTests.isStronglyConnected(graph)) || (graph.getType().isUndirected() && GraphTests.isConnected(graph));
 
         if (graph.getType().isUndirected())
             return solveCPPUndirected(graph);
@@ -109,17 +110,18 @@ public class ChinesePostman<V, E>
      */
     private GraphPath<V,E> solveCPPUndirected(Graph<V, E> graph){
 
-        //1. Find all odd degree vertices (there should be an odd number of those)
+        //1. Find all odd degree vertices (there should be an even number of those)
         List<V> oddDegreeVertices=graph.vertexSet().stream().filter(v ->graph.degreeOf(v)%2==1).collect(Collectors.toList());
 
         //2. Compute all pairwise shortest paths for the oddDegreeVertices
         Map<Pair<V,V>, GraphPath<V,E>> shortestPaths=new HashMap<>();
         ShortestPathAlgorithm<V,E> sp=new DijkstraShortestPath<>(graph);
         for(int i=0; i<oddDegreeVertices.size()-1; i++){
+            V u = oddDegreeVertices.get(i);
+            ShortestPathAlgorithm.SingleSourcePaths<V,E> paths=sp.getPaths(u);
             for(int j=i+1; j<oddDegreeVertices.size(); j++){
-                V u=oddDegreeVertices.get(i);
                 V v=oddDegreeVertices.get(j);
-                shortestPaths.put(new UnorderedPair<>(u, v), sp.getPath(u, v));
+                shortestPaths.put(new UnorderedPair<>(u, v), paths.getPath(v));
             }
         }
 
@@ -139,7 +141,7 @@ public class ChinesePostman<V, E>
         //identified by the matching algorithm. A shortcut from u to v
         //indirectly implies duplicating all edges on the shortest path from u to v
         Graph<V,E> eulerGraph=new Pseudograph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), graph.getType().isWeighted());
-        Graphs.addAllVertices(eulerGraph, graph.vertexSet()); Graphs.addAllEdges(eulerGraph, graph, graph.edgeSet());
+        Graphs.addGraph(eulerGraph, graph);
         Map<E, GraphPath<V,E>> shortcutEdges=new HashMap<>();
         for(DefaultWeightedEdge e: matching.getEdges()){
             V u=auxGraph.getEdgeSource(e);
@@ -163,7 +165,7 @@ public class ChinesePostman<V, E>
     private GraphPath<V, E> solveCPPDirected(Graph<V, E> graph)
     {
 
-        // 1. Find all imbalanced vertices (there should be an odd number of those)
+        // 1. Find all imbalanced vertices
         Map<V, Integer> imbalancedVertices = new LinkedHashMap<>();
         Set<V> negImbalancedVertices = new HashSet<>();
         Set<V> postImbalancedVertices = new HashSet<>();
@@ -185,8 +187,9 @@ public class ChinesePostman<V, E>
         Map<Pair<V, V>, GraphPath<V, E>> shortestPaths = new HashMap<>();
         ShortestPathAlgorithm<V, E> sp = new DijkstraShortestPath<>(graph);
         for (V u : negImbalancedVertices) {
+            ShortestPathAlgorithm.SingleSourcePaths<V,E> paths=sp.getPaths(u);
             for (V v : postImbalancedVertices) {
-                shortestPaths.put(new Pair<>(u, v), sp.getPath(u, v));
+                shortestPaths.put(new Pair<>(u, v), paths.getPath(v));
             }
         }
 
@@ -230,13 +233,12 @@ public class ChinesePostman<V, E>
             new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(
                 auxGraph, negImbalancedPartition, postImbalancedPartition).getMatching();
 
-        // 4. On the original graph, add shortcuts between the odd vertices. These shortcuts have
+        // 4. On the original graph, add shortcuts between the imbalanced vertices. These shortcuts have
         // been identified by the matching algorithm. A shortcut from u to v
         // indirectly implies duplicating all edges on the shortest path from u to v
 
         Graph<V, E> eulerGraph = new DirectedPseudograph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), graph.getType().isWeighted());
-        Graphs.addAllVertices(eulerGraph, graph.vertexSet());
-        Graphs.addAllEdges(eulerGraph, graph, graph.edgeSet());
+        Graphs.addGraph(eulerGraph, graph);
         Map<E, GraphPath<V, E>> shortcutEdges = new HashMap<>();
         for (DefaultWeightedEdge e : matching.getEdges()) {
             int i = auxGraph.getEdgeSource(e);
