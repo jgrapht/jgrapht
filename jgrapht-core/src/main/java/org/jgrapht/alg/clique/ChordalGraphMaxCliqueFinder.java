@@ -55,6 +55,7 @@ public class ChordalGraphMaxCliqueFinder<V, E>
 {
 
     private final Graph<V, E> graph;
+    private final ChordalityInspector.IterationOrder iterationOrder;
 
     private Clique<V> maximumClique;
     private boolean isChordal = true;
@@ -83,6 +84,7 @@ public class ChordalGraphMaxCliqueFinder<V, E>
         Graph<V, E> graph, ChordalityInspector.IterationOrder iterationOrder)
     {
         this.graph = Objects.requireNonNull(graph);
+        this.iterationOrder = Objects.requireNonNull(iterationOrder);
     }
 
     /**
@@ -91,7 +93,7 @@ public class ChordalGraphMaxCliqueFinder<V, E>
     private void lazyComputeMaximumClique()
     {
         if (maximumClique == null && isChordal) {
-            ChordalGraphColoring<V, E> cgc = new ChordalGraphColoring<>(graph);
+            ChordalGraphColoring<V, E> cgc = new ChordalGraphColoring<>(graph, iterationOrder);
             VertexColoringAlgorithm.Coloring<V> coloring = cgc.getColoring();
             List<V> perfectEliminationOrder = cgc.getPerfectEliminationOrder();
             if (coloring == null) {
