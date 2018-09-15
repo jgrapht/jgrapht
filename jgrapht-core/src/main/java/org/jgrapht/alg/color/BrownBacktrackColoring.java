@@ -51,6 +51,7 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
      */
     public BrownBacktrackColoring(Graph<V, E> graph)
     {
+        Objects.requireNonNull(graph, "Graph cannot be null");
         final int numVertices = graph.vertexSet().size();
         vertexList = new ArrayList<>(numVertices);
         neighbors = new int[numVertices][];
