@@ -56,10 +56,6 @@ public class ChordalGraphMaxCliqueFinder<V, E>
 
     private final Graph<V, E> graph;
 
-    private final ChordalityInspector<V, E> chordalityInspector;
-
-    private final VertexColoringAlgorithm<V> coloringAlgorithm;
-
     private Clique<V> maximumClique;
     private boolean isChordal = true;
 
@@ -87,8 +83,6 @@ public class ChordalGraphMaxCliqueFinder<V, E>
         Graph<V, E> graph, ChordalityInspector.IterationOrder iterationOrder)
     {
         this.graph = Objects.requireNonNull(graph);
-        chordalityInspector = new ChordalityInspector<>(graph, iterationOrder);
-        coloringAlgorithm = new ChordalGraphColoring<>(graph, iterationOrder);
     }
 
     /**

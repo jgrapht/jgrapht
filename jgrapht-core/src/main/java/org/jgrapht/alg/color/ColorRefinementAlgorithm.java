@@ -21,7 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**

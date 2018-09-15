@@ -43,7 +43,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
 
     public AbstractStrongConnectivityInspector(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.graph = GraphTests.requireDirected(graph);
     }
 
     @Override
