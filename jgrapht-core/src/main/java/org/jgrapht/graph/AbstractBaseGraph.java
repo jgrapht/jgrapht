@@ -194,6 +194,13 @@ public abstract class AbstractBaseGraph<V, E>
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
      * <code>v2</code> such that <code>v2.equals(v)</code>.
      * 
+     * <p>
+     * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
+     * and {@link Graph#addVertex()}. In such a case the user must make sure never to add vertices
+     * in the graph using method {@link Graph#addVertex(Object)}, which are going to be returned in
+     * the future by the supplied vertex supplier. Such a sequence will result into an
+     * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
+     * 
      * @param vertexSupplier the vertex supplier
      */
     public void setVertexSupplier(Supplier<V> vertexSupplier)
