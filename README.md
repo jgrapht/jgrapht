@@ -2,7 +2,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jgrapht/jgrapht/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jgrapht%22)
 [![Snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.jgrapht/jgrapht.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/jgrapht/jgrapht-core)
 [![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](http://www.gnu.org/licenses/lgpl-2.1.html)
-[![License](https://img.shields.io/badge/license-EPL%201.0-blue.svg)](http://www.eclipse.org/org/documents/epl-v10.php)
+[![License](https://img.shields.io/badge/license-EPL%202.0-blue.svg)](http://www.eclipse.org/org/documents/epl-v20.php)
 [![Language](http://img.shields.io/badge/language-java-brightgreen.svg)](https://www.java.com/)
 
 # JGraphT
@@ -28,7 +28,7 @@ JGraphT may be used under the terms of either the
 or the
 
  * Eclipse Public License (EPL)
-   http://www.eclipse.org/org/documents/epl-v10.php
+   http://www.eclipse.org/org/documents/epl-v20.php
 
 As a recipient of JGraphT, you may choose which license to receive the code under.
 
@@ -40,7 +40,7 @@ Please note that JGraphT is distributed WITHOUT ANY WARRANTY; without even the i
 
 Please refer to the license for details.
 
-SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-1.0
+SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-2.0
 
 ## Release Contents ##
 
@@ -49,7 +49,7 @@ The files below make up the table of contents for a release distribution archive
 - `README.md` this file
 - `CONTRIBUTORS.md` list of contributors
 - `HISTORY.md` changelog
-- `license-EPL.txt` Eclipse Public License 1.0
+- `license-EPL.txt` Eclipse Public License 2.0
 - `license-LGPL.txt` GNU Lesser General Public License 2.1
 - `javadoc/` Javadoc documentation
 - `lib/` JGraphT libraries and dependencies:
