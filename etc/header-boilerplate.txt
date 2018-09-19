@@ -1,3 +1,5 @@
+/*
+ * (C) Copyright BEGINYEAR-ENDYEAR, by AUTHORNAME and Contributors
  *
  * JGraphT : a free Java graph-theory library
  *

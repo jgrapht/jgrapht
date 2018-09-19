@@ -14,7 +14,7 @@ function updateOneFile() {
         sed -i '/^\/\/ End/d' "$file"
         sed -i'' '/(C) Copyright/,/\*\// {
                     /(C) Copyright/n
-                    /\*\//r etc/header-boilerplate.txt
+                    /\*\//r etc/header-boilerplate-tail.txt
                     d
                 }' "$file"
     fi
@@ -26,10 +26,12 @@ function updateOneModule() {
 }
 
 pushd $SRC_DIR
+tail -n +3 etc/header-boilerplate.txt > etc/header-boilerplate-tail.txt
 updateOneModule jgrapht-core
 updateOneModule jgrapht-demo
 updateOneModule jgrapht-ext
 updateOneModule jgrapht-guava
 updateOneModule jgrapht-io
 updateOneModule jgrapht-opt
+rm -f etc/header-boilerplate-tail.txt
 popd
