@@ -36,9 +36,9 @@ import java.util.stream.Collectors;
 
 /**
  * This class solves the Chinese Postman Problem (CPP), also known as the Route Inspection Problem.
- * The CPP asks to find a shortest closed path or circuit that visits every edge of a graph. In
- * weighted graphs, the circuit of minimal total weight is returned; in unweighted graphs, a circuit
- * of minimum total length (total number of edges) is returned.
+ * The CPP asks to find a <i>closed walk</i> of minimum length that visits every edge of the graph at least once. In
+ * weighted graphs, the <i>length</i> of the closed walk is defined as the sum of its edge weights; in unweighted graphs,
+ * a closed walk with the least number of edges is returned (the same result can be obtained for weighted graphs with uniform edge weights).
  * <p>
  * The algorithm works with directed and undirected graphs which may contain loops and/or multiple
  * edges. The runtime complexity is O(N^3) where N is the number of vertices in the graph. Mixed
@@ -71,20 +71,18 @@ import java.util.stream.Collectors;
  * @since September 2018
  */
 public class ChinesePostman<V, E>
-    implements
-    EulerianCycleAlgorithm<V, E>
 {
 
     /**
      * Solves the Chinese Postman Problem on the given graph.
      * For Undirected graph, this implementation uses the @{@link KolmogorovMinimumWeightPerfectMatching} matching algorithm;
      * for directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used instead.
+     * The input graph must be strongly connected. Otherwise the behavior of this class is undefined.
      * 
      * @param graph the input graph (must be a strongly connected graph)
      * @return Eulerian circuit of minimum weight.
      */
-    @Override
-    public GraphPath<V, E> getEulerianCycle(Graph<V, E> graph)
+    public GraphPath<V, E> getCPPSolution(Graph<V, E> graph)
     {
         // Mixed graphs are currently not supported. Solving the CPP for mixed graphs is NP-Hard
         GraphTests.requireDirectedOrUndirected(graph);
@@ -93,7 +91,7 @@ public class ChinesePostman<V, E>
         if (graph.vertexSet().isEmpty() || graph.edgeSet().isEmpty())
             return new HierholzerEulerianCycle<V, E>().getEulerianCycle(graph);
 
-        assert (graph.getType().isDirected() && GraphTests.isStronglyConnected(graph)) || (graph.getType().isUndirected() && GraphTests.isConnected(graph));
+        assert GraphTests.isStronglyConnected(graph);
 
         if (graph.getType().isUndirected())
             return solveCPPUndirected(graph);
@@ -106,7 +104,7 @@ public class ChinesePostman<V, E>
      * Solves the CPP for undirected graphs
      *
      * @param graph input graph
-     * @return Eulerian Circuit
+     * @return CPP solution (closed walk)
      */
     private GraphPath<V,E> solveCPPUndirected(Graph<V, E> graph){
 
@@ -160,7 +158,7 @@ public class ChinesePostman<V, E>
      * Solves the CPP for directed graphs
      * 
      * @param graph input graph
-     * @return Eulerian Circuit
+     * @return CPP solution (closed walk)
      */
     private GraphPath<V, E> solveCPPDirected(Graph<V, E> graph)
     {

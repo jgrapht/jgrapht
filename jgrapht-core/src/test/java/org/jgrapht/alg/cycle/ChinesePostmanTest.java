@@ -20,7 +20,6 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.EulerianCycleAlgorithm;
 import org.jgrapht.graph.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,8 +35,8 @@ public class ChinesePostmanTest {
     @Test(expected = IllegalArgumentException.class)
     public void testGraphNoVertices(){
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        EulerianCycleAlgorithm<Integer, DefaultEdge> alg=new ChinesePostman<>();
-        alg.getEulerianCycle(g);
+        ChinesePostman<Integer, DefaultEdge> alg=new ChinesePostman<>();
+        alg.getCPPSolution(g);
     }
 
     @Test
@@ -270,19 +269,19 @@ public class ChinesePostmanTest {
 
     @Test
     public void temp(){
-        EulerianCycleAlgorithm<Integer, DefaultEdge> alg=new ChinesePostman<>();
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+        ChinesePostman<Integer, DefaultEdge> alg=new ChinesePostman<>();
+        Graph<Integer, DefaultEdge> g= new SimpleGraph<>(DefaultEdge.class);
 //        Graph<Integer, DefaultEdge> g=new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
         g.addVertex(0); g.addVertex(1);
         g.addEdge(0,1);
         g.addEdge(1,0);
-        GraphPath<Integer, DefaultEdge> path=alg.getEulerianCycle(g);
+        GraphPath<Integer, DefaultEdge> path=alg.getCPPSolution(g);
     }
 
     private <V,E> void verifyClosedPath(Graph<V,E> graph, double expectedWeight, int expectedLength){
 
-        EulerianCycleAlgorithm<V, E> alg=new ChinesePostman<>();
-        GraphPath<V, E> path=alg.getEulerianCycle(graph);
+        ChinesePostman<V, E> alg=new ChinesePostman<>();
+        GraphPath<V, E> path=alg.getCPPSolution(graph);
 
         Assert.assertEquals(expectedLength, path.getLength());
         Assert.assertEquals(expectedLength, path.getEdgeList().size());
@@ -314,10 +313,10 @@ public class ChinesePostmanTest {
             E edge=edgeList.get(i);
 
             if(graph.getType().isUndirected()){
-                Assert.assertTrue(Graphs.getOppositeVertex(graph, edge, u).equals(v));
+                Assert.assertEquals(Graphs.getOppositeVertex(graph, edge, u), v);
             }else{ //Directed
-                Assert.assertTrue(graph.getEdgeSource(edge).equals(u));
-                Assert.assertTrue(graph.getEdgeTarget(edge).equals(v));
+                Assert.assertEquals(graph.getEdgeSource(edge), u);
+                Assert.assertEquals(graph.getEdgeTarget(edge), v);
             }
         }
     }
