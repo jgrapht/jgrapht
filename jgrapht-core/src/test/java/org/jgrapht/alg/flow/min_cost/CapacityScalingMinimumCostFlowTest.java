@@ -3,22 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow.min_cost;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.flow.min_cost.CapacityScalingMinimumCostFlow.DualSolution;
+import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.MinimumCostFLow;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
@@ -1041,7 +1043,6 @@ public class CapacityScalingMinimumCostFlowTest {
     }
 
     private void test(int[][] testCase, double cost) {
-        DefaultWeightedEdge edge;
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Map<Integer, Integer> supplyMap = new HashMap<>();
         Map<DefaultWeightedEdge, Integer> lowerMap = new HashMap<>();
@@ -1053,7 +1054,7 @@ public class CapacityScalingMinimumCostFlowTest {
                 supplyMap.put(data[0], data[1]);
             } else {
                 // this is information about an edge
-                edge = Graphs.addEdgeWithVertices(graph, data[0], data[1], data[4]);
+                DefaultWeightedEdge edge = Graphs.addEdgeWithVertices(graph, data[0], data[1], data[4]);
                 lowerMap.put(edge, data[2]);
                 upperMap.put(edge, data[3]);
             }
@@ -1062,6 +1063,45 @@ public class CapacityScalingMinimumCostFlowTest {
         CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> minimumCostFlow = new CapacityScalingMinimumCostFlow<>(problem, scalingFactor);
         assertEquals(cost, minimumCostFlow.getFlowCost(), EPS);
         assertTrue(minimumCostFlow.testOptimality(EPS));
+
+        assertTrue(checkFlowAndDualSolution(minimumCostFlow.getDualSolution(), minimumCostFlow.getMinimumCostFlow(), problem));
+    }
+
+
+    private <V, E> boolean checkFlowAndDualSolution(DualSolution<V, E> dualSolution, MinimumCostFLow<E> flow, MinimumCostFlowProblem<V, E> problem) {
+        Graph<V, E> graph = dualSolution.getGraph();
+        Map<V, Double> dualVariables = dualSolution.getDualVariables();
+        // check supply constraints
+        for (V vertex : graph.vertexSet()) {
+            int supply = problem.getSupplyMap().getOrDefault(vertex, 0);
+            int flowIn = 0;
+            for (E edge : graph.incomingEdgesOf(vertex)) {
+                flowIn += flow.getFlowOnEdge(edge);
+            }
+            int flowOut = 0;
+            for (E edge : graph.outgoingEdgesOf(vertex)) {
+                flowOut += flow.getFlowOnEdge(edge);
+            }
+            if (supply != flowOut - flowIn) {
+                return false;
+            }
+        }
+        // check capacity constraints
+        for (E edge : graph.edgeSet()) {
+            if (problem.getLowerCapacityMap().getOrDefault(edge, 0) > flow.getFlowOnEdge(edge) || problem.getUpperCapacityMap().get(edge) < flow.getFlowOnEdge(edge)) {
+                return false;
+            }
+        }
+        for (Map.Entry<E, Integer> entry : flow.getFlowMap().entrySet()) {
+            E edge = entry.getKey();
+            if (entry.getValue() < problem.getUpperCapacityMap().get(edge)) {
+                // non-negative flow on arc => have to check reduced cost optimality conditions
+                if (graph.getEdgeWeight(edge) + dualVariables.get(graph.getEdgeTarget(edge)) - dualVariables.get(graph.getEdgeSource(edge)) < -EPS) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 
