@@ -583,26 +583,48 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * <p>
      * Is represented as a mapping from graph nodes to their potentials (dual variables). Reduced cost
      * of a arc $(a, b)$ is defined as $cost((a, b)) + potential(b) - potential(b)$. According
-     * to the reduced cost optimality conditions, the solution to the minimum cost flow problem is
+     * to the reduced cost optimality conditions, a feasible solution to the minimum cost flow problem is
      * optimal if and if reduced cost of every non-saturated arc is greater than or equal to $0$.
      *
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
     public static class DualSolution<V, E> {
+        /**
+         * The graph on which both primal and dual linear programs are formulated
+         */
         Graph<V, E> graph;
 
+        /**
+         * Mapping from vertices to their dual variables
+         */
         Map<V, Double> dualVariables;
 
+        /**
+         * Constructs a new dual solution for minimum cost flow problem
+         *
+         * @param graph         the underlying network
+         * @param dualVariables mapping from vertices to their dual variables
+         */
         public DualSolution(Graph<V, E> graph, Map<V, Double> dualVariables) {
             this.graph = graph;
             this.dualVariables = dualVariables;
         }
 
+        /**
+         * Returns the underlying flow network
+         *
+         * @return the underlying flow network
+         */
         public Graph<V, E> getGraph() {
             return graph;
         }
 
+        /**
+         * Returns the mapping from vertices to their dual variables
+         *
+         * @return the mapping from vertices to their dual variables
+         */
         public Map<V, Double> getDualVariables() {
             return dualVariables;
         }
