@@ -29,7 +29,6 @@ import java.util.Map;
  * @param <V> graph vertex type
  * @param <E> graph edge type
  * @author Timofey Chudakov
- * @since July 2018
  */
 public interface MinimumCostFlowAlgorithm<V, E> {
 
@@ -55,7 +54,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
      *
      * @return a <em>read-only</em> mapping from edges to the corresponding flow values.
      */
-    default Map<E, Integer> getFlowMap() {
+    default Map<E, Double> getFlowMap() {
         return getMinimumCostFlow().getFlowMap();
     }
 
@@ -90,7 +89,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
          * @param edge an edge from the flow network
          * @return the flow on the {@code edge}
          */
-        int getFlowOnEdge(E edge);
+        double getFlow(E edge);
 
         /**
          * Returns a mapping from the network flow edges to the corresponding flow values. The mapping
@@ -99,7 +98,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
          *
          * @return a read-only map that defines a feasible flow of minimum cost.
          */
-        Map<E, Integer> getFlowMap();
+        Map<E, Double> getFlowMap();
     }
 
     /**
@@ -115,7 +114,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
         /**
          * A mapping defining the flow on the network
          */
-        private Map<E, Integer> flowMap;
+        private Map<E, Double> flowMap;
 
         /**
          * Constructs a new instance of minimum cost flow
@@ -123,7 +122,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
          * @param cost    the cost of the flow
          * @param flowMap the mapping defining the flow on the network
          */
-        public MinimumCostFlowImpl(double cost, Map<E, Integer> flowMap) {
+        public MinimumCostFlowImpl(double cost, Map<E, Double> flowMap) {
             this.cost = cost;
             this.flowMap = Collections.unmodifiableMap(flowMap);
         }
@@ -132,7 +131,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Map<E, Integer> getFlowMap() {
+        public Map<E, Double> getFlowMap() {
             return flowMap;
         }
 
@@ -148,7 +147,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public int getFlowOnEdge(E edge) {
+        public double getFlow(E edge) {
             return flowMap.get(edge);
         }
     }

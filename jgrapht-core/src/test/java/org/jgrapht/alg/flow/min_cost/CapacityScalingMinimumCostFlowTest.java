@@ -1059,7 +1059,7 @@ public class CapacityScalingMinimumCostFlowTest {
                 upperMap.put(edge, data[3]);
             }
         }
-        MinimumCostFlowProblem<Integer, DefaultWeightedEdge> problem = new MinimumCostFlowProblem<>(graph, supplyMap, upperMap, lowerMap);
+        MinimumCostFlowProblem<Integer, DefaultWeightedEdge> problem = new MinimumCostFlowProblem<>(graph, v -> supplyMap.getOrDefault(v, 0), upperMap::get, e -> lowerMap.getOrDefault(e, 0));
         CapacityScalingMinimumCostFlow<Integer, DefaultWeightedEdge> minimumCostFlow = new CapacityScalingMinimumCostFlow<>(problem, scalingFactor);
         assertEquals(cost, minimumCostFlow.getFlowCost(), EPS);
         assertTrue(minimumCostFlow.testOptimality(EPS));
@@ -1068,19 +1068,19 @@ public class CapacityScalingMinimumCostFlowTest {
     }
 
 
-    private <V, E> boolean checkFlowAndDualSolution(DualSolution<V, E> dualSolution, MinimumCostFLow<E> flow, MinimumCostFlowProblem<V, E> problem) {
-        Graph<V, E> graph = dualSolution.getGraph();
+    private <V, E> boolean checkFlowAndDualSolution(DualSolution<V> dualSolution, MinimumCostFLow<E> flow, MinimumCostFlowProblem<V, E> problem) {
+        Graph<V, E> graph = problem.getGraph();
         Map<V, Double> dualVariables = dualSolution.getDualVariables();
         // check supply constraints
         for (V vertex : graph.vertexSet()) {
-            int supply = problem.getSupplyMap().getOrDefault(vertex, 0);
+            int supply = problem.getNodeDemands().apply(vertex);
             int flowIn = 0;
             for (E edge : graph.incomingEdgesOf(vertex)) {
-                flowIn += flow.getFlowOnEdge(edge);
+                flowIn += flow.getFlow(edge);
             }
             int flowOut = 0;
             for (E edge : graph.outgoingEdgesOf(vertex)) {
-                flowOut += flow.getFlowOnEdge(edge);
+                flowOut += flow.getFlow(edge);
             }
             if (supply != flowOut - flowIn) {
                 return false;
@@ -1088,13 +1088,13 @@ public class CapacityScalingMinimumCostFlowTest {
         }
         // check capacity constraints
         for (E edge : graph.edgeSet()) {
-            if (problem.getLowerCapacityMap().getOrDefault(edge, 0) > flow.getFlowOnEdge(edge) || problem.getUpperCapacityMap().get(edge) < flow.getFlowOnEdge(edge)) {
+            if (problem.getArcCapacityLowerBounds().apply(edge) > flow.getFlow(edge) || problem.getArcCapacityUpperBounds().apply(edge) < flow.getFlow(edge)) {
                 return false;
             }
         }
-        for (Map.Entry<E, Integer> entry : flow.getFlowMap().entrySet()) {
+        for (Map.Entry<E, Double> entry : flow.getFlowMap().entrySet()) {
             E edge = entry.getKey();
-            if (entry.getValue() < problem.getUpperCapacityMap().get(edge)) {
+            if (entry.getValue() < problem.getArcCapacityUpperBounds().apply(edge)) {
                 // non-negative flow on arc => have to check reduced cost optimality conditions
                 if (graph.getEdgeWeight(edge) + dualVariables.get(graph.getEdgeTarget(edge)) - dualVariables.get(graph.getEdgeSource(edge)) < -EPS) {
                     return false;

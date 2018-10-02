@@ -29,18 +29,34 @@ import java.util.*;
 /**
  * This class computes a solution to a <a href="https://en.wikipedia.org/wiki/Minimum-cost_flow_problem">
  * minimum cost flow problem</a> using the successive shortest path algorithm with capacity scaling.
- * More precisely, this class computes a b-flow of minimum cost, i.e. for each node $v$ in the network
+ * More precisely, this class computes a <i>b-flow</i> of minimum cost, i.e. for each node $v$ in the network
  * the sum of all outgoing flows minus the sum of all incoming flows should be equal to the node supply $b_v$
+ * <p>
+ * The minimum cost flow problem is defined as follows:
+ * \[ \begin{align} \mbox{minimize}~&amp; \sum_{e\in \delta^+(s)}c_e\cdot f_e &amp;\\
+ * \mbox{s.t. }&amp;\sum_{e\in \delta^-(i)} f_e - \sum_{e\in \delta^+(i)} f_e = b_e &amp; \forall i\in V\\
+ * &amp;l_e\leq f_e \leq u_e &amp; \forall e\in E
+ * \end{align} \]
+ * Here $\delta^+(i)$ and $\delta^-(i)$ denote the outgoing and incoming edges of vertex $i$ respectively.
+ * The parameters $c_{e}$ define a cost for each unit of flow on the arc $e$, $l_{e}$ define minimum arc flow
+ * and $u_{e}$ define maximum arc flow. If $u_{e}$ is equal to {@link CapacityScalingMinimumCostFlow#CAP_INF},
+ * then arbitrary large flow can be sent across the arc $e$. Parameters $b_{e}$ define the nodes demands: positive
+ * demand means that a node is a supply node, 0 demand means that it is a transhipment node, negative demand means
+ * that it is a demand node. Parameters $b_{e}$, $l_{e}$ and $u_{e}$ can be specified via {@link MinimumCostFlowProblem},
+ * graph edge weights are considered to be parameters $c_{e}$, which can be negative.
  * <p>
  * This algorithm supports two modes: with and without scaling. An integral scaling factor can be specified
  * during construction time. If the specified scaling factor is less than 2, then the algorithm solves the
- * specified problem using regular successive shortest path. Currently the algorithm doesn't support undirected
- * flow networks. The algorithm also imposes two constraints on the directed flow networks, namely, is doesn't
- * support infinite capacity arcs with negative cost and self-loops aren't allowed. Note, that in this case a cost
- * of a flow on the network can be bounded from below by some constant, i.e. a feasible finite weight solution
- * can exist. The default scaling factor is {@link CapacityScalingMinimumCostFlow#DEFAULT_SCALING_FACTOR}.
+ * specified problem using regular successive shortest path. The default scaling factor is
+ * {@link CapacityScalingMinimumCostFlow#DEFAULT_SCALING_FACTOR}.
  * <p>
- * An arc with capacity greater that ot equal to {@link CapacityScalingMinimumCostFlow#CAP_INF} is considered to be
+ * Currently the algorithm doesn't support undirected
+ * flow networks. The algorithm also imposes two constraints on the directed flow networks, namely, is doesn't
+ * support infinite capacity arcs with negative cost and self-loops. Note, that in the case the network contains
+ * an infinite capacity arc with negative cost, the cost of a flow on the network can be bounded from below by
+ * some constant, i.e. a feasible finite weight solution can exist.
+ * <p>
+ * An arc with capacity greater that or equal to {@link CapacityScalingMinimumCostFlow#CAP_INF} is considered to be
  * an infinite capacity arc. The algorithm also uses {@link CapacityScalingMinimumCostFlow#COST_INF} during the computation,
  * therefore, the magnitude of the cost of any arc can exceed this values.
  * <p>
@@ -66,7 +82,6 @@ import java.util.*;
  * @author Timofey Chudakov
  * @see MinimumCostFlowProblem
  * @see MinimumCostFlowAlgorithm
- * @since July 2018
  */
 public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgorithm<V, E> {
 
@@ -93,6 +108,14 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      */
     private final int scalingFactor;
     /**
+     * Number of vertices in the network
+     */
+    private final int n;
+    /**
+     * Number of edges in the network
+     */
+    private final int m;
+    /**
      * Variable that is used to determine whether a vertex has been labeled temporarily or permanently during
      * Dijkstra's algorithm
      */
@@ -105,8 +128,10 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * Computed minimum cost flow
      */
     private MinimumCostFLow<E> minimumCostFLow;
-
-    private DualSolution<V, E> dualSolution;
+    /**
+     * Solution to the dual linear program formulated on the input flow network
+     */
+    private DualSolution<V> dualSolution;
     /**
      * Array of internal nodes used by the algorithm. Node: these nodes are stored in the same order as vertices of
      * the specified flow network. This allows to determine quickly their counterparts in the network.
@@ -125,14 +150,6 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * List of edges of the flow network.
      */
     private List<E> graphEdges;
-    /**
-     * Number of vertices in the network
-     */
-    private int n;
-    /**
-     * Number of edges in the network
-     */
-    private int m;
 
     /**
      * Constructs a new instance of the algorithm which uses default scaling factor.
@@ -151,13 +168,13 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * @param scalingFactor custom scaling factor
      */
     public CapacityScalingMinimumCostFlow(MinimumCostFlowProblem<V, E> problem, int scalingFactor) {
-        if (problem.graph.getType().isUndirected()) {
+        if (problem.getGraph().getType().isUndirected()) {
             throw new IllegalArgumentException("The algorithm doesn't support undirected flow networks");
         }
         this.problem = Objects.requireNonNull(problem);
         this.scalingFactor = scalingFactor;
-        n = problem.graph.vertexSet().size();
-        m = problem.graph.edgeSet().size();
+        n = problem.getGraph().vertexSet().size();
+        m = problem.getGraph().edgeSet().size();
         Node.ID = 0; // for debug
     }
 
@@ -166,7 +183,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      */
     @Override
     public V getFlowDirection(E edge) {
-        return problem.graph.getEdgeTarget(edge);
+        return problem.getGraph().getEdgeTarget(edge);
     }
 
     /**
@@ -181,11 +198,16 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
-     * Returns dual solution to the linear program formulated on the flow network
+     * Returns solution to the dual linear program formulated on the network. Serves as a certificate of optimality.
+     * <p>
+     * It is represented as a mapping from graph nodes to their potentials (dual variables). Reduced cost
+     * of a arc $(a, b)$ is defined as $cost((a, b)) + potential(b) - potential(b)$. According
+     * to the reduced cost optimality conditions, a feasible solution to the minimum cost flow problem is
+     * optimal if and if reduced cost of every non-saturated arc is greater than or equal to $0$.
      *
-     * @return dual solution to the linear program formulated on the flow network
+     * @return solution to the dual linear program formulated on the network.
      */
-    public DualSolution<V, E> getDualSolution() {
+    public DualSolution<V> getDualSolution() {
         dualSolution = lazyComputeDualSolution();
         return dualSolution;
     }
@@ -195,14 +217,14 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      *
      * @return a solution to the dual linear program
      */
-    private DualSolution<V, E> lazyComputeDualSolution() {
+    private DualSolution<V> lazyComputeDualSolution() {
         lazyCalculateMinimumCostFlow();
         if (dualSolution == null) {
             Map<V, Double> dualVariables = new HashMap<>();
             for (int i = 0; i < n; i++) {
                 dualVariables.put(graphVertices.get(i), nodes[i].potential);
             }
-            dualSolution = new DualSolution<>(problem.graph, dualVariables);
+            dualSolution = new DualSolution<>(dualVariables);
         }
         return dualSolution;
     }
@@ -259,13 +281,13 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         graphVertices = new ArrayList<>(n);
 
         Map<V, Node> nodeMap = new HashMap<>(n);
-        Graph<V, E> graph = problem.graph;
+        Graph<V, E> graph = problem.getGraph();
 
         // convert vertices into internal nodes
         int i = 0;
         for (V vertex : graph.vertexSet()) {
             graphVertices.add(vertex);
-            int supply = problem.supplyMap.getOrDefault(vertex, 0);
+            int supply = problem.getNodeDemands().apply(vertex);
             supplySum += supply;
             nodes[i] = new Node(supply);
             nodeMap.put(vertex, nodes[i]);
@@ -283,9 +305,9 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             graphEdges.add(edge);
             Node node = nodeMap.get(graph.getEdgeSource(edge));
             Node opposite = nodeMap.get(graph.getEdgeTarget(edge));
-            int upperCap = problem.upperCapacityMap.get(edge);
-            int lowerCap = problem.lowerCapacityMap.getOrDefault(edge, 0);
-            double cost = problem.graph.getEdgeWeight(edge);
+            int upperCap = problem.getArcCapacityUpperBounds().apply(edge);
+            int lowerCap = problem.getArcCapacityLowerBounds().apply(edge);
+            double cost = graph.getEdgeWeight(edge);
 
             if (upperCap < 0) {
                 throw new IllegalArgumentException("Negative edge capacities are not allowed");
@@ -532,7 +554,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * @return the solution to the minimum cost flow problem
      */
     private MinimumCostFLow<E> finish() {
-        Map<E, Integer> flowMap = new HashMap<>(m);
+        Map<E, Double> flowMap = new HashMap<>(m);
         double totalCost = 0;
         // check feasibility
         for (Arc arc = nodes[n].firstNonSaturated; arc != null; arc = arc.next) {
@@ -544,14 +566,14 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         for (int i = 0; i < m; i++) {
             E graphEdge = graphEdges.get(i);
             Arc arc = arcs[i];
-            int flowOnArc = arc.revArc.residualCapacity; // this value equals to the flow on the initial arc
-            if (problem.graph.getEdgeWeight(graphEdge) < 0) {
+            double flowOnArc = arc.revArc.residualCapacity; // this value equals to the flow on the initial arc
+            if (problem.getGraph().getEdgeWeight(graphEdge) < 0) {
                 // the initial arc goes in the opposite direction
-                flowOnArc = problem.upperCapacityMap.get(graphEdge) - problem.lowerCapacityMap.getOrDefault(graphEdge, 0) - flowOnArc;
+                flowOnArc = problem.getArcCapacityUpperBounds().apply(graphEdge) - problem.getArcCapacityLowerBounds().apply(graphEdge) - flowOnArc;
             }
-            flowOnArc += problem.lowerCapacityMap.getOrDefault(graphEdge, 0);
+            flowOnArc += problem.getArcCapacityLowerBounds().apply(graphEdge);
             flowMap.put(graphEdge, flowOnArc);
-            totalCost += flowOnArc * problem.graph.getEdgeWeight(graphEdge);
+            totalCost += flowOnArc * problem.getGraph().getEdgeWeight(graphEdge);
         }
         return new MinimumCostFlowImpl<>(totalCost, flowMap);
     }
@@ -561,7 +583,9 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * <p>
      * More precisely, tests, whether the reduced cost of every non-saturated arc in the residual network is non-negative.
      * This validation is performed with precision of {@code eps}. If the solution doesn't meet this condition,
-     * returns, false. Otherwise, returns true.
+     * returns, false.
+     * <p>
+     * In general, this method should always return true unless the algorithm implementation has a bug.
      *
      * @param eps the precision to use
      * @return true, if the computed solution is optimal, false otherwise.
@@ -581,20 +605,14 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     /**
      * Solution to the dual linear program formulated on the network. Serves as a certificate of optimality.
      * <p>
-     * Is represented as a mapping from graph nodes to their potentials (dual variables). Reduced cost
+     * It is represented as a mapping from graph nodes to their potentials (dual variables). Reduced cost
      * of a arc $(a, b)$ is defined as $cost((a, b)) + potential(b) - potential(b)$. According
      * to the reduced cost optimality conditions, a feasible solution to the minimum cost flow problem is
      * optimal if and if reduced cost of every non-saturated arc is greater than or equal to $0$.
      *
      * @param <V> graph vertex type
-     * @param <E> graph edge type
      */
-    public static class DualSolution<V, E> {
-        /**
-         * The graph on which both primal and dual linear programs are formulated
-         */
-        Graph<V, E> graph;
-
+    public static class DualSolution<V> {
         /**
          * Mapping from vertices to their dual variables
          */
@@ -603,21 +621,10 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         /**
          * Constructs a new dual solution for minimum cost flow problem
          *
-         * @param graph         the underlying network
          * @param dualVariables mapping from vertices to their dual variables
          */
-        public DualSolution(Graph<V, E> graph, Map<V, Double> dualVariables) {
-            this.graph = graph;
+        public DualSolution(Map<V, Double> dualVariables) {
             this.dualVariables = dualVariables;
-        }
-
-        /**
-         * Returns the underlying flow network
-         *
-         * @return the underlying flow network
-         */
-        public Graph<V, E> getGraph() {
-            return graph;
         }
 
         /**

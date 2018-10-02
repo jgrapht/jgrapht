@@ -20,68 +20,74 @@ package org.jgrapht.alg.flow.min_cost;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Function;
 
 /**
  * This class represents a <a href="https://en.wikipedia.org/wiki/Minimum-cost_flow_problem">
  * minimum cost flow problem</a>. It serves as input for the minimum cost flow algorithms.
+ * <p>
+ * The minimum cost flow problem is defined as follows:
+ * \[ \begin{align} \mbox{minimize}~&amp; \sum_{e\in \delta^+(s)}c_e\cdot f_e &amp;\\
+ * \mbox{s.t. }&amp;\sum_{e\in \delta^-(i)} f_e - \sum_{e\in \delta^+(i)} f_e = b_e &amp; \forall i\in V\\
+ * &amp;l_e\leq f_e \leq u_e &amp; \forall e\in E
+ * \end{align} \]
+ * Here $\delta^+(i)$ and $\delta^-(i)$ denote the outgoing and incoming edges of vertex $i$ respectively.
+ * The parameters $c_{e}$ define a cost for each unit of flow on the arc $e$, $l_{e}$ define minimum arc flow
+ * and $u_{e}$ define maximum arc flow.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  * @see MinimumCostFlowAlgorithm
- * @since July 2018
  */
 public class MinimumCostFlowProblem<V, E> {
     /**
      * The flow network
      */
-    Graph<V, E> graph;
+    private Graph<V, E> graph;
     /**
-     * The mapping from nodes to the corresponding supplies of the nodes. In every feasible for every node of
-     * the network the sum of all outgoing flows minus the sum of all incoming flows should be equal to the
-     * supply of the node. flow This mapping doesn't need to contain transhipment nodes (with zero supply).
+     * Function specifying the demand of each node. Demands can be positive, negative or 0. The positive
+     * demand nodes are the supply nodes, the nodes with 0 demand are transhipment nodes. Flow is always
+     * directed from supply nodes to nodes with negative demand. Summed over all nodes, the total demand
+     * should equal 0.
      */
-    Map<V, Integer> supplyMap;
+    private Function<V, Integer> nodeDemands;
     /**
-     * The mapping from edges of the network to the corresponding lower bounds of the flow on edges.
-     * Every feasible flow should satisfy the property that every arc's flow should be no less than
-     * its lower bound. This is an optional part of the problem. This mapping doesn't need to contains
-     * edges with zero lower capacities.
+     * Function specifying the lower arc capacities. Every feasible solution to this problem should satisfy the
+     * property that every arc's flow should be no less than its lower bound. This is an optional part of
+     * the problem.
      */
-    Map<E, Integer> lowerCapacityMap;
+    private Function<E, Integer> arcCapacityLowerBounds;
     /**
-     * The mapping from edges of the network to the corresponding upper bounds of the flow on edges.
-     * Every feasible flow should satisfy the property that the flow on an arc doesn't exceeds its
-     * upper bound. This mapping must contain all edges of the network.
+     * Function specifying the upper arc capacities. Every feasible solution to this problem should satisfy the
+     * property that the flow on an arc doesn't exceeds its upper bound.
      */
-    Map<E, Integer> upperCapacityMap;
+    private Function<E, Integer> arcCapacityUpperBounds;
 
     /**
-     * Constructs a new minimum cost flow problem without arcs' lower bounds.
+     * Constructs a new minimum cost flow problem without arc capacity lower bounds.
      *
-     * @param graph            the flow network
-     * @param supplyMap        the supply map of the network
-     * @param upperCapacityMap the lower capacity map of the network
+     * @param graph                  the flow network
+     * @param supplyMap              the node demands
+     * @param arcCapacityUpperBounds the arc capacity upper bounds
      */
-    public MinimumCostFlowProblem(Graph<V, E> graph, Map<V, Integer> supplyMap, Map<E, Integer> upperCapacityMap) {
-        this(graph, supplyMap, upperCapacityMap, new HashMap<>(0));
+    public MinimumCostFlowProblem(Graph<V, E> graph, Function<V, Integer> supplyMap, Function<E, Integer> arcCapacityUpperBounds) {
+        this(graph, supplyMap, arcCapacityUpperBounds, a -> 0);
     }
 
     /**
      * Constructs a new minimum cost flow problem
      *
-     * @param graph            the flow network
-     * @param supplyMap        the supply map of the network
-     * @param upperCapacityMap the lower capacity map of the network
-     * @param lowerCapacityMap the upper capacity map of the network
+     * @param graph                  the flow network
+     * @param nodeDemands            the node demands
+     * @param arcCapacityUpperBounds the arc capacity upper bounds
+     * @param arcCapacityLowerBounds the arc capacity lower bounds
      */
-    public MinimumCostFlowProblem(Graph<V, E> graph, Map<V, Integer> supplyMap, Map<E, Integer> upperCapacityMap, Map<E, Integer> lowerCapacityMap) {
+    public MinimumCostFlowProblem(Graph<V, E> graph, Function<V, Integer> nodeDemands, Function<E, Integer> arcCapacityUpperBounds, Function<E, Integer> arcCapacityLowerBounds) {
         this.graph = graph;
-        this.supplyMap = supplyMap;
-        this.upperCapacityMap = upperCapacityMap;
-        this.lowerCapacityMap = lowerCapacityMap;
+        this.nodeDemands = nodeDemands;
+        this.arcCapacityUpperBounds = arcCapacityUpperBounds;
+        this.arcCapacityLowerBounds = arcCapacityLowerBounds;
     }
 
     /**
@@ -94,29 +100,29 @@ public class MinimumCostFlowProblem<V, E> {
     }
 
     /**
-     * Returns the supply map of the flow network
+     * Returns the supply function of the flow network
      *
-     * @return the supply map of the flow network
+     * @return the supply function of the flow network
      */
-    public Map<V, Integer> getSupplyMap() {
-        return supplyMap;
+    public Function<V, Integer> getNodeDemands() {
+        return nodeDemands;
     }
 
     /**
-     * Returns the lower capacity map of the flow network
+     * Returns the lower capacity function of the flow network
      *
-     * @return the lower capacity of the flow network
+     * @return the lower capacity function of the flow network
      */
-    public Map<E, Integer> getLowerCapacityMap() {
-        return lowerCapacityMap;
+    public Function<E, Integer> getArcCapacityLowerBounds() {
+        return arcCapacityLowerBounds;
     }
 
     /**
-     * Returns the upper capacity map of the flow network
+     * Returns the upper capacity function of the flow network
      *
-     * @return the upper capacity of the flow network
+     * @return the upper capacity function of the flow network
      */
-    public Map<E, Integer> getUpperCapacityMap() {
-        return upperCapacityMap;
+    public Function<E, Integer> getArcCapacityUpperBounds() {
+        return arcCapacityUpperBounds;
     }
 }
