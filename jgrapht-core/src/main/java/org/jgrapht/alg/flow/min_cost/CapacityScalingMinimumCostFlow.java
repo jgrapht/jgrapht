@@ -50,6 +50,14 @@ import java.util.*;
  * specified problem using regular successive shortest path. The default scaling factor is
  * {@link CapacityScalingMinimumCostFlow#DEFAULT_SCALING_FACTOR}.
  * <p>
+ * Essentially, the capacity scaling technique is breaking down the solution of the problem into $O(\log U)$ phases
+ * $\left[\Delta_i, \Delta_{i +1}\right],\ \Delta_i = 2^{i}, i = 0, 1, \dots, \log_a(U) - 1$. At each phase the algorithm
+ * carries at least $\delta_i$ units of flow. This technique ensures weakly polynomial time bound on the running time
+ * complexity of the algorithm. Smaller scaling factors guarantee smaller constant in the asymptotic time bound. The
+ * best choice of scaling factor is between $2$ and $16$, which depends on the characteristics of the flow network.
+ * Choosing $100$ as a scaling factor is almost equivalent to using the algorithm without scaling. In the case the
+ * algorithm is used without scaling, it has pseudo-polynomial time complexity $\mathcal{O}(nU(m + n)\log n)$.
+ * <p>
  * Currently the algorithm doesn't support undirected
  * flow networks. The algorithm also imposes two constraints on the directed flow networks, namely, is doesn't
  * support infinite capacity arcs with negative cost and self-loops. Note, that in the case the network contains
@@ -58,7 +66,7 @@ import java.util.*;
  * <p>
  * An arc with capacity greater that or equal to {@link CapacityScalingMinimumCostFlow#CAP_INF} is considered to be
  * an infinite capacity arc. The algorithm also uses {@link CapacityScalingMinimumCostFlow#COST_INF} during the computation,
- * therefore, the magnitude of the cost of any arc can exceed this values.
+ * therefore, the magnitude of the cost of any arc can't exceed this values.
  * <p>
  * In the capacity scaling mode, the algorithm performs $\mathcal{O}(log_a U)$ $\Delta$-scaling phases, where $U$ is the
  * largest magnitude of any supply/demand or finite arc capacity, and $a$ is a scaling factor, which is considered to
@@ -98,7 +106,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     /**
      * Default scaling factor
      */
-    public static final int DEFAULT_SCALING_FACTOR = 2;
+    public static final int DEFAULT_SCALING_FACTOR = 8;
     /**
      * Debug variable
      */

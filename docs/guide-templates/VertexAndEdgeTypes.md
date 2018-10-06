@@ -211,7 +211,7 @@ valid (or if it's not, the algorithm avoids reuse).
 
 Another common case is for each edge to bear a double-valued weight as
 its only attribute (e.g. a physical network with latency measured for
-each link).  For this case, JGraphT supplies the `DefaultWeightedEdge`
+each link).  For this case, JGraphT supplyMap the `DefaultWeightedEdge`
 class, which extends the optimization mentioned in the previous
 section by storing the weight directly on the edge object.
 
