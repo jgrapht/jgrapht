@@ -26,6 +26,7 @@ import org.jgrapht.util.SupplierUtil;
 
 import java.util.*;
 import java.util.function.Supplier;
+
 //@example:class:end
 
 /**

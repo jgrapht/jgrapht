@@ -95,6 +95,7 @@ public final class HelloJGraphT
         throws MalformedURLException
     {
         //@example:urlCreate:begin
+
         Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         URL google = new URL("http://www.google.com");
@@ -111,6 +112,7 @@ public final class HelloJGraphT
         g.addEdge(google, jgrapht);
         g.addEdge(google, wikipedia);
         g.addEdge(wikipedia, google);
+
         //@example:urlCreate:end
 
         return g;
@@ -143,6 +145,7 @@ public final class HelloJGraphT
         throws ExportException
     {
         //@example:render:begin
+
         // use helper classes to define how vertices should be rendered,
         // adhering to the DOT language restrictions
         ComponentNameProvider<URL> vertexIdProvider =
