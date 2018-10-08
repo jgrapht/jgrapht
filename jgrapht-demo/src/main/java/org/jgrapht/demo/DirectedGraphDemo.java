@@ -18,6 +18,7 @@
 
 package org.jgrapht.demo;
 
+//@example:main:begin
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
@@ -26,6 +27,7 @@ import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
+//@example:main:end
 
 /**
  * This class demonstrates some of the operations that can be performed on directed graphs. After

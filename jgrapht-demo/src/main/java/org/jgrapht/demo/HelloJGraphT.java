@@ -17,12 +17,18 @@
  */
 package org.jgrapht.demo;
 
+//@example:urlCreate:begin
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+//@example:urlCreate:end
 import org.jgrapht.traverse.*;
+//@example:render:begin
 import org.jgrapht.io.*;
+//@example:render:end
 
+//@example:urlCreate:begin
 import java.net.*;
+//@example:urlCreate:end
 import java.util.*;
 import java.io.*;
 

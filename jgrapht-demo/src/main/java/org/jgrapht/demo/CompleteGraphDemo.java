@@ -17,6 +17,7 @@
  */
 package org.jgrapht.demo;
 
+//@example:class:begin
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
@@ -25,6 +26,7 @@ import org.jgrapht.util.SupplierUtil;
 
 import java.util.*;
 import java.util.function.Supplier;
+//@example:class:end
 
 /**
  * Demonstrates how to create a complete graph and perform a depth first search on it.
