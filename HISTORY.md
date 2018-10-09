@@ -41,6 +41,16 @@ Changes to JGraphT in each version:
     - Added `ClusteringCoefficient` to compute the local and global clustering coefficient of a graph (contributed by Alexandru Văleanu)
     - Refactored LCA interface, reimplemented Tarjan's algorithm and added HeavyPathLCAFinder, BinaryLiftingLCAFinder, EulerTourRMQLCAFinder (contributed by Alexandru Văleanu)
     - Added jgrapht-opt module with fastutil graph implementation (contributed by Dimitrios Michail)
+    - Added negative weight cycle reporting in Bellman-Ford (contributed by Dimitrios Michail in response to proposal from Miron Balcerzak)
+    - Added `KolmogorovMinimumWeightPerfectMatching` (contributed by Timofey Chudakov)
+    - Added graph implementation specific for integer vertices and fastutil map to jgrapht-opt module (contributed by Dimitrios Michail)
+    - Added Christofides algorithm for computing 3/2 approximate TSP solutions (contributed by Timofey Chudakov)
+    - Fixed bug in HeldKarpTSP (reported by Timofey Chudako, contributed by Alexandru Văleanu)
+    - Addded `PartitioningAlgorithm` interface and `BipartitePartitioning` implementation for recognizing bipartite graphs (contributed by Alexandru Văleanu)
+    - Fixed bug in `GraphTests.isStronglyConnected`: undirected graphs are now correctly identified as strongly connected whenever the graph is connected (reported by Joris Kinable, contributed by Dimitrios Michail)
+    - Upgraded EPL to v2.0, copyright header cleanup, removed @since tag (contributed by John Sichi)
+    - Use checkstyle to enforce correct file headers (contributed by John Sichi)
+    - Added `ChinesePostman` (contributed by Joris Kinable)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

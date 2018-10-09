@@ -3,26 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.demo;
 
+//@example:urlCreate:begin
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+//@example:urlCreate:end
 import org.jgrapht.traverse.*;
+//@example:render:begin
 import org.jgrapht.io.*;
+//@example:render:end
 
+//@example:urlCreate:begin
 import java.net.*;
+//@example:urlCreate:end
 import java.util.*;
 import java.io.*;
 
@@ -30,7 +36,6 @@ import java.io.*;
  * A simple introduction to using JGraphT.
  *
  * @author Barak Naveh
- * @since Jul 27, 2003
  */
 public final class HelloJGraphT
 {
@@ -90,6 +95,7 @@ public final class HelloJGraphT
         throws MalformedURLException
     {
         //@example:urlCreate:begin
+
         Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         URL google = new URL("http://www.google.com");
@@ -106,6 +112,7 @@ public final class HelloJGraphT
         g.addEdge(google, jgrapht);
         g.addEdge(google, wikipedia);
         g.addEdge(wikipedia, google);
+
         //@example:urlCreate:end
 
         return g;
@@ -138,6 +145,7 @@ public final class HelloJGraphT
         throws ExportException
     {
         //@example:render:begin
+
         // use helper classes to define how vertices should be rendered,
         // adhering to the DOT language restrictions
         ComponentNameProvider<URL> vertexIdProvider =
@@ -194,4 +202,3 @@ public final class HelloJGraphT
     }
 }
 
-// End HelloJGraphT.java

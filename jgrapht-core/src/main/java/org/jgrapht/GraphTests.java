@@ -3,17 +3,17 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
@@ -24,6 +24,8 @@ import org.jgrapht.alg.cycle.BergeGraphInspector;
 import org.jgrapht.alg.cycle.ChordalityInspector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 import org.jgrapht.alg.cycle.WeakChordalityInspector;
+import org.jgrapht.alg.interfaces.PartitioningAlgorithm;
+import org.jgrapht.alg.partition.BipartitePartitioning;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,8 +45,6 @@ public abstract class GraphTests
         "Graph must be directed or undirected";
     private static final String GRAPH_MUST_BE_UNDIRECTED = "Graph must be undirected";
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
-    private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
-    private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
     private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
@@ -243,11 +243,13 @@ public abstract class GraphTests
     }
 
     /**
-     * Test whether a directed graph is strongly connected.
+     * Test whether a graph is strongly connected.
      * 
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
+     * 
+     * <p>In case of undirected graphs this method delegated to {@link #isConnected(Graph)}.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -258,7 +260,11 @@ public abstract class GraphTests
     public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        if (graph.getType().isUndirected()) {
+            return isConnected(graph);
+        } else {
+            return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        }
     }
 
     /**
@@ -364,48 +370,11 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is bipartite, false otherwise
+     * @see BipartitePartitioning#isBipartite()
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
-        if (isEmpty(graph)) {
-            return true;
-        }
-        try {
-            // at most n^2/4 edges
-            if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
-                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
-            {
-                return false;
-            }
-        } catch (ArithmeticException e) {
-            // ignore
-        }
-
-        Set<V> unknown = new HashSet<>(graph.vertexSet());
-        Set<V> odd = new HashSet<>();
-        Deque<V> queue = new LinkedList<>();
-
-        while (!unknown.isEmpty()) {
-            if (queue.isEmpty()) {
-                queue.add(unknown.iterator().next());
-            }
-
-            V v = queue.removeFirst();
-            unknown.remove(v);
-
-            for (E e : graph.edgesOf(v)) {
-                V n = Graphs.getOppositeVertex(graph, e, v);
-                if (unknown.contains(n)) {
-                    queue.add(n);
-                    if (!odd.contains(v)) {
-                        odd.add(n);
-                    }
-                } else if (odd.contains(v) == odd.contains(n)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return new BipartitePartitioning<>(graph).isBipartite();
     }
 
     /**
@@ -417,38 +386,15 @@ public abstract class GraphTests
      * @return true if the partition is a bipartite partition, false otherwise
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @see BipartitePartitioning#isValidPartitioning(PartitioningAlgorithm.Partitioning)
      */
+    @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
         Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
-        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        Objects.requireNonNull(firstPartition, FIRST_PARTITION_CANNOT_BE_NULL);
-        Objects.requireNonNull(secondPartition, SECOND_PARTITION_CANNOT_BE_NULL);
-
-        if (graph.vertexSet().size() != firstPartition.size() + secondPartition.size()) {
-            return false;
-        }
-
-        for (V v : graph.vertexSet()) {
-            Collection<? extends V> otherPartition;
-            if (firstPartition.contains(v)) {
-                otherPartition = secondPartition;
-            } else if (secondPartition.contains(v)) {
-                otherPartition = firstPartition;
-            } else {
-                // v does not belong to any of the two partitions
-                return false;
-            }
-
-            for (E e : graph.edgesOf(v)) {
-                V other = Graphs.getOppositeVertex(graph, e, v);
-                if (!otherPartition.contains(other)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return new BipartitePartitioning<>(graph).isValidPartitioning(
+            new PartitioningAlgorithm.PartitioningImpl<>(
+                Arrays.asList((Set<V>) firstPartition, (Set<V>) secondPartition)));
     }
 
     /**
@@ -572,7 +518,8 @@ public abstract class GraphTests
     }
 
     /**
-     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a triangle of edges).
+     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a
+     * triangle of edges).
      *
      * The implementation of this method uses {@link GraphMetrics#getNumberOfTriangles(Graph)}.
      *
@@ -745,4 +692,3 @@ public abstract class GraphTests
     }
 }
 
-// End GraphTests.java

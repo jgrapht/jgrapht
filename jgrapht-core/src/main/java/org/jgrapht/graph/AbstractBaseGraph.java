@@ -3,17 +3,17 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
@@ -44,7 +44,6 @@ import java.util.function.*;
  *
  * @author Barak Naveh
  * @author Dimitrios Michail
- * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
     extends AbstractGraph<V, E>
@@ -193,6 +192,13 @@ public abstract class AbstractBaseGraph<V, E>
      * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
      * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * 
+     * <p>
+     * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
+     * and {@link Graph#addVertex()}. In such a case the user must make sure never to add vertices
+     * in the graph using method {@link Graph#addVertex(Object)}, which are going to be returned in
+     * the future by the supplied vertex supplier. Such a sequence will result into an
+     * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
      * 
      * @param vertexSupplier the vertex supplier
      */
@@ -608,4 +614,3 @@ public abstract class AbstractBaseGraph<V, E>
 
 }
 
-// End AbstractBaseGraph.java

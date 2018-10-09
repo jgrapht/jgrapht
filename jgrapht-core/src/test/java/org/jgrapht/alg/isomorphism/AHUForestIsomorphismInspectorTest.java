@@ -3,21 +3,22 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
@@ -25,6 +26,7 @@ import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -166,6 +168,7 @@ public class AHUForestIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeNumberOfChildren(){
         final int N = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -194,6 +197,7 @@ public class AHUForestIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomForests(){
         Random random = new Random(0x2312);
         final int NUM_TESTS = 1000;
@@ -223,6 +227,7 @@ public class AHUForestIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeRandomForest(){
         final int N = 50_000;
         Graph<Integer, DefaultEdge> tree1 = generateForest(N, new Random(0x88));

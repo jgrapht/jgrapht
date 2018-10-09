@@ -3,27 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -69,8 +71,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
 
     @Test(expected = NullPointerException.class)
     public void testNullGraphs(){
-        AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUUnrootedTreeIsomorphismInspector<>(null, null);
+        new AHUUnrootedTreeIsomorphismInspector<>(null, null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -78,8 +79,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
         tree1.addVertex("a");
 
-        AHUUnrootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-                new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);
+        new AHUUnrootedTreeIsomorphismInspector<>(tree1, null);
     }
 
     @Test
@@ -348,6 +348,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testLineGraph(){
         final int N = 20_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -364,7 +365,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
                 generateIsomorphicGraph(tree1, new Random(0x88));
 
         Graph<Integer, DefaultEdge> tree2 = pair.getFirst();
-        Map<Integer, Integer> mapping = pair.getSecond();
+        pair.getSecond();
 
         AHUUnrootedTreeIsomorphismInspector<Integer, DefaultEdge> isomorphism =
                 new AHUUnrootedTreeIsomorphismInspector<>(tree1, tree2);
@@ -375,6 +376,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeNumberOfChildren(){
         final int N = 100_000;
         Graph<Integer, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
@@ -401,6 +403,7 @@ public class AHUUnrootedTreeIsomorphismInspectorTest {
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testHugeRandomTree(){
         final int N = 50_000;
         Graph<Integer, DefaultEdge> tree1 = generateTree(N, new Random(0x88));
