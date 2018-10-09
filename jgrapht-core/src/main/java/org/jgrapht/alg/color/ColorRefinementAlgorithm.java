@@ -104,11 +104,11 @@ public class ColorRefinementAlgorithm<V, E>
 
             Set<Integer> adjacentColors = calculateColorDegrees(currentColor, rep);
 
-            List<Integer> colorsToBeSplit = adjacentColors
-                .stream().filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
-                .collect(Collectors.toCollection(ArrayList::new));
-            colorsToBeSplit.sort(Comparator.comparingInt(o -> o)); // canonical order
-            colorsToBeSplit.forEach(color -> splitUpColor(color, refineStack, rep));
+            // split colors
+            adjacentColors.stream()
+                .filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
+                .sorted(Comparator.comparingInt(o -> o)) // canonical order
+                .forEach(color -> splitUpColor(color, refineStack, rep));
 
             cleanupColorDegrees(adjacentColors, rep);
         }
@@ -178,13 +178,13 @@ public class ColorRefinementAlgorithm<V, E>
      */
     private void cleanupColorDegrees(Set<Integer> adjacentColors, ColoringRepresentation rep)
     {
-        adjacentColors.stream().forEach(c -> {
+        for(int c: adjacentColors) { 
             for (V v : rep.positiveDegreeColorClasses.get(c)) {
                 rep.colorDegree.put(v, 0);
             }
             rep.maxColorDegree[c] = 0;
             rep.positiveDegreeColorClasses.put(c, new ArrayList<>());
-        });
+        }
     }
 
     /**
