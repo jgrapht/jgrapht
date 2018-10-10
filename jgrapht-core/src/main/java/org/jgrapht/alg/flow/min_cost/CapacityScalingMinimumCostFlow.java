@@ -420,7 +420,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     }
 
     /**
-     * For every node in the {@code positiveExcessNodes} pushes all flow from it until its excess is less than
+     * For every node in the {@code positiveExcessNodes} pushes all flow away from it until its excess is less than
      * {@code delta}. This is always possible due to the performed flow network reduction during the initialization
      * phase.
      *
@@ -446,7 +446,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * in the $\Delta$-residual network, the augmentation carries at least {@code delta} units of flow. The search always
      * succeeds due to the flow network reduction performed during the initialization phase.
      * <p>
-     * Updates the potentials of the nodes so than they:
+     * Updates the potentials of the nodes so that they:
      * <ul>
      * <li>Satisfy optimality conditions in the $\Delta$-residual network</li>
      * <li>The reduced cost of the augmented path is equal to $0$</li>
