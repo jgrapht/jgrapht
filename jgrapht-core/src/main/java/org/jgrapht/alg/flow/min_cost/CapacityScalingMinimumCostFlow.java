@@ -135,7 +135,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     /**
      * Computed minimum cost flow
      */
-    private MinimumCostFLow<E> minimumCostFLow;
+    private MinimumCostFlow<E> minimumCostFLow;
     /**
      * Solution to the dual linear program formulated on the input flow network
      */
@@ -198,7 +198,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * {@inheritDoc}
      */
     @Override
-    public MinimumCostFLow<E> getMinimumCostFlow() {
+    public MinimumCostFlow<E> getMinimumCostFlow() {
         if (minimumCostFLow == null) {
             lazyCalculateMinimumCostFlow();
         }
@@ -556,12 +556,12 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
 
     /**
      * Finishes the computation by checking the flow feasibility, computing arc flows, and creating an instance
-     * of {@link MinimumCostFLow}. The resulting flow mapping contains all edges of the specified minimum cost
+     * of {@link MinimumCostFlow}. The resulting flow mapping contains all edges of the specified minimum cost
      * flow problem.
      *
      * @return the solution to the minimum cost flow problem
      */
-    private MinimumCostFLow<E> finish() {
+    private MinimumCostFlow<E> finish() {
         Map<E, Double> flowMap = new HashMap<>(m);
         double totalCost = 0;
         // check feasibility

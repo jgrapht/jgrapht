@@ -38,7 +38,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
      *
      * @return minimum cost flow
      */
-    MinimumCostFLow<E> getMinimumCostFlow();
+    MinimumCostFlow<E> getMinimumCostFlow();
 
     /**
      * Returns the cost of the computed minimum cost flow.
@@ -75,7 +75,7 @@ public interface MinimumCostFlowAlgorithm<V, E> {
      * @param <E> graph edge type
      * @since July 2018
      */
-    interface MinimumCostFLow<E> {
+    interface MinimumCostFlow<E> {
         /**
          * Returns the cost of the flow
          *
@@ -102,11 +102,11 @@ public interface MinimumCostFlowAlgorithm<V, E> {
     }
 
     /**
-     * Default implementation of the {@link MinimumCostFLow}
+     * Default implementation of the {@link MinimumCostFlow}
      *
      * @param <E> graph edge type
      */
-    class MinimumCostFlowImpl<E> implements MinimumCostFLow<E> {
+    class MinimumCostFlowImpl<E> implements MinimumCostFlow<E> {
         /**
          * The cost of the flow defined by the mapping {@code flowMap}
          */

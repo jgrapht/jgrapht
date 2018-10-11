@@ -20,7 +20,7 @@ package org.jgrapht.alg.flow.min_cost;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.flow.min_cost.CapacityScalingMinimumCostFlow.DualSolution;
-import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.MinimumCostFLow;
+import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.MinimumCostFlow;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
@@ -1068,7 +1068,7 @@ public class CapacityScalingMinimumCostFlowTest {
     }
 
 
-    private <V, E> boolean checkFlowAndDualSolution(DualSolution<V> dualSolution, MinimumCostFLow<E> flow, MinimumCostFlowProblem<V, E> problem) {
+    private <V, E> boolean checkFlowAndDualSolution(DualSolution<V> dualSolution, MinimumCostFlow<E> flow, MinimumCostFlowProblem<V, E> problem) {
         Graph<V, E> graph = problem.getGraph();
         Map<V, Double> dualVariables = dualSolution.getDualVariables();
         // check supply constraints
