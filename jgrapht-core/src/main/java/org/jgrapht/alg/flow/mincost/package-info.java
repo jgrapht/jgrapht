@@ -1,4 +1,4 @@
 /**
  * Algorithms for minimum cost flow
  */
-package org.jgrapht.alg.flow.min_cost;
+package org.jgrapht.alg.flow.mincost;

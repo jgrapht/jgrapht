@@ -15,11 +15,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.flow.min_cost;
+package org.jgrapht.alg.flow.mincost;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.flow.min_cost.CapacityScalingMinimumCostFlow.DualSolution;
+import org.jgrapht.alg.flow.mincost.CapacityScalingMinimumCostFlow.DualSolution;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.MinimumCostFlow;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
