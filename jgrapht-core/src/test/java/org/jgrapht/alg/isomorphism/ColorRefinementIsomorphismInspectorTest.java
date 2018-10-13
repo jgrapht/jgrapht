@@ -366,7 +366,7 @@ public class ColorRefinementIsomorphismInspectorTest {
     }
 
     @Test
-    public void testTwoDiscreteGraphs() {
+    public void testTwoDiscreteGraphsNonIsomorphic() {
         Graph<Integer, DefaultEdge> graph1 = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graph<Integer, DefaultEdge> graph2 = new DefaultUndirectedGraph<>(DefaultEdge.class);
 
