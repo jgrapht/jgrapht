@@ -364,4 +364,31 @@ public class ColorRefinementIsomorphismInspectorTest {
         assertFalse(isomorphismInspector.isColoringDiscrete());
         assertFalse(isomorphismInspector.isForest());
     }
+
+    @Test
+    public void testTwoDiscreteGraphs() {
+        Graph<Integer, DefaultEdge> graph1 = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph2 = new DefaultUndirectedGraph<>(DefaultEdge.class);
+
+        Graphs.addAllVertices(graph1, Arrays.asList(1, 2, 3, 4, 5, 6));
+        graph1.addEdge(1, 2);
+        graph1.addEdge(2, 3);
+        graph1.addEdge(3, 4);
+        graph1.addEdge(3, 5);
+        graph1.addEdge(4, 5);
+        graph1.addEdge(5, 6);
+
+        Graphs.addAllVertices(graph2, Arrays.asList(1, 2, 3, 4, 5, 6));
+        graph2.addEdge(1, 2);
+        graph2.addEdge(2, 3);
+        graph2.addEdge(2, 4);
+        graph2.addEdge(2, 5);
+        graph2.addEdge(3, 5);
+        graph2.addEdge(3, 6);
+        graph2.addEdge(4, 5);
+
+        ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector = new ColorRefinementIsomorphismInspector<>(graph1, graph2);
+        assertFalse(isomorphismInspector.isomorphismExists());
+        assertFalse(isomorphismInspector.getMappings().hasNext());
+    }
 }
