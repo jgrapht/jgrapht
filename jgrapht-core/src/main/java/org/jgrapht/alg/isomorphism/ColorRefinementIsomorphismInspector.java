@@ -22,9 +22,10 @@ import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
 import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.AsGraphUnion;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 /**
  * Implementation of the color refinement algorithm isomorphism test using its feature of detecting
@@ -104,6 +105,55 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
+     * Returns whether <code>isomorphism</code> is an isomorphism between <code>graph1</code> and <code>graph2</code>
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph
+     * @param isomorphism the isomorphim to test
+     * @return whether <code>isomorphism</code> is an isomorphism between <code>graph1</code> and <code>graph2</code>
+     */
+    public boolean assertIsomorphism(Graph<V, E> graph1, Graph<V, E> graph2, IsomorphicGraphMapping<V, E> isomorphism) {
+        if(graph1 == graph2) {
+            return true;
+        }
+
+        if(graph1.vertexSet().size() != graph2.vertexSet().size()) {
+            return false;
+        }
+        if (graph1.edgeSet().size() != graph2.edgeSet().size()) {
+            return false;
+        }
+
+        for(V vertex : graph1.vertexSet()) {
+            V vertexCorrespondence = isomorphism.getVertexCorrespondence(vertex, true);
+            if(vertexCorrespondence == null) {
+                return false;
+            }
+
+            if(graph1.inDegreeOf(vertex) != graph2.inDegreeOf(vertexCorrespondence)) {
+                return false;
+            }
+            if(graph1.outDegreeOf(vertex) != graph2.outDegreeOf(vertexCorrespondence)) {
+                return false;
+            }
+
+            for(E edge : graph1.outgoingEdgesOf(vertex)) {
+                V neighbor = Graphs.getOppositeVertex(graph1, edge, vertex);
+
+                V neighborCorrespondence = isomorphism.getVertexCorrespondence(neighbor, true);
+                if(neighborCorrespondence == null) {
+                    return false;
+                }
+
+                if(!graph2.containsEdge(vertexCorrespondence, neighborCorrespondence)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws IsomorphismUndecidableException if the isomorphism test was not executed and the inspector cannot decide whether the graphs are isomorphic
@@ -139,15 +189,21 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
             return false;
         }
 
-        Graph<Pair<V, Integer>, Pair<E, Integer>> graph = new UnionGraph<>(graph1, graph2);
-        ColorRefinementAlgorithm<Pair<V, Integer>, Pair<E, Integer>> colorRefinementAlgorithm = new ColorRefinementAlgorithm<>(graph);
+        Graph<DistinctGraphVertex<V, E>, DistinctGraphEdge<V, E>> graph = getDisjointGraphUnion(graph1, graph2);
+        ColorRefinementAlgorithm<DistinctGraphVertex<V, E>, DistinctGraphEdge<V, E>> colorRefinementAlgorithm =
+                new ColorRefinementAlgorithm<>(graph);
 
         // execute color refinement for graph
-        Coloring<Pair<V, Integer>> coloring = colorRefinementAlgorithm.getColoring();
+        Coloring<DistinctGraphVertex<V, E>> coloring = colorRefinementAlgorithm.getColoring();
 
         isomorphismTestExecuted = true;
 
         isIsomorphic = coarseColoringAreEqual(coloring);
+
+        if(isIsomorphic && !assertIsomorphism(graph1, graph2, (IsomorphicGraphMapping<V, E>) isomorphicGraphMapping)) {
+            throw new IllegalStateException("Either there is no isomorphism or the mapping is incorrect!");
+        }
+
         return isIsomorphic;
     }
 
@@ -188,7 +244,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
      * @param coloring the coarse coloring of the union graph
      * @return if the given coarse colorings are equal
      */
-    private boolean coarseColoringAreEqual(Coloring<Pair<V, Integer>> coloring) throws IsomorphismUndecidableException {
+    private boolean coarseColoringAreEqual(Coloring<DistinctGraphVertex<V, E>> coloring) throws IsomorphismUndecidableException {
         Pair<Coloring<V>, Coloring<V>> coloringPair = splitColoring(coloring);
         Coloring<V> coloring1 = coloringPair.getFirst();
         Coloring<V> coloring2 = coloringPair.getSecond();
@@ -258,16 +314,16 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
      * @param coloring the coloring to split up
      * @return the two colorings of the original graphs
      */
-     private Pair<Coloring<V>, Coloring<V>> splitColoring(Coloring<Pair<V, Integer>> coloring) {
+     private Pair<Coloring<V>, Coloring<V>> splitColoring(Coloring<DistinctGraphVertex<V, E>> coloring) {
         Map<V, Integer> col1 = new HashMap<>();
         Map<V, Integer> col2 = new HashMap<>();
         int index = 0;
-        for(Set<Pair<V, Integer>> set1 : coloring.getColorClasses()) {
-            for (Pair<V, Integer> entry : set1) {
-                if (entry.getSecond() == 1) {
-                    col1.put(entry.getFirst(), index);
+        for(Set<DistinctGraphVertex<V, E>> set1 : coloring.getColorClasses()) {
+            for (DistinctGraphVertex<V, E> entry : set1) {
+                if (entry.getGraph() == graph1) {
+                    col1.put(entry.getVertex(), index);
                 } else {
-                    col2.put(entry.getFirst(), index);
+                    col2.put(entry.getVertex(), index);
                 }
             }
             index++;
@@ -334,237 +390,133 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
-     * UnionGraph is a special union graph version representing the disjoint union of two graphs, which is optimized for
-     * the color refinement algorithm. It caches the vertex set of the union graph of the two input graphs.
+     * Calculates and returns a disjoint graph union of <code>graph1</code> and <code>graph2</code>
      *
-     * @param <V> the vertex type of the graphs
-     * @param <E> the edge type of the graphs
+     * @param graph1 the first graph of the disjoint union
+     * @param graph2 the second graph of the disjoint union
+     * @return the disjoint union of the two graphs
      */
-    class UnionGraph<V, E> implements Graph<Pair<V, Integer>, Pair<E, Integer>> {
+    private Graph<DistinctGraphVertex<V, E>, DistinctGraphEdge<V, E>> getDisjointGraphUnion(Graph<V, E> graph1, Graph<V, E> graph2) {
+        return new AsGraphUnion<>(getDistinctObjectGraph(graph1), getDistinctObjectGraph(graph2));
+    }
 
-        Graph<V, E> graph1, graph2;
-        Set<Pair<V, Integer>> vertexSet;
+    private Graph<DistinctGraphVertex<V, E>, DistinctGraphEdge<V, E>> getDistinctObjectGraph(Graph<V, E> graph) {
+        Graph<DistinctGraphVertex<V, E>, DistinctGraphEdge<V, E>> transformedGraph =
+                GraphTypeBuilder.<DistinctGraphVertex<V, E>, DistinctGraphEdge<V, E>>forGraphType(graph.getType()).buildGraph();
 
-        public UnionGraph(Graph<V, E> graph1, Graph<V, E> graph2) {
-            this.graph1 = graph1;
-            this.graph2 = graph2;
+        for(V vertex : graph.vertexSet()) {
+            transformedGraph.addVertex(new DistinctGraphVertex<>(vertex, graph));
         }
-        @Override
-        public Set<Pair<E, Integer>> getAllEdges(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
-            return null;
+        for(E edge : graph.edgeSet()) {
+            transformedGraph.addEdge(
+                    new DistinctGraphVertex<>(graph.getEdgeSource(edge), graph),
+                    new DistinctGraphVertex<>(graph.getEdgeTarget(edge), graph),
+                    new DistinctGraphEdge<>(edge, graph)
+            );
         }
-        @Override
-        public Pair<E, Integer> getEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
-            return null;
-        }
-        @Override
-        public Supplier<Pair<V, Integer>> getVertexSupplier() {
-            return null;
-        }
-        @Override
-        public Supplier<Pair<E, Integer>> getEdgeSupplier() {
-            return null;
-        }
-        @Override
-        public Pair<E, Integer> addEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
-            return null;
-        }
-        @Override
-        public boolean addEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex, Pair<E, Integer> e) {
-            return false;
-        }
-        @Override
-        public Pair<V, Integer> addVertex() {
-            return null;
-        }
-        @Override
-        public boolean addVertex(Pair<V, Integer> vIntegerTuple) {
-            return false;
-        }
-        @Override
-        public boolean containsEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
-            return false;
-        }
-        @Override
-        public boolean containsEdge(Pair<E, Integer> e) {
-            return false;
-        }
-        @Override
-        public boolean containsVertex(Pair<V, Integer> vIntegerTuple) {
-            return false;
-        }
-        @Override
-        public Set<Pair<E, Integer>> edgeSet() {
-            return null;
-        }
-        @Override
-        public int degreeOf(Pair<V, Integer> vertex) {
-            return 0;
-        }
-        @Override
-        public Set<Pair<E, Integer>> edgesOf(Pair<V, Integer> vertex) {
-            return null;
-        }
-        @Override
-        public int inDegreeOf(Pair<V, Integer> vertex) {
-            return 0;
-        }
-        @Override
-        public Set<Pair<E, Integer>> incomingEdgesOf(Pair<V, Integer> vertex) {
-            Graph<V, E> graph = vertex.getSecond() == 1 ? graph1 : graph2;
-            return new PairSet<>(graph.incomingEdgesOf(vertex.getFirst()), vertex.getSecond());
-        }
-        @Override
-        public int outDegreeOf(Pair<V, Integer> vertex) {
-            return 0;
-        }
-        @Override
-        public Set<Pair<E, Integer>> outgoingEdgesOf(Pair<V, Integer> vertex) {
-            return null;
-        }
-        @Override
-        public boolean removeAllEdges(Collection<? extends Pair<E, Integer>> edges) {
-            return false;
-        }
-        @Override
-        public Set<Pair<E, Integer>> removeAllEdges(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
-            return null;
-        }
-        @Override
-        public boolean removeAllVertices(Collection<? extends Pair<V, Integer>> vertices) {
-            return false;
-        }
-        @Override
-        public Pair<E, Integer> removeEdge(Pair<V, Integer> sourceVertex, Pair<V, Integer> targetVertex) {
-            return null;
-        }
-        @Override
-        public boolean removeEdge(Pair<E, Integer> e) {
-            return false;
-        }
-        @Override
-        public boolean removeVertex(Pair<V, Integer> vIntegerTuple) {
-            return false;
-        }
-        @Override
-        public Set<Pair<V, Integer>> vertexSet() {
-            if (vertexSet == null) {
-                vertexSet = new HashSet<>();
-                for (V v : graph1.vertexSet()) {
-                    vertexSet.add(new Pair<>(v, 1));
-                }
-                for (V v : graph2.vertexSet()) {
-                    vertexSet.add(new Pair<>(v, 2));
-                }
-            }
-            return vertexSet;
-        }
-        @Override
-        public Pair<V, Integer> getEdgeSource(Pair<E, Integer> e) {
-            if (e.getSecond() == 1){
-                return new Pair<>(graph1.getEdgeSource(e.getFirst()), 1);
-            } else {
-                return new Pair<>(graph2.getEdgeSource(e.getFirst()), 2);
-            }
-        }
-        @Override
-        public Pair<V, Integer> getEdgeTarget(Pair<E, Integer> e) {
-            if (e.getSecond() == 1){
-                return new Pair<>(graph1.getEdgeTarget(e.getFirst()), 1);
-            } else {
-                return new Pair<>(graph2.getEdgeTarget(e.getFirst()), 2);
-            }
-        }
-        @Override
-        public GraphType getType() {
-            return null;
-        }
-        @Override
-        public double getEdgeWeight(Pair<E, Integer> e) {
-            return 0;
-        }
-        @Override
-        public void setEdgeWeight(Pair<E, Integer> e, double weight) {
-        }
+
+        return transformedGraph;
     }
 
     /**
-     * Implementation of a set of pairs. It is optimized for the usage of class UnionGraph in the color refinement
-     * algorithm; it uses the innerSet of UnionGraph.
+     * Representation of a graph vertex in the disjoint union
      *
      * @param <V> the vertex type of the graph
+     * @param <E> the edge type of the graph
      */
-    class PairSet<V> implements Set<Pair<V, Integer>> {
-        Set<V> innerSet;
-        Integer index;
-        public PairSet(Set<V> innerSet, Integer index) {
-            this.innerSet = innerSet;
-            this.index = index;
+    private static class DistinctGraphVertex<V, E> {
+
+        private Pair<V, Graph<V, E>> pair;
+
+        private DistinctGraphVertex(V vertex, Graph<V, E> graph) {
+            this.pair = Pair.of(vertex, graph);
         }
-        @Override
-        public int size() {
-            return innerSet.size();
+
+        public V getVertex() {
+            return pair.getFirst();
         }
-        @Override
-        public boolean isEmpty() {
-            return innerSet.isEmpty();
+
+        public Graph<V, E> getGraph() {
+            return pair.getSecond();
         }
+
+
         @Override
-        public boolean contains(Object o) {
-            Pair<V, Integer> val = (Pair<V, Integer>)o;
-            return val.getSecond().equals(index) && innerSet.contains(val.getSecond());
+        public String toString()
+        {
+            return pair.toString();
         }
+
         @Override
-        public Iterator<Pair<V, Integer>> iterator() {
-            Iterator<V> innerIterator = innerSet.iterator();
-            return new Iterator<Pair<V, Integer>>() {
-                @Override
-                public boolean hasNext() {
-                    return innerIterator.hasNext();
-                }
-                @Override
-                public Pair<V, Integer> next() {
-                    return new Pair<>(innerIterator.next(), index);
-                }
-            };
-        }
-        @Override
-        public Object[] toArray() {
-            return new Object[0];
-        }
-        @Override
-        public <T> T[] toArray(T[] a) {
-            return null;
-        }
-        @Override
-        public boolean add(Pair<V, Integer> vIntegerTuple) {
-            if (!index.equals(vIntegerTuple.getSecond())) {
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            else if (!(o instanceof DistinctGraphVertex))
                 return false;
-            }
-            return innerSet.add(vIntegerTuple.getFirst());
+
+            @SuppressWarnings("unchecked") DistinctGraphVertex<V, Graph<V, E>> other = (DistinctGraphVertex<V, Graph<V, E>>) o;
+            return Objects.equals(getVertex(), other.getVertex()) && getGraph() == other.getGraph();
         }
+
         @Override
-        public boolean remove(Object o) {
-            return false;
+        public int hashCode() {
+            return pair.hashCode();
         }
+
+        public static <A, B> DistinctGraphVertex<A, B> of(A a, Graph<A, B> b) {
+            return new DistinctGraphVertex<>(a, b);
+        }
+
+    }
+
+    /**
+     * Representation of a graph edge in the disjoint union
+     *
+     * @param <V> the vertex type of the graph
+     * @param <E> the edge type of the graph
+     */
+    private static class DistinctGraphEdge<V, E> {
+
+        private Pair<E, Graph<V, E>> pair;
+
+        private DistinctGraphEdge(E edge, Graph<V, E> graph) {
+            this.pair = Pair.of(edge, graph);
+        }
+
+        public E getEdge() {
+            return pair.getFirst();
+        }
+
+        public Graph<V, E> getGraph() {
+            return pair.getSecond();
+        }
+
+
         @Override
-        public boolean containsAll(Collection<?> c) {
-            return false;
+        public String toString()
+        {
+            return pair.toString();
         }
+
         @Override
-        public boolean addAll(Collection<? extends Pair<V, Integer>> c) {
-            return false;
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            else if (!(o instanceof DistinctGraphEdge))
+                return false;
+
+            @SuppressWarnings("unchecked") DistinctGraphEdge<E, Graph<V, E>> other = (DistinctGraphEdge<E, Graph<V, E>>) o;
+            return Objects.equals(getEdge(), other.getEdge()) && getGraph() == other.getGraph();
         }
+
         @Override
-        public boolean retainAll(Collection<?> c) {
-            return false;
+        public int hashCode() {
+            return pair.hashCode();
         }
-        @Override
-        public boolean removeAll(Collection<?> c) {
-            return false;
+
+        public static <V, E> DistinctGraphEdge<V, E> of(E e, Graph<V, E> g) {
+            return new DistinctGraphEdge<>(e, g);
         }
-        @Override
-        public void clear() {
-        }
+
     }
 }
