@@ -124,13 +124,13 @@ public class LemonExporter<V, E>
         }
     }
 
-    private String quoted(final String s)
+    private String prepareId(final String s)
     {
         boolean escapeStringAsJava = parameters.contains(Parameter.ESCAPE_STRINGS_AS_JAVA);
         if (escapeStringAsJava) {
             return "\"" + StringEscapeUtils.escapeJava(s) + "\"";
         } else {
-            return "\"" + s + "\"";
+            return s;
         }
     }
 
@@ -147,7 +147,7 @@ public class LemonExporter<V, E>
         out.println("label");
         for (V v : g.vertexSet()) {
             String id = vertexIDProvider.getName(v);
-            String quotedId = quoted(id);
+            String quotedId = prepareId(id);
             out.println(quotedId);
         }
         out.println();
@@ -170,9 +170,9 @@ public class LemonExporter<V, E>
             String s = vertexIDProvider.getName(g.getEdgeSource(edge));
             String t = vertexIDProvider.getName(g.getEdgeTarget(edge));
 
-            out.print(quoted(s));
+            out.print(prepareId(s));
             out.print(TAB1);
-            out.print(quoted(t));
+            out.print(prepareId(t));
             if (exportEdgeWeights) {
                 out.print(TAB1);
                 out.print(Double.toString(g.getEdgeWeight(edge)));
