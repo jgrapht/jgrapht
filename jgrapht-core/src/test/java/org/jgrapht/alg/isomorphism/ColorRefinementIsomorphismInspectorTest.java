@@ -391,4 +391,23 @@ public class ColorRefinementIsomorphismInspectorTest {
         assertFalse(isomorphismInspector.isomorphismExists());
         assertFalse(isomorphismInspector.getMappings().hasNext());
     }
+
+    @Test
+    public void testTwoEqualGraphs() {
+        Graph<Integer, DefaultEdge> graph1 = new DefaultUndirectedGraph<>(DefaultEdge.class);
+
+        Graphs.addAllVertices(graph1, Arrays.asList(1, 2, 3, 4, 5, 6));
+        graph1.addEdge(1, 2);
+        graph1.addEdge(2, 3);
+        graph1.addEdge(3, 4);
+        graph1.addEdge(3, 5);
+        graph1.addEdge(4, 5);
+        graph1.addEdge(5, 6);
+
+
+        ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector = new ColorRefinementIsomorphismInspector<>(graph1, graph1);
+        assertTrue(isomorphismInspector.isomorphismExists());
+        assertTrue(isomorphismInspector.getMappings().hasNext());
+        assertTrue(isomorphismInspector.isValid());
+    }
 }

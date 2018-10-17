@@ -181,8 +181,17 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
             }
         }
 
+        if(graph1 == graph2) {
+            isomorphismTestExecuted = true;
+            isIsomorphic = true;
+            isomorphicGraphMapping = IsomorphicGraphMapping.identity(graph1);
+            return isIsomorphic;
+        }
+
         if(graph1.vertexSet().size() != graph2.vertexSet().size()) {
-            return false;
+            isomorphismTestExecuted = true;
+            isIsomorphic = false;
+            return isIsomorphic;
         }
 
         Graph<DistinctGraphObject<V, V, E>, DistinctGraphObject<E, V, E>> graph = getDisjointGraphUnion(graph1, graph2);
