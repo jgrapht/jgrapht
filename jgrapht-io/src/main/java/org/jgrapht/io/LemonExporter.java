@@ -27,6 +27,10 @@ import org.jgrapht.Graph;
 
 /**
  * Exports a graph into Lemon graph format (LGF).
+ * 
+ * <p>
+ * This is the custom graph format used in the <a href="https://lemon.cs.elte.hu">Lemon</a> graph
+ * library.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -132,9 +136,8 @@ public class LemonExporter<V, E>
 
     private void exportHeader(PrintWriter out)
     {
-        out.println("@attributes");
-        out.println("Creator" + DELIM + quoted(CREATOR));
-        out.println("Version" + DELIM + quoted(VERSION));
+        out.println("#Creator:" + DELIM + CREATOR);
+        out.println("#Version:" + DELIM + VERSION);
         out.println();
     }
 

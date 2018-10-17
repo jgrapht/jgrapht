@@ -46,9 +46,8 @@ public class LemonExporterTest
 
     // @formatter:off
     private static final String UNDIRECTED =
-    		"@attributes" + NL
-            + "Creator \"JGraphT Lemon (LGF) Exporter\"" + NL
-            + "Version \"1\"" + NL
+            "#Creator: JGraphT Lemon (LGF) Exporter" + NL
+            + "#Version: 1" + NL
             + NL
             + "@nodes" + NL
             + "label" + NL
@@ -63,9 +62,8 @@ public class LemonExporterTest
             + NL;
     
     private static final String UNDIRECTED_DEFAULT_WEIGHTS =
-    		"@attributes" + NL
-            + "Creator \"JGraphT Lemon (LGF) Exporter\"" + NL
-            + "Version \"1\"" + NL
+            "#Creator: JGraphT Lemon (LGF) Exporter" + NL
+            + "#Version: 1" + NL
             + NL
             + "@nodes" + NL
             + "label" + NL
@@ -80,9 +78,8 @@ public class LemonExporterTest
             + NL;
     
     private static final String UNDIRECTED_WEIGHTED =
-    		"@attributes" + NL
-            + "Creator \"JGraphT Lemon (LGF) Exporter\"" + NL
-            + "Version \"1\"" + NL
+            "#Creator: JGraphT Lemon (LGF) Exporter" + NL
+            + "#Version: 1" + NL
             + NL
             + "@nodes" + NL
             + "label" + NL
