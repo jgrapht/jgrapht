@@ -408,6 +408,5 @@ public class ColorRefinementIsomorphismInspectorTest {
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector = new ColorRefinementIsomorphismInspector<>(graph1, graph1);
         assertTrue(isomorphismInspector.isomorphismExists());
         assertTrue(isomorphismInspector.getMappings().hasNext());
-        assertTrue(isomorphismInspector.isValid());
     }
 }

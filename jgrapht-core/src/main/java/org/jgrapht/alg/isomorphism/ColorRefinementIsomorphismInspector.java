@@ -51,7 +51,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     /**
      * The isomorphism that is calculated by this color refinement isomorphism inspector
      */
-    private GraphMapping<V, E> isomorphicGraphMapping;
+    private IsomorphicGraphMapping<V, E> isomorphicGraphMapping;
 
     /**
      * contains whether the graphs are isomorphic or not.
@@ -102,51 +102,6 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         this.isColoringDiscrete = false;
         this.isomorphismTestExecuted = false;
         this.isForest = false;
-    }
-
-    /**
-     * Returns whether the found isomorphism between <code>graph1</code> and <code>graph2</code> is valid.
-     * It returns false if there is no isomorphism found or the isomorphism test was not executed.
-     *
-     * @return whether the found isomorphism between <code>graph1</code> and <code>graph2</code> is valid and false
-     * if there is no isomorphism found or the isomorphism test was not executed.
-     */
-    public boolean isValid() {
-        if(isomorphicGraphMapping == null) {
-            return false;
-        }
-
-        for (V v: graph1.vertexSet()){
-            if (!((IsomorphicGraphMapping<V, E>) isomorphicGraphMapping).getForwardMapping().containsKey(v) ||
-                    !graph2.containsVertex(((IsomorphicGraphMapping<V, E>) isomorphicGraphMapping).getForwardMapping().get(v)))
-                return false;
-        }
-
-        for (V v: graph2.vertexSet()){
-            if (!((IsomorphicGraphMapping<V, E>) isomorphicGraphMapping).getBackwardMapping().containsKey(v) ||
-                    !graph1.containsVertex(((IsomorphicGraphMapping<V, E>) isomorphicGraphMapping).getBackwardMapping().get(v)))
-                return false;
-        }
-
-        for (E edge: graph1.edgeSet()){
-            E e = isomorphicGraphMapping.getEdgeCorrespondence(edge, true);
-            V u = graph1.getEdgeSource(e);
-            V v = graph1.getEdgeTarget(e);
-
-            if (!graph2.containsEdge(u, v))
-                return false;
-        }
-
-        for (E edge: graph2.edgeSet()){
-            E e = isomorphicGraphMapping.getEdgeCorrespondence(edge, false);
-            V u = graph2.getEdgeSource(e);
-            V v = graph2.getEdgeTarget(e);
-
-            if (!graph1.containsEdge(u, v))
-                return false;
-        }
-
-        return true;
     }
 
     /**
@@ -206,7 +161,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
         isIsomorphic = coarseColoringAreEqual(coloring);
 
         if(isIsomorphic) {
-            assert isValid();
+            assert isomorphicGraphMapping.isValidIsomorphism();
         }
 
         return isIsomorphic;
@@ -215,6 +170,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     /**
      * Returns whether the coarse colorings of the two given graphs are discrete if the colorings are the same.
      * Otherwise, we do not computed if the coloring is discrete, hence, this method is undefined.
+     * In the case graph1 == graph2, the method is undefined as well.
      *
      * @return if the both colorings are discrete if they are the same on both graphs.
      *
@@ -231,6 +187,7 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
      * Returns whether the two given graphs are forests if an isomorphism exists and the coloring is not discrete,
      * because if the coloring is discrete, it does not have to be calculated if the graphs are forests.
      * Otherwise, we do not compute if the graphs are forests, hence, this method is undefined.
+     * In the case graph1 == graph2, the method is undefined as well.
      *
      * @return if the both colorings are discrete if they are the same on both graphs.
      *

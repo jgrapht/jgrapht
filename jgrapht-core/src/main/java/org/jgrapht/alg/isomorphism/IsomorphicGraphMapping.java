@@ -228,14 +228,57 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     /**
+     * Determines whether this mapping is indeed a valid isomorphic mapping
+     * between the first graph and the second graph.  Note that this method
+     * will return false for a homomorphism returned by a subgraph isomorphism
+     * inspector unless the resulting mapping happens to be bijective as well
+     * (mapping all of the vertices and edges from the first graph to the
+     * second graph and vice versa).
+     *
+     * @return true iff this mapping is a valid isomorphism between
+     * the two graphs
+     */
+    public boolean isValidIsomorphism() {
+        for (V v : graph1.vertexSet()) {
+            if (!forwardMapping.containsKey(v) ||
+                    !graph2.containsVertex(forwardMapping.get(v)))
+                return false;
+        }
+
+        for (V v : graph2.vertexSet()) {
+            if (!backwardMapping.containsKey(v) ||
+                    !graph1.containsVertex(backwardMapping.get(v)))
+                return false;
+        }
+
+        for (E edge : graph1.edgeSet()) {
+            E e = getEdgeCorrespondence(edge, true);
+            V u = graph1.getEdgeSource(e);
+            V v = graph1.getEdgeTarget(e);
+
+            if (!graph2.containsEdge(u, v))
+                return false;
+        }
+
+        for (E edge : graph2.edgeSet()) {
+            E e = getEdgeCorrespondence(edge, false);
+            V u = graph2.getEdgeSource(e);
+            V v = graph2.getEdgeTarget(e);
+
+            if (!graph1.containsEdge(u, v))
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Checks for equality. Assuming both are mappings on the same graphs.
      *
      * @param rel the corresponding mapping
-     *
      * @return do both relations map to the same vertices
      */
-    public boolean isEqualMapping(GraphMapping<V, E> rel)
-    {
+    public boolean isEqualMapping(GraphMapping<V, E> rel) {
         for (V v : graph2.vertexSet()) {
             if (!getVertexCorrespondence(v, false).equals(rel.getVertexCorrespondence(v, false))) {
                 return false;

@@ -111,38 +111,14 @@ public class IsomorphismTestUtil {
     }
 
     public static <V, E> boolean areIsomorphic(Graph<V, E> graph1, Graph<V, E> graph2,
-                                               IsomorphicGraphMapping<V, E> mapping){
-        for (V v: graph1.vertexSet()){
-            if (!mapping.getForwardMapping().containsKey(v) ||
-                    !graph2.containsVertex(mapping.getForwardMapping().get(v)))
-                return false;
-        }
-
-        for (V v: graph2.vertexSet()){
-            if (!mapping.getBackwardMapping().containsKey(v) ||
-                    !graph1.containsVertex(mapping.getBackwardMapping().get(v)))
-                return false;
-        }
-
-        for (E edge: graph1.edgeSet()){
-            E e = mapping.getEdgeCorrespondence(edge, true);
-            V u = graph1.getEdgeSource(e);
-            V v = graph1.getEdgeTarget(e);
-
-            if (!graph2.containsEdge(u, v))
-                return false;
-        }
-
-        for (E edge: graph2.edgeSet()){
-            E e = mapping.getEdgeCorrespondence(edge, false);
-            V u = graph2.getEdgeSource(e);
-            V v = graph2.getEdgeTarget(e);
-
-            if (!graph1.containsEdge(u, v))
-                return false;
-        }
-
-        return true;
+                                               IsomorphicGraphMapping<V, E> mapping) {
+        // reapply the mapping onto the given graphs in case they
+        // are not the same as the graphs over which the mapping
+        // was originally constructed
+        IsomorphicGraphMapping<V, E> reappliedMapping = new IsomorphicGraphMapping<>(
+                mapping.getForwardMapping(), mapping.getBackwardMapping(),
+                graph1, graph2);
+        return reappliedMapping.isValidIsomorphism();
     }
 
     public static <V> Graph<V, DefaultEdge> generateMappedGraph(Graph<V, DefaultEdge> graph,
