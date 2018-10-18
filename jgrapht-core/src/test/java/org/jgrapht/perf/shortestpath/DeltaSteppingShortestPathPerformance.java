@@ -18,20 +18,28 @@
 package org.jgrapht.perf.shortestpath;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.alg.shortestpath.DeltaSteppingShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.util.SupplierUtil;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +62,7 @@ public class DeltaSteppingShortestPathPerformance {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree).getPaths(0);
     }
 
-    @Benchmark
+    /*@Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraRandom(RandomGraphState data) {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
@@ -62,14 +70,14 @@ public class DeltaSteppingShortestPathPerformance {
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordRandom(RandomGraphState data) {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
-    }
+    }*/
 
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingDense(DenseGraphState data) {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.graphSize).getPaths(0);
     }
 
-    @Benchmark
+    /*@Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraDense(DenseGraphState data) {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
@@ -77,14 +85,14 @@ public class DeltaSteppingShortestPathPerformance {
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordDense(DenseGraphState data) {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
-    }
+    }*/
 
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingSparse(SparseGraphState data) {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree).getPaths(0);
     }
 
-    @Benchmark
+    /*@Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraSparse(SparseGraphState data) {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
@@ -92,13 +100,13 @@ public class DeltaSteppingShortestPathPerformance {
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordSparse(SparseGraphState data) {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
-    }
+    }*/
 
     @State(Scope.Benchmark)
     public static class RandomGraphState {
-        @Param({"5000"})
+        @Param({"10000"})
         int numOfVertices;
-        @Param({"100"})
+        @Param({"500"})
         int edgeDegree;
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
@@ -148,23 +156,34 @@ public class DeltaSteppingShortestPathPerformance {
 
     @State(Scope.Benchmark)
     public static class SparseGraphState {
-        @Param({"10000"})
-        int graphSize;
-        @Param({"50"})
+        @Param({"65536"})
+        int numOfVertices;
+        @Param({"32"})
         int edgeDegree;
-        Graph<Integer, DefaultWeightedEdge> graph;
+        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
         @Setup(Level.Iteration)
-        public void generate() {
+        public void generateGraph() {
             graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
 
-            for (int i = 0; i < graphSize; i++) {
-                graph.addVertex(i);
+            GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
+                    new GnmRandomGraphGenerator<>(numOfVertices, numOfVertices * edgeDegree - numOfVertices + 1);
+            generator.generateGraph(graph);
+            makeConnected(graph);
+            addEdgeWeights(graph);
+        }
+
+        private void makeConnected(Graph<Integer, DefaultWeightedEdge> graph) {
+            Object[] vertices = graph.vertexSet().toArray();
+            for (int i = 0; i < vertices.length - 1; i++) {
+                graph.addEdge((Integer) vertices[i], (Integer) vertices[i + 1]);
             }
-            for (int i = 0; i < graphSize; i++) {
-                for (int j = 0; j < edgeDegree; j++) {
-                    Graphs.addEdge(graph, i, (i + j) % graphSize, Math.random());
-                }
+        }
+
+        private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph) {
+            for (DefaultWeightedEdge edge : graph.edgeSet()) {
+                graph.setEdgeWeight(edge, Math.random());
             }
         }
     }

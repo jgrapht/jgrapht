@@ -31,7 +31,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.*;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -132,6 +131,7 @@ public class DeltaSteppingShortestPathTest {
         int numOfIterations = 100;
         int source = 0;
         for (int i = 0; i < numOfIterations; i++) {
+            System.out.println(i);
             Graph<Integer, DefaultWeightedEdge> graph = generateRandomGraph(numOfVertices, vertexDegree * numOfVertices);
             test(graph, source);
         }
@@ -207,5 +207,42 @@ public class DeltaSteppingShortestPathTest {
                 assertEquals(expected.getPath(sink).getWeight(), actual.getPath(sink).getWeight(), 1e-9);
             }
         }
+    }
+
+    @Test
+    public void testRandom() {
+        Graph<Integer, DefaultWeightedEdge> graph = generateRandomGraph();
+        DeltaSteppingShortestPath<Integer, DefaultWeightedEdge> shortestPath = new DeltaSteppingShortestPath<>(graph, 1.0 / 32);
+        shortestPath.getPaths(0);
+    }
+
+    private Graph<Integer, DefaultWeightedEdge> generateRandomGraph() {
+        int graphSize = 65536;
+        int edgeDegree = 32;
+        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
+
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
+                new GnmRandomGraphGenerator<>(graphSize, graphSize * edgeDegree - graphSize + 1);
+        generator.generateGraph(graph);
+        makeConnected(graph);
+        addEdgeWeights(graph);
+        return graph;
+    }
+
+    private Graph<Integer, DefaultWeightedEdge> generateSparseGraph() {
+        int graphSize = 10000;
+        int edgeDegree = 50;
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        for (int i = 0; i < graphSize; i++) {
+            graph.addVertex(i);
+        }
+        for (int i = 0; i < graphSize; i++) {
+            for (int j = 0; j < edgeDegree; j++) {
+                Graphs.addEdge(graph, i, (i + j) % graphSize, Math.random());
+            }
+        }
+        return graph;
     }
 }
