@@ -168,15 +168,14 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
-     * Returns whether the coarse colorings of the two given graphs are discrete if the colorings are the same.
-     * Otherwise, we do not computed if the coloring is discrete, hence, this method is undefined.
-     * In the case graph1 == graph2, the method is undefined as well.
+     * Returns whether the coarse colorings of the two given graphs are discrete.
+     * This method is undefined if the colorings are not the same or graph1 == graph2.
      *
-     * @return if the both colorings are discrete if they are the same on both graphs.
+     * @return if both colorings are discrete.
      *
      * @throws IsomorphismUndecidableException if the isomorphism test was not executed and the inspector cannot decide whether the graphs are isomorphic
      */
-    public boolean isColoringDiscrete() {
+    boolean isColoringDiscrete() {
         if(!isomorphismTestExecuted) {
             isomorphismExists();
         }
@@ -184,16 +183,14 @@ public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismIns
     }
 
     /**
-     * Returns whether the two given graphs are forests if an isomorphism exists and the coloring is not discrete,
-     * because if the coloring is discrete, it does not have to be calculated if the graphs are forests.
-     * Otherwise, we do not compute if the graphs are forests, hence, this method is undefined.
-     * In the case graph1 == graph2, the method is undefined as well.
+     * Returns whether the two given graphs are forests.
+     * This method is undefined if an isomorphism exists and the coloring is discrete, or graph1 == graph2.
      *
-     * @return if the both colorings are discrete if they are the same on both graphs.
+     * @return if both graphs are forests.
      *
      * @throws IsomorphismUndecidableException if the isomorphism test was not executed and the inspector cannot decide whether the graphs are isomorphic
      */
-    public boolean isForest() {
+    boolean isForest() {
         if(!isomorphismTestExecuted) {
             isomorphismExists();
         }
