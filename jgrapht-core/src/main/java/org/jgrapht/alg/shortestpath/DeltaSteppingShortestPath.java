@@ -22,10 +22,8 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -36,7 +34,6 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * An implementation of the parallel version of the delta-stepping algorithm.
@@ -67,14 +64,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * has high parallelism since all edges can be relaxed in parallel, the delta-stepping
  * introduces parameter delta, which, when chooses optimally, yields still good parallelism
  * and at the same time enables avoiding too many re-relaxations of the edges.
- *
- * <p>
- * To prevent the necessity to synchronize threads the bucket structure is implemented here
- * as a map of vertices to their bucket indices. Furthermore, every time a vertex is inserted
- * in a bucket the tentative distance to the vertex and its predecessor should be updated in
- * order to reconstruct the shortest paths tree at the end of the computation. Therefore to be
- * able to update all the information safely it is kept in a single object which is wrapped
- * in {@link AtomicReference}.
  *
  * <p>
  * This implementation delegates paralleling to the {@link ExecutorService}.
@@ -127,7 +116,13 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private Map<V, Set<E>> heavy;
 
+    /**
+     * Map to store predecessor for each vertex in the shortest path tree.
+     */
     private Map<V, Pair<Double, E>> distanceAndPredecessorMap;
+    /**
+     * Buckets structure.
+     */
     private BucketStructure bucketStructure;
 
     /**
@@ -305,14 +300,13 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         while (!bucketStructure.isEmpty()) {
             firstNonEmptyBucket = bucketStructure.firstNonEmptyBucket();
             NavigableSet<V> removed = new TreeSet<>();
-            NavigableSet<V> bucketElements = bucketStructure.bucketElements(firstNonEmptyBucket);
+            NavigableSet<V> bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
 
             while (!bucketElements.isEmpty()) {
                 removed.addAll(bucketElements);
-//                bucketStructure.clearBucket(firstNonEmptyBucket);
 
                 findAndRelaxRequests(bucketElements, light);
-                bucketElements = bucketStructure.bucketElements(firstNonEmptyBucket);
+                bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
             }
 
             findAndRelaxRequests(removed, heavy);
@@ -334,20 +328,16 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
     /**
      * Manages execution of edges relaxation.
-     * Receives tasks by calling {@link #getRelaxTasks(NavigableSet, Map)},
-     * submits them to the {@link #completionService} and waits till
-     * they are finished.
+     * Starts relaxations tasks by calling {@link #startRelaxTasks(NavigableSet, Map)},
+     * receives num of tasks as the result {@link #completionService} and takes them
+     * from the {@link #executor} when they are finished.
      *
      * @param vertices  vertices
      * @param edgesKind vertex to edges map
      */
     private void findAndRelaxRequests(NavigableSet<V> vertices, Map<V, Set<E>> edgesKind) {
-        List<Runnable> tasks = getRelaxTasks(vertices, edgesKind);
-//        System.out.println(vertices.size() + " " + tasks.size());
-        for (Runnable task : tasks) {
-            completionService.submit(task, null);
-        }
-        for (int i = 0; i < tasks.size(); i++) {
+        int numOfTasks = startRelaxTasks(vertices, edgesKind);
+        for (int i = 0; i < numOfTasks; i++) {
             try {
                 completionService.take();
             } catch (InterruptedException e) {
@@ -357,25 +347,27 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Generates relaxation tasks using prefix sums load balancing.
+     * Generates relaxation tasks and submits them to the {@link #executor}.
      *
      * <p>
-     * Iterates over {@code vertices} and creates a new {@link RelaxTask}
-     * whenever sum of relax requests for passed vertices reaches.
+     * Calculates total amount of requests for {@code vertices}. Uses prefix sums by
+     * num of requests for load balancing. Iterates over {@code vertices} and creates
+     * a new {@link RelaxTask} whenever sum of relax requests for passed vertices reaches
+     * $\frac{total relax requests}{parallelism}$ value.
      *
      * @param vertices  vertex list
      * @param edgesKind light or heavy edges
      * @return relax tasks
      */
-    private List<Runnable> getRelaxTasks(NavigableSet<V> vertices, Map<V, Set<E>> edgesKind) {
+    private int startRelaxTasks(NavigableSet<V> vertices, Map<V, Set<E>> edgesKind) {
         int totalRequests = vertices.stream().mapToInt(v -> edgesKind.get(v).size()).sum();
         int requestsPerThread = (int) Math.ceil((double) totalRequests / parallelism);
 
-        List<Runnable> tasks = new ArrayList<>();
         if (totalRequests == 0) {
-            return tasks;
+            return 0;
         }
 
+        int numOfTasks = 0;
         V begin = null;
         int numOfRequests = 0;
         for (V end : vertices) {
@@ -385,23 +377,24 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             numOfRequests += edgesKind.get(end).size();
             if (numOfRequests >= requestsPerThread) {
                 if (numOfRequests != 0) {
-                    tasks.add(new RelaxTask(vertices.subSet(begin, true, end, true), edgesKind));
+                    numOfTasks++;
+                    completionService.submit(new RelaxTask(vertices.subSet(begin, true, end, true), edgesKind), null);
                 }
                 numOfRequests = 0;
                 begin = null;
             }
         }
         if (numOfRequests != 0) {
-            tasks.add(new RelaxTask(vertices.tailSet(begin), edgesKind));
+            numOfTasks++;
+            completionService.submit(new RelaxTask(vertices.tailSet(begin), edgesKind), null);
         }
-        return tasks;
+        return numOfTasks;
     }
 
     /**
-     * Performs relaxation in parallel-safe fashion. Vertex data {@code v} is
-     * considered updated once either {@code distance} is greater than or equal
-     * to tentative distance in ??? or
-     * {@link AtomicReference#compareAndSet(Object, Object)} returns {@code true}.
+     * Performs relaxation in parallel-safe fashion. Synchronises by {@code vertex}
+     * then if new tentative distance is less then removes {@code v} from the old bucket,
+     * adds is to the new bucket and updates {@link #distanceAndPredecessorMap} value for {@code v}.
      *
      * @param v        vertex
      * @param e        edge to predecessor
@@ -423,7 +416,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Calculates number of buckets in the bucket structure.
+     * Calculates the number of buckets in the bucket structure.
      *
      * @return num of buckets
      */
@@ -480,9 +473,22 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     class BucketStructure {
+        /**
+         * Buckets.
+         */
         private final Set[] buckets;
+        /**
+         * Size of {@link #buckets}.
+         */
         private int numOfBuckets;
 
+        /**
+         * Constructs a new instance of the buckets structure.
+         * Initializes every bucket in the {@link #buckets} with
+         * an instance of the {@link ConcurrentSkipListSet} object.
+         *
+         * @param numOfBuckets num of buckets
+         */
         BucketStructure(int numOfBuckets) {
             buckets = new Set[numOfBuckets];
             for (int i = 0; i < buckets.length; i++) {
@@ -491,26 +497,46 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             this.numOfBuckets = numOfBuckets;
         }
 
-        void add(int bucket, V element) {
-            buckets[bucket].add(element);
+        /**
+         * Adds vertex {@code v} to the bucket indicated by {@code bucket} index.
+         *
+         * @param bucket bucket index
+         * @param v      vertex
+         */
+        void add(int bucket, V v) {
+            buckets[bucket].add(v);
         }
 
-        void remove(int bucket, V element) {
-            buckets[bucket].remove(element);
+        /**
+         * Removes vertex {@code v} from the bucket indicated by {@code bucket} index.
+         *
+         * @param bucket bucket index
+         * @param v      vertex
+         */
+        void remove(int bucket, V v) {
+            buckets[bucket].remove(v);
         }
 
-        NavigableSet<V> bucketElements(int bucket) {
+        /**
+         * Return vertex set of the bucket indicated by the index {@code bucket}
+         * and replace if with a new instance of the {@link ConcurrentSkipListSet} object.
+         *
+         * @param bucket bucket index
+         * @return set of vertices
+         */
+        NavigableSet<V> getContentAndReplace(int bucket) {
             NavigableSet result = (ConcurrentSkipListSet<V>) buckets[bucket];
             buckets[bucket] = new ConcurrentSkipListSet<V>();
             return result;
         }
 
-        void clearBucket(int bucket) {
-            if (!buckets[bucket].isEmpty()) {
-                buckets[bucket].clear();
-            }
-        }
 
+        /**
+         * Calculates the index of the first non-empty bucket
+         * or $-1$ if the buckets structure is empty.
+         *
+         * @return index of the first non-empty bucket
+         */
         int firstNonEmptyBucket() {
             for (int i = 0; i < numOfBuckets; i++) {
                 if (!buckets[i].isEmpty()) {
@@ -520,12 +546,13 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             return -1;
         }
 
+        /**
+         * Returns <tt>true</tt> if this structure contains at least one non-empty bucket.
+         *
+         * @return <tt>true</tt> if buckets structure contains at least one non-empty bucket
+         */
         boolean isEmpty() {
             return firstNonEmptyBucket() == -1;
-        }
-
-        int size() {
-            return numOfBuckets;
         }
     }
 }
