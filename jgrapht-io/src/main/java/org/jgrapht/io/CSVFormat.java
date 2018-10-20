@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -59,6 +59,18 @@ package org.jgrapht.io;
  * 
  * which represents a graph with edges: a-&gt;b, b-&gt;a, d-&gt;a, c-&gt;a, c-&gt;b, b-&gt;d,
  * b-&gt;a. Multiple occurrences of the same edge result into a multi-graph.
+ * 
+ * <p>Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS} is
+ * set. In this case the target vertex must be followed by the edge weight. The following example illustrates
+ * the weighted variant:
+ * 
+ * <pre>
+ * a,b,2.0
+ * b,a,3.0
+ * d,a,2.0
+ * c,a,1.5,b,2.5
+ * b,d,3.3,a,5.5
+ * </pre>
  * 
  * </li>
  * <li>
@@ -177,6 +189,11 @@ public enum CSVFormat
          * {@link CSVFormat#MATRIX MATRIX} format.
          */
         MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+        /**
+         * Whether to import/export edge weights. Only valid for the {@link CSVFormat#EDGE_LIST EDGE_LIST}
+         * and {@link CSVFormat#ADJACENCY_LIST ADJACENCY_LIST} formats.
+         */
+        EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS,
     }
 
 }

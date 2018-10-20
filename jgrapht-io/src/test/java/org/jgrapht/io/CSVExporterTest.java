@@ -36,26 +36,8 @@ public class CSVExporterTest
     // ---------------------------------------------
 
     private static final String NL = System.getProperty("line.separator");
-
-    private static ComponentNameProvider<Integer> nameProvider =
-        new ComponentNameProvider<Integer>()
-        {
-            @Override
-            public String getName(Integer vertex)
-            {
-                return String.valueOf(vertex);
-            }
-        };
-
-    private static ComponentNameProvider<String> stringNameProvider =
-        new ComponentNameProvider<String>()
-        {
-            @Override
-            public String getName(String vertex)
-            {
-                return vertex;
-            }
-        };
+    private static final ComponentNameProvider<Integer> nameProvider = v->String.valueOf(v);
+    private static final ComponentNameProvider<String> stringNameProvider = v->v;
 
     // @formatter:off
     private static final String UNDIRECTED_EDGE_LIST =
@@ -72,6 +54,14 @@ public class CSVExporterTest
         + "3;4" + NL
         + "4;5" + NL
         + "5;1" + NL;
+
+    private static final String DIRECTED_WEIGHTED_EDGE_LIST =
+          "1;2;2.0" + NL
+        + "1;3;2.0" + NL
+        + "3;1;2.0" + NL
+        + "3;4;2.0" + NL
+        + "4;5;2.0" + NL
+        + "5;1;2.0" + NL;    
     
     private static final String UNDIRECTED_ADJACENCY_LIST =
           "1;2;3;3;5" + NL
@@ -137,7 +127,7 @@ public class CSVExporterTest
       + "\"fred\n\"\"21\"\"\";\"who;;\"" +NL
       + "\"who;;\";'john doe'" + NL;
     
-    //     // @formatter:on
+    // @formatter:on
 
     // ~ Methods
     // ----------------------------------------------------------------
@@ -186,6 +176,31 @@ public class CSVExporterTest
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_EDGE_LIST, w.toString());
+    }
+
+    @Test
+    public void testDirectedWeightedEdgeList()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g = new AsWeightedGraph<>(g, e -> 2.0 , false, false);
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+        g.addVertex(4);
+        g.addVertex(5);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(3, 1);
+        g.addEdge(3, 4);
+        g.addEdge(4, 5);
+        g.addEdge(5, 1);
+
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.EDGE_LIST, ';');
+        exporter.setParameter(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS, true);
+        StringWriter w = new StringWriter();
+        exporter.exportGraph(g, w);
+        assertEquals(DIRECTED_WEIGHTED_EDGE_LIST, w.toString());
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -267,9 +267,12 @@ public class CSVImporter<V, E>
         extends
         RowCSVListener
     {
+        private boolean assumeEdgeWeights;
+        
         public AdjacencyListCSVListener(Graph<V, E> graph)
         {
             super(graph);
+            this.assumeEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS);
         }
 
         @Override
@@ -287,9 +290,13 @@ public class CSVImporter<V, E>
                 graph.addVertex(source);
             }
             row.remove(0);
-
-            // remaining are targets
-            for (String key : row) {
+            
+            // remaining are targets (if weighted pairs of target-weight)
+            int step = assumeEdgeWeights? 2 : 1;
+            
+            for(int i = 0; i < row.size(); i += step) { 
+                String key = row.get(i);
+                
                 if (key.isEmpty()) {
                     throw new ParseCancellationException("Target vertex cannot be empty");
                 }
@@ -300,11 +307,23 @@ public class CSVImporter<V, E>
                     vertices.put(key, target);
                     graph.addVertex(target);
                 }
+                
+                double weight = Graph.DEFAULT_EDGE_WEIGHT;
+                if (assumeEdgeWeights) { 
+                    try {
+                        weight = Double.parseDouble(row.get(i+1));
+                    } catch (NumberFormatException nfe) {
+                        throw new ParseCancellationException("Failed to parse edge weight");
+                    }
+                }
 
                 try {
                     String label = "e_" + source + "_" + target;
                     E e = edgeProvider.buildEdge(source, target, label, new HashMap<>());
                     graph.addEdge(source, target, e);
+                    if (assumeEdgeWeights) { 
+                        graph.setEdgeWeight(e, weight);
+                    }
                 } catch (IllegalArgumentException e) {
                     throw new ParseCancellationException(
                         "Provided graph does not support input: " + e.getMessage(), e);

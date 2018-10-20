@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -61,6 +61,11 @@ public class CSVImporterTest
         }
 
         CSVImporter<String, E> importer = createImporter(g, format, delimiter);
+        
+        if ((format == CSVFormat.EDGE_LIST || format == CSVFormat.ADJACENCY_LIST) && weighted) { 
+            importer.setParameter(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS, true);
+        }
+        
         importer.importGraph(g, new StringReader(input));
 
         return g;
@@ -90,6 +95,36 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("2", "3"));
         assertTrue(g.containsEdge("3", "4"));
         assertTrue(g.containsEdge("4", "1"));
+    }
+    
+    @Test
+    public void testEdgeListDirectedWeighted()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "1,2,1.0\n"
+                     + "2,3,2.0\n"
+                     + "3,4,3.0\n"
+                     + "4,1,4.0\n";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g =
+            readGraph(input, CSVFormat.EDGE_LIST, ',', DefaultEdge.class, true, true);
+
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(4, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
+        assertTrue(g.containsEdge("2", "3"));
+        assertEquals(2.0, g.getEdgeWeight(g.getEdge("2", "3")), 1e-9);
+        assertTrue(g.containsEdge("3", "4"));
+        assertEquals(3.0, g.getEdgeWeight(g.getEdge("3", "4")), 1e-9);
+        assertTrue(g.containsEdge("4", "1"));
+        assertEquals(4.0, g.getEdgeWeight(g.getEdge("4", "1")), 1e-9);
     }
 
     @Test
@@ -150,6 +185,50 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "1"));
         assertTrue(g.containsEdge("4", "5"));
         assertTrue(g.containsEdge("4", "6"));
+    }
+    
+    @Test
+    public void testAdjacencyListDirectedWeightedWithSemicolon()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "1;2;2.1;3;3.1;4;4.1\n"
+                     + "2;3;3.1\n"
+                     + "3;4;4.1;5;5.1;6;6.1\n"
+                     + "4;1;1.1;5;5.1;6;6.1\n";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g =
+            readGraph(input, CSVFormat.ADJACENCY_LIST, ';', DefaultEdge.class, true, true);
+
+        assertEquals(6, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsVertex("5"));
+        assertTrue(g.containsVertex("6"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertEquals(2.1, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
+        assertTrue(g.containsEdge("1", "3"));
+        assertEquals(3.1, g.getEdgeWeight(g.getEdge("1", "3")), 1e-9);
+        assertTrue(g.containsEdge("1", "4"));
+        assertEquals(4.1, g.getEdgeWeight(g.getEdge("1", "4")), 1e-9);
+        assertTrue(g.containsEdge("2", "3"));
+        assertEquals(3.1, g.getEdgeWeight(g.getEdge("2", "3")), 1e-9);
+        assertTrue(g.containsEdge("3", "4"));
+        assertEquals(4.1, g.getEdgeWeight(g.getEdge("3", "4")), 1e-9);
+        assertTrue(g.containsEdge("3", "5"));
+        assertEquals(5.1, g.getEdgeWeight(g.getEdge("3", "5")), 1e-9);
+        assertTrue(g.containsEdge("3", "6"));
+        assertEquals(6.1, g.getEdgeWeight(g.getEdge("3", "6")), 1e-9);
+        assertTrue(g.containsEdge("4", "1"));
+        assertEquals(1.1, g.getEdgeWeight(g.getEdge("4", "1")), 1e-9);
+        assertTrue(g.containsEdge("4", "5"));
+        assertEquals(5.1, g.getEdgeWeight(g.getEdge("4", "5")), 1e-9);
+        assertTrue(g.containsEdge("4", "6"));
+        assertEquals(6.1, g.getEdgeWeight(g.getEdge("4", "6")), 1e-9);
     }
 
     @Test
