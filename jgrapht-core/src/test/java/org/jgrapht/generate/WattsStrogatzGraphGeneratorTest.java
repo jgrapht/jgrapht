@@ -180,5 +180,20 @@ public class WattsStrogatzGraphGeneratorTest
         assertEquals(6, g.vertexSet().size());
         assertEquals(12, g.edgeSet().size());
     }
+    
+    @Test
+    public void testNonIntegerVertices()
+    {
+        final long seed = 5;
+
+        GraphGenerator<String, DefaultEdge, String> gen =
+            new WattsStrogatzGraphGenerator<>(10, 2, 0.1, seed);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
+
+        assertEquals(10, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
+    }
 
 }

@@ -166,7 +166,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
         for (int i = 0; i < n; i++) {
             V vi = ring.get(i);
-            List<E> viAdj = adj.get(i);
+            List<E> viAdj = adj.get(vi);
 
             for (int j = 1; j <= k / 2; j++) {
                 viAdj.add(target.addEdge(vi, ring.get((i + j) % n)));
@@ -177,9 +177,9 @@ public class WattsStrogatzGraphGenerator<V, E>
         for (int r = 0; r < k / 2; r++) {
             for (int i = 0; i < n; i++) {
                 V v = ring.get(i);
-                E e = adj.get(i).get(r);
-
+                
                 if (rng.nextDouble() < p) {
+                    E e = adj.get(v).get(r);
                     V other = ring.get(rng.nextInt(n));
                     if (!other.equals(v) && !target.containsEdge(v, other)) {
                         if (!addInsteadOfRewire) {
