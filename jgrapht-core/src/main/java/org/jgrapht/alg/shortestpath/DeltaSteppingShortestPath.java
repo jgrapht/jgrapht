@@ -3,17 +3,17 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
@@ -22,7 +22,6 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -66,12 +65,20 @@ import java.util.concurrent.TimeUnit;
  * and at the same time enables avoiding too many re-relaxations of the edges.
  *
  * <p>
+ * In this algorithm the vertices of the graph are maintained in the bucket structure according to
+ * the their tentative distance in the shortest path tree computed so far. On each iteration the
+ * first non-empty bucket is emptied and all light edges emanating from its vertices are relaxed.
+ * This may take more than $1$ iteration due to the reinsertion to the same bucket occurring during
+ * the relaxations process. All heavy edges of the vertices that were removed from the bucket are than
+ * relaxed one and for all.
+ *
+ * <p>
  * This implementation delegates paralleling to the {@link ExecutorService}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
- * @since September 2018
+ * @since October 2018
  */
 public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E> {
     /**
@@ -81,7 +88,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     /**
      * Error message for reporting that delta must be positive.
      */
-    private static final String DELTA_MUST_BE_POSITIVE = "Delta must be positive";
+    private static final String DELTA_MUST_BE_NON_NEGATIVE = "Delta must be non-negative";
     /**
      * Default value for {@link #parallelism}.
      */
@@ -94,6 +101,17 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private double delta;
     /**
+     * Maximum number of threads the {@link #executor} can run at the same time.
+     */
+    private int parallelism;
+    /**
+     * Indicates whether load balancing should be used while computations or not.
+     * Should be true if the graph large vertices out degrees deviations as well
+     * log simple paths of small weight.
+     */
+    private boolean loadBalancing;
+
+    /**
      * Num of buckets in the bucket structure.
      */
     private int numOfBuckets;
@@ -101,10 +119,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * Maximum edge weight in the {@link #graph}.
      */
     private double maxEdgeWeight;
-    /**
-     * Maximum number of threads the {@link #executor} can run at the same time.
-     */
-    private int parallelism;
+
     /**
      * Map with light edges for each vertex. An edge is considered
      * light if its weight is less than or equal to {@link #delta}.
@@ -145,56 +160,68 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph and parallelism.
-     * Initializes {@link #delta} to $0.0$ to preserve lazy computation style.
-     *
-     * @param graph       the graph
-     * @param parallelism num of threads
-     */
-    public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism) {
-        super(graph);
-        delta = 0.0;
-        this.parallelism = parallelism;
-        init();
-    }
-
-    /**
      * Constructs a new instance of the algorithm for a given graph and delta.
      *
      * @param graph the graph
      * @param delta bucket width
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta) {
-        this(graph, delta, DEFAULT_PARALLELISM);
+        this(graph, delta, DEFAULT_PARALLELISM, false);
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta and parallelism.
+     * Constructs a new instance of the algorithm for a given graph and parallelism.
      *
      * @param graph       the graph
-     * @param delta       bucket width
-     * @param parallelism num of threads
+     * @param parallelism parallelism
      */
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism) {
+    public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism) {
+        this(graph, 0.0, parallelism, false);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph and load balancing.
+     *
+     * @param graph         the graph
+     * @param loadBalancing loadBalancing
+     */
+    public DeltaSteppingShortestPath(Graph<V, E> graph, boolean loadBalancing) {
+        this(graph, 0.0, DEFAULT_PARALLELISM, loadBalancing);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, delta and loadBalancing.
+     *
+     * @param graph         the graph
+     * @param delta         bucket width
+     * @param loadBalancing loadBalancing
+     */
+    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, boolean loadBalancing) {
+        this(graph, delta, DEFAULT_PARALLELISM, loadBalancing);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph, delta, parallelism and loadBalancing.
+     * If delta is $0.0$ it will be computed when the {@link #getPath(Object, Object)} method will be invoked.
+     *
+     * @param graph         the graph
+     * @param delta         bucket width
+     * @param parallelism   num of threads
+     * @param loadBalancing loadBalancing
+     */
+    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism, boolean loadBalancing) {
         super(graph);
-        if (delta <= 0) {
-            throw new IllegalArgumentException(DELTA_MUST_BE_POSITIVE);
+        if (delta < 0) {
+            throw new IllegalArgumentException(DELTA_MUST_BE_NON_NEGATIVE);
         }
         this.delta = delta;
         this.parallelism = parallelism;
-        init();
-    }
-
-    /**
-     * Initializes {@link #light}, {@link #heavy},
-     * {@link #executor} and {@link #completionService} fields.
-     */
-    private void init() {
-        light = new HashMap<>(graph.vertexSet().size());
-        heavy = new HashMap<>(graph.vertexSet().size());
+        this.loadBalancing = loadBalancing;
+        light = new ConcurrentHashMap<>(graph.vertexSet().size());
+        heavy = new ConcurrentHashMap<>(graph.vertexSet().size());
+        distanceAndPredecessorMap = new ConcurrentHashMap<>(graph.vertexSet().size());
         executor = Executors.newFixedThreadPool(parallelism);
         completionService = new ExecutorCompletionService<>(executor);
-        distanceAndPredecessorMap = new ConcurrentHashMap<>(graph.vertexSet().size());
     }
 
     /**
@@ -272,12 +299,10 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * Fills {@link #light}, {@link #heavy}
      */
     private void fillMaps() {
-        graph.vertexSet().forEach(v -> {
+        graph.vertexSet().parallelStream().forEach(v -> {
             light.put(v, new HashSet<>());
             heavy.put(v, new HashSet<>());
             distanceAndPredecessorMap.put(v, Pair.of(Double.POSITIVE_INFINITY, null));
-        });
-        graph.vertexSet().parallelStream().forEach(v -> {
             for (E e : graph.outgoingEdgesOf(v)) {
                 if (graph.getEdgeWeight(e) > delta) {
                     heavy.get(v).add(e);
@@ -296,9 +321,8 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     private void computeShortestPaths(V source) {
         relax(source, null, 0.0);
 
-        int firstNonEmptyBucket;
-        while (!bucketStructure.isEmpty()) {
-            firstNonEmptyBucket = bucketStructure.firstNonEmptyBucket();
+        int firstNonEmptyBucket = 0;
+        while (firstNonEmptyBucket != -1) {
             NavigableSet<V> removed = new TreeSet<>();
             NavigableSet<V> bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
 
@@ -310,6 +334,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             }
 
             findAndRelaxRequests(removed, heavy);
+            firstNonEmptyBucket = bucketStructure.firstNonEmptyBucket();
         }
         shutDownExecutor();
     }
@@ -328,7 +353,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
     /**
      * Manages execution of edges relaxation.
-     * Starts relaxations tasks by calling {@link #startRelaxTasks(NavigableSet, Map)},
+     * Starts relaxations tasks by calling {@link #startRelaxTasksWithLoadBalancing(NavigableSet, Map)},
      * receives num of tasks as the result {@link #completionService} and takes them
      * from the {@link #executor} when they are finished.
      *
@@ -336,7 +361,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * @param edgesKind vertex to edges map
      */
     private void findAndRelaxRequests(NavigableSet<V> vertices, Map<V, Set<E>> edgesKind) {
-        int numOfTasks = startRelaxTasks(vertices, edgesKind);
+        int numOfTasks;
+        if (loadBalancing) {
+            numOfTasks = startRelaxTasksWithLoadBalancing(vertices, edgesKind);
+        } else {
+            numOfTasks = startRelaxTasks(vertices, edgesKind);
+        }
         for (int i = 0; i < numOfTasks; i++) {
             try {
                 completionService.take();
@@ -360,6 +390,48 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * @return relax tasks
      */
     private int startRelaxTasks(NavigableSet<V> vertices, Map<V, Set<E>> edgesKind) {
+        int verticesPerThread = (int) Math.ceil((double) vertices.size() / parallelism);
+
+        if (verticesPerThread == 0) {
+            return 0;
+        }
+
+        int numOfTasks = 0;
+        V begin = null;
+        int numOfVertices = 0;
+        for (V end : vertices) {
+            if (begin == null) {
+                begin = end;
+            }
+            numOfVertices++;
+            if (numOfVertices == verticesPerThread) {
+                numOfTasks++;
+                completionService.submit(new RelaxTask(vertices.subSet(begin, true, end, true), edgesKind), null);
+                numOfVertices = 0;
+                begin = null;
+            }
+        }
+        if (numOfVertices != 0) {
+            numOfTasks++;
+            completionService.submit(new RelaxTask(vertices.tailSet(begin), edgesKind), null);
+        }
+        return numOfTasks;
+    }
+
+    /**
+     * Generates relaxation tasks and submits them to the {@link #executor}.
+     *
+     * <p>
+     * Calculates total amount of requests for {@code vertices}. Uses prefix sums by
+     * num of requests for load balancing. Iterates over {@code vertices} and creates
+     * a new {@link RelaxTask} whenever sum of relax requests for passed vertices reaches
+     * $\frac{total relax requests}{parallelism}$ value.
+     *
+     * @param vertices  vertex list
+     * @param edgesKind light or heavy edges
+     * @return relax tasks
+     */
+    private int startRelaxTasksWithLoadBalancing(NavigableSet<V> vertices, Map<V, Set<E>> edgesKind) {
         int totalRequests = vertices.stream().mapToInt(v -> edgesKind.get(v).size()).sum();
         int requestsPerThread = (int) Math.ceil((double) totalRequests / parallelism);
 
@@ -404,10 +476,9 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         int updatedBucket = bucketIndex(distance);
         synchronized (v) {
             Pair<Double, E> oldData = distanceAndPredecessorMap.get(v);
-            int oldBucket = bucketIndex(oldData.getFirst());
             if (distance < oldData.getFirst()) {
                 if (!oldData.getFirst().equals(Double.POSITIVE_INFINITY)) {
-                    bucketStructure.remove(oldBucket, v);
+                    bucketStructure.remove(bucketIndex(oldData.getFirst()), v);
                 }
                 bucketStructure.add(updatedBucket, v);
                 distanceAndPredecessorMap.put(v, Pair.of(distance, e));
@@ -472,6 +543,9 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         }
     }
 
+    /**
+     * Implements bucket structure.
+     */
     class BucketStructure {
         /**
          * Buckets.
@@ -529,7 +603,6 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             buckets[bucket] = new ConcurrentSkipListSet<V>();
             return result;
         }
-
 
         /**
          * Calculates the index of the first non-empty bucket
