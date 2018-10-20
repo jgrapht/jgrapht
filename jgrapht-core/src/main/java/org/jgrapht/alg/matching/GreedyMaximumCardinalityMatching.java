@@ -23,7 +23,7 @@ import org.jgrapht.alg.interfaces.*;
 import java.util.*;
 
 /**
- * A simple class which computes a random, maximal cardinality matching. The algorithm can run in
+ * The greedy algorithm for computing a maximum cardinality matching. The algorithm can run in
  * two modes: sorted or unsorted. When unsorted, the matching is obtained by iterating through the
  * edges and adding an edge if it doesn't conflict with the edges already in the matching. When
  * sorted, the edges are first sorted by the sum of degrees of their endpoints. After that, the
@@ -31,9 +31,9 @@ import java.util.*;
  * produce better results, albeit at the cost of some additional computational overhead.
  * <p>
  * Independent of the mode, the resulting matching is maximal, and is therefore guaranteed to
- * contain at least half of the edges that a maximum matching has ($\frac{1}{2}$ approximation).
- * Runtime complexity: $O(m)$ when the edges are not sorted, $O(m+ m \log n)$ otherwise, where $n$
- * is the number of vertices, and m the number of edges.
+ * contain at least half of the edges that a maximum cardinality matching has ($\frac{1}{2}$ approximation).
+ * Runtime complexity: $O(m)$ when the edges are not sorted, $O(m + m \log n)$ otherwise, where $n$
+ * is the number of vertices, and $m$ the number of edges.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
