@@ -40,7 +40,7 @@ import java.util.stream.*;
  * To compute a maximum cardinality matching, at most $n$ augmenting path computations are
  * performed. Each augmenting path computation takes $O(m \alpha(m,n))$ time, where $\alpha(m,n)$ is
  * an inverse of the Ackerman function, $n$ is the number of vertices, and $m$ the number of edges.
- * This results in a total runtime complexity of O(nm alpha(m,n)). In practise, the number of
+ * This results in a total runtime complexity of O(nm alpha(m,n)). In practice, the number of
  * augmenting path computations performed is far smaller than $n$, since an efficient heuristic is
  * used to compute a near-optimal initial solution. This implementation is highly efficient: a
  * maximum matching in a graph of 2000 vertices and 1.5 million edges is calculated in a few
@@ -92,7 +92,6 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     implements
     MatchingAlgorithm<V, E>
 {
-
     /* The graph we are matching on. */
     private final Graph<V, E> graph;
     /* (Heuristic) matching algorithm used to compute an initial feasible solution */
@@ -112,7 +111,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     /* -----Algorithm data structures below---------- */
 
     /** Storage of the forest, even and odd levels */
-    private int[] even, odd;
+    private Levels levels;
 
     /** Special 'NIL' vertex. */
     private static final int NIL = -1;
@@ -174,8 +173,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         this.matching = new SimpleMatching(vertices.size());
         this.matchedVertices = 0;
 
-        this.even = new int[vertices.size()];
-        this.odd = new int[vertices.size()];
+        this.levels  = new Levels(vertices.size());
 
         this.queue = new FixedSizeIntegerQueue(vertices.size());
         this.uf = new UnionFind<>(new HashSet<>(vertexIndexMap.values()));
@@ -209,18 +207,18 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      */
     private boolean augment()
     {
-
         // reset data structures
-        Arrays.fill(even, NIL);
-        Arrays.fill(odd, NIL);
+        levels.reset();
         uf.reset();
         bridges.clear();
         queue.clear();
 
-        for (int root = 0; root < vertices.size(); root++) {
-            if (matching.isMatched(root)) // Only grow trees from exposed nodes
-                continue;
-            even[root] = root;
+        Deque<Integer> exposed = new ArrayDeque<>(matching.getExposed());
+        
+        while(!exposed.isEmpty()) { 
+            int root = exposed.pop(); 
+
+            levels.setEven(root, root);
             queue.enqueue(root);
             // for each exposed vertex, start a bfs search
             while (!queue.isEmpty()) {
@@ -230,7 +228,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                     int w = vertexIndexMap.get(wOrig);
 
                     // vertex w is even: we may have encountered a blossom.
-                    if (even[uf.find(w)] != NIL) { // w is an even vertex
+                    if (levels.isEven(uf.find(w))) { // w is an even vertex
                         // if v and w belong to the same blossom, the edge has been shrunken away
                         // and we can ignore it. if not, we found a new blossom. We do not need to
                         // check whether v and w belong to the same tree since each tree is fully
@@ -242,7 +240,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
 
                     // vertex w is either odd or unreached. If it is unreached, we have found an
                     // augmenting path. If it is odd, we can grow the tree.
-                    else if (odd[w] == NIL) { // w is odd or unreached
+                    else if (levels.isOddOrUnreached(w)) { // w is odd or unreached
 
                         if (matching.isExposed(w)) { // w is unreached: we found an augmenting path
                             augment(v);
@@ -252,9 +250,9 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                         }
 
                         // w is an odd vertex: grow the tree
-                        odd[w] = v;
+                        levels.setOdd(w, v);
                         int u = matching.opposite(w); // even vertex
-                        even[u] = w;
+                        levels.setEven(u, w);
                         queue.enqueue(u); // continue growing the tree from u
                     }
                 }
@@ -294,7 +292,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         // blossom. In fact, it can be any vertex of the blossom containing x. We therefore have to
         // ensure that the predecessor of the blossom's representative is the predecessor of the
         // actual base vertex.
-        even[uf.find(base)] = even[base];
+        levels.setEven(uf.find(base), levels.getEven(base));
     }
 
     /**
@@ -316,11 +314,11 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         int u = v;
         while (v != base) {
             uf.union(v, u);
-            u = even[v]; // odd vertex
+            u = levels.getEven(v); // odd vertex
             this.bridges.put(u, bridge);
             queue.enqueue(u);
             uf.union(v, u);
-            v = uf.find(odd[u]); // even vertex
+            v = uf.find(levels.getOdd(u)); // even vertex
         }
     }
 
@@ -369,10 +367,10 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     private int parent(int v)
     {
         v = uf.find(v); // even vertex
-        int parent = uf.find(even[v]); // odd vertex, or v if v is the root of its tree
+        int parent = uf.find(levels.getEven(v)); // odd vertex, or v if v is the root of its tree
         if (parent == v)
             return v; // root of tree
-        return uf.find(odd[parent]);
+        return uf.find(levels.getOdd(parent));
     }
 
     /**
@@ -410,8 +408,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             // To lift the path through the blossom, we have to walk from odd node u in the
             // direction of the bridge, cross the bridge, and then
             // continue in the direction of the tree root.
-            while (odd[start] != NIL) {
-
+            while (levels.isOdd(start)) {
                 Pair<Integer, Integer> bridge = bridges.get(start);
 
                 // From the start vertex u, walk in the direction of the bridge (v,w). The first
@@ -439,7 +436,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             if (path[i - 1] == end)
                 return i;
 
-            start = odd[path[i - 1]]; // even vertex
+            start = levels.getOdd(path[i - 1]); // even vertex
         }
     }
 
@@ -528,7 +525,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         // A(G)= {vertices labeled odd in the Edmonds Blossomg-Shrinking algorithm}. Note: we only
         // take odd vertices that are not consumed by blossoms (every blossom is even).
         Set<V> oddVertices = vertexIndexMap
-            .values().stream().filter(vx -> odd[vx] != NIL && !bridges.containsKey(vx))
+            .values().stream().filter(vx -> levels.isOdd(vx) && !bridges.containsKey(vx))
             .map(vertices::get).collect(Collectors.toSet());
         Set<V> otherVertices = graph
             .vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
@@ -547,19 +544,87 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                 / 2.0;
     }
 
+    
+    /**
+     * Storage of the forest, even and odd levels.
+     * 
+     * We explicitly maintain a dirty mark in order to be able to cleanup only the 
+     * values that we have changed. This is important when the graph is sparse to avoid performing an 
+     * $O(n)$ operation per augmentation.
+     */
+    private static class Levels
+    {
+        private int[] even, odd;
+        private List<Integer> dirty;
+        
+        public Levels(int n) {
+            this.even = new int[n];
+            this.odd = new int[n];
+            this.dirty = new ArrayList<>();
+            
+            Arrays.fill(even, NIL);
+            Arrays.fill(odd, NIL);
+        }
+        
+        public int getEven(int v) { 
+            return even[v];
+        }
+        
+        public void setEven(int v, int value) { 
+            even[v] = value;
+            if (value != NIL) { 
+                dirty.add(v);
+            }
+        }
+        
+        public int getOdd(int v) { 
+            return odd[v];
+        }
+        
+        public void setOdd(int v, int value) { 
+            odd[v] = value;
+            if (value != NIL) { 
+                dirty.add(v);
+            }
+        }
+        
+        public boolean isEven(int v) { 
+            return even[v] != NIL;
+        }
+        
+        public boolean isOddOrUnreached(int v) { 
+            return odd[v] == NIL;
+        }
+        
+        public boolean isOdd(int v) { 
+            return odd[v] != NIL;
+        }
+        
+        public void reset() {
+            for(int v: dirty) { 
+                even[v] = NIL;
+                odd[v] = NIL;
+            }
+            dirty.clear();
+        }
+    }
+    
     /**
      * Simple representation of a matching
      */
-    final class SimpleMatching
+    private static class SimpleMatching
     {
-
         private static final int UNMATCHED = -1;
         private final int[] match;
+        private Set<Integer> exposed;
 
         private SimpleMatching(int n)
         {
             this.match = new int[n];
+            this.exposed = new HashSet<>(n);
+            
             Arrays.fill(match, UNMATCHED);
+            IntStream.range(0, n).forEach(exposed::add);
         }
 
         /**
@@ -594,7 +659,15 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         {
             match[u] = v;
             match[v] = u;
+            exposed.remove(u);
+            exposed.remove(v);
         }
+        
+        Set<Integer> getExposed()
+        {
+            return exposed;
+        }
+        
     }
 
     /** Utility function to reverse part of an array */
