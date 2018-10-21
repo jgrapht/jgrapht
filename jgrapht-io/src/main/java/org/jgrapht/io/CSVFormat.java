@@ -60,7 +60,7 @@ package org.jgrapht.io;
  * which represents a graph with edges: a-&gt;b, b-&gt;a, d-&gt;a, c-&gt;a, c-&gt;b, b-&gt;d,
  * b-&gt;a. Multiple occurrences of the same edge result into a multi-graph.
  * 
- * <p>Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS} is
+ * <p>Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is
  * set. In this case the target vertex must be followed by the edge weight. The following example illustrates
  * the weighted variant:
  * 
@@ -104,7 +104,7 @@ package org.jgrapht.io;
  * </pre>
  * 
  * <p>
- * Weighted variants are also valid if {@link CSVFormat.Parameter#MATRIX_FORMAT_EDGE_WEIGHTS} is
+ * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is
  * set. The above example would then be:
  * 
  * <pre>
@@ -175,6 +175,10 @@ public enum CSVFormat
     public enum Parameter
     {
         /**
+         * Whether to import/export edge weights.
+         */
+        EDGE_WEIGHTS,
+        /**
          * Whether to import/export node ids. Only valid for the {@link CSVFormat#MATRIX MATRIX}
          * format.
          */
@@ -182,18 +186,15 @@ public enum CSVFormat
         /**
          * Whether to import/export edge weights. Only valid for the {@link CSVFormat#MATRIX MATRIX}
          * format.
+         * @deprecated Use {@link #EDGE_WEIGHTS} instead.
          */
+        @Deprecated
         MATRIX_FORMAT_EDGE_WEIGHTS,
         /**
          * Whether the input/output contains zero for missing edges. Only valid for the
          * {@link CSVFormat#MATRIX MATRIX} format.
          */
         MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-        /**
-         * Whether to import/export edge weights. Only valid for the {@link CSVFormat#EDGE_LIST EDGE_LIST}
-         * and {@link CSVFormat#ADJACENCY_LIST ADJACENCY_LIST} formats.
-         */
-        EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS,
     }
 
 }

@@ -272,7 +272,7 @@ public class CSVImporter<V, E>
         public AdjacencyListCSVListener(Graph<V, E> graph)
         {
             super(graph);
-            this.assumeEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS);
+            this.assumeEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
         }
 
         @Override
@@ -351,7 +351,8 @@ public class CSVImporter<V, E>
             super(graph);
             this.assumeNodeIds = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
             this.assumeEdgeWeights =
-                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+                parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS) || 
+                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);;
             this.assumeZeroWhenNoEdge =
                 parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
             this.verticesCount = 0;

@@ -204,7 +204,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter =
             new CSVExporter<>(nameProvider, CSVFormat.EDGE_LIST, ';');
-        exporter.setParameter(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS, true);
+        exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_WEIGHTED_EDGE_LIST, w.toString());
@@ -263,7 +263,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter =
             new CSVExporter<>(nameProvider, CSVFormat.ADJACENCY_LIST, ';');
         StringWriter w = new StringWriter();
-        exporter.setParameter(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS, true);
+        exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, true);
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_WEIGHTED_ADJACENCY_LIST, w.toString());
     }
@@ -435,7 +435,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultWeightedEdge> exporter =
             new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
         exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, true);
-        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
+        exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE_WEIGHTED, w.toString());
@@ -467,7 +467,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultWeightedEdge> exporter =
             new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
-        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
+        exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_WEIGHTED, w.toString());
