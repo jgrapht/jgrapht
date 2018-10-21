@@ -220,12 +220,18 @@ public class CSVExporter<V, E>
 
     private void exportAsAdjacencyList(Graph<V, E> g, PrintWriter out)
     {
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS);
+        
         for (V v : g.vertexSet()) {
             exportEscapedField(out, vertexIDProvider.getName(v));
             for (E e : g.outgoingEdgesOf(v)) {
                 V w = Graphs.getOppositeVertex(g, e, v);
                 out.print(delimiter);
                 exportEscapedField(out, vertexIDProvider.getName(w));
+                if (exportEdgeWeights) { 
+                    out.print(delimiter);
+                    exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
+                }
             }
             out.println();
         }

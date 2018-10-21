@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,7 @@ import java.io.*;
 import static org.junit.Assert.*;
 
 /**
- * .
+ * Tests for {@link CSVExporter}.
  * 
  * @author Dimitrios Michail
  */
@@ -71,11 +71,18 @@ public class CSVExporterTest
         + "5;4;1;2;3;4;5;5" + NL;
     
     private static final String DIRECTED_ADJACENCY_LIST =
-        "1;2;3" + NL
+          "1;2;3" + NL
         + "2" + NL
         + "3;1;4" + NL
         + "4;5" + NL
         + "5;1;2;3;4;5;5" + NL;
+    
+    private static final String DIRECTED_WEIGHTED_ADJACENCY_LIST =
+          "1;2;3.3;3;3.3" + NL
+        + "2" + NL
+        + "3;1;3.3;4;3.3" + NL
+        + "4;5;3.3" + NL
+        + "5;1;3.3;2;3.3;3;3.3;4;3.3;5;3.3;5;3.3" + NL;
     
     private static final String DIRECTED_MATRIX_NODEID =
           ";1;2;3;4;5" + NL
@@ -229,6 +236,36 @@ public class CSVExporterTest
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_ADJACENCY_LIST, w.toString());
+    }
+    
+    @Test
+    public void testDirectedWeightedAdjacencyList()
+    {
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        g = new AsWeightedGraph<>(g, e -> 3.3, false, false);
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+        g.addVertex(4);
+        g.addVertex(5);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(3, 1);
+        g.addEdge(3, 4);
+        g.addEdge(4, 5);
+        g.addEdge(5, 1);
+        g.addEdge(5, 2);
+        g.addEdge(5, 3);
+        g.addEdge(5, 4);
+        g.addEdge(5, 5);
+        g.addEdge(5, 5);
+
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.ADJACENCY_LIST, ';');
+        StringWriter w = new StringWriter();
+        exporter.setParameter(CSVFormat.Parameter.EDGE_OR_ADJACENCY_LIST_EDGE_WEIGHTS, true);
+        exporter.exportGraph(g, w);
+        assertEquals(DIRECTED_WEIGHTED_ADJACENCY_LIST, w.toString());
     }
 
     @Test
