@@ -58,7 +58,7 @@ import java.util.*;
  * @author Timofey Chudakov
  * @see BlossomVNode
  * @see BlossomVTreeEdge
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  */
 class BlossomVTree
 {

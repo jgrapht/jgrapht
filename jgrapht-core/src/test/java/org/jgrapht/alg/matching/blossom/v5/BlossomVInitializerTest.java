@@ -25,8 +25,9 @@ import org.junit.*;
 import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.*;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatchingTest.checkMatchingAndDualSolution;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatchingTest.checkMatchingAndDualSolution;
+import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
 import static org.junit.Assert.*;
 
 /**
@@ -48,6 +49,7 @@ public class BlossomVInitializerTest
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -70,8 +72,8 @@ public class BlossomVInitializerTest
         assertFalse(node1.isTreeRoot);
         assertFalse(node2.isTreeRoot);
 
-        assertEquals(2, state.nodeNum);
-        assertEquals(1, state.edgeNum);
+        assertEquals(4, state.nodeNum);
+        assertEquals(2, state.edgeNum);
         assertEquals(0, state.treeNum);
 
         assertEquals(Collections.emptySet(), BlossomVDebugger.getTreeRoots(state));
@@ -97,6 +99,7 @@ public class BlossomVInitializerTest
         DefaultWeightedEdge e25 = Graphs.addEdgeWithVertices(graph, 2, 5, 3);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 4);
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 5);
+        DefaultWeightedEdge e89 = Graphs.addEdgeWithVertices(graph, 8, 9, 0);
         graph.addVertex(7);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
@@ -106,9 +109,9 @@ public class BlossomVInitializerTest
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
-        assertEquals(7, state.nodeNum);
-        assertEquals(7, state.treeNum);
-        assertEquals(5, state.edgeNum);
+        assertEquals(9, state.nodeNum);
+        assertEquals(9, state.treeNum);
+        assertEquals(6, state.edgeNum);
 
         BlossomVNode node1 = vertexMap.get(1);
         BlossomVNode node2 = vertexMap.get(2);
@@ -205,11 +208,11 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
-        KolmogorovMinimumWeightPerfectMatching.Statistics statistics =
+        KolmogorovWeightedPerfectMatching.Statistics statistics =
             perfectMatching.getStatistics();
 
         assertEquals(8, matching.getWeight(), EPS);
@@ -217,7 +220,7 @@ public class BlossomVInitializerTest
         assertEquals(0, statistics.shrinkNum);
         assertEquals(0, statistics.expandNum);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -233,11 +236,11 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
-        KolmogorovMinimumWeightPerfectMatching.Statistics statistics =
+        KolmogorovWeightedPerfectMatching.Statistics statistics =
             perfectMatching.getStatistics();
 
         assertEquals(14, matching.getWeight(), EPS);
@@ -245,7 +248,7 @@ public class BlossomVInitializerTest
         assertEquals(0, statistics.shrinkNum);
         assertEquals(0, statistics.expandNum);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -262,11 +265,11 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
-        KolmogorovMinimumWeightPerfectMatching.Statistics statistics =
+        KolmogorovWeightedPerfectMatching.Statistics statistics =
             perfectMatching.getStatistics();
 
         assertEquals(18, matching.getWeight(), EPS);
@@ -274,7 +277,7 @@ public class BlossomVInitializerTest
         assertEquals(0, statistics.shrinkNum);
         assertEquals(0, statistics.expandNum);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -291,11 +294,11 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
-        KolmogorovMinimumWeightPerfectMatching.Statistics statistics =
+        KolmogorovWeightedPerfectMatching.Statistics statistics =
             perfectMatching.getStatistics();
 
         assertEquals(24, matching.getWeight(), EPS);
@@ -303,7 +306,7 @@ public class BlossomVInitializerTest
         assertEquals(0, statistics.shrinkNum);
         assertEquals(0, statistics.expandNum);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -320,14 +323,14 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
 
         assertEquals(11, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -344,14 +347,14 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
 
         assertEquals(18, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
 
     }
 
@@ -370,14 +373,14 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
 
         assertEquals(21, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -394,14 +397,14 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
 
         assertEquals(20, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
     }
 
     /**
@@ -418,14 +421,14 @@ public class BlossomVInitializerTest
         for (int[] edge : edges) {
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
         }
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
-            new KolmogorovMinimumWeightPerfectMatching<>(graph, fractionalOptions);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> perfectMatching =
+            new KolmogorovWeightedPerfectMatching<>(graph, fractionalOptions);
         MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
             perfectMatching.getMatching();
 
         assertEquals(17, matching.getWeight(), EPS);
         assertTrue(perfectMatching.testOptimality());
-        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution());
+        checkMatchingAndDualSolution(matching, perfectMatching.getDualSolution(), MINIMIZE);
 
     }
 

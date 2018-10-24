@@ -26,7 +26,7 @@ import java.util.*;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVInitializer.Action.*;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.MINUS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.PLUS;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.*;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.*;
 
 /**
  * Is used to start the Kolmogorov's Blossom V algorithm. Performs initialization of the algorithm's
@@ -63,7 +63,7 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  */
 class BlossomVInitializer<V, E>
 {
@@ -143,14 +143,14 @@ class BlossomVInitializer<V, E>
      */
     private BlossomVState<V, E> simpleInitialization(BlossomVOptions options)
     {
-        initGraph();
+        double minEdgeWeight = initGraph();
         for (BlossomVNode node : nodes) {
             node.isOuter = true;
         }
         allocateTrees();
         initAuxiliaryGraph();
         return new BlossomVState<>(
-            graph, nodes, edges, nodeNum, edgeNum, nodeNum, graphVertices, graphEdges, options);
+                graph, nodes, edges, nodeNum, edgeNum, nodeNum, graphVertices, graphEdges, options, minEdgeWeight);
     }
 
     /**
@@ -162,12 +162,12 @@ class BlossomVInitializer<V, E>
      */
     private BlossomVState<V, E> greedyInitialization(BlossomVOptions options)
     {
-        initGraph();
+        double minEdgeWeight = initGraph();
         int treeNum = initGreedy();
         allocateTrees();
         initAuxiliaryGraph();
         return new BlossomVState<>(
-            graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
+                graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options, minEdgeWeight);
     }
 
     /**
@@ -179,19 +179,19 @@ class BlossomVInitializer<V, E>
      */
     private BlossomVState<V, E> fractionalMatchingInitialization(BlossomVOptions options)
     {
-        initGraph();
+        double minEdgeWeight = initGraph();
         initGreedy();
         allocateTrees();
         int treeNum = initFractional();
         initAuxiliaryGraph();
         return new BlossomVState<>(
-            graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
+                graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options, minEdgeWeight);
     }
 
     /**
      * Converts the generic graph representation into the form convenient for the algorithm
      */
-    private void initGraph()
+    private double initGraph()
     {
         int expectedEdgeNum = graph.edgeSet().size();
         nodes = new BlossomVNode[nodeNum + 1];
@@ -210,18 +210,20 @@ class BlossomVInitializer<V, E>
         nodes[nodeNum] = new BlossomVNode(nodeNum); // auxiliary node to keep track of the first
                                                     // item in the linked list of tree roots
         i = 0;
+        double minEdgeWeight = graph.edgeSet().stream().map(graph::getEdgeWeight).min(Comparator.naturalOrder()).orElse(0d);
         // maps edges
         for (E e : graph.edgeSet()) {
             BlossomVNode source = vertexMap.get(graph.getEdgeSource(e));
             BlossomVNode target = vertexMap.get(graph.getEdgeTarget(e));
             if (source != target) { // we avoid self-loops in order to support pseudographs
                 edgeNum++;
-                BlossomVEdge edge = addEdge(source, target, graph.getEdgeWeight(e), i);
+                BlossomVEdge edge = addEdge(source, target, graph.getEdgeWeight(e) - minEdgeWeight, i);
                 edges[i] = edge;
                 graphEdges.add(e);
                 i++;
             }
         }
+        return minEdgeWeight;
     }
 
     /**

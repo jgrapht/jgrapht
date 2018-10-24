@@ -23,8 +23,8 @@ import org.junit.*;
 
 import java.util.*;
 
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
 /**
@@ -311,6 +311,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 3);
         DefaultWeightedEdge e35 = Graphs.addEdgeWithVertices(graph, 3, 5, 3);
         DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 3);
+        DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -509,6 +510,7 @@ public class BlossomVPrimalUpdaterTest
         Graph<Integer, DefaultWeightedEdge> graph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 4);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -532,7 +534,7 @@ public class BlossomVPrimalUpdaterTest
         assertEquals(edge12, node2.matched);
         Assert.assertEquals(BlossomVNode.Label.INFINITY, node1.label);
         Assert.assertEquals(BlossomVNode.Label.INFINITY, node2.label);
-        assertEquals(0, state.treeNum);
+        assertEquals(2, state.treeNum);
         assertEquals(0, edge12.slack, EPS);
         assertEquals(1, node1.dual, EPS);
         assertEquals(3, node2.dual, EPS);
@@ -551,6 +553,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 4);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 3);
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 4);
+        DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -846,6 +849,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 4);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 2);
         DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 4);
+        DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -916,6 +920,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e57 = Graphs.addEdgeWithVertices(graph, 5, 7, 8);
         DefaultWeightedEdge e58 = Graphs.addEdgeWithVertices(graph, 5, 8, 9);
         DefaultWeightedEdge e47 = Graphs.addEdgeWithVertices(graph, 4, 7, 7);
+        DefaultWeightedEdge e910 = Graphs.addEdgeWithVertices(graph, 9, 10, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -1283,6 +1288,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 2);
         DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 3);
         DefaultWeightedEdge e25 = Graphs.addEdgeWithVertices(graph, 2, 5, 3);
+        DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -1362,6 +1368,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 8);
         DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 8);
         DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 8);
+        DefaultWeightedEdge e89 = Graphs.addEdgeWithVertices(graph, 8, 9, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
@@ -1669,6 +1676,7 @@ public class BlossomVPrimalUpdaterTest
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 2);
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 5);
         DefaultWeightedEdge e35 = Graphs.addEdgeWithVertices(graph, 3, 5, 5);
+        DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);

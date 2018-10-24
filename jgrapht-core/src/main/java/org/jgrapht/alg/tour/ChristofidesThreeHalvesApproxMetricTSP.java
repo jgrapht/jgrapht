@@ -136,7 +136,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
          */
         Graph<V, E> subgraph = new AsSubgraph<>(graph, oddDegreeVertices);
         MatchingAlgorithm<V, E> matchingAlgorithm =
-            new KolmogorovMinimumWeightPerfectMatching<>(subgraph);
+            new KolmogorovWeightedPerfectMatching<>(subgraph);
         matchingAlgorithm.getMatching().getEdges().forEach(
             e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
 

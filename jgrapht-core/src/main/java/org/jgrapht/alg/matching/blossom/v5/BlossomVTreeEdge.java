@@ -49,7 +49,7 @@ import org.jheaps.tree.*;
  * {@code edge.head[0] == oppositeTree} and {@code edge.head[1] == tree}.
  *
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  * @see BlossomVTree
  * @see BlossomVEdge
  */

@@ -60,7 +60,7 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
  * matched, it necessarily is a tree root.
  *
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  */
 class BlossomVNode
 {

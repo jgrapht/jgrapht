@@ -21,11 +21,11 @@ import org.jheaps.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.INFINITY;
 
 /**
- * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates,
+ * This class is used by {@link KolmogorovWeightedPerfectMatching} to perform dual updates,
  * thus increasing the dual objective function value and creating new tight edges.
  * <p>
  * This class currently supports three types of dual updates: single tree, multiple trees fixed
@@ -61,7 +61,7 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  * @see BlossomVPrimalUpdater
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  */
 class BlossomVDualUpdater<V, E>
 {
@@ -79,7 +79,7 @@ class BlossomVDualUpdater<V, E>
      * Creates a new instance of the BlossomVDualUpdater
      *
      * @param state the state common to {@link BlossomVPrimalUpdater}, {@link BlossomVDualUpdater}
-     *        and {@link KolmogorovMinimumWeightPerfectMatching}
+     *        and {@link KolmogorovWeightedPerfectMatching}
      * @param primalUpdater primal updater used by the algorithm
      */
     public BlossomVDualUpdater(BlossomVState<V, E> state, BlossomVPrimalUpdater<V, E> primalUpdater)
@@ -100,7 +100,7 @@ class BlossomVDualUpdater<V, E>
         long start = System.nanoTime();
 
         BlossomVEdge augmentEdge = null;
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (KolmogorovWeightedPerfectMatching.DEBUG) {
             System.out.println("Start updating duals");
         }
         // go through all tree roots and determine the initial tree dual change wrt. in-tree
@@ -129,7 +129,7 @@ class BlossomVDualUpdater<V, E>
                 root.tree.eps += root.tree.accumulatedEps;
             }
         }
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (KolmogorovWeightedPerfectMatching.DEBUG) {
             for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
                 root = root.treeSiblingNext)
             {
@@ -149,14 +149,14 @@ class BlossomVDualUpdater<V, E>
      * doesn't violate in-tree constraints. In other words, {@code getEps(tree) - tree.eps} is the
      * resulting dual change wrt. in-tree constraints. The computed value is always greater than or
      * equal to the {@code tree.eps}, can violate the cross-tree constraints, and can be equal to
-     * {@link KolmogorovMinimumWeightPerfectMatching#INFINITY}.
+     * {@link KolmogorovWeightedPerfectMatching#INFINITY}.
      *
      * @param tree the tree to process
      * @return a value which can be safely assigned to tree.eps
      */
     private double getEps(BlossomVTree tree)
     {
-        double eps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
+        double eps = KolmogorovWeightedPerfectMatching.INFINITY;
         // check minimum slack of the plus-infinity edges
         if (!tree.plusInfinityEdges.isEmpty()) {
             BlossomVEdge edge = tree.plusInfinityEdges.findMin().getValue();
@@ -197,7 +197,7 @@ class BlossomVDualUpdater<V, E>
 
         double eps = getEps(tree); // include only constraints on (+,+) in-tree edges, (+, inf)
                                    // edges and "-' blossoms
-        double epsAugment = KolmogorovMinimumWeightPerfectMatching.INFINITY; // takes into account
+        double epsAugment = KolmogorovWeightedPerfectMatching.INFINITY; // takes into account
                                                                              // constraints of the
                                                                              // cross-tree edges
         BlossomVEdge augmentEdge = null; // the (+, +) cross-tree edge of minimum slack
@@ -228,14 +228,14 @@ class BlossomVDualUpdater<V, E>
             eps = epsAugment;
         }
         // now eps takes into account all the constraints
-        if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
+        if (eps > KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
             throw new IllegalArgumentException(
-                KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
+                    KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
         }
         if (eps > tree.eps) {
             delta = eps - tree.eps;
             tree.eps = eps;
-            if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+            if (KolmogorovWeightedPerfectMatching.DEBUG) {
                 System.out.println("Updating duals: now eps of " + tree + " is " + eps);
             }
         }
@@ -289,7 +289,7 @@ class BlossomVDualUpdater<V, E>
                     BlossomVTreeEdge currentEdge = iterator.next();
                     int dir = iterator.getCurrentDirection();
                     BlossomVTree opposite = currentEdge.head[dir];
-                    double plusPlusEps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
+                    double plusPlusEps = KolmogorovWeightedPerfectMatching.INFINITY;
                     int dirRev = 1 - dir;
 
                     if (!currentEdge.plusPlusEdges.isEmpty()) {
@@ -311,13 +311,13 @@ class BlossomVDualUpdater<V, E>
                     }
 
                     double[] plusMinusEps = new double[2];
-                    plusMinusEps[dir] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
+                    plusMinusEps[dir] = KolmogorovWeightedPerfectMatching.INFINITY;
                     if (!currentEdge.getCurrentPlusMinusHeap(dir).isEmpty()) {
                         plusMinusEps[dir] =
                             currentEdge.getCurrentPlusMinusHeap(dir).findMin().getKey()
                                 - currentTree.eps + opposite.eps;
                     }
-                    plusMinusEps[dirRev] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
+                    plusMinusEps[dirRev] = KolmogorovWeightedPerfectMatching.INFINITY;
                     if (!currentEdge.getCurrentPlusMinusHeap(dirRev).isEmpty()) {
                         plusMinusEps[dirRev] =
                             currentEdge.getCurrentPlusMinusHeap(dirRev).findMin().getKey()
@@ -363,9 +363,9 @@ class BlossomVDualUpdater<V, E>
                 currentTree = currentTree.nextTree;
             }
 
-            if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
+            if (eps > KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
                 throw new IllegalArgumentException(
-                    KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
+                        KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
             }
 
             // apply dual change to all trees in the connected component
@@ -390,14 +390,12 @@ class BlossomVDualUpdater<V, E>
      */
     private BlossomVEdge multipleTreeFixedDelta()
     {
-        if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
+        if (KolmogorovWeightedPerfectMatching.DEBUG) {
             System.out.println("Multiple tree fixed delta approach");
         }
-        BlossomVEdge varEdge;
         BlossomVEdge augmentEdge = null;
         double eps = INFINITY;
         double augmentEps = INFINITY;
-        double slack;
         for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
             root = root.treeSiblingNext)
         {
@@ -410,8 +408,8 @@ class BlossomVDualUpdater<V, E>
             {
                 // since all epsilons are equal we don't have to check (+, -) cross tree edges
                 if (!outgoingTreeEdge.plusPlusEdges.isEmpty()) {
-                    varEdge = outgoingTreeEdge.plusPlusEdges.findMin().getValue();
-                    slack = varEdge.slack - treeEps - outgoingTreeEdge.head[0].eps;
+                    BlossomVEdge varEdge = outgoingTreeEdge.plusPlusEdges.findMin().getValue();
+                    double slack = varEdge.slack - treeEps - outgoingTreeEdge.head[0].eps;
                     eps = Math.min(eps, slack / 2);
                     if (augmentEps > slack) {
                         augmentEps = slack;
@@ -420,9 +418,9 @@ class BlossomVDualUpdater<V, E>
                 }
             }
         }
-        if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
+        if (eps > KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
             throw new IllegalArgumentException(
-                KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
+                    KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
         }
         for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
             root = root.treeSiblingNext)

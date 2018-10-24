@@ -23,10 +23,10 @@ import org.junit.*;
 
 import java.util.*;
 
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
 /**
@@ -43,14 +43,20 @@ public class BlossomVDualUpdaterTest
     public void testUpdateDuals1()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        DefaultWeightedEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+        DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 2);
 
         BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
             new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
-            new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
+        Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
+        BlossomVEdge edge34 = edgeMap.get(e34);
+
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        primalUpdater.augment(edge34);
+
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
         assertTrue(dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA) > 0);
         for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
             root = root.treeSiblingNext)
@@ -67,11 +73,17 @@ public class BlossomVDualUpdaterTest
         Graphs.addEdgeWithVertices(graph, 1, 2, 6);
         Graphs.addEdgeWithVertices(graph, 1, 3, 7);
         Graphs.addEdgeWithVertices(graph, 2, 3, 10);
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
-            new BlossomVInitializer<>(graph);
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
+
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
-            new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+
+        Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
+        BlossomVEdge edge45 = edgeMap.get(e45);
+        primalUpdater.augment(edge45);
+
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
         dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA);
         for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
             root = root.treeSiblingNext)
@@ -84,7 +96,8 @@ public class BlossomVDualUpdaterTest
     public void testUpdateDualsSingle1()
     {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
-        DefaultEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
+        Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
         BlossomVInitializer<Integer, DefaultEdge> initializer = new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultEdge> state = initializer.initialize(noneOptions);

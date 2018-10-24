@@ -37,8 +37,8 @@ public class KolmogorovMinimumWeightPerfectMatchingPerformanceTest
     @Benchmark
     public MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> testBlossomV(Data data)
     {
-        KolmogorovMinimumWeightPerfectMatching<Integer, DefaultWeightedEdge> matching =
-            new KolmogorovMinimumWeightPerfectMatching<>(data.graph, data.options[data.optionNum]);
+        KolmogorovWeightedPerfectMatching<Integer, DefaultWeightedEdge> matching =
+            new KolmogorovWeightedPerfectMatching<>(data.graph, data.options[data.optionNum]);
         return matching.getMatching();
     }
 

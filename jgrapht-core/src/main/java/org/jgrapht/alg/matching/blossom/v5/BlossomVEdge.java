@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
- * It represents an edge between two nodes. Even though the minimum weight perfect matching problem
+ * It represents an edge between two nodes. Even though the weighted perfect matching problem
  * is formulated on an undirected graph, each edge has direction, i.e. it is an arc. According to
  * this direction it is present in two circular doubly linked lists of incident edges. The
  * references to the next and previous edges of this list are maintained via
@@ -50,7 +50,7 @@ import java.util.*;
  * actual slack of an edge.
  *
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  */
 class BlossomVEdge
 {

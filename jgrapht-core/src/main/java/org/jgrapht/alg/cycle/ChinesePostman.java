@@ -69,7 +69,7 @@ public class ChinesePostman<V, E>
 
     /**
      * Solves the Chinese Postman Problem on the given graph. For Undirected graph, this
-     * implementation uses the @{@link KolmogorovMinimumWeightPerfectMatching} matching algorithm;
+     * implementation uses the @{@link KolmogorovWeightedPerfectMatching} matching algorithm;
      * for directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used
      * instead. The input graph must be strongly connected. Otherwise the behavior of this class is
      * undefined.
@@ -135,7 +135,7 @@ public class ChinesePostman<V, E>
             }
         }
         MatchingAlgorithm.Matching<V, DefaultWeightedEdge> matching =
-            new KolmogorovMinimumWeightPerfectMatching<>(auxGraph).getMatching();
+            new KolmogorovWeightedPerfectMatching<>(auxGraph).getMatching();
 
         // 4. On the original graph, add shortcuts between the odd vertices. These shortcuts have
         // been

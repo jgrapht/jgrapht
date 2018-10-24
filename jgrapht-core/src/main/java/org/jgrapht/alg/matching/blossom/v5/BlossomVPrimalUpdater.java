@@ -18,10 +18,10 @@
 package org.jgrapht.alg.matching.blossom.v5;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.DEBUG;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.DEBUG;
 
 /**
- * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} for performing primal
+ * This class is used by {@link KolmogorovWeightedPerfectMatching} for performing primal
  * operations: grow, augment, shrink and expand. This class operates on alternating trees, blossom
  * structures, and node states. It changes them after applying any primal operation. Also, this
  * class can add and subtract some values from nodes' dual variables; it never changes their actual
@@ -59,7 +59,7 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  * @see BlossomVDualUpdater
  */
 class BlossomVPrimalUpdater<V, E>

@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * This class stores data needed for the Kolmogorov's Blossom V algorithm; it is used by
- * {@link KolmogorovMinimumWeightPerfectMatching}, {@link BlossomVPrimalUpdater} and
+ * {@link KolmogorovWeightedPerfectMatching}, {@link BlossomVPrimalUpdater} and
  * {@link BlossomVDualUpdater} during the course of the algorithm.
  * <p>
  * We refer to this object with all the data stored in nodes, edges, trees, and tree edges as the
@@ -32,7 +32,7 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
- * @see KolmogorovMinimumWeightPerfectMatching
+ * @see KolmogorovWeightedPerfectMatching
  * @see BlossomVPrimalUpdater
  * @see BlossomVDualUpdater
  */
@@ -76,7 +76,7 @@ class BlossomVState<V, E>
     /**
      * Statistics of the algorithm performance
      */
-    KolmogorovMinimumWeightPerfectMatching.Statistics statistics;
+    KolmogorovWeightedPerfectMatching.Statistics statistics;
     /**
      * BlossomVOptions used to determine the strategies used in the algorithm
      */
@@ -85,11 +85,14 @@ class BlossomVState<V, E>
      * Initial generic vertices of the graph
      */
     List<V> graphVertices;
-
     /**
      * Initial edges of the graph
      */
     List<E> graphEdges;
+    /**
+     * Minimum edge weight in the graph
+     */
+    double minEdgeWeight;
 
     /**
      * Constructs the algorithm's initial state
@@ -108,7 +111,7 @@ class BlossomVState<V, E>
      */
     public BlossomVState(
         Graph<V, E> graph, BlossomVNode[] nodes, BlossomVEdge[] edges, int nodeNum, int edgeNum,
-        int treeNum, List<V> graphVertices, List<E> graphEdges, BlossomVOptions options)
+        int treeNum, List<V> graphVertices, List<E> graphEdges, BlossomVOptions options, double minEdgeWeight)
     {
         this.graph = graph;
         this.nodes = nodes;
@@ -119,7 +122,8 @@ class BlossomVState<V, E>
         this.graphVertices = graphVertices;
         this.graphEdges = graphEdges;
         this.options = options;
-        this.statistics = new KolmogorovMinimumWeightPerfectMatching.Statistics();
+        this.statistics = new KolmogorovWeightedPerfectMatching.Statistics();
+        this.minEdgeWeight = minEdgeWeight;
     }
 
 }
