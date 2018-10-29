@@ -326,7 +326,7 @@ public class DOTExporter<V, E>
             }
         }
         if (labelName != null) {
-            out.print("label=\"" + escapeDoubleQuotes(labelName) + "\" ");
+            renderAttribute(out, "label", labelName);
         }
         if (attributes != null) {
             for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
@@ -335,10 +335,21 @@ public class DOTExporter<V, E>
                     // already handled by special case above
                     continue;
                 }
-                out.print(name + "=\"" + escapeDoubleQuotes(entry.getValue().getValue()) + "\" ");
+                renderAttribute(out, name, entry.getValue().getValue());
             }
         }
         out.print("]");
+    }
+
+    private void renderAttribute(PrintWriter out, String attrName, String attrValue)
+    {
+        out.print(attrName + "=");
+        if (attrValue.startsWith("<") && attrValue.endsWith(">")) {
+            out.print(attrValue);
+        } else {
+            out.print("\"" + escapeDoubleQuotes(attrValue) + "\"");
+        }
+        out.print(" ");
     }
 
     private static String escapeDoubleQuotes(String labelName)
