@@ -182,6 +182,41 @@ public class DOTExporterTest
     }
 
     @Test
+    public void testNodeHtmlLabel()
+    {
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
+            new StringComponentNameProvider<>(), vertex -> "<<b>html label</b>>", null);
+
+        StringWriter outputWriter = new StringWriter();
+
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("myVertex");
+        exporter.exportGraph(graph, outputWriter);
+
+        assertThat(outputWriter.toString(), containsString("label=<<b>html label</b>>"));
+    }
+
+    @Test
+    public void testNodeHtmlLabelFromAttribute()
+    {
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
+            new StringComponentNameProvider<>(), vertex -> null, null,
+                vertex -> {
+                    final HashMap<String, Attribute> attrs = new HashMap<>();
+                    attrs.put("label", new DefaultAttribute<>("<b>html label</b>", AttributeType.HTML));
+                    return attrs;
+                }, null);
+
+        StringWriter outputWriter = new StringWriter();
+
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("myVertex");
+        exporter.exportGraph(graph, outputWriter);
+
+        assertThat(outputWriter.toString(), containsString("label=<<b>html label</b>>"));
+    }
+
+    @Test
     public void testDifferentGraphID()
         throws UnsupportedEncodingException,
         ExportException

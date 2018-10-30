@@ -30,6 +30,7 @@ public enum AttributeType
     FLOAT("float"),
     DOUBLE("double"),
     STRING("string"),
+    HTML("html"),
     UNKNOWN("unknown");
 
     private String name;
@@ -70,6 +71,8 @@ public enum AttributeType
             return DOUBLE;
         case "string":
             return STRING;
+        case "html":
+            return HTML;
         case "unknown":
             return UNKNOWN;
         }

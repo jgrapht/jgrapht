@@ -17,6 +17,7 @@
  */
 package org.jgrapht.io;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.*;
 
 import java.io.*;
@@ -319,14 +320,20 @@ public class DOTExporter<V, E>
             return;
         }
         out.print(" [ ");
-        if (labelName == null) {
-            Attribute labelAttribute = attributes.get("label");
-            if (labelAttribute != null) {
-                labelName = labelAttribute.getValue();
+        final Attribute labelAttribute;
+        if (labelName == null && attributes.containsKey("label")) {
+            labelAttribute = attributes.get("label");
+        } else if (labelName != null) {
+            if (labelName.startsWith("<") && labelName.endsWith(">")) {
+                labelAttribute = new DefaultAttribute<>(StringUtils.substring(labelName, 1, -1), AttributeType.HTML);
+            } else {
+                labelAttribute = DefaultAttribute.createAttribute(labelName);
             }
+        } else {
+            labelAttribute = null;
         }
-        if (labelName != null) {
-            out.print("label=\"" + escapeDoubleQuotes(labelName) + "\" ");
+        if (labelAttribute != null) {
+             renderAttribute(out, "label", labelAttribute);
         }
         if (attributes != null) {
             for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
@@ -335,10 +342,22 @@ public class DOTExporter<V, E>
                     // already handled by special case above
                     continue;
                 }
-                out.print(name + "=\"" + escapeDoubleQuotes(entry.getValue().getValue()) + "\" ");
+                renderAttribute(out, name, entry.getValue());
             }
         }
         out.print("]");
+    }
+
+    private void renderAttribute(PrintWriter out, String attrName, Attribute attribute)
+    {
+        out.print(attrName + "=");
+        final String attrValue = attribute.getValue();
+        if (AttributeType.HTML.equals(attribute.getType())) {
+            out.print("<" + attrValue + ">");
+        } else {
+            out.print("\"" + escapeDoubleQuotes(attrValue) + "\"");
+        }
+        out.print(" ");
     }
 
     private static String escapeDoubleQuotes(String labelName)
