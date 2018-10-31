@@ -193,7 +193,7 @@ public class DOTExporterTest
         graph.addVertex("myVertex");
         exporter.exportGraph(graph, outputWriter);
 
-        assertThat(outputWriter.toString(), containsString("label=<<b>html label</b>>"));
+        assertThat(outputWriter.toString(), containsString("label=\"<<b>html label</b>>\""));
     }
 
     @Test

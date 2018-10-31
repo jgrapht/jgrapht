@@ -321,16 +321,10 @@ public class DOTExporter<V, E>
         }
         out.print(" [ ");
         final Attribute labelAttribute;
-        if (labelName == null && attributes.containsKey("label")) {
-            labelAttribute = attributes.get("label");
-        } else if (labelName != null) {
-            if (labelName.startsWith("<") && labelName.endsWith(">")) {
-                labelAttribute = new DefaultAttribute<>(StringUtils.substring(labelName, 1, -1), AttributeType.HTML);
-            } else {
-                labelAttribute = DefaultAttribute.createAttribute(labelName);
-            }
+        if (labelName != null) {
+            labelAttribute = DefaultAttribute.createAttribute(labelName);
         } else {
-            labelAttribute = null;
+            labelAttribute = attributes.get("label");
         }
         if (labelAttribute != null) {
              renderAttribute(out, "label", labelAttribute);
