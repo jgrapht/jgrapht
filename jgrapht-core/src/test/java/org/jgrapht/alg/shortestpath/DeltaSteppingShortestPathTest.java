@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2018-2018, by Semen Chudakov and Contributors.
- *
+d *
  * JGraphT : a free Java graph-theory library
  *
  * See the CONTRIBUTORS.md file distributed with this work for additional
