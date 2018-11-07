@@ -95,7 +95,7 @@ public class DeltaSteppingShortestPathPerformance {
         int edgeDegree;
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
-        @Setup(Level.Iteration)
+        @Setup(Level.Trial)
         public void generateGraph() {
             graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
             graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
@@ -123,11 +123,11 @@ public class DeltaSteppingShortestPathPerformance {
 
     @State(Scope.Benchmark)
     public static class DenseGraphState {
-        @Param({"1000",/* "2000", "3000"*/})
+        @Param({"1000", "2000", "3000"})
         int numOfVertices;
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
-        @Setup(Level.Iteration)
+        @Setup(Level.Trial)
         public void generateGraph() {
             graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
             graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());

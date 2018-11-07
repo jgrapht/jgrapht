@@ -24,10 +24,12 @@ import org.jgrapht.alg.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
@@ -101,15 +103,9 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private double delta;
     /**
-     * Maximum number of threads the {@link #executor} can run at the same time.
+     * Maximum number of threads the {@link #completionService} can run at the same time.
      */
     private int parallelism;
-    /**
-     * Indicates whether load balancing should be used while computations or not.
-     * Should be true if the graph large vertices out degrees deviations as well
-     * log simple paths of small weight.
-     */
-    private boolean loadBalancing;
 
     /**
      * Num of buckets in the bucket structure.
@@ -145,10 +141,26 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private ExecutorService executor;
     /**
-     * Enables keep track of when all submitted to the
-     * {@link #executor} tasks are finished.
+     * Decorator for {@link #executor} that enables to keep track of
+     * when all submitted tasks are finished.
      */
     private ExecutorCompletionService<Void> completionService;
+    /**
+     * Queue of vertices which edges should be relaxed on current iteration.
+     */
+    private ConcurrentLinkedQueue<V> verticesQueue;
+    /**
+     * Task for light edges relaxation.
+     */
+    private Runnable lightRelaxTask;
+    /**
+     * Task for light edges relaxation.
+     */
+    private Runnable heavyRelaxTask;
+    /**
+     * Indicates when all the vertices have been added to the {@link #verticesQueue}.
+     */
+    private volatile boolean allVerticesAdded;
 
     /**
      * Constructs a new instance of the algorithm for a given graph.
@@ -166,7 +178,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * @param delta bucket width
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta) {
-        this(graph, delta, DEFAULT_PARALLELISM, false);
+        this(graph, delta, DEFAULT_PARALLELISM);
     }
 
     /**
@@ -176,52 +188,32 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * @param parallelism parallelism
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism) {
-        this(graph, 0.0, parallelism, false);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given graph and load balancing.
-     *
-     * @param graph         the graph
-     * @param loadBalancing loadBalancing
-     */
-    public DeltaSteppingShortestPath(Graph<V, E> graph, boolean loadBalancing) {
-        this(graph, 0.0, DEFAULT_PARALLELISM, loadBalancing);
-    }
-
-    /**
-     * Constructs a new instance of the algorithm for a given graph, delta and loadBalancing.
-     *
-     * @param graph         the graph
-     * @param delta         bucket width
-     * @param loadBalancing loadBalancing
-     */
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, boolean loadBalancing) {
-        this(graph, delta, DEFAULT_PARALLELISM, loadBalancing);
+        this(graph, 0.0, parallelism);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given graph, delta, parallelism and loadBalancing.
      * If delta is $0.0$ it will be computed when the {@link #getPath(Object, Object)} method will be invoked.
      *
-     * @param graph         the graph
-     * @param delta         bucket width
-     * @param parallelism   num of threads
-     * @param loadBalancing loadBalancing
+     * @param graph       the graph
+     * @param delta       bucket width
+     * @param parallelism num of threads
      */
-    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism, boolean loadBalancing) {
+    public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism) {
         super(graph);
         if (delta < 0) {
             throw new IllegalArgumentException(DELTA_MUST_BE_NON_NEGATIVE);
         }
         this.delta = delta;
         this.parallelism = parallelism;
-        this.loadBalancing = loadBalancing;
         light = new ConcurrentHashMap<>(graph.vertexSet().size());
         heavy = new ConcurrentHashMap<>(graph.vertexSet().size());
         distanceAndPredecessorMap = new ConcurrentHashMap<>(graph.vertexSet().size());
         executor = Executors.newFixedThreadPool(parallelism);
         completionService = new ExecutorCompletionService<>(executor);
+        verticesQueue = new ConcurrentLinkedQueue<>();
+        lightRelaxTask = new RelaxTask(verticesQueue, light);
+        heavyRelaxTask = new RelaxTask(verticesQueue, heavy);
     }
 
     /**
@@ -322,18 +314,18 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         relax(source, null, 0.0);
 
         int firstNonEmptyBucket = 0;
+        List<Set<V>> removed = new ArrayList<>();
         while (firstNonEmptyBucket != -1) {
-            List<Set<V>> removed = new ArrayList<>();
             Set<V> bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
 
             while (!bucketElements.isEmpty()) {
                 removed.add(bucketElements);
-
-                findAndRelaxRequests(bucketElements, light);
+                findAndRelaxLightRequests(bucketElements);
                 bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
             }
 
-            findAndRelaxRequests(removed, heavy);
+            findAndRelaxHeavyRequests(removed);
+            removed.clear();
             firstNonEmptyBucket = bucketStructure.firstNonEmptyBucket();
         }
         shutDownExecutor();
@@ -353,37 +345,142 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
     /**
      * Manages execution of edges relaxation.
-     * Starts relaxations tasks by calling !!!!!!,
-     * receives num of tasks as the result {@link #completionService} and takes them
-     * from the {@link #executor} when they are finished.
+     * Adds all the elements from {@code vertices}
+     * the the {@link #verticesQueue} and submits
+     * as many {@link #lightRelaxTask} to the {@link #completionService}
+     * as needed.
      *
-     * @param vertices  vertices
-     * @param edgesKind vertex to edges map
+     * @param vertices vertices
      */
-    private void findAndRelaxRequests(Set<V> vertices, Map<V, Set<E>> edgesKind) {
+    private void findAndRelaxLightRequests(Set<V> vertices) {
+        allVerticesAdded = false;
+        int numOfVertices = vertices.size();
         int numOfTasks;
-        if (loadBalancing) {
-            long totalRequests = getTotalRequests(vertices, edgesKind);
-            numOfTasks = startRelaxTasksWithLoadBalancing(vertices, edgesKind, totalRequests);
+        if (numOfVertices >= parallelism) {
+            numOfTasks = parallelism;
+            Iterator<V> iterator = vertices.iterator();
+            addSetVertices(iterator, parallelism);
+            submitTasks(lightRelaxTask, parallelism - 1);
+            addSetRemaining(iterator);
+            submitTasks(lightRelaxTask, 1);
         } else {
-            long numOVertices = getNumOfVertices(vertices);
-            numOfTasks = startRelaxTasks(vertices, edgesKind, numOVertices);
+            numOfTasks = numOfVertices;
+            addSetRemaining(vertices.iterator());
+            submitTasks(lightRelaxTask, numOfVertices);
         }
+
+        allVerticesAdded = true;
         waitForTasksCompletion(numOfTasks);
     }
 
-    private void findAndRelaxRequests(List<Set<V>> vertices, Map<V, Set<E>> edgesKind) {
+    /**
+     * Manages execution of edges relaxation.
+     * Adds all the elements from {@code vertices}
+     * the the {@link #verticesQueue} and submits
+     * as many {@link #heavyRelaxTask} to the {@link #completionService}
+     * as needed.
+     *
+     * @param verticesSets set of sets of vertices
+     */
+    private void findAndRelaxHeavyRequests(List<Set<V>> verticesSets) {
+        allVerticesAdded = false;
+        int numOfVertices = verticesSets.stream().mapToInt(Set::size).sum();
         int numOfTasks;
-        if (loadBalancing) {
-            long totalRequests = getTotalRequests(vertices, edgesKind);
-            numOfTasks = startRelaxTasksWithLoadBalancing(vertices, edgesKind, totalRequests);
+        if (numOfVertices >= parallelism) {
+            numOfTasks = parallelism;
+            Iterator<Set<V>> setIterator = verticesSets.iterator();
+            Iterator<V> iterator = addSetsVertices(setIterator, parallelism);
+            submitTasks(heavyRelaxTask, parallelism - 1);
+            addSetRemaining(iterator);
+            addSetsRemaining(setIterator);
+            submitTasks(heavyRelaxTask, 1);
         } else {
-            long numOVertices = getNumOfVertices(vertices);
-            numOfTasks = startRelaxTasks(vertices, edgesKind, numOVertices);
+            numOfTasks = numOfVertices;
+            addSetsRemaining(verticesSets.iterator());
+            submitTasks(heavyRelaxTask, numOfVertices);
         }
+
+        allVerticesAdded = true;
         waitForTasksCompletion(numOfTasks);
     }
 
+    /**
+     * Adds {@code numOfVertices} vertices to the {@link #verticesQueue}
+     * provided by the {@code iterator}.
+     *
+     * @param iterator      vertices iterator
+     * @param numOfVertices vertices amount
+     */
+    private void addSetVertices(Iterator<V> iterator, int numOfVertices) {
+        for (int i = 0; i < numOfVertices && iterator.hasNext(); i++) {
+            verticesQueue.add(iterator.next());
+        }
+    }
+
+    /**
+     * Adds all remaining vertices to the {@link #verticesQueue}
+     * provided by the {@code iterator}.
+     *
+     * @param iterator vertices iterator
+     */
+    private void addSetRemaining(Iterator<V> iterator) {
+        while (iterator.hasNext()) {
+            verticesQueue.add(iterator.next());
+        }
+    }
+
+    /**
+     * Adds {@code numOfVertices} vertices to the {@link #verticesQueue}
+     * that are contained in the sets provided by the {@code setIterator}.
+     * Returns iterator of the set which vertex was added last.
+     *
+     * @param setIterator   sets of vertices iterator
+     * @param numOfVertices vertices amount
+     * @return iterator of the last set
+     */
+    private Iterator<V> addSetsVertices(Iterator<Set<V>> setIterator, int numOfVertices) {
+        int i = 0;
+        Iterator<V> iterator = null;
+        while (setIterator.hasNext() && i < numOfVertices) {
+            iterator = setIterator.next().iterator();
+            while (iterator.hasNext() && i < numOfVertices) {
+                verticesQueue.add(iterator.next());
+                i++;
+            }
+        }
+        return iterator;
+    }
+
+    /**
+     * Adds all remaining vertices to the {@link #verticesQueue}
+     * that are contained in the sets provided by the {@code setIterator}.
+     *
+     * @param setIterator sets of vertices iterator
+     */
+    private void addSetsRemaining(Iterator<Set<V>> setIterator) {
+        while (setIterator.hasNext()) {
+            verticesQueue.addAll(setIterator.next());
+        }
+    }
+
+
+    /**
+     * Submits the {@code task} {@code numOfTasks} times to the {@link #completionService}.
+     *
+     * @param task       task to be submitted
+     * @param numOfTasks amount of times task should be submitted
+     */
+    private void submitTasks(Runnable task, int numOfTasks) {
+        for (int i = 0; i < numOfTasks; i++) {
+            completionService.submit(task, null);
+        }
+    }
+
+    /**
+     * Takes {@code numOfTasks} tasks from the {@link #completionService}.
+     *
+     * @param numOfTasks amount of tasks
+     */
     private void waitForTasksCompletion(int numOfTasks) {
         for (int i = 0; i < numOfTasks; i++) {
             try {
@@ -393,198 +490,6 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             }
         }
     }
-
-    private long getNumOfVertices(Set<V> vertices) {
-        return vertices.size();
-    }
-
-    private long getNumOfVertices(List<Set<V>> vertices) {
-        return vertices.stream().mapToInt(Set::size).sum();
-    }
-
-    private long getTotalRequests(Set<V> vertices, Map<V, Set<E>> edgeKind) {
-        return vertices.stream().mapToInt(v -> edgeKind.get(v).size()).sum();
-    }
-
-    private long getTotalRequests(List<Set<V>> vertices, Map<V, Set<E>> edgeKind) {
-        return vertices.stream().mapToInt(set -> set.stream().mapToInt(v -> edgeKind.get(v).size()).sum()).sum();
-    }
-
-
-    /**
-     * Generates relaxation tasks and submits them to the {@link #executor}.
-     *
-     * <p>
-     * Calculates total amount of requests for {@code vertices}. Uses prefix sums by
-     * num of requests for load balancing. Iterates over {@code vertices} and creates
-     * a new {@link RelaxTask} whenever sum of relax requests for passed vertices reaches
-     * $\frac{total relax requests}{parallelism}$ value.
-     *
-     * @param vertices  vertex list
-     * @param edgesKind light or heavy edges
-     * @return relax tasks
-     */
-    private int startRelaxTasks(Set<V> vertices, Map<V, Set<E>> edgesKind, long numOfVertices) {
-        if (numOfVertices == 0) {
-            return 0;
-        }
-        long verticesPerTask = getVerticesPerTask(numOfVertices);
-
-        int numOfTasks = 0;
-        List<V> taskVertices = new ArrayList<>();
-        int currentAmount = 0;
-        for (V v : vertices) {
-            taskVertices.add(v);
-            currentAmount++;
-            if (currentAmount == verticesPerTask) {
-                numOfTasks++;
-                completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-                currentAmount = 0;
-                taskVertices = new ArrayList<>();
-            }
-        }
-        if (currentAmount != 0) {
-            numOfTasks++;
-            completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-        }
-        return numOfTasks;
-    }
-
-    /**
-     * Generates relaxation tasks and submits them to the {@link #executor}.
-     *
-     * <p>
-     * Calculates total amount of requests for {@code vertices}. Uses prefix sums by
-     * num of requests for load balancing. Iterates over {@code vertices} and creates
-     * a new {@link RelaxTask} whenever sum of relax requests for passed vertices reaches
-     * $\frac{total relax requests}{parallelism}$ value.
-     *
-     * @param vertices  vertex list
-     * @param edgesKind light or heavy edges
-     * @return relax tasks
-     */
-    private int startRelaxTasks(List<Set<V>> vertices, Map<V, Set<E>> edgesKind, long numOfVertices) {
-        if (numOfVertices == 0) {
-            return 0;
-        }
-        long verticesPerTask = getVerticesPerTask(numOfVertices);
-
-        int numOfTasks = 0;
-        List<V> taskVertices = new ArrayList<>();
-        int currentAmount = 0;
-        for (Set<V> set : vertices) {
-            for (V v : set) {
-                taskVertices.add(v);
-                currentAmount++;
-                if (currentAmount == verticesPerTask) {
-                    numOfTasks++;
-                    completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-                    currentAmount = 0;
-                    taskVertices = new ArrayList<>();
-                }
-            }
-        }
-        if (currentAmount != 0) {
-            numOfTasks++;
-            completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-        }
-        return numOfTasks;
-    }
-
-    /**
-     * Generates relaxation tasks and submits them to the {@link #executor}.
-     *
-     * <p>
-     * Calculates total amount of requests for {@code vertices}. Uses prefix sums by
-     * num of requests for load balancing. Iterates over {@code vertices} and creates
-     * a new {@link RelaxTask} whenever sum of relax requests for passed vertices reaches
-     * $\frac{total relax requests}{parallelism}$ value.
-     *
-     * @param vertices  vertex list
-     * @param edgesKind light or heavy edges
-     * @return relax tasks
-     */
-    private int startRelaxTasksWithLoadBalancing(Set<V> vertices, Map<V, Set<E>> edgesKind, long totalRequests) {
-        if (totalRequests == 0) {
-            return 0;
-        }
-        long requestsPerTask = getRequestsPerTask(totalRequests);
-
-
-        int numOfTasks = 0;
-        List<V> taskVertices = new ArrayList<>();
-        int numOfRequests = 0;
-        for (V v : vertices) {
-            taskVertices.add(v);
-            numOfRequests += edgesKind.get(v).size();
-            if (numOfRequests >= requestsPerTask) {
-                if (numOfRequests != 0) {
-                    numOfTasks++;
-                    completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-                }
-                numOfRequests = 0;
-                taskVertices = new ArrayList<>();
-            }
-        }
-        if (numOfRequests != 0) {
-            numOfTasks++;
-            completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-        }
-        return numOfTasks;
-    }
-
-    /**
-     * Generates relaxation tasks and submits them to the {@link #executor}.
-     *
-     * <p>
-     * Calculates total amount of requests for {@code vertices}. Uses prefix sums by
-     * num of requests for load balancing. Iterates over {@code vertices} and creates
-     * a new {@link RelaxTask} whenever sum of relax requests for passed vertices reaches
-     * $\frac{total relax requests}{parallelism}$ value.
-     *
-     * @param vertices  vertex list
-     * @param edgesKind light or heavy edges
-     * @return relax tasks
-     */
-    private int startRelaxTasksWithLoadBalancing(List<Set<V>> vertices, Map<V, Set<E>> edgesKind, long totalRequests) {
-        if (totalRequests == 0) {
-            return 0;
-        }
-        long requestsPerTask = getRequestsPerTask(totalRequests);
-
-
-        int numOfTasks = 0;
-        List<V> taskVertices = new ArrayList<>();
-        int numOfRequests = 0;
-        for (Set<V> set : vertices) {
-            for (V v : set) {
-                taskVertices.add(v);
-                numOfRequests += edgesKind.get(v).size();
-                if (numOfRequests >= requestsPerTask) {
-                    if (numOfRequests != 0) {
-                        numOfTasks++;
-                        completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-                    }
-                    numOfRequests = 0;
-                    taskVertices = new ArrayList<>();
-                }
-            }
-        }
-        if (numOfRequests != 0) {
-            numOfTasks++;
-            completionService.submit(new RelaxTask(taskVertices, edgesKind), null);
-        }
-        return numOfTasks;
-    }
-
-    private long getVerticesPerTask(long numOfVertices) {
-        return (long) Math.ceil((double) numOfVertices / parallelism);
-    }
-
-    private long getRequestsPerTask(long totalRequests) {
-        return (int) Math.ceil((double) totalRequests / parallelism);
-    }
-
 
     /**
      * Performs relaxation in parallel-safe fashion. Synchronises by {@code vertex}
@@ -636,7 +541,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         /**
          * Vertices which edges will be relaxed.
          */
-        private List<V> vertices;
+        private ConcurrentLinkedQueue<V> vertices;
         /**
          * Maps vertices to their edges.
          */
@@ -648,7 +553,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
          * @param vertices  vertices
          * @param edgesKind edges
          */
-        RelaxTask(List<V> vertices, Map<V, Set<E>> edgesKind) {
+        RelaxTask(ConcurrentLinkedQueue<V> vertices, Map<V, Set<E>> edgesKind) {
             this.vertices = vertices;
             this.edgesKind = edgesKind;
         }
@@ -658,9 +563,17 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
          */
         @Override
         public void run() {
-            for (V v : vertices) {
-                for (E e : edgesKind.get(v)) {
-                    relax(Graphs.getOppositeVertex(graph, e, v), e, distanceAndPredecessorMap.get(v).getFirst() + graph.getEdgeWeight(e));
+
+            while (true) {
+                V v = vertices.poll();
+                if (v == null) {
+                    if (allVerticesAdded && vertices.isEmpty()) {
+                        break;
+                    }
+                } else {
+                    for (E e : edgesKind.get(v)) {
+                        relax(Graphs.getOppositeVertex(graph, e, v), e, distanceAndPredecessorMap.get(v).getFirst() + graph.getEdgeWeight(e));
+                    }
                 }
             }
         }
@@ -675,7 +588,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
          */
         private final Set[] buckets;
         /**
-         * Size of {@link #buckets}.
+         * Length of {@link #buckets}.
          */
         private int numOfBuckets;
 
