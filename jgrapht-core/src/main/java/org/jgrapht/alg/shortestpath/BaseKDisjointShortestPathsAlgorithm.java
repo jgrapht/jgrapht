@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
@@ -117,16 +118,22 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         }   
         
         // Create a working graph copy to avoid modifying the underlying graph. This gets
-        // reinitialized for every call to getPaths since previous calls may have modified it. Since
-        // the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
+        // reinitialized for every call to getPaths since previous calls may have modified it.
+        
+        // Since shortest paths calculations are not expected to exceed the boundaries of the 
+        // connected component of the start vertex, we are inducing the working graph from
+        // the connected component.
+        Graph<V, E> connectedComponentGraph = new AsSubgraph<>(this.originalGraph, 
+            new ConnectivityInspector<>(this.originalGraph).connectedSetOf(startVertex));
+        
+        // Since the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
         // (even when the graph copy is already weighted) to avoid writing weight changes through to
         // the underlying graph.
         this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
-            this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier()), 
+            connectedComponentGraph.getVertexSupplier(), connectedComponentGraph.getEdgeSupplier()), 
             new HashMap<>(), false);
-        Graphs.addGraph(workingGraph, this.originalGraph);     
-
-
+        Graphs.addGraph(workingGraph, connectedComponentGraph);     
+        
         this.pathList = new ArrayList<>();
         GraphPath<V, E> currentPath = calculateShortestPath(startVertex, endVertex);
         if (currentPath != null) {
