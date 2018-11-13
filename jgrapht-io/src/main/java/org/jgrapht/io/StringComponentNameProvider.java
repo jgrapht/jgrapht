@@ -42,4 +42,3 @@ public class StringComponentNameProvider<T>
         return component.toString();
     }
 }
-

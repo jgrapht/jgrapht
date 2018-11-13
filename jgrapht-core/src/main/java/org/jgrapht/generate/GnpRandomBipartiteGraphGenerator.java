@@ -194,4 +194,3 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     }
 
 }
-

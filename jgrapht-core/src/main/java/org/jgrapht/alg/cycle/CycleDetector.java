@@ -239,4 +239,3 @@ public class CycleDetector<V, E>
         }
     }
 }
-

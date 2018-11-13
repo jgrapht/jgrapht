@@ -289,4 +289,3 @@ public class StoerWagnerMinimumCut<V, E>
         }
     }
 }
-

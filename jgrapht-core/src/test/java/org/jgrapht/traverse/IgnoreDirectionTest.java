@@ -69,4 +69,3 @@ public class IgnoreDirectionTest
         return i;
     }
 }
-

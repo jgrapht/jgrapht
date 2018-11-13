@@ -20,7 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class KSPDiscardsValidPathsTest
 {
@@ -123,4 +123,3 @@ public class KSPDiscardsValidPathsTest
         graph.setEdgeWeight(edge, weight);
     }
 }
-

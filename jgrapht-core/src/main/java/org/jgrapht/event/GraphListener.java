@@ -59,4 +59,3 @@ public interface GraphListener<V, E>
     }
 
 }
-

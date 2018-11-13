@@ -70,4 +70,3 @@ public class TraversalListenerAdapter<V, E>
     {
     }
 }
-

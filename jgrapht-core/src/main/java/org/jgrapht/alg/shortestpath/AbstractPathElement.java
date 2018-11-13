@@ -158,4 +158,3 @@ abstract class AbstractPathElement<V, E>
         return this.vertex;
     }
 }
-

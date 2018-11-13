@@ -17,13 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.*;
+import org.jgrapht.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.junit.Test;
+import java.util.*;
+import java.util.function.*;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
@@ -62,10 +60,9 @@ public class WeightedGraphAsWeightedGraphTest
     private void setUp()
     {
         Map<DefaultWeightedEdge, Double> graphWeights = createBackingGraph();
-        this.weightedGraph =
-            new AsWeightedGraph<>(this.backingGraph, graphWeights);
+        this.weightedGraph = new AsWeightedGraph<>(this.backingGraph, graphWeights);
     }
-    
+
     /**
      * Set up using explicit writeWeightsThrough setting (false) for AsWeightedGraph.
      */
@@ -73,8 +70,7 @@ public class WeightedGraphAsWeightedGraphTest
     {
         Map<DefaultWeightedEdge, Double> graphWeights = createBackingGraph();
         this.weightedGraph =
-            new AsWeightedGraph<>(this.backingGraph, graphWeights,
-                writeWeightsThrough);
+            new AsWeightedGraph<>(this.backingGraph, graphWeights, writeWeightsThrough);
     }
 
     private Map<DefaultWeightedEdge, Double> createBackingGraph()
@@ -97,8 +93,9 @@ public class WeightedGraphAsWeightedGraphTest
 
         return graphWeights;
     }
-    
-    @Test public void testSetEdgeWeight()
+
+    @Test
+    public void testSetEdgeWeight()
     {
         this.setUp(false);
 
@@ -109,7 +106,8 @@ public class WeightedGraphAsWeightedGraphTest
         assertEquals(this.defaultE12Weight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testSetEdgeWeightDefaultPropagation()
+    @Test
+    public void testSetEdgeWeightDefaultPropagation()
     {
         this.setUp();
 
@@ -120,7 +118,8 @@ public class WeightedGraphAsWeightedGraphTest
         assertEquals(newEdgeWeight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testSetEdgePropagatesChangesToBackingGraph()
+    @Test
+    public void testSetEdgePropagatesChangesToBackingGraph()
     {
         this.setUp(true);
 
@@ -131,19 +130,22 @@ public class WeightedGraphAsWeightedGraphTest
         assertEquals(newEdgeWeight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testGetEdgeWeight()
+    @Test
+    public void testGetEdgeWeight()
     {
         this.setUp(false);
         assertEquals(e23Weight, this.weightedGraph.getEdgeWeight(e23), 0);
     }
 
-    @Test public void testGetDefaultEdgeWeight()
+    @Test
+    public void testGetDefaultEdgeWeight()
     {
         this.setUp(false);
         assertEquals(defaultLoopWeight, this.weightedGraph.getEdgeWeight(loop), 0);
     }
 
-    @Test public void testGetEdgeWeightOfNull()
+    @Test
+    public void testGetEdgeWeightOfNull()
     {
         this.setUp(false);
         try {
@@ -155,16 +157,21 @@ public class WeightedGraphAsWeightedGraphTest
     }
 
     @Test
-    public void testWeightFunction(){
-        Graph<Integer, DefaultWeightedEdge> g1=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testWeightFunction()
+    {
+        Graph<Integer, DefaultWeightedEdge> g1 =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(g1, 0, 1, 2);
         Graphs.addEdgeWithVertices(g1, 1, 2, 3);
         Graphs.addEdgeWithVertices(g1, 2, 0, 4);
-        Function<DefaultWeightedEdge, Double> weightFunction= e -> Math.pow(g1.getEdgeWeight(e), 2);
-        Graph<Integer, DefaultWeightedEdge> g2=new AsWeightedGraph<>(g1, weightFunction, true, false);
-        //Repeat twice to trigger caching
-        for(int i=0; i<2; i++)
-            for(DefaultWeightedEdge edge : g1.edgeSet())
-                assertEquals(g1.getEdgeWeight(edge)*g1.getEdgeWeight(edge), g2.getEdgeWeight(edge), 0);
+        Function<DefaultWeightedEdge, Double> weightFunction =
+            e -> Math.pow(g1.getEdgeWeight(e), 2);
+        Graph<Integer, DefaultWeightedEdge> g2 =
+            new AsWeightedGraph<>(g1, weightFunction, true, false);
+        // Repeat twice to trigger caching
+        for (int i = 0; i < 2; i++)
+            for (DefaultWeightedEdge edge : g1.edgeSet())
+                assertEquals(
+                    g1.getEdgeWeight(edge) * g1.getEdgeWeight(edge), g2.getEdgeWeight(edge), 0);
     }
 }

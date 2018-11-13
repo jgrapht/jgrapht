@@ -17,15 +17,32 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.specifics.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
+import org.jgrapht.graph.specifics.DirectedSpecifics;
+import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.graph.specifics.UndirectedSpecifics;
+import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.TypeUtil;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * A unit test for simple directed graph when the backing map is an IdentityHashMap
@@ -74,27 +91,49 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     public static class SimpleIdentityDirectedGraph<V, E>
-        extends
-        SimpleDirectedGraph<V, E>
+            extends
+            AbstractBaseGraph<V, E>
     {
         private static final long serialVersionUID = 4600490314100246989L;
 
         public SimpleIdentityDirectedGraph(Class<? extends E> edgeClass)
         {
-            super(edgeClass);
+            super(null, SupplierUtil.createSupplier(edgeClass), DefaultGraphType.directedSimple(), new IdentitySpecificsStrategy<>());
         }
+    }
+    
+    private static class IdentitySpecificsStrategy<V,E> implements GraphSpecificsStrategy<V, E> {
 
-        public SimpleIdentityDirectedGraph(Supplier<E> es)
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Function<GraphType,
+            IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
         {
-            super(null, es, false);
+            return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
+                if (type.isWeighted()) {
+                    return new WeightedIntrusiveEdgesSpecifics<V, E>(new IdentityHashMap<>());
+                } else {
+                    return new UniformIntrusiveEdgesSpecifics<>(new IdentityHashMap<>());
+                }
+            };
         }
 
         @Override
-        protected Specifics<V, E> createSpecifics(boolean directed)
+        public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
         {
-            return new DirectedSpecifics<>(this, new IdentityHashMap<>());
-        }
-
+            return (BiFunction<Graph<V, E>, GraphType,
+                Specifics<V, E>> & Serializable) (graph, type) -> {
+                    if (type.isDirected()) {
+                        return new DirectedSpecifics<V, E>(
+                            graph, new IdentityHashMap<>(), getEdgeSetFactory());
+                    } else {
+                        return new UndirectedSpecifics<>(
+                            graph, new IdentityHashMap<>(), getEdgeSetFactory());
+                    }
+                };
+        } 
+        
     }
 
     // ~ Instance fields --------------------------------------------------------
@@ -149,9 +188,9 @@ public class SimpleIdentityDirectedGraphTest
         } catch (IllegalArgumentException ile) {
         }
 
-        assertEquals(false, g2.addEdge(v2, v1, e));
-        assertEquals(false, g3.addEdge(v2, v1, e));
-        assertEquals(true, g4.addEdge(v2, v1, e));
+        assertFalse(g2.addEdge(v2, v1, e));
+        assertFalse(g3.addEdge(v2, v1, e));
+        assertTrue(g4.addEdge(v2, v1, e));
     }
 
     /**
@@ -350,7 +389,7 @@ public class SimpleIdentityDirectedGraphTest
     public void testGetEdgeSupplier()
     {
         assertNotNull(g1.getEdgeSupplier());
-        Supplier<DefaultEdge> es=g1.getEdgeSupplier();
+        Supplier<DefaultEdge> es = g1.getEdgeSupplier();
         DefaultEdge e = es.get();
         assertNotNull(e);
         assertNull(g1.getEdgeSource(e));
@@ -617,7 +656,7 @@ public class SimpleIdentityDirectedGraphTest
         g3 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
         g4 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
 
-        eSupplier=g1.getEdgeSupplier();
+        eSupplier = g1.getEdgeSupplier();
         eLoop = eSupplier.get();
 
         g1.addVertex(v1);
@@ -654,4 +693,3 @@ public class SimpleIdentityDirectedGraphTest
         v4.setT("_v4");
     }
 }
-

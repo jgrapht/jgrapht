@@ -210,7 +210,7 @@ public class CSVExporter<V, E>
             exportEscapedField(out, vertexIDProvider.getName(g.getEdgeSource(e)));
             out.print(delimiter);
             exportEscapedField(out, vertexIDProvider.getName(g.getEdgeTarget(e)));
-            if (exportEdgeWeights) { 
+            if (exportEdgeWeights) {
                 out.print(delimiter);
                 exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
             }
@@ -221,14 +221,14 @@ public class CSVExporter<V, E>
     private void exportAsAdjacencyList(Graph<V, E> g, PrintWriter out)
     {
         boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
-        
+
         for (V v : g.vertexSet()) {
             exportEscapedField(out, vertexIDProvider.getName(v));
             for (E e : g.outgoingEdgesOf(v)) {
                 V w = Graphs.getOppositeVertex(g, e, v);
                 out.print(delimiter);
                 exportEscapedField(out, vertexIDProvider.getName(w));
-                if (exportEdgeWeights) { 
+                if (exportEdgeWeights) {
                     out.print(delimiter);
                     exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
                 }
@@ -240,9 +240,7 @@ public class CSVExporter<V, E>
     private void exportAsMatrix(Graph<V, E> g, PrintWriter out)
     {
         boolean exportNodeId = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-        boolean exportEdgeWeights =
-            parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS) || 
-            parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
         boolean zeroWhenNoEdge =
             parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
 
@@ -287,4 +285,3 @@ public class CSVExporter<V, E>
     }
 
 }
-

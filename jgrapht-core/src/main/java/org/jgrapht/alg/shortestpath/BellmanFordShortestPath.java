@@ -19,7 +19,7 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.*;
 
 import java.lang.reflect.*;
 import java.util.*;

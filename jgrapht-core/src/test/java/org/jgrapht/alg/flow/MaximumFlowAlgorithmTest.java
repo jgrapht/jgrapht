@@ -24,7 +24,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Joris Kinable
@@ -58,7 +59,7 @@ public abstract class MaximumFlowAlgorithmTest
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow)
     {
         Double flowValue = maxFlow.getValue();
-        Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlow();
+        Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlowMap();
 
         // Verify that the maximum flow value
         assertEquals(expectedResult, flowValue, EdmondsKarpMFImpl.DEFAULT_EPSILON);
@@ -111,7 +112,7 @@ public abstract class MaximumFlowAlgorithmTest
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow =
             solver.getMaximumFlow(source, sink);
         Double flowValue = maxFlow.getValue();
-        Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlow();
+        Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlowMap();
 
         assertEquals(expectedResult, flowValue.intValue());
 

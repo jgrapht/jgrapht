@@ -22,7 +22,7 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  */
@@ -109,4 +109,3 @@ public class KShortestPathKValuesTest
         }
     }
 }
-

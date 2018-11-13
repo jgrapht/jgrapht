@@ -17,51 +17,52 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
-import org.jgrapht.util.VertexToIntegerMapping;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
 import static org.jgrapht.util.MathUtil.log2;
 
 /**
- * Algorithm for computing lowest common ancestors in rooted trees and forests using the binary lifting method.
+ * Algorithm for computing lowest common ancestors in rooted trees and forests using the binary
+ * lifting method.
  *
  * <p>
- * The method appears in <i>Bender, Michael A., and Martın Farach-Colton. "The level ancestor problem
- * simplified." Theoretical Computer Science 321.1 (2004): 5-12</i> and it is also nicely presented in
- * the following article on
- * <a href="https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#Another%20easy%20solution%20in%20O(N%20logN,%20O(logN)">Topcoder</a>
+ * The method appears in <i>Bender, Michael A., and Martın Farach-Colton. "The level ancestor
+ * problem simplified." Theoretical Computer Science 321.1 (2004): 5-12</i> and it is also nicely
+ * presented in the following article on <a href=
+ * "https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#Another%20easy%20solution%20in%20O(N%20logN,%20O(logN)">Topcoder</a>
  * for more details about the algorithm.
  * </p>
  *
  * <p>
  * Algorithm idea:<br>
- * We improve on the naive approach by using jump pointers. These are pointers at a node which reference one of the
- * node’s ancestors. Each node stores jump pointers to ancestors at levels 1, 2, 4, . . . , 2^k. <br>
- * Queries are answered by repeatedly jumping from node to node, each time jumping more than half of the
- * remaining levels between the current ancestor and the goal ancestor (i.e. the lca).
- * The worst-case number of jumps is $O(log(|V|))$.
+ * We improve on the naive approach by using jump pointers. These are pointers at a node which
+ * reference one of the node’s ancestors. Each node stores jump pointers to ancestors at levels 1,
+ * 2, 4, . . . , 2^k. <br>
+ * Queries are answered by repeatedly jumping from node to node, each time jumping more than half of
+ * the remaining levels between the current ancestor and the goal ancestor (i.e. the lca). The
+ * worst-case number of jumps is $O(log(|V|))$.
  * </p>
  *
  *
  * <p>
- *  Preprocessing Time complexity: $O(|V| log(|V|))$<br>
- *  Preprocessing Space complexity:  $O(|V| log(|V|))$<br>
- *  Query Time complexity: $O(log(|V|))$<br>
- *  Query Space complexity: $O(1)$<br>
+ * Preprocessing Time complexity: $O(|V| log(|V|))$<br>
+ * Preprocessing Space complexity: $O(|V| log(|V|))$<br>
+ * Query Time complexity: $O(log(|V|))$<br>
+ * Query Space complexity: $O(1)$<br>
  * </p>
  *
  * <p>
- *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
- *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
- *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
- *     since it provides $O(1)$ per query.<br>
- *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
- *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
- *     For DAGs, use {@link NaiveLCAFinder}.
+ * For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly.
+ * For larger trees/forests with less than 50,000 queries you can use either
+ * {@link BinaryLiftingLCAFinder}, {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo
+ * more than that use {@link EulerTourRMQLCAFinder} since it provides $O(1)$ per query.<br>
+ * Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ * {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ * For DAGs, use {@link NaiveLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -69,7 +70,10 @@ import static org.jgrapht.util.MathUtil.log2;
  *
  * @author Alexandru Valeanu
  */
-public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
+public class BinaryLiftingLCAFinder<V, E>
+    implements
+    LowestCommonAncestorAlgorithm<V>
+{
 
     private final Graph<V, E> graph;
     private final Set<V> roots;
@@ -96,7 +100,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
      * @param graph the input graph
      * @param root the root of the graph
      */
-    public BinaryLiftingLCAFinder(Graph<V, E> graph, V root){
+    public BinaryLiftingLCAFinder(Graph<V, E> graph, V root)
+    {
         this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
@@ -112,7 +117,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
-    public BinaryLiftingLCAFinder(Graph<V, E> graph, Set<V> roots){
+    public BinaryLiftingLCAFinder(Graph<V, E> graph, Set<V> roots)
+    {
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
         this.maxLevel = log2(graph.vertexSet().size());
@@ -126,13 +132,15 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
         computeAncestorMatrix();
     }
 
-    private void normalizeGraph(){
+    private void normalizeGraph()
+    {
         VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
         vertexMap = vertexToIntegerMapping.getVertexMap();
         indexList = vertexToIntegerMapping.getIndexList();
     }
 
-    private void dfs(int u, int parent){
+    private void dfs(int u, int parent)
+    {
         component[u] = numberComponent;
         timeIn[u] = ++clock;
 
@@ -143,10 +151,10 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
         }
 
         V vertexU = indexList.get(u);
-        for (E edge: graph.outgoingEdgesOf(vertexU)){
+        for (E edge : graph.outgoingEdgesOf(vertexU)) {
             int v = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
-            if (v != parent){
+            if (v != parent) {
                 dfs(v, u);
             }
         }
@@ -154,7 +162,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
         timeOut[u] = ++clock;
     }
 
-    private void computeAncestorMatrix(){
+    private void computeAncestorMatrix()
+    {
         ancestors = new int[maxLevel + 1][graph.vertexSet().size()];
 
         for (int l = 0; l < maxLevel; l++) {
@@ -174,7 +183,7 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
 
         normalizeGraph();
 
-        for (V root: roots) {
+        for (V root : roots) {
             if (component[vertexMap.get(root)] == 0) {
                 numberComponent++;
                 dfs(vertexMap.get(root), -1);
@@ -184,7 +193,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
         }
     }
 
-    private boolean isAncestor(int ancestor, int descendant) {
+    private boolean isAncestor(int ancestor, int descendant)
+    {
         return timeIn[ancestor] <= timeIn[descendant] && timeOut[descendant] <= timeOut[ancestor];
     }
 
@@ -192,7 +202,8 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
      * {@inheritDoc}
      */
     @Override
-    public V getLCA(V a, V b) {
+    public V getLCA(V a, V b)
+    {
         int indexA = vertexMap.getOrDefault(a, -1);
         if (indexA == -1)
             throw new IllegalArgumentException("invalid vertex: " + a);
@@ -232,10 +243,12 @@ public class BinaryLiftingLCAFinder<V, E> implements LowestCommonAncestorAlgorit
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
+     * 
      * @throws UnsupportedOperationException if the method is called
      */
     @Override
-    public Set<V> getLCASet(V a, V b){
+    public Set<V> getLCASet(V a, V b)
+    {
         throw new UnsupportedOperationException();
     }
 }

@@ -204,4 +204,3 @@ public class DepthFirstIterator<V, E>
         return stack;
     }
 }
-

@@ -224,4 +224,3 @@ public class UnionFind<T>
             .collect(Collectors.joining(", ", "{", "}"));
     }
 }
-

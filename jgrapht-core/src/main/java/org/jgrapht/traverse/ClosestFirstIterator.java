@@ -340,4 +340,3 @@ public class ClosestFirstIterator<V, E>
         }
     }
 }
-

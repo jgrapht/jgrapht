@@ -17,10 +17,10 @@
  */
 package org.jgrapht.opt.graph.fastutil;
 
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.GraphType;
-import org.jgrapht.graph.AbstractBaseGraph;
+import java.util.function.*;
 
 /**
  * A graph implementation using fastutil's map implementations for storage specialized 

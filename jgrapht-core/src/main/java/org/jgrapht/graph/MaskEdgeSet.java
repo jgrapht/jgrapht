@@ -94,4 +94,3 @@ class MaskEdgeSet<V, E>
     }
 
 }
-

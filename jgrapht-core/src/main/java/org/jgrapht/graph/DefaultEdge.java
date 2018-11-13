@@ -58,4 +58,3 @@ public class DefaultEdge
         return "(" + source + " : " + target + ")";
     }
 }
-

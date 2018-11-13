@@ -92,4 +92,3 @@ abstract class VF2MappingIterator<V, E>
         throw new UnsupportedOperationException();
     }
 }
-

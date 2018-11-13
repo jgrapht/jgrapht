@@ -17,22 +17,13 @@
  */
 package org.jgrapht.opt.graph.fastutil;
 
-import java.io.Serializable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import it.unimi.dsi.fastutil.objects.*;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.specifics.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.graph.GraphSpecificsStrategy;
-import org.jgrapht.graph.IntrusiveEdgesSpecifics;
-import org.jgrapht.graph.UniformIntrusiveEdgesSpecifics;
-import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
-
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * The fast lookup specifics strategy implementation using fastutil maps for storage..

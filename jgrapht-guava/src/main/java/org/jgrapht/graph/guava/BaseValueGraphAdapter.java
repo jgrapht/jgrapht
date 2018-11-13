@@ -18,8 +18,8 @@
 package org.jgrapht.graph.guava;
 
 import com.google.common.graph.*;
-import org.jgrapht.*;
 import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.*;
 
@@ -27,7 +27,8 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * A base abstract implementation for the graph adapter class using Guava's {@link ValueGraph}. This

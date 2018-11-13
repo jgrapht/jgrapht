@@ -24,7 +24,7 @@ import org.jgrapht.util.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public abstract class MaximumFlowMinimumCutAlgorithmTestBase
 {

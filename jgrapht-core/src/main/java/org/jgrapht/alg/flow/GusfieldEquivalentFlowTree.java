@@ -44,7 +44,7 @@ import java.util.*;
  *
  * <p>
  * Note: this class performs calculations in a lazy manner. The EFT is not calculated until the
- * first invocation of {@link GusfieldEquivalentFlowTree#calculateMaximumFlow(Object, Object)} or
+ * first invocation of {@link GusfieldEquivalentFlowTree#getMaximumFlowValue(Object, Object)} or
  * {@link GusfieldEquivalentFlowTree#getEquivalentFlowTree()}. Moreover, this class <em>only</em>
  * calculates the value of the maximum flow between a source-destination pair; it does not calculate
  * the corresponding flow per edge. If you need to know the exact flow through an edge, use one of
@@ -200,7 +200,7 @@ public class GusfieldEquivalentFlowTree<V, E>
      * @return the Maximum flow between source and sink.
      */
     @Override
-    public double calculateMaximumFlow(V source, V sink)
+    public double getMaximumFlowValue(V source, V sink)
     {
         assert indexMap.containsKey(source) && indexMap.containsKey(sink);
 
@@ -210,18 +210,6 @@ public class GusfieldEquivalentFlowTree<V, E>
         if (p == null) // Lazy invocation of the algorithm
             this.calculateEquivalentFlowTree();
         return flowMatrix[indexMap.get(source)][indexMap.get(sink)];
-    }
-
-    /**
-     * Returns maximum flow value, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call.
-     * 
-     * @return maximum flow value
-     */
-    @Override
-    public double getMaximumFlowValue()
-    {
-        return calculateMaximumFlow(lastInvokedSource, lastInvokedTarget);
     }
 
     /**

@@ -67,4 +67,3 @@ public interface TraversalListener<V, E>
      */
     void vertexFinished(VertexTraversalEvent<V> e);
 }
-

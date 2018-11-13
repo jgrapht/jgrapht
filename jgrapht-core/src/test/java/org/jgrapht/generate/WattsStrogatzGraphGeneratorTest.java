@@ -24,7 +24,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author Dimitrios Michail
@@ -180,7 +181,7 @@ public class WattsStrogatzGraphGeneratorTest
         assertEquals(6, g.vertexSet().size());
         assertEquals(12, g.edgeSet().size());
     }
-    
+
     @Test
     public void testNonIntegerVertices()
     {

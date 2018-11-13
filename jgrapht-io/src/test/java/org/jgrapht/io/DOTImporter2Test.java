@@ -24,7 +24,8 @@ import org.junit.*;
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * 2nd part of tests for DOTImporter. See also {@link DOTImporter1Test}.

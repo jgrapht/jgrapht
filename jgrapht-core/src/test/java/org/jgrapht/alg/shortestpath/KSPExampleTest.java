@@ -20,7 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class KSPExampleTest
 {
@@ -64,4 +64,3 @@ public class KSPExampleTest
         assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex, nbPaths).size());
     }
 }
-

@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -32,9 +32,9 @@ import java.util.*;
  * be the set of out-degree 0 nodes (leafs) in $G x,y$. The lowest common ancestors of $x$ and $y$
  * are the elements of SLCA (x, y). This naive algorithm simply starts at $a$ and $b$, recursing
  * upwards to the root(s) of the DAG. Wherever the recursion paths cross we have found our LCA.</i>
- * from <i> Michael A. Bender, Martín Farach-Colton, Giridhar Pemmasani, Steven Skiena, Pavel Sumazin,
- * Lowest common ancestors in trees and directed acyclic graphs,
- * Journal of Algorithms, Volume 57, Issue 2, 2005, Pages 75-94, ISSN 0196-6774,
+ * from <i> Michael A. Bender, Martín Farach-Colton, Giridhar Pemmasani, Steven Skiena, Pavel
+ * Sumazin, Lowest common ancestors in trees and directed acyclic graphs, Journal of Algorithms,
+ * Volume 57, Issue 2, 2005, Pages 75-94, ISSN 0196-6774,
  * https://doi.org/10.1016/j.jalgor.2005.08.001. </i>
  *
  * <p>
@@ -68,15 +68,15 @@ import java.util.*;
  * their respective children which we wish to find the LCA for.
  *
  * <p>
- *  Preprocessing Time complexity: $O(1)$<br>
- *  Preprocessing Space complexity:  $O(1)$<br>
- *  Query Time complexity: $O(|V|)$<br>
- *  Query Space complexity: $O(|V|)$<br>
+ * Preprocessing Time complexity: $O(1)$<br>
+ * Preprocessing Space complexity: $O(1)$<br>
+ * Query Time complexity: $O(|V|)$<br>
+ * Query Space complexity: $O(|V|)$<br>
  * </p>
  *
  * <p>
- *     For trees or forests please use either {@link BinaryLiftingLCAFinder}, {@link HeavyPathLCAFinder},
- *     {@link EulerTourRMQLCAFinder} or {@link TarjanLCAFinder}.
+ * For trees or forests please use either {@link BinaryLiftingLCAFinder},
+ * {@link HeavyPathLCAFinder}, {@link EulerTourRMQLCAFinder} or {@link TarjanLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -85,7 +85,9 @@ import java.util.*;
  * @author Leo Crawford
  * @author Alexandru Valeanu
  */
-public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
+public class NaiveLCAFinder<V, E>
+    implements
+    LowestCommonAncestorAlgorithm<V>
 {
     private Graph<V, E> graph;
 
@@ -94,7 +96,8 @@ public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
      * 
      * @param graph the input graph
      */
-    public NaiveLCAFinder(Graph<V, E> graph) {
+    public NaiveLCAFinder(Graph<V, E> graph)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
@@ -121,8 +124,8 @@ public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
     @Override
     public Set<V> getLCASet(V a, V b)
     {
-        @SuppressWarnings("unchecked")
-        Set<V>[] visitedSets = (Set<V>[]) Array.newInstance(Set.class, 2);
+        @SuppressWarnings("unchecked") Set<V>[] visitedSets =
+            (Set<V>[]) Array.newInstance(Set.class, 2);
         // set of nodes visited from a
         visitedSets[0] = new LinkedHashSet<>();
         // set of nodes visited from b
@@ -169,8 +172,8 @@ public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
      */
     private void doubleBfs(V a, V b, Set<V>[] visitedSets)
     {
-        @SuppressWarnings("unchecked")
-        Queue<V>[] queues = (Queue<V>[]) Array.newInstance(Queue.class, 2);
+        @SuppressWarnings("unchecked") Queue<V>[] queues =
+            (Queue<V>[]) Array.newInstance(Queue.class, 2);
         queues[0] = new ArrayDeque<>();
         queues[1] = new ArrayDeque<>();
 
@@ -277,4 +280,3 @@ public class NaiveLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V>
         return y.iterator().next();
     }
 }
-

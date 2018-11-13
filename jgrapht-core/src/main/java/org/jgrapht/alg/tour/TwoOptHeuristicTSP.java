@@ -52,7 +52,7 @@ import java.util.*;
  */
 public class TwoOptHeuristicTSP<V, E>
     implements
-        HamiltonianCycleAlgorithm<V, E>
+    HamiltonianCycleAlgorithm<V, E>
 {
     private int k;
     private Random rng;

@@ -17,7 +17,7 @@
  */
 package org.jgrapht.generate;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 import java.util.*;
 
@@ -41,7 +41,7 @@ import java.util.*;
  * The Structure and Function of Complex Networks. SIAM Rev., 45(2):167--256, 2003.
  *
  * <p>
- *  For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
+ * For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
  * 
  * @author Dimitrios Michail
  * 

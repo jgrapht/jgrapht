@@ -271,4 +271,3 @@ public class AStarShortestPath<V, E>
     }
 
 }
-

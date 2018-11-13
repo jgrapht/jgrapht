@@ -195,4 +195,3 @@ public class AsUndirectedGraph<V, E>
         return super.toStringFromSets(vertexSet(), edgeSet(), false);
     }
 }
-

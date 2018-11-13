@@ -17,21 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Color refinement algorithm that finds the coarsest stable coloring of a graph based on a given
@@ -105,8 +95,8 @@ public class ColorRefinementAlgorithm<V, E>
             Set<Integer> adjacentColors = calculateColorDegrees(currentColor, rep);
 
             // split colors
-            adjacentColors.stream()
-                .filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
+            adjacentColors
+                .stream().filter(c -> rep.minColorDegree[c] < rep.maxColorDegree[c])
                 .sorted(Comparator.comparingInt(o -> o)) // canonical order
                 .forEach(color -> splitUpColor(color, refineStack, rep));
 
@@ -178,7 +168,7 @@ public class ColorRefinementAlgorithm<V, E>
      */
     private void cleanupColorDegrees(Set<Integer> adjacentColors, ColoringRepresentation rep)
     {
-        for(int c: adjacentColors) { 
+        for (int c : adjacentColors) {
             for (V v : rep.positiveDegreeColorClasses.get(c)) {
                 rep.colorDegree.put(v, 0);
             }
@@ -244,7 +234,7 @@ public class ColorRefinementAlgorithm<V, E>
                 }
             }
         }
-        
+
         // Update colors classes if some color has changed
         for (V v : rep.positiveDegreeColorClasses.get(color)) {
             if (!newMapping.get(rep.colorDegree.get(v)).equals(color)) {

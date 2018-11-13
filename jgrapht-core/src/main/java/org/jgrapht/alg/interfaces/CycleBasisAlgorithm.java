@@ -179,4 +179,3 @@ public interface CycleBasisAlgorithm<V, E>
     }
 
 }
-

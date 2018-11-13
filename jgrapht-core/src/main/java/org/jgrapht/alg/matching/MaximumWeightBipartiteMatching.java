@@ -17,26 +17,14 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.math.BigDecimal;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.FibonacciHeap;
+import java.math.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Maximum weight matching in bipartite graphs.
@@ -65,7 +53,7 @@ public class MaximumWeightBipartiteMatching<V, E>
     private final Set<V> partition2;
 
     private final Comparator<BigDecimal> comparator;
-    private final Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal,V>> heapSupplier;
+    private final Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal, V>> heapSupplier;
 
     // vertex potentials
     private Map<V, BigDecimal> pot;
@@ -94,7 +82,7 @@ public class MaximumWeightBipartiteMatching<V, E>
     {
         this(graph, partition1, partition2, (comparator) -> new FibonacciHeap<>(comparator));
     }
-    
+
     /**
      * Constructor.
      * 
@@ -104,7 +92,9 @@ public class MaximumWeightBipartiteMatching<V, E>
      * @param heapSupplier a supplier for the addressable heap to use in the algorithm.
      * @throws IllegalArgumentException if the graph is not undirected
      */
-    public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal,V>> heapSupplier)
+    public MaximumWeightBipartiteMatching(
+        Graph<V, E> graph, Set<V> partition1, Set<V> partition2,
+        Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal, V>> heapSupplier)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = Objects.requireNonNull(partition1, "Partition 1 cannot be null");

@@ -41,4 +41,3 @@ public interface AStarAdmissibleHeuristic<V>
     double getCostEstimate(V sourceVertex, V targetVertex);
 
 }
-

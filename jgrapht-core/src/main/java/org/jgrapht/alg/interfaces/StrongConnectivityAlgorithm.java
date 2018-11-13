@@ -72,4 +72,3 @@ public interface StrongConnectivityAlgorithm<V, E>
      */
     Graph<Graph<V, E>, DefaultEdge> getCondensation();
 }
-

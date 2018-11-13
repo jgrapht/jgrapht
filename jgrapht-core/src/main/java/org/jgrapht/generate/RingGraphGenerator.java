@@ -70,4 +70,3 @@ public class RingGraphGenerator<V, E>
         target.addEdge(endVertex, startVertex);
     }
 }
-

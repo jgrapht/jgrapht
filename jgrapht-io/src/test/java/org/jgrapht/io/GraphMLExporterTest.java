@@ -27,7 +27,8 @@ import org.xmlunit.diff.*;
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 /**
  * @author Trevor Harmon
@@ -668,4 +669,3 @@ public class GraphMLExporterTest
     }
 
 }
-

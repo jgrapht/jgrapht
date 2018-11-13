@@ -17,43 +17,43 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphMapping;
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.AsGraphUnion;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
 
 import java.util.*;
 
 /**
- * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between two rooted forests.
- * Please see <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">mathworld.wolfram.com</a> for a complete
- * definition of the isomorphism problem for general graphs.
+ * This is an implementation of the AHU algorithm for detecting an (unweighted) isomorphism between
+ * two rooted forests. Please see
+ * <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">mathworld.wolfram.com</a> for a
+ * complete definition of the isomorphism problem for general graphs.
  *
  * <p>
- *     The original algorithm was first presented in "Alfred V. Aho and John E. Hopcroft. 1974.
- *     The Design and Analysis of Computer Algorithms (1st ed., page 84). Addison-Wesley
- *     Longman Publishing Co., Inc., Boston, MA, USA."
+ * The original algorithm was first presented in "Alfred V. Aho and John E. Hopcroft. 1974. The
+ * Design and Analysis of Computer Algorithms (1st ed., page 84). Addison-Wesley Longman Publishing
+ * Co., Inc., Boston, MA, USA."
  * </p>
  *
  * <p>
- *     This implementation runs in linear time (in the number of vertices of the input forests)
- *     while using a linear amount of memory.
+ * This implementation runs in linear time (in the number of vertices of the input forests) while
+ * using a linear amount of memory.
  * </p>
  *
  * <p>
- *      For an implementation that supports rooted trees see {@link AHURootedTreeIsomorphismInspector} and for one
- *      for unrooted trees see {@link AHUUnrootedTreeIsomorphismInspector}.
+ * For an implementation that supports rooted trees see {@link AHURootedTreeIsomorphismInspector}
+ * and for one for unrooted trees see {@link AHUUnrootedTreeIsomorphismInspector}.
  * </p>
  *
  * <p>
- *     Note: This implementation requires the input graphs to have valid vertex suppliers
- *     (see {@link Graph#getVertexSupplier()}).
+ * Note: This implementation requires the input graphs to have valid vertex suppliers (see
+ * {@link Graph#getVertexSupplier()}).
  * </p>
  *
  * <p>
- *     Note: This inspector only returns a single mapping (chosen arbitrarily) rather than all possible mappings.
+ * Note: This inspector only returns a single mapping (chosen arbitrarily) rather than all possible
+ * mappings.
  * </p>
  *
  * @param <V> the type of the vertices
@@ -61,7 +61,10 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector<V, E> {
+public class AHUForestIsomorphismInspector<V, E>
+    implements
+    IsomorphismInspector<V, E>
+{
     private final Graph<V, E> forest1;
     private final Graph<V, E> forest2;
 
@@ -83,10 +86,13 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      * @throws NullPointerException if {@code forest1} or {@code forest2} is {@code null}
      * @throws NullPointerException if {@code roots1} or {@code roots2} is {@code null}
      * @throws IllegalArgumentException if {@code forest1} or {@code forest2} is empty
-     * @throws IllegalArgumentException if {@code roots1} or {@code roots2}  is empty
-     * @throws IllegalArgumentException if {@code roots1} or {@code roots2} contain an invalid vertex
+     * @throws IllegalArgumentException if {@code roots1} or {@code roots2} is empty
+     * @throws IllegalArgumentException if {@code roots1} or {@code roots2} contain an invalid
+     *         vertex
      */
-    public AHUForestIsomorphismInspector(Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2){
+    public AHUForestIsomorphismInspector(
+        Graph<V, E> forest1, Set<V> roots1, Graph<V, E> forest2, Set<V> roots2)
+    {
         validateForest(forest1, roots1);
         this.forest1 = forest1;
         this.roots1 = roots1;
@@ -96,20 +102,21 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
         this.roots2 = roots2;
     }
 
-    private void validateForest(Graph<V, E> forest, Set<V> roots){
+    private void validateForest(Graph<V, E> forest, Set<V> roots)
+    {
         assert GraphTests.isSimple(forest);
         Objects.requireNonNull(forest, "input forest cannot be null");
         Objects.requireNonNull(roots, "set of roots cannot be null");
 
-        if (forest.vertexSet().isEmpty()){
+        if (forest.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("input forest cannot be empty");
         }
 
-        if (roots.isEmpty()){
+        if (roots.isEmpty()) {
             throw new IllegalArgumentException("set of roots cannot be empty");
         }
 
-        if (!forest.vertexSet().containsAll(roots)){
+        if (!forest.vertexSet().containsAll(roots)) {
             throw new IllegalArgumentException("root not contained in forest");
         }
     }
@@ -118,7 +125,8 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      * {@inheritDoc}
      */
     @Override
-    public Iterator<GraphMapping<V, E>> getMappings() {
+    public Iterator<GraphMapping<V, E>> getMappings()
+    {
         GraphMapping<V, E> iterMapping = getMapping();
 
         if (iterMapping == null)
@@ -131,17 +139,19 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      * {@inheritDoc}
      */
     @Override
-    public boolean isomorphismExists(){
+    public boolean isomorphismExists()
+    {
         return getMapping() != null;
     }
 
-    private Pair<V, Graph<V, E>> createSingleRootGraph(Graph<V, E> forest, Set<V> roots){
+    private Pair<V, Graph<V, E>> createSingleRootGraph(Graph<V, E> forest, Set<V> roots)
+    {
         Graph<V, E> freshForest = GraphTypeBuilder.forGraph(forest).weighted(false).buildGraph();
 
         roots.forEach(freshForest::addVertex);
         V freshVertex = freshForest.addVertex();
 
-        for (V root: roots)
+        for (V root : roots)
             freshForest.addEdge(freshVertex, root);
 
         return Pair.of(freshVertex, new AsGraphUnion<>(freshForest, forest));
@@ -152,7 +162,8 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
      *
      * @return isomorphic mapping, {@code null} is none exists
      */
-    public IsomorphicGraphMapping<V, E> getMapping(){
+    public IsomorphicGraphMapping<V, E> getMapping()
+    {
         if (computed) {
             return isomorphicMapping;
         }
@@ -161,9 +172,10 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             V root1 = roots1.iterator().next();
             V root2 = roots2.iterator().next();
 
-            isomorphicMapping = new AHURootedTreeIsomorphismInspector<>(forest1, root1, forest2, root2).getMapping();
-        }
-        else{
+            isomorphicMapping =
+                new AHURootedTreeIsomorphismInspector<>(forest1, root1, forest2, root2)
+                    .getMapping();
+        } else {
             Pair<V, Graph<V, E>> pair1 = createSingleRootGraph(forest1, roots1);
             Pair<V, Graph<V, E>> pair2 = createSingleRootGraph(forest2, roots2);
 
@@ -174,9 +186,10 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
             Graph<V, E> freshForest2 = pair2.getSecond();
 
             IsomorphicGraphMapping<V, E> mapping =
-                    new AHURootedTreeIsomorphismInspector<>(freshForest1, fresh1, freshForest2, fresh2).getMapping();
+                new AHURootedTreeIsomorphismInspector<>(freshForest1, fresh1, freshForest2, fresh2)
+                    .getMapping();
 
-            if (mapping != null){
+            if (mapping != null) {
                 Map<V, V> newForwardMapping = new HashMap<>(mapping.getForwardMapping());
                 Map<V, V> newBackwardMapping = new HashMap<>(mapping.getBackwardMapping());
 
@@ -184,8 +197,8 @@ public class AHUForestIsomorphismInspector<V, E> implements IsomorphismInspector
                 newForwardMapping.remove(fresh1);
                 newBackwardMapping.remove(fresh2);
 
-                isomorphicMapping =
-                        new IsomorphicGraphMapping<>(newForwardMapping, newBackwardMapping, forest1, forest2);
+                isomorphicMapping = new IsomorphicGraphMapping<>(
+                    newForwardMapping, newBackwardMapping, forest1, forest2);
             }
         }
 

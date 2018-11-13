@@ -17,13 +17,11 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.PairingHeap;
+import org.jgrapht.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVInitializer.Action.*;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.MINUS;
@@ -31,34 +29,35 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.PLUS;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.*;
 
 /**
- * Is used to start the Kolmogorov's Blossom V algorithm. Performs initialization of the algorithm's internal
- * data structures and finds an initial matching according to the strategy specified in {@code options}.
+ * Is used to start the Kolmogorov's Blossom V algorithm. Performs initialization of the algorithm's
+ * internal data structures and finds an initial matching according to the strategy specified in
+ * {@code options}.
  * <p>
  * The initialization process involves converting the graph into internal representation, allocating
- * trees for unmatched vertices, and creating an auxiliary graph whose nodes correspond to alternating trees. The only
- * part that varies is the strategy to find an initial matching to speed up the main part of the algorithm.
+ * trees for unmatched vertices, and creating an auxiliary graph whose nodes correspond to
+ * alternating trees. The only part that varies is the strategy to find an initial matching to speed
+ * up the main part of the algorithm.
  * <p>
- * The simple initialization (option {@link BlossomVOptions.InitializationType#NONE}) doesn't find any matching
- * and initializes the data structures by allocating $|V|$ single vertex trees. This is the fastest initialization
- * strategy; however, it slows the main algorithm down.
+ * The simple initialization (option {@link BlossomVOptions.InitializationType#NONE}) doesn't find
+ * any matching and initializes the data structures by allocating $|V|$ single vertex trees. This is
+ * the fastest initialization strategy; however, it slows the main algorithm down.
  * <p>
- * The greedy initialization (option {@link BlossomVOptions.InitializationType#GREEDY} runs in two phases.
- * First, for every node it determines an edge of minimum weight and assigns half of that weight to the
- * node's dual variable. This ensures that the slacks of all edges are non-negative. After that it goes through
- * all nodes again, greedily increases its dual variable and chooses an incident matching edge if it is possible.
- * After that every node is incident to at least one tight edge. The resulting matching is an output of this
- * initialization strategy.
+ * The greedy initialization (option {@link BlossomVOptions.InitializationType#GREEDY} runs in two
+ * phases. First, for every node it determines an edge of minimum weight and assigns half of that
+ * weight to the node's dual variable. This ensures that the slacks of all edges are non-negative.
+ * After that it goes through all nodes again, greedily increases its dual variable and chooses an
+ * incident matching edge if it is possible. After that every node is incident to at least one tight
+ * edge. The resulting matching is an output of this initialization strategy.
  * <p>
- * The fractional matching initialization (option {@link BlossomVOptions.InitializationType#FRACTIONAL}) is both
- * the most complicated and the most efficient type of initialization. The linear programming formulation of the
- * fractional matching problem is identical to the one used for bipartite graphs. More precisely:
- * <oi>
+ * The fractional matching initialization (option
+ * {@link BlossomVOptions.InitializationType#FRACTIONAL}) is both the most complicated and the most
+ * efficient type of initialization. The linear programming formulation of the fractional matching
+ * problem is identical to the one used for bipartite graphs. More precisely: <oi>
  * <li>Minimize the $sum_{e\in E}x_e\times c_e$ subject to:</li>
  * <li>For all nodes: $\sum_{e is incident to v}x_e = 1$</li>
- * <li>For all edges: $x_e \ge 0$</li>
- * </oi>
- * <b>Note:</b> for an optimal solution in general graphs we have to require the variables $x_e$ to be $0$ or $1$.
- * For more information on this type of initialization, see: <i>David Applegate and William J. Cook. \Solving Large-Scale Matching
+ * <li>For all edges: $x_e \ge 0$</li> </oi> <b>Note:</b> for an optimal solution in general graphs
+ * we have to require the variables $x_e$ to be $0$ or $1$. For more information on this type of
+ * initialization, see: <i>David Applegate and William J. Cook. \Solving Large-Scale Matching
  * Problems". In: Network Flows And Matching. 1991.</i>
  *
  * @param <V> the graph vertex type
@@ -66,7 +65,8 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * @author Timofey Chudakov
  * @see KolmogorovMinimumWeightPerfectMatching
  */
-class BlossomVInitializer<V, E> {
+class BlossomVInitializer<V, E>
+{
     /**
      * The graph for which to find a matching
      */
@@ -88,15 +88,15 @@ class BlossomVInitializer<V, E> {
      */
     private BlossomVEdge[] edges;
     /**
-     * Generic vertices of the {@code graph} in the same order as internal nodes in the array {@code nodes}.
-     * Since for each node in the {@code nodes} we know its position in the {@code nodes}, we can determine
-     * its generic counterpart in constant time
+     * Generic vertices of the {@code graph} in the same order as internal nodes in the array
+     * {@code nodes}. Since for each node in the {@code nodes} we know its position in the
+     * {@code nodes}, we can determine its generic counterpart in constant time
      */
     private List<V> graphVertices;
     /**
-     * Generic edges of the {@code graph} in the same order as internal edges in the array {@code edges}.
-     * Since for each edge in the {@code edges} we know its position in the {@code edges}, we can determine
-     * its generic counterpart in constant time
+     * Generic edges of the {@code graph} in the same order as internal edges in the array
+     * {@code edges}. Since for each edge in the {@code edges} we know its position in the
+     * {@code edges}, we can determine its generic counterpart in constant time
      */
     private List<E> graphEdges;
 
@@ -105,83 +105,94 @@ class BlossomVInitializer<V, E> {
      *
      * @param graph the graph to search matching in
      */
-    public BlossomVInitializer(Graph<V, E> graph) {
+    public BlossomVInitializer(Graph<V, E> graph)
+    {
         this.graph = graph;
         nodeNum = graph.vertexSet().size();
     }
 
     /**
-     * Converts the generic graph representation into the data structure form convenient for the algorithm,
-     * and initializes the matching according to the strategy specified in {@code options}.
+     * Converts the generic graph representation into the data structure form convenient for the
+     * algorithm, and initializes the matching according to the strategy specified in
+     * {@code options}.
      *
      * @param options the options of the algorithm
      * @return the state object with all necessary information for the algorithm
      */
-    public BlossomVState<V, E> initialize(BlossomVOptions options) {
+    public BlossomVState<V, E> initialize(BlossomVOptions options)
+    {
         switch (options.initializationType) {
-            case NONE:
-                return simpleInitialization(options);
-            case GREEDY:
-                return greedyInitialization(options);
-            case FRACTIONAL:
-                return fractionalMatchingInitialization(options);
-            default:
-                return null;
+        case NONE:
+            return simpleInitialization(options);
+        case GREEDY:
+            return greedyInitialization(options);
+        case FRACTIONAL:
+            return fractionalMatchingInitialization(options);
+        default:
+            return null;
         }
     }
 
     /**
-     * Performs simple initialization of the matching by allocating $|V|$ trees. The result of
-     * this type of initialization is an empty matching. That is why this is the most basic type
-     * of initialization.
+     * Performs simple initialization of the matching by allocating $|V|$ trees. The result of this
+     * type of initialization is an empty matching. That is why this is the most basic type of
+     * initialization.
      *
      * @param options the options of the algorithm
      * @return the state object with all necessary information for the algorithm
      */
-    private BlossomVState<V, E> simpleInitialization(BlossomVOptions options) {
+    private BlossomVState<V, E> simpleInitialization(BlossomVOptions options)
+    {
         initGraph();
         for (BlossomVNode node : nodes) {
             node.isOuter = true;
         }
         allocateTrees();
         initAuxiliaryGraph();
-        return new BlossomVState<>(graph, nodes, edges, nodeNum, edgeNum, nodeNum, graphVertices, graphEdges, options);
+        return new BlossomVState<>(
+            graph, nodes, edges, nodeNum, edgeNum, nodeNum, graphVertices, graphEdges, options);
     }
 
     /**
-     * Performs greedy initialization of the algorithm. For the description of this initialization strategy
-     * see the class description.
+     * Performs greedy initialization of the algorithm. For the description of this initialization
+     * strategy see the class description.
      *
      * @param options the options of the algorithm
      * @return the state object with all necessary information for the algorithm
      */
-    private BlossomVState<V, E> greedyInitialization(BlossomVOptions options) {
+    private BlossomVState<V, E> greedyInitialization(BlossomVOptions options)
+    {
         initGraph();
         int treeNum = initGreedy();
         allocateTrees();
         initAuxiliaryGraph();
-        return new BlossomVState<>(graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
+        return new BlossomVState<>(
+            graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
     }
 
     /**
-     * Performs fractional matching initialization, see {@link BlossomVInitializer#initFractional()} for the description.
+     * Performs fractional matching initialization, see {@link BlossomVInitializer#initFractional()}
+     * for the description.
      *
      * @param options the options of the algorithm
      * @return the state object with all necessary information for the algorithm
      */
-    private BlossomVState<V, E> fractionalMatchingInitialization(BlossomVOptions options) {
+    private BlossomVState<V, E> fractionalMatchingInitialization(BlossomVOptions options)
+    {
         initGraph();
         initGreedy();
         allocateTrees();
         int treeNum = initFractional();
         initAuxiliaryGraph();
-        return new BlossomVState<>(graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
+        return new BlossomVState<>(
+            graph, nodes, edges, nodeNum, edgeNum, treeNum, graphVertices, graphEdges, options);
     }
 
     /**
      * Converts the generic graph representation into the form convenient for the algorithm
      */
-    private void initGraph() {
+    private void initGraph()
+    {
         int expectedEdgeNum = graph.edgeSet().size();
         nodes = new BlossomVNode[nodeNum + 1];
         edges = new BlossomVEdge[expectedEdgeNum];
@@ -196,7 +207,8 @@ class BlossomVInitializer<V, E> {
             vertexMap.put(vertex, nodes[i]);
             i++;
         }
-        nodes[nodeNum] = new BlossomVNode(nodeNum);  // auxiliary node to keep track of the first item in the linked list of tree roots
+        nodes[nodeNum] = new BlossomVNode(nodeNum); // auxiliary node to keep track of the first
+                                                    // item in the linked list of tree roots
         i = 0;
         // maps edges
         for (E e : graph.edgeSet()) {
@@ -213,16 +225,17 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Adds a new edge between {@code from} and {@code to}. The resulting edge points from {@code from}
-     * to {@code to}
+     * Adds a new edge between {@code from} and {@code to}. The resulting edge points from
+     * {@code from} to {@code to}
      *
-     * @param from  the tail of this edge
-     * @param to    the head of this edge
+     * @param from the tail of this edge
+     * @param to the head of this edge
      * @param slack the slack of the resulting edge
-     * @param pos   position of the resulting edge in the array {@code edges}
+     * @param pos position of the resulting edge in the array {@code edges}
      * @return the newly added edge
      */
-    public BlossomVEdge addEdge(BlossomVNode from, BlossomVNode to, double slack, int pos) {
+    public BlossomVEdge addEdge(BlossomVNode from, BlossomVNode to, double slack, int pos)
+    {
         BlossomVEdge edge = new BlossomVEdge(pos);
         edge.slack = slack;
         edge.headOriginal[0] = to;
@@ -236,13 +249,14 @@ class BlossomVInitializer<V, E> {
     /**
      * Performs greedy matching initialization.
      * <p>
-     * For every node we choose an incident edge of minimum slack and set its dual to half of this slack.
-     * This maintains the nonnegativity of edge slacks. After that we go through all nodes again, greedily
-     * increase their dual variables, and match them if it is possible.
+     * For every node we choose an incident edge of minimum slack and set its dual to half of this
+     * slack. This maintains the nonnegativity of edge slacks. After that we go through all nodes
+     * again, greedily increase their dual variables, and match them if it is possible.
      *
      * @return the number of unmatched nodes, which equals the number of trees
      */
-    private int initGreedy() {
+    private int initGreedy()
+    {
         // set all dual variables to infinity
         for (int i = 0; i < nodeNum; i++) {
             nodes[i].dual = INFINITY;
@@ -274,7 +288,8 @@ class BlossomVInitializer<V, E> {
             }
             edge.slack -= target.dual;
         }
-        // go through all vertices, greedily increase their dual variables to the minimum slack of incident edges;
+        // go through all vertices, greedily increase their dual variables to the minimum slack of
+        // incident edges;
         // if there exists a tight unmatched edge in the neighborhood, match it
         int treeNum = nodeNum;
         for (int i = 0; i < nodeNum; i++) {
@@ -282,7 +297,9 @@ class BlossomVInitializer<V, E> {
             if (!node.isInfinityNode()) {
                 double minSlack = INFINITY;
                 // find the minimum slack of incident edges
-                for (BlossomVNode.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                for (BlossomVNode.IncidentEdgeIterator incidentEdgeIterator =
+                    node.incidentEdgesIterator(); incidentEdgeIterator.hasNext();)
+                {
                     BlossomVEdge edge = incidentEdgeIterator.next();
                     if (edge.slack < minSlack) {
                         minSlack = edge.slack;
@@ -291,10 +308,14 @@ class BlossomVInitializer<V, E> {
                 node.dual += minSlack;
                 double resultMinSlack = minSlack;
                 // subtract minimum slack from the slacks of all incident edges
-                for (BlossomVNode.IncidentEdgeIterator incidentEdgeIterator = node.incidentEdgesIterator(); incidentEdgeIterator.hasNext(); ) {
+                for (BlossomVNode.IncidentEdgeIterator incidentEdgeIterator =
+                    node.incidentEdgesIterator(); incidentEdgeIterator.hasNext();)
+                {
                     BlossomVEdge edge = incidentEdgeIterator.next();
                     int dir = incidentEdgeIterator.getDir();
-                    if (edge.slack <= resultMinSlack && node.isPlusNode() && edge.head[dir].isPlusNode()) {
+                    if (edge.slack <= resultMinSlack && node.isPlusNode()
+                        && edge.head[dir].isPlusNode())
+                    {
                         node.label = BlossomVNode.Label.INFINITY;
                         edge.head[dir].label = BlossomVNode.Label.INFINITY;
                         node.matched = edge;
@@ -310,17 +331,22 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Initializes an auxiliary graph by adding tree edges between trees and adding (+, +) cross-tree edges
-     * and (+, inf) edges to the appropriate heaps
+     * Initializes an auxiliary graph by adding tree edges between trees and adding (+, +)
+     * cross-tree edges and (+, inf) edges to the appropriate heaps
      */
-    private void initAuxiliaryGraph() {
+    private void initAuxiliaryGraph()
+    {
         // go through all tree roots and visit all incident edges of those roots.
         // if a (+, inf) edge is encountered => add it to the infinity heap
         // if a (+, +) edge is encountered and the opposite node hasn't been processed yet =>
         // add this edge to the heap of (+, +) cross-tree edges
-        for (BlossomVNode root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = nodes[nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             BlossomVTree tree = root.tree;
-            for (BlossomVNode.IncidentEdgeIterator edgeIterator = root.incidentEdgesIterator(); edgeIterator.hasNext(); ) {
+            for (BlossomVNode.IncidentEdgeIterator edgeIterator = root.incidentEdgesIterator();
+                edgeIterator.hasNext();)
+            {
                 BlossomVEdge edge = edgeIterator.next();
                 BlossomVNode opposite = edge.head[edgeIterator.getDir()];
                 if (opposite.isInfinityNode()) {
@@ -333,24 +359,29 @@ class BlossomVInitializer<V, E> {
                 }
             }
             root.isProcessed = true;
-            for (BlossomVTree.TreeEdgeIterator treeEdgeIterator = tree.treeEdgeIterator(); treeEdgeIterator.hasNext(); ) {
+            for (BlossomVTree.TreeEdgeIterator treeEdgeIterator = tree.treeEdgeIterator();
+                treeEdgeIterator.hasNext();)
+            {
                 BlossomVTreeEdge treeEdge = treeEdgeIterator.next();
                 treeEdge.head[treeEdgeIterator.getCurrentDirection()].currentEdge = null;
             }
         }
         // clear isProcessed flags
-        for (BlossomVNode root = nodes[nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = nodes[nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             root.isProcessed = false;
         }
     }
 
     /**
-     * Allocates trees. Initializes the doubly linked list of tree roots
-     * via treeSiblingPrev and treeSiblingNext. The same mechanism is used for keeping track
-     * of the children of a node in the tree. The lookup {@code nodes[nodeNum] } is used to quickly find
-     * the first root in the linked list
+     * Allocates trees. Initializes the doubly linked list of tree roots via treeSiblingPrev and
+     * treeSiblingNext. The same mechanism is used for keeping track of the children of a node in
+     * the tree. The lookup {@code nodes[nodeNum] } is used to quickly find the first root in the
+     * linked list
      */
-    private void allocateTrees() {
+    private void allocateTrees()
+    {
         BlossomVNode lastRoot = nodes[nodeNum];
         for (int i = 0; i < nodeNum; i++) {
             BlossomVNode node = nodes[i];
@@ -365,12 +396,15 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Finishes the fractional matching initialization. Goes through all nodes and expands half-loops.
-     * The total number or trees equals to the number of half-loops. Tree roots are chosen arbitrarily.
+     * Finishes the fractional matching initialization. Goes through all nodes and expands
+     * half-loops. The total number or trees equals to the number of half-loops. Tree roots are
+     * chosen arbitrarily.
      *
-     * @return the number of trees in the resulting state object, which equals the number of unmatched nodes
+     * @return the number of trees in the resulting state object, which equals the number of
+     *         unmatched nodes
      */
-    private int finish() {
+    private int finish()
+    {
         if (DEBUG) {
             System.out.println("Finishing fractional matching initialization");
         }
@@ -397,15 +431,19 @@ class BlossomVInitializer<V, E> {
     /**
      * Performs lazy delta spreading during the fractional matching initialization.
      * <p>
-     * Goes through all nodes in the tree rooted at {@code root} and adds {@code eps} to the "+" nodes and
-     * subtracts {@code eps} from "-" nodes. Updates incident edges respectively.
+     * Goes through all nodes in the tree rooted at {@code root} and adds {@code eps} to the "+"
+     * nodes and subtracts {@code eps} from "-" nodes. Updates incident edges respectively.
      *
      * @param heap the heap for storing best edges
      * @param root the root of the current tree
-     * @param eps  the accumulated dual change of the tree
+     * @param eps the accumulated dual change of the tree
      */
-    private void updateDuals(AddressableHeap<Double, BlossomVEdge> heap, BlossomVNode root, double eps) {
-        for (BlossomVTree.TreeNodeIterator treeNodeIterator = new BlossomVTree.TreeNodeIterator(root); treeNodeIterator.hasNext(); ) {
+    private void updateDuals(
+        AddressableHeap<Double, BlossomVEdge> heap, BlossomVNode root, double eps)
+    {
+        for (BlossomVTree.TreeNodeIterator treeNodeIterator =
+            new BlossomVTree.TreeNodeIterator(root); treeNodeIterator.hasNext();)
+        {
             BlossomVNode treeNode = treeNodeIterator.next();
             if (treeNode.isProcessed) {
                 treeNode.dual += eps;
@@ -413,11 +451,15 @@ class BlossomVInitializer<V, E> {
                     BlossomVNode minusNode = treeNode.getOppositeMatched();
                     minusNode.dual -= eps;
                     double delta = eps - treeNode.matched.slack;
-                    for (BlossomVNode.IncidentEdgeIterator iterator = minusNode.incidentEdgesIterator(); iterator.hasNext(); ) {
+                    for (BlossomVNode.IncidentEdgeIterator iterator =
+                        minusNode.incidentEdgesIterator(); iterator.hasNext();)
+                    {
                         iterator.next().slack += delta;
                     }
                 }
-                for (BlossomVNode.IncidentEdgeIterator iterator = treeNode.incidentEdgesIterator(); iterator.hasNext(); ) {
+                for (BlossomVNode.IncidentEdgeIterator iterator = treeNode.incidentEdgesIterator();
+                    iterator.hasNext();)
+                {
                     iterator.next().slack -= eps;
                 }
                 treeNode.isProcessed = false;
@@ -434,11 +476,13 @@ class BlossomVInitializer<V, E> {
     /**
      * Adds "best edges" to the {@code heap}
      *
-     * @param heap     the heap for storing best edges
-     * @param node     infinity node {@code bestEdge} is incident to
+     * @param heap the heap for storing best edges
+     * @param node infinity node {@code bestEdge} is incident to
      * @param bestEdge current best edge of the {@code node}
      */
-    private void addToHead(AddressableHeap<Double, BlossomVEdge> heap, BlossomVNode node, BlossomVEdge bestEdge) {
+    private void addToHead(
+        AddressableHeap<Double, BlossomVEdge> heap, BlossomVNode node, BlossomVEdge bestEdge)
+    {
         bestEdge.handle = heap.insert(bestEdge.slack, bestEdge);
         node.bestEdge = bestEdge;
     }
@@ -448,7 +492,8 @@ class BlossomVInitializer<V, E> {
      *
      * @param node the node which best edge should be removed from the heap it is stored in
      */
-    private void removeFromHeap(BlossomVNode node) {
+    private void removeFromHeap(BlossomVNode node)
+    {
         node.bestEdge.handle.delete();
         node.bestEdge.handle = null;
         node.bestEdge = null;
@@ -460,8 +505,10 @@ class BlossomVInitializer<V, E> {
      * @param blossomFormingEdge a tight (+, +) in-tree edge
      * @return the root of the blossom formed by the {@code blossomFormingEdge}
      */
-    private BlossomVNode findBlossomRootInit(BlossomVEdge blossomFormingEdge) {
-        BlossomVNode[] branches = new BlossomVNode[]{blossomFormingEdge.head[0], blossomFormingEdge.head[1]};
+    private BlossomVNode findBlossomRootInit(BlossomVEdge blossomFormingEdge)
+    {
+        BlossomVNode[] branches =
+            new BlossomVNode[] { blossomFormingEdge.head[0], blossomFormingEdge.head[1] };
         BlossomVNode root, upperBound; // need to be scoped outside of the loop
         int dir = 0;
         while (true) {
@@ -500,23 +547,27 @@ class BlossomVInitializer<V, E> {
 
     /**
      * Handles encountered infinity edges incident to "+" nodes of the alternating tree. This method
-     * determines whether the {@code infinityEdge} is tight. If so, it applies grow operation to it. Otherwise,
-     * it determines whether it has smaller slack than {@code criticalEps}. If so, this edge becomes the best edge
-     * of the "+" node in the tree.
+     * determines whether the {@code infinityEdge} is tight. If so, it applies grow operation to it.
+     * Otherwise, it determines whether it has smaller slack than {@code criticalEps}. If so, this
+     * edge becomes the best edge of the "+" node in the tree.
      *
-     * @param heap         the heap of infinity edges incident to the currently processed tree
+     * @param heap the heap of infinity edges incident to the currently processed tree
      * @param infinityEdge encountered infinity edge
-     * @param dir          direction of the infinityEdge to the infinity node
-     * @param eps          the eps of the current branch
-     * @param criticalEps  the value by which the epsilon of the current tree can be increased so that the slacks of
-     *                     (+, +) cross-tree and in-tree edges don't become negative
+     * @param dir direction of the infinityEdge to the infinity node
+     * @param eps the eps of the current branch
+     * @param criticalEps the value by which the epsilon of the current tree can be increased so
+     *        that the slacks of (+, +) cross-tree and in-tree edges don't become negative
      */
-    private void handleInfinityEdgeInit(AddressableHeap<Double, BlossomVEdge> heap, BlossomVEdge infinityEdge, int dir, double eps, double criticalEps) {
+    private void handleInfinityEdgeInit(
+        AddressableHeap<Double, BlossomVEdge> heap, BlossomVEdge infinityEdge, int dir, double eps,
+        double criticalEps)
+    {
         BlossomVNode inTreeNode = infinityEdge.head[1 - dir];
         BlossomVNode oppositeNode = infinityEdge.head[dir];
-        if (infinityEdge.slack > eps) {  // this edge isn't tight, but this edge can become a best edge
-            if (infinityEdge.slack < criticalEps) {  // this edge can become a best edge
-                if (oppositeNode.bestEdge == null) {  // inTreeNode hadn't had any best edge before
+        if (infinityEdge.slack > eps) { // this edge isn't tight, but this edge can become a best
+                                        // edge
+            if (infinityEdge.slack < criticalEps) { // this edge can become a best edge
+                if (oppositeNode.bestEdge == null) { // inTreeNode hadn't had any best edge before
                     addToHead(heap, oppositeNode, infinityEdge);
                 } else {
                     if (infinityEdge.slack < oppositeNode.bestEdge.slack) {
@@ -549,15 +600,19 @@ class BlossomVInitializer<V, E> {
      * Augments the tree rooted at {@code treeRoot} via {@code augmentEdge}. The augmenting branch
      * starts at {@code branchStart}
      *
-     * @param treeRoot    the root of the tree to augment
+     * @param treeRoot the root of the tree to augment
      * @param branchStart the endpoint of the {@code augmentEdge} which belongs to the currentTree
      * @param augmentEdge a tight (+, +) cross-tree edge
      */
-    private void augmentBranchInit(BlossomVNode treeRoot, BlossomVNode branchStart, BlossomVEdge augmentEdge) {
+    private void augmentBranchInit(
+        BlossomVNode treeRoot, BlossomVNode branchStart, BlossomVEdge augmentEdge)
+    {
         if (DEBUG) {
             System.out.println("Augmenting an edge " + augmentEdge);
         }
-        for (BlossomVTree.TreeNodeIterator iterator = new BlossomVTree.TreeNodeIterator(treeRoot); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeNodeIterator iterator = new BlossomVTree.TreeNodeIterator(treeRoot);
+            iterator.hasNext();)
+        {
             iterator.next().label = BlossomVNode.Label.INFINITY;
         }
 
@@ -578,20 +633,24 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Forms a 1/2-valued odd circuit. Nodes from the odd circuit aren't actually contracted into a single
-     * pseudonode. The blossomSibling references are set so that the nodes form a circular linked list.
-     * The matching is updated respectively.
+     * Forms a 1/2-valued odd circuit. Nodes from the odd circuit aren't actually contracted into a
+     * single pseudonode. The blossomSibling references are set so that the nodes form a circular
+     * linked list. The matching is updated respectively.
      * <p>
-     * <b>Note:</b> each node of the circuit can be expanded in the future and become a new tree root.
+     * <b>Note:</b> each node of the circuit can be expanded in the future and become a new tree
+     * root.
      *
      * @param blossomFormingEdge a tight (+, +) in-tree edge that forms an odd circuit
-     * @param treeRoot           the root of the tree odd circuit belongs to
+     * @param treeRoot the root of the tree odd circuit belongs to
      */
-    private void shrinkInit(BlossomVEdge blossomFormingEdge, BlossomVNode treeRoot) {
+    private void shrinkInit(BlossomVEdge blossomFormingEdge, BlossomVNode treeRoot)
+    {
         if (DEBUG) {
             System.out.println("Shrinking an edge " + blossomFormingEdge);
         }
-        for (BlossomVTree.TreeNodeIterator iterator = new BlossomVTree.TreeNodeIterator(treeRoot); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeNodeIterator iterator = new BlossomVTree.TreeNodeIterator(treeRoot);
+            iterator.hasNext();)
+        {
             iterator.next().label = BlossomVNode.Label.INFINITY;
         }
         BlossomVNode blossomRoot = findBlossomRootInit(blossomFormingEdge);
@@ -613,7 +672,9 @@ class BlossomVInitializer<V, E> {
 
         // set the circular blossomSibling references
         BlossomVEdge prevEdge = blossomFormingEdge;
-        for (BlossomVEdge.BlossomNodesIterator iterator = blossomFormingEdge.blossomNodesIterator(blossomRoot); iterator.hasNext(); ) {
+        for (BlossomVEdge.BlossomNodesIterator iterator =
+            blossomFormingEdge.blossomNodesIterator(blossomRoot); iterator.hasNext();)
+        {
             BlossomVNode current = iterator.next();
             current.label = PLUS;
             if (iterator.getCurrentDirection() == 0) {
@@ -629,16 +690,17 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Expands a 1/2-valued odd circuit. Essentially, changes the matching of the circuit so that the
-     * {@code blossomNode} becomes matched to the {@code blossomNodeMatched} edge and all other nodes
-     * become matched. Sets the labels of the matched nodes of the circuit to
+     * Expands a 1/2-valued odd circuit. Essentially, changes the matching of the circuit so that
+     * the {@code blossomNode} becomes matched to the {@code blossomNodeMatched} edge and all other
+     * nodes become matched. Sets the labels of the matched nodes of the circuit to
      * {@link org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label#INFINITY}
      *
-     * @param blossomNode        some node that belongs to the "contracted" odd circuit
-     * @param blossomNodeMatched a matched edge of the {@code blossomNode}, which doesn't belong to the
-     *                           circuit. <b>Note:</b> this value can be {@code null}
+     * @param blossomNode some node that belongs to the "contracted" odd circuit
+     * @param blossomNodeMatched a matched edge of the {@code blossomNode}, which doesn't belong to
+     *        the circuit. <b>Note:</b> this value can be {@code null}
      */
-    private void expandInit(BlossomVNode blossomNode, BlossomVEdge blossomNodeMatched) {
+    private void expandInit(BlossomVNode blossomNode, BlossomVEdge blossomNodeMatched)
+    {
         if (DEBUG) {
             System.out.println("Expanding node " + blossomNode);
         }
@@ -663,20 +725,22 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Solves the fractional matching problem formulated on the initial graph. See the class description for
-     * more information about fractional matching initialization.
+     * Solves the fractional matching problem formulated on the initial graph. See the class
+     * description for more information about fractional matching initialization.
      *
-     * @return the number of trees in the resulting state object, which equals to the number of unmatched nodes.
+     * @return the number of trees in the resulting state object, which equals to the number of
+     *         unmatched nodes.
      */
-    private int initFractional() {
+    private int initFractional()
+    {
         /*
-         * For every free node u, which is adjacent to at least one "+" node in the current tree, we keep track
-         * of an edge that has minimum slack and connects node u and some "+" node in the current tree. This edge
-         * is called a "best edge".
+         * For every free node u, which is adjacent to at least one "+" node in the current tree, we
+         * keep track of an edge that has minimum slack and connects node u and some "+" node in the
+         * current tree. This edge is called a "best edge".
          */
         AddressableHeap<Double, BlossomVEdge> heap = new PairingHeap<>();
 
-        for (BlossomVNode root = nodes[nodeNum].treeSiblingNext; root != null; ) {
+        for (BlossomVNode root = nodes[nodeNum].treeSiblingNext; root != null;) {
             BlossomVNode root2 = root.treeSiblingNext;
             BlossomVNode root3 = null;
             if (root2 != null) {
@@ -691,14 +755,15 @@ class BlossomVInitializer<V, E> {
             BlossomVNode branchRoot = currentNode;
             BlossomVEdge criticalEdge = null;
             /*
-             * Let's denote the minimum slack of (+, inf) edges incident to nodes of this tree as infSlack.
-             * Critical eps is the minimum dual value which can be chosen as the branchEps so that it doesn't
-             * violate the dual constraints on (+, +) in-tree and cross-tree edges. It is always greater than
-             * or equal to the branchEps. If it is equal to the branchEps, a shrink or augment operation can be
-             * applied immediately. If it is greater than branchEps, we have to compare it with infSlack. If
-             * criticalEps is greater than infSlack, we have to do a grow operation after we increase the
-             * branchEps by infSlack - branchEps. Otherwise, we can apply shrink or augment operations after we
-             * increase the branchEps by criticalEps - branchEps.
+             * Let's denote the minimum slack of (+, inf) edges incident to nodes of this tree as
+             * infSlack. Critical eps is the minimum dual value which can be chosen as the branchEps
+             * so that it doesn't violate the dual constraints on (+, +) in-tree and cross-tree
+             * edges. It is always greater than or equal to the branchEps. If it is equal to the
+             * branchEps, a shrink or augment operation can be applied immediately. If it is greater
+             * than branchEps, we have to compare it with infSlack. If criticalEps is greater than
+             * infSlack, we have to do a grow operation after we increase the branchEps by infSlack
+             * - branchEps. Otherwise, we can apply shrink or augment operations after we increase
+             * the branchEps by criticalEps - branchEps.
              */
             double criticalEps = INFINITY;
             int criticalDir = -1;
@@ -706,15 +771,16 @@ class BlossomVInitializer<V, E> {
 
             /*
              * Grow a tree as much as possible. Main goal is to apply a primal operation. Therefore,
-             * if we encounter a tight (+, +) cross-tree or in-tree edge => we won't be able to increase
-             * dual objective function anymore (can't increase branchEps)
-             * => we go out of the loop, apply lazy dual changes to the current branch and perform an
-             * augment or shrink operation.
+             * if we encounter a tight (+, +) cross-tree or in-tree edge => we won't be able to
+             * increase dual objective function anymore (can't increase branchEps) => we go out of
+             * the loop, apply lazy dual changes to the current branch and perform an augment or
+             * shrink operation.
              *
-             * A tree is grown in phases. Each phase starts with a new "branch"; the reason to
-             * start a new branch is that the tree can't be grown any further without dual changes and therefore
-             * no primal operation can be applied. That is why we choose an edge of minimum slack from heap,
-             * and set the eps of the branch so that this edge becomes tight
+             * A tree is grown in phases. Each phase starts with a new "branch"; the reason to start
+             * a new branch is that the tree can't be grown any further without dual changes and
+             * therefore no primal operation can be applied. That is why we choose an edge of
+             * minimum slack from heap, and set the eps of the branch so that this edge becomes
+             * tight
              */
             while (true) {
                 currentNode.isProcessed = true;
@@ -727,7 +793,7 @@ class BlossomVInitializer<V, E> {
 
                 // Process edges incident to the current node
                 BlossomVNode.IncidentEdgeIterator iterator;
-                for (iterator = currentNode.incidentEdgesIterator(); iterator.hasNext(); ) {
+                for (iterator = currentNode.incidentEdgesIterator(); iterator.hasNext();) {
                     BlossomVEdge currentEdge = iterator.next();
                     int dir = iterator.getDir();
 
@@ -747,7 +813,8 @@ class BlossomVInitializer<V, E> {
                                 criticalEdge = currentEdge;
                                 criticalDir = dir;
                                 if (criticalEps <= branchEps) {
-                                    // found a tight (+, +) in-tree edge to shrink => go out of the loop
+                                    // found a tight (+, +) in-tree edge to shrink => go out of the
+                                    // loop
                                     primalOperation = true;
                                     break;
                                 }
@@ -770,7 +837,8 @@ class BlossomVInitializer<V, E> {
                         }
 
                     } else {
-                        // opposite node is an infinity node since all other trees contain only one "+" node
+                        // opposite node is an infinity node since all other trees contain only one
+                        // "+" node
                         handleInfinityEdgeInit(heap, currentEdge, dir, branchEps, criticalEps);
                     }
                 }
@@ -783,11 +851,11 @@ class BlossomVInitializer<V, E> {
                     break;
                 } else {
                     /*
-                     * Move currentNode to the next unprocessed "+" node in the tree,
-                     * growing the tree if it is possible. Start a new branch if all nodes have
-                     * been processed. Exit the loop if the slack of fibHeap.min().getData() is >=
-                     * than the slack of critical edge (in this case we can perform primal operation
-                     * after updating the duals).
+                     * Move currentNode to the next unprocessed "+" node in the tree, growing the
+                     * tree if it is possible. Start a new branch if all nodes have been processed.
+                     * Exit the loop if the slack of fibHeap.min().getData() is >= than the slack of
+                     * critical edge (in this case we can perform primal operation after updating
+                     * the duals).
                      */
                     if (currentNode.firstTreeChild != null) {
                         // move to the next grandchild
@@ -802,7 +870,8 @@ class BlossomVInitializer<V, E> {
                             currentNode = currentNode.treeSiblingNext.getOppositeMatched();
                         } else if (currentNode == branchRoot) {
                             // we've processed all nodes in the current branch
-                            BlossomVEdge minSlackEdge = heap.isEmpty() ? null : heap.findMin().getValue();
+                            BlossomVEdge minSlackEdge =
+                                heap.isEmpty() ? null : heap.findMin().getValue();
                             if (minSlackEdge == null || minSlackEdge.slack >= criticalEps) {
                                 // can perform primal operation after updating duals
                                 if (DEBUG) {
@@ -835,7 +904,8 @@ class BlossomVInitializer<V, E> {
                                 minusNode.addChild(plusNode, minusNode.matched, true);
 
                                 if (DEBUG) {
-                                    System.out.println("New branch root is " + plusNode + ", eps = " + branchEps);
+                                    System.out.println(
+                                        "New branch root is " + plusNode + ", eps = " + branchEps);
                                 }
                                 // Start a new branch
                                 currentNode = branchRoot = plusNode;
@@ -874,10 +944,13 @@ class BlossomVInitializer<V, E> {
     }
 
     /**
-     * Enum for specifying the primal operation to perform with critical edge during fractional matching
-     * initialization
+     * Enum for specifying the primal operation to perform with critical edge during fractional
+     * matching initialization
      */
-    enum Action {
-        NONE, SHRINK, AUGMENT,
+    enum Action
+    {
+        NONE,
+        SHRINK,
+        AUGMENT,
     }
 }

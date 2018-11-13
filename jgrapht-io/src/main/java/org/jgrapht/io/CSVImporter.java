@@ -268,7 +268,7 @@ public class CSVImporter<V, E>
         RowCSVListener
     {
         private boolean assumeEdgeWeights;
-        
+
         public AdjacencyListCSVListener(Graph<V, E> graph)
         {
             super(graph);
@@ -290,13 +290,13 @@ public class CSVImporter<V, E>
                 graph.addVertex(source);
             }
             row.remove(0);
-            
+
             // remaining are targets (if weighted pairs of target-weight)
-            int step = assumeEdgeWeights? 2 : 1;
-            
-            for(int i = 0; i < row.size(); i += step) { 
+            int step = assumeEdgeWeights ? 2 : 1;
+
+            for (int i = 0; i < row.size(); i += step) {
                 String key = row.get(i);
-                
+
                 if (key.isEmpty()) {
                     throw new ParseCancellationException("Target vertex cannot be empty");
                 }
@@ -307,11 +307,11 @@ public class CSVImporter<V, E>
                     vertices.put(key, target);
                     graph.addVertex(target);
                 }
-                
+
                 double weight = Graph.DEFAULT_EDGE_WEIGHT;
-                if (assumeEdgeWeights) { 
+                if (assumeEdgeWeights) {
                     try {
-                        weight = Double.parseDouble(row.get(i+1));
+                        weight = Double.parseDouble(row.get(i + 1));
                     } catch (NumberFormatException nfe) {
                         throw new ParseCancellationException("Failed to parse edge weight");
                     }
@@ -321,7 +321,7 @@ public class CSVImporter<V, E>
                     String label = "e_" + source + "_" + target;
                     E e = edgeProvider.buildEdge(source, target, label, new HashMap<>());
                     graph.addEdge(source, target, e);
-                    if (assumeEdgeWeights) { 
+                    if (assumeEdgeWeights) {
                         graph.setEdgeWeight(e, weight);
                     }
                 } catch (IllegalArgumentException e) {
@@ -350,9 +350,8 @@ public class CSVImporter<V, E>
         {
             super(graph);
             this.assumeNodeIds = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-            this.assumeEdgeWeights =
-                parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS) || 
-                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);;
+            this.assumeEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
+            ;
             this.assumeZeroWhenNoEdge =
                 parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
             this.verticesCount = 0;
@@ -566,4 +565,3 @@ public class CSVImporter<V, E>
     }
 
 }
-

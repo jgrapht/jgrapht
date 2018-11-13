@@ -24,7 +24,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -183,4 +183,3 @@ public abstract class CrossComponentIteratorTest
         }
     }
 }
-

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * Algorithm to compute a vertex partitioning of a graph.
@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
  *
  * @author Alexandru Valeanu
  */
-public interface PartitioningAlgorithm<V> {
+public interface PartitioningAlgorithm<V>
+{
 
     /**
      * Computes a vertex partitioning.
@@ -50,7 +51,10 @@ public interface PartitioningAlgorithm<V> {
      *
      * @param <V> the vertex type
      */
-    interface Partitioning<V> extends Iterable<Set<V>>{
+    interface Partitioning<V>
+        extends
+        Iterable<Set<V>>
+    {
 
         /**
          * Get the number of partitions.
@@ -70,12 +74,13 @@ public interface PartitioningAlgorithm<V> {
         Set<V> getPartition(int index);
 
         /**
-         * Get the partitions. This method returns a partitioning of
-         * the vertices in the graph into disjoint partitions.
+         * Get the partitions. This method returns a partitioning of the vertices in the graph into
+         * disjoint partitions.
          *
          * @return a list of partitions
          */
-        default List<Set<V>> getPartitions(){
+        default List<Set<V>> getPartitions()
+        {
             final int n = getNumberPartitions();
             List<Set<V>> partitions = new ArrayList<>(n);
 
@@ -92,7 +97,11 @@ public interface PartitioningAlgorithm<V> {
      *
      * @param <V> the vertex type
      */
-    class PartitioningImpl<V> implements Partitioning<V>, Serializable {
+    class PartitioningImpl<V>
+        implements
+        Partitioning<V>,
+        Serializable
+    {
 
         private static final long serialVersionUID = 3702471090706836080L;
 
@@ -105,11 +114,11 @@ public interface PartitioningAlgorithm<V> {
          * @param classes the partition classes
          * @throws NullPointerException if {@code classes} is {@code null}
          */
-        public PartitioningImpl(List<Set<V>> classes) {
-            this.classes = Collections.unmodifiableList(Objects.requireNonNull(classes)
-                    .stream()
-                    .map(Collections::unmodifiableSet)
-                    .collect(Collectors.toList()));
+        public PartitioningImpl(List<Set<V>> classes)
+        {
+            this.classes = Collections.unmodifiableList(
+                Objects.requireNonNull(classes).stream().map(Collections::unmodifiableSet).collect(
+                    Collectors.toList()));
         }
 
         /**
@@ -118,24 +127,29 @@ public interface PartitioningAlgorithm<V> {
          * @param vertexToPartitionMap the vertex to partition index map
          * @throws NullPointerException if {@code vertexToPartitionMap} is {@code null}
          */
-        public PartitioningImpl(Map<V, Integer> vertexToPartitionMap){
+        public PartitioningImpl(Map<V, Integer> vertexToPartitionMap)
+        {
             Objects.requireNonNull(vertexToPartitionMap);
 
             Map<Integer, Set<V>> partitionIndexToVertexMap = new HashMap<>();
 
-            for (Map.Entry<V, Integer> entry: vertexToPartitionMap.entrySet()){
-                partitionIndexToVertexMap.computeIfAbsent(entry.getValue(), x -> new HashSet<>()).add(entry.getKey());
+            for (Map.Entry<V, Integer> entry : vertexToPartitionMap.entrySet()) {
+                partitionIndexToVertexMap
+                    .computeIfAbsent(entry.getValue(), x -> new HashSet<>()).add(entry.getKey());
             }
 
-            this.classes = Collections.unmodifiableList(partitionIndexToVertexMap.values().stream()
-                    .map(Collections::unmodifiableSet).collect(Collectors.toList()));
+            this.classes = Collections.unmodifiableList(
+                partitionIndexToVertexMap
+                    .values().stream().map(Collections::unmodifiableSet)
+                    .collect(Collectors.toList()));
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public int getNumberPartitions() {
+        public int getNumberPartitions()
+        {
             return classes.size();
         }
 
@@ -143,8 +157,9 @@ public interface PartitioningAlgorithm<V> {
          * {@inheritDoc}
          */
         @Override
-        public Set<V> getPartition(int index) {
-            if (index < 0 || index >= classes.size()){
+        public Set<V> getPartition(int index)
+        {
+            if (index < 0 || index >= classes.size()) {
                 throw new IndexOutOfBoundsException(index + " is not valid");
             }
 
@@ -157,14 +172,16 @@ public interface PartitioningAlgorithm<V> {
         @Override
         public String toString()
         {
-            return "Partition [number-of-partitions=" + getNumberPartitions() + ", partitions=" + classes + "]";
+            return "Partition [number-of-partitions=" + getNumberPartitions() + ", partitions="
+                + classes + "]";
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public Iterator<Set<V>> iterator() {
+        public Iterator<Set<V>> iterator()
+        {
             return classes.iterator();
         }
     }

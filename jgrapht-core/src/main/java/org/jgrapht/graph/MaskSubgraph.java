@@ -382,4 +382,3 @@ public class MaskSubgraph<V, E>
     }
 
 }
-

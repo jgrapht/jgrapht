@@ -17,9 +17,8 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.traverse.BreadthFirstIterator;
+import org.jgrapht.*;
+import org.jgrapht.traverse.*;
 
 import java.util.*;
 
@@ -31,7 +30,8 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TreeMeasurer<V, E> {
+public class TreeMeasurer<V, E>
+{
 
     /* Input graph */
     private final Graph<V, E> graph;
@@ -42,19 +42,21 @@ public class TreeMeasurer<V, E> {
      * @param graph input graph
      * @throws NullPointerException if {@code graph} is {@code null}
      */
-    public TreeMeasurer(Graph<V, E> graph) {
+    public TreeMeasurer(Graph<V, E> graph)
+    {
         this.graph = Objects.requireNonNull(graph);
     }
 
-    private V computeFarthestVertex(BreadthFirstIterator<V, E> bfs){
+    private V computeFarthestVertex(BreadthFirstIterator<V, E> bfs)
+    {
         V farthest = null;
         int dist = Integer.MIN_VALUE;
 
-        while (bfs.hasNext()){
+        while (bfs.hasNext()) {
             V v = bfs.next();
             int depth = bfs.getDepth(v);
 
-            if (dist < depth){
+            if (dist < depth) {
                 farthest = v;
                 dist = depth;
             }
@@ -68,13 +70,14 @@ public class TreeMeasurer<V, E> {
      * center of a graph is the set of vertices of graph eccentricity equal to the graph radius.
      *
      * <p>
-     *     Note: The input graph must be undirected.
+     * Note: The input graph must be undirected.
      * </p>
      *
      * @return the graph center
      * @throws IllegalArgumentException if {@code graph} is not undirected
      */
-    public Set<V> getGraphCenter() {
+    public Set<V> getGraphCenter()
+    {
         GraphTests.requireUndirected(graph);
 
         if (graph.vertexSet().isEmpty())

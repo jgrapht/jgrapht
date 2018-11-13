@@ -245,6 +245,7 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Get the graph
+     * 
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -254,6 +255,7 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Set the graph
+     * 
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -342,4 +344,3 @@ public class HawickJamesSimpleCycles<V, E>
         return nCycles;
     }
 }
-

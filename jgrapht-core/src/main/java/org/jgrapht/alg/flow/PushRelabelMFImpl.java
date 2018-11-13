@@ -17,12 +17,11 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.alg.util.extension.*;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**

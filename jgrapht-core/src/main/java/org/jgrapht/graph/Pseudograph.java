@@ -92,4 +92,3 @@ public class Pseudograph<V, E>
     }
 
 }
-

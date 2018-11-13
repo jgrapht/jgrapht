@@ -80,4 +80,3 @@ public class CompleteBipartiteGraphGenerator<V, E>
         }
     }
 }
-

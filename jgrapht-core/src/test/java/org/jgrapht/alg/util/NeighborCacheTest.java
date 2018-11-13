@@ -24,7 +24,8 @@ import org.junit.rules.*;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 /**
@@ -221,4 +222,3 @@ public class NeighborCacheTest
     }
 
 }
-

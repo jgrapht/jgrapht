@@ -17,8 +17,7 @@
  */
 package org.jgrapht.generate;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
+import org.jgrapht.*;
 
 import java.util.*;
 
@@ -26,13 +25,13 @@ import java.util.*;
  * Generates a random tree using Prüfer sequences.
  * 
  * <p>
- *  A Prüfer sequence of length $n$ is randomly generated and converted into the corresponding tree.
+ * A Prüfer sequence of length $n$ is randomly generated and converted into the corresponding tree.
  * </p>
  *
  * <p>
- *  This implementation is inspired by "X. Wang, L. Wang and Y. Wu, "An Optimal Algorithm for Prufer Codes," Journal
- *  of Software Engineering and Applications, Vol. 2 No. 2, 2009, pp. 111-115. doi: 10.4236/jsea.2009.22016."
- *  and has a running time of $O(n)$.
+ * This implementation is inspired by "X. Wang, L. Wang and Y. Wu, "An Optimal Algorithm for Prufer
+ * Codes," Journal of Software Engineering and Applications, Vol. 2 No. 2, 2009, pp. 111-115. doi:
+ * 10.4236/jsea.2009.22016." and has a running time of $O(n)$.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -40,7 +39,10 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
+public class PruferTreeGenerator<V, E>
+    implements
+    GraphGenerator<V, E, V>
+{
 
     // number of vertices
     private final int n;
@@ -52,9 +54,9 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
     private final int[] inputPruferSeq;
 
     /**
-     * Construct a new PruferTreeGenerator from an input Prüfer sequence. Note that
-     * the size of the generated tree will be $l+2$ where $l$ is the length of the input
-     * sequence. The Prüfer sequence must contain integers between $0$ and $l+1$ (inclusive).
+     * Construct a new PruferTreeGenerator from an input Prüfer sequence. Note that the size of the
+     * generated tree will be $l+2$ where $l$ is the length of the input sequence. The Prüfer
+     * sequence must contain integers between $0$ and $l+1$ (inclusive).
      *
      * Note: In this case, the same tree will be generated every time.
      *
@@ -63,8 +65,9 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
      * @throws IllegalArgumentException if {@code pruferSequence} is {@code null}
      * @throws IllegalArgumentException if {@code pruferSequence} is invalid.
      */
-    public PruferTreeGenerator(int[] pruferSequence){
-        if (Objects.isNull(pruferSequence)){
+    public PruferTreeGenerator(int[] pruferSequence)
+    {
+        if (Objects.isNull(pruferSequence)) {
             throw new IllegalArgumentException("pruferSequence cannot be null");
         }
 
@@ -72,12 +75,12 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
         this.rng = null;
         this.inputPruferSeq = pruferSequence.clone();
 
-        if (n <= 0){
+        if (n <= 0) {
             throw new IllegalArgumentException("n must be greater than 0");
         }
 
         for (int i = 0; i < n - 2; i++) {
-            if (pruferSequence[i] < 0 || pruferSequence[i] >= n){
+            if (pruferSequence[i] < 0 || pruferSequence[i] >= n) {
                 throw new IllegalArgumentException("invalid pruferSequence");
             }
         }
@@ -89,7 +92,8 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
      * @param n number of vertices to be generated
      * @throws IllegalArgumentException if {@code n} is &le; 0
      */
-    public PruferTreeGenerator(int n) {
+    public PruferTreeGenerator(int n)
+    {
         this(n, new Random());
     }
 
@@ -100,7 +104,8 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
      * @param seed seed for the random number generator
      * @throws IllegalArgumentException if {@code n} is &le; 0
      */
-    public PruferTreeGenerator(int n, long seed) {
+    public PruferTreeGenerator(int n, long seed)
+    {
         this(n, new Random(seed));
     }
 
@@ -112,8 +117,9 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
      * @throws IllegalArgumentException if {@code n} is &le; 0
      * @throws NullPointerException if {@code rng} is {@code null}
      */
-    public PruferTreeGenerator(int n, Random rng) {
-        if (n <= 0){
+    public PruferTreeGenerator(int n, Random rng)
+    {
+        if (n <= 0) {
             throw new IllegalArgumentException("n must be greater than 0");
         }
 
@@ -126,8 +132,8 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
      * Generates a tree.
      *
      * <p>
-     * Note: An exception will be thrown if the target graph is not empty (i.e. contains
-     * at least one vertex)
+     * Note: An exception will be thrown if the target graph is not empty (i.e. contains at least
+     * one vertex)
      * </p>
      *
      * @param target the target graph
@@ -137,10 +143,11 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
      * @throws IllegalArgumentException if {@code target} is not empty
      */
     @Override
-    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap) {
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
+    {
         GraphTests.requireUndirected(target);
 
-        if (!target.vertexSet().isEmpty()){
+        if (!target.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("target graph is not empty");
         }
 
@@ -152,7 +159,7 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
         }
 
         // base case
-        if (n == 1){
+        if (n == 1) {
             return;
         }
 
@@ -164,21 +171,20 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
 
         int[] pruferSeq;
 
-        if (inputPruferSeq == null){
+        if (inputPruferSeq == null) {
             pruferSeq = new int[n - 2];
 
             for (int i = 0; i < n - 2; i++) {
                 pruferSeq[i] = rng.nextInt(n);
                 ++degree[pruferSeq[i]];
             }
-        }
-        else{
+        } else {
             pruferSeq = inputPruferSeq;
         }
 
         int index = -1;
-        for (int k = 0; k < n; k++){
-            if (degree[k] == 1){
+        for (int k = 0; k < n; k++) {
+            if (degree[k] == 1) {
                 index = k;
                 break;
             }
@@ -190,18 +196,17 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
         // set of nodes without a parent
         Set<V> orphans = new HashSet<>(target.vertexSet());
 
-        for (int i = 0; i < n - 2; i++){
+        for (int i = 0; i < n - 2; i++) {
             int y = pruferSeq[i];
             orphans.remove(vertexList.get(x));
             target.addEdge(vertexList.get(x), vertexList.get(y));
             --degree[y];
 
-            if (y < index && degree[y] == 1){
+            if (y < index && degree[y] == 1) {
                 x = y;
-            }
-            else{
+            } else {
                 for (int k = index + 1; k < n; k++) {
-                    if (degree[k] == 1){
+                    if (degree[k] == 1) {
                         index = x = k;
                         break;
                     }

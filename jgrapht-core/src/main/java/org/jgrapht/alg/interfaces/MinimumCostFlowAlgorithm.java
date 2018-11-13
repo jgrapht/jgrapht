@@ -17,21 +17,25 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem;
+import org.jgrapht.alg.flow.mincost.*;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allows to calculate minimum cost flow on the specified
  * <a href="https://en.wikipedia.org/wiki/Minimum-cost_flow_problem">minimum cost flow problem</a>.
  * <p>
- * For more information see: <i>K. Ahuja, Ravindra &amp; L. Magnanti, Thomas &amp; Orlin, James. (1993). Network Flows.</i>
+ * For more information see: <i>K. Ahuja, Ravindra &amp; L. Magnanti, Thomas &amp; Orlin, James.
+ * (1993). Network Flows.</i>
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
  * @author Timofey Chudakov
  */
-public interface MinimumCostFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>{
+public interface MinimumCostFlowAlgorithm<V, E>
+    extends
+    FlowAlgorithm<V, E>
+{
 
     /**
      * Calculates feasible flow of minimum cost for the minimum cost flow problem.
@@ -39,7 +43,7 @@ public interface MinimumCostFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>{
      * @param minimumCostFlowProblem minimum cost flow problem
      * @return minimum cost flow
      */
-    MinimumCostFlow<E> getMinimumCostFlow(MinimumCostFlowProblem<V,E> minimumCostFlowProblem);
+    MinimumCostFlow<E> getMinimumCostFlow(MinimumCostFlowProblem<V, E> minimumCostFlowProblem);
 
     /**
      * Returns the objective value (cost) of a solution to the minimum cost flow problem.
@@ -47,18 +51,20 @@ public interface MinimumCostFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>{
      * @param minimumCostFlowProblem minimum cost flow problem
      * @return the objective value (cost) of a solution to the minimum cost flow problem.
      */
-    default double getFlowCost(MinimumCostFlowProblem<V,E> minimumCostFlowProblem) {
+    default double getFlowCost(MinimumCostFlowProblem<V, E> minimumCostFlowProblem)
+    {
         return getMinimumCostFlow(minimumCostFlowProblem).getCost();
     }
-
-
 
     /**
      * Represents a minimum cost flow.
      *
      * @param <E> graph edge type
      */
-    interface MinimumCostFlow<E> extends Flow<E>{
+    interface MinimumCostFlow<E>
+        extends
+        Flow<E>
+    {
         /**
          * Returns the cost of the flow
          *
@@ -72,7 +78,12 @@ public interface MinimumCostFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>{
      *
      * @param <E> graph edge type
      */
-    class MinimumCostFlowImpl<E> extends FlowImpl<E> implements MinimumCostFlow<E> {
+    class MinimumCostFlowImpl<E>
+        extends
+        FlowImpl<E>
+        implements
+        MinimumCostFlow<E>
+    {
         /**
          * The cost of the flow defined by the mapping {@code flowMap}
          */
@@ -81,10 +92,11 @@ public interface MinimumCostFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>{
         /**
          * Constructs a new instance of minimum cost flow
          *
-         * @param cost    the cost of the flow
+         * @param cost the cost of the flow
          * @param flowMap the mapping defining the flow on the network
          */
-        public MinimumCostFlowImpl(double cost, Map<E, Double> flowMap) {
+        public MinimumCostFlowImpl(double cost, Map<E, Double> flowMap)
+        {
             super(flowMap);
             this.cost = cost;
         }
@@ -93,7 +105,8 @@ public interface MinimumCostFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>{
          * {@inheritDoc}
          */
         @Override
-        public double getCost() {
+        public double getCost()
+        {
             return cost;
         }
     }

@@ -30,7 +30,9 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  */
-public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>
+public interface MaximumFlowAlgorithm<V, E>
+    extends
+    FlowAlgorithm<V, E>
 {
 
     /**
@@ -54,23 +56,6 @@ public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>
      * @param source source vertex
      * @param sink sink vertex
      * @return the value of the maximum flow
-     * @deprecated replaced by @link{getMaximumFlowValue}
-     */
-    @Deprecated
-    default double calculateMaximumFlow(V source, V sink)
-    {
-        return getMaximumFlow(source, sink).getValue();
-    }
-
-    /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
-     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
-     * <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different.
-     *
-     * @param source source vertex
-     * @param sink sink vertex
-     * @return the value of the maximum flow
      */
     default double getMaximumFlowValue(V source, V sink)
     {
@@ -78,27 +63,13 @@ public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>
     }
 
     /**
-     * Returns maximum flow value, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call.
-     *
-     * NOTE: this function currently has a default implementation to guarantee backwards
-     * compatibility. This function should be enforced in the next version.
-     *
-     * @return maximum flow value
-     * @deprecated method has been removed
-     */
-    @Deprecated
-    default double getMaximumFlowValue()
-    {
-        throw new UnsupportedOperationException("Function not implemented");
-    }
-
-    /**
      * A maximum flow
      *
      * @param <E> the graph edge type
      */
-    interface MaximumFlow<E> extends Flow<E>
+    interface MaximumFlow<E>
+        extends
+        Flow<E>
     {
         /**
          * Returns value of the maximum-flow for the given network
@@ -106,15 +77,6 @@ public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>
          * @return value of the maximum-flow
          */
         Double getValue();
-
-        /**
-         * Returns mapping from edge to flow value through this particular edge
-         *
-         * @return maximum flow
-         * @deprecated Method renamed to getFlowMap
-         */
-        @Deprecated
-        default Map<E, Double> getFlow(){return getFlowMap();}
     }
 
     /**
@@ -122,7 +84,9 @@ public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>
      *
      * @param <E> the graph edge type
      */
-    class MaximumFlowImpl<E> extends FlowImpl<E>
+    class MaximumFlowImpl<E>
+        extends
+        FlowImpl<E>
         implements
         MaximumFlow<E>
     {
@@ -153,4 +117,3 @@ public interface MaximumFlowAlgorithm<V, E> extends FlowAlgorithm<V,E>
         }
     }
 }
-

@@ -119,4 +119,3 @@ public class WheelGraphGenerator<V, E>
         }
     }
 }
-

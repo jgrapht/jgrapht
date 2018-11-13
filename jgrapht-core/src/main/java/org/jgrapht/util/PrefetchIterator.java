@@ -224,4 +224,3 @@ public class PrefetchIterator<E>
             throws NoSuchElementException;
     }
 }
-

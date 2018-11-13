@@ -62,4 +62,3 @@ public interface ListenableGraph<V, E>
      */
     public void removeVertexSetListener(VertexSetListener<V> l);
 }
-

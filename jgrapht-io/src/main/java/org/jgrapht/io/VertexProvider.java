@@ -35,4 +35,3 @@ public interface VertexProvider<V>
      */
     V buildVertex(String id, Map<String, Attribute> attributes);
 }
-

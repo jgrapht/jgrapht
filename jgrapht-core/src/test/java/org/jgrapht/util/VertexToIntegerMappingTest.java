@@ -17,28 +17,29 @@
  */
 package org.jgrapht.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Tests for {@link VertexToIntegerMapping}
  *
  * @author Alexandru Valeanu
  */
-public class VertexToIntegerMappingTest {
+public class VertexToIntegerMappingTest
+{
 
     @Test(expected = NullPointerException.class)
-    public void testNullSet(){
+    public void testNullSet()
+    {
         VertexToIntegerMapping<Integer> mapping = new VertexToIntegerMapping<>((Set<Integer>) null);
     }
 
     @Test
-    public void testEmptySet(){
+    public void testEmptySet()
+    {
         VertexToIntegerMapping<Integer> mapping = new VertexToIntegerMapping<>(new HashSet<>());
 
         Assert.assertTrue(mapping.getIndexList().isEmpty());
@@ -46,21 +47,24 @@ public class VertexToIntegerMappingTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNotUniqueElements(){
-        VertexToIntegerMapping<Integer> mapping = new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1));
+    public void testNotUniqueElements()
+    {
+        VertexToIntegerMapping<Integer> mapping =
+            new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1));
     }
 
     @Test
-    public void testRandomInstances(){
+    public void testRandomInstances()
+    {
         Random random = new Random(0x88);
         final int NUM_TESTS = 1024;
-        Supplier<String> supplier =
-                SupplierUtil.createStringSupplier(random.nextInt(100));
+        Supplier<String> supplier = SupplierUtil.createStringSupplier(random.nextInt(100));
 
         for (int test = 0; test < NUM_TESTS; test++) {
             final int N = 10 + random.nextInt(1024);
 
-            Set<String> vertices = IntStream.range(0, N).mapToObj(x -> supplier.get()).collect(Collectors.toSet());
+            Set<String> vertices =
+                IntStream.range(0, N).mapToObj(x -> supplier.get()).collect(Collectors.toSet());
             VertexToIntegerMapping<String> mapping = new VertexToIntegerMapping<>(vertices);
 
             Map<String, Integer> vertexMap = mapping.getVertexMap();
@@ -73,7 +77,7 @@ public class VertexToIntegerMappingTest {
                 Assert.assertEquals(i, vertexMap.get(indexList.get(i)).intValue());
             }
 
-            for (Map.Entry<String, Integer> entry: vertexMap.entrySet()){
+            for (Map.Entry<String, Integer> entry : vertexMap.entrySet()) {
                 Assert.assertEquals(indexList.get(entry.getValue()), entry.getKey());
             }
         }

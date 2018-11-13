@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.*;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * 
@@ -32,7 +32,9 @@ import org.junit.*;
  * 
  * @author Assaf Mizrachi
  */
-public class BhandariKDisjointShortestPathsTest extends KDisjointShortestPathsTestCase
+public class BhandariKDisjointShortestPathsTest
+    extends
+    KDisjointShortestPathsTestCase
 {
 
     /**

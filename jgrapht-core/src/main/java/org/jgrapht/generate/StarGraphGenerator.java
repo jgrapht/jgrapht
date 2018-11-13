@@ -46,7 +46,7 @@ public class StarGraphGenerator<V, E>
      */
     public StarGraphGenerator(int order)
     {
-        if (order < 0) { 
+        if (order < 0) {
             throw new IllegalArgumentException("Order must be non-negative");
         }
         this.order = order;
@@ -74,4 +74,3 @@ public class StarGraphGenerator<V, E>
         }
     }
 }
-

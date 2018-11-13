@@ -89,4 +89,3 @@ public class LinearGraphGenerator<V, E>
         }
     }
 }
-

@@ -22,11 +22,11 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.io.*;
 import org.jgrapht.io.GraphMLExporter.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in
@@ -294,7 +294,7 @@ public final class GraphMLDemo
             public CustomVertex get()
             {
                 return new CustomVertex(
-                        String.valueOf(id++), GENERATOR.nextBoolean() ? Color.BLACK : Color.WHITE);
+                    String.valueOf(id++), GENERATOR.nextBoolean() ? Color.BLACK : Color.WHITE);
             }
         };
 
@@ -302,8 +302,8 @@ public final class GraphMLDemo
          * Generate the complete graph. Vertices have random colors and edges have random edge
          * weights.
          */
-        Graph<CustomVertex, DefaultWeightedEdge> graph1 =
-                new DirectedWeightedPseudograph<>(vSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
+        Graph<CustomVertex, DefaultWeightedEdge> graph1 = new DirectedWeightedPseudograph<>(
+            vSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
 
         CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
             new CompleteGraphGenerator<>(SIZE);

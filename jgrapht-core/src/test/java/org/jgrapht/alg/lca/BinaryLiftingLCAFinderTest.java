@@ -17,20 +17,24 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Tests for the {@link BinaryLiftingLCAFinder}
  *
  * @author Alexandru Valeanu
  */
-public class BinaryLiftingLCAFinderTest extends LCATreeTestBase {
+public class BinaryLiftingLCAFinderTest
+    extends
+    LCATreeTestBase
+{
 
     @Override
-    <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots) {
+    <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots)
+    {
         return new BinaryLiftingLCAFinder<>(graph, roots);
     }
 }

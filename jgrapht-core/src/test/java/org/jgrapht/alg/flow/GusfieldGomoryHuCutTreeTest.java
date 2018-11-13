@@ -25,7 +25,8 @@ import org.jgrapht.graph.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class for the GusfieldGomoryHuCutTree implementation
@@ -73,9 +74,8 @@ public class GusfieldGomoryHuCutTreeTest
 
                 // Check cut weights
                 double expectedCutWeight = minimumSTCutAlgorithm.calculateMinCut(i, j);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j), 0);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i), 0);
-                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(), 0);
+                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(i, j), 0);
+                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(j, i), 0);
                 assertEquals(expectedCutWeight, alg.calculateMinCut(j, i), 0);
                 assertEquals(expectedCutWeight, alg.calculateMinCut(i, j), 0);
                 assertEquals(expectedCutWeight, alg.getCutCapacity(), 0);

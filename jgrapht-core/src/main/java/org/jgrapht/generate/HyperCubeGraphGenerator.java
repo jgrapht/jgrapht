@@ -82,4 +82,3 @@ public class HyperCubeGraphGenerator<V, E>
         }
     }
 }
-

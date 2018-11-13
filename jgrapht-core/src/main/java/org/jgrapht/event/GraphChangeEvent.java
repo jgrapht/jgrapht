@@ -57,4 +57,3 @@ public class GraphChangeEvent
         return type;
     }
 }
-

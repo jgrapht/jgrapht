@@ -24,7 +24,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 public class EdmondsKarpMFImplTest
     extends
@@ -67,7 +67,7 @@ public class EdmondsKarpMFImplTest
             simple.setEdgeWeight(e, 1.0);
             MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMFImpl<>(simple);
-            Map<DefaultWeightedEdge, Double> flow = solver.getMaximumFlow(0, 1).getFlow();
+            Map<DefaultWeightedEdge, Double> flow = solver.getMaximumFlow(0, 1).getFlowMap();
             flow.put(e, 25.0);
             fail();
         } catch (UnsupportedOperationException ex) {
@@ -109,4 +109,3 @@ public class EdmondsKarpMFImplTest
         }
     }
 }
-

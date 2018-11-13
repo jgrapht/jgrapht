@@ -283,4 +283,3 @@ public abstract class AbstractGraph<V, E>
         return true;
     }
 }
-

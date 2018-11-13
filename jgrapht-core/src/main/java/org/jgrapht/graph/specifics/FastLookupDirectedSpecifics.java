@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
@@ -45,49 +45,6 @@ public class FastLookupDirectedSpecifics<V, E>
      * edges which touch both u and v are included in the set.
      */
     protected Map<Pair<V, V>, Set<E>> touchingVerticesToEdgeMap;
-
-    /**
-     * Construct a new fast lookup directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public FastLookupDirectedSpecifics(Graph<V, E> graph)
-    {
-        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
-
-    /**
-     * Construct a new fast lookup directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public FastLookupDirectedSpecifics(
-        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
-    {
-        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
-
-    /**
-     * Construct a new fast lookup directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
-     *        iteration order.
-     * @param edgeSetFactory factory for the creation of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public FastLookupDirectedSpecifics(
-        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
-        EdgeSetFactory<V, E> edgeSetFactory)
-    {
-        this(graph, vertexMap, new HashMap<>(), edgeSetFactory);
-    }
 
     /**
      * Construct a new fast lookup directed specifics.

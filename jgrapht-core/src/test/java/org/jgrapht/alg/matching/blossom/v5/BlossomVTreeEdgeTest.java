@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
 import static org.junit.Assert.*;
@@ -35,15 +31,20 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class BlossomVTreeEdgeTest {
+public class BlossomVTreeEdgeTest
+{
 
     @Test
-    public void testGetCurrentPlusMinusHeap() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testGetCurrentPlusMinusHeap()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
-        BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomVOptions(NONE));
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
+        BlossomVState<Integer, DefaultWeightedEdge> state =
+            initializer.initialize(new BlossomVOptions(NONE));
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
 
         BlossomVNode node1 = vertexMap.get(1);
@@ -58,14 +59,18 @@ public class BlossomVTreeEdgeTest {
     }
 
     @Test
-    public void testRemoveFromTreeEdgeList() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testRemoveFromTreeEdgeList()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         Graphs.addEdgeWithVertices(graph, 1, 3, 0);
         Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
-        BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(new BlossomVOptions(NONE));
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
+        BlossomVState<Integer, DefaultWeightedEdge> state =
+            initializer.initialize(new BlossomVOptions(NONE));
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
 
         BlossomVNode node1 = vertexMap.get(1);
@@ -86,14 +91,22 @@ public class BlossomVTreeEdgeTest {
 
         treeEdge12.removeFromTreeEdgeList();
 
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge13)), BlossomVDebugger.getTreeEdgesOf(tree1));
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), BlossomVDebugger.getTreeEdgesOf(tree2));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(treeEdge13)),
+            BlossomVDebugger.getTreeEdgesOf(tree1));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(treeEdge23)),
+            BlossomVDebugger.getTreeEdgesOf(tree2));
 
         treeEdge13.removeFromTreeEdgeList();
 
         assertTrue(BlossomVDebugger.getTreeEdgesOf(tree1).isEmpty());
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), BlossomVDebugger.getTreeEdgesOf(tree2));
-        assertEquals(new HashSet<>(Collections.singletonList(treeEdge23)), BlossomVDebugger.getTreeEdgesOf(tree3));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(treeEdge23)),
+            BlossomVDebugger.getTreeEdgesOf(tree2));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(treeEdge23)),
+            BlossomVDebugger.getTreeEdgesOf(tree3));
 
         treeEdge23.removeFromTreeEdgeList();
 

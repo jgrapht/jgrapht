@@ -33,7 +33,7 @@ public final class GraphBuilderDemo
      * 
      * @param args command line arguments
      */
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
         Graph<Integer, DefaultEdge> kite = buildKiteGraph();
     }
@@ -43,31 +43,26 @@ public final class GraphBuilderDemo
      *
      * @return a modifiable empty graph instance
      */
-    //@example:buildType:begin
+    // @example:buildType:begin
     private static Graph<Integer, DefaultEdge> buildEmptySimpleGraph()
     {
-        return GraphTypeBuilder.<Integer, DefaultEdge>undirected().
-            allowingMultipleEdges(false).allowingSelfLoops(false).
-            edgeClass(DefaultEdge.class).weighted(false).buildGraph();
+        return GraphTypeBuilder
+            .<Integer, DefaultEdge> undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).edgeClass(DefaultEdge.class).weighted(false).buildGraph();
     }
-    //@example:buildType:end
-
+    // @example:buildType:end
 
     /**
      * Builds the <a href="http://mathworld.wolfram.com/KiteGraph.html">kite graph</a>.
      *
      * @return an unmodifiable instance of the kite graph
      */
-    //@example:buildEdges:begin
+    // @example:buildEdges:begin
     private static Graph<Integer, DefaultEdge> buildKiteGraph()
     {
-        return new GraphBuilder<>(buildEmptySimpleGraph()).
-            addEdgeChain(1, 2, 3, 4, 1).
-            addEdge(2, 4).
-            addEdge(3, 5).buildAsUnmodifiable();
+        return new GraphBuilder<>(buildEmptySimpleGraph())
+            .addEdgeChain(1, 2, 3, 4, 1).addEdge(2, 4).addEdge(3, 5).buildAsUnmodifiable();
     }
-    //@example:buildEdges:end
+    // @example:buildEdges:end
 
-    
 }
-

@@ -17,9 +17,7 @@
  */
 package org.jgrapht.util;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Sorts the specified list of integers into ascending order using the Radix Sort method.
@@ -30,7 +28,8 @@ import java.util.ListIterator;
  *
  * The specified list must be modifiable, but need not be resizable.
  */
-public class RadixSort {
+public class RadixSort
+{
 
     public static int CUT_OFF = 40;
 
@@ -42,10 +41,12 @@ public class RadixSort {
     private static int[] count = new int[SIZE_RADIX];
 
     // Suppresses default constructor, ensuring non-instantiability.
-    private RadixSort(){
+    private RadixSort()
+    {
     }
 
-    private static void radixSort(int array[], int n, int tempArray[], int cnt[]) {
+    private static void radixSort(int array[], int n, int tempArray[], int cnt[])
+    {
         for (int d = 0, shift = 0; d < MAX_D; d++, shift += (MAX_DIGITS / MAX_D)) {
             Arrays.fill(cnt, 0);
 
@@ -67,14 +68,15 @@ public class RadixSort {
      *
      * @param list the input list of integers
      */
-    public static void sort(List<Integer> list){
-        if (list == null){
+    public static void sort(List<Integer> list)
+    {
+        if (list == null) {
             return;
         }
 
         final int n = list.size();
 
-        if (n <= CUT_OFF){
+        if (n <= CUT_OFF) {
             list.sort(null);
             return;
         }
@@ -83,14 +85,14 @@ public class RadixSort {
 
         ListIterator<Integer> listIterator = list.listIterator();
 
-        while (listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             array[listIterator.nextIndex()] = listIterator.next();
         }
         radixSort(array, n, new int[n], count);
 
         listIterator = list.listIterator();
 
-        while (listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             listIterator.next();
             listIterator.set(array[listIterator.previousIndex()]);
         }

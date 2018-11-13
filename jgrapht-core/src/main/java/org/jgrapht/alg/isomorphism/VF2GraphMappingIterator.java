@@ -95,4 +95,3 @@ class VF2GraphMappingIterator<V, E>
         }
     }
 }
-

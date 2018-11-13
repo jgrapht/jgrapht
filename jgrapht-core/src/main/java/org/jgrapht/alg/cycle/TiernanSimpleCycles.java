@@ -62,6 +62,7 @@ public class TiernanSimpleCycles<V, E>
 
     /**
      * Get the graph
+     * 
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -71,6 +72,7 @@ public class TiernanSimpleCycles<V, E>
 
     /**
      * Set the graph
+     * 
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -175,4 +177,3 @@ public class TiernanSimpleCycles<V, E>
         return cycles;
     }
 }
-

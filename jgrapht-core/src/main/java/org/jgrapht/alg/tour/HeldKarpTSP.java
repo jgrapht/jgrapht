@@ -17,12 +17,10 @@
  */
 package org.jgrapht.alg.tour;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.VertexToIntegerMapping;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -179,9 +177,12 @@ public class HeldKarpTSP<V, E>
         for (int step = 1; step < n; step++) {
             int nextNode = -1;
             for (int node = 1; node < n; node++) {
-                if ((lastState & (1 << node)) == 0 && W[lastNode][node] != Double.MAX_VALUE &&
-                        C[node][lastState ^ (1 << node)] != Double.MIN_VALUE &&
-                        Double.compare(C[node][lastState ^ (1 << node)] + W[lastNode][node], C[lastNode][lastState]) == 0) {
+                if ((lastState & (1 << node)) == 0 && W[lastNode][node] != Double.MAX_VALUE
+                    && C[node][lastState ^ (1 << node)] != Double.MIN_VALUE
+                    && Double.compare(
+                        C[node][lastState ^ (1 << node)] + W[lastNode][node],
+                        C[lastNode][lastState]) == 0)
+                {
                     nextNode = node;
                     break;
                 }

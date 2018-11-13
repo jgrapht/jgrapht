@@ -245,4 +245,3 @@ class GraphOrdering<V, E>
         }
     }
 }
-

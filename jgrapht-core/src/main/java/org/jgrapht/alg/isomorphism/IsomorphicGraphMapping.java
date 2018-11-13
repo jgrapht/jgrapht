@@ -17,8 +17,7 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphMapping;
+import org.jgrapht.*;
 
 import java.util.*;
 
@@ -32,7 +31,10 @@ import java.util.*;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
+public class IsomorphicGraphMapping<V, E>
+    implements
+    GraphMapping<V, E>
+{
 
     public static final int NULL_NODE = -1;
 
@@ -50,14 +52,16 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      * @param core1 the mapping as array (forwards)
      * @param core2 the mapping as array (backwards)
      */
-    public IsomorphicGraphMapping(GraphOrdering<V, E> g1, GraphOrdering<V, E> g2, int[] core1, int[] core2) {
+    public IsomorphicGraphMapping(
+        GraphOrdering<V, E> g1, GraphOrdering<V, E> g2, int[] core1, int[] core2)
+    {
         this.graph1 = g1.getGraph();
         this.graph2 = g2.getGraph();
 
         this.forwardMapping = new HashMap<>(this.graph1.vertexSet().size());
         this.backwardMapping = new HashMap<>(this.graph1.vertexSet().size());
 
-        for (V v: graph1.vertexSet()){
+        for (V v : graph1.vertexSet()) {
             int vNumber = g1.getVertexNumber(v);
             int uNumber = core1[vNumber];
 
@@ -66,7 +70,7 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
             }
         }
 
-        for (V v: graph2.vertexSet()){
+        for (V v : graph2.vertexSet()) {
             int vNumber = g2.getVertexNumber(v);
             int uNumber = core2[vNumber];
 
@@ -83,9 +87,11 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      * @param backwardMapping the mapping from graph2 to graph1 (inverse of forwardMapping)
      * @param graph1 the first graph
      * @param graph2 the second graph
-
+     * 
      */
-    public IsomorphicGraphMapping(Map<V, V> forwardMapping, Map<V, V> backwardMapping, Graph<V, E> graph1, Graph<V, E> graph2) {
+    public IsomorphicGraphMapping(
+        Map<V, V> forwardMapping, Map<V, V> backwardMapping, Graph<V, E> graph1, Graph<V, E> graph2)
+    {
         this.forwardMapping = Objects.requireNonNull(forwardMapping);
         this.backwardMapping = Objects.requireNonNull(backwardMapping);
 
@@ -94,7 +100,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     @Override
-    public V getVertexCorrespondence(V v, boolean forward) {
+    public V getVertexCorrespondence(V v, boolean forward)
+    {
         if (forward)
             return forwardMapping.get(v);
         else
@@ -102,7 +109,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     @Override
-    public E getEdgeCorrespondence(E e, boolean forward) {
+    public E getEdgeCorrespondence(E e, boolean forward)
+    {
         Graph<V, E> fromGraph;
         Graph<V, E> toGraph;
 
@@ -119,12 +127,12 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
         V v = fromGraph.getEdgeTarget(e);
 
         V uu = getVertexCorrespondence(u, forward);
-        if (uu == null){
+        if (uu == null) {
             return null;
         }
 
         V vv = getVertexCorrespondence(v, forward);
-        if (vv == null){
+        if (vv == null) {
             return null;
         }
 
@@ -136,7 +144,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      *
      * @return the unmodifiable forward mapping function
      */
-    public Map<V, V> getForwardMapping(){
+    public Map<V, V> getForwardMapping()
+    {
         return Collections.unmodifiableMap(forwardMapping);
     }
 
@@ -145,7 +154,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      *
      * @return the unmodifiable backward mapping function
      */
-    public Map<V, V> getBackwardMapping(){
+    public Map<V, V> getBackwardMapping()
+    {
         return Collections.unmodifiableMap(backwardMapping);
     }
 
@@ -154,7 +164,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      *
      * @return the set of vertices $v$ for which the mapping is defined
      */
-    public Set<V> getMappingDomain(){
+    public Set<V> getMappingDomain()
+    {
         return Collections.unmodifiableSet(forwardMapping.keySet());
     }
 
@@ -163,7 +174,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      *
      * @return the set of vertices $v$ for which a preimage exists
      */
-    public Set<V> getMappingRange(){
+    public Set<V> getMappingRange()
+    {
         return Collections.unmodifiableSet(backwardMapping.keySet());
     }
 
@@ -190,20 +202,24 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         IsomorphicGraphMapping<?, ?> that = (IsomorphicGraphMapping<?, ?>) o;
-        return Objects.equals(forwardMapping, that.forwardMapping) &&
-                Objects.equals(backwardMapping, that.backwardMapping) &&
-                graph1 == that.graph1 &&
-                graph2 == that.graph2;
+        return Objects.equals(forwardMapping, that.forwardMapping)
+            && Objects.equals(backwardMapping, that.backwardMapping) && graph1 == that.graph1
+            && graph2 == that.graph2;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(forwardMapping, backwardMapping,
-                System.identityHashCode(graph1), System.identityHashCode(graph2));
+    public int hashCode()
+    {
+        return Objects.hash(
+            forwardMapping, backwardMapping, System.identityHashCode(graph1),
+            System.identityHashCode(graph2));
     }
 
     @Override
@@ -228,26 +244,23 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     /**
-     * Determines whether this mapping is indeed a valid isomorphic mapping
-     * between the first graph and the second graph.  Note that this method
-     * will return false for a homomorphism returned by a subgraph isomorphism
-     * inspector unless the resulting mapping happens to be bijective as well
-     * (mapping all of the vertices and edges from the first graph to the
-     * second graph and vice versa).
+     * Determines whether this mapping is indeed a valid isomorphic mapping between the first graph
+     * and the second graph. Note that this method will return false for a homomorphism returned by
+     * a subgraph isomorphism inspector unless the resulting mapping happens to be bijective as well
+     * (mapping all of the vertices and edges from the first graph to the second graph and vice
+     * versa).
      *
-     * @return true iff this mapping is a valid isomorphism between
-     * the two graphs
+     * @return true iff this mapping is a valid isomorphism between the two graphs
      */
-    public boolean isValidIsomorphism() {
+    public boolean isValidIsomorphism()
+    {
         for (V v : graph1.vertexSet()) {
-            if (!forwardMapping.containsKey(v) ||
-                    !graph2.containsVertex(forwardMapping.get(v)))
+            if (!forwardMapping.containsKey(v) || !graph2.containsVertex(forwardMapping.get(v)))
                 return false;
         }
 
         for (V v : graph2.vertexSet()) {
-            if (!backwardMapping.containsKey(v) ||
-                    !graph1.containsVertex(backwardMapping.get(v)))
+            if (!backwardMapping.containsKey(v) || !graph1.containsVertex(backwardMapping.get(v)))
                 return false;
         }
 
@@ -278,7 +291,8 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
      * @param rel the corresponding mapping
      * @return do both relations map to the same vertices
      */
-    public boolean isEqualMapping(GraphMapping<V, E> rel) {
+    public boolean isEqualMapping(GraphMapping<V, E> rel)
+    {
         for (V v : graph2.vertexSet()) {
             if (!getVertexCorrespondence(v, false).equals(rel.getVertexCorrespondence(v, false))) {
                 return false;
@@ -289,23 +303,25 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     /**
-     * Computes the composition of two isomorphisms.
-     * Let $f : V_{G_1} \rightarrow V_{G_2}$ be an isomorphism from $V_{G_1}$ to $V_{G_2}$ and
-     * $g : V_{G_2} \rightarrow V_{G_3}$ one from $V_{G_2}$ to $V_{G_3}$.
+     * Computes the composition of two isomorphisms. Let $f : V_{G_1} \rightarrow V_{G_2}$ be an
+     * isomorphism from $V_{G_1}$ to $V_{G_2}$ and $g : V_{G_2} \rightarrow V_{G_3}$ one from
+     * $V_{G_2}$ to $V_{G_3}$.
      *
-     * This method computes an isomorphism $h : V_{G_1} \rightarrow V_{G_3}$ from $V_{G_1}$ to $V_{G_3}$.
+     * This method computes an isomorphism $h : V_{G_1} \rightarrow V_{G_3}$ from $V_{G_1}$ to
+     * $V_{G_3}$.
      *
-     * Note: The composition $g ∘ f$ can be built only if $f$'s codomain equals $g$'s domain;
-     * this implementation only requires that the former is a subset of the latter.
+     * Note: The composition $g ∘ f$ can be built only if $f$'s codomain equals $g$'s domain; this
+     * implementation only requires that the former is a subset of the latter.
      *
      * @param otherMapping the other isomorphism (i.e. function $g$)
      * @return the composition of the two isomorphism
      */
-    public IsomorphicGraphMapping<V, E> compose(IsomorphicGraphMapping<V, E> otherMapping){
+    public IsomorphicGraphMapping<V, E> compose(IsomorphicGraphMapping<V, E> otherMapping)
+    {
         Map<V, V> fMap = new HashMap<>(forwardMapping.size());
         Map<V, V> bMap = new HashMap<>(forwardMapping.size());
 
-        for (V v: graph1.vertexSet()){
+        for (V v : graph1.vertexSet()) {
             V u = otherMapping.getVertexCorrespondence(forwardMapping.get(v), true);
             fMap.put(v, u);
             bMap.put(u, v);
@@ -315,18 +331,20 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
     }
 
     /**
-     * Computes an identity automorphism (i.e. a self-mapping of a graph in which each vertex also maps to itself).
+     * Computes an identity automorphism (i.e. a self-mapping of a graph in which each vertex also
+     * maps to itself).
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a mapping from graph to graph
      */
-    public static <V, E> IsomorphicGraphMapping<V, E> identity(Graph<V, E> graph){
+    public static <V, E> IsomorphicGraphMapping<V, E> identity(Graph<V, E> graph)
+    {
         Map<V, V> fMap = new HashMap<>(graph.vertexSet().size());
         Map<V, V> bMap = new HashMap<>(graph.vertexSet().size());
 
-        for (V v: graph.vertexSet()){
+        for (V v : graph.vertexSet()) {
             fMap.put(v, v);
             bMap.put(v, v);
         }
@@ -334,4 +352,3 @@ public class IsomorphicGraphMapping<V, E> implements GraphMapping<V, E> {
         return new IsomorphicGraphMapping<>(fMap, bMap, graph, graph);
     }
 }
-

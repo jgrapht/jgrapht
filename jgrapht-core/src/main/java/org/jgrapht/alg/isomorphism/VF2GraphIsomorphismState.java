@@ -201,4 +201,3 @@ class VF2GraphIsomorphismState<V, E>
         }
     }
 }
-

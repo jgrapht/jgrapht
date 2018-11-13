@@ -92,4 +92,3 @@ public class CompleteGraphGenerator<V, E>
         }
     }
 }
-

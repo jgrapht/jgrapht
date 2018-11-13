@@ -20,7 +20,6 @@ package org.jgrapht.alg.matching;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
@@ -115,7 +114,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         generator.generateGraph(target);
 
         return new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(
-                target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).getMatching();
+            target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).getMatching();
     }
 
     @Test

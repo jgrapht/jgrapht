@@ -17,10 +17,9 @@
  */
 package org.jgrapht.opt.graph.fastutil;
 
-import org.jgrapht.graph.DefaultGraphType;
-import org.jgrapht.graph.IncomingOutgoingEdgesTest;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 /**
  * Tests for {@link FastutilMapGraph}.

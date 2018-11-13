@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jheaps.MergeableAddressableHeap;
+import org.jheaps.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
@@ -25,33 +25,36 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.INFINITY;
 
 /**
- * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates, thus
- * increasing the dual objective function value and creating new tight edges.
+ * This class is used by {@link KolmogorovMinimumWeightPerfectMatching} to perform dual updates,
+ * thus increasing the dual objective function value and creating new tight edges.
  * <p>
- * This class currently supports three types of dual updates: single tree, multiple trees fixed delta, and
- * multiple tree variable delta. The first one is used to updates duals of a single tree, when at least one
- * of the {@link BlossomVOptions#updateDualsBefore} or {@link BlossomVOptions#updateDualsAfter} is true.
- * The latter two are used to update the duals globally and are defined by the {@link BlossomVOptions}.
+ * This class currently supports three types of dual updates: single tree, multiple trees fixed
+ * delta, and multiple tree variable delta. The first one is used to updates duals of a single tree,
+ * when at least one of the {@link BlossomVOptions#updateDualsBefore} or
+ * {@link BlossomVOptions#updateDualsAfter} is true. The latter two are used to update the duals
+ * globally and are defined by the {@link BlossomVOptions}.
  * <p>
- * There are two type of constraints on a dual change of a tree: in-tree and cross-tree. In-tree constraints
- * are imposed by the infinity edges, (+, +) in-tree edges and "-" blossoms. Cross-tree constraints are
- * imposed by (+, +), (+, -) and (-, +) cross-tree edges. With respect to this classification of constraints
- * the following strategies of changing the duals can be used:
+ * There are two type of constraints on a dual change of a tree: in-tree and cross-tree. In-tree
+ * constraints are imposed by the infinity edges, (+, +) in-tree edges and "-" blossoms. Cross-tree
+ * constraints are imposed by (+, +), (+, -) and (-, +) cross-tree edges. With respect to this
+ * classification of constraints the following strategies of changing the duals can be used:
  * <ul>
  * <li>Single tree strategy greedily increases the duals of the tree with respect to the in-tree and
- * cross-tree constraints. This can result in a zero-change update. If a tight (+, +) cross-tree edge
+ * cross-tree constraints. This can result in a zero-change update. If a tight (+, +) cross-tree
+ * edge is encountered during this operation, an immediate augmentation is performed
+ * afterwards.</li>
+ *
+ * <li>Multiple tree fixed delta approach considers only in-tree constraints and constraints imposed
+ * by the (+, +) cross-tree edges. Since this approach increases the trees' epsilons by the same
+ * amount, it doesn't need to consider other two dual constraints. If a tight (+, +) cross-tree edge
  * is encountered during this operation, an immediate augmentation is performed afterwards.</li>
  *
- * <li>Multiple tree fixed delta approach considers only in-tree constraints and constraints imposed by
- * the (+, +) cross-tree edges. Since this approach increases the trees' epsilons by the same amount,
- * it doesn't need to consider other two dual constraints. If a tight (+, +) cross-tree edge
- * is encountered during this operation, an immediate augmentation is performed afterwards.</li>
- *
- * <li>Multiple tree variable delta approach considers all types of constraints. It determines a connected
- * components in the auxiliary graph, where only tight (-, +) and (+, -) cross-tree edges are present. For
- * these connected components it computes the same dual change, therefore the constraints imposed by the
- * (-, +) and (+, -) cross-tree edges can't be violated. If a tight (+, +) cross-tree edge
- * is encountered during this operation, an immediate augmentation is performed afterwards.</li>
+ * <li>Multiple tree variable delta approach considers all types of constraints. It determines a
+ * connected components in the auxiliary graph, where only tight (-, +) and (+, -) cross-tree edges
+ * are present. For these connected components it computes the same dual change, therefore the
+ * constraints imposed by the (-, +) and (+, -) cross-tree edges can't be violated. If a tight (+,
+ * +) cross-tree edge is encountered during this operation, an immediate augmentation is performed
+ * afterwards.</li>
  * </ul>
  *
  * @param <V> the graph vertex type
@@ -60,7 +63,8 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfect
  * @see BlossomVPrimalUpdater
  * @see KolmogorovMinimumWeightPerfectMatching
  */
-class BlossomVDualUpdater<V, E> {
+class BlossomVDualUpdater<V, E>
+{
     /**
      * State information needed for the algorithm
      */
@@ -74,10 +78,12 @@ class BlossomVDualUpdater<V, E> {
     /**
      * Creates a new instance of the BlossomVDualUpdater
      *
-     * @param state         the state common to {@link BlossomVPrimalUpdater}, {@link BlossomVDualUpdater} and {@link KolmogorovMinimumWeightPerfectMatching}
+     * @param state the state common to {@link BlossomVPrimalUpdater}, {@link BlossomVDualUpdater}
+     *        and {@link KolmogorovMinimumWeightPerfectMatching}
      * @param primalUpdater primal updater used by the algorithm
      */
-    public BlossomVDualUpdater(BlossomVState<V, E> state, BlossomVPrimalUpdater<V, E> primalUpdater) {
+    public BlossomVDualUpdater(BlossomVState<V, E> state, BlossomVPrimalUpdater<V, E> primalUpdater)
+    {
         this.state = state;
         this.primalUpdater = primalUpdater;
     }
@@ -89,16 +95,20 @@ class BlossomVDualUpdater<V, E> {
      * @param type the strategy to use for updating the duals
      * @return the sum of all changes of dual variables of the trees
      */
-    public double updateDuals(BlossomVOptions.DualUpdateStrategy type) {
+    public double updateDuals(BlossomVOptions.DualUpdateStrategy type)
+    {
         long start = System.nanoTime();
 
         BlossomVEdge augmentEdge = null;
         if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Start updating duals");
         }
-        // go through all tree roots and determine the initial tree dual change wrt. in-tree constraints
+        // go through all tree roots and determine the initial tree dual change wrt. in-tree
+        // constraints
         // the cross-tree constraints are handles wrt. dual update strategy
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             BlossomVTree tree = root.tree;
             double eps = getEps(tree);
             tree.accumulatedEps = eps - tree.eps;
@@ -111,15 +121,20 @@ class BlossomVDualUpdater<V, E> {
 
         double dualChange = 0;
         // add tree.accumulatedEps to the tree.eps
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             if (root.tree.accumulatedEps > EPS) {
                 dualChange += root.tree.accumulatedEps;
                 root.tree.eps += root.tree.accumulatedEps;
             }
         }
         if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
-            for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
-                System.out.println("Updating duals: now eps of " + root.tree + " is " + (root.tree.eps));
+            for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+                root = root.treeSiblingNext)
+            {
+                System.out
+                    .println("Updating duals: now eps of " + root.tree + " is " + (root.tree.eps));
             }
         }
         state.statistics.dualUpdatesTime += System.nanoTime() - start;
@@ -130,15 +145,17 @@ class BlossomVDualUpdater<V, E> {
     }
 
     /**
-     * Computes and returns the value which can be assigned to the {@code tree.eps} so that it doesn't violate
-     * in-tree constraints. In other words, {@code getEps(tree) - tree.eps} is the resulting dual change wrt. in-tree
-     * constraints. The computed value is always greater than or equal to the {@code tree.eps}, can violate the cross-tree
-     * constraints, and can be equal to {@link KolmogorovMinimumWeightPerfectMatching#INFINITY}.
+     * Computes and returns the value which can be assigned to the {@code tree.eps} so that it
+     * doesn't violate in-tree constraints. In other words, {@code getEps(tree) - tree.eps} is the
+     * resulting dual change wrt. in-tree constraints. The computed value is always greater than or
+     * equal to the {@code tree.eps}, can violate the cross-tree constraints, and can be equal to
+     * {@link KolmogorovMinimumWeightPerfectMatching#INFINITY}.
      *
      * @param tree the tree to process
      * @return a value which can be safely assigned to tree.eps
      */
-    private double getEps(BlossomVTree tree) {
+    private double getEps(BlossomVTree tree)
+    {
         double eps = KolmogorovMinimumWeightPerfectMatching.INFINITY;
         // check minimum slack of the plus-infinity edges
         if (!tree.plusInfinityEdges.isEmpty()) {
@@ -166,33 +183,42 @@ class BlossomVDualUpdater<V, E> {
     }
 
     /**
-     * Updates the duals of the single tree. This method takes into account both in-tree and cross-tree constraints.
-     * If possible, it also finds a cross-tree (+, +) edge of minimum slack and performs an augmentation.
+     * Updates the duals of the single tree. This method takes into account both in-tree and
+     * cross-tree constraints. If possible, it also finds a cross-tree (+, +) edge of minimum slack
+     * and performs an augmentation.
      *
      * @param tree the tree to update duals of
-     * @return true iff some progress was made and there was no augmentation performed, false otherwise
+     * @return true iff some progress was made and there was no augmentation performed, false
+     *         otherwise
      */
-    public boolean updateDualsSingle(BlossomVTree tree) {
+    public boolean updateDualsSingle(BlossomVTree tree)
+    {
         long start = System.nanoTime();
 
-        double eps = getEps(tree);  // include only constraints on (+,+) in-tree edges, (+, inf) edges and "-' blossoms
-        double epsAugment = KolmogorovMinimumWeightPerfectMatching.INFINITY; // takes into account constraints of the cross-tree edges
+        double eps = getEps(tree); // include only constraints on (+,+) in-tree edges, (+, inf)
+                                   // edges and "-' blossoms
+        double epsAugment = KolmogorovMinimumWeightPerfectMatching.INFINITY; // takes into account
+                                                                             // constraints of the
+                                                                             // cross-tree edges
         BlossomVEdge augmentEdge = null; // the (+, +) cross-tree edge of minimum slack
         double delta = 0;
-        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator();
+            iterator.hasNext();)
+        {
             BlossomVTreeEdge treeEdge = iterator.next();
             BlossomVTree opposite = treeEdge.head[iterator.getCurrentDirection()];
-            if (!treeEdge.plusPlusEdges.isEmpty()){
+            if (!treeEdge.plusPlusEdges.isEmpty()) {
                 BlossomVEdge plusPlusEdge = treeEdge.plusPlusEdges.findMin().getValue();
-                if(plusPlusEdge.slack - opposite.eps < epsAugment){
+                if (plusPlusEdge.slack - opposite.eps < epsAugment) {
                     epsAugment = plusPlusEdge.slack - opposite.eps;
                     augmentEdge = plusPlusEdge;
                 }
             }
-            MergeableAddressableHeap<Double, BlossomVEdge> currentPlusMinusHeap = treeEdge.getCurrentPlusMinusHeap(opposite.currentDirection);
-            if (!currentPlusMinusHeap.isEmpty()){
+            MergeableAddressableHeap<Double, BlossomVEdge> currentPlusMinusHeap =
+                treeEdge.getCurrentPlusMinusHeap(opposite.currentDirection);
+            if (!currentPlusMinusHeap.isEmpty()) {
                 BlossomVEdge edge = currentPlusMinusHeap.findMin().getValue();
-                if(edge.slack + opposite.eps < eps){
+                if (edge.slack + opposite.eps < eps) {
                     eps = edge.slack + opposite.eps;
 
                 }
@@ -203,7 +229,8 @@ class BlossomVDualUpdater<V, E> {
         }
         // now eps takes into account all the constraints
         if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
-            throw new IllegalArgumentException(KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
+            throw new IllegalArgumentException(
+                KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
         }
         if (eps > tree.eps) {
             delta = eps - tree.eps;
@@ -226,19 +253,24 @@ class BlossomVDualUpdater<V, E> {
     /**
      * Updates the duals via connected components. The connected components are a set of trees which
      * are connected via tight (+, -) cross tree edges. For these components the same dual change is
-     * chosen. As a result, the circular constraints are guaranteed to be avoided. This is the point where
-     * the {@link BlossomVDualUpdater#updateDualsSingle} approach can fail.
+     * chosen. As a result, the circular constraints are guaranteed to be avoided. This is the point
+     * where the {@link BlossomVDualUpdater#updateDualsSingle} approach can fail.
      */
-    private BlossomVEdge updateDualsConnectedComponents() {
+    private BlossomVEdge updateDualsConnectedComponents()
+    {
         BlossomVTree dummyTree = new BlossomVTree();
         BlossomVEdge augmentEdge = null;
         double augmentEps = INFINITY;
 
         double oppositeEps;
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             root.tree.nextTree = null;
         }
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             BlossomVTree startTree = root.tree;
             if (startTree.nextTree != null) {
                 // this tree is present in some connected component and has been processed already
@@ -251,7 +283,9 @@ class BlossomVDualUpdater<V, E> {
 
             BlossomVTree currentTree = startTree;
             while (true) {
-                for (BlossomVTree.TreeEdgeIterator iterator = currentTree.treeEdgeIterator(); iterator.hasNext(); ) {
+                for (BlossomVTree.TreeEdgeIterator iterator = currentTree.treeEdgeIterator();
+                    iterator.hasNext();)
+                {
                     BlossomVTreeEdge currentEdge = iterator.next();
                     int dir = iterator.getCurrentDirection();
                     BlossomVTree opposite = currentEdge.head[dir];
@@ -259,7 +293,8 @@ class BlossomVDualUpdater<V, E> {
                     int dirRev = 1 - dir;
 
                     if (!currentEdge.plusPlusEdges.isEmpty()) {
-                        plusPlusEps = currentEdge.plusPlusEdges.findMin().getKey() - currentTree.eps - opposite.eps;
+                        plusPlusEps = currentEdge.plusPlusEdges.findMin().getKey() - currentTree.eps
+                            - opposite.eps;
                         if (augmentEps > plusPlusEps) {
                             augmentEps = plusPlusEps;
                             augmentEdge = currentEdge.plusPlusEdges.findMin().getValue();
@@ -278,22 +313,30 @@ class BlossomVDualUpdater<V, E> {
                     double[] plusMinusEps = new double[2];
                     plusMinusEps[dir] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                     if (!currentEdge.getCurrentPlusMinusHeap(dir).isEmpty()) {
-                        plusMinusEps[dir] = currentEdge.getCurrentPlusMinusHeap(dir).findMin().getKey() - currentTree.eps + opposite.eps;
+                        plusMinusEps[dir] =
+                            currentEdge.getCurrentPlusMinusHeap(dir).findMin().getKey()
+                                - currentTree.eps + opposite.eps;
                     }
                     plusMinusEps[dirRev] = KolmogorovMinimumWeightPerfectMatching.INFINITY;
                     if (!currentEdge.getCurrentPlusMinusHeap(dirRev).isEmpty()) {
-                        plusMinusEps[dirRev] = currentEdge.getCurrentPlusMinusHeap(dirRev).findMin().getKey() - opposite.eps + currentTree.eps;
+                        plusMinusEps[dirRev] =
+                            currentEdge.getCurrentPlusMinusHeap(dirRev).findMin().getKey()
+                                - opposite.eps + currentTree.eps;
                     }
                     if (opposite.nextTree == dummyTree) {
-                        // opposite tree is in another connected component and has valid accumulated eps
+                        // opposite tree is in another connected component and has valid accumulated
+                        // eps
                         oppositeEps = opposite.accumulatedEps;
                     } else if (plusMinusEps[0] > 0 && plusMinusEps[1] > 0) {
-                        // this tree edge doesn't contain any tight (-, +) cross-tree edge and opposite tree
+                        // this tree edge doesn't contain any tight (-, +) cross-tree edge and
+                        // opposite tree
                         // hasn't been processed yet.
                         oppositeEps = 0;
                     } else {
-                        // opposite hasn't been processed and there is a tight (-, +) cross-tree edge between
-                        // current tree and opposite tree => we add opposite to the current connected component
+                        // opposite hasn't been processed and there is a tight (-, +) cross-tree
+                        // edge between
+                        // current tree and opposite tree => we add opposite to the current
+                        // connected component
                         connectedComponentLast.nextTree = opposite;
                         connectedComponentLast = opposite.nextTree = opposite;
                         if (eps > opposite.accumulatedEps) {
@@ -308,7 +351,8 @@ class BlossomVDualUpdater<V, E> {
                         eps = plusPlusEps - oppositeEps;
                     }
                     if (eps > plusMinusEps[dir] + oppositeEps) {
-                        // eps is bounded by the resulting slack of a (+, -) cross-tree edge in the current direction
+                        // eps is bounded by the resulting slack of a (+, -) cross-tree edge in the
+                        // current direction
                         eps = plusMinusEps[dir] + oppositeEps;
                     }
                 }
@@ -320,7 +364,8 @@ class BlossomVDualUpdater<V, E> {
             }
 
             if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
-                throw new IllegalArgumentException(KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
+                throw new IllegalArgumentException(
+                    KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
             }
 
             // apply dual change to all trees in the connected component
@@ -332,7 +377,9 @@ class BlossomVDualUpdater<V, E> {
                 currentTree.accumulatedEps = eps;
             } while (currentTree != nextTree);
         }
-        if (augmentEdge != null && augmentEps - augmentEdge.head[0].tree.accumulatedEps - augmentEdge.head[1].tree.accumulatedEps <= 0) {
+        if (augmentEdge != null && augmentEps - augmentEdge.head[0].tree.accumulatedEps
+            - augmentEdge.head[1].tree.accumulatedEps <= 0)
+        {
             return augmentEdge;
         }
         return null;
@@ -341,7 +388,8 @@ class BlossomVDualUpdater<V, E> {
     /**
      * Updates duals by iterating through trees and greedily increasing their dual variables.
      */
-    private BlossomVEdge multipleTreeFixedDelta() {
+    private BlossomVEdge multipleTreeFixedDelta()
+    {
         if (KolmogorovMinimumWeightPerfectMatching.DEBUG) {
             System.out.println("Multiple tree fixed delta approach");
         }
@@ -350,12 +398,16 @@ class BlossomVDualUpdater<V, E> {
         double eps = INFINITY;
         double augmentEps = INFINITY;
         double slack;
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             BlossomVTree tree = root.tree;
             double treeEps = tree.eps;
             eps = Math.min(eps, tree.accumulatedEps);
             // iterate only through outgoing tree edges so that every edge is considered only once
-            for (BlossomVTreeEdge outgoingTreeEdge = tree.first[0]; outgoingTreeEdge != null; outgoingTreeEdge = outgoingTreeEdge.next[0]) {
+            for (BlossomVTreeEdge outgoingTreeEdge = tree.first[0]; outgoingTreeEdge != null;
+                outgoingTreeEdge = outgoingTreeEdge.next[0])
+            {
                 // since all epsilons are equal we don't have to check (+, -) cross tree edges
                 if (!outgoingTreeEdge.plusPlusEdges.isEmpty()) {
                     varEdge = outgoingTreeEdge.plusPlusEdges.findMin().getValue();
@@ -369,9 +421,12 @@ class BlossomVDualUpdater<V, E> {
             }
         }
         if (eps > KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
-            throw new IllegalArgumentException(KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
+            throw new IllegalArgumentException(
+                KolmogorovMinimumWeightPerfectMatching.NO_PERFECT_MATCHING);
         }
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             root.tree.accumulatedEps = eps;
         }
         if (augmentEps <= 2 * eps) {

@@ -24,8 +24,9 @@ import org.junit.experimental.categories.*;
 
 import java.util.*;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
-import static org.junit.Assert.*;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class PalmerHamiltonianCycleTest
 {

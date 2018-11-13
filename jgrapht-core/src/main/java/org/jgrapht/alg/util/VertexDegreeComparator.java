@@ -102,4 +102,3 @@ public class VertexDegreeComparator<V, E>
             return -1 * comparison;
     }
 }
-

@@ -229,4 +229,3 @@ public class ModifiableInteger
         return String.valueOf(this.value);
     }
 }
-

@@ -52,4 +52,3 @@ public interface GraphMapping<V, E>
      */
     E getEdgeCorrespondence(E edge, boolean forward);
 }
-

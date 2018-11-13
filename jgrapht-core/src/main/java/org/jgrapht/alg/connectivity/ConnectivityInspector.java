@@ -269,4 +269,3 @@ public class ConnectivityInspector<V, E>
         }
     }
 }
-

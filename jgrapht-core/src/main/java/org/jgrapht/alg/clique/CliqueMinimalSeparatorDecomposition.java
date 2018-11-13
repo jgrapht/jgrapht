@@ -462,4 +462,3 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         return graph;
     }
 }
-

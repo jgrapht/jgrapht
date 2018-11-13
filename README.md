@@ -8,7 +8,7 @@
 
 # JGraphT
 
-Released: October 18, 2018</p>
+Released: November 12, 2018</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
@@ -87,7 +87,7 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 ```
 
 We have also started auto-publishing SNAPSHOT builds for every successful commit to master.  To use the bleeding edge:
@@ -95,7 +95,7 @@ We have also started auto-publishing SNAPSHOT builds for every successful commit
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.3.1-SNAPSHOT</version>
 ```
 
 and make sure the snapshot repository is enabled:

@@ -17,31 +17,31 @@
  */
 package org.jgrapht.alg.cycle;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Joris Kinable
  */
-public class ChinesePostmanTest {
+public class ChinesePostmanTest
+{
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGraphNoVertices(){
+    public void testGraphNoVertices()
+    {
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        ChinesePostman<Integer, DefaultEdge> alg=new ChinesePostman<>();
+        ChinesePostman<Integer, DefaultEdge> alg = new ChinesePostman<>();
         alg.getCPPSolution(g);
     }
 
     @Test
-    public void testSingleEdgeGraph(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testSingleEdgeGraph()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(0);
         g.addVertex(1);
         Graphs.addEdge(g, 0, 1, 10);
@@ -50,8 +50,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testGraphWithSelfloop(){
-        Graph<Integer, DefaultWeightedEdge> g=new WeightedPseudograph<>(DefaultWeightedEdge.class);
+    public void testGraphWithSelfloop()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new WeightedPseudograph<>(DefaultWeightedEdge.class);
         g.addVertex(0);
         g.addVertex(1);
         Graphs.addEdge(g, 0, 1, 10);
@@ -61,8 +63,9 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testGraphWithMultipleEdges(){
-        Graph<Integer, DefaultWeightedEdge> g=new WeightedMultigraph<>(DefaultWeightedEdge.class);
+    public void testGraphWithMultipleEdges()
+    {
+        Graph<Integer, DefaultWeightedEdge> g = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         Graphs.addEdge(g, 1, 2, 1);
         Graphs.addEdge(g, 1, 4, 3);
@@ -74,8 +77,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testUndirectedGraph1(){
-        Graph<Character, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUndirectedGraph1()
+    {
+        Graph<Character, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'));
         Graphs.addEdge(g, 'A', 'B', 50);
         Graphs.addEdge(g, 'A', 'C', 50);
@@ -95,8 +100,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testUndirectedGraph2(){
-        Graph<Character, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUndirectedGraph2()
+    {
+        Graph<Character, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList('A', 'B', 'C', 'D', 'E'));
         Graphs.addEdge(g, 'A', 'B', 8);
         Graphs.addEdge(g, 'A', 'C', 5);
@@ -111,8 +118,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testUndirectedGraph3(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUndirectedGraph3()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6, 7));
         Graphs.addEdge(g, 1, 2, 5);
         Graphs.addEdge(g, 1, 4, 4);
@@ -131,8 +140,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testUndirectedGraph4(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUndirectedGraph4()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
         Graphs.addEdge(g, 1, 2, 100);
         Graphs.addEdge(g, 1, 3, 150);
@@ -155,8 +166,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testUndirectedGraph5(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUndirectedGraph5()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
         Graphs.addEdge(g, 1, 2, 1);
         Graphs.addEdge(g, 2, 3, 1);
@@ -167,13 +180,13 @@ public class ChinesePostmanTest {
         this.verifyClosedPath(g, 10, 10);
     }
 
-
-    //---------------------Directed graph tests --------------------------
-
+    // ---------------------Directed graph tests --------------------------
 
     @Test
-    public void testDirectedGraphWithMultipleEdgesAndSelfLoop(){
-        Graph<Integer, DefaultWeightedEdge> g=new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+    public void testDirectedGraphWithMultipleEdgesAndSelfLoop()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         Graphs.addEdge(g, 1, 2, 1);
         Graphs.addEdge(g, 2, 3, 3);
@@ -186,8 +199,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testDirectedGraph1(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testDirectedGraph1()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         Graphs.addEdge(g, 1, 2, 1);
         Graphs.addEdge(g, 1, 4, 5);
@@ -199,8 +214,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testDirectedGraph2(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testDirectedGraph2()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         Graphs.addEdge(g, 1, 2, 8);
         Graphs.addEdge(g, 1, 3, 3);
@@ -213,8 +230,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testDirectedGraph3(){
-        Graph<Integer, DefaultWeightedEdge> g=new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+    public void testDirectedGraph3()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         Graphs.addEdge(g, 1, 2, 21);
         Graphs.addEdge(g, 2, 3, 8);
@@ -227,8 +246,10 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testDirectedGraph4(){
-        Graph<Integer, DefaultWeightedEdge> g=new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testDirectedGraph4()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
         Graphs.addEdge(g, 1, 2, 10);
         Graphs.addEdge(g, 1, 3, 20);
@@ -246,8 +267,9 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void testDirectedGraph5(){
-        Graph<Integer, DefaultEdge> g=new DefaultDirectedGraph<>(DefaultEdge.class);
+    public void testDirectedGraph5()
+    {
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
         g.addEdge(1, 2);
         g.addEdge(1, 11);
@@ -268,53 +290,60 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void temp(){
-        ChinesePostman<Integer, DefaultEdge> alg=new ChinesePostman<>();
-        Graph<Integer, DefaultEdge> g= new SimpleGraph<>(DefaultEdge.class);
-//        Graph<Integer, DefaultEdge> g=new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
-        g.addVertex(0); g.addVertex(1);
-        g.addEdge(0,1);
-        g.addEdge(1,0);
-        GraphPath<Integer, DefaultEdge> path=alg.getCPPSolution(g);
+    public void temp()
+    {
+        ChinesePostman<Integer, DefaultEdge> alg = new ChinesePostman<>();
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        // Graph<Integer, DefaultEdge> g=new DefaultDirectedGraph<Integer,
+        // DefaultEdge>(DefaultEdge.class);
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addEdge(0, 1);
+        g.addEdge(1, 0);
+        GraphPath<Integer, DefaultEdge> path = alg.getCPPSolution(g);
     }
 
-    private <V,E> void verifyClosedPath(Graph<V,E> graph, double expectedWeight, int expectedLength){
+    private <V,
+        E> void verifyClosedPath(Graph<V, E> graph, double expectedWeight, int expectedLength)
+    {
 
-        ChinesePostman<V, E> alg=new ChinesePostman<>();
-        GraphPath<V, E> path=alg.getCPPSolution(graph);
+        ChinesePostman<V, E> alg = new ChinesePostman<>();
+        GraphPath<V, E> path = alg.getCPPSolution(graph);
 
         Assert.assertEquals(expectedLength, path.getLength());
         Assert.assertEquals(expectedLength, path.getEdgeList().size());
         Assert.assertEquals(expectedWeight, path.getWeight(), 0.00000001);
-        Assert.assertEquals(expectedWeight, path.getEdgeList().stream().mapToDouble(graph::getEdgeWeight).sum(), 0.00000001);
+        Assert.assertEquals(
+            expectedWeight, path.getEdgeList().stream().mapToDouble(graph::getEdgeWeight).sum(),
+            0.00000001);
 
-        //all edges of the graph must be visited at least once
+        // all edges of the graph must be visited at least once
         Assert.assertTrue(path.getEdgeList().containsAll(graph.edgeSet()));
 
         Assert.assertTrue(graph.containsVertex(path.getStartVertex()));
         Assert.assertEquals(path.getStartVertex(), path.getEndVertex());
 
-        //Verify that the path is an actual path in the graph
-        Assert.assertEquals(path.getEdgeList().size()+1, path.getVertexList().size());
-        List<V> vertexList=path.getVertexList();
-        List<E> edgeList=path.getEdgeList();
+        // Verify that the path is an actual path in the graph
+        Assert.assertEquals(path.getEdgeList().size() + 1, path.getVertexList().size());
+        List<V> vertexList = path.getVertexList();
+        List<E> edgeList = path.getEdgeList();
 
-        //Check start and end vertex
+        // Check start and end vertex
         Assert.assertEquals(vertexList.get(0), path.getStartVertex());
-        Assert.assertEquals(vertexList.get(vertexList.size()-1), path.getEndVertex());
+        Assert.assertEquals(vertexList.get(vertexList.size() - 1), path.getEndVertex());
 
-        //All vertices and edges in the path must be contained in the graph
+        // All vertices and edges in the path must be contained in the graph
         Assert.assertTrue(graph.vertexSet().containsAll(vertexList));
         Assert.assertTrue(graph.edgeSet().containsAll(edgeList));
 
-        for(int i=0; i<vertexList.size()-1; i++){
-            V u=vertexList.get(i);
-            V v=vertexList.get(i+1);
-            E edge=edgeList.get(i);
+        for (int i = 0; i < vertexList.size() - 1; i++) {
+            V u = vertexList.get(i);
+            V v = vertexList.get(i + 1);
+            E edge = edgeList.get(i);
 
-            if(graph.getType().isUndirected()){
+            if (graph.getType().isUndirected()) {
                 Assert.assertEquals(Graphs.getOppositeVertex(graph, edge, u), v);
-            }else{ //Directed
+            } else { // Directed
                 Assert.assertEquals(graph.getEdgeSource(edge), u);
                 Assert.assertEquals(graph.getEdgeTarget(edge), v);
             }

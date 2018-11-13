@@ -89,4 +89,3 @@ class VF2SubgraphMappingIterator<V, E>
         }
     }
 }
-

@@ -78,4 +78,3 @@ public class KruskalMinimumSpanningTree<V, E>
         return new SpanningTreeImpl<>(edgeList, spanningTreeCost);
     }
 }
-

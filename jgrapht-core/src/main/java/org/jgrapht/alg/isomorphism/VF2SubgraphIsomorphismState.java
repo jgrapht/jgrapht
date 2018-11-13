@@ -197,4 +197,3 @@ class VF2SubgraphIsomorphismState<V, E>
         }
     }
 }
-

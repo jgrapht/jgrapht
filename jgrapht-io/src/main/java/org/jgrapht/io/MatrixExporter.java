@@ -256,4 +256,3 @@ public class MatrixExporter<V, E>
     }
 
 }
-

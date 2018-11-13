@@ -96,4 +96,3 @@ public class DefaultGraphMapping<V, E>
         return graphMapping.get(keyVertex);
     }
 }
-

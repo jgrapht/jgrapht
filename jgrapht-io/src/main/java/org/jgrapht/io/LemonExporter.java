@@ -17,13 +17,11 @@
  */
 package org.jgrapht.io;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
+import org.apache.commons.text.*;
+import org.jgrapht.*;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.jgrapht.Graph;
+import java.io.*;
+import java.util.*;
 
 /**
  * Exports a graph into Lemon graph format (LGF).

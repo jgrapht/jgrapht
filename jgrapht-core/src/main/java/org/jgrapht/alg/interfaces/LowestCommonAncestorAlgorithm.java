@@ -17,21 +17,21 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.*;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 /**
- * Algorithm to compute a <a href="https://en.wikipedia.org/wiki/Lowest_common_ancestor">lowest common ancestor</a>
- * in a tree, forest or DAG.
+ * Algorithm to compute a <a href="https://en.wikipedia.org/wiki/Lowest_common_ancestor">lowest
+ * common ancestor</a> in a tree, forest or DAG.
  *
  * @param <V> vertex the graph vertex type
  *
  * @author Alexandru Valeanu
  */
-public interface LowestCommonAncestorAlgorithm<V> {
+public interface LowestCommonAncestorAlgorithm<V>
+{
 
     /**
      * Return the LCA of a and b
@@ -49,8 +49,10 @@ public interface LowestCommonAncestorAlgorithm<V> {
      * @param queries a list of pairs of vertices
      * @return a list L of LCAs where L(i) is the LCA for pair queries(i)
      */
-    default List<V> getBatchLCA(List<Pair<V, V>> queries){
-        return queries.stream().map(p -> getLCA(p.getFirst(), p.getSecond())).collect(Collectors.toList());
+    default List<V> getBatchLCA(List<Pair<V, V>> queries)
+    {
+        return queries
+            .stream().map(p -> getLCA(p.getFirst(), p.getSecond())).collect(Collectors.toList());
     }
 
     /**
@@ -60,7 +62,8 @@ public interface LowestCommonAncestorAlgorithm<V> {
      * @param b the other element to find the LCA for
      *
      * @return the set LCAs of a and b, or empty set if there is no LCA computed.
-     * @throws UnsupportedOperationException - if the operation is not supported by the implementing class
+     * @throws UnsupportedOperationException - if the operation is not supported by the implementing
+     *         class
      */
     Set<V> getLCASet(V a, V b);
 
@@ -70,7 +73,9 @@ public interface LowestCommonAncestorAlgorithm<V> {
      * @param queries a list of pairs of vertices
      * @return a list L of LCAs where L(i) is the computed set of LCAs for pair queries(i)
      */
-    default List<Set<V>> getBatchLCASet(List<Pair<V, V>> queries){
-        return queries.stream().map(p -> getLCASet(p.getFirst(), p.getSecond())).collect(Collectors.toList());
+    default List<Set<V>> getBatchLCASet(List<Pair<V, V>> queries)
+    {
+        return queries
+            .stream().map(p -> getLCASet(p.getFirst(), p.getSecond())).collect(Collectors.toList());
     }
 }

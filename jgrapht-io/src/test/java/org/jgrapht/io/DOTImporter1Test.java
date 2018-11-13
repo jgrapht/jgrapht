@@ -522,8 +522,7 @@ public class DOTImporter1Test
         testGarbageGraph(input, expected, result);
     }
 
-    private void testGarbageGraph(
-        String input, String expected, Graph<String, DefaultEdge> graph)
+    private void testGarbageGraph(String input, String expected, Graph<String, DefaultEdge> graph)
     {
         GraphImporter<String, DefaultEdge> importer = buildImporter();
         try {

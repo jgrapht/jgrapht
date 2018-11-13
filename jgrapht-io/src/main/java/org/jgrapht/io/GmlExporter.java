@@ -230,4 +230,3 @@ public class GmlExporter<V, E>
     }
 
 }
-

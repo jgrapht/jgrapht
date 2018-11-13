@@ -22,7 +22,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Robby McKilliam
@@ -325,4 +326,3 @@ public class StoerWagnerMinimumCutTest
         assertTrue(mincut.minCut().equals(solution1) || mincut.minCut().equals(solution2));
     }
 }
-

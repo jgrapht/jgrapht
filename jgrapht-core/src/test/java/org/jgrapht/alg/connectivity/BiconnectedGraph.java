@@ -63,4 +63,3 @@ public class BiconnectedGraph
         addVertex("5");
     }
 }
-

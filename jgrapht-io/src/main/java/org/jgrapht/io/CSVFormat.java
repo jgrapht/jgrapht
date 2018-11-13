@@ -60,9 +60,10 @@ package org.jgrapht.io;
  * which represents a graph with edges: a-&gt;b, b-&gt;a, d-&gt;a, c-&gt;a, c-&gt;b, b-&gt;d,
  * b-&gt;a. Multiple occurrences of the same edge result into a multi-graph.
  * 
- * <p>Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is
- * set. In this case the target vertex must be followed by the edge weight. The following example illustrates
- * the weighted variant:
+ * <p>
+ * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is set. In this case
+ * the target vertex must be followed by the edge weight. The following example illustrates the
+ * weighted variant:
  * 
  * <pre>
  * a,b,2.0
@@ -104,8 +105,8 @@ package org.jgrapht.io;
  * </pre>
  * 
  * <p>
- * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is
- * set. The above example would then be:
+ * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is set. The above
+ * example would then be:
  * 
  * <pre>
  * ,1.0,,1.0,
@@ -184,13 +185,6 @@ public enum CSVFormat
          */
         MATRIX_FORMAT_NODEID,
         /**
-         * Whether to import/export edge weights. Only valid for the {@link CSVFormat#MATRIX MATRIX}
-         * format.
-         * @deprecated Use {@link #EDGE_WEIGHTS} instead.
-         */
-        @Deprecated
-        MATRIX_FORMAT_EDGE_WEIGHTS,
-        /**
          * Whether the input/output contains zero for missing edges. Only valid for the
          * {@link CSVFormat#MATRIX MATRIX} format.
          */
@@ -198,4 +192,3 @@ public enum CSVFormat
     }
 
 }
-

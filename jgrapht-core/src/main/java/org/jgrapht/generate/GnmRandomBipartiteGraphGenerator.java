@@ -221,4 +221,3 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
     }
 
 }
-

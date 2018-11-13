@@ -17,14 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,10 +30,12 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Alexandru Valeanu
  */
-public class TreeMeasurerTest {
+public class TreeMeasurerTest
+{
 
     @Test
-    public void testNoCenters(){
+    public void testNoCenters()
+    {
         Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
 
         TreeMeasurer<Integer, DefaultEdge> treeMeasurer = new TreeMeasurer<>(tree);
@@ -45,7 +44,8 @@ public class TreeMeasurerTest {
     }
 
     @Test
-    public void testTwoCenters(){
+    public void testTwoCenters()
+    {
         Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
 
         tree.addVertex(1);
@@ -63,7 +63,8 @@ public class TreeMeasurerTest {
     }
 
     @Test
-    public void testOneCenter(){
+    public void testOneCenter()
+    {
         Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(DefaultEdge.class);
 
         tree.addVertex(1);

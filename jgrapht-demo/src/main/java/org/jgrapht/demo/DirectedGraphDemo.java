@@ -50,7 +50,7 @@ public class DirectedGraphDemo
 
     public static void main(String args[])
     {
-        //@example:main:begin
+        // @example:main:begin
         // constructs a directed graph with the specified vertices and edges
         Graph<String, DefaultEdge> directedGraph =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
@@ -101,6 +101,6 @@ public class DirectedGraphDemo
         System.out.println("Shortest path from c to i:");
         SingleSourcePaths<String, DefaultEdge> cPaths = dijkstraAlg.getPaths("c");
         System.out.println(cPaths.getPath("i"));
-        //@example:main:end
+        // @example:main:end
     }
 }

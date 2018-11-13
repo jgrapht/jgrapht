@@ -62,4 +62,3 @@ public interface WeightCombiner
      */
     double combine(double a, double b);
 }
-

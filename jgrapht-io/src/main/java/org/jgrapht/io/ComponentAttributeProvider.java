@@ -38,4 +38,3 @@ public interface ComponentAttributeProvider<T>
      */
     public Map<String, Attribute> getComponentAttributes(T component);
 }
-

@@ -20,13 +20,14 @@ package org.jgrapht.io;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for Graph6Sparse6Exporter
@@ -140,7 +141,10 @@ public class Graph6Sparse6ExporterTest
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp =
             new GnpRandomGraphGenerator<>(40, .55, 0, true);
         for (int i = 0; i < 20; i++) {
-            Graph<Integer, DefaultEdge> orig = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer,
+                DefaultEdge> orig = new Pseudograph<>(
+                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                    false);
             gnp.generateGraph(orig);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
@@ -197,7 +201,10 @@ public class Graph6Sparse6ExporterTest
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp =
             new GnpRandomGraphGenerator<>(40, .55, 0);
         for (int i = 0; i < 20; i++) {
-            Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer,
+                DefaultEdge> orig = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                    false);
             gnp.generateGraph(orig);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);

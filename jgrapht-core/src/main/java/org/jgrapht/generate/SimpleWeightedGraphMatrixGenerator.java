@@ -89,4 +89,3 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
         }
     }
 }
-

@@ -134,4 +134,3 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
         return iter.hasNext();
     }
 }
-

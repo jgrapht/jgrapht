@@ -84,4 +84,3 @@ public interface GraphIterator<V, E>
     @Override
     void remove();
 }
-

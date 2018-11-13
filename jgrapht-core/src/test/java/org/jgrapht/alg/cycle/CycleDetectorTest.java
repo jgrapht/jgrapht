@@ -146,8 +146,7 @@ public class CycleDetectorTest
     private void runTest(
         Graph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
     {
-        CycleDetector<String, DefaultEdge> detector =
-            new CycleDetector<>(g);
+        CycleDetector<String, DefaultEdge> detector = new CycleDetector<>(g);
 
         Set<String> emptySet = Collections.emptySet();
 
@@ -188,8 +187,7 @@ public class CycleDetectorTest
         assertEquals(2, graph.edgeSet().size());
         assertEquals(2, graph.vertexSet().size());
 
-        CycleDetector<String, DefaultEdge> cycleDetector =
-            new CycleDetector<>(graph);
+        CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(graph);
         Set<String> cycleVertices = cycleDetector.findCycles();
 
         boolean foundCycle = cycleDetector.detectCyclesContainingVertex(vertexA);
@@ -204,4 +202,3 @@ public class CycleDetectorTest
         assertTrue(foundVertex);
     }
 }
-

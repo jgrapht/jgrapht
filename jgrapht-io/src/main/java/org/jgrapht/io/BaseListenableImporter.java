@@ -17,11 +17,10 @@
  */
 package org.jgrapht.io;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiConsumer;
+import org.jgrapht.alg.util.*;
 
-import org.jgrapht.alg.util.Pair;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Base implementation for a graph importer which uses consumers for attributes.
@@ -67,8 +66,7 @@ class BaseListenableImporter<V, E>
      * 
      * @param consumer the consumer
      */
-    public void removeGraphAttributeConsumer(
-        BiConsumer<String, Attribute> consumer)
+    public void removeGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
     {
         graphAttributeConsumers.remove(consumer);
     }

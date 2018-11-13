@@ -337,4 +337,3 @@ public class BiconnectivityInspector<V, E>
     }
 
 }
-

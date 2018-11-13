@@ -17,34 +17,32 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
+import java.util.*;
+import java.util.stream.*;
+
 /**
- * A base implementation of a $k$ disjoint shortest paths algorithm based on the strategy used in 
- * Suurballe and Bhandari algorithms.
- * The algorithm procedure goes as follow:
+ * A base implementation of a $k$ disjoint shortest paths algorithm based on the strategy used in
+ * Suurballe and Bhandari algorithms. The algorithm procedure goes as follow:
  * <ol>
- * <li> Using some known shortest path algorithm (e.g. Dijkstra) to find the shortest
- * path $P_1$ from source to target.
- * <li> For i = 2,...,$k$
- * <li> &emsp;Perform some graph transformations based on the previously found path
- * <li> &emsp;Find the shortest path $P_i$ from source to target
- * <li> Remove all overlapping edges to get $k$ disjoint paths.
- * </ol> 
- * The class implements the above procedure and resolves final paths (step 5) from the
- * intermediate path results found in step 4.
- * An extending class has to implement two methods:
+ * <li>Using some known shortest path algorithm (e.g. Dijkstra) to find the shortest path $P_1$ from
+ * source to target.
+ * <li>For i = 2,...,$k$
+ * <li>&emsp;Perform some graph transformations based on the previously found path
+ * <li>&emsp;Find the shortest path $P_i$ from source to target
+ * <li>Remove all overlapping edges to get $k$ disjoint paths.
+ * </ol>
+ * The class implements the above procedure and resolves final paths (step 5) from the intermediate
+ * path results found in step 4. An extending class has to implement two methods:
  * <ul>
- * <li> {@link #transformGraph} - to be used in step 3.
- * <li> {@link #calculateShortestPath} - to be used in step 4.
+ * <li>{@link #transformGraph} - to be used in step 3.
+ * <li>{@link #calculateShortestPath} - to be used in step 4.
  * </ul>
- * Currently known extensions are {@link SuurballeKDisjointShortestPaths} and 
+ * Currently known extensions are {@link SuurballeKDisjointShortestPaths} and
  * {@link BhandariKDisjointShortestPaths}.
  * 
  * @param <V> the graph vertex type
@@ -52,7 +50,9 @@ import org.jgrapht.graph.*;
  * 
  * @author Assaf Mizrachi
  */
-abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPathAlgorithm<V, E>
+abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
+    implements
+    KShortestPathAlgorithm<V, E>
 {
 
     /**
@@ -63,7 +63,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
     protected List<List<E>> pathList;
 
     protected Set<E> overlappingEdges;
-    
+
     protected Graph<V, E> originalGraph;
 
     /**
@@ -75,14 +75,15 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
      * @throws IllegalArgumentException if the graph is undirected.
      * @throws IllegalArgumentException if the graph is not simple.
      */
-    public BaseKDisjointShortestPathsAlgorithm(Graph<V, E> graph) {
-                         
+    public BaseKDisjointShortestPathsAlgorithm(Graph<V, E> graph)
+    {
+
         this.originalGraph = graph;
         GraphTests.requireDirected(graph);
         if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Graph must be simple");
-        }    
-              
+        }
+
     }
 
     /**
@@ -100,7 +101,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
      */
     @Override
     public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex, int k)
-    {        
+    {
         if (k <= 0) {
             throw new IllegalArgumentException("Number of paths must be positive");
         }
@@ -114,28 +115,28 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         }
         if (!originalGraph.containsVertex(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
-        }   
-        
+        }
+
         // Create a working graph copy to avoid modifying the underlying graph. This gets
         // reinitialized for every call to getPaths since previous calls may have modified it. Since
         // the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
         // (even when the graph copy is already weighted) to avoid writing weight changes through to
         // the underlying graph.
-        this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
-            this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier()), 
+        this.workingGraph = new AsWeightedGraph<>(
+            new DefaultDirectedWeightedGraph<>(
+                this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier()),
             new HashMap<>(), false);
-        Graphs.addGraph(workingGraph, this.originalGraph);     
-
+        Graphs.addGraph(workingGraph, this.originalGraph);
 
         this.pathList = new ArrayList<>();
         GraphPath<V, E> currentPath = calculateShortestPath(startVertex, endVertex);
         if (currentPath != null) {
             pathList.add(currentPath.getEdgeList());
-            
+
             for (int i = 0; i < k - 1; i++) {
                 transformGraph(this.pathList.get(i));
-                currentPath = calculateShortestPath(startVertex, endVertex);   
-                
+                currentPath = calculateShortestPath(startVertex, endVertex);
+
                 if (currentPath != null) {
                     pathList.add(currentPath.getEdgeList());
                 } else {
@@ -212,30 +213,28 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
                 v = getEdgeTarget(e);
             }
         }
-        
+
         return paths
             .stream().map(path -> createGraphPath(new ArrayList<>(path), startVertex, endVertex))
             .collect(Collectors.toList());
     }
 
     /**
-     * Iterate over all paths to remove overlapping edges (i.e. those edges contained in more than 
-     * one path).
-     * Two edges are considered as overlapping in case both edges connect the same vertex pair, 
-     * disregarding direction.
-     * At the end of this method, each path contains unique edges but not necessarily connecting the
-     * start to end vertex.
+     * Iterate over all paths to remove overlapping edges (i.e. those edges contained in more than
+     * one path). Two edges are considered as overlapping in case both edges connect the same vertex
+     * pair, disregarding direction. At the end of this method, each path contains unique edges but
+     * not necessarily connecting the start to end vertex.
      * 
      */
     private void findOverlappingEdges()
     {
         Map<UnorderedPair<V, V>, Integer> edgeOccurrenceCount = new HashMap<>();
         for (List<E> path : pathList) {
-            for (E e : path) {                
+            for (E e : path) {
                 V v = this.getEdgeSource(e);
-                V u = this.getEdgeTarget(e);                
+                V u = this.getEdgeTarget(e);
                 UnorderedPair<V, V> edgePair = new UnorderedPair<>(v, u);
-                
+
                 if (edgeOccurrenceCount.containsKey(edgePair)) {
                     edgeOccurrenceCount.put(edgePair, 2);
                 } else {
@@ -244,10 +243,11 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
             }
         }
 
-        this.overlappingEdges = pathList.stream().flatMap(List::stream).filter(
-            e -> edgeOccurrenceCount.get(new UnorderedPair<>(
-                this.getEdgeSource(e), 
-                this.getEdgeTarget(e))) > 1)
+        this.overlappingEdges = pathList
+            .stream().flatMap(List::stream)
+            .filter(
+                e -> edgeOccurrenceCount
+                    .get(new UnorderedPair<>(this.getEdgeSource(e), this.getEdgeTarget(e))) > 1)
             .collect(Collectors.toSet());
     }
 
@@ -259,19 +259,22 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         }
         return new GraphWalk<>(originalGraph, startVertex, endVertex, edgeList, weight);
     }
-    
-    private V getEdgeSource(E e) {
-        return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeSource(e) : this.originalGraph.getEdgeSource(e);
+
+    private V getEdgeSource(E e)
+    {
+        return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeSource(e)
+            : this.originalGraph.getEdgeSource(e);
     }
-    
-    private V getEdgeTarget(E e) {
-        return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeTarget(e) : this.originalGraph.getEdgeTarget(e);
+
+    private V getEdgeTarget(E e)
+    {
+        return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeTarget(e)
+            : this.originalGraph.getEdgeTarget(e);
     }
-        
+
     /**
-     * Calculates the shortest paths for the current iteration.
-     * Path is not final; rather, it is intended to be used in a "post-production" phase
-     * (see resolvePaths method).
+     * Calculates the shortest paths for the current iteration. Path is not final; rather, it is
+     * intended to be used in a "post-production" phase (see resolvePaths method).
      * 
      * @param startVertex the start vertex
      * @param endVertex the end vertex
@@ -279,11 +282,11 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
      * @return the shortest path between start and end vertices.
      */
     protected abstract GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex);
-    
+
     /**
-     * Prepares the working graph for next iteration. To be called from the second iteration
-     *  and on so implementation may assume a preceding {@link #calculateShortestPath} call.
-     *  
+     * Prepares the working graph for next iteration. To be called from the second iteration and on
+     * so implementation may assume a preceding {@link #calculateShortestPath} call.
+     * 
      * @param previousPath the path found at the previous iteration.
      */
     protected abstract void transformGraph(List<E> previousPath);

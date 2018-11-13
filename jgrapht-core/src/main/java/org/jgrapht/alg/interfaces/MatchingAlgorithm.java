@@ -195,4 +195,3 @@ public interface MatchingAlgorithm<V, E>
     }
 
 }
-

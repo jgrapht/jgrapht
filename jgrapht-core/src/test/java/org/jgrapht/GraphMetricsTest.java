@@ -17,12 +17,11 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.cycle.TarjanSimpleCycles;
+import org.jgrapht.alg.cycle.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Assert;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 
@@ -237,12 +236,14 @@ public class GraphMetricsTest
         }
     }
 
-    private static long naiveCountTriangles(Graph<Integer, DefaultEdge> graph){
+    private static long naiveCountTriangles(Graph<Integer, DefaultEdge> graph)
+    {
         return GraphMetrics.naiveCountTriangles(graph, new ArrayList<>(graph.vertexSet()));
     }
 
     @Test
-    public void testCountTriangles(){
+    public void testCountTriangles()
+    {
         final int NUM_TESTS = 300;
         Random random = new Random(0x88_88);
 
@@ -250,20 +251,22 @@ public class GraphMetricsTest
             final int N = 20 + random.nextInt(100);
 
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
-                    SupplierUtil.createIntegerSupplier(),
-                    SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
             BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
-                    new BarabasiAlbertGraphGenerator<>(10 + random.nextInt(10), 1 + random.nextInt(7), N, random);
+                new BarabasiAlbertGraphGenerator<>(
+                    10 + random.nextInt(10), 1 + random.nextInt(7), N, random);
 
             generator.generateGraph(graph);
 
-            Assert.assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
+            Assert
+                .assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
         }
     }
 
     @Test
-    public void testCountTriangles2(){
+    public void testCountTriangles2()
+    {
         final int NUM_TESTS = 100;
         Random random = new Random(0x88_88);
 
@@ -271,23 +274,23 @@ public class GraphMetricsTest
             final int N = 1 + random.nextInt(100);
 
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
-                    SupplierUtil.createIntegerSupplier(),
-                    SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
             GraphGenerator<Integer, DefaultEdge, Integer> generator =
-                    new GnpRandomGraphGenerator<>(N, .55, random.nextInt());
+                new GnpRandomGraphGenerator<>(N, .55, random.nextInt());
 
             generator.generateGraph(graph);
 
-            Assert.assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
+            Assert
+                .assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
         }
     }
 
     @Test
-    public void testCountTriangles3(){
+    public void testCountTriangles3()
+    {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         // Complete graph: expected (|V| choose 3)
 

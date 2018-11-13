@@ -20,19 +20,19 @@ package org.jgrapht.util;
 import java.util.*;
 
 /**
- * Helper class for building a one-to-one mapping for a collection of vertices to the integer range $[0, n)$
- * where $n$ is the number of vertices in the collection.
+ * Helper class for building a one-to-one mapping for a collection of vertices to the integer range
+ * $[0, n)$ where $n$ is the number of vertices in the collection.
  *
  * <p>
- *     This class computes the mapping only once, on instantiation. It does not support
- *     live updates.
+ * This class computes the mapping only once, on instantiation. It does not support live updates.
  * </p>
  *
  * @author Alexandru Valeanu
  *
  * @param <V> the graph vertex type
  */
-public class VertexToIntegerMapping<V> {
+public class VertexToIntegerMapping<V>
+{
 
     private final Map<V, Integer> vertexMap;
     private final List<V> indexList;
@@ -43,7 +43,8 @@ public class VertexToIntegerMapping<V> {
      * @param vertices the input set of vertices
      * @throws NullPointerException if {@code vertices} is {@code null}
      */
-    public VertexToIntegerMapping(Set<V> vertices){
+    public VertexToIntegerMapping(Set<V> vertices)
+    {
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
 
         vertexMap = new HashMap<>(vertices.size());
@@ -56,14 +57,15 @@ public class VertexToIntegerMapping<V> {
     }
 
     /**
-     * Create a new mapping from a list of vertices. The input list will be used as
-     * the {@code indexList} so it must not be modified.
+     * Create a new mapping from a list of vertices. The input list will be used as the
+     * {@code indexList} so it must not be modified.
      *
      * @param vertices the input list of vertices
      * @throws NullPointerException if {@code vertices} is {@code null}
      * @throws IllegalArgumentException if the vertices are not distinct
      */
-    public VertexToIntegerMapping(List<V> vertices){
+    public VertexToIntegerMapping(List<V> vertices)
+    {
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
 
         vertexMap = new HashMap<>(vertices.size());
@@ -72,10 +74,9 @@ public class VertexToIntegerMapping<V> {
         for (int i = 0; i < vertices.size(); i++) {
             V v = vertices.get(i);
 
-            if (!vertexMap.containsKey(v)){
+            if (!vertexMap.containsKey(v)) {
                 vertexMap.put(v, i);
-            }
-            else{
+            } else {
                 throw new IllegalArgumentException("vertices are not distinct");
             }
         }
@@ -88,38 +89,42 @@ public class VertexToIntegerMapping<V> {
      * @throws NullPointerException if {@code vertices} is {@code null}
      * @throws IllegalArgumentException if the vertices are not distinct
      */
-    public VertexToIntegerMapping(Collection<V> vertices){
+    public VertexToIntegerMapping(Collection<V> vertices)
+    {
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
 
         vertexMap = new HashMap<>(vertices.size());
         indexList = new ArrayList<>(vertices.size());
 
         for (V v : vertices) {
-            if (!vertexMap.containsKey(v)){
+            if (!vertexMap.containsKey(v)) {
                 vertexMap.put(v, vertexMap.size());
                 indexList.add(v);
-            }
-            else{
+            } else {
                 throw new IllegalArgumentException("vertices are not distinct");
             }
         }
     }
 
     /**
-     * Get the {@code vertexMap}, a mapping from vertices to integers (i.e. the inverse of {@code indexList}).
+     * Get the {@code vertexMap}, a mapping from vertices to integers (i.e. the inverse of
+     * {@code indexList}).
      *
      * @return a mapping from vertices to integers
      */
-    public Map<V, Integer> getVertexMap(){
+    public Map<V, Integer> getVertexMap()
+    {
         return vertexMap;
     }
 
     /**
-     * Get the {@code indexList}, a mapping from integers to vertices (i.e. the inverse of {@code vertexMap}).
+     * Get the {@code indexList}, a mapping from integers to vertices (i.e. the inverse of
+     * {@code vertexMap}).
      *
      * @return a mapping from integers to vertices
      */
-    public List<V> getIndexList(){
+    public List<V> getIndexList()
+    {
         return indexList;
     }
 }

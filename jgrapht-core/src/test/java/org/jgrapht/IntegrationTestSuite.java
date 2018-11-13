@@ -22,7 +22,8 @@ import org.junit.experimental.categories.*;
 import org.junit.runner.*;
 
 /**
- * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests and optional tests.
+ * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests and
+ * optional tests.
  * 
  * @author John Sichi
  */

@@ -285,4 +285,3 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
         return new AsUnmodifiableGraph<>(this.graph);
     }
 }
-

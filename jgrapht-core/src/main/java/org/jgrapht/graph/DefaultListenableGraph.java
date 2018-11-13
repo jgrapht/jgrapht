@@ -475,4 +475,3 @@ public class DefaultListenableGraph<V, E>
     }
 
 }
-

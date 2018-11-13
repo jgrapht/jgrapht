@@ -59,4 +59,3 @@ public class EdgeTraversalEvent<E>
         return edge;
     }
 }
-

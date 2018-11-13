@@ -128,4 +128,3 @@ public class KShortestPathCompleteGraph6
         addVertex("v5");
     }
 }
-

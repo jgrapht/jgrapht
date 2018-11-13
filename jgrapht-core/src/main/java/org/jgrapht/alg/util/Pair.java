@@ -136,4 +136,3 @@ public class Pair<A, B>
         return new Pair<>(a, b);
     }
 }
-

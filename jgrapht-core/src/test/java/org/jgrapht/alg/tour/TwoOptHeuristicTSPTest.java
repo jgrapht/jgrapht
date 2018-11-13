@@ -25,8 +25,8 @@ import org.jgrapht.util.*;
 import org.junit.*;
 import org.junit.experimental.categories.*;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
-import static org.junit.Assert.*;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link TwoOptHeuristicTSP}.

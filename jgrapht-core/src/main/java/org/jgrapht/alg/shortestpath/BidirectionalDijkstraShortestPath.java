@@ -280,4 +280,3 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     }
 
 }
-

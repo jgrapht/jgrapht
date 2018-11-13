@@ -17,19 +17,23 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Tests for the {@link TarjanLCAFinder}
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinderTest extends LCATreeTestBase {
+public class TarjanLCAFinderTest
+    extends
+    LCATreeTestBase
+{
     @Override
-    <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots) {
+    <V, E> LowestCommonAncestorAlgorithm<V> createSolver(Graph<V, E> graph, Set<V> roots)
+    {
         return new TarjanLCAFinder<>(graph, roots);
     }
 }

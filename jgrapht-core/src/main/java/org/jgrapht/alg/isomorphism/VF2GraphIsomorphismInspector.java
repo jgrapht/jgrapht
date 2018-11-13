@@ -100,4 +100,3 @@ public class VF2GraphIsomorphismInspector<V, E>
             ordering1, ordering2, vertexComparator, edgeComparator);
     }
 }
-

@@ -24,7 +24,7 @@ import org.junit.*;
 
 import java.util.function.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class DirectedSimpleCyclesTest
 {

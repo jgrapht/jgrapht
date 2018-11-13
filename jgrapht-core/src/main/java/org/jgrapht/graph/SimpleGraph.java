@@ -23,10 +23,11 @@ import org.jgrapht.util.*;
 import java.util.function.*;
 
 /**
- * Implementation of a <a href=http://mathworld.wolfram.com/SimpleGraph.html>Simple Graph</a>.
- * A Simple Graph is an undirected graph containing no <a href="http://mathworld.wolfram.com/GraphLoop.html">graph loops</a> or
- * <a href="http://mathworld.wolfram.com/MultipleEdge.html">multiple edges</a>. This particular implementation supports
- * both weighted and unweighted edges.
+ * Implementation of a <a href=http://mathworld.wolfram.com/SimpleGraph.html>Simple Graph</a>. A
+ * Simple Graph is an undirected graph containing no
+ * <a href="http://mathworld.wolfram.com/GraphLoop.html">graph loops</a> or
+ * <a href="http://mathworld.wolfram.com/MultipleEdge.html">multiple edges</a>. This particular
+ * implementation supports both weighted and unweighted edges.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -93,4 +94,3 @@ public class SimpleGraph<V, E>
     }
 
 }
-

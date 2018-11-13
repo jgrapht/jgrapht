@@ -164,4 +164,3 @@ public class EdgeReversedGraph<V, E>
         return toStringFromSets(vertexSet(), edgeSet(), getType().isDirected());
     }
 }
-

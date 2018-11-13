@@ -236,11 +236,5 @@ public class GraphPerformanceTest
         {
             super(vertexSupplier, edgeSupplier);
         }
-
-        @Override
-        protected Specifics<V, E> createSpecifics(boolean directed)
-        {
-            return new DirectedSpecifics<>(this);
-        }
     }
 }

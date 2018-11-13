@@ -27,14 +27,16 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public interface FlowAlgorithm<V,E> {
+public interface FlowAlgorithm<V, E>
+{
 
     /**
      * Result object of a flow algorithm
      *
      * @return flow
      */
-    default Flow getFlow(){
+    default Flow getFlow()
+    {
         return new FlowImpl<>(this.getFlowMap());
     }
 
@@ -46,8 +48,9 @@ public interface FlowAlgorithm<V,E> {
     Map<E, Double> getFlowMap();
 
     /**
-     * For the specified {@code edge} $(u, v)$ returns vertex $v$ if the flow goes from $u$ to $v$, or returns
-     * vertex $u$ otherwise. For directed flow networks the result is always the head of the specified arc.
+     * For the specified {@code edge} $(u, v)$ returns vertex $v$ if the flow goes from $u$ to $v$,
+     * or returns vertex $u$ otherwise. For directed flow networks the result is always the head of
+     * the specified arc.
      * <p>
      * <em>Note:</em> not all flow algorithms may support undirected graphs.
      *
@@ -61,21 +64,23 @@ public interface FlowAlgorithm<V,E> {
      *
      * @param <E> graph edge type
      */
-    interface Flow<E> {
+    interface Flow<E>
+    {
         /**
          * Returns the flow on the {@code edge}
          *
          * @param edge an edge from the flow network
          * @return the flow on the {@code edge}
          */
-        default double getFlow(E edge){
+        default double getFlow(E edge)
+        {
             return getFlowMap().get(edge);
         }
 
         /**
-         * Returns a mapping from the network flow edges to the corresponding flow values. The mapping
-         * contains all edges of the flow network regardless of whether there is a non-zero flow on an
-         * edge or not.
+         * Returns a mapping from the network flow edges to the corresponding flow values. The
+         * mapping contains all edges of the flow network regardless of whether there is a non-zero
+         * flow on an edge or not.
          *
          * @return a read-only map that defines a feasible flow.
          */
@@ -87,7 +92,10 @@ public interface FlowAlgorithm<V,E> {
      *
      * @param <E> graph edge type
      */
-    class FlowImpl<E> implements Flow<E> {
+    class FlowImpl<E>
+        implements
+        Flow<E>
+    {
         /**
          * A mapping defining the flow on the network
          */
@@ -98,7 +106,8 @@ public interface FlowAlgorithm<V,E> {
          *
          * @param flowMap the mapping defining the flow on the network
          */
-        public FlowImpl(Map<E, Double> flowMap) {
+        public FlowImpl(Map<E, Double> flowMap)
+        {
             this.flowMap = Collections.unmodifiableMap(flowMap);
         }
 
@@ -106,7 +115,8 @@ public interface FlowAlgorithm<V,E> {
          * {@inheritDoc}
          */
         @Override
-        public Map<E, Double> getFlowMap() {
+        public Map<E, Double> getFlowMap()
+        {
             return flowMap;
         }
     }

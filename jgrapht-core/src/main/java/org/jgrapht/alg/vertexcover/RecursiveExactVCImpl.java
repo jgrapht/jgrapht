@@ -157,7 +157,6 @@ public class RecursiveExactVCImpl<V, E>
         return new VertexCoverAlgorithm.VertexCoverImpl<>(verticesInCover, vertexCover.weight);
     }
 
-
     private BitSetCover calculateCoverRecursively(
         int indexNextCandidate, BitSet visited, double accumulatedWeight)
     {

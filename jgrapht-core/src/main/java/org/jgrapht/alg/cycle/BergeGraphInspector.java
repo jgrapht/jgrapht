@@ -97,8 +97,8 @@ public class BergeGraphInspector<V, E>
      * @return The conjunct path of S and T
      */
     private GraphPath<V, E> P(
-            Graph<V, E> g, GraphPath<V, E> S, GraphPath<V, E> T, V m, V b1, V b2, V b3, V s1,
-            V s2, V s3)
+        Graph<V, E> g, GraphPath<V, E> S, GraphPath<V, E> T, V m, V b1, V b2, V b3, V s1, V s2,
+        V s3)
     {
         if (s1 == b1) {
             if (b1 == m) {
@@ -260,10 +260,8 @@ public class BergeGraphInspector<V, E>
                                     M.remove(s3);
 
                                     Map<V, GraphPath<V, E>> S1 = new HashMap<>(),
-                                        S2 = new HashMap<>(),
-                                        S3 = new HashMap<>(),
-                                        T1 = new HashMap<>(),
-                                        T2 = new HashMap<>(),
+                                        S2 = new HashMap<>(), S3 = new HashMap<>(),
+                                        T1 = new HashMap<>(), T2 = new HashMap<>(),
                                         T3 = new HashMap<>();
 
                                     // find paths which could be the edges of the pyramid
@@ -278,14 +276,12 @@ public class BergeGraphInspector<V, E>
                                         validInterior.add(s1);
                                         Graph<V, E> subg = new AsSubgraph<>(g, validInterior);
                                         S1.put(
-                                            m1,
-                                                new DijkstraShortestPath<>(subg).getPath(m1, s1));
+                                            m1, new DijkstraShortestPath<>(subg).getPath(m1, s1));
                                         validInterior.remove(s1);
                                         validInterior.add(b1);
                                         subg = new AsSubgraph<>(g, validInterior);
                                         T1.put(
-                                            m1,
-                                                new DijkstraShortestPath<>(subg).getPath(b1, m1));
+                                            m1, new DijkstraShortestPath<>(subg).getPath(b1, m1));
 
                                     }
                                     for (V m2 : M) {
@@ -298,14 +294,12 @@ public class BergeGraphInspector<V, E>
                                         validInterior.add(s2);
                                         Graph<V, E> subg = new AsSubgraph<>(g, validInterior);
                                         S2.put(
-                                            m2,
-                                                new DijkstraShortestPath<>(subg).getPath(m2, s2));
+                                            m2, new DijkstraShortestPath<>(subg).getPath(m2, s2));
                                         validInterior.remove(s2);
                                         validInterior.add(b2);
                                         subg = new AsSubgraph<>(g, validInterior);
                                         T2.put(
-                                            m2,
-                                                new DijkstraShortestPath<>(subg).getPath(b2, m2));
+                                            m2, new DijkstraShortestPath<>(subg).getPath(b2, m2));
 
                                     }
                                     for (V m3 : M) {
@@ -319,14 +313,12 @@ public class BergeGraphInspector<V, E>
 
                                         Graph<V, E> subg = new AsSubgraph<>(g, validInterior);
                                         S3.put(
-                                            m3,
-                                                new DijkstraShortestPath<>(subg).getPath(m3, s3));
+                                            m3, new DijkstraShortestPath<>(subg).getPath(m3, s3));
                                         validInterior.remove(s3);
                                         validInterior.add(b3);
                                         subg = new AsSubgraph<>(g, validInterior, null);
                                         T3.put(
-                                            m3,
-                                                new DijkstraShortestPath<>(subg).getPath(b3, m3));
+                                            m3, new DijkstraShortestPath<>(subg).getPath(b3, m3));
                                     }
 
                                     // Check if all edges of a pyramid are valid
@@ -334,10 +326,8 @@ public class BergeGraphInspector<V, E>
                                     M1.addAll(M);
                                     M1.add(b1);
                                     for (V m1 : M1) {
-                                        GraphPath<V,
-                                            E> P1 = P(
-                                                g, S1.get(m1), T1.get(m1), m1, b1, b2, b3, s1,
-                                                s2, s3);
+                                        GraphPath<V, E> P1 = P(
+                                            g, S1.get(m1), T1.get(m1), m1, b1, b2, b3, s1, s2, s3);
                                         if (P1 == null)
                                             continue;
                                         Set<V> M2 = new HashSet<>();
@@ -346,8 +336,8 @@ public class BergeGraphInspector<V, E>
                                         for (V m2 : M) {
                                             GraphPath<V,
                                                 E> P2 = P(
-                                                    g, S2.get(m2), T2.get(m2), m2, b2, b1, b3,
-                                                    s2, s1, s3);
+                                                    g, S2.get(m2), T2.get(m2), m2, b2, b1, b3, s2,
+                                                    s1, s3);
                                             if (P2 == null)
                                                 continue;
                                             Set<V> M3 = new HashSet<>();
@@ -356,8 +346,8 @@ public class BergeGraphInspector<V, E>
                                             for (V m3 : M3) {
                                                 GraphPath<V,
                                                     E> P3 = P(
-                                                        g, S3.get(m3), T3.get(m3), m3, b3, b1,
-                                                        b2, s3, s1, s2);
+                                                        g, S3.get(m3), T3.get(m3), m3, b3, b1, b2,
+                                                        s3, s1, s2);
                                                 if (P3 == null)
                                                     continue;
                                                 if (certify) {
@@ -477,7 +467,7 @@ public class BergeGraphInspector<V, E>
                                         validSet.add(v1);
                                         validSet.add(v4);
                                         GraphPath<V, E> p = new DijkstraShortestPath<>(
-                                                new AsSubgraph<>(g, validSet)).getPath(v1, v4);
+                                            new AsSubgraph<>(g, validSet)).getPath(v1, v4);
                                         List<E> edgeList = new LinkedList<>();
                                         edgeList.addAll(p.getEdgeList());
                                         if (p.getLength() % 2 == 1) {
@@ -491,10 +481,9 @@ public class BergeGraphInspector<V, E>
 
                                         }
 
-                                        double weight = edgeList
-                                            .stream().mapToDouble(g::getEdgeWeight).sum();
-                                        certificate =
-                                                new GraphWalk<>(g, v1, v1, edgeList, weight);
+                                        double weight =
+                                            edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
+                                        certificate = new GraphWalk<>(g, v1, v1, edgeList, weight);
                                     }
                                     return true;
                                 }
@@ -555,8 +544,7 @@ public class BergeGraphInspector<V, E>
                         edgeList.addAll(pvw.getEdgeList());
                         edgeList.addAll(pwu.getEdgeList());
 
-                        double weight =
-                            edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
+                        double weight = edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                         certificate = new GraphWalk<>(g, u, u, edgeList, weight);
                     }
                     return true;
@@ -810,7 +798,7 @@ public class BergeGraphInspector<V, E>
                                 continue;
 
                             GraphPath<V, E> Path =
-                                    new DijkstraShortestPath<>(new AsSubgraph<>(g, v2v3))
+                                new DijkstraShortestPath<>(new AsSubgraph<>(g, v2v3))
                                     .getPath(v1, v4);
                             if (Path == null)
                                 continue;
@@ -842,8 +830,8 @@ public class BergeGraphInspector<V, E>
                                         edgeList.add(g.getEdge(x, v1));
                                     }
 
-                                    double weight = edgeList
-                                        .stream().mapToDouble(g::getEdgeWeight).sum();
+                                    double weight =
+                                        edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                                     certificate = new GraphWalk<>(g, v1, v1, edgeList, weight);
                                 }
                                 return true;
@@ -982,15 +970,14 @@ public class BergeGraphInspector<V, E>
                                     verticesForPv5v6.remove(v4);
 
                                     if (new ConnectivityInspector<>(
-                                            new AsSubgraph<>(g, verticesForPv5v6))
-                                            .pathExists(v6, v5))
+                                        new AsSubgraph<>(g, verticesForPv5v6)).pathExists(v6, v5))
                                     {
                                         if (certify) {
                                             List<E> edgeList = new LinkedList<>();
                                             edgeList.add(g.getEdge(v1, v4));
                                             edgeList.add(g.getEdge(v4, v6));
                                             GraphPath<V, E> P =
-                                                    new DijkstraShortestPath<>(g).getPath(v6, v5);
+                                                new DijkstraShortestPath<>(g).getPath(v6, v5);
                                             edgeList.addAll(P.getEdgeList());
                                             if (P.getLength() % 2 == 1) {
                                                 V x = X.iterator().next();
@@ -1003,10 +990,9 @@ public class BergeGraphInspector<V, E>
                                             }
 
                                             double weight = edgeList
-                                                .stream().mapToDouble(g::getEdgeWeight)
-                                                .sum();
+                                                .stream().mapToDouble(g::getEdgeWeight).sum();
                                             certificate =
-                                                    new GraphWalk<>(g, v1, v1, edgeList, weight);
+                                                new GraphWalk<>(g, v1, v1, edgeList, weight);
                                         }
                                         return true;
                                     }
@@ -1232,10 +1218,10 @@ public class BergeGraphInspector<V, E>
         Graph<V, E> complementGraph;
         if (g.getType().isSimple())
             complementGraph = new SimpleGraph<>(
-                    g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
+                g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
         else
             complementGraph = new Multigraph<>(
-                    g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
+                g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
         new ComplementGraphGenerator<>(g).generateGraph(complementGraph);
 
         certify = computeCertificate;

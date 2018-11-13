@@ -17,18 +17,13 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.generate.NamedGraphGenerator;
-import org.jgrapht.generate.StarGraphGenerator;
+import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 import static junit.framework.TestCase.fail;
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
@@ -409,7 +404,8 @@ public class GraphTestsTest
         }
     }
 
-    @Test public void testIsCubic()
+    @Test
+    public void testIsCubic()
     {
         assertTrue(GraphTests.isCubic(NamedGraphGenerator.petersenGraph()));
         Graph<Integer, DefaultEdge> triangle = new SimpleGraph<>(DefaultEdge.class);
@@ -448,11 +444,12 @@ public class GraphTestsTest
         assertTrue(GraphTests.isWeaklyChordal(graph));
     }
 
-    @Test public void failRequireIsWeightedOnUnweightedGraph()
+    @Test
+    public void failRequireIsWeightedOnUnweightedGraph()
     {
         try {
             Graph<String, DefaultWeightedEdge> graph =
-                    new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
+                new DefaultDirectedGraph<>(DefaultWeightedEdge.class);
             GraphTests.requireWeighted(graph);
             fail("Expected an IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException e) {
@@ -460,7 +457,8 @@ public class GraphTestsTest
         }
     }
 
-    @Test public void failRequireIsWeightedOnNull()
+    @Test
+    public void failRequireIsWeightedOnNull()
     {
         try {
             GraphTests.requireWeighted(null);
@@ -470,10 +468,10 @@ public class GraphTestsTest
         }
     }
 
-    @Test public void testRequireIsWeighted()
+    @Test
+    public void testRequireIsWeighted()
     {
         Graph graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
         assertEquals(graph, GraphTests.requireWeighted(graph));
     }
 }
-

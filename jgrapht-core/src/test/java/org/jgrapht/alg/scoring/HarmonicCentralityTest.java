@@ -22,7 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit tests for harmonic centrality.

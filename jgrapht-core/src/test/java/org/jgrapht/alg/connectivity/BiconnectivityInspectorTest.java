@@ -241,4 +241,3 @@ public class BiconnectivityInspectorTest
             new HashSet<>(Arrays.asList(blocks.get(5), blocks.get(6))), inspector.getBlocks(9));
     }
 }
-

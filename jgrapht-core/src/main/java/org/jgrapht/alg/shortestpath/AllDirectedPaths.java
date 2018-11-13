@@ -292,8 +292,7 @@ public class AllDirectedPaths<V, E>
     /**
      * Transform an ordered list of edges into a GraphPath.
      *
-     * The weight of the generated GraphPath is set to the sum of the
-     * weights of the edges.
+     * The weight of the generated GraphPath is set to the sum of the weights of the edges.
      *
      * @param edges the edges
      *
@@ -307,4 +306,3 @@ public class AllDirectedPaths<V, E>
         return new GraphWalk<>(graph, source, target, edges, weight);
     }
 }
-

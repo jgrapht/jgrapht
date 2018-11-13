@@ -61,11 +61,11 @@ public class CSVImporterTest
         }
 
         CSVImporter<String, E> importer = createImporter(g, format, delimiter);
-        
-        if ((format == CSVFormat.EDGE_LIST || format == CSVFormat.ADJACENCY_LIST) && weighted) { 
+
+        if ((format == CSVFormat.EDGE_LIST || format == CSVFormat.ADJACENCY_LIST) && weighted) {
             importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, true);
         }
-        
+
         importer.importGraph(g, new StringReader(input));
 
         return g;
@@ -96,7 +96,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("3", "4"));
         assertTrue(g.containsEdge("4", "1"));
     }
-    
+
     @Test
     public void testEdgeListDirectedWeighted()
         throws ImportException
@@ -186,7 +186,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "5"));
         assertTrue(g.containsEdge("4", "6"));
     }
-    
+
     @Test
     public void testAdjacencyListDirectedWeightedWithSemicolon()
         throws ImportException
@@ -271,7 +271,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultWeightedEdge> g =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         CSVImporter<String, DefaultWeightedEdge> importer =
             createImporter(g, CSVFormat.MATRIX, ';');
@@ -322,7 +322,7 @@ public class CSVImporterTest
         // @formatter:on
 
         Graph<String, DefaultWeightedEdge> g =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         CSVImporter<String, DefaultWeightedEdge> importer =
             createImporter(g, CSVFormat.MATRIX, ',');
@@ -371,8 +371,7 @@ public class CSVImporterTest
           + "1;1;1;1;1" + NL;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, true);
@@ -410,8 +409,7 @@ public class CSVImporterTest
           + "1;1;1;1;1" + NL;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.importGraph(g, new StringReader(input));
@@ -450,8 +448,7 @@ public class CSVImporterTest
             + "E;1;1;1;1;1" + NL;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
@@ -492,8 +489,7 @@ public class CSVImporterTest
             + "E;1;1;1;1;1" + NL;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
@@ -631,8 +627,7 @@ public class CSVImporterTest
           + "1;1;1;1;1" + NL;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, ';');
         try {
@@ -657,8 +652,7 @@ public class CSVImporterTest
             + "E\t1\t1\t1\t1\t1" + NL;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         CSVImporter<String, DefaultEdge> importer = createImporter(g, CSVFormat.MATRIX, '\t');
         importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);

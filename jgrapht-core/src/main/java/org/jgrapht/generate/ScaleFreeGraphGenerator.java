@@ -113,4 +113,3 @@ public class ScaleFreeGraphGenerator<V, E>
         }
     }
 }
-

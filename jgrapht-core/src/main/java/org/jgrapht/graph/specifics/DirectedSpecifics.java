@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -47,32 +47,6 @@ public class DirectedSpecifics<V, E>
     protected Graph<V, E> graph;
     protected Map<V, DirectedEdgeContainer<V, E>> vertexMap;
     protected EdgeSetFactory<V, E> edgeSetFactory;
-
-    /**
-     * Construct a new directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @deprecated Since default strategies should be decided at a higher level. 
-     */
-    @Deprecated
-    public DirectedSpecifics(Graph<V, E> graph)
-    {
-        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
-
-    /**
-     * Construct a new directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated    
-    public DirectedSpecifics(
-        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
-    {
-        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
 
     /**
      * Construct a new directed specifics.
@@ -122,9 +96,7 @@ public class DirectedSpecifics<V, E>
     {
         Set<E> edges = null;
 
-        if (graph.containsVertex(sourceVertex)
-            && graph.containsVertex(targetVertex))
-        {
+        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
             edges = new ArrayUnenforcedSet<>();
 
             DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
@@ -145,9 +117,7 @@ public class DirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (graph.containsVertex(sourceVertex)
-            && graph.containsVertex(targetVertex))
-        {
+        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
             DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
 
             for (E e : ec.outgoing) {

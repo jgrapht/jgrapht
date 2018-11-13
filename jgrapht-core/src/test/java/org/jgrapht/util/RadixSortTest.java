@@ -17,13 +17,11 @@
  */
 package org.jgrapht.util;
 
-import org.jgrapht.SlowTests;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.jgrapht.*;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -32,7 +30,8 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Alexandru Valeanu
  */
-public class RadixSortTest {
+public class RadixSortTest
+{
 
     /**
      * Check if the input list is sorted in ascending order.
@@ -40,7 +39,8 @@ public class RadixSortTest {
      * @param list the input list
      * @return true if the list is sorted in ascending order, false otherwise
      */
-    public static boolean isSorted(List<Integer> list){
+    public static boolean isSorted(List<Integer> list)
+    {
         for (int i = 0; i < list.size() - 1; i++) {
             if (!(list.get(i) <= list.get(i + 1)))
                 return false;
@@ -50,19 +50,22 @@ public class RadixSortTest {
     }
 
     @Test
-    public void testNullArray(){
+    public void testNullArray()
+    {
         RadixSort.sort(null);
     }
 
     @Test
-    public void testEmptyArray(){
+    public void testEmptyArray()
+    {
         List<Integer> list = new ArrayList<>();
         RadixSort.sort(list);
         assertTrue(list.isEmpty());
     }
 
     @Test
-    public void testSmallArray(){
+    public void testSmallArray()
+    {
         List<Integer> list = new ArrayList<>();
         list.add(3);
         list.add(1);
@@ -76,7 +79,8 @@ public class RadixSortTest {
     }
 
     @Test
-    public void testRandomHugeArray(){
+    public void testRandomHugeArray()
+    {
         Random random = new Random(0x881);
         final int N = 1_000_000;
 
@@ -92,17 +96,20 @@ public class RadixSortTest {
 
     @Test
     @Category(SlowTests.class)
-    public void testRandomArrays(){
+    public void testRandomArrays()
+    {
         testRandomArrays(new Random(0x88));
     }
-    
+
     @Test
     @Category(SlowTests.class)
-    public void testRandomArraysWithNoFixedSeed(){
+    public void testRandomArraysWithNoFixedSeed()
+    {
         testRandomArrays(new Random());
     }
-    
-    private void testRandomArrays(Random random){
+
+    private void testRandomArrays(Random random)
+    {
         final int NUM_TESTS = 500_000;
 
         for (int test = 0; test < NUM_TESTS; test++) {

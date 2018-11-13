@@ -24,7 +24,7 @@ import org.junit.*;
 import java.io.*;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 /**
@@ -199,13 +199,12 @@ public class DOTExporterTest
     @Test
     public void testNodeHtmlLabelFromAttribute()
     {
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
-            new StringComponentNameProvider<>(), vertex -> null, null,
-                vertex -> {
-                    final HashMap<String, Attribute> attrs = new HashMap<>();
-                    attrs.put("label", new DefaultAttribute<>("<b>html label</b>", AttributeType.HTML));
-                    return attrs;
-                }, null);
+        DOTExporter<String, DefaultEdge> exporter =
+            new DOTExporter<>(new StringComponentNameProvider<>(), vertex -> null, null, vertex -> {
+                final HashMap<String, Attribute> attrs = new HashMap<>();
+                attrs.put("label", new DefaultAttribute<>("<b>html label</b>", AttributeType.HTML));
+                return attrs;
+            }, null);
 
         StringWriter outputWriter = new StringWriter();
 
@@ -246,4 +245,3 @@ public class DOTExporterTest
     }
 
 }
-

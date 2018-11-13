@@ -182,4 +182,3 @@ public class BreadthFirstIterator<V, E>
         }
     }
 }
-

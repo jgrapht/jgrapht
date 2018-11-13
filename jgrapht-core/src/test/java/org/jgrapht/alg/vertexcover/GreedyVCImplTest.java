@@ -17,25 +17,28 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Map;
+import java.util.*;
 
 import static org.jgrapht.alg.vertexcover.VertexCoverTestUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class GreedyVCImplTest {
+public class GreedyVCImplTest
+{
 
-    public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph) {
+    public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph)
+    {
         return new GreedyVCImpl<>(graph);
     }
 
-    public <V, E> VertexCoverAlgorithm<V> createWeightedSolver(Graph<V, E> graph, Map<V, Double> vertexWeightMap) {
+    public <V, E> VertexCoverAlgorithm<V> createWeightedSolver(
+        Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
         return new GreedyVCImpl<>(graph, vertexWeightMap);
     }
 
@@ -53,7 +56,7 @@ public class GreedyVCImplTest {
 
             VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), 1.0 * vertexCover.size(),0);
+            assertEquals(vertexCover.getWeight(), 1.0 * vertexCover.size(), 0);
         }
     }
 
@@ -68,13 +71,14 @@ public class GreedyVCImplTest {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
             Map<Integer, Double> vertexWeights = WeightedVertexCoverTest.getRandomVertexWeights(g);
 
-            VertexCoverAlgorithm<Integer> mvc = createWeightedSolver(Graphs.undirectedGraph(g), vertexWeights);
+            VertexCoverAlgorithm<Integer> mvc =
+                createWeightedSolver(Graphs.undirectedGraph(g), vertexWeights);
 
             VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
             assertTrue(isCover(g, vertexCover));
             assertEquals(
-                    vertexCover.getWeight(),
-                    vertexCover.stream().mapToDouble(vertexWeights::get).sum(),0);
+                vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
+                0);
         }
     }
 }

@@ -17,21 +17,13 @@
  */
 package org.jgrapht.opt.graph.fastutil;
 
-import java.io.Serializable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import it.unimi.dsi.fastutil.objects.*;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.specifics.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.graph.GraphSpecificsStrategy;
-import org.jgrapht.graph.IntrusiveEdgesSpecifics;
-import org.jgrapht.graph.UniformIntrusiveEdgesSpecifics;
-import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
-import org.jgrapht.graph.specifics.DirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedSpecifics;
-
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A specifics strategy implementation using fastutil maps for storage.

@@ -17,27 +17,24 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
+import java.util.*;
 
 /**
- *  Base class for vertex cover tests
+ * Base class for vertex cover tests
  *
  * @author Linda Buisman
  */
-public class VertexCoverTestUtils {
+public class VertexCoverTestUtils
+{
 
-    public VertexCoverTestUtils(){
+    public VertexCoverTestUtils()
+    {
     }
 
     // ~ Static fields/initializers ---------------------------------------------
@@ -59,7 +56,8 @@ public class VertexCoverTestUtils {
      *
      * @return returns true if the provided vertex cover is a valid cover in the given graph
      */
-    static boolean isCover(Graph<Integer, DefaultEdge> g, VertexCoverAlgorithm.VertexCover<Integer> vertexCover)
+    static boolean isCover(
+        Graph<Integer, DefaultEdge> g, VertexCoverAlgorithm.VertexCover<Integer> vertexCover)
     {
         Set<DefaultEdge> uncoveredEdges = new HashSet<>(g.edgeSet());
         for (Integer v : vertexCover)
@@ -76,10 +74,10 @@ public class VertexCoverTestUtils {
      */
     static Graph<Integer, DefaultEdge> createRandomPseudoGraph(int vertices)
     {
-        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator =
-                new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
+            new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
         graphGenerator.generateGraph(g);
         return g;
     }

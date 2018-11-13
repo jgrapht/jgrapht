@@ -48,4 +48,3 @@ public interface VertexSetListener<V>
      */
     void vertexRemoved(GraphVertexChangeEvent<V> e);
 }
-

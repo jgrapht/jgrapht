@@ -21,7 +21,8 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests for the {@link BreadthFirstIterator} class.
@@ -161,4 +162,3 @@ public class BreadthFirstIteratorTest
         assertEquals(new Integer(2), bfs.getParent(3));
     }
 }
-

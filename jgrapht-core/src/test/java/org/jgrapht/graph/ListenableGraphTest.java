@@ -21,7 +21,8 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for {@link ListenableGraph} class.
@@ -284,4 +285,3 @@ public class ListenableGraphTest
         }
     }
 }
-

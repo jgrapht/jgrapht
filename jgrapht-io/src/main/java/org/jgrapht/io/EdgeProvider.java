@@ -39,4 +39,3 @@ public interface EdgeProvider<V, E>
      */
     E buildEdge(V from, V to, String label, Map<String, Attribute> attributes);
 }
-

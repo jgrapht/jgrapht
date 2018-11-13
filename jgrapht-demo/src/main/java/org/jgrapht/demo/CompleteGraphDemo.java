@@ -18,14 +18,15 @@
 package org.jgrapht.demo;
 
 //@example:class:begin
+
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 //@example:class:end
 
@@ -33,7 +34,7 @@ import java.util.function.Supplier;
  * Demonstrates how to create a complete graph and perform a depth first search on it.
  *
  */
-//@example:class:begin
+// @example:class:begin
 public final class CompleteGraphDemo
 {
     // number of vertices
@@ -58,19 +59,19 @@ public final class CompleteGraphDemo
             }
         };
 
-        //@example:generate:begin
+        // @example:generate:begin
         // Create the graph object
-        Graph<String, DefaultEdge> completeGraph = new SimpleGraph<>(vSupplier, SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<String, DefaultEdge> completeGraph =
+            new SimpleGraph<>(vSupplier, SupplierUtil.createDefaultEdgeSupplier(), false);
 
         // Create the CompleteGraphGenerator object
         CompleteGraphGenerator<String, DefaultEdge> completeGenerator =
             new CompleteGraphGenerator<>(SIZE);
 
-
         // Use the CompleteGraphGenerator object to make completeGraph a
         // complete graph with [size] number of vertices
         completeGenerator.generateGraph(completeGraph);
-        //@example:generate:end
+        // @example:generate:end
 
         // Print out the graph to be sure it's really complete
         Iterator<String> iter = new DepthFirstIterator<>(completeGraph);
@@ -82,5 +83,4 @@ public final class CompleteGraphDemo
         }
     }
 }
-//@example:class:end
-
+// @example:class:end

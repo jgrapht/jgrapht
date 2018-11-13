@@ -131,4 +131,3 @@ public interface GraphPath<V, E>
     }
 
 }
-

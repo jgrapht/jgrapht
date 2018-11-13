@@ -242,4 +242,3 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(6, g.edgeSet().size());
     }
 }
-

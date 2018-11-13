@@ -35,4 +35,3 @@ public interface ComponentNameProvider<T>
     String getName(T component);
 
 }
-

@@ -2,7 +2,11 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.2.1** (under development):
+
+- **version 1.3.1** (Under development):
+    - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
+
+- **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Restored optional tests for `BergeGraphInspector` (contributed by Philipp Kaesgen)
     - Use POSIX tar format for assembly (contributed by Mark Raynsford)
@@ -62,6 +66,7 @@ Changes to JGraphT in each version:
     - Added support for edge weights in CSV export/import (contributed by Dimitrios Michail)
     - Added support for html attributes and labels in DOTExporter (contributed by PHaroZ)
     - Unified flow interfaces (contributed by Joris Kinable)
+    - Optimizations for Edmonds maximum cardinality matchings (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

@@ -621,4 +621,3 @@ public class SimpleDirectedGraphTest
         e41_1 = g4.addEdge(v4, v1);
     }
 }
-

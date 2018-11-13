@@ -18,15 +18,15 @@
 package org.jgrapht.alg.transform;
 
 import org.jgrapht.*;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.generate.StarGraphGenerator;
+import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for LineGraphConverter
@@ -55,12 +55,13 @@ public class LineGraphConverterTest
     {
         // Line Graph of a star graph is a complete graph
         Graph<Integer, DefaultEdge> starGraph = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new StarGraphGenerator<>(5);
         Map<String, Integer> resultMap = new HashMap<>();
         generator.generateGraph(starGraph, resultMap);
 
-        LineGraphConverter<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConverter<>(starGraph);
+        LineGraphConverter<Integer, DefaultEdge, DefaultEdge> lgc =
+            new LineGraphConverter<>(starGraph);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
         lgc.convertToLineGraph(target);
 
@@ -72,12 +73,12 @@ public class LineGraphConverterTest
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
-        DefaultEdge e12 = g.addEdge(1,2);
-        DefaultEdge e25 = g.addEdge(2,5);
-        DefaultEdge e54 = g.addEdge(5,4);
-        DefaultEdge e41 = g.addEdge(4,1);
-        DefaultEdge e43 = g.addEdge(4,3);
-        DefaultEdge e13 = g.addEdge(1,3);
+        DefaultEdge e12 = g.addEdge(1, 2);
+        DefaultEdge e25 = g.addEdge(2, 5);
+        DefaultEdge e54 = g.addEdge(5, 4);
+        DefaultEdge e41 = g.addEdge(4, 1);
+        DefaultEdge e43 = g.addEdge(4, 3);
+        DefaultEdge e13 = g.addEdge(1, 3);
 
         LineGraphConverter<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConverter<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
@@ -102,13 +103,13 @@ public class LineGraphConverterTest
     {
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
-        DefaultEdge e12 = g.addEdge(1,2);
-        DefaultEdge e14 = g.addEdge(1,4);
-        DefaultEdge e23 = g.addEdge(2,3);
-        DefaultEdge e31 = g.addEdge(3,1);
-        DefaultEdge e32 = g.addEdge(3,2);
-        DefaultEdge e34 = g.addEdge(3,4);
-        DefaultEdge e43 = g.addEdge(4,3);
+        DefaultEdge e12 = g.addEdge(1, 2);
+        DefaultEdge e14 = g.addEdge(1, 4);
+        DefaultEdge e23 = g.addEdge(2, 3);
+        DefaultEdge e31 = g.addEdge(3, 1);
+        DefaultEdge e32 = g.addEdge(3, 2);
+        DefaultEdge e34 = g.addEdge(3, 4);
+        DefaultEdge e43 = g.addEdge(4, 3);
 
         LineGraphConverter<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConverter<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleDirectedGraph<>(DefaultEdge.class);
@@ -130,14 +131,16 @@ public class LineGraphConverterTest
         assertTrue(target.containsEdge(e43, e31));
         assertTrue(target.containsEdge(e14, e43));
     }
+
     @Test
-    public void selfLoopTestUndirected(){
-        Graph<Integer, DefaultEdge> g=new Pseudograph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(1,2,3));
-        DefaultEdge e12 = g.addEdge(1,2);
-        DefaultEdge e23 = g.addEdge(2,3);
-        DefaultEdge e31 = g.addEdge(3,1);
-        DefaultEdge e22 = g.addEdge(2,2);
+    public void selfLoopTestUndirected()
+    {
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3));
+        DefaultEdge e12 = g.addEdge(1, 2);
+        DefaultEdge e23 = g.addEdge(2, 3);
+        DefaultEdge e31 = g.addEdge(3, 1);
+        DefaultEdge e22 = g.addEdge(2, 2);
         LineGraphConverter<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConverter<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new SimpleGraph<>(DefaultEdge.class);
         lgc.convertToLineGraph(target);
@@ -152,14 +155,16 @@ public class LineGraphConverterTest
         assertTrue(target.containsEdge(e22, e23));
 
     }
+
     @Test
-    public void selfLoopTestDirected(){
-        Graph<Integer, DefaultEdge> g=new DirectedPseudograph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(1,2,3));
-        DefaultEdge e12 = g.addEdge(1,2);
-        DefaultEdge e23 = g.addEdge(2,3);
-        DefaultEdge e31 = g.addEdge(3,1);
-        DefaultEdge e22 = g.addEdge(2,2);
+    public void selfLoopTestDirected()
+    {
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3));
+        DefaultEdge e12 = g.addEdge(1, 2);
+        DefaultEdge e23 = g.addEdge(2, 3);
+        DefaultEdge e31 = g.addEdge(3, 1);
+        DefaultEdge e22 = g.addEdge(2, 2);
         LineGraphConverter<Integer, DefaultEdge, DefaultEdge> lgc = new LineGraphConverter<>(g);
         Graph<DefaultEdge, DefaultEdge> target = new DirectedPseudograph<>(DefaultEdge.class);
         lgc.convertToLineGraph(target);

@@ -21,8 +21,8 @@ import org.jgrapht.*;
 
 /**
  * May be used to provide external path validations in addition to the basic validations done by
- * {@link KShortestSimplePaths} - that the path is from source to target and that it does not contain
- * loops.
+ * {@link KShortestSimplePaths} - that the path is from source to target and that it does not
+ * contain loops.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

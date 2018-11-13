@@ -17,19 +17,19 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Dimitrios Michail
@@ -236,8 +236,8 @@ public class SimpleGraphMLImporterTest
 
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).allowingMultipleEdges(true)
-                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
+                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         new SimpleGraphMLImporter<String, DefaultEdge>()
@@ -338,21 +338,20 @@ public class SimpleGraphMLImporterTest
         assertTrue(g.containsVertex("0"));
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsEdge("0", "1"));
-        
+
+        assertEquals(DefaultAttribute.createAttribute("green"), graphAttrs.get("color"));
+        assertEquals(DefaultAttribute.createAttribute("undirected"), graphAttrs.get("edgedefault"));
+        assertEquals(DefaultAttribute.createAttribute("n0"), vertexAttrs.get(Pair.of("0", "id")));
+        assertEquals(DefaultAttribute.createAttribute("n1"), vertexAttrs.get(Pair.of("1", "id")));
         assertEquals(
-            DefaultAttribute.createAttribute("green"), graphAttrs.get("color"));
+            DefaultAttribute.createAttribute("e1"),
+            edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "id")));
         assertEquals(
-            DefaultAttribute.createAttribute("undirected"), graphAttrs.get("edgedefault"));
+            DefaultAttribute.createAttribute("n0"),
+            edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "source")));
         assertEquals(
-            DefaultAttribute.createAttribute("n0"), vertexAttrs.get(Pair.of("0", "id")));
-        assertEquals(
-            DefaultAttribute.createAttribute("n1"), vertexAttrs.get(Pair.of("1", "id")));
-        assertEquals(
-            DefaultAttribute.createAttribute("e1"), edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "id")));
-        assertEquals(
-            DefaultAttribute.createAttribute("n0"), edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "source")));
-        assertEquals(
-            DefaultAttribute.createAttribute("n1"), edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "target")));
+            DefaultAttribute.createAttribute("n1"),
+            edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "target")));
     }
 
 }

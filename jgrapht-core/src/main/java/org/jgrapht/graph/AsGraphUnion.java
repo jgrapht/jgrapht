@@ -39,8 +39,10 @@ import java.util.function.*;
  * @author Ilya Razenshteyn
  */
 public class AsGraphUnion<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -3848082143382987713L;
 
@@ -110,12 +112,13 @@ public class AsGraphUnion<V, E>
 
         if (inG1 && inG2) {
             return new UnmodifiableUnionSet<>(
-                g1.getAllEdges(sourceVertex, targetVertex), g2.getAllEdges(sourceVertex, targetVertex));
+                g1.getAllEdges(sourceVertex, targetVertex),
+                g2.getAllEdges(sourceVertex, targetVertex));
         } else if (inG1) {
             return Collections.unmodifiableSet(g1.getAllEdges(sourceVertex, targetVertex));
         } else if (inG2) {
             return Collections.unmodifiableSet(g2.getAllEdges(sourceVertex, targetVertex));
-        } 
+        }
         return Collections.emptySet();
     }
 
@@ -238,8 +241,7 @@ public class AsGraphUnion<V, E>
         boolean inG2 = g2.containsVertex(vertex);
 
         if (inG1 && inG2) {
-            return new UnmodifiableUnionSet<>(
-                g1.edgesOf(vertex), g2.edgesOf(vertex));
+            return new UnmodifiableUnionSet<>(g1.edgesOf(vertex), g2.edgesOf(vertex));
         } else if (inG1) {
             return Collections.unmodifiableSet(g1.edgesOf(vertex));
         } else if (inG2) {
@@ -474,4 +476,3 @@ public class AsGraphUnion<V, E>
         throw new UnsupportedOperationException(READ_ONLY);
     }
 }
-

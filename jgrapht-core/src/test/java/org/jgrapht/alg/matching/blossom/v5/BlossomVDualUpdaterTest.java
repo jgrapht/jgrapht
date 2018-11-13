@@ -17,19 +17,16 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Map;
+import java.util.*;
 
-import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_FIXED_DELTA;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
+import static org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching.EPS;
 import static org.junit.Assert.*;
 
 /**
@@ -37,57 +34,73 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class BlossomVDualUpdaterTest {
+public class BlossomVDualUpdaterTest
+{
 
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
     @org.junit.Test
-    public void testUpdateDuals1() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUpdateDuals1()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
         assertTrue(dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA) > 0);
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             assertEquals(root.tree.eps, 2.5, EPS);
         }
     }
 
     @Test
-    public void testUpdateDuals2() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUpdateDuals2()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2, 6);
         Graphs.addEdgeWithVertices(graph, 1, 3, 7);
         Graphs.addEdgeWithVertices(graph, 2, 3, 10);
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
         dualUpdater.updateDuals(MULTIPLE_TREE_FIXED_DELTA);
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             assertEquals(root.tree.eps, 3, EPS);
         }
     }
 
     @Test
-    public void testUpdateDualsSingle1() {
+    public void testUpdateDualsSingle1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
         DefaultEdge edge = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
 
         BlossomVInitializer<Integer, DefaultEdge> initializer = new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultEdge> state = initializer.initialize(noneOptions);
-        BlossomVDualUpdater<Integer, DefaultEdge> dualUpdater = new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
+        BlossomVDualUpdater<Integer, DefaultEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, new BlossomVPrimalUpdater<>(state));
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
-
 
         BlossomVTree tree = vertexMap.get(1).tree;
         dualUpdater.updateDualsSingle(tree);
         assertEquals(5, tree.eps, EPS);
     }
 
-    public void testUpdateDualsSingle2() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUpdateDualsSingle2()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
@@ -97,10 +110,13 @@ public class BlossomVDualUpdaterTest {
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 2);
         DefaultWeightedEdge e35 = Graphs.addEdgeWithVertices(graph, 3, 5, 4);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, primalUpdater);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -140,19 +156,25 @@ public class BlossomVDualUpdaterTest {
      * Tests updating duals with connected components for basic invariants
      */
     @Test
-    public void testUpdateDualsConnectedComponents1() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUpdateDualsConnectedComponents1()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 10);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
-        DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0); // tight (-, +) cross-tree edge
+        DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0); // tight (-, +)
+                                                                              // cross-tree edge
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 8); // infinity edge
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 0); // matched free edge
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, primalUpdater);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -178,8 +200,10 @@ public class BlossomVDualUpdaterTest {
      * Tests updating duals with two connected components
      */
     @Test
-    public void testUpdateDualsConnectedComponents2() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUpdateDualsConnectedComponents2()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         // tree edges
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
@@ -187,16 +211,22 @@ public class BlossomVDualUpdaterTest {
         DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
         // cross-tree and infinity edges
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 10); // infinity edge
-        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);  // free matched edge
+        DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0); // free matched edge
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 10); // infinity edge
-        DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 6); // (-, +) cross-tree edge
-        DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 7); // (+, +) cross-tree edge
-        DefaultWeightedEdge e37 = Graphs.addEdgeWithVertices(graph, 3, 7, 5); // (+, -) cross-tree edge
+        DefaultWeightedEdge e26 = Graphs.addEdgeWithVertices(graph, 2, 6, 6); // (-, +) cross-tree
+                                                                              // edge
+        DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 7); // (+, +) cross-tree
+                                                                              // edge
+        DefaultWeightedEdge e37 = Graphs.addEdgeWithVertices(graph, 3, 7, 5); // (+, -) cross-tree
+                                                                              // edge
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, primalUpdater);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -228,26 +258,35 @@ public class BlossomVDualUpdaterTest {
      * Tests updating duals with connected components on a big test case
      */
     @Test
-    public void testUpdateDualsConnectedComponents3() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testUpdateDualsConnectedComponents3()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
-        DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0); // tight (-, +) cross-tree edge
+        DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0); // tight (-, +)
+                                                                              // cross-tree edge
         DefaultWeightedEdge e56 = Graphs.addEdgeWithVertices(graph, 5, 6, 0);
         DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
-        DefaultWeightedEdge e68 = Graphs.addEdgeWithVertices(graph, 6, 8, 0); // tight (-, +) cross-tree edge
+        DefaultWeightedEdge e68 = Graphs.addEdgeWithVertices(graph, 6, 8, 0); // tight (-, +)
+                                                                              // cross-tree edge
         DefaultWeightedEdge e910 = Graphs.addEdgeWithVertices(graph, 9, 10, 0); // free matched edge
         DefaultWeightedEdge e39 = Graphs.addEdgeWithVertices(graph, 3, 9, 5);
         DefaultWeightedEdge e49 = Graphs.addEdgeWithVertices(graph, 4, 9, 5);
         DefaultWeightedEdge e710 = Graphs.addEdgeWithVertices(graph, 7, 10, 15);
         DefaultWeightedEdge e810 = Graphs.addEdgeWithVertices(graph, 8, 10, 15);
-        DefaultWeightedEdge e46 = Graphs.addEdgeWithVertices(graph, 4, 6, 4); // not tight (-, +) cross-tree edge
-        DefaultWeightedEdge e28 = Graphs.addEdgeWithVertices(graph, 2, 8, 6); // not tight (-, +) cross-tree edge
+        DefaultWeightedEdge e46 = Graphs.addEdgeWithVertices(graph, 4, 6, 4); // not tight (-, +)
+                                                                              // cross-tree edge
+        DefaultWeightedEdge e28 = Graphs.addEdgeWithVertices(graph, 2, 8, 6); // not tight (-, +)
+                                                                              // cross-tree edge
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
-        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater = new BlossomVDualUpdater<>(state, primalUpdater);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
+        BlossomVDualUpdater<Integer, DefaultWeightedEdge> dualUpdater =
+            new BlossomVDualUpdater<>(state, primalUpdater);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -285,7 +324,6 @@ public class BlossomVDualUpdaterTest {
         node5.tree.setCurrentEdges();
         primalUpdater.grow(edge56, false, false);
         node5.tree.clearCurrentEdges();
-
 
         double dualChange = dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
         assertTrue(dualChange > 0);

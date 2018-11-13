@@ -96,7 +96,7 @@ public class DOTImporter<V, E>
         }, (graphUpdater != null) ? graphUpdater : (c, a) -> {
         });
 
-        Map<CharSequence,CharSequence> lookupMap=new HashMap<>();
+        Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
         lookupMap.put("\\\\", "\\");
         lookupMap.put("\\\"", "\"");
         lookupMap.put("\\'", "'");

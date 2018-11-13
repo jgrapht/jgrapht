@@ -60,4 +60,3 @@ public class IntegerComponentNameProvider<T>
         return id.toString();
     }
 }
-

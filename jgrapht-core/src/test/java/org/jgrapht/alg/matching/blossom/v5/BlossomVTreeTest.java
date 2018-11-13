@@ -17,16 +17,11 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.MINUS;
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.InitializationType.NONE;
@@ -37,13 +32,16 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class BlossomVTreeTest {
+public class BlossomVTreeTest
+{
 
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
     @Test
-    public void testTreeNodeIterator() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testTreeNodeIterator()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
@@ -51,12 +49,13 @@ public class BlossomVTreeTest {
         DefaultWeightedEdge e36 = Graphs.addEdgeWithVertices(graph, 3, 6, 0);
         DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
-
 
         BlossomVNode node1 = vertexMap.get(1);
         BlossomVNode node2 = vertexMap.get(2);
@@ -81,16 +80,21 @@ public class BlossomVTreeTest {
 
         int i = 0;
         Set<BlossomVNode> actualNodes = new HashSet<>();
-        for (BlossomVTree.TreeNodeIterator iterator = node1.tree.treeNodeIterator(); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeNodeIterator iterator = node1.tree.treeNodeIterator();
+            iterator.hasNext();)
+        {
             i++;
             actualNodes.add(iterator.next());
         }
         assertEquals(7, i);
-        assertEquals(new HashSet<>(Arrays.asList(node1, node2, node3, node4, node5, node6, node7)), actualNodes);
+        assertEquals(
+            new HashSet<>(Arrays.asList(node1, node2, node3, node4, node5, node6, node7)),
+            actualNodes);
     }
 
     @Test
-    public void testTreeEdgeIterator() {
+    public void testTreeEdgeIterator()
+    {
         BlossomVNode node1 = new BlossomVNode(-1); // positions doesn't matter here
         BlossomVNode node2 = new BlossomVNode(-1);
         BlossomVNode node3 = new BlossomVNode(-1);
@@ -109,7 +113,9 @@ public class BlossomVTreeTest {
         Set<BlossomVTreeEdge> expectedInEdges = new HashSet<>(Arrays.asList(treeEdge3, treeEdge4));
         Set<BlossomVTreeEdge> actualOutEdges = new HashSet<>();
         Set<BlossomVTreeEdge> actualInEdges = new HashSet<>();
-        for (BlossomVTree.TreeEdgeIterator iterator = tree1.treeEdgeIterator(); iterator.hasNext(); ) {
+        for (BlossomVTree.TreeEdgeIterator iterator = tree1.treeEdgeIterator();
+            iterator.hasNext();)
+        {
             BlossomVTreeEdge edge = iterator.next();
             int currentDir = iterator.getCurrentDirection();
             if (currentDir == 0) {
@@ -124,7 +130,8 @@ public class BlossomVTreeTest {
     }
 
     @Test
-    public void testAddMinusBlossom() {
+    public void testAddMinusBlossom()
+    {
         BlossomVNode root = new BlossomVNode(-1);
         BlossomVTree tree = new BlossomVTree(root);
 

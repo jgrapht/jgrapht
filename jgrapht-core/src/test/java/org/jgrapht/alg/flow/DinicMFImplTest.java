@@ -22,7 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DinicMFImplTest
     extends
@@ -62,7 +62,7 @@ public class DinicMFImplTest
         edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 100.0);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v2);
+        double flow = dinic.getMaximumFlowValue(v1, v2);
         assertEquals(100.0, flow, 0);
     }
 
@@ -77,7 +77,7 @@ public class DinicMFImplTest
         edge = g.addEdge(v2, v3);
         g.setEdgeWeight(edge, 50.0);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v3);
+        double flow = dinic.getMaximumFlowValue(v1, v3);
         assertEquals(50.0, flow, 0);
     }
 
@@ -86,7 +86,7 @@ public class DinicMFImplTest
     {
         g.addVertex(v1);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v1);
+        double flow = dinic.getMaximumFlowValue(v1, v1);
         System.out.println(flow);
     }
 
@@ -96,7 +96,7 @@ public class DinicMFImplTest
         g.addVertex(v1);
         g.addVertex(v2);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v2);
+        double flow = dinic.getMaximumFlowValue(v1, v2);
         assertEquals(0.0, flow, 0);
     }
 
@@ -119,7 +119,7 @@ public class DinicMFImplTest
         edge = g.addEdge(v1, v3);
         g.setEdgeWeight(edge, 1.0);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v2);
+        double flow = dinic.getMaximumFlowValue(v1, v2);
         assertEquals(2.0, flow, 0);
     }
 }

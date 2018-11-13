@@ -23,7 +23,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for the {@link DepthFirstIteratorTest} class.
@@ -161,4 +161,3 @@ public class DepthFirstIteratorTest
         assertEquals(expected, actual);
     }
 }
-

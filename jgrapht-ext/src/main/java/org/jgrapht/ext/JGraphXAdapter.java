@@ -303,4 +303,3 @@ public class JGraphXAdapter<V, E>
         }
     }
 }
-

@@ -48,7 +48,8 @@ abstract class BaseShortestPathAlgorithm<V, E>
     /**
      * Error message for reporting that a sink vertex is missing.
      */
-    protected static final String GRAPH_MUST_CONTAIN_THE_SINK_VERTEX = "Graph must contain the sink vertex!";
+    protected static final String GRAPH_MUST_CONTAIN_THE_SINK_VERTEX =
+        "Graph must contain the sink vertex!";
 
     /**
      * The underlying graph.

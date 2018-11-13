@@ -420,4 +420,3 @@ final class RankingPathElementList<V, E>
         }
     }
 }
-

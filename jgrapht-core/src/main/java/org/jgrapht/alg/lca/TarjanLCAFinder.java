@@ -17,11 +17,9 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.UnionFind;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
 import java.util.*;
 
@@ -29,33 +27,33 @@ import java.util.*;
  * Tarjan's offline algorithm for computing lowest common ancestors in rooted trees and forests.
  *
  * <p>
- * See the article on
- * <a href="https://en.wikipedia.org/wiki/Tarjan%27s_off-line_lowest_common_ancestors_algorithm">wikipedia</a> for more
- * information on the algorithm.
+ * See the article on <a href=
+ * "https://en.wikipedia.org/wiki/Tarjan%27s_off-line_lowest_common_ancestors_algorithm">wikipedia</a>
+ * for more information on the algorithm.
  *
  * </p>
  *
  * <p>
- *     The original algorithm can be found in <i>Gabow, H. N.; Tarjan, R. E. (1983),
- *     "A linear-time algorithm for a special case of disjoint set union", Proceedings of the 15th
- *     ACM Symposium on Theory of Computing (STOC), pp. 246–251, doi:10.1145/800061.808753</i>
+ * The original algorithm can be found in <i>Gabow, H. N.; Tarjan, R. E. (1983), "A linear-time
+ * algorithm for a special case of disjoint set union", Proceedings of the 15th ACM Symposium on
+ * Theory of Computing (STOC), pp. 246–251, doi:10.1145/800061.808753</i>
  * </p>
  *
  * <p>
- *  Preprocessing Time complexity: $O(1)$<br>
- *  Preprocessing Space complexity:  $O(1)$<br>
- *  Query Time complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries<br>
- *  Query Space complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries<br>
+ * Preprocessing Time complexity: $O(1)$<br>
+ * Preprocessing Space complexity: $O(1)$<br>
+ * Query Time complexity: $O(|V| log^{*}(|V|) + |Q|)$ where $|Q|$ is the number of queries<br>
+ * Query Space complexity: $O(|V| + |Q|)$ where $|Q|$ is the number of queries<br>
  * </p>
  *
  * <p>
- *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
- *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
- *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
- *     since it provides $O(1)$ per query.<br>
- *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
- *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
- *     For DAGs, use {@link NaiveLCAFinder}.
+ * For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly.
+ * For larger trees/forests with less than 50,000 queries you can use either
+ * {@link BinaryLiftingLCAFinder}, {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo
+ * more than that use {@link EulerTourRMQLCAFinder} since it provides $O(1)$ per query.<br>
+ * Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ * {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ * For DAGs, use {@link NaiveLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -63,7 +61,10 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
+public class TarjanLCAFinder<V, E>
+    implements
+    LowestCommonAncestorAlgorithm<V>
+{
     private Graph<V, E> graph;
     private Set<V> roots;
 
@@ -87,7 +88,8 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
      * @param graph the input graph
      * @param root the root of the graph
      */
-    public TarjanLCAFinder(Graph<V, E> graph, V root) {
+    public TarjanLCAFinder(Graph<V, E> graph, V root)
+    {
         this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
@@ -103,7 +105,8 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
-    public TarjanLCAFinder(Graph<V, E> graph, Set<V> roots) {
+    public TarjanLCAFinder(Graph<V, E> graph, Set<V> roots)
+    {
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
 
@@ -118,25 +121,29 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
      * {@inheritDoc}
      */
     @Override
-    public V getLCA(V a, V b) {
-        return getBatchLCA(Collections.singletonList(Pair.of(a,b))).get(0);
+    public V getLCA(V a, V b)
+    {
+        return getBatchLCA(Collections.singletonList(Pair.of(a, b))).get(0);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<V> getBatchLCA(List<Pair<V, V>> queries) {
+    public List<V> getBatchLCA(List<Pair<V, V>> queries)
+    {
         return computeTarjan(queries);
     }
 
-    private void initialize(){
+    private void initialize()
+    {
         unionFind = new UnionFind<>(Collections.emptySet());
         ancestors = new HashMap<>();
         blackNodes = new HashSet<>();
     }
 
-    private void clear(){
+    private void clear()
+    {
         unionFind = null;
         ancestors = null;
         blackNodes = null;
@@ -146,7 +153,8 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
         lowestCommonAncestors = null;
     }
 
-    private List<V> computeTarjan(List<Pair<V, V>> queries){
+    private List<V> computeTarjan(List<Pair<V, V>> queries)
+    {
         initialize();
 
         this.queries = queries;
@@ -154,7 +162,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
 
         this.queryOccurs = new HashMap<>();
 
-        for (int i = 0; i < queries.size(); i++){
+        for (int i = 0; i < queries.size(); i++) {
             V a = this.queries.get(i).getFirst();
             V b = this.queries.get(i).getSecond();
 
@@ -166,7 +174,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
 
             if (a.equals(b))
                 this.lowestCommonAncestors.add(a);
-            else{
+            else {
                 queryOccurs.computeIfAbsent(a, x -> new HashSet<>()).add(i);
                 queryOccurs.computeIfAbsent(b, x -> new HashSet<>()).add(i);
 
@@ -176,7 +184,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
 
         Set<V> visited = new HashSet<>();
 
-        for (V root: roots){
+        for (V root : roots) {
             if (visited.contains(root))
                 throw new IllegalArgumentException("multiple roots in the same tree");
 
@@ -190,15 +198,16 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
         return tmpRef;
     }
 
-    private void computeTarjanOLCA(V u, V p, Set<V> visited){
+    private void computeTarjanOLCA(V u, V p, Set<V> visited)
+    {
         visited.add(u);
         unionFind.addElement(u);
         ancestors.put(u, u);
 
-        for (E edge: graph.outgoingEdgesOf(u)){
+        for (E edge : graph.outgoingEdgesOf(u)) {
             V v = Graphs.getOppositeVertex(graph, edge, u);
 
-            if (!v.equals(p)){
+            if (!v.equals(p)) {
                 computeTarjanOLCA(v, u, visited);
                 unionFind.union(u, v);
                 ancestors.put(unionFind.find(u), u);
@@ -207,7 +216,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
 
         blackNodes.add(u);
 
-        for (int index: queryOccurs.computeIfAbsent(u, x -> new HashSet<>())){
+        for (int index : queryOccurs.computeIfAbsent(u, x -> new HashSet<>())) {
             Pair<V, V> query = queries.get(index);
             V v;
 
@@ -216,7 +225,7 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
             else
                 v = query.getFirst();
 
-            if (blackNodes.contains(v)){
+            if (blackNodes.contains(v)) {
                 lowestCommonAncestors.set(index, ancestors.get(unionFind.find(v)));
             }
         }
@@ -226,10 +235,12 @@ public class TarjanLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
+     * 
      * @throws UnsupportedOperationException if the method is called
      */
     @Override
-    public Set<V> getLCASet(V a, V b){
+    public Set<V> getLCASet(V a, V b)
+    {
         throw new UnsupportedOperationException();
     }
 }

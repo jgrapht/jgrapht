@@ -149,4 +149,3 @@ public class AsUnmodifiableGraph<V, E>
         return super.getType().asUnmodifiable();
     }
 }
-

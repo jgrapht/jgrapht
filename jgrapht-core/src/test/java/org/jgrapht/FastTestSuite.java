@@ -27,7 +27,7 @@ import org.junit.runner.*;
  * @author John Sichi
  */
 @RunWith(ParallelSuite.class)
-@Categories.ExcludeCategory({SlowTests.class, OptionalTests.class})
+@Categories.ExcludeCategory({ SlowTests.class, OptionalTests.class })
 @SuiteClasses({ "**/*Test.class", "!**/perf/**" })
 public class FastTestSuite
 {

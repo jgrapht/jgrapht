@@ -17,16 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.graph.specifics.DirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedSpecifics;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A default lookup specifics strategy implementation.

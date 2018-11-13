@@ -17,17 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.junit.*;
 
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class AsUnweightedGraphTest
 {
@@ -45,7 +40,8 @@ public class AsUnweightedGraphTest
     /**
      * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    @Before public void setUp()
+    @Before
+    public void setUp()
     {
         Graph<String, DefaultWeightedEdge> undirectedWeightedGraph =
             new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -61,27 +57,32 @@ public class AsUnweightedGraphTest
         loop = Graphs.addEdge(undirectedWeightedGraph, v4, v4, 6781234453486d);
     }
 
-    @Test public void getEdgeWeightOfE12()
+    @Test
+    public void getEdgeWeightOfE12()
     {
         assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void getEdgeWeightOfE23()
+    @Test
+    public void getEdgeWeightOfE23()
     {
         assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e23), 0);
     }
 
-    @Test public void getEdgeWeightOfE24()
+    @Test
+    public void getEdgeWeightOfE24()
     {
         assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e24), 0);
     }
 
-    @Test public void getEdgeWeightOfLoop()
+    @Test
+    public void getEdgeWeightOfLoop()
     {
         assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(loop), 0);
     }
 
-    @Test public void setEdgeWeight()
+    @Test
+    public void setEdgeWeight()
     {
         try {
             this.unweightedGraph.setEdgeWeight(e23, 81);
@@ -90,12 +91,14 @@ public class AsUnweightedGraphTest
         }
     }
 
-    @Test public void getType()
+    @Test
+    public void getType()
     {
         assertFalse(this.unweightedGraph.getType().isWeighted());
     }
 
-    @Test public void failOnCreationOfUnweightedGraph()
+    @Test
+    public void failOnCreationOfUnweightedGraph()
     {
         try {
             new AsUnweightedGraph<>(null);

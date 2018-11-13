@@ -370,4 +370,3 @@ public class GraphDelegator<V, E>
     }
 
 }
-

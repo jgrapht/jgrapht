@@ -17,16 +17,13 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.ArrayUnenforcedSet;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * An algorithm which computes a decomposition into disjoint paths for a given tree/forest
@@ -34,7 +31,8 @@ import java.util.stream.Collectors;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public interface TreeToPathDecompositionAlgorithm<V, E> {
+public interface TreeToPathDecompositionAlgorithm<V, E>
+{
     /**
      * Computes a path decomposition.
      *
@@ -48,7 +46,8 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    interface PathDecomposition<V, E> {
+    interface PathDecomposition<V, E>
+    {
         /**
          * Set of edges of the path decomposition.
          * 
@@ -66,7 +65,8 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
         /**
          * @return number of paths in the decomposition
          */
-        default int numberOfPaths(){
+        default int numberOfPaths()
+        {
             return getPaths().size();
         }
     }
@@ -77,7 +77,11 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class PathDecompositionImpl<V, E> implements PathDecomposition<V, E>, Serializable {
+    class PathDecompositionImpl<V, E>
+        implements
+        PathDecomposition<V, E>,
+        Serializable
+    {
 
         private static final long serialVersionUID = 8468626434814461297L;
         private final Set<E> edges;
@@ -90,28 +94,32 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
          * @param edges the edges
          * @param paths the vertex paths
          */
-        public PathDecompositionImpl(Graph<V, E> graph, Set<E> edges, List<List<V>> paths) {
+        public PathDecompositionImpl(Graph<V, E> graph, Set<E> edges, List<List<V>> paths)
+        {
             this.edges = edges;
 
-            Set<GraphPath<V, E>> arrayUnenforcedSet = paths.stream()
-                    .map(path -> new GraphWalk<>(graph, path, path.size()))
-                    .collect(Collectors.toCollection(ArrayUnenforcedSet::new));
+            Set<GraphPath<V, E>> arrayUnenforcedSet =
+                paths.stream().map(path -> new GraphWalk<>(graph, path, path.size())).collect(
+                    Collectors.toCollection(ArrayUnenforcedSet::new));
 
             this.paths = Collections.unmodifiableSet(arrayUnenforcedSet);
         }
 
         @Override
-        public Set<E> getEdges() {
+        public Set<E> getEdges()
+        {
             return edges;
         }
 
         @Override
-        public Set<GraphPath<V, E>> getPaths() {
+        public Set<GraphPath<V, E>> getPaths()
+        {
             return paths;
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return "Path-Decomposition [edges=" + edges + "," + "paths=" + getPaths() + "]";
         }
     }

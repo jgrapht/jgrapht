@@ -23,7 +23,7 @@ import org.junit.*;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link CSVExporter}.
@@ -36,8 +36,8 @@ public class CSVExporterTest
     // ---------------------------------------------
 
     private static final String NL = System.getProperty("line.separator");
-    private static final ComponentNameProvider<Integer> nameProvider = v->String.valueOf(v);
-    private static final ComponentNameProvider<String> stringNameProvider = v->v;
+    private static final ComponentNameProvider<Integer> nameProvider = v -> String.valueOf(v);
+    private static final ComponentNameProvider<String> stringNameProvider = v -> v;
 
     // @formatter:off
     private static final String UNDIRECTED_EDGE_LIST =
@@ -189,7 +189,7 @@ public class CSVExporterTest
     public void testDirectedWeightedEdgeList()
     {
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        g = new AsWeightedGraph<>(g, e -> 2.0 , false, false);
+        g = new AsWeightedGraph<>(g, e -> 2.0, false, false);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -237,7 +237,7 @@ public class CSVExporterTest
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_ADJACENCY_LIST, w.toString());
     }
-    
+
     @Test
     public void testDirectedWeightedAdjacencyList()
     {
@@ -495,4 +495,3 @@ public class CSVExporterTest
     }
 
 }
-

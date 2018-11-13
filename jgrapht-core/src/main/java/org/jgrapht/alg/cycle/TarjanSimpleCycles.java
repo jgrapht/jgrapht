@@ -69,6 +69,7 @@ public class TarjanSimpleCycles<V, E>
 
     /**
      * Get the graph
+     * 
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -78,6 +79,7 @@ public class TarjanSimpleCycles<V, E>
 
     /**
      * Set the graph
+     * 
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -191,4 +193,3 @@ public class TarjanSimpleCycles<V, E>
         return removed.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
-

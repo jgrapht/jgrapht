@@ -23,7 +23,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for ClosestFirstIterator.
@@ -156,4 +156,3 @@ public class ClosestFirstIteratorTest
         return new ClosestFirstIterator<>(g, startVertex);
     }
 }
-

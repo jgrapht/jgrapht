@@ -77,6 +77,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     /**
      * Get the graph
+     * 
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -86,6 +87,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     /**
      * Set the graph
+     * 
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -274,4 +276,3 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         return removed.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
-

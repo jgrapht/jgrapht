@@ -35,4 +35,3 @@ public class AlwaysEqualComparator<T>
         return 0;
     }
 }
-

@@ -62,7 +62,6 @@ public class PatonCycleBase<V, E>
         this.graph = GraphTests.requireUndirected(graph);
     }
 
-
     /**
      * Return an undirected cycle basis of a graph. Works only for undirected graphs which do not
      * have multiple (parallel) edges.
@@ -161,4 +160,3 @@ public class PatonCycleBase<V, E>
         return new CycleBasisImpl<V, E>(graph, cycles, totalLength, totalWeight);
     }
 }
-

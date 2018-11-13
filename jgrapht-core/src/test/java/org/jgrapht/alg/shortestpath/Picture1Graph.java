@@ -119,4 +119,3 @@ public class Picture1Graph
         addVertex("v7");
     }
 }
-

@@ -423,4 +423,3 @@ abstract class VF2State<V, E>
         System.out.println((new String(indent)) + method + "> " + str);
     }
 }
-

@@ -17,17 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * The fast lookup specifics strategy implementation.
@@ -44,12 +39,14 @@ import org.jgrapht.graph.specifics.Specifics;
  * @param <E> the graph edge type
  */
 public class FastLookupGraphSpecificsStrategy<V, E>
-    implements GraphSpecificsStrategy<V, E>
+    implements
+    GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = -5490869870275054280L;
 
     @Override
-    public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory() { 
+    public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
+    {
         return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
             if (type.isWeighted()) {
                 return new WeightedIntrusiveEdgesSpecifics<V, E>(new LinkedHashMap<>());
@@ -58,7 +55,7 @@ public class FastLookupGraphSpecificsStrategy<V, E>
             }
         };
     }
-    
+
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {

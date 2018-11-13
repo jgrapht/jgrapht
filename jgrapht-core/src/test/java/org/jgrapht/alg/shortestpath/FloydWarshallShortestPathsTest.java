@@ -163,4 +163,3 @@ public class FloydWarshallShortestPathsTest
         assertNull(fw.getPath("b", "a"));
     }
 }
-

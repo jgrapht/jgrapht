@@ -21,7 +21,8 @@ import org.junit.*;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * SerializationTest tests serialization and deserialization of JGraphT objects.
@@ -111,4 +112,3 @@ public class SerializationTest
         return obj;
     }
 }
-

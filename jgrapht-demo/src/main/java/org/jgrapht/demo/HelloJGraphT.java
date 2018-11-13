@@ -18,19 +18,21 @@
 package org.jgrapht.demo;
 
 //@example:urlCreate:begin
+
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-//@example:urlCreate:end
-import org.jgrapht.traverse.*;
-//@example:render:begin
 import org.jgrapht.io.*;
-//@example:render:end
+import org.jgrapht.traverse.*;
 
-//@example:urlCreate:begin
-import java.net.*;
-//@example:urlCreate:end
-import java.util.*;
 import java.io.*;
+import java.net.*;
+import java.util.*;
+
+//@example:urlCreate:end
+//@example:render:begin
+//@example:render:end
+//@example:urlCreate:begin
+//@example:urlCreate:end
 
 /**
  * A simple introduction to using JGraphT.
@@ -52,29 +54,31 @@ public final class HelloJGraphT
      * @throws ExportException if graph cannot be exported.
      */
     public static void main(String[] args)
-        throws MalformedURLException, ExportException
+        throws MalformedURLException,
+        ExportException
     {
         Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
         // note undirected edges are printed as: {<v1>,<v2>}
         System.out.println("-- toString output");
-        //@example:toString:begin
+        // @example:toString:begin
         System.out.println(stringGraph.toString());
-        //@example:toString:end
+        // @example:toString:end
         System.out.println();
 
-        //@example:traverse:begin
+        // @example:traverse:begin
 
         // create a graph based on URL objects
         Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
 
         // find the vertex corresponding to www.jgrapht.org
-        //@example:findVertex:begin
-        URL start = hrefGraph.vertexSet().stream().filter(
-            url -> url.getHost().equals("www.jgrapht.org")).findAny().get();
-        //@example:findVertex:end
+        // @example:findVertex:begin
+        URL start = hrefGraph
+            .vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
+            .get();
+        // @example:findVertex:end
 
-        //@example:traverse:end
+        // @example:traverse:end
 
         // perform a graph traversal starting from that vertex
         System.out.println("-- traverseHrefGraph output");
@@ -94,7 +98,7 @@ public final class HelloJGraphT
     private static Graph<URL, DefaultEdge> createHrefGraph()
         throws MalformedURLException
     {
-        //@example:urlCreate:begin
+        // @example:urlCreate:begin
 
         Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -113,7 +117,7 @@ public final class HelloJGraphT
         g.addEdge(google, wikipedia);
         g.addEdge(wikipedia, google);
 
-        //@example:urlCreate:end
+        // @example:urlCreate:end
 
         return g;
     }
@@ -127,13 +131,13 @@ public final class HelloJGraphT
      */
     private static void traverseHrefGraph(Graph<URL, DefaultEdge> hrefGraph, URL start)
     {
-        //@example:traverse:begin
+        // @example:traverse:begin
         Iterator<URL> iterator = new DepthFirstIterator<>(hrefGraph, start);
         while (iterator.hasNext()) {
             URL url = iterator.next();
             System.out.println(url);
         }
-        //@example:traverse:end
+        // @example:traverse:end
     }
 
     /**
@@ -144,34 +148,32 @@ public final class HelloJGraphT
     private static void renderHrefGraph(Graph<URL, DefaultEdge> hrefGraph)
         throws ExportException
     {
-        //@example:render:begin
+        // @example:render:begin
 
         // use helper classes to define how vertices should be rendered,
         // adhering to the DOT language restrictions
-        ComponentNameProvider<URL> vertexIdProvider =
-            new ComponentNameProvider<URL>()
+        ComponentNameProvider<URL> vertexIdProvider = new ComponentNameProvider<URL>()
+        {
+            public String getName(URL url)
             {
-                public String getName(URL url)
-                {
-                    return url.getHost().replace('.', '_');
-                }
-            };
-        ComponentNameProvider<URL> vertexLabelProvider =
-            new ComponentNameProvider<URL>()
+                return url.getHost().replace('.', '_');
+            }
+        };
+        ComponentNameProvider<URL> vertexLabelProvider = new ComponentNameProvider<URL>()
+        {
+            public String getName(URL url)
             {
-                public String getName(URL url)
-                {
-                    return url.toString();
-                }
-            };
-        GraphExporter<URL, DefaultEdge> exporter = new DOTExporter<>(
-            vertexIdProvider, vertexLabelProvider, null);
+                return url.toString();
+            }
+        };
+        GraphExporter<URL, DefaultEdge> exporter =
+            new DOTExporter<>(vertexIdProvider, vertexLabelProvider, null);
         Writer writer = new StringWriter();
         exporter.exportGraph(hrefGraph, writer);
         System.out.println(writer.toString());
-        //@example:render:end
+        // @example:render:end
     }
-    
+
     /**
      * Create a toy graph based on String objects.
      *
@@ -201,4 +203,3 @@ public final class HelloJGraphT
         return g;
     }
 }
-

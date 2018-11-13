@@ -47,7 +47,7 @@ import java.util.*;
  *
  * <p>
  * Note: this class performs calculations in a lazy manner. The GHT is not calculated until the
- * first invocation of {@link GusfieldGomoryHuCutTree#calculateMaximumFlow(Object, Object)} or
+ * first invocation of {@link GusfieldGomoryHuCutTree#getMaximumFlowValue(Object, Object)} or
  * {@link GusfieldGomoryHuCutTree#getGomoryHuTree()}. Moreover, this class <em>only</em> calculates
  * the value of the maximum flow between a source-destination pair; it does not calculate the
  * corresponding flow per edge. If you need to know the exact flow through an edge, use one of the
@@ -218,7 +218,7 @@ public class GusfieldGomoryHuCutTree<V, E>
      * @return the Maximum flow between source and sink.
      */
     @Override
-    public double calculateMaximumFlow(V source, V sink)
+    public double getMaximumFlowValue(V source, V sink)
     {
         assert indexMap.containsKey(source) && indexMap.containsKey(sink);
 
@@ -230,18 +230,6 @@ public class GusfieldGomoryHuCutTree<V, E>
         if (p == null) // Lazy invocation of the algorithm
             this.calculateGomoryHuTree();
         return flowMatrix[indexMap.get(source)][indexMap.get(sink)];
-    }
-
-    /**
-     * Returns rhw maximum flow value, that was calculated during the last
-     * {@link #calculateMaximumFlow(Object, Object)} call.
-     * 
-     * @return maximum flow value
-     */
-    @Override
-    public double getMaximumFlowValue()
-    {
-        return calculateMaximumFlow(lastInvokedSource, lastInvokedTarget);
     }
 
     /**
@@ -274,7 +262,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     @Override
     public double calculateMinCut(V source, V sink)
     {
-        return calculateMaximumFlow(source, sink);
+        return getMaximumFlowValue(source, sink);
     }
 
     /**

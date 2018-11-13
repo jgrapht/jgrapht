@@ -17,23 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.graph.AsGraphUnion;
-import org.jgrapht.graph.AsWeightedGraph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.TypeUtil;
+import java.util.*;
 
 /**
  * Johnson's all pairs shortest paths algorithm.

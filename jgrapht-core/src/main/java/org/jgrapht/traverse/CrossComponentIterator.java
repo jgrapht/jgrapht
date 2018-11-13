@@ -318,4 +318,3 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
 }
-

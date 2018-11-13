@@ -233,7 +233,8 @@ public interface Graph<V, E>
      *
      * @return The newly created vertex if added to the graph.
      *
-     * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in the graph
+     * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in
+     *         the graph
      * @throws UnsupportedOperationException if the graph was not initialized with a vertex supplier
      *
      * @see #getVertexSupplier()
@@ -578,19 +579,20 @@ public interface Graph<V, E>
 
     /**
      * Assigns a weight to an edge between <code>sourceVertex</code> and <code>targetVertex</code>.
-     * If no edge exists between <code>sourceVertex</code> and <code>targetVertex</code> or either of these vertices is
-     * <code>null</code>, a <code>NullPointerException</code> is thrown.
-     * <p> When there exist multiple edges between <code>sourceVertex</code> and <code>targetVertex</code>, consider using
-     * {@link #setEdgeWeight(Object, double)} instead.
+     * If no edge exists between <code>sourceVertex</code> and <code>targetVertex</code> or either
+     * of these vertices is <code>null</code>, a <code>NullPointerException</code> is thrown.
+     * <p>
+     * When there exist multiple edges between <code>sourceVertex</code> and
+     * <code>targetVertex</code>, consider using {@link #setEdgeWeight(Object, double)} instead.
      *
      * @param sourceVertex source vertex of the edge
      * @param targetVertex target vertex of the edge
      * @param weight new weight for edge
      * @throws UnsupportedOperationException if the graph does not support weights
      */
-    default void setEdgeWeight(V sourceVertex, V targetVertex, double weight){
+    default void setEdgeWeight(V sourceVertex, V targetVertex, double weight)
+    {
         this.setEdgeWeight(this.getEdge(sourceVertex, targetVertex), weight);
     }
 
 }
-

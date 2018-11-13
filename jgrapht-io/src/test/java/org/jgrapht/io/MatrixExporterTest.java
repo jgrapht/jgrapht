@@ -23,7 +23,7 @@ import org.junit.*;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * .
@@ -115,4 +115,3 @@ public class MatrixExporterTest
         assertEquals(DIRECTED_ADJACENCY, w.toString());
     }
 }
-

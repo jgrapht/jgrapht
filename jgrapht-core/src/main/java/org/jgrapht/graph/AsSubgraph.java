@@ -624,4 +624,3 @@ public class AsSubgraph<V, E>
     }
 
 }
-

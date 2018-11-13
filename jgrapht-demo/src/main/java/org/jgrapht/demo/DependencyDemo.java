@@ -19,8 +19,7 @@
 package org.jgrapht.demo;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
-import org.jgrapht.alg.cycle.CycleDetector;
+import org.jgrapht.alg.cycle.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 

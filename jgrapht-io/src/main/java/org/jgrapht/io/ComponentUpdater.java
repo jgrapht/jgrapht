@@ -35,4 +35,3 @@ public interface ComponentUpdater<T>
      */
     void update(T component, Map<String, Attribute> attributes);
 }
-

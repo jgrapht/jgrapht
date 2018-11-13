@@ -263,4 +263,3 @@ public class KosarajuStrongConnectivityInspector<V, E>
         }
     }
 }
-

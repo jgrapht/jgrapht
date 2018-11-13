@@ -18,8 +18,8 @@
 package org.jgrapht.graph.guava;
 
 import com.google.common.graph.*;
-import org.jgrapht.*;
 import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.*;
 

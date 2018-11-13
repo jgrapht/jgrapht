@@ -20,9 +20,7 @@ package org.jgrapht.util;
 import org.junit.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
 import static org.junit.Assert.*;
 
@@ -55,7 +53,7 @@ public class UnmodifiableUnionSetTest
         IntStream.rangeClosed(1, 15).forEach(x -> assertTrue(union.contains(x)));
         IntStream.rangeClosed(16, 20).forEach(x -> assertFalse(union.contains(x)));
     }
-    
+
     @Test
     public void test3()
     {
@@ -67,24 +65,22 @@ public class UnmodifiableUnionSetTest
         IntStream.rangeClosed(11, 19).forEach(x -> assertFalse(union.contains(x)));
         IntStream.of(20).forEach(x -> assertTrue(union.contains(x)));
     }
-    
+
     @Test
     public void test4()
     {
         UnmodifiableUnionSet<Integer> union = new UnmodifiableUnionSet<>(
-            new HashSet<>(),
-            new HashSet<>(Arrays.asList(1, 2, 3, 4, 5)));
+            new HashSet<>(), new HashSet<>(Arrays.asList(1, 2, 3, 4, 5)));
         assertEquals(5, union.size());
         IntStream.rangeClosed(1, 5).forEach(x -> assertTrue(union.contains(x)));
         IntStream.of(6).forEach(x -> assertFalse(union.contains(x)));
     }
-    
+
     @Test
     public void test5()
     {
-        UnmodifiableUnionSet<Integer> union = new UnmodifiableUnionSet<>(
-            new HashSet<>(),
-            new HashSet<>());
+        UnmodifiableUnionSet<Integer> union =
+            new UnmodifiableUnionSet<>(new HashSet<>(), new HashSet<>());
         assertEquals(0, union.size());
         IntStream.rangeClosed(1, 5).forEach(x -> assertFalse(union.contains(x)));
     }
@@ -100,15 +96,15 @@ public class UnmodifiableUnionSetTest
         List<Integer> collectedElementsAsList = StreamSupport
             .stream(union.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
         assertEquals(15, collectedElementsAsList.size());
-        
+
         Set<Integer> collectedElementsAsSet = StreamSupport
             .stream(union.spliterator(), false).collect(Collectors.toCollection(HashSet::new));
         assertEquals(15, collectedElementsAsSet.size());
-        
-        IntStream.rangeClosed(1, 15).forEach(x->assertTrue(collectedElementsAsList.contains(x)));
-        IntStream.rangeClosed(1, 15).forEach(x->assertTrue(collectedElementsAsSet.contains(x)));
+
+        IntStream.rangeClosed(1, 15).forEach(x -> assertTrue(collectedElementsAsList.contains(x)));
+        IntStream.rangeClosed(1, 15).forEach(x -> assertTrue(collectedElementsAsSet.contains(x)));
     }
-    
+
     @Test
     public void testIteratorCommonElements()
     {
@@ -120,13 +116,13 @@ public class UnmodifiableUnionSetTest
         List<Integer> collectedElementsAsList = StreamSupport
             .stream(union.spliterator(), false).collect(Collectors.toCollection(ArrayList::new));
         assertEquals(10, collectedElementsAsList.size());
-        
+
         Set<Integer> collectedElementsAsSet = StreamSupport
             .stream(union.spliterator(), false).collect(Collectors.toCollection(HashSet::new));
         assertEquals(10, collectedElementsAsSet.size());
-        
-        IntStream.rangeClosed(1, 10).forEach(x->assertTrue(collectedElementsAsList.contains(x)));
-        IntStream.rangeClosed(1, 10).forEach(x->assertTrue(collectedElementsAsSet.contains(x)));
+
+        IntStream.rangeClosed(1, 10).forEach(x -> assertTrue(collectedElementsAsList.contains(x)));
+        IntStream.rangeClosed(1, 10).forEach(x -> assertTrue(collectedElementsAsSet.contains(x)));
     }
 
 }

@@ -172,4 +172,3 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
     }
 
 }
-

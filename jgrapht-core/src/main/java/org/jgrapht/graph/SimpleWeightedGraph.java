@@ -84,4 +84,3 @@ public class SimpleWeightedGraph<V, E>
     }
 
 }
-

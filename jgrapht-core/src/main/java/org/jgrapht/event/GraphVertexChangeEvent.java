@@ -81,4 +81,3 @@ public class GraphVertexChangeEvent<V>
         return vertex;
     }
 }
-

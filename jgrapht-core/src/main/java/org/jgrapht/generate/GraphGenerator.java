@@ -70,4 +70,3 @@ public interface GraphGenerator<V, E, T>
     }
 
 }
-

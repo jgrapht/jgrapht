@@ -117,4 +117,3 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             ordering1, ordering2, vertexComparator, edgeComparator);
     }
 }
-

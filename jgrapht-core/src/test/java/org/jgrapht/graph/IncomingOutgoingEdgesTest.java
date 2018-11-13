@@ -21,9 +21,10 @@ import org.jgrapht.*;
 import org.junit.*;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -41,14 +42,14 @@ public class IncomingOutgoingEdgesTest
         g.addVertex(3);
         g.addVertex(4);
         g.addVertex(5);
-        
+
         assertEquals(5, g.vertexSet().size());
         assertTrue(g.vertexSet().contains(1));
         assertTrue(g.vertexSet().contains(2));
         assertTrue(g.vertexSet().contains(3));
         assertTrue(g.vertexSet().contains(4));
         assertTrue(g.vertexSet().contains(5));
-        
+
         DefaultEdge e12 = g.addEdge(1, 2);
         DefaultEdge e23_1 = g.addEdge(2, 3);
         DefaultEdge e23_2 = g.addEdge(2, 3);
@@ -115,14 +116,14 @@ public class IncomingOutgoingEdgesTest
         g.addVertex(3);
         g.addVertex(4);
         g.addVertex(5);
-        
+
         assertEquals(5, g.vertexSet().size());
         assertTrue(g.vertexSet().contains(1));
         assertTrue(g.vertexSet().contains(2));
         assertTrue(g.vertexSet().contains(3));
         assertTrue(g.vertexSet().contains(4));
         assertTrue(g.vertexSet().contains(5));
-        
+
         DefaultEdge e12 = g.addEdge(1, 2);
         DefaultEdge e23_1 = g.addEdge(2, 3);
         DefaultEdge e23_2 = g.addEdge(2, 3);

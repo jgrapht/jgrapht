@@ -23,7 +23,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -128,7 +129,9 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultWeightedEdge>> allPaths = all.getAllPaths("A", "D", true, 2);
         allPaths.sort(Comparator.comparing(GraphPath::getWeight));
 
-        assertEquals("Example weighted graph has 3 paths of length no greater than 2", 3, allPaths.size());;
+        assertEquals(
+            "Example weighted graph has 3 paths of length no greater than 2", 3, allPaths.size());
+        ;
 
         assertEquals(Arrays.asList("A", "D"), allPaths.get(0).getVertexList());
         assertEquals(-1, allPaths.get(0).getWeight(), 0);
@@ -189,22 +192,27 @@ public class AllDirectedPathsTest
     }
 
     @Test
-    public void testZeroLengthPaths() {
+    public void testZeroLengthPaths()
+    {
         // Verify fix for https://github.com/jgrapht/jgrapht/issues/640.
-        DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        DefaultDirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
 
         graph.addVertex("a");
         graph.addVertex("b");
         graph.addEdge("a", "b");
 
         List<GraphPath<String, DefaultEdge>> paths = new AllDirectedPaths<>(graph)
-        .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
+            .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
 
         Assert.assertFalse("We should find at least some paths!", paths.isEmpty());
 
-        paths.forEach(path ->
-            Assert.assertEquals(String.format("The path %s has length %d even though we requested only paths of length 0", path, path.getLength()), 0, path.getLength())
-        );
+        paths.forEach(
+            path -> Assert.assertEquals(
+                String.format(
+                    "The path %s has length %d even though we requested only paths of length 0",
+                    path, path.getLength()),
+                0, path.getLength()));
     }
 
     private static Graph<String, DefaultEdge> toyGraph()

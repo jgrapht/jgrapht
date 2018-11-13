@@ -23,7 +23,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * This test class is fairly small compared with the tests for the VF2SubgraphIsomorphismInspector

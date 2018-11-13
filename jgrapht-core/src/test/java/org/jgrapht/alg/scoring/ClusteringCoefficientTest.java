@@ -17,14 +17,11 @@
  */
 package org.jgrapht.alg.scoring;
 
-import org.jgrapht.Graph;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.generate.StarGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,10 +30,12 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Alexandru Valeanu
  */
-public class ClusteringCoefficientTest {
+public class ClusteringCoefficientTest
+{
 
     @Test
-    public void testUndirectedClusteringCoefficient(){
+    public void testUndirectedClusteringCoefficient()
+    {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int i = 1; i <= 8; i++) {
@@ -56,7 +55,7 @@ public class ClusteringCoefficientTest {
         graph.addEdge(8, 5);
 
         ClusteringCoefficient<Integer, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(1, clusteringCoefficient.getVertexScore(1), 0.0);
         assertEquals(0.333333333, clusteringCoefficient.getVertexScore(2), 0.0001);
@@ -69,7 +68,8 @@ public class ClusteringCoefficientTest {
     }
 
     @Test
-    public void testUndirected2ClusteringCoefficient() {
+    public void testUndirected2ClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         graph.addVertex("A");
@@ -83,25 +83,27 @@ public class ClusteringCoefficientTest {
         graph.addEdge("B", "C");
 
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(1.0 / 3.0, clusteringCoefficient.getVertexScore("A"), 0.001);
     }
 
     @Test
-    public void testOneNodeClusteringCoefficient() {
+    public void testOneNodeClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         graph.addVertex("A");
 
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(0, clusteringCoefficient.getAverageClusteringCoefficient(), 0.0);
     }
 
     @Test
-    public void testTwoConectedNodesClusteringCoefficient() {
+    public void testTwoConectedNodesClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         graph.addVertex("A");
@@ -110,51 +112,54 @@ public class ClusteringCoefficientTest {
         graph.addEdge("A", "B");
 
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(0, clusteringCoefficient.getAverageClusteringCoefficient(), 0.0);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testNullGraphClusteringCoefficient() {
+    public void testNullGraphClusteringCoefficient()
+    {
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(null);
+            new ClusteringCoefficient<>(null);
     }
 
     @Test
-    public void testCompleteGraphClusteringCoefficient() {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createStringSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+    public void testCompleteGraphClusteringCoefficient()
+    {
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         CompleteGraphGenerator<String, DefaultEdge> completeGraphGenerator =
-                new CompleteGraphGenerator<>(100);
+            new CompleteGraphGenerator<>(100);
 
         completeGraphGenerator.generateGraph(graph);
 
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(1, clusteringCoefficient.getAverageClusteringCoefficient(), 0.0);
     }
 
     @Test
-    public void testStarGraphClusteringCoefficient() {
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createStringSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+    public void testStarGraphClusteringCoefficient()
+    {
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-        StarGraphGenerator<String, DefaultEdge> starGraphGenerator =
-                new StarGraphGenerator<>(100);
+        StarGraphGenerator<String, DefaultEdge> starGraphGenerator = new StarGraphGenerator<>(100);
 
         starGraphGenerator.generateGraph(graph);
 
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(0, clusteringCoefficient.getAverageClusteringCoefficient(), 0.0);
     }
 
     @Test
-    public void testTriangleDirectedGraphClusteringCoefficient() {
+    public void testTriangleDirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> directedGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -172,11 +177,13 @@ public class ClusteringCoefficientTest {
         directedGraph.addEdge(node3, node1);
         directedGraph.addEdge(node1, node3);
 
-        assertEquals(1, new ClusteringCoefficient<>(directedGraph).getAverageClusteringCoefficient(), 0.0);
+        assertEquals(
+            1, new ClusteringCoefficient<>(directedGraph).getAverageClusteringCoefficient(), 0.0);
     }
 
     @Test
-    public void testSpecial1DirectedGraphClusteringCoefficient() {
+    public void testSpecial1DirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> directedGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -196,11 +203,13 @@ public class ClusteringCoefficientTest {
         directedGraph.addEdge(node3, node4);
         directedGraph.addEdge(node4, node1);
 
-        assertEquals(0.5, new ClusteringCoefficient<>(directedGraph).getAverageClusteringCoefficient(), 0.0);
+        assertEquals(
+            0.5, new ClusteringCoefficient<>(directedGraph).getAverageClusteringCoefficient(), 0.0);
     }
 
     @Test
-    public void testSpecial2DirectedGraphClusteringCoefficient() {
+    public void testSpecial2DirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> directedGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -219,11 +228,14 @@ public class ClusteringCoefficientTest {
         directedGraph.addEdge(node3, node2);
         directedGraph.addEdge(node4, node3);
 
-        assertEquals(0.4167, new ClusteringCoefficient<>(directedGraph).getAverageClusteringCoefficient(), 0.01);
+        assertEquals(
+            0.4167, new ClusteringCoefficient<>(directedGraph).getAverageClusteringCoefficient(),
+            0.01);
     }
 
     @Test
-    public void testTriangleNonCompleteDirectedGraphClusteringCoefficient() {
+    public void testTriangleNonCompleteDirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> directedGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -240,13 +252,15 @@ public class ClusteringCoefficientTest {
         directedGraph.addEdge(node3, node2);
         directedGraph.addEdge(node1, node3);
 
-        ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient = new ClusteringCoefficient<>(directedGraph);
+        ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
+            new ClusteringCoefficient<>(directedGraph);
 
         assertEquals(0.833, clusteringCoefficient.getAverageClusteringCoefficient(), 0.01);
     }
 
     @Test
-    public void testTriangleGraphClusteringCoefficient() {
+    public void testTriangleGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -265,7 +279,8 @@ public class ClusteringCoefficientTest {
     }
 
     @Test
-    public void testSpecial1UndirectedGraphClusteringCoefficient() {
+    public void testSpecial1UndirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -298,14 +313,15 @@ public class ClusteringCoefficientTest {
         graph.addEdge(node7, node2);
 
         ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-                new ClusteringCoefficient<>(graph);
+            new ClusteringCoefficient<>(graph);
 
         assertEquals(0.4, clusteringCoefficient.getVertexScore(node1), 0.0);
         assertEquals(0.667, clusteringCoefficient.getVertexScore(node3), 0.001);
     }
 
     @Test
-    public void testSpecial2UndirectedGraphClusteringCoefficient() {
+    public void testSpecial2UndirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         String node1 = "0";
@@ -334,11 +350,13 @@ public class ClusteringCoefficientTest {
         graph.addEdge(node6, node7);
         graph.addEdge(node7, node1);
 
-        assertEquals(0.8857, new ClusteringCoefficient<>(graph).getAverageClusteringCoefficient(), 0.01);
+        assertEquals(
+            0.8857, new ClusteringCoefficient<>(graph).getAverageClusteringCoefficient(), 0.01);
     }
 
     @Test
-    public void testSpecial3UndirectedGraphClusteringCoefficient() {
+    public void testSpecial3UndirectedGraphClusteringCoefficient()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         String node1 = "0";

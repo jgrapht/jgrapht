@@ -25,7 +25,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test that all Bron-Kerbosch variants return the same results.

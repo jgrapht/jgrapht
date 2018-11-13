@@ -148,4 +148,3 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
         return this.pathElements.size();
     }
 }
-

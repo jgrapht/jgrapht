@@ -346,4 +346,3 @@ class KShortestSimplePathsIterator<V, E>
         }
     }
 }
-

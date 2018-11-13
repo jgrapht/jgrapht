@@ -17,13 +17,11 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.generate.BarabasiAlbertForestGenerator;
-import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -32,20 +30,22 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class IsomorphismTestUtil {
+public class IsomorphismTestUtil
+{
 
-    public static Graph<Integer, DefaultEdge> parseGraph(String vertices, String edges){
-        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(-100),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+    public static Graph<Integer, DefaultEdge> parseGraph(String vertices, String edges)
+    {
+        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(-100), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         vertices = vertices.substring(1, vertices.length() - 1);
 
-        for (String s: vertices.split(", "))
+        for (String s : vertices.split(", "))
             forest.addVertex(Integer.valueOf(s));
 
         edges = edges.substring(1, edges.length() - 1);
 
-        for (String s: edges.split(", ")){
+        for (String s : edges.split(", ")) {
             String[] ends = s.substring(1, s.length() - 1).split(",");
             forest.addEdge(Integer.valueOf(ends[0]), Integer.valueOf(ends[1]));
         }
@@ -53,12 +53,13 @@ public class IsomorphismTestUtil {
         return forest;
     }
 
-    public static Pair<Graph<Integer, DefaultEdge>, Graph<Integer, DefaultEdge>> parseGraph(String vertices, String edges,
-                                                                                            String mapping, Map<Integer, Integer> map){
+    public static Pair<Graph<Integer, DefaultEdge>, Graph<Integer, DefaultEdge>> parseGraph(
+        String vertices, String edges, String mapping, Map<Integer, Integer> map)
+    {
 
         Graph<Integer, DefaultEdge> forest = parseGraph(vertices, edges);
 
-        for (String s: mapping.substring(1, mapping.length() - 1).split(", ")){
+        for (String s : mapping.substring(1, mapping.length() - 1).split(", ")) {
             String[] ends = s.split("=");
             map.put(Integer.valueOf(ends[0]), Integer.valueOf(ends[1]));
         }
@@ -66,20 +67,22 @@ public class IsomorphismTestUtil {
         return Pair.of(forest, generateMappedGraph(forest, map));
     }
 
-    public static Graph<Integer, DefaultEdge> generateForest(int N, Random random){
+    public static Graph<Integer, DefaultEdge> generateForest(int N, Random random)
+    {
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertForestGenerator<>(N / 10, N, random);
+            new BarabasiAlbertForestGenerator<>(N / 10, N, random);
 
-        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> forest = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         generator.generateGraph(forest);
 
         return forest;
     }
 
-    public static Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>>
-    generateIsomorphicGraph(Graph<Integer, DefaultEdge> graph, Random random){
+    public static Pair<Graph<Integer, DefaultEdge>, Map<Integer, Integer>> generateIsomorphicGraph(
+        Graph<Integer, DefaultEdge> graph, Random random)
+    {
         List<Integer> permutation = new ArrayList<>(graph.vertexSet().size());
 
         for (int i = 0; i < graph.vertexSet().size(); i++) {
@@ -98,39 +101,41 @@ public class IsomorphismTestUtil {
         return Pair.of(generateMappedGraph(graph, mapping), mapping);
     }
 
-    public static Graph<Integer, DefaultEdge> generateTree(int N, Random random){
+    public static Graph<Integer, DefaultEdge> generateTree(int N, Random random)
+    {
         BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
-                new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
+            new BarabasiAlbertGraphGenerator<>(1, 1, N - 1, random);
 
         Graph<Integer, DefaultEdge> tree = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         generator.generateGraph(tree);
 
         return tree;
     }
 
-    public static <V, E> boolean areIsomorphic(Graph<V, E> graph1, Graph<V, E> graph2,
-                                               IsomorphicGraphMapping<V, E> mapping) {
+    public static <V, E> boolean areIsomorphic(
+        Graph<V, E> graph1, Graph<V, E> graph2, IsomorphicGraphMapping<V, E> mapping)
+    {
         // reapply the mapping onto the given graphs in case they
         // are not the same as the graphs over which the mapping
         // was originally constructed
         IsomorphicGraphMapping<V, E> reappliedMapping = new IsomorphicGraphMapping<>(
-                mapping.getForwardMapping(), mapping.getBackwardMapping(),
-                graph1, graph2);
+            mapping.getForwardMapping(), mapping.getBackwardMapping(), graph1, graph2);
         return reappliedMapping.isValidIsomorphism();
     }
 
-    public static <V> Graph<V, DefaultEdge> generateMappedGraph(Graph<V, DefaultEdge> graph,
-                                                                Map<V, V> mapping){
+    public static <
+        V> Graph<V, DefaultEdge> generateMappedGraph(Graph<V, DefaultEdge> graph, Map<V, V> mapping)
+    {
 
-        SimpleGraph<V, DefaultEdge> isoGraph = new SimpleGraph<>(graph.getVertexSupplier(),
-                graph.getEdgeSupplier(), false);
+        SimpleGraph<V, DefaultEdge> isoGraph =
+            new SimpleGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), false);
 
-        for (V v: graph.vertexSet())
+        for (V v : graph.vertexSet())
             isoGraph.addVertex(mapping.get(v));
 
-        for (DefaultEdge edge: graph.edgeSet()){
+        for (DefaultEdge edge : graph.edgeSet()) {
             V u = graph.getEdgeSource(edge);
             V v = graph.getEdgeTarget(edge);
 

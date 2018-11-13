@@ -93,4 +93,3 @@ public class DirectedPseudograph<V, E>
         return new GraphBuilder<>(new DirectedPseudograph<>(null, edgeSupplier, false));
     }
 }
-

@@ -17,36 +17,30 @@
  */
 package org.jgrapht.alg.tour;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
-import org.jgrapht.alg.interfaces.EulerianCycleAlgorithm;
-import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.alg.matching.blossom.v5.KolmogorovMinimumWeightPerfectMatching;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.*;
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.matching.blossom.v5.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.graph.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * A $3/2$-approximation algorithm for the metric TSP problem.
  * <p>
- * The <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">travelling salesman problem</a>
- * (TSP) asks the following question: "Given a list of cities and the distances between each pair of cities,
- * what is the shortest possible route that visits each city exactly once and returns to the origin city?".
- * In the metric TSP, the intercity distances satisfy the triangle inequality.
+ * The <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">travelling salesman
+ * problem</a> (TSP) asks the following question: "Given a list of cities and the distances between
+ * each pair of cities, what is the shortest possible route that visits each city exactly once and
+ * returns to the origin city?". In the metric TSP, the intercity distances satisfy the triangle
+ * inequality.
  * <p>
  * This is an implementation of the <a href="https://en.wikipedia.org/wiki/Christofides_algorithm">
  * Christofides algorithm</a>. The algorithms is a $3/2$-approximation assuming that the input graph
- * satisfies triangle inequality and all edge weights are nonnegative. The implementation requires the input
- * graph to be <i>undirected</i> and <i>complete</i>. The worst case running time complexity is $\mathcal{O}(V^3E)$.
+ * satisfies triangle inequality and all edge weights are nonnegative. The implementation requires
+ * the input graph to be <i>undirected</i> and <i>complete</i>. The worst case running time
+ * complexity is $\mathcal{O}(V^3E)$.
  * <p>
  * The algorithm performs following steps to compute the resulting tour:
  * <ol>
@@ -54,32 +48,40 @@ import java.util.stream.Collectors;
  * <li>Find vertices with odd degree in the MST.</li>
  * <li>Compute minimum weight perfect matching in the induced subgraph on odd degree vertices.</li>
  * <li>Add edges from the minimum weight perfect matching to the MST (forming a pseudograph).</li>
- * <li>Compute an Eulerian cycle in the obtained pseudograph and form a closed tour in this cycle.</li>
+ * <li>Compute an Eulerian cycle in the obtained pseudograph and form a closed tour in this
+ * cycle.</li>
  * </ol>
  * <p>
  * The following two observations yield the $3/2$ approximation bound:
  * <ul>
- * <li>The cost of every minimum spanning tree is less than or equal to the cost of every Hamiltonian cycle
- * since after one edge removal every Hamiltonian cycle becomes a spanning tree</li>
- * <li>Twice the cost of a perfect matching in a graph is less than or equal to the cost of every Hamiltonian
- * cycle. This follows from the fact that after forming a closed tour using the edges of a perfect matching
- * the cost of the edges not from the matching is greater than or equal to the cost of the matching edges.</li>
+ * <li>The cost of every minimum spanning tree is less than or equal to the cost of every
+ * Hamiltonian cycle since after one edge removal every Hamiltonian cycle becomes a spanning
+ * tree</li>
+ * <li>Twice the cost of a perfect matching in a graph is less than or equal to the cost of every
+ * Hamiltonian cycle. This follows from the fact that after forming a closed tour using the edges of
+ * a perfect matching the cost of the edges not from the matching is greater than or equal to the
+ * cost of the matching edges.</li>
  * </ul>
  * <p>
- * For more details, see <i>Christofides, N.: Worst-case analysis of a new heuristic for the travelling salesman
- * problem. Graduate School of Industrial Administration, Carnegie Mellon University (1976).</i>
+ * For more details, see <i>Christofides, N.: Worst-case analysis of a new heuristic for the
+ * travelling salesman problem. Graduate School of Industrial Administration, Carnegie Mellon
+ * University (1976).</i>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
  * @author Dimitrios Michail
  */
-public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements HamiltonianCycleAlgorithm<V, E> {
+public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
+    implements
+    HamiltonianCycleAlgorithm<V, E>
+{
 
     /**
      * Empty constructor
      */
-    public ChristofidesThreeHalvesApproxMetricTSP() {
+    public ChristofidesThreeHalvesApproxMetricTSP()
+    {
     }
 
     /**
@@ -92,7 +94,8 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
      * @throws IllegalArgumentException if the graph contains no vertices
      */
     @Override
-    public GraphPath<V, E> getTour(Graph<V, E> graph) {
+    public GraphPath<V, E> getTour(Graph<V, E> graph)
+    {
         if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException("Graph must be undirected");
         }
@@ -109,7 +112,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
         if (graph.vertexSet().size() == 1) {
             V start = graph.vertexSet().iterator().next();
             return new GraphWalk<>(
-                    graph, start, start, Collections.singletonList(start), Collections.emptyList(), 0d);
+                graph, start, start, Collections.singletonList(start), Collections.emptyList(), 0d);
         }
 
         int n = graph.vertexSet().size();
@@ -120,27 +123,33 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
         // add all edges of a minimum spanning tree to the auxiliary graph
         SpanningTreeAlgorithm<E> spanningTreeAlgorithm = new KruskalMinimumSpanningTree<>(graph);
         spanningTreeAlgorithm.getSpanningTree().getEdges().forEach(
-                e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
+            e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
 
         // find odd degree vertices
-        Set<V> oddDegreeVertices = mstAndMatching.vertexSet().stream()
-                .filter(v -> (mstAndMatching.edgesOf(v).size() & 1) == 1).collect(Collectors.toSet());
+        Set<V> oddDegreeVertices = mstAndMatching
+            .vertexSet().stream().filter(v -> (mstAndMatching.edgesOf(v).size() & 1) == 1)
+            .collect(Collectors.toSet());
 
         /*
-         * Form an induced subgraph on odd degree vertices, find minimum weight perfect
-         * matching and add its edges to the auxiliary graph
+         * Form an induced subgraph on odd degree vertices, find minimum weight perfect matching and
+         * add its edges to the auxiliary graph
          */
         Graph<V, E> subgraph = new AsSubgraph<>(graph, oddDegreeVertices);
-        MatchingAlgorithm<V, E> matchingAlgorithm = new KolmogorovMinimumWeightPerfectMatching<>(subgraph);
-        matchingAlgorithm.getMatching().getEdges().forEach(e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
+        MatchingAlgorithm<V, E> matchingAlgorithm =
+            new KolmogorovMinimumWeightPerfectMatching<>(subgraph);
+        matchingAlgorithm.getMatching().getEdges().forEach(
+            e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
 
         // find an Eulerian cycle in the auxiliary graph
-        EulerianCycleAlgorithm<V, DefaultEdge> eulerianCycleAlgorithm = new HierholzerEulerianCycle<>();
-        GraphPath<V, DefaultEdge> eulerianCycle = eulerianCycleAlgorithm.getEulerianCycle(mstAndMatching);
+        EulerianCycleAlgorithm<V, DefaultEdge> eulerianCycleAlgorithm =
+            new HierholzerEulerianCycle<>();
+        GraphPath<V, DefaultEdge> eulerianCycle =
+            eulerianCycleAlgorithm.getEulerianCycle(mstAndMatching);
 
         // form a closed tour from the Hamiltonian cycle
         Set<V> visited = new HashSet<>(n);
-        List<V> tourVertices = eulerianCycle.getVertexList().stream().filter(visited::add).collect(Collectors.toList());
+        List<V> tourVertices = eulerianCycle
+            .getVertexList().stream().filter(visited::add).collect(Collectors.toList());
         tourVertices.add(tourVertices.get(0));
 
         // compute tour edges
@@ -156,6 +165,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E> implements Hamiltonian
             tourWeight += graph.getEdgeWeight(edge);
         }
 
-        return new GraphWalk<>(graph, tourVertices.get(0), tourVertices.get(0), tourVertices, tourEdges, tourWeight);
+        return new GraphWalk<>(
+            graph, tourVertices.get(0), tourVertices.get(0), tourVertices, tourEdges, tourWeight);
     }
 }

@@ -109,5 +109,4 @@ public class JGraphXAdapterDemo
         // that's all there is to it!...
     }
 }
-//@example:full:end
-
+// @example:full:end

@@ -17,30 +17,31 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.decomposition.HeavyPathDecomposition;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.decomposition.*;
+import org.jgrapht.alg.interfaces.*;
 
 import java.util.*;
 
 /**
- * Algorithm for computing lowest common ancestors in rooted trees and forests based on {@link HeavyPathDecomposition}.
+ * Algorithm for computing lowest common ancestors in rooted trees and forests based on
+ * {@link HeavyPathDecomposition}.
  *
  * <p>
- *  Preprocessing Time complexity: $O(|V|)$<br>
- *  Preprocessing Space complexity:  $O(|V|)$<br>
- *  Query Time complexity: $O(log(|V|))$<br>
- *  Query Space complexity: $O(1)$<br>
+ * Preprocessing Time complexity: $O(|V|)$<br>
+ * Preprocessing Space complexity: $O(|V|)$<br>
+ * Query Time complexity: $O(log(|V|))$<br>
+ * Query Space complexity: $O(1)$<br>
  * </p>
  *
  * <p>
- *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
- *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
- *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
- *     since it provides $O(1)$ per query.<br>
- *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
- *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
- *     For DAGs, use {@link NaiveLCAFinder}.
+ * For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly.
+ * For larger trees/forests with less than 50,000 queries you can use either
+ * {@link BinaryLiftingLCAFinder}, {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo
+ * more than that use {@link EulerTourRMQLCAFinder} since it provides $O(1)$ per query.<br>
+ * Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ * {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ * For DAGs, use {@link NaiveLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -48,7 +49,10 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
+public class HeavyPathLCAFinder<V, E>
+    implements
+    LowestCommonAncestorAlgorithm<V>
+{
 
     private final Graph<V, E> graph;
     private final Set<V> roots;
@@ -72,7 +76,8 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
      * @param graph the input graph
      * @param root the root of the graph
      */
-    public HeavyPathLCAFinder(Graph<V, E> graph, V root){
+    public HeavyPathLCAFinder(Graph<V, E> graph, V root)
+    {
         this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
@@ -88,7 +93,8 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
-    public HeavyPathLCAFinder(Graph<V, E> graph, Set<V> roots){
+    public HeavyPathLCAFinder(Graph<V, E> graph, Set<V> roots)
+    {
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
 
@@ -102,9 +108,11 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
     }
 
     /**
-     * Compute the heavy path decomposition and get the corresponding arrays from the internal state.
+     * Compute the heavy path decomposition and get the corresponding arrays from the internal
+     * state.
      */
-    private void computeHeavyPathDecomposition(){
+    private void computeHeavyPathDecomposition()
+    {
         HeavyPathDecomposition<V, E> heavyPath = new HeavyPathDecomposition<>(graph, roots);
         HeavyPathDecomposition<V, E>.InternalState state = heavyPath.getInternalState();
 
@@ -123,7 +131,8 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
      * {@inheritDoc}
      */
     @Override
-    public V getLCA(V a, V b) {
+    public V getLCA(V a, V b)
+    {
         int indexA = vertexMap.getOrDefault(a, -1);
         if (indexA == -1)
             throw new IllegalArgumentException("invalid vertex: " + a);
@@ -139,52 +148,53 @@ public class HeavyPathLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V
         int componentA = component[indexA];
         int componentB = component[indexB];
 
-        // If a and b are in different components (or haven't been explored yet) then they do not have a lca
+        // If a and b are in different components (or haven't been explored yet) then they do not
+        // have a lca
         if (componentA != componentB || componentA == -1)
             return null;
 
         /*
          * Idea: Get a and b on the same vertex path by 'jumping' from one path to another
          *
-         *       while (a and b are on different paths) do
-         *          if a's path starts lower than b's path (in the tree)
-         *              set a := father of the first node in a's path
-         *          else
-         *              set b: = father of the first node in b's path
+         * while (a and b are on different paths) do if a's path starts lower than b's path (in the
+         * tree) set a := father of the first node in a's path else set b: = father of the first
+         * node in b's path
          *
-         *       now a and b are on the same path
+         * now a and b are on the same path
          *
-         *       return a if a is closer to the root than b; otherwise return b
+         * return a if a is closer to the root than b; otherwise return b
          */
 
         int pathA = path[indexA];
         int pathB = path[indexB];
 
-        while (pathA != pathB){
+        while (pathA != pathB) {
             int firstNodePathA = firstNodeInPath[pathA];
             int firstNodePathB = firstNodeInPath[pathB];
-            
+
             if (depth[firstNodePathA] < depth[firstNodePathB]) {
                 indexB = parent[firstNodePathB];
                 pathB = path[indexB];
-            }
-            else {
+            } else {
                 indexA = parent[firstNodePathA];
                 pathA = path[indexA];
             }
         }
 
-        return positionInPath[indexA] < positionInPath[indexB] ? indexList.get(indexA) : indexList.get(indexB);
+        return positionInPath[indexA] < positionInPath[indexB] ? indexList.get(indexA)
+            : indexList.get(indexB);
     }
 
     /**
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
+     * 
      * @throws UnsupportedOperationException if the method is called
      */
     @Override
-    public Set<V> getLCASet(V a, V b){
+    public Set<V> getLCASet(V a, V b)
+    {
         throw new UnsupportedOperationException();
     }
 }

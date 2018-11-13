@@ -17,12 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.*;
 
 import static junit.framework.TestCase.fail;
 import static org.jgrapht.Graph.DEFAULT_EDGE_WEIGHT;
@@ -53,7 +51,8 @@ public class UnweightedGraphAsWeightedGraphTest
     /**
      * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    @Before public void setUp()
+    @Before
+    public void setUp()
     {
         Graph<String, DefaultWeightedEdge> graph =
             new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
@@ -76,7 +75,8 @@ public class UnweightedGraphAsWeightedGraphTest
         this.weightedGraph = new AsWeightedGraph<>(graph, graphWeights);
     }
 
-    @Test public void testSetEdgeWeight()
+    @Test
+    public void testSetEdgeWeight()
     {
         double newEdgeWeight = -999;
         this.weightedGraph.setEdgeWeight(e12, newEdgeWeight);
@@ -84,17 +84,20 @@ public class UnweightedGraphAsWeightedGraphTest
         assertEquals(newEdgeWeight, this.weightedGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testGetEdgeWeight()
+    @Test
+    public void testGetEdgeWeight()
     {
         assertEquals(e23Weight, this.weightedGraph.getEdgeWeight(e23), 0);
     }
 
-    @Test public void testGetDefaultEdgeWeight()
+    @Test
+    public void testGetDefaultEdgeWeight()
     {
         assertEquals(DEFAULT_EDGE_WEIGHT, this.weightedGraph.getEdgeWeight(loop), 0);
     }
 
-    @Test public void testGetEdgeWeightOfNull()
+    @Test
+    public void testGetEdgeWeightOfNull()
     {
         try {
             this.weightedGraph.getEdgeWeight(null);
@@ -104,18 +107,18 @@ public class UnweightedGraphAsWeightedGraphTest
         }
     }
 
-    @Test public void testGetType()
+    @Test
+    public void testGetType()
     {
         assertTrue(this.weightedGraph.getType().isWeighted());
     }
 
-    @Test public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
+    @Test
+    public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
     {
         try {
             new AsWeightedGraph<>(
-                new DefaultUndirectedGraph<>(String.class),
-                new HashMap<>(),
-                true);
+                new DefaultUndirectedGraph<>(String.class), new HashMap<>(), true);
             fail("Expected a IllegalArgumentException");
         } catch (Exception e) {
             assertTrue(e instanceof IllegalArgumentException);

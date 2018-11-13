@@ -364,10 +364,8 @@ public class GraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        Map<String, Map<String, Attribute>> vAttributes =
-                new HashMap<>();
-        Map<DefaultEdge, Map<String, Attribute>> eAttributes =
-                new HashMap<>();
+        Map<String, Map<String, Attribute>> vAttributes = new HashMap<>();
+        Map<DefaultEdge, Map<String, Attribute>> eAttributes = new HashMap<>();
         Graph<String, DefaultEdge> g =
             readGraph(input, DefaultEdge.class, false, false, vAttributes, eAttributes);
 
@@ -484,10 +482,8 @@ public class GraphMLImporterTest
 
         Graph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        Map<String, Map<String, Attribute>> vAttributes =
-                new HashMap<>();
-        Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes =
-                new HashMap<>();
+        Map<String, Map<String, Attribute>> vAttributes = new HashMap<>();
+        Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes = new HashMap<>();
 
         GraphMLImporter<String, DefaultWeightedEdge> importer =
             createGraphImporter(g, vAttributes, eAttributes);
@@ -548,10 +544,8 @@ public class GraphMLImporterTest
 
         Graph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        Map<String, Map<String, Attribute>> vAttributes =
-                new HashMap<>();
-        Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes =
-                new HashMap<>();
+        Map<String, Map<String, Attribute>> vAttributes = new HashMap<>();
+        Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes = new HashMap<>();
 
         GraphMLImporter<String, DefaultWeightedEdge> importer =
             createGraphImporter(g, vAttributes, eAttributes);
@@ -739,8 +733,7 @@ public class GraphMLImporterTest
     public void testExportImport()
         throws Exception
     {
-        DirectedPseudograph<String, DefaultEdge> g1 =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g1 = new DirectedPseudograph<>(DefaultEdge.class);
         g1.addVertex("1");
         g1.addVertex("2");
         g1.addVertex("3");
@@ -903,8 +896,7 @@ public class GraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        final Graph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        final Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         try {
             GraphMLImporter<String,
@@ -948,8 +940,7 @@ public class GraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         HashMap<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         HashMap<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
@@ -996,8 +987,7 @@ public class GraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g =
-                new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         HashMap<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         HashMap<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();

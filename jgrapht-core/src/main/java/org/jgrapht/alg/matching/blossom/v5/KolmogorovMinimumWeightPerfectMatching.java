@@ -17,59 +17,67 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.matching.EdmondsMaximumCardinalityMatching;
-import org.jgrapht.alg.util.Pair;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.matching.*;
+import org.jgrapht.alg.util.*;
 
 import java.util.*;
 
 import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStrategy.MULTIPLE_TREE_CONNECTED_COMPONENTS;
 
 /**
- * This class computes a minimum weight perfect matching in general graphs using the Blossom V algorithm.
+ * This class computes a minimum weight perfect matching in general graphs using the Blossom V
+ * algorithm.
  * <p>
- * Let $G = (V, E, c)$ be an undirected graph with a real-valued cost function defined on it. A matching is
- * an edge-disjoint subset of edges $M \subseteq E$. A matching is perfect if $2|M| = |V|$. In the minimum
- * weight perfect matching problem the goal is to minimize the weighted sum of the edges in the perfect matching.
- * This class supports pseudographs, but a problem on a pseudograph can be easily reduced to a problem on a simple graph.
- * Moreover, this reduction can heavily influence the running time since only an edge with minimum weight between two
- * vertices can belong to the matching. Currently, users are responsible for doing this reduction themselves
+ * Let $G = (V, E, c)$ be an undirected graph with a real-valued cost function defined on it. A
+ * matching is an edge-disjoint subset of edges $M \subseteq E$. A matching is perfect if $2|M| =
+ * |V|$. In the minimum weight perfect matching problem the goal is to minimize the weighted sum of
+ * the edges in the perfect matching. This class supports pseudographs, but a problem on a
+ * pseudograph can be easily reduced to a problem on a simple graph. Moreover, this reduction can
+ * heavily influence the running time since only an edge with minimum weight between two vertices
+ * can belong to the matching. Currently, users are responsible for doing this reduction themselves
  * before invoking the algorithm.
  * <p>
- * Note that if the graph is unweighted and dense, {@link EdmondsMaximumCardinalityMatching} may be a better choice.
+ * Note that if the graph is unweighted and dense, {@link EdmondsMaximumCardinalityMatching} may be
+ * a better choice.
  * <p>
- * For more information about the algorithm see the following paper:
- * <i>Kolmogorov, V. Math. Prog. Comp. (2009) 1: 43. https://doi.org/10.1007/s12532-009-0002-8</i>, and the
- * original implementation: <i>http://pub.ist.ac.at/~vnk/software/blossom5-v2.05.src.tar.gz</i>
+ * For more information about the algorithm see the following paper: <i>Kolmogorov, V. Math. Prog.
+ * Comp. (2009) 1: 43. https://doi.org/10.1007/s12532-009-0002-8</i>, and the original
+ * implementation: <i>http://pub.ist.ac.at/~vnk/software/blossom5-v2.05.src.tar.gz</i>
  * <p>
- * The algorithm can be divided into two phases: initialization and the main algorithm. The initialization
- * phase is responsible for converting the specified graph into the form convenient for the algorithm and
- * for finding an initial matching to speed up the main part. Furthermore, the main part of the algorithm
- * can be further divided into primal and dual updates. The primal phases are aimed at augmenting the
- * matching so that the value of the objective function of the primal linear program increases. Dual updates
- * are aimed at increasing the objective function of the dual linear program. The algorithm iteratively performs
- * these primal and dual operations to build alternating trees of tight edges and augment the matching. Thus,
- * at any stage of the algorithm the matching consists of tight edges. This means that the resulting
- * perfect matching meets complementary slackness conditions, and is therefore optimal.
+ * The algorithm can be divided into two phases: initialization and the main algorithm. The
+ * initialization phase is responsible for converting the specified graph into the form convenient
+ * for the algorithm and for finding an initial matching to speed up the main part. Furthermore, the
+ * main part of the algorithm can be further divided into primal and dual updates. The primal phases
+ * are aimed at augmenting the matching so that the value of the objective function of the primal
+ * linear program increases. Dual updates are aimed at increasing the objective function of the dual
+ * linear program. The algorithm iteratively performs these primal and dual operations to build
+ * alternating trees of tight edges and augment the matching. Thus, at any stage of the algorithm
+ * the matching consists of tight edges. This means that the resulting perfect matching meets
+ * complementary slackness conditions, and is therefore optimal.
  * <p>
- * At construction time the set of options can be specified to define the strategies used by the algorithm
- * to perform initialization, dual updates, etc. This can be done with the {@link BlossomVOptions}. This class
- * supports retrieving statistics for the algorithm performance; see {@link KolmogorovMinimumWeightPerfectMatching#getStatistics()}.
- * It provides the time elapsed during primal operations and dual updates, as well as the number of these primal operations
+ * At construction time the set of options can be specified to define the strategies used by the
+ * algorithm to perform initialization, dual updates, etc. This can be done with the
+ * {@link BlossomVOptions}. This class supports retrieving statistics for the algorithm performance;
+ * see {@link KolmogorovMinimumWeightPerfectMatching#getStatistics()}. It provides the time elapsed
+ * during primal operations and dual updates, as well as the number of these primal operations
  * performed.
  * <p>
- * The solution to a minimum weight perfect matching problem instance comes with a certificate of optimality,
- * which is represented by a solution to a dual linear program; see {@link DualSolution}. This class encapsulates
- * a mapping from the node sets of odd cardinality to the corresponding dual variables. This mapping doesn't contain
- * the sets whose dual variables are $0$. The computation of the dual solution is performed lazily and doesn't affect
- * the running time of finding a minimum weight perfect matching.
+ * The solution to a minimum weight perfect matching problem instance comes with a certificate of
+ * optimality, which is represented by a solution to a dual linear program; see
+ * {@link DualSolution}. This class encapsulates a mapping from the node sets of odd cardinality to
+ * the corresponding dual variables. This mapping doesn't contain the sets whose dual variables are
+ * $0$. The computation of the dual solution is performed lazily and doesn't affect the running time
+ * of finding a minimum weight perfect matching.
  * <p>
- * This class supports testing the optimality of the solution via {@link KolmogorovMinimumWeightPerfectMatching#testOptimality()}.
- * It also supports retrieval of the computation error when the edge weights are real values via
- * {@link KolmogorovMinimumWeightPerfectMatching#getError()}. Both optimality test and error computation are performed
- * lazily and don't affect the running time of the main algorithm. If the problem instance doesn't contain a perfect
- * matching at all, the algorithm doesn't find a minimum weight maximum matching; instead, it throws an exception.
+ * This class supports testing the optimality of the solution via
+ * {@link KolmogorovMinimumWeightPerfectMatching#testOptimality()}. It also supports retrieval of
+ * the computation error when the edge weights are real values via
+ * {@link KolmogorovMinimumWeightPerfectMatching#getError()}. Both optimality test and error
+ * computation are performed lazily and don't affect the running time of the main algorithm. If the
+ * problem instance doesn't contain a perfect matching at all, the algorithm doesn't find a minimum
+ * weight maximum matching; instead, it throws an exception.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -77,7 +85,10 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVOptions.DualUpdateStra
  * @see BlossomVPrimalUpdater
  * @see BlossomVDualUpdater
  */
-public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlgorithm<V, E> {
+public class KolmogorovMinimumWeightPerfectMatching<V, E>
+    implements
+    MatchingAlgorithm<V, E>
+{
     /**
      * Default epsilon used in the algorithm
      */
@@ -136,17 +147,20 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @param graph the graph for which to find a minimum weight perfect matching
      */
-    public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph) {
+    public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph)
+    {
         this(graph, DEFAULT_OPTIONS);
     }
 
     /**
      * Constructs a new instance of the algorithm with the specified {@code options}
      *
-     * @param graph   the graph for which to find a minimum weight perfect matching
-     * @param options the options which define the strategies for the initialization and dual updates
+     * @param graph the graph for which to find a minimum weight perfect matching
+     * @param options the options which define the strategies for the initialization and dual
+     *        updates
      */
-    public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph, BlossomVOptions options) {
+    public KolmogorovMinimumWeightPerfectMatching(Graph<V, E> graph, BlossomVOptions options)
+    {
         Objects.requireNonNull(graph);
         if ((graph.vertexSet().size() & 1) == 1) {
             throw new IllegalArgumentException(NO_PERFECT_MATCHING);
@@ -157,13 +171,14 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Computes and returns a minimum weight perfect matching in the {@code graph}. See the class description
-     * for the relative definitions and algorithm description.
+     * Computes and returns a minimum weight perfect matching in the {@code graph}. See the class
+     * description for the relative definitions and algorithm description.
      *
      * @return the minimum weight perfect matching for the {@code graph}
      */
     @Override
-    public MatchingAlgorithm.Matching<V, E> getMatching() {
+    public MatchingAlgorithm.Matching<V, E> getMatching()
+    {
         if (matching == null) {
             lazyComputeMinimumWeightPerfectMatching();
         }
@@ -171,12 +186,13 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Returns the computed solution to the dual linear program with respect to the
-     * minimum weight perfect matching linear program formulation.
+     * Returns the computed solution to the dual linear program with respect to the minimum weight
+     * perfect matching linear program formulation.
      *
      * @return the solution to the dual linear program formulated on the {@code graph}
      */
-    public DualSolution<V, E> getDualSolution() {
+    public DualSolution<V, E> getDualSolution()
+    {
         dualSolution = lazyComputeDualSolution();
         return dualSolution;
     }
@@ -184,23 +200,27 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Performs an optimality test after the perfect matching is computed.
      * <p>
-     * More precisely, checks whether dual variables of all pseudonodes and resulting slacks of all edges
-     * are non-negative and that slacks of all matched edges are exactly 0. Since the algorithm uses floating
-     * point arithmetic, this check is done with precision of {@link KolmogorovMinimumWeightPerfectMatching#EPS}
+     * More precisely, checks whether dual variables of all pseudonodes and resulting slacks of all
+     * edges are non-negative and that slacks of all matched edges are exactly 0. Since the
+     * algorithm uses floating point arithmetic, this check is done with precision of
+     * {@link KolmogorovMinimumWeightPerfectMatching#EPS}
      * <p>
-     * In general, this method should always return true unless the algorithm implementation has a bug.
+     * In general, this method should always return true unless the algorithm implementation has a
+     * bug.
      *
      * @return true iff the assigned dual variables satisfy the dual linear program formulation AND
-     * complementary slackness conditions are also satisfied. The total error must not exceed EPS
+     *         complementary slackness conditions are also satisfied. The total error must not
+     *         exceed EPS
      */
-    public boolean testOptimality() {
+    public boolean testOptimality()
+    {
         lazyComputeMinimumWeightPerfectMatching();
         return getError() < EPS; // getError() won't return -1 since matching != null
     }
 
     /**
-     * Computes the error in the solution to the dual linear program. More precisely, the total error
-     * equals the sum of:
+     * Computes the error in the solution to the dual linear program. More precisely, the total
+     * error equals the sum of:
      * <ul>
      * <li>Absolute value of edge slack if negative or the edge is matched</li>
      * <li>Absolute value of pseudonode variable if negative</li>
@@ -208,7 +228,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @return the total numeric error
      */
-    public double getError() {
+    public double getError()
+    {
         lazyComputeMinimumWeightPerfectMatching();
         double error = testNonNegativity();
         Set<E> matchedEdges = matching.getEdges();
@@ -238,7 +259,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Lazily runs the algorithm on the specified graph.
      */
-    private void lazyComputeMinimumWeightPerfectMatching() {
+    private void lazyComputeMinimumWeightPerfectMatching()
+    {
         if (matching != null) {
             return;
         }
@@ -253,7 +275,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         while (true) {
             int cycleTreeNum = state.treeNum;
 
-            for (BlossomVNode currentRoot = state.nodes[state.nodeNum].treeSiblingNext; currentRoot != null; ) {
+            for (BlossomVNode currentRoot = state.nodes[state.nodeNum].treeSiblingNext;
+                currentRoot != null;)
+            {
                 // initialize variables
                 BlossomVNode nextRoot = currentRoot.treeSiblingNext;
                 BlossomVNode nextNextRoot = null;
@@ -279,7 +303,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 while (iterationTreeNum == state.treeNum) {
                     if (DEBUG) {
                         printState();
-                        System.out.println("Current tree is " + tree + ", current root is " + currentRoot);
+                        System.out.println(
+                            "Current tree is " + tree + ", current root is " + currentRoot);
                     }
 
                     if (!tree.plusInfinityEdges.isEmpty()) {
@@ -341,7 +366,9 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 // we are done
                 break;
             }
-            if (cycleTreeNum == state.treeNum && dualUpdater.updateDuals(options.dualUpdateStrategy) <= 0) {
+            if (cycleTreeNum == state.treeNum
+                && dualUpdater.updateDuals(options.dualUpdateStrategy) <= 0)
+            {
                 dualUpdater.updateDuals(MULTIPLE_TREE_CONNECTED_COMPONENTS);
             }
         }
@@ -349,12 +376,16 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Sets the currentEdge and currentDirection variables for all trees adjacent to the {@code tree}
+     * Sets the currentEdge and currentDirection variables for all trees adjacent to the
+     * {@code tree}
      *
      * @param tree the tree whose adjacent trees' variables are modified
      */
-    private void setCurrentEdgesAndTryToAugment(BlossomVTree tree) {
-        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator(); iterator.hasNext(); ) {
+    private void setCurrentEdgesAndTryToAugment(BlossomVTree tree)
+    {
+        for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator();
+            iterator.hasNext();)
+        {
             BlossomVTreeEdge treeEdge = iterator.next();
             BlossomVTree opposite = treeEdge.head[iterator.getCurrentDirection()];
 
@@ -379,7 +410,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @return true iff the condition described above holds
      */
-    private double testNonNegativity() {
+    private double testNonNegativity()
+    {
         BlossomVNode[] nodes = state.nodes;
         double error = 0;
         for (int i = 0; i < state.nodeNum; i++) {
@@ -401,10 +433,11 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      * Computes the sum of all duals from {@code start} inclusive to {@code end} inclusive
      *
      * @param start the node to start from
-     * @param end   the node to end with
+     * @param end the node to end with
      * @return the sum = start.dual + start.blossomParent.dual + ... + end.dual
      */
-    private double totalDual(BlossomVNode start, BlossomVNode end) {
+    private double totalDual(BlossomVNode start, BlossomVNode end)
+    {
         if (end == start) {
             return start.getTrueDual();
         } else {
@@ -420,15 +453,17 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Returns $(b, b)$ in the case where the vertices {@code a} and {@code b} have a common ancestor blossom $b$.
-     * Otherwise, returns the outermost parent blossoms of nodes {@code a} and {@code b}
+     * Returns $(b, b)$ in the case where the vertices {@code a} and {@code b} have a common
+     * ancestor blossom $b$. Otherwise, returns the outermost parent blossoms of nodes {@code a} and
+     * {@code b}
      *
      * @param a a vertex whose lca is to be found with respect to another vertex
      * @param b the other vertex whose lca is to be found
      * @return either an lca blossom of {@code a} and {@code b} or their outermost blossoms
      */
-    private Pair<BlossomVNode, BlossomVNode> lca(BlossomVNode a, BlossomVNode b) {
-        BlossomVNode[] branches = new BlossomVNode[]{a, b};
+    private Pair<BlossomVNode, BlossomVNode> lca(BlossomVNode a, BlossomVNode b)
+    {
+        BlossomVNode[] branches = new BlossomVNode[] { a, b };
         int dir = 0;
         Pair<BlossomVNode, BlossomVNode> result;
         while (true) {
@@ -445,7 +480,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                 if (jumpNode.isMarked) {
                     result = new Pair<>(jumpNode, jumpNode);
                 } else {
-                    result = dir == 0 ? new Pair<>(branches[dir], jumpNode) : new Pair<>(jumpNode, branches[dir]);
+                    result = dir == 0 ? new Pair<>(branches[dir], jumpNode)
+                        : new Pair<>(jumpNode, branches[dir]);
                 }
                 break;
             }
@@ -458,11 +494,13 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Clears the marking of {@code node} and all its ancestors up until the first unmarked vertex is encountered
+     * Clears the marking of {@code node} and all its ancestors up until the first unmarked vertex
+     * is encountered
      *
      * @param node the node to start from
      */
-    private void clearMarked(BlossomVNode node) {
+    private void clearMarked(BlossomVNode node)
+    {
         do {
             node.isMarked = false;
             node = node.blossomParent;
@@ -472,7 +510,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Clears the marking of all nodes and pseudonodes
      */
-    private void clearMarked() {
+    private void clearMarked()
+    {
         BlossomVNode[] nodes = state.nodes;
         for (int i = 0; i < state.nodeNum; i++) {
             BlossomVNode current = nodes[i];
@@ -484,21 +523,25 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Finishes the algorithm after all nodes are matched. The main problem it solves is that
-     * the matching after the end of primal and dual operations may not be valid in the contracted blossoms.
+     * Finishes the algorithm after all nodes are matched. The main problem it solves is that the
+     * matching after the end of primal and dual operations may not be valid in the contracted
+     * blossoms.
      * <p>
-     * Property: if a matching is changed in the parent blossom, the matching in all lower blossoms can become invalid.
-     * Therefore, we traverse all nodes, find an unmatched node (it is necessarily contracted), go up to the first
-     * blossom whose matching hasn't been fixed (we set blossomGrandparent references to point to the previous nodes on
-     * the path). Then we start to change the matching accordingly all the way down to the initial node.
+     * Property: if a matching is changed in the parent blossom, the matching in all lower blossoms
+     * can become invalid. Therefore, we traverse all nodes, find an unmatched node (it is
+     * necessarily contracted), go up to the first blossom whose matching hasn't been fixed (we set
+     * blossomGrandparent references to point to the previous nodes on the path). Then we start to
+     * change the matching accordingly all the way down to the initial node.
      * <p>
-     * Let's call an edge that is matched to a blossom root a "blossom edge". To make the matching valid we move the
-     * blossom edge one layer down at a time so that in the end its endpoints are valid initial nodes of the graph.
-     * After this transformation we can't traverse the blossomSibling references any more. That is why we initially compute
-     * a mapping of every pseudonode to the set of nodes that are contracted in it. This map is needed to
-     * construct a dual solution after the matching in the graph becomes valid.
+     * Let's call an edge that is matched to a blossom root a "blossom edge". To make the matching
+     * valid we move the blossom edge one layer down at a time so that in the end its endpoints are
+     * valid initial nodes of the graph. After this transformation we can't traverse the
+     * blossomSibling references any more. That is why we initially compute a mapping of every
+     * pseudonode to the set of nodes that are contracted in it. This map is needed to construct a
+     * dual solution after the matching in the graph becomes valid.
      */
-    private void finish() {
+    private void finish()
+    {
         if (DEBUG) {
             System.out.println("Finishing matching");
         }
@@ -518,12 +561,14 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
                     blossomPrev = blossom;
                     blossom = blossomPrev.blossomParent;
                 } while (!blossom.isOuter);
-                // now node.blossomGrandparent points to the previous blossom in the hierarchy (not counting the blossom node)
+                // now node.blossomGrandparent points to the previous blossom in the hierarchy (not
+                // counting the blossom node)
                 while (true) {
                     // find the root of the blossom. This can be a pseudonode
                     BlossomVNode blossomRoot = blossom.matched.getCurrentOriginal(blossom);
                     if (blossomRoot == null) {
-                        blossomRoot = blossom.matched.head[0].isProcessed ? blossom.matched.headOriginal[1] : blossom.matched.headOriginal[0];
+                        blossomRoot = blossom.matched.head[0].isProcessed
+                            ? blossom.matched.headOriginal[1] : blossom.matched.headOriginal[0];
                     }
                     while (blossomRoot.blossomParent != blossom) {
                         blossomRoot = blossomRoot.blossomParent;
@@ -566,10 +611,11 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Sets the blossomGrandparent references so that from a pseudonode we can make
-     * one step down to some node that belongs to that pseudonode
+     * Sets the blossomGrandparent references so that from a pseudonode we can make one step down to
+     * some node that belongs to that pseudonode
      */
-    private void prepareForDualSolution() {
+    private void prepareForDualSolution()
+    {
         BlossomVNode[] nodes = state.nodes;
         for (int i = 0; i < state.nodeNum; i++) {
             BlossomVNode current = nodes[i];
@@ -585,14 +631,15 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     }
 
     /**
-     * Computes the set of original contracted vertices in the {@code pseudonode} and puts computes value into
-     * the {@code blossomNodes}. If {@code node} contains other pseudonodes which haven't been processed already,
-     * recursively computes the same set for them.
+     * Computes the set of original contracted vertices in the {@code pseudonode} and puts computes
+     * value into the {@code blossomNodes}. If {@code node} contains other pseudonodes which haven't
+     * been processed already, recursively computes the same set for them.
      *
-     * @param pseudonode   the pseudonode whose contracted nodes are computed
+     * @param pseudonode the pseudonode whose contracted nodes are computed
      * @param blossomNodes the mapping from pseudonodes to the original nodes contained in them
      */
-    private Set<V> getBlossomNodes(BlossomVNode pseudonode, Map<BlossomVNode, Set<V>> blossomNodes) {
+    private Set<V> getBlossomNodes(BlossomVNode pseudonode, Map<BlossomVNode, Set<V>> blossomNodes)
+    {
         if (blossomNodes.containsKey(pseudonode)) {
             return blossomNodes.get(pseudonode);
         }
@@ -620,7 +667,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @return the solution to the dual linear program
      */
-    private DualSolution<V, E> lazyComputeDualSolution() {
+    private DualSolution<V, E> lazyComputeDualSolution()
+    {
         lazyComputeMinimumWeightPerfectMatching();
         if (dualSolution != null) {
             return dualSolution;
@@ -635,9 +683,12 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
             do {
                 if (Math.abs(current.getTrueDual()) > EPS) {
                     if (current.isBlossom) {
-                        dualMap.put(getBlossomNodes(current, nodesInBlossoms), current.getTrueDual());
+                        dualMap
+                            .put(getBlossomNodes(current, nodesInBlossoms), current.getTrueDual());
                     } else {
-                        dualMap.put(Collections.singleton(state.graphVertices.get(current.pos)), current.getTrueDual());
+                        dualMap.put(
+                            Collections.singleton(state.graphVertices.get(current.pos)),
+                            current.getTrueDual());
                     }
                 }
                 current.isMarked = true;
@@ -654,7 +705,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Prints the state of the algorithm. This is a debug method.
      */
-    private void printState() {
+    private void printState()
+    {
         BlossomVNode[] nodes = state.nodes;
         BlossomVEdge[] edges = state.edges;
         System.out.println();
@@ -687,9 +739,12 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Debug method
      */
-    private void printTrees() {
+    private void printTrees()
+    {
         System.out.println("Printing trees");
-        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null; root = root.treeSiblingNext) {
+        for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
+            root = root.treeSiblingNext)
+        {
             BlossomVTree tree = root.tree;
             System.out.println(tree);
         }
@@ -698,7 +753,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
     /**
      * Debug method
      */
-    private void printMap() {
+    private void printMap()
+    {
         System.out.println(state.nodeNum + " " + state.edgeNum);
         for (int i = 0; i < state.nodeNum; i++) {
             System.out.println(state.graphVertices.get(i) + " -> " + state.nodes[i]);
@@ -710,16 +766,17 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
      *
      * @return the statistics describing the algorithms characteristics
      */
-    public Statistics getStatistics() {
+    public Statistics getStatistics()
+    {
         return state.statistics;
     }
-
 
     /**
      * Describes the performance characteristics of the algorithm and numeric data about the number
      * of performed dual operations during the main phase of the algorithm
      */
-    public static class Statistics {
+    public static class Statistics
+    {
         /**
          * Number of shrink operations
          */
@@ -757,96 +814,105 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         /**
          * @return the number of shrink operations
          */
-        public int getShrinkNum() {
+        public int getShrinkNum()
+        {
             return shrinkNum;
         }
 
         /**
          * @return the number of expand operations
          */
-        public int getExpandNum() {
+        public int getExpandNum()
+        {
             return expandNum;
         }
 
         /**
          * @return the number of grow operations
          */
-        public int getGrowNum() {
+        public int getGrowNum()
+        {
             return growNum;
         }
 
         /**
          * @return the time spent during the augment operation in nanoseconds
          */
-        public long getAugmentTime() {
+        public long getAugmentTime()
+        {
             return augmentTime;
         }
 
         /**
          * @return the time spent during the expand operation in nanoseconds
          */
-        public long getExpandTime() {
+        public long getExpandTime()
+        {
             return expandTime;
         }
 
         /**
          * @return the time spent during the shrink operation in nanoseconds
          */
-        public long getShrinkTime() {
+        public long getShrinkTime()
+        {
             return shrinkTime;
         }
 
         /**
          * @return the time spent during the grow operation in nanoseconds
          */
-        public long getGrowTime() {
+        public long getGrowTime()
+        {
             return growTime;
         }
 
         /**
-         * @return the time spent during the dual update phase (either single tree or global) in nanoseconds
+         * @return the time spent during the dual update phase (either single tree or global) in
+         *         nanoseconds
          */
-        public long getDualUpdatesTime() {
+        public long getDualUpdatesTime()
+        {
             return dualUpdatesTime;
         }
 
         @Override
-        public String toString() {
-            return "Statistics{shrinkNum=" + shrinkNum +
-                    ", expandNum=" + expandNum +
-                    ", growNum=" + growNum +
-                    ", augmentTime=" + augmentTime +
-                    ", expandTime=" + expandTime +
-                    ", shrinkTime=" + shrinkTime +
-                    ", growTime=" + growTime + '}';
+        public String toString()
+        {
+            return "Statistics{shrinkNum=" + shrinkNum + ", expandNum=" + expandNum + ", growNum="
+                + growNum + ", augmentTime=" + augmentTime + ", expandTime=" + expandTime
+                + ", shrinkTime=" + shrinkTime + ", growTime=" + growTime + '}';
         }
     }
 
     /**
-     * A solution to the dual linear program formulated on the  {@code graph}
+     * A solution to the dual linear program formulated on the {@code graph}
      *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static class DualSolution<V, E> {
+    public static class DualSolution<V, E>
+    {
         /**
          * The graph on which both primal and dual linear programs are formulated
          */
         Graph<V, E> graph;
 
         /**
-         * Mapping from sets of vertices of odd cardinality to their dual variables. Represents a solution
-         * to the dual linear program
+         * Mapping from sets of vertices of odd cardinality to their dual variables. Represents a
+         * solution to the dual linear program
          */
         Map<Set<V>, Double> dualVariables;
 
         /**
          * Constructs a new solution for the dual linear program
          *
-         * @param graph         the graph on which the linear program is formulated
-         * @param dualVariables the mapping from sets of vertices of odd cardinality to their dual variables
+         * @param graph the graph on which the linear program is formulated
+         * @param dualVariables the mapping from sets of vertices of odd cardinality to their dual
+         *        variables
          */
-        public DualSolution(Graph<V, E> graph, Map<Set<V>, Double> dualVariables) {
+        public DualSolution(Graph<V, E> graph, Map<Set<V>, Double> dualVariables)
+        {
             this.graph = graph;
             this.dualVariables = dualVariables;
         }
@@ -854,7 +920,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
         /**
          * @return the graph on which the linear program is formulated
          */
-        public Graph<V, E> getGraph() {
+        public Graph<V, E> getGraph()
+        {
             return graph;
         }
 
@@ -864,7 +931,8 @@ public class KolmogorovMinimumWeightPerfectMatching<V, E> implements MatchingAlg
          *
          * @return the mapping from sets of vertices of odd cardinality to their dual variables
          */
-        public Map<Set<V>, Double> getDualVariables() {
+        public Map<Set<V>, Double> getDualVariables()
+        {
             return dualVariables;
         }
     }

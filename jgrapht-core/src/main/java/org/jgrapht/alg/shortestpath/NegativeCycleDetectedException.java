@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.GraphPath;
+import org.jgrapht.*;
 
 /**
- * An exception used to notify about the detection of a negative cycle. The exception 
- * may carry the negative cycle to the user.
+ * An exception used to notify about the detection of a negative cycle. The exception may carry the
+ * negative cycle to the user.
  * 
  * @author Dimitrios Michail
  */
@@ -32,7 +32,7 @@ public class NegativeCycleDetectedException
     private static final long serialVersionUID = -8064609917721881630L;
 
     private GraphPath<?, ?> cycle;
-    
+
     /**
      * Constructs a new exception with {@code null} as its detail message. The cause is not
      * initialized, and may subsequently be initialized by a call to {@link #initCause}.
@@ -53,7 +53,7 @@ public class NegativeCycleDetectedException
     {
         super(message);
     }
-    
+
     /**
      * Constructs a new exception with the specified detail message. The cause is not initialized,
      * and may subsequently be initialized by a call to {@link #initCause}.
@@ -62,7 +62,7 @@ public class NegativeCycleDetectedException
      *        {@link #getMessage()} method.
      * @param cycle the negative weight cycle
      */
-    public NegativeCycleDetectedException(String message, GraphPath<?,?> cycle)
+    public NegativeCycleDetectedException(String message, GraphPath<?, ?> cycle)
     {
         super(message);
         this.cycle = cycle;
@@ -70,6 +70,7 @@ public class NegativeCycleDetectedException
 
     /**
      * Get the actual negative cycle, or null if not provided.
+     * 
      * @return the negative cycle or null.
      */
     public GraphPath<?, ?> getCycle()
@@ -79,6 +80,7 @@ public class NegativeCycleDetectedException
 
     /**
      * Set the negative cycle.
+     * 
      * @param cycle the negative cycle.
      */
     public void setCycle(GraphPath<?, ?> cycle)

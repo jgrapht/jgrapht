@@ -188,13 +188,5 @@ public class DirectedGraphTest
         {
             super(edgeClass);
         }
-
-        @Override
-        protected Specifics<V, E> createSpecifics(boolean directed)
-        {
-            return new FastLookupDirectedSpecifics<>(
-                this, new LinkedHashMap<>(), v -> new LinkedHashSet<>());
-        }
     }
 }
-

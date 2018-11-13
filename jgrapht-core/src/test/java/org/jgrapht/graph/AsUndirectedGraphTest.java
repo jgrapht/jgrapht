@@ -22,7 +22,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A unit test for the AsDirectedGraph view.
@@ -225,4 +225,3 @@ public class AsUndirectedGraphTest
         loop = directed.addEdge(v4, v4);
     }
 }
-

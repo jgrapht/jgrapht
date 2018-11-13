@@ -17,41 +17,40 @@
  */
 package org.jgrapht.alg.lca;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.LowestCommonAncestorAlgorithm;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.util.VertexToIntegerMapping;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
 /**
- * Algorithm for computing lowest common ancestors in rooted trees and forests based on
- * <i>Berkman, Omer; Vishkin, Uzi (1993), "Recursive Star-Tree Parallel Data Structure",
- * SIAM Journal on Computing, 22 (2): 221–242, doi:10.1137/0222017</i>.
+ * Algorithm for computing lowest common ancestors in rooted trees and forests based on <i>Berkman,
+ * Omer; Vishkin, Uzi (1993), "Recursive Star-Tree Parallel Data Structure", SIAM Journal on
+ * Computing, 22 (2): 221–242, doi:10.1137/0222017</i>.
  *
  * <p>
- *  The algorithm involves forming an Euler tour of a graph formed from the input tree by doubling every edge,
- *  and using this tour to compute a sequence of level numbers of the nodes in the order the tour visits them.
- *  A lowest common ancestor query can then be transformed into a query that seeks the minimum value occurring
- *  within some subinterval of this sequence of numbers.
+ * The algorithm involves forming an Euler tour of a graph formed from the input tree by doubling
+ * every edge, and using this tour to compute a sequence of level numbers of the nodes in the order
+ * the tour visits them. A lowest common ancestor query can then be transformed into a query that
+ * seeks the minimum value occurring within some subinterval of this sequence of numbers.
  * </p>
  *
  * <p>
- *  Preprocessing Time complexity: $O(|V| log(|V|))$<br>
- *  Preprocessing Space complexity:  $O(|V| log(|V|))$<br>
- *  Query Time complexity: $O(1)$<br>
- *  Query Space complexity: $O(1)$<br>
+ * Preprocessing Time complexity: $O(|V| log(|V|))$<br>
+ * Preprocessing Space complexity: $O(|V| log(|V|))$<br>
+ * Query Time complexity: $O(1)$<br>
+ * Query Space complexity: $O(1)$<br>
  * </p>
  *
  * <p>
- *     For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly. For larger
- *     trees/forests with less than 50,000 queries you can use either {@link BinaryLiftingLCAFinder},
- *     {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo more than that use {@link EulerTourRMQLCAFinder}
- *     since it provides $O(1)$ per query.<br>
- *     Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
- *     {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
- *     For DAGs, use {@link NaiveLCAFinder}.
+ * For small (i.e. less than 100 vertices) trees or forests, all implementations behave similarly.
+ * For larger trees/forests with less than 50,000 queries you can use either
+ * {@link BinaryLiftingLCAFinder}, {@link HeavyPathLCAFinder} or {@link EulerTourRMQLCAFinder}. Fo
+ * more than that use {@link EulerTourRMQLCAFinder} since it provides $O(1)$ per query.<br>
+ * Space-wise, {@link HeavyPathLCAFinder} and {@link TarjanLCAFinder} only use a linear amount while
+ * {@link BinaryLiftingLCAFinder} and {@link EulerTourRMQLCAFinder} require linearithmic space.<br>
+ * For DAGs, use {@link NaiveLCAFinder}.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -59,7 +58,10 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  */
-public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorithm<V> {
+public class EulerTourRMQLCAFinder<V, E>
+    implements
+    LowestCommonAncestorAlgorithm<V>
+{
     private final Graph<V, E> graph;
     private final Set<V> roots;
     private final int maxLevel;
@@ -88,7 +90,8 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
      * @param graph the input graph
      * @param root the root of the graph
      */
-    public EulerTourRMQLCAFinder(Graph<V, E> graph, V root){
+    public EulerTourRMQLCAFinder(Graph<V, E> graph, V root)
+    {
         this(graph, Collections.singleton(Objects.requireNonNull(root, "root cannot be null")));
     }
 
@@ -104,7 +107,8 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
      * @param graph the input graph
      * @param roots the set of roots of the graph
      */
-    public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots){
+    public EulerTourRMQLCAFinder(Graph<V, E> graph, Set<V> roots)
+    {
         this.graph = Objects.requireNonNull(graph, "graph cannot be null");
         this.roots = Objects.requireNonNull(roots, "roots cannot be null");
         this.maxLevel = 1 + org.jgrapht.util.MathUtil.log2(graph.vertexSet().size());
@@ -118,13 +122,15 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
         computeAncestorsStructure();
     }
 
-    private void normalizeGraph(){
+    private void normalizeGraph()
+    {
         VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
         vertexMap = vertexToIntegerMapping.getVertexMap();
         indexList = vertexToIntegerMapping.getIndexList();
     }
 
-    private void dfsIterative(int u, int startLevel){
+    private void dfsIterative(int u, int startLevel)
+    {
         // set of vertices for which the part of the if has been performed
         // (in other words: u ∈ explored iff dfs(u, ...) has been called as some point)
         Set<Integer> explored = new HashSet<>();
@@ -132,12 +138,12 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
         ArrayDeque<Pair<Integer, Integer>> stack = new ArrayDeque<>();
         stack.push(Pair.of(u, startLevel));
 
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             Pair<Integer, Integer> pair = stack.poll();
             u = pair.getFirst();
             int lvl = pair.getSecond();
 
-            if (!explored.contains(u)){
+            if (!explored.contains(u)) {
                 explored.add(u);
 
                 component[u] = numberComponent;
@@ -146,18 +152,18 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
                 sizeTour++;
 
                 V vertexU = indexList.get(u);
-                for (E edge: graph.outgoingEdgesOf(vertexU)){
+                for (E edge : graph.outgoingEdgesOf(vertexU)) {
                     int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
-                    // check if child has not been explored (i.e. dfs(child, ...) has not been called)
-                    if (!explored.contains(child)){
+                    // check if child has not been explored (i.e. dfs(child, ...) has not been
+                    // called)
+                    if (!explored.contains(child)) {
                         // simulate the return from recursion
                         stack.push(pair);
                         stack.push(Pair.of(child, lvl + 1));
                     }
                 }
-            }
-            else{
+            } else {
                 eulerTour[sizeTour] = u;
                 level[sizeTour] = lvl;
                 sizeTour++;
@@ -165,7 +171,8 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
         }
     }
 
-    private void computeRMQ(){
+    private void computeRMQ()
+    {
         rmq = new int[maxLevel + 1][sizeTour];
         log2 = new int[sizeTour + 1];
 
@@ -190,7 +197,8 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
         }
     }
 
-    private void computeAncestorsStructure(){
+    private void computeAncestorsStructure()
+    {
         normalizeGraph();
 
         eulerTour = new int[2 * graph.vertexSet().size()];
@@ -200,21 +208,20 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
         numberComponent = 0;
         component = new int[graph.vertexSet().size()];
 
-        for (V root: roots){
+        for (V root : roots) {
             int u = vertexMap.get(root);
 
             if (component[u] == 0) {
                 numberComponent++;
                 dfsIterative(u, -1);
-            }
-            else{
+            } else {
                 throw new IllegalArgumentException("multiple roots in the same tree");
             }
         }
 
         Arrays.fill(representative, -1);
-        for (int i = 0; i < sizeTour; i++){
-            if (representative[eulerTour[i]] == -1){
+        for (int i = 0; i < sizeTour; i++) {
+            if (representative[eulerTour[i]] == -1) {
                 representative[eulerTour[i]] = i;
             }
         }
@@ -226,7 +233,8 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
      * {@inheritDoc}
      */
     @Override
-    public V getLCA(V a, V b) {
+    public V getLCA(V a, V b)
+    {
         int indexA = vertexMap.getOrDefault(a, -1);
         if (indexA == -1)
             throw new IllegalArgumentException("invalid vertex: " + a);
@@ -256,7 +264,7 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
         int pwl = 1 << l;
         int sol = rmq[l][indexA];
 
-        if(level[sol] > level[rmq[l][indexB - pwl + 1]])
+        if (level[sol] > level[rmq[l][indexB - pwl + 1]])
             sol = rmq[l][indexB - pwl + 1];
 
         return indexList.get(eulerTour[sol]);
@@ -266,10 +274,12 @@ public class EulerTourRMQLCAFinder<V, E> implements LowestCommonAncestorAlgorith
      * Note: This operation is not supported.<br>
      *
      * {@inheritDoc}
+     * 
      * @throws UnsupportedOperationException if the method is called
      */
     @Override
-    public Set<V> getLCASet(V a, V b){
+    public Set<V> getLCASet(V a, V b)
+    {
         throw new UnsupportedOperationException();
     }
 }

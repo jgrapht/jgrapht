@@ -17,11 +17,9 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.util.*;
 
@@ -34,18 +32,23 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class BlossomVNodeTest {
+public class BlossomVNodeTest
+{
 
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
     @Test
-    public void testLabels() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testLabels()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
 
         BlossomVNode node = vertexMap.get(1); // position doesn't matter
@@ -62,14 +65,18 @@ public class BlossomVNodeTest {
     }
 
     @Test
-    public void testAncestors() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testAncestors()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -92,7 +99,8 @@ public class BlossomVNodeTest {
      * Tests correct edge addition and correct edge direction
      */
     @Test
-    public void testAddEdge() {
+    public void testAddEdge()
+    {
         BlossomVNode from = new BlossomVNode(-1);
         BlossomVNode to = new BlossomVNode(-1);
         BlossomVEdge nodeEdge = new BlossomVEdge(-1);
@@ -111,13 +119,17 @@ public class BlossomVNodeTest {
         assertSame(nodeEdge.head[0], to);
         assertSame(nodeEdge.head[1], from);
 
-        for (BlossomVNode.IncidentEdgeIterator iterator = from.incidentEdgesIterator(); iterator.hasNext(); ) {
+        for (BlossomVNode.IncidentEdgeIterator iterator = from.incidentEdgesIterator();
+            iterator.hasNext();)
+        {
             BlossomVEdge edge = iterator.next();
             int dir = iterator.getDir();
             assertSame(edge.head[dir], to);
         }
 
-        for (BlossomVNode.IncidentEdgeIterator iterator = to.incidentEdgesIterator(); iterator.hasNext(); ) {
+        for (BlossomVNode.IncidentEdgeIterator iterator = to.incidentEdgesIterator();
+            iterator.hasNext();)
+        {
             BlossomVEdge edge = iterator.next();
             int dir = iterator.getDir();
             assertSame(edge.head[dir], from);
@@ -128,11 +140,14 @@ public class BlossomVNodeTest {
      * Tests correct edge removal from linked lists of incidents edges
      */
     @Test
-    public void testRemoveEdge() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testRemoveEdge()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 5);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
@@ -154,15 +169,18 @@ public class BlossomVNodeTest {
      * Tests iteration over all incident edges and correct edge direction
      */
     @Test
-    public void testIncidentEdgeIterator1() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testIncidentEdgeIterator1()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e24 = Graphs.addEdgeWithVertices(graph, 2, 4, 0);
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
@@ -187,12 +205,16 @@ public class BlossomVNodeTest {
     /**
      * Tests {@link BlossomVNode.IncidentEdgeIterator} for a particular node
      *
-     * @param node                  node whose adjacent edge iterator is been tested
+     * @param node node whose adjacent edge iterator is been tested
      * @param expectedIncidentEdges expected incident edges of the {@code node}
      */
-    private void testIncidentEdgeIteratorOf(BlossomVNode node, Set<BlossomVEdge> expectedIncidentEdges) {
+    private void testIncidentEdgeIteratorOf(
+        BlossomVNode node, Set<BlossomVEdge> expectedIncidentEdges)
+    {
         Set<BlossomVEdge> adj = new HashSet<>();
-        for (BlossomVNode.IncidentEdgeIterator iterator = node.incidentEdgesIterator(); iterator.hasNext(); ) {
+        for (BlossomVNode.IncidentEdgeIterator iterator = node.incidentEdgesIterator();
+            iterator.hasNext();)
+        {
             BlossomVEdge edge = iterator.next();
             assertEquals(node, edge.head[1 - iterator.getDir()]);
             adj.add(edge);
@@ -205,18 +227,21 @@ public class BlossomVNodeTest {
      * tree roots linked list
      */
     @Test
-    public void testRemoveFromChildList() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testRemoveFromChildList()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
         DefaultWeightedEdge e45 = Graphs.addEdgeWithVertices(graph, 4, 5, 0);
         DefaultWeightedEdge e16 = Graphs.addEdgeWithVertices(graph, 1, 6, 0);
 
-
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -240,23 +265,29 @@ public class BlossomVNodeTest {
 
         Set<BlossomVNode> empty = new HashSet<>();
 
-        assertEquals(new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.getChildrenOf(node2));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(node3)), BlossomVDebugger.getChildrenOf(node2));
         node3.removeFromChildList();
         assertEquals(empty, BlossomVDebugger.getChildrenOf(node2));
 
-        assertEquals(new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.getChildrenOf(node4));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(node5)), BlossomVDebugger.getChildrenOf(node4));
         node5.removeFromChildList();
         assertEquals(empty, BlossomVDebugger.getChildrenOf(node4));
 
-        assertEquals(new HashSet<>(Arrays.asList(node2, node4)), BlossomVDebugger.getChildrenOf(node1));
+        assertEquals(
+            new HashSet<>(Arrays.asList(node2, node4)), BlossomVDebugger.getChildrenOf(node1));
         node4.removeFromChildList();
-        assertEquals(new HashSet<>(Collections.singletonList(node2)), BlossomVDebugger.getChildrenOf(node1));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(node2)), BlossomVDebugger.getChildrenOf(node1));
         node2.removeFromChildList();
         assertEquals(empty, BlossomVDebugger.getChildrenOf(node1));
 
-        assertEquals(new HashSet<>(Arrays.asList(node1, node6)), BlossomVDebugger.getTreeRoots(state));
+        assertEquals(
+            new HashSet<>(Arrays.asList(node1, node6)), BlossomVDebugger.getTreeRoots(state));
         node1.removeFromChildList();
-        assertEquals(new HashSet<>(Collections.singletonList(node6)), BlossomVDebugger.getTreeRoots(state));
+        assertEquals(
+            new HashSet<>(Collections.singletonList(node6)), BlossomVDebugger.getTreeRoots(state));
         node6.removeFromChildList();
         assertEquals(empty, BlossomVDebugger.getTreeRoots(state));
     }
@@ -265,8 +296,10 @@ public class BlossomVNodeTest {
      * Tests proper moving of child lists
      */
     @Test
-    public void testMoveChildrenTo() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testMoveChildrenTo()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e14 = Graphs.addEdgeWithVertices(graph, 1, 4, 0);
@@ -274,9 +307,11 @@ public class BlossomVNodeTest {
         DefaultWeightedEdge e67 = Graphs.addEdgeWithVertices(graph, 6, 7, 0);
         DefaultWeightedEdge e78 = Graphs.addEdgeWithVertices(graph, 7, 8, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -315,22 +350,28 @@ public class BlossomVNodeTest {
         // moving child list of size 1 to empty list
         node2.moveChildrenTo(node4);
 
-        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.getChildrenOf(node4));
-        //moving child list of size 2 to empty list
+        assertEquals(
+            new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.getChildrenOf(node4));
+        // moving child list of size 2 to empty list
         node4.moveChildrenTo(node2);
-        assertEquals(new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.getChildrenOf(node2));
+        assertEquals(
+            new HashSet<>(Arrays.asList(node3, node5)), BlossomVDebugger.getChildrenOf(node2));
 
         // moving child list to non-empty child list
         node1.moveChildrenTo(node6);
-        assertEquals(new HashSet<>(Arrays.asList(node2, node4, node7)), BlossomVDebugger.getChildrenOf(node6));
+        assertEquals(
+            new HashSet<>(Arrays.asList(node2, node4, node7)),
+            BlossomVDebugger.getChildrenOf(node6));
     }
 
     /**
      * Tests correct search of penultimate blossom
      */
     @Test
-    public void testGetPenultimateBlossom() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testGetPenultimateBlossom()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e13 = Graphs.addEdgeWithVertices(graph, 1, 3, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
@@ -339,9 +380,11 @@ public class BlossomVNodeTest {
         DefaultWeightedEdge e15 = Graphs.addEdgeWithVertices(graph, 1, 5, 0);
         DefaultWeightedEdge e16 = Graphs.addEdgeWithVertices(graph, 1, 6, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -373,10 +416,11 @@ public class BlossomVNodeTest {
         assertEquals(node5, node5.getPenultimateBlossom());
     }
 
-
     @Test
-    public void testGetPenultimateBlossomAndFixBlossomGrandparent() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testGetPenultimateBlossomAndFixBlossomGrandparent()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge e12 = Graphs.addEdgeWithVertices(graph, 1, 2, 0);
         DefaultWeightedEdge e23 = Graphs.addEdgeWithVertices(graph, 2, 3, 0);
         DefaultWeightedEdge e34 = Graphs.addEdgeWithVertices(graph, 3, 4, 0);
@@ -389,9 +433,11 @@ public class BlossomVNodeTest {
         DefaultWeightedEdge e18 = Graphs.addEdgeWithVertices(graph, 1, 8, 0);
         DefaultWeightedEdge e19 = Graphs.addEdgeWithVertices(graph, 1, 9, 0);
 
-        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer = new BlossomVInitializer<>(graph);
+        BlossomVInitializer<Integer, DefaultWeightedEdge> initializer =
+            new BlossomVInitializer<>(graph);
         BlossomVState<Integer, DefaultWeightedEdge> state = initializer.initialize(noneOptions);
-        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater = new BlossomVPrimalUpdater<>(state);
+        BlossomVPrimalUpdater<Integer, DefaultWeightedEdge> primalUpdater =
+            new BlossomVPrimalUpdater<>(state);
         Map<Integer, BlossomVNode> vertexMap = BlossomVDebugger.getVertexMap(state);
         Map<DefaultWeightedEdge, BlossomVEdge> edgeMap = BlossomVDebugger.getEdgeMap(state);
 
@@ -430,7 +476,8 @@ public class BlossomVNodeTest {
         primalUpdater.grow(edge18, false, false);
 
         // let's assume the worst case: all blossomGrandparent references point to blossom3
-        node1.blossomGrandparent = blossom1.blossomGrandparent = blossom2.blossomGrandparent = blossom3;
+        node1.blossomGrandparent =
+            blossom1.blossomGrandparent = blossom2.blossomGrandparent = blossom3;
         assertEquals(blossom2, node1.getPenultimateBlossomAndFixBlossomGrandparent());
         assertNotEquals(blossom3, node1.blossomGrandparent);
         assertNotEquals(blossom3, blossom1.blossomGrandparent);

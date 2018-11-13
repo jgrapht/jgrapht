@@ -340,4 +340,3 @@ public class JohnsonSimpleCycles<V, E>
         return bSets.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
-

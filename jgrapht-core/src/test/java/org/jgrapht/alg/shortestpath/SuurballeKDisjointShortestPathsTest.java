@@ -26,7 +26,10 @@ import org.jgrapht.alg.interfaces.*;
  * 
  * @author Assaf Mizrachi
  */
-public class SuurballeKDisjointShortestPathsTest extends KDisjointShortestPathsTestCase {
+public class SuurballeKDisjointShortestPathsTest
+    extends
+    KDisjointShortestPathsTestCase
+{
 
     @Override
     protected <V, E> KShortestPathAlgorithm<V, E> getKShortestPathAlgorithm(Graph<V, E> graph)

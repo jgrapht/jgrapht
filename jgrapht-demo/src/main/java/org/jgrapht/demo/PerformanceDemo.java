@@ -124,4 +124,3 @@ public final class PerformanceDemo
         return rt.totalMemory() - rt.freeMemory();
     }
 }
-

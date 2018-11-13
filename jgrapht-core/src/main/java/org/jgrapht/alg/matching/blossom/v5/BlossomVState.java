@@ -17,16 +17,17 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * This class stores data needed for the Kolmogorov's Blossom V algorithm; it is used by
- * {@link KolmogorovMinimumWeightPerfectMatching}, {@link BlossomVPrimalUpdater} and {@link BlossomVDualUpdater}
- * during the course of the algorithm.
+ * {@link KolmogorovMinimumWeightPerfectMatching}, {@link BlossomVPrimalUpdater} and
+ * {@link BlossomVDualUpdater} during the course of the algorithm.
  * <p>
- * We refer to this object with all the data stored in nodes, edges, trees, and tree edges as the state of the algorithm
+ * We refer to this object with all the data stored in nodes, edges, trees, and tree edges as the
+ * state of the algorithm
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -35,7 +36,8 @@ import java.util.List;
  * @see BlossomVPrimalUpdater
  * @see BlossomVDualUpdater
  */
-class BlossomVState<V, E> {
+class BlossomVState<V, E>
+{
     /**
      * Number of nodes in the graph
      */
@@ -51,8 +53,8 @@ class BlossomVState<V, E> {
     /**
      * An array of nodes of the graph.
      * <p>
-     * <b>Note:</b> the size of the array is nodeNum + 1. The node nodes[nodeNum] is an auxiliary node that is used
-     * as the first element in the linked list of tree roots
+     * <b>Note:</b> the size of the array is nodeNum + 1. The node nodes[nodeNum] is an auxiliary
+     * node that is used as the first element in the linked list of tree roots
      */
     BlossomVNode[] nodes;
     /**
@@ -92,19 +94,22 @@ class BlossomVState<V, E> {
     /**
      * Constructs the algorithm's initial state
      *
-     * @param graph         the graph for which to find a matching
-     * @param nodes         nodes used in the algorithm
-     * @param edges         edges used in the algorithm
-     * @param nodeNum       number of nodes in the graph
-     * @param edgeNum       number of edges in the graph
-     * @param treeNum       number of trees in the graph
-     * @param graphVertices generic vertices of the {@code graph} in the same order as nodes in {@code nodes}
-     * @param graphEdges    generic edges of the {@code graph} in the same order as edges in {@code edges}
-     * @param options       default or user defined options
+     * @param graph the graph for which to find a matching
+     * @param nodes nodes used in the algorithm
+     * @param edges edges used in the algorithm
+     * @param nodeNum number of nodes in the graph
+     * @param edgeNum number of edges in the graph
+     * @param treeNum number of trees in the graph
+     * @param graphVertices generic vertices of the {@code graph} in the same order as nodes in
+     *        {@code nodes}
+     * @param graphEdges generic edges of the {@code graph} in the same order as edges in
+     *        {@code edges}
+     * @param options default or user defined options
      */
-    public BlossomVState(Graph<V, E> graph, BlossomVNode[] nodes, BlossomVEdge[] edges,
-                         int nodeNum, int edgeNum, int treeNum,
-                         List<V> graphVertices, List<E> graphEdges, BlossomVOptions options) {
+    public BlossomVState(
+        Graph<V, E> graph, BlossomVNode[] nodes, BlossomVEdge[] edges, int nodeNum, int edgeNum,
+        int treeNum, List<V> graphVertices, List<E> graphEdges, BlossomVOptions options)
+    {
         this.graph = graph;
         this.nodes = nodes;
         this.edges = edges;

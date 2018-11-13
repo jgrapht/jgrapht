@@ -59,4 +59,3 @@ public class VertexTraversalEvent<V>
         return vertex;
     }
 }
-

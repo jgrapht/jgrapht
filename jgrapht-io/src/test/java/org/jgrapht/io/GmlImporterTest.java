@@ -448,7 +448,7 @@ public class GmlImporterTest
         UnsupportedEncodingException
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         g1.addVertex("1");
         g1.addVertex("2");
         g1.addVertex("3");
@@ -456,8 +456,7 @@ public class GmlImporterTest
         g1.setEdgeWeight(g1.addEdge("2", "3"), 3.0);
         g1.setEdgeWeight(g1.addEdge("3", "3"), 5.0);
 
-        GmlExporter<String, DefaultWeightedEdge> exporter =
-                new GmlExporter<>();
+        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g1, os);
@@ -491,8 +490,7 @@ public class GmlImporterTest
             (from, to, label, attributes) -> g.getEdgeSupplier().get();
 
         try {
-            GmlImporter<String, DefaultEdge> importer =
-                    new GmlImporter<>(vp, ep);
+            GmlImporter<String, DefaultEdge> importer = new GmlImporter<>(vp, ep);
             importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {
@@ -856,8 +854,8 @@ public class GmlImporterTest
             }
         }
 
-        GmlImporter<String, E> importer = new GmlImporter<>(
-                (l, a) -> l, (f, t, l, a) -> g.getEdgeSupplier().get());
+        GmlImporter<String, E> importer =
+            new GmlImporter<>((l, a) -> l, (f, t, l, a) -> g.getEdgeSupplier().get());
         importer.importGraph(g, new StringReader(input));
 
         return g;

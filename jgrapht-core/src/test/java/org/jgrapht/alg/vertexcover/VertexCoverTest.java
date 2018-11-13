@@ -17,15 +17,16 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
 /**
  * Tests the vertex cover algorithms.
  *
  * @author Linda Buisman
  */
-public interface VertexCoverTest {
+public interface VertexCoverTest
+{
 
     <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph);
 }

@@ -17,11 +17,10 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import static org.jgrapht.alg.vertexcover.VertexCoverTestUtils.*;
 import static org.junit.Assert.assertEquals;
@@ -32,7 +31,10 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Linda Buisman
  */
-public abstract class VertexCoverTwoApproxTest implements VertexCoverTest {
+public abstract class VertexCoverTwoApproxTest
+    implements
+    VertexCoverTest
+{
 
     // ------- Approximation algorithms ------
 
@@ -59,16 +61,16 @@ public abstract class VertexCoverTwoApproxTest implements VertexCoverTest {
     public void testFind2ApproximationCover2()
     {
 
-
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(70);
 
-            VertexCoverAlgorithm.VertexCover<Integer> optimalCover = new RecursiveExactVCImpl<>(g).getVertexCover();
+            VertexCoverAlgorithm.VertexCover<Integer> optimalCover =
+                new RecursiveExactVCImpl<>(g).getVertexCover();
             VertexCoverAlgorithm<Integer> mvc = createSolver(Graphs.undirectedGraph(g));
 
             VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), 1.0 * vertexCover.size(),0);
+            assertEquals(vertexCover.getWeight(), 1.0 * vertexCover.size(), 0);
             assertTrue(vertexCover.getWeight() <= optimalCover.getWeight() * 2); // Verify
             // 2-approximation
         }

@@ -37,4 +37,3 @@ public interface DirectedSimpleCycles<V, E>
      */
     List<List<V>> findSimpleCycles();
 }
-
