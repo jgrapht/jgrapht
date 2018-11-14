@@ -18,15 +18,16 @@
 package org.jgrapht.alg.dense;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
- * Class for calculation of the densest subgraph of an weighted Graph
+ * Class for calculating the maximum density subgraph of a weighted Graph
  * Uses the binary search approach combined with min-Cut-computations
  * described in 'Finding a maximum density subgraph, Goldberg'
  * @param <V> Type of vertices
  * @param <E> Type of edges
  */
-public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraphAlgorithmBase<V,E> {
+public class MaximumDensitySubgraphAlgorithm<V,E extends DefaultWeightedEdge> extends MaximumDensitySubgraphAlgorithmBase<V,E> {
 
     /**
      * Constructor
@@ -79,10 +80,13 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
         if (this.densestSubgraph == null){
             throw new NullPointerException("First need to calculate densest Subgraph");
         }
+        /*
         double sum =0;
         for (E e: this.densestSubgraph.edgeSet()){
             sum+= this.densestSubgraph.getEdgeWeight(e);
         }
+        */
+        double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(e ->this.densestSubgraph.getEdgeWeight(e)).sum();
         return sum/this.densestSubgraph.vertexSet().size();
     }
 }

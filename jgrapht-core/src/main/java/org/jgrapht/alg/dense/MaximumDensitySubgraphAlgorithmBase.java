@@ -32,9 +32,10 @@ import java.util.*;
  */
 public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
 
-    protected double upper, lower, guess;
+    double upper, lower, guess;
     protected final int n,m;
-    protected Graph<V, E> currentNetwork, original, densestSubgraph;
+    Graph<V, E> original, densestSubgraph;
+    private Graph<V, E> currentNetwork;
     private HashSet<V> currentVertices;
     private V s,t;
     private MinimumSTCutAlgorithm<V, E> minSTCutAlg;
@@ -100,6 +101,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
      * @return the minimal capacity of all edges vt and sv
      */
     private double getMinimalCapacity(){
+        /*
         double min = 0;
         double w;
         for (V v : this.original.vertexSet()){
@@ -113,6 +115,10 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
             }
         }
         return min;
+        */
+        double a = this.original.vertexSet().stream().mapToDouble(v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(v,t))).min().getAsDouble();
+        double b = this.original.vertexSet().stream().mapToDouble(v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(s,v))).min().getAsDouble();
+        return a < b ? a : b;
     }
 
     /**
