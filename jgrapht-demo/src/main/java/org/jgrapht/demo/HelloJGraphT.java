@@ -98,7 +98,7 @@ public final class HelloJGraphT
     private static Graph<URL, DefaultEdge> createHrefGraph()
         throws MalformedURLException
     {
-        // @example:urlCreate:begin
+        //@example:urlCreate:begin
 
         Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 

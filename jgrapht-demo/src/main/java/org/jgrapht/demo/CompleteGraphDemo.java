@@ -34,7 +34,7 @@ import java.util.function.*;
  * Demonstrates how to create a complete graph and perform a depth first search on it.
  *
  */
-// @example:class:begin
+//@example:class:begin
 public final class CompleteGraphDemo
 {
     // number of vertices
@@ -59,7 +59,7 @@ public final class CompleteGraphDemo
             }
         };
 
-        // @example:generate:begin
+        //@example:generate:begin
         // Create the graph object
         Graph<String, DefaultEdge> completeGraph =
             new SimpleGraph<>(vSupplier, SupplierUtil.createDefaultEdgeSupplier(), false);
@@ -71,7 +71,7 @@ public final class CompleteGraphDemo
         // Use the CompleteGraphGenerator object to make completeGraph a
         // complete graph with [size] number of vertices
         completeGenerator.generateGraph(completeGraph);
-        // @example:generate:end
+        //@example:generate:end
 
         // Print out the graph to be sure it's really complete
         Iterator<String> iter = new DepthFirstIterator<>(completeGraph);
@@ -83,4 +83,4 @@ public final class CompleteGraphDemo
         }
     }
 }
-// @example:class:end
+//@example:class:end
