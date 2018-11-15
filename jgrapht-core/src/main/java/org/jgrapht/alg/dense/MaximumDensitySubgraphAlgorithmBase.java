@@ -39,7 +39,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
     protected final int n,m;
     Graph<V, E> original, densestSubgraph;
     private Graph<V, E> currentNetwork;
-    private HashSet<V> currentVertices;
+    private Set<V> currentVertices;
     private V s,t;
     private MinimumSTCutAlgorithm<V, E> minSTCutAlg;
     private boolean checkWeights;

@@ -18,7 +18,6 @@
 package org.jgrapht.alg.dense;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
  * Class for calculating the maximum density subgraph of a weighted Graph
@@ -27,7 +26,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
  * @param <V> Type of vertices
  * @param <E> Type of edges
  */
-public class MaximumDensitySubgraphAlgorithm<V,E extends DefaultWeightedEdge> extends MaximumDensitySubgraphAlgorithmBase<V,E> {
+public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraphAlgorithmBase<V,E> {
 
     /**
      * Constructor
@@ -60,7 +59,7 @@ public class MaximumDensitySubgraphAlgorithm<V,E extends DefaultWeightedEdge> ex
 
     @Override
     protected double getEdgeWeightSink(V v) {
-        return m + 2*guess + this.original.outgoingEdgesOf(v).stream().mapToDouble(
+        return m + 2*guess - this.original.outgoingEdgesOf(v).stream().mapToDouble(
             e->this.original.getEdgeWeight(e)).sum();
     }
 
