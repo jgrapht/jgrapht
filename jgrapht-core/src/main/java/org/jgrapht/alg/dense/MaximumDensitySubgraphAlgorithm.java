@@ -44,7 +44,8 @@ public class MaximumDensitySubgraphAlgorithm<V,E extends DefaultWeightedEdge> ex
     protected void initBinarySearchInterval(){
         this.guess = 0;
         this.lower = 0;
-        this.upper = this.original.edgeSet().stream().mapToDouble(e-> this.original.getEdgeWeight(e)).sum();
+        this.upper = this.original.edgeSet().stream().mapToDouble(
+            e-> this.original.getEdgeWeight(e)).sum();
     }
 
     @Override
@@ -59,7 +60,8 @@ public class MaximumDensitySubgraphAlgorithm<V,E extends DefaultWeightedEdge> ex
 
     @Override
     protected double getEdgeWeightSink(V v) {
-        return m + 2*guess + this.original.outgoingEdgesOf(v).stream().mapToDouble(e->this.original.getEdgeWeight(e)).sum();
+        return m + 2*guess + this.original.outgoingEdgesOf(v).stream().mapToDouble(
+            e->this.original.getEdgeWeight(e)).sum();
     }
 
     /**
@@ -80,13 +82,8 @@ public class MaximumDensitySubgraphAlgorithm<V,E extends DefaultWeightedEdge> ex
         if (this.densestSubgraph == null){
             throw new NullPointerException("First need to calculate densest Subgraph");
         }
-        /*
-        double sum =0;
-        for (E e: this.densestSubgraph.edgeSet()){
-            sum+= this.densestSubgraph.getEdgeWeight(e);
-        }
-        */
-        double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(e ->this.densestSubgraph.getEdgeWeight(e)).sum();
+        double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
+            e ->this.densestSubgraph.getEdgeWeight(e)).sum();
         return sum/this.densestSubgraph.vertexSet().size();
     }
 }

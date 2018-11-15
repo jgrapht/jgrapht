@@ -23,9 +23,12 @@ import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import java.util.*;
+import java.util.stream.*;
 
 /**
- * Abstract class for calculating maximum density subgraph based on TO-DO
+ * Abstract base class for calculating maximum density subgraph based on
+ * A. V. Goldberg in "Finding Maximum Density Subgraphs", 1984,
+ * University of Berkley, https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf
  * Methods that depend on the density should be overridden by subclass
  * @param <V> Type of vertices
  * @param <E> Type of edges
@@ -76,13 +79,13 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
 
     /**
      * Updates network for next computation, e.g edges from v to t and from s to v
-     */
+     * Enforces positivity on network weights if specified
+     **/
     private void updateNetwork(){
         for (V v : this.original.vertexSet()){
             currentNetwork.setEdgeWeight(currentNetwork.getEdge(v,t), getEdgeWeightSink(v));
             currentNetwork.setEdgeWeight(currentNetwork.getEdge(s,v), getEdgeWeightSource(v));
         }
-        //if needed make all capacities non-negative
         if (this.checkWeights){
             double minCapacity = getMinimalCapacity();
             if (minCapacity < 0){
@@ -101,24 +104,12 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
      * @return the minimal capacity of all edges vt and sv
      */
     private double getMinimalCapacity(){
-        /*
-        double min = 0;
-        double w;
-        for (V v : this.original.vertexSet()){
-            w =  currentNetwork.getEdgeWeight(currentNetwork.getEdge(v,t));
-            if (w < min){
-                min = w;
-            }
-            w = currentNetwork.getEdgeWeight(currentNetwork.getEdge(s,v));
-            if (w < min){
-                min = w;
-            }
-        }
-        return min;
-        */
-        double a = this.original.vertexSet().stream().mapToDouble(v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(v,t))).min().getAsDouble();
-        double b = this.original.vertexSet().stream().mapToDouble(v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(s,v))).min().getAsDouble();
-        return a < b ? a : b;
+        DoubleStream sourceWeights = this.original.vertexSet().stream().mapToDouble(
+            v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(v,t)));
+        DoubleStream sinkWeights = this.original.vertexSet().stream().mapToDouble(
+            v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(s,v)));
+        OptionalDouble min = DoubleStream.concat(sourceWeights, sinkWeights).min();
+        return min.isPresent() ? min.getAsDouble() : 0;
     }
 
     /**
@@ -171,6 +162,10 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
         return this.densestSubgraph;
     }
 
+    /**
+     * Wrapper for construction of MinimumSTCutAlgorithm
+     * @return instance of MinimumSTCutAlgorithm for the constructed network
+     */
     private MinimumSTCutAlgorithm<V,E> setupMinCutAlg(){
         return new PushRelabelMFImpl<>(this.currentNetwork);
     }
