@@ -40,7 +40,7 @@ public class LabeledEdges
      */
     public static void main(String[] args)
     {
-        // @example:create:begin
+        //@example:create:begin
         Graph<String, RelationshipEdge> graph = new DefaultDirectedGraph<>(RelationshipEdge.class);
 
         ArrayList<String> people = new ArrayList<String>();
@@ -66,9 +66,9 @@ public class LabeledEdges
 
         // But Sarah doesn't really like James
         graph.addEdge("Sarah", "James", new RelationshipEdge(ENEMY));
-        // @example:create:end
+        //@example:create:end
 
-        // @example:print:begin
+        //@example:print:begin
         for (RelationshipEdge edge : graph.edgeSet()) {
             String v1 = graph.getEdgeSource(edge);
             String v2 = graph.getEdgeTarget(edge);
@@ -78,24 +78,24 @@ public class LabeledEdges
                 System.out.printf(v1 + " is a friend of " + v2 + "\n");
             }
         }
-        // @example:print:end
+        //@example:print:end
 
         assert (isEnemyOf(graph, "James", "John"));
     }
 
-    // @example:isEnemyOf:begin
+    //@example:isEnemyOf:begin
     private static boolean isEnemyOf(
         Graph<String, RelationshipEdge> graph, String person1, String person2)
     {
         return graph.getEdge(person1, person2).getLabel().equals(ENEMY);
     }
-    // @example:isEnemyOf:end
+    //@example:isEnemyOf:end
 }
 
 /**
  * Custom edge class labeled with relationship type.
  */
-// @example:edgeclass:begin
+//@example:edgeclass:begin
 class RelationshipEdge
     extends
     DefaultEdge
@@ -129,4 +129,4 @@ class RelationshipEdge
         return "(" + getSource() + " : " + getTarget() + " : " + label + ")";
     }
 }
-// @example:edgeclass:end
+//@example:edgeclass:end
