@@ -19,7 +19,7 @@ package org.jgrapht.alg.dense;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import java.util.*;
@@ -33,11 +33,12 @@ import java.util.stream.*;
  * @param <V> Type of vertices
  * @param <E> Type of edges
  */
-public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
+public abstract class MaximumDensitySubgraphAlgorithmBase<V,E> implements MaximumDensitySubgraphAlg<V,E> {
 
     double upper, lower, guess;
     protected final int n,m;
-    Graph<V, E> original, densestSubgraph;
+    protected final Graph<V, E> graph;
+    protected Graph<V,E> densestSubgraph;
     private Graph<V, E> currentNetwork;
     private Set<V> currentVertices;
     private V s,t;
@@ -54,9 +55,9 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
      */
     protected MaximumDensitySubgraphAlgorithmBase(Class<? extends E> edgeClass, Graph<V, E> g, V s, V t, boolean checkWeights){
         this.checkWeights = checkWeights;
-        this.s = s;
-        this.t = t;
-        this.original = g;
+        this.s = Objects.requireNonNull(s,"Source vertex is null");
+        this.t = Objects.requireNonNull(t,"Sink vertex is null");
+        this.graph = Objects.requireNonNull(g, "Graph is null");
         this.m = g.edgeSet().size();
         this.n = g.vertexSet().size();
         this.initBinarySearchInterval();
@@ -82,7 +83,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
      * Enforces positivity on network weights if specified
      **/
     private void updateNetwork(){
-        for (V v : this.original.vertexSet()){
+        for (V v : this.graph.vertexSet()){
             currentNetwork.setEdgeWeight(currentNetwork.getEdge(v,t), getEdgeWeightSink(v));
             currentNetwork.setEdgeWeight(currentNetwork.getEdge(s,v), getEdgeWeightSource(v));
         }
@@ -90,7 +91,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
             double minCapacity = getMinimalCapacity();
             if (minCapacity < 0){
                 E e;
-                for (V v : this.original.vertexSet()){
+                for (V v : this.graph.vertexSet()){
                     e = currentNetwork.getEdge(v,t);
                     currentNetwork.setEdgeWeight(e, currentNetwork.getEdgeWeight(e)- minCapacity);
                     e = currentNetwork.getEdge(s,t);
@@ -104,9 +105,9 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
      * @return the minimal capacity of all edges vt and sv
      */
     private double getMinimalCapacity(){
-        DoubleStream sourceWeights = this.original.vertexSet().stream().mapToDouble(
+        DoubleStream sourceWeights = this.graph.vertexSet().stream().mapToDouble(
             v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(v,t)));
-        DoubleStream sinkWeights = this.original.vertexSet().stream().mapToDouble(
+        DoubleStream sinkWeights = this.graph.vertexSet().stream().mapToDouble(
             v -> currentNetwork.getEdgeWeight(currentNetwork.getEdge(s,v)));
         OptionalDouble min = DoubleStream.concat(sourceWeights, sinkWeights).min();
         return min.isPresent() ? min.getAsDouble() : 0;
@@ -123,14 +124,14 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
     private void initializeNetwork(){
         currentNetwork.addVertex(s);
         currentNetwork.addVertex(t);
-        for (V v : this.original.vertexSet()){
+        for (V v : this.graph.vertexSet()){
             currentNetwork.addVertex(v);
             currentNetwork.addEdge(s,v);
             currentNetwork.addEdge(v,t);
         }
-        for (E e : this.original.edgeSet()){
-            E e1 = currentNetwork.addEdge(this.original.getEdgeSource(e), this.original.getEdgeTarget(e));
-            E e2 = currentNetwork.addEdge(this.original.getEdgeTarget(e), this.original.getEdgeSource(e));
+        for (E e : this.graph.edgeSet()){
+            E e1 = currentNetwork.addEdge(this.graph.getEdgeSource(e), this.graph.getEdgeTarget(e));
+            E e2 = currentNetwork.addEdge(this.graph.getEdgeTarget(e), this.graph.getEdgeSource(e));
             double weight = this.getInternalEdgeWeight(e);
             currentNetwork.setEdgeWeight(e1, weight);
             currentNetwork.setEdgeWeight(e2, weight);
@@ -142,7 +143,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
      * Performs binary search on the initial interval lower-upper until interval is smaller than epsilon
      * For to big epsilon calculate until a (first) solution is found, instead of returning an empty graph
      * @param epsilon accuracy for the binary search
-     * @return max density subgraph of original graph
+     * @return max density subgraph of the graph
      */
     public Graph<V,E> calculateDensest(double epsilon){
         Set<V> sourcePartition;
@@ -158,7 +159,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E>{
                 currentVertices.addAll(sourcePartition);
             }
         }
-        this.densestSubgraph = new AsSubgraph<>(original, currentVertices);
+        this.densestSubgraph = new AsSubgraph<>(graph, currentVertices);
         return this.densestSubgraph;
     }
 

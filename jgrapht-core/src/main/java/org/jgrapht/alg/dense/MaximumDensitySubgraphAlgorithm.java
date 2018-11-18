@@ -43,13 +43,12 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
     protected void initBinarySearchInterval(){
         this.guess = 0;
         this.lower = 0;
-        this.upper = this.original.edgeSet().stream().mapToDouble(
-            e-> this.original.getEdgeWeight(e)).sum();
+        this.upper = this.graph.edgeSet().stream().mapToDouble(this.graph::getEdgeWeight).sum();
     }
 
     @Override
     protected double getInternalEdgeWeight(E e) {
-        return this.original.getEdgeWeight(e);
+        return this.graph.getEdgeWeight(e);
     }
 
     @Override
@@ -59,8 +58,8 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
 
     @Override
     protected double getEdgeWeightSink(V v) {
-        return m + 2*guess - this.original.outgoingEdgesOf(v).stream().mapToDouble(
-            e->this.original.getEdgeWeight(e)).sum();
+        return m + 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
+            this.graph::getEdgeWeight).sum();
     }
 
     /**
@@ -72,8 +71,8 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
     }
 
     /**
-     * Calculates maximal density of the original graph
-     * @throws NullPointerException if densest Subgraph has not been calculated before
+     * Calculates maximal density of the graph
+     * @throws NullPointerException if densest subgraph has not been calculated before
      * @return density of given graph
      */
     @Override
@@ -82,7 +81,7 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
             throw new NullPointerException("First need to calculate densest Subgraph");
         }
         double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
-            e ->this.densestSubgraph.getEdgeWeight(e)).sum();
+            this.densestSubgraph::getEdgeWeight).sum();
         return sum/this.densestSubgraph.vertexSet().size();
     }
 }
