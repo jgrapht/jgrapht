@@ -17,7 +17,8 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * A double comparator with adjustable tolerance.
@@ -26,8 +27,11 @@ import java.util.*;
  */
 public class ToleranceDoubleComparator
     implements
-    Comparator<Double>
+    Comparator<Double>,
+    Serializable
 {
+    private static final long serialVersionUID = -3819451375975842372L;
+
     /**
      * Default tolerance used by the comparator.
      */
