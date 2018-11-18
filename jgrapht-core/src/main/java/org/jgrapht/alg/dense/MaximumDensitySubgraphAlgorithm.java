@@ -20,9 +20,17 @@ package org.jgrapht.alg.dense;
 import org.jgrapht.Graph;
 
 /**
- * Class for calculating the maximum density subgraph of a weighted Graph
- * Uses the binary search approach combined with min-Cut-computations
- * described in 'Finding a maximum density subgraph, Goldberg'
+ * This class computes a maximum density subgraph based on the algorithm described
+ * by A. V. Goldberg in "Finding Maximum Density Subgraphs", 1984,
+ * University of Berkley, https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf
+ * The basic concept is to construct a network that can be used to compute the maximum density
+ * subgraph using a binary search approach.
+ *
+ * This algorithm assumes the density to be defined as TO-DO and sets the weights of the network
+ * accordingly.
+ *
+ * For more details see @link{org.jgrapht.alg.dense.MaximumDensitySubgraphAlgorithmBase}
+ *
  * @param <V> Type of vertices
  * @param <E> Type of edges
  */
@@ -70,11 +78,6 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
         return this.calculateDensest((double) 1/(this.n*(this.n-1)));
     }
 
-    /**
-     * Calculates maximal density of the graph
-     * @throws NullPointerException if densest subgraph has not been calculated before
-     * @return density of given graph
-     */
     @Override
     public double getDensity() throws NullPointerException{
         if (this.densestSubgraph == null){

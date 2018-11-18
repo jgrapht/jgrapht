@@ -44,7 +44,8 @@ public class MaximumDensitySubgraphAlgorithmTest<V,E> {
         g.setEdgeWeight(g.addEdge(4,2),1);
         g.setEdgeWeight(g.addEdge(0,4),3);
         g.setEdgeWeight(g.addEdge(2,3),1);
-        test(g, constructDefaultSolver(g), 2, new LinkedHashSet<>(Arrays.asList(0,2,3,4)));
+        test(g, constructDefaultSolver(g),
+            2, new LinkedHashSet<>(Arrays.asList(0,2,3,4)));
     }
 
     @Test
@@ -64,7 +65,8 @@ public class MaximumDensitySubgraphAlgorithmTest<V,E> {
         g.setEdgeWeight(g.addEdge(2,7),1);
         g.setEdgeWeight(g.addEdge(3,7),4);
         g.setEdgeWeight(g.addEdge(4,2),1);
-        test(g, constructDefaultSolver(g), 2.66666666, new LinkedHashSet<>(Arrays.asList(0, 1, 2, 3, 4, 7)));
+        test(g, constructDefaultSolver(g),
+            2.66666666, new LinkedHashSet<>(Arrays.asList(0, 1, 2, 3, 4, 7)));
     }
 
     @Test
@@ -79,10 +81,12 @@ public class MaximumDensitySubgraphAlgorithmTest<V,E> {
         g.setEdgeWeight(g.addEdge(4,2),0.0009);
         g.setEdgeWeight(g.addEdge(0,4),0.003);
         g.setEdgeWeight(g.addEdge(2,3),0.001);
-        test(g, constructDefaultSolver(g), 0.001633333, new LinkedHashSet<>(Arrays.asList(0, 2, 4)));
+        test(g, constructDefaultSolver(g),
+            0.001633333, new LinkedHashSet<>(Arrays.asList(0, 2, 4)));
     }
 
-    public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlg<Integer, DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
+    public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlg<Integer,
+                     DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
         Graph<Integer,DefaultEdge> computed = solver.calculateDensest(DEFAULT_EPS);
         assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
         Graph<Integer, DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);

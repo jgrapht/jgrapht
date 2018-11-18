@@ -20,7 +20,7 @@ package org.jgrapht.alg.interfaces;
 import org.jgrapht.*;
 
 /**
- * An algorithm which computes shortest paths between vertices.
+ * Interface for algorithms computing the maximum density subgraph
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -34,16 +34,18 @@ public interface MaximumDensitySubgraphAlg<V, E>
      * Calculate a maximum density subgraph
      *
      * @param epsilon precision for computation
-     * @return maximum density subgraph
+     * @return the maximum density subgraph
      */
     Graph<V,E> calculateDensest(double epsilon);
 
     /**
-     * Computes density of a maximum density subgraph
-     * @return the maximum density of any subgraph
+     * Computes density of a maximum density subgraph.
+     * Need to first call calculateDensest.
+     *
+     * @return the actual density of the maximum density subgraph
      * @throws NullPointerException if calculateDensest() has not been called earlier
      */
-    double getDensity() throws NullPointerException;
+    double getDensity();
 
 }
 
