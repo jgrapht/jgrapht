@@ -48,18 +48,21 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E> implements Maximu
     /**
      * Constructor
      * @param edgeClass type of edges used
-     * @param g input for computation
+     * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      */
-    protected MaximumDensitySubgraphAlgorithmBase(Class<? extends E> edgeClass, Graph<V, E> g, V s, V t, boolean checkWeights){
+    protected MaximumDensitySubgraphAlgorithmBase(Class<? extends E> edgeClass, Graph<V, E> graph, V s, V t, boolean checkWeights){
+        if (graph.containsVertex(s) || graph.containsVertex(t)){
+            throw new IllegalArgumentException("Source or sink vertex already in graph");
+        }
         this.checkWeights = checkWeights;
         this.s = Objects.requireNonNull(s,"Source vertex is null");
         this.t = Objects.requireNonNull(t,"Sink vertex is null");
-        this.graph = Objects.requireNonNull(g, "Graph is null");
-        this.m = g.edgeSet().size();
-        this.n = g.vertexSet().size();
+        this.graph = Objects.requireNonNull(graph, "Graph is null");
+        this.m = this.graph.edgeSet().size();
+        this.n = this.graph.vertexSet().size();
         this.initBinarySearchInterval();
         this.currentNetwork = new DirectedWeightedPseudograph<>(edgeClass);
         this.currentVertices = new HashSet<>();
