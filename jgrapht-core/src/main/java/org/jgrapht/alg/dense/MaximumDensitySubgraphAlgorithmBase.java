@@ -32,15 +32,12 @@ import java.util.stream.*;
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach.
- *
  * <p>
  * In the simplest case of an unweighted graph $G=(V,E)$ the density of $G$ can be defined to be
  * $...$
  * Therefore it is in this case equal to half the average vertex degree.
  * For directed graphs one can consider the graph as undirected.
  * </p>
- *
- * <p>
  * The idea of the algorithm is to construct a network based on the input graph $G=(V,E)$ and some
  * guess $g$ for the density. This network $N=(V_N, E_N)$ is constructed as follows:
  * <ul>
@@ -51,13 +48,12 @@ import java.util.stream.*;
  * Additionally one defines the following weights for the network:
  * <ul>
  * <li>$c_{ij}=1 \forall \{i,j\}\in E$</li>
- * <li>$c_{si}=m \forall i \in V $</li>
+ * <li>$c_{si}=m \forall i \in V $, where $m=\left|{E}\right|$</li>
  * <li>c_{it}=m+2g-d_i \forall i \in V$ where $d_i$ is the degree of vertex $i$</li>
  * </ul>
  * <br>
  * As seen later these weights depend on the definition of the density. Therefore these weights and
- * the following applies to the defintion of density from above.
- *
+ * the following applies to the definition of density from above.
  * <p>
  * Using this network one can show some important properties, that are essential
  * for the algorithm to work.
@@ -65,7 +61,8 @@ import java.util.stream.*;
  * $C(S,T) = m\left|{V}\right| + 2\left|{V_1}\right|\left(g - D_1\right)$ where
  * $V_1 \dot{\cup} V_2=V$ and $V_1 = S\setminus \{s\}, V_2=  T\setminus \{t\}$ and $D_1$ shall be
  * the density of the induced subgraph of V_1 regarding G.
- *
+ * </p>
+ * <p>
  * Especially important is the capacity of minimum s-t Cut. Using the above equation, one can derive
  * that given a minimum s-t Cut of N and the maximum density of G to be D, then $g\geq D$ if
  * $V_1=\emptyset$,otherwise $g\leq D$. Moreover the induced subgraph of $V_1$ regarding G is
@@ -79,6 +76,8 @@ import java.util.stream.*;
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{n(n-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
+ * The runtime can in this case be given by $O(M(n,n+m)\log{n}$, where $M(n,m)$ is the runtime of
+ * the internally used MinimumSTCutAlgorithm.
  * </p>
  *
  * <p>
@@ -87,7 +86,9 @@ import java.util.stream.*;
  * As these more general variants including edge weights are only guaranteed to terminate for
  * integer edge weights, instead of using the natural termination property, the algorithm needs to
  * be called with a epsilon. The computation then ensures, that the returned maximum density only
- * differs at most epsilon from the correct solution.
+ * differs at most epsilon from the correct solution. This is why subclasses of this class might
+ * have a little different runtime analysis, regarding the $\log{n}$ part.
+ *
  * </p>
  *
  * @param <V> Type of vertices
