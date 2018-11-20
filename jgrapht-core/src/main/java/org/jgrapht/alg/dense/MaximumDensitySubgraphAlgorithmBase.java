@@ -88,11 +88,12 @@ import java.util.stream.*;
  * be called with a epsilon. The computation then ensures, that the returned maximum density only
  * differs at most epsilon from the correct solution. This is why subclasses of this class might
  * have a little different runtime analysis, regarding the $\log{n}$ part.
- *
  * </p>
  *
  * @param <V> Type of vertices
  * @param <E> Type of edges
+ *
+ * @author Andre Immig
  */
 public abstract class MaximumDensitySubgraphAlgorithmBase<V,E> implements MaximumDensitySubgraphAlg<V,E> {
 

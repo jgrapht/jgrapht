@@ -43,6 +43,8 @@ import org.jgrapht.Graph;
  *
  * @param <V> Type of vertices
  * @param <E> Type of edges
+ *
+ * @author Andre Immig
  */
 public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraphAlgorithmBase<V,E> {
 
