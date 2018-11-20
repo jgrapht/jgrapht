@@ -21,24 +21,23 @@ import org.jgrapht.Graph;
 
 /**
  * This class computes a maximum density subgraph based on the algorithm described
- * by A. V. Goldberg in "Finding Maximum Density Subgraphs", 1984,University of Berkley,
- * https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf
+ * by Andrew Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
+ * Finding Maximum Density Subgraphs</a>, 1984,University of Berkley.
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach. For more details see
  * {@link MaximumDensitySubgraphAlgorithmBase}.
  * <br>
  * This variant of the algorithm assumes the density of a positive real-weighted graph G=(V,E)
- * to be defined as $frac{\sum\limits_{e \in E} w(e)}{\left|{V}\right|}$ and sets the weights of
+ * to be defined as \[\frac{\sum\limits_{e \in E} w(e)}{\left|{V}\right|}\] and sets the weights of
  * the network as proposed in the above paper. For this case the weights of the network from
  * {@link MaximumDensitySubgraphAlgorithmBase} must be chosen to be:
- * <ul>
- * <li>$c_{ij}=w(ij)\forall \{i,j\}\in E$</li>
- * <li>$c_{it}=m+2g-d_i\forall i \in V$, where $d_i$ is the degree of vertex i. </li>
- * <li>$c_{si}=m \forall i \in V$, where $m=\left|{E}\right|$</li>
- * </ul>
- * According to the base class the runtime of this algorithm is $O(M(n,n+m)\log{\frac{W}{\eps}})$,
- * where $W$ is the sum of all weights of $G$, $\eps$ is the given accuracy and $M(n,m)$ is the
+ * \[c_{ij}=w(ij)\forall \{i,j\}\in E\]
+ * \[c_{it}=m+2g-d_i\forall i \in V\]
+ * \[c_{si}=m\forall i \in V\]
+ * where $m=\left|{E}\right|$ and $d_i$ is the degree of vertex $i$.
+ * According to the base class the runtime of this algorithm is \[O(M(n,n+m)\log{\frac{W}{\varepsilon}})\]
+ * where $W$ is the sum of all weights of $G$, $\varepsilon$ is the given accuracy and $M(n,m)$ is the
  * runtime of the internally used MinimumSTCutAlgorithm.
  *
  * @param <V> Type of vertices

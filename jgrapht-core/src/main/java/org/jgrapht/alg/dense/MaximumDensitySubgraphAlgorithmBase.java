@@ -27,30 +27,27 @@ import java.util.stream.*;
 
 /**
  * This abstract base class computes a maximum density subgraph based on the algorithm described
- * by A. V. Goldberg in "Finding Maximum Density Subgraphs", 1984,
- * University of Berkley, https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf
+ * by Andrew Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
+ * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley.
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach.
  * <p>
  * In the simplest case of an unweighted graph $G=(V,E)$ the density of $G$ can be defined to be
- * $...$
+ * \[\frac{\left|{E}\right|}{\left|{V}\right|}\]
  * Therefore it is in this case equal to half the average vertex degree.
  * For directed graphs one can consider the graph as undirected.
  * </p>
  * The idea of the algorithm is to construct a network based on the input graph $G=(V,E)$ and some
  * guess $g$ for the density. This network $N=(V_N, E_N)$ is constructed as follows:
- * <ul>
- * <li> $V_N=V\cup {s,t}$</li>
- * <li> $E_N=\{(i,j)| \{i,j\} \in E\} \cup \{(s,i)| i\in V\} \cup \{(i,t)| i \in V\}$</li>
- * </ul>
+ * \[V_N=V\cup {s,t}\]
+ * \[E_N=\{(i,j)| \{i,j\} \in E\} \cup \{(s,i)| i\in V\} \cup \{(i,t)| i \in V\}\]
  * <br>
  * Additionally one defines the following weights for the network:
- * <ul>
- * <li>$c_{ij}=1 \forall \{i,j\}\in E$</li>
- * <li>$c_{si}=m \forall i \in V $, where $m=\left|{E}\right|$</li>
- * <li>c_{it}=m+2g-d_i \forall i \in V$ where $d_i$ is the degree of vertex $i$</li>
- * </ul>
+ * \[c_{ij}=1 \forall \{i,j\}\in E\]
+ * \[c_{si}=m \forall i \in V\]
+ * \[c_{it}=m+2g-d_i \forall i \in V\]
+ * where $m=\left|{E}\right|$ and $d_i$ is the degree of vertex $i$.
  * <br>
  * As seen later these weights depend on the definition of the density. Therefore these weights and
  * the following applies to the definition of density from above.
@@ -58,20 +55,19 @@ import java.util.stream.*;
  * Using this network one can show some important properties, that are essential
  * for the algorithm to work.
  * The capacity of a s-t of N is given by:
- * $C(S,T) = m\left|{V}\right| + 2\left|{V_1}\right|\left(g - D_1\right)$ where
+ * \[C(S,T) = m\left|{V}\right| + 2\left|{V_1}\right|\left(g - D_1\right)\] where
  * $V_1 \dot{\cup} V_2=V$ and $V_1 = S\setminus \{s\}, V_2=  T\setminus \{t\}$ and $D_1$ shall be
- * the density of the induced subgraph of V_1 regarding G.
+ * the density of the induced subgraph of $V_1$ regarding $G$.
  * </p>
  * <p>
  * Especially important is the capacity of minimum s-t Cut. Using the above equation, one can derive
- * that given a minimum s-t Cut of N and the maximum density of G to be D, then $g\geq D$ if
+ * that given a minimum s-t Cut of $N$ and the maximum density of $G$ to be $D$, then $g\geq D$ if
  * $V_1=\emptyset$,otherwise $g\leq D$. Moreover the induced subgraph of $V_1$ regarding G is
- * guaranteed to have density greater g or it can be used to proof that there can't exist any
- * subgraph of G greater g.
+ * guaranteed to have density greater $g$ or it can be used to proof that there can't exist any
+ * subgraph of $G$ greater $g$.
  * Based on this property one can use a binary search approach to shrink the possible interval which
  * contains the solution.
  * </p>
- *
  * <p>
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{n(n-1)}$. This means shrinking
@@ -85,8 +81,8 @@ import java.util.stream.*;
  * needs to be adapted accordingly. Some generalizations can be found in the paper.
  * As these more general variants including edge weights are only guaranteed to terminate for
  * integer edge weights, instead of using the natural termination property, the algorithm needs to
- * be called with a epsilon. The computation then ensures, that the returned maximum density only
- * differs at most epsilon from the correct solution. This is why subclasses of this class might
+ * be called with $\varepsilon$ . The computation then ensures, that the returned maximum density only
+ * differs at most $\varepsilon$ from the correct solution. This is why subclasses of this class might
  * have a little different runtime analysis, regarding the $\log{n}$ part.
  * </p>
  *
