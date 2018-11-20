@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.dense;
+package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.Graph;
 
@@ -26,12 +26,12 @@ import org.jgrapht.Graph;
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach. For more details see
- * {@link MaximumDensitySubgraphAlgorithmBase}.
+ * {@link GoldbergMaximumDensitySubgraphAlgorithmBase}.
  * <br>
  * This variant of the algorithm assumes the density of a positive real-weighted graph G=(V,E)
  * to be defined as \[\frac{\sum\limits_{e \in E} w(e)}{\left|{V}\right|}\] and sets the weights of
  * the network as proposed in the above paper. For this case the weights of the network from
- * {@link MaximumDensitySubgraphAlgorithmBase} must be chosen to be:
+ * {@link GoldbergMaximumDensitySubgraphAlgorithmBase} must be chosen to be:
  * \[c_{ij}=w(ij)\forall \{i,j\}\in E\]
  * \[c_{it}=m+2g-d_i\forall i \in V\]
  * \[c_{si}=m\forall i \in V\]
@@ -45,7 +45,7 @@ import org.jgrapht.Graph;
  *
  * @author Andre Immig
  */
-public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraphAlgorithmBase<V,E> {
+public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> {
 
     /**
      * Constructor
@@ -54,7 +54,7 @@ public class MaximumDensitySubgraphAlgorithm<V,E> extends MaximumDensitySubgraph
      * @param s additional source vertex
      * @param t additional target vertex
      */
-    public MaximumDensitySubgraphAlgorithm(Class<? extends E> edgeClass, Graph<V, E> g, V s, V t) {
+    public GoldbergMaximumDensitySubgraphAlgorithm(Class<? extends E> edgeClass, Graph<V, E> g, V s, V t) {
         super(edgeClass,g,s,t,false);
     }
 

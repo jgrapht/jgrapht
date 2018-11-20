@@ -1,4 +1,4 @@
-package org.jgrapht.alg.dense;
+package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -10,13 +10,13 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for {@link MaximumDensitySubgraphAlgorithm}
+ * Tests for {@link GoldbergMaximumDensitySubgraphAlgorithm}
  *
  * @author Andre Immig
  */
 
 
-public class MaximumDensitySubgraphAlgorithmTest<V,E> {
+public class MaximumDensitySubgraphAlgorithmTest {
 
     final double DEFAULT_EPS = Math.pow(10,-5);
     @Test
@@ -28,8 +28,8 @@ public class MaximumDensitySubgraphAlgorithmTest<V,E> {
         test(g, constructDefaultSolver(g), 5, new LinkedHashSet<>(Arrays.asList(0,1)));
     }
 
-    private MaximumDensitySubgraphAlg<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph){
-        return new MaximumDensitySubgraphAlgorithm<>(DefaultEdge.class,graph,-1,-2);
+    private MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph){
+        return new GoldbergMaximumDensitySubgraphAlgorithm<>(DefaultEdge.class,graph,-1,-2);
     }
 
     @Test
@@ -85,8 +85,8 @@ public class MaximumDensitySubgraphAlgorithmTest<V,E> {
             0.001633333, new LinkedHashSet<>(Arrays.asList(0, 2, 4)));
     }
 
-    public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlg<Integer,
-                     DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
+    public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Integer,
+                         DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
         Graph<Integer,DefaultEdge> computed = solver.calculateDensest(DEFAULT_EPS);
         assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
         Graph<Integer, DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);

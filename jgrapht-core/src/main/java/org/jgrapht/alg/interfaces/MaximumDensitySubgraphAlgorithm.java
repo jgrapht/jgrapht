@@ -27,7 +27,7 @@ import org.jgrapht.*;
  *
  * @author Andre Immig
  */
-public interface MaximumDensitySubgraphAlg<V, E>
+public interface MaximumDensitySubgraphAlgorithm<V, E>
 {
 
     /**

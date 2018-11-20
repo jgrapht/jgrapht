@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.dense;
+package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
@@ -91,7 +91,7 @@ import java.util.stream.*;
  *
  * @author Andre Immig
  */
-public abstract class MaximumDensitySubgraphAlgorithmBase<V,E> implements MaximumDensitySubgraphAlg<V,E> {
+public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implements MaximumDensitySubgraphAlgorithm<V,E> {
 
     double upper, lower, guess;
     protected final int n,m;
@@ -111,7 +111,7 @@ public abstract class MaximumDensitySubgraphAlgorithmBase<V,E> implements Maximu
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      */
-    protected MaximumDensitySubgraphAlgorithmBase(Class<? extends E> edgeClass, Graph<V, E> graph, V s, V t, boolean checkWeights){
+    protected GoldbergMaximumDensitySubgraphAlgorithmBase(Class<? extends E> edgeClass, Graph<V, E> graph, V s, V t, boolean checkWeights){
         if (graph.containsVertex(s) || graph.containsVertex(t)){
             throw new IllegalArgumentException("Source or sink vertex already in graph");
         }
