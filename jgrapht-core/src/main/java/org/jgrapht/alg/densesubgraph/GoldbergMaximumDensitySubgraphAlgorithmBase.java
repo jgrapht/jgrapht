@@ -20,8 +20,8 @@ package org.jgrapht.alg.densesubgraph;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -97,21 +97,20 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
     protected final int n,m;
     protected final Graph<V, E> graph;
     protected Graph<V,E> densestSubgraph;
-    private Graph<V, E> currentNetwork;
+    private Graph<V, DefaultWeightedEdge> currentNetwork;
     private Set<V> currentVertices;
     private V s,t;
-    private MinimumSTCutAlgorithm<V, E> minSTCutAlg;
+    private MinimumSTCutAlgorithm<V, DefaultWeightedEdge> minSTCutAlg;
     private boolean checkWeights;
 
     /**
      * Constructor
-     * @param edgeClass type of edges used
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      */
-    protected GoldbergMaximumDensitySubgraphAlgorithmBase(Class<? extends E> edgeClass, Graph<V, E> graph, V s, V t, boolean checkWeights){
+    protected GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights){
         if (graph.containsVertex(s) || graph.containsVertex(t)){
             throw new IllegalArgumentException("Source or sink vertex already in graph");
         }
@@ -122,10 +121,19 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         this.m = this.graph.edgeSet().size();
         this.n = this.graph.vertexSet().size();
         this.initBinarySearchInterval();
-        this.currentNetwork = new DirectedWeightedPseudograph<>(edgeClass);
+        this.currentNetwork = this.buildNetwork();
         this.currentVertices = new HashSet<>();
         this.initializeNetwork();
         this.minSTCutAlg = this.setupMinCutAlg();
+    }
+
+    /**
+     * Helper method for constructing the internally used network
+     */
+    private Graph<V,DefaultWeightedEdge> buildNetwork(){
+        return GraphTypeBuilder.<V,DefaultWeightedEdge> directed()
+            .allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
+            .edgeSupplier(DefaultWeightedEdge::new).buildGraph();
     }
 
     /**
@@ -151,7 +159,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         if (this.checkWeights){
             double minCapacity = getMinimalCapacity();
             if (minCapacity < 0){
-                E e;
+                DefaultWeightedEdge e;
                 for (V v : this.graph.vertexSet()){
                     e = currentNetwork.getEdge(v,t);
                     currentNetwork.setEdgeWeight(e, currentNetwork.getEdgeWeight(e)- minCapacity);
@@ -191,8 +199,8 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
             currentNetwork.addEdge(v,t);
         }
         for (E e : this.graph.edgeSet()){
-            E e1 = currentNetwork.addEdge(this.graph.getEdgeSource(e), this.graph.getEdgeTarget(e));
-            E e2 = currentNetwork.addEdge(this.graph.getEdgeTarget(e), this.graph.getEdgeSource(e));
+            DefaultWeightedEdge e1 = currentNetwork.addEdge(this.graph.getEdgeSource(e), this.graph.getEdgeTarget(e));
+            DefaultWeightedEdge e2 = currentNetwork.addEdge(this.graph.getEdgeTarget(e), this.graph.getEdgeSource(e));
             double weight = this.getInternalEdgeWeight(e);
             currentNetwork.setEdgeWeight(e1, weight);
             currentNetwork.setEdgeWeight(e2, weight);
@@ -228,7 +236,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * Wrapper for construction of MinimumSTCutAlgorithm
      * @return instance of MinimumSTCutAlgorithm for the constructed network
      */
-    private MinimumSTCutAlgorithm<V,E> setupMinCutAlg(){
+    private MinimumSTCutAlgorithm<V, DefaultWeightedEdge> setupMinCutAlg(){
         return new PushRelabelMFImpl<>(this.currentNetwork);
     }
 

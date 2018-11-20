@@ -49,13 +49,12 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
 
     /**
      * Constructor
-     * @param edgeClass type of edges used
      * @param g input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      */
-    public GoldbergMaximumDensitySubgraphAlgorithm(Class<? extends E> edgeClass, Graph<V, E> g, V s, V t) {
-        super(edgeClass,g,s,t,false);
+    public GoldbergMaximumDensitySubgraphAlgorithm(Graph<V, E> g, V s, V t) {
+        super(g,s,t,false);
     }
 
     @Override

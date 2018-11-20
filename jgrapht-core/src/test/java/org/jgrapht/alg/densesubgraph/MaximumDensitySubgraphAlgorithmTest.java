@@ -29,7 +29,7 @@ public class MaximumDensitySubgraphAlgorithmTest {
     }
 
     private MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph){
-        return new GoldbergMaximumDensitySubgraphAlgorithm<>(DefaultEdge.class,graph,-1,-2);
+        return new GoldbergMaximumDensitySubgraphAlgorithm<>(graph,-1,-2);
     }
 
     @Test
