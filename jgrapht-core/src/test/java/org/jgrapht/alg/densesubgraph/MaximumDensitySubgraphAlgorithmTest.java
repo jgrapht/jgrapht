@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 public class MaximumDensitySubgraphAlgorithmTest {
 
-    final double DEFAULT_EPS = Math.pow(10,-5);
+    private final double DEFAULT_EPS = Math.pow(10,-5);
     @Test
     public void testMinimal(){
         WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);

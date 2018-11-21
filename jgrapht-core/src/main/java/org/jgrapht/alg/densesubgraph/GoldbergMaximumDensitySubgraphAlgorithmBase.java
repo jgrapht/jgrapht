@@ -265,11 +265,4 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * @return weight of the edge
      */
     protected abstract double getEdgeWeightSink(V vertex);
-
-    /**
-     * Getter for final density result
-     * @return maximum density calculated
-     * @throws NullPointerException maximum density subgraph has not been calculated before
-     */
-    public abstract double getDensity() throws NullPointerException;
 }
