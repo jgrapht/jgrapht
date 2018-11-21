@@ -1,335 +1,64 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<!--
-/* ==========================================
- * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
- *
- * See the CONTRIBUTORS.md file distributed with this work for additional
- * information regarding copyright ownership.
- *
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0, or the
- * GNU Lesser General Public License v2.1 or later
- * which is available at
- * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
- *
- * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
- */
-/* ~~~~~~~~~~
- * index.html
- * ~~~~~~~~~~
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
- *
- * Original Author:  Barak Naveh
- * Contributor(s):   -
- *
- * $Id: index.html 759 2012-01-20 00:15:19Z perfecthash $
- *
- * Changes
- * ~~~~~~~
- * 27-Jul-2003 : Initial revision (BN);
- * 29-Jul-2003 : Local HelloJGraphT, stat counter, highlighted download link (BN);
- * 03-Aug-2003 : Added comparison to JGraph (BN);
- * 02-Jul-2006 : Updates for 0.7.0 (JVS);
- * 20-Mar-2007 : Updates for 0.7.1 (JVS);
- * 29-Sep-2007 : Updates for 0.7.2 (JVS);
- * 27-Jan-2008 : Updates for 0.7.3 (JVS);
- * 28-Sep-2008 : Updates for 0.8.0 (JVS);
- * 03-Jul-2009 : Updates for 0.8.1 (JVS);
- * 27-Nov-2010 : Updates for 0.8.2 (JVS);
- * 19-Jan-2012 : Updates for 0.8.3 (JVS);
- * 18-Dec-2013 : Updates for 0.9.0 (JVS);
- * 11-Apr-2015 : Updates for 0.9.1 (JVS);
- * 03-Apr-2016 : Updates for 0.9.2 (JVS);
- * 19-Sep-2016 : Updates for 1.0.0 (JK);
- * 16-Jan-2017 : Updates for 1.0.1 (JK);
- * 14-Nov-2017 : Updates for 1.1.0 (JK);
- * 16-May-2018 : Updates for 1.2.0 (JK);
- * 12-Nov-2018 : Updates for 1.3.0 (JK);
- * 
- */
--->
-
+---
+---
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="Author" content="Barak Naveh">
-  <meta name="keywords" content="JGraphT, java, graph, library, java graph library, theory, graph-theory, free, JGraph, open-source">
-  <title>Welcome to JGraphT - a free Java Graph Library</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ site.title }}</title>
+	<meta name="keywords" content="{{ site.keywords }}">
+	<meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="combo.css">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  {% if site.favicon %}<link rel="shortcut icon" href="{{ site.favicon }}" type="image/x-icon">{% endif %}
+	{% if site.touch_icon %}<link rel="apple-touch-icon" href="{{ site.touch_icon }}">{% endif %}
 </head>
 <body>
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<h1><font size="7"><font color="#CC3399">J</font>Graph<font color="#FFCC00">T</font></font><font size="3">&nbsp;</font><br>
-
-
-</h1>
-
-<div align="right">
-<script type="text/javascript" src="https://www.ohloh.net/p/12112/widgets/project_partner_badge.js"></script>
-</div>
-
-<h2>Latest News</h2>
-
-<p>
-Release 1.3.0 is now available, dual-licensed under LGPL 
-<a href="https://github.com/jgrapht/jgrapht/wiki/Relicensing">and EPL</a>.
-</p>
-
-<p>
-
-<b>Once upon a time, JGraphT source code lived in an svn repository, but these
-days it lives in
-<a href="http://github.com/jgrapht/jgrapht">github</a>.</b>  Please send
-all new contributions there in the form of pull requests!
-
-</p>
-
-<p>
-
-If you enjoy using JGraphT, please click the Like button for
-our <a href="https://www.facebook.com/jgrapht">Facebook page</a>!
-
-</p>
-
-<p>
-
-<div class="fb-like-box" data-href="https://www.facebook.com/jgrapht" data-width="600" data-show-faces="true" data-stream="false" data-header="false"></div>
-
-</p>
-
-<h2>About JGraphT</h2>
-
-<p>JGraphT is a free Java graph library that provides 
-mathematical graph-theory objects and algorithms. JGraphT supports 
-various types of graphs including: </p>
-
-<ul>
-  <li><b>directed</b> and <b>undirected</b> graphs.</li>
-  <li>graphs with <b>weighted</b> / <b>unweighted</b> / labeled or any 
-  user-defined edges.</li>
-  <li>various edge multiplicity options, including: <b>simple-graphs</b>,
-  <b>multigraphs</b>, <b>pseudographs</b>. </li>
-  <li><b>unmodifiable</b> graphs - allow modules to provide  
-  &quot;read-only&quot; access to  internal graphs.</li>
-  <li><b>listenable</b> graphs - allow external listeners to track  modification events.</li>
-  <li><b>subgraphs</b> graphs that are auto-updating subgraph views on 
-  other graphs.</li>
-  <li>all compositions of above graphs.</li>
-</ul>
-<p>Although powerful, JGraphT is designed to be <b>simple</b>
-and <b>type-safe</b> (via Java generics). For example,
-graph vertices can be of any objects. You can create graphs based on: Strings,
-URLs, XML documents, etc; you can even create graphs of graphs! This
-<a href="https://raw.github.com/jgrapht/jgrapht/master/jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java">code example</a> shows how.</p>
-<p>Other features offered by JGraphT:</p>
-
-<ul>
-  <li>graph visualization using the JGraphX library</li>
-  <li>complete source code included, under the terms of the
-  <a href="LGPL.html">GNU Lesser General Public License</a> and the <a href="https://github.com/jgrapht/jgrapht/wiki/Relicensing">EPL</a> as well via dual licensing).</li>
-  <li>comprehensive <a href="javadoc">Javadocs</a>.</li>
-  <li>easy extensibility.</li>
-</ul>
-
-
-<h2>Maven Releases</h2>
-
-Starting from 0.9.0, every JGraphT release is published to the Maven Central Repository. You can add a dependency from your project as follows:
-
-<pre><code>
-  &lt;groupId&gt;org.jgrapht&lt;/groupId&gt;
-  &lt;artifactId&gt;jgrapht-core&lt;/artifactId&gt;
-  &lt;version&gt;1.3.0&lt;/version&gt;
-</code></pre>
-
-We have also started auto-publishing SNAPSHOT builds for every successful commit to master.  To use the bleeding edge:
-
-<pre><code>
-  &lt;groupId&gt;org.jgrapht&lt;/groupId&gt;
-  &lt;artifactId&gt;jgrapht-core&lt;/artifactId&gt;
-  &lt;version&gt;1.3.1-SNAPSHOT&lt;/version&gt;
-</code></pre>
-
-and make sure the snapshot repository is enabled:
-
-<pre><code>
-  &lt;repositories&gt;
-    &lt;repository&gt;
-      &lt;id&gt;maven-snapshots&lt;/id&gt;
-      &lt;url&gt;http://oss.sonatype.org/content/repositories/snapshots&lt;/url&gt;
-      &lt;layout&gt;default&lt;/layout&gt;
-      &lt;releases&gt;
-        &lt;enabled&gt;false&lt;/enabled&gt;
-      &lt;/releases&gt;
-      &lt;snapshots&gt;
-        &lt;enabled&gt;true&lt;/enabled&gt;
-      &lt;/snapshots&gt;
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
-</code></pre>
-
-<h2>Download</h2>
-<p>
-You can download the latest version of JGraphT from the
-<a href="http://sourceforge.net/projects/jgrapht">project page</a> on 
-SourceForge:</p>
-
-<p>
-<div align="center">
-<table border="1" cellpadding="8" bgcolor="white" width="80%" cellspacing="0" >
-  <tr>
-    <td align="center">
-    <a href="http://prdownloads.sourceforge.net/jgrapht/jgrapht-1.3.0.zip?download">
-    <img alt="zipicon.png" src="images/zipicon.png" border="0" width="32" height="32"></a>
-    <br>
-    <a href="http://prdownloads.sourceforge.net/jgrapht/jgrapht-1.3.0.zip?download">jgrapht-1.3.0.zip</a></td>
-    <td vAlign="top" align="left"><b>Windows Download</b>
-    <br>
-    A ZIP file that contains source code and runtime files of JGraphT. </td>
-  </tr>
-  <tr>
-    <td align="center">
-    <a href="http://prdownloads.sourceforge.net/jgrapht/jgrapht-1.3.0.tar.gz?download">
-    <img alt="foldericon.png" src="images/foldericon.png" border="0" width="32" height="32"></a>
-    <br>
-    <a href="http://prdownloads.sourceforge.net/jgrapht/jgrapht-1.3.0.tar.gz?download">jgrapht-1.3.0.tar.gz</a> </td>
-    <td vAlign="top" align="left"><b>Linux Download</b>
-    <br>
-    A tar.gz file that contains source code and runtime files of JGraphT. </td>
-  </tr>
-</table>
-</div>
-
-<p>
-
-<p>
-There are two downloads, one for Windows-based systems, and one for
-Linux/Unix-based systems. The downloads contain identical Java source
-code and a <a href="https://github.com/jgrapht/jgrapht/blob/master/README.md">README.md</a> file to help you to get started.
-Starting with version 1.0.0, JDK 1.8 is required at a minimum (<a href=
-"http://sourceforge.net/project/showfiles.php?group_id=86459&amp;package_id=89784"
->earlier versions</a> with less functionality can be used on older
-JDK's/JRE's).</p>
-
-<p>
-The
-<a href="javadoc">JavaDoc files</a>
-are available online. They are also included in the downloads so you
-can view them locally.</p>
-
-
-
-<h2>Support</h2>
-<p>The <a href="http://sourceforge.net/projects/jgrapht">JGraphT project</a> is 
-maintained on <a href="https://github.com/jgrapht/jgrapht">github</a> and released at SourceForge.  You can:</p>
-
-
-
-
-<ul>
-  <li><b>Get help</b> via the JGraphT
-  <a href="http://lists.sourceforge.net/lists/listinfo/jgrapht-users">users 
-  mailing list</a>.</li>
-  <li><b>Stay informed</b> on new releases via the
-  <a href="http://lists.sourceforge.net/lists/listinfo/jgrapht-announce">
-  announce mailing list</a>.</li>
-  <li><b>Report a bug</b> you might have found in JGraphT using the
-  <a href="https://github.com/jgrapht/jgrapht/issues">issue
-  tracker</a>, or request an enhancement.</li>
-  <li>Get answers to <b>frequently asked questions</b> at <a href="https://stackoverflow.com/questions/tagged/jgrapht">Stack Overflow</a>.
-</ul>
-
-
-
-
-<p>If you are reporting a bug, please describe a reproducing scenario.&nbsp;If 
-possible, attach a small program with a description of what is wrong and 
-needs fixing.</p>
-<p>If you need a bug fixed <i>really</i> urgently, use the source... </p>
-
-
-<p>There is also
-a <a href="http://github.com/jgrapht/jgrapht/wiki">wiki</a>
-set up for everyone in the JGraphT community to share information
-about the project.</p>
-
-
-
-
-<h2>JGraphT and JGraphX</h2>
-
-<p dir="ltr">JGraphT and <a href="https://github.com/jgraph/jgraphx">JGraphX</a> are two different libraries which are intended for different purposes. </p>
-
-<p>JGraphT:</p>
-<ul>
-  <li>is focused on data structures and algorithms.</li>
-</ul>
-
-<p>JGraphX:</p>
-<ul>
-  <li>is focused on rendering and GUI-based editing.</li>
-</ul>
-
-
-<p>The two libraries are complementary and can be used together via
-the JGraphXAdapter provided by JGraphT; this adapter allows a
-JGraphT graph data structure to be used as the model being viewed and
-controlled via JGraphX.</p>
-
-<p>Note that JGraphX is the successor to the older JGraph project, which reached its end of life years ago.  JGraphT used to maintain JGraph support as well, but as of JGraphT release 1.1.1, this support is being dropped, so users should migrate to JGraphX instead.</p>
-
-<h2>Your Improvements</h2>
-<p>If you add new features or fix bugs please
-	<a href="https://github.com/jgrapht/jgrapht/pulls">
-send us your updates</a>.
-We will add them to the next release of JGraphT 
-so  everyone can enjoy your contribution. You might also benefit from it: 
-others may fix hidden bugs in your code or may contribute new features.</p>
-
-
-
-<p>If you wish to join the JGraphT team, please
-	<a href="mailto:perfecthash@users.sf.net">
-send us a few words</a> about yourself - we'll be happy to grow!<br>
-&nbsp;</p>
-
-<p>&nbsp;</p>
-
-<hr noshade size="2" style="background-color:#7AA1E6;color:#7AA1E6;border-width: thin none none;">
-<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%">
-  <tr>
-    <td width="10%"align="left"><a href="http://validator.w3.org/check/referer"><img
-          src="https://www.w3.org/Icons/valid-html401" border="0"
-          alt="Valid HTML 4.01!" height="31" width="88"></a></td>
-          
-    <td width="80%"align="center"><small>
-		  &copy; Copyright 2003-2018, by Barak Naveh and Contributors. All rights reserved.</small></td>
-	    
-	<td width="10%" align="right">
-
-<a href="http://sourceforge.net/projects/jgrapht"><img src="https://sflogo.sourceforge.net/sflogo.php?group_id=86459&type=12" width="120" height="30" border="0" alt="Get JGraphT at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-
-</td>
-  </tr>
-</table>
-<br>
-
-
+  <div id="main">
+
+    <nav><ul>
+      {% for node in site.posts reversed %}
+        {% capture id %}{{ node.id | remove:'/' | downcase }}{% endcapture %}
+        <li class="p-{{id}}"><a href="#{{id}}">{{node.title}}</a></li>
+      {% endfor %}
+    </ul></nav>
+
+
+    {% for page in site.posts reversed %}
+      {% capture id %}{{ page.id | remove:'/' | downcase }}{% endcapture %}
+      <div id="{{id}}" class="section p-{{id}}">
+        {% if page.icon %}
+        <div class="subtlecircle sectiondivider imaged">
+          <img src="{{page.icon}}" alt="section icon" />
+          <h5 class="icon-title">{{ page.title }}</h5>
+        </div>
+        {% elsif page.fa-icon %}
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-{{ page.fa-icon }} fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">{{ page.title }}</h5>
+        </div>
+        {% endif %}
+        <div class="container {{ page.style }}">
+          {{ page.content }}
+        </div>
+      </div>
+    {% endfor %}
+
+
+    <div id="footer" class="section text-white">
+      <div class="container">
+        {% capture foottext %} {% include footer.md %} {% endcapture %}
+        {{ foottext | markdownify }}
+      </div>
+    </div>
+  </div>
+
+{% include analytics.html %}
 </body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="site.js"></script>
 </html>
