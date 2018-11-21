@@ -1,6 +1,7 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
@@ -28,8 +29,14 @@ public class MaximumDensitySubgraphAlgorithmTest {
         test(g, constructDefaultSolver(g), 5, new LinkedHashSet<>(Arrays.asList(0,1)));
     }
 
-    private MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph){
-        return new GoldbergMaximumDensitySubgraphAlgorithm<>(graph,-1,-2);
+    private MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph)
+    {
+        try {
+            MinimumSTCutAlgorithm<Integer, DefaultEdge> alg = new PushRelabelMFImpl<>(graph);
+            return new GoldbergMaximumDensitySubgraphAlgorithm<>(alg, graph, -1, -2);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Test

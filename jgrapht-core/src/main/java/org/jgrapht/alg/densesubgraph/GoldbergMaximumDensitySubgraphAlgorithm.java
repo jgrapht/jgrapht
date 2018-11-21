@@ -18,6 +18,7 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.*;
 
 /**
  * This class computes a maximum density subgraph based on the algorithm described
@@ -49,12 +50,13 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
 
     /**
      * Constructor
+     * @param alg instance of the type of subalgorithm to use
      * @param g input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      */
-    public GoldbergMaximumDensitySubgraphAlgorithm(Graph<V, E> g, V s, V t) {
-        super(g,s,t,false);
+    public GoldbergMaximumDensitySubgraphAlgorithm(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> g, V s, V t) {
+        super(alg, g,s,t,false);
     }
 
     @Override

@@ -18,10 +18,11 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -105,12 +106,13 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
 
     /**
      * Constructor
+     * @param alg instance of the type of subalgorithm to use
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      */
-    protected GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights){
+    protected GoldbergMaximumDensitySubgraphAlgorithmBase(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> graph, V s, V t, boolean checkWeights){
         if (graph.containsVertex(s) || graph.containsVertex(t)){
             throw new IllegalArgumentException("Source or sink vertex already in graph");
         }
@@ -124,7 +126,12 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         this.currentNetwork = this.buildNetwork();
         this.currentVertices = new HashSet<>();
         this.initializeNetwork();
-        this.minSTCutAlg = this.setupMinCutAlg();
+        try {
+            this.minSTCutAlg = this.setupMinCutAlg(alg);
+        }
+        catch (NoSuchMethodException | InstantiationException | IllegalAccessException| InvocationTargetException e){
+            throw new IllegalArgumentException("Could not instantiate MinimumSTCutAlgorithm");
+        }
     }
 
     /**
@@ -234,10 +241,14 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
 
     /**
      * Wrapper for construction of MinimumSTCutAlgorithm
+     * @param alg instance of the algorithm type to use
      * @return instance of MinimumSTCutAlgorithm for the constructed network
      */
-    private MinimumSTCutAlgorithm<V, DefaultWeightedEdge> setupMinCutAlg(){
-        return new PushRelabelMFImpl<>(this.currentNetwork);
+    private MinimumSTCutAlgorithm<V, DefaultWeightedEdge> setupMinCutAlg(MinimumSTCutAlgorithm<V,E> alg)
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+        InstantiationException
+    {
+        return TypeUtil.uncheckedCast(alg.getClass().getDeclaredConstructor(Graph.class).newInstance(this.currentNetwork));
     }
 
     /**
