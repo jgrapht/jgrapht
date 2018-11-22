@@ -33,17 +33,14 @@ public interface MaximumDensitySubgraphAlgorithm<V, E>
     /**
      * Calculate a maximum density subgraph
      *
-     * @param epsilon precision for computation
      * @return the maximum density subgraph
      */
-    Graph<V,E> calculateDensest(double epsilon);
+    Graph<V,E> calculateDensest();
 
     /**
      * Computes density of a maximum density subgraph.
-     * Need to first call calculateDensest.
      *
      * @return the actual density of the maximum density subgraph
-     * @throws NullPointerException if calculateDensest() has not been called earlier
      */
     double getDensity();
 

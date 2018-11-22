@@ -33,7 +33,7 @@ public class MaximumDensitySubgraphAlgorithmTest {
     {
         try {
             MinimumSTCutAlgorithm<Integer, DefaultEdge> alg = new PushRelabelMFImpl<>(graph);
-            return new GoldbergMaximumDensitySubgraphAlgorithm<>(alg, graph, -1, -2);
+            return new GoldbergMaximumDensitySubgraphAlgorithm<>(alg, graph, -1, -2, DEFAULT_EPS);
         } catch (Exception e) {
             return null;
         }
@@ -94,7 +94,7 @@ public class MaximumDensitySubgraphAlgorithmTest {
 
     public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Integer,
                          DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
-        Graph<Integer,DefaultEdge> computed = solver.calculateDensest(DEFAULT_EPS);
+        Graph<Integer,DefaultEdge> computed = solver.calculateDensest();
         assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
         Graph<Integer, DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);
         assertEquals(expected, computed);
