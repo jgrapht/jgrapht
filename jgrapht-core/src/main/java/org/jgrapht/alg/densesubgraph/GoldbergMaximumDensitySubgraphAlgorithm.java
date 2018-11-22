@@ -182,6 +182,9 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> implements MaximumDens
      * @return max density subgraph of the graph
      */
     public Graph<V,E> calculateDensest(){
+        if (this.densestSubgraph != null){
+            return this.densestSubgraph;
+        }
         Set<V> sourcePartition;
         while (Double.compare(upper-lower, this.epsilon)>=0) {
             guess = lower + ((upper - lower)) / 2;
@@ -205,7 +208,10 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> implements MaximumDens
      *
      * @return the actual density of the maximum density subgraph
      */
-    public double getDensity() throws NullPointerException{
+    public double getDensity(){
+        if (this.densestSubgraph == null){
+            this.calculateDensest();
+        }
         double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
             this.densestSubgraph::getEdgeWeight).sum();
         return sum/this.densestSubgraph.vertexSet().size();
