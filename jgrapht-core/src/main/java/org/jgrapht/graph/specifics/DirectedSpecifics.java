@@ -17,12 +17,15 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-import java.io.*;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.EdgeSetFactory;
+import org.jgrapht.util.ArrayUnenforcedSet;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of
@@ -160,22 +163,17 @@ public class DirectedSpecifics<V, E>
     {
         ArrayUnenforcedSet<E> inAndOut =
             new ArrayUnenforcedSet<>(getEdgeContainer(vertex).incoming);
-        inAndOut.addAll(getEdgeContainer(vertex).outgoing);
 
-        // we have two copies for each self-loop - remove one of them.
         if (graph.getType().isAllowingSelfLoops()) {
-            Set<E> loops = getAllEdges(vertex, vertex);
-
-            for (int i = 0; i < inAndOut.size();) {
-                E e = inAndOut.get(i);
-
-                if (loops.contains(e)) {
-                    inAndOut.remove(i);
-                    loops.remove(e); // so we remove it only once
-                } else {
-                    i++;
+            for (E e : getEdgeContainer(vertex).outgoing) {
+                V source = graph.getEdgeSource(e);
+                V target = graph.getEdgeTarget(e);
+                if (!source.equals(target)) {
+                    inAndOut.add(e);
                 }
             }
+        } else {
+            inAndOut.addAll(getEdgeContainer(vertex).outgoing);
         }
 
         return Collections.unmodifiableSet(inAndOut);
