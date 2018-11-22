@@ -17,7 +17,8 @@ import static org.junit.Assert.assertEquals;
  */
 
 
-public class MaximumDensitySubgraphAlgorithmTest {
+public class GoldbergMaximumDensitySubgraphAlgorithmTest
+{
 
     private final double DEFAULT_EPS = Math.pow(10,-5);
     @Test
@@ -95,6 +96,7 @@ public class MaximumDensitySubgraphAlgorithmTest {
     public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Integer,
                          DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
         Graph<Integer,DefaultEdge> computed = solver.calculateDensest();
+        System.out.println(computed);
         assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
         Graph<Integer, DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);
         assertEquals(expected, computed);

@@ -17,13 +17,9 @@
  */
 package org.jgrapht.alg.densesubgraph;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.*;
-import java.lang.reflect.*;
-import java.util.*;
+import org.jgrapht.alg.util.*;
 
 /**
  * This class computes a maximum density subgraph based on the algorithm described
@@ -91,7 +87,8 @@ import java.util.*;
  *
  * @author Andre Immig
  */
-public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> {
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?,Double>,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E>{
+
     /**
      * Constructor
      * @param alg instance of the type of subalgorithm to use
@@ -100,9 +97,12 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithm(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> graph, V s, V t, double epsilon){
-        super(alg, graph, s,t, false, epsilon);
-        this.upper = this.graph.edgeSet().stream().mapToDouble(this.graph::getEdgeWeight).sum();
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> graph, V s, V t, double epsilon){
+        super(alg, graph, s,t, true, epsilon);
+        this.upper =  this.graph.edgeSet().stream().mapToDouble(this.graph::getEdgeWeight).sum();
+        for (V v: this.graph.vertexSet()){
+            this.upper += v.getSecond();
+        }
     }
 
     /**
@@ -116,16 +116,19 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
         }
         double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
             this.densestSubgraph::getEdgeWeight).sum();
+        for (V v: this.densestSubgraph.vertexSet()){
+            sum+=v.getSecond();
+        }
         return sum/this.densestSubgraph.vertexSet().size();
     }
 
     /**
      * Getter for network weights of edges su for u in V
-     * @param  v of V
      * @return weight of the edge
      */
+    @Override
     protected double getEdgeWeightSource(V v){
-        return this.graph.edgeSet().size();
+        return 0;
     }
 
     /**
@@ -133,8 +136,9 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
      * @param v of V
      * @return weight of the edge
      */
+    @Override
     protected double getEdgeWeightSink(V v) {
-        return this.graph.edgeSet().size() + 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
-            this.graph::getEdgeWeight).sum();
+        return 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
+            this.graph::getEdgeWeight).sum() - 2*v.getSecond();
     }
 }
