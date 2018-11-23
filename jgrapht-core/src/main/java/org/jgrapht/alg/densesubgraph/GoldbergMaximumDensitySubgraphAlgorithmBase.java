@@ -29,7 +29,10 @@ import java.util.stream.*;
 /**
  * This abstract base class computes a maximum density subgraph based on the algorithm described
  * by Andrew Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
- * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley.
+ * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley. Each subclass decides which
+ * concrete definition of density is used by implementing {@link #getEdgeWeightSource(Object)} and
+ * {@link #getEdgeWeightSink(Object)} as proposed in the paper. After the computation the density is
+ * computed using {@link MaximumDensitySubgraphAlgorithm#getDensity()}.
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach.
@@ -74,17 +77,20 @@ import java.util.stream.*;
  * solutions for the maximum density can't be smaller than $\frac{1}{n(n-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
  * The runtime can in this case be given by $O(M(n,n+m)\log{n}$, where $M(n,m)$ is the runtime of
- * the internally used MinimumSTCutAlgorithm.
+ * the internally used MinimumSTCutAlgorithm. Especially for large networks it is advised to use a
+ * MinimumSTCutAlgorithm with runtime not depending on the number of edges, because the $N$ has
+ * $O(n+m)$ edges. Preferably one should use {@link org.jgrapht.alg.flow.PushRelabelMFImpl}, leading
+ * to a runtime of $O(n^{3}\log{n})$.
  * </p>
- *
  * <p>
- * Similar the same argument can be applied for other definitions of density, where the network
- * needs to be adapted accordingly. Some generalizations can be found in the paper.
- * As these more general variants including edge weights are only guaranteed to terminate for
- * integer edge weights, instead of using the natural termination property, the algorithm needs to
- * be called with $\varepsilon$ . The computation then ensures, that the returned maximum density only
- * differs at most $\varepsilon$ from the correct solution. This is why subclasses of this class might
- * have a little different runtime analysis, regarding the $\log{n}$ part.
+ * Similar to the above explanation the same argument can be applied for other definitions of
+ * density by adapting the definitions accordingly, where the network needs to be adapted
+ * accordingly. Some generalizations can be found in the paper. As these more general variants
+ * including edge weights are only guaranteed to terminate for integer edge weights, instead of
+ * using the natural termination property, the algorithm needs to be called with $\varepsilon$ in
+ * the constructor. The computation then ensures, that the returned maximum density only differs at
+ * most $\varepsilon$ from the correct solution. This is why subclasses of this class might have a
+ * little different runtime analysis regarding the $\log{n}$ part.
  * </p>
  *
  * @param <V> Type of vertices
@@ -146,7 +152,8 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
 
     /**
      * Updates network for next computation, e.g edges from v to t and from s to v
-     * Enforces positivity on network weights if specified
+     * Enforces positivity on network weights if specified by adding subtracting the lowest weights
+     * to all edges $(v,t)$ and $(v,s)$.
      **/
     private void updateNetwork(){
         for (V v : this.graph.vertexSet()){
