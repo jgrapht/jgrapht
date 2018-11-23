@@ -41,6 +41,20 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest
     }
 
     @Test
+    public void testEmpty1(){
+        WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
+        test(g, constructDefaultSolver(g),0, new LinkedHashSet<>());
+    }
+
+    @Test
+    public void testEmpty2(){
+        WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
+        g.addVertex(0);
+        g.addVertex(1);
+        test(g, constructDefaultSolver(g),0, new LinkedHashSet<>());
+    }
+
+    @Test
     public void testSmall1(){
         WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
         for (int i=0; i<=4; i++){

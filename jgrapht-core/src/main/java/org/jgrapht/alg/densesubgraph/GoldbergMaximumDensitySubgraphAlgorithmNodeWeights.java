@@ -20,6 +20,7 @@ package org.jgrapht.alg.densesubgraph;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
 
 /**
  * This class computes a maximum density subgraph based on the algorithm described
@@ -104,6 +105,9 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
         for (V v: this.graph.vertexSet()){
             this.upper += v.getSecond();
         }
+        if (this.graph.vertexSet().isEmpty() && this.graph.edgeSet().isEmpty()){
+            this.densestSubgraph = new AsSubgraph<>(this.graph, null);
+        }
     }
 
     /**
@@ -114,6 +118,10 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
     public double getDensity(){
         if (this.densestSubgraph == null){
             this.calculateDensest();
+        }
+        int n = this.densestSubgraph.vertexSet().size();
+        if (n == 0){
+            return 0;
         }
         double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
             this.densestSubgraph::getEdgeWeight).sum();

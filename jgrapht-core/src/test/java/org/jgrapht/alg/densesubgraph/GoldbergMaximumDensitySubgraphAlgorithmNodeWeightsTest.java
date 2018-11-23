@@ -46,6 +46,22 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
     }
 
     @Test
+    public void testEmpty1(){
+        WeightedMultigraph<Pair<Integer,Double>, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
+        test(g, constructDefaultSolver(g),0, new LinkedHashSet<>());
+    }
+
+    @Test
+    public void testEmpty2(){
+        WeightedMultigraph<Pair<Integer,Double>, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
+        Pair<Integer,Double> p1 = new Pair<>(0,1.3);
+        Pair<Integer,Double> p2 = new Pair<>(1, 2.1);
+        g.addVertex(p1);
+        g.addVertex(p2);
+        test(g, constructDefaultSolver(g),2.1, new LinkedHashSet<>(Collections.singletonList(p2)));
+    }
+
+    @Test
     public void testSmall1(){
         SimpleWeightedGraph<Pair<Integer,Double>, DefaultEdge> g = new SimpleWeightedGraph<>(DefaultEdge.class);
         ArrayList<Pair<Integer,Double>> vertices = new ArrayList<>();

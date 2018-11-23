@@ -207,7 +207,8 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
     /**
      * Algorithm to compute max density subgraph
      * Performs binary search on the initial interval lower-upper until interval is smaller than epsilon
-     * For to big epsilon calculate until a (first) solution is found, instead of returning an empty graph
+     * In case no solution is found because epsilon is too big, the computation continues until a
+     * (first) solution is found, thereby avoiding to return an empty graph.
      * @return max density subgraph of the graph
      */
     public Graph<V,E> calculateDensest(){

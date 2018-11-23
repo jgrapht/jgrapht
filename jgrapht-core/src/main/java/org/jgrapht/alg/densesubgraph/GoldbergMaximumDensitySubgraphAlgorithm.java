@@ -103,6 +103,9 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
     public GoldbergMaximumDensitySubgraphAlgorithm(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> graph, V s, V t, double epsilon){
         super(alg, graph, s,t, false, epsilon);
         this.upper = this.graph.edgeSet().stream().mapToDouble(this.graph::getEdgeWeight).sum();
+        if (this.graph.vertexSet().isEmpty()){
+            this.densestSubgraph = new AsSubgraph<>(this.graph,null);
+        }
     }
 
     /**
@@ -113,6 +116,10 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
     public double getDensity(){
         if (this.densestSubgraph == null){
             this.calculateDensest();
+        }
+        int n = this.densestSubgraph.vertexSet().size();
+        if (n == 0){
+            return 0;
         }
         double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
             this.densestSubgraph::getEdgeWeight).sum();
