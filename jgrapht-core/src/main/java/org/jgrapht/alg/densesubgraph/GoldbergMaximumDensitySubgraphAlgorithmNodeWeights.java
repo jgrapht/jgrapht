@@ -72,6 +72,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
         for (V v: this.graph.vertexSet()){
             this.upper += v.getSecond();
         }
+        //check if solution will be empty
         if (this.graph.vertexSet().isEmpty() && this.graph.edgeSet().isEmpty()){
             this.densestSubgraph = new AsSubgraph<>(this.graph, null);
         }
@@ -86,6 +87,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
         if (this.densestSubgraph == null){
             this.calculateDensest();
         }
+        //avoid dividing by 0
         int n = this.densestSubgraph.vertexSet().size();
         if (n == 0){
             return 0;
@@ -103,7 +105,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @return weight of the edge
      */
     @Override
-    protected double getEdgeWeightSource(V v){
+    protected double getEdgeWeightFromSourceToVertex(V v){
         return 0;
     }
 
@@ -113,7 +115,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @return weight of the edge
      */
     @Override
-    protected double getEdgeWeightSink(V v) {
+    protected double getEdgeWeightFromVertexToSink(V v) {
         return 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
             this.graph::getEdgeWeight).sum() - 2*v.getSecond();
     }

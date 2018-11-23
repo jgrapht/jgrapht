@@ -30,8 +30,8 @@ import java.util.stream.*;
  * This abstract base class computes a maximum density subgraph based on the algorithm described
  * by Andrew Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
  * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley. Each subclass decides which
- * concrete definition of density is used by implementing {@link #getEdgeWeightSource(Object)} and
- * {@link #getEdgeWeightSink(Object)} as proposed in the paper. After the computation the density is
+ * concrete definition of density is used by implementing {@link #getEdgeWeightFromSourceToVertex(Object)} and
+ * {@link #getEdgeWeightFromVertexToSink(Object)} as proposed in the paper. After the computation the density is
  * computed using {@link MaximumDensitySubgraphAlgorithm#getDensity()}.
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
@@ -157,8 +157,8 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      **/
     private void updateNetwork(){
         for (V v : this.graph.vertexSet()){
-            currentNetwork.setEdgeWeight(currentNetwork.getEdge(v,t), getEdgeWeightSink(v));
-            currentNetwork.setEdgeWeight(currentNetwork.getEdge(s,v), getEdgeWeightSource(v));
+            currentNetwork.setEdgeWeight(currentNetwork.getEdge(v,t), getEdgeWeightFromVertexToSink(v));
+            currentNetwork.setEdgeWeight(currentNetwork.getEdge(s,v), getEdgeWeightFromSourceToVertex(v));
         }
         if (this.checkWeights){
             double minCapacity = getMinimalCapacity();
@@ -258,12 +258,12 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * @param vertex of V
      * @return weight of the edge
      */
-    protected abstract double getEdgeWeightSource(V vertex);
+    protected abstract double getEdgeWeightFromSourceToVertex(V vertex);
 
     /**
      * Getter for network weights of edges ut for u in V
      * @param vertex of V
      * @return weight of the edge
      */
-    protected abstract double getEdgeWeightSink(V vertex);
+    protected abstract double getEdgeWeightFromVertexToSink(V vertex);
 }
