@@ -40,13 +40,14 @@ import org.jgrapht.alg.util.*;
  * \[E_N=\{(i,j)| \{i,j\} \in E\} \cup \{(s,i)| i\in V\} \cup \{(i,t)| i \in V\}\]
  * <br>
  * This variant of the algorithm assumes the density of a positive real-weighted graph G=(V,E)
- * to be defined as \[\frac{\sum\limits_{e \in E} w(e)}{\left|{V}\right|}\] and sets the weights of
- * the network as proposed in the above paper. For this case the weights of the network
+ * to be defined as \[\frac{\sum\limits_{e \in E} w(e) + \sum\limits_{v \in V} w(v)}{\left|{V}\right|}\]
+ * and sets the weights of the network as proposed in the above paper. For this case the weights of the network
  * must be chosen to be:
  * \[c_{ij}=w(ij)\forall \{i,j\}\in E\]
- * \[c_{it}=m+2g-d_i\forall i \in V\]
- * \[c_{si}=m\forall i \in V\]
- * where $m=\left|{E}\right|$ and $d_i$ is the degree of vertex $i$.
+ * \[c_{it}=m'+2g-d_i-2w(i)\forall i \in V\]
+ * \[c_{si}=m'\forall i \in V\]
+ * where $m'$ is such that all weights are positive and $d_i$ is the degree of vertex $i$ and
+ * $w(v)$ is the weight of vertex $v$.
  * <br>
  * As seen later these weights depend on the definition of the density. Therefore these weights and
  * the following applies to the definition of density from above.
@@ -72,7 +73,7 @@ import org.jgrapht.alg.util.*;
  * solutions for the maximum density can't be smaller than $\frac{1}{W(W-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
  * The runtime can in this case be given by $O(M(n,n+m)\log{W}$, where $M(n,m)$ is the runtime of
- * the internally used MinimumSTCutAlgorithm and $W$ is the sum all weights from $G$.
+ * the internally used MinimumSTCutAlgorithm and $W$ is the sum all edge and vertex weights from $G$.
  * </p>
  *
  * <p>

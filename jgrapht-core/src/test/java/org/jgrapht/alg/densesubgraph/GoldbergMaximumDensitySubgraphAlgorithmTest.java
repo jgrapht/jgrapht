@@ -96,7 +96,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest
     public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Integer,
                          DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
         Graph<Integer,DefaultEdge> computed = solver.calculateDensest();
-        System.out.println(computed);
         assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
         Graph<Integer, DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);
         assertEquals(expected, computed);

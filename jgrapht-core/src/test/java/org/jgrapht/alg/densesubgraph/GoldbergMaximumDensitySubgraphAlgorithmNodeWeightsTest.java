@@ -46,6 +46,23 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
     }
 
     @Test
+    public void testSmall1(){
+        SimpleWeightedGraph<Pair<Integer,Double>, DefaultEdge> g = new SimpleWeightedGraph<>(DefaultEdge.class);
+        ArrayList<Pair<Integer,Double>> vertices = new ArrayList<>();
+        vertices.add(new Pair<>(0,1.51));
+        vertices.add(new Pair<>(1,1.0));
+        vertices.add(new Pair<>(2,1.0));
+        for (int i=0; i<=2 ;i++) {
+            g.addVertex(vertices.get(i));
+        }
+        g.setEdgeWeight(g.addEdge(vertices.get(0),vertices.get(1)),4);
+        g.setEdgeWeight(g.addEdge(vertices.get(0),vertices.get(2)),2);
+        test(g, constructDefaultSolver(g),
+            3.255, new LinkedHashSet<>(Arrays.asList(vertices.get(0),vertices.get(1))));
+    }
+
+
+    @Test
     public void testSmall2(){
         SimpleWeightedGraph<Pair<Integer,Double>, DefaultEdge> g = new SimpleWeightedGraph<>(DefaultEdge.class);
         ArrayList<Pair<Integer,Double>> vertices = new ArrayList<>();
@@ -65,14 +82,14 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
         g.setEdgeWeight(g.addEdge(vertices.get(3),vertices.get(7)),4);
         g.setEdgeWeight(g.addEdge(vertices.get(4),vertices.get(2)),1);
         test(g, constructDefaultSolver(g),
-            2.66666666, new LinkedHashSet<>(Arrays.asList(vertices.get(0),vertices.get(1),vertices.get(2),vertices.get(3),
+            3.76666666, new LinkedHashSet<>(Arrays.asList(vertices.get(0),vertices.get(1),vertices.get(2),vertices.get(3),
             vertices.get(4),vertices.get(7))));
     }
 
     public void test(Graph<Pair<Integer,Double>,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Pair<Integer,Double>,DefaultEdge> solver,
         double expectedDensity, Set<Pair<Integer,Double>> expectedVertices){
         Graph<Pair<Integer,Double>,DefaultEdge> computed = solver.calculateDensest();
-        //assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
+        assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
         Graph<Pair<Integer,Double>,DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);
         assertEquals(expected, computed);
     }
