@@ -23,6 +23,7 @@ import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of
@@ -141,20 +142,52 @@ public class UndirectedSpecifics<V, E>
         return equalStraight || equalInverted;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void addEdgeToTouchingVertices(E e)
+    public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
+        getEdgeContainer(sourceVertex).addEdge(e);
 
-        getEdgeContainer(source).addEdge(e);
-
-        if (!source.equals(target)) {
-            getEdgeContainer(target).addEdge(e);
+        if (!sourceVertex.equals(targetVertex)) {
+            getEdgeContainer(targetVertex).addEdge(e);
         }
+        return true;
+    }
+
+    @Override
+    public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
+    {
+        // lookup for edge with same source and target
+        UndirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        for (E edge : ec.vertexEdges) {
+            if (isEqualsStraightOrInverted(sourceVertex, targetVertex, edge)) { 
+                return false;
+            }
+        }
+
+        // add
+        ec.addEdge(e);
+        getEdgeContainer(targetVertex).addEdge(e);
+        return true;
+    }
+
+    @Override
+    public E computeEdgeToTouchingVerticesIfAbsent(
+        V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
+    {
+        // lookup for edge with same source and target
+        UndirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        for (E edge : ec.vertexEdges) {
+            if (isEqualsStraightOrInverted(sourceVertex, targetVertex, edge)) {
+                return null;
+            }
+        }
+
+        // create and add
+        E e = edgeSupplier.get();
+        ec.addEdge(e);
+        getEdgeContainer(targetVertex).addEdge(e);
+
+        return e;
     }
 
     /**
@@ -263,4 +296,5 @@ public class UndirectedSpecifics<V, E>
 
         return ec;
     }
+
 }

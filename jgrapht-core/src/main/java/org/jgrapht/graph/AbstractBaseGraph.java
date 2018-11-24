@@ -116,12 +116,14 @@ public abstract class AbstractBaseGraph<V, E>
 
         this.graphSpecificsStrategy =
             Objects.requireNonNull(graphSpecificsStrategy, GRAPH_SPECIFICS_STRATEGY_REQUIRED);
-        this.specifics = Objects.requireNonNull(
-            graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
-            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
-            graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
-            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.specifics = Objects
+            .requireNonNull(
+                graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
+                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.intrusiveEdgesSpecifics = Objects
+            .requireNonNull(
+                graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
+                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -214,10 +216,6 @@ public abstract class AbstractBaseGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!type.isAllowingMultipleEdges() && containsEdge(sourceVertex, targetVertex)) {
-            return null;
-        }
-
         if (!type.isAllowingSelfLoops() && sourceVertex.equals(targetVertex)) {
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
@@ -226,10 +224,18 @@ public abstract class AbstractBaseGraph<V, E>
             throw new UnsupportedOperationException(THE_GRAPH_CONTAINS_NO_EDGE_SUPPLIER);
         }
 
-        E e = edgeSupplier.get();
-        if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-            specifics.addEdgeToTouchingVertices(e);
-            return e;
+        if (!type.isAllowingMultipleEdges()) {
+            E e = specifics
+                .computeEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
+            if (e != null && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                return e;
+            }
+        } else {
+            E e = edgeSupplier.get();
+            if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+                return e;
+            }
         }
         return null;
     }
@@ -247,20 +253,17 @@ public abstract class AbstractBaseGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!type.isAllowingMultipleEdges() && containsEdge(sourceVertex, targetVertex)) {
-            return false;
-        }
-
         if (!type.isAllowingSelfLoops() && sourceVertex.equals(targetVertex)) {
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-            specifics.addEdgeToTouchingVertices(e);
-            return true;
+        if (!type.isAllowingMultipleEdges()) {
+            return specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)
+                && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+        } else {
+            return specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)
+                && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
         }
-
-        return false;
     }
 
     @Override

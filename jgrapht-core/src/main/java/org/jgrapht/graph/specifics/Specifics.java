@@ -18,6 +18,7 @@
 package org.jgrapht.graph.specifics;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * An interface encapsulating the basic graph operations. Different implementations have different
@@ -76,10 +77,34 @@ public interface Specifics<V, E>
 
     /**
      * Adds the specified edge to the edge containers of its source and target vertices.
-     *
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
      * @param e the edge
+     * @return true if the edge was added, false otherwise
      */
-    void addEdgeToTouchingVertices(E e);
+    boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e);
+
+    /**
+     * Adds a new edge to the edge containers of its source and target vertices.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
+     * @return true if the edge was added, false otherwise
+     */
+    boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e);
+    
+    /**
+     * Adds a new edge to the edge containers of its source and target vertices.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param edgeSupplier the function which will create the edge
+     * @return the newly created edge or null if an edge with the same source and target vertices
+     *         was already present
+     */
+    E computeEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, Supplier<E> edgeSupplier);
 
     /**
      * Returns the degree of the specified vertex. A degree of a vertex in an undirected graph is

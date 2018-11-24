@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.EdgeSetFactory;
@@ -137,13 +138,49 @@ public class DirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void addEdgeToTouchingVertices(E e)
+    public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
+        getEdgeContainer(sourceVertex).addOutgoingEdge(e);
+        getEdgeContainer(targetVertex).addIncomingEdge(e);
+        return true;
+    }
 
-        getEdgeContainer(source).addOutgoingEdge(e);
-        getEdgeContainer(target).addIncomingEdge(e);
+    @Override
+    public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
+    {
+        // lookup for edge with same source and target
+        DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        for (E outEdge : ec.outgoing) {
+            if (graph.getEdgeTarget(outEdge).equals(targetVertex)) {
+                return false;
+            }
+        }
+
+        // add
+        ec.addOutgoingEdge(e);
+        getEdgeContainer(targetVertex).addIncomingEdge(e);
+
+        return true;
+    }
+
+    @Override
+    public E computeEdgeToTouchingVerticesIfAbsent(
+        V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
+    {
+        // lookup for edge with same source and target
+        DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        for (E e : ec.outgoing) {
+            if (graph.getEdgeTarget(e).equals(targetVertex)) {
+                return null;
+            }
+        }
+
+        // create and add
+        E e = edgeSupplier.get();
+        ec.addOutgoingEdge(e);
+        getEdgeContainer(targetVertex).addIncomingEdge(e);
+
+        return e;
     }
 
     /**
@@ -246,4 +283,5 @@ public class DirectedSpecifics<V, E>
 
         return ec;
     }
+
 }
