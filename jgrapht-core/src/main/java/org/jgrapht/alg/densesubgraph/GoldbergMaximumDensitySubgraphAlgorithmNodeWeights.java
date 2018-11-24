@@ -18,6 +18,7 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
@@ -60,22 +61,25 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
 
     /**
      * Constructor
-     * @param alg instance of the type of subalgorithm to use
+     * @param clazz MinimumSTCutAlgorithm to use
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> graph, V s, V t, double epsilon){
-        super(alg, graph, s,t, true, epsilon);
-        this.upper =  this.graph.edgeSet().stream().mapToDouble(this.graph::getEdgeWeight).sum();
-        for (V v: this.graph.vertexSet()){
-            this.upper += v.getSecond();
-        }
-        //check if solution will be empty
-        if (this.graph.vertexSet().isEmpty() && this.graph.edgeSet().isEmpty()){
-            this.densestSubgraph = new AsSubgraph<>(this.graph, null);
-        }
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Class<? extends MinimumSTCutAlgorithm> clazz, Graph<V, E> graph, V s, V t, double epsilon){
+        super(clazz, graph, s,t, true, epsilon);
+    }
+
+    /**
+     * Convenience constructor that uses PushRelabel as default MinimumSTCutAlgorithm
+     * @param graph input for computation
+     * @param s additional source vertex
+     * @param t additional target vertex
+     * @param epsilon to use for internal computation
+     */
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon){
+        super(PushRelabelMFImpl.class, graph, s,t, true, epsilon);
     }
 
     /**
@@ -92,31 +96,33 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
         if (n == 0){
             return 0;
         }
-        double sum = this.densestSubgraph.edgeSet().stream().mapToDouble(
-            this.densestSubgraph::getEdgeWeight).sum();
-        for (V v: this.densestSubgraph.vertexSet()){
-            sum+=v.getSecond();
-        }
-        return sum/this.densestSubgraph.vertexSet().size();
+        return computeDensityNumerator(this.densestSubgraph)/this.densestSubgraph.vertexSet().size();
     }
 
-    /**
-     * Getter for network weights of edges su for u in V
-     * @return weight of the edge
-     */
+    @Override
+    protected double computeDensityNumerator(Graph<V,E> g){
+        double sum = g.edgeSet().stream().mapToDouble(
+            g::getEdgeWeight).sum();
+        for (V v: g.vertexSet()){
+            sum+=v.getSecond();
+        }
+        return sum;
+    }
+
     @Override
     protected double getEdgeWeightFromSourceToVertex(V v){
         return 0;
     }
 
-    /**
-     * Getter for network weights of edges ut for u in V
-     * @param v of V
-     * @return weight of the edge
-     */
     @Override
     protected double getEdgeWeightFromVertexToSink(V v) {
         return 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
             this.graph::getEdgeWeight).sum() - 2*v.getSecond();
+    }
+
+    @Override protected void checkForEmptySolution() {
+        if (this.graph.vertexSet().isEmpty() && this.graph.edgeSet().isEmpty()){
+            this.densestSubgraph = new AsSubgraph<>(this.graph, null);
+        }
     }
 }

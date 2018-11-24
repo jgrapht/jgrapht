@@ -18,6 +18,7 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
@@ -100,8 +101,8 @@ import java.util.stream.*;
  */
 public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implements MaximumDensitySubgraphAlgorithm<V,E> {
 
-    private double lower, epsilon;
-    protected double guess, upper;
+    private double lower, upper, epsilon;
+    protected double guess;
     protected final Graph<V, E> graph;
     protected Graph<V,E> densestSubgraph;
     private Graph<V, DefaultWeightedEdge> currentNetwork;
@@ -112,14 +113,14 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
 
     /**
      * Constructor
-     * @param alg instance of the type of subalgorithm to use
+     * @param clazz MinimumSTCutAlgorithm to use
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmBase(MinimumSTCutAlgorithm<V,E> alg, Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon){
+    public GoldbergMaximumDensitySubgraphAlgorithmBase(Class<? extends MinimumSTCutAlgorithm> clazz, Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon){
         if (graph.containsVertex(s) || graph.containsVertex(t)){
             throw new IllegalArgumentException("Source or sink vertex already in graph");
         }
@@ -129,16 +130,30 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         this.epsilon = epsilon;
         this.guess = 0;
         this.lower = 0;
+        this.upper = this.computeDensityNumerator(this.graph);
         this.checkWeights = checkWeights;
         this.currentNetwork = this.buildNetwork();
         this.currentVertices = new HashSet<>();
         this.initializeNetwork();
+        this.checkForEmptySolution();
         try {
-            this.minSTCutAlg = this.setupMinCutAlg(alg);
+            this.minSTCutAlg = this.setupMinCutAlg(clazz);
         }
         catch (NoSuchMethodException | InstantiationException | IllegalAccessException| InvocationTargetException e){
             throw new IllegalArgumentException("Could not instantiate MinimumSTCutAlgorithm");
         }
+    }
+
+    /**
+     * Convenience constructor that uses PushRelabel as default MinimumSTCutAlgorithm
+     * @param graph input for computation
+     * @param s additional source vertex
+     * @param t additional target vertex
+     * @param checkWeights if true implementation will enforce all internal weights to be positive
+     * @param epsilon to use for internal computation
+     */
+    public GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon){
+        this(PushRelabelMFImpl.class, graph, s,t, checkWeights, epsilon);
     }
 
     /**
@@ -242,15 +257,15 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
 
     /**
      * Wrapper for construction of MinimumSTCutAlgorithm
-     * @param alg instance of the algorithm type to use
+     * @param clazz MinimumSTCutAlgorithm to use
      * @return instance of MinimumSTCutAlgorithm for the constructed network
      */
     private MinimumSTCutAlgorithm<V, DefaultWeightedEdge> setupMinCutAlg(
-        MinimumSTCutAlgorithm<V,E> alg)
+        Class<? extends MinimumSTCutAlgorithm> clazz)
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
         InstantiationException
     {
-        return TypeUtil.uncheckedCast(alg.getClass().getDeclaredConstructor(Graph.class).newInstance(this.currentNetwork));
+        return TypeUtil.uncheckedCast(clazz.getDeclaredConstructor(Graph.class).newInstance(this.currentNetwork));
     }
 
     /**
@@ -266,4 +281,15 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * @return weight of the edge
      */
     protected abstract double getEdgeWeightFromVertexToSink(V vertex);
+
+    /**
+     * @param g the graph to compute the numerator density from
+     * @return numerator part of the density
+     */
+    protected abstract double computeDensityNumerator(Graph<V,E> g);
+
+    /**
+     * Check if densest subgraph will be empty to avoid errors.
+     */
+    protected abstract void checkForEmptySolution();
 }
