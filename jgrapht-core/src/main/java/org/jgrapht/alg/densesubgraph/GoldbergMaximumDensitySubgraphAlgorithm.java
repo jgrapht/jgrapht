@@ -18,8 +18,11 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.function.*;
 
 /**
  * This class computes a maximum density subgraph based on the algorithm described
@@ -57,14 +60,14 @@ import org.jgrapht.graph.*;
 public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> {
     /**
      * Constructor
-     * @param clazz MinimumSTCutAlgorithm to use
+     * @param algFactory factory to construct the algorithm to use
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithm(Class<? extends MinimumSTCutAlgorithm> clazz, Graph<V, E> graph, V s, V t, double epsilon){
-        super(clazz, graph, s,t, false, epsilon);
+    public GoldbergMaximumDensitySubgraphAlgorithm(Graph<V, E> graph, V s, V t, double epsilon, Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
+        super(graph, s,t, false, epsilon, algFactory);
     }
 
     /**
@@ -75,7 +78,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
      * @param epsilon to use for internal computation
      */
     public GoldbergMaximumDensitySubgraphAlgorithm(Graph<V, E> graph, V s, V t, double epsilon){
-        super(graph, s, t, false,epsilon);
+        this(graph, s, t, epsilon, PushRelabelMFImpl::new);
     }
 
     @Override

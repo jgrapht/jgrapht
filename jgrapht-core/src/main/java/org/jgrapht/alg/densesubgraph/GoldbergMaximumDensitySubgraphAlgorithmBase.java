@@ -22,9 +22,8 @@ import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.*;
-import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 /**
@@ -113,14 +112,14 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
 
     /**
      * Constructor
-     * @param clazz MinimumSTCutAlgorithm to use
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmBase(Class<? extends MinimumSTCutAlgorithm> clazz, Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon){
+    public GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights,
+            double epsilon, Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
         if (graph.containsVertex(s) || graph.containsVertex(t)){
             throw new IllegalArgumentException("Source or sink vertex already in graph");
         }
@@ -136,24 +135,9 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         this.currentVertices = new HashSet<>();
         this.initializeNetwork();
         this.checkForEmptySolution();
-        try {
-            this.minSTCutAlg = this.setupMinCutAlg(clazz);
-        }
-        catch (NoSuchMethodException | InstantiationException | IllegalAccessException| InvocationTargetException e){
-            throw new IllegalArgumentException("Could not instantiate MinimumSTCutAlgorithm");
-        }
-    }
-
-    /**
-     * Convenience constructor that uses PushRelabel as default MinimumSTCutAlgorithm
-     * @param graph input for computation
-     * @param s additional source vertex
-     * @param t additional target vertex
-     * @param checkWeights if true implementation will enforce all internal weights to be positive
-     * @param epsilon to use for internal computation
-     */
-    public GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights, double epsilon){
-        this(PushRelabelMFImpl.class, graph, s,t, checkWeights, epsilon);
+        this.minSTCutAlg =
+            (MinimumSTCutAlgorithm<V, DefaultWeightedEdge>) algFactory.apply(
+                (Graph<V, E>) currentNetwork);
     }
 
     /**
@@ -253,19 +237,6 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         }
         this.densestSubgraph = new AsSubgraph<>(graph, currentVertices);
         return this.densestSubgraph;
-    }
-
-    /**
-     * Wrapper for construction of MinimumSTCutAlgorithm
-     * @param clazz MinimumSTCutAlgorithm to use
-     * @return instance of MinimumSTCutAlgorithm for the constructed network
-     */
-    private MinimumSTCutAlgorithm<V, DefaultWeightedEdge> setupMinCutAlg(
-        Class<? extends MinimumSTCutAlgorithm> clazz)
-        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-        InstantiationException
-    {
-        return TypeUtil.uncheckedCast(clazz.getDeclaredConstructor(Graph.class).newInstance(this.currentNetwork));
     }
 
     /**

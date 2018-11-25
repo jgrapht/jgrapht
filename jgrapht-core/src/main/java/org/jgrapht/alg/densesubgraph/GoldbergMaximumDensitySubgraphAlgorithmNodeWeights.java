@@ -23,6 +23,8 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
+import java.util.function.*;
+
 /**
  * This class computes a maximum density subgraph based on the algorithm described
  * by Andrew Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
@@ -61,14 +63,14 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
 
     /**
      * Constructor
-     * @param clazz MinimumSTCutAlgorithm to use
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Class<? extends MinimumSTCutAlgorithm> clazz, Graph<V, E> graph, V s, V t, double epsilon){
-        super(clazz, graph, s,t, true, epsilon);
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon,
+        Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
+        super(graph, s,t, true, epsilon, algFactory);
     }
 
     /**
@@ -79,7 +81,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @param epsilon to use for internal computation
      */
     public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon){
-        super(PushRelabelMFImpl.class, graph, s,t, true, epsilon);
+        this(graph, s, t, epsilon, PushRelabelMFImpl::new);
     }
 
     /**

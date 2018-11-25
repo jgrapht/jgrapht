@@ -35,13 +35,9 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
 
     private MaximumDensitySubgraphAlgorithm<Pair<Integer,Double>, DefaultEdge> constructDefaultSolver(Graph<Pair<Integer,Double>, DefaultEdge> graph)
     {
-        try {
             Pair<Integer, Double> s = new Pair<>(-1,0.0);
             Pair<Integer, Double> t = new Pair<>(-2,0.0);
-            return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<>(DinicMFImpl.class, graph, s,t, DEFAULT_EPS);
-        } catch (Exception e) {
-            return null;
-        }
+            return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<>(graph, s,t, DEFAULT_EPS, DinicMFImpl::new);
     }
 
     @Test
