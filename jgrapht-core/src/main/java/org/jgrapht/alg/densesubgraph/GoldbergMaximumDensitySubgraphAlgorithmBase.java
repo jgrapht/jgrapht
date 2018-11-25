@@ -119,7 +119,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * @param algFactory function to construct the subalgorithm
      */
     public GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights,
-            double epsilon, Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
+            double epsilon, Function<Graph<V,DefaultWeightedEdge>,MinimumSTCutAlgorithm<V,DefaultWeightedEdge>> algFactory){
         if (graph.containsVertex(s) || graph.containsVertex(t)){
             throw new IllegalArgumentException("Source or sink vertex already in graph");
         }
@@ -135,9 +135,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
         this.currentVertices = new HashSet<>();
         this.initializeNetwork();
         this.checkForEmptySolution();
-        this.minSTCutAlg =
-            (MinimumSTCutAlgorithm<V, DefaultWeightedEdge>) algFactory.apply(
-                (Graph<V, E>) currentNetwork);
+        this.minSTCutAlg = algFactory.apply(currentNetwork);
     }
 
     /**

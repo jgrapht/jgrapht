@@ -70,7 +70,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @param algFactory function to construct the subalgorithm
      */
     public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon,
-        Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
+        Function<Graph<V,DefaultWeightedEdge>,MinimumSTCutAlgorithm<V,DefaultWeightedEdge>> algFactory){
         super(graph, s,t, true, epsilon, algFactory);
     }
 

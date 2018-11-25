@@ -66,7 +66,8 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithm(Graph<V, E> graph, V s, V t, double epsilon, Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
+    public GoldbergMaximumDensitySubgraphAlgorithm(Graph<V, E> graph, V s, V t, double epsilon,
+        Function<Graph<V,DefaultWeightedEdge>,MinimumSTCutAlgorithm<V,DefaultWeightedEdge>> algFactory){
         super(graph, s,t, false, epsilon, algFactory);
     }
 
