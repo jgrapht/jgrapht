@@ -18,7 +18,6 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
@@ -117,6 +116,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * @param t additional target vertex
      * @param checkWeights if true implementation will enforce all internal weights to be positive
      * @param epsilon to use for internal computation
+     * @param algFactory function to construct the subalgorithm
      */
     public GoldbergMaximumDensitySubgraphAlgorithmBase(Graph<V, E> graph, V s, V t, boolean checkWeights,
             double epsilon, Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
@@ -240,6 +240,21 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
     }
 
     /**
+     * Computes density of a maximum density subgraph.
+     * @return the actual density of the maximum density subgraph
+     */
+    public double getDensity(){
+        if (this.densestSubgraph == null){
+            this.calculateDensest();
+        }
+        double denominator = computeDensityDenominator(this.densestSubgraph);
+        if (Double.compare(denominator,0) == 0){
+            return 0;
+        }
+        return computeDensityNumerator(this.densestSubgraph)/denominator;
+    }
+
+    /**
      * Getter for network weights of edges su for u in V
      * @param vertex of V
      * @return weight of the edge
@@ -258,6 +273,13 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * @return numerator part of the density
      */
     protected abstract double computeDensityNumerator(Graph<V,E> g);
+
+    /**
+     * @param g the graph to compute the denominator density from
+     * @return numerator part of the density
+     */
+    protected abstract double computeDensityDenominator(Graph<V,E> g);
+
 
     /**
      * Check if densest subgraph will be empty to avoid errors.

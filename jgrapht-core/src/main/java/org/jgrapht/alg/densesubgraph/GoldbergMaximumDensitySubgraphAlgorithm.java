@@ -89,23 +89,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
     }
 
     /**
-     * Computes density of a maximum density subgraph.
-     *
-     * @return the actual density of the maximum density subgraph
-     */
-    public double getDensity(){
-        if (this.densestSubgraph == null){
-            this.calculateDensest();
-        }
-        //avoid dividing by 0
-        int n = this.densestSubgraph.vertexSet().size();
-        if (n == 0){
-            return 0;
-        }
-        return computeDensityNumerator(this.densestSubgraph)/this.densestSubgraph.vertexSet().size();
-    }
-
-    /**
      * Getter for network weights of edges su for u in V
      * @param  v of V
      * @return weight of the edge
@@ -124,8 +107,15 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
             this.graph::getEdgeWeight).sum();
     }
 
-    @Override protected double computeDensityNumerator(Graph<V, E> g){
+    @Override
+    protected double computeDensityNumerator(Graph<V, E> g){
        return g.edgeSet().stream().mapToDouble(
             g::getEdgeWeight).sum();
     }
+
+    @Override
+    protected double computeDensityDenominator(Graph<V, E> g){
+       return g.vertexSet().size();
+    }
+
 }

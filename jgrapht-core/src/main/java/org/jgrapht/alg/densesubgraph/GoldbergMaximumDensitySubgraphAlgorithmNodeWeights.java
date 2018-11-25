@@ -67,6 +67,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @param s additional source vertex
      * @param t additional target vertex
      * @param epsilon to use for internal computation
+     * @param algFactory function to construct the subalgorithm
      */
     public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon,
         Function<Graph<V,E>,MinimumSTCutAlgorithm<V,E>> algFactory){
@@ -84,23 +85,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
         this(graph, s, t, epsilon, PushRelabelMFImpl::new);
     }
 
-    /**
-     * Computes density of a maximum density subgraph.
-     *
-     * @return the actual density of the maximum density subgraph
-     */
-    public double getDensity(){
-        if (this.densestSubgraph == null){
-            this.calculateDensest();
-        }
-        //avoid dividing by 0
-        int n = this.densestSubgraph.vertexSet().size();
-        if (n == 0){
-            return 0;
-        }
-        return computeDensityNumerator(this.densestSubgraph)/this.densestSubgraph.vertexSet().size();
-    }
-
     @Override
     protected double computeDensityNumerator(Graph<V,E> g){
         double sum = g.edgeSet().stream().mapToDouble(
@@ -109,6 +93,11 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
             sum+=v.getSecond();
         }
         return sum;
+    }
+
+    @Override
+    protected double computeDensityDenominator(Graph<V,E> g){
+        return g.vertexSet().size();
     }
 
     @Override
@@ -122,7 +111,8 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
             this.graph::getEdgeWeight).sum() - 2*v.getSecond();
     }
 
-    @Override protected void checkForEmptySolution() {
+    @Override
+    protected void checkForEmptySolution() {
         if (this.graph.vertexSet().isEmpty() && this.graph.edgeSet().isEmpty()){
             this.densestSubgraph = new AsSubgraph<>(this.graph, null);
         }
