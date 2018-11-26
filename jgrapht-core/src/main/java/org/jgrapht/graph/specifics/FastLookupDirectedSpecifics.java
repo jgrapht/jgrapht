@@ -17,12 +17,15 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
+
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.EdgeSetFactory;
 
 /**
  * Fast implementation of DirectedSpecifics. This class uses additional data structures to improve
@@ -135,7 +138,14 @@ public class FastLookupDirectedSpecifics<V, E>
         removeFromIndex(source, target, e);
     }
 
-    private void addToIndex(V sourceVertex, V targetVertex, E e)
+    /**
+     * Add an edge to the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
+     */
+    protected void addToIndex(V sourceVertex, V targetVertex, E e)
     {
         Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
@@ -148,13 +158,15 @@ public class FastLookupDirectedSpecifics<V, E>
         }
     }
 
-    /*
-     * Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges for
-     * a pair of touching vertices, remove the pair from the map.
+    /**
+     * Remove an edge from the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
      */
-    private void removeFromIndex(V sourceVertex, V targetVertex, E e)
+    protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
-
         Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null) {

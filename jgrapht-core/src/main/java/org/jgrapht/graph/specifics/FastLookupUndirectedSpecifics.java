@@ -140,10 +140,14 @@ public class FastLookupUndirectedSpecifics<V, E>
         removeFromIndex(source, target, e);
     }
 
-    /*
-     * Add edge to touchingVerticesToEdgeMap for the UnorderedPair {u,v}
+    /**
+     * Add an edge to the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
      */
-    private void addToIndex(V sourceVertex, V targetVertex, E e)
+    protected void addToIndex(V sourceVertex, V targetVertex, E e)
     {
         Pair<V, V> vertexPair = new UnorderedPair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
@@ -156,11 +160,14 @@ public class FastLookupUndirectedSpecifics<V, E>
         }
     }
 
-    /*
-     * Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges for
-     * a pair of touching vertices, remove the pair from the map.
+    /**
+     * Remove an edge from the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
      */
-    private void removeFromIndex(V sourceVertex, V targetVertex, E e)
+    protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
         Pair<V, V> vertexPair = new UnorderedPair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
