@@ -12,6 +12,7 @@ description: "a Java library of graph theory data structures and algorithms"
 source_link: "https://github.com/jgrapht/jgrapht"
 favicon:     "img/favicon.ico"
 touch_icon:  "img/apple-touch-icon.png"
+google_analytics_key: UA-129653402-1
 github:
   is_project_page: false
 
