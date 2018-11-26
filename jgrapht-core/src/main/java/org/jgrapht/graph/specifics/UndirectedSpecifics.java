@@ -143,6 +143,19 @@ public class UndirectedSpecifics<V, E>
     }
 
     @Override
+    @Deprecated
+    public void addEdgeToTouchingVertices(E e)
+    {
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
+        getEdgeContainer(source).addEdge(e);
+
+        if (!source.equals(target)) {
+            getEdgeContainer(target).addEdge(e);
+        }
+    }
+    
+    @Override
     public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
         getEdgeContainer(sourceVertex).addEdge(e);

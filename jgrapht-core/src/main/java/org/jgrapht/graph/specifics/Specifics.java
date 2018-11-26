@@ -78,6 +78,15 @@ public interface Specifics<V, E>
     /**
      * Adds the specified edge to the edge containers of its source and target vertices.
      * 
+     * @param e the edge
+     * @deprecated Use method {@link #addEdgeToTouchingVertices(Object, Object, Object)} instead.
+     */
+    @Deprecated
+    void addEdgeToTouchingVertices(E e);
+    
+    /**
+     * Adds the specified edge to the edge containers of its source and target vertices.
+     * 
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge

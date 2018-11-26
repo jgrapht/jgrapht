@@ -134,6 +134,16 @@ public class DirectedSpecifics<V, E>
         return null;
     }
 
+    @Override
+    @Deprecated
+    public void addEdgeToTouchingVertices(E e)
+    {
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
+        getEdgeContainer(source).addOutgoingEdge(e);
+        getEdgeContainer(target).addIncomingEdge(e);
+    }
+    
     /**
      * {@inheritDoc}
      */
