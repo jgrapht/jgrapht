@@ -109,22 +109,27 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
     {
-        if (!super.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
+        // first lookup using our own index
+        E edge = getEdge(sourceVertex, targetVertex);
+        if (edge != null) { 
             return false;
         }
-        addToIndex(sourceVertex, targetVertex, e);
-        return true;
+
+        return addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
     }
 
     @Override
     public E computeEdgeToTouchingVerticesIfAbsent(
         V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
     {
-        E e = super.computeEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
-        if (e == null) {
+        // first lookup using our own index
+        E edge = getEdge(sourceVertex, targetVertex);
+        if (edge != null) { 
             return null;
         }
-        addToIndex(sourceVertex, targetVertex, e);
+        
+        E e = edgeSupplier.get();
+        addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
         return e;
     }
 
