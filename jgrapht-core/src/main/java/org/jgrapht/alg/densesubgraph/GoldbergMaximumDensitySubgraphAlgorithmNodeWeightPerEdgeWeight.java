@@ -33,6 +33,7 @@ import java.util.function.*;
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach.
  * <p>
+ * Anpassen -----------
  * This variant of the algorithm assumes the density of a positive real edge and vertex weighted graph G=(V,E)
  * to be defined as \[\frac{\sum\limits_{e \in E} w(e) + \sum\limits_{v \in V} w(v)}{\left|{V}\right|}\]
  * and sets the weights of the network from @link{GoldbergMaximumDensitySubgraphAlgorithmBase} as
@@ -47,6 +48,7 @@ import java.util.function.*;
  * All the math to prove the correctness of these weights is the same.
  * <br>
  * <p>
+ * Anpassen ------------
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{W(W-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
@@ -59,7 +61,7 @@ import java.util.function.*;
  *
  * @author Andre Immig
  */
-public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?,Double>,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E>{
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight<V extends Pair<?,Double>,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E>{
 
     /**
      * Constructor
@@ -69,7 +71,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @param epsilon to use for internal computation
      * @param algFactory function to construct the subalgorithm
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon,
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight(Graph<V, E> graph, V s, V t, double epsilon,
         Function<Graph<V,DefaultWeightedEdge>,MinimumSTCutAlgorithm<V,DefaultWeightedEdge>> algFactory){
         super(graph, s,t, true, epsilon, algFactory);
     }
@@ -81,23 +83,19 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon){
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight(Graph<V, E> graph, V s, V t, double epsilon){
         this(graph, s, t, epsilon, PushRelabelMFImpl::new);
     }
 
     @Override
     protected double computeDensityNumerator(Graph<V,E> g){
-        double sum = g.edgeSet().stream().mapToDouble(
+        return g.edgeSet().stream().mapToDouble(
             g::getEdgeWeight).sum();
-        for (V v: g.vertexSet()){
-            sum+=v.getSecond();
-        }
-        return sum;
     }
 
     @Override
     protected double computeDensityDenominator(Graph<V,E> g){
-        return g.vertexSet().size();
+        return g.vertexSet().stream().mapToDouble(v->v.getSecond()).sum();
     }
 
     @Override
@@ -107,7 +105,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
 
     @Override
     protected double getEdgeWeightFromVertexToSink(V v) {
-        return 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
-            this.graph::getEdgeWeight).sum() - 2*v.getSecond();
+        return 2*guess*v.getSecond() - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
+            this.graph::getEdgeWeight).sum() ;
     }
 }

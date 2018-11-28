@@ -82,13 +82,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
         this(graph, s, t, epsilon, PushRelabelMFImpl::new);
     }
 
-    @Override
-    protected void checkForEmptySolution(){
-        if (this.graph.vertexSet().isEmpty()){
-            this.densestSubgraph = new AsSubgraph<>(this.graph,null);
-        }
-    }
-
     /**
      * Getter for network weights of edges su for u in V
      * @param  v of V
