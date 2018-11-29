@@ -101,4 +101,30 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
         test(g, constructDefaultSolver(g),
             0.001633333, Arrays.asList(0, 2, 4));
     }
+
+    @Test
+    public void testMedium(){
+        DirectedWeightedMultigraph<Integer, DefaultEdge> g = new DirectedWeightedMultigraph<>(DefaultEdge.class);
+        List<Integer> vertices = new ArrayList<>();
+        List<Double> weights = new ArrayList<>();
+        List<Pair<Integer,Integer>> edges = new ArrayList<>();
+        for (int i=0; i<=100;i++){
+            vertices.add(i);
+        }
+        addVertices(g,vertices);
+        for (int i=1; i<=50;i++){
+            edges.add(new Pair<>(i,i/2));
+            weights.add(1/Math.log10(i+1));
+        }
+        for (int j=50; j<=100; j++){
+            edges.add(new Pair<>(j,1));
+            weights.add(100/(double)j);
+        }
+        List<Integer> expected = vertices.subList(50,101);
+        expected.add(0);
+        expected.add(1);
+        expected.add(2);
+        addEdgesAndWeights(g, edges, weights);
+        test(g, constructDefaultSolver(g), 1.411760, expected);
+    }
 }

@@ -102,7 +102,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
     private double lower, upper, epsilon;
     protected double guess;
     protected final Graph<V, E> graph;
-    protected Graph<V,E> densestSubgraph;
+    private Graph<V,E> densestSubgraph;
     private Graph<V, DefaultWeightedEdge> currentNetwork;
     private Set<V> currentVertices;
     private V s,t;

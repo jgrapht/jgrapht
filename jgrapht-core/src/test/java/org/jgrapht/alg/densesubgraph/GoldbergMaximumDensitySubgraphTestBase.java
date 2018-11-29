@@ -5,10 +5,8 @@ import org.jgrapht.alg.interfaces.MaximumDensitySubgraphAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AsSubgraph;
 
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;

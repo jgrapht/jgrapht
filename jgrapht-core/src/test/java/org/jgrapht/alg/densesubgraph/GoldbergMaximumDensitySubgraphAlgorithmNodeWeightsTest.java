@@ -96,4 +96,30 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest extends Gold
         test(g, constructDefaultSolver(g),
             3.76666666, getByIndices(vertices,Arrays.asList(0,1,2,3,4,7)));
     }
+
+    @Test
+    public void testMedium(){
+        DirectedWeightedMultigraph<Pair<Integer,Double>, DefaultEdge> g = new DirectedWeightedMultigraph<>(DefaultEdge.class);
+        List<Pair<Integer,Double>> vertices = new ArrayList<>();
+        List<Double> weights = new ArrayList<>();
+        List<Pair<Pair<Integer,Double>,Pair<Integer,Double>>> edges = new ArrayList<>();
+        for (int i=0; i<=100;i++){
+            vertices.add(new Pair<> (i,1.0));
+        }
+        addVertices(g,vertices);
+        for (int i=1; i<=50;i++){
+            edges.add(new Pair<>(vertices.get(i),vertices.get(i/2)));
+            weights.add(1/Math.log10(i+1));
+        }
+        for (int j=50; j<=100; j++){
+            edges.add(new Pair<>(vertices.get(j),vertices.get(1)));
+            weights.add(100/(double)j);
+        }
+        List<Pair<Integer,Double>> expected = vertices.subList(50,101);
+        expected.add(vertices.get(0));
+        expected.add(vertices.get(1));
+        expected.add(vertices.get(2));
+        addEdgesAndWeights(g, edges, weights);
+        test(g, constructDefaultSolver(g), 2.411760, expected);
+    }
 }
