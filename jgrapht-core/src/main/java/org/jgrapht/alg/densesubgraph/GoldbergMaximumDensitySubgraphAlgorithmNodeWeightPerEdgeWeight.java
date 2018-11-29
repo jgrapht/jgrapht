@@ -104,7 +104,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight<V ex
     }
 
     @Override
-    protected double getEdgeWeightFromVertexToSink(V v) {
+    protected double getEdgeWeightFromVertexToSink(V v){
         return 2*guess*v.getSecond() - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
             this.graph::getEdgeWeight).sum() ;
     }

@@ -96,20 +96,20 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V,E> extends GoldbergMaximu
      * @param v of V
      * @return weight of the edge
      */
-    protected double getEdgeWeightFromVertexToSink(V v) {
+    protected double getEdgeWeightFromVertexToSink(V v){
         return this.graph.edgeSet().size() + 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
             this.graph::getEdgeWeight).sum();
     }
 
     @Override
     protected double computeDensityNumerator(Graph<V, E> g){
-       return g.edgeSet().stream().mapToDouble(
+        return g.edgeSet().stream().mapToDouble(
             g::getEdgeWeight).sum();
     }
 
     @Override
     protected double computeDensityDenominator(Graph<V, E> g){
-       return g.vertexSet().size();
+        return g.vertexSet().size();
     }
 
 }
