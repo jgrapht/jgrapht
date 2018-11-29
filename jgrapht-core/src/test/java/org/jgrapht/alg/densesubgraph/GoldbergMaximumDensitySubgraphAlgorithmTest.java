@@ -4,10 +4,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
-
 import java.util.*;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link GoldbergMaximumDensitySubgraphAlgorithm}
@@ -16,10 +13,23 @@ import static org.junit.Assert.assertEquals;
  */
 
 
-public class GoldbergMaximumDensitySubgraphAlgorithmTest
-{
+public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximumDensitySubgraphTestBase<Integer, DefaultEdge>{
 
-    private final double DEFAULT_EPS = Math.pow(10,-5);
+    @Override
+    protected MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph){
+        return new GoldbergMaximumDensitySubgraphAlgorithm<>(graph, s,t, DEFAULT_EPS);
+    }
+
+    @Override
+    protected Integer getAdditionalSource(){
+        return -1;
+    }
+
+    @Override
+    protected Integer getAdditionalSink(){
+        return -2;
+    }
+
     @Test
     public void testMinimal(){
         WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
@@ -27,15 +37,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest
         g.addVertex(1);
         g.setEdgeWeight(g.addEdge(0,1),10);
         test(g, constructDefaultSolver(g), 5, new LinkedHashSet<>(Arrays.asList(0,1)));
-    }
-
-    private MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph)
-    {
-        try {
-            return new GoldbergMaximumDensitySubgraphAlgorithm<>(graph, -1, -2, DEFAULT_EPS);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     @Test
@@ -103,13 +104,5 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest
         g.setEdgeWeight(g.addEdge(2,3),0.001);
         test(g, constructDefaultSolver(g),
             0.001633333, new LinkedHashSet<>(Arrays.asList(0, 2, 4)));
-    }
-
-    public void test(Graph<Integer,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Integer,
-                         DefaultEdge> solver, double expectedDensity, Set<Integer> expectedVertices){
-        Graph<Integer,DefaultEdge> computed = solver.calculateDensest();
-        assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
-        Graph<Integer, DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);
-        assertEquals(expected, computed);
     }
 }

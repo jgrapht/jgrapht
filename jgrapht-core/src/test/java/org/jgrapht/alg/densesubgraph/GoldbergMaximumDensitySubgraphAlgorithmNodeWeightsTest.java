@@ -6,10 +6,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
-
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 /**
  * Tests for {@link GoldbergMaximumDensitySubgraphAlgorithm}
@@ -18,10 +15,22 @@ import static org.junit.Assert.*;
  */
 
 
-public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
-{
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest extends GoldbergMaximumDensitySubgraphTestBase<Pair<Integer,Double>, DefaultEdge>{
 
-    private final double DEFAULT_EPS = Math.pow(10,-5);
+    protected MaximumDensitySubgraphAlgorithm<Pair<Integer,Double>, DefaultEdge> constructDefaultSolver(Graph<Pair<Integer,Double>, DefaultEdge> graph){
+        return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<>(graph, s,t, DEFAULT_EPS, DinicMFImpl::new);
+    }
+
+    @Override
+    protected Pair<Integer, Double> getAdditionalSink(){
+        return new Pair<>(-1,0.0);
+    }
+
+    @Override
+    protected Pair<Integer, Double> getAdditionalSource(){
+        return new Pair<>(-2,0.0);
+    }
+
     @Test
     public void testMinimal(){
         SimpleDirectedWeightedGraph<Pair<Integer,Double>, DefaultEdge> g = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
@@ -31,13 +40,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
         g.addVertex(v2);
         g.setEdgeWeight(g.addEdge(v1,v2),10);
         test(g, constructDefaultSolver(g), 7, new LinkedHashSet<>(Arrays.asList(v1,v2)));
-    }
-
-    private MaximumDensitySubgraphAlgorithm<Pair<Integer,Double>, DefaultEdge> constructDefaultSolver(Graph<Pair<Integer,Double>, DefaultEdge> graph)
-    {
-            Pair<Integer, Double> s = new Pair<>(-1,0.0);
-            Pair<Integer, Double> t = new Pair<>(-2,0.0);
-            return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<>(graph, s,t, DEFAULT_EPS, DinicMFImpl::new);
     }
 
     @Test
@@ -95,13 +97,5 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsTest
         test(g, constructDefaultSolver(g),
             3.76666666, new LinkedHashSet<>(Arrays.asList(vertices.get(0),vertices.get(1),vertices.get(2),vertices.get(3),
             vertices.get(4),vertices.get(7))));
-    }
-
-    public void test(Graph<Pair<Integer,Double>,DefaultEdge> g, MaximumDensitySubgraphAlgorithm<Pair<Integer,Double>,DefaultEdge> solver,
-        double expectedDensity, Set<Pair<Integer,Double>> expectedVertices){
-        Graph<Pair<Integer,Double>,DefaultEdge> computed = solver.calculateDensest();
-        assertEquals(expectedDensity, solver.getDensity(), DEFAULT_EPS);
-        Graph<Pair<Integer,Double>,DefaultEdge> expected = new AsSubgraph<>(g, expectedVertices);
-        assertEquals(expected, computed);
     }
 }
