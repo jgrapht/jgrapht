@@ -264,7 +264,7 @@ public class DirectedSpecifics<V, E>
 
     /**
      * {@inheritDoc}
-     * @deprecated Use method {@link #removeEdgeToTouchingVertices(Object, Object, Object)} instead.
+     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)} instead.
      */
     @Override
     @Deprecated

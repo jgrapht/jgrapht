@@ -175,7 +175,7 @@ public interface Specifics<V, E>
      * Removes the specified edge from the edge containers of its source and target vertices.
      *
      * @param e the edge
-     * @deprecated Use method {@link #removeEdgeToTouchingVertices(Object, Object, Object)} instead.
+     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)} instead.
      */
     @Deprecated
     void removeEdgeFromTouchingVertices(E e);
