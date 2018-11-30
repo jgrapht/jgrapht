@@ -95,7 +95,8 @@ public interface Specifics<V, E>
     boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e);
 
     /**
-     * Adds a new edge to the edge containers of its source and target vertices.
+     * Adds the specified edge to the edge containers of its source and target vertices only
+     * if the edge is not already in the graph.
      * 
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
@@ -105,7 +106,9 @@ public interface Specifics<V, E>
     boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e);
     
     /**
-     * Adds a new edge to the edge containers of its source and target vertices.
+     * Computes an edge given an edge supplier and adds it to the edge containers of its source 
+     * and target vertices only if the graph does not contain other edges with the same source and 
+     * target vertices. 
      * 
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
