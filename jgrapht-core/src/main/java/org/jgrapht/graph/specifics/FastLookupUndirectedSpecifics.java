@@ -121,7 +121,7 @@ public class FastLookupUndirectedSpecifics<V, E>
     }
 
     @Override
-    public E computeEdgeToTouchingVerticesIfAbsent(
+    public E createEdgeToTouchingVerticesIfAbsent(
         V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
     {
         // first lookup using our own index
@@ -136,6 +136,7 @@ public class FastLookupUndirectedSpecifics<V, E>
     }
 
     @Override
+    @Deprecated
     public void removeEdgeFromTouchingVertices(E e)
     {
         super.removeEdgeFromTouchingVertices(e);
@@ -143,6 +144,14 @@ public class FastLookupUndirectedSpecifics<V, E>
         V source = graph.getEdgeSource(e);
         V target = graph.getEdgeTarget(e);
         removeFromIndex(source, target, e);
+    }
+    
+    @Override
+    public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
+    {
+        super.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+
+        removeFromIndex(sourceVertex, targetVertex, e);
     }
 
     /**

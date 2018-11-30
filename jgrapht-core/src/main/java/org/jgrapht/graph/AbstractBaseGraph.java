@@ -226,7 +226,7 @@ public abstract class AbstractBaseGraph<V, E>
 
         if (!type.isAllowingMultipleEdges()) {
             E e = specifics
-                .computeEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
+                .createEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
             if (e != null && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
                 return e;
             }

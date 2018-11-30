@@ -184,7 +184,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     @Override
-    public E computeEdgeToTouchingVerticesIfAbsent(
+    public E createEdgeToTouchingVerticesIfAbsent(
         V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
     {
         // lookup for edge with same source and target
@@ -277,8 +277,10 @@ public class UndirectedSpecifics<V, E>
 
     /**
      * {@inheritDoc}
+     * @deprecated Use method {@link #removeEdgeToTouchingVertices(Object, Object, Object)} instead.
      */
     @Override
+    @Deprecated
     public void removeEdgeFromTouchingVertices(E e)
     {
         V source = graph.getEdgeSource(e);
@@ -288,6 +290,19 @@ public class UndirectedSpecifics<V, E>
 
         if (!source.equals(target)) {
             getEdgeContainer(target).removeEdge(e);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
+    {
+        getEdgeContainer(sourceVertex).removeEdge(e);
+
+        if (!sourceVertex.equals(targetVertex)) {
+            getEdgeContainer(targetVertex).removeEdge(e);
         }
     }
 
