@@ -451,7 +451,7 @@ public abstract class AbstractBaseGraph<V, E>
         E e = getEdge(sourceVertex, targetVertex);
 
         if (e != null) {
-            specifics.removeEdgeFromTouchingVertices(e);
+            specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
             intrusiveEdgesSpecifics.remove(e);
         }
 
@@ -465,7 +465,9 @@ public abstract class AbstractBaseGraph<V, E>
     public boolean removeEdge(E e)
     {
         if (containsEdge(e)) {
-            specifics.removeEdgeFromTouchingVertices(e);
+            V sourceVertex = getEdgeSource(e);
+            V targetVertex = getEdgeTarget(e);
+            specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
             intrusiveEdgesSpecifics.remove(e);
             return true;
         } else {
