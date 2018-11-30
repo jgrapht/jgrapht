@@ -246,10 +246,10 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
             this.calculateDensest();
         }
         double denominator = computeDensityDenominator(this.densestSubgraph);
-        if (Double.compare(denominator,0) == 0){
-            return 0;
+        if (denominator != 0){
+            return computeDensityNumerator(this.densestSubgraph)/denominator;
         }
-        return computeDensityNumerator(this.densestSubgraph)/denominator;
+        return 0;
     }
 
     /**
@@ -283,7 +283,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * Check if denominator will be empty to avoid dividing by 0.
      */
     private void checkForEmptySolution(){
-        if (this.computeDensityDenominator(this.graph) == 0){
+        if (! (this.computeDensityDenominator(this.graph) != 0)){
             this.densestSubgraph = new AsSubgraph<>(this.graph,null);
         }
     }

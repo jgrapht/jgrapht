@@ -33,7 +33,6 @@ import java.util.function.*;
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach.
  * <p>
- * Anpassen -----------
  * This variant of the algorithm assumes the density of a positive real edge and vertex weighted graph G=(V,E)
  * to be defined as \[\frac{\sum\limits_{e \in E} w(e) + \sum\limits_{v \in V} w(v)}{\left|{V}\right|}\]
  * and sets the weights of the network from @link{GoldbergMaximumDensitySubgraphAlgorithmBase} as
@@ -48,7 +47,6 @@ import java.util.function.*;
  * All the math to prove the correctness of these weights is the same.
  * <br>
  * <p>
- * Anpassen ------------
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{W(W-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
