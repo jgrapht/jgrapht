@@ -213,9 +213,8 @@ public class DirectedSpecifics<V, E>
 
         if (graph.getType().isAllowingSelfLoops()) {
             for (E e : getEdgeContainer(vertex).outgoing) {
-                V source = graph.getEdgeSource(e);
                 V target = graph.getEdgeTarget(e);
-                if (!source.equals(target)) {
+                if (!vertex.equals(target)) {
                     inAndOut.add(e);
                 }
             }
