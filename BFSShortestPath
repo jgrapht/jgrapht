@@ -1,0 +1,126 @@
+/*
+ * (C) Copyright 2018-2018, by Divyanshu Thakur and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+
+
+
+/*
+Time Complexity : O(V + E)
+Auxiliary Space : O(V)
+*/
+
+import java.util.*;
+public class BFSShortestPath 
+{	
+	// BFS algo implementation to traverse the Graph 
+	static boolean BFS(LinkedList<Integer>[] graph, int src, int dest, int v, int pred[], int dist[])
+	{
+		Queue<Integer> queue=new LinkedList<>();
+		boolean visited[]=new boolean[v];
+		
+		for(int i=0;i<v;i++)
+		{
+			visited[i]=false;
+			dist[i]=Integer.MAX_VALUE;
+			pred[i]=-1;
+		}
+		
+		visited[src]=true;
+		dist[src]=0;
+		queue.add(src);
+		
+		while(!queue.isEmpty())
+		{
+			int u=queue.element();
+			queue.remove();
+			
+			for(int i=0;i<graph[u].size();i++)
+			{
+				if(visited[graph[u].get(i)]==false)
+				{
+					visited[graph[u].get(i)]=true;
+					dist[graph[u].get(i)]=dist[u]+1;
+					pred[graph[u].get(i)]=u;
+					queue.add(graph[u].get(i));
+					
+					if(graph[u].get(i)==dest)
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	// Method to print the shortest distance.
+	static void printShortestDistance(LinkedList<Integer>[] graph, int s, int dest, int v)
+	{
+		int pred[]=new int[v];
+		int dist[]=new int[v];
+		
+		// If there is no path from source to destination return.
+		if(BFS(graph, s, dest, v, pred, dist)==false)
+		{
+			System.out.println("Given source and destination are not connected");
+			return;
+		}
+		Vector<Integer> path=new Vector();
+		int crawl=dest;
+		path.add(crawl);
+		while(pred[crawl]!=-1)
+		{
+			path.add(pred[crawl]);
+			crawl=pred[crawl];
+		}
+		System.out.println("Shortest path length is:"+ dist[dest]);
+		System.out.println();
+		System.out.print("Path is -> ");
+		for(int i=path.size()-1;i>=0;i--)
+			System.out.print(path.get(i)+" ");
+	}
+	
+	//Add edges
+	static void add_edge(LinkedList<Integer>[] graph, int src, int dest)
+	{
+		graph[src].add(dest);
+		graph[dest].add(src);
+	}
+	
+	public static void main(String[] args)
+	{
+		int v=8;
+		LinkedList<Integer> graph[]=new LinkedList[v];
+
+		for(int i=0;i<v;i++)
+            graph[i] = new LinkedList<>(); 
+		// Construct the Graph
+		add_edge(graph, 0, 1);
+		add_edge(graph, 0, 3); 
+    	add_edge(graph, 1, 2); 
+	    add_edge(graph, 3, 4); 
+	    add_edge(graph, 3, 7); 
+	    add_edge(graph, 4, 5); 
+	    add_edge(graph, 4, 6); 
+	    add_edge(graph, 4, 7); 
+	    add_edge(graph, 5, 6); 
+	    add_edge(graph, 6, 7);
+	    
+	    int source = 0, dest = 7; 
+
+	    printShortestDistance(graph, source, dest, v);
+	}
+
+}
