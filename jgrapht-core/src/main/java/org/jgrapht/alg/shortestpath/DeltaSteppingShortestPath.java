@@ -23,21 +23,24 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * An implementation of the parallel version of the delta-stepping algorithm.
+ * Concurrent implementation implementation of the parallel version of the delta-stepping algorithm.
  *
  * <p>
  * The time complexity of the algorithm is
@@ -95,6 +98,11 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * Default value for {@link #parallelism}.
      */
     private static final int DEFAULT_PARALLELISM = Runtime.getRuntime().availableProcessors();
+    /**
+     * Empirically computed amount of tasks per worker thread in
+     * the {@link ForkJoinPool} that yields good performance.
+     */
+    private static final int TASKS_TO_THREADS_RATIO = 20;
 
     /**
      * The bucket width. A bucket with index $i$ therefore stores
@@ -115,18 +123,6 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * Maximum edge weight in the {@link #graph}.
      */
     private double maxEdgeWeight;
-
-    /**
-     * Map with light edges for each vertex. An edge is considered
-     * light if its weight is less than or equal to {@link #delta}.
-     */
-    private Map<V, Set<E>> light;
-    /**
-     * Map with heavy edges for each vertex. An edge is
-     * considered heavy if its weight is greater than {@link #delta}.
-     */
-    private Map<V, Set<E>> heavy;
-
     /**
      * Map to store predecessor for each vertex in the shortest path tree.
      */
@@ -134,7 +130,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     /**
      * Buckets structure.
      */
-    private BucketStructure bucketStructure;
+    private Set[] bucketStructure;
 
     /**
      * Executor to which relax tasks will be submitted.
@@ -206,14 +202,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         }
         this.delta = delta;
         this.parallelism = parallelism;
-        light = new ConcurrentHashMap<>(graph.vertexSet().size());
-        heavy = new ConcurrentHashMap<>(graph.vertexSet().size());
         distanceAndPredecessorMap = new ConcurrentHashMap<>(graph.vertexSet().size());
         executor = Executors.newFixedThreadPool(parallelism);
         completionService = new ExecutorCompletionService<>(executor);
         verticesQueue = new ConcurrentLinkedQueue<>();
-        lightRelaxTask = new RelaxTask(verticesQueue, light);
-        heavyRelaxTask = new RelaxTask(verticesQueue, heavy);
+        lightRelaxTask = new LightRelaxTask(verticesQueue);
+        heavyRelaxTask = new HeavyRelaxTask(verticesQueue);
     }
 
     /**
@@ -222,18 +216,65 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * @return max edge weight
      */
     private double getMaxEdgeWeight() {
-        double result = 0.0;
-        double weight;
-        for (E defaultWeightedEdge : graph.edgeSet()) {
-            weight = graph.getEdgeWeight(defaultWeightedEdge);
-            if (weight < 0) {
-                throw new IllegalArgumentException(NEGATIVE_EDGE_WEIGHT_NOT_ALLOWED);
-            }
-            if (weight > result) {
-                result = weight;
+        ForkJoinTask<Double> task = ForkJoinPool.commonPool().submit(
+                new MaxEdgeWeightTask(
+                        graph.edgeSet().spliterator(),
+                        graph.edgeSet().size() / (TASKS_TO_THREADS_RATIO * parallelism) + 1));
+        return task.join();
+    }
+
+    /**
+     * Is used during the algorithm to compute maximum edge weight of the {@link #graph}.
+     */
+    class MaxEdgeWeightTask extends RecursiveTask<Double> {
+        /**
+         * Is used to split a collection and create new recursive tasks during the computation.
+         */
+        Spliterator<E> spliterator;
+        /**
+         * Amount of vertices at which he computation of performed sequentially.
+         */
+        long loadBalancing;
+
+        /**
+         * Constructs a new instance for the given spliterator and loadBalancing
+         *
+         * @param spliterator   spliterator
+         * @param loadBalancing loadBalancing
+         */
+        MaxEdgeWeightTask(Spliterator<E> spliterator, long loadBalancing) {
+            this.spliterator = spliterator;
+            this.loadBalancing = loadBalancing;
+        }
+
+        /**
+         * Computes maximum edge weight. If amount of vertices in
+         * {@link #spliterator} is less than {@link #loadBalancing},
+         * then computation is performed sequentially. If not, the
+         * {@link #spliterator} is used to split the collection and
+         * two new child tasks are created.
+         *
+         * @return max edge weight
+         */
+        @Override
+        protected Double compute() {
+            if (spliterator.estimateSize() <= loadBalancing) {
+                double[] max = {0};
+                spliterator.forEachRemaining(e -> {
+                    double weight = graph.getEdgeWeight(e);
+                    if (weight < 0) {
+                        throw new IllegalArgumentException(NEGATIVE_EDGE_WEIGHT_NOT_ALLOWED);
+                    }
+                    max[0] = Math.max(weight, max[0]);
+                });
+                return max[0];
+            } else {
+                MaxEdgeWeightTask t1 = new MaxEdgeWeightTask(spliterator.trySplit(), loadBalancing);
+                t1.fork();
+                MaxEdgeWeightTask t2 = new MaxEdgeWeightTask(spliterator, loadBalancing);
+                return Math.max(t2.compute(), t1.join());
             }
         }
-        return result;
     }
 
     /**
@@ -262,9 +303,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         if (delta == 0.0) {
             delta = findDelta();
         }
-        numOfBuckets = numOfBuckets();
-        bucketStructure = new BucketStructure(numOfBuckets);
-        fillMaps();
+        numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
+        bucketStructure = new Set[numOfBuckets];
+        for (int i = 0; i < numOfBuckets; i++) {
+            bucketStructure[i] = new ConcurrentSkipListSet();
+        }
+        fillDistanceAndPredecessorMap();
 
         computeShortestPaths(source);
 
@@ -288,25 +332,14 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Fills {@link #light}, {@link #heavy}
+     * Fills {@link #distanceAndPredecessorMap} concurrently.
      */
-    private void fillMaps() {
-        graph.vertexSet().parallelStream().forEach(v -> {
-            light.put(v, new HashSet<>());
-            heavy.put(v, new HashSet<>());
-            distanceAndPredecessorMap.put(v, Pair.of(Double.POSITIVE_INFINITY, null));
-            for (E e : graph.outgoingEdgesOf(v)) {
-                if (graph.getEdgeWeight(e) > delta) {
-                    heavy.get(v).add(e);
-                } else {
-                    light.get(v).add(e);
-                }
-            }
-        });
+    private void fillDistanceAndPredecessorMap() {
+        graph.vertexSet().parallelStream().forEach(v -> distanceAndPredecessorMap.put(v, Pair.of(Double.POSITIVE_INFINITY, null)));
     }
 
     /**
-     * Performs shortest paths computation.
+     * Performs computation of the shortest paths .
      *
      * @param source the source vertex
      */
@@ -315,18 +348,21 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
         int firstNonEmptyBucket = 0;
         List<Set<V>> removed = new ArrayList<>();
-        while (firstNonEmptyBucket != -1) {
-            Set<V> bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
+        while (firstNonEmptyBucket < numOfBuckets) {
+            Set<V> bucketElements = getContentAndReplace(firstNonEmptyBucket);
 
             while (!bucketElements.isEmpty()) {
                 removed.add(bucketElements);
                 findAndRelaxLightRequests(bucketElements);
-                bucketElements = bucketStructure.getContentAndReplace(firstNonEmptyBucket);
+                bucketElements = getContentAndReplace(firstNonEmptyBucket);
             }
 
             findAndRelaxHeavyRequests(removed);
             removed.clear();
-            firstNonEmptyBucket = bucketStructure.firstNonEmptyBucket();
+            ++firstNonEmptyBucket;
+            while (firstNonEmptyBucket < numOfBuckets && bucketStructure[firstNonEmptyBucket].isEmpty()) {
+                ++firstNonEmptyBucket;
+            }
         }
         shutDownExecutor();
     }
@@ -374,11 +410,10 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Manages execution of edges relaxation.
-     * Adds all the elements from {@code vertices}
-     * the the {@link #verticesQueue} and submits
-     * as many {@link #heavyRelaxTask} to the {@link #completionService}
-     * as needed.
+     * Manages execution of edges relaxation. Adds all
+     * elements from {@code vertices} to the {@link #verticesQueue}
+     * and submits as many {@link #heavyRelaxTask} to the
+     * {@link #completionService} as needed.
      *
      * @param verticesSets set of sets of vertices
      */
@@ -492,7 +527,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Performs relaxation in parallel-safe fashion. Synchronises by {@code vertex}
+     * Performs relaxation in parallel-safe fashion. Synchronises by {@code vertex},
      * then if new tentative distance is less then removes {@code v} from the old bucket,
      * adds is to the new bucket and updates {@link #distanceAndPredecessorMap} value for {@code v}.
      *
@@ -506,21 +541,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             Pair<Double, E> oldData = distanceAndPredecessorMap.get(v);
             if (distance < oldData.getFirst()) {
                 if (!oldData.getFirst().equals(Double.POSITIVE_INFINITY)) {
-                    bucketStructure.remove(bucketIndex(oldData.getFirst()), v);
+                    bucketStructure[bucketIndex(oldData.getFirst())].remove(v);
                 }
-                bucketStructure.add(updatedBucket, v);
+                bucketStructure[updatedBucket].add(v);
                 distanceAndPredecessorMap.put(v, Pair.of(distance, e));
             }
         }
-    }
-
-    /**
-     * Calculates the number of buckets in the bucket structure.
-     *
-     * @return num of buckets
-     */
-    private int numOfBuckets() {
-        return (int) (Math.ceil(maxEdgeWeight / delta) + 1);
     }
 
     /**
@@ -530,32 +556,39 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * @return bucket index
      */
     private int bucketIndex(double distance) {
-        return ((int) Math.round(distance / delta)) % numOfBuckets;
+        return (int) Math.round(distance / delta) % numOfBuckets;
     }
 
     /**
-     * Represents task that is submitted to the {@link #completionService}
-     * during shortest path computation.
+     * Replaces the bucket at the {@code bucketIndex} index with a new instance of the {@link ConcurrentSkipListSet}.
+     * Return the reference to the set that was previously in the bucket.
+     *
+     * @param bucketIndex bucket index
+     * @return content of the bucket
      */
-    class RelaxTask implements Runnable {
+    private Set getContentAndReplace(int bucketIndex) {
+        Set result = bucketStructure[bucketIndex];
+        bucketStructure[bucketIndex] = new ConcurrentSkipListSet<V>();
+        return result;
+    }
+
+    /**
+     * Task that is submitted to the {@link #completionService}
+     * during shortest path computation for light relax requests relaxation.
+     */
+    class LightRelaxTask implements Runnable {
         /**
          * Vertices which edges will be relaxed.
          */
         private ConcurrentLinkedQueue<V> vertices;
-        /**
-         * Maps vertices to their edges.
-         */
-        private Map<V, Set<E>> edgesKind;
 
         /**
          * Constructs instance of a new task.
          *
-         * @param vertices  vertices
-         * @param edgesKind edges
+         * @param vertices vertices
          */
-        RelaxTask(ConcurrentLinkedQueue<V> vertices, Map<V, Set<E>> edgesKind) {
+        LightRelaxTask(ConcurrentLinkedQueue<V> vertices) {
             this.vertices = vertices;
-            this.edgesKind = edgesKind;
         }
 
         /**
@@ -571,8 +604,10 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
                         break;
                     }
                 } else {
-                    for (E e : edgesKind.get(v)) {
-                        relax(Graphs.getOppositeVertex(graph, e, v), e, distanceAndPredecessorMap.get(v).getFirst() + graph.getEdgeWeight(e));
+                    for (E e : graph.outgoingEdgesOf(v)) {
+                        if (graph.getEdgeWeight(e) <= delta) {
+                            relax(Graphs.getOppositeVertex(graph, e, v), e, distanceAndPredecessorMap.get(v).getFirst() + graph.getEdgeWeight(e));
+                        }
                     }
                 }
             }
@@ -580,88 +615,44 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Implements bucket structure.
+     * Task that is submitted to the {@link #completionService}
+     * during shortest path computation for light relax requests relaxation.
      */
-    class BucketStructure {
+    class HeavyRelaxTask implements Runnable {
         /**
-         * Buckets.
+         * Vertices which edges will be relaxed.
          */
-        private final Set[] buckets;
-        /**
-         * Length of {@link #buckets}.
-         */
-        private int numOfBuckets;
+        private ConcurrentLinkedQueue<V> vertices;
 
         /**
-         * Constructs a new instance of the buckets structure.
-         * Initializes every bucket in the {@link #buckets} with
-         * an instance of the {@link ConcurrentSkipListSet} object.
+         * Constructs instance of a new task.
          *
-         * @param numOfBuckets num of buckets
+         * @param vertices vertices
          */
-        BucketStructure(int numOfBuckets) {
-            buckets = new Set[numOfBuckets];
-            for (int i = 0; i < buckets.length; i++) {
-                buckets[i] = new ConcurrentSkipListSet<V>();
-            }
-            this.numOfBuckets = numOfBuckets;
+        HeavyRelaxTask(ConcurrentLinkedQueue<V> vertices) {
+            this.vertices = vertices;
         }
 
         /**
-         * Adds vertex {@code v} to the bucket indicated by {@code bucket} index.
-         *
-         * @param bucket bucket index
-         * @param v      vertex
+         * Performs relaxation of edges emanating from {@link #vertices}.
          */
-        void add(int bucket, V v) {
-            buckets[bucket].add(v);
-        }
+        @Override
+        public void run() {
 
-        /**
-         * Removes vertex {@code v} from the bucket indicated by {@code bucket} index.
-         *
-         * @param bucket bucket index
-         * @param v      vertex
-         */
-        void remove(int bucket, V v) {
-            buckets[bucket].remove(v);
-        }
-
-        /**
-         * Return vertex set of the bucket indicated by the index {@code bucket}
-         * and replace if with a new instance of the {@link ConcurrentSkipListSet} object.
-         *
-         * @param bucket bucket index
-         * @return set of vertices
-         */
-        Set<V> getContentAndReplace(int bucket) {
-            Set<V> result = (Set<V>) buckets[bucket];
-            buckets[bucket] = new ConcurrentSkipListSet<V>();
-            return result;
-        }
-
-        /**
-         * Calculates the index of the first non-empty bucket
-         * or $-1$ if the buckets structure is empty.
-         *
-         * @return index of the first non-empty bucket
-         */
-        int firstNonEmptyBucket() {
-            for (int i = 0; i < numOfBuckets; i++) {
-                if (!buckets[i].isEmpty()) {
-                    return i;
+            while (true) {
+                V v = vertices.poll();
+                if (v == null) {
+                    if (allVerticesAdded && vertices.isEmpty()) {
+                        break;
+                    }
+                } else {
+                    for (E e : graph.outgoingEdgesOf(v)) {
+                        if (graph.getEdgeWeight(e) > delta) {
+                            relax(Graphs.getOppositeVertex(graph, e, v), e, distanceAndPredecessorMap.get(v).getFirst() + graph.getEdgeWeight(e));
+                        }
+                    }
                 }
             }
-            return -1;
-        }
-
-        /**
-         * Returns <tt>true</tt> if this structure contains at least one non-empty bucket.
-         *
-         * @return <tt>true</tt> if buckets structure contains at least one non-empty bucket
-         */
-        boolean isEmpty() {
-            return firstNonEmptyBucket() == -1;
         }
     }
 }
