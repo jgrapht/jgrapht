@@ -21,6 +21,7 @@ import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.partition.*;
+import org.jgrapht.alg.planar.BoyerMyrvoldPlanarityInspector;
 
 import java.util.*;
 import java.util.stream.*;
@@ -32,6 +33,7 @@ import java.util.stream.*;
  * @author Dimitrios Michail
  * @author Joris Kinable
  * @author Alexandru Valeanu
+ * @author Timofey Chudakov
  */
 public abstract class GraphTests
 {
@@ -543,6 +545,25 @@ public abstract class GraphTests
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new BergeGraphInspector<V, E>().isBerge(graph);
+    }
+
+    /**
+     * Checks that the specified graph is planar. A graph is
+     * <a href="https://en.wikipedia.org/wiki/Planar_graph">planar</a> if it can be drawn on a
+     * two-dimensional plane without any of its edges crossing. The implementation of the method
+     * is delegated to the {@link org.jgrapht.alg.planar.BoyerMyrvoldPlanarityInspector}. Also,
+     * use this class to get a planar embedding of the graph in case it is planar, or a Kuratowski
+     * subgraph as a certificate of nonplanarity.
+     *
+     * @param graph the graph to test planarity of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is planar, false otherwise
+     */
+    public static <V, E> boolean isPlanar(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new BoyerMyrvoldPlanarityInspector<>(graph).isPlanar();
     }
 
     /**
