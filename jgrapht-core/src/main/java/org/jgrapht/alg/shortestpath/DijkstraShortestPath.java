@@ -17,54 +17,97 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.util.Pair;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
+
+import java.util.function.Supplier;
 
 /**
  * An implementation of <a href="http://mathworld.wolfram.com/DijkstrasAlgorithm.html">Dijkstra's
- * shortest path algorithm</a> using a Fibonacci heap.
+ * shortest path algorithm</a> using a pairing heap by default. A custom heap implementation can
+ * by specified during the construction time.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
  * @author John V. Sichi
  */
 public final class DijkstraShortestPath<V, E>
-    extends
-    BaseShortestPathAlgorithm<V, E>
-{
+        extends
+        BaseShortestPathAlgorithm<V, E> {
     private final double radius;
+    private final Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier;
 
     /**
-     * Constructs a new instance of the algorithm for a given graph.
-     * 
+     * Constructs a new instance of the algorithm for a given graph. The constructed algorithm will
+     * use pairing heap as a default heap implementation.
+     *
      * @param graph the graph
      */
-    public DijkstraShortestPath(Graph<V, E> graph)
-    {
-        this(graph, Double.POSITIVE_INFINITY);
+    public DijkstraShortestPath(Graph<V, E> graph) {
+        this(graph, Double.POSITIVE_INFINITY, PairingHeap::new);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph. The constructed algorithm will
+     * use pairing heap as a default heap implementation.
+     *
+     * @param graph  the graph
+     * @param radius limit on path length, or Double.POSITIVE_INFINITY for unbounded search
+     */
+    public DijkstraShortestPath(Graph<V, E> graph, double radius) {
+        this(graph, radius, PairingHeap::new);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph. The constructed algorithm will
+     * use the heap supplied by the {@code heapSupplier}
+     *
+     * @param graph        the graph
+     * @param heapSupplier supplier of the preferable heap implementation
+     */
+    public DijkstraShortestPath(Graph<V, E> graph, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier) {
+        this(graph, Double.POSITIVE_INFINITY, heapSupplier);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given graph.
      *
-     * @param graph the graph
-     * @param radius limit on path length, or Double.POSITIVE_INFINITY for unbounded search
+     * @param graph        the graph
+     * @param radius       limit on path length, or Double.POSITIVE_INFINITY for unbounded search
+     * @param heapSupplier supplier of the preferable heap implementation
      */
-    public DijkstraShortestPath(Graph<V, E> graph, double radius)
-    {
+    public DijkstraShortestPath(Graph<V, E> graph, double radius, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier) {
         super(graph);
         if (radius < 0.0) {
             throw new IllegalArgumentException("Radius must be non-negative");
         }
+        this.heapSupplier = heapSupplier;
         this.radius = radius;
+    }
+
+    /**
+     * Find a path between two vertices. For a more advanced search (e.g. limited by radius or using
+     * another heap), use the constructor instead.
+     *
+     * @param graph  the graph to be searched
+     * @param source the vertex at which the path should start
+     * @param sink   the vertex at which the path should end
+     * @param <V>    the graph vertex type
+     * @param <E>    the graph edge type
+     * @return a shortest path, or null if no path exists
+     */
+    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink) {
+        return new DijkstraShortestPath<>(graph).getPath(source, sink);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GraphPath<V, E> getPath(V source, V sink)
-    {
+    public GraphPath<V, E> getPath(V source, V sink) {
         if (!graph.containsVertex(source)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
@@ -76,7 +119,7 @@ public final class DijkstraShortestPath<V, E>
         }
 
         DijkstraClosestFirstIterator<V, E> it =
-            new DijkstraClosestFirstIterator<>(graph, source, radius);
+                new DijkstraClosestFirstIterator<>(graph, source, radius, heapSupplier);
 
         while (it.hasNext()) {
             V vertex = it.next();
@@ -90,44 +133,25 @@ public final class DijkstraShortestPath<V, E>
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Note that in the case of Dijkstra's algorithm it is more efficient to compute all
      * single-source shortest paths using this method than repeatedly invoking
      * {@link #getPath(Object, Object)} for the same source but different sink vertex.
      */
     @Override
-    public SingleSourcePaths<V, E> getPaths(V source)
-    {
+    public SingleSourcePaths<V, E> getPaths(V source) {
         if (!graph.containsVertex(source)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
 
         DijkstraClosestFirstIterator<V, E> it =
-            new DijkstraClosestFirstIterator<>(graph, source, radius);
+                new DijkstraClosestFirstIterator<>(graph, source, radius, heapSupplier);
 
         while (it.hasNext()) {
             it.next();
         }
 
         return it.getPaths();
-    }
-
-    /**
-     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
-     * the constructor instead.
-     * 
-     * @param graph the graph to be searched
-     * @param source the vertex at which the path should start
-     * @param sink the vertex at which the path should end
-     * 
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     *
-     * @return a shortest path, or null if no path exists
-     */
-    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink)
-    {
-        return new DijkstraShortestPath<>(graph).getPath(source, sink);
     }
 
 }

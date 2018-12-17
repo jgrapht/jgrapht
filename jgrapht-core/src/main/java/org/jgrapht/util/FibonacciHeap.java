@@ -43,7 +43,9 @@ import java.util.*;
  * @param <T> node data type
  *
  * @author Nathan Fiedler
+ * @deprecated Use heaps from jheaps dependency
  */
+@Deprecated
 public class FibonacciHeap<T>
 {
     private static final double ONEOVERLOGPHI = 1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);

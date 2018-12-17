@@ -22,6 +22,8 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 import java.util.*;
 
@@ -217,8 +219,8 @@ public class GreedyMultiplicativeSpanner<V, E>
         SpannerAlgorithmBase
     {
         protected Graph<V, DefaultWeightedEdge> spanner;
-        protected FibonacciHeap<V> heap;
-        protected Map<V, FibonacciHeapNode<V>> nodes;
+        protected AddressableHeap<Double, V> heap;
+        protected Map<V, AddressableHeap.Handle<Double, V>> nodes;
 
         public WeightedSpannerAlgorithm()
         {
@@ -226,8 +228,8 @@ public class GreedyMultiplicativeSpanner<V, E>
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
             }
-            this.heap = new FibonacciHeap<V>();
-            this.nodes = new LinkedHashMap<V, FibonacciHeapNode<V>>();
+            this.heap = new PairingHeap<>();
+            this.nodes = new LinkedHashMap<>();
         }
 
         @Override
@@ -237,14 +239,13 @@ public class GreedyMultiplicativeSpanner<V, E>
             heap.clear();
             nodes.clear();
 
-            FibonacciHeapNode<V> sNode = new FibonacciHeapNode<V>(s);
+            AddressableHeap.Handle<Double, V> sNode = heap.insert(0d, s);
             nodes.put(s, sNode);
-            heap.insert(sNode, 0d);
 
             while (!heap.isEmpty()) {
-                FibonacciHeapNode<V> uNode = heap.removeMin();
+                AddressableHeap.Handle<Double, V> uNode = heap.deleteMin();
                 double uDistance = uNode.getKey();
-                V u = uNode.getData();
+                V u = uNode.getValue();
 
                 if (uDistance > distance) {
                     return false;
@@ -256,15 +257,14 @@ public class GreedyMultiplicativeSpanner<V, E>
 
                 for (DefaultWeightedEdge e : spanner.edgesOf(u)) {
                     V v = Graphs.getOppositeVertex(spanner, e, u);
-                    FibonacciHeapNode<V> vNode = nodes.get(v);
+                    AddressableHeap.Handle<Double, V> vNode = nodes.get(v);
                     double vDistance = uDistance + spanner.getEdgeWeight(e);
 
                     if (vNode == null) { // no distance
-                        vNode = new FibonacciHeapNode<>(v);
+                        vNode = heap.insert(vDistance, v);
                         nodes.put(v, vNode);
-                        heap.insert(vNode, vDistance);
                     } else if (vDistance < vNode.getKey()) {
-                        heap.decreaseKey(vNode, vDistance);
+                        vNode.decreaseKey(vDistance);
                     }
                 }
 

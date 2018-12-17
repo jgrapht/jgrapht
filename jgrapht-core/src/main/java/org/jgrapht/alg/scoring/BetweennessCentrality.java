@@ -40,7 +40,7 @@ import java.util.*;
  * Mathematical Sociology. 25 (2): 163–177.</li>
  * </ul>
  *
- * The running time is $O(nm) and $O(nm +n^2 \log n)$ for unweighted and weighted graph
+ * The running time is $O(nm)$ and $O(nm +n^2 \log n)$ for unweighted and weighted graph
  * respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
  * space complexity is $O(n + m)$.
  *

@@ -17,10 +17,14 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.function.Supplier;
 
 /**
  * A closest-first iterator for a directed or undirected graph. For this iterator to work correctly
@@ -30,22 +34,21 @@ import java.util.*;
  * <p>
  * The metric for <i>closest</i> here is the weighted path length from a start vertex, i.e.
  * Graph.getEdgeWeight(Edge) is summed to calculate path length. Negative edge weights will result
- * in an IllegalArgumentException. Optionally, path length may be bounded by a finite radius.
+ * in an IllegalArgumentException. Optionally, path length may be bounded by a finite radius. A custom
+ * heap implementation can be specified during the construction time. Pairing heap is used by default.
  * </p>
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
  * @author John V. Sichi
  */
 public class ClosestFirstIterator<V, E>
-    extends
-    CrossComponentIterator<V, E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
-{
+        extends
+        CrossComponentIterator<V, E, AddressableHeap.Handle<Double, ClosestFirstIterator.QueueEntry<V, E>>> {
     /**
      * Priority queue of fringe vertices.
      */
-    private FibonacciHeap<QueueEntry<V, E>> heap = new FibonacciHeap<>();
+    private AddressableHeap<Double, QueueEntry<V, E>> heap = new PairingHeap<>();
 
     /**
      * Maximum distance to search.
@@ -60,11 +63,10 @@ public class ClosestFirstIterator<V, E>
      * vertex. If the specified start vertex is <code>null</code>, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
-     * @param g the graph to be iterated.
+     * @param g           the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      */
-    public ClosestFirstIterator(Graph<V, E> g, V startVertex)
-    {
+    public ClosestFirstIterator(Graph<V, E> g, V startVertex) {
         this(g, startVertex, Double.POSITIVE_INFINITY);
     }
 
@@ -76,11 +78,10 @@ public class ClosestFirstIterator<V, E>
      * traversal is treated as if it were over a single connected component with respect to events
      * fired.
      *
-     * @param g the graph to be iterated.
+     * @param g             the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
      */
-    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
-    {
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices) {
         this(g, startVertices, Double.POSITIVE_INFINITY);
     }
 
@@ -91,14 +92,30 @@ public class ClosestFirstIterator<V, E>
      * or equal to the specified radius. The specified start vertex may not be <code>
      * null</code>.
      *
-     * @param g the graph to be iterated.
+     * @param g           the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
-     *        search.
+     * @param radius      limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     *                    search.
      */
-    public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
-    {
-        this(g, startVertex == null ? null : Collections.singletonList(startVertex), radius);
+    public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius) {
+        this(g, startVertex == null ? null : Collections.singletonList(startVertex), radius, PairingHeap::new);
+    }
+
+    /**
+     * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
+     * start at the specified start vertex and will be limited to the subset of the connected
+     * component which includes that vertex and is reachable via paths of weighted length less than
+     * or equal to the specified radius. The specified start vertex may not be <code>
+     * null</code>. This algorithm will use the heap supplied by the {@code heapSupplier}.
+     *
+     * @param g           the graph to be iterated.
+     * @param startVertex the vertex iteration to be started.
+     * @param radius      limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     *                    search.
+     * @param heapSupplier  supplier of the preferable heap implementation
+     */
+    public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius, Supplier<AddressableHeap<Double, QueueEntry<V, E>>> heapSupplier) {
+        this(g, startVertex == null ? null : Collections.singletonList(startVertex), radius, heapSupplier);
     }
 
     /**
@@ -110,13 +127,32 @@ public class ClosestFirstIterator<V, E>
      * the order in which the start vertices are supplied. Because of this, the entire traversal is
      * treated as if it were over a single connected component with respect to events fired.
      *
-     * @param g the graph to be iterated.
+     * @param g             the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
-     *        search.
+     * @param radius        limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     *                      search.
      */
-    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius)
-    {
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius) {
+        this(g, startVertices, radius, PairingHeap::new);
+    }
+
+    /**
+     * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
+     * start at the specified start vertices and will be limited to the subset of the graph
+     * reachable from those vertices via paths of weighted length less than or equal to the
+     * specified radius. The specified collection of start vertices may not be <code>null</code>.
+     * Iteration order is based on minimum distance from any of the start vertices, regardless of
+     * the order in which the start vertices are supplied. Because of this, the entire traversal is
+     * treated as if it were over a single connected component with respect to events fired.
+     * This algorithm will use the heap supplied by the {@code heapSupplier}.
+     *
+     * @param g             the graph to be iterated.
+     * @param startVertices the vertices iteration to be started.
+     * @param radius        limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded
+     *                      search.
+     * @param heapSupplier  supplier of the preferable heap implementation
+     */
+    public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius, Supplier<AddressableHeap<Double, QueueEntry<V, E>>> heapSupplier) {
         super(g, startVertices);
         this.radius = radius;
         checkRadiusTraversal(isCrossComponentTraversal());
@@ -140,8 +176,7 @@ public class ClosestFirstIterator<V, E>
 
     // override AbstractGraphIterator
     @Override
-    public void setCrossComponentTraversal(boolean crossComponentTraversal)
-    {
+    public void setCrossComponentTraversal(boolean crossComponentTraversal) {
         if (initialized) {
             checkRadiusTraversal(crossComponentTraversal);
         }
@@ -154,13 +189,11 @@ public class ClosestFirstIterator<V, E>
      * known upper bound.
      *
      * @param vertex vertex being sought from start vertex
-     *
      * @return weighted length of shortest path known, or Double.POSITIVE_INFINITY if no path found
-     *         yet
+     * yet
      */
-    public double getShortestPathLength(V vertex)
-    {
-        FibonacciHeapNode<QueueEntry<V, E>> node = getSeenData(vertex);
+    public double getShortestPathLength(V vertex) {
+        AddressableHeap.Handle<Double, QueueEntry<V, E>> node = getSeenData(vertex);
 
         if (node == null) {
             return Double.POSITIVE_INFINITY;
@@ -176,31 +209,28 @@ public class ClosestFirstIterator<V, E>
      * spanning tree edge; otherwise, it is the best candidate seen so far.
      *
      * @param vertex the spanned vertex.
-     *
      * @return the spanning tree edge, or null if the vertex either has not been seen yet or is a
-     *         start vertex.
+     * start vertex.
      */
-    public E getSpanningTreeEdge(V vertex)
-    {
-        FibonacciHeapNode<QueueEntry<V, E>> node = getSeenData(vertex);
+    public E getSpanningTreeEdge(V vertex) {
+        AddressableHeap.Handle<Double, QueueEntry<V, E>> node = getSeenData(vertex);
 
         if (node == null) {
             return null;
         }
 
-        return node.getData().spanningTreeEdge;
+        return node.getValue().spanningTreeEdge;
     }
 
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
     @Override
-    protected boolean isConnectedComponentExhausted()
-    {
+    protected boolean isConnectedComponentExhausted() {
         if (heap.size() == 0) {
             return true;
         } else {
-            if (heap.min().getKey() > radius) {
+            if (heap.findMin().getKey() > radius) {
                 heap.clear();
 
                 return true;
@@ -214,17 +244,15 @@ public class ClosestFirstIterator<V, E>
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
     @Override
-    protected void encounterVertex(V vertex, E edge)
-    {
+    protected void encounterVertex(V vertex, E edge) {
         double shortestPathLength;
         if (edge == null) {
             shortestPathLength = 0;
         } else {
             shortestPathLength = calculatePathLength(vertex, edge);
         }
-        FibonacciHeapNode<QueueEntry<V, E>> node = createSeenData(vertex, edge);
-        putSeenData(vertex, node);
-        heap.insert(node, shortestPathLength);
+        AddressableHeap.Handle<Double, QueueEntry<V, E>> handle = heap.insert(shortestPathLength, new QueueEntry<>(vertex, edge));
+        putSeenData(vertex, handle);
     }
 
     /**
@@ -232,14 +260,13 @@ public class ClosestFirstIterator<V, E>
      * shorter path than the old edge.
      *
      * @param vertex the vertex re-encountered
-     * @param edge the edge via which the vertex was re-encountered
+     * @param edge   the edge via which the vertex was re-encountered
      */
     @Override
-    protected void encounterVertexAgain(V vertex, E edge)
-    {
-        FibonacciHeapNode<QueueEntry<V, E>> node = getSeenData(vertex);
+    protected void encounterVertexAgain(V vertex, E edge) {
+        AddressableHeap.Handle<Double, QueueEntry<V, E>> node = getSeenData(vertex);
 
-        if (node.getData().frozen) {
+        if (node.getValue().frozen) {
             // no improvement for this vertex possible
             return;
         }
@@ -247,8 +274,8 @@ public class ClosestFirstIterator<V, E>
         double candidatePathLength = calculatePathLength(vertex, edge);
 
         if (candidatePathLength < node.getKey()) {
-            node.getData().spanningTreeEdge = edge;
-            heap.decreaseKey(node, candidatePathLength);
+            node.getValue().spanningTreeEdge = edge;
+            node.decreaseKey(candidatePathLength);
         }
     }
 
@@ -256,16 +283,14 @@ public class ClosestFirstIterator<V, E>
      * @see CrossComponentIterator#provideNextVertex()
      */
     @Override
-    protected V provideNextVertex()
-    {
-        FibonacciHeapNode<QueueEntry<V, E>> node = heap.removeMin();
-        node.getData().frozen = true;
+    protected V provideNextVertex() {
+        AddressableHeap.Handle<Double, QueueEntry<V, E>> node = heap.deleteMin();
+        node.getValue().frozen = true;
 
-        return node.getData().vertex;
+        return node.getValue().vertex;
     }
 
-    private void assertNonNegativeEdge(E edge)
-    {
+    private void assertNonNegativeEdge(E edge) {
         if (getGraph().getEdgeWeight(edge) < 0) {
             throw new IllegalArgumentException("negative edge weights not allowed");
         }
@@ -276,67 +301,47 @@ public class ClosestFirstIterator<V, E>
      * opposite vertex.
      *
      * @param vertex the vertex for which to calculate the path length.
-     * @param edge the edge via which the path is being extended.
-     *
+     * @param edge   the edge via which the path is being extended.
      * @return calculated path length.
      */
-    private double calculatePathLength(V vertex, E edge)
-    {
+    private double calculatePathLength(V vertex, E edge) {
         assertNonNegativeEdge(edge);
 
         V otherVertex = Graphs.getOppositeVertex(getGraph(), edge, vertex);
-        FibonacciHeapNode<QueueEntry<V, E>> otherEntry = getSeenData(otherVertex);
+        AddressableHeap.Handle<Double, QueueEntry<V, E>> otherEntry = getSeenData(otherVertex);
 
         return otherEntry.getKey() + getGraph().getEdgeWeight(edge);
     }
 
-    private void checkRadiusTraversal(boolean crossComponentTraversal)
-    {
+    private void checkRadiusTraversal(boolean crossComponentTraversal) {
         if (crossComponentTraversal && (radius != Double.POSITIVE_INFINITY)) {
             throw new IllegalArgumentException(
-                "radius may not be specified for cross-component traversal");
+                    "radius may not be specified for cross-component traversal");
         }
-    }
-
-    /**
-     * The first time we see a vertex, make up a new heap node for it.
-     *
-     * @param vertex a vertex which has just been encountered.
-     * @param edge the edge via which the vertex was encountered.
-     *
-     * @return the new heap node.
-     */
-    private FibonacciHeapNode<QueueEntry<V, E>> createSeenData(V vertex, E edge)
-    {
-        QueueEntry<V, E> entry = new QueueEntry<>();
-        entry.vertex = vertex;
-        entry.spanningTreeEdge = edge;
-
-        return new FibonacciHeapNode<>(entry);
     }
 
     /**
      * Private data to associate with each entry in the priority queue.
      */
-    static class QueueEntry<V, E>
-    {
-        /**
-         * Best spanning tree edge to vertex seen so far.
-         */
-        E spanningTreeEdge;
-
+    static class QueueEntry<V, E> {
         /**
          * The vertex reached.
          */
         V vertex;
 
         /**
+         * Best spanning tree edge to vertex seen so far.
+         */
+        E spanningTreeEdge;
+
+        /**
          * True once spanningTreeEdge is guaranteed to be the true minimum.
          */
         boolean frozen;
 
-        QueueEntry()
-        {
+        QueueEntry(V vertex, E spanningTreeEdge) {
+            this.vertex = vertex;
+            this.spanningTreeEdge = spanningTreeEdge;
         }
     }
 }
