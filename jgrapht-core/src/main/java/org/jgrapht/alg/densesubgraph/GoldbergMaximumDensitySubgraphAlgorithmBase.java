@@ -283,7 +283,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
      * Check if denominator will be empty to avoid dividing by 0.
      */
     private void checkForEmptySolution(){
-        if (! (this.computeDensityDenominator(this.graph) != 0)){
+        if (Double.compare(computeDensityDenominator(this.graph),0)==0){
             this.densestSubgraph = new AsSubgraph<>(this.graph,null);
         }
     }

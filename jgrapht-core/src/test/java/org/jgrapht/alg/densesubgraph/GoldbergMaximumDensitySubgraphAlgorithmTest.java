@@ -7,6 +7,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.*;
 import org.junit.*;
 import java.util.*;
+import java.util.function.*;
 import static java.util.Arrays.*;
 
 /**
@@ -17,10 +18,11 @@ import static java.util.Arrays.*;
 
 
 public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximumDensitySubgraphTestBase<Integer, DefaultEdge>{
-
+    
     @Override
-    protected MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructDefaultSolver(Graph<Integer, DefaultEdge> graph){
-        return new GoldbergMaximumDensitySubgraphAlgorithm<>(graph, s,t, DEFAULT_EPS, PushRelabelMFImpl::new);
+    protected MaximumDensitySubgraphAlgorithm<Integer, DefaultEdge> constructSolver( Graph<Integer, DefaultEdge> g,
+        Function<Graph<Integer, DefaultWeightedEdge>, MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge>> alg) {
+        return new GoldbergMaximumDensitySubgraphAlgorithm<>(g, s,t,DEFAULT_EPS, alg);
     }
 
     @Override
@@ -36,14 +38,14 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
     @Test
     public void testEmpty1(){
         WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
-        test(g, constructDefaultSolver(g),0, new ArrayList<>());
+        test(g, constructSolver(g,PushRelabelMFImpl::new),0, new ArrayList<>());
     }
 
     @Test
     public void testEmpty2(){
         WeightedMultigraph<Integer, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
         addVertices(g, asList(0,1));
-        test(g, constructDefaultSolver(g),0, new ArrayList<>());
+        test(g, constructSolver(g,PushRelabelMFImpl::new),0, new ArrayList<>());
     }
 
     @Test
@@ -52,7 +54,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
         addVertices(g, asList(0,1));
         addEdgesAndWeights(g, Collections.singletonList(new Pair<>(0, 1)),
             Collections.singletonList(10.0));
-        test(g, constructDefaultSolver(g), 5, asList(0,1));
+        test(g, constructSolver(g,PushRelabelMFImpl::new), 5, asList(0,1));
     }
 
     @Test
@@ -68,7 +70,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
                             1.0, 1.0,
                             3.0, 1.0);
         addEdgesAndWeights(g,edges,weights);
-        test(g, constructDefaultSolver(g),2, asList(0,2,3,4));
+        test(g, constructSolver(g,PushRelabelMFImpl::new),2, asList(0,2,3,4));
     }
 
     @Test
@@ -86,7 +88,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
                             1.0, 2.0, 1.0,
                             4.0, 1.0);
         addEdgesAndWeights(g,edges,weights);
-        test(g, constructDefaultSolver(g),
+        test(g, constructSolver(g,PushRelabelMFImpl::new),
             2.66666666, asList(0, 1, 2, 3, 4, 7));
     }
 
@@ -101,7 +103,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
                 0.0002, 0.00000001, 0.001,
                 0.0009, 0.003,      0.001);
         addEdgesAndWeights(g,edges,weights);
-        test(g, constructDefaultSolver(g),
+        test(g, constructSolver(g,PushRelabelMFImpl::new),
             0.001633333, asList(0, 2, 4));
     }
 
@@ -128,6 +130,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithmTest extends GoldbergMaximum
         expected.add(1);
         expected.add(2);
         addEdgesAndWeights(g, edges, weights);
-        test(g, constructDefaultSolver(g), 1.411760, expected);
+        test(g, constructSolver(g,PushRelabelMFImpl::new), 1.411760, expected);
     }
 }

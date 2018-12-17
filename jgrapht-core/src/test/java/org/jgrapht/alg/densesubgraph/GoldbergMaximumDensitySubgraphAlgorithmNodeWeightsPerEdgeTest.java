@@ -7,6 +7,7 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 import java.util.*;
+import java.util.function.*;
 import static java.util.Arrays.*;
 
 /**
@@ -19,8 +20,12 @@ import static java.util.Arrays.*;
 public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
     extends GoldbergMaximumDensitySubgraphTestBase<Pair<Integer,Double>, DefaultEdge>{
 
-    protected MaximumDensitySubgraphAlgorithm<Pair<Integer,Double>, DefaultEdge> constructDefaultSolver(Graph<Pair<Integer,Double>, DefaultEdge> graph){
-        return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight<>(graph, s,t, DEFAULT_EPS, DinicMFImpl::new);
+    @Override
+    protected MaximumDensitySubgraphAlgorithm<Pair<Integer, Double>, DefaultEdge> constructSolver(
+        Graph<Pair<Integer, Double>, DefaultEdge> g,
+        Function<Graph<Pair<Integer, Double>, DefaultWeightedEdge>, MinimumSTCutAlgorithm<Pair<Integer, Double>, DefaultWeightedEdge>> alg)
+    {
+        return new GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight<>(g, s,t, DEFAULT_EPS, alg);
     }
 
     @Override
@@ -36,7 +41,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
     @Test
     public void testEmpty1(){
         WeightedMultigraph<Pair<Integer,Double>, DefaultEdge> g = new WeightedMultigraph<>(DefaultEdge.class);
-        test(g, constructDefaultSolver(g),0, new ArrayList<>());
+        test(g, constructSolver(g,PushRelabelMFImpl::new),0, new ArrayList<>());
     }
 
     @Test
@@ -45,7 +50,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
         Pair<Integer,Double> p1 = new Pair<>(0,1.3);
         Pair<Integer,Double> p2 = new Pair<>(1, 2.1);
         addVertices(g, asList(p1,p2));
-        test(g, constructDefaultSolver(g),0, new ArrayList<>());
+        test(g, constructSolver(g,PushRelabelMFImpl::new),0, new ArrayList<>());
     }
 
     @Test
@@ -56,7 +61,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
         addVertices(g, asList(v1,v2));
         addEdgesAndWeights(g, Collections.singletonList(new Pair<>(v1, v2)),
             Collections.singletonList(10.0));
-        test(g, constructDefaultSolver(g), 2.5, asList(v1,v2));
+        test(g, constructSolver(g,PushRelabelMFImpl::new), 2.5, asList(v1,v2));
     }
 
     @Test
@@ -70,7 +75,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
         addEdgesAndWeights(g,  asList(new Pair<>(vertices.get(0), vertices.get(1)),
                                              new Pair<>(vertices.get(0), vertices.get(2))),
                                 asList(4.0,2.0));
-        test(g, constructDefaultSolver(g),
+        test(g, constructSolver(g,PushRelabelMFImpl::new),
                 1.709401, getByIndices(vertices, asList(0, 1,2)));
     }
 
@@ -98,7 +103,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
                 1.0, 4.0,
                 1.0);
         addEdgesAndWeights(g,edges,weights);
-        test(g, constructDefaultSolver(g),
+        test(g, constructSolver(g,PushRelabelMFImpl::new),
             2.424242, getByIndices(vertices, asList(0,1,2,3,4,7)));
     }
 
@@ -125,6 +130,6 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightsPerEdgeTest
         expected.add(vertices.get(1));
         expected.add(vertices.get(2));
         addEdgesAndWeights(g, edges, weights);
-        test(g, constructDefaultSolver(g), 1.411760, expected);
+        test(g, constructSolver(g,PushRelabelMFImpl::new), 1.411760, expected);
     }
 }

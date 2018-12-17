@@ -1,27 +1,27 @@
 package org.jgrapht.alg.densesubgraph;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumDensitySubgraphAlgorithm;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.AsSubgraph;
-
+import org.jgrapht.graph.*;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.function.*;
 import java.util.stream.Collectors;
-
 import static org.junit.Assert.assertEquals;
 
 public abstract class GoldbergMaximumDensitySubgraphTestBase<V,E> {
+
+    protected final double DEFAULT_EPS = Math.pow(10,-5);
+    protected V s,t;
 
     public GoldbergMaximumDensitySubgraphTestBase(){
         s = this.getAdditionalSource();
         t = this.getAdditionalSink();
     }
 
-    protected final double DEFAULT_EPS = Math.pow(10,-5);
-    protected V s,t;
-
-    protected abstract MaximumDensitySubgraphAlgorithm<V,E> constructDefaultSolver(Graph<V,E> graph);
+    protected abstract MaximumDensitySubgraphAlgorithm<V,E> constructSolver(Graph<V,E> g,
+        Function<Graph<V,DefaultWeightedEdge>, MinimumSTCutAlgorithm<V,DefaultWeightedEdge>> alg);
 
     protected abstract V getAdditionalSource();
 
