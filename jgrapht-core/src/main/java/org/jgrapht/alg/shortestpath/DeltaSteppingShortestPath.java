@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -144,7 +145,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     /**
      * Queue of vertices which edges should be relaxed on current iteration.
      */
-    private ConcurrentLinkedQueue<V> verticesQueue;
+    private Queue<V> verticesQueue;
     /**
      * Task for light edges relaxation.
      */
@@ -580,14 +581,14 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         /**
          * Vertices which edges will be relaxed.
          */
-        private ConcurrentLinkedQueue<V> vertices;
+        private Queue<V> vertices;
 
         /**
          * Constructs instance of a new task.
          *
          * @param vertices vertices
          */
-        LightRelaxTask(ConcurrentLinkedQueue<V> vertices) {
+        LightRelaxTask(Queue<V> vertices) {
             this.vertices = vertices;
         }
 
@@ -622,14 +623,14 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         /**
          * Vertices which edges will be relaxed.
          */
-        private ConcurrentLinkedQueue<V> vertices;
+        private Queue<V> vertices;
 
         /**
          * Constructs instance of a new task.
          *
          * @param vertices vertices
          */
-        HeavyRelaxTask(ConcurrentLinkedQueue<V> vertices) {
+        HeavyRelaxTask(Queue<V> vertices) {
             this.vertices = vertices;
         }
 

@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class DeltaSteppingShortestPathPerformance {
 
-    /*@Benchmark
+    @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingGnm(GnmState data) {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree).getPaths(0);
     }
@@ -73,7 +73,7 @@ public class DeltaSteppingShortestPathPerformance {
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordGnm(GnmState data) {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
-    }*/
+    }
 
     @Benchmark
     public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingGnp(GnpState data) {
@@ -120,24 +120,24 @@ public class DeltaSteppingShortestPathPerformance {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
     }
 
-    /*@Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingDense(DenseGraphState data) {
+    @Benchmark
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingDense(CompleteGraphState data) {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraDense(DenseGraphState data) {
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraDense(CompleteGraphState data) {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordDense(DenseGraphState data) {
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordDense(CompleteGraphState data) {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
-    }*/
+    }
 
 
     @State(Scope.Benchmark)
-    public abstract static class RandomGraphState {
+    public abstract static class BaseState {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
         public abstract void generateGraph();
@@ -157,7 +157,7 @@ public class DeltaSteppingShortestPathPerformance {
     }
 
     @State(Scope.Benchmark)
-    public static class GnmState extends RandomGraphState {
+    public static class GnmState extends BaseState {
         @Param({"10000"})
         int numOfVertices;
         @Param({"50", "500"})
@@ -177,7 +177,7 @@ public class DeltaSteppingShortestPathPerformance {
     }
 
     @State(Scope.Benchmark)
-    public static class GnpState extends RandomGraphState {
+    public static class GnpState extends BaseState {
         @Param({"10000"})
         int numOfVertices;
         @Param({"0.01", "0.05"})
@@ -197,7 +197,7 @@ public class DeltaSteppingShortestPathPerformance {
     }
 
     @State(Scope.Benchmark)
-    public static class BarabasiAlbertState extends RandomGraphState {
+    public static class BarabasiAlbertState extends BaseState {
         @Param({"1000"})
         int m0;
         @Param({"10000"})
@@ -219,7 +219,7 @@ public class DeltaSteppingShortestPathPerformance {
     }
 
     @State(Scope.Benchmark)
-    public static class WattsStogatzState extends RandomGraphState {
+    public static class WattsStogatzState extends BaseState {
         @Param({"10000"})
         int numOfVertices;
         @Param({"100", "1000"})
@@ -240,10 +240,9 @@ public class DeltaSteppingShortestPathPerformance {
     }
 
     @State(Scope.Benchmark)
-    public static class DenseGraphState {
+    public static class CompleteGraphState extends BaseState{
         @Param({"1000", "2000", "3000"})
         int numOfVertices;
-        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
         @Setup(Level.Trial)
         public void generateGraph() {
@@ -253,7 +252,7 @@ public class DeltaSteppingShortestPathPerformance {
 
             generator.generateGraph(graph);
 
-            graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, Math.random()));
+            addEdgeWeights(graph);
         }
     }
 }
