@@ -20,6 +20,8 @@ package org.jgrapht.alg.scoring;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.util.*;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 import java.util.*;
 
@@ -187,6 +189,7 @@ public class BetweennessCentrality<V, E>
                 }
                 // shortest path to w via v?
                 if (distance.get(w) >= d) {
+                    distance.put(w, d);
                     queue.update(w, d);
                     sigma.put(w, sigma.get(w) + sigma.get(v));
                     predecessors.get(w).add(v);
@@ -227,14 +230,13 @@ public class BetweennessCentrality<V, E>
         MyQueue<V, Double>
     {
 
-        FibonacciHeap<V> delegate = new FibonacciHeap<>();
-        Map<V, FibonacciHeapNode<V>> seen = new HashMap<>();
+        AddressableHeap<Double, V> delegate = new PairingHeap<>();
+        Map<V, AddressableHeap.Handle<Double, V>> seen = new HashMap<>();
 
         @Override
         public void insert(V t, Double d)
         {
-            FibonacciHeapNode<V> node = new FibonacciHeapNode<>(t);
-            delegate.insert(node, d);
+            AddressableHeap.Handle<Double, V> node = delegate.insert(d, t);
             seen.put(t, node);
         }
 
@@ -244,13 +246,13 @@ public class BetweennessCentrality<V, E>
             if (!seen.containsKey(t)) {
                 throw new IllegalArgumentException("Element " + t + " does not exist in queue");
             }
-            delegate.decreaseKey(seen.get(t), d);
+            seen.get(t).decreaseKey(d);
         }
 
         @Override
         public V remove()
         {
-            return delegate.removeMin().getData();
+            return delegate.deleteMin().getValue();
         }
 
         @Override
