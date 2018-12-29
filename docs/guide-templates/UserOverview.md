@@ -23,11 +23,11 @@ supported, as we'll explain further on; but for now, let's take a look
 at a simple example of creating a directed graph:
 
 ```java
-:[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java?example=urlCreate)
+:[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java?example=uriCreate)
 ```
 
 Notice how the vertex objects are instances of the
-[java.net.URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)
+[java.net.URI](https://docs.oracle.com/javase/8/docs/api/java/net/URI.html)
 class.  JGraphT does not supply a vertex class itself; instead, you're
 free to choose your own based on whatever works best for your
 application, subject to certain restrictions mentioned below.
