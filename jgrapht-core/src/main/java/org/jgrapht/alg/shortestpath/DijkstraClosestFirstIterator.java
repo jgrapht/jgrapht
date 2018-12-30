@@ -111,6 +111,7 @@ class DijkstraClosestFirstIterator<V, E>
     public DijkstraClosestFirstIterator(Graph<V, E> graph, V source, double radius, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier) {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
         this.source = Objects.requireNonNull(source, "Source vertex cannot be null");
+        Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
         if (radius < 0.0) {
             throw new IllegalArgumentException("Radius must be non-negative");
         }

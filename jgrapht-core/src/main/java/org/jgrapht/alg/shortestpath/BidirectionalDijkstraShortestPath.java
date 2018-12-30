@@ -29,6 +29,7 @@ import org.jheaps.tree.PairingHeap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -98,7 +99,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         if (radius < 0.0) {
             throw new IllegalArgumentException("Radius must be non-negative");
         }
-        this.heapSupplier = heapSupplier;
+        this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
         this.radius = radius;
     }
 
@@ -249,7 +250,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
 
         public SearchFrontier(Graph<V, E> graph) {
             this.graph = graph;
-            this.heap = new PairingHeap<>();
+            this.heap = heapSupplier.get();
             this.seen = new HashMap<>();
         }
 

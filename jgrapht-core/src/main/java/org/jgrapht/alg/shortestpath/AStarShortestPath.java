@@ -111,7 +111,7 @@ public class AStarShortestPath<V, E>
         this.admissibleHeuristic =
                 Objects.requireNonNull(admissibleHeuristic, "Heuristic function cannot be null!");
         this.comparator = new ToleranceDoubleComparator();
-        this.heapSupplier = heapSupplier;
+        this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null!");
     }
 
     /**
@@ -121,7 +121,7 @@ public class AStarShortestPath<V, E>
      */
     private void initialize(AStarAdmissibleHeuristic<V> admissibleHeuristic) {
         this.admissibleHeuristic = admissibleHeuristic;
-        openList = new PairingHeap<>();
+        openList = heapSupplier.get();
         vertexToHeapNodeMap = new HashMap<>();
         closedList = new HashSet<>();
         gScoreMap = new HashMap<>();

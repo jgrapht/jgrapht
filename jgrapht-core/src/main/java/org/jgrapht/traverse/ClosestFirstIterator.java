@@ -24,6 +24,7 @@ import org.jheaps.tree.PairingHeap;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -42,13 +43,13 @@ import java.util.function.Supplier;
  * @param <E> the graph edge type
  * @author John V. Sichi
  */
-public class ClosestFirstIterator<V, E>
+    public class ClosestFirstIterator<V, E>
         extends
         CrossComponentIterator<V, E, AddressableHeap.Handle<Double, ClosestFirstIterator.QueueEntry<V, E>>> {
     /**
      * Priority queue of fringe vertices.
      */
-    private AddressableHeap<Double, QueueEntry<V, E>> heap = new PairingHeap<>();
+    private AddressableHeap<Double, QueueEntry<V, E>> heap;
 
     /**
      * Maximum distance to search.
@@ -155,6 +156,8 @@ public class ClosestFirstIterator<V, E>
     public ClosestFirstIterator(Graph<V, E> g, Iterable<V> startVertices, double radius, Supplier<AddressableHeap<Double, QueueEntry<V, E>>> heapSupplier) {
         super(g, startVertices);
         this.radius = radius;
+        Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
+        this.heap = heapSupplier.get();
         checkRadiusTraversal(isCrossComponentTraversal());
         initialized = true;
         if (!crossComponentTraversal) {
