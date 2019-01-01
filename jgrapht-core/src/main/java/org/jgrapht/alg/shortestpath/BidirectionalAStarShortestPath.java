@@ -56,15 +56,8 @@ public class BidirectionalAStarShortestPath<V, E>
             backwardFrontier = new SearchFrontier(graph);
         }
 
-        forwardFrontier.gScoreMap.put(source, 0.0);
-        FibonacciHeapNode<V> sourceNode = new FibonacciHeapNode<>(source);
-        forwardFrontier.openList.insert(sourceNode, 0.0);
-        forwardFrontier.vertexToHeapNodeMap.put(source, sourceNode);
-
-        backwardFrontier.gScoreMap.put(sink, 0.0);
-        FibonacciHeapNode<V> targetNode = new FibonacciHeapNode<>(sink);
-        backwardFrontier.openList.insert(targetNode, 0.0);
-        backwardFrontier.vertexToHeapNodeMap.put(sink, targetNode);
+        forwardFrontier.updateDistance(source, null, 0.0, 0.0);
+        backwardFrontier.updateDistance(sink, null, 0.0, 0.0);
 
         // initialize best path
         double bestPath = Double.POSITIVE_INFINITY;
@@ -72,8 +65,8 @@ public class BidirectionalAStarShortestPath<V, E>
 
         SearchFrontier frontier = forwardFrontier;
         SearchFrontier otherFrontier = backwardFrontier;
-        V endVertex = source;
-        V otherEndVertex = sink;
+        V endVertex = sink;
+        V otherEndVertex = source;
 
         while (true) {
             // stopping condition
@@ -85,29 +78,29 @@ public class BidirectionalAStarShortestPath<V, E>
             // frontier scan
             FibonacciHeapNode<V> node = frontier.openList.removeMin();
             V v = node.getData();
-            double vDistance = node.getKey();
 
-            for (E edge : graph.outgoingEdgesOf(v)) {
-                V successor = Graphs.getOppositeVertex(graph, edge, v);
+            for (E edge : frontier.graph.outgoingEdgesOf(v)) {
+                V successor = Graphs.getOppositeVertex(frontier.graph, edge, v);
 
                 if (successor.equals(v)) { // Ignore self-loop
                     continue;
                 }
 
-                double gScore_current = frontier.gScoreMap.get(v);
-                double tentativeGScore = gScore_current + graph.getEdgeWeight(edge);
+                double gScore_current = frontier.getDistance(v);
+                double tentativeGScore = gScore_current + frontier.graph.getEdgeWeight(edge);
                 double fScore = tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex);
 
                 frontier.updateDistance(successor, edge, tentativeGScore, fScore);
 
                 // check path with successor's distance from the other frontier
-                double pathDistance = vDistance + graph.getEdgeWeight(edge) + otherFrontier.getDistance(successor);
+                double pathDistance = tentativeGScore + otherFrontier.getDistance(successor);
 
                 if (pathDistance < bestPath) {
                     bestPath = pathDistance;
                     bestPathCommonVertex = successor;
                 }
             }
+            frontier.closedList.add(node.getData());
 
             // swap frontiers
             SearchFrontier tmpFrontier = frontier;
@@ -181,7 +174,7 @@ public class BidirectionalAStarShortestPath<V, E>
         final Map<V, Double> gScoreMap;
         final Map<V, E> cameFrom;
 
-        public SearchFrontier(Graph<V, E> graph) {
+        SearchFrontier(Graph<V, E> graph) {
             this.graph = graph;
             openList = new FibonacciHeap<>();
             vertexToHeapNodeMap = new HashMap<>();
@@ -190,7 +183,7 @@ public class BidirectionalAStarShortestPath<V, E>
             cameFrom = new HashMap<>();
         }
 
-        public void updateDistance(V v, E e, double tentativeGScore, double fScore) {
+        void updateDistance(V v, E e, double tentativeGScore, double fScore) {
             if (vertexToHeapNodeMap.containsKey(v)) { // We re-encountered a vertex. It's
                 // either in the open or closed list.
                 if (tentativeGScore >= gScoreMap.get(v)) {// Ignore path since it is
@@ -218,7 +211,7 @@ public class BidirectionalAStarShortestPath<V, E>
             }
         }
 
-        public double getDistance(V v) {
+        double getDistance(V v) {
             Double distance = gScoreMap.get(v);
             if (distance == null) {
                 return Double.POSITIVE_INFINITY;
@@ -227,7 +220,7 @@ public class BidirectionalAStarShortestPath<V, E>
             }
         }
 
-        public E getTreeEdge(V v) {
+        E getTreeEdge(V v) {
             E e = cameFrom.get(v);
             if (e == null) {
                 return null;
