@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2015-2018, by Semen Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.Graph;
@@ -13,7 +30,6 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -128,13 +144,13 @@ public class BidirectionalAStarShortestPathTest {
 
     @Test
     public void testGetPath() {
-        Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
-        AStarAdmissibleHeuristic<String> heuristic = simpleGraphHeuristic();
+        Graph<String, DefaultWeightedEdge> graph = getSimpleGraph();
+        AStarAdmissibleHeuristic<String> heuristic = getSimpleGraphHeuristic();
 
         assertEquals(Arrays.asList(s, y, z), new BidirectionalAStarShortestPath<>(graph, heuristic).getPath(s, z).getVertexList());
     }
 
-    private Graph<String, DefaultWeightedEdge> generateSimpleGraph() {
+    private Graph<String, DefaultWeightedEdge> getSimpleGraph() {
         Graph<String, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         Graphs.addAllVertices(graph, Arrays.asList(s, t, y, x, z));
@@ -157,7 +173,7 @@ public class BidirectionalAStarShortestPathTest {
         return graph;
     }
 
-    private AStarAdmissibleHeuristic<String> simpleGraphHeuristic() {
+    private AStarAdmissibleHeuristic<String> getSimpleGraphHeuristic() {
         return (sourceVertex, targetVertex) -> {
             if (sourceVertex.equals(s) && targetVertex.equals(z)) {
                 return 7;
@@ -176,7 +192,6 @@ public class BidirectionalAStarShortestPathTest {
             } else if (sourceVertex.equals(z) && targetVertex.equals(s)) {
                 return 7;
             } else {
-                System.out.println(sourceVertex + " : " + targetVertex);
                 return 0;
             }
         };
@@ -268,23 +283,19 @@ public class BidirectionalAStarShortestPathTest {
         g.setEdgeWeight(g.addEdge(3, 3), 0.2476189990121238);
 
         AStarAdmissibleHeuristic<Integer> h = (s, t) -> {
-            if (s.intValue() == 0 && t.intValue() == 1) {
+            if (s == 0 && t == 1) {
                 // actual = 0.5822723681370429
                 return 0.5822723681370429;
             }
-            if (s.intValue() == 3 && t.intValue() == 1) {
+            if (s == 3 && t == 1) {
                 // actual = 0.8109462023168071
                 return 0.8109462023168071;
             }
-            if (s.intValue() == 3 && t.intValue() == 2) {
+            if (s == 3 && t == 2) {
                 // actual = 0.9641320715228003
                 return 0.9639222864568235;
             }
-            if (s.intValue() == 0 && t.intValue() == 1) {
-                // actual = 0.5822723681370429
-                return 0.5822723681370429;
-            }
-            if (s.intValue() == 0 && t.intValue() == 2) {
+            if (s == 0 && t == 2) {
                 // actual = 0.7354582373430361
                 return 0.7354582373430361;
             }
@@ -292,11 +303,10 @@ public class BidirectionalAStarShortestPathTest {
             // all other zero
             return 0d;
         };
+        BidirectionalAStarShortestPath<Integer, DefaultWeightedEdge> shortestPath = new BidirectionalAStarShortestPath<>(g, h);
 
-        AStarShortestPath<Integer, DefaultWeightedEdge> shortestPath = new AStarShortestPath<>(g, h);
         // shortest path from 3 to 2 is 3->0->1->2 with weight 0.9641320715228003
         assertEquals(0.9641320715228003, shortestPath.getPath(3, 2).getWeight(), 1e-9);
-        assertFalse(shortestPath.isConsistentHeuristic(h));
     }
 
     private class ManhattanDistance
