@@ -44,11 +44,11 @@ public class IncomingOutgoingEdgesTest
         g.addVertex(5);
 
         assertEquals(5, g.vertexSet().size());
-        assertTrue(g.vertexSet().contains(1));
-        assertTrue(g.vertexSet().contains(2));
-        assertTrue(g.vertexSet().contains(3));
-        assertTrue(g.vertexSet().contains(4));
-        assertTrue(g.vertexSet().contains(5));
+        assertTrue(g.containsVertex(1));
+        assertTrue(g.containsVertex(2));
+        assertTrue(g.containsVertex(3));
+        assertTrue(g.containsVertex(4));
+        assertTrue(g.containsVertex(5));
 
         DefaultEdge e12 = g.addEdge(1, 2);
         DefaultEdge e23_1 = g.addEdge(2, 3);
@@ -118,11 +118,11 @@ public class IncomingOutgoingEdgesTest
         g.addVertex(5);
 
         assertEquals(5, g.vertexSet().size());
-        assertTrue(g.vertexSet().contains(1));
-        assertTrue(g.vertexSet().contains(2));
-        assertTrue(g.vertexSet().contains(3));
-        assertTrue(g.vertexSet().contains(4));
-        assertTrue(g.vertexSet().contains(5));
+        assertTrue(g.containsVertex(1));
+        assertTrue(g.containsVertex(2));
+        assertTrue(g.containsVertex(3));
+        assertTrue(g.containsVertex(4));
+        assertTrue(g.containsVertex(5));
 
         DefaultEdge e12 = g.addEdge(1, 2);
         DefaultEdge e23_1 = g.addEdge(2, 3);

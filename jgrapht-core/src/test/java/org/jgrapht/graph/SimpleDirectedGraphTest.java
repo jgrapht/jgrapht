@@ -488,22 +488,22 @@ public class SimpleDirectedGraphTest
     public void testVertexSet()
     {
         assertEquals(1, g1.vertexSet().size());
-        assertTrue(g1.vertexSet().contains(v1));
+        assertTrue(g1.containsVertex(v1));
 
         assertEquals(2, g2.vertexSet().size());
-        assertTrue(g2.vertexSet().contains(v1));
-        assertTrue(g2.vertexSet().contains(v2));
+        assertTrue(g2.containsVertex(v1));
+        assertTrue(g2.containsVertex(v2));
 
         assertEquals(3, g3.vertexSet().size());
-        assertTrue(g3.vertexSet().contains(v1));
-        assertTrue(g3.vertexSet().contains(v2));
-        assertTrue(g3.vertexSet().contains(v3));
+        assertTrue(g3.containsVertex(v1));
+        assertTrue(g3.containsVertex(v2));
+        assertTrue(g3.containsVertex(v3));
 
         assertEquals(4, g4.vertexSet().size());
-        assertTrue(g4.vertexSet().contains(v1));
-        assertTrue(g4.vertexSet().contains(v2));
-        assertTrue(g4.vertexSet().contains(v3));
-        assertTrue(g4.vertexSet().contains(v4));
+        assertTrue(g4.containsVertex(v1));
+        assertTrue(g4.containsVertex(v2));
+        assertTrue(g4.containsVertex(v3));
+        assertTrue(g4.containsVertex(v4));
     }
 
     @Test

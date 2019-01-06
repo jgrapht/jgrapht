@@ -107,10 +107,10 @@ public class NaiveLCAFinder<V, E>
     @Override
     public V getLCA(V a, V b)
     {
-        if (!graph.vertexSet().contains(a))
+        if (!graph.containsVertex(a))
             throw new IllegalArgumentException("invalid vertex: " + a);
 
-        if (!graph.vertexSet().contains(b))
+        if (!graph.containsVertex(b))
             throw new IllegalArgumentException("invalid vertex: " + b);
 
         return findLca(

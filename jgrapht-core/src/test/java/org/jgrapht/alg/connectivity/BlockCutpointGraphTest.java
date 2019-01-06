@@ -79,10 +79,10 @@ public class BlockCutpointGraphTest
         for (V cutpoint : cutpoints) {
             Graph<V, E> cpblock = bcGraph.getBlock(cutpoint);
             assertEquals(1, cpblock.vertexSet().size());
-            assertTrue(cpblock.vertexSet().contains(cutpoint));
+            assertTrue(cpblock.containsVertex(cutpoint));
 
             for (Graph<V, E> block : Graphs.neighborListOf(bcGraph, cpblock))
-                assertTrue(block.vertexSet().contains(cutpoint));
+                assertTrue(block.containsVertex(cutpoint));
         }
 
         // assert that the edge set is complete, i.e. there are edges between a block and all its

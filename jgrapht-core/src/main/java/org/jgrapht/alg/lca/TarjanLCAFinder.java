@@ -166,10 +166,10 @@ public class TarjanLCAFinder<V, E>
             V a = this.queries.get(i).getFirst();
             V b = this.queries.get(i).getSecond();
 
-            if (!graph.vertexSet().contains(a))
+            if (!graph.containsVertex(a))
                 throw new IllegalArgumentException("invalid vertex: " + a);
 
-            if (!graph.vertexSet().contains(b))
+            if (!graph.containsVertex(b))
                 throw new IllegalArgumentException("invalid vertex: " + b);
 
             if (a.equals(b))

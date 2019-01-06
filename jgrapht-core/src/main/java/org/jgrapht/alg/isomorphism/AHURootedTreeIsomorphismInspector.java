@@ -111,7 +111,7 @@ public class AHURootedTreeIsomorphismInspector<V, E>
             throw new IllegalArgumentException("tree cannot be empty");
         }
 
-        if (!tree.vertexSet().contains(root)) {
+        if (!tree.containsVertex(root)) {
             throw new IllegalArgumentException("root not contained in forest");
         }
     }
