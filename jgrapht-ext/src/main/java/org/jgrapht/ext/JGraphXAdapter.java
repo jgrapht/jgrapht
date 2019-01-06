@@ -186,7 +186,7 @@ public class JGraphXAdapter<V, E>
         // we have to iterate over this because the graphT has already
         // deleted the vertex and edges so we can't query what the edges were
         for (E edge : cellToEdgeMap.values()) {
-            if (!graphT.edgeSet().contains(edge)) {
+            if (!graphT.containsEdge(edge)) {
                 removedEdges.add(edge);
             }
         }

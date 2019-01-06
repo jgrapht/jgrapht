@@ -309,22 +309,22 @@ public class SimpleIdentityDirectedGraphTest
         assertEquals(0, g1.edgeSet().size());
 
         assertEquals(2, g2.edgeSet().size());
-        assertTrue(g2.edgeSet().contains(e12_1));
-        assertTrue(g2.edgeSet().contains(e21_1));
+        assertTrue(g2.containsEdge(e12_1));
+        assertTrue(g2.containsEdge(e21_1));
 
         assertEquals(6, g3.edgeSet().size());
-        assertTrue(g3.edgeSet().contains(e12_2));
-        assertTrue(g3.edgeSet().contains(e21_2));
-        assertTrue(g3.edgeSet().contains(e23_1));
-        assertTrue(g3.edgeSet().contains(e32_1));
-        assertTrue(g3.edgeSet().contains(e31_1));
-        assertTrue(g3.edgeSet().contains(e13_1));
+        assertTrue(g3.containsEdge(e12_2));
+        assertTrue(g3.containsEdge(e21_2));
+        assertTrue(g3.containsEdge(e23_1));
+        assertTrue(g3.containsEdge(e32_1));
+        assertTrue(g3.containsEdge(e31_1));
+        assertTrue(g3.containsEdge(e13_1));
 
         assertEquals(4, g4.edgeSet().size());
-        assertTrue(g4.edgeSet().contains(e12_3));
-        assertTrue(g4.edgeSet().contains(e23_2));
-        assertTrue(g4.edgeSet().contains(e34_1));
-        assertTrue(g4.edgeSet().contains(e41_1));
+        assertTrue(g4.containsEdge(e12_3));
+        assertTrue(g4.containsEdge(e23_2));
+        assertTrue(g4.containsEdge(e34_1));
+        assertTrue(g4.containsEdge(e41_1));
     }
 
     /**
