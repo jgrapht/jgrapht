@@ -246,7 +246,7 @@ public class BidirectionalAStarShortestPath<V, E>
          */
         final Map<V, Double> gScoreMap;
         /**
-         * Predecessor nao,
+         * Predecessor map.
          */
         final Map<V, E> cameFrom;
 
@@ -263,8 +263,7 @@ public class BidirectionalAStarShortestPath<V, E>
         void updateDistance(V v, E e, double tentativeGScore, double fScore) {
             if (vertexToHeapNodeMap.containsKey(v)) { // We re-encountered a vertex. It's
                 // either in the open or closed list.
-                if (tentativeGScore >= gScoreMap.get(v)) {// Ignore path since it is
-                    // non-improving
+                if (tentativeGScore >= gScoreMap.get(v)) {// Ignore path since it is non-improving
                     return;
                 }
 
@@ -272,8 +271,7 @@ public class BidirectionalAStarShortestPath<V, E>
                 gScoreMap.put(v, tentativeGScore);
 
                 if (closedList.contains(v)) { // it's in the closed list. Move node back to
-                    // open list, since we discovered a shorter
-                    // path to this node
+                    // open list, since we discovered a shorter path to this node
                     closedList.remove(v);
                     openList.insert(vertexToHeapNodeMap.get(v), fScore);
                 } else { // It's in the open list

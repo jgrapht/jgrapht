@@ -214,13 +214,13 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    public static class ALTBenchmark
+    public static class AStarALTBenchmark
         extends
         BenchmarkBase
     {
         private int totalLandmarks;
 
-        public ALTBenchmark(int totalLandmarks)
+        AStarALTBenchmark(int totalLandmarks)
         {
             this.totalLandmarks = totalLandmarks;
         }
@@ -244,10 +244,57 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
-    @Test
-    public void testBenchmark()
-        throws RunnerException
+    public static class BidirectionalAStarNoHeuristicBenchmark
+            extends
+            BenchmarkBase
     {
+        @Override
+        ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+                Graph<Integer, DefaultWeightedEdge> graph)
+        {
+            return new BidirectionalAStarShortestPath<>(graph, (u, t) -> 0d);
+
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Bidirectional A* no heuristic";
+        }
+    }
+
+    public static class BidirectionalAStarALTBenchmark
+            extends
+            BenchmarkBase
+    {
+        private int totalLandmarks;
+
+        BidirectionalAStarALTBenchmark(int totalLandmarks)
+        {
+            this.totalLandmarks = totalLandmarks;
+        }
+
+        @Override
+        ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+                Graph<Integer, DefaultWeightedEdge> graph)
+        {
+            Integer[] vertices = graph.vertexSet().toArray(new Integer[0]);
+            Set<Integer> landmarks = new HashSet<>();
+            while (landmarks.size() < totalLandmarks) {
+                landmarks.add(vertices[rng.nextInt(graph.vertexSet().size())]);
+            }
+            return new AStarShortestPath<>(graph, new ALTAdmissibleHeuristic<>(graph, landmarks));
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Bidirectional A* with ALT heuristic (" + totalLandmarks + " random landmarks)";
+        }
+    }
+
+    @Test
+    public void testBenchmark() {
         System.out.println("All-Pairs Shortest Paths Benchmark");
         System.out.println("---------");
         System.out.println(
@@ -260,10 +307,13 @@ public class DijkstraShortestPathPerformanceTest
         algFactory.add(() -> new ClosestFirstIteratorBenchmark());
         algFactory.add(() -> new DijkstraBenchmark());
         algFactory.add(() -> new AStarNoHeuristicBenchmark());
-        algFactory.add(() -> new ALTBenchmark(1));
-        algFactory.add(() -> new ALTBenchmark(5));
+        algFactory.add(() -> new AStarALTBenchmark(1));
+        algFactory.add(() -> new AStarALTBenchmark(5));
         algFactory.add(() -> new BidirectionalDijkstraBenchmark());
         algFactory.add(() -> new BFSShortestPathBenchmark());
+        algFactory.add(() -> new BidirectionalAStarALTBenchmark(1));
+        algFactory.add(() -> new BidirectionalAStarALTBenchmark(5));
+        algFactory.add(() -> new BidirectionalAStarNoHeuristicBenchmark());
 
         for (Supplier<BenchmarkBase> alg : algFactory) {
 
