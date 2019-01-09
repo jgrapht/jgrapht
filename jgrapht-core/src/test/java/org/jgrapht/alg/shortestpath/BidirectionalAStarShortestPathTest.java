@@ -223,12 +223,11 @@ public class BidirectionalAStarShortestPathTest {
     @Test
     public void testLabyrinth2() {
         this.readLabyrinth(labyrinth2);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new AStarShortestPath<>(graph, new ManhattanDistance());
+        BidirectionalAStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
+                new BidirectionalAStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path =
                 aStarShortestPath.getPath(sourceNode, targetNode);
         assertNull(path);
-        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
     /**
@@ -254,13 +253,12 @@ public class BidirectionalAStarShortestPathTest {
         Graphs.addEdge(multigraph, n2, n3, 7.0);
         Graphs.addEdge(multigraph, n2, n3, 9);
         Graphs.addEdge(multigraph, n2, n3, 2);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new AStarShortestPath<>(multigraph, new ManhattanDistance());
+        BidirectionalAStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
+                new BidirectionalAStarShortestPath<>(multigraph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path = aStarShortestPath.getPath(n1, n3);
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 6);
         assertEquals(path.getEdgeList().size(), 2);
-        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
     @Test

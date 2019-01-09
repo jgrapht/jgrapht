@@ -23,8 +23,9 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * A bidirectional version of A* algorithm.
@@ -71,18 +73,33 @@ public class BidirectionalAStarShortestPath<V, E>
      * Heuristic used while shortest path computation.
      */
     private AStarAdmissibleHeuristic<V> admissibleHeuristic;
+    private final Supplier<AddressableHeap<Double, V>> heapSupplier;
 
     /**
      * Constructs a new instance of the algorithm for a given graph.
      *
-     * @param graph the graph
+     * @param graph               the graph
      * @param admissibleHeuristic admissible heuristic which estimates the distance from a node to
-     *      the target node. The heuristic must never overestimate the distance.
+     *                            the target node. The heuristic must never overestimate the distance.
      */
     public BidirectionalAStarShortestPath(Graph<V, E> graph, AStarAdmissibleHeuristic<V> admissibleHeuristic) {
+        this(graph, admissibleHeuristic, PairingHeap::new);
+    }
+
+    /**
+     * Create a new instance of the bidirectional A* shortest path algorithm.
+     *
+     * @param graph               the input graph
+     * @param admissibleHeuristic admissible heuristic which estimates the distance from a node to
+     *                            the target node. The heuristic must never overestimate the distance.
+     * @param heapSupplier        supplier of the preferable heap implementation
+     */
+    public BidirectionalAStarShortestPath(Graph<V, E> graph, AStarAdmissibleHeuristic<V> admissibleHeuristic,
+                                          Supplier<AddressableHeap<Double, V>> heapSupplier) {
         super(graph);
         this.admissibleHeuristic =
                 Objects.requireNonNull(admissibleHeuristic, "Heuristic function cannot be null!");
+        this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null!");
     }
 
     /**
@@ -129,13 +146,14 @@ public class BidirectionalAStarShortestPath<V, E>
         while (true) {
             // stopping condition
             if (frontier.openList.isEmpty() || otherFrontier.openList.isEmpty()
-                    || Math.max(frontier.openList.min().getKey(), otherFrontier.openList.min().getKey()) >= bestPath) {
+                    || Math.max(frontier.openList.findMin().getKey(),
+                    otherFrontier.openList.findMin().getKey()) >= bestPath) {
                 break;
             }
 
             // frontier scan
-            FibonacciHeapNode<V> node = frontier.openList.removeMin();
-            V v = node.getData();
+            AddressableHeap.Handle<Double, V> node = frontier.openList.deleteMin();
+            V v = node.getValue();
 
             for (E edge : frontier.graph.outgoingEdgesOf(v)) {
                 V successor = Graphs.getOppositeVertex(frontier.graph, edge, v);
@@ -153,9 +171,9 @@ public class BidirectionalAStarShortestPath<V, E>
 
             }
             // close current vertex
-            frontier.closedList.add(node.getData());
+            frontier.closedList.add(v);
             // check if best path can be updated
-            if (otherFrontier.closedList.contains(node.getData())) {
+            if (otherFrontier.closedList.contains(v)) {
                 double pathDistance = frontier.getDistance(v) + otherFrontier.getDistance(v);
                 if (pathDistance < bestPath) {
                     bestPath = pathDistance;
@@ -234,8 +252,8 @@ public class BidirectionalAStarShortestPath<V, E>
         /**
          * Open nodes of the frontier.
          */
-        final FibonacciHeap<V> openList;
-        final Map<V, FibonacciHeapNode<V>> vertexToHeapNodeMap;
+        final AddressableHeap<Double, V> openList;
+        final Map<V, AddressableHeap.Handle<Double, V>> vertexToHeapNodeMap;
         /**
          * Closed nodes of the frontier.
          */
@@ -253,7 +271,7 @@ public class BidirectionalAStarShortestPath<V, E>
         SearchFrontier(Graph<V, E> graph, V endVertex) {
             this.graph = graph;
             this.endVertex = endVertex;
-            openList = new FibonacciHeap<>();
+            openList = heapSupplier.get();
             vertexToHeapNodeMap = new HashMap<>();
             closedList = new HashSet<>();
             gScoreMap = new HashMap<>();
@@ -261,6 +279,7 @@ public class BidirectionalAStarShortestPath<V, E>
         }
 
         void updateDistance(V v, E e, double tentativeGScore, double fScore) {
+            AddressableHeap.Handle<Double, V> node = vertexToHeapNodeMap.get(v);
             if (vertexToHeapNodeMap.containsKey(v)) { // We re-encountered a vertex. It's
                 // either in the open or closed list.
                 if (tentativeGScore >= gScoreMap.get(v)) {// Ignore path since it is non-improving
@@ -273,16 +292,15 @@ public class BidirectionalAStarShortestPath<V, E>
                 if (closedList.contains(v)) { // it's in the closed list. Move node back to
                     // open list, since we discovered a shorter path to this node
                     closedList.remove(v);
-                    openList.insert(vertexToHeapNodeMap.get(v), fScore);
+                    openList.insert(fScore, v);
                 } else { // It's in the open list
-                    openList.decreaseKey(vertexToHeapNodeMap.get(v), fScore);
+                    node.decreaseKey(fScore);
                 }
             } else { // We've encountered a new vertex.
                 cameFrom.put(v, e);
                 gScoreMap.put(v, tentativeGScore);
-                FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<>(v);
-                openList.insert(heapNode, fScore);
-                vertexToHeapNodeMap.put(v, heapNode);
+                node = openList.insert(fScore, v);
+                vertexToHeapNodeMap.put(v, node);
             }
         }
 
