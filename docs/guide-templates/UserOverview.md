@@ -419,7 +419,7 @@ using our
 Simply instantiate the correct adapter on top of your Guava graph, and
 you'll have an implementation of JGraphT's `Graph` interface which
 stays in sync with the Guava graph automatically, at no extra memory
-cost.  Now you can run JGraphT algorithms on top of your Guava graph,
+cost.  Now you can [run JGraphT algorithms](GuavaAdapter) on top of your Guava graph,
 or run our importers or exporters against it.
 
 ### JGraphX Adapter

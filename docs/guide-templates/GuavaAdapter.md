@@ -18,7 +18,7 @@ The graph does not have any information associated with the edges, so we can use
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-guava/src/test/java/org/jgrapht/graph/guava/MutableGraphAdapterTest.java?example=adaptGuavaGraph)
 ```
 
-Now suppose we want to find a [minimum vertex cover](https://brilliant.org/wiki/vertex-cover) for this graph.  JGraphT supplies [an algorithm](https://jgrapht.org/javadoc/org/jgrapht/alg/vertexcover/RecursiveExactVCImpl.html) for this purpose:
+Now suppose we want to find a [minimum vertex cover](https://brilliant.org/wiki/vertex-cover) for this graph.  JGraphT supplies [several algorithms](https://jgrapht.org/javadoc/org/jgrapht/alg/vertexcover/package-summary.html) for this purpose:
 
 ```java
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-guava/src/test/java/org/jgrapht/graph/guava/MutableGraphAdapterTest.java?example=findVertexCover)
