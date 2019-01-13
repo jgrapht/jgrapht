@@ -45,12 +45,19 @@ public class BFSShortestPath<V,E>
     BaseShortestPathAlgorithm<V, E>
 {
 
+    /**
+     * Construct a new instance.
+     *
+     * @param graph the input graph
+     */
     public BFSShortestPath(Graph<V, E> graph)
     {
         super(graph);
     }
 
-    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @SuppressWarnings("unchecked")
     public SingleSourcePaths<V, E> getPaths(V source)
