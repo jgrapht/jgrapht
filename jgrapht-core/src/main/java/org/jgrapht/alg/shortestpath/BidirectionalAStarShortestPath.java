@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2018, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2019, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,14 +22,11 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.graph.EdgeReversedGraph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.FibonacciHeapNode;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -68,7 +65,7 @@ import java.util.function.Supplier;
  */
 public class BidirectionalAStarShortestPath<V, E>
         extends
-        BaseShortestPathAlgorithm<V, E> {
+        BaseBidirectionalShortestPathAlgorithm<V, E> {
     /**
      * Heuristic used while shortest path computation.
      */
@@ -125,12 +122,12 @@ public class BidirectionalAStarShortestPath<V, E>
         }
 
         // create frontiers
-        SearchFrontier forwardFrontier = new SearchFrontier(graph, sink);
-        SearchFrontier backwardFrontier;
+        AStarSearchFrontier forwardFrontier = new AStarSearchFrontier(graph, sink);
+        AStarSearchFrontier backwardFrontier;
         if (graph.getType().isDirected()) {
-            backwardFrontier = new SearchFrontier(new EdgeReversedGraph<>(graph), source);
+            backwardFrontier = new AStarSearchFrontier(new EdgeReversedGraph<>(graph), source);
         } else {
-            backwardFrontier = new SearchFrontier(graph, source);
+            backwardFrontier = new AStarSearchFrontier(graph, source);
         }
 
         forwardFrontier.updateDistance(source, null, 0.0, 0.0);
@@ -140,8 +137,8 @@ public class BidirectionalAStarShortestPath<V, E>
         double bestPath = Double.POSITIVE_INFINITY;
         V bestPathCommonVertex = null;
 
-        SearchFrontier frontier = forwardFrontier;
-        SearchFrontier otherFrontier = backwardFrontier;
+        AStarSearchFrontier frontier = forwardFrontier;
+        AStarSearchFrontier otherFrontier = backwardFrontier;
 
         while (true) {
             // stopping condition
@@ -182,7 +179,7 @@ public class BidirectionalAStarShortestPath<V, E>
             }
 
             // swap frontiers
-            SearchFrontier tmpFrontier = frontier;
+            AStarSearchFrontier tmpFrontier = frontier;
             frontier = otherFrontier;
             otherFrontier = tmpFrontier;
         }
@@ -196,54 +193,10 @@ public class BidirectionalAStarShortestPath<V, E>
         }
     }
 
-    private GraphPath<V, E> createPath(
-            SearchFrontier forwardFrontier, SearchFrontier backwardFrontier, double weight, V source,
-            V commonVertex, V sink) {
-        LinkedList<E> edgeList = new LinkedList<>();
-        LinkedList<V> vertexList = new LinkedList<>();
-
-        // add common vertex
-        vertexList.add(commonVertex);
-
-        // traverse forward path
-        V v = commonVertex;
-        while (true) {
-            E e = forwardFrontier.getTreeEdge(v);
-
-            if (e == null) {
-                break;
-            }
-
-            edgeList.addFirst(e);
-            v = Graphs.getOppositeVertex(forwardFrontier.graph, e, v);
-            vertexList.addFirst(v);
-        }
-
-        // traverse reverse path
-        v = commonVertex;
-        while (true) {
-            E e = backwardFrontier.getTreeEdge(v);
-
-            if (e == null) {
-                break;
-            }
-
-            edgeList.addLast(e);
-            v = Graphs.getOppositeVertex(backwardFrontier.graph, e, v);
-            vertexList.addLast(v);
-        }
-
-        return new GraphWalk<>(graph, source, sink, vertexList, edgeList, weight);
-    }
-
     /**
-     * Helper class to maintain the search frontier
+     * Maintains search frontier during shortest path computation.
      */
-    class SearchFrontier {
-        /**
-         * Frontier`s graph.
-         */
-        final Graph<V, E> graph;
+    class AStarSearchFrontier extends BaseSearchFrontier {
         /**
          * End vertex of the frontier.
          */
@@ -268,8 +221,8 @@ public class BidirectionalAStarShortestPath<V, E>
          */
         final Map<V, E> cameFrom;
 
-        SearchFrontier(Graph<V, E> graph, V endVertex) {
-            this.graph = graph;
+        AStarSearchFrontier(Graph<V, E> graph, V endVertex) {
+            super(graph);
             this.endVertex = endVertex;
             openList = heapSupplier.get();
             vertexToHeapNodeMap = new HashMap<>();
@@ -304,6 +257,7 @@ public class BidirectionalAStarShortestPath<V, E>
             }
         }
 
+        @Override
         double getDistance(V v) {
             Double distance = gScoreMap.get(v);
             if (distance == null) {
@@ -313,6 +267,7 @@ public class BidirectionalAStarShortestPath<V, E>
             }
         }
 
+        @Override
         E getTreeEdge(V v) {
             E e = cameFrom.get(v);
             if (e == null) {
