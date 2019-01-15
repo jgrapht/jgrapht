@@ -41,14 +41,14 @@ import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Concurrent implementation implementation of the parallel version of the delta-stepping algorithm.
+ * Concurrent implementation of the parallel version of the delta-stepping algorithm.
  *
  * <p>
  * The time complexity of the algorithm is
  * $O(\frac{(|V| + |E| + n_{\Delta} + m_{\Delta})}{p} + \frac{L}{\Delta}\cdot d\cdot l_{\Delta}\cdot \log n)$, where,
  * denoting $\Delta$-path as a path of total weight at most $\Delta$ with no edge repetition,
  * <ul>
- * <li>$n_{\Delta}$ - number of vertices pairs (u,v), where u and v are connected by some $\Delta$-path.</li>
+ * <li>$n_{\Delta}$ - number of vertices pairs (u,v), where u and v are connected by some $\Delta$-path (a path with total weight at most $\Delta$).</li>
  * <li>$m_{\Delta}$ - number of vertices triples (u,$v^{\prime}$,v), where u and $v^{\prime}$ are connected
  * by some $\Delta$-path and edge ($v^{\prime}$,v) has weight at most $\Delta$.</li>
  * <li>$L$ - maximal weight of a shortest path from selected source to any sink.</li>
@@ -63,10 +63,10 @@ import java.util.concurrent.TimeUnit;
  *
  * <p>
  * The algorithm solves the single source shortest path problem in a graph with no
- * negative weight edges. Its advantage of the {@link DijkstraShortestPath}
- * algorithm is that it can benefit from multiple threads. While the Dijkstra`s
- * algorithm is fully sequential and the {@link BellmanFordShortestPath} algorithm
- * has high parallelism since all edges can be relaxed in parallel, the delta-stepping
+ * negative weight edges. Its advantage of the {@link DijkstraShortestPath} and
+ * {@link BellmanFordShortestPath} algorithms is that it can benefit from multiple
+ * threads. While the Dijkstra`s algorithm is fully sequential and the Bellman-Ford`s algorithm
+ * has high parallelism since all edges can be relaxed simultaneously, the delta-stepping
  * introduces parameter delta, which, when chooses optimally, yields still good parallelism
  * and at the same time enables avoiding too many re-relaxations of the edges.
  *
@@ -84,7 +84,7 @@ import java.util.concurrent.TimeUnit;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
- * @since October 2018
+ * @since January 2018
  */
 public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E> {
     /**
@@ -112,7 +112,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private double delta;
     /**
-     * Maximum number of threads the {@link #completionService} can run at the same time.
+     * Maximal number of threads used in the computations.
      */
     private int parallelism;
 
@@ -155,7 +155,8 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private Runnable heavyRelaxTask;
     /**
-     * Indicates when all the vertices have been added to the {@link #verticesQueue}.
+     * Indicates when all the vertices are been added to the
+     * {@link #verticesQueue} on each iteration.
      */
     private volatile boolean allVerticesAdded;
 
@@ -182,19 +183,22 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      * Constructs a new instance of the algorithm for a given graph and parallelism.
      *
      * @param graph       the graph
-     * @param parallelism parallelism
+     * @param parallelism maximum number of threads used in the computations
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism) {
         this(graph, 0.0, parallelism);
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta, parallelism and loadBalancing.
-     * If delta is $0.0$ it will be computed when the {@link #getPath(Object, Object)} method will be invoked.
+     * Constructs a new instance of the algorithm for a given graph, delta, parallelism.
+     * If delta is $0.0$ it will be computed during the algorithm execution. In general
+     * if the value of $\frac{maximum edge weight}{maximum edge outdegree}$ is know beforehand,
+     * it is preferable to specify it via this constructor, because processing the whole graph
+     * to compute may significantly slow down the algorithm.
      *
      * @param graph       the graph
      * @param delta       bucket width
-     * @param parallelism num of threads
+     * @param parallelism maximum number of threads used in the computations
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism) {
         super(graph);
@@ -226,6 +230,8 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
     /**
      * Is used during the algorithm to compute maximum edge weight of the {@link #graph}.
+     * Apart from computing the maximal edge weight in the graph the task also checks if
+     * there is emy edges with negative weights. It is done to speedup the algorithm.
      */
     class MaxEdgeWeightTask extends RecursiveTask<Double> {
         /**
@@ -253,7 +259,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
          * {@link #spliterator} is less than {@link #loadBalancing},
          * then computation is performed sequentially. If not, the
          * {@link #spliterator} is used to split the collection and
-         * two new child tasks are created.
+         * then two new child tasks are created.
          *
          * @return max edge weight
          */
@@ -301,7 +307,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
         maxEdgeWeight = getMaxEdgeWeight();
-        if (delta == 0.0) {
+        if (delta == 0.0) { // the value should be computed
             delta = findDelta();
         }
         numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
@@ -350,9 +356,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         int firstNonEmptyBucket = 0;
         List<Set<V>> removed = new ArrayList<>();
         while (firstNonEmptyBucket < numOfBuckets) {
+            // the content of a bucket is replaced
+            // in order not to handle the same vertices
+            // several times
             Set<V> bucketElements = getContentAndReplace(firstNonEmptyBucket);
 
-            while (!bucketElements.isEmpty()) {
+            while (!bucketElements.isEmpty()) {  // reinsertions may occur
                 removed.add(bucketElements);
                 findAndRelaxLightRequests(bucketElements);
                 bucketElements = getContentAndReplace(firstNonEmptyBucket);
@@ -361,7 +370,8 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
             findAndRelaxHeavyRequests(removed);
             removed.clear();
             ++firstNonEmptyBucket;
-            while (firstNonEmptyBucket < numOfBuckets && bucketStructure[firstNonEmptyBucket].isEmpty()) {
+            while (firstNonEmptyBucket < numOfBuckets
+                    && bucketStructure[firstNonEmptyBucket].isEmpty()) { // skip empty buckets
                 ++firstNonEmptyBucket;
             }
         }
@@ -373,7 +383,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private void shutDownExecutor() {
         executor.shutdown();
-        try {
+        try { // wait till the executor is shut down
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -381,11 +391,10 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Manages execution of edges relaxation.
-     * Adds all the elements from {@code vertices}
-     * the the {@link #verticesQueue} and submits
-     * as many {@link #lightRelaxTask} to the {@link #completionService}
-     * as needed.
+     * Manages edges relaxation. Adds all elements from
+     * {@code vertices} to the {@link #verticesQueue}
+     * and submits as many {@link #lightRelaxTask} to the
+     * {@link #completionService} as needed.
      *
      * @param vertices vertices
      */
@@ -394,13 +403,17 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         int numOfVertices = vertices.size();
         int numOfTasks;
         if (numOfVertices >= parallelism) {
+            // use as available tasks
             numOfTasks = parallelism;
             Iterator<V> iterator = vertices.iterator();
+            // provide some work to the workers
             addSetVertices(iterator, parallelism);
-            submitTasks(lightRelaxTask, parallelism - 1);
+            submitTasks(lightRelaxTask, parallelism - 1); // one thread should
+            // submit rest of vertices
             addSetRemaining(iterator);
-            submitTasks(lightRelaxTask, 1);
+            submitTasks(lightRelaxTask, 1); // use remaining thread for relaxation
         } else {
+            // only several relaxation tasks are needed
             numOfTasks = numOfVertices;
             addSetRemaining(vertices.iterator());
             submitTasks(lightRelaxTask, numOfVertices);
@@ -423,14 +436,18 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         int numOfVertices = verticesSets.stream().mapToInt(Set::size).sum();
         int numOfTasks;
         if (numOfVertices >= parallelism) {
+            // use as available tasks
             numOfTasks = parallelism;
             Iterator<Set<V>> setIterator = verticesSets.iterator();
+            // provide some work to the workers
             Iterator<V> iterator = addSetsVertices(setIterator, parallelism);
-            submitTasks(heavyRelaxTask, parallelism - 1);
+            submitTasks(heavyRelaxTask, parallelism - 1);// one thread should
+            // submit rest of vertices
             addSetRemaining(iterator);
             addSetsRemaining(setIterator);
-            submitTasks(heavyRelaxTask, 1);
+            submitTasks(heavyRelaxTask, 1); // use remaining thread for relaxation
         } else {
+            // only several relaxation tasks are needed
             numOfTasks = numOfVertices;
             addSetsRemaining(verticesSets.iterator());
             submitTasks(heavyRelaxTask, numOfVertices);
@@ -538,7 +555,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private void relax(V v, E e, double distance) {
         int updatedBucket = bucketIndex(distance);
-        synchronized (v) {
+        synchronized (v) { // to make relaxation updates thread-safe
             Pair<Double, E> oldData = distanceAndPredecessorMap.get(v);
             if (distance < oldData.getFirst()) {
                 if (!oldData.getFirst().equals(Double.POSITIVE_INFINITY)) {
@@ -600,8 +617,10 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
             while (true) {
                 V v = vertices.poll();
-                if (v == null) {
-                    if (allVerticesAdded && vertices.isEmpty()) {
+                if (v == null) { // we might have a termination situation
+                    if (allVerticesAdded && vertices.isEmpty()) { // need to check
+                        // is the queue is empty, because some vertices might have been added
+                        // while passing from first if condition to the second
                         break;
                     }
                 } else {
@@ -617,7 +636,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
 
     /**
      * Task that is submitted to the {@link #completionService}
-     * during shortest path computation for light relax requests relaxation.
+     * during shortest path computation for heavy relax requests relaxation.
      */
     class HeavyRelaxTask implements Runnable {
         /**

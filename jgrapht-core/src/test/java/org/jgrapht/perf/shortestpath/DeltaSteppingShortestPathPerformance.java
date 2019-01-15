@@ -121,17 +121,17 @@ public class DeltaSteppingShortestPathPerformance {
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingDense(CompleteGraphState data) {
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDeltaSteppingComplete(CompleteGraphState data) {
         return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraDense(CompleteGraphState data) {
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testDijkstraComplete(CompleteGraphState data) {
         return new DijkstraShortestPath<>(data.graph).getPaths(0);
     }
 
     @Benchmark
-    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordDense(CompleteGraphState data) {
+    public ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> testBellmanFordComplete(CompleteGraphState data) {
         return new BellmanFordShortestPath<>(data.graph).getPaths(0);
     }
 
