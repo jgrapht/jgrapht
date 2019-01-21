@@ -18,29 +18,29 @@
 package org.jgrapht.alg.drawing.model;
 
 /**
- * A 2-dimensional rectangle.
+ * A 3-dimensional box.
  * 
  * @author Dimitrios Michail
  *
  * @param <N> the number type
  */
-public abstract class Rectangle2D<N>
+public abstract class Box3D<N>
     extends
-    Rectangle<N>
+    Box<N>
 {
-    private static final long serialVersionUID = -1855277817131669241L;
+    private static final long serialVersionUID = 7261288786532743819L;
 
     /**
-     * Create a new rectangle
+     * Create a new box
      * 
      * @param coordinates the lower left corner coordinates
      * @param sides width and height
      */
-    public Rectangle2D(N[] coordinates, N[] sides)
+    public Box3D(N[] coordinates, N[] sides)
     {
         super(coordinates, sides);
-        assert coordinates.length == 2;
-        assert sides.length == 2;
+        assert coordinates.length == 3;
+        assert sides.length == 3;
     }
 
     /**
@@ -64,6 +64,16 @@ public abstract class Rectangle2D<N>
     }
 
     /**
+     * Get the minimum y coordinate
+     * 
+     * @return the minimum y coordinate
+     */
+    public N getMinZ()
+    {
+        return coordinates[2];
+    }
+
+    /**
      * Get the width
      * 
      * @return the width
@@ -83,11 +93,22 @@ public abstract class Rectangle2D<N>
         return sides[1];
     }
 
+    /**
+     * Get the depth
+     * 
+     * @return the depth
+     */
+    public N getDepth()
+    {
+        return sides[2];
+    }
+
     @Override
     public String toString()
     {
-        return "Rectangle2D [minX=" + coordinates[0] + ", minY=" + coordinates[1] + ", width="
-            + sides[0] + ", height=" + sides[1] + "]";
+        return "Box3D [minX=" + coordinates[0] + ", minY=" + coordinates[1] + ", minZ="
+            + coordinates[2] + ", width=" + sides[0] + ", height=" + sides[1] + ", depth="
+            + sides[2] + "]";
     }
 
 }

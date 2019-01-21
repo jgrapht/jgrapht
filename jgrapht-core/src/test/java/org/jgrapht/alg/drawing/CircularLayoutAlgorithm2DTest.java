@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.DoubleRectangle2D;
+import org.jgrapht.alg.drawing.model.DoubleBox2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
@@ -51,7 +51,7 @@ public class CircularLayoutAlgorithm2DTest
 
         CircularLayoutAlgorithm2D<String, DefaultEdge> alg = new CircularLayoutAlgorithm2D<>(1d);
         MapLayoutModel2D<String, Double> model =
-            new MapLayoutModel2D<>(DoubleRectangle2D.of(0d, 0d, 2d, 2d));
+            new MapLayoutModel2D<>(DoubleBox2D.of(0d, 0d, 2d, 2d));
 
         alg.layout(graph, model);
 
@@ -81,7 +81,7 @@ public class CircularLayoutAlgorithm2DTest
         CircularLayoutAlgorithm2D<String, DefaultEdge> alg =
             new CircularLayoutAlgorithm2D<>(1d, (a, b) -> a.compareTo(b));
         MapLayoutModel2D<String, Double> model =
-            new MapLayoutModel2D<>(DoubleRectangle2D.of(0d, 0d, 2d, 2d));
+            new MapLayoutModel2D<>(DoubleBox2D.of(0d, 0d, 2d, 2d));
 
         alg.layout(graph, model);
 

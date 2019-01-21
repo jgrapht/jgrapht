@@ -29,7 +29,7 @@ import org.jgrapht.alg.drawing.model.DoublePoint2D;
 import org.jgrapht.alg.drawing.model.LayoutModel;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Points;
-import org.jgrapht.alg.drawing.model.Rectangle2D;
+import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 /**
@@ -123,7 +123,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     @Override
     public void layout(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>> model)
+        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
     {
         this.savedComparisons = 0;
         super.layout(graph, model);
@@ -131,7 +131,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     @Override
     protected Map<V, Point2D<Double>> calculateRepulsiveForces(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>> model)
+        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
     {
         // index all points
         DoubleFRQuadTree quadTree = new DoubleFRQuadTree(model.getDrawableArea());
@@ -153,8 +153,8 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
             
             while (!queue.isEmpty()) {
                 Node node = queue.removeFirst();
-                Rectangle2D<Double> rectangle = node.getRectangle();
-                double rectangleWidth = rectangle.getWidth();
+                Box2D<Double> box = node.getBox();
+                double boxWidth = box.getWidth();
 
                 Point2D<Double> uPos = null;
                 if (node.isLeaf()) {
@@ -167,7 +167,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
                     if (comparator.compare(distanceToCentroid, 0d) == 0) {
                         savedComparisons += node.getNumberOfPoints() - 1;
                         continue;
-                    } else if (comparator.compare(rectangleWidth / distanceToCentroid, theta) < 0) {
+                    } else if (comparator.compare(boxWidth / distanceToCentroid, theta) < 0) {
                         uPos = Points.sub(node.getCentroid(), origin);
                         savedComparisons += node.getNumberOfPoints() - 1;
                     } else {

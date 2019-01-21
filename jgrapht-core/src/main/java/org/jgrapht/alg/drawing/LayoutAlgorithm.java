@@ -20,7 +20,7 @@ package org.jgrapht.alg.drawing;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.drawing.model.LayoutModel;
 import org.jgrapht.alg.drawing.model.Point;
-import org.jgrapht.alg.drawing.model.Rectangle;
+import org.jgrapht.alg.drawing.model.Box;
 
 /**
  * A general interface for a layout algorithm.
@@ -31,9 +31,9 @@ import org.jgrapht.alg.drawing.model.Rectangle;
  * @param <E> the graph edge type
  * @param <N> the number type
  * @param <P> the point type
- * @param <R> the rectangle type
+ * @param <R> the box type
  */
-public interface LayoutAlgorithm<V, E, N extends Number, P extends Point<N>, R extends Rectangle<N>>
+public interface LayoutAlgorithm<V, E, N extends Number, P extends Point<N>, R extends Box<N>>
 {
 
     /**

@@ -23,7 +23,7 @@ import java.util.Random;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.DoubleRectangle2D;
+import org.jgrapht.alg.drawing.model.DoubleBox2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
@@ -54,7 +54,7 @@ public class RandomLayoutAlgorithm2DTest
         RandomLayoutAlgorithm2D<String, DefaultEdge> alg = new RandomLayoutAlgorithm2D<>(5L);
 
         MapLayoutModel2D<String, Double> model =
-            new MapLayoutModel2D<>(DoubleRectangle2D.of(0d, 0d, 10d, 20d));
+            new MapLayoutModel2D<>(DoubleBox2D.of(0d, 0d, 10d, 20d));
         alg.layout(graph, model);
 
         Random rng = new Random(5L);

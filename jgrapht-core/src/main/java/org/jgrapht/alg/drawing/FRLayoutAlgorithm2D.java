@@ -29,7 +29,7 @@ import org.jgrapht.alg.drawing.model.LayoutModel;
 import org.jgrapht.alg.drawing.model.MapLayoutModel;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Points;
-import org.jgrapht.alg.drawing.model.Rectangle2D;
+import org.jgrapht.alg.drawing.model.Box2D;
 
 /**
  * Fruchterman and Reingold Force-Directed Placement Algorithm.
@@ -57,7 +57,7 @@ public class FRLayoutAlgorithm2D<V, E>
     protected double optimalDistance;
     protected double normalizationFactor;
     protected int iterations;
-    protected BiFunction<LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>>, Integer,
+    protected BiFunction<LayoutModel<V, Double, Point2D<Double>, Box2D<Double>>, Integer,
         TemperatureModel> temperatureModelSupplier;
 
     /**
@@ -119,7 +119,7 @@ public class FRLayoutAlgorithm2D<V, E>
      */
     public FRLayoutAlgorithm2D(
         int iterations, double normalizationFactor,
-        BiFunction<LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>>, Integer,
+        BiFunction<LayoutModel<V, Double, Point2D<Double>, Box2D<Double>>, Integer,
             TemperatureModel> temperatureModelSupplier,
         Random rng)
     {
@@ -131,10 +131,10 @@ public class FRLayoutAlgorithm2D<V, E>
 
     @Override
     public void layout(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>> model)
+        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
     {
         // read area
-        Rectangle2D<Double> drawableArea = model.getDrawableArea();
+        Box2D<Double> drawableArea = model.getDrawableArea();
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinY();
 
@@ -151,7 +151,7 @@ public class FRLayoutAlgorithm2D<V, E>
             }
         } else {
             // assign random initial positions
-            MapLayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>> randomModel =
+            MapLayoutModel<V, Double, Point2D<Double>, Box2D<Double>> randomModel =
                 new MapLayoutModel<>(drawableArea);
             new RandomLayoutAlgorithm2D<V, E>(rng).layout(graph, randomModel);
             for (V v : graph.vertexSet()) {
@@ -237,7 +237,7 @@ public class FRLayoutAlgorithm2D<V, E>
      * @return the displacement per vertex due to the repulsive forces
      */
     protected Map<V, Point2D<Double>> calculateRepulsiveForces(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>> model)
+        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
     {
         Point2D<Double> origin =
             DoublePoint2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
@@ -271,7 +271,7 @@ public class FRLayoutAlgorithm2D<V, E>
      * @return the displacement per vertex due to the attractive forces
      */
     protected Map<V, Point2D<Double>> calculateAttractiveForces(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Rectangle2D<Double>> model)
+        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
     {
         Point2D<Double> origin =
             DoublePoint2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());

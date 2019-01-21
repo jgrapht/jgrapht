@@ -35,7 +35,7 @@ import java.util.function.Function;
  * @param <P> the point type
  * @param <R> the rectangle type 
  */
-public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, R extends Rectangle<N>>
+public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, R extends Box<N>>
     implements
     LayoutModel<V, N, P, R>
 {

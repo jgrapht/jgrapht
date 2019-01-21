@@ -22,59 +22,51 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * Test {@link DoubleRectangle3D}.
+ * Test {@link DoubleBox2D}.
  * 
  * @author Dimitrios Michail
  */
-public class DoubleRectangle3DTest
+public class DoubleBox2DTest
 {
 
     @Test
     public void testConstructor1()
     {
-        DoubleRectangle3D p = new DoubleRectangle3D(5, 10, 15);
+        DoubleBox2D p = new DoubleBox2D(5, 10);
         assertEquals(p.getWidth(), 5d, 1e-9);
         assertEquals(p.getHeight(), 10d, 1e-9);
-        assertEquals(p.getDepth(), 15d, 1e-9);
         assertEquals(p.getMinX(), 0d, 1e-9);
         assertEquals(p.getMinY(), 0d, 1e-9);
-        assertEquals(p.getMinZ(), 0d, 1e-9);
-    }
-
-    @Test
-    public void testFactoryMethod1()
-    {
-        DoubleRectangle3D p = DoubleRectangle3D.of(5, 10, 15);
-        assertEquals(p.getWidth(), 5d, 1e-9);
-        assertEquals(p.getHeight(), 10d, 1e-9);
-        assertEquals(p.getDepth(), 15d, 1e-9);
-        assertEquals(p.getMinX(), 0d, 1e-9);
-        assertEquals(p.getMinY(), 0d, 1e-9);
-        assertEquals(p.getMinZ(), 0d, 1e-9);
     }
 
     @Test
     public void testConstructor2()
     {
-        DoubleRectangle3D p = new DoubleRectangle3D(4, 5, 6, 7, 8, 9);
-        assertEquals(p.getMinX(), 4d, 1e-9);
-        assertEquals(p.getMinY(), 5d, 1e-9);
-        assertEquals(p.getMinZ(), 6d, 1e-9);
+        DoubleBox2D p = new DoubleBox2D(5, 4, 7, 8);
         assertEquals(p.getWidth(), 7d, 1e-9);
         assertEquals(p.getHeight(), 8d, 1e-9);
-        assertEquals(p.getDepth(), 9d, 1e-9);
+        assertEquals(p.getMinX(), 5d, 1e-9);
+        assertEquals(p.getMinY(), 4d, 1e-9);
+    }
+
+    @Test
+    public void testFactoryMethod1()
+    {
+        DoubleBox2D p = DoubleBox2D.of(5, 10);
+        assertEquals(p.getWidth(), 5d, 1e-9);
+        assertEquals(p.getHeight(), 10d, 1e-9);
+        assertEquals(p.getMinX(), 0d, 1e-9);
+        assertEquals(p.getMinY(), 0d, 1e-9);
     }
 
     @Test
     public void testFactoryMethod2()
     {
-        DoubleRectangle3D p = DoubleRectangle3D.of(4, 5, 6, 7, 8, 9);
-        assertEquals(p.getMinX(), 4d, 1e-9);
-        assertEquals(p.getMinY(), 5d, 1e-9);
-        assertEquals(p.getMinZ(), 6d, 1e-9);
+        DoubleBox2D p = DoubleBox2D.of(5, 4, 7, 8);
         assertEquals(p.getWidth(), 7d, 1e-9);
         assertEquals(p.getHeight(), 8d, 1e-9);
-        assertEquals(p.getDepth(), 9d, 1e-9);
+        assertEquals(p.getMinX(), 5d, 1e-9);
+        assertEquals(p.getMinY(), 4d, 1e-9);
     }
 
 }

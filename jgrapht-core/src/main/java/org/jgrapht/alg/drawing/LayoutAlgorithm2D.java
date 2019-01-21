@@ -18,7 +18,7 @@
 package org.jgrapht.alg.drawing;
 
 import org.jgrapht.alg.drawing.model.Point2D;
-import org.jgrapht.alg.drawing.model.Rectangle2D;
+import org.jgrapht.alg.drawing.model.Box2D;
 
 /**
  * A general interface for a 2d layout algorithm.
@@ -31,6 +31,6 @@ import org.jgrapht.alg.drawing.model.Rectangle2D;
  */
 public interface LayoutAlgorithm2D<V, E, N extends Number>
     extends
-    LayoutAlgorithm<V, E, N, Point2D<N>, Rectangle2D<N>>
+    LayoutAlgorithm<V, E, N, Point2D<N>, Box2D<N>>
 {
 }

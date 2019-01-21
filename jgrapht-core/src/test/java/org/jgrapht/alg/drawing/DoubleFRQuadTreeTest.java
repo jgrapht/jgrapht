@@ -26,7 +26,7 @@ import java.util.Random;
 
 import org.jgrapht.alg.drawing.DoubleFRQuadTree.Node;
 import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.DoubleRectangle2D;
+import org.jgrapht.alg.drawing.model.DoubleBox2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ public class DoubleFRQuadTreeTest
         double width = 100;
         double height = 100;
         int points = 10000;
-        DoubleRectangle2D region = DoubleRectangle2D.of(0, 0, width, height);
+        DoubleBox2D region = DoubleBox2D.of(0, 0, width, height);
         DoubleFRQuadTree tree = new DoubleFRQuadTree(region);
 
         Random rng = new Random(17);

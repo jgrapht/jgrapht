@@ -50,16 +50,16 @@ public class ListenableLayoutModelTest
         String v1 = graph.addVertex();
         String v2 = graph.addVertex();
 
-        MapLayoutModel<String, Double, Point2D<Double>, Rectangle2D<Double>> delegate =
-            new MapLayoutModel<>(DoubleRectangle2D.of(0, 0, 2d, 2d));
+        MapLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> delegate =
+            new MapLayoutModel<>(DoubleBox2D.of(0, 0, 2d, 2d));
 
-        ListenableLayoutModel<String, Double, Point2D<Double>, Rectangle2D<Double>> model =
+        ListenableLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> model =
             new ListenableLayoutModel<>(delegate);
         
         CountListener listener = new CountListener();
         model.addListener(listener);
 
-        assertEquals(DoubleRectangle2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
+        assertEquals(DoubleBox2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
         assertNull(model.getInitializer());
 
         assertNull(model.get(v1));

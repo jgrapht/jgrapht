@@ -29,14 +29,14 @@ import java.util.function.Function;
  */
 public class MapLayoutModel3D<V, N extends Number>
     extends
-    MapLayoutModel<V, N, Point3D<N>, Rectangle3D<N>>
+    MapLayoutModel<V, N, Point3D<N>, Box3D<N>>
 {
     /**
      * Create a new model.
      * 
      * @param drawableArea the drawable area
      */
-    public MapLayoutModel3D(Rectangle3D<N> drawableArea)
+    public MapLayoutModel3D(Box3D<N> drawableArea)
     {
         super(drawableArea);
     }
@@ -47,7 +47,7 @@ public class MapLayoutModel3D<V, N extends Number>
      * @param drawableArea the drawable area
      * @param initializer the vertex initializer
      */
-    public MapLayoutModel3D(Rectangle3D<N> drawableArea, Function<V, Point3D<N>> initializer)
+    public MapLayoutModel3D(Box3D<N> drawableArea, Function<V, Point3D<N>> initializer)
     {
         super(drawableArea, initializer);
     }

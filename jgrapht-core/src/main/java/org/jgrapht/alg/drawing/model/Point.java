@@ -20,6 +20,7 @@ package org.jgrapht.alg.drawing.model;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * A base implementation for a point in Euclidean space.
@@ -86,16 +87,9 @@ public abstract class Point<N>
     @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append('(');
-        for (int i = 0; i < coordinates.length; i++) {
-            sb.append(coordinates[i]);
-            if (i < coordinates.length - 1) {
-                sb.append(',');
-            }
-        }
-        sb.append(')');
-        return sb.toString();
+        return Arrays
+            .asList(coordinates).stream().map(String::valueOf)
+            .collect(Collectors.joining(",", "(", ")"));
     }
 
 }

@@ -22,13 +22,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * A base implementation for a rectangle in Euclidean space.
+ * A base implementation for a box in Euclidean space.
  * 
  * @author Dimitrios Michail
  *
  * @param <N> the number type
  */
-public abstract class Rectangle<N>
+public abstract class Box<N>
     implements
     Serializable
 {
@@ -45,12 +45,12 @@ public abstract class Rectangle<N>
     protected N[] sides;
 
     /**
-     * Create a new rectangle
+     * Create a new box
      * 
      * @param coordinates the coordinates of lower corner
      * @param sides the side lengths
      */
-    public Rectangle(N[] coordinates, N[] sides)
+    public Box(N[] coordinates, N[] sides)
     {
         this.coordinates = Objects.requireNonNull(coordinates);
         this.sides = Objects.requireNonNull(sides);
@@ -60,9 +60,9 @@ public abstract class Rectangle<N>
     }
 
     /**
-     * Get the dimensions of the rectangle
+     * Get the dimensions of the box
      * 
-     * @return the dimensions of the rectangle
+     * @return the dimensions of the box
      */
     public int getDimensions()
     {
@@ -88,7 +88,7 @@ public abstract class Rectangle<N>
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Rectangle<?> other = (Rectangle<?>) obj;
+        Box<?> other = (Box<?>) obj;
         if (!Arrays.equals(coordinates, other.coordinates))
             return false;
         if (!Arrays.equals(sides, other.sides))

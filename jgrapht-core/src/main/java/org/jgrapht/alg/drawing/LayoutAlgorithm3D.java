@@ -18,7 +18,7 @@
 package org.jgrapht.alg.drawing;
 
 import org.jgrapht.alg.drawing.model.Point3D;
-import org.jgrapht.alg.drawing.model.Rectangle3D;
+import org.jgrapht.alg.drawing.model.Box3D;
 
 /**
  * A general interface for a 3d layout algorithm.
@@ -31,6 +31,6 @@ import org.jgrapht.alg.drawing.model.Rectangle3D;
  */
 public interface LayoutAlgorithm3D<V, E, N extends Number>
     extends
-    LayoutAlgorithm<V, E, N, Point3D<N>, Rectangle3D<N>>
+    LayoutAlgorithm<V, E, N, Point3D<N>, Box3D<N>>
 {
 }

@@ -81,5 +81,5 @@ public abstract class Points
     {
         return DoublePoint2D.of(a.getX() * scalar, a.getY() * scalar);
     }
-
+    
 }

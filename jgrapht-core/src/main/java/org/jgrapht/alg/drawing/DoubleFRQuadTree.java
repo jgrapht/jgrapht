@@ -25,8 +25,8 @@ import java.util.Objects;
 
 import org.jgrapht.alg.drawing.model.DoublePoint2D;
 import org.jgrapht.alg.drawing.model.Point2D;
-import org.jgrapht.alg.drawing.model.Rectangle2D;
-import org.jgrapht.alg.drawing.model.Rectangles;
+import org.jgrapht.alg.drawing.model.Box2D;
+import org.jgrapht.alg.drawing.model.Boxes;
 import org.jgrapht.alg.util.Pair;
 
 /**
@@ -51,11 +51,11 @@ class DoubleFRQuadTree
     /**
      * Create a new tree for a certain area.
      * 
-     * @param rectangle the area
+     * @param box the area
      */
-    public DoubleFRQuadTree(Rectangle2D<Double> rectangle)
+    public DoubleFRQuadTree(Box2D<Double> box)
     {
-        this.root = new Node(rectangle);
+        this.root = new Node(box);
     }
 
     /**
@@ -74,13 +74,13 @@ class DoubleFRQuadTree
                 }
 
                 // split
-                Rectangle2D<Double> rect = cur.getRectangle();
-                Pair<Rectangle2D<Double>, Rectangle2D<Double>> xsplit =
-                    Rectangles.splitAlongXAxis(rect);
-                Pair<Rectangle2D<Double>, Rectangle2D<Double>> west =
-                    Rectangles.splitAlongYAxis(xsplit.getFirst());
-                Pair<Rectangle2D<Double>, Rectangle2D<Double>> east =
-                    Rectangles.splitAlongYAxis(xsplit.getSecond());
+                Box2D<Double> rect = cur.getBox();
+                Pair<Box2D<Double>, Box2D<Double>> xsplit =
+                    Boxes.splitAlongXAxis(rect);
+                Pair<Box2D<Double>, Box2D<Double>> west =
+                    Boxes.splitAlongYAxis(xsplit.getFirst());
+                Pair<Box2D<Double>, Box2D<Double>> east =
+                    Boxes.splitAlongYAxis(xsplit.getSecond());
 
                 // create 4 children
                 cur.children = new Node[4];
@@ -92,13 +92,13 @@ class DoubleFRQuadTree
                 // distribute old points and compute centroid
                 double centroidX = 0, centroidY = 0;
                 for (Point2D<Double> point : cur.points) {
-                    if (Rectangles.containsPoint(cur.children[NW].getRectangle(), point)) {
+                    if (Boxes.containsPoint(cur.children[NW].getBox(), point)) {
                         cur.children[NW].points.add(point);
-                    } else if (Rectangles.containsPoint(cur.children[NE].getRectangle(), point)) {
+                    } else if (Boxes.containsPoint(cur.children[NE].getBox(), point)) {
                         cur.children[NE].points.add(point);
-                    } else if (Rectangles.containsPoint(cur.children[SW].getRectangle(), point)) {
+                    } else if (Boxes.containsPoint(cur.children[SW].getBox(), point)) {
                         cur.children[SW].points.add(point);
-                    } else if (Rectangles.containsPoint(cur.children[SE].getRectangle(), point)) {
+                    } else if (Boxes.containsPoint(cur.children[SE].getBox(), point)) {
                         cur.children[SE].points.add(point);
                     }
                     centroidX += point.getX();
@@ -122,13 +122,13 @@ class DoubleFRQuadTree
                     (cur.centroid.getY() * (cur.totalPoints - 1) + p.getY()) / cur.totalPoints);
 
             // non-leaf
-            if (Rectangles.containsPoint(cur.children[NW].getRectangle(), p)) {
+            if (Boxes.containsPoint(cur.children[NW].getBox(), p)) {
                 cur = cur.children[NW];
-            } else if (Rectangles.containsPoint(cur.children[NE].getRectangle(), p)) {
+            } else if (Boxes.containsPoint(cur.children[NE].getBox(), p)) {
                 cur = cur.children[NE];
-            } else if (Rectangles.containsPoint(cur.children[SW].getRectangle(), p)) {
+            } else if (Boxes.containsPoint(cur.children[SW].getBox(), p)) {
                 cur = cur.children[SW];
-            } else if (Rectangles.containsPoint(cur.children[SE].getRectangle(), p)) {
+            } else if (Boxes.containsPoint(cur.children[SE].getBox(), p)) {
                 cur = cur.children[SE];
             } else {
                 throw new IllegalArgumentException();
@@ -155,7 +155,7 @@ class DoubleFRQuadTree
     public class Node
     {
         // node region
-        Rectangle2D<Double> rectangle;
+        Box2D<Double> box;
 
         // internal node
         int totalPoints;
@@ -168,11 +168,11 @@ class DoubleFRQuadTree
         /**
          * Create a new node for a given area
          * 
-         * @param rectangle the are
+         * @param box the area
          */
-        public Node(Rectangle2D<Double> rectangle)
+        public Node(Box2D<Double> box)
         {
-            this.rectangle = Objects.requireNonNull(rectangle);
+            this.box = Objects.requireNonNull(box);
             this.points = new ArrayList<>();
         }
 
@@ -223,9 +223,9 @@ class DoubleFRQuadTree
          * 
          * @return the area of the node
          */
-        public Rectangle2D<Double> getRectangle()
+        public Box2D<Double> getBox()
         {
-            return rectangle;
+            return box;
         }
 
         /**

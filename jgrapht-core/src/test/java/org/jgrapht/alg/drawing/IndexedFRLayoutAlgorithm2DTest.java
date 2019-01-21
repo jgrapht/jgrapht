@@ -24,10 +24,10 @@ import java.util.Map;
 import java.util.Random;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.model.DoubleRectangle2D;
+import org.jgrapht.alg.drawing.model.DoubleBox2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel;
 import org.jgrapht.alg.drawing.model.Point2D;
-import org.jgrapht.alg.drawing.model.Rectangle2D;
+import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
@@ -68,8 +68,8 @@ public class IndexedFRLayoutAlgorithm2DTest
         IndexedFRLayoutAlgorithm2D<String, DefaultEdge> alg =
             new IndexedFRLayoutAlgorithm2D<>(iterations, theta, normalizationFactor, rng);
 
-        MapLayoutModel<String, Double, Point2D<Double>, Rectangle2D<Double>> model =
-            new MapLayoutModel<>(DoubleRectangle2D.of(0d, 0d, 100d, 100d));
+        MapLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> model =
+            new MapLayoutModel<>(DoubleBox2D.of(0d, 0d, 100d, 100d));
         alg.layout(graph, model);
 
         Map<String, Point2D<Double>> result = model.collect();
@@ -127,8 +127,8 @@ public class IndexedFRLayoutAlgorithm2DTest
         IndexedFRLayoutAlgorithm2D<String, DefaultEdge> alg =
             new IndexedFRLayoutAlgorithm2D<>(iterations, theta, normalizationFactor, rng);
 
-        MapLayoutModel<String, Double, Point2D<Double>, Rectangle2D<Double>> model =
-            new MapLayoutModel<>(DoubleRectangle2D.of(0d, 0d, 100d, 100d));
+        MapLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> model =
+            new MapLayoutModel<>(DoubleBox2D.of(0d, 0d, 100d, 100d));
         alg.layout(graph, model);
 
         Map<String, Point2D<Double>> result = model.collect();

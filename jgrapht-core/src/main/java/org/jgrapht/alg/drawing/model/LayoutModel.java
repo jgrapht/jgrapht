@@ -34,7 +34,7 @@ import org.jgrapht.Graph;
  * @param <P> the point type
  * @param <R> the rectangle type 
  */
-public interface LayoutModel<V, N extends Number, P extends Point<N>, R extends Rectangle<N>>
+public interface LayoutModel<V, N extends Number, P extends Point<N>, R extends Box<N>>
     extends
     Iterable<Map.Entry<V, P>>
 {

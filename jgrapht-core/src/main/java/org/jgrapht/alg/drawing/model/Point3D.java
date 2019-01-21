@@ -24,7 +24,7 @@ package org.jgrapht.alg.drawing.model;
  *
  * @param <N> the number type
  */
-public abstract class Point3D<N extends Number>
+public abstract class Point3D<N>
     extends
     Point<N>
 {

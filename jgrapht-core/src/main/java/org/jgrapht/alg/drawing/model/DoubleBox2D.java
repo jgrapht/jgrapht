@@ -18,79 +18,69 @@
 package org.jgrapht.alg.drawing.model;
 
 /**
- * A 3-dimensional rectangle using {@link Double}.
+ * A 2-dimensional box (rectangle) using {@link Double}.
  * 
  * @author Dimitrios Michail
  */
-public class DoubleRectangle3D
+public class DoubleBox2D
     extends
-    Rectangle3D<Double>
+    Box2D<Double>
 {
-    private static final long serialVersionUID = 5504903679994699674L;
+    private static final long serialVersionUID = 8085178618558249008L;
 
     /**
-     * Create a new rectangle
+     * Create a new box
      * 
      * @param width the width
      * @param height the height
-     * @param depth the depth
      */
-    public DoubleRectangle3D(double width, double height, double depth)
+    public DoubleBox2D(double width, double height)
     {
-        this(0d, 0d, 0d, width, height, depth);
+        this(0d, 0d, width, height);
     }
 
     /**
-     * Create a new rectangle
+     * Create a new box
      * 
      * @param x the x coordinate of the lower-left corner
      * @param y the y coordinate of the lower-left corner
-     * @param z the y coordinate of the lower-left corner
      * @param width the width
      * @param height the height
-     * @param depth the depth
      */
-    public DoubleRectangle3D(
-        double x, double y, double z, double width, double height, double depth)
+    public DoubleBox2D(double x, double y, double width, double height)
     {
-        super(new Double[3], new Double[3]);
-        assert width >= 0d && height >= 0d && depth >= 0d;
+        super(new Double[2], new Double[2]);
+        assert width >= 0d && height >= 0d;
         coordinates[0] = x;
         coordinates[1] = y;
-        coordinates[2] = z;
         sides[0] = width;
         sides[1] = height;
-        sides[2] = depth;
     }
-
+    
     /**
-     * Create a new rectangle
+     * Create a new box
      * 
      * @param width the width
      * @param height the height
-     * @param depth the depth
-     * @return the rectangle
+     * @return the box
      */
-    public static DoubleRectangle3D of(double width, double height, double depth)
+    public static DoubleBox2D of(double width, double height)
     {
-        return new DoubleRectangle3D(width, height, depth);
+        return new DoubleBox2D(width, height);
     }
 
     /**
-     * Create a new rectangle
+     * Create a new box
      * 
      * @param x the x coordinate of the lower-left corner
      * @param y the y coordinate of the lower-left corner
-     * @param z the y coordinate of the lower-left corner
      * @param width the width
      * @param height the height
-     * @param depth the depth
-     * @return the rectangle
+     * @return the box
      */
-    public static DoubleRectangle3D of(
-        double x, double y, double z, double width, double height, double depth)
+    public static DoubleBox2D of(double x, double y, double width, double height)
     {
-        return new DoubleRectangle3D(x, y, z, width, height, depth);
+        return new DoubleBox2D(x, y, width, height);
     }
 
 }
