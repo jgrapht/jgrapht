@@ -33,13 +33,13 @@ import java.util.function.Function;
  * @param <V> the vertex type
  * @param <N> the number type
  * @param <P> the point type
- * @param <R> the rectangle type
+ * @param <B> the box type
  */
-public class MapLayoutModel<V, N extends Number, P extends Point<N>, R extends Box<N>>
+public class MapLayoutModel<V, N extends Number, P extends Point<N>, B extends Box<N>>
     implements
-    LayoutModel<V, N, P, R>
+    LayoutModel<V, N, P, B>
 {
-    protected R drawableArea;
+    protected B drawableArea;
     protected Function<V, P> initializer;
     protected Map<V, P> points;
     protected Set<V> fixed;
@@ -49,7 +49,7 @@ public class MapLayoutModel<V, N extends Number, P extends Point<N>, R extends B
      * 
      * @param drawableArea the drawable area
      */
-    public MapLayoutModel(R drawableArea)
+    public MapLayoutModel(B drawableArea)
     {
         this(drawableArea, null);
     }
@@ -60,7 +60,7 @@ public class MapLayoutModel<V, N extends Number, P extends Point<N>, R extends B
      * @param drawableArea the drawable area
      * @param initializer the vertex initializer
      */
-    public MapLayoutModel(R drawableArea, Function<V, P> initializer)
+    public MapLayoutModel(B drawableArea, Function<V, P> initializer)
     {
         this.drawableArea = drawableArea;
         this.initializer = initializer;
@@ -69,13 +69,13 @@ public class MapLayoutModel<V, N extends Number, P extends Point<N>, R extends B
     }
 
     @Override
-    public R getDrawableArea()
+    public B getDrawableArea()
     {
         return drawableArea;
     }
 
     @Override
-    public void setDrawableArea(R drawableArea)
+    public void setDrawableArea(B drawableArea)
     {
         this.drawableArea = drawableArea;
     }

@@ -33,13 +33,13 @@ import java.util.function.Function;
  * @param <V> the vertex type
  * @param <N> the number type
  * @param <P> the point type
- * @param <R> the rectangle type 
+ * @param <B> the box type 
  */
-public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, R extends Box<N>>
+public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, B extends Box<N>>
     implements
-    LayoutModel<V, N, P, R>
+    LayoutModel<V, N, P, B>
 {
-    protected LayoutModel<V, N, P, R> model;
+    protected LayoutModel<V, N, P, B> model;
     protected List<BiConsumer<V, P>> listeners;
 
     /**
@@ -47,20 +47,20 @@ public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, R ex
      * 
      * @param model the underlying layout model
      */
-    public ListenableLayoutModel(LayoutModel<V, N, P, R> model)
+    public ListenableLayoutModel(LayoutModel<V, N, P, B> model)
     {
         this.model = Objects.requireNonNull(model);
         this.listeners = new ArrayList<>();
     }
 
     @Override
-    public R getDrawableArea()
+    public B getDrawableArea()
     {
         return model.getDrawableArea();
     }
 
     @Override
-    public void setDrawableArea(R drawableArea)
+    public void setDrawableArea(B drawableArea)
     {
         model.setDrawableArea(drawableArea);
     }

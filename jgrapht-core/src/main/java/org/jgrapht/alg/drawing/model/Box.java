@@ -55,7 +55,7 @@ public abstract class Box<N>
         this.coordinates = Objects.requireNonNull(coordinates);
         this.sides = Objects.requireNonNull(sides);
         if (coordinates.length != sides.length) {
-            throw new IllegalArgumentException("Rectangle dimensions do not match");
+            throw new IllegalArgumentException("Box dimensions do not match");
         }
     }
 

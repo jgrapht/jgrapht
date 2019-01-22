@@ -32,9 +32,9 @@ import org.jgrapht.Graph;
  * @param <V> the vertex type
  * @param <N> the number type
  * @param <P> the point type
- * @param <R> the rectangle type 
+ * @param <B> the box type 
  */
-public interface LayoutModel<V, N extends Number, P extends Point<N>, R extends Box<N>>
+public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends Box<N>>
     extends
     Iterable<Map.Entry<V, P>>
 {
@@ -44,14 +44,14 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, R extends 
      * 
      * @return the drawable area of the model
      */
-    R getDrawableArea();
+    B getDrawableArea();
 
     /**
      * Set the drawable area of the model.
      * 
      * @param drawableArea the drawable area to use
      */
-    void setDrawableArea(R drawableArea);
+    void setDrawableArea(B drawableArea);
 
     /**
      * Get the last location of a particular vertex in the model. May return null if the vertex has
