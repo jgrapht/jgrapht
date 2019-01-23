@@ -67,25 +67,17 @@ public class BFSShortestPath<V,E>
         }
 
         /*
-         * Initialize distance and predecessor.
+         * Initialize distanceAndPredecessorMap 
          */
-        int n = graph.vertexSet().size();
-        Map<V, Double> distance = new HashMap<>();
-        Map<V, E> pred = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            distance.put(v, Double.POSITIVE_INFINITY);
-        }
-        distance.put(source, 0d);
+        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
+        distanceAndPredecessorMap.put(source, Pair.of(0d, null));
         
         /*
-         * Declaring queue and visited array 
+         * Declaring queue
          */
-        Queue<V> queue = new LinkedList<>(); 
-        HashMap<V, Boolean> visited = new HashMap<V, Boolean>();
-        
+        Deque<V> queue = new ArrayDeque<>();  
         
         queue.add(source);
-        visited.put(source, true);
         
         /*
          * It takes the top most vertex from queue,relax its outgoing edges,updates 
@@ -96,25 +88,17 @@ public class BFSShortestPath<V,E>
             V v = queue.poll();
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
-                if(!visited.containsKey(u))
+                if(!distanceAndPredecessorMap.containsKey(u))
                 {
-                    visited.put(u, true);
                     queue.add(u);
-                    double newDist = distance.get(v) + graph.getEdgeWeight(e);
-                    distance.put(u, newDist);
-                    pred.put(u, e);
+                    double newDist = distanceAndPredecessorMap.get(v).getFirst() + 1.0;
+                    distanceAndPredecessorMap.put(u, Pair.of(newDist,e));
+                    
                 }
             }
         }
         
         
-        /*
-         * Transform result
-         */
-        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            distanceAndPredecessorMap.put(v, Pair.of(distance.get(v), pred.get(v)));
-        }
         return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
         
         
