@@ -103,6 +103,24 @@ public class DijkstraShortestPathPerformanceTest
             return "Dijkstra";
         }
     }
+    
+    public static class BFSShortestPathBenchmark
+    extends
+    BenchmarkBase
+    {
+        @Override
+        ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph)
+        {
+            return new BFSShortestPath<>(graph);
+        }
+    
+        @Override
+        public String toString()
+        {
+            return "BFSShortestPath";
+        }
+    }
 
     public static class ClosestFirstIteratorBenchmark
         extends
@@ -245,6 +263,7 @@ public class DijkstraShortestPathPerformanceTest
         algFactory.add(() -> new ALTBenchmark(1));
         algFactory.add(() -> new ALTBenchmark(5));
         algFactory.add(() -> new BidirectionalDijkstraBenchmark());
+        algFactory.add(() -> new BFSShortestPathBenchmark());
 
         for (Supplier<BenchmarkBase> alg : algFactory) {
 
