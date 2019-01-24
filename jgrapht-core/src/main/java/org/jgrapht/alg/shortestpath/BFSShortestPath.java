@@ -20,15 +20,13 @@ package org.jgrapht.alg.shortestpath;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
 
 /**
  * The BFS Shortest Path algorithm.
  *
  * <p>
- * An implementation of <a href="https://www.geeksforgeeks.org/shortest-path-unweighted-graph/">BFS
+ * An implementation of <a href="https://en.wikipedia.org/wiki/Breadth-first_search">BFS
  * shortest path algorithm</a> to compute shortest paths from a single source vertex to all other 
  * vertices in an unweighted graph.
  *
@@ -59,7 +57,6 @@ public class BFSShortestPath<V,E>
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public SingleSourcePaths<V, E> getPaths(V source)
     {
         if (!graph.containsVertex(source)) {
