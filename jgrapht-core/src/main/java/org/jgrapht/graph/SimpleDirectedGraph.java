@@ -24,7 +24,7 @@ import java.util.function.*;
 
 /**
  * A simple directed graph. A simple directed graph is a directed graph in which neither multiple
- * (parallel) edges between any two vertices nor loops are permitted.
+ * (parallel) edges between any two vertices nor (self) loops are permitted.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

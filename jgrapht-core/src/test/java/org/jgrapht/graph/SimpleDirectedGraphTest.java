@@ -36,10 +36,10 @@ public class SimpleDirectedGraphTest
     // ~ Instance fields --------------------------------------------------------
 
     Graph<String, DefaultEdge> gEmpty;
-    private Graph<String, DefaultEdge> g1;
-    private Graph<String, DefaultEdge> g2;
-    private Graph<String, DefaultEdge> g3;
-    private Graph<String, DefaultEdge> g4;
+    private Graph<String, DefaultEdge> g1; // v1
+    private Graph<String, DefaultEdge> g2; // v1 --><-- v2
+    private Graph<String, DefaultEdge> g3; // v1 --><-- v2 --><-- v3 --><-- v1
+    private Graph<String, DefaultEdge> g4; // v1 --> v2 --> v3 --> v4 --> v1
     private DefaultEdge eLoop;
     private Supplier<DefaultEdge> eSupplier;
     private String v1 = "v1";
@@ -58,6 +58,55 @@ public class SimpleDirectedGraphTest
     private DefaultEdge e23_2;
     private DefaultEdge e34_1;
     private DefaultEdge e41_1;
+
+    @Before
+    public void setUp()
+    {
+        gEmpty = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g1 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g2 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g3 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g4 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+
+        eSupplier = g1.getEdgeSupplier();
+        eLoop = eSupplier.get();
+
+        g1.addVertex(v1);
+
+        g2.addVertex(v1);
+        g2.addVertex(v2);
+        e12_1 = g2.addEdge(v1, v2);
+        e21_1 = g2.addEdge(v2, v1);
+
+        g3.addVertex(v1);
+        g3.addVertex(v2);
+        g3.addVertex(v3);
+        e12_2 = g3.addEdge(v1, v2);
+        e21_2 = g3.addEdge(v2, v1);
+        e23_1 = g3.addEdge(v2, v3);
+        e32_1 = g3.addEdge(v3, v2);
+        e31_1 = g3.addEdge(v3, v1);
+        e13_1 = g3.addEdge(v1, v3);
+
+        g4.addVertex(v1);
+        g4.addVertex(v2);
+        g4.addVertex(v3);
+        g4.addVertex(v4);
+        e12_3 = g4.addEdge(v1, v2);
+        e23_2 = g4.addEdge(v2, v3);
+        e34_1 = g4.addEdge(v3, v4);
+        e41_1 = g4.addEdge(v4, v1);
+    }
 
     /**
      * Class to test for boolean addEdge(V, V, E)
@@ -572,52 +621,4 @@ public class SimpleDirectedGraphTest
         assertEquals("([v1, v2], [(v2,v1)])", r.toString());
     }
 
-    @Before
-    public void setUp()
-    {
-        gEmpty = new SimpleDirectedGraph<>(
-            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
-            false);
-        g1 = new SimpleDirectedGraph<>(
-            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
-            false);
-        g2 = new SimpleDirectedGraph<>(
-            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
-            false);
-        g3 = new SimpleDirectedGraph<>(
-            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
-            false);
-        g4 = new SimpleDirectedGraph<>(
-            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
-            false);
-
-        eSupplier = g1.getEdgeSupplier();
-        eLoop = eSupplier.get();
-
-        g1.addVertex(v1);
-
-        g2.addVertex(v1);
-        g2.addVertex(v2);
-        e12_1 = g2.addEdge(v1, v2);
-        e21_1 = g2.addEdge(v2, v1);
-
-        g3.addVertex(v1);
-        g3.addVertex(v2);
-        g3.addVertex(v3);
-        e12_2 = g3.addEdge(v1, v2);
-        e21_2 = g3.addEdge(v2, v1);
-        e23_1 = g3.addEdge(v2, v3);
-        e32_1 = g3.addEdge(v3, v2);
-        e31_1 = g3.addEdge(v3, v1);
-        e13_1 = g3.addEdge(v1, v3);
-
-        g4.addVertex(v1);
-        g4.addVertex(v2);
-        g4.addVertex(v3);
-        g4.addVertex(v4);
-        e12_3 = g4.addEdge(v1, v2);
-        e23_2 = g4.addEdge(v2, v3);
-        e34_1 = g4.addEdge(v3, v4);
-        e41_1 = g4.addEdge(v4, v1);
-    }
 }
