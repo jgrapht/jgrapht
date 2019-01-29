@@ -657,5 +657,30 @@ public class DOTImporter2Test
         Graphs.addAllVertices(expected, Arrays.asList("struct1"));
         assertEquals(expected.toString(), graph.toString());
     }
+    
+    @Test
+    public void testEmptyList() throws Exception {
+        // @formatter:off
+        String input = "digraph g {" + NL +
+                       "  name=\"TEST\";" + NL + 
+                       "  graph []" + NL +
+                       "  anyNodeWithAttributes [color=\"red\"];" + NL +
+                       "  anyNodeWithoutAttributes;" + NL +
+                       "  anyNodeWithEmptyAttributes [];" + NL +
+                       "}";
+        // @formatter:on
+        VertexProvider<String> vp = (a, b) -> a;
+        EdgeProvider<String, DefaultEdge> ep = (f, t, l, a) -> new DefaultEdge();
+        
+        GraphImporter<String, DefaultEdge> importer = new DOTImporter<String, DefaultEdge>(vp, ep);
+        DirectedPseudograph<String, DefaultEdge> graph =
+            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+        importer.importGraph(graph, new StringReader(input));
+        
+        DirectedPseudograph<String, DefaultEdge> expected =
+            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+        Graphs.addAllVertices(expected, Arrays.asList("anyNodeWithAttributes", "anyNodeWithoutAttributes", "anyNodeWithEmptyAttributes"));
+        assertEquals(expected.toString(), graph.toString());
+    }
 
 }

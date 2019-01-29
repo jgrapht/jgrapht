@@ -479,9 +479,12 @@ public class DOTImporter<V, E>
             String nodeId = nodeIdPartialState.getId();
 
             // read attributes
-            Map<String, Attribute> attrs = Collections.emptyMap();
+            Map<String, Attribute> attrs = null;
             if (it.hasNext()) {
                 attrs = it.next().attrs;
+            }
+            if (attrs == null) { 
+                attrs = Collections.emptyMap();
             }
 
             // create or update vertex
