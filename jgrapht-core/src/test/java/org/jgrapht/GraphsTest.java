@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 /**
  * @author Christoph Zauner
@@ -431,7 +431,8 @@ public class GraphsTest
     }
 
     @Test
-    public void testNeighborSetOf(){
+    public void testNeighborSetOf()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -440,11 +441,9 @@ public class GraphsTest
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(3, 4);
-        graph.addEdge(1,4);
+        graph.addEdge(1, 4);
         Set<Integer> neighborSet = Graphs.neighborSetOf(graph, 1);
         Assert.assertEquals(new HashSet<>(Arrays.asList(2, 4)), neighborSet);
     }
 
 }
-
-// End GraphsTest.java

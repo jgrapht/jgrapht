@@ -3,30 +3,30 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class DinicMFImplTest extends MaximumFlowAlgorithmTest
+public class DinicMFImplTest
+    extends
+    MaximumFlowAlgorithmTest
 {
 
     private DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> g;
@@ -43,66 +43,72 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
 
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
-            Graph<Integer, DefaultWeightedEdge> network)
+        Graph<Integer, DefaultWeightedEdge> network)
     {
         return new DinicMFImpl<>(network);
     }
 
     @Before
-    public void init() {
+    public void init()
+    {
         g = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
     }
 
     @Test
-    public void simpleTest1() {
+    public void simpleTest1()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
-        edge = g.addEdge(v1,  v2);
+        edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 100.0);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v2);
+        double flow = dinic.getMaximumFlowValue(v1, v2);
         assertEquals(100.0, flow, 0);
     }
 
     @Test
-    public void simpleTest2() {
+    public void simpleTest2()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
-        edge = g.addEdge(v1,  v2);
+        edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 100.0);
         edge = g.addEdge(v2, v3);
         g.setEdgeWeight(edge, 50.0);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v3);
+        double flow = dinic.getMaximumFlowValue(v1, v3);
         assertEquals(50.0, flow, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void exceptionTest1() {
+    public void exceptionTest1()
+    {
         g.addVertex(v1);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v1);
+        double flow = dinic.getMaximumFlowValue(v1, v1);
         System.out.println(flow);
     }
 
     @Test
-    public void disconnectedTest() {
+    public void disconnectedTest()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v2);
+        double flow = dinic.getMaximumFlowValue(v1, v2);
         assertEquals(0.0, flow, 0);
     }
 
     @Test
-    public void simpleTest3() {
+    public void simpleTest3()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
         String v4 = "v4";
         g.addVertex(v4);
-        edge = g.addEdge(v1,  v2);
+        edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 2.0);
         edge = g.addEdge(v2, v3);
         g.setEdgeWeight(edge, 2.0);
@@ -113,7 +119,7 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
         edge = g.addEdge(v1, v3);
         g.setEdgeWeight(edge, 1.0);
         dinic = new DinicMFImpl<>(g);
-        double flow = dinic.calculateMaximumFlow(v1, v2);
+        double flow = dinic.getMaximumFlowValue(v1, v2);
         assertEquals(2.0, flow, 0);
     }
 }

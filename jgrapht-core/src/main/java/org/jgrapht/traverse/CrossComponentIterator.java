@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * Provides a cross-connected-component traversal functionality for iterator subclasses.
@@ -30,10 +30,10 @@ import org.jgrapht.event.*;
  * @param <D> type of data associated to seen vertices
  *
  * @author Barak Naveh
- * @since Jan 31, 2004
  */
 public abstract class CrossComponentIterator<V, E, D>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private static final int CCS_BEFORE_COMPONENT = 1;
     private static final int CCS_WITHIN_COMPONENT = 2;
@@ -318,5 +318,3 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
 }
-
-// End CrossComponentIterator.java

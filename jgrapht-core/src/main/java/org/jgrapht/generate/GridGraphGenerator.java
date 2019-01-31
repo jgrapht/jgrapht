@@ -3,23 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a bidirectional <a href="http://mathworld.wolfram.com/GridGraph.html">grid graph</a> of
@@ -32,19 +32,18 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @author Assaf Mizrachi
- * @since Dec 29, 2010
  */
 public class GridGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the vertices at the corners.
      */
     public static final String CORNER_VERTEX = "Corner Vertex";
 
-    private int rows;
-
-    private int cols;
+    private final int rows;
+    private final int cols;
 
     /**
      * Creates a new GridGraphGenerator object with rows x cols dimension.
@@ -70,14 +69,13 @@ public class GridGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         Map<Integer, V> map = new TreeMap<>();
 
         // Adding all vertices to the set
         int cornerCtr = 0;
-        for (int i = 0; i < (rows * cols); i++) {
+        for (int i = 0; i < rows * cols; i++) {
             V vertex = target.addVertex();
             map.put(i + 1, vertex);
 
@@ -103,5 +101,3 @@ public class GridGraphGenerator<V, E>
         }
     }
 }
-
-// End GridGraphGenerator.java

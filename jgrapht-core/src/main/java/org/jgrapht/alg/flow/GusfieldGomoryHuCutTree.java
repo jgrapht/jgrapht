@@ -3,26 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * This class computes a Gomory-Hu tree (GHT) using the algorithm proposed by Dan Gusfield. For a
@@ -31,10 +31,10 @@ import org.jgrapht.graph.*;
  * efficiently query the maximum flows and minimum cuts for all pairs of vertices. The algorithm is
  * described in: <i>Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM
  * Journal on Computing, 19(1), p142-155, 1990</i><br>
- * In an undirected graph, there exist $\frac{n(n-1)}{2}$ different vertex pairs. This class computes the
- * maximum flow/minimum cut between each of these pairs efficiently by performing exactly $(n-1)$
- * minimum $s-t$ cut computations. If your application needs fewer than $n-1$ flow/cut computations,
- * consider computing the maximum flows/minimum cuts manually through
+ * In an undirected graph, there exist $\frac{n(n-1)}{2}$ different vertex pairs. This class
+ * computes the maximum flow/minimum cut between each of these pairs efficiently by performing
+ * exactly $(n-1)$ minimum $s-t$ cut computations. If your application needs fewer than $n-1$
+ * flow/cut computations, consider computing the maximum flows/minimum cuts manually through
  * {@link MaximumFlowAlgorithm}/{@link MinimumSTCutAlgorithm}.
  *
  *
@@ -47,7 +47,7 @@ import org.jgrapht.graph.*;
  *
  * <p>
  * Note: this class performs calculations in a lazy manner. The GHT is not calculated until the
- * first invocation of {@link GusfieldGomoryHuCutTree#calculateMaximumFlow(Object, Object)} or
+ * first invocation of {@link GusfieldGomoryHuCutTree#getMaximumFlowValue(Object, Object)} or
  * {@link GusfieldGomoryHuCutTree#getGomoryHuTree()}. Moreover, this class <em>only</em> calculates
  * the value of the maximum flow between a source-destination pair; it does not calculate the
  * corresponding flow per edge. If you need to know the exact flow through an edge, use one of the
@@ -67,7 +67,9 @@ import org.jgrapht.graph.*;
  * @author Joris Kinable
  */
 public class GusfieldGomoryHuCutTree<V, E>
-    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
+    implements
+    MaximumFlowAlgorithm<V, E>,
+    MinimumSTCutAlgorithm<V, E>
 {
 
     private final Graph<V, E> network;
@@ -216,7 +218,7 @@ public class GusfieldGomoryHuCutTree<V, E>
      * @return the Maximum flow between source and sink.
      */
     @Override
-    public double calculateMaximumFlow(V source, V sink)
+    public double getMaximumFlowValue(V source, V sink)
     {
         assert indexMap.containsKey(source) && indexMap.containsKey(sink);
 
@@ -228,18 +230,6 @@ public class GusfieldGomoryHuCutTree<V, E>
         if (p == null) // Lazy invocation of the algorithm
             this.calculateGomoryHuTree();
         return flowMatrix[indexMap.get(source)][indexMap.get(sink)];
-    }
-
-    /**
-     * Returns rhw maximum flow value, that was calculated during the last
-     * {@link #calculateMaximumFlow(Object, Object)} call.
-     * 
-     * @return maximum flow value
-     */
-    @Override
-    public double getMaximumFlowValue()
-    {
-        return calculateMaximumFlow(lastInvokedSource, lastInvokedTarget);
     }
 
     /**
@@ -272,7 +262,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     @Override
     public double calculateMinCut(V source, V sink)
     {
-        return calculateMaximumFlow(source, sink);
+        return getMaximumFlowValue(source, sink);
     }
 
     /**

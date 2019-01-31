@@ -3,47 +3,42 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 /**
- * This is an implementation of the VF2 algorithm using its feature of detecting
- * subgraph isomorphism between two graphs as described in Cordella et al.
- * A (sub)graph isomorphism algorithm for matching
- * large graphs (2004), DOI:10.1109/TPAMI.2004.75,
+ * This is an implementation of the VF2 algorithm using its feature of detecting subgraph
+ * isomorphism between two graphs as described in Cordella et al. A (sub)graph isomorphism algorithm
+ * for matching large graphs (2004), DOI:10.1109/TPAMI.2004.75,
  * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
  * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
  *
  * <p>
- * Note that this inspector only finds isomorphisms between a smaller graph and
- * all <a
- * href="http://mathworld.wolfram.com/Vertex-InducedSubgraph.html">induced
- * subgraphs</a> of a larger graph.  It does not find isomorphisms between the
- * smaller graph and arbitrary subgraphs of the larger graph.  For example,
- * given as input the <a
- * href="http://mathworld.wolfram.com/CubicalGraph.html">cubical graph</a>
- * $Q_{3}$ and the <a
- * href="http://mathworld.wolfram.com/SquareGraph.html">square graph</a>,
- * isomorphic mappings will be found between the square and the faces of the
- * cube.  However, given the <a
- * href="http://mathworld.wolfram.com/CompleteGraph.html">complete graph</a>
- * $K_{5}$ and the square graph as input, no isomorphisms will be found since
- * all induced subgraphs of a complete graph are themselves complete graphs.
+ * Note that this inspector only finds isomorphisms between a smaller graph and all
+ * <a href="http://mathworld.wolfram.com/Vertex-InducedSubgraph.html">induced subgraphs</a> of a
+ * larger graph. It does not find isomorphisms between the smaller graph and arbitrary subgraphs of
+ * the larger graph. For example, given as input the
+ * <a href="http://mathworld.wolfram.com/CubicalGraph.html">cubical graph</a> $Q_{3}$ and the
+ * <a href="http://mathworld.wolfram.com/SquareGraph.html">square graph</a>, isomorphic mappings
+ * will be found between the square and the faces of the cube. However, given the
+ * <a href="http://mathworld.wolfram.com/CompleteGraph.html">complete graph</a> $K_{5}$ and the
+ * square graph as input, no isomorphisms will be found since all induced subgraphs of a complete
+ * graph are themselves complete graphs.
  *
  * <p>
  * Consequently, in the case where both input graphs have the same number of vertices, this
@@ -56,7 +51,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public class VF2SubgraphIsomorphismInspector<V, E>
-    extends VF2AbstractIsomorphismInspector<V, E>
+    extends
+    VF2AbstractIsomorphismInspector<V, E>
 {
 
     /**
@@ -121,5 +117,3 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             ordering1, ordering2, vertexComparator, edgeComparator);
     }
 }
-
-// End VF2SubgraphIsomorphismInspector.java

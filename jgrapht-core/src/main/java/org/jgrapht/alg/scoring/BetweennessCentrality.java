@@ -3,59 +3,61 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.util.*;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
+
+import java.util.*;
 
 /**
  * Betweenness centrality.
  * 
  * <p>
- * Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a node
- * $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
+ * Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a
+ * node $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
  * t}\frac{\sigma_{st}(v)}{\sigma_{st}}$ where $\sigma_{st}$ is the total number of shortest paths
  * from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
  * $v$. For more details see
  * <a href="https://en.wikipedia.org/wiki/Betweenness_centrality">wikipedia</a>.
  * 
- * The algorithm is based on 
+ * The algorithm is based on
  * <ul>
- * <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". 
- * Journal of Mathematical Sociology. 25 (2): 163–177.</li>
+ * <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". Journal of
+ * Mathematical Sociology. 25 (2): 163–177.</li>
  * </ul>
  *
- * The running time is $O(nm) and $O(nm +n^2 \log n)$ for unweighted and weighted graph respectively, 
- * where $n$ is the number of vertices and $m$ the number of edges of the graph. The space
- * complexity is $O(n + m)$.
+ * The running time is $O(nm)$ and $O(nm +n^2 \log n)$ for unweighted and weighted graph
+ * respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
+ * space complexity is $O(n + m)$.
  *
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Assaf Mizrachi
- * @since December 2017
  */
 public class BetweennessCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+    implements
+    VertexScoringAlgorithm<V, Double>
 {
 
-   /**
+    /**
      * Underlying graph
      */
     private final Graph<V, E> graph;
@@ -77,13 +79,13 @@ public class BetweennessCentrality<V, E>
     {
         this(graph, false);
     }
-    
+
     /**
      * Construct a new instance.
      * 
      * @param graph the input graph
-     * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where $n$ is the
-     *        number of vertices of the graph
+     * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where
+     *        $n$ is the number of vertices of the graph
      */
     public BetweennessCentrality(Graph<V, E> graph, boolean normalize)
     {
@@ -137,10 +139,10 @@ public class BetweennessCentrality<V, E>
         if (!this.graph.getType().isDirected()) {
             this.scores.forEach((v, score) -> this.scores.put(v, score / 2));
         }
-        
+
         if (normalize) {
-            int n = this.graph.vertexSet().size();         
-            int normalizationFactor = (n - 1) * (n - 2);       
+            int n = this.graph.vertexSet().size();
+            int normalizationFactor = (n - 1) * (n - 2);
             if (normalizationFactor != 0) {
                 this.scores.forEach((v, score) -> this.scores.put(v, score / normalizationFactor));
             }
@@ -187,6 +189,7 @@ public class BetweennessCentrality<V, E>
                 }
                 // shortest path to w via v?
                 if (distance.get(w) >= d) {
+                    distance.put(w, d);
                     queue.update(w, d);
                     sigma.put(w, sigma.get(w) + sigma.get(v));
                     predecessors.get(w).add(v);
@@ -208,7 +211,7 @@ public class BetweennessCentrality<V, E>
             if (!w.equals(s)) {
                 this.scores.put(w, this.scores.get(w) + dependency.get(w));
             }
-        }        
+        }
     }
 
     private interface MyQueue<T, D>
@@ -223,17 +226,17 @@ public class BetweennessCentrality<V, E>
     }
 
     private class WeightedQueue
-        implements MyQueue<V, Double>
+        implements
+        MyQueue<V, Double>
     {
 
-        FibonacciHeap<V> delegate = new FibonacciHeap<>();
-        Map<V, FibonacciHeapNode<V>> seen = new HashMap<>();
+        AddressableHeap<Double, V> delegate = new PairingHeap<>();
+        Map<V, AddressableHeap.Handle<Double, V>> seen = new HashMap<>();
 
         @Override
         public void insert(V t, Double d)
         {
-            FibonacciHeapNode<V> node = new FibonacciHeapNode<>(t);
-            delegate.insert(node, d);
+            AddressableHeap.Handle<Double, V> node = delegate.insert(d, t);
             seen.put(t, node);
         }
 
@@ -243,13 +246,13 @@ public class BetweennessCentrality<V, E>
             if (!seen.containsKey(t)) {
                 throw new IllegalArgumentException("Element " + t + " does not exist in queue");
             }
-            delegate.decreaseKey(seen.get(t), d);
+            seen.get(t).decreaseKey(d);
         }
 
         @Override
         public V remove()
         {
-            return delegate.removeMin().getData();
+            return delegate.deleteMin().getValue();
         }
 
         @Override
@@ -261,7 +264,8 @@ public class BetweennessCentrality<V, E>
     }
 
     private class UnweightedQueue
-        implements MyQueue<V, Double>
+        implements
+        MyQueue<V, Double>
     {
 
         Queue<V> delegate = new ArrayDeque<>();

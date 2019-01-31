@@ -3,27 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * A subgraph is a graph that has a subset of vertices and a subset of edges with respect to some
@@ -87,18 +87,20 @@ import org.jgrapht.event.*;
  * @author Barak Naveh
  * @see Graph
  * @see Set
- * @since Jul 18, 2003
  */
 public class AsSubgraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
 
     private static final long serialVersionUID = -1471811754881775298L;
 
     private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
-    private static final String CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH = "Cannot create new vertices from subgraph";
+    private static final String CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH =
+        "Cannot create new vertices from subgraph";
 
     protected final Set<E> edgeSet = new LinkedHashSet<>();
     protected final Set<V> vertexSet = new LinkedHashSet<>();
@@ -189,18 +191,6 @@ public class AsSubgraph<V, E>
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated Use suppliers instead
-     */
-    @Override
-    @Deprecated
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return base.getEdgeFactory();
-    }
-    
     /**
      * {@inheritDoc}
      */
@@ -367,8 +357,7 @@ public class AsSubgraph<V, E>
 
         if (baseType.isUndirected()) {
             int degree = 0;
-            Iterator<E> it =
-                base.edgesOf(vertex).stream().filter(edgeSet::contains).iterator();
+            Iterator<E> it = base.edgesOf(vertex).stream().filter(edgeSet::contains).iterator();
             while (it.hasNext()) {
                 E e = it.next();
                 degree++;
@@ -539,11 +528,10 @@ public class AsSubgraph<V, E>
             vertexSet.addAll(base.vertexSet());
         } else {
             if (vertexFilter.size() > base.vertexSet().size()) {
-                base.vertexSet().stream().filter(vertexFilter::contains).forEach(
-                        vertexSet::add);
+                base.vertexSet().stream().filter(vertexFilter::contains).forEach(vertexSet::add);
             } else {
                 vertexFilter.stream().filter(v -> v != null && base.containsVertex(v)).forEach(
-                        vertexSet::add);
+                    vertexSet::add);
             }
         }
 
@@ -579,10 +567,11 @@ public class AsSubgraph<V, E>
      * An internal listener on the base graph.
      *
      * @author Barak Naveh
-     * @since Jul 20, 2003
      */
     private class BaseGraphListener
-        implements GraphListener<V, E>, Serializable
+        implements
+        GraphListener<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = 4343535244243546391L;
 
@@ -635,5 +624,3 @@ public class AsSubgraph<V, E>
     }
 
 }
-
-// End Subgraph.java

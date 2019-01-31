@@ -3,25 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/CompleteBipartiteGraph.html">complete bipartite
@@ -32,23 +30,23 @@ import org.jgrapht.Graph;
  * @param <E> the graph edge type
  *
  * @author Andrew Newell
- * @since Dec 21, 2008
  */
 public class CompleteBipartiteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-    private int sizeA, sizeB;
+    private final int sizeA, sizeB;
 
     /**
      * Creates a new CompleteBipartiteGraphGenerator object.
      *
-     * @param partitionOne This is the number of vertices in the first partition
-     * @param partitionTwo This is the number of vertices in the second parition
+     * @param partitionOne number of vertices in the first partition
+     * @param partitionTwo number of vertices in the second partition
      */
     public CompleteBipartiteGraphGenerator(int partitionOne, int partitionTwo)
     {
-        if ((partitionOne < 0) || (partitionTwo < 0)) {
-            throw new IllegalArgumentException("must be non-negative");
+        if (partitionOne < 0 || partitionTwo < 0) {
+            throw new IllegalArgumentException("partition sizes must be non-negative");
         }
         this.sizeA = partitionOne;
         this.sizeB = partitionTwo;
@@ -58,8 +56,7 @@ public class CompleteBipartiteGraphGenerator<V, E>
      * Construct a complete bipartite graph
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if ((sizeA < 1) && (sizeB < 1)) {
             return;
@@ -83,5 +80,3 @@ public class CompleteBipartiteGraphGenerator<V, E>
         }
     }
 }
-
-// End CompleteBipartiteGraphGenerator.java

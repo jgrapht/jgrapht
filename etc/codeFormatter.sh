@@ -16,4 +16,5 @@ find ../jgrapht-core/ -name *.java -print -exec $eclipse_path -nosplash -vm $jav
 find ../jgrapht-demo/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
 find ../jgrapht-dist/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
 find ../jgrapht-ext/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
-find ../jgrapht-touchgraph/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
+find ../jgrapht-guava/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;
+find ../jgrapht-io/ -name *.java -print -exec $eclipse_path -nosplash -vm $java_path -application org.eclipse.jdt.core.JavaCodeFormatter -quiet -config $config_file {} \;

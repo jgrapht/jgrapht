@@ -11,8 +11,8 @@
  * <li>Johnson - $O(((V+E)C)$</li>
  * <li>Tiernan - $O(V.const^V)$</li>
  * </ol>
- * where $V$ is the number of vertices, $E$ is the number of edges and $C$ is the number of the simple
- * cycles in the graph. All the above implementations work correctly with loops but not with
+ * where $V$ is the number of vertices, $E$ is the number of edges and $C$ is the number of the
+ * simple cycles in the graph. All the above implementations work correctly with loops but not with
  * multiple edges. Space complexity for all cases is $O(V+E)$.
  * 
  * <p>
@@ -53,8 +53,8 @@
  * implementation supports graphs with self-loops and multiple (parallel) edges.</li>
  * </ol>
  *
- * The worst case time complexity of all above algorithms is $O(|V|^3)$ since the length of the cycle
- * basis can be that large.
+ * The worst case time complexity of all above algorithms is $O(|V|^3)$ since the length of the
+ * cycle basis can be that large.
  *
  * <p>
  * See the following papers for details of the above algorithms:

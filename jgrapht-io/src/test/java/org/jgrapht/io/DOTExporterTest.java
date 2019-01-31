@@ -3,32 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
+
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -65,7 +62,8 @@ public class DOTExporterTest
 
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);
@@ -73,7 +71,8 @@ public class DOTExporterTest
     }
 
     private void testUndirected(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -112,7 +111,8 @@ public class DOTExporterTest
     }
 
     private void testUndirectedWithGraphAttributes(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -182,8 +182,43 @@ public class DOTExporterTest
     }
 
     @Test
+    public void testNodeHtmlLabel()
+    {
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
+            new StringComponentNameProvider<>(), vertex -> "<<b>html label</b>>", null);
+
+        StringWriter outputWriter = new StringWriter();
+
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("myVertex");
+        exporter.exportGraph(graph, outputWriter);
+
+        assertThat(outputWriter.toString(), containsString("label=\"<<b>html label</b>>\""));
+    }
+
+    @Test
+    public void testNodeHtmlLabelFromAttribute()
+    {
+        DOTExporter<String, DefaultEdge> exporter =
+            new DOTExporter<>(new StringComponentNameProvider<>(), vertex -> null, null, vertex -> {
+                final HashMap<String, Attribute> attrs = new HashMap<>();
+                attrs.put("label", new DefaultAttribute<>("<b>html label</b>", AttributeType.HTML));
+                return attrs;
+            }, null);
+
+        StringWriter outputWriter = new StringWriter();
+
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("myVertex");
+        exporter.exportGraph(graph, outputWriter);
+
+        assertThat(outputWriter.toString(), containsString("label=<<b>html label</b>>"));
+    }
+
+    @Test
     public void testDifferentGraphID()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
@@ -210,5 +245,3 @@ public class DOTExporterTest
     }
 
 }
-
-// End DOTExporterTest.java

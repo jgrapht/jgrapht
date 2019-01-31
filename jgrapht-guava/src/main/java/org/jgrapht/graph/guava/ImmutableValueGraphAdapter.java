@@ -3,51 +3,47 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.function.ToDoubleFunction;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.util.TypeUtil;
-
-import com.google.common.graph.EndpointPair;
+import com.google.common.graph.*;
 import com.google.common.graph.Graphs;
-import com.google.common.graph.ImmutableValueGraph;
-import com.google.common.graph.MutableValueGraph;
-import com.google.common.graph.ValueGraphBuilder;
+import org.jgrapht.Graph;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph}.
  * 
- * <p>The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph 
+ * <p>
+ * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph
  * is immutable, the resulting graph is unmodifiable.
  * 
  * <p>
  * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
  * graph is weighted.
  * 
- * <p>Assume for example that the following class is the value type: <blockquote>
+ * <p>
+ * Assume for example that the following class is the value type: <blockquote>
  * 
  * <pre>
  * class MyValue
- *     implements Serializable
+ *     implements
+ *     Serializable
  * {
  *     private double value;
  *
@@ -74,7 +70,8 @@ import com.google.common.graph.ValueGraphBuilder;
  * valueGraph.addNode("v2");
  * valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
  * 
- * ImmutableValueGraph&lt;String, MyValue&gt; immutableValueGraph = ImmutableValueGraph.copyOf(valueGraph);
+ * ImmutableValueGraph&lt;String, MyValue&gt; immutableValueGraph =
+ *     ImmutableValueGraph.copyOf(valueGraph);
  * 
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new ImmutableValueGraphAdapter&lt;&gt;(
  *     immutableValueGraph, (ToDoubleFunction&lt;MyValue&gt; &amp; Serializable) MyValue::getValue);
@@ -90,8 +87,12 @@ import com.google.common.graph.ValueGraphBuilder;
  * @param <W> the value type
  */
 public class ImmutableValueGraphAdapter<V, W>
-    extends BaseValueGraphAdapter<V, W, ImmutableValueGraph<V, W>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    BaseValueGraphAdapter<V, W, ImmutableValueGraph<V, W>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = 2629294259825656044L;
 
@@ -126,7 +127,7 @@ public class ImmutableValueGraphAdapter<V, W>
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
-    
+
     @Override
     public boolean addVertex(V v)
     {
@@ -219,7 +220,8 @@ public class ImmutableValueGraphAdapter<V, W>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

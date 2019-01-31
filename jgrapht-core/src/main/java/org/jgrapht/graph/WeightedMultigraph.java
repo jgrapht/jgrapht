@@ -3,30 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops
- * are permitted, but multiple (parallel) edges between any two vertices are. The edges of a weighted
- * multigraph have weights. If you're unsure about multigraphs, see:
+ * are permitted, but multiple (parallel) edges between any two vertices are. The edges of a
+ * weighted multigraph have weights. If you're unsure about multigraphs, see:
  * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
  * 
@@ -34,7 +33,8 @@ import org.jgrapht.util.SupplierUtil;
  * @param <E> the graph edge type
  */
 public class WeightedMultigraph<V, E>
-    extends Multigraph<V, E>
+    extends
+    Multigraph<V, E>
 {
     private static final long serialVersionUID = -6009321659287373874L;
 
@@ -56,9 +56,7 @@ public class WeightedMultigraph<V, E>
      */
     public WeightedMultigraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(
-            vertexSupplier, edgeSupplier,
-            true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -74,7 +72,7 @@ public class WeightedMultigraph<V, E>
     {
         return new GraphBuilder<>(new WeightedMultigraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -88,34 +86,5 @@ public class WeightedMultigraph<V, E>
     {
         return new GraphBuilder<>(new WeightedMultigraph<>(null, edgeSupplier));
     }
-    
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public WeightedMultigraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
 
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated    
-    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new WeightedMultigraph<>(ef));
-    }
 }
-
-// End WeightedMultigraph.java

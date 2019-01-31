@@ -3,25 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.vertexcover;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.vertexcover.util.*;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Greedy algorithm to find a vertex cover for a graph. A vertex cover is a set of vertices that
@@ -31,9 +33,9 @@ import org.jgrapht.alg.vertexcover.util.*;
  * <a href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
- * Note: this class supports pseudo-graphs Runtime: $O(|E| \log |V|)$ This class produces often, but not
- * always, better solutions than the 2-approximation algorithms. Nevertheless, there are instances
- * where the solution is significantly worse. In those cases, consider using
+ * Note: this class supports pseudo-graphs Runtime: $O(|E| \log |V|)$ This class produces often, but
+ * not always, better solutions than the 2-approximation algorithms. Nevertheless, there are
+ * instances where the solution is significantly worse. In those cases, consider using
  * {@link ClarksonTwoApproxVCImpl}.
  *
  *
@@ -41,29 +43,52 @@ import org.jgrapht.alg.vertexcover.util.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- * @since Nov 6, 2003
  */
 public class GreedyVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>
+    implements
+    VertexCoverAlgorithm<V>
 {
 
     private static int vertexCounter = 0;
+
+    private final Graph<V, E> graph;
+    private final Map<V, Double> vertexWeightMap;
+
+    /**
+     * Constructs a new GreedyVCImpl instance where all vertices have uniform weights.
+     * 
+     * @param graph input graph
+     */
+    public GreedyVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = graph
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+    }
+
+    /**
+     * Constructs a new GreedyVCImpl instance
+     * 
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     */
+    public GreedyVCImpl(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = Objects.requireNonNull(vertexWeightMap);
+    }
 
     /**
      * Finds a greedy solution to the minimum weighted vertex cover problem. At each iteration, the
      * algorithm picks the vertex v with the smallest ratio {@code weight(v)/degree(v)} and adds it
      * to the cover. Next vertex v and all edges incident to it are removed. The process repeats
-     * until all vertices are covered. Runtime: $O(|E| \log |V|)$
+     * until all vertices are covered. Runtime: O(|E|*log|V|)
      *
-     * @param graph input graph
-     * @param vertexWeightMap mapping of vertex weights
      * @return greedy solution
      */
     @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
     {
-        GraphTests.requireUndirected(graph);
-
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
 
@@ -82,10 +107,12 @@ public class GreedyVCImpl<V, E>
             ux.addNeighbor(vx);
             vx.addNeighbor(ux);
 
-            assert (ux.neighbors.get(vx) == vx.neighbors.get(ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+            assert (ux.neighbors.get(vx) == vx.neighbors.get(
+                ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
-        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>(vertexEncapsulationMap.values());
+        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
+        workingGraph.addAll(vertexEncapsulationMap.values());
         assert (workingGraph.size() == vertexEncapsulationMap
             .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
                 + "vertices in working graph: " + workingGraph.size();
@@ -118,11 +145,10 @@ public class GreedyVCImpl<V, E>
             // Update cover
             cover.add(vx.v);
             weight += vertexWeightMap.get(vx.v);
-            assert (!workingGraph.parallelStream().anyMatch(
+            assert (workingGraph.parallelStream().noneMatch(
                 ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
         }
-
-        return new VertexCoverImpl<>(cover, weight);
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
 
 }

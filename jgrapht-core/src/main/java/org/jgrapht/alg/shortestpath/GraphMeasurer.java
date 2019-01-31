@@ -3,23 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
 import java.util.*;
 
@@ -159,12 +159,12 @@ public class GraphMeasurer<V, E>
     }
 
     /**
-     * Compute the graph pseudo-periphery.
-     * The pseudo-periphery of a graph is the set of all pseudo-peripheral vertices.
-     * A pseudo-peripheral vertex $v$ has the property that for any vertex $u$, if $v$ is as far away from $u$ as possible,
-     * then $u$ is as far away from $v$ as possible. Formally, a vertex $u$ is pseudo-peripheral, if for each
-     * vertex $v$ with $d(u,v)=\epsilon(u)$ holds $\epsilon(u)=\epsilon(v)$, where $\epsilon(u)$ is
-     * the eccentricity of vertex $u$.
+     * Compute the graph pseudo-periphery. The pseudo-periphery of a graph is the set of all
+     * pseudo-peripheral vertices. A pseudo-peripheral vertex $v$ has the property that for any
+     * vertex $u$, if $v$ is as far away from $u$ as possible, then $u$ is as far away from $v$ as
+     * possible. Formally, a vertex $u$ is pseudo-peripheral, if for each vertex $v$ with
+     * $d(u,v)=\epsilon(u)$ holds $\epsilon(u)=\epsilon(v)$, where $\epsilon(u)$ is the eccentricity
+     * of vertex $u$.
      *
      * @return the graph pseudo-periphery
      */
@@ -177,9 +177,9 @@ public class GraphMeasurer<V, E>
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             V u = entry.getKey();
 
-            for (V v: graph.vertexSet())
-                if (comp.compare(shortestPathAlgorithm.getPathWeight(u, v), entry.getValue()) == 0 &&
-                        comp.compare(entry.getValue(), eccentricityMap.get(v)) == 0)
+            for (V v : graph.vertexSet())
+                if (comp.compare(shortestPathAlgorithm.getPathWeight(u, v), entry.getValue()) == 0
+                    && comp.compare(entry.getValue(), eccentricityMap.get(v)) == 0)
                     graphPseudoPeriphery.add(entry.getKey());
         }
 

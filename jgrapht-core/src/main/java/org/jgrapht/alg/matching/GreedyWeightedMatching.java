@@ -3,32 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 
+import java.util.*;
+
 /**
  * The greedy algorithm for computing a maximum weight matching in an arbitrary graph. The algorithm
- * runs in $O(m + m \log n)$ where $n$ is the number of vertices and $m$ is the number of edges of the
- * graph. This implementation accepts directed and undirected graphs which may contain self-loops
- * and multiple (parallel) edges. There is no assumption on the edge weights, i.e. they can also be negative or
- * zero.
+ * runs in $O(m + m \log n)$ where $n$ is the number of vertices and $m$ is the number of edges of
+ * the graph. This implementation accepts directed and undirected graphs which may contain
+ * self-loops and multiple (parallel) edges. There is no assumption on the edge weights, i.e. they
+ * can also be negative or zero.
  * 
  * <p>
  * This algorithm can be run in two modes: with and without edge cost normalization. Without
@@ -38,11 +38,11 @@ import org.jgrapht.alg.util.*;
  * cannot be increased in cardinality without removing an edge first. The resulting matching is
  * guaranteed to be a $\frac{1}{2}$-Approximation. <br>
  * With normalization, the edges are sorted in non-increasing order of their normalized costs
- * $\frac{c(u,v)}{d(u)+d(v)}$ instead, after which the algorithm proceeds in the same manner. Here, $c(u,v)$
- * is the cost of edge $(u,v)$, and $d(u)$ resp $d(v)$ are the degrees of vertices $u$ resp $v$. Running this
- * algorithm in normalized mode often (but not always!) produces a better result than running the
- * algorithm without normalization. <i>Note however that the normalized version does NOT produce a
- * $\frac{1}{2}$-approximation</i>. See <a href=
+ * $\frac{c(u,v)}{d(u)+d(v)}$ instead, after which the algorithm proceeds in the same manner. Here,
+ * $c(u,v)$ is the cost of edge $(u,v)$, and $d(u)$ resp $d(v)$ are the degrees of vertices $u$ resp
+ * $v$. Running this algorithm in normalized mode often (but not always!) produces a better result
+ * than running the algorithm without normalization. <i>Note however that the normalized version
+ * does NOT produce a $\frac{1}{2}$-approximation</i>. See <a href=
  * "https://mathoverflow.net/questions/269526/is-greedy-matching-algorithm-with-normalized-edge-weights-a-2-approximation/269760#269760">this
  * proof for details.</a> The runtime complexity remains the same, independent of whether
  * normalization is used.
@@ -51,8 +51,8 @@ import org.jgrapht.alg.util.*;
  * For more information about approximation algorithms for the maximum weight matching problem in
  * arbitrary graphs see:
  * <ul>
- * <li>R. Preis, Linear Time $\frac{1}{2}$-Approximation Algorithm for Maximum Weighted Matching in General
- * Graphs. Symposium on Theoretical Aspects of Computer Science, 259-269, 1999.</li>
+ * <li>R. Preis, Linear Time $\frac{1}{2}$-Approximation Algorithm for Maximum Weighted Matching in
+ * General Graphs. Symposium on Theoretical Aspects of Computer Science, 259-269, 1999.</li>
  * <li>D.E. Drake, S. Hougardy, A Simple Approximation Algorithm for the Weighted Matching Problem,
  * Information Processing Letters 85, 211-213, 2003.</li>
  * </ul>
@@ -63,10 +63,10 @@ import org.jgrapht.alg.util.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since September 2016
  */
 public class GreedyWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
@@ -150,5 +150,3 @@ public class GreedyWeightedMatching<V, E>
     }
 
 }
-
-// End GreedyWeightedMatching.java

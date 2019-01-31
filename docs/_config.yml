@@ -1,0 +1,26 @@
+permalink: /:title
+timezone: null
+lsi: false
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+theme: jekyll-theme-primer
+title: JGraphT
+description: "a Java library of graph theory data structures and algorithms"
+source_link: "https://github.com/jgrapht/jgrapht"
+favicon:     "img/favicon.ico"
+touch_icon:  "img/apple-touch-icon.png"
+google_analytics_key: UA-129653402-1
+github:
+  is_project_page: false
+
+colors:
+  black:     '#111111'
+  white:     '#f8f8f8'
+  blue:      '#49a7e9'
+  green:     '#9bcf2f'
+  purple:    '#c869bf'
+  orange:    '#fab125'
+  turquoise: '#0fbfcf'

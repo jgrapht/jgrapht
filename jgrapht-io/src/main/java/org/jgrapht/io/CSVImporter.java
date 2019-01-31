@@ -1,29 +1,29 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
-
-import java.io.*;
-import java.util.*;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import org.jgrapht.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.
@@ -57,11 +57,12 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since August 2016
  */
 public class CSVImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -246,7 +247,8 @@ public class CSVImporter<V, E>
     }
 
     private class ThrowingErrorListener
-        extends BaseErrorListener
+        extends
+        BaseErrorListener
     {
 
         @Override
@@ -262,11 +264,15 @@ public class CSVImporter<V, E>
 
     // listener for the edge list format
     private class AdjacencyListCSVListener
-        extends RowCSVListener
+        extends
+        RowCSVListener
     {
+        private boolean assumeEdgeWeights;
+
         public AdjacencyListCSVListener(Graph<V, E> graph)
         {
             super(graph);
+            this.assumeEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
         }
 
         @Override
@@ -285,8 +291,12 @@ public class CSVImporter<V, E>
             }
             row.remove(0);
 
-            // remaining are targets
-            for (String key : row) {
+            // remaining are targets (if weighted pairs of target-weight)
+            int step = assumeEdgeWeights ? 2 : 1;
+
+            for (int i = 0; i < row.size(); i += step) {
+                String key = row.get(i);
+
                 if (key.isEmpty()) {
                     throw new ParseCancellationException("Target vertex cannot be empty");
                 }
@@ -298,10 +308,22 @@ public class CSVImporter<V, E>
                     graph.addVertex(target);
                 }
 
+                double weight = Graph.DEFAULT_EDGE_WEIGHT;
+                if (assumeEdgeWeights) {
+                    try {
+                        weight = Double.parseDouble(row.get(i + 1));
+                    } catch (NumberFormatException nfe) {
+                        throw new ParseCancellationException("Failed to parse edge weight");
+                    }
+                }
+
                 try {
                     String label = "e_" + source + "_" + target;
                     E e = edgeProvider.buildEdge(source, target, label, new HashMap<>());
                     graph.addEdge(source, target, e);
+                    if (assumeEdgeWeights) {
+                        graph.setEdgeWeight(e, weight);
+                    }
                 } catch (IllegalArgumentException e) {
                     throw new ParseCancellationException(
                         "Provided graph does not support input: " + e.getMessage(), e);
@@ -313,7 +335,8 @@ public class CSVImporter<V, E>
 
     // listener for the edge list format
     private class MatrixCSVListener
-        extends RowCSVListener
+        extends
+        RowCSVListener
     {
         private boolean assumeNodeIds;
         private boolean assumeEdgeWeights;
@@ -327,8 +350,8 @@ public class CSVImporter<V, E>
         {
             super(graph);
             this.assumeNodeIds = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-            this.assumeEdgeWeights =
-                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+            this.assumeEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
+            ;
             this.assumeZeroWhenNoEdge =
                 parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
             this.verticesCount = 0;
@@ -475,7 +498,8 @@ public class CSVImporter<V, E>
 
     // base listener
     private abstract class RowCSVListener
-        extends CSVBaseListener
+        extends
+        CSVBaseListener
     {
         protected Graph<V, E> graph;
         protected List<String> row;
@@ -541,5 +565,3 @@ public class CSVImporter<V, E>
     }
 
 }
-
-// End CSVImporter.java

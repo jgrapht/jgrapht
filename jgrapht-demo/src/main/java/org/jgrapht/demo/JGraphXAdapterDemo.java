@@ -3,39 +3,39 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.demo;
 
-import java.awt.*;
+//@example:full:begin
 
-import javax.swing.*;
-
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
-import com.mxgraph.layout.*;
-import com.mxgraph.swing.*;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on
  * JGraphAdapterDemo.
  *
- * @since July 9, 2013
  */
 public class JGraphXAdapterDemo
-    extends JApplet
+    extends
+    JApplet
 {
     private static final long serialVersionUID = 2202072534703043194L;
 
@@ -109,5 +109,4 @@ public class JGraphXAdapterDemo
         // that's all there is to it!...
     }
 }
-
-// End JGraphXAdapterDemo.java
+//@example:full:end

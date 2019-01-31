@@ -3,31 +3,31 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 
+import java.util.*;
+
 /**
  * Implementation of the well-known Hopcroft Karp algorithm to compute a matching of maximum
- * cardinality in a bipartite graph. The algorithm runs in $O(|E| \cdot \sqrt{|V|})$ time. This implementation
- * accepts undirected graphs which may contain self-loops and multiple edges. To compute a maximum
- * cardinality matching in general (non-bipartite) graphs, use
+ * cardinality in a bipartite graph. The algorithm runs in $O(|E| \cdot \sqrt{|V|})$ time. This
+ * implementation accepts undirected graphs which may contain self-loops and multiple edges. To
+ * compute a maximum cardinality matching in general (non-bipartite) graphs, use
  * {@link EdmondsMaximumCardinalityMatching} instead.
  *
  * <p>
@@ -50,7 +50,8 @@ import org.jgrapht.alg.util.*;
  * @author Joris Kinable
  */
 public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
 
     private final Graph<V, E> graph;

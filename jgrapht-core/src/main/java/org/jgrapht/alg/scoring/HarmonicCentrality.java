@@ -3,34 +3,34 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 
+import java.util.*;
+
 /**
  * Harmonic centrality.
  * 
  * <p>
- * The harmonic centrality of a vertex $x$ is defined as $H(x)=\sum_{y \neq x} 1/d(x,y)$, where $d(x,y)$
- * is the shortest path distance from $x$ to $y$. In case a distance $d(x,y)=\infinity$, then $1/d(x,y)=0$.
- * When normalization is used the score is divided by $n-1$ where $n$ is the total number of vertices in
- * the graph.
+ * The harmonic centrality of a vertex $x$ is defined as $H(x)=\sum_{y \neq x} 1/d(x,y)$, where
+ * $d(x,y)$ is the shortest path distance from $x$ to $y$. In case a distance $d(x,y)=\infinity$,
+ * then $1/d(x,y)=0$. When normalization is used the score is divided by $n-1$ where $n$ is the
+ * total number of vertices in the graph.
  *
  * For details see the following papers:
  * <ul>
@@ -47,18 +47,18 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
  * 
  * <p>
  * Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
- * whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m +
- * n \log n))$ or $O(n^3)$ respectively, where $n$ is the number of vertices and $m$ the number of edges of
- * the graph.
+ * whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m
+ * + n \log n))$ or $O(n^3)$ respectively, where $n$ is the number of vertices and $m$ the number of
+ * edges of the graph.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since January 2017
  */
 public final class HarmonicCentrality<V, E>
-    extends ClosenessCentrality<V, E>
+    extends
+    ClosenessCentrality<V, E>
 {
     /**
      * Construct a new instance. By default the centrality is normalized and computed using outgoing
@@ -76,8 +76,8 @@ public final class HarmonicCentrality<V, E>
      * 
      * @param graph the input graph
      * @param incoming if true incoming paths are used, otherwise outgoing paths
-     * @param normalize whether to normalize by dividing the closeness by $n-1$, where $n$ is the number
-     *        of vertices of the graph
+     * @param normalize whether to normalize by dividing the closeness by $n-1$, where $n$ is the
+     *        number of vertices of the graph
      */
     public HarmonicCentrality(Graph<V, E> graph, boolean incoming, boolean normalize)
     {

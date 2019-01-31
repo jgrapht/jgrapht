@@ -3,29 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.cycle.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.cycle.Cycles;
+import java.io.*;
+import java.util.*;
 
 /**
  * Allows to derive an undirected <a href="https://en.wikipedia.org/wiki/Cycle_basis">cycle
@@ -43,7 +39,6 @@ import org.jgrapht.alg.cycle.Cycles;
  * @param <E> edge the graph edge type
  * 
  * @author Dimitrios Michail
- * @since October 2016
  */
 public interface CycleBasisAlgorithm<V, E>
 {
@@ -100,7 +95,9 @@ public interface CycleBasisAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     class CycleBasisImpl<V, E>
-        implements CycleBasis<V, E>, Serializable
+        implements
+        CycleBasis<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = -1420882459022219505L;
 
@@ -182,5 +179,3 @@ public interface CycleBasisAlgorithm<V, E>
     }
 
 }
-
-// End UndirectedCycleBasisAlgorithm.java

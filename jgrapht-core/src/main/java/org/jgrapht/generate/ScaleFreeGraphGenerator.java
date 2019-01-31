@@ -3,23 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates directed or undirected
@@ -34,7 +34,8 @@ import org.jgrapht.*;
  * @author Ilya Razenshteyn
  */
 public class ScaleFreeGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final int size;
     private final Random rng;
@@ -84,17 +85,13 @@ public class ScaleFreeGraphGenerator<V, E>
      * @param resultMap unused parameter, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         List<V> vertexList = new ArrayList<>();
         List<Integer> degrees = new ArrayList<>();
         int degreeSum = 0;
         for (int i = 0; i < size; i++) {
             V newVertex = target.addVertex();
-            if (newVertex == null) { 
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
             int newDegree = 0;
             while ((newDegree == 0) && (i != 0)) // we want our graph to be connected
             {
@@ -116,5 +113,3 @@ public class ScaleFreeGraphGenerator<V, E>
         }
     }
 }
-
-// End ScaleFreeGraphGenerator.java

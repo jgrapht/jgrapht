@@ -3,37 +3,37 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.perf.graph;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.Supplier;
-
-import org.jgrapht.alg.connectivity.GabowStrongConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.specifics.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * Benchmark class to compare different graph implementations. The benchmark creates a graph, runs
@@ -173,8 +173,10 @@ public class GraphPerformanceTest
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new MemoryEfficientDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> graph = new MemoryEfficientDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             rgg.generateGraph(graph);
             return graph;
         }
@@ -191,8 +193,10 @@ public class GraphPerformanceTest
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             rgg.generateGraph(graph);
             return graph;
         }
@@ -227,15 +231,10 @@ public class GraphPerformanceTest
     {
         private static final long serialVersionUID = -1826738982402033648L;
 
-        public MemoryEfficientDirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
+        public MemoryEfficientDirectedWeightedGraph(
+            Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(vertexSupplier, edgeSupplier);
-        }
-
-        @Override
-        protected Specifics<V, E> createSpecifics(boolean directed)
-        {
-            return new DirectedSpecifics<>(this);
         }
     }
 }

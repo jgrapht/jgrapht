@@ -3,47 +3,30 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.demo;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.io.*;
+import org.jgrapht.io.GraphMLExporter.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.ComponentAttributeProvider;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.GraphMLExporter;
-import org.jgrapht.io.GraphMLExporter.AttributeCategory;
-import org.jgrapht.io.GraphMLImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.IntegerComponentNameProvider;
-import org.jgrapht.io.VertexProvider;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in
@@ -302,31 +285,31 @@ public final class GraphMLDemo
      */
     public static void main(String[] args)
     {
-        /*
-         * Generate the complete graph. Vertices have random colors and edges have random edge
-         * weights.
-         */
-        Graph<CustomVertex, DefaultWeightedEdge> graph1 =
-            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
-        CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
-            new CompleteGraphGenerator<>(SIZE);
-
-        VertexFactory<CustomVertex> vFactory = new VertexFactory<CustomVertex>()
+        Supplier<CustomVertex> vSupplier = new Supplier<CustomVertex>()
         {
             private int id = 0;
 
             @Override
-            public CustomVertex createVertex()
+            public CustomVertex get()
             {
                 return new CustomVertex(
                     String.valueOf(id++), GENERATOR.nextBoolean() ? Color.BLACK : Color.WHITE);
             }
-
         };
 
+        /*
+         * Generate the complete graph. Vertices have random colors and edges have random edge
+         * weights.
+         */
+        Graph<CustomVertex, DefaultWeightedEdge> graph1 = new DirectedWeightedPseudograph<>(
+            vSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
+
+        CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
+            new CompleteGraphGenerator<>(SIZE);
+
         System.out.println("-- Generating complete graph");
-        completeGenerator.generateGraph(graph1, vFactory);
+        completeGenerator.generateGraph(graph1);
 
         /*
          * Assign random weights to the graph

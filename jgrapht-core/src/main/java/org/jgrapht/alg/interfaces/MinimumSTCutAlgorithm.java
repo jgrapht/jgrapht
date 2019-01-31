@@ -3,31 +3,31 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.interfaces;
 
 import java.util.*;
 
 /**
- * Given a weighted graph $G(V,E)$ (directed or undirected). This class computes a minimum $s-t$ cut. A
- * cut is a partitioning of the vertices into two disjoint sets $S, T $such that $s \in S, t \in T$, and
- * that $S \cup T = V%. The <i>capacity</i> of a cut is defined as the sum of the weights of the edges
- * from $S$ to $T$. In case of a directed graph, only the edges with their tail in $S$ and their head in $T$
- * are counted. In cased of a undirected graph, all edges with one endpoint in $S$ and one endpoint in
- * $T$ are counted. For a given $s$ and $t$, this class computes two partitions $S$ and $T$ such that the
- * capacity of the cut is minimized. When each edge has equal weight, by definition this class
- * minimizes the number of edges from $S$ to $T$.
+ * Given a weighted graph $G(V,E)$ (directed or undirected). This class computes a minimum $s-t$
+ * cut. A cut is a partitioning of the vertices into two disjoint sets $S, T $such that $s \in S, t
+ * \in T$, and that $S \cup T = V%. The <i>capacity</i> of a cut is defined as the sum of the
+ * weights of the edges from $S$ to $T$. In case of a directed graph, only the edges with their tail
+ * in $S$ and their head in $T$ are counted. In cased of a undirected graph, all edges with one
+ * endpoint in $S$ and one endpoint in $T$ are counted. For a given $s$ and $t$, this class computes
+ * two partitions $S$ and $T$ such that the capacity of the cut is minimized. When each edge has
+ * equal weight, by definition this class minimizes the number of edges from $S$ to $T$.
  *
  * Note: it is not recommended to use this class to calculate the overall minimum cut in a graph by
  * iteratively invoking this class for all source-sink pairs. This is computationally expensive.
@@ -77,8 +77,8 @@ public interface MinimumSTCutAlgorithm<V, E>
     /**
      * Returns the set of edges which run from $S$ to $T$, in the $s-t$ cut obtained after the last
      * invocation of {@link #calculateMinCut(Object, Object)} In case of a directed graph, only the
-     * edges with their tail in $S$ and their head in $T$ are returned. In cased of a undirected graph,
-     * all edges with one endpoint in $S$ and one endpoint in $T$ are returned.
+     * edges with their tail in $S$ and their head in $T$ are returned. In cased of a undirected
+     * graph, all edges with one endpoint in $S$ and one endpoint in $T$ are returned.
      * 
      * @return set of edges which run from $S$ to $T$
      */

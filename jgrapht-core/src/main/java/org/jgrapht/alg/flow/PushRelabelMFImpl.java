@@ -3,45 +3,47 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.alg.util.extension.*;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
  * <p>
  * <a href="https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm"> Push-relabel
  * maximum flow</a> algorithm designed by Andrew V. Goldberg and Robert Tarjan. Current
- * implementation complexity upper-bound is $O(V^3)$. For more details see: <i>"A new approach to the
- * maximum flow problem"</i> by Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of the
- * eighteenth annual ACM symposium on Theory of computing</i>
+ * implementation complexity upper-bound is $O(V^3)$. For more details see: <i>"A new approach to
+ * the maximum flow problem"</i> by Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of
+ * the eighteenth annual ACM symposium on Theory of computing</i>
  * </p>
  *
  * <p>
- *     This implementation is based on <i>On Implementing the Push—Relabel Method for the
- *     Maximum Flow Problem</i> by B. V. Cherkassky and A.V. Goldberg (Cherkassky, B. &amp; Goldberg, A. Algorithmica (1997) 19: 390. https://doi.org/10.1007/PL00009180)
- *     and <i>Introduction to Algorithms</i> (3rd Edition).
+ * This implementation is based on <i>On Implementing the Push—Relabel Method for the Maximum Flow
+ * Problem</i> by B. V. Cherkassky and A.V. Goldberg (Cherkassky, B. &amp; Goldberg, A. Algorithmica
+ * (1997) 19: 390. https://doi.org/10.1007/PL00009180) and <i>Introduction to Algorithms</i> (3rd
+ * Edition).
  * </p>
  *
  * <p>
  * This class can also computes minimum $s-t$ cuts. Effectively, to compute a minimum $s-t$ cut, the
- * implementation first computes a minimum $s-t$ flow, after which a BFS is run on the residual graph.
+ * implementation first computes a minimum $s-t$ flow, after which a BFS is run on the residual
+ * graph.
  * </p>
  *
  * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and
@@ -55,7 +57,8 @@ import java.util.*;
  *
  */
 public class PushRelabelMFImpl<V, E>
-        extends MaximumFlowAlgorithmBase<V, E>
+    extends
+    MaximumFlowAlgorithmBase<V, E>
 {
     // Diagnostic
     private static final boolean DIAGNOSTIC_ENABLED = false;
@@ -81,6 +84,8 @@ public class PushRelabelMFImpl<V, E>
 
     // number of relabels already performed
     private int relabelCounter;
+
+    private static ToleranceDoubleComparator comparator = new ToleranceDoubleComparator();
 
     /**
      * Construct a new push-relabel algorithm.
@@ -115,8 +120,9 @@ public class PushRelabelMFImpl<V, E>
         this.vertexExtension = (VertexExtension[]) Array.newInstance(VertexExtension.class, N);
     }
 
-    private void enqueue(VertexExtension vx){
-        if (!vx.active && vx.hasExcess()){
+    private void enqueue(VertexExtension vx)
+    {
+        if (!vx.active && vx.hasExcess()) {
             vx.active = true;
             activeVertices.add(vx);
         }
@@ -136,7 +142,7 @@ public class PushRelabelMFImpl<V, E>
         this.countHeight = new int[2 * N + 1];
 
         int id = 0;
-        for (V v: network.vertexSet()){
+        for (V v : network.vertexSet()) {
             VertexExtension vx = getVertexExtension(v);
             vx.id = id;
             vertexExtension[id] = vx;
@@ -151,7 +157,8 @@ public class PushRelabelMFImpl<V, E>
      * @param sink the sink
      * @param active resulting queue with all active vertices
      */
-    public void initialize(VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
+    public void initialize(
+        VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
     {
         this.activeVertices = active;
 
@@ -169,12 +176,12 @@ public class PushRelabelMFImpl<V, E>
         countHeight[N] = 1;
         countHeight[0] = N - 1;
 
-        for (AnnotatedFlowEdge ex : source.getOutgoing()){
+        for (AnnotatedFlowEdge ex : source.getOutgoing()) {
             source.excess += ex.capacity;
             push(ex);
         }
 
-        if (USE_GLOBAL_RELABELING_HEURISTIC){
+        if (USE_GLOBAL_RELABELING_HEURISTIC) {
             recomputeHeightsHeuristic();
             this.relabelCounter = 0;
         }
@@ -201,7 +208,7 @@ public class PushRelabelMFImpl<V, E>
     public double calculateMaximumFlow(V source, V sink)
     {
         /*
-            Note: this implementation uses the FIFO selection rule (check wiki for more details)
+         * Note: this implementation uses the FIFO selection rule (check wiki for more details)
          */
 
         init(source, sink);
@@ -210,7 +217,7 @@ public class PushRelabelMFImpl<V, E>
         initialize(getVertexExtension(source), getVertexExtension(sink), this.activeVertices);
 
         //
-        while (!activeVertices.isEmpty()){
+        while (!activeVertices.isEmpty()) {
             VertexExtension vx = activeVertices.poll();
             vx.active = false;
             discharge(vx);
@@ -247,11 +254,11 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        The basic operation PUSH(u, v) is applied if u in an overflowing vertex (i.e. has excess)
-        and u.height = v.height + 1.
-
-        The operation can be either saturating (if ux.excess >= ex.capacity - ex.flow) or
-        nonsaturating (otherwise).
+     * The basic operation PUSH(u, v) is applied if u in an overflowing vertex (i.e. has excess) and
+     * u.height = v.height + 1.
+     * 
+     * The operation can be either saturating (if ux.excess >= ex.capacity - ex.flow) or
+     * nonsaturating (otherwise).
      */
     private void push(AnnotatedFlowEdge ex)
     {
@@ -273,9 +280,10 @@ public class PushRelabelMFImpl<V, E>
         enqueue(vx);
     }
 
-    private void gapHeuristic(int l){
+    private void gapHeuristic(int l)
+    {
         for (int i = 0; i < N; i++) {
-            if (l < vertexExtension[i].height && vertexExtension[i].height < N){
+            if (l < vertexExtension[i].height && vertexExtension[i].height < N) {
                 countHeight[vertexExtension[i].height]--;
                 vertexExtension[i].height = Math.max(vertexExtension[i].height, N + 1);
                 countHeight[vertexExtension[i].height]++;
@@ -284,14 +292,14 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        The basic operation RELABEL(u) is applied if u is overflowing (i.e. has excess)
-        and if u.height <= v.height + 1.
-
-        We can relabel an overflowing vertex $u$ if for every vertex v for which there is
-        residual capacity from u to v, flow cannot be pushed from u to v because v is not
-        downhill from u.
+     * The basic operation RELABEL(u) is applied if u is overflowing (i.e. has excess) and if
+     * u.height <= v.height + 1.
+     * 
+     * We can relabel an overflowing vertex $u$ if for every vertex v for which there is residual
+     * capacity from u to v, flow cannot be pushed from u to v because v is not downhill from u.
      */
-    private void relabel(VertexExtension ux){
+    private void relabel(VertexExtension ux)
+    {
         int oldHeight = ux.height;
 
         // Increase the height of u; u.h = 1 + min(v.h : (u, v) in Ef)
@@ -299,39 +307,39 @@ public class PushRelabelMFImpl<V, E>
         countHeight[ux.height]--;
         ux.height = 2 * N;
 
-        for (AnnotatedFlowEdge ex : ux.getOutgoing()){
-            if (ex.hasCapacity()){
-                ux.height = Math.min(ux.height, ex.<VertexExtension>getTarget().height + 1);
+        for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
+            if (ex.hasCapacity()) {
+                ux.height = Math.min(ux.height, ex.<VertexExtension> getTarget().height + 1);
             }
         }
 
         countHeight[ux.height]++;
 
-        if (USE_GAP_RELABELING_HEURISTIC){
+        if (USE_GAP_RELABELING_HEURISTIC) {
             /*
-                The gap heuristic detects gaps in the height function.
-                If there is a height 0 < h < |V| for which there is no node u such that
-                u.height = h, then any node v with h < v.height < |V| has been disconnected from sink
-                 and can be relabeled to (|V| + 1).
+             * The gap heuristic detects gaps in the height function. If there is a height 0 < h <
+             * |V| for which there is no node u such that u.height = h, then any node v with h <
+             * v.height < |V| has been disconnected from sink and can be relabeled to (|V| + 1).
              */
-            if (0 < oldHeight && oldHeight < N && countHeight[oldHeight] == 0){
+            if (0 < oldHeight && oldHeight < N && countHeight[oldHeight] == 0) {
                 gapHeuristic(oldHeight);
             }
         }
 
-        if (DIAGNOSTIC_ENABLED){
+        if (DIAGNOSTIC_ENABLED) {
             diagnostic.incrementRelabels(ux.height, ux.height);
         }
     }
 
-    private void bfs(Queue<Integer> queue, boolean[] visited){
-        while (!queue.isEmpty()){
+    private void bfs(Queue<Integer> queue, boolean[] visited)
+    {
+        while (!queue.isEmpty()) {
             int vertexID = queue.poll();
 
-            for (AnnotatedFlowEdge flowEdge: vertexExtension[vertexID].getOutgoing()){
+            for (AnnotatedFlowEdge flowEdge : vertexExtension[vertexID].getOutgoing()) {
                 VertexExtension vx = flowEdge.getTarget();
 
-                if (!visited[vx.id] && flowEdge.getInverse().hasCapacity()){
+                if (!visited[vx.id] && flowEdge.getInverse().hasCapacity()) {
                     vx.height = vertexExtension[vertexID].height + 1;
                     visited[vx.id] = true;
                     queue.add(vx.id);
@@ -341,12 +349,13 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        The global relabeling heuristic updates the height function by computing shortest path
-        distances in the residual graph from all nodes to the sink.
-
-        This can be done in linear time by a backwards breadth-first search.
-    */
-    private void recomputeHeightsHeuristic(){
+     * The global relabeling heuristic updates the height function by computing shortest path
+     * distances in the residual graph from all nodes to the sink.
+     * 
+     * This can be done in linear time by a backwards breadth-first search.
+     */
+    private void recomputeHeightsHeuristic()
+    {
         Arrays.fill(countHeight, 0);
 
         Queue<Integer> queue = new ArrayDeque<>(N);
@@ -377,20 +386,21 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        An overflowing vertex u is discharged by pushing all of its excess flow through
-        admissible edges to neighboring vertices, relabeling u as necessary to cause edges
-        leaving u to become admissible,
+     * An overflowing vertex u is discharged by pushing all of its excess flow through admissible
+     * edges to neighboring vertices, relabeling u as necessary to cause edges leaving u to become
+     * admissible,
      */
-    private void discharge(VertexExtension ux){
-        while (ux.hasExcess()){
+    private void discharge(VertexExtension ux)
+    {
+        while (ux.hasExcess()) {
             // If there are no more edges
-            if (ux.currentArc >= ux.getOutgoing().size()){
+            if (ux.currentArc >= ux.getOutgoing().size()) {
                 // then we relabel u
                 relabel(ux);
 
-                if (USE_GLOBAL_RELABELING_HEURISTIC){
+                if (USE_GLOBAL_RELABELING_HEURISTIC) {
                     // If we already relabeled |V| vertices, then we do a global relabeling
-                    // Note:  Global relabelings are performed periodically
+                    // Note: Global relabelings are performed periodically
                     if ((++relabelCounter) == N) {
                         recomputeHeightsHeuristic();
 
@@ -403,13 +413,12 @@ public class PushRelabelMFImpl<V, E>
 
                 // rewind the pointer to the next edge
                 ux.currentArc = 0;
-            }
-            else{
+            } else {
                 AnnotatedFlowEdge flowEdge = ux.getOutgoing().get(ux.currentArc);
 
                 /*
-                    Check if the edge is admissible. If it is then do a PUSH operation.
-                    Otherwise, make currentArc point to the next edge.
+                 * Check if the edge is admissible. If it is then do a PUSH operation. Otherwise,
+                 * make currentArc point to the next edge.
                  */
                 if (isAdmissible(flowEdge))
                     push(flowEdge);
@@ -422,8 +431,8 @@ public class PushRelabelMFImpl<V, E>
 
     private boolean isAdmissible(AnnotatedFlowEdge e)
     {
-        return e.hasCapacity() &&
-                (e.<VertexExtension>getSource().height == (e.<VertexExtension>getTarget().height + 1));
+        return e.hasCapacity() && (e
+            .<VertexExtension> getSource().height == (e.<VertexExtension> getTarget().height + 1));
     }
 
     private VertexExtension getVertexExtension(V v)
@@ -483,7 +492,7 @@ public class PushRelabelMFImpl<V, E>
             System.out.println(labels);
 
             List<Map.Entry<Pair<Integer, Integer>, Integer>> relabelsSorted =
-                    new ArrayList<>(relabels.entrySet());
+                new ArrayList<>(relabels.entrySet());
 
             relabelsSorted.sort((o1, o2) -> -(o1.getValue() - o2.getValue()));
 
@@ -493,7 +502,7 @@ public class PushRelabelMFImpl<V, E>
             System.out.println("            " + relabelsSorted);
 
             List<Map.Entry<Pair<V, V>, Integer>> dischargesSorted =
-                    new ArrayList<>(discharges.entrySet());
+                new ArrayList<>(discharges.entrySet());
 
             dischargesSorted.sort((one, other) -> -(one.getValue() - other.getValue()));
 
@@ -507,7 +516,10 @@ public class PushRelabelMFImpl<V, E>
     /**
      * Vertex extension for the push-relabel algorithm, which contains an additional height.
      */
-    public class VertexExtension extends VertexExtensionBase {
+    public class VertexExtension
+        extends
+        VertexExtensionBase
+    {
         private int id;
         private int height; // also called label (or distance label) in some papers
         private boolean active;
@@ -515,7 +527,7 @@ public class PushRelabelMFImpl<V, E>
 
         private boolean hasExcess()
         {
-            return excess > 0;
+            return comparator.compare(excess, 0.0) > 0;
         }
 
         @Override

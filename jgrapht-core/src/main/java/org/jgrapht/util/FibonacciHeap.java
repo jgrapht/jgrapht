@@ -3,17 +3,17 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.util;
 
@@ -23,9 +23,9 @@ import java.util.*;
  * This class implements a Fibonacci heap data structure. Much of the code in this class is based on
  * the algorithms in the "Introduction to Algorithms" by Cormen, Leiserson, and Rivest in Chapter
  * 21. The amortized running time of most of these methods is $O(1)$, making it a very fast data
- * structure. Several have an actual running time of $O(1)$. removeMin() and delete() have $O(log n)$
- * amortized running times because they do the heap consolidation. If you attempt to store nodes in
- * this heap with key values of -Infinity (Double.NEGATIVE_INFINITY) the <code>delete()</code>
+ * structure. Several have an actual running time of $O(1)$. removeMin() and delete() have $O(log
+ * n)$ amortized running times because they do the heap consolidation. If you attempt to store nodes
+ * in this heap with key values of -Infinity (Double.NEGATIVE_INFINITY) the <code>delete()</code>
  * operation may fail to remove the correct element.
  *
  * <p>
@@ -43,7 +43,9 @@ import java.util.*;
  * @param <T> node data type
  *
  * @author Nathan Fiedler
+ * @deprecated Use heaps from jheaps dependency
  */
+@Deprecated
 public class FibonacciHeap<T>
 {
     private static final double ONEOVERLOGPHI = 1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
@@ -405,17 +407,17 @@ public class FibonacciHeap<T>
     {
         FibonacciHeapNode<T> z = y.parent;
 
-        // if there's a parent...
-        if (z != null) {
-            // if y is unmarked, set it marked
+        // if there's a parent of y...
+        while (z != null) {
+            // if y is marked, set it marked and finish
             if (!y.mark) {
                 y.mark = true;
+                return;
             } else {
-                // it's marked, cut it from parent
+                // y is marked, cut it from parent and continue cascading cut with z
                 cut(y, z);
-
-                // cut its parent as well
-                cascadingCut(z);
+                y = z;
+                z = z.parent;
             }
         }
     }
@@ -524,8 +526,8 @@ public class FibonacciHeap<T>
     // consolidate
 
     /**
-     * The reverse of the link operation: removes $x$ from the child list of $y$. This method assumes
-     * that min is non-null.
+     * The reverse of the link operation: removes $x$ from the child list of $y$. This method
+     * assumes that min is non-null.
      *
      * <p>
      * Running time: $O(1)$

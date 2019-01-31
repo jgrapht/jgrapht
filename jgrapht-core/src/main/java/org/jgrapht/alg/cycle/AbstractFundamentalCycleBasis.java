@@ -3,34 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
-import org.jgrapht.alg.util.Pair;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * A base implementation for the computation of a fundamental cycle basis of a graph. Subclasses
@@ -53,10 +45,10 @@ import org.jgrapht.alg.util.Pair;
  * @param <E> the edge type
  *
  * @author Dimitrios Michail
- * @since October 2016
  */
 public abstract class AbstractFundamentalCycleBasis<V, E>
-    implements CycleBasisAlgorithm<V, E>
+    implements
+    CycleBasisAlgorithm<V, E>
 {
     protected Graph<V, E> graph;
 
@@ -128,13 +120,13 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
 
         // handle self-loops
         if (source.equals(target)) {
-            return Pair.of(Arrays.asList(e), graph.getEdgeWeight(e));
+            return Pair.of(Collections.singletonList(e), graph.getEdgeWeight(e));
         }
 
         /*
          * traverse half cycle
          */
-        Set<E> path1 = new LinkedHashSet<E>();
+        Set<E> path1 = new LinkedHashSet<>();
         path1.add(e);
         V cur = source;
         while (!cur.equals(target)) {
@@ -151,7 +143,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
          * traverse the other half cycle, while removing common edges
          */
         double path2Weight = 0d;
-        LinkedList<E> path2 = new LinkedList<E>();
+        LinkedList<E> path2 = new LinkedList<>();
         if (!cur.equals(target)) {
             cur = target;
             while (true) {
@@ -180,5 +172,3 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
     }
 
 }
-
-// End AbstractFundamentalCycleBasis.java

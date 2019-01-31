@@ -3,26 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.util;
-
-import java.util.*;
-import java.util.function.*;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
@@ -38,10 +38,10 @@ import org.jgrapht.util.*;
  * @param <E> the edge type
  * 
  * @author Szabolcs Besenyei
- * @since November 2017
  */
 public class NeighborCache<V, E>
-    implements GraphListener<V, E>
+    implements
+    GraphListener<V, E>
 {
     private Map<V, Neighbors<V>> successors = new HashMap<>();
     private Map<V, Neighbors<V>> predecessors = new HashMap<>();
@@ -125,7 +125,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e
+            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
@@ -150,7 +151,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
-        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e
+            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
@@ -181,7 +183,8 @@ public class NeighborCache<V, E>
     @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
-        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e
+            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         successors.remove(e.getVertex());
         predecessors.remove(e.getVertex());

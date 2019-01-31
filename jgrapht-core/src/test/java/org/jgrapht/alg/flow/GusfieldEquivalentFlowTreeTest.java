@@ -3,27 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +34,8 @@ import static org.junit.Assert.assertTrue;
  * @author Joris Kinable
  */
 public class GusfieldEquivalentFlowTreeTest
-    extends GusfieldTreeAlgorithmsTestBase
+    extends
+    GusfieldTreeAlgorithmsTestBase
 {
     @Override
     public void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network)
@@ -53,7 +54,7 @@ public class GusfieldEquivalentFlowTreeTest
         double expectedMinimumCut = minimumCutAlg.minCutWeight();
         double cheapestEdge = equivalentFlowTree
             .edgeSet().stream().mapToDouble(equivalentFlowTree::getEdgeWeight).min().getAsDouble();
-        assertEquals(expectedMinimumCut, cheapestEdge,0);
+        assertEquals(expectedMinimumCut, cheapestEdge, 0);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm =
             new PushRelabelMFImpl<>(network);
@@ -64,9 +65,8 @@ public class GusfieldEquivalentFlowTreeTest
 
                 // Check cut weights
                 double expectedCutWeight = minimumSTCutAlgorithm.calculateMinCut(i, j);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j),0);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i),0);
-                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(),0);
+                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(i, j), 0);
+                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(j, i), 0);
 
                 // Verify the correctness of the tree
                 // The cost of the cheapest edge in the path from i to j must equal the weight of an
@@ -76,7 +76,7 @@ public class GusfieldEquivalentFlowTreeTest
                 DefaultWeightedEdge cheapestEdgeInPath = pathEdges
                     .stream().min(Comparator.comparing(equivalentFlowTree::getEdgeWeight))
                     .orElseThrow(() -> new RuntimeException("path is empty?!"));
-                assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath),0);
+                assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath), 0);
             }
         }
     }

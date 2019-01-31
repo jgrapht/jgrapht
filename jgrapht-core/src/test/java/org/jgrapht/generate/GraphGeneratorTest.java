@@ -3,37 +3,34 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * .
  *
  * @author John V. Sichi
- * @since Sep 17, 2003
  */
 public class GraphGeneratorTest
 {
@@ -50,7 +47,8 @@ public class GraphGeneratorTest
     public void testEmptyGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new EmptyGraphGenerator<>(SIZE);
-        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         Map<String, Object> resultMap = new HashMap<>();
         gen.generateGraph(g, resultMap);
         assertEquals(SIZE, g.vertexSet().size());
@@ -65,7 +63,8 @@ public class GraphGeneratorTest
     public void testLinearGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new LinearGraphGenerator<>(SIZE);
-        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         Map<String, Object> resultMap = new HashMap<>();
         gen.generateGraph(g, resultMap);
         assertEquals(SIZE, g.vertexSet().size());
@@ -101,7 +100,8 @@ public class GraphGeneratorTest
     public void testRingGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new RingGraphGenerator<>(SIZE);
-        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         Map<String, Object> resultMap = new HashMap<>();
         gen.generateGraph(g, resultMap);
         assertEquals(SIZE, g.vertexSet().size());
@@ -133,11 +133,11 @@ public class GraphGeneratorTest
     @Test
     public void testCompleteGraphGenerator()
     {
-        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
             new CompleteGraphGenerator<>(10);
-        completeGenerator
-            .generateGraph(completeGraph);
+        completeGenerator.generateGraph(completeGraph);
 
         // complete graph with 10 vertices has 10*(10-1)/2 = 45 edges
         assertEquals(45, completeGraph.edgeSet().size());
@@ -146,11 +146,11 @@ public class GraphGeneratorTest
     @Test
     public void testCompleteGraphGeneratorWithDirectedGraph()
     {
-        Graph<Object, DefaultEdge> completeGraph = new SimpleDirectedGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> completeGraph = new SimpleDirectedGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
             new CompleteGraphGenerator<>(10);
-        completeGenerator
-            .generateGraph(completeGraph);
+        completeGenerator.generateGraph(completeGraph);
 
         // complete graph with 10 vertices has 10*(10-1) = 90 edges
         assertEquals(90, completeGraph.edgeSet().size());
@@ -162,7 +162,8 @@ public class GraphGeneratorTest
     @Test
     public void testScaleFreeGraphGenerator()
     {
-        Graph<Object, DefaultEdge> graph = new DefaultDirectedGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> graph = new DefaultDirectedGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         ScaleFreeGraphGenerator<Object, DefaultEdge> generator = new ScaleFreeGraphGenerator<>(500);
         generator.generateGraph(graph);
         ConnectivityInspector<Object, DefaultEdge> inspector = new ConnectivityInspector<>(graph);
@@ -181,7 +182,8 @@ public class GraphGeneratorTest
         }
 
         generator = new ScaleFreeGraphGenerator<>(0);
-        Graph<Object, DefaultEdge> empty = new DefaultDirectedGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> empty = new DefaultDirectedGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(empty);
         assertTrue("non-empty graph generated", empty.vertexSet().size() == 0);
     }
@@ -192,7 +194,8 @@ public class GraphGeneratorTest
     @Test
     public void testCompleteBipartiteGraphGenerator()
     {
-        Graph<Object, DefaultEdge> completeBipartiteGraph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> completeBipartiteGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteBipartiteGraphGenerator<Object, DefaultEdge> completeBipartiteGenerator =
             new CompleteBipartiteGraphGenerator<>(10, 4);
         completeBipartiteGenerator.generateGraph(completeBipartiteGraph);
@@ -209,11 +212,11 @@ public class GraphGeneratorTest
     @Test
     public void testHyperCubeGraphGenerator()
     {
-        Graph<Object, DefaultEdge> hyperCubeGraph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> hyperCubeGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         HyperCubeGraphGenerator<Object, DefaultEdge> hyperCubeGenerator =
             new HyperCubeGraphGenerator<>(4);
-        hyperCubeGenerator
-            .generateGraph(hyperCubeGraph);
+        hyperCubeGenerator.generateGraph(hyperCubeGraph);
 
         // Hypercube of 4 dimensions should have 2^4=16 vertices and
         // 4*2^(4-1)=32 total edges
@@ -228,7 +231,8 @@ public class GraphGeneratorTest
     public void testStarGraphGenerator()
     {
         Map<String, Object> map = new HashMap<>();
-        Graph<Object, DefaultEdge> starGraph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> starGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         StarGraphGenerator<Object, DefaultEdge> starGenerator = new StarGraphGenerator<>(10);
         starGenerator.generateGraph(starGraph, map);
 
@@ -251,13 +255,14 @@ public class GraphGeneratorTest
         Map<String, String> resultMap = new HashMap<>();
 
         // validating a directed and undirected graph
-        Graph<String, String> directedGridGraph =
-            new DefaultDirectedGraph<>(SupplierUtil.createStringSupplier(1), SupplierUtil.createStringSupplier(1), false);
+        Graph<String, String> directedGridGraph = new DefaultDirectedGraph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.createStringSupplier(1), false);
         generator.generateGraph(directedGridGraph, resultMap);
         validateGridGraphGenerator(rows, cols, directedGridGraph, resultMap);
 
         resultMap.clear();
-        Graph<String, String> undirectedGridGraph = new SimpleGraph<>(SupplierUtil.createStringSupplier(1), SupplierUtil.createStringSupplier(1), false);
+        Graph<String, String> undirectedGridGraph = new SimpleGraph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.createStringSupplier(1), false);
         generator.generateGraph(undirectedGridGraph, resultMap);
         validateGridGraphGenerator(rows, cols, undirectedGridGraph, resultMap);
     }
@@ -328,5 +333,3 @@ public class GraphGeneratorTest
         }
     }
 }
-
-// End GraphGeneratorTest.java

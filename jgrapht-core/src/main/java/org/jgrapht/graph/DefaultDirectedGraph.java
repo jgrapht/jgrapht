@@ -3,25 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * The default implementation of a directed graph. A default directed graph is a non-simple directed
@@ -33,7 +32,8 @@ import org.jgrapht.util.SupplierUtil;
  * 
  */
 public class DefaultDirectedGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -2066644490824847621L;
 
@@ -92,46 +92,4 @@ public class DefaultDirectedGraph<V, E>
         return new GraphBuilder<>(new DefaultDirectedGraph<>(null, edgeSupplier, false));
     }
 
-    /**
-     * Creates a new undirected graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public DefaultDirectedGraph(EdgeFactory<V, E> ef)
-    {
-        this(ef, false);
-    }
-
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param weighted if true the graph supports edge weights
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public DefaultDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        super(ef, true, false, true, weighted);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends DefaultDirectedGraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new DefaultDirectedGraph<>(ef));
-    }
 }
-
-// End DefaultDirectedGraph.java

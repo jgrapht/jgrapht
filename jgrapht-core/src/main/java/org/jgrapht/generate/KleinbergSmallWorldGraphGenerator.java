@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * Kleinberg's small-world graph generator.
@@ -32,21 +32,21 @@ import org.jgrapht.alg.util.*;
  * <p>
  * The basic structure is a a two-dimensional grid and allows for edges to be directed. It begins
  * with a set of nodes (representing individuals in the social network) that are identified with the
- * set of lattice points in an $n \times n$ square. For a universal constant $p \geq 1$, the node $u$
- * has a directed edge to every other node within lattice distance $p$ (these are its local contacts).
- * For universal constants $q \geq 0$ and $r \geq 0$, we also construct directed edges
+ * set of lattice points in an $n \times n$ square. For a universal constant $p \geq 1$, the node
+ * $u$ has a directed edge to every other node within lattice distance $p$ (these are its local
+ * contacts). For universal constants $q \geq 0$ and $r \geq 0$, we also construct directed edges
  * from $u$ to $q$ other nodes (the long-range contacts) using independent random trials; the i-th
- * directed edge from $u$ has endpoint $v$ with probability proportional to \frac{1}{d(u,v)^r}$ where
- * $d(u,v)$ is the lattice distance from $u$ to $v$.
+ * directed edge from $u$ has endpoint $v$ with probability proportional to \frac{1}{d(u,v)^r}$
+ * where $d(u,v)$ is the lattice distance from $u$ to $v$.
  * 
  * @author Dimitrios Michail
- * @since February 2017
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
 public class KleinbergSmallWorldGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final Random rng;
 
@@ -131,8 +131,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
      * @param resultMap not used by this generator, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Special cases
@@ -155,11 +154,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(n * n);
         for (int i = 0; i < n * n; i++) {
-            V v = target.addVertex();
-            if (v == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            nodes.add(v);
+            nodes.add(target.addVertex());
         }
 
         /*

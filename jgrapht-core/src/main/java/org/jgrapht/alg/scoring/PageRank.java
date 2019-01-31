@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * PageRank implementation.
@@ -41,25 +41,25 @@ import org.jgrapht.alg.interfaces.*;
  * </p>
  *
  * <p>
- * Each iteration of the algorithm runs in linear time $O(n+m)$ when $n$ is the number of nodes and $m$
- * the number of edges of the graph. The maximum number of iterations can be adjusted by the caller.
- * The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
+ * Each iteration of the algorithm runs in linear time $O(n+m)$ when $n$ is the number of nodes and
+ * $m$ the number of edges of the graph. The maximum number of iterations can be adjusted by the
+ * caller. The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
  * </p>
  * 
  * <p>
  * If the graph is a weighted graph, a weighted variant is used where the probability of following
- * an edge e out of node $v$ is equal to the weight of $e$ over the sum of weights of all outgoing edges
- * of $v$.
+ * an edge e out of node $v$ is equal to the weight of $e$ over the sum of weights of all outgoing
+ * edges of $v$.
  * </p>
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since August 2016
  */
 public final class PageRank<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+    implements
+    VertexScoringAlgorithm<V, Double>
 {
     /**
      * Default number of maximum iterations.

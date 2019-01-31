@@ -3,38 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
 
-import java.math.BigDecimal;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.util.GenericFibonacciHeap;
+import java.math.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Maximum weight matching in bipartite graphs.
@@ -55,13 +45,15 @@ import org.jgrapht.util.GenericFibonacciHeap;
  * @author Dimitrios Michail
  */
 public class MaximumWeightBipartiteMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final Set<V> partition1;
     private final Set<V> partition2;
 
     private final Comparator<BigDecimal> comparator;
+    private final Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal, V>> heapSupplier;
 
     // vertex potentials
     private Map<V, BigDecimal> pot;
@@ -69,8 +61,8 @@ public class MaximumWeightBipartiteMatching<V, E>
     private Map<V, E> matchedEdge;
 
     // shortest path related data structures
-    private GenericFibonacciHeap<BigDecimal, V> heap;
-    private Map<V, GenericFibonacciHeap<BigDecimal, V>.Node> nodeInHeap;
+    private AddressableHeap<BigDecimal, V> heap;
+    private Map<V, AddressableHeap.Handle<BigDecimal, V>> nodeInHeap;
     private Map<V, E> pred;
     private Map<V, BigDecimal> dist;
 
@@ -88,10 +80,27 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
+        this(graph, partition1, partition2, (comparator) -> new FibonacciHeap<>(comparator));
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
+     * @param heapSupplier a supplier for the addressable heap to use in the algorithm.
+     * @throws IllegalArgumentException if the graph is not undirected
+     */
+    public MaximumWeightBipartiteMatching(
+        Graph<V, E> graph, Set<V> partition1, Set<V> partition2,
+        Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal, V>> heapSupplier)
+    {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = Objects.requireNonNull(partition1, "Partition 1 cannot be null");
         this.partition2 = Objects.requireNonNull(partition2, "Partition 2 cannot be null");
         this.comparator = Comparator.<BigDecimal> naturalOrder();
+        this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
     }
 
     /**
@@ -123,7 +132,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         pot = new HashMap<>();
         dist = new HashMap<>();
         matchedEdge = new HashMap<>();
-        heap = new GenericFibonacciHeap<>(comparator);
+        heap = heapSupplier.apply(comparator);
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
         graph.vertexSet().forEach(v -> {
@@ -203,7 +212,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                     pred.put(b1, e1);
                     reachedB.push(b1);
 
-                    GenericFibonacciHeap<BigDecimal, V>.Node node = heap.insert(db1, b1);
+                    AddressableHeap.Handle<BigDecimal, V> node = heap.insert(db1, b1);
                     nodeInHeap.put(b1, node);
                 } else {
                     if (comparator.compare(db1, dist.get(b1)) < 0) {
@@ -222,7 +231,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             V b = null;
             BigDecimal db = BigDecimal.ZERO;
             if (!heap.isEmpty()) {
-                b = heap.removeMin().getData();
+                b = heap.deleteMin().getValue();
                 nodeInHeap.remove(b);
                 db = dist.get(b);
             }
@@ -263,8 +272,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                                 pred.put(b1, e1);
                                 reachedB.push(b1);
 
-                                GenericFibonacciHeap<BigDecimal, V>.Node node =
-                                    heap.insert(db1, b1);
+                                AddressableHeap.Handle<BigDecimal, V> node = heap.insert(db1, b1);
                                 nodeInHeap.put(b1, node);
                             } else {
                                 if (comparator.compare(db1, dist.get(b1)) < 0) {

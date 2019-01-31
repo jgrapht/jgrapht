@@ -3,23 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @author Luiz Kill
  */
 public class HawickJamesSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     private enum Operation
     {
@@ -243,18 +244,20 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * 
+     * @return graph
      */
-    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * 
+     * @param graph graph
      */
-    @Override
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
@@ -341,5 +344,3 @@ public class HawickJamesSimpleCycles<V, E>
         return nCycles;
     }
 }
-
-// End HawickAndJamesSimpleCycles.java

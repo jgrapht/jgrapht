@@ -3,31 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
+import java.util.*;
+import java.util.stream.*;
+
 import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-import java.util.stream.IntStream;
-
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DefaultEdgeFunction;
-import org.junit.Test;
 
 /**
  * Test {@link MartinShortestPath}.
@@ -52,7 +50,8 @@ public class MartinShortestPathTest
         DefaultEdge e35 = g.addEdge(3, 5);
         DefaultEdge e45 = g.addEdge(4, 5);
 
-        DefaultEdgeFunction<DefaultEdge, double[]> f = new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
+        DefaultEdgeFunction<DefaultEdge, double[]> f =
+            new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
 
         f.set(e12, new double[] { 1.0, 5.0 });
         f.set(e13, new double[] { 4.0, 2.0 });
@@ -87,7 +86,8 @@ public class MartinShortestPathTest
         g.addVertex(1);
         g.addVertex(2);
 
-        DefaultEdgeFunction<DefaultEdge, double[]> f = new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
+        DefaultEdgeFunction<DefaultEdge, double[]> f =
+            new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
 
         MultiObjectiveSingleSourcePaths<Integer, DefaultEdge> paths1 =
             new MartinShortestPath<>(g, f).getPaths(1);

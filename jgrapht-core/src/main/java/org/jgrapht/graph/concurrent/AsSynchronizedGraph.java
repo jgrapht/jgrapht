@@ -3,19 +3,22 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.concurrent;
+
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 import java.io.*;
 import java.util.*;
@@ -23,18 +26,17 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 import java.util.function.*;
 import java.util.stream.*;
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
 
 /**
  * Create a synchronized (thread-safe) Graph backed by the specified Graph. This Graph is designed
- * to support concurrent reads which are mutually exclusive with writes. In order to guarantee serial
- * access, it is critical that <strong>all</strong> access to the backing Graph is accomplished
- * through the created Graph.
+ * to support concurrent reads which are mutually exclusive with writes. In order to guarantee
+ * serial access, it is critical that <strong>all</strong> access to the backing Graph is
+ * accomplished through the created Graph.
  *
  * <p>
- * Users need to manually synchronize on {@link EdgeFactory} if creating an edge needs to access
- * shared resources. Failure to follow this advice may result in non-deterministic behavior.
+ * Users need to manually synchronize on edge supplier (see {@link Graph#getEdgeSupplier()}) if
+ * creating an edge needs to access shared resources. Failure to follow this advice may result in
+ * non-deterministic behavior.
  * </p>
  *
  * <p>
@@ -54,11 +56,10 @@ import org.jgrapht.graph.*;
  * </p>
  *
  * <p>
- * As an alternative, a <em>copyless mode</em> is supported.  When enabled,
- * no collection copies are made at all (and hence the cache setting is
- * ignored).  This requires the caller to explicitly synchronize iteration via
- * the {@link #getLock} method.  This approach requires quite a bit of care on the
- * part of the calling application, so it is disabled by default.
+ * As an alternative, a <em>copyless mode</em> is supported. When enabled, no collection copies are
+ * made at all (and hence the cache setting is ignored). This requires the caller to explicitly
+ * synchronize iteration via the {@link #getLock} method. This approach requires quite a bit of care
+ * on the part of the calling application, so it is disabled by default.
  * </p>
  *
  * <p>
@@ -68,51 +69,55 @@ import org.jgrapht.graph.*;
  * {@link IllegalArgumentException} may be thrown if another thread has concurrently removed that
  * object. Therefore, calling the remove methods concurrently with a typical algorithm is likely to
  * cause the algorithm to fail with an {@link IllegalArgumentException}. So really the main
- * concurrent read/write use case is add-only.
- * <br>
+ * concurrent read/write use case is add-only. <br>
  * eg: If threadA tries to get all edges touching a certain vertex after threadB removes the vertex,
  * the algorithm will be interrupted by {@link IllegalArgumentException}.
  * </p>
+ * 
  * <pre>
- *      Thread threadA = new Thread(() -&gt; {
- *          Set vertices = graph.vertexSet();
- *          for (Object v : vertices) {
- *              // {@link IllegalArgumentException} may be thrown since other threads may have removed the vertex.
- *              Set edges = graph.edgesOf(v);
- *              doOtherThings();
- *          }
- *      });
- *      Thread threadB = new Thread(() -&gt; {
- *          Set vertices = graph.vertexSet();
- *          for (Object v : vertices) {
- *              if (someConditions) {
- *                  graph.removeVertex(v);
- *              }
- *          }
- *      });
+ * Thread threadA = new Thread(() -&gt; {
+ *     Set vertices = graph.vertexSet();
+ *     for (Object v : vertices) {
+ *         // {@link IllegalArgumentException} may be thrown since other threads may have removed
+ *         // the vertex.
+ *         Set edges = graph.edgesOf(v);
+ *         doOtherThings();
+ *     }
+ * });
+ * Thread threadB = new Thread(() -&gt; {
+ *     Set vertices = graph.vertexSet();
+ *     for (Object v : vertices) {
+ *         if (someConditions) {
+ *             graph.removeVertex(v);
+ *         }
+ *     }
+ * });
  * </pre>
  *
  * <p>
  *
- * One way to avoid the hazard noted above is for the calling
- * application to explicitly synchronize all iterations using the {@link #getLock} method.
+ * One way to avoid the hazard noted above is for the calling application to explicitly synchronize
+ * all iterations using the {@link #getLock} method.
  *
  * </p>
  *
  * <p>
- * The created Graph's hashCode is equal to the backing set's hashCode. And the created Graph is equal
- * to another Graph if they are the same Graph or the backing Graph is equal to the other Graph.
+ * The created Graph's hashCode is equal to the backing set's hashCode. And the created Graph is
+ * equal to another Graph if they are the same Graph or the backing Graph is equal to the other
+ * Graph.
  * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author CHEN Kui
- * @since Feb 23, 2018
  */
 public class AsSynchronizedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Graph<V, E>, Serializable
+    extends
+    GraphDelegator<V, E>
+    implements
+    Graph<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 5144561442831050752L;
 
@@ -127,8 +132,8 @@ public class AsSynchronizedGraph<V, E>
     private CacheStrategy<V, E> cacheStrategy;
 
     /**
-     * Constructor for AsSynchronizedGraph with default settings
-     * (cache disabled, non-fair mode, and copyless mode disabled).
+     * Constructor for AsSynchronizedGraph with default settings (cache disabled, non-fair mode, and
+     * copyless mode disabled).
      *
      * @param g the backing graph (the delegate)
      */
@@ -186,7 +191,7 @@ public class AsSynchronizedGraph<V, E>
         } finally {
             readWriteLock.readLock().unlock();
         }
-            
+
     }
 
     /**
@@ -214,11 +219,11 @@ public class AsSynchronizedGraph<V, E>
     {
         readWriteLock.writeLock().lock();
         try {
-             if (cacheStrategy.addEdge(sourceVertex, targetVertex, e)) {
-                 edgeSetModified();
-                 return true;
-             }
-             return false;
+            if (cacheStrategy.addEdge(sourceVertex, targetVertex, e)) {
+                edgeSetModified();
+                return true;
+            }
+            return false;
         } finally {
             readWriteLock.writeLock().unlock();
         }
@@ -553,8 +558,9 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Return whether the graph uses cache for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
-     * <code>outgoingEdgesOf</code> methods.
+     * Return whether the graph uses cache for <code>edgesOf</code>, <code>incomingEdgesOf</code>
+     * and <code>outgoingEdgesOf</code> methods.
+     * 
      * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
      */
     public boolean isCacheEnabled()
@@ -569,6 +575,7 @@ public class AsSynchronizedGraph<V, E>
 
     /**
      * Return whether copyless mode is used for collection-returning methods.
+     * 
      * @return <tt>true</tt> if the graph uses copyless mode, <tt>false</tt> otherwise
      */
     public boolean isCopyless()
@@ -660,6 +667,7 @@ public class AsSynchronizedGraph<V, E>
 
     /**
      * Return whether fair mode is used for synchronizing access to this graph.
+     * 
      * @return <tt>true</tt> if the graph uses fair mode, <tt>false</tt> if non-fair mode
      */
     public boolean isFair()
@@ -668,12 +676,11 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Get the read/write lock used to synchronize all access to this graph.
-     * This can be used by calling applications to explicitly synchronize compound sequences
-     * of graph accessses.  The lock is reentrant, so the locks
-     * acquired internally by AsSynchronizedGraph will not interfere with the
-     * caller's acquired lock.  However, write methods <strong>MUST NOT</strong> be called while
-     * holding a read lock, otherwise a deadlock will occur.
+     * Get the read/write lock used to synchronize all access to this graph. This can be used by
+     * calling applications to explicitly synchronize compound sequences of graph accessses. The
+     * lock is reentrant, so the locks acquired internally by AsSynchronizedGraph will not interfere
+     * with the caller's acquired lock. However, write methods <strong>MUST NOT</strong> be called
+     * while holding a read lock, otherwise a deadlock will occur.
      *
      * @return the reentrant read/write lock used to synchronize all access to this graph
      */
@@ -683,9 +690,9 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Create a synchronized (thread-safe) and unmodifiable Set backed by the specified Set. In order
-     * to guarantee serial access, it is critical that <strong>all</strong> access to the backing
-     * Set is accomplished through the created Set.
+     * Create a synchronized (thread-safe) and unmodifiable Set backed by the specified Set. In
+     * order to guarantee serial access, it is critical that <strong>all</strong> access to the
+     * backing Set is accomplished through the created Set.
      *
      * <p>
      * When a traversal over the set is started via a method such as iterator(), a snapshot of the
@@ -693,8 +700,8 @@ public class AsSynchronizedGraph<V, E>
      * </p>
      *
      * <p>
-     * The created Set's hashCode is equal to the backing Set's hashCode. And the created Set is equal
-     * to another set if they are the same Set or the backing Set is equal to the other Set.
+     * The created Set's hashCode is equal to the backing Set's hashCode. And the created Set is
+     * equal to another set if they are the same Set or the backing Set is equal to the other Set.
      * </p>
      *
      * <p>
@@ -704,10 +711,11 @@ public class AsSynchronizedGraph<V, E>
      * @param <E> the class of the objects in the set
      *
      * @author CHEN Kui
-     * @since Feb 23, 2018
      */
     private static class CopyOnDemandSet<E>
-            implements Set<E>, Serializable
+        implements
+        Set<E>,
+        Serializable
     {
         private static final long serialVersionUID = 5553953818148294283L;
 
@@ -727,6 +735,7 @@ public class AsSynchronizedGraph<V, E>
 
         /**
          * Constructor for CopyOnDemandSet.
+         * 
          * @param s the backing set.
          * @param readWriteLock the ReadWriteLock on which to locked
          * @param copyless whether copyless mode should be used
@@ -741,6 +750,7 @@ public class AsSynchronizedGraph<V, E>
 
         /**
          * Return whether copyless mode is used for iteration.
+         * 
          * @return <tt>true</tt> if the set uses copyless mode, <tt>false</tt> otherwise
          */
         public boolean isCopyless()
@@ -791,8 +801,8 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Returns an iterator over the elements in the backing set's unmodifiable copy. The elements
-         * are returned in the same order of the backing set.
+         * Returns an iterator over the elements in the backing set's unmodifiable copy. The
+         * elements are returned in the same order of the backing set.
          *
          * @return an iterator over the elements in the backing set's unmodifiable copy.
          */
@@ -925,7 +935,8 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Creates a <Code>Spliterator</code> over the elements in the set's unmodifiable copy.
          *
-         * @return a  <code>Spliterator</code> over the elements in the backing set's unmodifiable copy.
+         * @return a <code>Spliterator</code> over the elements in the backing set's unmodifiable
+         *         copy.
          */
         @Override
         public Spliterator<E> spliterator()
@@ -936,8 +947,9 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return a sequential <code>Stream</code> with the backing set's unmodifiable copy as its
          * source.
+         * 
          * @return a sequential <code>Stream</code> with the backing set's unmodifiable copy as its
-         * source.
+         *         source.
          */
         @Override
         public Stream<E> stream()
@@ -946,10 +958,11 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Return a possibly parallel <code>Stream</code> with the backing set's unmodifiable copy as
-         * its source.
-         * @return a possibly parallel <code>Stream</code> with the backing set's unmodifiable copy
+         * Return a possibly parallel <code>Stream</code> with the backing set's unmodifiable copy
          * as its source.
+         * 
+         * @return a possibly parallel <code>Stream</code> with the backing set's unmodifiable copy
+         *         as its source.
          */
         @Override
         public Stream<E> parallelStream()
@@ -959,9 +972,10 @@ public class AsSynchronizedGraph<V, E>
 
         /**
          * Compares the specified object with this set for equality.
+         * 
          * @param o object to be compared for equality with this set.
          * @return <code>true</code> if o and this set are the same object or o is equal to the
-         * backing object, false otherwise.
+         *         backing object, false otherwise.
          */
         @Override
         public boolean equals(Object o)
@@ -978,6 +992,7 @@ public class AsSynchronizedGraph<V, E>
 
         /**
          * Return the backing set's hashcode.
+         * 
          * @return the backing set's hashcode.
          */
         @Override
@@ -993,6 +1008,7 @@ public class AsSynchronizedGraph<V, E>
 
         /**
          * Return the backing set's toString result.
+         * 
          * @return the backing set's toString result.
          */
         @Override
@@ -1007,8 +1023,8 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Get the backing set's unmodifiable copy, or a direct reference to
-         * the backing set if in copyless mode.
+         * Get the backing set's unmodifiable copy, or a direct reference to the backing set if in
+         * copyless mode.
          *
          * @return the backing set or its unmodifiable copy
          */
@@ -1093,8 +1109,9 @@ public class AsSynchronizedGraph<V, E>
         boolean removeVertex(V v);
 
         /**
-         * Return whether the graph uses cache for <code>edgesOf</code>, <code>incomingEdgesOf</code>
-         * and <code>outgoingEdgesOf</code> methods.
+         * Return whether the graph uses cache for <code>edgesOf</code>,
+         * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+         * 
          * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
          */
         boolean isCacheEnabled();
@@ -1105,7 +1122,9 @@ public class AsSynchronizedGraph<V, E>
      * and <code>outgoingEdgesOf</code> methods.
      */
     private class NoCache
-        implements CacheStrategy<V, E>, Serializable
+        implements
+        CacheStrategy<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = 19246150051213471L;
 
@@ -1192,13 +1211,13 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Disable cache as per <code>NoCache</code>, and also don't produce copies;
-     * instead, just directly return the results from the underlying graph.
-     * This requires the caller to explicitly synchronize iterations over these
-     * collections.
+     * Disable cache as per <code>NoCache</code>, and also don't produce copies; instead, just
+     * directly return the results from the underlying graph. This requires the caller to explicitly
+     * synchronize iterations over these collections.
      */
     private class NoCopy
-        extends NoCache
+        extends
+        NoCache
     {
         private static final long serialVersionUID = -5046944235164395939L;
 
@@ -1231,11 +1250,13 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Use cache for AsSynchronizedGraph's <code>edgesOf</code>, <code>incomingEdgesOf</code>
-     * and <code>outgoingEdgesOf</code> methods.
+     * Use cache for AsSynchronizedGraph's <code>edgesOf</code>, <code>incomingEdgesOf</code> and
+     * <code>outgoingEdgesOf</code> methods.
      */
     private class CacheAccess
-        implements CacheStrategy<V, E>, Serializable
+        implements
+        CacheStrategy<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = -18262921841829294L;
 
@@ -1400,8 +1421,7 @@ public class AsSynchronizedGraph<V, E>
         private boolean copyless;
 
         /**
-         * Construct a new Builder with non-fair mode, cache disabled, and
-         * copyless mode disabled.
+         * Construct a new Builder with non-fair mode, cache disabled, and copyless mode disabled.
          */
         public Builder()
         {
@@ -1427,7 +1447,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the Builder
          */
-        public Builder<V,E> cacheDisable()
+        public Builder<V, E> cacheDisable()
         {
             cacheEnable = false;
             return this;
@@ -1438,7 +1458,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the Builder
          */
-        public Builder<V,E> cacheEnable()
+        public Builder<V, E> cacheEnable()
         {
             cacheEnable = true;
             return this;
@@ -1449,7 +1469,8 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return <tt>true</tt> if cache will be used, <tt>false</tt> if cache will not be used
          */
-        public boolean isCacheEnable() {
+        public boolean isCacheEnable()
+        {
             return cacheEnable;
         }
 
@@ -1458,7 +1479,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the Builder
          */
-        public Builder<V,E> setCopyless()
+        public Builder<V, E> setCopyless()
         {
             copyless = true;
             return this;
@@ -1469,7 +1490,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the Builder
          */
-        public Builder<V,E> clearCopyless()
+        public Builder<V, E> clearCopyless()
         {
             copyless = false;
             return this;
@@ -1490,7 +1511,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the SynchronizedGraphParams
          */
-        public Builder<V,E> setFair()
+        public Builder<V, E> setFair()
         {
             fair = true;
             return this;
@@ -1501,7 +1522,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the SynchronizedGraphParams
          */
-        public Builder<V,E> setNonfair()
+        public Builder<V, E> setNonfair()
         {
             fair = false;
             return this;
@@ -1523,11 +1544,9 @@ public class AsSynchronizedGraph<V, E>
          * @param graph the backing graph (the delegate)
          * @return the AsSynchronizedGraph
          */
-        public AsSynchronizedGraph<V,E> build(Graph<V, E> graph)
+        public AsSynchronizedGraph<V, E> build(Graph<V, E> graph)
         {
             return new AsSynchronizedGraph<>(graph, cacheEnable, fair, copyless);
         }
     }
 }
-
-// End AsSynchronizedGraph.java

@@ -3,37 +3,30 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.function.ToDoubleFunction;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.junit.Test;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.MutableValueGraph;
-import com.google.common.graph.ValueGraphBuilder;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -91,7 +84,7 @@ public class MutableValueGraphAdapterTest
             // ignore
         }
     }
-    
+
     /**
      * Test two ways values in special case where value type is double.
      */
@@ -141,23 +134,25 @@ public class MutableValueGraphAdapterTest
     @Test
     public void testExample()
     {
-        MutableValueGraph<String, MyValue> valueGraph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
-        
+        MutableValueGraph<String, MyValue> valueGraph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+
         valueGraph.addNode("v1");
         valueGraph.addNode("v2");
         valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
-        
-        Graph<String, EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
+
+        Graph<String,
+            EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
                 valueGraph, new MyValue(1.0),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
-        
+
         assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
-        
+
         valueGraph.putEdgeValue("v1", "v2", new MyValue(9.0));
-        
+
         assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 9.0, 1e-9);
     }
-    
+
     /**
      * Example on javadoc
      */
@@ -174,12 +169,12 @@ public class MutableValueGraphAdapterTest
         Graph<String, EndpointPair<String>> g = new MutableDoubleValueGraphAdapter<>(graph);
 
         assertEquals(3.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
-        
+
         g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 7.0);
-        
+
         assertEquals(7.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
     }
-    
+
     /**
      * Test the most general version of the directed graph.
      */
@@ -419,7 +414,8 @@ public class MutableValueGraphAdapterTest
     }
 
     private static class MyValue
-        implements Serializable
+        implements
+        Serializable
     {
         private static final long serialVersionUID = 1L;
 

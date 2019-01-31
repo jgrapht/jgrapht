@@ -3,77 +3,80 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.util.TypeUtil;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
- * The most general implementation of the {@link org.jgrapht.Graph} interface. Its subclasses add
- * various restrictions to get more specific graphs. The decision whether it is directed or
- * undirected is decided at construction time and cannot be later modified (see constructor for
- * details).
- *
+ * The most general implementation of the {@link org.jgrapht.Graph} interface.
+ * 
  * <p>
- * This graph implementation guarantees deterministic vertex and edge set ordering (via
- * {@link LinkedHashMap} and {@link LinkedHashSet}).
- * </p>
+ * Its subclasses add various restrictions to get more specific graphs. The decision whether it is
+ * directed or undirected is decided at construction time and cannot be later modified (see
+ * constructor for details).
+ * 
+ * <p>
+ * The behavior of this class can be adjusted by changing the {@link GraphSpecificsStrategy} that is
+ * provided from the constructor. All implemented strategies guarantee deterministic vertex and edge
+ * set ordering (via {@link LinkedHashMap} and {@link LinkedHashSet}). The defaults are reasonable
+ * for most use-cases, only change if you know what you are doing.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @author Dimitrios Michail
- * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Cloneable, Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Graph<V, E>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -3582386521833998627L;
-    
+
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
     private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
         "Graph specifics must not be null";
+    private static final String INVALID_VERTEX_SUPPLIER_DOES_NOT_RETURN_UNIQUE_VERTICES_ON_EACH_CALL =
+        "Invalid vertex supplier (does not return unique vertices on each call).";
+    private static final String MIXED_GRAPH_NOT_SUPPORTED = "Mixed graph not supported";
+    private static final String GRAPH_SPECIFICS_STRATEGY_REQUIRED =
+        "Graph specifics strategy required";
+    private static final String THE_GRAPH_CONTAINS_NO_VERTEX_SUPPLIER =
+        "The graph contains no vertex supplier";
+    private static final String THE_GRAPH_CONTAINS_NO_EDGE_SUPPLIER =
+        "The graph contains no edge supplier";
 
     private transient Set<V> unmodifiableVertexSet = null;
 
     private Supplier<V> vertexSupplier;
     private Supplier<E> edgeSupplier;
-    
-    @Deprecated
-    private EdgeFactory<V, E> edgeFactory;
-
     private GraphType type;
+
     private Specifics<V, E> specifics;
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
+    private GraphSpecificsStrategy<V, E> graphSpecificsStrategy;
 
     /**
      * Construct a new graph.
@@ -87,44 +90,40 @@ public abstract class AbstractBaseGraph<V, E>
     protected AbstractBaseGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type)
     {
+        this(vertexSupplier, edgeSupplier, type, new FastLookupGraphSpecificsStrategy<>());
+    }
+
+    /**
+     * Construct a new graph.
+     *
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     * @param type the graph type
+     * @param graphSpecificsStrategy strategy for constructing low-level graph specifics
+     *
+     * @throws IllegalArgumentException if the graph type is mixed
+     */
+    protected AbstractBaseGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type,
+        GraphSpecificsStrategy<V, E> graphSpecificsStrategy)
+    {
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.type = Objects.requireNonNull(type);
         if (type.isMixed()) {
-            throw new IllegalArgumentException("Mixed graph not supported");
+            throw new IllegalArgumentException(MIXED_GRAPH_NOT_SUPPORTED);
         }
-        this.specifics = Objects
-            .requireNonNull(createSpecifics(type.isDirected()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
-            createIntrusiveEdgesSpecifics(type.isWeighted()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.edgeFactory = new BackwardsCompatibleEdgeFactory(null);
-    }
 
-    /**
-     * Construct a new graph. The graph can either be directed or undirected, depending on the
-     * specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @param directed if true the graph will be directed, otherwise undirected
-     * @param allowMultipleEdges whether to allow multiple (parallel) edges or not.
-     * @param allowLoops whether to allow edges that are self-loops or not.
-     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
-     *
-     * @throws NullPointerException if the specified edge factory is <code>
-     * null</code>.
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    protected AbstractBaseGraph(
-        EdgeFactory<V, E> ef, boolean directed, boolean allowMultipleEdges, boolean allowLoops,
-        boolean weighted)
-    {
-        this(
-            null, null,
-            new DefaultGraphType.Builder(directed, !directed)
-                .allowMultipleEdges(allowMultipleEdges).allowSelfLoops(allowLoops)
-                .weighted(weighted).build());
-        this.edgeFactory = new BackwardsCompatibleEdgeFactory(ef);
+        this.graphSpecificsStrategy =
+            Objects.requireNonNull(graphSpecificsStrategy, GRAPH_SPECIFICS_STRATEGY_REQUIRED);
+        this.specifics = Objects
+            .requireNonNull(
+                graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
+                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.intrusiveEdgesSpecifics = Objects
+            .requireNonNull(
+                graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
+                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -134,69 +133,6 @@ public abstract class AbstractBaseGraph<V, E>
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return specifics.getAllEdges(sourceVertex, targetVertex);
-    }
-
-    /**
-     * Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is
-     * an edge that its source and target vertices are the same.
-     *
-     * @return <code>true</code> if and only if graph loops are allowed.
-     * @deprecated Use type instead 
-     */
-    @Deprecated
-    public boolean isAllowingLoops()
-    {
-        return type.isAllowingSelfLoops();
-    }
-
-    /**
-     * Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph.
-     * The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
-     * v2.
-     *
-     * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
-     * @deprecated Use type instead 
-     */
-    @Deprecated
-    public boolean isAllowingMultipleEdges()
-    {
-        return type.isAllowingMultipleEdges();
-    }
-
-    /**
-     * Returns <code>true</code> if and only if the graph supports edge weights.
-     *
-     * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
-     * @deprecated Use type instead 
-     */
-    @Deprecated
-    public boolean isWeighted()
-    {
-        return type.isWeighted();
-    }
-
-    /**
-     * Returns <code>true</code> if the graph is directed, false if undirected.
-     *
-     * @return <code>true</code> if the graph is directed, false if undirected.
-     * @deprecated Use type instead 
-     */
-    @Deprecated
-    public boolean isDirected()
-    {
-        return type.isDirected();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated Use supplier instead 
-     */
-    @Deprecated
-    @Override
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return edgeFactory;
     }
 
     @Override
@@ -248,6 +184,13 @@ public abstract class AbstractBaseGraph<V, E>
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
      * <code>v2</code> such that <code>v2.equals(v)</code>.
      * 
+     * <p>
+     * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
+     * and {@link Graph#addVertex()}. In such a case the user must make sure never to add vertices
+     * in the graph using method {@link Graph#addVertex(Object)}, which are going to be returned in
+     * the future by the supplied vertex supplier. Such a sequence will result into an
+     * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
+     * 
      * @param vertexSupplier the vertex supplier
      */
     public void setVertexSupplier(Supplier<V> vertexSupplier)
@@ -273,31 +216,26 @@ public abstract class AbstractBaseGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!type.isAllowingMultipleEdges() && containsEdge(sourceVertex, targetVertex)) {
-            return null;
-        }
-
         if (!type.isAllowingSelfLoops() && sourceVertex.equals(targetVertex)) {
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        E e = edgeFactory.createEdge(sourceVertex, targetVertex);
+        if (edgeSupplier == null) {
+            throw new UnsupportedOperationException(THE_GRAPH_CONTAINS_NO_EDGE_SUPPLIER);
+        }
 
-        //@formatter:off
-        /*
-         * After next release, replace above call with code below:
-         * 
-         * if (edgeSupplier == null) { 
-         *     throw new UnsupportedOperationException("The graph contains no edge supplier"); 
-         * } 
-         * 
-         * E e = edgeSupplier.get();
-         */
-        //@formatter:on
-
-        if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-            specifics.addEdgeToTouchingVertices(e);
-            return e;
+        if (!type.isAllowingMultipleEdges()) {
+            E e = specifics
+                .createEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
+            if (e != null && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                return e;
+            }
+        } else {
+            E e = edgeSupplier.get();
+            if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+                return e;
+            }
         }
         return null;
     }
@@ -315,35 +253,33 @@ public abstract class AbstractBaseGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!type.isAllowingMultipleEdges() && containsEdge(sourceVertex, targetVertex)) {
-            return false;
-        }
-
         if (!type.isAllowingSelfLoops() && sourceVertex.equals(targetVertex)) {
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-            specifics.addEdgeToTouchingVertices(e);
-            return true;
+        if (!type.isAllowingMultipleEdges()) {
+            return specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)
+                && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+        } else {
+            return specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)
+                && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
         }
-
-        return false;
     }
 
     @Override
     public V addVertex()
     {
         if (vertexSupplier == null) {
-            throw new UnsupportedOperationException("The graph contains no vertex supplier");
+            throw new UnsupportedOperationException(THE_GRAPH_CONTAINS_NO_VERTEX_SUPPLIER);
         }
 
         V v = vertexSupplier.get();
 
-        if (specifics.addVertex(v)) {
-            return v;
+        if (!specifics.addVertex(v)) {
+            throw new IllegalArgumentException(
+                INVALID_VERTEX_SUPPLIER_DOES_NOT_RETURN_UNIQUE_VERTICES_ON_EACH_CALL);
         }
-        return null;
+        return v;
     }
 
     /**
@@ -397,16 +333,18 @@ public abstract class AbstractBaseGraph<V, E>
 
             newGraph.vertexSupplier = this.vertexSupplier;
             newGraph.edgeSupplier = this.edgeSupplier;
-            newGraph.edgeFactory = this.edgeFactory;
-
+            newGraph.type = type;
             newGraph.unmodifiableVertexSet = null;
+
+            newGraph.graphSpecificsStrategy = this.graphSpecificsStrategy;
 
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
-            newGraph.specifics = newGraph.createSpecifics(this.getType().isDirected());
-            newGraph.intrusiveEdgesSpecifics =
-                newGraph.createIntrusiveEdgesSpecifics(this.getType().isWeighted());
+            newGraph.specifics = newGraph.graphSpecificsStrategy
+                .getSpecificsFactory().apply(newGraph, newGraph.type);
+            newGraph.intrusiveEdgesSpecifics = newGraph.graphSpecificsStrategy
+                .getIntrusiveEdgesSpecificsFactory().apply(newGraph.type);
 
             Graphs.addGraph(newGraph, this);
 
@@ -513,7 +451,7 @@ public abstract class AbstractBaseGraph<V, E>
         E e = getEdge(sourceVertex, targetVertex);
 
         if (e != null) {
-            specifics.removeEdgeFromTouchingVertices(e);
+            specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
             intrusiveEdgesSpecifics.remove(e);
         }
 
@@ -527,7 +465,9 @@ public abstract class AbstractBaseGraph<V, E>
     public boolean removeEdge(E e)
     {
         if (containsEdge(e)) {
-            specifics.removeEdgeFromTouchingVertices(e);
+            V sourceVertex = getEdgeSource(e);
+            V targetVertex = getEdgeTarget(e);
+            specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
             intrusiveEdgesSpecifics.remove(e);
             return true;
         } else {
@@ -605,65 +545,4 @@ public abstract class AbstractBaseGraph<V, E>
     {
         return type;
     }
-
-    /**
-     * Create the specifics for this graph. Subclasses can override this method in order to adjust
-     * the specifics and thus the space-time tradeoffs of the graph implementation.
-     * 
-     * @param directed if true the specifics should adjust the behavior to a directed graph
-     *        otherwise undirected
-     * @return the specifics used by this graph
-     */
-    protected Specifics<V, E> createSpecifics(boolean directed)
-    {
-        if (directed) {
-            return new FastLookupDirectedSpecifics<>(this);
-        } else {
-            return new FastLookupUndirectedSpecifics<>(this);
-        }
-    }
-
-    /**
-     * Create the specifics for the edges set of the graph.
-     * 
-     * @param weighted if true the specifics should support weighted edges
-     * @return the specifics used for the edge set of this graph
-     */
-    protected IntrusiveEdgesSpecifics<V, E> createIntrusiveEdgesSpecifics(boolean weighted)
-    {
-        if (weighted) {
-            return new WeightedIntrusiveEdgesSpecifics<>();
-        } else {
-            return new UniformIntrusiveEdgesSpecifics<>();
-        }
-    }
-
-    @Deprecated
-    private class BackwardsCompatibleEdgeFactory
-        implements EdgeFactory<V, E>, Serializable
-    {
-        private EdgeFactory<V, E> ef;
-
-        public BackwardsCompatibleEdgeFactory(EdgeFactory<V, E> ef)
-        {
-            this.ef = ef;
-        }
-
-        @Override
-        public E createEdge(V sourceVertex, V targetVertex)
-        {
-            if (edgeSupplier == null && this.ef == null) {
-                throw new UnsupportedOperationException("The graph contains no edge supplier");
-            }
-            if (edgeSupplier != null) { 
-                return edgeSupplier.get();
-            } else { 
-                return ef.createEdge(sourceVertex, targetVertex);
-            }
-        }
-
-    }
-
 }
-
-// End AbstractBaseGraph.java

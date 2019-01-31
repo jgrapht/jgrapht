@@ -3,33 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Dimitrios Michail
@@ -37,41 +36,6 @@ import org.junit.*;
 public class JohnsonShortestPathsTest
 {
 
-    @Deprecated
-    private VertexFactory<String> vertexFactory = new VertexFactory<String>()
-    {
-        private int i = 0;
-
-        @Override
-        public String createVertex()
-        {
-            return "vertex" + i++;
-        }
-    };
-
-    @Test
-    @Deprecated
-    public void testIssue408Deprecated()
-    {
-        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 0);
-
-        graph.addEdge(4, 5);
-        graph.addEdge(5, 6);
-        graph.addEdge(6, 4);
-
-        JohnsonShortestPaths<Integer, DefaultEdge> sp =
-            new JohnsonShortestPaths<>(graph, new IntegerVertexFactory(7));
-
-        assertEquals(2.0, sp.getPathWeight(0, 2), 0.0);
-        assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
-        assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
-    }
-    
     @Test
     public void testIssue408()
     {
@@ -99,32 +63,6 @@ public class JohnsonShortestPathsTest
         assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
         assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
     }
-    
-    @Test
-    @Deprecated
-    public void testWikipediaExampleDeprecated()
-    {
-        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
-            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        g.addVertex("w");
-        g.addVertex("y");
-        g.addVertex("x");
-        g.addVertex("z");
-        g.setEdgeWeight(g.addEdge("w", "z"), 2);
-        g.setEdgeWeight(g.addEdge("y", "w"), 4);
-        g.setEdgeWeight(g.addEdge("x", "w"), 6);
-        g.setEdgeWeight(g.addEdge("x", "y"), 3);
-        g.setEdgeWeight(g.addEdge("z", "x"), -7);
-        g.setEdgeWeight(g.addEdge("y", "z"), 5);
-        g.setEdgeWeight(g.addEdge("z", "y"), -3);
-
-        JohnsonShortestPaths<String, DefaultWeightedEdge> alg =
-            new JohnsonShortestPaths<>(g, vertexFactory);
-        assertEquals(-1d, alg.getPathWeight("z", "w"), 1e-9);
-        assertEquals(-4d, alg.getPathWeight("z", "y"), 1e-9);
-        assertEquals(0, alg.getPathWeight("z", "z"), 1e-9);
-        assertEquals(-7, alg.getPathWeight("z", "x"), 1e-9);
-    }
 
     @Test
     public void testWikipediaExample()
@@ -134,7 +72,7 @@ public class JohnsonShortestPathsTest
                 .directed().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph();
-        
+
         g.addVertex("w");
         g.addVertex("y");
         g.addVertex("x");
@@ -147,15 +85,12 @@ public class JohnsonShortestPathsTest
         g.setEdgeWeight(g.addEdge("y", "z"), 5);
         g.setEdgeWeight(g.addEdge("z", "y"), -3);
 
-        JohnsonShortestPaths<String, DefaultWeightedEdge> alg =
-            new JohnsonShortestPaths<>(g);
+        JohnsonShortestPaths<String, DefaultWeightedEdge> alg = new JohnsonShortestPaths<>(g);
         assertEquals(-1d, alg.getPathWeight("z", "w"), 1e-9);
         assertEquals(-4d, alg.getPathWeight("z", "y"), 1e-9);
         assertEquals(0, alg.getPathWeight("z", "z"), 1e-9);
         assertEquals(-7, alg.getPathWeight("z", "x"), 1e-9);
     }
-    
-    
 
     @Test
     public void testRandomGraphsCompareWithFloydWarshall()

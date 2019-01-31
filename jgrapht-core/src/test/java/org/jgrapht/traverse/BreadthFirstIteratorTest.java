@@ -3,23 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -34,10 +34,10 @@ import static org.junit.Assert.assertNull;
  *
  * @author Liviu Rau
  * @author Patrick Sharp
- * @since Jul 30, 2003
  */
 public class BreadthFirstIteratorTest
-    extends CrossComponentIteratorTest
+    extends
+    CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -90,9 +90,9 @@ public class BreadthFirstIteratorTest
     }
 
     @Test
-    public void searchTreeTest(){
-        Graph<String, DefaultEdge> g =
-                new DefaultDirectedGraph<>(DefaultEdge.class);
+    public void searchTreeTest()
+    {
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addVertex("c");
@@ -100,14 +100,15 @@ public class BreadthFirstIteratorTest
         g.addVertex("e");
         g.addVertex("z");
 
-        DefaultEdge e1=g.addEdge("a", "b");
-        DefaultEdge e2=g.addEdge("b", "c");
-        DefaultEdge e3=g.addEdge("b", "z");
-        DefaultEdge e4=g.addEdge("b", "d");
-        DefaultEdge e5=g.addEdge("d", "e");
+        DefaultEdge e1 = g.addEdge("a", "b");
+        DefaultEdge e2 = g.addEdge("b", "c");
+        DefaultEdge e3 = g.addEdge("b", "z");
+        DefaultEdge e4 = g.addEdge("b", "d");
+        DefaultEdge e5 = g.addEdge("d", "e");
 
-        BreadthFirstIterator<String, DefaultEdge> bfs= new BreadthFirstIterator<>(g, "a");
-        while(bfs.hasNext()) bfs.next();
+        BreadthFirstIterator<String, DefaultEdge> bfs = new BreadthFirstIterator<>(g, "a");
+        while (bfs.hasNext())
+            bfs.next();
 
         assertEquals(0, bfs.getDepth("a"));
         assertEquals(1, bfs.getDepth("b"));
@@ -133,15 +134,17 @@ public class BreadthFirstIteratorTest
     }
 
     @Test
-    public void searchTreeDirectedCycleTest(){
-        Graph<Integer,DefaultEdge> g= new SimpleDirectedGraph<>(DefaultEdge.class);
-        DefaultEdge e1=Graphs.addEdgeWithVertices(g, 0,1);
-        DefaultEdge e2=Graphs.addEdgeWithVertices(g, 1,2);
-        DefaultEdge e3=Graphs.addEdgeWithVertices(g, 2,3);
-        Graphs.addEdgeWithVertices(g, 3,0);
+    public void searchTreeDirectedCycleTest()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        DefaultEdge e1 = Graphs.addEdgeWithVertices(g, 0, 1);
+        DefaultEdge e2 = Graphs.addEdgeWithVertices(g, 1, 2);
+        DefaultEdge e3 = Graphs.addEdgeWithVertices(g, 2, 3);
+        Graphs.addEdgeWithVertices(g, 3, 0);
 
-        BreadthFirstIterator<Integer, DefaultEdge> bfs= new BreadthFirstIterator<>(g, 0);
-        while(bfs.hasNext()) bfs.next();
+        BreadthFirstIterator<Integer, DefaultEdge> bfs = new BreadthFirstIterator<>(g, 0);
+        while (bfs.hasNext())
+            bfs.next();
 
         assertEquals(0, bfs.getDepth(0));
         assertEquals(1, bfs.getDepth(1));
@@ -159,5 +162,3 @@ public class BreadthFirstIteratorTest
         assertEquals(new Integer(2), bfs.getParent(3));
     }
 }
-
-// End BreadthFirstIteratorTest.java

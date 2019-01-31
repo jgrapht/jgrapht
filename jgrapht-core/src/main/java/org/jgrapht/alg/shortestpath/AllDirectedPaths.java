@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A Dijkstra-like algorithm to find all paths between two sets of nodes in a directed graph, with
@@ -30,14 +30,13 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  *
  * @author Andrew Gainer-Dewar, Google LLC
- * @since Feb, 2016
  */
 public class AllDirectedPaths<V, E>
 {
     private final Graph<V, E> graph;
 
     /**
-     * Create a new instance
+     * Create a new instance.
      *
      * @param graph the input graph
      * @throws IllegalArgumentException if the graph is not directed
@@ -212,6 +211,10 @@ public class AllDirectedPaths<V, E>
                 completePaths.add(GraphWalk.singletonWalk(graph, source, 0d));
             }
 
+            if (maxPathLength != null && maxPathLength == 0) {
+                continue;
+            }
+
             for (E edge : graph.outgoingEdgesOf(source)) {
                 assert graph.getEdgeSource(edge).equals(source);
 
@@ -219,7 +222,9 @@ public class AllDirectedPaths<V, E>
                     completePaths.add(makePath(Collections.singletonList(edge)));
                 }
 
-                if (edgeMinDistancesFromTargets.containsKey(edge) && (maxPathLength == null || maxPathLength > 1)) {
+                if (edgeMinDistancesFromTargets.containsKey(edge)
+                    && (maxPathLength == null || maxPathLength > 1))
+                {
                     List<E> path = Collections.singletonList(edge);
                     incompletePaths.add(path);
                 }
@@ -247,9 +252,8 @@ public class AllDirectedPaths<V, E>
             for (E outEdge : graph.outgoingEdgesOf(leafNode)) {
                 // Proceed if the outgoing edge is marked and the mark
                 // is sufficiently small
-                if (edgeMinDistancesFromTargets.containsKey(outEdge)
-                    && ((maxPathLength == null) || ((edgeMinDistancesFromTargets.get(outEdge)
-                        + lengthSoFar) <= maxPathLength)))
+                if (edgeMinDistancesFromTargets.containsKey(outEdge) && ((maxPathLength == null)
+                    || ((edgeMinDistancesFromTargets.get(outEdge) + lengthSoFar) <= maxPathLength)))
                 {
                     List<E> newPath = new ArrayList<>(incompletePath);
                     newPath.add(outEdge);
@@ -265,7 +269,7 @@ public class AllDirectedPaths<V, E>
                         assert sourceVertices.contains(completePath.getStartVertex());
                         assert targetVertices.contains(completePath.getEndVertex());
                         assert (maxPathLength == null)
-                            || (completePath.getWeight() <= maxPathLength);
+                            || (completePath.getLength() <= maxPathLength);
                         completePaths.add(completePath);
                     }
 
@@ -286,7 +290,9 @@ public class AllDirectedPaths<V, E>
     }
 
     /**
-     * Transform an ordered list of edges into a GraphPath
+     * Transform an ordered list of edges into a GraphPath.
+     *
+     * The weight of the generated GraphPath is set to the sum of the weights of the edges.
      *
      * @param edges the edges
      *
@@ -296,9 +302,7 @@ public class AllDirectedPaths<V, E>
     {
         V source = graph.getEdgeSource(edges.get(0));
         V target = graph.getEdgeTarget(edges.get(edges.size() - 1));
-        double weight = edges.size();
+        double weight = edges.stream().mapToDouble(edge -> graph.getEdgeWeight(edge)).sum();
         return new GraphWalk<>(graph, source, target, edges, weight);
     }
 }
-
-// End AllDirectedPaths.java

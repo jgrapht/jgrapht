@@ -3,36 +3,30 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.EdgeReversedGraph;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A collection of utilities to assist with graph manipulation.
  *
  * @author Barak Naveh
- * @since Jul 31, 2003
  */
 public abstract class Graphs
 {
@@ -58,16 +52,17 @@ public abstract class Graphs
     public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
         Supplier<E> edgeSupplier = g.getEdgeSupplier();
-        if (edgeSupplier == null) { 
+        if (edgeSupplier == null) {
             throw new UnsupportedOperationException("Graph contains no edge supplier");
         }
         E e = edgeSupplier.get();
 
-        // we first create the edge and set the weight to make sure that
-        // listeners will see the correct weight upon addEdge.
-        g.setEdgeWeight(e, weight);
-
-        return g.addEdge(sourceVertex, targetVertex, e) ? e : null;
+        if (g.addEdge(sourceVertex, targetVertex, e)) {
+            g.setEdgeWeight(e, weight);
+            return e;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -293,7 +288,8 @@ public abstract class Graphs
      * @param <E> the graph edge type
      * @return a set of the vertices that are neighbors of the specified vertex
      */
-    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex) {
+    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex)
+    {
         Set<V> neighbors = new LinkedHashSet<>();
 
         for (E e : g.edgesOf(vertex)) {
@@ -580,6 +576,22 @@ public abstract class Graphs
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
     }
-}
 
-// End Graphs.java
+    /**
+     * Compute a new mapping from the vertices of a graph to the integer range $[0, n)$ where $n$ is
+     * the number of vertices in the graph.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @throws NullPointerException if {@code graph} is {@code null}
+     *
+     * @return the mapping as an object containing the {@code vertexMap} and the {@code indexList}
+     *
+     * @see VertexToIntegerMapping
+     */
+    public static <V, E> VertexToIntegerMapping<V> getVertexToIntegerMapping(Graph<V, E> graph)
+    {
+        return new VertexToIntegerMapping<>(Objects.requireNonNull(graph).vertexSet());
+    }
+}

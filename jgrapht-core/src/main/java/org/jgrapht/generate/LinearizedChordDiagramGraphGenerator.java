@@ -3,36 +3,37 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * The linearized chord diagram graph model generator.
  * 
  * <p>
  * The generator makes precise several unspecified mathematical details of the Barabási-Albert
- * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned to
- * a new node are added one by one, or simultaneously, etc. The generator is described in the paper:
- * Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
+ * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned
+ * to a new node are added one by one, or simultaneously, etc. The generator is described in the
+ * paper: Bélaa Bollobás and Oliver Riordan. The Diameter of a Scale-Free Random Graph. Journal
+ * Combinatorica, 24(1): 5--34, 2004.
  * 
  * <p>
- * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allow for multiple
+ * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allows for multiple
  * edges (parallel-edges) and self-loops. They show, however, that their number will be small. This
  * means that this generator works only on graphs which allow multiple edges (parallel-edges) such
  * as {@link Pseudograph} or {@link DirectedPseudograph}.
@@ -44,13 +45,13 @@ import org.jgrapht.graph.*;
  * node is proportional to its degree.
  * 
  * @author Dimitrios Michail
- * @since February 2017
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
 public class LinearizedChordDiagramGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int m;
@@ -110,8 +111,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
      * @throws IllegalArgumentException if the graph does not allow self-loops or parallel edges
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Add nodes by maintaining a list with vertex multiplicity equal to its degree for sampling
@@ -121,9 +121,6 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
         for (int t = 0; t < n; t++) {
             // add node
             V vt = target.addVertex();
-            if (vt == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
 
             // add edges
             for (int j = 0; j < m; j++) {

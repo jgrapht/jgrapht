@@ -3,32 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.perf.matching;
-
-import java.util.concurrent.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing matching algorithms.
@@ -61,7 +61,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
             }
 
-            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            graph = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
         }
 
@@ -73,7 +74,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class PathGrowingWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -83,7 +85,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class PathGrowingWeightedMatchingNoHeuristicsRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -94,7 +97,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class GreedyWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -104,7 +108,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class EdmondsMaximumCardinalityMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)

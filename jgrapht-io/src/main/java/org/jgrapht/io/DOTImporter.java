@@ -3,28 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
-import org.apache.commons.lang3.*;
-import org.apache.commons.lang3.text.translate.*;
+import org.apache.commons.text.*;
+import org.apache.commons.text.translate.*;
 import org.jgrapht.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Import a graph from a DOT file.
@@ -42,8 +42,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class DOTImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     /**
      * Default key used in the graph updater (if provided) for the graph ID.
@@ -51,9 +53,7 @@ public class DOTImporter<V, E>
     public static final String DEFAULT_GRAPH_ID_KEY = "ID";
 
     // identifier unescape rule
-    private static final CharSequenceTranslator UNESCAPE_ID = new AggregateTranslator(
-        new LookupTranslator(
-            new String[][] { { "\\\\", "\\" }, { "\\\"", "\"" }, { "\\'", "'" }, { "\\", "" } }));
+    private final CharSequenceTranslator UNESCAPE_ID;
 
     /**
      * Constructs a new importer.
@@ -95,6 +95,14 @@ public class DOTImporter<V, E>
         super(vertexProvider, edgeProvider, (vertexUpdater != null) ? vertexUpdater : (c, a) -> {
         }, (graphUpdater != null) ? graphUpdater : (c, a) -> {
         });
+
+        Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
+        lookupMap.put("\\\\", "\\");
+        lookupMap.put("\\\"", "\"");
+        lookupMap.put("\\'", "'");
+        lookupMap.put("\\", "");
+        UNESCAPE_ID = new AggregateTranslator(new LookupTranslator(lookupMap));
+
     }
 
     /**
@@ -141,7 +149,8 @@ public class DOTImporter<V, E>
      * Common error listener for both lexer and parser which throws an exception.
      */
     private class ThrowingErrorListener
-        extends BaseErrorListener
+        extends
+        BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -159,7 +168,8 @@ public class DOTImporter<V, E>
      * grammar.
      */
     private class CreateGraphDOTListener
-        extends DOTBaseListener
+        extends
+        DOTBaseListener
     {
         // graph to update
         private Graph<V, E> graph;
@@ -805,7 +815,7 @@ public class DOTImporter<V, E>
      * @param input the input
      * @return the unescaped output
      */
-    private static String unescapeId(String input)
+    private String unescapeId(String input)
     {
         final char QUOTE = '"';
         if (input.charAt(0) != QUOTE || input.charAt(input.length() - 1) != QUOTE) {

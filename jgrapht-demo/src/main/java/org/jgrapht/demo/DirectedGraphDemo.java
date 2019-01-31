@@ -3,29 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
 package org.jgrapht.demo;
- 
-import java.util.*;
 
+//@example:main:begin
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
-import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
+
+//@example:main:end
 
 /**
  * This class demonstrates some of the operations that can be performed on directed graphs. After
@@ -36,7 +39,6 @@ import org.jgrapht.graph.*;
  * directed graphs.
  *
  * @author Minh Van Nguyen
- * @since 2008-01-17
  */
 public class DirectedGraphDemo
 {
@@ -45,9 +47,10 @@ public class DirectedGraphDemo
      *
      * @param args ignored.
      */
-    
+
     public static void main(String args[])
     {
+        //@example:main:begin
         // constructs a directed graph with the specified vertices and edges
         Graph<String, DefaultEdge> directedGraph =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
@@ -94,10 +97,10 @@ public class DirectedGraphDemo
 
         // Prints the shortest path from vertex c to vertex i. This path does
         // NOT exist for our particular directed graph. Hence the path is
-        // empty and the variable "path"; must be null.
+        // empty and the result must be null.
         System.out.println("Shortest path from c to i:");
         SingleSourcePaths<String, DefaultEdge> cPaths = dijkstraAlg.getPaths("c");
         System.out.println(cPaths.getPath("i"));
+        //@example:main:end
     }
 }
-

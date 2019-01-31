@@ -3,25 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.Map;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.graph.GraphDelegator;
+import java.util.*;
 
 /**
  * An interface for generating new graph structures.
@@ -32,7 +30,6 @@ import org.jgrapht.graph.GraphDelegator;
  *        elements
  *
  * @author John V. Sichi
- * @since Sep 16, 2003
  */
 public interface GraphGenerator<V, E, T>
 {
@@ -52,9 +49,9 @@ public interface GraphGenerator<V, E, T>
      *        graph elements (or collections of graph elements)
      * 
      * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
-     *         suppliers, in order to be able to create new vertices and edges. 
-     *         Methods {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must
-     *         not return <code>null</code>.
+     *         suppliers, in order to be able to create new vertices and edges. Methods
+     *         {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must not return
+     *         <code>null</code>.
      */
     void generateGraph(Graph<V, E> target, Map<String, T> resultMap);
 
@@ -69,53 +66,7 @@ public interface GraphGenerator<V, E, T>
      */
     default void generateGraph(Graph<V, E> target)
     {
-        generateGraph(target, (Map<String, T>) null);
-    }
-
-    /**
-     * Generate a graph structure. The topology of the generated graph is dependent on the
-     * implementation. For graphs in which not all vertices share the same automorphism equivalence
-     * class, the generator may produce a labeling indicating the roles played by generated
-     * elements. This is the purpose of the resultMap parameter. For example, a generator for a
-     * wheel graph would designate a hub vertex. Role names used as keys in resultMap should be
-     * declared as public static final Strings by implementation classes.
-     *
-     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
-     *        result will be a disconnected graph since generated elements will not be connected to
-     *        existing elements
-     * @param vertexFactory called to produce new vertices
-     * @param resultMap if non-null, receives implementation-specific mappings from String roles to
-     *        graph elements (or collections of graph elements)
-     * @deprecated Use simpler methods
-     */
-    @Deprecated
-    default void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap)
-    {
-        /*
-         * Use delegator in order to switch supplier for backwards compatibility.
-         */
-        if (vertexFactory != null && target.getVertexSupplier() == null) { 
-            target = new GraphDelegator<>(target, vertexFactory::createVertex, null);
-        }
-        generateGraph(target, resultMap);
-    }
-
-    /**
-     * Generate a graph structure.
-     *
-     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
-     *        result will be a disconnected graph since generated elements will not be connected to
-     *        existing elements
-     * @param vertexFactory called to produce new vertices
-     * @deprecated Use simpler methods 
-     */
-    @Deprecated
-    default void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)
-    {
-        generateGraph(target, vertexFactory, null);
+        generateGraph(target, null);
     }
 
 }
-
-// End GraphGenerator.java

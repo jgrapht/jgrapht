@@ -3,33 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
+import org.jgrapht.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
 import javax.xml.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
-
-import org.jgrapht.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import java.io.*;
+import java.util.*;
+import java.util.Map.*;
 
 /**
  * Imports a graph from a GraphML data source.
@@ -116,11 +115,12 @@ import org.xml.sax.helpers.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since July 2016
  */
 public class GraphMLImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -266,7 +266,8 @@ public class GraphMLImporter<V, E>
 
     // content handler
     private class GraphMLHandler
-        extends DefaultHandler
+        extends
+        DefaultHandler
     {
         private static final String GRAPH = "graph";
         private static final String GRAPH_ID = "id";
@@ -547,9 +548,17 @@ public class GraphMLImporter<V, E>
             throws SAXException
         {
             if (insideDefault) {
-                currentKey.defaultValue = new String(ch, start, length);
+                if (currentKey.defaultValue != null) {
+                    currentKey.defaultValue += new String(ch, start, length);
+                } else {
+                    currentKey.defaultValue = new String(ch, start, length);
+                }
             } else if (insideData) {
-                currentData.value = new String(ch, start, length);
+                if (currentData.value != null) {
+                    currentData.value += new String(ch, start, length);
+                } else {
+                    currentData.value = new String(ch, start, length);
+                }
             }
         }
 

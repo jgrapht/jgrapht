@@ -3,34 +3,36 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.extension.*;
 
 import java.util.*;
 
 /**
- * Implementation of {@literal <a href = "https://en.wikipedia.org/wiki/Dinic%27s_algorithm">}Dinic algorithm{@literal </a>} with scaling for
- * {@literal <a href = "https://en.wikipedia.org/wiki/Maximum_flow_problem"maximum"}maximum flow problem{@literal </a>}.
+ * Implementation of {@literal <a href = "https://en.wikipedia.org/wiki/Dinic%27s_algorithm">}Dinic
+ * algorithm{@literal </a>} with scaling for
+ * {@literal <a href = "https://en.wikipedia.org/wiki/Maximum_flow_problem"maximum"}maximum flow
+ * problem{@literal </a>}.
  *
  * The running time of the algorithm is $O(n^2m)$.
  *
- * Dinic algorithm firstly was mentioned in {@literal <i>}DINIC, E. A. 1970. Algorithm for Solution of a Problem
- * of Maximum Flow in Networks With Power Estimation.
- * Soviet Math. Dokl. 11, 1277-1280.{@literal </>}
+ * Dinic algorithm firstly was mentioned in {@literal <i>}DINIC, E. A. 1970. Algorithm for Solution
+ * of a Problem of Maximum Flow in Networks With Power Estimation. Soviet Math. Dokl. 11,
+ * 1277-1280.{@literal </>}
  *
  * Scheme of the algorithm:
  *
@@ -46,7 +48,9 @@ import java.util.*;
  * @author Kirill Vishnyakov
  */
 
-public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
+public class DinicMFImpl<V, E>
+    extends
+    MaximumFlowAlgorithmBase<V, E>
 {
 
     /**
@@ -63,8 +67,8 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
 
     /**
-     * Constructor.
-     * Constructs a new network on which we will calculate the maximum flow, using Dinic algorithm.
+     * Constructor. Constructs a new network on which we will calculate the maximum flow, using
+     * Dinic algorithm.
      *
      * @param network the network on which we calculate the maximum flow.
      * @param epsilon the tolerance for the comparison of floating point values.
@@ -88,8 +92,7 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Constructor.
-     * Constructs a new network on which we will calculate the maximum flow.
+     * Constructor. Constructs a new network on which we will calculate the maximum flow.
      *
      * @param network the network on which we calculate the maximum flow.
      */
@@ -107,8 +110,8 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Assigns source to currentSource and sink to currentSink. Afterwards invokes dinic() method
-     * to calculate the maximum flow in the network using Dinic algorithm with scaling.
+     * Assigns source to currentSource and sink to currentSink. Afterwards invokes dinic() method to
+     * calculate the maximum flow in the network using Dinic algorithm with scaling.
      *
      * @param source source vertex.
      * @param sink sink vertex.
@@ -139,14 +142,12 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Creates a level graph.
-     * We can split all vertices of the graph in disjoint sets. In the same set
-     * will lie vertices with equal distance from the source.
-     * It's obvious that level network cannot contain edges $i \to j$, where $i$ and $j$ are two vertices
-     * for which holds: $|i.level - j.level| > 1$. It follows from a property of the shortest paths.
-     * Level graph contains only edges that lead from level $i$ to the level $i + 1$.
-     * Thus level graph does not contain backward edges or edges that lead from $i$-th level
-     * to $i$-th.
+     * Creates a level graph. We can split all vertices of the graph in disjoint sets. In the same
+     * set will lie vertices with equal distance from the source. It's obvious that level network
+     * cannot contain edges $i \to j$, where $i$ and $j$ are two vertices for which holds: $|i.level
+     * - j.level| > 1$. It follows from a property of the shortest paths. Level graph contains only
+     * edges that lead from level $i$ to the level $i + 1$. Thus level graph does not contain
+     * backward edges or edges that lead from $i$-th level to $i$-th.
      *
      * @return true, if level graph has been constructed(i.e we reached the sink), otherwise false.
      */
@@ -177,10 +178,10 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Finds a blocking flow in the network.
-     * For each vertex we have a pointer on the first edge which we can use to reach the sink.
-     * If we can't reach the sink using current edge, we increment the pointer.
-     * So on each iteration we either saturate at least one edge or we increment pointer.
+     * Finds a blocking flow in the network. For each vertex we have a pointer on the first edge
+     * which we can use to reach the sink. If we can't reach the sink using current edge, we
+     * increment the pointer. So on each iteration we either saturate at least one edge or we
+     * increment pointer.
      *
      * @param v current vertex.
      * @param flow we can push through.
@@ -215,8 +216,8 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Runs Dinic algorithm with scaling.
-     * Construct a level graph, then find blocking flow and finally increase the flow.
+     * Runs Dinic algorithm with scaling. Construct a level graph, then find blocking flow and
+     * finally increase the flow.
      */
     public void dinic()
     {
@@ -247,7 +248,8 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
      * Extension for vertex class.
      */
     class VertexExtension
-        extends VertexExtensionBase
+        extends
+        VertexExtensionBase
     {
 
         /**
@@ -261,5 +263,3 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
         int level;
     }
 }
-
-// End DinicMFImpl.java

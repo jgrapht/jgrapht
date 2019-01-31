@@ -3,27 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * An admissible heuristic for the A* algorithm using a set of landmarks and the triangle
@@ -35,9 +35,9 @@ import org.jgrapht.graph.*;
  * algorithm, all distances to and from these landmark nodes are computed and stored. Afterwards,
  * the heuristic estimates the distance from a vertex to another vertex using the already computed
  * distances to and from the landmarks and the fact that shortest path distances obey the
- * triangle-inequality. The heuristic's space requirement is $O(n)$ per landmark where n is the number
- * of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm execution is
- * performed per landmark.
+ * triangle-inequality. The heuristic's space requirement is $O(n)$ per landmark where n is the
+ * number of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm
+ * execution is performed per landmark.
  * 
  * <p>
  * The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
@@ -67,7 +67,8 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class ALTAdmissibleHeuristic<V, E>
-    implements AStarAdmissibleHeuristic<V>
+    implements
+    AStarAdmissibleHeuristic<V>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;

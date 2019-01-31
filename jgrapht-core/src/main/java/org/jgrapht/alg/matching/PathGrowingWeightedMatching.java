@@ -3,33 +3,34 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 
+import java.util.*;
+
 /**
- * A linear time $\frac{1}{2}$-approximation algorithm for finding a maximum weight matching in an arbitrary
- * graph. Linear time here means $O(m)$ where m is the cardinality of the edge set, even if the graph
- * contains isolated vertices. $\frac{1}{2}$-approximation means that for any graph instance, the algorithm
- * computes a matching whose weight is at least half of the weight of a maximum weight matching. The
- * implementation accepts directed and undirected graphs which may contain self-loops and multiple
- * edges. There is no assumption on the edge weights, i.e. they can also be negative or zero.
+ * A linear time $\frac{1}{2}$-approximation algorithm for finding a maximum weight matching in an
+ * arbitrary graph. Linear time here means $O(m)$ where m is the cardinality of the edge set, even
+ * if the graph contains isolated vertices. $\frac{1}{2}$-approximation means that for any graph
+ * instance, the algorithm computes a matching whose weight is at least half of the weight of a
+ * maximum weight matching. The implementation accepts directed and undirected graphs which may
+ * contain self-loops and multiple edges. There is no assumption on the edge weights, i.e. they can
+ * also be negative or zero.
  * 
  * <p>
  * The algorithm is due to Drake and Hougardy, described in detail in the following paper:
@@ -58,10 +59,10 @@ import org.jgrapht.alg.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
- * @since September 2016
  */
 public class PathGrowingWeightedMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     /**
      * Default value on whether to use extra heuristics to improve the result.
@@ -91,8 +92,8 @@ public class PathGrowingWeightedMatching<V, E>
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
-     *        approximation factor remains $\frac{1}{2}$, in most cases the heuristics produce matchings of
-     *        higher quality.
+     *        approximation factor remains $\frac{1}{2}$, in most cases the heuristics produce
+     *        matchings of higher quality.
      */
     public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics)
     {
@@ -105,8 +106,8 @@ public class PathGrowingWeightedMatching<V, E>
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
-     *        approximation factor remains $\frac{1}{2}$, in most cases the heuristics produce matchings of
-     *        higher quality.
+     *        approximation factor remains $\frac{1}{2}$, in most cases the heuristics produce
+     *        matchings of higher quality.
      * @param epsilon tolerance when comparing floating point values
      */
     public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics, double epsilon)
@@ -404,5 +405,3 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
 }
-
-// End PathGrowingWeightedMatching.java

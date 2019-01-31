@@ -3,27 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.spanning;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.util.FibonacciHeap;
-import org.jgrapht.util.FibonacciHeapNode;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -40,10 +38,10 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  * @author Alexey Kudinkin
- * @since Mar 5, 2013
  */
 public class PrimMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+    implements
+    SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> g;
 
@@ -70,19 +68,15 @@ public class PrimMinimumSpanningTree<V, E>
         final int N = g.vertexSet().size();
 
         /*
-         * Normalize the graph
-         *   map each vertex to an integer (using a HashMap)
-         *   keep the reverse mapping  (using an ArrayList)
+         * Normalize the graph by mapping each vertex to an integer.
          */
-        Map<V, Integer> vertexMap = new HashMap<>();
-        List<V> indexList = new ArrayList<>();
-        for(V v : g.vertexSet()){
-            vertexMap.put(v,vertexMap.size());
-            indexList.add(v);
-        }
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(g);
+        Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
+        List<V> indexList = vertexToIntegerMapping.getIndexList();
 
         VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
-        FibonacciHeapNode<VertexInfo>[] fibNodes = (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
+        FibonacciHeapNode<VertexInfo>[] fibNodes =
+            (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
         FibonacciHeap<VertexInfo> fibonacciHeap = new FibonacciHeap<>();
 
         for (int i = 0; i < N; i++) {
@@ -116,7 +110,7 @@ public class PrimMinimumSpanningTree<V, E>
                 if (!vertices[id].spanned) {
                     double cost = g.getEdgeWeight(e);
 
-                    if (cost < vertices[id].distance){
+                    if (cost < vertices[id].distance) {
                         vertices[id].distance = cost;
                         vertices[id].edgeFromParent = e;
 
@@ -129,7 +123,8 @@ public class PrimMinimumSpanningTree<V, E>
         return new SpanningTreeImpl<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
     }
 
-    private class VertexInfo {
+    private class VertexInfo
+    {
         public int id;
         public boolean spanned;
         public double distance;

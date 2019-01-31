@@ -3,17 +3,17 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.util;
 
@@ -39,23 +39,4 @@ public class TypeUtil
         return (T) o;
     }
 
-    /**
-     * @deprecated Use {@link #uncheckedCast(Object)} instead.
-     * Casts an object to a type.
-     *
-     * @param o object to be cast
-     * @param <T> the type of the result
-     * @param typeDecl conveys the target type information; the actual value is unused and can be
-     *        null since this is all just stupid compiler tricks
-     *
-     * @return the result of the cast
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public static <T> T uncheckedCast(Object o, Object typeDecl)
-    {
-        return (T) o;
-    }
 }
-
-// End TypeUtil.java

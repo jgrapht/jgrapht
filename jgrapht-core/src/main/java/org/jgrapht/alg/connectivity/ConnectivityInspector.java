@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.connectivity;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.event.*;
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.traverse.BreadthFirstIterator;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
 import java.util.*;
 
@@ -48,10 +48,10 @@ import java.util.*;
  *
  * @author Barak Naveh
  * @author John V. Sichi
- * @since Aug 6, 2003
  */
 public class ConnectivityInspector<V, E>
-    implements GraphListener<V, E>
+    implements
+    GraphListener<V, E>
 {
     private List<Set<V>> connectedSets;
     private Map<V, Set<V>> vertexToConnectedSet;
@@ -65,31 +65,17 @@ public class ConnectivityInspector<V, E>
     public ConnectivityInspector(Graph<V, E> g)
     {
         init();
-        this.graph=Objects.requireNonNull(g);
+        this.graph = Objects.requireNonNull(g);
         if (g.getType().isDirected())
             this.graph = new AsUndirectedGraph<>(g);
     }
 
     /**
-     * Test if the inspected graph is connected. A graph is connected when there is a path between every pair of
-     * vertices. In a connected graph, there are no unreachable vertices. When the inspected graph is a <i>directed</i>
-     * graph, this method returns true if and only if the inspected graph is <i>weakly</i> connected.
-     * An empty graph is <i>not</i> considered connected.
-     *
-     * @return <code>true</code> if and only if inspected graph is connected.
-     * @deprecated for consistency, this method is renamed to {@link #isConnected()}
-     */
-    @Deprecated
-    public boolean isGraphConnected()
-    {
-        return lazyFindConnectedSets().size() == 1;
-    }
-
-    /**
-     * Test if the inspected graph is connected. A graph is connected when there is a path between every pair of
-     * vertices. In a connected graph, there are no unreachable vertices. When the inspected graph is a <i>directed</i>
-     * graph, this method returns true if and only if the inspected graph is <i>weakly</i> connected.
-     * An empty graph is <i>not</i> considered connected.
+     * Test if the inspected graph is connected. A graph is connected when there is a path between
+     * every pair of vertices. In a connected graph, there are no unreachable vertices. When the
+     * inspected graph is a <i>directed</i> graph, this method returns true if and only if the
+     * inspected graph is <i>weakly</i> connected. An empty graph is <i>not</i> considered
+     * connected.
      *
      * @return <code>true</code> if and only if inspected graph is connected.
      */
@@ -149,20 +135,20 @@ public class ConnectivityInspector<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        V source=e.getEdgeSource();
-        V target=e.getEdgeTarget();
-        Set<V> sourceSet=connectedSetOf(source);
-        Set<V> targetSet=connectedSetOf(target);
+        V source = e.getEdgeSource();
+        V target = e.getEdgeTarget();
+        Set<V> sourceSet = connectedSetOf(source);
+        Set<V> targetSet = connectedSetOf(target);
 
-        //If source and target are in the same set, do nothing, otherwise, merge sets
-        if(sourceSet != targetSet){
-            Set<V> merge=new HashSet<>();
+        // If source and target are in the same set, do nothing, otherwise, merge sets
+        if (sourceSet != targetSet) {
+            Set<V> merge = new HashSet<>();
             merge.addAll(sourceSet);
             merge.addAll(targetSet);
             connectedSets.remove(sourceSet);
             connectedSets.remove(targetSet);
             connectedSets.add(merge);
-            for(V v : merge)
+            for (V v : merge)
                 vertexToConnectedSet.put(v, merge);
         }
     }
@@ -178,14 +164,15 @@ public class ConnectivityInspector<V, E>
     }
 
     /**
-     * Tests whether two vertices lay respectively in the same connected component (undirected graph), or in
-     * the same weakly connected component (directed graph).
+     * Tests whether two vertices lay respectively in the same connected component (undirected
+     * graph), or in the same weakly connected component (directed graph).
      *
      * @param sourceVertex one end of the path.
      * @param targetVertex another end of the path.
      *
-     * @return <code>true</code> if and only if the source and target vertex are in the same connected component (undirected graph),
-     * or in the same weakly connected component (directed graph).
+     * @return <code>true</code> if and only if the source and target vertex are in the same
+     *         connected component (undirected graph), or in the same weakly connected component
+     *         (directed graph).
      */
     public boolean pathExists(V sourceVertex, V targetVertex)
     {
@@ -198,7 +185,7 @@ public class ConnectivityInspector<V, E>
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
-        Set<V> component=new HashSet<>();
+        Set<V> component = new HashSet<>();
         component.add(e.getVertex());
         connectedSets.add(component);
         vertexToConnectedSet.put(e.getVertex(), component);
@@ -245,10 +232,10 @@ public class ConnectivityInspector<V, E>
      * A traversal listener that groups all vertices according to to their containing connected set.
      *
      * @author Barak Naveh
-     * @since Aug 6, 2003
      */
     private class MyTraversalListener
-        extends TraversalListenerAdapter<V, E>
+        extends
+        TraversalListenerAdapter<V, E>
     {
         private Set<V> currentConnectedSet;
 
@@ -282,5 +269,3 @@ public class ConnectivityInspector<V, E>
         }
     }
 }
-
-// End ConnectivityInspector.java

@@ -3,23 +3,21 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * A common interface for classes implementing algorithms for enumeration of the simple cycles of a
@@ -33,30 +31,9 @@ import org.jgrapht.*;
 public interface DirectedSimpleCycles<V, E>
 {
     /**
-     * Returns the graph on which the simple cycle search algorithm is executed by this object.
-     *
-     * @return The graph.
-     * @deprecated Since not really needed on the interface.
-     */
-    @Deprecated
-    Graph<V, E> getGraph();
-
-    /**
-     * Sets the graph on which the simple cycle search algorithm is executed by this object.
-     *
-     * @param graph the graph.
-     * @throws IllegalArgumentException if the argument is <code>null</code>.
-     * @deprecated Since not really needed on the interface. 
-     */
-    @Deprecated
-    void setGraph(Graph<V, E> graph);
-
-    /**
      * Find the simple cycles of the graph.
      *
      * @return The list of all simple cycles. Possibly empty but never <code>null</code>.
      */
     List<List<V>> findSimpleCycles();
 }
-
-// End DirectedSimpleCycles.java

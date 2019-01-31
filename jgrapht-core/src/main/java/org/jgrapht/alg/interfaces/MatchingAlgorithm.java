@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.interfaces;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
@@ -50,7 +50,8 @@ public interface MatchingAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     interface Matching<V, E>
-        extends Iterable<E>
+        extends
+        Iterable<E>
     {
         /**
          * Returns the graph over which this matching is defined.
@@ -90,7 +91,8 @@ public interface MatchingAlgorithm<V, E>
          * in the graph is incident to an edge in the matching.
          * 
          * @return true if the matching is perfect. By definition, a perfect matching consists of
-         *         exactly $\frac{1}{2|V|}$ edges, and the number of vertices in the graph must be even.
+         *         exactly $\frac{1}{2|V|}$ edges, and the number of vertices in the graph must be
+         *         even.
          */
         default boolean isPerfect()
         {
@@ -116,7 +118,9 @@ public interface MatchingAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     class MatchingImpl<V, E>
-        implements Matching<V, E>, Serializable
+        implements
+        Matching<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = 4767675421846527768L;
 
@@ -187,8 +191,7 @@ public interface MatchingAlgorithm<V, E>
         {
             return "Matching [edges=" + edges + ", weight=" + weight + "]";
         }
+
     }
 
 }
-
-// End MatchingAlgorithm.java

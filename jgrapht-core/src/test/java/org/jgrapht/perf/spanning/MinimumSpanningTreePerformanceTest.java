@@ -3,39 +3,31 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.perf.spanning;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.util.StopWatch;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.
@@ -58,7 +50,8 @@ public class MinimumSpanningTreePerformanceTest
     private static abstract class BenchmarkBase
     {
         protected Random rng = new Random(SEED);
-        protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generatorSparseGraphs = null;
+        protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generatorSparseGraphs =
+            null;
         protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generatorDenseGraphs = null;
         protected Graph<Integer, DefaultWeightedEdge> sparseGraph, denseGraph;
 
@@ -70,11 +63,14 @@ public class MinimumSpanningTreePerformanceTest
             if (generatorDenseGraphs == null) {
                 // lazily construct generators
                 generatorDenseGraphs = new GnpRandomGraphGenerator<>(
-                    PERF_BENCHMARK_VERTICES_COUNT_DENSE, PERF_BENCHMARK_EDGES_PROP_DENSE, rng, false);
+                    PERF_BENCHMARK_VERTICES_COUNT_DENSE, PERF_BENCHMARK_EDGES_PROP_DENSE, rng,
+                    false);
             }
 
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedDenseGraph =
-                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            DirectedWeightedPseudograph<Integer,
+                DefaultWeightedEdge> weightedDenseGraph = new DirectedWeightedPseudograph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             this.denseGraph = weightedDenseGraph;
 
@@ -85,19 +81,22 @@ public class MinimumSpanningTreePerformanceTest
             }
         }
 
-        public void setupSparse(){
+        public void setupSparse()
+        {
             if (generatorSparseGraphs == null) {
                 // lazily construct generator
                 generatorSparseGraphs = new GnmRandomGraphGenerator<>(
-                        PERF_BENCHMARK_VERTICES_COUNT_SPARSE, PERF_BENCHMARK_EDGES_COUNT_SPARSE);
+                    PERF_BENCHMARK_VERTICES_COUNT_SPARSE, PERF_BENCHMARK_EDGES_COUNT_SPARSE);
             }
 
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedSparseGraph =
-                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            DirectedWeightedPseudograph<Integer,
+                DefaultWeightedEdge> weightedSparseGraph = new DirectedWeightedPseudograph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             this.sparseGraph = weightedSparseGraph;
 
-            generatorSparseGraphs .generateGraph(sparseGraph);
+            generatorSparseGraphs.generateGraph(sparseGraph);
 
             for (DefaultWeightedEdge e : weightedSparseGraph.edgeSet()) {
                 weightedSparseGraph.setEdgeWeight(e, rng.nextDouble());
@@ -118,7 +117,8 @@ public class MinimumSpanningTreePerformanceTest
     }
 
     public static class PrimBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
@@ -135,7 +135,8 @@ public class MinimumSpanningTreePerformanceTest
     }
 
     public static class KruskalBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
@@ -152,7 +153,8 @@ public class MinimumSpanningTreePerformanceTest
     }
 
     public static class BoruvkaBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
@@ -169,7 +171,8 @@ public class MinimumSpanningTreePerformanceTest
     }
 
     @Test
-    public void testBenchmarkDenseGraphs() {
+    public void testBenchmarkDenseGraphs()
+    {
         System.out.println("Minimum Spanning Tree Benchmark using dense graphs");
         System.out.println("-------------------------------");
         System.out.println(
@@ -217,12 +220,13 @@ public class MinimumSpanningTreePerformanceTest
     }
 
     @Test
-    public void testBenchmarkSparseGraphs() {
+    public void testBenchmarkSparseGraphs()
+    {
         System.out.println("Minimum Spanning Tree Benchmark using sparse graphs");
         System.out.println("-------------------------------");
         System.out.println(
-                "Using G(n,M) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_SPARSE + ", M = "
-                        + PERF_BENCHMARK_EDGES_COUNT_SPARSE);
+            "Using G(n,M) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_SPARSE + ", M = "
+                + PERF_BENCHMARK_EDGES_COUNT_SPARSE);
         System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
         System.out.println("Averaging results over " + REPEAT + " executions");
 
@@ -260,7 +264,7 @@ public class MinimumSpanningTreePerformanceTest
 
             System.out.print(" -> ");
             System.out
-                    .printf("setup %.3f (ms) | execution %.3f (ms)\n", avgGraphCreate, avgExecution);
+                .printf("setup %.3f (ms) | execution %.3f (ms)\n", avgGraphCreate, avgExecution);
         }
     }
 

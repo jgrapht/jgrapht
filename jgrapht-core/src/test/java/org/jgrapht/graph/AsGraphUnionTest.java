@@ -3,37 +3,32 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Unit test for the {@link AsGraphUnion} class.
  *
  * @author Joris Kinable
- * @since Aug 24, 2015
  */
 public class AsGraphUnionTest
 {
@@ -300,27 +295,27 @@ public class AsGraphUnionTest
         Graph<Integer, DefaultWeightedEdge> g2Masked = new AsWeightedGraph<>(g2, weightMap);
 
         Graph<Integer, DefaultWeightedEdge> graphUnionSum =
-                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
-        assertEquals(30.0, graphUnionSum.getEdgeWeight(edge),0);
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
+        assertEquals(30.0, graphUnionSum.getEdgeWeight(edge), 0);
         Graph<Integer, DefaultWeightedEdge> graphUnionFirst =
-                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
-        assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge),0);
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
+        assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge), 0);
         Graph<Integer, DefaultWeightedEdge> graphUnionSecond =
-                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
-        assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge),0);
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
+        assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge), 0);
         Graph<Integer, DefaultWeightedEdge> graphUnionMax =
-                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
-        assertEquals(20.0, graphUnionMax.getEdgeWeight(edge),0);
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
+        assertEquals(20.0, graphUnionMax.getEdgeWeight(edge), 0);
         Graph<Integer, DefaultWeightedEdge> graphUnionMin =
-                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
-        assertEquals(10.0, graphUnionMin.getEdgeWeight(edge),0);
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
+        assertEquals(10.0, graphUnionMin.getEdgeWeight(edge), 0);
         Graph<Integer, DefaultWeightedEdge> graphUnionMult =
-                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
-        assertEquals(200.0, graphUnionMult.getEdgeWeight(edge),0);
+            new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
+        assertEquals(200.0, graphUnionMult.getEdgeWeight(edge), 0);
 
-        assertEquals(10.0, g1.getEdgeWeight(edge),0);
-        assertEquals(10.0, g2.getEdgeWeight(edge),0);
-        assertEquals(20.0, g2Masked.getEdgeWeight(edge),0);
+        assertEquals(10.0, g1.getEdgeWeight(edge), 0);
+        assertEquals(10.0, g2.getEdgeWeight(edge), 0);
+        assertEquals(20.0, g2Masked.getEdgeWeight(edge), 0);
     }
 
 }

@@ -3,29 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
-import java.util.stream.IntStream;
+import java.util.stream.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -43,8 +42,9 @@ public class GraphMeasurerTest
 
     private Graph<Integer, DefaultEdge> getGraph1()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        IntStream.range(0,7).forEach(i->g.addVertex());
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        IntStream.range(0, 7).forEach(i -> g.addVertex());
         g.addEdge(0, 1);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -56,8 +56,9 @@ public class GraphMeasurerTest
 
     private Graph<Integer, DefaultEdge> getGraph2()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        IntStream.range(0,7).forEach(i->g.addVertex());
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        IntStream.range(0, 7).forEach(i -> g.addVertex());
         g.addEdge(0, 1);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -76,20 +77,20 @@ public class GraphMeasurerTest
         final int N = 100;
         final int M = 100000;
 
-        for (int i = 0; i < N; i++){
+        for (int i = 0; i < N; i++) {
             g.addVertex(i);
         }
 
-        for (int i = 0; i < N - 1; i++){
+        for (int i = 0; i < N - 1; i++) {
             g.addEdge(i, i + 1);
             g.setEdgeWeight(g.getEdge(i, i + 1), 50 + random.nextInt(50));
         }
 
-        for (int i = N - 1; i < M; i++){
+        for (int i = N - 1; i < M; i++) {
             int u = random.nextInt(N);
             int v = random.nextInt(N);
 
-            if (u != v){
+            if (u != v) {
                 g.addEdge(u, v);
                 g.setEdgeWeight(g.getEdge(u, v), 100 + random.nextInt(200));
             }
@@ -103,9 +104,8 @@ public class GraphMeasurerTest
     public void testVertexEccentricityG1()
     {
         Graph<Integer, DefaultEdge> g1 = getGraph1();
-        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
-            new FloydWarshallShortestPaths<>(g1),
-            new JohnsonShortestPaths<>(g1));
+        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs =
+            Arrays.asList(new FloydWarshallShortestPaths<>(g1), new JohnsonShortestPaths<>(g1));
         for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
             GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
@@ -123,9 +123,8 @@ public class GraphMeasurerTest
     public void testVertexEccentricityG2()
     {
         Graph<Integer, DefaultEdge> g2 = getGraph2();
-        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
-            new FloydWarshallShortestPaths<>(g2),
-            new JohnsonShortestPaths<>(g2));
+        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs =
+            Arrays.asList(new FloydWarshallShortestPaths<>(g2), new JohnsonShortestPaths<>(g2));
         for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
             GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
@@ -260,7 +259,11 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g3 = getGraph3();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g3);
         Set<Integer> graphPseudoPeriphery3 = gdm.getGraphPseudoPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46,
-                48, 51, 53, 60, 61, 63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)), graphPseudoPeriphery3);
+        assertEquals(
+            new HashSet<>(
+                Arrays.asList(
+                    6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46, 48, 51, 53, 60, 61,
+                    63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)),
+            graphPseudoPeriphery3);
     }
 }

@@ -3,24 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
-
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -29,7 +28,6 @@ import static org.junit.Assert.assertTrue;
  * Unit test for {@link ListenableGraph} class.
  *
  * @author Barak Naveh
- * @since Aug 3, 2003
  */
 public class ListenableGraphTest
 {
@@ -39,6 +37,7 @@ public class ListenableGraphTest
     Object lastRemovedEdge;
     Object lastAddedVertex;
     Object lastRemovedVertex;
+    Double lastWeightUpdate;
 
     /**
      * Tests GraphListener listener.
@@ -187,9 +186,52 @@ public class ListenableGraphTest
 
         DefaultWeightedEdge e = g.addEdge(v1, v2);
         g.setEdgeWeight(e, 10.0);
-        assertEquals(10.0, g.getEdgeWeight(e),0);
+        assertEquals(10.0, g.getEdgeWeight(e), 0);
         assertEquals(e, lastAddedEdge);
         assertEquals(null, lastRemovedEdge);
+    }
+
+    @Test
+    public void testListenableDirectedWeightedGraphWithCustomEdge()
+    {
+        init();
+
+        ListenableGraph<Object, DefaultEdge> g =
+            new DefaultListenableGraph<>(new DefaultDirectedWeightedGraph<>(DefaultEdge.class));
+
+        GraphListener<Object, DefaultEdge> listener = new MyGraphListener<>();
+        g.addGraphListener(listener);
+
+        String v1 = "v1";
+        String v2 = "v2";
+
+        g.addVertex(v1);
+        assertEquals(v1, lastAddedVertex);
+        assertEquals(null, lastRemovedVertex);
+
+        g.addVertex(v2);
+
+        init();
+
+        DefaultEdge e = g.addEdge(v1, v2);
+        g.setEdgeWeight(e, 10.0);
+        assertEquals(10.0, g.getEdgeWeight(e), 0);
+        assertEquals(e, lastAddedEdge);
+        assertEquals(null, lastRemovedEdge);
+
+        init();
+
+        g.setEdgeWeight(e, 5.5d);
+        assertEquals(5.5, g.getEdgeWeight(e), 1e-9);
+        assertEquals(null, lastAddedEdge);
+        assertEquals(null, lastRemovedEdge);
+        assertEquals(5.5, lastWeightUpdate, 1e-9);
+
+        g.setEdgeWeight(e, 20.5d);
+        assertEquals(20.5, g.getEdgeWeight(e), 1e-9);
+        assertEquals(null, lastAddedEdge);
+        assertEquals(null, lastRemovedEdge);
+        assertEquals(20.5, lastWeightUpdate, 1e-9);
     }
 
     public void init()
@@ -198,6 +240,7 @@ public class ListenableGraphTest
         lastAddedVertex = null;
         lastRemovedEdge = null;
         lastRemovedVertex = null;
+        lastWeightUpdate = null;
     }
 
     // ~ Inner Classes ----------------------------------------------------------
@@ -206,47 +249,39 @@ public class ListenableGraphTest
      * A listener on the tested graph.
      *
      * @author Barak Naveh
-     * @since Aug 3, 2003
      */
     private class MyGraphListener<E>
-        implements GraphListener<Object, E>
+        implements
+        GraphListener<Object, E>
     {
-        /**
-         * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
-         */
         @Override
         public void edgeAdded(GraphEdgeChangeEvent<Object, E> e)
         {
             lastAddedEdge = e.getEdge();
         }
 
-        /**
-         * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
-         */
         @Override
         public void edgeRemoved(GraphEdgeChangeEvent<Object, E> e)
         {
             lastRemovedEdge = e.getEdge();
         }
 
-        /**
-         * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
-         */
         @Override
         public void vertexAdded(GraphVertexChangeEvent<Object> e)
         {
             lastAddedVertex = e.getVertex();
         }
 
-        /**
-         * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
-         */
         @Override
         public void vertexRemoved(GraphVertexChangeEvent<Object> e)
         {
             lastRemovedVertex = e.getVertex();
         }
+
+        @Override
+        public void edgeWeightUpdated(GraphEdgeChangeEvent<Object, E> e)
+        {
+            lastWeightUpdate = e.getEdgeWeight();
+        }
     }
 }
-
-// End ListenableGraphTest.java

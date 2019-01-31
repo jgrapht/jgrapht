@@ -3,36 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.tour;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.TSPAlgorithm;
-import org.jgrapht.graph.GraphWalk;
+import java.util.*;
 
 /**
  * The 2-opt heuristic algorithm for the TSP problem.
@@ -46,7 +35,8 @@ import org.jgrapht.graph.GraphWalk;
  * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates k
  * random initial tours and then iteratively improves the tours until a local minimum is reached. In
  * each iteration it applies the best possible 2-opt move which means to find the best pair of edges
- * $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour length.
+ * $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour
+ * length.
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/2-opt">wikipedia</a> for more details.
@@ -62,7 +52,7 @@ import org.jgrapht.graph.GraphWalk;
  */
 public class TwoOptHeuristicTSP<V, E>
     implements
-    TSPAlgorithm<V, E>
+    HamiltonianCycleAlgorithm<V, E>
 {
     private int k;
     private Random rng;
@@ -229,8 +219,8 @@ public class TwoOptHeuristicTSP<V, E>
 
     /**
      * Improve the tour using the 2-opt heuristic. In each iteration it applies the best possible
-     * 2-opt move which means to find the best pair of edges $(i,i+1)$ and $(j,j+1)$ such that replacing
-     * them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour length.
+     * 2-opt move which means to find the best pair of edges $(i,i+1)$ and $(j,j+1)$ such that
+     * replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour length.
      * 
      * <p>
      * The returned array instance might or might not be the input array.

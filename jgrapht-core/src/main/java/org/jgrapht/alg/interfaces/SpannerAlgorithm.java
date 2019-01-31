@@ -3,19 +3,21 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.interfaces;
+
+import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -26,6 +28,8 @@ import java.util.*;
  * given graph.
  *
  * @param <E> edge the graph edge type
+ *
+ * @author Dimitrios Michail
  */
 public interface SpannerAlgorithm<E>
 {
@@ -43,7 +47,8 @@ public interface SpannerAlgorithm<E>
      * @param <E> the graph edge type
      */
     interface Spanner<E>
-        extends Iterable<E>
+        extends
+        Set<E>
     {
 
         /**
@@ -52,24 +57,6 @@ public interface SpannerAlgorithm<E>
          * @return weight of the graph spanner
          */
         double getWeight();
-
-        /**
-         * Set of edges of the graph spanner.
-         * 
-         * @return edge set of the spanner
-         */
-        Set<E> getEdges();
-
-        /**
-         * Returns an iterator over the edges in the spanner.
-         * 
-         * @return iterator over the edges in the spanner.
-         */
-        @Override
-        default Iterator<E> iterator()
-        {
-            return getEdges().iterator();
-        }
     }
 
     /**
@@ -78,12 +65,23 @@ public interface SpannerAlgorithm<E>
      * @param <E> the graph edge type
      */
     class SpannerImpl<E>
-        implements Spanner<E>, Serializable
+        extends
+        WeightedUnmodifiableSet<E>
+        implements
+        Spanner<E>,
+        Serializable
     {
         private static final long serialVersionUID = 5951646499902668516L;
 
-        private final double weight;
-        private final Set<E> edges;
+        /**
+         * Construct a new spanner
+         *
+         * @param edges the edges
+         */
+        public SpannerImpl(Set<E> edges)
+        {
+            super(edges);
+        }
 
         /**
          * Construct a new spanner
@@ -93,26 +91,13 @@ public interface SpannerAlgorithm<E>
          */
         public SpannerImpl(Set<E> edges, double weight)
         {
-            this.edges = edges;
-            this.weight = weight;
-        }
-
-        @Override
-        public double getWeight()
-        {
-            return weight;
-        }
-
-        @Override
-        public Set<E> getEdges()
-        {
-            return edges;
+            super(edges, weight);
         }
 
         @Override
         public String toString()
         {
-            return "Spanner [weight=" + weight + ", edges=" + edges + "]";
+            return "Spanner [weight=" + weight + ", edges=" + this + "]";
         }
     }
 

@@ -3,25 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.clique;
+
+import org.jgrapht.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
-
-import org.jgrapht.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm with pivot.
@@ -35,8 +35,8 @@ import org.jgrapht.*;
  * 
  * <p>
  * where the authors show that using that rule guarantees that the Bron-Kerbosch algorithm has
- * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding time
- * to write the output, which is worst-case optimal.
+ * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding
+ * time to write the output, which is worst-case optimal.
  * 
  * <p>
  * The algorithm first computes all maximal cliques and then returns the result to the user. A
@@ -51,7 +51,8 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class PivotBronKerboschCliqueFinder<V, E>
-    extends BaseBronKerboschCliqueFinder<V, E>
+    extends
+    BaseBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.
@@ -185,10 +186,8 @@ public class PivotBronKerboschCliqueFinder<V, E>
                 vNeighbors.add(Graphs.getOppositeVertex(graph, e, v));
             }
 
-            Set<V> newP =
-                P.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
-            Set<V> newX =
-                X.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
+            Set<V> newP = P.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
+            Set<V> newX = X.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
             Set<V> newR = new HashSet<>(R);
             newR.add(v);
 

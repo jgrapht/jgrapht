@@ -3,27 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
-
-import java.util.*;
-import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.util.extension.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Base class backing algorithms allowing to derive
@@ -37,7 +37,9 @@ import org.jgrapht.alg.util.extension.*;
  * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmBase<V, E>
-    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
+    implements
+    MaximumFlowAlgorithm<V, E>,
+    MinimumSTCutAlgorithm<V, E>
 {
     /**
      * Default tolerance.
@@ -195,10 +197,10 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     /**
      * Increase flow in the direction denoted by edge $(u,v)$. Any existing flow in the reverse
      * direction $(v,u)$ gets reduced first. More precisely, let $f_2$ be the existing flow in the
-     * direction $(v,u)$, and $f_1$ be the desired increase of flow in direction $(u,v)$. If
-     * $f_1 \geq f_2$, then the flow on $(v,u)$ becomes $0$, and the flow on $(u,v)$ becomes $f_1-f_2$.
-     * Else, if $f_1 \textlptr f_2$, the flow in the direction $(v, u)$ is reduced, i.e. the flow on $(v, u)$
-     * becomes $f_2 - f_1$, whereas the flow on $(u,v)$ remains zero.
+     * direction $(v,u)$, and $f_1$ be the desired increase of flow in direction $(u,v)$. If $f_1
+     * \geq f_2$, then the flow on $(v,u)$ becomes $0$, and the flow on $(u,v)$ becomes $f_1-f_2$.
+     * Else, if $f_1 \textlptr f_2$, the flow in the direction $(v, u)$ is reduced, i.e. the flow on
+     * $(v, u)$ becomes $f_2 - f_1$, whereas the flow on $(u,v)$ remains zero.
      * 
      * @param edge desired direction in which the flow is increased
      * @param flow increase of flow in the the direction indicated by the forwardEdge
@@ -248,7 +250,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     class VertexExtensionBase
-        implements Extension
+        implements
+        Extension
     {
         private final List<AnnotatedFlowEdge> outgoing = new ArrayList<>();
 
@@ -263,7 +266,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     class AnnotatedFlowEdge
-        implements Extension
+        implements
+        Extension
     {
         /* Edge source */
         private VertexExtensionBase source;
@@ -364,10 +368,11 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns the direction of the flow on an edge $(u,v)$. In case $(u,v)$ is a directed edge (arc),
-     * this function will always return the edge target $v$. However, if $(u,v)$ is an edge in an
-     * undirected graph, flow may go through the edge in either side. If the flow goes from $u$ to $v$,
-     * we return $v$, otherwise $u$. If the flow on an edge equals $0$, the returned value has no meaning.
+     * Returns the direction of the flow on an edge $(u,v)$. In case $(u,v)$ is a directed edge
+     * (arc), this function will always return the edge target $v$. However, if $(u,v)$ is an edge
+     * in an undirected graph, flow may go through the edge in either side. If the flow goes from
+     * $u$ to $v$, we return $v$, otherwise $u$. If the flow on an edge equals $0$, the returned
+     * value has no meaning.
      * 
      * @param e edge
      * @return the vertex where the flow leaves the edge
@@ -394,7 +399,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     @Override
     public double calculateMinCut(V source, V sink)
     {
-        return this.calculateMaximumFlow(source, sink);
+        return this.getMaximumFlowValue(source, sink);
     }
 
     @Override
@@ -470,5 +475,3 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         }
     }
 }
-
-// End MaximumFlowAlgorithmBase.java

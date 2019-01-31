@@ -3,28 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 /**
- * Provides an edge-reversed view $g'$ of a directed graph $g$. The vertex sets for the two graphs are
- * the same, but g' contains an edge $(v2, v1)$ iff g$$ contains an edge $(v1, v2)$. $g'$ is backed by $g$, so
- * changes to $g$ are reflected in $g'$, and vice versa.
+ * Provides an edge-reversed view $g'$ of a directed graph $g$. The vertex sets for the two graphs
+ * are the same, but g' contains an edge $(v2, v1)$ iff g$$ contains an edge $(v1, v2)$. $g'$ is
+ * backed by $g$, so changes to $g$ are reflected in $g'$, and vice versa.
  *
  * <p>
  * This class allows you to use a directed graph algorithm in reverse. For example, suppose you have
@@ -39,8 +39,11 @@ import org.jgrapht.*;
  * @see AsUndirectedGraph
  */
 public class EdgeReversedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Graph<V, E> {
+    extends
+    GraphDelegator<V, E>
+    implements
+    Graph<V, E>
+{
     private static final long serialVersionUID = -3806030402468293063L;
 
     /**
@@ -161,5 +164,3 @@ public class EdgeReversedGraph<V, E>
         return toStringFromSets(vertexSet(), edgeSet(), getType().isDirected());
     }
 }
-
-// End EdgeReversedGraph.java

@@ -3,37 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.function.ToDoubleFunction;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.junit.Test;
+import org.junit.*;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.ImmutableValueGraph;
-import com.google.common.graph.MutableValueGraph;
-import com.google.common.graph.ValueGraphBuilder;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -49,7 +41,8 @@ public class ImmutableValueGraphAdapterTest
     @Test
     public void testWeights()
     {
-        MutableValueGraph<String, MyValue> graph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+        MutableValueGraph<String, MyValue> graph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
 
         graph.addNode("v1");
         graph.addNode("v2");
@@ -62,9 +55,10 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String, EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
-            ImmutableValueGraph.copyOf(graph), 
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+        Graph<String,
+            EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
+                ImmutableValueGraph.copyOf(graph),
+                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -72,28 +66,29 @@ public class ImmutableValueGraphAdapterTest
         assertFalse(g.getType().isUndirected());
         assertTrue(g.getType().isWeighted());
         assertTrue(g.getType().isAllowingCycles());
-        
+
         assertEquals(2.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
         assertEquals(3.0, g.getEdgeWeight(EndpointPair.ordered("v2", "v3")), 1e-9);
         assertEquals(4.0, g.getEdgeWeight(EndpointPair.ordered("v2", "v4")), 1e-9);
         assertEquals(5.0, g.getEdgeWeight(EndpointPair.ordered("v4", "v4")), 1e-9);
         assertEquals(6.0, g.getEdgeWeight(EndpointPair.ordered("v5", "v2")), 1e-9);
-        
-        try { 
+
+        try {
             g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 1.0);
             fail("Immutable");
-        } catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // ignore
         }
     }
-    
+
     /**
      * Test special case of double value type
      */
     @Test
     public void testDoubleWeights()
     {
-        MutableValueGraph<String, Double> graph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+        MutableValueGraph<String, Double> graph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
 
         graph.addNode("v1");
         graph.addNode("v2");
@@ -106,8 +101,8 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", 5.0);
         graph.putEdgeValue("v5", "v2", 6.0);
 
-        Graph<String, EndpointPair<String>> g = new ImmutableDoubleValueGraphAdapter<>(
-            ImmutableValueGraph.copyOf(graph));
+        Graph<String, EndpointPair<String>> g =
+            new ImmutableDoubleValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph));
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -115,49 +110,51 @@ public class ImmutableValueGraphAdapterTest
         assertFalse(g.getType().isUndirected());
         assertTrue(g.getType().isWeighted());
         assertTrue(g.getType().isAllowingCycles());
-        
+
         assertEquals(2.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
         assertEquals(3.0, g.getEdgeWeight(EndpointPair.ordered("v2", "v3")), 1e-9);
         assertEquals(4.0, g.getEdgeWeight(EndpointPair.ordered("v2", "v4")), 1e-9);
         assertEquals(5.0, g.getEdgeWeight(EndpointPair.ordered("v4", "v4")), 1e-9);
         assertEquals(6.0, g.getEdgeWeight(EndpointPair.ordered("v5", "v2")), 1e-9);
-        
-        try { 
+
+        try {
             g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 1.0);
             fail("Immutable");
-        } catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // ignore
         }
     }
-    
+
     /**
      * Example on javadoc
      */
     @Test
     public void testExample()
     {
-        MutableValueGraph<String, MyValue> mutableValueGraph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
-        
+        MutableValueGraph<String, MyValue> mutableValueGraph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+
         mutableValueGraph.addNode("v1");
         mutableValueGraph.addNode("v2");
         mutableValueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
-        
-        ImmutableValueGraph<String, MyValue> immutableValueGraph = ImmutableValueGraph.copyOf(mutableValueGraph);
-        
+
+        ImmutableValueGraph<String, MyValue> immutableValueGraph =
+            ImmutableValueGraph.copyOf(mutableValueGraph);
+
         Graph<String, EndpointPair<String>> graph = new ImmutableValueGraphAdapter<>(
             immutableValueGraph, (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
-        
+
         assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
     }
-    
-    
+
     /**
      * Test the most general version of the directed graph.
      */
     @Test
     public void testDirectedGraph()
     {
-        MutableValueGraph<String, MyValue> graph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+        MutableValueGraph<String, MyValue> graph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
 
         graph.addNode("v1");
         graph.addNode("v2");
@@ -170,9 +167,10 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String, EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
-            ImmutableValueGraph.copyOf(graph), 
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+        Graph<String,
+            EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
+                ImmutableValueGraph.copyOf(graph),
+                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -276,7 +274,8 @@ public class ImmutableValueGraphAdapterTest
     public void testSerialization()
         throws Exception
     {
-        MutableValueGraph<String, MyValue> graph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+        MutableValueGraph<String, MyValue> graph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
 
         graph.addNode("v1");
         graph.addNode("v2");
@@ -289,10 +288,11 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String, EndpointPair<String>> initialGraph = new ImmutableValueGraphAdapter<>(
-            ImmutableValueGraph.copyOf(graph), 
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
-        
+        Graph<String,
+            EndpointPair<String>> initialGraph = new ImmutableValueGraphAdapter<>(
+                ImmutableValueGraph.copyOf(graph),
+                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+
         Graph<String, EndpointPair<String>> g = (Graph<String,
             EndpointPair<String>>) SerializationTestUtils.serializeAndDeserialize(initialGraph);
 
@@ -348,7 +348,8 @@ public class ImmutableValueGraphAdapterTest
     }
 
     private static class MyValue
-        implements Serializable
+        implements
+        Serializable
     {
 
         private static final long serialVersionUID = 1L;

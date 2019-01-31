@@ -3,25 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg;
 
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -35,8 +34,8 @@ public class TransitiveClosureTest
     @Test
     public void testLinearGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph =
-            new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         int N = 10;
         LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(N);
@@ -54,8 +53,8 @@ public class TransitiveClosureTest
     @Test
     public void testRingGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph =
-            new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         int N = 10;
         RingGraphGenerator<Integer, DefaultEdge> gen = new RingGraphGenerator<>(N);
@@ -84,8 +83,8 @@ public class TransitiveClosureTest
     @Test
     public void testEmptyDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         int n = 10;
         EmptyGraphGenerator<Integer, DefaultEdge> gen = new EmptyGraphGenerator<>(n);
         gen.generateGraph(graph);
@@ -98,8 +97,8 @@ public class TransitiveClosureTest
     @Test
     public void testCompleteBipartiteDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteBipartiteGraphGenerator<Integer, DefaultEdge> gen =
             new CompleteBipartiteGraphGenerator<>(5, 5);
         gen.generateGraph(graph);
@@ -112,8 +111,8 @@ public class TransitiveClosureTest
     @Test
     public void testLinearGraphForDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         int n = 10;
         LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(n);
         gen.generateGraph(graph);
@@ -128,5 +127,3 @@ public class TransitiveClosureTest
         }
     }
 }
-
-// End TransitiveClosureTest.java

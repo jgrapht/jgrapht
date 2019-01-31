@@ -3,29 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.connectivity.BiconnectivityInspector;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
-import org.jgrapht.alg.cycle.WeakChordalityInspector;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.partition.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -33,6 +31,7 @@ import java.util.stream.Collectors;
  * @author Barak Naveh
  * @author Dimitrios Michail
  * @author Joris Kinable
+ * @author Alexandru Valeanu
  */
 public abstract class GraphTests
 {
@@ -41,8 +40,7 @@ public abstract class GraphTests
         "Graph must be directed or undirected";
     private static final String GRAPH_MUST_BE_UNDIRECTED = "Graph must be undirected";
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
-    private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
-    private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
+    private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
@@ -60,7 +58,8 @@ public abstract class GraphTests
     }
 
     /**
-     * Check if a graph is simple. A graph is simple if it has no self-loops and multiple (parallel) edges.
+     * Check if a graph is simple. A graph is simple if it has no self-loops and multiple (parallel)
+     * edges.
      * 
      * @param graph a graph
      * @param <V> the graph vertex type
@@ -177,10 +176,11 @@ public abstract class GraphTests
     }
 
     /**
-     * Test if the inspected graph is connected. A graph is connected when, while ignoring edge directionality, there exists a path between every pair of
-     * vertices. In a connected graph, there are no unreachable vertices. When the inspected graph is a <i>directed</i>
-     * graph, this method returns true if and only if the inspected graph is <i>weakly</i> connected.
-     * An empty graph is <i>not</i> considered connected.
+     * Test if the inspected graph is connected. A graph is connected when, while ignoring edge
+     * directionality, there exists a path between every pair of vertices. In a connected graph,
+     * there are no unreachable vertices. When the inspected graph is a <i>directed</i> graph, this
+     * method returns true if and only if the inspected graph is <i>weakly</i> connected. An empty
+     * graph is <i>not</i> considered connected.
      * 
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
@@ -199,11 +199,13 @@ public abstract class GraphTests
     }
 
     /**
-     * Tests if the inspected graph is biconnected. A biconnected graph is a connected graph on two or more vertices having no cutpoints.
+     * Tests if the inspected graph is biconnected. A biconnected graph is a connected graph on two
+     * or more vertices having no cutpoints.
      *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
-     * case more control is required use {@link org.jgrapht.alg.connectivity.BiconnectivityInspector} directly.
+     * case more control is required use
+     * {@link org.jgrapht.alg.connectivity.BiconnectivityInspector} directly.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -236,11 +238,14 @@ public abstract class GraphTests
     }
 
     /**
-     * Test whether a directed graph is strongly connected.
+     * Test whether a graph is strongly connected.
      * 
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
+     * 
+     * <p>
+     * In case of undirected graphs this method delegated to {@link #isConnected(Graph)}.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -251,7 +256,11 @@ public abstract class GraphTests
     public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        if (graph.getType().isUndirected()) {
+            return isConnected(graph);
+        } else {
+            return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        }
     }
 
     /**
@@ -357,48 +366,11 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is bipartite, false otherwise
+     * @see BipartitePartitioning#isBipartite()
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
-        if (isEmpty(graph)) {
-            return true;
-        }
-        try {
-            // at most n^2/4 edges
-            if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
-                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
-            {
-                return false;
-            }
-        } catch (ArithmeticException e) {
-            // ignore
-        }
-
-        Set<V> unknown = new HashSet<>(graph.vertexSet());
-        Set<V> odd = new HashSet<>();
-        Deque<V> queue = new LinkedList<>();
-
-        while (!unknown.isEmpty()) {
-            if (queue.isEmpty()) {
-                queue.add(unknown.iterator().next());
-            }
-
-            V v = queue.removeFirst();
-            unknown.remove(v);
-
-            for (E e : graph.edgesOf(v)) {
-                V n = Graphs.getOppositeVertex(graph, e, v);
-                if (unknown.contains(n)) {
-                    queue.add(n);
-                    if (!odd.contains(v)) {
-                        odd.add(n);
-                    }
-                } else if (!(odd.contains(v) ^ odd.contains(n))) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return new BipartitePartitioning<>(graph).isBipartite();
     }
 
     /**
@@ -410,38 +382,15 @@ public abstract class GraphTests
      * @return true if the partition is a bipartite partition, false otherwise
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @see BipartitePartitioning#isValidPartitioning(PartitioningAlgorithm.Partitioning)
      */
+    @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
         Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
-        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        Objects.requireNonNull(firstPartition, FIRST_PARTITION_CANNOT_BE_NULL);
-        Objects.requireNonNull(secondPartition, SECOND_PARTITION_CANNOT_BE_NULL);
-
-        if (graph.vertexSet().size() != firstPartition.size() + secondPartition.size()) {
-            return false;
-        }
-
-        for (V v : graph.vertexSet()) {
-            Collection<? extends V> otherPartition;
-            if (firstPartition.contains(v)) {
-                otherPartition = secondPartition;
-            } else if (secondPartition.contains(v)) {
-                otherPartition = firstPartition;
-            } else {
-                // v does not belong to any of the two partitions
-                return false;
-            }
-
-            for (E e : graph.edgesOf(v)) {
-                V other = Graphs.getOppositeVertex(graph, e, v);
-                if (!otherPartition.contains(other)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return new BipartitePartitioning<>(graph).isValidPartitioning(
+            new PartitioningAlgorithm.PartitioningImpl<>(
+                Arrays.asList((Set<V>) firstPartition, (Set<V>) secondPartition)));
     }
 
     /**
@@ -483,8 +432,8 @@ public abstract class GraphTests
 
     /**
      * Checks whether a graph is chordal. A <a href="https://en.wikipedia.org/wiki/Chordal_graph">
-     * chordal graph</a> is one in which all cycles of four or more vertices have a chord, which
-     * is an edge that is not part of the cycle but connects two vertices of the cycle.
+     * chordal graph</a> is one in which all cycles of four or more vertices have a chord, which is
+     * an edge that is not part of the cycle but connects two vertices of the cycle.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -492,33 +441,35 @@ public abstract class GraphTests
      * @return true if the graph is chordal, false otherwise
      * @see ChordalityInspector#isChordal()
      */
-    public static <V, E> boolean isChordal(Graph<V, E> graph){
+    public static <V, E> boolean isChordal(Graph<V, E> graph)
+    {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new ChordalityInspector<>(graph).isChordal();
     }
 
     /**
-     * Checks whether a graph is <a href="http://www.graphclasses.org/classes/gc_14.html">weakly chordal</a>.
+     * Checks whether a graph is <a href="http://www.graphclasses.org/classes/gc_14.html">weakly
+     * chordal</a>.
      * <p>
      * The following definitions are equivalent:
      * <ol>
-     * <li>
-     * A graph is weakly chordal (weakly triangulated) if neither it nor its complement
-     * contains a <a href="http://mathworld.wolfram.com/ChordlessCycle.html">chordless cycles</a> with
-     * five or more vertices.</li>
-     * <li> A 2-pair in a graph is a pair of non-adjacent vertices $x$, $y$ such that every chordless path has
-     * exactly two edges. A graph is weakly chordal if every connected
-     * <a href="https://en.wikipedia.org/wiki/Induced_subgraph">induced subgraph</a> $H$ that is not a complete
-     * graph, contains a 2-pair.</li>
+     * <li>A graph is weakly chordal (weakly triangulated) if neither it nor its complement contains
+     * a <a href="http://mathworld.wolfram.com/ChordlessCycle.html">chordless cycles</a> with five
+     * or more vertices.</li>
+     * <li>A 2-pair in a graph is a pair of non-adjacent vertices $x$, $y$ such that every chordless
+     * path has exactly two edges. A graph is weakly chordal if every connected
+     * <a href="https://en.wikipedia.org/wiki/Induced_subgraph">induced subgraph</a> $H$ that is not
+     * a complete graph, contains a 2-pair.</li>
      * </ol>
      *
      * @param graph the input graph
-     * @param <V>   the graph vertex type
-     * @param <E>   the graph edge type
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      * @return true if the graph is weakly chordal, false otherwise
      * @see WeakChordalityInspector#isWeaklyChordal()
      */
-    public static <V, E> boolean isWeaklyChordal(Graph<V, E> graph) {
+    public static <V, E> boolean isWeaklyChordal(Graph<V, E> graph)
+    {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new WeakChordalityInspector<>(graph).isWeaklyChordal();
     }
@@ -526,10 +477,10 @@ public abstract class GraphTests
     /**
      * Tests whether an undirected graph meets Ore's condition to be Hamiltonian.
      *
-     * Let $G$ be a (finite and simple) graph with $n \geq 3$ vertices. We denote by $deg(v)$ the degree of a vertex $v$ in $G$,
-     * i.e. the number of incident edges in $G$ to $v$.
-     * Then, Ore's theorem states that if $deg(v) + deg(w) \geq n$ for every pair of distinct non-adjacent vertices
-     * $v$ and $w$ of $G$, then $G$ is Hamiltonian.
+     * Let $G$ be a (finite and simple) graph with $n \geq 3$ vertices. We denote by $deg(v)$ the
+     * degree of a vertex $v$ in $G$, i.e. the number of incident edges in $G$ to $v$. Then, Ore's
+     * theorem states that if $deg(v) + deg(w) \geq n$ for every pair of distinct non-adjacent
+     * vertices $v$ and $w$ of $G$, then $G$ is Hamiltonian.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -537,7 +488,8 @@ public abstract class GraphTests
      * @return true if the graph meets Ore's condition, false otherwise
      * @see org.jgrapht.alg.tour.PalmerHamiltonianCycle
      */
-    public static <V, E> boolean hasOreProperty(Graph<V, E> graph){
+    public static <V, E> boolean hasOreProperty(Graph<V, E> graph)
+    {
         requireUndirected(graph);
 
         final int n = graph.vertexSet().size();
@@ -552,12 +504,45 @@ public abstract class GraphTests
                 V v = vertexList.get(i);
                 V w = vertexList.get(j);
 
-                if (!v.equals(w) && !graph.containsEdge(v, w) && graph.degreeOf(v) + graph.degreeOf(w) < n)
+                if (!v.equals(w) && !graph.containsEdge(v, w)
+                    && graph.degreeOf(v) + graph.degreeOf(w) < n)
                     return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a
+     * triangle of edges).
+     *
+     * The implementation of this method uses {@link GraphMetrics#getNumberOfTriangles(Graph)}.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is triangle-free, false otherwise
+     */
+    public static <V, E> boolean isTriangleFree(Graph<V, E> graph)
+    {
+        return GraphMetrics.getNumberOfTriangles(graph) == 0;
+    }
+
+    /**
+     * Checks that the specified graph is perfect. Due to the Strong Perfect Graph Theorem Berge
+     * Graphs are the same as perfect Graphs. The implementation of this method is delegated to
+     * {@link org.jgrapht.alg.cycle.BergeGraphInspector}
+     *
+     * @param graph the graph reference to check for being perfect or not
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is perfect, false otherwise
+     */
+    public static <V, E> boolean isPerfect(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new BergeGraphInspector<V, E>().isBerge(graph);
     }
 
     /**
@@ -680,6 +665,25 @@ public abstract class GraphTests
         return requireDirectedOrUndirected(graph, GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
     }
 
+    /**
+     * Checks that the specified graph is weighted and throws a customized
+     * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
+     * {@code null} and throws a {@link NullPointerException} if it is.
+     *
+     * @param graph the graph reference to check for being weighted and not null
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return {@code graph} if directed and not {@code null}
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws IllegalArgumentException if {@code graph} is not weighted
+     */
+    public static <V, E> Graph<V, E> requireWeighted(Graph<V, E> graph)
+    {
+        if (graph == null)
+            throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
+        if (!graph.getType().isWeighted()) {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_WEIGHTED);
+        }
+        return graph;
+    }
 }
-
-// End GraphTests.java

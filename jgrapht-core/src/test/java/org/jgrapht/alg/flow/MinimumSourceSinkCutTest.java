@@ -3,31 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +32,8 @@ import static org.junit.Assert.assertTrue;
  * @author Joris Kinable
  */
 public abstract class MinimumSourceSinkCutTest
-    extends MaximumFlowMinimumCutAlgorithmTestBase
+    extends
+    MaximumFlowMinimumCutAlgorithmTestBase
 {
 
     public static final int NR_RANDOM_TESTS = 500;
@@ -67,7 +64,7 @@ public abstract class MinimumSourceSinkCutTest
         Set<DefaultWeightedEdge> cutEdges)
     {
 
-        assertEquals(expectedCutWeight, cutWeight,0);
+        assertEquals(expectedCutWeight, cutWeight, 0);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -84,7 +81,7 @@ public abstract class MinimumSourceSinkCutTest
                         && sinkPartition.contains(network.getEdgeTarget(e)))
                 .collect(Collectors.toSet()),
             cutEdges);
-        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(),0);
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(), 0);
     }
 
     private void runTestUndirected(
@@ -107,7 +104,7 @@ public abstract class MinimumSourceSinkCutTest
         Set<DefaultWeightedEdge> cutEdges)
     {
 
-        assertEquals(expectedCutWeight, cutWeight,0);
+        assertEquals(expectedCutWeight, cutWeight, 0);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -124,7 +121,7 @@ public abstract class MinimumSourceSinkCutTest
                         ^ sourcePartition.contains(network.getEdgeTarget(e)))
                 .collect(Collectors.toSet()),
             cutEdges);
-        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(),0);
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(), 0);
 
     }
 
@@ -132,7 +129,7 @@ public abstract class MinimumSourceSinkCutTest
     public void testProblematicCase()
     {
         Graph<Integer, DefaultWeightedEdge> network =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(network, 1, 2, 0);
         Graphs.addEdgeWithVertices(network, 1, 4, 1);
         Graphs.addEdgeWithVertices(network, 1, 5, 1);

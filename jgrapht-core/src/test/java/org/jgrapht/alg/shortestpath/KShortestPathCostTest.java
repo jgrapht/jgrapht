@@ -3,36 +3,31 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.BiconnectedGraph;
-import org.jgrapht.alg.connectivity.NotBiconnectedGraph;
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
- * @since July 5, 2007
  */
 public class KShortestPathCostTest
 {
@@ -47,7 +42,8 @@ public class KShortestPathCostTest
 
         KShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
             new KShortestSimplePaths<>(graph);
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v3", nbPaths);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements =
+            pathFinder.getPaths("vS", "v3", nbPaths);
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
@@ -75,7 +71,8 @@ public class KShortestPathCostTest
 
         // assertEquals(2, pathFinder.getPaths("v5").size());
 
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v5", maxSize);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements =
+            pathFinder.getPaths("vS", "v5", maxSize);
         GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(
             Arrays.asList(new Object[] { picture1Graph.eS1, picture1Graph.e15 }),
@@ -268,7 +265,8 @@ public class KShortestPathCostTest
 
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
-        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths = new KShortestSimplePaths<>(graph);
+        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths =
+            new KShortestSimplePaths<>(graph);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
 
         try {
@@ -286,5 +284,3 @@ public class KShortestPathCostTest
         }
     }
 }
-
-// End KShortestPathCostTest.java

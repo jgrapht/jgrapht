@@ -3,26 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Create a random graph based on the $G(n, p)$ Erdős–Rényi model. See the Wikipedia article for
@@ -40,7 +37,6 @@ import org.jgrapht.Graph;
  * For the $G(n, M)$ model please see {@link GnmRandomGraphGenerator}.
  *
  * @author Dimitrios Michail
- * @since September 2016
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -139,8 +135,7 @@ public class GnpRandomGraphGenerator<V, E>
         int previousVertexSetSize = target.vertexSet().size();
         Map<Integer, V> vertices = new HashMap<>(n);
         for (int i = 0; i < n; i++) {
-            V v = target.addVertex();
-            vertices.put(i, v);
+            vertices.put(i, target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n) {
@@ -188,5 +183,3 @@ public class GnpRandomGraphGenerator<V, E>
     }
 
 }
-
-// End GnpRandomGraphGenerator.java

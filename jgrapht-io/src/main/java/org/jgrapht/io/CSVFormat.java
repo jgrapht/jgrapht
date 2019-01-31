@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
 
@@ -60,6 +60,19 @@ package org.jgrapht.io;
  * which represents a graph with edges: a-&gt;b, b-&gt;a, d-&gt;a, c-&gt;a, c-&gt;b, b-&gt;d,
  * b-&gt;a. Multiple occurrences of the same edge result into a multi-graph.
  * 
+ * <p>
+ * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is set. In this case
+ * the target vertex must be followed by the edge weight. The following example illustrates the
+ * weighted variant:
+ * 
+ * <pre>
+ * a,b,2.0
+ * b,a,3.0
+ * d,a,2.0
+ * c,a,1.5,b,2.5
+ * b,d,3.3,a,5.5
+ * </pre>
+ * 
  * </li>
  * <li>
  * <p>
@@ -92,8 +105,8 @@ package org.jgrapht.io;
  * </pre>
  * 
  * <p>
- * Weighted variants are also valid if {@link CSVFormat.Parameter#MATRIX_FORMAT_EDGE_WEIGHTS} is
- * set. The above example would then be:
+ * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is set. The above
+ * example would then be:
  * 
  * <pre>
  * ,1.0,,1.0,
@@ -140,7 +153,6 @@ package org.jgrapht.io;
  * </ul>
  * 
  * @author Dimitrios Michail
- * @since August 2016
  *
  */
 public enum CSVFormat
@@ -164,15 +176,14 @@ public enum CSVFormat
     public enum Parameter
     {
         /**
+         * Whether to import/export edge weights.
+         */
+        EDGE_WEIGHTS,
+        /**
          * Whether to import/export node ids. Only valid for the {@link CSVFormat#MATRIX MATRIX}
          * format.
          */
         MATRIX_FORMAT_NODEID,
-        /**
-         * Whether to import/export edge weights. Only valid for the {@link CSVFormat#MATRIX MATRIX}
-         * format.
-         */
-        MATRIX_FORMAT_EDGE_WEIGHTS,
         /**
          * Whether the input/output contains zero for missing edges. Only valid for the
          * {@link CSVFormat#MATRIX MATRIX} format.
@@ -181,5 +192,3 @@ public enum CSVFormat
     }
 
 }
-
-// End CSVFormat.java

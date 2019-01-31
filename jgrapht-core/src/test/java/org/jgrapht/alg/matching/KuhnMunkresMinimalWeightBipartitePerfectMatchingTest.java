@@ -3,29 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 {
@@ -38,7 +37,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
      * First partition
      */
     private enum FIRST_PARTITION
-        implements V
+        implements
+        V
     {
         A,
         B,
@@ -70,7 +70,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
      * Second partition
      */
     private enum SECOND_PARTITION
-        implements V
+        implements
+        V
     {
         A,
         B,
@@ -98,80 +99,32 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     private static List<? extends V> secondPartition = Arrays.asList(SECOND_PARTITION.values());
 
-    private static class WeightedEdge
-        extends DefaultWeightedEdge
-    {
-        private static final long serialVersionUID = 1L;
-
-        class APair
-            extends Pair<V, V>
-        {
-            private static final long serialVersionUID = 1L;
-
-            APair(V first, V second)
-            {
-                super(first, second);
-            }
-        }
-
-        WeightedEdge(V source, V target)
-        {
-            aPair = new APair(source, target);
-        }
-
-        static WeightedEdge make(V source, V target)
-        {
-            return new WeightedEdge(source, target);
-        }
-
-        @Override
-        public boolean equals(Object edge)
-        {
-            return (edge instanceof WeightedEdge) && aPair.equals(((WeightedEdge) edge).aPair);
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return aPair.hashCode();
-        }
-
-        @Override
-        public String toString()
-        {
-            return aPair.toString() + " : " + getWeight();
-        }
-
-        APair aPair;
-
-    }
-
-    private static Matching<V, WeightedEdge> match(
+    private static Matching<V, DefaultWeightedEdge> match(
         final double[][] costMatrix, final int partitionCardinality)
     {
         List<? extends V> first = firstPartition.subList(0, partitionCardinality);
         List<? extends V> second = secondPartition.subList(0, partitionCardinality);
 
-        Graph<V, WeightedEdge> target = new SimpleWeightedGraph<>(WeightedEdge::make);
+        Graph<V, DefaultWeightedEdge> target = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-        GraphGenerator<V, WeightedEdge, V> generator =
-            new SimpleWeightedBipartiteGraphMatrixGenerator<V, WeightedEdge>()
+        GraphGenerator<V, DefaultWeightedEdge, V> generator =
+            new SimpleWeightedBipartiteGraphMatrixGenerator<V, DefaultWeightedEdge>()
                 .first(first).second(second).weights(costMatrix);
 
-        generator.generateGraph(target, null, null);
+        generator.generateGraph(target);
 
-        return new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>(
+        return new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(
             target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).getMatching();
     }
 
     @Test
     public void testForEmptyGraph()
     {
-        Graph<V, WeightedEdge> graph = new SimpleWeightedGraph<>(WeightedEdge.class);
+        Graph<V, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         Set<? extends V> emptyList = Collections.emptySet();
 
-        MatchingAlgorithm<V, WeightedEdge> alg =
+        MatchingAlgorithm<V, DefaultWeightedEdge> alg =
             new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(graph, emptyList, emptyList);
 
         Assert.assertTrue(alg.getMatching().getEdges().isEmpty());

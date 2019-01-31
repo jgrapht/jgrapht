@@ -3,38 +3,39 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
- * A simple graph. A simple graph is an undirected graph for which at most one edge connects any two
- * vertices, and loops are not permitted. If you're unsure about simple graphs, see:
- * <a href="http://mathworld.wolfram.com/SimpleGraph.html">
- * http://mathworld.wolfram.com/SimpleGraph.html</a>.
+ * Implementation of a <a href=http://mathworld.wolfram.com/SimpleGraph.html>Simple Graph</a>. A
+ * Simple Graph is an undirected graph containing no
+ * <a href="http://mathworld.wolfram.com/GraphLoop.html">graph loops</a> or
+ * <a href="http://mathworld.wolfram.com/MultipleEdge.html">multiple edges</a>. This particular
+ * implementation supports both weighted and unweighted edges.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  */
 public class SimpleGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = 4607246833824317836L;
 
@@ -47,7 +48,7 @@ public class SimpleGraph<V, E>
     {
         this(null, SupplierUtil.createSupplier(edgeClass), false);
     }
-    
+
     /**
      * Creates a new simple graph.
      * 
@@ -63,7 +64,6 @@ public class SimpleGraph<V, E>
                 .undirected().allowMultipleEdges(false).allowSelfLoops(false).weighted(weighted)
                 .build());
     }
-    
 
     /**
      * Create a builder for this kind of graph.
@@ -78,7 +78,6 @@ public class SimpleGraph<V, E>
     {
         return new GraphBuilder<>(new SimpleGraph<>(edgeClass));
     }
-    
 
     /**
      * Create a builder for this kind of graph.
@@ -94,46 +93,4 @@ public class SimpleGraph<V, E>
         return new GraphBuilder<>(new SimpleGraph<>(null, edgeSupplier, false));
     }
 
-    /**
-     * Creates a new simple graph with the specified edge factory.
-     *
-     * @param weighted if true the graph supports edge weights
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public SimpleGraph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        super(ef, false, false, false, weighted);
-    }
-
-    /**
-     * Creates a new simple graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public SimpleGraph(EdgeFactory<V, E> ef)
-    {
-        this(ef, false);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
-     */
-    @Deprecated
-    public static <V,
-        E> GraphBuilder<V, E, ? extends SimpleGraph<V, E>> createBuilder(EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new SimpleGraph<>(ef));
-    }
 }
-
-// End SimpleGraph.java

@@ -3,26 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -32,7 +32,8 @@ import static org.junit.Assert.*;
  * @author John V. Sichi
  */
 public class DijkstraShortestPathTest
-    extends ShortestPathTestCase
+    extends
+    ShortestPathTestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -45,10 +46,8 @@ public class DijkstraShortestPathTest
         GraphPath<String, DefaultWeightedEdge> path;
         Graph<String, DefaultWeightedEdge> g = create();
 
-        path = new DijkstraShortestPath<>(g, Double.POSITIVE_INFINITY)
-            .getPath(V3, V4);
-        assertEquals(
-            Arrays.asList(e13, e12, e24), path.getEdgeList());
+        path = new DijkstraShortestPath<>(g, Double.POSITIVE_INFINITY).getPath(V3, V4);
+        assertEquals(Arrays.asList(e13, e12, e24), path.getEdgeList());
         assertEquals(10.0, path.getWeight(), 0);
 
         path = new DijkstraShortestPath<>(g, 7.0).getPath(V3, V4);
@@ -59,8 +58,7 @@ public class DijkstraShortestPathTest
     protected List<DefaultWeightedEdge> findPathBetween(
         Graph<String, DefaultWeightedEdge> g, String src, String dest)
     {
-        return new DijkstraShortestPath<>(g)
-            .getPath(src, dest).getEdgeList();
+        return new DijkstraShortestPath<>(g).getPath(src, dest).getEdgeList();
     }
 
     @Test
@@ -83,7 +81,7 @@ public class DijkstraShortestPathTest
         g.setEdgeWeight(we34, 3.0);
 
         SingleSourcePaths<String, DefaultWeightedEdge> pathsTree =
-                new DijkstraShortestPath<>(g).getPaths(V1);
+            new DijkstraShortestPath<>(g).getPaths(V1);
         assertEquals(g, pathsTree.getGraph());
         assertEquals(V1, pathsTree.getSourceVertex());
         assertEquals(0d, pathsTree.getWeight(V1), 1e-9);
@@ -139,17 +137,12 @@ public class DijkstraShortestPathTest
         g.setEdgeWeight(we32, 1.0);
         g.setEdgeWeight(we34, 3.0);
 
+        assertEquals(0d, new DijkstraShortestPath<>(g).getPathWeight(V1, V1), 0);
+        assertEquals(2d, new DijkstraShortestPath<>(g).getPathWeight(V1, V2), 0);
+        assertEquals(1d, new DijkstraShortestPath<>(g).getPathWeight(V1, V3), 0);
+        assertEquals(3d, new DijkstraShortestPath<>(g).getPathWeight(V1, V4), 0);
         assertEquals(
-            0d, new DijkstraShortestPath<>(g).getPathWeight(V1, V1),0);
-        assertEquals(
-            2d, new DijkstraShortestPath<>(g).getPathWeight(V1, V2),0);
-        assertEquals(
-            1d, new DijkstraShortestPath<>(g).getPathWeight(V1, V3),0);
-        assertEquals(
-            3d, new DijkstraShortestPath<>(g).getPathWeight(V1, V4),0);
-        assertEquals(
-            Double.POSITIVE_INFINITY,
-                new DijkstraShortestPath<>(g).getPathWeight(V1, V5),0);
+            Double.POSITIVE_INFINITY, new DijkstraShortestPath<>(g).getPathWeight(V1, V5), 0);
     }
 
     @Test
@@ -170,5 +163,3 @@ public class DijkstraShortestPathTest
     }
 
 }
-
-// End DijkstraShortestPathTest.java

@@ -3,26 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
+import java.util.*;
 
 /**
  * Generates a complete graph of any size.
@@ -35,12 +32,12 @@ import org.jgrapht.GraphTests;
  * @param <E> the graph edge type
  *
  * @author Tim Shearouse
- * @since Nov 02, 2008
  */
 public class CompleteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-    private int size;
+    private final int size;
 
     /**
      * Construct a new CompleteGraphGenerator.
@@ -51,9 +48,8 @@ public class CompleteGraphGenerator<V, E>
     public CompleteGraphGenerator(int size)
     {
         if (size < 0) {
-            throw new IllegalArgumentException("must be non-negative");
+            throw new IllegalArgumentException("size must be non-negative");
         }
-
         this.size = size;
     }
 
@@ -78,11 +74,7 @@ public class CompleteGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            V newVertex = target.addVertex();
-            if (newVertex == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            nodes.add(newVertex);
+            nodes.add(target.addVertex());
         }
 
         /*
@@ -100,5 +92,3 @@ public class CompleteGraphGenerator<V, E>
         }
     }
 }
-
-// End CompleteGraphGenerator.java

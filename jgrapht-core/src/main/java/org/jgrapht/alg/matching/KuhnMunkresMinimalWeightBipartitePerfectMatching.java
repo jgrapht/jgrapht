@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * Kuhn-Munkres algorithm (named in honor of Harold Kuhn and James Munkres) solving <i>assignment
@@ -33,8 +33,8 @@ import org.jgrapht.alg.interfaces.*;
  *
  * <p>
  * Given <a href=http://en.wikipedia.org/wiki/Complete_bipartite_graph> complete bipartite graph</a>
- * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i, j)</i>,
- * find <i>perfect</i> matching of <i>minimal cost</i>.
+ * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i,
+ * j)</i>, find <i>perfect</i> matching of <i>minimal cost</i>.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -43,7 +43,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Alexey Kudinkin
  */
 public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private Set<? extends V> partition1;
@@ -609,7 +610,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
                 for (int i = 0; i < excessMatrix.length; ++i) {
                     if ((excessMatrix[i][pathTailCol] == 0) && !rowsVisited[i]) {
-                        boolean extending = extendMatchingOL(i, // New tail to continue
+                        boolean extending = extendMatchingOL(
+                            i, // New tail to continue
                             pathTailCol //
                         );
                         if (extending) {
@@ -623,5 +625,3 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         }
     }
 }
-
-// End KuhnMunkresMinimalWeightBipartitePerfectMatching.java

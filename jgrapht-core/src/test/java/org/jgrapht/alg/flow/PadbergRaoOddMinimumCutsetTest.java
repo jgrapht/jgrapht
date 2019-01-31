@@ -3,33 +3,31 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test class for the PadbergRaoOddMinimumCutset implementation
@@ -69,7 +67,7 @@ public class PadbergRaoOddMinimumCutsetTest
             .collect(Collectors.toSet());
         assertEquals(expectedCutEdges, cutEdges);
         double expectedWeight = cutEdges.stream().mapToDouble(network::getEdgeWeight).sum();
-        assertEquals(expectedWeight, cutValue,0);
+        assertEquals(expectedWeight, cutValue, 0);
 
         // Verify whether the returned odd cut-set is indeed of minimum weight. To verify this, we
         // exhaustively iterate over all possible cutsets.
@@ -192,8 +190,10 @@ public class PadbergRaoOddMinimumCutsetTest
     {
         Random rand = new Random(0);
         for (int i = 0; i < 8; i++) {
-            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
-                new SimpleWeightedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            SimpleWeightedGraph<Integer,
+                DefaultWeightedEdge> randomGraph = new SimpleWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             int vertices = rand.nextInt((30 - 10) + 1) + 10; // 10-30 vertices
             double p = 0.01 * (rand.nextInt((85 - 50) + 1) + 50); // p=[0.5;0.85]
             GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen =

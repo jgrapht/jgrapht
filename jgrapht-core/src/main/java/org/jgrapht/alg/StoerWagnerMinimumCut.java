@@ -3,30 +3,31 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+import java.util.*;
+
 /**
  * Implements the <a href="http://dl.acm.org/citation.cfm?id=263872">Stoer and Wagner minimum cut
- * algorithm</a>. Deterministically computes the minimum cut in $O(|V||E| + |V| \log |V|)$ time. This
- * implementation uses Java's PriorityQueue and requires $O(|V||E| \log |E|)$ time. M. Stoer and F.
- * Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591, 1997.
+ * algorithm</a>. Deterministically computes the minimum cut in $O(|V||E| + |V| \log |V|)$ time.
+ * This implementation uses Java's PriorityQueue and requires $O(|V||E| \log |E|)$ time. M. Stoer
+ * and F. Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591,
+ * 1997.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -177,8 +178,8 @@ public class StoerWagnerMinimumCut<V, E>
     }
 
     /**
-     * Merges vertex $t$ into vertex $s$, summing the weights as required. Returns the merged vertex and
-     * the sum of its weights
+     * Merges vertex $t$ into vertex $s$, summing the weights as required. Returns the merged vertex
+     * and the sum of its weights
      * 
      * @param s the first vertex
      * @param t the second vertex
@@ -239,7 +240,8 @@ public class StoerWagnerMinimumCut<V, E>
      * Class for weighted vertices
      */
     protected class VertexAndWeight
-        implements Comparable<VertexAndWeight>
+        implements
+        Comparable<VertexAndWeight>
     {
         public Set<V> vertex;
         public Double weight;
@@ -287,5 +289,3 @@ public class StoerWagnerMinimumCut<V, E>
         }
     }
 }
-
-// End StoerWagnerMinimumCut.java

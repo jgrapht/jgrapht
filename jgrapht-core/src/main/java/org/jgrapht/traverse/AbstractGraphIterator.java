@@ -3,24 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * An empty implementation of a graph iterator to minimize the effort required to implement graph
@@ -30,10 +30,10 @@ import org.jgrapht.event.*;
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
- * @since Jul 19, 2003
  */
 public abstract class AbstractGraphIterator<V, E>
-    implements GraphIterator<V, E>
+    implements
+    GraphIterator<V, E>
 {
     private final Set<TraversalListener<V, E>> traversalListeners = new LinkedHashSet<>();
 
@@ -223,10 +223,10 @@ public abstract class AbstractGraphIterator<V, E>
      * A reusable edge event.
      *
      * @author Barak Naveh
-     * @since Aug 11, 2003
      */
     static class FlyweightEdgeEvent<VV, localE>
-        extends EdgeTraversalEvent<localE>
+        extends
+        EdgeTraversalEvent<localE>
     {
         private static final long serialVersionUID = 4051327833765000755L;
 
@@ -256,10 +256,10 @@ public abstract class AbstractGraphIterator<V, E>
      * A reusable vertex event.
      *
      * @author Barak Naveh
-     * @since Aug 11, 2003
      */
     static class FlyweightVertexEvent<VV>
-        extends VertexTraversalEvent<VV>
+        extends
+        VertexTraversalEvent<VV>
     {
         private static final long serialVersionUID = 3834024753848399924L;
 
@@ -286,5 +286,3 @@ public abstract class AbstractGraphIterator<V, E>
     }
 
 }
-
-// End AbstractGraphIterator.java

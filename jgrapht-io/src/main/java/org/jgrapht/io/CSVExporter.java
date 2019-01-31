@@ -1,26 +1,26 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Exports a graph into a CSV Format or any other Delimiter-separated value format.
@@ -48,11 +48,12 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since August 2016
  */
 public class CSVExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -203,22 +204,34 @@ public class CSVExporter<V, E>
 
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
+
         for (E e : g.edgeSet()) {
             exportEscapedField(out, vertexIDProvider.getName(g.getEdgeSource(e)));
             out.print(delimiter);
             exportEscapedField(out, vertexIDProvider.getName(g.getEdgeTarget(e)));
+            if (exportEdgeWeights) {
+                out.print(delimiter);
+                exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
+            }
             out.println();
         }
     }
 
     private void exportAsAdjacencyList(Graph<V, E> g, PrintWriter out)
     {
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
+
         for (V v : g.vertexSet()) {
             exportEscapedField(out, vertexIDProvider.getName(v));
             for (E e : g.outgoingEdgesOf(v)) {
                 V w = Graphs.getOppositeVertex(g, e, v);
                 out.print(delimiter);
                 exportEscapedField(out, vertexIDProvider.getName(w));
+                if (exportEdgeWeights) {
+                    out.print(delimiter);
+                    exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
+                }
             }
             out.println();
         }
@@ -227,8 +240,7 @@ public class CSVExporter<V, E>
     private void exportAsMatrix(Graph<V, E> g, PrintWriter out)
     {
         boolean exportNodeId = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-        boolean exportEdgeWeights =
-            parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
         boolean zeroWhenNoEdge =
             parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
 
@@ -273,5 +285,3 @@ public class CSVExporter<V, E>
     }
 
 }
-
-// End CSVExporter.java

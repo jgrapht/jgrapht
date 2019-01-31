@@ -3,29 +3,27 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.io.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests
@@ -103,7 +101,8 @@ public class DIMACSExporterTest
 
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
@@ -122,7 +121,8 @@ public class DIMACSExporterTest
 
     @Test
     public void testUnweightedUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -142,7 +142,8 @@ public class DIMACSExporterTest
 
     @Test
     public void testDirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -166,7 +167,8 @@ public class DIMACSExporterTest
 
     @Test
     public void testWeightedUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
@@ -207,7 +209,8 @@ public class DIMACSExporterTest
 
     @Test
     public void testDirectedColoring()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -231,7 +234,8 @@ public class DIMACSExporterTest
 
     @Test
     public void testDirectedMaxClique()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);

@@ -3,26 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.concurrent;
 
-import java.util.*;
 import junit.extensions.*;
 import junit.framework.*;
 import junit.textui.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
+
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 /**
@@ -35,18 +37,19 @@ public class AsSynchronizedGraphTest
     private ArrayList<Integer> vertices;
     private ArrayList<DefaultEdge> edges;
     private AsSynchronizedGraph<Integer, DefaultEdge> g;
-    private Vector<ArrayList<Order> > ordersList;
+    private Vector<ArrayList<Order>> ordersList;
 
     @Test
     public void testAddVertex()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
+            .build(new SimpleGraph<>(DefaultEdge.class));
         ordersList = new Vector<>();
         for (int i = 0; i < 20; i++) {
             ordersList.add(new ArrayList<>());
         }
         for (int i = 0; i < 1000; i++) {
-            int index = (int)(Math.random()*ordersList.size());
+            int index = (int) (Math.random() * ordersList.size());
             ordersList.get(index).add(new AddV(i));
         }
         TestSuite ts = new ActiveTestSuite();
@@ -66,7 +69,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testAddEdge()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
+            .cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
         ArrayList<DefaultEdge> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
@@ -75,9 +79,9 @@ public class AsSynchronizedGraphTest
             ordersList.add(new ArrayList<>());
         }
         for (int i = 0; i < 1000; i++) {
-            int index = (int)(Math.random()*ordersList.size());
+            int index = (int) (Math.random() * ordersList.size());
             DefaultEdge e = new DefaultEdge();
-            ordersList.get(index).add(new AddE(i, (i + 1)%1000,  e));
+            ordersList.get(index).add(new AddE(i, (i + 1) % 1000, e));
             list.add(e);
         }
         TestSuite ts = new ActiveTestSuite();
@@ -102,7 +106,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveEdge()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
+            .cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
         edges = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 1000; i++) {
@@ -110,7 +115,7 @@ public class AsSynchronizedGraphTest
         }
         for (int i = 0; i < 1000; i++) {
             DefaultEdge e = new DefaultEdge();
-            g.addEdge(i, (i + 1)%1000, e);
+            g.addEdge(i, (i + 1) % 1000, e);
             edges.add(e);
         }
         for (int i = 0; i < 5; i++) {
@@ -128,7 +133,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveVertex()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
+            .cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
         vertices = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 100; i++) {
@@ -162,7 +168,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testOthers()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheDisable().build(new Pseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
+            .cacheDisable().build(new Pseudograph<>(DefaultEdge.class));
         Set<Integer> vertSet = g.vertexSet();
         Set<DefaultEdge> edgeSet = g.edgeSet();
         g.addVertex(1);
@@ -176,13 +183,13 @@ public class AsSynchronizedGraphTest
         assertEquals(0, edgeSet.size());
         assertEquals(0, iteratorCnt(edgeSet.iterator()));
 
-        g.addEdge(1,2);
+        g.addEdge(1, 2);
         assertEquals(1, g.edgesOf(2).size());
         assertEquals(1, iteratorCnt(g.edgesOf(2).iterator()));
         assertEquals(1, g.outgoingEdgesOf(1).size());
         assertEquals(1, g.incomingEdgesOf(2).size());
 
-        g.addEdge(2,3);
+        g.addEdge(2, 3);
         assertEquals(2, edgeSet.size());
         assertEquals(2, iteratorCnt(edgeSet.iterator()));
         assertEquals(2, g.edgesOf(2).size());
@@ -197,7 +204,7 @@ public class AsSynchronizedGraphTest
         assertEquals(3, iteratorCnt(g.edgesOf(2).iterator()));
         assertEquals(3, g.outgoingEdgesOf(2).size());
         assertEquals(3, g.incomingEdgesOf(2).size());
-        g.addEdge(2,2);
+        g.addEdge(2, 2);
         assertEquals(4, g.edgesOf(2).size());
         assertEquals(4, iteratorCnt(g.edgesOf(2).iterator()));
         assertEquals(4, g.outgoingEdgesOf(2).size());
@@ -224,21 +231,21 @@ public class AsSynchronizedGraphTest
         ArrayList<Order> order4 = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             order1.add(new AddV(i));
-        createOrder(order1, 2, 9, true);    // add 21 edges
-        createOrder(order1, 4, 7, false);   // rm 3 edges
+        createOrder(order1, 2, 9, true); // add 21 edges
+        createOrder(order1, 4, 7, false); // rm 3 edges
         for (int i = 10; i < 20; i++)
             order2.add(new AddV(i));
-        createOrder(order2, 10, 20, true);  // add 45 edges
+        createOrder(order2, 10, 20, true); // add 45 edges
         order2.add(new SetCache());
         createOrder(order2, 14, 18, false); // rm 6 edges
         for (int i = 20; i < 30; i++)
             order3.add(new AddV(i));
         order3.add(new SetCache());
-        createOrder(order3, 25, 30, true);  // add 15 edges
+        createOrder(order3, 25, 30, true); // add 15 edges
         createOrder(order3, 25, 30, false); // rm 15 edges
         for (int i = 30; i < 60; i++)
             order4.add(new AddV(i));
-        createOrder(order4, 30, 60, true);  // add 435 edges
+        createOrder(order4, 30, 60, true); // add 435 edges
         ordersList = new Vector<>();
         ordersList.add(order1);
         ordersList.add(order2);
@@ -260,13 +267,13 @@ public class AsSynchronizedGraphTest
         assertEquals(9, g.edgesOf(10).size());
         new SetCache().execute();
         order1.clear();
-        createOrder(order1, 1, 10, false);  // rm 18 edges
+        createOrder(order1, 1, 10, false); // rm 18 edges
         order2.clear();
         createOrder(order2, 10, 20, false); // rm 39 edges
         order3.clear();
-        for (int i = 3; i < 15; i++)    // rm 12 vertices, 0 edges
+        for (int i = 3; i < 15; i++) // rm 12 vertices, 0 edges
             order3.add(new RmV(i));
-        for (int i = 30; i < 40; i++)   // rm 10 vertices
+        for (int i = 30; i < 40; i++) // rm 10 vertices
             order3.add(new RmV(i));
         ts = new ActiveTestSuite();
         ordersList.clear();
@@ -285,8 +292,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testCopyless()
     {
-        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().setCopyless().build(
-            new Pseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>()
+            .setCopyless().build(new Pseudograph<>(DefaultEdge.class));
         vertices = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             g.addVertex(i);
@@ -295,7 +302,7 @@ public class AsSynchronizedGraphTest
         edges = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             DefaultEdge e = new DefaultEdge();
-            g.addEdge(i, (i + 1)%1000, e);
+            g.addEdge(i, (i + 1) % 1000, e);
             edges.add(e);
         }
         TestSuite ts = new ActiveTestSuite();
@@ -315,34 +322,37 @@ public class AsSynchronizedGraphTest
             }
         }
     }
-    
+
     private interface Order
     {
         void execute();
     }
-    
+
     private class AddV
-        implements Order
+        implements
+        Order
     {
         int vertex;
-        
+
         public AddV(int v)
         {
             vertex = v;
         }
 
         @Override
-        public void execute() {
+        public void execute()
+        {
             g.addVertex(vertex);
         }
     }
-    
+
     private class AddE
-        implements Order
+        implements
+        Order
     {
         DefaultEdge e;
         int s, t;
-        
+
         public AddE(int s, int t, DefaultEdge e)
         {
             this.e = e;
@@ -356,9 +366,10 @@ public class AsSynchronizedGraphTest
             g.addEdge(s, t, e);
         }
     }
-    
+
     private class SetCache
-        implements Order
+        implements
+        Order
     {
         @Override
         public void execute()
@@ -368,12 +379,13 @@ public class AsSynchronizedGraphTest
             }
         }
     }
-    
+
     private class RmV
-        implements Order
+        implements
+        Order
     {
         int v;
-        
+
         public RmV(int v)
         {
             this.v = v;
@@ -385,12 +397,13 @@ public class AsSynchronizedGraphTest
             g.removeVertex(v);
         }
     }
-    
+
     private class RmE
-        implements Order
+        implements
+        Order
     {
         int s, t;
-        
+
         public RmE(int s, int t)
         {
             this.s = s;
@@ -403,7 +416,7 @@ public class AsSynchronizedGraphTest
             g.removeEdge(s, t);
         }
     }
-    
+
     private <K> int iteratorCnt(Iterator<K> it)
     {
         int count = 0;
@@ -413,15 +426,16 @@ public class AsSynchronizedGraphTest
         }
         return count;
     }
-    
+
     public class TestThread
-        extends TestCase
+        extends
+        TestCase
     {
         public TestThread(String s)
         {
             super(s);
         }
-        
+
         public void addVertex()
         {
             while (true) {
@@ -435,7 +449,7 @@ public class AsSynchronizedGraphTest
                 g.addVertex(id);
             }
         }
-        
+
         public void removeEdge()
         {
             while (true) {
@@ -449,7 +463,7 @@ public class AsSynchronizedGraphTest
                 g.removeEdge(e);
             }
         }
-        
+
         public void verifyEdges()
         {
             while (true) {
@@ -479,12 +493,13 @@ public class AsSynchronizedGraphTest
                 synchronized (vertices) {
                     if (vertices.size() > 10)
                         c = vertices.remove(0);
-                    else return;
+                    else
+                        return;
                 }
                 g.removeVertex(c);
             }
         }
-        
+
         public void runAsThread()
         {
             List<Order> orders = ordersList.remove(0);
@@ -494,5 +509,3 @@ public class AsSynchronizedGraphTest
         }
     }
 }
-
-// End AsSynchronizedGraphTest.java

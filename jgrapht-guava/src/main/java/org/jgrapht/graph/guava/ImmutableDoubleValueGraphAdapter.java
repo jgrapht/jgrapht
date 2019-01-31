@@ -3,38 +3,36 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
-import java.io.Serializable;
-import java.util.function.ToDoubleFunction;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.ImmutableValueGraph;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph} specialized with double values.
  * 
  * <p>
- * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph 
+ * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph
  * is immutable, the resulting graph is unmodifiable.
  * 
  * <p>
  * Each edge in {@link ImmutableValueGraph} is associated with a double value which is mapped to the
- * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling method 
+ * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling method
  * {@link #getEdgeWeight(Object)} will return the value of an edge.
  * 
  * <p>
@@ -62,7 +60,8 @@ import com.google.common.graph.ImmutableValueGraph;
  * @param <V> the graph vertex type
  */
 public class ImmutableDoubleValueGraphAdapter<V>
-    extends ImmutableValueGraphAdapter<V, Double>
+    extends
+    ImmutableValueGraphAdapter<V, Double>
 {
     private static final long serialVersionUID = 8730006126353129360L;
 

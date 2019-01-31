@@ -3,29 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -34,22 +30,24 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class MaximumCardinalityIteratorTest {
-
+public class MaximumCardinalityIteratorTest
+{
 
     /**
      * Tests basic properties of events fired by {@code LexBreadthFirstIterator}.
      */
     @Test
-    public void testEvents() {
+    public void testEvents()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, "a", "b");
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "c", "a");
         Graphs.addEdgeWithVertices(graph, "b", "d");
         LexBreadthFirstIteratorTest.MyTraversalListener<String, DefaultEdge> listener =
-                new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
-        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+            new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         iterator.addTraversalListener(listener);
         for (int i = 0; i < 4; i++) {
             iterator.next();
@@ -58,14 +56,15 @@ public class MaximumCardinalityIteratorTest {
         assertEquals(graph.vertexSet(), listener.verticesFinished);
     }
 
-
     /**
      * Tests iterator on empty graph.
      */
     @Test(expected = NoSuchElementException.class)
-    public void testMaximumCardinalityIterator1() {
+    public void testMaximumCardinalityIterator1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        MaximumCardinalityIterator<Integer, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<Integer, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
 
         assertFalse(iterator.hasNext());
 
@@ -76,13 +75,15 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on basic invariants.
      */
     @Test
-    public void testMaximumCardinalityIterator2() {
+    public void testMaximumCardinalityIterator2()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, "a", "b");
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "b", "d");
         Graphs.addEdgeWithVertices(graph, "c", "d");
-        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         Set<String> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -114,13 +115,15 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on disconnected graph.
      */
     @Test
-    public void testMaximumCardinalityIterator3() {
+    public void testMaximumCardinalityIterator3()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
         graph.addVertex(4);
-        MaximumCardinalityIterator<Integer, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<Integer, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -152,7 +155,8 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on pseudograph.
      */
     @Test
-    public void testMaximumCardinalityIterator4() {
+    public void testMaximumCardinalityIterator4()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, "a", "a");
         Graphs.addEdgeWithVertices(graph, "a", "b");
@@ -163,7 +167,8 @@ public class MaximumCardinalityIteratorTest {
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "c", "c");
         Graphs.addEdgeWithVertices(graph, "c", "c");
-        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         Set<String> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -187,4 +192,3 @@ public class MaximumCardinalityIteratorTest {
     }
 
 }
-

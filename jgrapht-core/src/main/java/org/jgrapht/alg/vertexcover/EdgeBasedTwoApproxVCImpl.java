@@ -3,25 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.vertexcover;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Finds a 2-approximation for a minimum vertex cover A vertex cover is a set of vertices that
@@ -37,11 +37,23 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  *
  * @author Linda Buisman
- * @since Nov 6, 2003
  */
 public class EdgeBasedTwoApproxVCImpl<V, E>
-    implements MinimumVertexCoverAlgorithm<V, E>
+    implements
+    VertexCoverAlgorithm<V>
 {
+
+    private final Graph<V, E> graph;
+
+    /**
+     * Constructs a new EdgeBasedTwoApproxVCImpl instance
+     * 
+     * @param graph input graph
+     */
+    public EdgeBasedTwoApproxVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+    }
 
     /**
      * Finds a 2-approximation for a minimal vertex cover of the specified graph. The algorithm
@@ -65,12 +77,8 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
      * @return a set of vertices which is a vertex cover for the specified graph.
      */
     @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph)
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
     {
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("graph must be undirected");
-        }
-
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 
@@ -92,7 +100,7 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
             sg.removeVertex(u);
             sg.removeVertex(v);
         }
-
-        return new VertexCoverImpl<>(cover, cover.size());
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover);
     }
+
 }

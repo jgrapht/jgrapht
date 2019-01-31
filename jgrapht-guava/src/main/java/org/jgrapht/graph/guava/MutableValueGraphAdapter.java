@@ -3,37 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.util.TypeUtil;
-
-import com.google.common.graph.EndpointPair;
+import com.google.common.graph.*;
 import com.google.common.graph.Graphs;
-import com.google.common.graph.MutableValueGraph;
-import com.google.common.graph.ValueGraph;
-import com.google.common.graph.ValueGraphBuilder;
+import org.jgrapht.Graph;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph}.
@@ -48,7 +40,8 @@ import com.google.common.graph.ValueGraphBuilder;
  * 
  * <pre>
  * class MyValue
- *     implements Serializable
+ *     implements
+ *     Serializable
  * {
  *     private double value;
  *
@@ -96,8 +89,12 @@ import com.google.common.graph.ValueGraphBuilder;
  * @param <W> the value type
  */
 public class MutableValueGraphAdapter<V, W>
-    extends BaseValueGraphAdapter<V, W, MutableValueGraph<V, W>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    BaseValueGraphAdapter<V, W, MutableValueGraph<V, W>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -5095044027783397573L;
 
@@ -314,7 +311,8 @@ public class MutableValueGraphAdapter<V, W>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

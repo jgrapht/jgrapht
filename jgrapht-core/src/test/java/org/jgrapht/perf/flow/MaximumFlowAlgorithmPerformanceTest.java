@@ -3,36 +3,38 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.perf.flow;
-
-import java.util.concurrent.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 public class MaximumFlowAlgorithmPerformanceTest
 {
 
+    public static final int NUMBER_OF_GRAPHS = 20;
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
     public static final int PERF_BENCHMARK_EDGES_COUNT = 100000;
 
@@ -40,12 +42,9 @@ public class MaximumFlowAlgorithmPerformanceTest
     private static abstract class RandomGraphBenchmarkBase
     {
 
-        public static final long SEED = 1446523573696201013l;
+        public static final long SEED = 1446523573696201013L;
 
-        private MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver;
-
-        private Integer source;
-        private Integer sink;
+        private List<Graph<Integer, DefaultWeightedEdge>> graphs;
 
         abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> network);
@@ -53,32 +52,35 @@ public class MaximumFlowAlgorithmPerformanceTest
         @Setup
         public void setup()
         {
+            graphs = new ArrayList<>();
+
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> rgg =
                 new GnmRandomGraphGenerator<>(
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
-                new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            for (int i = 0; i < NUMBER_OF_GRAPHS; i++) {
+                SimpleDirectedWeightedGraph<Integer,
+                    DefaultWeightedEdge> network = new SimpleDirectedWeightedGraph<>(
+                        SupplierUtil.createIntegerSupplier(0),
+                        SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
-            rgg.generateGraph(network);
-
-            solver = createSolver(network);
-
-            Object[] vs = network.vertexSet().toArray();
-
-            source = (Integer) vs[0];
-            sink = (Integer) vs[vs.length - 1];
+                rgg.generateGraph(network);
+                graphs.add(network);
+            }
         }
 
         @Benchmark
         public void run()
         {
-            solver.getMaximumFlow(source, sink);
+            for (Graph<Integer, DefaultWeightedEdge> g : graphs) {
+                createSolver(g).getMaximumFlow(0, g.vertexSet().size() - 1);
+            }
         }
     }
 
     public static class EdmondsKarpMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -89,7 +91,8 @@ public class MaximumFlowAlgorithmPerformanceTest
     }
 
     public static class PushRelabelMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -100,10 +103,12 @@ public class MaximumFlowAlgorithmPerformanceTest
     }
 
     public static class DinicMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
 
-        @Override MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+        @Override
+        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> network)
         {
             return new DinicMFImpl<>(network);

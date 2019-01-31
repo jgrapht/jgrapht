@@ -3,25 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.builder.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.
@@ -60,16 +60,6 @@ public class JohnsonSimpleCycles<V, E>
     private Set<V> pathSet = null;
 
     /**
-     * Create a simple cycle finder with an unspecified graph.
-     * 
-     * @deprecated Use the constructor with the graph parameter.
-     */
-    @Deprecated
-    public JohnsonSimpleCycles()
-    {
-    }
-
-    /**
      * Create a simple cycle finder for the specified graph.
      *
      * @param graph - the DirectedGraph in which to find cycles.
@@ -78,33 +68,6 @@ public class JohnsonSimpleCycles<V, E>
      * null</code>.
      */
     public JohnsonSimpleCycles(Graph<V, E> graph)
-    {
-        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
-        if (GraphTests.hasMultipleEdges(graph)) {
-            throw new IllegalArgumentException("Graph should not have multiple (parallel) edges");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated As not really needed.
-     */
-    @Override
-    @Deprecated
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated As not really needed.
-     */
-    @Override
-    @Deprecated
-    public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
         if (GraphTests.hasMultipleEdges(graph)) {
@@ -151,10 +114,10 @@ public class JohnsonSimpleCycles<V, E>
     private Pair<Graph<V, E>, Integer> findMinSCSG(int startIndex)
     {
         /*
-         * Per Johnson : "adjacency structure of strong component $K$ with least vertex in subgraph of
-         * $G$ induced by $(s, s + 1, n)$". Or in contemporary terms: the strongly connected component of
-         * the subgraph induced by $(v_1, \dotso ,v_n)$ which contains the minimum (among those SCCs) vertex
-         * index. We return that index together with the graph.
+         * Per Johnson : "adjacency structure of strong component $K$ with least vertex in subgraph
+         * of $G$ induced by $(s, s + 1, n)$". Or in contemporary terms: the strongly connected
+         * component of the subgraph induced by $(v_1, \dotso ,v_n)$ which contains the minimum
+         * (among those SCCs) vertex index. We return that index together with the graph.
          */
         initMinSCGState();
 
@@ -377,5 +340,3 @@ public class JohnsonSimpleCycles<V, E>
         return bSets.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
-
-// End JohnsonSimpleCycles.java

@@ -1,4 +1,4 @@
 /**
- * Importers/Exporters for various graph formats. 
+ * Importers/Exporters for various graph formats.
  */
 package org.jgrapht.io;

@@ -3,26 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-import java.util.function.ToDoubleFunction;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-
 import org.junit.*;
+
+import java.util.*;
+import java.util.function.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class AlphaCentralityTest
 {
-	@Test
+    @Test
     public void testGraph2Nodes()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -102,7 +102,7 @@ public class AlphaCentralityTest
         g.addEdge("E", "4");
         g.addEdge("4", "5");
         g.addEdge("E", "F");
-        
+
         VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.85);
 
         assertEquals(pr.getVertexScore("A"), 1.0000, 0.5);
@@ -152,7 +152,7 @@ public class AlphaCentralityTest
         g.addEdge("E", "4");
         g.addEdge("4", "5");
         g.addEdge("E", "F");
-        
+
         VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.15);
 
         assertEquals(pr.getVertexScore("A"), 1.0000, 0.05);
@@ -202,7 +202,7 @@ public class AlphaCentralityTest
         g.addEdge("E", "4");
         g.addEdge("4", "5");
         g.addEdge("E", "F");
-        
+
         Map<String, Double> exogenousfactormap = new HashMap<>();
         for (String v : g.vertexSet()) {
             exogenousfactormap.put(v, 1.0);
@@ -211,7 +211,8 @@ public class AlphaCentralityTest
 
         ToDoubleFunction<String> exogenousFactorFunction = (v) -> exogenousfactormap.get(v);
 
-        VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.15, exogenousFactorFunction);
+        VertexScoringAlgorithm<String, Double> pr =
+            new AlphaCentrality<>(g, 0.15, exogenousFactorFunction);
 
         assertEquals(pr.getVertexScore("A"), 1.0000, 0.005);
         assertEquals(pr.getVertexScore("B"), 1.0000, 0.005);
@@ -241,7 +242,8 @@ public class AlphaCentralityTest
         g.setEdgeWeight(g.addEdge("center", "b"), 20.0);
         g.setEdgeWeight(g.addEdge("center", "c"), 5.0);
 
-        VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
+        VertexScoringAlgorithm<String, Double> pr =
+            new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
 
         assertEquals(pr.getVertexScore("center"), 1.0000, 0.0001);
         assertEquals(pr.getVertexScore("a"), 64.7500, 0.0001);
@@ -264,7 +266,8 @@ public class AlphaCentralityTest
         g.setEdgeWeight(g.addEdge("center", "b"), 1.0);
         g.setEdgeWeight(g.addEdge("center", "c"), 1.0);
 
-        VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
+        VertexScoringAlgorithm<String, Double> pr =
+            new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
 
         assertEquals(pr.getVertexScore("center"), 1.0000, 0.0001);
         assertEquals(pr.getVertexScore("a"), 1.8500, 0.0001);
@@ -287,7 +290,8 @@ public class AlphaCentralityTest
         g.addEdge("center", "b");
         g.addEdge("center", "c");
 
-        VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
+        VertexScoringAlgorithm<String, Double> pr =
+            new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
 
         assertEquals(pr.getVertexScore("center"), 1.0000, 0.0001);
         assertEquals(pr.getVertexScore("a"), 1.8500, 0.0001);
@@ -301,7 +305,8 @@ public class AlphaCentralityTest
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
-        VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
+        VertexScoringAlgorithm<String, Double> pr =
+            new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
 
         assertTrue(pr.getScores().isEmpty());
     }
@@ -321,7 +326,8 @@ public class AlphaCentralityTest
         g.addEdge("center", "b");
         g.addEdge("center", "c");
 
-        VertexScoringAlgorithm<String, Double> pr = new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
+        VertexScoringAlgorithm<String, Double> pr =
+            new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0001);
 
         pr.getVertexScore("unknown");
     }
@@ -341,14 +347,12 @@ public class AlphaCentralityTest
 
         new AlphaCentrality<>(g, 0.85, 1.0, 0, 0.0001);
     }
-        
+
     @Test(expected = IllegalArgumentException.class)
     public void testBadParameters3()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         new AlphaCentrality<>(g, 0.85, 1.0, 100, 0.0);
-    }    
+    }
 }
-
-// End AlphaCentralityTest.java

@@ -3,27 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
+import com.mxgraph.model.*;
+import com.mxgraph.view.*;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
-import com.mxgraph.model.*;
-import com.mxgraph.view.*;
+import java.util.*;
 
 /**
  * <P>
@@ -36,23 +35,22 @@ import com.mxgraph.view.*;
  * </P>
  *
  * <P>
- * Note: If this class is used with an edge type such as String, you must
- * either supply unique String names via addEdge(v1, v2, "edge123"), or use a
- * custom edge factory which does so.  Otherwise, if you use addEdge(v1, v2),
- * the edge will be created with an empty String "" as value and saved (in
- * JGraphT as well as in this class), which results in the edge not saving
- * correctly.
+ * Note: If this class is used with an edge type such as String, you must either supply unique
+ * String names via addEdge(v1, v2, "edge123"), or use a custom edge factory which does so.
+ * Otherwise, if you use addEdge(v1, v2), the edge will be created with an empty String "" as value
+ * and saved (in JGraphT as well as in this class), which results in the edge not saving correctly.
  * </P>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author JeanYves Tinevez
- * @since 09 July, 2013
  */
 public class JGraphXAdapter<V, E>
-    extends mxGraph
-    implements GraphListener<V, E>
+    extends
+    mxGraph
+    implements
+    GraphListener<V, E>
 {
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".
@@ -188,7 +186,7 @@ public class JGraphXAdapter<V, E>
         // we have to iterate over this because the graphT has already
         // deleted the vertex and edges so we can't query what the edges were
         for (E edge : cellToEdgeMap.values()) {
-            if (!graphT.edgeSet().contains(edge)) {
+            if (!graphT.containsEdge(edge)) {
                 removedEdges.add(edge);
             }
         }
@@ -305,5 +303,3 @@ public class JGraphXAdapter<V, E>
         }
     }
 }
-
-// End JGraphXAdapter.java

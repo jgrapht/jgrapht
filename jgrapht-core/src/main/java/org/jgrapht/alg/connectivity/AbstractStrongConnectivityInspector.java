@@ -3,32 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.connectivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
+import java.util.*;
 
 /**
  * Base implementation of the strongly connected components algorithm.
@@ -41,7 +34,8 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * @author Dimitrios Michail
  */
 abstract class AbstractStrongConnectivityInspector<V, E>
-    implements StrongConnectivityAlgorithm<V, E>
+    implements
+    StrongConnectivityAlgorithm<V, E>
 {
     protected final Graph<V, E> graph;
     protected List<Set<V>> stronglyConnectedSets;
@@ -49,7 +43,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
 
     public AbstractStrongConnectivityInspector(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.graph = GraphTests.requireDirected(graph);
     }
 
     @Override

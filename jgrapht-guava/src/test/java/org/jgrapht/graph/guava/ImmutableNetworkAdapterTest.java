@@ -3,36 +3,28 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-import java.util.HashSet;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.guava.ImmutableNetworkAdapter;
-import org.junit.Test;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import com.google.common.graph.ImmutableNetwork;
-import com.google.common.graph.MutableNetwork;
-import com.google.common.graph.NetworkBuilder;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -118,58 +110,52 @@ public class ImmutableNetworkAdapterTest
         assertEquals(new HashSet<>(), g.outgoingEdgesOf("v3"));
         assertEquals(new HashSet<>(Arrays.asList(e44)), g.outgoingEdgesOf("v4"));
         assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.outgoingEdgesOf("v5"));
-        
+
         // test indeed immutable
-        try { 
+        try {
             g.addVertex("new");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.addEdge("v1", "v5");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.addEdge("v1", "v5", new DefaultEdge());
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.removeVertex("v1");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.removeEdge("v1", "v2");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.removeEdge(e12);
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
+
     }
-    
+
     /**
      * Tests serialization
      */
@@ -205,7 +191,7 @@ public class ImmutableNetworkAdapterTest
 
         Graph<String, DefaultEdge> g =
             new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network));
-        
+
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
         assertTrue(g.getType().isDirected());
@@ -214,7 +200,8 @@ public class ImmutableNetworkAdapterTest
         assertTrue(g.getType().isAllowingCycles());
         assertFalse(g.getType().isModifiable());
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 =
+            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -223,7 +210,7 @@ public class ImmutableNetworkAdapterTest
         assertFalse(g2.getType().isWeighted());
         assertTrue(g2.getType().isAllowingCycles());
         assertFalse(g2.getType().isModifiable());
-        
+
         assertTrue(g2.containsVertex("v1"));
         assertTrue(g2.containsVertex("v2"));
         assertTrue(g2.containsVertex("v3"));

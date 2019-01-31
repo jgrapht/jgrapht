@@ -3,27 +3,26 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
+
+import org.jgrapht.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.Map.*;
-import java.util.regex.Matcher;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.regex.*;
 
 /**
  * Exports a graph into a DOT file.
@@ -33,26 +32,34 @@ import org.jgrapht.graph.*;
  * http://en.wikipedia.org/wiki/DOT_language</a>.
  * </p>
  * 
+ * The user can adjust the behavior using {@link ComponentNameProvider} and
+ * {@link ComponentAttributeProvider} instances given through the constructor.
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Trevor Harmon
  */
 public class DOTExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     /**
      * Default graph id used by the exporter.
      */
     public static final String DEFAULT_GRAPH_ID = "G";
 
-    private ComponentNameProvider<Graph<V, E>> graphIDProvider;
-    private ComponentNameProvider<V> vertexLabelProvider;
-    private ComponentNameProvider<E> edgeLabelProvider;
-    private ComponentAttributeProvider<V> vertexAttributeProvider;
-    private ComponentAttributeProvider<E> edgeAttributeProvider;
-    private Map<String, String> graphAttributes;
+    private final ComponentNameProvider<Graph<V, E>> graphIDProvider;
+    private final ComponentNameProvider<V> vertexLabelProvider;
+    private final ComponentNameProvider<E> edgeLabelProvider;
+    private final ComponentAttributeProvider<V> vertexAttributeProvider;
+    private final ComponentAttributeProvider<E> edgeAttributeProvider;
+    private final Map<String, String> graphAttributes;
+    private final Map<V, String> vertexIds;
+
+    private static final String INDENT = "  ";
 
     /**
      * Constructs a new DOTExporter object with an integer name provider for the vertex IDs and null
@@ -139,6 +146,7 @@ public class DOTExporter<V, E>
         this.graphIDProvider =
             (graphIDProvider == null) ? any -> DEFAULT_GRAPH_ID : graphIDProvider;
         this.graphAttributes = new LinkedHashMap<>();
+        this.vertexIds = new HashMap<>();
     }
 
     /**
@@ -151,33 +159,12 @@ public class DOTExporter<V, E>
     public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
-        String indent = "  ";
-        String connector;
-        String header = (g instanceof AbstractBaseGraph
-            && !((AbstractBaseGraph<V, E>) g).isAllowingMultipleEdges())
-                ? DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD + " " : "";
-        String graphId = graphIDProvider.getName(g);
-        if (graphId == null || graphId.trim().isEmpty()) {
-            graphId = DEFAULT_GRAPH_ID;
-        }
-        if (!DOTUtils.isValidID(graphId)) {
-            throw new RuntimeException(
-                "Generated graph ID '" + graphId
-                    + "' is not valid with respect to the .dot language");
-        }
-        if (g.getType().isDirected()) {
-            header += DOTUtils.DIRECTED_GRAPH_KEYWORD;
-            connector = " " + DOTUtils.DIRECTED_GRAPH_EDGEOP + " ";
-        } else {
-            header += DOTUtils.UNDIRECTED_GRAPH_KEYWORD;
-            connector = " " + DOTUtils.UNDIRECTED_GRAPH_EDGEOP + " ";
-        }
-        header += " " + graphId + " {";
-        out.println(header);
+
+        out.println(computeHeader(g));
 
         // graph attributes
-        for(Entry<String, String> attr: graphAttributes.entrySet()) {
-            out.print(indent);
+        for (Entry<String, String> attr : graphAttributes.entrySet()) {
+            out.print(INDENT);
             out.print(attr.getKey());
             out.print('=');
             out.print(attr.getValue());
@@ -186,7 +173,8 @@ public class DOTExporter<V, E>
 
         // vertex set
         for (V v : g.vertexSet()) {
-            out.print(indent + getVertexID(v));
+            out.print(INDENT);
+            out.print(getVertexID(v));
 
             String labelName = null;
             if (vertexLabelProvider != null) {
@@ -201,12 +189,17 @@ public class DOTExporter<V, E>
             out.println(";");
         }
 
+        String connector = computeConnector(g);
+
         // edge set
         for (E e : g.edgeSet()) {
             String source = getVertexID(g.getEdgeSource(e));
             String target = getVertexID(g.getEdgeTarget(e));
 
-            out.print(indent + source + connector + target);
+            out.print(INDENT);
+            out.print(source);
+            out.print(connector);
+            out.print(target);
 
             String labelName = null;
             if (edgeLabelProvider != null) {
@@ -221,9 +214,30 @@ public class DOTExporter<V, E>
             out.println(";");
         }
 
-        out.println("}");
+        out.println(computeFooter(g));
 
         out.flush();
+    }
+
+    /**
+     * Compute the header
+     * 
+     * @param graph the graph
+     * @return the header
+     */
+    private String computeHeader(Graph<V, E> graph)
+    {
+        StringBuilder headerBuilder = new StringBuilder();
+        if (!graph.getType().isAllowingMultipleEdges()) {
+            headerBuilder.append(DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD).append(" ");
+        }
+        if (graph.getType().isDirected()) {
+            headerBuilder.append(DOTUtils.DIRECTED_GRAPH_KEYWORD);
+        } else {
+            headerBuilder.append(DOTUtils.UNDIRECTED_GRAPH_KEYWORD);
+        }
+        headerBuilder.append(" ").append(computeGraphId(graph)).append(" {");
+        return headerBuilder.toString();
     }
 
     /**
@@ -250,20 +264,69 @@ public class DOTExporter<V, E>
         graphAttributes.put(key, value);
     }
 
-    private void renderAttributes(PrintWriter out, String labelName, Map<String, Attribute> attributes)
+    /**
+     * Compute the footer
+     * 
+     * @param graph the graph
+     * @return the footer
+     */
+    private String computeFooter(Graph<V, E> graph)
+    {
+        return "}";
+    }
+
+    /**
+     * Compute the connector
+     * 
+     * @param graph the graph
+     * @return the connector
+     */
+    private String computeConnector(Graph<V, E> graph)
+    {
+        StringBuilder connectorBuilder = new StringBuilder();
+        if (graph.getType().isDirected()) {
+            connectorBuilder.append(" ").append(DOTUtils.DIRECTED_GRAPH_EDGEOP).append(" ");
+        } else {
+            connectorBuilder.append(" ").append(DOTUtils.UNDIRECTED_GRAPH_EDGEOP).append(" ");
+        }
+        return connectorBuilder.toString();
+    }
+
+    /**
+     * Get the id of the graph.
+     * 
+     * @param graph the graph
+     * @return the graph id
+     */
+    private String computeGraphId(Graph<V, E> graph)
+    {
+        String graphId = graphIDProvider.getName(graph);
+        if (graphId == null || graphId.trim().isEmpty()) {
+            graphId = DEFAULT_GRAPH_ID;
+        }
+        if (!DOTUtils.isValidID(graphId)) {
+            throw new RuntimeException(
+                "Generated graph ID '" + graphId
+                    + "' is not valid with respect to the .dot language");
+        }
+        return graphId;
+    }
+
+    private void renderAttributes(
+        PrintWriter out, String labelName, Map<String, Attribute> attributes)
     {
         if (labelName == null && attributes == null) {
             return;
         }
         out.print(" [ ");
-        if (labelName == null) {
-            Attribute labelAttribute = attributes.get("label");
-            if (labelAttribute != null) { 
-                labelName = labelAttribute.getValue();
-            }
-        }
+        final Attribute labelAttribute;
         if (labelName != null) {
-            out.print("label=\"" + escapeDoubleQuotes(labelName) + "\" ");
+            labelAttribute = DefaultAttribute.createAttribute(labelName);
+        } else {
+            labelAttribute = attributes.get("label");
+        }
+        if (labelAttribute != null) {
+            renderAttribute(out, "label", labelAttribute);
         }
         if (attributes != null) {
             for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
@@ -272,13 +335,26 @@ public class DOTExporter<V, E>
                     // already handled by special case above
                     continue;
                 }
-                out.print(name + "=\"" + escapeDoubleQuotes(entry.getValue().getValue()) + "\" ");
+                renderAttribute(out, name, entry.getValue());
             }
         }
         out.print("]");
     }
 
-    private static String escapeDoubleQuotes(String labelName) {
+    private void renderAttribute(PrintWriter out, String attrName, Attribute attribute)
+    {
+        out.print(attrName + "=");
+        final String attrValue = attribute.getValue();
+        if (AttributeType.HTML.equals(attribute.getType())) {
+            out.print("<" + attrValue + ">");
+        } else {
+            out.print("\"" + escapeDoubleQuotes(attrValue) + "\"");
+        }
+        out.print(" ");
+    }
+
+    private static String escapeDoubleQuotes(String labelName)
+    {
         return labelName.replaceAll("\"", Matcher.quoteReplacement("\\\""));
     }
 
@@ -299,22 +375,26 @@ public class DOTExporter<V, E>
      */
     private String getVertexID(V v)
     {
-        // TODO jvs 28-Jun-2008: possible optimizations here are
-        // (a) only validate once per vertex
+        String vertexId = vertexIds.get(v);
+        if (vertexId == null) {
+            /*
+             * use the associated id provider for an ID of the given vertex
+             */
+            String idCandidate = vertexIDProvider.getName(v);
 
-        // use the associated id provider for an ID of the given vertex
-        String idCandidate = vertexIDProvider.getName(v);
+            /*
+             * test if it is a valid ID
+             */
+            if (!DOTUtils.isValidID(idCandidate)) {
+                throw new RuntimeException(
+                    "Generated id '" + idCandidate + "'for vertex '" + v
+                        + "' is not valid with respect to the .dot language");
+            }
 
-        // test if it is a valid ID
-        if (DOTUtils.isValidID(idCandidate)) {
-            return idCandidate;
+            vertexIds.put(v, idCandidate);
+            vertexId = idCandidate;
         }
-
-        throw new RuntimeException(
-            "Generated id '" + idCandidate + "'for vertex '" + v
-                + "' is not valid with respect to the .dot language");
+        return vertexId;
     }
 
 }
-
-// End DOTExporter.java

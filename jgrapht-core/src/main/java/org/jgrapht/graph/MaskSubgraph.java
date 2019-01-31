@@ -3,25 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
+
+import org.jgrapht.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.jgrapht.*;
 
 /**
  * An unmodifiable subgraph induced by a vertex/edge masking function. The subgraph will keep track
@@ -33,11 +33,12 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
- * @since July 5, 2007
  */
 public class MaskSubgraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -7397441126669119179L;
 
@@ -96,7 +97,7 @@ public class MaskSubgraph<V, E>
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -248,17 +249,6 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
-     * @deprecated Use suppliers instead
-     */
-    @Override
-    @Deprecated
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return base.getEdgeFactory();
-    }
-    
-    /**
-     * {@inheritDoc}
      */
     @Override
     public Supplier<V> getVertexSupplier()
@@ -392,5 +382,3 @@ public class MaskSubgraph<V, E>
     }
 
 }
-
-// End MaskSubgraph.java

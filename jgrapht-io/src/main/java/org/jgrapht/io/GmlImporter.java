@@ -3,29 +3,29 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.io;
-
-import java.io.*;
-import java.util.*;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
-import org.apache.commons.lang3.*;
+import org.apache.commons.text.*;
 import org.jgrapht.*;
 import org.jgrapht.io.GmlParser.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
@@ -69,9 +69,10 @@ import org.jgrapht.io.GmlParser.*;
  * are ignored. The importer also supports reading additional string attributes such as label or
  * custom user attributes. String attributes are unescaped as if they are Java strings.
  * 
- * <p>The parser completely ignores elements from the input that are not related to vertices or edges 
- * of the graph. Moreover, complicated nested structures are simply returned as a whole. For example,
- * in the following graph
+ * <p>
+ * The parser completely ignores elements from the input that are not related to vertices or edges
+ * of the graph. Moreover, complicated nested structures are simply returned as a whole. For
+ * example, in the following graph
  * 
  * <pre>
  * graph [
@@ -89,7 +90,7 @@ import org.jgrapht.io.GmlParser.*;
  * ]
  * </pre>
  * 
- * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]". 
+ * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
  * 
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -97,8 +98,10 @@ import org.jgrapht.io.GmlParser.*;
  * @author Dimitrios Michail
  */
 public class GmlImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     /**
      * Constructs a new importer.
@@ -164,7 +167,8 @@ public class GmlImporter<V, E>
     }
 
     private class ThrowingErrorListener
-        extends BaseErrorListener
+        extends
+        BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -179,7 +183,8 @@ public class GmlImporter<V, E>
 
     // create graph from parse tree
     private class CreateGraphGmlListener
-        extends GmlBaseListener
+        extends
+        GmlBaseListener
     {
         private static final String NODE = "node";
         private static final String EDGE = "edge";
@@ -267,19 +272,19 @@ public class GmlImporter<V, E>
         @Override
         public void enterNumberKeyValue(GmlParser.NumberKeyValueContext ctx)
         {
-            if (!insideNode && !insideEdge) { 
+            if (!insideNode && !insideEdge) {
                 return;
             }
-            
+
             if (level < 2) {
                 return;
             }
-            
+
             String key = ctx.ID().getText();
             String value = ctx.NUMBER().getText();
-            
-            if (level == 2) { 
-                if (insideNode) { 
+
+            if (level == 2) {
+                if (insideNode) {
                     if (key.equals(ID)) {
                         try {
                             nodeId = Integer.parseInt(value);
@@ -288,9 +293,9 @@ public class GmlImporter<V, E>
                         }
                     } else {
                         attributes.put(key, parseNumberAttribute(value));
-                    }    
+                    }
                 } else {
-                    // insideEdge                    
+                    // insideEdge
                     assert insideEdge;
 
                     switch (key) {
@@ -319,11 +324,11 @@ public class GmlImporter<V, E>
                         attributes.put(key, parseNumberAttribute(value));
                     }
                 }
-            } else { 
+            } else {
                 assert level >= 3;
                 /*
-                 * Inside a list. We simply concatenate everything here to allow the user
-                 * to do something fancier in user-code. 
+                 * Inside a list. We simply concatenate everything here to allow the user to do
+                 * something fancier in user-code.
                  */
                 stringBuffer.append(' ');
                 stringBuffer.append(key);
@@ -350,11 +355,11 @@ public class GmlImporter<V, E>
                 targetId = null;
                 weight = null;
                 attributes = new HashMap<>();
-            } else if (insideNode || insideEdge) { 
-                if (level == 2) { 
+            } else if (insideNode || insideEdge) {
+                if (level == 2) {
                     stringBuffer = new StringBuilder();
                     stringBuffer.append('[');
-                } else if (level >= 3) { 
+                } else if (level >= 3) {
                     stringBuffer.append(' ');
                     stringBuffer.append(key);
                     stringBuffer.append(' ');
@@ -385,13 +390,15 @@ public class GmlImporter<V, E>
                 }
                 insideEdge = false;
                 attributes = null;
-            }  else if (insideNode || insideEdge) {
-                if (level == 2) { 
+            } else if (insideNode || insideEdge) {
+                if (level == 2) {
                     stringBuffer.append(' ');
                     stringBuffer.append(']');
-                    attributes.put(key, new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
+                    attributes.put(
+                        key,
+                        new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
                     stringBuffer = null;
-                } else if (level >= 3) { 
+                } else if (level >= 3) {
                     stringBuffer.append(' ');
                     stringBuffer.append(']');
                 }
@@ -401,22 +408,22 @@ public class GmlImporter<V, E>
         @Override
         public void enterStringKeyValue(GmlParser.StringKeyValueContext ctx)
         {
-            if (!insideNode && !insideEdge) { 
+            if (!insideNode && !insideEdge) {
                 return;
             }
-            
+
             if (level < 2) {
                 return;
             }
-                
+
             String key = ctx.ID().getText();
             String text = ctx.STRING().getText();
             String noQuotes = text.subSequence(1, text.length() - 1).toString();
             String unescapedText = StringEscapeUtils.unescapeJava(noQuotes);
-            
+
             if (level == 2) {
                 /*
-                 * Store attribute 
+                 * Store attribute
                  */
                 if (key.equals(ID)) {
                     throw new IllegalArgumentException("Invalid type for attribute id: string");
@@ -431,8 +438,8 @@ public class GmlImporter<V, E>
                 attributes.put(key, DefaultAttribute.createAttribute(unescapedText));
             } else if (level >= 3) {
                 /*
-                 * Inside a list. We simply concatenate everything here to allow the user
-                 * to do something fancier in user-code.
+                 * Inside a list. We simply concatenate everything here to allow the user to do
+                 * something fancier in user-code.
                  */
                 stringBuffer.append(' ');
                 stringBuffer.append(key);

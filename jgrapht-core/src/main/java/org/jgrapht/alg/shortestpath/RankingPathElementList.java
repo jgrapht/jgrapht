@@ -3,33 +3,33 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * List of simple paths in increasing order of weight.
  *
- * @since July 5, 2007
  */
 final class RankingPathElementList<V, E>
-    extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
+    extends
+    AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
     /**
      * Vertex that paths of the list must not disconnect.
@@ -172,12 +172,11 @@ final class RankingPathElementList<V, E>
      * Complexity =
      *
      * <ul>
-     * <li>w/o guard-vertex: $O(knp)$ where $k$ is the max size limit of the
-     * list and $np$ is the maximum number of vertices in the paths stored in the
-     * list</li>
-     * <li>with guard-vertex: $O(k(m+n)$</code>) where $k$ is the max size limit of
-     * the list, $m$ is the number of edges of the graph and $n$ is the number
-     * of vertices of the graph, $O(m + n)$ being the complexity of the <code>
+     * <li>w/o guard-vertex: $O(knp)$ where $k$ is the max size limit of the list and $np$ is the
+     * maximum number of vertices in the paths stored in the list</li>
+     * <li>with guard-vertex: $O(k(m+n)$</code>) where $k$ is the max size limit of the list, $m$ is
+     * the number of edges of the graph and $n$ is the number of vertices of the graph, $O(m + n)$
+     * being the complexity of the <code>
      * ConnectivityInspector</code> to check whether a path exists towards the guard-vertex</li>
      * </ul>
      *
@@ -308,10 +307,8 @@ final class RankingPathElementList<V, E>
         ConnectivityInspector<V, E> connectivityInspector;
         PathMask<V, E> connectivityMask = new PathMask<>(prevPathElement);
 
-        MaskSubgraph<V,
-            E> connectivityGraph = new MaskSubgraph<>(
-                this.graph, connectivityMask::isVertexMasked,
-                connectivityMask::isEdgeMasked);
+        MaskSubgraph<V, E> connectivityGraph = new MaskSubgraph<>(
+            this.graph, connectivityMask::isVertexMasked, connectivityMask::isEdgeMasked);
         connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
 
         if (connectivityMask.isVertexMasked(this.guardVertexToNotDisconnect)) {
@@ -342,7 +339,8 @@ final class RankingPathElementList<V, E>
             GraphPath<V, E> prevPath;
             if (prevPathElement.getPrevEdge() == null) {
                 prevPath = new GraphWalk<>(
-                    graph, Collections.singletonList(prevPathElement.getVertex()), prevPathElement.getWeight());
+                    graph, Collections.singletonList(prevPathElement.getVertex()),
+                    prevPathElement.getWeight());
             } else {
                 List<E> prevEdges = prevPathElement.createEdgeListPath();
                 prevPath = new GraphWalk<V, E>(
@@ -422,5 +420,3 @@ final class RankingPathElementList<V, E>
         }
     }
 }
-
-// End RankingPathElementList.java

@@ -3,33 +3,23 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-
 package org.jgrapht.generate;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Generate a random $d$-regular undirected graph with $n$ vertices. A regular graph is a graph
@@ -52,15 +42,14 @@ import org.jgrapht.Graph;
  * Note Series (1999): 239-298.
  *
  * @author Emilio Cruciani
- * @since March 2018
  *
  * @param <V> graph node type
  * @param <E> graph edge type
  */
 public class RandomRegularGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-
     private final int n;
     private final int d;
     private final Random rng;
@@ -138,24 +127,20 @@ public class RandomRegularGraphGenerator<V, E>
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
-        // directed/mixed case
         if (!target.getType().isUndirected()) {
             throw new IllegalArgumentException("target graph must be undirected");
         }
 
         if (target.getType().isSimple()) {
             // simple case
-            if (this.n == 0 || this.d == 0) {
+            if (n == 0 || d == 0) {
                 // no nodes or zero degree case
-                EmptyGraphGenerator<V, E> emptyGraphGenerator = new EmptyGraphGenerator<>(this.n);
-                emptyGraphGenerator.generateGraph(target);
-            } else if (this.d == this.n) {
+                new EmptyGraphGenerator<V, E>(n).generateGraph(target);
+            } else if (d == n) {
                 throw new IllegalArgumentException("target graph must be simple if 'n == d'");
-            } else if (this.d == (this.n - 1)) {
+            } else if (d == n - 1) {
                 // complete case
-                CompleteGraphGenerator<V, E> completeGraphGenerator =
-                    new CompleteGraphGenerator<>(this.n);
-                completeGraphGenerator.generateGraph(target);
+                new CompleteGraphGenerator<V, E>(n).generateGraph(target);
             } else {
                 // general case
                 generateSimpleRegularGraph(target);
@@ -166,8 +151,10 @@ public class RandomRegularGraphGenerator<V, E>
         }
     }
 
-    // auxiliary method to check if there are remaining suitable edges
-    // used in generateSimpleRegularGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)
+    /*
+     * Auxiliary method to check if there are remaining suitable edges, in the simple regular graph
+     * generator.
+     */
     private boolean suitable(
         Set<Map.Entry<Integer, Integer>> edges, Map<Integer, Integer> potentialEdges)
     {
@@ -191,30 +178,28 @@ public class RandomRegularGraphGenerator<V, E>
         return false;
     }
 
-    // auxiliary method to manage simple case
+    /*
+     * Generate simple regular graph
+     */
     private void generateSimpleRegularGraph(Graph<V, E> target)
     {
         // integers to vertices
-        List<V> vertices = new ArrayList<>(this.n);
-        for (int i = 0; i < this.n; i++) {
-            V v = target.addVertex();
-            if (v == null) { 
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            vertices.add(v);
+        List<V> vertices = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            vertices.add(target.addVertex());
         }
 
         // set of final edges to add to target graph
-        Set<Map.Entry<Integer, Integer>> edges = new HashSet<>(this.n * this.d);
+        Set<Map.Entry<Integer, Integer>> edges = new HashSet<>(n * d);
         do {
-            List<Integer> stubs = new ArrayList<>(this.n * this.d);
-            for (int i = 0; i < this.n * this.d; i++) {
-                stubs.add(i % this.n);
+            List<Integer> stubs = new ArrayList<>(n * d);
+            for (int i = 0; i < n * d; i++) {
+                stubs.add(i % n);
             }
 
             while (!stubs.isEmpty()) {
                 Map<Integer, Integer> potentialEdges = new HashMap<>();
-                Collections.shuffle(stubs, this.rng);
+                Collections.shuffle(stubs, rng);
 
                 for (int i = 0; i < stubs.size() - 1; i += 2) {
                     int s1 = stubs.get(i);
@@ -259,22 +244,21 @@ public class RandomRegularGraphGenerator<V, E>
         }
     }
 
-    // auxiliary method to manage non-simple case
+    /*
+     * Generate non-simple regular graph.
+     */
     private void generateNonSimpleRegularGraph(Graph<V, E> target)
     {
-        List<V> vertices = new ArrayList<>(this.n * this.d);
-        for (int i = 0; i < this.n; i++) {
+        List<V> vertices = new ArrayList<>(n * d);
+        for (int i = 0; i < n; i++) {
             V vertex = target.addVertex();
-            if (vertex == null) { 
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-            for (int j = 0; j < this.d; j++) {
+            for (int j = 0; j < d; j++) {
                 vertices.add(vertex);
             }
         }
 
-        Collections.shuffle(vertices, this.rng);
-        for (int i = 0; i < (this.n * this.d) / 2; i++) {
+        Collections.shuffle(vertices, rng);
+        for (int i = 0; i < (n * d) / 2; i++) {
             V u = vertices.get(2 * i);
             V v = vertices.get(2 * i + 1);
             target.addEdge(u, v);

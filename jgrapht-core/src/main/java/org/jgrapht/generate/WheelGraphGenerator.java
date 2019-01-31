@@ -3,25 +3,25 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
-import org.jgrapht.graph.GraphDelegator;
+import org.jgrapht.graph.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel graph</a> of any size.
@@ -33,10 +33,10 @@ import org.jgrapht.graph.GraphDelegator;
  * @param <E> the graph edge type
  *
  * @author John V. Sichi
- * @since Sep 16, 2003
  */
 public class WheelGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the hub vertex.
@@ -81,8 +81,7 @@ public class WheelGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -98,10 +97,12 @@ public class WheelGraphGenerator<V, E>
             rim.add(vertex);
             return vertex;
         };
-        
-        Graph<V,E> targetWithRimVertexSupplier = new GraphDelegator<>(target, rimVertexSupplier, null);
-        
-        new RingGraphGenerator<V,E>(size - 1).generateGraph(targetWithRimVertexSupplier, resultMap);
+
+        Graph<V, E> targetWithRimVertexSupplier =
+            new GraphDelegator<>(target, rimVertexSupplier, null);
+
+        new RingGraphGenerator<V, E>(size - 1)
+            .generateGraph(targetWithRimVertexSupplier, resultMap);
 
         V hubVertex = target.addVertex();
 
@@ -118,5 +119,3 @@ public class WheelGraphGenerator<V, E>
         }
     }
 }
-
-// End WheelGraphGenerator.java
