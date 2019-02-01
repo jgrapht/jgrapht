@@ -1,22 +1,22 @@
 /*
- * (C) Copyright 2018-2018, by Kirill Vishnyakov and Contributors.
+ * (C) Copyright 2018-2019, by Kirill Vishnyakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.alg.tour;
+package org.jgrapht.demo;
 
 import org.jgrapht.alg.util.Pair;
 
@@ -112,11 +112,11 @@ public class ParberryKnightTour
          */
 
         if (n < 6 || n % 2 != 0) {
-            throw new UnsupportedOperationException("n has to be greater than 5 and even!");
+            throw new IllegalArgumentException("n has to be greater than 5 and even!");
         }
 
         if (m != n + 2 && m != n) {
-            throw new UnsupportedOperationException("n x n and n x (n + 2) are the only possible board configurations!");
+            throw new IllegalArgumentException("n x n and n x (n + 2) are the only possible board configurations!");
         }
 
         this.n = n;
@@ -403,10 +403,6 @@ public class ParberryKnightTour
      */
 
     public KnightTour getTour() {
-
-        Pair<Integer, Integer> cell1 = new Pair<>(0, 0);
-        Pair<Integer, Integer> cell2 = new Pair<>(n - 1, m - 1);
-
-        return generateTour(cell1, cell2);
+        return generateTour(new Pair<>(0, 0), new Pair<>(n - 1, m - 1));
     }
 }

@@ -1,22 +1,21 @@
 /*
-* (C) Copyright 2018-2018, by Kirill Vishnyakov and Contributors.
-*
-* JGraphT : a free Java graph-theory library
-*
-* This program and the accompanying materials are dual-licensed under
-* either
-*
-* (a) the terms of the GNU Lesser General Public License version 2.1
-* as published by the Free Software Foundation, or (at your option) any
-* later version.
-*
-* or (per the licensee's choosing)
-*
-* (b) the terms of the Eclipse Public License v1.0 as published by
-* the Eclipse Foundation.
-*/
-
-package org.jgrapht.alg.tour;
+ * (C) Copyright 2018-2019, by Kirill Vishnyakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+package org.jgrapht.demo;
 
 import org.jgrapht.alg.util.Pair;
 
@@ -181,7 +180,7 @@ class KnightTour {
         private E value;
 
         /**
-         * Boolean flag that is being used in traversal function, such as toArrayList.
+         * Boolean flag that is being used in traversal function, such as toList.
          * True if the node was visited, otherwise false.
          */
 
@@ -230,9 +229,9 @@ class KnightTour {
 
     /*
       Let's call each of the following 8 cells structured:
-     
+
       (enumeration starts with 0 to make the relation between cells and indices in structured array more clear)
-     
+
       0). (2, 0);
       1). (0, 1);
       2). (n - 1, 0);
@@ -241,7 +240,7 @@ class KnightTour {
       5). (0, m - 1);
       6). (n - 1, m - 2);
       7). (n - 3, m - 1);
-     
+
       #########################################
       #**0***********************************2#
       #1**************************************#
@@ -261,7 +260,7 @@ class KnightTour {
       #**************************************6#
       #5***********************************7**#
       #########################################
-      
+
       Structured cells are needed in the the merging procedure in the Parberry's algorithm.
      */
 
@@ -272,7 +271,7 @@ class KnightTour {
     private final ArrayList<KnightTour.Node<Pair<Integer, Integer>>> structured;
 
     /**
-     * Used in toArrayList function.
+     * Used in toList function.
      */
 
     private List<Pair<Integer, Integer>> arrayList;
@@ -292,7 +291,7 @@ class KnightTour {
      * @return ArrayList that contains knight's tour.
      */
 
-    public List<Pair<Integer, Integer>> toArrayList() {
+    public List<Pair<Integer, Integer>> toList() {
         if (arrayList != null) {
             return arrayList;
         }
@@ -424,7 +423,7 @@ public class WarnsdorffRuleKnightTourHeuristic {
 
     public WarnsdorffRuleKnightTourHeuristic(int n) {
         if (n < 3) {
-            throw new UnsupportedOperationException("You set incorrect board size!");
+            throw new IllegalArgumentException("Incorrect board size!");
         }
         this.n = n;
         this.m = n;
@@ -439,7 +438,7 @@ public class WarnsdorffRuleKnightTourHeuristic {
 
     public WarnsdorffRuleKnightTourHeuristic(int n, int m) {
         if ((n < 3 && m < 3) || n <= 1 || m <= 1) {
-            throw new UnsupportedOperationException("You set incorrect board size!");
+            throw new IllegalArgumentException("Incorrect board size!");
         }
         this.n = n;
         this.m = m;
@@ -560,35 +559,35 @@ public class WarnsdorffRuleKnightTourHeuristic {
 
     private boolean checkStructured(HashSet<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> moves, boolean structured) {
         return !structured || (
-            (moves.contains(new Pair<>(new Pair<>(1, 0), new Pair<>(0, 2)))
-                || moves.contains(new Pair<>(new Pair<>(0, 2), new Pair<>(1, 0))))
-                &&
-                moves.contains(new Pair<>(new Pair<>(2, 0), new Pair<>(0, 1)))
-                || moves.contains(new Pair<>(new Pair<>(0, 1), new Pair<>(2, 0)))
+                (moves.contains(new Pair<>(new Pair<>(1, 0), new Pair<>(0, 2)))
+                        || moves.contains(new Pair<>(new Pair<>(0, 2), new Pair<>(1, 0))))
+                        &&
+                        moves.contains(new Pair<>(new Pair<>(2, 0), new Pair<>(0, 1)))
+                        || moves.contains(new Pair<>(new Pair<>(0, 1), new Pair<>(2, 0)))
 
-                &&
+                        &&
 
-                moves.contains(new Pair<>(new Pair<>(n - 3, 0), new Pair<>(n - 1, 1)))
-                || moves.contains(new Pair<>(new Pair<>(n - 1, 1), new Pair<>(n - 3, 0)))
-                &&
-                moves.contains(new Pair<>(new Pair<>(n - 2, 0), new Pair<>(n - 1, 2)))
-                || moves.contains(new Pair<>(new Pair<>(n - 1, 2), new Pair<>(n - 2, 0)))
+                        moves.contains(new Pair<>(new Pair<>(n - 3, 0), new Pair<>(n - 1, 1)))
+                        || moves.contains(new Pair<>(new Pair<>(n - 1, 1), new Pair<>(n - 3, 0)))
+                        &&
+                        moves.contains(new Pair<>(new Pair<>(n - 2, 0), new Pair<>(n - 1, 2)))
+                        || moves.contains(new Pair<>(new Pair<>(n - 1, 2), new Pair<>(n - 2, 0)))
 
-                &&
+                        &&
 
-                moves.contains(new Pair<>(new Pair<>(0, m - 3), new Pair<>(1, m - 1)))
-                || moves.contains(new Pair<>(new Pair<>(1, m - 1), new Pair<>(0, m - 3)))
-                &&
-                moves.contains(new Pair<>(new Pair<>(0, m - 2), new Pair<>(2, m - 1)))
-                || moves.contains(new Pair<>(new Pair<>(2, m - 1), new Pair<>(0, m - 2)))
+                        moves.contains(new Pair<>(new Pair<>(0, m - 3), new Pair<>(1, m - 1)))
+                        || moves.contains(new Pair<>(new Pair<>(1, m - 1), new Pair<>(0, m - 3)))
+                        &&
+                        moves.contains(new Pair<>(new Pair<>(0, m - 2), new Pair<>(2, m - 1)))
+                        || moves.contains(new Pair<>(new Pair<>(2, m - 1), new Pair<>(0, m - 2)))
 
-                &&
+                        &&
 
-                moves.contains(new Pair<>(new Pair<>(n - 3, m - 1), new Pair<>(n - 1, m - 2)))
-                || moves.contains(new Pair<>(new Pair<>(n - 1, m - 2), new Pair<>(n - 3, m - 1)))
-                &&
-                moves.contains(new Pair<>(new Pair<>(n - 2, m - 1), new Pair<>(n - 1, m - 3)))
-                || moves.contains(new Pair<>(new Pair<>(n - 1, m - 3), new Pair<>(n - 2, m - 2))));
+                        moves.contains(new Pair<>(new Pair<>(n - 3, m - 1), new Pair<>(n - 1, m - 2)))
+                        || moves.contains(new Pair<>(new Pair<>(n - 1, m - 2), new Pair<>(n - 3, m - 1)))
+                        &&
+                        moves.contains(new Pair<>(new Pair<>(n - 2, m - 1), new Pair<>(n - 1, m - 3)))
+                        || moves.contains(new Pair<>(new Pair<>(n - 1, m - 3), new Pair<>(n - 2, m - 2))));
     }
 
     /**
@@ -697,11 +696,11 @@ public class WarnsdorffRuleKnightTourHeuristic {
     public KnightTour getTour(TourType type, boolean structured, int shiftX, int shiftY) {
 
         if (shiftX < 0 || shiftY < 0) {
-            throw new UnsupportedOperationException("You have set incorrect shift!");
+            throw new IllegalArgumentException("Incorrect shift value!");
         }
 
         if (!checkExistence(type)) {
-            throw new UnsupportedOperationException("No solution exist for such configuration!");
+            throw new IllegalArgumentException("No solution exist for such configuration!");
         }
 
         KnightTour tour = new KnightTour();
@@ -776,7 +775,7 @@ public class WarnsdorffRuleKnightTourHeuristic {
              */
 
             if (run == (n * m) && ! found) {
-                throw new UnsupportedOperationException("The Warnsdorff's rule heuristic has failed to find a tour!");
+                return null;
             }
 
         }
@@ -802,7 +801,7 @@ public class WarnsdorffRuleKnightTourHeuristic {
         /*
          Set the start node.
          */
-        
+
         tour.getList().setStartNode(tour.getList().getHead());
 
         return tour;
