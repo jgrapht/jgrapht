@@ -23,42 +23,100 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class BFSShortestPathTest
-    extends
-    UnWeightedShortestPathTestCase
 {
+    // ~ Static fields/initializers ---------------------------------------------
 
-    @Override
-    protected List<DefaultEdge> findPathBetween(
-        Graph<String, DefaultEdge> g, String src, String dest)
-    {
-        SingleSourcePaths<String, DefaultEdge> tree;
-        tree = new BFSShortestPath<>(g).getPaths(src);
-        GraphPath<String, DefaultEdge> path = tree.getPath(dest);
-        if(path!=null)
-            return tree.getPath(dest).getEdgeList();
-        else 
-            return new LinkedList<DefaultEdge> ();
-    }
+    static final String V1 = "v1";
+    static final String V2 = "v2";
+    static final String V3 = "v3";
+    static final String V4 = "v4";
+    static final String V5 = "v5";
+    
+    // ~ Instance fields --------------------------------------------------------
 
-    @Override
-    protected SingleSourcePaths<String, DefaultEdge> getPathsFrom(
-        Graph<String, DefaultEdge> g, String src)
+    DefaultEdge e12;
+    DefaultEdge e13;
+    DefaultEdge e35;
+    DefaultEdge e24;
+    DefaultEdge e45;
+    
+    protected Graph<String, DefaultEdge> create()
     {
+        Graph<String, DefaultEdge> g;
         
-        return new BFSShortestPath<>(g).getPaths(src);
-    }
+        g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+        g.addVertex(V5);
 
-    @Override
-    protected List<DefaultEdge> findPathTo(SingleSourcePaths<String, DefaultEdge> tree, String dest)
-    {
-        GraphPath<String, DefaultEdge> path = tree.getPath(dest);
-        if(path!=null)
-            return tree.getPath(dest).getEdgeList();
-        else 
-            return new LinkedList<DefaultEdge> ();
+        e12 = Graphs.addEdgeWithVertices(g, V1, V2);
+
+        e13 = Graphs.addEdgeWithVertices(g, V1, V3);
+
+        e24 = Graphs.addEdgeWithVertices(g, V2, V4);
+
+        e35 = Graphs.addEdgeWithVertices(g, V3, V5);
+
+        e45 = Graphs.addEdgeWithVertices(g, V4, V5);
+
+        
+        return g;
+        
     }
+    
+    @Test
+    public void testPathBetween()
+    {
+        GraphPath<String, DefaultEdge> path;
+        Graph<String, DefaultEdge> g = create();
+
+        path = BFSShortestPath.findPathBetween(g, V1, V2);
+        assertEquals(Arrays.asList(e12), path.getEdgeList());
+
+        path = BFSShortestPath.findPathBetween(g, V1, V4);
+        assertEquals(Arrays.asList(e12, e24), path.getEdgeList());
+
+        path = BFSShortestPath.findPathBetween(g, V1, V5);
+        assertEquals(Arrays.asList(e13, e35), path.getEdgeList());
+
+        path = BFSShortestPath.findPathBetween(g, V4, V3);
+        assertNull(path);
+    }
+    
+    @Test
+    public void testAllPaths()
+    {
+        List<DefaultEdge> path;
+        Graph<String, DefaultEdge> g = create();
+        
+        SingleSourcePaths<String, DefaultEdge> tree = new BFSShortestPath<>(g).getPaths(V1);
+        
+        path = tree.getPath(V1).getEdgeList();
+        assertEquals(Arrays.asList(),path);
+        
+        path = tree.getPath(V2).getEdgeList();
+        assertEquals(Arrays.asList(e12), path);
+        
+        path = tree.getPath(V3).getEdgeList();
+        assertEquals(Arrays.asList(e13), path);
+        
+        path = tree.getPath(V4).getEdgeList();
+        assertEquals(Arrays.asList(e12, e24), path);
+        
+        path = tree.getPath(V5).getEdgeList();
+        assertEquals(Arrays.asList(e13, e35), path);
+        
+    }
+    
     
 
 }
