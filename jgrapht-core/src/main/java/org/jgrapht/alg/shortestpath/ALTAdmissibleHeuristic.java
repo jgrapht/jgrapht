@@ -38,7 +38,7 @@ import java.util.*;
  * triangle-inequality. The heuristic's space requirement is $O(n)$ per landmark where n is the
  * number of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm
  * execution is performed per landmark.
- * 
+ *
  * <p>
  * The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
  * in detail in the following <a href=
@@ -49,18 +49,18 @@ import java.util.*;
  * Theory. In Proceedings of the sixteenth annual ACM-SIAM symposium on Discrete algorithms (SODA'
  * 05), 156--165, 2005.</li>
  * </ul>
- * 
+ *
  * <p>
  * Note that using this heuristic does not require the edge weights to satisfy the
  * triangle-inequality. The method depends on the triangle inequality with respect to the shortest
  * path distances in the graph, not an embedding in Euclidean space or some other metric, which need
  * not be present.
- * 
+ *
  * <p>
  * In general more landmarks will speed up A* but will need more space. Given an A* query with
  * vertices source and target, a good landmark appears "before" source or "after" target where
  * before and after are relative to the "direction" from source to target.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
@@ -78,10 +78,10 @@ public class ALTAdmissibleHeuristic<V, E>
 
     /**
      * Constructs a new {@link AStarAdmissibleHeuristic} using a set of landmarks.
-     * 
+     *
      * @param graph the graph
      * @param landmarks a set of vertices of the graph which will be used as landmarks
-     * 
+     *
      * @throws IllegalArgumentException if no landmarks are provided
      * @throws IllegalArgumentException if the graph contains edges with negative weights
      */
@@ -118,10 +118,10 @@ public class ALTAdmissibleHeuristic<V, E>
     /**
      * An admissible heuristic estimate from a source vertex to a target vertex. The estimate is
      * always non-negative and never overestimates the true distance.
-     * 
+     *
      * @param u the source vertex
      * @param t the target vertex
-     * 
+     *
      * @return an admissible heuristic estimate
      */
     @Override
@@ -174,7 +174,7 @@ public class ALTAdmissibleHeuristic<V, E>
 
     /**
      * Compute all distances to and from a landmark
-     * 
+     *
      * @param landmark the landmark
      */
     private void precomputeToFromLandmark(V landmark)
@@ -201,4 +201,11 @@ public class ALTAdmissibleHeuristic<V, E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <ET> boolean isConsistent(Graph<V, ET> graph) {
+        return true;
+    }
 }

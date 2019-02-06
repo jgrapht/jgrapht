@@ -26,7 +26,15 @@ import org.jgrapht.graph.GraphWalk;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -48,7 +56,7 @@ import java.util.function.Supplier;
  * <p>
  * Note: This implementation works with both consistent and inconsistent admissible heuristics. For
  * details on consistency, refer to the description of the method
- * {@link #isConsistentHeuristic(AStarAdmissibleHeuristic)}. However, this class is <i>not</i>
+ * {@link AStarAdmissibleHeuristic#isConsistent(Graph)}. However, this class is <i>not</i>
  * optimized for inconsistent heuristics. Several opportunities to improve both worst case and
  * average runtime complexities for A* with inconsistent heuristics described in literature can be
  * used to improve this implementation!
@@ -58,6 +66,7 @@ import java.util.function.Supplier;
  * @author Joris Kinable
  * @author Jon Robison
  * @author Thomas Breitbart
+ * @see AStarAdmissibleHeuristic
  */
 public class AStarShortestPath<V, E>
         extends
@@ -181,34 +190,6 @@ public class AStarShortestPath<V, E>
         return numberOfExpandedNodes;
     }
 
-    /**
-     * Returns true if the provided heuristic is a <i>consistent</i> or <i>monotone</i> heuristic
-     * wrt the graph provided at construction time. A heuristic is monotonic if its estimate is
-     * always less than or equal to the estimated distance from any neighboring vertex to the goal,
-     * plus the step cost of reaching that neighbor. For details, refer to <a href=
-     * "https://en.wikipedia.org/wiki/Consistent_heuristic">https://en.wikipedia.org/wiki/Consistent_heuristic</a>.
-     * In short, a heuristic is consistent iff <code>h(u)&le; d(u,v)+h(v)</code>, for every edge
-     * $(u,v)$, where $d(u,v)$ is the weight of edge $(u,v)$ and $h(u)$ is the estimated cost to
-     * reach the target node from vertex u. Most natural admissible heuristics, such as Manhattan or
-     * Euclidean distance, are consistent heuristics.
-     *
-     * @param admissibleHeuristic admissible heuristic
-     * @return true is the heuristic is consistent, false otherwise
-     */
-    public boolean isConsistentHeuristic(AStarAdmissibleHeuristic<V> admissibleHeuristic) {
-        for (V targetVertex : graph.vertexSet()) {
-            for (E e : graph.edgeSet()) {
-                double weight = graph.getEdgeWeight(e);
-                V edgeSource = graph.getEdgeSource(e);
-                V edgeTarget = graph.getEdgeTarget(e);
-                double h_x = admissibleHeuristic.getCostEstimate(edgeSource, targetVertex);
-                double h_y = admissibleHeuristic.getCostEstimate(edgeTarget, targetVertex);
-                if (h_x > weight + h_y)
-                    return false;
-            }
-        }
-        return true;
-    }
 
     private void expandNode(AddressableHeap.Handle<Double, V> currentNode, V endVertex) {
         numberOfExpandedNodes++;
@@ -254,7 +235,7 @@ public class AStarShortestPath<V, E>
     }
 
     /**
-     * Builds the graph path
+     * Builds the graph path.
      *
      * @param startVertex  starting vertex of the path
      * @param targetVertex ending vertex of the path

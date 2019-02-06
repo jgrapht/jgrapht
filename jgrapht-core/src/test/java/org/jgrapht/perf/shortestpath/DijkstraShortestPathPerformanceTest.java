@@ -17,25 +17,37 @@
  */
 package org.jgrapht.perf.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.shortestpath.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.traverse.*;
-import org.jgrapht.util.*;
-import org.junit.*;
-import org.openjdk.jmh.runner.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.ALTAdmissibleHeuristic;
+import org.jgrapht.alg.shortestpath.AStarShortestPath;
+import org.jgrapht.alg.shortestpath.BidirectionalAStarShortestPath;
+import org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.traverse.ClosestFirstIterator;
+import org.jgrapht.util.StopWatch;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * A small benchmark comparing Dijkstra like algorithms. The benchmark creates a random graph and
  * computes all-pairs shortest paths.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class DijkstraShortestPathPerformanceTest
@@ -43,7 +55,7 @@ public class DijkstraShortestPathPerformanceTest
     private static final int PERF_BENCHMARK_VERTICES_COUNT = 250;
     private static final double PERF_BENCHMARK_EDGES_PROP = 0.3;
     private static final int WARMUP_REPEAT = 5;
-    private static final int REPEAT = 10;
+    private static final int REPEAT = 2; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private static final long SEED = 13l;
 
     private static abstract class BenchmarkBase
@@ -250,10 +262,8 @@ public class DijkstraShortestPathPerformanceTest
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
-                Graph<Integer, DefaultWeightedEdge> graph)
-        {
+                Graph<Integer, DefaultWeightedEdge> graph) {
             return new BidirectionalAStarShortestPath<>(graph, (u, t) -> 0d);
-
         }
 
         @Override
@@ -283,7 +293,9 @@ public class DijkstraShortestPathPerformanceTest
             while (landmarks.size() < totalLandmarks) {
                 landmarks.add(vertices[rng.nextInt(graph.vertexSet().size())]);
             }
-            return new AStarShortestPath<>(graph, new ALTAdmissibleHeuristic<>(graph, landmarks));
+            AStarAdmissibleHeuristic<Integer> heuristic =
+                    new ALTAdmissibleHeuristic<>(graph, landmarks);
+            return new BidirectionalAStarShortestPath<>(graph, heuristic);
         }
 
         @Override
