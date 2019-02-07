@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail, Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -62,6 +62,7 @@ import java.util.*;
  * before and after are relative to the "direction" from source to target.
  *
  * @author Dimitrios Michail
+ * @author Semen Chudakov
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

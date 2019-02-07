@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2018, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ * (C) Copyright 2015-2018, by Joris Kinable, Jon Robison, Thomas Breitbart, Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,6 +33,9 @@ import static org.junit.Assert.assertTrue;
  * Test class for AStarShortestPath implementation
  *
  * @author Joris Kinable
+ * @author Jon Robison
+ * @author Thomas Breitbart
+ * @author Semen Chudakov
  */
 public class AStarShortestPathTest extends BaseHeuristicTest {
 

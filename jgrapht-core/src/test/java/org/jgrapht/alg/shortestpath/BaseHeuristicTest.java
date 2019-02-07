@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2019, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2019, by Semen Chudakov, Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,12 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.graph.WeightedMultigraph;
 
 /**
- * Base class for the heuristic search algorithms.
+ * Base test class for the heuristic search algorithms.
+ *
+ * @author Semen Chudakov
+ * @author Joris Kinable
+ * @author Jon Robison
+ * @author Thomas Breitbart
  */
 public class BaseHeuristicTest {
     protected final String[] labyrinth1 =

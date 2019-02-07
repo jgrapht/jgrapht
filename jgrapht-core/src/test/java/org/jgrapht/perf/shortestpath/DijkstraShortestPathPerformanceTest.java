@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail, Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -49,6 +49,7 @@ import java.util.function.Supplier;
  * computes all-pairs shortest paths.
  *
  * @author Dimitrios Michail
+ * @author Semen Chudakov
  */
 public class DijkstraShortestPathPerformanceTest
 {

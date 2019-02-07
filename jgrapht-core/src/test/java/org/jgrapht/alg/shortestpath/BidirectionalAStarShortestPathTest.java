@@ -37,6 +37,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+/**
+ * Test class for {@link BidirectionalAStarShortestPath} class.
+ *
+ * @author Semen Chudakov
+ */
 public class BidirectionalAStarShortestPathTest extends BaseHeuristicTest {
     private static final String s = "s";
     private static final String t = "t";
