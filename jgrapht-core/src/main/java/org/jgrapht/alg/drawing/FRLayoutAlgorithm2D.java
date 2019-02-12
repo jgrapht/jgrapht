@@ -34,6 +34,15 @@ import org.jgrapht.alg.drawing.model.Box2D;
 /**
  * Fruchterman and Reingold Force-Directed Placement Algorithm.
  * 
+ * The algorithm belongs in the broad category of 
+ * <a href="https://en.wikipedia.org/wiki/Force-directed_graph_drawing">force directed graph drawing</a>
+ * algorithms and is described in the paper:
+ * 
+ * <ul>
+ * <li>Thomas M. J. Fruchterman and Edward M. Reingold. Graph drawing by force-directed placement. 
+ * Software: Practice and experience, 21(11):1129--1164, 1991.</li>
+ * </ul>
+ * 
  * @author Dimitrios Michail
  * 
  * @param <V> the vertex type
@@ -293,9 +302,27 @@ public class FRLayoutAlgorithm2D<V, E>
     }
 
     /**
+     * A general interface for a temperature model.
+
+     * <p>
+     * The temperature should start from a high enough value and gradually become zero.
+     */
+    public interface TemperatureModel
+    {
+
+        /**
+         * Return the temperature for the new iteration
+         * 
+         * @param iteration the next iteration
+         * @param maxIterations total number of iterations
+         * @return the temperature for the next iteration
+         */
+        double temperature(int iteration, int maxIterations);
+
+    }
+    
+    /**
      * An inverse linear temperature model.
-     * 
-     * @author Dimitrios Michail
      */
     protected class InverseLinearTemperatureModel
         implements

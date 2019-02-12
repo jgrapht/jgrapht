@@ -30,8 +30,8 @@ import org.jgrapht.alg.drawing.model.Boxes;
 import org.jgrapht.alg.util.Pair;
 
 /**
- * A simple QuadTree for indexing during force calculations in the Fruchterman and Reingold
- * Force-Directed Placement Algorithm.
+ * A simple <a href="https://en.wikipedia.org/wiki/Quadtree">QuadTree</a> for indexing during force calculations
+ * in the Fruchterman and Reingold Force-Directed Placement Algorithm.
  * 
  * <p>
  * The tree supports adding points one by one and maintains the centroid and total number of points

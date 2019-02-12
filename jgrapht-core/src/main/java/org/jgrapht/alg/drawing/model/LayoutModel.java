@@ -23,9 +23,16 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.drawing.LayoutAlgorithm;
 
 /**
- * A general interface for the layout model.
+ * A general interface for the layout model. 
+ * 
+ * The layout model provides the necessary components to a {@link LayoutAlgorithm} in order to
+ * draw a graph. Its responsibility is to provide the available drawable area, to be able to 
+ * store and answer queries about vertex coordinates, to allow someone to fix (make permanent) 
+ * a vertex location and potentially provide an initializer. If provided, the initializer, maybe 
+ * called by a layout algorithm in order to calculate initial positions for each vertex.  
  * 
  * @author Dimitrios Michail
  *
@@ -76,7 +83,8 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
     /**
      * Set a point as being a "fixed-point" or not.
      * 
-     * A fixed point can be assigned a location but cannot move after that.
+     * It is the model's responsibility to make sure that changing the coordinates of a fixed point
+     * by calling {@link #put(Object, Point)} has no effect.    
      * 
      * @param vertex a vertex
      * @param fixed whether it is a fixed point or not.
@@ -117,7 +125,8 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
 
     /**
      * Get the initializer of the model. The role of the initializer is to set the initial
-     * coordinates of graph vertices.
+     * coordinates of graph vertices. A particular layout algorithm may choose to ignore or 
+     * to execute the initializer in order to compute the initial vertex coordinates. 
      * 
      * @return the initializer or null if no initializer is present
      */

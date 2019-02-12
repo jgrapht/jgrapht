@@ -25,15 +25,19 @@ import org.jgrapht.alg.drawing.model.Box;
 /**
  * A general interface for a layout algorithm.
  * 
+ * A layout algorithm takes as input a graph and computes point coordinates for each of the 
+ * graph vertices. Details such as the dimensions of the drawable area, the storage of the vertices'
+ * coordinates, etc. are provided using a {@link LayoutModel}.  
+ * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @param <N> the number type
  * @param <P> the point type
- * @param <R> the box type
+ * @param <B> the box type
  */
-public interface LayoutAlgorithm<V, E, N extends Number, P extends Point<N>, R extends Box<N>>
+public interface LayoutAlgorithm<V, E, N extends Number, P extends Point<N>, B extends Box<N>>
 {
 
     /**
@@ -42,6 +46,6 @@ public interface LayoutAlgorithm<V, E, N extends Number, P extends Point<N>, R e
      * @param graph the graph
      * @param model the layout model to use
      */
-    void layout(Graph<V, E> graph, LayoutModel<V, N, P, R> model);
+    void layout(Graph<V, E> graph, LayoutModel<V, N, P, B> model);
 
 }

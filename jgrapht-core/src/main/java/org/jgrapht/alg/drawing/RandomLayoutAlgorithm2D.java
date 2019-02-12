@@ -27,7 +27,7 @@ import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Box2D;
 
 /**
- * Random layout.
+ * Random layout. The algorithm assigns vertex coordinates uniformly at random. 
  * 
  * @author Dimitrios Michail
  * 

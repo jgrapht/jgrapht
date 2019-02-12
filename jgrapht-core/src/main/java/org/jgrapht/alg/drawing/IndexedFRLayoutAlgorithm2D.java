@@ -33,8 +33,14 @@ import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 /**
- * Fruchterman and Reingold Force-Directed Placement Algorithm using the Barnes-Hut indexing
+ * Fruchterman and Reingold Force-Directed Placement Algorithm using the 
+ * <a href="https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut</a> indexing
  * technique with a Quad-Tree.
+ * 
+ * The Barnes-Hut indexing technique is described in the following paper: 
+ * <ul>
+ * <li>J. Barnes & P. Hut (December 1986). "A hierarchical O(N log N) force-calculation algorithm". Nature. 324 (4): 446–449.</li>
+ * </ul>
  * 
  * @author Dimitrios Michail
  *
