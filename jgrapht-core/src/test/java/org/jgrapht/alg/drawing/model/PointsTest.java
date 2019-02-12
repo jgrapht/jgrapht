@@ -51,7 +51,7 @@ public class PointsTest
     {
         DoublePoint2D p1 = DoublePoint2D.of(5, 5);
         DoublePoint2D p2 = DoublePoint2D.of(3, 4);
-        Point2D<Double> p3 = Points.sub(p1,  p2);
+        Point2D<Double> p3 = Points.subtract(p1,  p2);
         assertEquals(2d, p3.getX(), 1e-9);
         assertEquals(1d, p3.getY(), 1e-9);
     }

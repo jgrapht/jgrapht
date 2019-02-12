@@ -17,7 +17,6 @@
  */
 package org.jgrapht.alg.drawing.model;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
@@ -52,9 +51,7 @@ public class DoublePoint2D
      */
     public DoublePoint2D(double x, double y)
     {
-        super(new Double[2]);
-        coordinates[0] = x;
-        coordinates[1] = y;
+        super(x, y);
     }
 
     @Override
@@ -77,7 +74,8 @@ public class DoublePoint2D
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + Arrays.hashCode(coordinates);
+        result = prime * result + ((x == null) ? 0 : x.hashCode());
+        result = prime * result + ((y == null) ? 0 : y.hashCode());
         return result;
     }
 

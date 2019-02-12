@@ -18,9 +18,6 @@
 package org.jgrapht.alg.drawing.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * A base implementation for a point in Euclidean space.
@@ -34,62 +31,5 @@ public abstract class Point<N>
     Serializable
 {
     private static final long serialVersionUID = -1515743447961074994L;
-
-    /**
-     * The actual coordinates
-     */
-    protected N[] coordinates;
-
-    /**
-     * Create a new point
-     * 
-     * @param coordinates the coordinates of the point
-     */
-    public Point(N[] coordinates)
-    {
-        this.coordinates = Objects.requireNonNull(coordinates);
-    }
-
-    /**
-     * Get the dimensions of the point
-     * 
-     * @return the dimensions of the point
-     */
-    public int getDimensions()
-    {
-        return coordinates.length;
-    }
-    
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Arrays.hashCode(coordinates);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Point<?> other = (Point<?>) obj;
-        if (!Arrays.equals(coordinates, other.coordinates))
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return Arrays
-            .asList(coordinates).stream().map(String::valueOf)
-            .collect(Collectors.joining(",", "(", ")"));
-    }
 
 }

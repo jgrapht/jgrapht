@@ -18,7 +18,6 @@
 package org.jgrapht.alg.drawing.model;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * A 3-dimensional point using {@link BigDecimal}.
@@ -48,10 +47,7 @@ public class BigDecimalPoint3D
      */
     public BigDecimalPoint3D(BigDecimal x, BigDecimal y, BigDecimal z)
     {
-        super(new BigDecimal[3]);
-        coordinates[0] = Objects.requireNonNull(x);
-        coordinates[1] = Objects.requireNonNull(y);
-        coordinates[2] = Objects.requireNonNull(z);
+        super(x, y, z);
     }
 
     /**

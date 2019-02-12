@@ -48,21 +48,6 @@ public class BigDecimalPoint3DTest
         assertEquals(p.getX(), BigDecimal.valueOf(3d));
         assertEquals(p.getY(), BigDecimal.valueOf(2d));
         assertEquals(p.getZ(), BigDecimal.valueOf(9d));
-
-        p.setX(BigDecimal.valueOf(5d));
-        assertEquals(p.getX(), BigDecimal.valueOf(5d));
-        assertEquals(p.getY(), BigDecimal.valueOf(2d));
-        assertEquals(p.getZ(), BigDecimal.valueOf(9d));
-
-        p.setY(BigDecimal.valueOf(13d));
-        assertEquals(p.getX(), BigDecimal.valueOf(5d));
-        assertEquals(p.getY(), BigDecimal.valueOf(13d));
-        assertEquals(p.getZ(), BigDecimal.valueOf(9d));
-        
-        p.setZ(BigDecimal.valueOf(11d));
-        assertEquals(p.getX(), BigDecimal.valueOf(5d));
-        assertEquals(p.getY(), BigDecimal.valueOf(13d));
-        assertEquals(p.getZ(), BigDecimal.valueOf(11d));
     }
 
 }

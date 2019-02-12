@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.drawing.model;
 
+import java.util.Objects;
+
 /**
  * A 3-dimensional point
  * 
@@ -24,21 +26,26 @@ package org.jgrapht.alg.drawing.model;
  *
  * @param <N> the number type
  */
-public abstract class Point3D<N>
+public class Point3D<N>
     extends
     Point<N>
 {
     private static final long serialVersionUID = 4886925782083650556L;
 
+    protected N x, y, z;
+    
     /**
      * Create a new point
      * 
-     * @param coordinates the coordinates
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
      */
-    public Point3D(N[] coordinates)
+    public Point3D(N x, N y, N z)
     {
-        super(coordinates);
-        assert coordinates.length == 3;
+        this.x = Objects.requireNonNull(x);
+        this.y = Objects.requireNonNull(y);
+        this.z = Objects.requireNonNull(z);
     }
 
     /**
@@ -48,7 +55,7 @@ public abstract class Point3D<N>
      */
     public N getX()
     {
-        return coordinates[0];
+        return x;
     }
 
     /**
@@ -58,7 +65,7 @@ public abstract class Point3D<N>
      */
     public N getY()
     {
-        return coordinates[1];
+        return y;
     }
 
     /**
@@ -68,37 +75,46 @@ public abstract class Point3D<N>
      */
     public N getZ()
     {
-        return coordinates[2];
+        return z;
     }
 
-    /**
-     * Set the x coordinate
-     * 
-     * @param x the value to set
-     */
-    public void setX(N x)
+    @Override
+    public int hashCode()
     {
-        coordinates[0] = x;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((x == null) ? 0 : x.hashCode());
+        result = prime * result + ((y == null) ? 0 : y.hashCode());
+        result = prime * result + ((z == null) ? 0 : z.hashCode());
+        return result;
     }
 
-    /**
-     * Set the y coordinate
-     * 
-     * @param y the value to set
-     */
-    public void setY(N y)
+    @Override
+    public boolean equals(Object obj)
     {
-        coordinates[1] = y;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Point3D<?> other = (Point3D<?>) obj;
+        if (x == null) {
+            if (other.x != null)
+                return false;
+        } else if (!x.equals(other.x))
+            return false;
+        if (y == null) {
+            if (other.y != null)
+                return false;
+        } else if (!y.equals(other.y))
+            return false;
+        if (z == null) {
+            if (other.z != null)
+                return false;
+        } else if (!z.equals(other.z))
+            return false;
+        return true;
     }
-
-    /**
-     * Set the z coordinate
-     * 
-     * @param z the value to set
-     */
-    public void setZ(N z)
-    {
-        coordinates[2] = z;
-    }
-
+    
 }

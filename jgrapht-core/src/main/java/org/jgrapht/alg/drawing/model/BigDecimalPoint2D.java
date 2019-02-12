@@ -18,7 +18,6 @@
 package org.jgrapht.alg.drawing.model;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * A 2-dimensional point using {@link BigDecimal}.
@@ -47,9 +46,7 @@ public class BigDecimalPoint2D
      */
     public BigDecimalPoint2D(BigDecimal x, BigDecimal y)
     {
-        super(new BigDecimal[2]);
-        coordinates[0] = Objects.requireNonNull(x);
-        coordinates[1] = Objects.requireNonNull(y);
+        super(x, y);
     }
     
     /**

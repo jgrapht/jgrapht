@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.drawing.model;
 
+import java.util.Objects;
+
 /**
  * A 2-dimensional point.
  * 
@@ -24,23 +26,36 @@ package org.jgrapht.alg.drawing.model;
  *
  * @param <N> the number type
  */
-public abstract class Point2D<N>
+public class Point2D<N>
     extends
     Point<N>
 {
     private static final long serialVersionUID = -5410937389829502498L;
 
+    protected N x, y;
+    
     /**
      * Create a new point
      * 
-     * @param coordinates the coordinates
+     * @param x the x coordinate
+     * @param y the y coordinate
      */
-    public Point2D(N[] coordinates)
+    public Point2D(N x, N y)
     {
-        super(coordinates);
-        assert coordinates.length == 2;
+        this.x = Objects.requireNonNull(x);
+        this.y = Objects.requireNonNull(y);
     }
 
+    /**
+     * Get the number of dimensions of the point
+     * 
+     * @return the number of dimensions of the point
+     */
+    public int getNumDimensions()
+    {
+        return 2;
+    }
+    
     /**
      * Get the x coordinate
      * 
@@ -48,7 +63,7 @@ public abstract class Point2D<N>
      */
     public N getX()
     {
-        return coordinates[0];
+        return x;
     }
 
     /**
@@ -58,7 +73,40 @@ public abstract class Point2D<N>
      */
     public N getY()
     {
-        return coordinates[1];
+        return y;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((x == null) ? 0 : x.hashCode());
+        result = prime * result + ((y == null) ? 0 : y.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Point2D<?> other = (Point2D<?>) obj;
+        if (x == null) {
+            if (other.x != null)
+                return false;
+        } else if (!x.equals(other.x))
+            return false;
+        if (y == null) {
+            if (other.y != null)
+                return false;
+        } else if (!y.equals(other.y))
+            return false;
+        return true;
     }
 
 }

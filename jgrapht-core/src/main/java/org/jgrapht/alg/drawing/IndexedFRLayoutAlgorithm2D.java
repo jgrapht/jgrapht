@@ -151,7 +151,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
         // compute displacement with index
         Map<V, Point2D<Double>> disp = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            Point2D<Double> vPos = Points.sub(model.get(v), origin);
+            Point2D<Double> vPos = Points.subtract(model.get(v), origin);
             Point2D<Double> vDisp = DoublePoint2D.of(0d, 0d);
 
             Deque<Node> queue = new ArrayDeque<>();
@@ -167,14 +167,14 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
                     if (!node.hasPoints()) {
                         continue;
                     }
-                    uPos = Points.sub(node.getPoints().iterator().next(), origin);
+                    uPos = Points.subtract(node.getPoints().iterator().next(), origin);
                 } else {
-                    double distanceToCentroid = Points.length(Points.sub(vPos, node.getCentroid()));
+                    double distanceToCentroid = Points.length(Points.subtract(vPos, node.getCentroid()));
                     if (comparator.compare(distanceToCentroid, 0d) == 0) {
                         savedComparisons += node.getNumberOfPoints() - 1;
                         continue;
                     } else if (comparator.compare(boxWidth / distanceToCentroid, theta) < 0) {
-                        uPos = Points.sub(node.getCentroid(), origin);
+                        uPos = Points.subtract(node.getCentroid(), origin);
                         savedComparisons += node.getNumberOfPoints() - 1;
                     } else {
                         for (Node child : node.getChildren()) {
@@ -187,7 +187,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
                 if (comparator.compare(vPos.getX(), uPos.getX()) != 0
                     || comparator.compare(vPos.getY(), uPos.getY()) != 0)
                 {
-                    Point2D<Double> delta = Points.sub(vPos, uPos);
+                    Point2D<Double> delta = Points.subtract(vPos, uPos);
                     double deltaLen = Points.length(delta);
                     Point2D<Double> dispContribution =
                         Points.scalarMultiply(delta, repulsiveForce(deltaLen) / deltaLen);

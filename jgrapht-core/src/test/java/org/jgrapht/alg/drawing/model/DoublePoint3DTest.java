@@ -46,21 +46,6 @@ public class DoublePoint3DTest
         assertEquals(p.getX(), 3d, 1e-9);
         assertEquals(p.getY(), 2d, 1e-9);
         assertEquals(p.getZ(), 9d, 1e-9);
-        
-        p.setX(5d);
-        assertEquals(p.getX(), 5d, 1e-9);
-        assertEquals(p.getY(), 2d, 1e-9);
-        assertEquals(p.getZ(), 9d, 1e-9);
-        
-        p.setY(13d);
-        assertEquals(p.getX(), 5d, 1e-9);
-        assertEquals(p.getY(), 13d, 1e-9);
-        assertEquals(p.getZ(), 9d, 1e-9);
-        
-        p.setZ(15d);
-        assertEquals(p.getX(), 5d, 1e-9);
-        assertEquals(p.getY(), 13d, 1e-9);
-        assertEquals(p.getZ(), 15d, 1e-9);
     }
 
 }

@@ -252,15 +252,15 @@ public class FRLayoutAlgorithm2D<V, E>
             DoublePoint2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
         Map<V, Point2D<Double>> disp = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            Point2D<Double> vPos = Points.sub(model.get(v), origin);
+            Point2D<Double> vPos = Points.subtract(model.get(v), origin);
             Point2D<Double> vDisp = DoublePoint2D.of(0d, 0d);
 
             for (V u : graph.vertexSet()) {
                 if (v == u) {
                     continue;
                 }
-                Point2D<Double> uPos = Points.sub(model.get(u), origin);
-                Point2D<Double> delta = Points.sub(vPos, uPos);
+                Point2D<Double> uPos = Points.subtract(model.get(u), origin);
+                Point2D<Double> delta = Points.subtract(vPos, uPos);
                 double deltaLen = Points.length(delta);
                 Point2D<Double> dispContribution =
                     Points.scalarMultiply(delta, repulsiveForce(deltaLen) / deltaLen);
@@ -288,10 +288,10 @@ public class FRLayoutAlgorithm2D<V, E>
         for (E e : graph.edgeSet()) {
             V v = graph.getEdgeSource(e);
             V u = graph.getEdgeTarget(e);
-            Point2D<Double> vPos = Points.sub(model.get(v), origin);
-            Point2D<Double> uPos = Points.sub(model.get(u), origin);
+            Point2D<Double> vPos = Points.subtract(model.get(v), origin);
+            Point2D<Double> uPos = Points.subtract(model.get(u), origin);
 
-            Point2D<Double> delta = Points.sub(vPos, uPos);
+            Point2D<Double> delta = Points.subtract(vPos, uPos);
             double deltaLen = Points.length(delta);
             Point2D<Double> dispContribution =
                 Points.scalarMultiply(delta, attractiveForce(deltaLen) / deltaLen);
