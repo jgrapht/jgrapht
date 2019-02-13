@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2018, by Joris Kinable, Jon Robison, Thomas Breitbart, Semen Chudakov and Contributors.
+ * (C) Copyright 2015-2018, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
