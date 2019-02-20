@@ -29,15 +29,19 @@ import java.util.Objects;
  * Implementation of the Eppstein`s algorithm for finding
  * $k$ shortest path between two vertices in a graph.
  *
- * <p>
- * This implementation can only be used for directed simple graphs.
  *
  * <p>
- * The algorithm is originally described in
- * <a href="https://www.ics.uci.edu/~eppstein/pubs/Epp-SJC-98.pdf">this paper</a>.
- * It achieves the state-of-the-art complexity of $O(m + n\log n + k\log k)$ if the paths
- * are produced in sorted order, where $m$ is the amount of edges in the graph, $n$ is the
- * amount of vertices in the graph and $k$ is the amount of paths needed.
+ * The algorithm is originally described in:
+ * David Eppstein. 1999. Finding the k Shortest Paths. SIAM J. Comput. 28, 2
+ * (February 1999), 652-673. DOI=http://dx.doi.org/10.1137/S0097539795290477.
+ *
+ * The main advantage ot this algorithm is that it achieves the state-of-the-art complexity
+ * of $O(m + n\log n + k\log k)$ if the paths are produced in sorted order, where $m$ is the
+ * amount of edges in the graph, $n$ is the amount of vertices in the graph and $k$ is the
+ * amount of paths needed.
+ *
+ * <p>
+ * This implementation can only be used for directed simple graphs.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
