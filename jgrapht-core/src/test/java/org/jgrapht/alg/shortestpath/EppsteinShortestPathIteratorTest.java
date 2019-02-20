@@ -37,24 +37,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Test case for {@link EppsteinPathsIterator} class.
+ * Test case for {@link EppsteinShortestPathIterator} class.
  *
  * @author Semen Chudakov
  */
-public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
+public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoSourceGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(2);
-        new EppsteinPathsIterator<>(graph, 1, 2);
+        new EppsteinShortestPathIterator<>(graph, 1, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoSinkGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
-        new EppsteinPathsIterator<>(graph, 1, 2);
+        new EppsteinShortestPathIterator<>(graph, 1, 2);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, 1, 2);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, 1, 2);
         assertFalse(it.hasNext());
     }
 
@@ -72,8 +72,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, 1, 2);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, 1, 2);
         assertFalse(it.hasNext());
         it.next();
     }
@@ -84,8 +84,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         graph.addVertex(1);
         Integer source = 1;
         Integer target = 1;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 0.0, false);
     }
@@ -95,8 +95,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         DefaultWeightedEdge a = Graphs.addEdgeWithVertices(graph, 1, 2, 1.0);
         DefaultWeightedEdge b = Graphs.addEdgeWithVertices(graph, 2, 3, 1.0);
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, 1, 3);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, 1, 3);
         assertTrue(it.hasNext());
         GraphPath<Integer, DefaultWeightedEdge> path = it.next();
         assertEquals(2.0, path.getWeight(), 1e-9);
@@ -110,8 +110,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, simpleGraph1);
         Integer source = 1;
         Integer target = 12;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 55.0, true);
@@ -132,8 +132,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, simpleGraph2);
         Integer source = 1;
         Integer target = 4;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 13.0, true);
@@ -147,8 +147,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, simpleGraph3);
         Integer source = 5;
         Integer target = 4;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 8.0, true);
@@ -169,8 +169,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         Integer source = 1;
         Integer target = 2;
         readGraph(graph, cyclicGraph1);
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 1.0, true);
@@ -187,8 +187,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, cyclicGraph2);
         Integer source = 1;
         Integer target = 6;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         for (int i = 0; i < 2; i++) {
@@ -211,8 +211,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, cyclicGraph3);
         Integer source = 1;
         Integer target = 3;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it =
-                new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
+                new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 2.0, true);
@@ -230,8 +230,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, restHeapGraph);
         Integer source = 1;
         Integer target = 10;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it
-                = new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it
+                = new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 3.0, true);
@@ -250,8 +250,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
         readGraph(graph, notShortestPathEdgesGraph);
         Integer source = 1;
         Integer target = 2;
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it
-                = new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it
+                = new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
         performAssertion(graph, it, source, target, 1.0, false);
@@ -275,8 +275,8 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
 
     private void assertCorrectness(Graph<Integer, DefaultWeightedEdge> graph,
                                    Integer source, Integer target) {
-        EppsteinPathsIterator<Integer, DefaultWeightedEdge> it
-                = new EppsteinPathsIterator<>(graph, source, target);
+        EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it
+                = new EppsteinShortestPathIterator<>(graph, source, target);
         if (it.hasNext()) {
             GraphPath<Integer, DefaultWeightedEdge> path = it.next();
             double weight = path.getWeight();
@@ -292,7 +292,7 @@ public class EppsteinPathsIteratorTest extends BaseEppsteinKShortestPathsTest {
     }
 
     private void performAssertion(Graph<Integer, DefaultWeightedEdge> graph,
-                                  EppsteinPathsIterator<Integer, DefaultWeightedEdge> it,
+                                  EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it,
                                   Integer source, Integer target, double expectedWeight, boolean hasNext) {
         GraphPath<Integer, DefaultWeightedEdge> path = it.next();
         assertEquals(expectedWeight, path.getWeight(), 1e-9);

@@ -41,7 +41,7 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * Iterator over the shortest paths between two vertices in a graph sorted by weight.
+ * Iterator over the shortest paths (not required to be simple) between two vertices in a graph sorted by weight.
  *
  * <p>
  * This implementation can only be used for directed simple graphs.
@@ -86,7 +86,7 @@ import java.util.Set;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public class EppsteinPathsIterator<V, E> implements Iterator<GraphPath<V, E>> {
+public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> {
     /**
      * Underlying graph.
      */
@@ -134,7 +134,7 @@ public class EppsteinPathsIterator<V, E> implements Iterator<GraphPath<V, E>> {
      * @param source source vertex
      * @param sink   sink vertex
      */
-    public EppsteinPathsIterator(Graph<V, E> graph, V source, V sink) {
+    public EppsteinShortestPathIterator(Graph<V, E> graph, V source, V sink) {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
         GraphType type = graph.getType();
         if (!(type.isDirected() && type.isSimple())) {
@@ -646,7 +646,7 @@ public class EppsteinPathsIterator<V, E> implements Iterator<GraphPath<V, E>> {
          */
         private List<PathsGraphVertex> getSidetracks(List<PathsGraphVertex> vertices) {
             if (vertices.size() > 1) {
-                Set<Integer> toBeRemoved = new HashSet<>();
+                List<Integer> toBeRemoved = new ArrayList<>();
                 Iterator<PathsGraphVertex> it = vertices.iterator();
                 PathsGraphVertex curr = it.next();
                 PathsGraphVertex next;
@@ -661,8 +661,11 @@ public class EppsteinPathsIterator<V, E> implements Iterator<GraphPath<V, E>> {
                 }
 
                 List<PathsGraphVertex> result = new ArrayList<>(vertices.size() - toBeRemoved.size());
-                for (int i = 0; i < vertices.size(); i++) {
-                    if (!toBeRemoved.contains(i)) {
+                int size = toBeRemoved.size();
+                for (int i = 0, j = 0; i < vertices.size(); i++) {
+                    if (j < size && toBeRemoved.get(j).equals(i)) {
+                        j++;
+                    } else {
                         result.add(vertices.get(i));
                     }
                 }

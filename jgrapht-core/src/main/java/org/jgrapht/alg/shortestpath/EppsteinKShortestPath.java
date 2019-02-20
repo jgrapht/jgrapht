@@ -42,9 +42,9 @@ import java.util.Objects;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
- * @see EppsteinPathsIterator
+ * @see EppsteinShortestPathIterator
  */
-public class EppsteinKShortestPaths<V, E> implements KShortestPathAlgorithm<V, E> {
+public class EppsteinKShortestPath<V, E> implements KShortestPathAlgorithm<V, E> {
     /**
      * Underlying graph.
      */
@@ -55,7 +55,7 @@ public class EppsteinKShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      *
      * @param graph graph
      */
-    public EppsteinKShortestPaths(Graph<V, E> graph) {
+    public EppsteinKShortestPath(Graph<V, E> graph) {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
     }
 
@@ -76,8 +76,8 @@ public class EppsteinKShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
             throw new IllegalArgumentException("k should be positive");
         }
         List<GraphPath<V, E>> result = new ArrayList<>();
-        EppsteinPathsIterator<V, E> iterator =
-                new EppsteinPathsIterator<>(graph, source, sink);
+        EppsteinShortestPathIterator<V, E> iterator =
+                new EppsteinShortestPathIterator<>(graph, source, sink);
         for (int i = 0; i < k && iterator.hasNext(); i++) {
             result.add(iterator.next());
         }

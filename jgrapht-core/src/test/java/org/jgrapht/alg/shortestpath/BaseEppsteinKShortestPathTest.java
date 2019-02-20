@@ -22,12 +22,12 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
- * Base class for {@link EppsteinKShortestPaths} and
- * {@link EppsteinPathsIterator} test cases.
+ * Base class for {@link EppsteinKShortestPath} and
+ * {@link EppsteinShortestPathIterator} test cases.
  *
  * @author Semen Chudakov
  */
-public class BaseEppsteinKShortestPathsTest {
+public class BaseEppsteinKShortestPathTest {
     final int[][] simpleGraph1 = {
             {1, 2, 2}, {2, 3, 20}, {3, 4, 14},
             {1, 5, 13}, {2, 6, 27}, {3, 7, 14}, {4, 8, 15},

@@ -30,17 +30,17 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for {@link EppsteinKShortestPaths} class.
+ * Tests for {@link EppsteinKShortestPath} class.
  *
  * @author Semen Chudakov
  */
-public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathsTest {
+public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeK() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
-        new EppsteinKShortestPaths<>(graph).getPaths(1, 2, -1);
+        new EppsteinKShortestPath<>(graph).getPaths(1, 2, -1);
     }
 
     /**
@@ -54,7 +54,7 @@ public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathsTest {
         graph.addVertex(1);
         graph.addVertex(2);
         List<GraphPath<Integer, DefaultWeightedEdge>> paths
-                = new EppsteinKShortestPaths<>(graph).getPaths(1, 2, 0);
+                = new EppsteinKShortestPath<>(graph).getPaths(1, 2, 0);
         assertEquals(0, paths.size());
     }
 
@@ -62,14 +62,14 @@ public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathsTest {
     public void testNoSourceGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(2);
-        new EppsteinKShortestPaths<>(graph).getPaths(1, 2, 1);
+        new EppsteinKShortestPath<>(graph).getPaths(1, 2, 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoSinkGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
-        new EppsteinKShortestPaths<>(graph).getPaths(1, 2, 1);
+        new EppsteinKShortestPath<>(graph).getPaths(1, 2, 1);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         readGraph(graph, cyclicGraph3);
         List<GraphPath<Integer, DefaultWeightedEdge>> paths =
-                new EppsteinKShortestPaths<>(graph).getPaths(1, 3, 6);
+                new EppsteinKShortestPath<>(graph).getPaths(1, 3, 6);
         List<Double> weights = Arrays.asList(2.0, 4.0, 6.0, 6.0, 8.0, 8.0);
 
         assertSameWeights(paths, weights);
@@ -93,7 +93,7 @@ public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         readGraph(graph, simpleGraph1);
         List<GraphPath<Integer, DefaultWeightedEdge>> paths =
-                new EppsteinKShortestPaths<>(graph).getPaths(1, 12, 12);
+                new EppsteinKShortestPath<>(graph).getPaths(1, 12, 12);
         List<Double> weights = Arrays.asList(55.0, 58.0, 59.0, 61.0, 62.0, 64.0, 65.0, 68.0, 68.0, 71.0);
 
         assertSameWeights(paths, weights);
