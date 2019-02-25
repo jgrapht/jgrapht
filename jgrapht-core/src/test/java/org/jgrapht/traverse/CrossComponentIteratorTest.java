@@ -20,11 +20,12 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -70,6 +71,46 @@ public abstract class CrossComponentIteratorTest
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
         doDirectedGraphTest(createIterator(graph, (String) null));
         doDirectedGraphTest(createIterator(graph, (Iterable<String>) null));
+    }
+
+    @Test
+    public void testNonCrossComponentTraversal()
+    {
+        final ModifiableInteger iteratorCalls = new ModifiableInteger();
+        final ModifiableInteger sizeCalls = new ModifiableInteger();
+        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
+        Graph<String, DefaultWeightedEdge> wrapper =
+            new GraphDelegator<String, DefaultWeightedEdge>(graph)
+            {
+                @Override
+                public Set<String> vertexSet()
+                {
+                    return new AbstractSet<String>()
+                    {
+                        @Override
+                        public Iterator<String> iterator()
+                        {
+                            iteratorCalls.increment();
+                            return getDelegate().vertexSet().iterator();
+                        }
+
+                        @Override
+                        public int size()
+                        {
+                            sizeCalls.increment();
+                            return getDelegate().vertexSet().size();
+                        }
+                    };
+                }
+            };
+
+        AbstractGraphIterator<String, DefaultWeightedEdge> iterator =
+            createIterator(wrapper, Arrays.asList("orphan"));
+        assertFalse(iterator.isCrossComponentTraversal());
+        result = new StringBuilder();
+        collectResult(iterator, result);
+        assertEquals(0, iteratorCalls.getValue());
+        assertEquals(0, sizeCalls.getValue());
     }
 
     abstract String getExpectedCCStr1();

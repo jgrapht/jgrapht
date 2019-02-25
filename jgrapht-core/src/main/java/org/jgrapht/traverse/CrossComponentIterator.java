@@ -116,7 +116,6 @@ public abstract class CrossComponentIterator<V, E, D>
         /*
          * Initialize crossComponentTraversal and test for containment
          */
-        this.entireGraphVertexIterator = graph.vertexSet().iterator();
         if (startVertices == null) {
             this.crossComponentTraversal = true;
         } else {
@@ -127,7 +126,7 @@ public abstract class CrossComponentIterator<V, E, D>
         /*
          * Initialize start vertex
          */
-        Iterator<V> it = crossComponentTraversal ? entireGraphVertexIterator : startVertexIterator;
+        Iterator<V> it = crossComponentTraversal ? getEntireGraphVertexIterator() : startVertexIterator;
         // pick a start vertex if possible
         if (it.hasNext()) {
             this.startVertex = it.next();
@@ -156,7 +155,7 @@ public abstract class CrossComponentIterator<V, E, D>
             }
 
             Iterator<V> it =
-                isCrossComponentTraversal() ? entireGraphVertexIterator : startVertexIterator;
+                isCrossComponentTraversal() ? getEntireGraphVertexIterator() : startVertexIterator;
             while (it != null && it.hasNext()) {
                 V v = it.next();
                 if (!graph.containsVertex(v)) {
@@ -202,6 +201,20 @@ public abstract class CrossComponentIterator<V, E, D>
         } else {
             throw new NoSuchElementException();
         }
+    }
+
+    /**
+     * Lazily instantiates {@code entireGraphVertexIterator}.
+     *
+     * @return iterator which provides start vertices for cross-component iteration
+     */
+    protected Iterator<V> getEntireGraphVertexIterator()
+    {
+        if (entireGraphVertexIterator == null) {
+            assert(isCrossComponentTraversal());
+            entireGraphVertexIterator = graph.vertexSet().iterator();
+        }
+        return entireGraphVertexIterator;
     }
 
     /**
