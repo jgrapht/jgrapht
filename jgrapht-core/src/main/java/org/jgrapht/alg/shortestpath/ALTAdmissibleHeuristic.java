@@ -62,7 +62,6 @@ import java.util.*;
  * before and after are relative to the "direction" from source to target.
  *
  * @author Dimitrios Michail
- * @author Semen Chudakov
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

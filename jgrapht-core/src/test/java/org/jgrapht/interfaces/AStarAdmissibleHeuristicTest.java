@@ -19,7 +19,7 @@ package org.jgrapht.interfaces;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.alg.shortestpath.BaseHeuristicTest;
+import org.jgrapht.alg.shortestpath.BaseHeuristicSearchTest;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.junit.Test;
@@ -31,7 +31,7 @@ import static junit.framework.TestCase.assertTrue;
  * {@link org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic#isConsistent(Graph)}
  * method.
  */
-public class AStarAdmissibleHeuristicTest extends BaseHeuristicTest {
+public class AStarAdmissibleHeuristicTest extends BaseHeuristicSearchTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullValue() {

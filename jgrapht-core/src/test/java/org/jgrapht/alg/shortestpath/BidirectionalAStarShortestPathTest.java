@@ -42,7 +42,7 @@ import static org.junit.Assert.assertNull;
  *
  * @author Semen Chudakov
  */
-public class BidirectionalAStarShortestPathTest extends BaseHeuristicTest {
+public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest {
     private static final String s = "s";
     private static final String t = "t";
     private static final String y = "y";

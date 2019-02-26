@@ -33,11 +33,8 @@ import static org.junit.Assert.assertTrue;
  * Test class for AStarShortestPath implementation
  *
  * @author Joris Kinable
- * @author Jon Robison
- * @author Thomas Breitbart
- * @author Semen Chudakov
  */
-public class AStarShortestPathTest extends BaseHeuristicTest {
+public class AStarShortestPathTest extends BaseHeuristicSearchTest {
 
     /**
      * Test on a graph with a path from the source node to the target node.

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2019, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,6 +31,7 @@ import java.util.LinkedList;
  *
  * @param <V> vertices type
  * @param <E> edges type
+ * @author Dimitrios Michail
  */
 public abstract class BaseBidirectionalShortestPathAlgorithm<V, E> extends BaseShortestPathAlgorithm<V, E> {
 
@@ -47,12 +48,12 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E> extends BaseS
      * Builds shortest path between {@code source} and {@code sink} based
      * on the information provided by search frontiers and common vertex.
      *
-     * @param forwardFrontier forward direction frontier
+     * @param forwardFrontier  forward direction frontier
      * @param backwardFrontier backward direction frontier
-     * @param weight weight of the shortest path
-     * @param source path source
-     * @param commonVertex path common vertex
-     * @param sink path sink
+     * @param weight           weight of the shortest path
+     * @param source           path source
+     * @param commonVertex     path common vertex
+     * @param sink             path sink
      * @return shortest path between source and sink
      */
     protected GraphPath<V, E> createPath(

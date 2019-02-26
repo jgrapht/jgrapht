@@ -49,7 +49,6 @@ import java.util.function.Supplier;
  * computes all-pairs shortest paths.
  *
  * @author Dimitrios Michail
- * @author Semen Chudakov
  */
 public class DijkstraShortestPathPerformanceTest {
     private static final int PERF_BENCHMARK_VERTICES_COUNT = 250;
