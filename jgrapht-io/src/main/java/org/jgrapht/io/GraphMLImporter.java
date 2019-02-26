@@ -428,10 +428,10 @@ public class GraphMLImporter<V, E>
         public void startDocument()
             throws SAXException
         {
-            nodes = new HashMap<>();
+            nodes = new LinkedHashMap<>();
             edges = new ArrayList<>();
-            nodeValidKeys = new HashMap<>();
-            edgeValidKeys = new HashMap<>();
+            nodeValidKeys = new LinkedHashMap<>();
+            edgeValidKeys = new LinkedHashMap<>();
             insideDefault = false;
             insideData = false;
             currentKey = null;
