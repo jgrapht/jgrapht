@@ -66,7 +66,7 @@ public class EppsteinKShortestPath<V, E> implements KShortestPathAlgorithm<V, E>
     /**
      * Computes {@code k} shortest paths between {@code source}
      * and {@code sink}. If the amount of paths is denoted by $n$,
-     * the method returns $m = min{k, n}$ such paths. The paths are
+     * the method returns $m = min\{k, n\}$ such paths. The paths are
      * produced in sorted order by weights.
      *
      * @param source the source vertex

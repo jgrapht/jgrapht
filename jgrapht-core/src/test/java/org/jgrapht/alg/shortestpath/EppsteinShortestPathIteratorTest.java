@@ -28,9 +28,11 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -277,18 +279,18 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                                    Integer source, Integer target) {
         EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it
                 = new EppsteinShortestPathIterator<>(graph, source, target);
-        if (it.hasNext()) {
-            GraphPath<Integer, DefaultWeightedEdge> path = it.next();
-            double weight = path.getWeight();
+        GraphPath<Integer, DefaultWeightedEdge> path;
+        double weight = 0.0;
+        Set<GraphPath<Integer, DefaultWeightedEdge>> paths = new HashSet<>();
+        int i = 0;
+        for (; i < 10 && it.hasNext(); i++) {
+            path = it.next();
+            paths.add(path);
             assertCorrectPath(graph, path, source, target);
-
-            for (int i = 0; i < 10 && it.hasNext(); i++) {
-                path = it.next();
-                assertCorrectPath(graph, path, source, target);
-                assertTrue(weight <= path.getWeight());
-                weight = path.getWeight();
-            }
+            assertTrue(weight <= path.getWeight());
+            weight = path.getWeight();
         }
+        assertEquals(i, paths.size());
     }
 
     private void performAssertion(Graph<Integer, DefaultWeightedEdge> graph,
