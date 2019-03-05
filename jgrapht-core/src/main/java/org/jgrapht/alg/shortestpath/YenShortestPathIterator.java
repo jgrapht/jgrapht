@@ -51,8 +51,8 @@ import java.util.function.Supplier;
  *
  * <p>
  * The main idea of this algorithm is to divide each path between the {@link #source} and the
- * {@link #sink} into the root part, which coincides within some of the paths computed so far, and
- * the spur part, which deviates from all other path computed so far. Therefore for each path the
+ * {@link #sink} into the root part - the part that coincides within some of the paths computed so far, and
+ * the spur part, the part that deviates from all other paths computed so far. Therefore for each path the
  * algorithm maintains a vertex, at which the path deviates from its "parent" path (the candidate path
  * using which it was computed).
  *
@@ -60,7 +60,7 @@ import java.util.function.Supplier;
  * First the algorithm finds the shortest path between the {@link #source} and the {@link #sink},
  * which is put into the candidates heap. The {@link #source} is assigned to be its deviation vertex.
  * Then on each iteration the algorithm takes a candidate from the heap with minimum weight, puts it into the
- * result list and builds all possible deviations from it wrt other paths, that are in the result list.
+ * result list and builds all possible deviations from it wrt. other paths, that are in the result list.
  * By generating spur paths starting only from the vertices that are after the deviation vertex of current
  * path (including the deviation vertex) it is possible to avoid building duplicated candidates.
  *
@@ -93,7 +93,7 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
     private AddressableHeap<Double, GraphPath<V, E>> candidatePaths;
 
     /**
-     * Keeps track of at which vertex each path
+     * Keeps track of the vertex at which each path
      * deviates from its "parent" path.
      */
     private Map<GraphPath<V, E>, V> deviations;
@@ -106,12 +106,26 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
      */
     private Map<Double, Integer> weightsFrequencies;
 
+    /**
+     * Stores the amount of paths in {@link #candidatePaths}
+     * with minimum weight.
+     */
     private int amountOfCandidatesWithMinimumWeight;
 
+    /**
+     * Getter for {@link #amountOfCandidatesWithMinimumWeight}.
+     *
+     * @return current amount of candidate paths with minimum weight
+     */
     int getAmountOfCandidatesWithMinimumWeight() {
         return amountOfCandidatesWithMinimumWeight;
     }
 
+    /**
+     * Getter for {@link #candidatePaths}.
+     *
+     * @return heap with candidate paths
+     */
     AddressableHeap<Double, GraphPath<V, E>> getCandidatePaths() {
         return candidatePaths;
     }
@@ -162,11 +176,17 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext() {
         return !candidatePaths.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GraphPath<V, E> next() {
         if (candidatePaths.isEmpty()) {
@@ -392,6 +412,17 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
          */
         Set<E> maskedEdges;
 
+        /**
+         * Constructs an instance of the shortest paths tree for the given
+         * {@code maskSubgraph}, {@code maskedVertices}, {@code maskedEdges}, {@code reversedTree}, {@code treeSource}.
+         *
+         * @param maskSubgraph   graph which has removed vertices and edges
+         * @param maskedVertices vertices removed form the graph
+         * @param maskedEdges    edges removed from the graph
+         * @param reversedTree   shortest path tree in the edge reverted
+         *                       {@code maskSubgraph} starting at {@code treeSource}.
+         * @param treeSource     source vertex of the  {@code reversedTree}
+         */
         YenShortestPathsTree(Graph<V, E> maskSubgraph, Set<V> maskedVertices, Set<E> maskedEdges,
                              Map<V, Pair<Double, E>> reversedTree, V treeSource) {
             super(maskSubgraph, treeSource, reversedTree);

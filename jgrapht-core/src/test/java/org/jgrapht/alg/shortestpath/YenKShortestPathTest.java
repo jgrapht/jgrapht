@@ -31,7 +31,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test case for the {@link YenKShortestPath}.
+ * Test for the {@link YenKShortestPath}.
  */
 public class YenKShortestPathTest extends BaseKShortestPathTest {
     @Test(expected = IllegalArgumentException.class)
@@ -42,7 +42,7 @@ public class YenKShortestPathTest extends BaseKShortestPathTest {
     }
 
     /**
-     * If k equals $0$ and there is no paths in the graph
+     * If k equals to $0$ and there is no paths in the graph
      * between source and target, no exception should be thrown
      * and an empty list should be returned.
      */

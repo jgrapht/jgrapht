@@ -40,7 +40,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Test case for the {@link YenShortestPathIterator}.
+ * Test for the {@link YenShortestPathIterator}.
  */
 public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
 

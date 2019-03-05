@@ -46,7 +46,7 @@ import java.util.Objects;
  * {@code source} and the {@code sink} and forms the resulting list. During
  * the execution the algorithm keeps track of how many candidates with minimum
  * weight exist. If the amount is greater or equal to the amount of path needed
- * to complet the execution, the algorithm retrieves the rest of the path from
+ * to complete the execution, the algorithm retrieves the rest of the path from
  * the candidates heap and adds them to the resulting list.
  *
  * @param <V> the graph vertex type
@@ -61,7 +61,7 @@ public class YenKShortestPath<V, E> implements KShortestPathAlgorithm<V, E> {
     private final Graph<V, E> graph;
 
     /**
-     * Constructs an instance of the algorithm  for the given {@code graph}.
+     * Constructs an instance of the algorithm for the given {@code graph}.
      *
      * @param graph graph
      */
