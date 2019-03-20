@@ -31,7 +31,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test for the {@link YenKShortestPath}.
+ * Tests for the {@link YenKShortestPath}.
  */
 public class YenKShortestPathTest extends BaseKShortestPathTest {
     @Test(expected = IllegalArgumentException.class)
@@ -84,7 +84,7 @@ public class YenKShortestPathTest extends BaseKShortestPathTest {
     /**
      * If the specified k is greater than the total amount of paths between
      * source and target, a list of all existing paths should be returned
-     * and not exception should be thrown.
+     * and no exception should be thrown.
      */
     @Test
     public void testLessThanKPaths() {

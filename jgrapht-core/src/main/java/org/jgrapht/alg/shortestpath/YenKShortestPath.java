@@ -71,9 +71,9 @@ public class YenKShortestPath<V, E> implements KShortestPathAlgorithm<V, E> {
 
     /**
      * Computes {@code k} shortest loopless paths between {@code source}
-     * and {@code sink}. If the amount of paths is denoted by $n$,
-     * the method returns $m = min\{k, n\}$ such paths. The paths are
-     * produced in sorted order by weights.
+     * and {@code sink}. If the overall number of such paths is denoted by $n$,
+     * the method returns $m = min\{k, n\}$ such paths. The paths are produced
+     * in sorted order by weights.
      *
      * @param source the source vertex
      * @param sink   the target vertex
@@ -89,7 +89,7 @@ public class YenKShortestPath<V, E> implements KShortestPathAlgorithm<V, E> {
         YenShortestPathIterator<V, E> iterator = new YenShortestPathIterator<>(graph, source, sink);
         for (int i = 0; i < k && iterator.hasNext(); i++) {
             int amountOfPathLeft = k - i;
-            if (iterator.getAmountOfCandidatesWithMinimumWeight() == amountOfPathLeft) {
+            if (iterator.getNumberOfCandidatesWithMinimumWeight() == amountOfPathLeft) {
                 AddressableHeap<Double, GraphPath<V, E>> candidates = iterator.getCandidatePaths();
                 for (int j = 0; j < amountOfPathLeft; j++) {
                     result.add(candidates.deleteMin().getValue());

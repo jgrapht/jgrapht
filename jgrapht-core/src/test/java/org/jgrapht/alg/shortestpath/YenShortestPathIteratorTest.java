@@ -24,6 +24,7 @@ import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
@@ -40,9 +41,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Test for the {@link YenShortestPathIterator}.
+ * Tests for the {@link YenShortestPathIterator}.
  */
 public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
+
+    /**
+     * Seed value which is used to generate random graphs
+     * by {@link #getRandomGraph(Graph, int, double)} method.
+     */
+    private static final long SEED = 13l;
+    /**
+     * Number of path to iterate over for each random graph
+     * in the {@link #assertCorrectness(Graph, Integer, Integer)}
+     * method.
+     */
+    private static final int NUMBER_OF_PATH_TO_ITERATE = 10;
+
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoSourceGraph() {
@@ -88,7 +102,7 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
         YenShortestPathIterator<Integer, DefaultWeightedEdge> it =
                 new YenShortestPathIterator<>(graph, source, target);
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 0.0, false);
+        performAssertion(it, 0.0, false);
     }
 
     @Test
@@ -115,16 +129,16 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 55.0, true);
-        performAssertion(graph, it, source, target, 58.0, true);
-        performAssertion(graph, it, source, target, 59.0, true);
-        performAssertion(graph, it, source, target, 61.0, true);
-        performAssertion(graph, it, source, target, 62.0, true);
-        performAssertion(graph, it, source, target, 64.0, true);
-        performAssertion(graph, it, source, target, 65.0, true);
-        performAssertion(graph, it, source, target, 68.0, true);
-        performAssertion(graph, it, source, target, 68.0, true);
-        performAssertion(graph, it, source, target, 71.0, false);
+        performAssertion(it, 55.0, true);
+        performAssertion(it, 58.0, true);
+        performAssertion(it, 59.0, true);
+        performAssertion(it, 61.0, true);
+        performAssertion(it, 62.0, true);
+        performAssertion(it, 64.0, true);
+        performAssertion(it, 65.0, true);
+        performAssertion(it, 68.0, true);
+        performAssertion(it, 68.0, true);
+        performAssertion(it, 71.0, false);
     }
 
     @Test
@@ -137,9 +151,9 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 13.0, true);
-        performAssertion(graph, it, source, target, 15.0, true);
-        performAssertion(graph, it, source, target, 21.0, false);
+        performAssertion(it, 13.0, true);
+        performAssertion(it, 15.0, true);
+        performAssertion(it, 21.0, false);
     }
 
     @Test
@@ -152,9 +166,9 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 9.0, true);
-        performAssertion(graph, it, source, target, 13.0, true);
-        performAssertion(graph, it, source, target, 15.0, false);
+        performAssertion(it, 9.0, true);
+        performAssertion(it, 13.0, true);
+        performAssertion(it, 15.0, false);
     }
 
     @Test
@@ -167,9 +181,9 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 13.0, true);
-        performAssertion(graph, it, source, target, 15.0, true);
-        performAssertion(graph, it, source, target, 21.0, false);
+        performAssertion(it, 13.0, true);
+        performAssertion(it, 15.0, true);
+        performAssertion(it, 21.0, false);
     }
 
     @Test
@@ -182,7 +196,7 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 1.0, false);
+        performAssertion(it, 1.0, false);
     }
 
     @Test
@@ -195,8 +209,8 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 4.0, true);
-        performAssertion(graph, it, source, target, 4.0, false);
+        performAssertion(it, 4.0, true);
+        performAssertion(it, 4.0, false);
     }
 
     @Test
@@ -209,7 +223,7 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 2.0, false);
+        performAssertion(it, 2.0, false);
     }
 
 
@@ -223,9 +237,9 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 4.0, true);
-        performAssertion(graph, it, source, target, 7.0, true);
-        performAssertion(graph, it, source, target, 10.0, false);
+        performAssertion(it, 4.0, true);
+        performAssertion(it, 7.0, true);
+        performAssertion(it, 10.0, false);
     }
 
     @Test
@@ -238,7 +252,7 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
                 = new YenShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 1.0, false);
+        performAssertion(it, 1.0, false);
     }
 
     @Test
@@ -256,72 +270,71 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
         }
     }
 
-
+    /**
+     * If the overall number of paths between {@code source}
+     * and {@code target} is denoted by $n$ and the value of
+     * {@link #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$
+     * then the method iterates over $p = min\{n, m\}$ such paths
+     * and verifies that they are built correctly. Additionally
+     * method checks that are returned in the increasing order by
+     * weight.
+     *
+     * @param graph  graph the iterator is being tested on
+     * @param source source vertex
+     * @param target target vertex
+     */
     private void assertCorrectness(Graph<Integer, DefaultWeightedEdge> graph,
                                    Integer source, Integer target) {
-        int amountOfPathsToIterate = 10;
         YenShortestPathIterator<Integer, DefaultWeightedEdge> it
                 = new YenShortestPathIterator<>(graph, source, target);
         GraphPath<Integer, DefaultWeightedEdge> path;
         double previousPathWeight = 0.0;
         Set<GraphPath<Integer, DefaultWeightedEdge>> paths = new HashSet<>();
         int i = 0;
-        for (; i < amountOfPathsToIterate && it.hasNext(); i++) {
+        for (; i < NUMBER_OF_PATH_TO_ITERATE && it.hasNext(); i++) {
             path = it.next();
             paths.add(path);
-            assertCorrectPath(graph, path, source, target);
+            ((GraphWalk<Integer, DefaultWeightedEdge>) path).verify();
             assertTrue(previousPathWeight <= path.getWeight());
             previousPathWeight = path.getWeight();
         }
         assertEquals(i, paths.size());
     }
 
-    private void performAssertion(Graph<Integer, DefaultWeightedEdge> graph,
-                                  YenShortestPathIterator<Integer, DefaultWeightedEdge> it,
-                                  Integer source, Integer target, double expectedWeight, boolean hasNext) {
+    /**
+     * Performs assertions to check correctness of the next
+     * path which the {@code it} is expected to return.
+     *
+     * @param it             shortest paths iterator
+     * @param expectedWeight expected weight of the next path
+     * @param hasNext        expected return value of the
+     *                       {@link YenShortestPathIterator#hasNext()} method
+     */
+    private void performAssertion(YenShortestPathIterator<Integer, DefaultWeightedEdge> it,
+                                  double expectedWeight, boolean hasNext) {
         GraphPath<Integer, DefaultWeightedEdge> path = it.next();
         assertEquals(expectedWeight, path.getWeight(), 1e-9);
-        assertCorrectPath(graph, path, source, target);
+        ((GraphWalk<Integer, DefaultWeightedEdge>) path).verify();
         assertLooplessPath(path);
         assertEquals(it.hasNext(), hasNext);
     }
 
-    private void assertCorrectPath(Graph<Integer, DefaultWeightedEdge> graph,
-                                   GraphPath<Integer, DefaultWeightedEdge> path,
-                                   Integer source, Integer target) {
-        List<DefaultWeightedEdge> edgeList = path.getEdgeList();
-
-        double expectedWeight = path.getWeight();
-        double actualWeight = edgeList.stream().mapToDouble(graph::getEdgeWeight).sum();
-        assertEquals(expectedWeight, actualWeight, 1e-9);
-
-        if (edgeList.size() == 0) {
-            assertEquals(source, target);
-        } else {
-            assertEquals(graph.getEdgeSource(edgeList.get(0)), source);
-            assertEquals(graph.getEdgeTarget(edgeList.get(edgeList.size() - 1)), target);
-
-            if (edgeList.size() >= 2) {
-                Iterator<DefaultWeightedEdge> it = edgeList.iterator();
-                DefaultWeightedEdge curr = it.next();
-                DefaultWeightedEdge next;
-                while (it.hasNext()) {
-                    next = it.next();
-                    assertEquals(graph.getEdgeTarget(curr), graph.getEdgeSource(next));
-                    curr = next;
-                }
-            }
-        }
-    }
-
+    /**
+     * Asserts that {@code path} is loopless. More formally
+     * checks that the {@code path} has no duplicate vertices.
+     */
     private void assertLooplessPath(GraphPath<Integer, DefaultWeightedEdge> path) {
         Set<Integer> uniqueVertices = new HashSet<>(path.getVertexList());
         assertEquals(path.getVertexList().size(), uniqueVertices.size());
     }
 
+    /**
+     * Generates random graph from the $G(n, p)$ model
+     * using {@link #SEED} as a parameter for the generator instance.
+     */
     private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p) {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator
-                = new GnpRandomGraphGenerator<>(n, p);
+                = new GnpRandomGraphGenerator<>(n, p, SEED);
         generator.generateGraph(graph);
 
         graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, Math.random()));
