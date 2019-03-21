@@ -50,15 +50,15 @@ import java.util.function.Supplier;
  * modifications are undefined.
  *
  * <p>
- * The main idea of this algorithm is to divide each path between the {@link #source} and the
- * {@link #sink} into the root part - the part that coincides within some of the paths computed so far, and
+ * The main idea of this algorithm is to divide each path between the {@code source} and the
+ * {@code sink} into the root part - the part that coincides within some of the paths computed so far, and
  * the spur part, the part that deviates from all other paths computed so far. Therefore, for each path the
  * algorithm maintains a vertex, at which the path deviates from its "parent" path (the candidate path
  * using which it was computed).
  *
  * <p>
- * First the algorithm finds the shortest path between the {@link #source} and the {@link #sink},
- * which is put into the candidates heap. The {@link #source} is assigned to be its deviation vertex.
+ * First the algorithm finds the shortest path between the {@code source} and the {@code sink},
+ * which is put into the candidates heap. The {@code source} is assigned to be its deviation vertex.
  * Then on each iteration the algorithm takes a candidate from the heap with minimum weight, puts it into the
  * result list and builds all possible deviations from it wrt. other paths, that are in the result list.
  * By generating spur paths starting only from the vertices that are after the deviation vertex of current
@@ -107,7 +107,7 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
     private Map<Double, Integer> weightsFrequencies;
 
     /**
-     * Stores the number of paths in {@link #candidatePaths}
+     * Stores the number of paths in {@code candidatePaths}
      * with minimum weight.
      */
     private int numberOfCandidatesWithMinimumWeight;
@@ -122,7 +122,7 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
     }
 
     /**
-     * Getter for {@link #candidatePaths}.
+     * Returns heap with candidate paths.
      *
      * @return heap with candidate paths
      */
@@ -215,12 +215,12 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
 
     /**
      * Builds unique loopless deviations from the given path
-     * in the {@link #graph}. First receives the deviation
+     * in the {@code graph}. First receives the deviation
      * vertex of the current path as well as sets of vertices
      * and edges to be masked during the computations. Then
      * creates an instance of the {@link MaskSubgraph}
      * and builds a reversed shortest paths tree starting at
-     * {@link #sink} in it. Finally builds new paths by deviating
+     * {@code sink} in it. Finally builds new paths by deviating
      * from the vertices of the provided {@code path}.
      * <p>
      * For more information on this step refer to the article
@@ -285,11 +285,11 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
             E edge = graph.getEdge(recoverVertex, recoverVertexSuccessor);
             customTree.recoverEdge(edge);
 
-            double recoverVertexUpdatedCost = maskSubgraph.getEdgeWeight(edge) +
+            double recoverVertexUpdatedDistance = maskSubgraph.getEdgeWeight(edge) +
                     customTree.map.get(recoverVertexSuccessor).getFirst();
 
-            if (customTree.map.get(recoverVertex).getFirst() > recoverVertexUpdatedCost) {
-                customTree.map.put(recoverVertex, Pair.of(recoverVertexUpdatedCost, edge));
+            if (customTree.map.get(recoverVertex).getFirst() > recoverVertexUpdatedDistance) {
+                customTree.map.put(recoverVertex, Pair.of(recoverVertexUpdatedDistance, edge));
                 customTree.correctDistanceBackward(recoverVertex);
             }
         }
@@ -297,8 +297,8 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
 
     /**
      * For the given {@code path} builds sets of vertices and edges to be masked.
-     * First masks all edges and vertices of the provided {@code path} except for the {@link #sink}.
-     * Then for each path in the {@link #resultList} that coincides in the {@code path}
+     * First masks all edges and vertices of the provided {@code path} except for the {@code sink}.
+     * Then for each path in the {@code resultList} that coincides in the {@code path}
      * until the {@code pathDeviation} masks the edge between the {@code pathDeviation} and its
      * successor in this path.
      *
@@ -405,11 +405,11 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
      */
     class YenShortestPathsTree extends TreeSingleSourcePathsImpl<V, E> {
         /**
-         * Vertices which are masked in the {@link #g}.
+         * Vertices which are masked in the {@code g}.
          */
         Set<V> maskedVertices;
         /**
-         * Edges which are masked in the {@link #g}.
+         * Edges which are masked in the {@code g}.
          */
         Set<E> maskedEdges;
 
@@ -432,7 +432,7 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
         }
 
         /**
-         * Restores vertex {@code v} in the {@link #g}.
+         * Restores vertex {@code v} in the {@code g}.
          *
          * @param v vertex to be recovered
          */
@@ -441,7 +441,7 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
         }
 
         /**
-         * Restores edge {@code e} in the {@link #g}.
+         * Restores edge {@code e} in the {@code g}.
          *
          * @param e edge to be recovered
          */
@@ -450,8 +450,8 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
         }
 
         /**
-         * Updates the cost of provided vertex {@code v} in the shortest paths tree
-         * based on the current costs of its successors in the {@link #g}.
+         * Updates the distance of provided vertex {@code v} in the shortest paths tree
+         * based on the current distances of its successors in the {@code g}.
          *
          * @param v vertex which should be updated
          */
@@ -475,9 +475,9 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
         }
 
         /**
-         * Updates the cost of relevant precedents of the input vertex.
+         * Updates the distance of relevant precedents of the input vertex.
          *
-         * @param v vertex cost should be updated
+         * @param v vertex which distance should be updated
          */
         void correctDistanceBackward(V v) {
             List<V> vertices = new LinkedList<>();
@@ -485,19 +485,19 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
 
             while (!vertices.isEmpty()) {
                 V vertex = vertices.remove(0);
-                double vertexCost = super.map.get(vertex).getFirst();
+                double vertexDistance = super.map.get(vertex).getFirst();
 
                 for (E e : super.g.incomingEdgesOf(vertex)) {
                     V predecessor = Graphs.getOppositeVertex(super.g, e, vertex);
 
-                    double predecessorCost = Double.POSITIVE_INFINITY;
+                    double predecessorDistance = Double.POSITIVE_INFINITY;
                     if (super.map.containsKey(predecessor)) {
-                        predecessorCost = super.map.get(predecessor).getFirst();
+                        predecessorDistance = super.map.get(predecessor).getFirst();
                     }
 
-                    double updatedCost = vertexCost + super.g.getEdgeWeight(e);
-                    if (predecessorCost > updatedCost) {
-                        super.map.put(predecessor, Pair.of(updatedCost, e));
+                    double updatedDistance = vertexDistance + super.g.getEdgeWeight(e);
+                    if (predecessorDistance > updatedDistance) {
+                        super.map.put(predecessor, Pair.of(updatedDistance, e));
                         vertices.add(predecessor);
                     }
                 }

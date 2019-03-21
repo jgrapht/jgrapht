@@ -47,12 +47,12 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
 
     /**
      * Seed value which is used to generate random graphs
-     * by {@link #getRandomGraph(Graph, int, double)} method.
+     * by {@code getRandomGraph(Graph, int, double)} method.
      */
     private static final long SEED = 13l;
     /**
      * Number of path to iterate over for each random graph
-     * in the {@link #assertCorrectness(Graph, Integer, Integer)}
+     * in the {@code assertCorrectness(Graph, Integer, Integer)}
      * method.
      */
     private static final int NUMBER_OF_PATH_TO_ITERATE = 10;
@@ -273,7 +273,7 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
     /**
      * If the overall number of paths between {@code source}
      * and {@code target} is denoted by $n$ and the value of
-     * {@link #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$
+     * {@code #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$
      * then the method iterates over $p = min\{n, m\}$ such paths
      * and verifies that they are built correctly. Additionally
      * method checks that are returned in the increasing order by
@@ -329,8 +329,11 @@ public class YenShortestPathIteratorTest extends BaseKShortestPathTest {
     }
 
     /**
-     * Generates random graph from the $G(n, p)$ model
-     * using {@link #SEED} as a parameter for the generator instance.
+     * Generates random graph from the $G(n, p)$ model.
+     *
+     * @param graph graph instance for the generator
+     * @param n     the number of nodes
+     * @param p     the edge probability
      */
     private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p) {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator
