@@ -475,7 +475,7 @@ public class YenShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> 
         }
 
         /**
-         * Updates the distance of relevant precedents of the input vertex.
+         * Updates the distance of relevant predecessors of the input vertex.
          *
          * @param v vertex which distance should be updated
          */
