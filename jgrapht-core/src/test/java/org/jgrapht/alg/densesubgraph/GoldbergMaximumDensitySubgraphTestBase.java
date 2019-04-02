@@ -10,6 +10,12 @@ import java.util.function.*;
 import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * base class for {@link GoldbergMaximumDensitySubgraphAlgorithm} testing
+ *
+ * @author Andre Immig
+ */
+
 public abstract class GoldbergMaximumDensitySubgraphTestBase<V,E> {
 
     protected final double DEFAULT_EPS = Math.pow(10,-5);

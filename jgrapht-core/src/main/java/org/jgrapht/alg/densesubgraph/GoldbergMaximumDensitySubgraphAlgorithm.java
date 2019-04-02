@@ -30,26 +30,26 @@ import java.util.function.*;
  * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley.
  * <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
- * subgraph using a binary search approach.
+ * subgraph using a binary search approach. See {@link GoldbergMaximumDensitySubgraphAlgorithmBase} for
+ * further details
  * <p>
  * This variant of the algorithm assumes the density of a positive real-weighted graph G=(V,E)
  * to be defined as \[\frac{\sum\limits_{e \in E} w(e)}{\left|{V}\right|}\] and sets the weights of
- * the network from @link{GoldbergMaximumDensitySubgraphAlgorithmBase} as proposed in the above
+ * the network from {@link GoldbergMaximumDensitySubgraphAlgorithmBase} as proposed in the above
  * paper. For this case the weights of the network must be chosen to be:
- * \[c_{ij}=w(ij)\forall \{i,j\}\in E\]
- * \[c_{it}=m+2g-d_i\forall i \in V\]
- * \[c_{si}=m\forall i \in V\]
+ * \[c_{ij}=w(ij)\,\forall \{i,j\}\in E\]
+ * \[c_{it}=m+2g-d_i\,\forall i \in V\]
+ * \[c_{si}=m\,\forall i \in V\]
  * where $m=\left|{E}\right|$ and $d_i$ is the degree of vertex $i$.
  * <br>
- * For details see {@link GoldbergMaximumDensitySubgraphAlgorithmBase}.
- * All the math to prove the correctness of these weights is the same.
- * <br>
+ * All the math to prove the correctness of these weights is the same as in
+ * {@link GoldbergMaximumDensitySubgraphAlgorithmBase}. <br>
  * <p>
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{W(W-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
  * The runtime can in this case be given by $O(M(n,n+m)\log{W})$, where $M(n,m)$ is the runtime of
- * the internally used MinimumSTCutAlgorithm and $W$ is the sum all weights from $G$.
+ * the internally used {@link MinimumSTCutAlgorithm} and $W$ is the sum of all weights from $G$.
  * </p>
  *
  * @param <V> Type of vertices

@@ -34,24 +34,24 @@ import java.util.function.*;
  * subgraph using a binary search approach.
  * <p>
  * This variant of the algorithm assumes the density of a positive real edge and vertex weighted graph G=(V,E)
- * to be defined as \[\frac{\sum\limits_{e \in E} w(e) + \sum\limits_{v \in V} w(v)}{\left|{V}\right|}\]
- * and sets the weights of the network from @link{GoldbergMaximumDensitySubgraphAlgorithmBase} as
+ * to be defined as \[\frac{\sum\limits_{e \in E} w(e)}{\sum\limits_{v \in V} w(v)}\]
+ * and sets the weights of the network from {@link GoldbergMaximumDensitySubgraphAlgorithmBase} as
  * proposed in the above paper. For this case the weights of the network must be chosen to be:
- * \[c_{ij}=w(ij)\forall \{i,j\}\in E\]
- * \[c_{it}=m'+2g-d_i-2w(i)\forall i \in V\]
- * \[c_{si}=m'\forall i \in V\]
- * where $m'$ is such that all weights are positive and $d_i$ is the degree of vertex $i$ and
+ * \[c_{ij}=w(ij)\,\forall \{i,j\}\in E\]
+ * \[c_{it}=m'+2gw(i)-d_i\,\forall i \in V\]
+ * \[c_{si}=m'\,\forall i \in V\]
+ * where $m'$ is such, that all weights are positive and $d_i$ is the degree of vertex $i$ and
  * $w(v)$ is the weight of vertex $v$.
  * <br>
- * For details see {@link GoldbergMaximumDensitySubgraphAlgorithmBase}.
- * All the math to prove the correctness of these weights is the same.
+ * All the math to prove the correctness of these weights is the same as in
+ * {@link GoldbergMaximumDensitySubgraphAlgorithmBase}.
  * <br>
  * <p>
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{W(W-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
  * The runtime can in this case be given by $O(M(n,n+m)\log{W})$, where $M(n,m)$ is the runtime of
- * the internally used MinimumSTCutAlgorithm and $W$ is the sum all edge and vertex weights from $G$.
+ * the internally used {@link MinimumSTCutAlgorithm} and $W$ is the sum of all edge weights from $G$.
  * </p>
  *
  * @param <V> Type of vertices

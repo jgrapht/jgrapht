@@ -37,9 +37,10 @@ import java.util.stream.*;
  * subgraph using a binary search approach.
  * <p>
  * In the simplest case of an unweighted graph $G=(V,E)$ the density of $G$ can be defined to be
- * \[\frac{\left|{E}\right|}{\left|{V}\right|}\]
- * Therefore it is in this case equal to half the average vertex degree.
- * For directed graphs one can consider the graph as undirected.
+ * \[\frac{\left|{E}\right|}{\left|{V}\right|}\], where a directed graph can be considered as undirected.
+ * Therefore it is in this case equal to half the average vertex degree. This variant is implemented in
+ * {@link GoldbergMaximumDensitySubgraphAlgorithm}; because the following math translates directly to other variants
+ * the full math is only fully explained once.
  * </p>
  * The idea of the algorithm is to construct a network based on the input graph $G=(V,E)$ and some
  * guess $g$ for the density. This network $N=(V_N, E_N)$ is constructed as follows:
@@ -53,7 +54,8 @@ import java.util.stream.*;
  * where $m=\left|{E}\right|$ and $d_i$ is the degree of vertex $i$.
  * <br>
  * As seen later these weights depend on the definition of the density. Therefore these weights and
- * the following applies to the definition of density from above.
+ * the following applies to the definition of density from above. Definitions suitable for other cases in
+ * can be found in the corresponding subclasses.
  * <p>
  * Using this network one can show some important properties, that are essential
  * for the algorithm to work.
@@ -66,7 +68,7 @@ import java.util.stream.*;
  * Especially important is the capacity of minimum s-t Cut. Using the above equation, one can derive
  * that given a minimum s-t Cut of $N$ and the maximum density of $G$ to be $D$, then $g\geq D$ if
  * $V_1=\emptyset$,otherwise $g\leq D$. Moreover the induced subgraph of $V_1$ regarding G is
- * guaranteed to have density greater $g$ or it can be used to proof that there can't exist any
+ * guaranteed to have density greater $g$, otherwise it can be used to proof that there can't exist any
  * subgraph of $G$ greater $g$.
  * Based on this property one can use a binary search approach to shrink the possible interval which
  * contains the solution.
@@ -76,17 +78,16 @@ import java.util.stream.*;
  * solutions for the maximum density can't be smaller than $\frac{1}{n(n-1)}$. This means shrinking
  * the binary search interval to this size, the correct solution is found.
  * The runtime can in this case be given by $O(M(n,n+m)\log{n}$, where $M(n,m)$ is the runtime of
- * the internally used MinimumSTCutAlgorithm. Especially for large networks it is advised to use a
- * MinimumSTCutAlgorithm with runtime not depending on the number of edges, because the $N$ has
+ * the internally used {@link MinimumSTCutAlgorithm}. Especially for large networks it is advised to use a
+ * {@link MinimumSTCutAlgorithm} whose runtime doesn't depend on the number of edges, because the network $N$ has
  * $O(n+m)$ edges. Preferably one should use {@link org.jgrapht.alg.flow.PushRelabelMFImpl}, leading
  * to a runtime of $O(n^{3}\log{n})$.
  * </p>
  * <p>
  * Similar to the above explanation the same argument can be applied for other definitions of
- * density by adapting the definitions accordingly, where the network needs to be adapted
- * accordingly. Some generalizations can be found in the paper. As these more general variants
- * including edge weights are only guaranteed to terminate for integer edge weights, instead of
- * using the natural termination property, the algorithm needs to be called with $\varepsilon$ in
+ * density by adapting the definitions and the network accordingly. Some generalizations can be found in the paper.
+ * As these more general variants including edge weights are only guaranteed to terminate for integer edge weights,
+ * instead of using the natural termination property, the algorithm needs to be called with $\varepsilon$ in
  * the constructor. The computation then ensures, that the returned maximum density only differs at
  * most $\varepsilon$ from the correct solution. This is why subclasses of this class might have a
  * little different runtime analysis regarding the $\log{n}$ part.
@@ -255,14 +256,14 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V,E> implement
     /**
      * Getter for network weights of edges su for u in V
      * @param vertex of V
-     * @return weight of the edge
+     * @return weight of the edge (s,v)
      */
     protected abstract double getEdgeWeightFromSourceToVertex(V vertex);
 
     /**
      * Getter for network weights of edges ut for u in V
      * @param vertex of V
-     * @return weight of the edge
+     * @return weight of the edge (v,t)
      */
     protected abstract double getEdgeWeightFromVertexToSink(V vertex);
 
