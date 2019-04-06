@@ -50,32 +50,32 @@ import java.util.Set;
  * modifications are undefined.
  *
  * <p>
- * First the shortest path tree in the edge reversed graph {@link #graph}
- * starting at {@link #sink} is built. Thus we get distances $d(v)$ from
- * every vertex $v$ to {@link #sink}. We then define a sidetrack edge to be
- * an edge, which is not in the shortest paths tree but which source and target
- * belong to it. The key observation is that every path between the {@link #source}
- * and the {@link #sink} can be determined by a sequence of such sidetracks.
+ * First the shortest paths tree in the edge reversed graph starting at
+ * {@code sink} is built. Thus we get distances $d(v)$ from every vertex
+ * $v$ to {@code sink}. We then define a sidetrack edge to be an edge, which
+ * is not in the shortest paths tree but which source and target belong to it.
+ * The key observation is that every path between the {@code source}
+ * and the {@code sink} can be determined by a sequence of such sidetracks.
  *
  * <p>
- * Let $d(v)$ be the distance from $v$ to {@link #sink} and $w()$ be the
- * weight function for edges in {@link #graph}. If $e$ connects a pair of
+ * Let $d(v)$ be the distance from $v$ to {@code sink} and $w()$ be the
+ * weight function for edges in {@code graph}. If $e$ connects a pair of
  * vertices $(u, w)$, the $\delta(e)$ is defined as $w(e)+d(w)-d(u)$.
  * Intuitively, $\delta(e)$ measures how much distance is lost by being
- * “sidetracked” along $e$ instead of taking a shortest path to {@link #sink}.
+ * “sidetracked” along $e$ instead of taking a shortest path to {@code sink}.
  *
  * <p>
  * The idea of the algorithm is to build a heap of sidetracks. This heap can
- * be then traversed with breadth-first serach in order to retrieve the implicit
- * representations of the paths between {@link #source} and {@link #sink}.
+ * be then traversed with breadth-first search in order to retrieve the implicit
+ * representations of the paths between {@code source} and {@code sink}.
  *
  * <p>
  * This implementation has several improvements comparing to the original description
  * in the article:
  *
  * <ol>
- * <li>Only vertices that are reachable from {@link #source} are inserted
- * into the paths graph.</li>
+ * <li>An outgoing edge of vertex $v$ is inserted in the paths graph iff
+ * if is reachable from the {@code source}.</li>
  * <li>The cross edges in the paths graph are added only for those vertices,
  * which are reachable from the root vertex.</li>
  * <li>Weights of the edges in the paths graph are mot maintained explicitly,
@@ -101,15 +101,14 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     private final V sink;
 
     /**
-     * Root vertex connected to the root of the balanced
-     * heap of the {@link #source}, from which the BFS over
-     * the paths graph is started.
+     * Vertex of the paths graph from which the BFS
+     * traversal is started.
      */
     private PathsGraphVertex pathsGraphRoot;
 
     /**
-     * Shortest paths tree in the edge reversed graph {@link #graph}
-     * rooted at {@link #sink}.
+     * Shortest paths tree in the edge reversed graph {@code graph}
+     * rooted at {@code sink}.
      */
     private Map<V, Pair<Double, E>> distanceAndPredecessorMap;
 
@@ -120,7 +119,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     private Queue<EppsteinGraphPath> pathsQueue;
 
     /**
-     * For each vertex $v$ in {@link #graph} maintains
+     * For each vertex $v$ in {@code graph} maintains
      * the root of the balanced heap, which corresponds
      * to it.
      */
@@ -166,11 +165,17 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext() {
         return !pathsQueue.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GraphPath<V, E> next() {
         if (pathsQueue.isEmpty()) {
@@ -246,12 +251,12 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * If the {@link #graph} is denoted by $G$, then for
-     * every vertex $v$ reachable from {@link #source} in $G$
+     * If the {@code graph} is denoted by $G$, then for
+     * every vertex $v$ reachable from {@code source} in $G$
      * $D(G)$ contains balanced heaps of all outroots,
      * which corresponds to vertices on the path from $v$ to
-     * {@link #sink}. If there are no sidetracks on the path
-     * from $v$ to {@link #sink}, the value $null$  is stored.
+     * {@code sink}. If there are no sidetracks on the path
+     * from $v$ to {@code sink}, the value $null$  is stored.
      * An outroot is connected to its rest heap if the corresponding
      * vertex has more than one sidetrack.
      */
@@ -289,7 +294,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
 
     /**
      * Adds cross edges for every vertex $v$ reachable
-     * from the root of balanced heap of {@link #source}
+     * from the root of balanced heap of {@code source}
      * in the paths graph. If a sidetrack, which corresponds
      * to $v$ connects some pair of vertices $(u,w)$, a cross
      * edge from $v$ to the root of the balanced heap of $w$
@@ -326,7 +331,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     /**
      * Creates the root vertex $r$ of the paths graph
      * and connects it to the root of the balanced heap
-     * of {@link #source}.
+     * of {@code source}.
      */
     private void addPathGraphRoot() {
         PathsGraphVertex root = new PathsGraphVertex(null, 0);
@@ -338,9 +343,9 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * Guides the process of adding the sidetracks of
      * {@code v} to the paths graph. First receives the
      * outroot and root of the rest heap of {@code v} by
-     * calling {@link #getOutrootAndRestHeapRoot(Object)}.
+     * calling {@code getOutrootAndRestHeapRoot(Object)}.
      * If the outroot if $null$ maps $v$ to {@code predecessorHeap}
-     * in {@link #hMapping}. Otherwise inserts outroot of $v$
+     * in {@code hMapping}. Otherwise inserts outroot of $v$
      * in the balanced heap rooted at {@code predecessorHeap}
      * and links it to the received rest heap root.
      *
@@ -518,7 +523,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * Calculates the $\delta(e)$ value for a given {@code e}.
+     * Calculates the $\delta(e)$ value for a given edge {@code e}.
      *
      * @param e edge
      * @return value of $\delta(e)$
@@ -544,8 +549,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         private List<PathsGraphVertex> pathsGraphVertices;
 
         /**
-         * Shortest paths tree in the edge reversed graph {@link #graph}
-         * rooted at {@link #sink}.
+         * Shortest paths tree in the edge reversed graph {@code graph}
+         * rooted at {@code sink}.
          */
         private Map<V, Pair<Double, E>> distanceAndPredecessorMap;
 
@@ -553,6 +558,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
          * Weight of tha path.
          */
         private double weight;
+
 
         EppsteinGraphPath(Graph<V, E> graph, List<PathsGraphVertex> pathsGraphVertices,
                           Map<V, Pair<Double, E>> distanceAndPredecessorMap, double weight) {
@@ -584,7 +590,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
 
         /**
          * Given the implicit representation of the path between
-         * {@link #source} and {@link #sink} constructs the edge
+         * {@code source} and {@code sink} constructs the edge
          * list of the path.
          *
          * @return edge list of the path
@@ -638,7 +644,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         }
 
         /**
-         * Builds sequence of sidetracks in the {@link #graph}
+         * Builds sequence of sidetracks in the {@code graph}
          * this path corresponds to.
          *
          * @param vertices vertices of the paths graph
@@ -687,14 +693,17 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * the paths graph traversal.
      */
     private class PathsGraphVertex implements Comparable<PathsGraphVertex> {
+
         /**
          * Edge this vertex corresponds to.
          */
         E edge;
+
         /**
-         * $|Delta(edge)$ value.
+         * $Delta(edge)$ value.
          */
         double delta;
+
         /**
          * If this vertex is part of a balanced heap of outroots
          * in the path graph, this value is used to determine where

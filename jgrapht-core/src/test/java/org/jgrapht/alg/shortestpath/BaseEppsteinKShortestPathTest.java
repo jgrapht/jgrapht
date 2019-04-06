@@ -22,8 +22,8 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
- * Base class for {@link EppsteinKShortestPath} and
- * {@link EppsteinShortestPathIterator} test cases.
+ * Base test for {@link EppsteinKShortestPath} and
+ * {@link EppsteinShortestPathIterator}.
  *
  * @author Semen Chudakov
  */

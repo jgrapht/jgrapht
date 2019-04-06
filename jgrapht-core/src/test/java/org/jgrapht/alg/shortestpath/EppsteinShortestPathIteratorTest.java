@@ -23,14 +23,13 @@ import org.jgrapht.Graphs;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -39,11 +38,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Test case for {@link EppsteinShortestPathIterator} class.
+ * Tests for {@link EppsteinShortestPathIterator}.
  *
  * @author Semen Chudakov
  */
 public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathTest {
+
+    /**
+     * Seed value which is used to generate random graphs
+     * by {@code getRandomGraph(Graph, int, double)} method.
+     */
+    private static final long SEED = 13l;
+    /**
+     * Number of path to iterate over for each random graph
+     * in the {@code testOnRandomGraph(Graph, Integer, Integer)}
+     * method.
+     */
+    private static final int NUMBER_OF_PATH_TO_ITERATE = 10;
+
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoSourceGraph() {
@@ -89,7 +101,7 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
         EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it =
                 new EppsteinShortestPathIterator<>(graph, source, target);
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 0.0, false);
+        verifyNextPath(it, 0.0, false);
     }
 
     @Test
@@ -116,16 +128,16 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 55.0, true);
-        performAssertion(graph, it, source, target, 58.0, true);
-        performAssertion(graph, it, source, target, 59.0, true);
-        performAssertion(graph, it, source, target, 61.0, true);
-        performAssertion(graph, it, source, target, 62.0, true);
-        performAssertion(graph, it, source, target, 64.0, true);
-        performAssertion(graph, it, source, target, 65.0, true);
-        performAssertion(graph, it, source, target, 68.0, true);
-        performAssertion(graph, it, source, target, 68.0, true);
-        performAssertion(graph, it, source, target, 71.0, false);
+        verifyNextPath(it, 55.0, true);
+        verifyNextPath(it, 58.0, true);
+        verifyNextPath(it, 59.0, true);
+        verifyNextPath(it, 61.0, true);
+        verifyNextPath(it, 62.0, true);
+        verifyNextPath(it, 64.0, true);
+        verifyNextPath(it, 65.0, true);
+        verifyNextPath(it, 68.0, true);
+        verifyNextPath(it, 68.0, true);
+        verifyNextPath(it, 71.0, false);
     }
 
     @Test
@@ -138,9 +150,9 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 13.0, true);
-        performAssertion(graph, it, source, target, 15.0, true);
-        performAssertion(graph, it, source, target, 21.0, false);
+        verifyNextPath(it, 13.0, true);
+        verifyNextPath(it, 15.0, true);
+        verifyNextPath(it, 21.0, false);
     }
 
     @Test
@@ -153,16 +165,16 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 8.0, true);
-        performAssertion(graph, it, source, target, 16.0, true);
-        performAssertion(graph, it, source, target, 19.0, true);
-        performAssertion(graph, it, source, target, 19.0, true);
-        performAssertion(graph, it, source, target, 22.0, true);
-        performAssertion(graph, it, source, target, 23.0, true);
-        performAssertion(graph, it, source, target, 24.0, true);
-        performAssertion(graph, it, source, target, 25.0, true);
-        performAssertion(graph, it, source, target, 25.0, true);
-        performAssertion(graph, it, source, target, 26.0, true);
+        verifyNextPath(it, 8.0, true);
+        verifyNextPath(it, 16.0, true);
+        verifyNextPath(it, 19.0, true);
+        verifyNextPath(it, 19.0, true);
+        verifyNextPath(it, 22.0, true);
+        verifyNextPath(it, 23.0, true);
+        verifyNextPath(it, 24.0, true);
+        verifyNextPath(it, 25.0, true);
+        verifyNextPath(it, 25.0, true);
+        verifyNextPath(it, 26.0, true);
     }
 
     @Test
@@ -175,11 +187,11 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 1.0, true);
-        performAssertion(graph, it, source, target, 3.0, true);
-        performAssertion(graph, it, source, target, 5.0, true);
-        performAssertion(graph, it, source, target, 7.0, true);
-        performAssertion(graph, it, source, target, 9.0, true);
+        verifyNextPath(it, 1.0, true);
+        verifyNextPath(it, 3.0, true);
+        verifyNextPath(it, 5.0, true);
+        verifyNextPath(it, 7.0, true);
+        verifyNextPath(it, 9.0, true);
 //         and so on
     }
 
@@ -194,15 +206,15 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
 
         assertTrue(it.hasNext());
         for (int i = 0; i < 2; i++) {
-            performAssertion(graph, it, source, target, 4.0, true);
+            verifyNextPath(it, 4.0, true);
         }
 
         for (int i = 0; i < 4; i++) {
-            performAssertion(graph, it, source, target, 8.0, true);
+            verifyNextPath(it, 8.0, true);
         }
 
         for (int i = 0; i < 12; i++) {
-            performAssertion(graph, it, source, target, 12.0, true);
+            verifyNextPath(it, 12.0, true);
         }
 //         and so on
     }
@@ -217,12 +229,12 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 2.0, true);
-        performAssertion(graph, it, source, target, 4.0, true);
-        performAssertion(graph, it, source, target, 6.0, true);
-        performAssertion(graph, it, source, target, 6.0, true);
-        performAssertion(graph, it, source, target, 8.0, true);
-        performAssertion(graph, it, source, target, 8.0, true);
+        verifyNextPath(it, 2.0, true);
+        verifyNextPath(it, 4.0, true);
+        verifyNextPath(it, 6.0, true);
+        verifyNextPath(it, 6.0, true);
+        verifyNextPath(it, 8.0, true);
+        verifyNextPath(it, 8.0, true);
 //         and so on
     }
 
@@ -236,14 +248,14 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 = new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 3.0, true);
-        performAssertion(graph, it, source, target, 4.0, true);
-        performAssertion(graph, it, source, target, 5.0, true);
-        performAssertion(graph, it, source, target, 6.0, true);
-        performAssertion(graph, it, source, target, 7.0, true);
-        performAssertion(graph, it, source, target, 8.0, true);
-        performAssertion(graph, it, source, target, 9.0, true);
-        performAssertion(graph, it, source, target, 10.0, false);
+        verifyNextPath(it, 3.0, true);
+        verifyNextPath(it, 4.0, true);
+        verifyNextPath(it, 5.0, true);
+        verifyNextPath(it, 6.0, true);
+        verifyNextPath(it, 7.0, true);
+        verifyNextPath(it, 8.0, true);
+        verifyNextPath(it, 9.0, true);
+        verifyNextPath(it, 10.0, false);
     }
 
     @Test
@@ -256,11 +268,11 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
                 = new EppsteinShortestPathIterator<>(graph, source, target);
 
         assertTrue(it.hasNext());
-        performAssertion(graph, it, source, target, 1.0, false);
+        verifyNextPath(it, 1.0, false);
     }
 
     @Test
-    public void testRandomGraphs() {
+    public void testOnRandomGraphs() {
         int n = 100;
         double p = 0.5;
         for (int i = 0; i < 1000; i++) {
@@ -270,12 +282,24 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
             getRandomGraph(graph, n, p);
             Integer source = (int) (Math.random() * n);
             Integer target = (int) (Math.random() * n);
-            assertCorrectness(graph, source, target);
+            testOnRandomGraph(graph, source, target);
         }
     }
 
-
-    private void assertCorrectness(Graph<Integer, DefaultWeightedEdge> graph,
+    /**
+     * If the overall number of paths between {@code source}
+     * and {@code target} is denoted by $n$ and the value of
+     * {@code #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$
+     * then the method iterates over $p = min\{n, m\}$ such paths
+     * and verifies that they are built correctly. Additionally
+     * method checks that are returned in the increasing order by
+     * weight.
+     *
+     * @param graph  graph the iterator is being tested on
+     * @param source source vertex
+     * @param target target vertex
+     */
+    private void testOnRandomGraph(Graph<Integer, DefaultWeightedEdge> graph,
                                    Integer source, Integer target) {
         EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it
                 = new EppsteinShortestPathIterator<>(graph, source, target);
@@ -283,59 +307,57 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
         double weight = 0.0;
         Set<GraphPath<Integer, DefaultWeightedEdge>> paths = new HashSet<>();
         int i = 0;
-        for (; i < 10 && it.hasNext(); i++) {
+        for (; i < NUMBER_OF_PATH_TO_ITERATE && it.hasNext(); i++) {
             path = it.next();
             paths.add(path);
-            assertCorrectPath(graph, path, source, target);
+            verifyPath(path);
             assertTrue(weight <= path.getWeight());
             weight = path.getWeight();
         }
         assertEquals(i, paths.size());
     }
 
-    private void performAssertion(Graph<Integer, DefaultWeightedEdge> graph,
-                                  EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it,
-                                  Integer source, Integer target, double expectedWeight, boolean hasNext) {
+    /**
+     * Performs assertions to check correctness of the next
+     * path which the {@code it} is expected to return.
+     *
+     * @param it             shortest paths iterator
+     * @param expectedWeight expected weight of the next path
+     * @param hasNext        expected return value of the
+     *                       {@link YenShortestPathIterator#hasNext()} method
+     */
+    private void verifyNextPath(EppsteinShortestPathIterator<Integer, DefaultWeightedEdge> it,
+                                double expectedWeight, boolean hasNext) {
         GraphPath<Integer, DefaultWeightedEdge> path = it.next();
         assertEquals(expectedWeight, path.getWeight(), 1e-9);
-        assertCorrectPath(graph, path, source, target);
+        verifyPath(path);
         assertEquals(it.hasNext(), hasNext);
     }
 
-    private void assertCorrectPath(Graph<Integer, DefaultWeightedEdge> graph,
-                                   GraphPath<Integer, DefaultWeightedEdge> path,
-                                   Integer source, Integer target) {
-        List<DefaultWeightedEdge> edgeList = path.getEdgeList();
-
-        double expectedWeight = path.getWeight();
-        double actualWeight = edgeList.stream().mapToDouble(graph::getEdgeWeight).sum();
-        assertEquals(expectedWeight, actualWeight, 1e-9);
-
-        if (edgeList.size() == 0) {
-            assertEquals(source, target);
-        } else {
-            assertEquals(graph.getEdgeSource(edgeList.get(0)), source);
-            assertEquals(graph.getEdgeTarget(edgeList.get(edgeList.size() - 1)), target);
-
-            if (edgeList.size() >= 2) {
-                Iterator<DefaultWeightedEdge> it = edgeList.iterator();
-                DefaultWeightedEdge curr = it.next();
-                DefaultWeightedEdge next;
-                while (it.hasNext()) {
-                    next = it.next();
-                    assertEquals(graph.getEdgeTarget(curr), graph.getEdgeSource(next));
-                    curr = next;
-                }
-            }
-        }
+    /**
+     * Creates a graph walk of the give {@code graph} and verifies that the path is correct
+     * by callig {@link GraphWalk#verify()}.
+     *
+     * @param path path to verify
+     */
+    private void verifyPath(GraphPath<Integer, DefaultWeightedEdge> path) {
+        GraphWalk<Integer, DefaultWeightedEdge> walk =
+                new GraphWalk<>(path.getGraph(), path.getStartVertex(), path.getEndVertex(),
+                        path.getVertexList(), path.getEdgeList(), path.getWeight());
+        walk.verify();
     }
 
-
+    /**
+     * Generates random graph from the $G(n, p)$ model.
+     *
+     * @param graph graph instance for the generator
+     * @param n     the number of nodes
+     * @param p     the edge probability
+     */
     private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p) {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator
                 = new GnpRandomGraphGenerator<>(n, p);
         generator.generateGraph(graph);
-
         graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, (int) (Math.random() * 10)));
     }
 }

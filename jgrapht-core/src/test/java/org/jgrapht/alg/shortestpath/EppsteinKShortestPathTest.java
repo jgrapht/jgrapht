@@ -86,7 +86,7 @@ public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathTest {
     /**
      * If the specified k is greater than the total amount of paths between
      * source and target, a list of all existing paths should be returned
-     * and not exception should be thrown.
+     * and no exception should be thrown.
      */
     @Test
     public void testLessThanKPaths() {
