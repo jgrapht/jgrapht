@@ -28,7 +28,26 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.jgrapht.Graph;
 
 /**
- * Exports a graph to a JSON format.
+ * Exports a graph using <a href="https://tools.ietf.org/html/rfc8259">JSON</a>.
+ * 
+ * <p>
+ * The output is one object which contains:
+ * <ul>
+ * <li>A member named <code>nodes</code> whose value is an array of nodes.
+ * <li>A member named <code>edges</code> whose value is an array of edges.
+ * <li>Two members named <code>creator</code> and <code>version</code> for metadata.
+ * </ul>
+ * 
+ * <p>
+ * Each node contains an identifier and possibly other attributes provided using a
+ * {@link ComponentAttributeProvider}. Similarly each edge contains the source and target vertices,
+ * a possible identifier using {@link ComponentNameProvider} and possible other attributes using a
+ * {@link ComponentAttributeProvider}. All these can be adjusted using the appropriate constructor
+ * call, see
+ * {@link #JSONExporter(ComponentNameProvider, ComponentAttributeProvider, ComponentNameProvider, ComponentAttributeProvider)}.
+ * The default constructor constructs integer identifiers using an
+ * {@link IntegerComponentNameProvider} for both vertices and edges and does not output any custom
+ * attributes using {@link EmptyComponentAttributeProvider}.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -209,7 +228,7 @@ public class JSONExporter<V, E>
                 out.print(",");
                 out.print(quoted(entry.getKey()));
                 out.print(":");
-                out.print(quoted(entry.getValue().toString()));
+                outputValue(out, entry.getValue());
             });
     }
 
@@ -222,8 +241,34 @@ public class JSONExporter<V, E>
                 out.print(",");
                 out.print(quoted(entry.getKey()));
                 out.print(":");
-                out.print(quoted(entry.getValue().toString()));
+                outputValue(out, entry.getValue());
             });
+    }
+    
+    private void outputValue(PrintWriter out, Attribute value) {
+        AttributeType type = value.getType();
+        if (type.equals(AttributeType.BOOLEAN)) {
+            boolean booleanValue = Boolean.parseBoolean(value.getValue());
+            out.print(booleanValue?"true":"false");
+        } else if (type.equals(AttributeType.INT)) { 
+            out.print(Integer.parseInt(value.getValue()));
+        } else if (type.equals(AttributeType.LONG)) { 
+            out.print(Long.parseLong(value.getValue()));
+        } else if (type.equals(AttributeType.FLOAT)) { 
+            float floatValue = Float.parseFloat(value.getValue());
+            if (!Float.isFinite(floatValue)) {
+                throw new IllegalArgumentException("Infinity and NaN not allowed in JSON");
+            }
+            out.print(floatValue);
+        } else if (type.equals(AttributeType.DOUBLE)) {
+            double doubleValue = Double.parseDouble(value.getValue());
+            if (!Double.isFinite(doubleValue)) {
+                throw new IllegalArgumentException("Infinity and NaN not allowed in JSON");
+            }
+            out.print(doubleValue);
+        } else { 
+            out.print(quoted(value.toString()));
+        }
     }
 
     private String quoted(final String s)
