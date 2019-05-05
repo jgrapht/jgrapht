@@ -21,11 +21,13 @@ import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.generate.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -226,7 +228,7 @@ public class DirectedAcyclicGraphTest
     }
 
     @Test
-    public void testWhenVertexIsNotInGraph_Then_ThowException()
+    public void testWhenVertexIsNotInGraph_Then_ThrowException()
     {
         DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(DefaultEdge.class);
         try {
@@ -522,6 +524,82 @@ public class DirectedAcyclicGraphTest
         // Then
         assertTrue(dag.iterator().hasNext());
     }
+    
+    //@formatter:off
+    /**
+     * Input:
+     *
+     * A +--> B +--> C
+     * |             ^
+     * |             |
+     * +-------------+
+     *
+     * Expected output when determining ancestors of A
+     * (order does not matter):
+     *
+     * B, C
+     */
+    //@formatter:on
+    @Test
+    public void testMultipleEdges01()
+    {
+        DirectedAcyclicGraph<String, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+
+        graph.addEdge(a, b);
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, c);
+        graph.addEdge(a, c);
+        graph.addEdge(a, c);
+
+        Set<String> expectedAncestors = new HashSet<>();
+        expectedAncestors.add("B");
+        expectedAncestors.add("C");
+
+        Set<String> ancestors = graph.getDescendants("A");
+
+        assertEquals(expectedAncestors, ancestors);
+        
+        Iterator<String> it = graph.iterator();
+        assertEquals(a, it.next());
+        assertEquals(b, it.next());
+        assertEquals(c, it.next());
+        assertFalse(it.hasNext());
+    }
+    
+    @Test
+    public void testMultipleEdges02()
+    {
+        Random rng = new Random(17);
+        
+        // create random DAG with multiple edges
+        Graph<Long, DefaultEdge> sourceGraph = setUpDagWithMultipleEdges(20, 20, 0.5, rng);
+        
+        replayAndTestDAG(sourceGraph, rng);
+    }
+    
+    @Test
+    public void testMultipleEdges03()
+    {
+        // allow different tests per time
+        Random rng = new Random();
+        
+        for(double p: Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)) { 
+            // create random DAG with multiple edges
+            Graph<Long, DefaultEdge> sourceGraph = setUpDagWithMultipleEdges(20, 20, p, rng);
+            replayAndTestDAG(sourceGraph, rng);    
+        }
+        
+    }
 
     // ~ Private Methods ----------------------------------------------------------
 
@@ -533,6 +611,69 @@ public class DirectedAcyclicGraphTest
             SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         randomGraphGenerator.generateGraph(sourceGraph);
         return sourceGraph;
+    }
+    
+    private Graph<Long, DefaultEdge> setUpDagWithMultipleEdges(int levels, int verticesPerLevel, double edgeProb, Random rng) { 
+        Graph<Long,
+            DefaultEdge> g = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(false)
+                .vertexSupplier(SupplierUtil.createLongSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+
+        Long [][] vertices = new Long[levels][verticesPerLevel];
+        for(int i = 0; i < levels; i++) {
+            for(int j=0; j < verticesPerLevel; j++) { 
+                vertices[i][j] = g.addVertex();
+            }
+            if (i == 0) { 
+                continue;
+            }
+            for(int k = 0; k < verticesPerLevel; k++) {
+                for(int l = 0; l < verticesPerLevel; l++) {
+                    if (rng.nextDouble() < edgeProb) { 
+                        g.addEdge(vertices[i-1][k], vertices[i][l]);
+                    }
+                    // sometimes we add the edge twice
+                    if (rng.nextDouble() < edgeProb) { 
+                        g.addEdge(vertices[i-1][k], vertices[i][l]);
+                    }
+                }   
+            }
+        }
+        
+        return g;
+    }
+    
+    private void replayAndTestDAG(Graph<Long, DefaultEdge> sourceGraph, Random rng)
+    {   
+        // extract edges and shuffle
+        List<DefaultEdge> edgeList = sourceGraph.edgeSet().stream().collect(Collectors.toList());
+        Collections.shuffle(edgeList, rng);
+        
+        // create DAG
+        DirectedAcyclicGraph<Long, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
+
+        for(Long v: sourceGraph.vertexSet()) { 
+            graph.addVertex(v);
+        }
+        
+        for(DefaultEdge e: edgeList) { 
+            Long s = sourceGraph.getEdgeSource(e);
+            Long t = sourceGraph.getEdgeTarget(e);
+            graph.addEdge(s, t);
+        }
+        
+        Map<Long, Integer> topo = new HashMap<>();
+        int i = 0;
+        for(Long v: graph) { 
+            topo.put(v, i++);
+        }
+        for(DefaultEdge e: graph.edgeSet()) { 
+            Long s = graph.getEdgeSource(e);
+            Long t = graph.getEdgeTarget(e);
+            assertTrue(topo.get(s) < topo.get(t));
+        }
     }
 
     // ~ Inner Classes ----------------------------------------------------------

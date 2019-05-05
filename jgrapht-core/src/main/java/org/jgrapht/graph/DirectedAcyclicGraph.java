@@ -17,7 +17,6 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
@@ -62,7 +61,7 @@ import java.util.function.*;
  */
 public class DirectedAcyclicGraph<V, E>
     extends
-    SimpleDirectedGraph<V, E>
+    AbstractBaseGraph<V, E>
     implements
     Iterable<V>
 {
@@ -124,7 +123,12 @@ public class DirectedAcyclicGraph<V, E>
         VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
         boolean weighted)
     {
-        super(vertexSupplier, edgeSupplier, weighted);
+        super(
+            vertexSupplier, edgeSupplier,
+            new DefaultGraphType.Builder()
+                .directed().allowMultipleEdges(true).allowSelfLoops(false).weighted(weighted)
+                .allowCycles(false)
+                .build());
         this.visitedStrategyFactory =
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
@@ -158,14 +162,6 @@ public class DirectedAcyclicGraph<V, E>
         Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DirectedAcyclicGraph<>(null, edgeSupplier, false));
-    }
-
-    @Override
-    public GraphType getType()
-    {
-        return new DefaultGraphType.Builder()
-            .directed().weighted(super.getType().isWeighted()).allowMultipleEdges(false)
-            .allowSelfLoops(false).allowCycles(false).build();
     }
 
     @Override
