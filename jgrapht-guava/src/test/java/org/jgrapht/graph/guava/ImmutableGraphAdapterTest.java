@@ -19,6 +19,7 @@ package org.jgrapht.graph.guava;
 
 import com.google.common.graph.*;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
@@ -36,8 +37,7 @@ public class ImmutableGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @Test
-    public void testDirectedGraph()
+    @Test public void testDirectedGraph()
     {
         MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(true).build();
 
@@ -152,9 +152,7 @@ public class ImmutableGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testSerialization()
+    @SuppressWarnings("unchecked") @Test public void testSerialization()
         throws Exception
     {
         MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(true).build();
@@ -173,8 +171,9 @@ public class ImmutableGraphAdapterTest
         Graph<String, EndpointPair<String>> initialGraph =
             new ImmutableGraphAdapter<>(ImmutableGraph.copyOf(graph));
 
-        Graph<String, EndpointPair<String>> g = (Graph<String,
-            EndpointPair<String>>) SerializationTestUtils.serializeAndDeserialize(initialGraph);
+        Graph<String, EndpointPair<String>> g =
+            (Graph<String, EndpointPair<String>>) SerializationTestUtils
+                .serializeAndDeserialize(initialGraph);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

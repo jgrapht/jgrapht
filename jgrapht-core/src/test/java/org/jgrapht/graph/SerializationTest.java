@@ -19,8 +19,7 @@ package org.jgrapht.graph;
 
 import org.junit.*;
 
-import java.io.*;
-
+import static org.jgrapht.graph.SerializationTestUtils.serializeAndDeserialize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -40,9 +39,7 @@ public class SerializationTest
     /**
      * Tests serialization of DirectedMultigraph.
      */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testDirectedMultigraph()
+    @SuppressWarnings("unchecked") @Test public void testDirectedMultigraph()
         throws Exception
     {
         DirectedMultigraph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
@@ -67,9 +64,7 @@ public class SerializationTest
     /**
      * Tests serialization of DirectedAcyclicGraph
      */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testDirectedAcyclicGraph()
+    @SuppressWarnings("unchecked") @Test public void testDirectedAcyclicGraph()
         throws Exception
     {
         DirectedAcyclicGraph<String, DefaultEdge> graph1 =
@@ -94,21 +89,5 @@ public class SerializationTest
         assertEquals(2, graph2.edgesOf(v3).size());
 
         assertEquals(graph1.toString(), graph2.toString());
-    }
-
-    private Object serializeAndDeserialize(Object obj)
-        throws Exception
-    {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bout);
-
-        out.writeObject(obj);
-        out.flush();
-
-        ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bin);
-
-        obj = in.readObject();
-        return obj;
     }
 }
