@@ -89,7 +89,7 @@ public class DirectedAcyclicGraph<V, E>
      */
     public DirectedAcyclicGraph(Class<? extends E> edgeClass)
     {
-        this(null, SupplierUtil.createSupplier(edgeClass), false);
+        this(null, SupplierUtil.createSupplier(edgeClass), false, false);
     }
 
     /**
@@ -104,7 +104,23 @@ public class DirectedAcyclicGraph<V, E>
     {
         this(
             vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
-            weighted);
+            weighted, false);
+    }
+    
+    /**
+     * Construct a directed acyclic graph.
+     *
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param weighted if true the graph will be weighted, otherwise not
+     * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
+     */
+    public DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted, boolean allowMultipleEdges)
+    {
+        this(
+            vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
+            weighted, allowMultipleEdges);
     }
 
     /**
@@ -117,16 +133,41 @@ public class DirectedAcyclicGraph<V, E>
      * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
      *        the way this class stores the topological order.
      * @param weighted if true the graph will be weighted, otherwise not
+     * @deprecated Deprecated
      */
+    @Deprecated
     protected DirectedAcyclicGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
         VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
         boolean weighted)
     {
+        this(vertexSupplier, edgeSupplier, visitedStrategyFactory, topoOrderMap, weighted, false);
+    }
+
+    /**
+     * Construct a directed acyclic graph.
+     * 
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
+     *        implementation to adjust the performance tradeoffs.
+     * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
+     *        the way this class stores the topological order.
+     * @param weighted if true the graph will be weighted, otherwise not
+     * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
+     */
+    protected DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
+        VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
+        boolean weighted, boolean allowMultipleEdges)
+    {
         super(
             vertexSupplier, edgeSupplier,
             new DefaultGraphType.Builder()
-                .directed().allowMultipleEdges(true).allowSelfLoops(false).weighted(weighted)
+                .directed()
+                .allowMultipleEdges(allowMultipleEdges)
+                .allowSelfLoops(false)
+                .weighted(weighted)
                 .allowCycles(false)
                 .build());
         this.visitedStrategyFactory =
@@ -135,7 +176,7 @@ public class DirectedAcyclicGraph<V, E>
             Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
         this.topoComparator = new TopoComparator();
     }
-
+    
     /**
      * Create a builder for this kind of graph.
      *

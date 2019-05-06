@@ -544,7 +544,7 @@ public class DirectedAcyclicGraphTest
     public void testMultipleEdges01()
     {
         DirectedAcyclicGraph<String, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(DefaultEdge.class);
+            new DirectedAcyclicGraph<>(SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, true);
 
         String a = "A";
         String b = "B";
@@ -650,9 +650,9 @@ public class DirectedAcyclicGraphTest
         List<DefaultEdge> edgeList = sourceGraph.edgeSet().stream().collect(Collectors.toList());
         Collections.shuffle(edgeList, rng);
         
-        // create DAG
+        // create DAG which allows multiple edges
         DirectedAcyclicGraph<Long, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(DefaultEdge.class);
+            new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false, true);
 
         for(Long v: sourceGraph.vertexSet()) { 
             graph.addVertex(v);
