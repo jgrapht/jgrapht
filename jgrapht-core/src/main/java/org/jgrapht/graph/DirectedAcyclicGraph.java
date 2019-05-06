@@ -133,9 +133,7 @@ public class DirectedAcyclicGraph<V, E>
      * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
      *        the way this class stores the topological order.
      * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Deprecated
      */
-    @Deprecated
     protected DirectedAcyclicGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
         VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
