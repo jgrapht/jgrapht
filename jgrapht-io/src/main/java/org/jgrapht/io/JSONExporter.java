@@ -139,10 +139,10 @@ public class JSONExporter<V, E>
         out.print(quoted("nodes"));
         out.print(':');
         out.print('[');
-        int j = 0;
+        boolean printComma = false;
         for (V v : g.vertexSet()) {
-            if (j == 0) {
-                j++;
+            if (!printComma) {
+                printComma = true;
             } else {
                 out.print(',');
             }
@@ -157,10 +157,10 @@ public class JSONExporter<V, E>
         out.print(quoted("edges"));
         out.print(':');
         out.print('[');
-        int i = 0;
+        printComma = false;
         for (E e : g.edgeSet()) {
-            if (i == 0) {
-                i++;
+            if (!printComma) {
+                printComma = true;
             } else {
                 out.print(',');
             }
