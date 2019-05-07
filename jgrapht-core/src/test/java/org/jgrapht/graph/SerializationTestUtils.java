@@ -17,13 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
-
 import java.io.*;
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Serialization test utils for the serialization and deserialization of JGraphT objects.
@@ -32,29 +26,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class SerializationTestUtils
 {
-    private static final String v1 = "v1";
-    private static final String v2 = "v2";
-    private static final String v3 = "v3";
-    private static final List<String> vertexList = Arrays.asList(v1, v2, v3);
-
-    public static String getV1()
+    // don't instantiate this class
+    private SerializationTestUtils()
     {
-        return v1;
-    }
-
-    public static String getV2()
-    {
-        return v2;
-    }
-
-    public static String getV3()
-    {
-        return v3;
-    }
-
-    public static List<String> getVertexList()
-    {
-        return vertexList;
     }
 
     public static Object serializeAndDeserialize(Object obj)
@@ -71,23 +45,5 @@ public class SerializationTestUtils
 
         obj = in.readObject();
         return obj;
-    }
-
-    public static <V, E> void assertContainsAllVertices(Graph<V, E> graph, List<V> vertices)
-    {
-        for (V v : vertices) {
-            assertTrue(graph.containsVertex(v));
-        }
-    }
-
-    public static <V, E> void checkEdgesOf(Graph<V, E> graph, List<Integer> edges, List<V> vertices)
-    {
-        if (edges.size() != vertices.size()) {
-            throw new IllegalArgumentException(
-                "the size of list of #edges and vertices should match");
-        }
-        for (int i = 0; i < edges.size(); i++) {
-            assertEquals(edges.get(i).intValue(), graph.edgesOf(vertices.get(i)).size());
-        }
     }
 }
