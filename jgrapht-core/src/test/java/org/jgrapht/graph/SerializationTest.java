@@ -37,7 +37,9 @@ public class SerializationTest
     /**
      * Tests serialization of DirectedMultigraph.
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DirectedMultigraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DirectedMultigraph()
         throws Exception
     {
         DirectedMultigraph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
@@ -56,7 +58,9 @@ public class SerializationTest
     /**
      * Tests serialization of DirectedAcyclicGraph
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DirectedAcyclicGraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DirectedAcyclicGraph()
         throws Exception
     {
         DirectedAcyclicGraph<String, DefaultEdge> graph1 =
@@ -82,7 +86,9 @@ public class SerializationTest
      * <p>
      * directed, with self-loops, with multi-edges, un-weighted
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DirectedPseudograph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DirectedPseudograph()
         throws Exception
     {
         DirectedPseudograph<String, DefaultEdge> graph1 =
@@ -114,7 +120,9 @@ public class SerializationTest
     /**
      * Tests serialization of DefaultDirectedGraph.
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DefaultDirectedGraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DefaultDirectedGraph()
         throws Exception
     {
         DefaultDirectedGraph<String, DefaultEdge> graph1 =
@@ -139,7 +147,9 @@ public class SerializationTest
     /**
      * Tests serialization of DefaultUndirectedGraph
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DefaultUndirectedGraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DefaultUndirectedGraph()
         throws Exception
     {
         DefaultUndirectedGraph<String, DefaultEdge> graph1 =
@@ -173,7 +183,9 @@ public class SerializationTest
      * <p>
      * undirected, weighted, self-loops allowed, no-multiple edges
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DefaultUndirectedWeightedGraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DefaultUndirectedWeightedGraph()
         throws Exception
     {
         DefaultUndirectedWeightedGraph<String, DefaultWeightedEdge> graph1 =
@@ -219,7 +231,9 @@ public class SerializationTest
      * <p>
      * weighted, with multiple edges, no self-loops
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization_DirectedWeightedMultiGraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization_DirectedWeightedMultiGraph()
         throws Exception
     {
         DirectedWeightedMultigraph<String, DefaultWeightedEdge> graph1 =

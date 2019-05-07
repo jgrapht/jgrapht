@@ -25,6 +25,11 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Serialization test utils for the serialization and deserialization of JGraphT objects.
+ *
+ * @author John V. Sichi
+ */
 public class SerializationTestUtils
 {
     private static final String v1 = "v1";

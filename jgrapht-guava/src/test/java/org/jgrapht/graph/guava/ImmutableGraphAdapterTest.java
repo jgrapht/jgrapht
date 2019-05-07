@@ -37,7 +37,8 @@ public class ImmutableGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @Test public void testDirectedGraph()
+    @Test
+    public void testDirectedGraph()
     {
         MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(true).build();
 
@@ -152,7 +153,9 @@ public class ImmutableGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization()
         throws Exception
     {
         MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(true).build();

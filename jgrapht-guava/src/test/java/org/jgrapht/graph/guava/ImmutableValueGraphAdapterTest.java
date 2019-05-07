@@ -39,7 +39,8 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @Test public void testWeights()
+    @Test
+    public void testWeights()
     {
         MutableValueGraph<String, MyValue> graph =
             ValueGraphBuilder.directed().allowsSelfLoops(true).build();
@@ -83,7 +84,8 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Test special case of double value type
      */
-    @Test public void testDoubleWeights()
+    @Test
+    public void testDoubleWeights()
     {
         MutableValueGraph<String, Double> graph =
             ValueGraphBuilder.directed().allowsSelfLoops(true).build();
@@ -126,7 +128,8 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Example on javadoc
      */
-    @Test public void testExample()
+    @Test
+    public void testExample()
     {
         MutableValueGraph<String, MyValue> mutableValueGraph =
             ValueGraphBuilder.directed().allowsSelfLoops(true).build();
@@ -148,7 +151,8 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @Test public void testDirectedGraph()
+    @Test
+    public void testDirectedGraph()
     {
         MutableValueGraph<String, MyValue> graph =
             ValueGraphBuilder.directed().allowsSelfLoops(true).build();
@@ -265,7 +269,9 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked") @Test public void testSerialization()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization()
         throws Exception
     {
         MutableValueGraph<String, MyValue> graph =
