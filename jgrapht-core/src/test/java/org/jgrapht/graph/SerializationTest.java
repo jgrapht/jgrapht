@@ -17,12 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graphs;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 import static org.jgrapht.graph.SerializationTestUtils.*;
 import static org.junit.Assert.assertEquals;
@@ -100,8 +99,6 @@ public class SerializationTest
         DirectedPseudograph<String, DefaultEdge> graph2 =
             (DirectedPseudograph<String, DefaultEdge>) serializeAndDeserialize(graph1);
         assertContainsAllVertices(graph2, getVertexList());
-
-        System.out.println(graph2.getAllEdges(getV1(), getV2()));
 
         assertTrue(graph2.containsEdge(getV1(), getV2()));
         assertTrue(graph2.containsEdge(getV2(), getV3()));

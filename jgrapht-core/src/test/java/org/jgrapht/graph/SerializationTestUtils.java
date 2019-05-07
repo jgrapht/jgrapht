@@ -17,14 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
