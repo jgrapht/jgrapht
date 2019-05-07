@@ -53,9 +53,9 @@ import java.util.Set;
  * First the shortest paths tree in the edge reversed graph starting at
  * {@code sink} is built. Thus we get distances $d(v)$ from every vertex
  * $v$ to {@code sink}. We then define a sidetrack edge to be an edge, which
- * is not in the shortest paths tree but which source and target belong to it.
- * The key observation is that every path between the {@code source}
- * and the {@code sink} can be determined by a sequence of such sidetracks.
+ * is not in the shortest paths tree. The key observation is that every path
+ * between the {@code source} and the {@code sink} can be solely determined
+ * by a sub-sequence of its edges which are sidetracks.
  *
  * <p>
  * Let $d(v)$ be the distance from $v$ to {@code sink} and $w()$ be the
@@ -70,13 +70,13 @@ import java.util.Set;
  * representations of the paths between {@code source} and {@code sink}.
  *
  * <p>
- * This implementation has several improvements comparing to the original description
- * in the article:
+ * This implementation has several improvements in comparison  to the original
+ * description in the article:
  *
  * <ol>
  * <li>An outgoing edge of vertex $v$ is inserted in the paths graph iff
- * if is reachable from the {@code source}.</li>
- * <li>The cross edges in the paths graph are added only for those vertices,
+ * it is reachable from the {@code source}.</li>
+ * <li>The cross edges in the paths graph are added only for those vertices
  * which are reachable from the root vertex.</li>
  * <li>Weights of the edges in the paths graph are mot maintained explicitly,
  * because they are computed during its traversal.</li>
@@ -223,7 +223,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
 
     /**
      * Adds an extension of {@code paths} with {@code extendingVertex}
-     * being the last its element.
+     * being its last element.
      *
      * @param path            path to put extension of
      * @param extendingVertex vertex to extend path with

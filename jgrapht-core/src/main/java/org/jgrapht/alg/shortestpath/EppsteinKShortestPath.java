@@ -35,10 +35,10 @@ import java.util.Objects;
  * (February 1999), 652-673. DOI=http://dx.doi.org/10.1137/S0097539795290477.
  *
  * <p>
- * The main advantage ot this algorithm is that it achieves the state-of-the-art complexity
- * of $O(m + n\log n + k\log k)$ if the paths are produced in sorted order, where $m$ is the
- * amount of edges in the graph, $n$ is the amount of vertices in the graph and $k$ is the
- * amount of paths needed.
+ * The main advantage ot this algorithm is that it achieves the state-of-the-art
+ * complexity of $O(m + n\log n + k\log k)$ while guaranteeing that the paths are
+ * produced in sorted order, where $m$ is the number of edges in the graph, $n$ is
+ * the number of vertices in the graph and $k$ is the number of paths needed.
  *
  * <p>
  * This implementation can only be used for directed simple graphs.
@@ -65,7 +65,7 @@ public class EppsteinKShortestPath<V, E> implements KShortestPathAlgorithm<V, E>
 
     /**
      * Computes {@code k} shortest paths between {@code source}
-     * and {@code sink}. If the amount of paths is denoted by $n$,
+     * and {@code sink}. If the number of paths is denoted by $n$,
      * the method returns $m = min\{k, n\}$ such paths. The paths are
      * produced in sorted order by weights.
      *
@@ -77,7 +77,7 @@ public class EppsteinKShortestPath<V, E> implements KShortestPathAlgorithm<V, E>
     @Override
     public List<GraphPath<V, E>> getPaths(V source, V sink, int k) {
         if (k < 0) {
-            throw new IllegalArgumentException("k should be positive");
+            throw new IllegalArgumentException("k must be non-negative");
         }
         List<GraphPath<V, E>> result = new ArrayList<>();
         EppsteinShortestPathIterator<V, E> iterator =
