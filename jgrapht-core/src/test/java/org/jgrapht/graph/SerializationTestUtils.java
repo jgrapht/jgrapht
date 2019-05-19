@@ -31,6 +31,7 @@ public class SerializationTestUtils
     {
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T serializeAndDeserialize(T obj)
         throws Exception
     {

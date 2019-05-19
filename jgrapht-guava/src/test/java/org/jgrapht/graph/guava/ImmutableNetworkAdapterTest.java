@@ -200,8 +200,7 @@ public class ImmutableNetworkAdapterTest
         assertTrue(g.getType().isAllowingCycles());
         assertFalse(g.getType().isModifiable());
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());

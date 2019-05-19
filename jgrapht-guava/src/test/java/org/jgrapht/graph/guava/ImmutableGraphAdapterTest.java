@@ -153,7 +153,6 @@ public class ImmutableGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -174,8 +173,7 @@ public class ImmutableGraphAdapterTest
         Graph<String, EndpointPair<String>> initialGraph =
             new ImmutableGraphAdapter<>(ImmutableGraph.copyOf(graph));
 
-        Graph<String, EndpointPair<String>> g =
-            (Graph<String, EndpointPair<String>>) SerializationTestUtils
+        Graph<String, EndpointPair<String>> g = SerializationTestUtils
                 .serializeAndDeserialize(initialGraph);
 
         assertFalse(g.getType().isAllowingMultipleEdges());

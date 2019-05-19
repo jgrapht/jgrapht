@@ -134,7 +134,6 @@ public class SerializationTest
      * no multiple-edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSimpleGraph()
         throws Exception
@@ -157,7 +156,6 @@ public class SerializationTest
      * multiple-edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testMultiGraph()
         throws Exception
@@ -181,7 +179,6 @@ public class SerializationTest
      * multiple-edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testPseudograph()
         throws Exception
@@ -207,7 +204,6 @@ public class SerializationTest
      * no multiple edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDefaultUndirectedGraph()
         throws Exception
@@ -233,7 +229,6 @@ public class SerializationTest
      * no-multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSimpleWeightedGraph()
         throws Exception
@@ -266,7 +261,6 @@ public class SerializationTest
      * multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testWeightedMultigraph()
         throws Exception
@@ -305,7 +299,6 @@ public class SerializationTest
      * multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testWeightedPseudograph()
         throws Exception
@@ -347,7 +340,6 @@ public class SerializationTest
      * no multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDefaultUndirectedWeightedGraph()
         throws Exception
@@ -383,7 +375,6 @@ public class SerializationTest
      * no multiple-edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSimpleDirectedGraph()
         throws Exception
@@ -408,7 +399,6 @@ public class SerializationTest
      * multiple edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDirectedMultigraph()
         throws Exception
@@ -433,7 +423,6 @@ public class SerializationTest
      * multiple-edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDirectedPseudograph()
         throws Exception
@@ -462,7 +451,6 @@ public class SerializationTest
      * no multiple-edges
      * unweighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDefaultDirectedGraph()
         throws Exception
@@ -488,7 +476,6 @@ public class SerializationTest
      * no multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSimpleDirectedWeightedGraph()
         throws Exception
@@ -522,7 +509,6 @@ public class SerializationTest
      * multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDirectedWeightedMultiGraph()
         throws Exception
@@ -563,7 +549,6 @@ public class SerializationTest
      * multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDirectedWeightedPseudograph()
         throws Exception
@@ -610,7 +595,6 @@ public class SerializationTest
      * no multiple edges
      * weighted
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testDefaultDirectedWeightedGraph()
         throws Exception
