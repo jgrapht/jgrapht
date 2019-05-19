@@ -292,8 +292,8 @@ public class ImmutableValueGraphAdapterTest
             new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
 
-        Graph<String, EndpointPair<String>> g = SerializationTestUtils
-                .serializeAndDeserialize(initialGraph);
+        Graph<String, EndpointPair<String>> g =
+            SerializationTestUtils.serializeAndDeserialize(initialGraph);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

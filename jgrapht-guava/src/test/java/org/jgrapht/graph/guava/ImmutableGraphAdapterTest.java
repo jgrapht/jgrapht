@@ -173,8 +173,8 @@ public class ImmutableGraphAdapterTest
         Graph<String, EndpointPair<String>> initialGraph =
             new ImmutableGraphAdapter<>(ImmutableGraph.copyOf(graph));
 
-        Graph<String, EndpointPair<String>> g = SerializationTestUtils
-                .serializeAndDeserialize(initialGraph);
+        Graph<String, EndpointPair<String>> g =
+            SerializationTestUtils.serializeAndDeserialize(initialGraph);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
