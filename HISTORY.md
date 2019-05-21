@@ -29,6 +29,7 @@ Changes to JGraphT in each version:
     - Enhanced `DirectedAcyclicGraph` to support multiple edges (contributed by Dimitrios Michail based on a suggestion by Sarat Chandra Balla)
     - Refactored `SerializationTestUtils` (contributed by Lavish Kothari)
     - Added more serialization test coverage (contributed by Lavish Kothari)
+    - Added Goldberg's algorithms for the calculation of maximum density subgraphs (contributed by Andre Immig)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
