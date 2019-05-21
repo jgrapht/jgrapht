@@ -264,7 +264,6 @@ public class MutableGraphAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization1()
         throws Exception

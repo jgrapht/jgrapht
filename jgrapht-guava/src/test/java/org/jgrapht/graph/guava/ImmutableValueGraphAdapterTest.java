@@ -58,7 +58,7 @@ public class ImmutableValueGraphAdapterTest
 
         Graph<String, EndpointPair<String>> g =
             new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -170,7 +170,7 @@ public class ImmutableValueGraphAdapterTest
 
         Graph<String, EndpointPair<String>> g =
             new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -269,7 +269,6 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -290,7 +289,7 @@ public class ImmutableValueGraphAdapterTest
 
         Graph<String, EndpointPair<String>> initialGraph =
             new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         Graph<String, EndpointPair<String>> g =
             SerializationTestUtils.serializeAndDeserialize(initialGraph);

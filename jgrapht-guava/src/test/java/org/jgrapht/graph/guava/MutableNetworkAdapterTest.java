@@ -192,7 +192,6 @@ public class MutableNetworkAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -250,7 +249,6 @@ public class MutableNetworkAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization1()
         throws Exception

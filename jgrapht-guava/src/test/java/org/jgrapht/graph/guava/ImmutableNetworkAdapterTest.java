@@ -159,7 +159,6 @@ public class ImmutableNetworkAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
