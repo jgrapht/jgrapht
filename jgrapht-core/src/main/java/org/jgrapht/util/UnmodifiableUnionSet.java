@@ -48,20 +48,14 @@ public class UnmodifiableUnionSet<E>
     {
         Objects.requireNonNull(first);
         Objects.requireNonNull(second);
-        if (second.size() > first.size()) {
-            // always store largest set first
-            this.first = second;
-            this.second = first;
-        } else {
-            this.first = first;
-            this.second = second;
-        }
+        this.first = first;
+        this.second = second;
     }
 
     @Override
     public Iterator<E> iterator()
     {
-        return new UnionIterator();
+        return new UnionIterator(orderSetsBySize());
     }
 
     /**
@@ -72,9 +66,11 @@ public class UnmodifiableUnionSet<E>
     @Override
     public int size()
     {
-        int count = first.size();
-        for (E e : second) {
-            if (!first.contains(e)) {
+        SetSizeOrdering ordering = orderSetsBySize();
+        Set<E> bigger = ordering.bigger;
+        int count = ordering.biggerSize;
+        for (E e : ordering.smaller) {
+            if (!bigger.contains(e)) {
                 count++;
             }
         }
@@ -87,19 +83,63 @@ public class UnmodifiableUnionSet<E>
         return first.contains(o) || second.contains(o);
     }
 
+    private SetSizeOrdering orderSetsBySize()
+    {
+        int firstSize = first.size();
+        int secondSize = second.size();
+        if (secondSize > firstSize) {
+            return new SetSizeOrdering(
+                second,
+                first,
+                secondSize,
+                firstSize);
+        } else {
+            return new SetSizeOrdering(
+                first,
+                second,
+                firstSize,
+                secondSize);
+        }
+    }
+
+    // note that these inner classes could be static, but we
+    // declare them as non-static to avoid the clutter from
+    // duplicating the generic type parameter
+
+    private class SetSizeOrdering
+    {
+        final Set<E> bigger;
+        final Set<E> smaller;
+        final int biggerSize;
+        final int smallerSize;
+
+        SetSizeOrdering(
+            Set<E> bigger,
+            Set<E> smaller,
+            int biggerSize,
+            int smallerSize)
+        {
+            this.bigger = bigger;
+            this.smaller = smaller;
+            this.biggerSize = biggerSize;
+            this.smallerSize = smallerSize;
+        }
+    }
+
     private class UnionIterator
         implements
         Iterator<E>
     {
-
-        private boolean inFirstSet;
+        private SetSizeOrdering ordering;
+        private boolean inBiggerSet;
         private Iterator<E> iterator;
         private E cur;
 
-        public UnionIterator()
+        UnionIterator(SetSizeOrdering ordering)
         {
-            this.inFirstSet = true;
-            this.iterator = first.iterator();
+            this.ordering = ordering;
+            this.inBiggerSet = true;
+            this.iterator = ordering.bigger.iterator();
             this.cur = prefetch();
         }
 
@@ -126,17 +166,17 @@ public class UnmodifiableUnionSet<E>
         private E prefetch()
         {
             while (true) {
-                if (inFirstSet) {
+                if (inBiggerSet) {
                     if (iterator.hasNext()) {
                         return iterator.next();
                     } else {
-                        inFirstSet = false;
-                        iterator = second.iterator();
+                        inBiggerSet = false;
+                        iterator = ordering.smaller.iterator();
                     }
                 } else {
                     if (iterator.hasNext()) {
                         E elem = iterator.next();
-                        if (!first.contains(elem)) {
+                        if (!ordering.bigger.contains(elem)) {
                             return elem;
                         }
                     } else {
