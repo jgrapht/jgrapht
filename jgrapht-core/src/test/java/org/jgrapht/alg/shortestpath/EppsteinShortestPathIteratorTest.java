@@ -42,19 +42,56 @@ import static org.junit.Assert.assertFalse;
  *
  * @author Semen Chudakov
  */
-public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathTest {
+public class EppsteinShortestPathIteratorTest {
 
     /**
      * Seed value which is used to generate random graphs
      * by {@code getRandomGraph(Graph, int, double)} method.
      */
-    private static final long SEED = 13l;
+    private static final long SEED = 13L;
     /**
      * Number of path to iterate over for each random graph
      * in the {@code testOnRandomGraph(Graph, Integer, Integer)}
      * method.
      */
     private static final int NUMBER_OF_PATH_TO_ITERATE = 10;
+
+    private final int[][] simpleGraph1 = {
+            {1, 2, 2}, {2, 3, 20}, {3, 4, 14},
+            {1, 5, 13}, {2, 6, 27}, {3, 7, 14}, {4, 8, 15},
+            {5, 6, 9}, {6, 7, 10}, {7, 8, 25},
+            {5, 9, 15}, {6, 10, 20}, {7, 11, 12}, {8, 12, 7},
+            {9, 10, 18}, {10, 11, 8}, {11, 12, 11}
+    };
+    private final int[][] simpleGraph2 = {{1, 2, 5}, {1, 3, 6}, {2, 3, 7}, {2, 4, 8}, {3, 4, 9}};
+    private final int[][] simpleGraph3 = {
+            {0, 1, 6}, {2, 0, 9}, {4, 0, 4}, {0, 5, 6}, {0, 6, 5},
+            {2, 1, 1}, {1, 4, 9}, {4, 1, 2}, {1, 5, 7}, {1, 6, 5},
+            {2, 4, 1}, {2, 5, 0}, {3, 4, 4}, {4, 3, 4}, {4, 5, 6},
+            {5, 4, 8}, {4, 6, 3}, {6, 5, 0}
+    };
+
+    private final int[][] cyclicGraph1 = {{1, 2, 1}, {2, 1, 1}};
+
+    private final int[][] cyclicGraph2 = {
+            {1, 2, 1}, {2, 3, 1}, {3, 4, 1}, {4, 1, 1},
+            {1, 5, 2}, {5, 6, 2}, {6, 7, 2}, {7, 1, 2},
+            {3, 6, 2}, {6, 3, 2}
+    };
+
+    private final int[][] cyclicGraph3 = {
+            {1, 2, 1}, {2, 3, 1}, {3, 4, 1},
+            {3, 4, 1}, {4, 3, 1}, {4, 5, 1}, {5, 4, 1}
+    };
+
+    private final int[][] restHeapGraph = {
+            {1, 2, 2}, {1, 3, 3}, {1, 4, 4}, {1, 5, 5}, {1, 6, 6}, {1, 7, 7}, {1, 8, 8}, {1, 9, 9},
+            {2, 10, 1}, {3, 10, 1}, {4, 10, 1}, {5, 10, 1}, {6, 10, 1}, {7, 10, 1}, {8, 10, 1}, {9, 10, 1}
+    };
+    private final int[][] notShortestPathEdgesGraph = {
+            {1, 2, 1},
+            {1, 3, 3}, {1, 4, 4}, {1, 5, 5}, {1, 6, 6}, {1, 7, 7}, {1, 8, 8}, {1, 9, 9}
+    };
 
 
     @Test(expected = IllegalArgumentException.class)
@@ -356,8 +393,14 @@ public class EppsteinShortestPathIteratorTest extends BaseEppsteinKShortestPathT
      */
     private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p) {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator
-                = new GnpRandomGraphGenerator<>(n, p);
+                = new GnpRandomGraphGenerator<>(n, p, SEED);
         generator.generateGraph(graph);
         graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, (int) (Math.random() * 10)));
+    }
+
+    private void readGraph(Graph<Integer, DefaultWeightedEdge> graph, int[][] representation) {
+        for (int[] ints : representation) {
+            Graphs.addEdgeWithVertices(graph, ints[0], ints[1], ints[2]);
+        }
     }
 }

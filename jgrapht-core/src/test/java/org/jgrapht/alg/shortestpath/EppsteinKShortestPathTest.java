@@ -34,7 +34,19 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Semen Chudakov
  */
-public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathTest {
+public class EppsteinKShortestPathTest {
+    final int[][] simpleGraph1 = {
+            {1, 2, 2}, {2, 3, 20}, {3, 4, 14},
+            {1, 5, 13}, {2, 6, 27}, {3, 7, 14}, {4, 8, 15},
+            {5, 6, 9}, {6, 7, 10}, {7, 8, 25},
+            {5, 9, 15}, {6, 10, 20}, {7, 11, 12}, {8, 12, 7},
+            {9, 10, 18}, {10, 11, 8}, {11, 12, 11}
+    };
+
+    final int[][] cyclicGraph3 = {
+            {1, 2, 1}, {2, 3, 1}, {3, 4, 1},
+            {3, 4, 1}, {4, 3, 1}, {4, 5, 1}, {5, 4, 1}
+    };
 
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeK() {
@@ -103,6 +115,13 @@ public class EppsteinKShortestPathTest extends BaseEppsteinKShortestPathTest {
         assertEquals(weights.size(), paths.size());
         for (int i = 0; i < paths.size(); i++) {
             assertEquals(weights.get(i), paths.get(i).getWeight(), 1e-9);
+        }
+    }
+
+
+    private void readGraph(Graph<Integer, DefaultWeightedEdge> graph, int[][] representation) {
+        for (int[] ints : representation) {
+            Graphs.addEdgeWithVertices(graph, ints[0], ints[1], ints[2]);
         }
     }
 }

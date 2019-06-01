@@ -35,9 +35,9 @@ import java.util.Objects;
  * (February 1999), 652-673. DOI=http://dx.doi.org/10.1137/S0097539795290477.
  *
  * <p>
- * The main advantage ot this algorithm is that it achieves the state-of-the-art
- * complexity of $O(m + n\log n + k\log k)$ while guaranteeing that the paths are
- * produced in sorted order, where $m$ is the number of edges in the graph, $n$ is
+ * The main advantage ot this algorithm is that it achieves the complexity of
+ * $O(m + n\log n + k\log k)$ while guaranteeing that the paths are
+ * produced in sorted order by weight, where $m$ is the number of edges in the graph, $n$ is
  * the number of vertices in the graph and $k$ is the number of paths needed.
  *
  * <p>
