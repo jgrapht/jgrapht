@@ -624,4 +624,28 @@ public class SerializationTest
         assertWeight(graph1, graph2, Arrays.asList(3.0), v3, v1);
     }
 
+    /**
+     * Test Serialization of {@link AsGraphUnion}
+     * @throws Exception
+     */
+    @Test
+    public void testAsGraphUnion()
+            throws Exception
+    {
+        Graph<String, DefaultEdge> graph1 = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph2 = new DirectedPseudograph<>(DefaultEdge.class);
+        graph1.addVertex(v1);
+        graph1.addVertex(v2);
+        graph1.addVertex(v3);
+        graph2.addVertex(v1);
+        graph2.addVertex(v2);
+        graph2.addVertex(v3);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v1, v3);
+        graph2.addEdge(v2, v3);
+        AsGraphUnion<String, DefaultEdge> graph3 = new AsGraphUnion<>(graph1, graph2);
+        AsGraphUnion<String, DefaultEdge> graph4 = serializeAndDeserialize(graph3);
+        verifyBasic(graph3, graph4, Arrays.asList(2, 2, 2));
+    }
+
 }

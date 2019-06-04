@@ -17,10 +17,13 @@
  */
 package org.jgrapht.util;
 
+import java.io.*;
+
 /**
  * Binary operator for edge weights. There are some prewritten operators.
  */
 public interface WeightCombiner
+    extends Serializable
 {
     /**
      * Sum of weights.
