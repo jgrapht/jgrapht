@@ -49,6 +49,7 @@ import java.util.stream.*;
  * @param <E> the graph edge type
  * 
  * @author Assaf Mizrachi
+ * @author Benjamin Krogh
  */
 abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
     implements
@@ -162,7 +163,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
     private List<GraphPath<V, E>> resolvePaths(V startVertex, V endVertex)
     {
         // first we need to remove overlapping edges.
-        findOverlappingEdges();
+        findValidEdges();
 
         // now we might be left with path fragments (not necessarily leading from start to end).
         // We need to merge them to valid paths.
@@ -182,73 +183,45 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      * 
      * @return list of disjoint paths from start to end.
      */
-    private List<GraphPath<V, E>> buildPaths(V startVertex, V endVertex)
-    {
-        List<List<E>> paths = new ArrayList<>();
-        Map<V, ArrayDeque<E>> sourceToEdgeLookup = new HashMap<>();
-        Set<E> nonOverlappingEdges = pathList
-            .stream().flatMap(List::stream).filter(e -> !this.overlappingEdges.contains(e))
-            .collect(Collectors.toSet());
-
-        for (E e : nonOverlappingEdges) {
-            V u = getEdgeSource(e);
-            if (u.equals(startVertex)) { // start of a new path
-                List<E> path = new ArrayList<>();
-                path.add(e);
-                paths.add(path);
-            } else { // some edge which is part of a path
-                if (!sourceToEdgeLookup.containsKey(u)) {
-                    sourceToEdgeLookup.put(u, new ArrayDeque<>());
+    private List<GraphPath<V, E>> buildPaths(V startVertex, V endVertex) {
+        Map<V, List<E>> sourceVertexToEdge = this.validEdges.stream()
+                .collect(Collectors.groupingBy(this::getEdgeSource));
+        List<E> startEdges = sourceVertexToEdge.get(startVertex);
+        List<GraphPath<V, E>> result = new ArrayList<>();
+        for (E edge : startEdges) {
+            final List<E> resultPath = new ArrayList<>();
+            resultPath.add(edge);
+            while (true) {
+                final V edgeTarget = getEdgeTarget(edge);
+                if (edgeTarget.equals(endVertex)) {
+                    break;
                 }
-                sourceToEdgeLookup.get(u).add(e);
+                List<E> outgoingEdges = sourceVertexToEdge.get(edgeTarget);
+                edge = outgoingEdges.remove(outgoingEdges.size() - 1);
+                resultPath.add(edge);
             }
+            GraphPath<V, E> graphPath = createGraphPath(resultPath, startVertex, endVertex);
+            result.add(graphPath);
         }
-
-        // Build the paths using the lookup table
-        for (List<E> path : paths) {
-            V v = getEdgeTarget(path.get(0));
-            while (!v.equals(endVertex)) {
-                E e = sourceToEdgeLookup.get(v).poll();
-                path.add(e);
-                v = getEdgeTarget(e);
-            }
-        }
-
-        return paths
-            .stream().map(path -> createGraphPath(new ArrayList<>(path), startVertex, endVertex))
-            .collect(Collectors.toList());
+        return result;
     }
 
     /**
-     * Iterate over all paths to remove overlapping edges (i.e. those edges contained in more than
-     * one path). Two edges are considered as overlapping in case both edges connect the same vertex
-     * pair, disregarding direction. At the end of this method, each path contains unique edges but
-     * not necessarily connecting the start to end vertex.
-     * 
+     * Iterate over all paths and remove all edges used an even number of times.
+     * The remaining edges forms the valid edge set, which is used in the buildPaths method to construct
+     * the k-shortest paths
      */
-    private void findOverlappingEdges()
-    {
-        Map<UnorderedPair<V, V>, Integer> edgeOccurrenceCount = new HashMap<>();
+    private void findValidEdges() {
+        Map<UnorderedPair<V, V>, E> validEdges = new HashMap<>();
         for (List<E> path : pathList) {
             for (E e : path) {
                 V v = this.getEdgeSource(e);
                 V u = this.getEdgeTarget(e);
                 UnorderedPair<V, V> edgePair = new UnorderedPair<>(v, u);
-
-                if (edgeOccurrenceCount.containsKey(edgePair)) {
-                    edgeOccurrenceCount.put(edgePair, 2);
-                } else {
-                    edgeOccurrenceCount.put(edgePair, 1);
-                }
+                validEdges.compute(edgePair, (unused, edge) -> edge == null ? e : null);
             }
         }
-
-        this.overlappingEdges = pathList
-            .stream().flatMap(List::stream)
-            .filter(
-                e -> edgeOccurrenceCount
-                    .get(new UnorderedPair<>(this.getEdgeSource(e), this.getEdgeTarget(e))) > 1)
-            .collect(Collectors.toSet());
+        this.validEdges = new HashSet<>(validEdges.values());
     }
 
     private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex)
