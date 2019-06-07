@@ -196,10 +196,9 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
     }
 
     /**
-     * Iterate over all paths to remove overlapping edges (i.e. those edges contained in more than
-     * one path). Two edges are considered as overlapping in case both edges connect the same vertex
-     * pair, disregarding direction. At the end of this method, each path contains unique edges but
-     * not necessarily connecting the start to end vertex.
+     * Iterate over all paths and remove all edges used an even number of times.
+     * The remaining edges forms the valid edge set, which is used in the buildPaths method to construct
+     * the k-shortest paths
      */
     private void findValidEdges() {
         Map<UnorderedPair<V, V>, E> validEdges = new HashMap<>();
