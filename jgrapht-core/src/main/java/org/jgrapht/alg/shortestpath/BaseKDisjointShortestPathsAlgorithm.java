@@ -152,7 +152,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      */
     private List<GraphPath<V, E>> resolvePaths(V startVertex, V endVertex) {
         // first we need to remove overlapping edges.
-        findOverlappingEdges();
+        findValidEdges();
 
         // now we might be left with path fragments (not necessarily leading from start to end).
         // We need to merge them to valid paths.
@@ -200,7 +200,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      * pair, disregarding direction. At the end of this method, each path contains unique edges but
      * not necessarily connecting the start to end vertex.
      */
-    private void findOverlappingEdges() {
+    private void findValidEdges() {
         Map<UnorderedPair<V, V>, E> validEdges = new HashMap<>();
         for (List<E> path : pathList) {
             for (E e : path) {
