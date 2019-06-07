@@ -48,6 +48,7 @@ import java.util.stream.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Assaf Mizrachi
+ * @author Benjamin Krogh
  */
 abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
         implements
