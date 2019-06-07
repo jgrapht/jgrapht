@@ -63,9 +63,9 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
 
     protected List<List<E>> pathList;
 
-    protected Set<E> overlappingEdges;
 
     protected Graph<V, E> originalGraph;
+    private Set<E> validEdges;
 
     /**
      * Creates a new instance of the algorithm
