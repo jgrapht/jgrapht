@@ -972,7 +972,6 @@ public abstract class KDisjointShortestPathsTestCase
 
         builder.addEdge(6, 2, 1);
         builder.addEdge(7, 2, 1);
-        builder.addEdge(7, 3, 1);
         builder.addEdge(8, 2, 1);
 
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = builder.build();
