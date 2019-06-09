@@ -931,7 +931,9 @@ public abstract class KDisjointShortestPathsTestCase
      * A complex test case with the goal of finding the three shortest paths from vertex 1 to vertex 2 through the following weighted directed graph. Vertices are numbers in boxes, i.e., 1, 3, 4, 5, 6, 7, 8, 2.
      * Weights are numbers close to an edge. Each edge has its origin to the left, and destination to the right
      * The source is node 1. Sink is node 2.
-     * The weight of each edge is the unboxed number close the edge.
+     * The weight of each edge is the unboxed number close to the edge.
+     *
+     * @formatter:off
      *
      *                         +-+        2        +-+
      *                        /|3|-----------------|6|-
@@ -949,6 +951,8 @@ public abstract class KDisjointShortestPathsTestCase
      *                    \--- +-+ /--             +-+ /--
      *                        \|5|-----------------|8|-
      *                         +-+         6       +-+
+     *
+     * @formatter:on
      *
      * The expected result is the three paths through vertices:
      * p1 = 1, 3, 7, 2
