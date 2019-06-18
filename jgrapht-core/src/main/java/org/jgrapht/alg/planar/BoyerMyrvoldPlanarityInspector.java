@@ -22,6 +22,7 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.PlanarityTestingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.util.DoublyLinkedList;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -231,7 +232,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
     }
 
     /**
-     * Performs sorting of the vertices by their lowpoints and adding them to the {@code separatedDfsChildList} lists
+     * Performs sorting of the vertices by their lowpoints and adding them to the {@code separatedDfsChildList}
      */
     private void sortVetices() {
         List<List<Node>> sorted = new ArrayList<>(Collections.nCopies(n, null));
@@ -251,7 +252,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 for (Node node : list) {
                     nodes.set(i++, node);
                     if (node.parentEdge != null) {
-                        node.listNode = node.parentEdge.source.separatedDfsChildList.append(node);
+                        node.listNode = node.parentEdge.source.separatedDfsChildList.addLast(node);
                     }
                 }
             }
@@ -342,9 +343,9 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
         }
         assert !edge.embedded;
         if (entryDir == 0) {
-            root.embedded.append(edge);
+            root.embedded.addLast(edge);
         } else {
-            root.embedded.prepend(edge);
+            root.embedded.addFirst(edge);
         }
         Node child = edge.source;
         child.embedBackEdge(edge, childPrev);
@@ -370,10 +371,10 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
         Node current = circulator.getCurrent(), prev = circulator.getPrev();
         Edge shortCircuit = new Edge(current, componentRoot.getParent());
         if (entryDir == 0) {
-            componentRoot.embedded.append(shortCircuit);
+            componentRoot.embedded.addLast(shortCircuit);
             componentRoot.outerFaceNeighbors[0] = current;
         } else {
-            componentRoot.embedded.prepend(shortCircuit);
+            componentRoot.embedded.addFirst(shortCircuit);
             componentRoot.outerFaceNeighbors[1] = current;
         }
         current.embedBackEdge(shortCircuit, prev);
@@ -517,10 +518,10 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 if (newStart != end) {
                     if (rootChild.lowpoint < end.dfsIndex) {
                         // the component in externally active
-                        root.listNode = newStart.pertinentRoots.append(root);
+                        root.listNode = newStart.pertinentRoots.addLast(root);
                     } else {
                         // the component is internally active
-                        root.listNode = newStart.pertinentRoots.prepend(root);
+                        root.listNode = newStart.pertinentRoots.addFirst(root);
                     }
                 } else {
                     break;
@@ -563,7 +564,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                     Node virtualRoot = child.initialComponentRoot;
                     node.embedded.append(virtualRoot.embedded);
                 }
-                List<E> embeddedEdges = new ArrayList<>(node.embedded.getSize());
+                List<E> embeddedEdges = new ArrayList<>(node.embedded.size());
                 for (Edge edge : node.embedded) {
                     embeddedEdges.add(edge.graphEdge);
                 }
@@ -613,20 +614,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 }
             }
         }
-//        for (Node node : nodes) {
-//            int edgeNum = node.backEdges.size() + node.treeEdges.size() + node.downEdges.size();
-//            if (node.parentEdge != null) {
-//                edgeNum += 1;
-//            }
-//            if (edgeNum != graph.degreeOf(node.graphVertex)) {
-//                System.out.println(node);
-//                System.out.println(graph.edgesOf(node.graphVertex));
-//            }
-//            int degree = graph.degreeOf(node.graphVertex);
-//            assert edgeNum == degree;
-//        }
         System.out.println("Inverted edges = " + inverted);
-
     }
 
     /**
@@ -1003,7 +991,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
      * @param componentRoot the root of the component to process
      */
     private void fixBoundaryOrder(Node componentRoot) {
-        if (componentRoot.embedded.getSize() < 2) {
+        if (componentRoot.embedded.size() < 2) {
             return;
         }
         Node componentParent = componentRoot.getParent();
@@ -1839,13 +1827,13 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
          * The list containing the dfs children of this node, which are in the different child biconnected
          * component, i.e. their weren't merged in the parent component.
          */
-        ElementList<Node> separatedDfsChildList;
+        DoublyLinkedList<Node> separatedDfsChildList;
         /**
          * The roots of the pertinent components during the processing of the node $v$. These are the
          * components that have pertinent descendant nodes, i.e. nodes incident to the node $v$ via
          * a back edge
          */
-        ElementList<Node> pertinentRoots;
+        DoublyLinkedList<Node> pertinentRoots;
         /**
          * The list of tree edges incident to this node in the dfs tree. This list doesn't contain
          * a parent edge of this node
@@ -1865,14 +1853,14 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
          * this node is stored in. This enable deleting of this node from the {@code separatedDfsChildList}
          * list in $\mathcal{O}(1)$ time
          */
-        ElementList.ListNode<Node> listNode;
+        DoublyLinkedList.ListNode<Node> listNode;
         /**
          * The list of the embedded edges incident to this node in a clockwise or a counterclockwise order.
          * The order is counterclockwise if the product of the signs of the parent edges along the path from
          * the root of the component this node is contained in to this node is equal to $-1$. Otherwise, the
          * order is clockwise.
          */
-        ElementList<Edge> embedded;
+        DoublyLinkedList<Edge> embedded;
 
         /**
          * Creates a new real node with the specified parameters.
@@ -1914,14 +1902,14 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
             this.parentEdge = parentEdge;
             this.rootVertex = rootVertex;
             this.outerFaceNeighbors = (Node[]) Array.newInstance(Node.class, 2);
-            this.embedded = new ElementList<>();
+            this.embedded = new DoublyLinkedList<>();
             if (parentEdge != null) {
                 embedded.add(parentEdge);
             }
             this.visited = this.backEdgeFlag = n;
             if (!rootVertex) {
-                separatedDfsChildList = new ElementList<>();
-                pertinentRoots = new ElementList<>();
+                separatedDfsChildList = new DoublyLinkedList<>();
+                pertinentRoots = new DoublyLinkedList<>();
                 treeEdges = new ArrayList<>();
                 downEdges = new ArrayList<>();
                 backEdges = new ArrayList<>();
@@ -2027,14 +2015,14 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
         }
 
         void removeShortCircuitEdges() {
-            List<ElementList.ListNode<Edge>> toRemove = new ArrayList<>();
-            for (ElementList.ListIterator<Edge> iterator = embedded.listIterator(); iterator.hasNext(); ) {
-                ElementList.ListNode<Edge> currentNode = iterator.nextNode();
+            List<DoublyLinkedList.ListNode<Edge>> toRemove = new ArrayList<>();
+            for (DoublyLinkedList.ListIterator<Edge> iterator = embedded.listIterator(); iterator.hasNext(); ) {
+                DoublyLinkedList.ListNode<Edge> currentNode = iterator.nextNode();
                 if (currentNode.getValue().shortCircuit) {
                     toRemove.add(currentNode);
                 }
             }
-            for (ElementList.ListNode<Edge> removeNode : toRemove) {
+            for (DoublyLinkedList.ListNode<Edge> removeNode : toRemove) {
                 embedded.remove(removeNode);
             }
         }
@@ -2136,9 +2124,9 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
             Edge firstEdge = embedded.getFirstElement();
             if (firstEdge.getOpposite(this) == prev) {
                 // edge on the new inner face is at the beginning of the list
-                embedded.prepend(edge);
+                embedded.addFirst(edge);
             } else {
-                embedded.append(edge);
+                embedded.addLast(edge);
             }
         }
 
@@ -2156,7 +2144,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
          * @param parentNext the next node along the traversal of the parent biconnected component
          * @param parentEdge the parent edge if the child component
          */
-        void mergeChildEdges(ElementList<Edge> edges, int vIn, int vOut, Node parentNext, Edge parentEdge) {
+        void mergeChildEdges(DoublyLinkedList<Edge> edges, int vIn, int vOut, Node parentNext, Edge parentEdge) {
             assert !embedded.isEmpty();
             Node firstOpposite = embedded.getFirstElement().getOpposite(this);
             boolean alongParentTraversal = firstOpposite != parentNext;

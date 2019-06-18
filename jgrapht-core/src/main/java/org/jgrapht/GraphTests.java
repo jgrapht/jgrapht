@@ -28,7 +28,7 @@ import java.util.stream.*;
 
 /**
  * A collection of utilities to test for various graph properties.
- * 
+ *
  * @author Barak Naveh
  * @author Dimitrios Michail
  * @author Joris Kinable
@@ -47,7 +47,7 @@ public abstract class GraphTests
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
      * no edges.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -62,7 +62,7 @@ public abstract class GraphTests
     /**
      * Check if a graph is simple. A graph is simple if it has no self-loops and multiple (parallel)
      * edges.
-     * 
+     *
      * @param graph a graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -94,7 +94,7 @@ public abstract class GraphTests
     /**
      * Check if a graph has self-loops. A self-loop is an edge with the same source and target
      * vertices.
-     * 
+     *
      * @param graph a graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -120,7 +120,7 @@ public abstract class GraphTests
     /**
      * Check if a graph has multiple edges (parallel edges), that is, whether the graph contains two
      * or more edges connecting the same pair of vertices.
-     * 
+     *
      * @param graph a graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -152,7 +152,7 @@ public abstract class GraphTests
      * every pair of distinct vertices is connected by a unique edge. A complete directed graph is a
      * directed graph in which every pair of distinct vertices is connected by a pair of unique
      * edges (one in each direction).
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -183,7 +183,7 @@ public abstract class GraphTests
      * there are no unreachable vertices. When the inspected graph is a <i>directed</i> graph, this
      * method returns true if and only if the inspected graph is <i>weakly</i> connected. An empty
      * graph is <i>not</i> considered connected.
-     * 
+     *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link ConnectivityInspector} directly.
@@ -223,7 +223,7 @@ public abstract class GraphTests
 
     /**
      * Test whether a directed graph is weakly connected.
-     * 
+     *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link ConnectivityInspector} directly.
@@ -241,11 +241,11 @@ public abstract class GraphTests
 
     /**
      * Test whether a graph is strongly connected.
-     * 
+     *
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
-     * 
+     *
      * <p>
      * In case of undirected graphs this method delegated to {@link #isConnected(Graph)}.
      *
@@ -363,7 +363,7 @@ public abstract class GraphTests
 
     /**
      * Test whether a graph is bipartite.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -377,7 +377,7 @@ public abstract class GraphTests
 
     /**
      * Test whether a partition of the vertices into two sets is a bipartite partition.
-     * 
+     *
      * @param graph the input graph
      * @param firstPartition the first vertices partition
      * @param secondPartition the second vertices partition
@@ -398,7 +398,7 @@ public abstract class GraphTests
     /**
      * Tests whether a graph is <a href="http://mathworld.wolfram.com/CubicGraph.html">cubic</a>. A
      * graph is cubic if all vertices have degree 3.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -559,11 +559,128 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is planar, false otherwise
+     * @see PlanarityTestingAlgorithm
+     * @see BoyerMyrvoldPlanarityInspector
      */
     public static <V, E> boolean isPlanar(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new BoyerMyrvoldPlanarityInspector<>(graph).isPlanar();
+    }
+
+    /**
+     * Checks whether the {@code graph} is a
+     * <a href="https://en.wikipedia.org/wiki/Kuratowski%27s_theorem#Kuratowski_subgraphs">Kuratowski subdivision</a>.
+     * Effectively checks whether the {@code graph} is a $K_{3,3}$ subdivision or $K_{5}$ subdivision
+     *
+     * @param graph the graph to test
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the {@code graph} is a Kuratowski subdivision, false otherwise
+     */
+    public static <V, E> boolean isKuratowskiSubdivision(Graph<V, E> graph)
+    {
+        return isK33Subdivision(graph) || isK5Subdivision(graph);
+    }
+
+    /**
+     * Checks whether the {@code graph} is a $K_{3,3}$ subdivision.
+     *
+     * @param graph the graph to test
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the {@code graph} is a $K_{3,3}$ subdivision, false otherwise
+     */
+    public static <V, E> boolean isK33Subdivision(Graph<V, E> graph)
+    {
+        List<V> degree3 = new ArrayList<>();
+        // collect all vertices with degree 3
+        for (V vertex : graph.vertexSet()) {
+            int degree = graph.degreeOf(vertex);
+            if (degree == 3) {
+                degree3.add(vertex);
+            } else if (degree != 2) {
+                return false;
+            }
+        }
+        if (degree3.size() != 6) {
+            return false;
+        }
+        V vertex = degree3.remove(degree3.size() - 1);
+        Set<V> reachable = reachableWithDegree(graph, vertex, 3);
+        if (reachable.size() != 3) {
+            return false;
+        }
+        degree3.removeAll(reachable);
+        return reachable.equals(reachableWithDegree(graph, degree3.get(0), 3))
+                && reachable.equals(reachableWithDegree(graph, degree3.get(1), 3));
+    }
+
+    /**
+     * Checks whether the {@code graph} is a $K_5$ subdivision.
+     *
+     * @param graph the graph to test
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the {@code graph} is a $K_5$ subdivision, false otherwise
+     */
+    public static <V, E> boolean isK5Subdivision(Graph<V, E> graph)
+    {
+        Set<V> degree5 = new HashSet<>();
+        for (V vertex : graph.vertexSet()) {
+            int degree = graph.degreeOf(vertex);
+            if (degree == 4) {
+                degree5.add(vertex);
+            } else if (degree != 2) {
+                return false;
+            }
+        }
+        if (degree5.size() != 5) {
+            return false;
+        }
+        for (V vertex : degree5) {
+            Set<V> reachable = reachableWithDegree(graph, vertex, 4);
+            if (reachable.size() != 4 || !degree5.containsAll(reachable) || reachable.contains(vertex)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Uses BFS to find all vertices of the {@code graph} which have a degree {@code degree}.
+     * This method doesn't advance to new nodes after it finds a node with a degree {@code degree}
+     *
+     * @param graph       the graph to search in
+     * @param startVertex the start vertex
+     * @param degree      the degree of desired vertices
+     * @param <V>         the graph vertex type
+     * @param <E>         the graph edge type
+     * @return all vertices of the {@code graph} reachable from {@code startVertex}, which have
+     * degree {@code degree}
+     */
+    private static <V, E> Set<V> reachableWithDegree(Graph<V, E> graph, V startVertex, int degree)
+    {
+        Set<V> visited = new HashSet<>();
+        Set<V> reachable = new HashSet<>();
+        Queue<V> queue = new ArrayDeque<>();
+        queue.add(startVertex);
+        while (!queue.isEmpty()) {
+            V current = queue.poll();
+            visited.add(current);
+            for (E e : graph.edgesOf(current)) {
+                V opposite = Graphs.getOppositeVertex(graph, e, current);
+                if (visited.contains(opposite)) {
+                    continue;
+                }
+                if (graph.degreeOf(opposite) == degree) {
+                    reachable.add(opposite);
+                } else {
+                    queue.add(opposite);
+                }
+            }
+        }
+        return reachable;
     }
 
     /**

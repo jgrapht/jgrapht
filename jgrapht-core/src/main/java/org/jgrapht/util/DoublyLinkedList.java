@@ -15,8 +15,9 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.alg.planar;
+package org.jgrapht.util;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -25,16 +26,27 @@ import java.util.NoSuchElementException;
  * list nodes the data is stored in. The primary goal of this is to be able to delete an element from this
  * list in $\mathcal{O}(1)$ via the list node it is stored in.
  * <p>
- * Currently, this data structure doesn't have a fail-fast behavior, meaning that the user have to ensure,
- * that the list isn't modified during the iteration over its elements. Otherwise, the result of such
- * iteration is undefined.
+ * The iterators over this list have a <i>fail-fast</i> behaviour meaning that they throw a
+ * {@link ConcurrentModificationException} after they detect a structural modification of the list,
+ * that they're not responsible for.
  *
  * @param <E> the list element type
  * @author Timofey Chudakov
  */
-public class ElementList<E> implements Iterable<E> {
+public class DoublyLinkedList<E> implements Iterable<E> {
+    /**
+     * The first element of the list
+     */
     private ListNode<E> head;
+    /**
+     * The size of the list
+     */
     private int size;
+    /**
+     * The number of modifications applied to this list. This value is used to exhibit a fail-fast
+     * behavior during the iteration over the list when its structure is changed concurrently
+     */
+    private int modCount;
 
     /**
      * {@inheritDoc}
@@ -50,7 +62,7 @@ public class ElementList<E> implements Iterable<E> {
      * @return a list iterator starting from the beginning of this list
      */
     public ListIterator<E> listIterator() {
-        return new ListIterator<>(head);
+        return new ListIteratorImpl(head);
     }
 
     /**
@@ -68,7 +80,7 @@ public class ElementList<E> implements Iterable<E> {
         if (start == null) {
             throw new NoSuchElementException();
         }
-        return new ListIterator<>(start, true);
+        return new ListIteratorImpl(start, true);
     }
 
     /**
@@ -85,7 +97,7 @@ public class ElementList<E> implements Iterable<E> {
      *
      * @return the number of elements in this list
      */
-    public int getSize() {
+    public int size() {
         return size;
     }
 
@@ -97,7 +109,7 @@ public class ElementList<E> implements Iterable<E> {
      * @return the list node, which contains the {@code value}
      */
     public ListNode<E> add(E value) {
-        return append(value);
+        return addLast(value);
     }
 
     /**
@@ -119,6 +131,7 @@ public class ElementList<E> implements Iterable<E> {
             current = current.prev;
         } while (current != head);
         head = newHead;
+        ++modCount;
     }
 
     /**
@@ -127,7 +140,7 @@ public class ElementList<E> implements Iterable<E> {
      *
      * @param list the list to append
      */
-    public void append(ElementList<E> list) {
+    public void append(DoublyLinkedList<E> list) {
         if (!list.isEmpty()) {
             if (isEmpty()) {
                 head = list.head;
@@ -137,6 +150,7 @@ public class ElementList<E> implements Iterable<E> {
             size += list.size;
             list.size = 0;
             list.head = null;
+            ++modCount;
         }
 
     }
@@ -147,7 +161,7 @@ public class ElementList<E> implements Iterable<E> {
      *
      * @param list the list to prepend
      */
-    public void prepend(ElementList<E> list) {
+    public void prepend(DoublyLinkedList<E> list) {
         if (!list.isEmpty()) {
             if (!isEmpty()) {
                 linkBefore(head, list);
@@ -157,6 +171,7 @@ public class ElementList<E> implements Iterable<E> {
 
             list.size = 0;
             list.head = null;
+            ++modCount;
         }
     }
 
@@ -167,7 +182,7 @@ public class ElementList<E> implements Iterable<E> {
      * @param value the value to add
      * @return the list node allocated for storing the {@code value}
      */
-    public ListNode<E> append(E value) {
+    public ListNode<E> addLast(E value) {
         ListNode<E> result = new ListNode<>(value);
         if (isEmpty()) {
             insertFirst(result);
@@ -175,19 +190,21 @@ public class ElementList<E> implements Iterable<E> {
             linkBefore(head, result);
         }
         ++size;
+        ++modCount;
         return result;
     }
 
     /**
-     * Prepends the {@code value} to the beginning of this list. Returns the list node allocated for storing
+     * Adds the {@code value} to the beginning of this list. Returns the list node allocated for storing
      * the {@code value}. The returned value is the new head of the list.
      *
      * @param value the value to add
      * @return the list node allocated for storing the {@code value}
      */
-    public ListNode<E> prepend(E value) {
-        ListNode<E> result = append(value);
+    public ListNode<E> addFirst(E value) {
+        ListNode<E> result = addLast(value);
         head = result;
+        ++modCount;
         return result;
     }
 
@@ -207,6 +224,7 @@ public class ElementList<E> implements Iterable<E> {
         }
         unlink(node);
         --size;
+        ++modCount;
     }
 
     /**
@@ -235,7 +253,10 @@ public class ElementList<E> implements Iterable<E> {
 
     /**
      * Finds and returns the list node allocate for the {@code element}. If this list doesn't contain
-     * the {@code element}, returns {@code null}
+     * the {@code element}, returns {@code null}. The timer complexity of this method is linear in the
+     * size of the list under the assumption that the element comparison is done in constant time.
+     * Otherwise, the complexity is $\mathcal{O}(n\cdot h)$, where $n$ is the size of the list and $h$
+     * is the time needed to compare two elements stored in this list.
      *
      * @param element the element of this list to search the list node of.
      * @return the list node allocate for the {@code element}, or {@code null} if this list doesn't contain
@@ -283,7 +304,7 @@ public class ElementList<E> implements Iterable<E> {
      * @param node the node to link the {@code list} before
      * @param list the sequence of nodes to link before {@code node}
      */
-    private void linkBefore(ListNode<E> node, ElementList<E> list) {
+    private void linkBefore(ListNode<E> node, DoublyLinkedList<E> list) {
         ListNode<E> head = list.head;
         ListNode<E> last = head.prev;
         head.prev = node.prev;
@@ -322,11 +343,31 @@ public class ElementList<E> implements Iterable<E> {
     }
 
     /**
-     * An iterator over the list data structure. Currently this iterator is only unidirectional.
+     * An interface for the iterators over the {@link DoublyLinkedList}
      *
      * @param <E> the list element type
      */
-    public static class ListIterator<E> implements java.util.Iterator<E> {
+    public interface ListIterator<E> extends Iterator<E> {
+        /**
+         * Returns the next list node
+         *
+         * @return the next list node
+         */
+        ListNode<E> nextNode();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default E next() {
+            return nextNode().value;
+        }
+    }
+
+    /**
+     * An implementation of the {@link DoublyLinkedList.ListIterator} interface.
+     */
+    public class ListIteratorImpl implements DoublyLinkedList.ListIterator<E> {
         /**
          * The list node this iterator has started from
          */
@@ -336,22 +377,29 @@ public class ElementList<E> implements Iterable<E> {
          * the traversal is finished.
          */
         ListNode<E> current;
-
+        /**
+         * Whether this iterator should move in the reverse direction
+         */
         boolean reversed;
+        /**
+         * The number of modifications the list have had at the moment when this iterator was created
+         */
+        int expectedModCount;
 
         /**
          * Creates new list iterator, which starts from the {@code start} node
          *
          * @param start the node to start the traversal from
          */
-        ListIterator(ListNode<E> start) {
+        ListIteratorImpl(ListNode<E> start) {
             this(start, false);
         }
 
-        ListIterator(ListNode<E> start, boolean reversed) {
+        ListIteratorImpl(ListNode<E> start, boolean reversed) {
             this.start = start;
             this.current = start;
             this.reversed = reversed;
+            this.expectedModCount = modCount;
         }
 
         /**
@@ -366,23 +414,15 @@ public class ElementList<E> implements Iterable<E> {
          * {@inheritDoc}
          */
         @Override
-        public E next() {
-            return nextNode().value;
-        }
-
-        /**
-         * Returns the next list node
-         *
-         * @return the next list node
-         */
         public ListNode<E> nextNode() {
+            checkForComodification();
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             ListNode<E> result = current;
             if (reversed) {
                 current = current.prev;
-            }else{
+            } else {
                 current = current.next;
             }
             if (current == start) {
@@ -391,7 +431,14 @@ public class ElementList<E> implements Iterable<E> {
             return result;
         }
 
-
+        /**
+         * Verifies that the list structure hasn't been changed since the iteration started
+         */
+        private void checkForComodification() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
 
     /**

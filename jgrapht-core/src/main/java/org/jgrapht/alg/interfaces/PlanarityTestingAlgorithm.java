@@ -46,7 +46,7 @@ public interface PlanarityTestingAlgorithm<V, E> {
 
     /**
      * Computes combinatorial embedding of the input {@code graph}. This method will return
-     * a valid result only if the {@code graph} is planar. For more information on the combinarotial
+     * a valid result only if the {@code graph} is planar. For more information on the combinatorial
      * embedding, see {@link PlanarityTestingAlgorithm.Embedding}
      *
      * @return combinatorial embedding of the input {@code graph}
@@ -56,122 +56,12 @@ public interface PlanarityTestingAlgorithm<V, E> {
     /**
      * Extracts a Kuratowski subdivision from the {@code graph}. The returned value certifies the
      * nonplanarity of the graph. The returned certificate can be verified through the call to the
-     * {@link PlanarityTestingAlgorithm#isKuratowskiSubdivision(Graph)}. This method will return a valid
+     * {@link org.jgrapht.GraphTests#isKuratowskiSubdivision(Graph)}. This method will return a valid
      * result only if the {@code graph} is not planar.
      *
      * @return a Kuratowski subdivision from the {@code graph}
      */
     Graph<V, E> getKuratowskiSubdivision();
-
-    /**
-     * Checks whether the {@code graph} is a
-     * <a href="https://en.wikipedia.org/wiki/Kuratowski%27s_theorem#Kuratowski_subgraphs">Kuratowski subdivision</a>.
-     * Effectively checks whether the {@code graph} is a $K_{3,3}$ subdivision or $K_{5}$ subdivision
-     *
-     * @param graph the graph to test
-     * @param <V>   the graph vertex type
-     * @param <E>   the graph edge type
-     * @return true if the {@code graph} is a Kuratowski subdivision, false otherwise
-     */
-    static <V, E> boolean isKuratowskiSubdivision(Graph<V, E> graph) {
-        return isK33Subdivision(graph) || isK5Subdivision(graph);
-    }
-
-    /**
-     * Checks whether the {@code graph} is a $K_{3,3}$ subdivision.
-     *
-     * @param graph the graph to test
-     * @param <V>   the graph vertex type
-     * @param <E>   the graph edge type
-     * @return true if the {@code graph} is a $K_{3,3}$ subdivision, false otherwise
-     */
-    static <V, E> boolean isK33Subdivision(Graph<V, E> graph) {
-        List<V> degree3 = new ArrayList<>();
-        // collect all vertices with degree 3
-        for (V vertex : graph.vertexSet()) {
-            if (graph.degreeOf(vertex) == 3) {
-                degree3.add(vertex);
-            } else if (graph.degreeOf(vertex) != 2) {
-                return false;
-            }
-        }
-        if (degree3.size() != 6) {
-            return false;
-        }
-        V vertex = degree3.remove(degree3.size() - 1);
-        Set<V> reachable = reachableWithDegree(graph, vertex, 3);
-        if (reachable.size() != 3) {
-            return false;
-        }
-        degree3.removeAll(reachable);
-        return reachable.equals(reachableWithDegree(graph, degree3.get(0), 3))
-                && reachable.equals(reachableWithDegree(graph, degree3.get(1), 3));
-    }
-
-    /**
-     * Checks whether the {@code graph} is a $K_5$ subdivision.
-     *
-     * @param graph the graph to test
-     * @param <V>   the graph vertex type
-     * @param <E>   the graph edge type
-     * @return true if the {@code graph} is a $K_5$ subdivision, false otherwise
-     */
-    static <V, E> boolean isK5Subdivision(Graph<V, E> graph) {
-        Set<V> degree5 = new HashSet<>();
-        for (V vertex : graph.vertexSet()) {
-            int degree = graph.degreeOf(vertex);
-            if (degree == 4) {
-                degree5.add(vertex);
-            } else if (degree != 2) {
-                return false;
-            }
-        }
-        if (degree5.size() != 5) {
-            return false;
-        }
-        for (V vertex : degree5) {
-            Set<V> reachable = reachableWithDegree(graph, vertex, 4);
-            if (reachable.size() != 4 || !degree5.containsAll(reachable) || reachable.contains(vertex)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Uses BFS to find all vertices of the {@code graph} which have a degree {@code degree}.
-     * This method doesn't advance to new nodes after the it finds a node with a degree {@code degree}
-     *
-     * @param graph       the graph to search in
-     * @param startVertex the start vertex
-     * @param degree      the degree of desired vertices
-     * @param <V>         the graph vertex type
-     * @param <E>         the graph edge type
-     * @return all vertices of the {@code graph} reachable from {@code startVertex}, which have
-     * degree {@code degree}
-     */
-    static <V, E> Set<V> reachableWithDegree(Graph<V, E> graph, V startVertex, int degree) {
-        Set<V> visited = new HashSet<>();
-        Set<V> reachable = new HashSet<>();
-        Queue<V> queue = new ArrayDeque<>();
-        queue.add(startVertex);
-        while (!queue.isEmpty()) {
-            V current = queue.poll();
-            visited.add(current);
-            for (E e : graph.edgesOf(current)) {
-                V opposite = Graphs.getOppositeVertex(graph, e, current);
-                if (visited.contains(opposite)) {
-                    continue;
-                }
-                if (graph.degreeOf(opposite) == degree) {
-                    reachable.add(opposite);
-                } else {
-                    queue.add(opposite);
-                }
-            }
-        }
-        return reachable;
-    }
 
     /**
      * A <a href="https://en.wikipedia.org/wiki/Graph_embedding#Combinatorial_embedding">combinatorial embedding</a>

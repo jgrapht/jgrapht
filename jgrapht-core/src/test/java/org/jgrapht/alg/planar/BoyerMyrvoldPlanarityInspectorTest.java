@@ -18,6 +18,7 @@
 package org.jgrapht.alg.planar;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.PlanarityTestingAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
@@ -50,7 +51,7 @@ public class BoyerMyrvoldPlanarityInspectorTest {
             testEmbedding(embedding);
         } else {
             Graph<Integer, DefaultEdge> subdivision = inspector.getKuratowskiSubdivision();
-            boolean isSubdivision = PlanarityTestingAlgorithm.isKuratowskiSubdivision(subdivision);
+            boolean isSubdivision = GraphTests.isKuratowskiSubdivision(subdivision);
             assertTrue(isSubdivision);
         }
     }

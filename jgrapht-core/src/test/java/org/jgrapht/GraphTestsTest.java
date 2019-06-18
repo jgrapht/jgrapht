@@ -448,14 +448,10 @@ public class GraphTestsTest
      * Full graph on 4 vertices (every graph on less that 5 is planar)
      */
     @Test
-    public void testIsPlanar1() {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 1, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
+    public void testIsPlanar1()
+    {
+        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
         assertTrue(GraphTests.isPlanar(graph));
     }
 
@@ -463,17 +459,10 @@ public class GraphTestsTest
      * $K_{3,3}$
      */
     @Test
-    public void testIsPlanar2() {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 4);
-        Graphs.addEdgeWithVertices(graph, 1, 5);
-        Graphs.addEdgeWithVertices(graph, 1, 6);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 5);
-        Graphs.addEdgeWithVertices(graph, 2, 6);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 5);
-        Graphs.addEdgeWithVertices(graph, 3, 6);
+    public void testIsPlanar2()
+    {
+        int[][] edges = {{1, 4}, {1, 5}, {1, 6}, {2, 4}, {2, 5}, {2, 6}, {3, 4}, {3, 5}, {3, 6}};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
         assertFalse(GraphTests.isPlanar(graph));
     }
 
@@ -481,19 +470,49 @@ public class GraphTestsTest
      * $K_{5}$
      */
     @Test
-    public void testIsPlanar3() {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 1, 4);
-        Graphs.addEdgeWithVertices(graph, 1, 5);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 5);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 5);
-        Graphs.addEdgeWithVertices(graph, 4, 5);
+    public void testIsPlanar3()
+    {
+        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {1, 5}, {2, 3}, {2, 4}, {2, 5}, {3, 4}, {3, 5}, {4, 5}};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
         assertFalse(GraphTests.isPlanar(graph));
+    }
+
+    @Test
+    public void testIsK33Subdivision1()
+    {
+        int[][] edges = {{1, 4}, {1, 5}, {1, 6}, {2, 4}, {2, 5}, {2, 6}, {3, 4}, {3, 5}, {3, 6}};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
+        assertTrue(GraphTests.isKuratowskiSubdivision(graph));
+        assertTrue(GraphTests.isK33Subdivision(graph));
+    }
+
+    @Test
+    public void testIsK33Subdivision2()
+    {
+        int[][] edges = {{1, 5}, {1, 6}, {2, 4}, {2, 6}, {3, 4}, {3, 5}, {1, 7}, {7, 4}, {2, 8}, {8, 5},
+                {3, 9}, {9, 6}};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
+        assertTrue(GraphTests.isKuratowskiSubdivision(graph));
+        assertTrue(GraphTests.isK33Subdivision(graph));
+    }
+
+    @Test
+    public void testIsK5Subdivision1()
+    {
+        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {1, 5}, {2, 3}, {2, 4}, {2, 5}, {3, 4}, {3, 5}, {4, 5}};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
+        assertTrue(GraphTests.isKuratowskiSubdivision(graph));
+        assertTrue(GraphTests.isK5Subdivision(graph));
+    }
+
+    @Test
+    public void testIsK5Subdivision2()
+    {
+        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 7}, {7, 8}, {8, 9}, {9, 10}, {10, 1},
+                {1, 5}, {1, 7}, {3, 7}, {3, 9}, {5, 9},};
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
+        assertTrue(GraphTests.isKuratowskiSubdivision(graph));
+        assertTrue(GraphTests.isK5Subdivision(graph));
     }
 
     @Test
@@ -523,7 +542,21 @@ public class GraphTestsTest
     @Test
     public void testRequireIsWeighted()
     {
-        Graph graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
         assertEquals(graph, GraphTests.requireWeighted(graph));
+    }
+
+    /**
+     * Creates a graph from the list of its edges
+     *
+     * @param edges the edge list of a graph
+     * @return a graph specified by the {@code edges}
+     */
+    private Graph<Integer, DefaultEdge> getGraph(int[][] edges) {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
+        }
+        return graph;
     }
 }
