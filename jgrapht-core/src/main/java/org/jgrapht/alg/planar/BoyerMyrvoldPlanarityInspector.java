@@ -228,13 +228,13 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 currentDfsIndex = orientDfs(visited, vertex, currentDfsIndex);
             }
         }
-        sortVetices();
+        sortVertices();
     }
 
     /**
      * Performs sorting of the vertices by their lowpoints and adding them to the {@code separatedDfsChildList}
      */
-    private void sortVetices() {
+    private void sortVertices() {
         List<List<Node>> sorted = new ArrayList<>(Collections.nCopies(n, null));
         for (Node node : nodes) {
             int lowpoint = node.lowpoint;
