@@ -1,7 +1,6 @@
 # JGraphT Release Process
 
 1. Let other developers on [jgrapht-dev](https://groups.google.com/forum/#!forum/jgrapht-dev) know that you're starting on the release and ask them to hold off on merging changes until the release is complete.
-1. Check and, if necessary, update dependencies: `mvn versions:display-dependency-updates`. Recompile to check whether any of the version updates introduced errors, e.g. because some methods have been deprecated: `mvn -Dmaven.compiler.showWarnings=true -Dmaven.compiler.showDeprecation=true clean compile`
 1. Review the README.md, HISTORY.md, CONTRIBUTORS.md, and update:
     * Version
     * Dependencies
@@ -23,6 +22,7 @@
 1. Update [the website](../docs) with links to the new downloads, version numbers, etc.  (To be specific, you'll need to update the [Jumpstart](../docs/_posts/2000-01-02-jumpstart.md), [Download](../docs/_posts/2000-01-04-download.md), and [News](../docs/_posts/2000-01-06-news.md) sections.)  Be sure to push this commit **after** the javadoc update from the previous step; this will trigger an automatic rebuild of the website (the javadoc gets loaded automatically).
 1. Announce the new version in the mailing lists: jgrapht-users@lists.sourceforge.net, jgrapht-announce@lists.sourceforge.net
 1. Update and commit the version number in HISTORY.md to reflect the beginning of development for the next version.  Finally, remove all existing deprecated methods.
+1. Check and, if necessary, update dependencies: `mvn versions:display-dependency-updates`. Recompile to check whether any of the version updates introduced errors, e.g. because some methods have been deprecated: `mvn -Dmaven.compiler.showWarnings=true -Dmaven.compiler.showDeprecation=true clean compile`.  Then use `mvn package` to rebuild an archive distribution.  Unpack an archive (either .zip or .tar.gz) under `jgrapht-dist/target`, and then inspect the contents of the unpacked `jgrapht-x.y.z-SNAPSHOT/lib` directory.  Make sure that no unexpected transitive dependencies have crept in by comparing the jars with those from the release archive distribution (which you can download and unpack).  If everything is OK, then submit the dependency updates as a pull request and wait for a reviewer to merge them.  We perform dependency updates at the start of a new development cycle to give plenty of time for any incompatibilities to be noticed, but it's also OK to do this step in the middle of a long development cycle (or at any time as needed for specific dependencies, e.g. to take advantage of a new feature, or to close a security hole).
 
 ## Notes
 * The release artifacts are signed with private keys. In order to sign this release, you'll need to make sure you've already [created and published your own key](http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven).
