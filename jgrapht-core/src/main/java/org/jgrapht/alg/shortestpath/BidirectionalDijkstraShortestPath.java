@@ -137,12 +137,12 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         // create frontiers
-        DijkstraSearchFrontier forwardFrontier = new DijkstraSearchFrontier(graph);
-        DijkstraSearchFrontier backwardFrontier;
+        DijkstraSearchFrontier<V,E> forwardFrontier = new DijkstraSearchFrontier<>(graph,heapSupplier);
+        DijkstraSearchFrontier<V,E> backwardFrontier;
         if (graph.getType().isDirected()) {
-            backwardFrontier = new DijkstraSearchFrontier(new EdgeReversedGraph<>(graph));
+            backwardFrontier = new DijkstraSearchFrontier<>(new EdgeReversedGraph<>(graph), heapSupplier);
         } else {
-            backwardFrontier = new DijkstraSearchFrontier(graph);
+            backwardFrontier = new DijkstraSearchFrontier<>(graph, heapSupplier);
         }
 
         assert !source.equals(sink);
@@ -155,8 +155,8 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         double bestPath = Double.POSITIVE_INFINITY;
         V bestPathCommonVertex = null;
 
-        DijkstraSearchFrontier frontier = forwardFrontier;
-        DijkstraSearchFrontier otherFrontier = backwardFrontier;
+        DijkstraSearchFrontier<V,E> frontier = forwardFrontier;
+        DijkstraSearchFrontier<V,E> otherFrontier = backwardFrontier;
 
         while (true) {
             // stopping condition
@@ -190,7 +190,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             }
 
             // swap frontiers
-            DijkstraSearchFrontier tmpFrontier = frontier;
+            DijkstraSearchFrontier<V,E> tmpFrontier = frontier;
             frontier = otherFrontier;
             otherFrontier = tmpFrontier;
 
@@ -207,25 +207,28 @@ public final class BidirectionalDijkstraShortestPath<V, E>
 
     /**
      * Maintains search frontier during shortest path computation.
+     *
+     * @param <V1> vertices type
+     * @param <E1> edges type
      */
-    class DijkstraSearchFrontier
+    static class DijkstraSearchFrontier<V1, E1>
         extends
-        BaseSearchFrontier
+        BaseSearchFrontier<V1, E1>
     {
 
-        final AddressableHeap<Double, Pair<V, E>> heap;
-        final Map<V, AddressableHeap.Handle<Double, Pair<V, E>>> seen;
+        final AddressableHeap<Double, Pair<V1, E1>> heap;
+        final Map<V1, AddressableHeap.Handle<Double, Pair<V1, E1>>> seen;
 
-        DijkstraSearchFrontier(Graph<V, E> graph)
+        DijkstraSearchFrontier(Graph<V1, E1> graph, Supplier<AddressableHeap<Double, Pair<V1, E1>>> heapSupplier)
         {
             super(graph);
             this.heap = heapSupplier.get();
             this.seen = new HashMap<>();
         }
 
-        void updateDistance(V v, E e, double distance)
+        void updateDistance(V1 v, E1 e, double distance)
         {
-            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V1, E1>> node = seen.get(v);
             if (node == null) {
                 node = heap.insert(distance, new Pair<>(v, e));
                 seen.put(v, node);
@@ -238,9 +241,9 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         @Override
-        public double getDistance(V v)
+        public double getDistance(V1 v)
         {
-            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V1, E1>> node = seen.get(v);
             if (node == null) {
                 return Double.POSITIVE_INFINITY;
             } else {
@@ -249,9 +252,9 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         @Override
-        public E getTreeEdge(V v)
+        public E1 getTreeEdge(V1 v)
         {
-            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V1, E1>> node = seen.get(v);
             if (node == null) {
                 return null;
             } else {
