@@ -282,7 +282,7 @@ public class BiconnectivityInspector<V, E>
             E edge = stack.peek();
             V source = graph.getEdgeSource(edge);
             V target = graph.getEdgeTarget(edge);
-            if (discTime.get(source) < discTimeCutpoint || discTime.get(target) < discTimeCutpoint)
+            if (discTime.get(source) < discTimeCutpoint && discTime.get(target) < discTimeCutpoint)
                 break;
             stack.pop();
             vertexComponent.add(source);
@@ -325,7 +325,7 @@ public class BiconnectivityInspector<V, E>
                     || (parent == null && children > 1))
                 {
                     this.cutpoints.add(v); // v is a cutpoint
-                    buildBlock(discTime.get(v)); // construct biconnected component
+                    buildBlock(discTime.get(nv)); // construct biconnected component
                 }
             } else if ((discTime.get(nv) < discTime.get(v)) && !nv.equals(parent)) { // found
                                                                                      // backedge
