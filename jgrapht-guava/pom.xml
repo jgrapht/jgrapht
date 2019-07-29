@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.1-jre</version>
+            <version>28.0-jre</version>
             <exclusions>
                     <exclusion>
                         <groupId>com.google.code.findbugs</groupId>
@@ -91,6 +91,14 @@
                     <exclusion>
                         <groupId>org.checkerframework</groupId>
                         <artifactId>checker-qual</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>failureaccess</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>listenablefuture</artifactId>
                     </exclusion>
       		</exclusions>
         </dependency>
