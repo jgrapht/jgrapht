@@ -223,6 +223,7 @@ public class YenShortestPathIterator<V, E>
         // initializations
         V pathDeviation = deviations.get(path);
         List<V> pathVertices = path.getVertexList();
+        List<E> pathEdges = path.getEdgeList();
         int pathVerticesSize = pathVertices.size();
         int pathDeviationIndex = pathVertices.indexOf(pathDeviation);
 
@@ -275,7 +276,7 @@ public class YenShortestPathIterator<V, E>
             }
             // recover edge
             V recoverVertexSuccessor = pathVertices.get(i + 1);
-            E edge = graph.getEdge(recoverVertex, recoverVertexSuccessor);
+            E edge = pathEdges.get(i);
             customTree.recoverEdge(edge);
 
             double recoverVertexUpdatedDistance = maskSubgraph.getEdgeWeight(edge)
@@ -304,6 +305,8 @@ public class YenShortestPathIterator<V, E>
         GraphPath<V, E> path, V pathDeviation, int pathDeviationIndex)
     {
         List<V> pathVertices = path.getVertexList();
+        List<E> pathEdges = path.getEdgeList();
+
         Set<V> maskedVertices = new HashSet<>();
         Set<E> maskedEdges = new HashSet<>();
 
@@ -311,9 +314,8 @@ public class YenShortestPathIterator<V, E>
 
         // mask vertices and edges of the current path
         for (int i = 0; i < pathVerticesSize - 1; i++) {
-            V v = pathVertices.get(i);
-            maskedVertices.add(v);
-            maskedEdges.add(graph.getEdge(v, pathVertices.get(i + 1)));
+            maskedVertices.add(pathVertices.get(i));
+            maskedEdges.add(pathEdges.get(i));
         }
 
         // mask corresponding edges of coinciding paths
@@ -330,8 +332,7 @@ public class YenShortestPathIterator<V, E>
                 continue;
             }
 
-            V successor = resultPathVertices.get(deviationIndex + 1);
-            maskedEdges.add(graph.getEdge(pathDeviation, successor));
+            maskedEdges.add(resultPath.getEdgeList().get(deviationIndex));
         }
         return Pair.of(maskedVertices, maskedEdges);
     }
@@ -350,16 +351,17 @@ public class YenShortestPathIterator<V, E>
         GraphPath<V, E> path, int recoverVertexIndex, GraphPath<V, E> spurPath)
     {
         List<V> pathVertices = path.getVertexList();
+        List<E> pathEdges = path.getEdgeList();
 
         List<V> candidatePathVertices = new LinkedList<>();
         List<E> candidatePathEdges = new LinkedList<>();
 
         double rootPathWeight = 0.0;
-        for (int j = 0; j < recoverVertexIndex; j++) {
-            E edge = graph.getEdge(pathVertices.get(j), pathVertices.get(j + 1));
+        for (int i = 0; i < recoverVertexIndex; i++) {
+            E edge = pathEdges.get(i);
             rootPathWeight += graph.getEdgeWeight(edge);
             candidatePathEdges.add(edge);
-            candidatePathVertices.add(pathVertices.get(j));
+            candidatePathVertices.add(pathVertices.get(i));
         }
 
         ListIterator<V> spurPathVerticesIterator =
@@ -465,7 +467,9 @@ public class YenShortestPathIterator<V, E>
 
             for (E e : super.g.outgoingEdgesOf(v)) {
                 V successor = Graphs.getOppositeVertex(super.g, e, v);
-
+                if(successor.equals(v)){
+                    continue;
+                }
                 double updatedDistance = Double.POSITIVE_INFINITY;
                 if (super.map.containsKey(successor)) {
                     updatedDistance = super.map.get(successor).getFirst();
@@ -495,7 +499,9 @@ public class YenShortestPathIterator<V, E>
 
                 for (E e : super.g.incomingEdgesOf(vertex)) {
                     V predecessor = Graphs.getOppositeVertex(super.g, e, vertex);
-
+                    if(predecessor.equals(vertex)){
+                        continue;
+                    }
                     double predecessorDistance = Double.POSITIVE_INFINITY;
                     if (super.map.containsKey(predecessor)) {
                         predecessorDistance = super.map.get(predecessor).getFirst();
