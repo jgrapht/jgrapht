@@ -6,6 +6,8 @@ Changes to JGraphT in each version:
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Format code in parallel (contributed by Joris Kinable)
     - Fix edge reuse bug in KDisjointShortestPaths implementations (contributed by Benjamin Krogh)
+    - Updated Yen`s algorithm to operate on pseudo graphs correctly (contributed by Semen Chudakov)
+    - Updated Guava to version 28.0 (contributed by John Sichi)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

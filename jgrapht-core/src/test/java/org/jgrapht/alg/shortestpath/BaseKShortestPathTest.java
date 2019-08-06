@@ -49,9 +49,15 @@ class BaseKShortestPathTest
     protected final int[][] notShortestPathEdgesGraph = { { 1, 2, 1 }, { 1, 3, 3 }, { 1, 4, 4 },
         { 1, 5, 5 }, { 1, 6, 6 }, { 1, 7, 7 }, { 1, 8, 8 }, { 1, 9, 9 } };
 
-    protected final int[][] multigraph =
+    protected final int[][] pseudograph1 =
         { { 1, 2, 3 }, { 1, 4, 2 }, { 1, 5, 4 }, { 2, 3, 4 }, { 2, 2, 0 }, { 3, 5, 3 }, { 4, 1, 0 },
             { 4, 3, 2 }, { 4, 4, 0 }, { 4, 6, 0 }, { 5, 3, 2 }, { 5, 6, 2 } };
+
+    protected final int[][] pseudograph2 =
+            { { 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 2 }, { 1, 2, 3 }, { 1, 2, 4 },
+                    { 2, 2, 5 }, { 2, 3, 6 }, { 2, 3, 7 },
+                    { 3, 3, 8 }, { 3, 4, 9 }, { 3, 4, 10 },
+                    { 4, 4, 11 } };
 
     protected void readGraph(Graph<Integer, DefaultWeightedEdge> graph, int[][] representation)
     {
