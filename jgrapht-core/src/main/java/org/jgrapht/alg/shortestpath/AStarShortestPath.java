@@ -123,7 +123,7 @@ public class AStarShortestPath<V, E>
      *
      * @param admissibleHeuristic admissible heuristic
      */
-    private void initialize(AStarAdmissibleHeuristic<V> admissibleHeuristic)
+    protected void initialize(AStarAdmissibleHeuristic<V> admissibleHeuristic)
     {
         this.admissibleHeuristic = admissibleHeuristic;
         openList = heapSupplier.get();
@@ -187,8 +187,13 @@ public class AStarShortestPath<V, E>
     {
         return numberOfExpandedNodes;
     }
-
-    private void expandNode(AddressableHeap.Handle<Double, V> currentNode, V endVertex)
+    
+    /** Expand node, update cost estimates, and  add neighbors to heap where appropriate
+     * 
+     * @param currentNode Node being expanded.
+     * @param endVertex Target node.
+     */
+    protected void expandNode(AddressableHeap.Handle<Double, V> currentNode, V endVertex)
     {
         numberOfExpandedNodes++;
 
@@ -219,7 +224,7 @@ public class AStarShortestPath<V, E>
                     // open list, since we discovered a shorter
                     // path to this node
                     closedList.remove(successor);
-                    openList.insert(fScore, vertexToHeapNodeMap.get(successor).getValue());
+                    vertexToHeapNodeMap.put(successor, openList.insert(fScore, successor));
                 } else { // It's in the open list
                     vertexToHeapNodeMap.get(successor).decreaseKey(fScore);
                 }
@@ -240,7 +245,7 @@ public class AStarShortestPath<V, E>
      * @param pathLength length of the path
      * @return the shortest path from startVertex to endVertex
      */
-    private GraphPath<V, E> buildGraphPath(V startVertex, V targetVertex, double pathLength)
+    protected GraphPath<V, E> buildGraphPath(V startVertex, V targetVertex, double pathLength)
     {
         List<E> edgeList = new ArrayList<>();
         List<V> vertexList = new ArrayList<>();
