@@ -49,15 +49,6 @@ public class KShortestSimplePaths<V, E>
     KShortestPathAlgorithm<V, E>
 {
     private final BellmanFordKShortestSimplePaths<V, E> bellmanFordKShortestSimplePaths;
-    
-    /**
-     * Graph on which shortest paths are searched.
-     */
-    private Graph<V, E> graph;
-
-    private int nMaxHops;
-
-    private PathValidator<V, E> pathValidator;
 
     /**
      * Constructs an object to compute ranking shortest paths in a graph.
