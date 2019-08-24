@@ -22,7 +22,7 @@ import org.jgrapht.*;
 import java.util.*;
 
 /**
- * Helper class for {@link KShortestSimplePaths}.
+ * Helper class for {@link BellmanFordKShortestSimplePaths}.
  *
  */
 class KShortestSimplePathsIterator<V, E>

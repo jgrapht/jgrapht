@@ -40,8 +40,8 @@ public class KShortestPathCostTest
 
         KShortestPathCompleteGraph4 graph = new KShortestPathCompleteGraph4();
 
-        KShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
-            new KShortestSimplePaths<>(graph);
+        BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
+            new BellmanFordKShortestSimplePaths<>(graph);
         List<GraphPath<String, DefaultWeightedEdge>> pathElements =
             pathFinder.getPaths("vS", "v3", nbPaths);
 
@@ -66,8 +66,8 @@ public class KShortestPathCostTest
 
         int maxSize = 10;
 
-        KShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
-            new KShortestSimplePaths<>(picture1Graph);
+        BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
+            new BellmanFordKShortestSimplePaths<>(picture1Graph);
 
         // assertEquals(2, pathFinder.getPaths("v5").size());
 
@@ -158,7 +158,8 @@ public class KShortestPathCostTest
         for (String sourceVertex : graph.vertexSet()) {
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    KShortestSimplePaths<String, E> pathFinder = new KShortestSimplePaths<>(graph);
+                    BellmanFordKShortestSimplePaths<String, E>
+                        pathFinder = new BellmanFordKShortestSimplePaths<>(graph);
 
                     List<GraphPath<String, E>> pathElements =
                         pathFinder.getPaths(sourceVertex, targetVertex, maxSize);
@@ -188,7 +189,8 @@ public class KShortestPathCostTest
         for (String sourceVertex : graph.vertexSet()) {
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    KShortestSimplePaths<String, E> pathFinder = new KShortestSimplePaths<>(graph);
+                    BellmanFordKShortestSimplePaths<String, E>
+                        pathFinder = new BellmanFordKShortestSimplePaths<>(graph);
                     List<GraphPath<String, E>> prevPathElementsResults =
                         pathFinder.getPaths(sourceVertex, targetVertex, 1);
 
@@ -199,7 +201,7 @@ public class KShortestPathCostTest
                     }
 
                     for (int maxSize = 2; maxSize < maxSizeLimit; maxSize++) {
-                        pathFinder = new KShortestSimplePaths<>(graph);
+                        pathFinder = new BellmanFordKShortestSimplePaths<>(graph);
                         List<GraphPath<String, E>> pathElementsResults =
                             pathFinder.getPaths(sourceVertex, targetVertex, maxSize);
 
@@ -265,8 +267,8 @@ public class KShortestPathCostTest
 
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
-        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths =
-            new KShortestSimplePaths<>(graph);
+        BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> kPaths =
+            new BellmanFordKShortestSimplePaths<>(graph);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
 
         try {

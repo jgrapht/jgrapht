@@ -51,8 +51,8 @@ public class KShortestPathKValuesTest
         KShortestPathCompleteGraph6 graph = new KShortestPathCompleteGraph6();
 
         for (int maxSize = 1; maxSize <= calculateNbElementaryPathsForCompleteGraph(6); maxSize++) {
-            KShortestSimplePaths<String, DefaultWeightedEdge> finder =
-                new KShortestSimplePaths<>(graph);
+            BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> finder =
+                new BellmanFordKShortestSimplePaths<>(graph);
 
             assertEquals(finder.getPaths("vS", "v1", maxSize).size(), maxSize);
             assertEquals(finder.getPaths("vS", "v2", maxSize).size(), maxSize);
@@ -98,8 +98,8 @@ public class KShortestPathKValuesTest
         int maxSize = Integer.MAX_VALUE;
 
         for (String sourceVertex : graph.vertexSet()) {
-            KShortestSimplePaths<String, DefaultWeightedEdge> finder =
-                new KShortestSimplePaths<>(graph);
+            BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> finder =
+                new BellmanFordKShortestSimplePaths<>(graph);
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
                     assertEquals(

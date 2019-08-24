@@ -38,7 +38,7 @@ import java.util.stream.*;
  * @param <E> the graph edge type
  *
  */
-public class KShortestSimplePaths<V, E>
+public class BellmanFordKShortestSimplePaths<V, E>
     implements
     KShortestPathAlgorithm<V, E>
 {
@@ -56,7 +56,7 @@ public class KShortestSimplePaths<V, E>
      *
      * @param graph graph on which shortest paths are searched
      */
-    public KShortestSimplePaths(Graph<V, E> graph)
+    public BellmanFordKShortestSimplePaths(Graph<V, E> graph)
     {
         this(graph, graph.vertexSet().size() - 1, null);
     }
@@ -70,7 +70,7 @@ public class KShortestSimplePaths<V, E>
      * @param graph graph on which shortest paths are searched.
      * @param pathValidator the path validator to use
      */
-    public KShortestSimplePaths(Graph<V, E> graph, PathValidator<V, E> pathValidator)
+    public BellmanFordKShortestSimplePaths(Graph<V, E> graph, PathValidator<V, E> pathValidator)
     {
         this(graph, graph.vertexSet().size() - 1, pathValidator);
     }
@@ -83,7 +83,7 @@ public class KShortestSimplePaths<V, E>
      *
      * @throws IllegalArgumentException if nMaxHops is negative or 0.
      */
-    public KShortestSimplePaths(Graph<V, E> graph, int nMaxHops)
+    public BellmanFordKShortestSimplePaths(Graph<V, E> graph, int nMaxHops)
     {
         this(graph, nMaxHops, null);
     }
@@ -100,7 +100,7 @@ public class KShortestSimplePaths<V, E>
      *
      * @throws IllegalArgumentException if nMaxHops is negative or 0.
      */
-    public KShortestSimplePaths(Graph<V, E> graph, int nMaxHops, PathValidator<V, E> pathValidator)
+    public BellmanFordKShortestSimplePaths(Graph<V, E> graph, int nMaxHops, PathValidator<V, E> pathValidator)
     {
         this.graph = Objects.requireNonNull(graph, "graph is null");
         this.nMaxHops = nMaxHops;

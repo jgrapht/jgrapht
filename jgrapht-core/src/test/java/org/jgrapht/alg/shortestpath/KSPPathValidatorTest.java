@@ -47,8 +47,8 @@ public class KSPPathValidatorTest
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestSimplePaths<String, DefaultEdge> ksp =
-                new KShortestSimplePaths<>(clique, Integer.MAX_VALUE, (partialPath, edge) -> false);
+            BellmanFordKShortestSimplePaths<String, DefaultEdge> ksp =
+                new BellmanFordKShortestSimplePaths<>(clique, Integer.MAX_VALUE, (partialPath, edge) -> false);
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
@@ -71,8 +71,8 @@ public class KSPPathValidatorTest
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestSimplePaths<String, DefaultEdge> ksp =
-                new KShortestSimplePaths<>(clique, Integer.MAX_VALUE, (partialPath, edge) -> true);
+            BellmanFordKShortestSimplePaths<String, DefaultEdge> ksp =
+                new BellmanFordKShortestSimplePaths<>(clique, Integer.MAX_VALUE, (partialPath, edge) -> true);
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
@@ -95,8 +95,8 @@ public class KSPPathValidatorTest
         int size = 10;
         SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestSimplePaths<Integer, DefaultEdge> ksp =
-                new KShortestSimplePaths<>(ring, Integer.MAX_VALUE, (partialPath, edge) -> {
+            BellmanFordKShortestSimplePaths<Integer, DefaultEdge> ksp =
+                new BellmanFordKShortestSimplePaths<>(ring, Integer.MAX_VALUE, (partialPath, edge) -> {
                     if (partialPath == null) {
                         return true;
                     }
@@ -127,8 +127,8 @@ public class KSPPathValidatorTest
         // generate graph of two cliques connected by single edge
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
-            KShortestSimplePaths<Integer, DefaultEdge> ksp =
-                new KShortestSimplePaths<>(graph, Integer.MAX_VALUE, (partialPath, edge) -> {
+            BellmanFordKShortestSimplePaths<Integer, DefaultEdge> ksp =
+                new BellmanFordKShortestSimplePaths<>(graph, Integer.MAX_VALUE, (partialPath, edge) -> {
                     // accept all requests but the one to pass through the edge connecting
                     // the two cliques.
                     DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
@@ -163,8 +163,8 @@ public class KSPPathValidatorTest
     public void testGraphPath()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> line = buildLineGraph(10);
-        KShortestSimplePaths<Integer, DefaultEdge> ksp =
-            new KShortestSimplePaths<>(line, new PathValidator<Integer, DefaultEdge>()
+        BellmanFordKShortestSimplePaths<Integer, DefaultEdge> ksp =
+            new BellmanFordKShortestSimplePaths<>(line, new PathValidator<Integer, DefaultEdge>()
             {
 
                 int index = 0;

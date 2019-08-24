@@ -34,7 +34,7 @@ public class KSPDiscardsValidPathsTest
     public void testNot3connectedGraph()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
-        KShortestSimplePaths<String, DefaultWeightedEdge> paths;
+        BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> paths;
 
         graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         graph.addVertex("S");
@@ -72,7 +72,7 @@ public class KSPDiscardsValidPathsTest
         this.addGraphEdge(graph, "K", "L", 1.0);
         this.addGraphEdge(graph, "L", "S", 1.0);
 
-        paths = new KShortestSimplePaths<>(graph);
+        paths = new BellmanFordKShortestSimplePaths<>(graph);
 
         assertTrue(paths.getPaths("S", "T", 3).size() == 3);
     }
@@ -86,7 +86,7 @@ public class KSPDiscardsValidPathsTest
     public void testBrunoMaoili()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
-        KShortestSimplePaths<String, DefaultWeightedEdge> paths;
+        BellmanFordKShortestSimplePaths<String, DefaultWeightedEdge> paths;
 
         graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         graph.addVertex("A");
@@ -103,13 +103,13 @@ public class KSPDiscardsValidPathsTest
         this.addGraphEdge(graph, "B", "E", 1.0);
         this.addGraphEdge(graph, "C", "D", 1.0);
 
-        paths = new KShortestSimplePaths<>(graph);
+        paths = new BellmanFordKShortestSimplePaths<>(graph);
         assertTrue(paths.getPaths("A", "E", 2).size() == 2);
 
-        paths = new KShortestSimplePaths<>(graph);
+        paths = new BellmanFordKShortestSimplePaths<>(graph);
         assertTrue(paths.getPaths("A", "E", 3).size() == 3);
 
-        paths = new KShortestSimplePaths<>(graph);
+        paths = new BellmanFordKShortestSimplePaths<>(graph);
         assertTrue(paths.getPaths("A", "E", 4).size() == 4);
     }
 

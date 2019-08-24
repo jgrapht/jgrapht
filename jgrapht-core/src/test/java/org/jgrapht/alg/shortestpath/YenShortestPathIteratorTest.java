@@ -348,7 +348,7 @@ public class YenShortestPathIteratorTest
         graph.addEdge("21","1f");
 
         KShortestPathAlgorithm<String,DefaultEdge> yen = new YenKShortestPath<>(graph);
-        KShortestPathAlgorithm<String,DefaultEdge> simple = new KShortestSimplePaths<>(graph);
+        KShortestPathAlgorithm<String,DefaultEdge> simple = new BellmanFordKShortestSimplePaths<>(graph);
 
         // should contain exactly 3 elements each
         List<GraphPath<String,DefaultEdge>> yenPaths = yen.getPaths("1e","18",7);
@@ -403,7 +403,7 @@ public class YenShortestPathIteratorTest
      * If the overall number of paths between {@code source} and {@code target} is denoted by $n$
      * and the value of {@code #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$ then the method
      * iterates over $p = min\{n, m\}$ such paths and verifies that they are built correctly.
-     * The method uses the {@link KShortestSimplePaths} implementation to verify the order
+     * The method uses the {@link BellmanFordKShortestSimplePaths} implementation to verify the order
      * of paths returned by {@link YenShortestPathIterator}. Additionally it is checked that
      * all paths returned by the iterator are unique.
      *
@@ -417,7 +417,7 @@ public class YenShortestPathIteratorTest
 
         Set<GraphPath<Integer, DefaultWeightedEdge>> paths = new HashSet<>();
         List<GraphPath<Integer, DefaultWeightedEdge>> expectedPaths
-                = new KShortestSimplePaths<>(graph).getPaths(source, target, NUMBER_OF_PATH_TO_ITERATE);
+                = new BellmanFordKShortestSimplePaths<>(graph).getPaths(source, target, NUMBER_OF_PATH_TO_ITERATE);
         Iterator<GraphPath<Integer, DefaultWeightedEdge>> expectedPathsIterator  = expectedPaths.iterator();
         YenShortestPathIterator<Integer, DefaultWeightedEdge> yenPathIterator =
                 new YenShortestPathIterator<>(graph, source, target);
