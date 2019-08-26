@@ -210,7 +210,7 @@ public class BidirectionalAStarShortestPath<V, E>
      */
     class AStarSearchFrontier
         extends
-        BaseSearchFrontier
+        BaseSearchFrontier<V,E>
     {
         /**
          * End vertex of the frontier.
@@ -292,12 +292,7 @@ public class BidirectionalAStarShortestPath<V, E>
         @Override
         E getTreeEdge(V v)
         {
-            E e = cameFrom.get(v);
-            if (e == null) {
-                return null;
-            } else {
-                return e;
-            }
+            return cameFrom.get(v);
         }
     }
 
