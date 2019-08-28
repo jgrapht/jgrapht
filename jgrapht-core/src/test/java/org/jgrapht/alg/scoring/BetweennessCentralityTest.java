@@ -171,6 +171,16 @@ public class BetweennessCentralityTest
         assertGraph5(scores);
 
     }
+    
+    @Test
+    public void testWeighted6()
+    {
+        Graph<Integer, DefaultWeightedEdge> g = createWeighted6();
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph6(scores);
+
+    }
 
     @Test
     public void testStar()
@@ -353,6 +363,13 @@ public class BetweennessCentralityTest
         assertEquals(0.0, scores.get(13), 0.0);
         assertEquals(0.0, scores.get(14), 0.0);
     }
+    
+    private void assertGraph6(Map<Integer, Double> scores)
+    {
+        assertEquals(0.0, scores.get(0), 0.0);
+        assertEquals(1.0, scores.get(1), 0.0);
+        assertEquals(0.0, scores.get(2), 0.0);
+    }
 
     private Graph<Integer, DefaultEdge> createUnweighted1()
     {
@@ -503,6 +520,27 @@ public class BetweennessCentralityTest
 
         e = g.addEdge("G", "F");
         g.setEdgeWeight(e, 0.2);
+
+        return g;
+    }
+    
+    private Graph<Integer, DefaultWeightedEdge> createWeighted6()
+    {
+        Graph<Integer, DefaultWeightedEdge> g = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addVertex(2);
+        
+        DefaultWeightedEdge e;
+        
+        e = g.addEdge(2, 1);
+        g.setEdgeWeight(e, 1);
+        
+        e = g.addEdge(1, 0);
+        g.setEdgeWeight(e, 1);
+        
+        e = g.addEdge(2, 0);
+        g.setEdgeWeight(e, 49);
 
         return g;
     }
