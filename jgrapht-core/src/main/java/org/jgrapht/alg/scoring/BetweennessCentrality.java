@@ -185,12 +185,20 @@ public class BetweennessCentrality<V, E>
                 if (distance.get(w) == Double.POSITIVE_INFINITY) {
                     queue.insert(w, d);
                     distance.put(w, d);
+                    sigma.put(w, sigma.get(v));
+                    predecessors.get(w).add(v);
                 }
                 // shortest path to w via v?
-                if (distance.get(w) >= d) {
-                    distance.put(w, d);
-                    queue.update(w, d);
+                else if (distance.get(w) == d) {
+                    //queue.update(w, d);
                     sigma.put(w, sigma.get(w) + sigma.get(v));
+                    predecessors.get(w).add(v);
+                }
+                else if(distance.get(w) > d){
+                    queue.update(w, d);
+                    distance.put(w, d);
+                    sigma.put(w, sigma.get(v));
+                    predecessors.get(w).clear();
                     predecessors.get(w).add(v);
                 }
             }
