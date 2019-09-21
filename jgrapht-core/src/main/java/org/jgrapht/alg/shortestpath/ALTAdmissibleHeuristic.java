@@ -70,11 +70,11 @@ public class ALTAdmissibleHeuristic<V, E>
     implements
     AStarAdmissibleHeuristic<V>
 {
-    private final Graph<V, E> graph;
-    private final Comparator<Double> comparator;
-    private final Map<V, Map<V, Double>> fromLandmark;
-    private final Map<V, Map<V, Double>> toLandmark;
-    private final boolean directed;
+    protected final Graph<V, E> graph;
+    protected final Comparator<Double> comparator;
+    protected final Map<V, Map<V, Double>> fromLandmark;
+    protected final Map<V, Map<V, Double>> toLandmark;
+    protected final boolean directed;
 
     /**
      * Constructs a new {@link AStarAdmissibleHeuristic} using a set of landmarks.
@@ -177,7 +177,7 @@ public class ALTAdmissibleHeuristic<V, E>
      *
      * @param landmark the landmark
      */
-    private void precomputeToFromLandmark(V landmark)
+    protected void precomputeToFromLandmark(V landmark)
     {
         // compute distances from landmark
         SingleSourcePaths<V, E> fromLandmarkPaths =
