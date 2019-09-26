@@ -237,4 +237,60 @@ public class HawickJamesSimpleCyclesTest {
         assertEquals(1, run2.size());
         assertTrue(run2.get(0).containsAll(asList("A", "B", "C")));
     }
+
+    @Test
+    public void limitPaths1() {
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "A");
+
+        HawickJamesSimpleCycles<String, DefaultEdge> hjsc = new HawickJamesSimpleCycles<>(graph);
+        hjsc.setPathLimit(1);
+
+        assertTrue(hjsc.findSimpleCycles().isEmpty());
+    }
+
+    @Test
+    public void limitPaths2() {
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "A");
+
+        HawickJamesSimpleCycles<String, DefaultEdge> hjsc = new HawickJamesSimpleCycles<>(graph);
+        hjsc.setPathLimit(2);
+
+        assertTrue(hjsc.findSimpleCycles().isEmpty());
+    }
+
+    @Test
+    public void limitPathsTwoCycles() {
+        // Two smaller cycles are still found
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "A");
+
+        graph.addEdge("C", "D");
+        graph.addEdge("D", "C");
+
+        HawickJamesSimpleCycles<String, DefaultEdge> hjsc = new HawickJamesSimpleCycles<>(graph);
+        hjsc.setPathLimit(2);
+
+        List<List<String>> cycles = hjsc.findSimpleCycles();
+        assertEquals(2, cycles.size());
+        assertTrue(cycles.get(0).containsAll(asList("A", "B")));
+        assertTrue(cycles.get(1).containsAll(asList("C", "D")));
+    }
 }
