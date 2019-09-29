@@ -20,6 +20,8 @@ package org.jgrapht.util;
 import org.jgrapht.graph.*;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.*;
 
@@ -48,6 +50,23 @@ public class SupplierUtil
      */
     public static final Supplier<Object> OBJECT_SUPPLIER = createSupplier(Object.class);
 
+    private static class ConstructorSupplier<T> implements Supplier<T>, Serializable {
+        private final Constructor<? extends T> constructor;
+
+        public ConstructorSupplier(Constructor<? extends T> constructor) {
+            this.constructor = constructor;
+        }
+
+        @Override
+        public T get() {
+            try {
+                return constructor.newInstance();
+            } catch (ReflectiveOperationException ex) {
+                throw new RuntimeException("Supplier failed", ex);
+            }
+        }
+    }
+
     /**
      * Create a supplier from a class which calls the default constructor.
      * 
@@ -57,13 +76,15 @@ public class SupplierUtil
      */
     public static <T> Supplier<T> createSupplier(Class<? extends T> clazz)
     {
-        return (Supplier<T> & Serializable) () -> {
-            try {
-                return clazz.getDeclaredConstructor().newInstance();
-            } catch (Exception ex) {
-                throw new RuntimeException("Supplier failed", ex);
-            }
-        };
+        try {
+            final Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
+            if ((!Modifier.isPublic(constructor.getModifiers()) ||
+                    !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) && !constructor.isAccessible())
+                constructor.setAccessible(true);
+            return new ConstructorSupplier(constructor);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
