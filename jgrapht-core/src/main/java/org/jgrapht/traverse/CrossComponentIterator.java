@@ -308,9 +308,21 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
+    /**
+     * Selects the outgoing edges for a given vertex based on the source vertex and other traversal
+     * state. The default implementation returns all outgoing edges.
+     *
+     * @param vertex vertex in question
+     * @return set of outgoing edges connected to the vertex
+     */
+    protected Set<E> selectOutgoingEdges(V vertex)
+    {
+        return graph.outgoingEdgesOf(vertex);
+    }
+
     private void addUnseenChildrenOf(V vertex)
     {
-        for (E edge : graph.outgoingEdgesOf(vertex)) {
+        for (E edge : selectOutgoingEdges(vertex)) {
             if (nListeners != 0) {
                 fireEdgeTraversed(createEdgeTraversalEvent(edge));
             }
