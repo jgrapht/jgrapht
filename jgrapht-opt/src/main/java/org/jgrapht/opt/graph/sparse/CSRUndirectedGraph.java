@@ -1,0 +1,271 @@
+package org.jgrapht.opt.graph.sparse;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import org.jgrapht.GraphType;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.AbstractGraph;
+import org.jgrapht.graph.DefaultGraphType;
+
+public class CSRUndirectedGraph
+    extends
+    AbstractGraph<Integer, Integer>
+{
+    private static final String UNMODIFIABLE = "this graph is unmodifiable";
+
+    private CSRBooleanMatrix incidenceMatrix;
+    private CSRBooleanMatrix incidenceMatrixT;
+
+    public CSRUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
+    {
+        List<Pair<Integer, Integer>> nonZeros = new ArrayList<>();
+        List<Pair<Integer, Integer>> nonZerosTranspose = new ArrayList<>();
+        int eIndex = 0;
+        for (Pair<Integer, Integer> e : edges) {
+            nonZeros.add(Pair.of(e.getFirst(), eIndex));
+            nonZeros.add(Pair.of(e.getSecond(), eIndex));
+            nonZerosTranspose.add(Pair.of(eIndex, e.getFirst()));
+            nonZerosTranspose.add(Pair.of(eIndex, e.getSecond()));
+            eIndex++;
+        }
+        incidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), nonZeros);
+        incidenceMatrixT = new CSRBooleanMatrix(edges.size(), numVertices, nonZerosTranspose);
+    }
+
+    @Override
+    public Set<Integer> getAllEdges(Integer sourceVertex, Integer targetVertex)
+    {
+        if (sourceVertex < 0 || sourceVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+        if (targetVertex < 0 || targetVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+
+        Set<Integer> result = new HashSet<>();
+        Iterator<Integer> it = incidenceMatrix.columnIterator(sourceVertex);
+        while (it.hasNext()) {
+            int eId = it.next();
+
+            Iterator<Integer> vIt = incidenceMatrixT.columnIterator(eId);
+            int v = vIt.next();
+            int u = vIt.next();
+
+            if (v == sourceVertex && u == targetVertex || v == targetVertex && u == sourceVertex) {
+                result.add(eId);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Integer getEdge(Integer sourceVertex, Integer targetVertex)
+    {
+        if (sourceVertex < 0 || sourceVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+        if (targetVertex < 0 || targetVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+
+        Iterator<Integer> it = incidenceMatrix.columnIterator(sourceVertex);
+        while (it.hasNext()) {
+            int eId = it.next();
+
+            Iterator<Integer> vIt = incidenceMatrixT.columnIterator(eId);
+            int v = vIt.next();
+            int u = vIt.next();
+
+            if (v == sourceVertex && u == targetVertex || v == targetVertex && u == sourceVertex) {
+                return eId;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Supplier<Integer> getVertexSupplier()
+    {
+        return null;
+    }
+
+    @Override
+    public Supplier<Integer> getEdgeSupplier()
+    {
+        return null;
+    }
+
+    @Override
+    public Integer addEdge(Integer sourceVertex, Integer targetVertex)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean addEdge(Integer sourceVertex, Integer targetVertex, Integer e)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public Integer addVertex()
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean addVertex(Integer v)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean containsEdge(Integer e)
+    {
+        return e >= 0 && e < incidenceMatrix.columns();
+    }
+
+    @Override
+    public boolean containsVertex(Integer v)
+    {
+        return v >= 0 && v < incidenceMatrix.rows();
+    }
+
+    @Override
+    public Set<Integer> edgeSet()
+    {
+        return IntStream
+            .range(0, incidenceMatrix.columns()).mapToObj(Integer::valueOf)
+            .collect(Collectors.toSet());
+    }
+
+    @Override
+    public int degreeOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZeros(vertex);
+    }
+
+    @Override
+    public Set<Integer> edgesOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.rowSet(vertex);
+    }
+
+    @Override
+    public int inDegreeOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZeros(vertex);
+    }
+
+    @Override
+    public Set<Integer> incomingEdgesOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.rowSet(vertex);
+    }
+
+    @Override
+    public int outDegreeOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZeros(vertex);
+    }
+
+    @Override
+    public Set<Integer> outgoingEdgesOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.rowSet(vertex);
+    }
+
+    @Override
+    public Integer removeEdge(Integer sourceVertex, Integer targetVertex)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean removeEdge(Integer e)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean removeVertex(Integer v)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public Set<Integer> vertexSet()
+    {
+        return IntStream
+            .range(0, incidenceMatrix.rows()).mapToObj(Integer::valueOf)
+            .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Integer getEdgeSource(Integer e)
+    {
+        assertEdgeExist(e);
+        return incidenceMatrixT.columnIterator(e).next();
+    }
+
+    @Override
+    public Integer getEdgeTarget(Integer e)
+    {
+        assertEdgeExist(e);
+        Iterator<Integer> it = incidenceMatrixT.columnIterator(e);
+        it.next();
+        return it.next();
+    }
+
+    @Override
+    public GraphType getType()
+    {
+        return new DefaultGraphType.Builder()
+            .undirected().weighted(false).modifiable(false).allowMultipleEdges(true)
+            .allowSelfLoops(true).build();
+    }
+
+    @Override
+    public double getEdgeWeight(Integer e)
+    {
+        return 1.0;
+    }
+
+    @Override
+    public void setEdgeWeight(Integer e, double weight)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    protected boolean assertVertexExist(Integer v)
+    {
+        if (v >= 0 && v < incidenceMatrix.rows()) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
+        }
+    }
+
+    protected boolean assertEdgeExist(Integer e)
+    {
+        if (e >= 0 && e < incidenceMatrixT.rows()) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("no such edge in graph: " + e.toString());
+        }
+    }
+
+}
