@@ -51,6 +51,25 @@ public class SupplierUtil
     public static final Supplier<Object> OBJECT_SUPPLIER = createSupplier(Object.class);
 
     private static class ConstructorSupplier<T> implements Supplier<T>, Serializable {
+
+        private static class SerializedForm implements Serializable {
+            private final Class<?> type;
+
+            public SerializedForm(Class<?> type) {
+                this.type = type;
+            }
+
+            /* pp */ Object readResolve() throws ObjectStreamException {
+                try {
+                    return new ConstructorSupplier(type.getDeclaredConstructor());
+                } catch (ReflectiveOperationException e) {
+                    InvalidObjectException ex = new InvalidObjectException("Failed to get no-args constructor from " + type);
+                    ex.initCause(e);
+                    throw ex;
+                }
+            }
+        }
+
         private final Constructor<? extends T> constructor;
 
         public ConstructorSupplier(Constructor<? extends T> constructor) {
@@ -64,6 +83,10 @@ public class SupplierUtil
             } catch (ReflectiveOperationException ex) {
                 throw new RuntimeException("Supplier failed", ex);
             }
+        }
+
+        /* pp */ Object writeReplace() throws ObjectStreamException {
+            return new SerializedForm(constructor.getDeclaringClass());
         }
     }
 
