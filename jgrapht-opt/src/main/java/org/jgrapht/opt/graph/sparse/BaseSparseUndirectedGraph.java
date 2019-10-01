@@ -135,7 +135,7 @@ public abstract class BaseSparseUndirectedGraph
     public Set<Integer> edgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return incidenceMatrix.rowSet(vertex);
+        return incidenceMatrix.nonZerosSet(vertex);
     }
 
     @Override
@@ -149,7 +149,7 @@ public abstract class BaseSparseUndirectedGraph
     public Set<Integer> incomingEdgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return incidenceMatrix.rowSet(vertex);
+        return incidenceMatrix.nonZerosSet(vertex);
     }
 
     @Override
@@ -163,7 +163,7 @@ public abstract class BaseSparseUndirectedGraph
     public Set<Integer> outgoingEdgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return incidenceMatrix.rowSet(vertex);
+        return incidenceMatrix.nonZerosSet(vertex);
     }
 
     @Override
@@ -220,7 +220,7 @@ public abstract class BaseSparseUndirectedGraph
             return null;
         }
 
-        Iterator<Integer> it = incidenceMatrix.nonZerosIterator(sourceVertex);
+        Iterator<Integer> it = incidenceMatrix.nonZerosPositionIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
 
@@ -245,7 +245,7 @@ public abstract class BaseSparseUndirectedGraph
         }
 
         Set<Integer> result = new HashSet<>();
-        Iterator<Integer> it = incidenceMatrix.nonZerosIterator(sourceVertex);
+        Iterator<Integer> it = incidenceMatrix.nonZerosPositionIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
 

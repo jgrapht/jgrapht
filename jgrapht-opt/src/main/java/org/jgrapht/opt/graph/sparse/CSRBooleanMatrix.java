@@ -28,10 +28,12 @@ import java.util.Set;
 import org.jgrapht.alg.util.Pair;
 
 /**
- * Compressed Sparse Row Boolean Matrix
+ * A sparse boolean matrix in Compressed Sparse Row (CSR) format.
+ * 
+ * <p>
+ * This is a helper class for graph representation and thus does not provide a fully fledged matrix.
  * 
  * @author Dimitrios Michail
- *
  */
 class CSRBooleanMatrix
     implements
@@ -132,7 +134,7 @@ class CSRBooleanMatrix
      * @param row the row
      * @return an iterator over the non-zero entries of a row
      */
-    public Iterator<Integer> nonZerosIterator(int row)
+    public Iterator<Integer> nonZerosPositionIterator(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
@@ -145,20 +147,20 @@ class CSRBooleanMatrix
      * @param row the row
      * @return the position of non-zero entries of a row as a set.
      */
-    public Set<Integer> rowSet(int row)
+    public Set<Integer> nonZerosSet(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
-        return new RowSet(row);
+        return new NonZerosSet(row);
     }
 
-    private class RowSet
+    private class NonZerosSet
         extends
         AbstractSet<Integer>
     {
         private int row;
 
-        public RowSet(int row)
+        public NonZerosSet(int row)
         {
             this.row = row;
         }

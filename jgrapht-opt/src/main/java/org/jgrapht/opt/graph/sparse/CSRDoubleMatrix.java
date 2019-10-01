@@ -29,7 +29,10 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 
 /**
- * Compressed Sparse Row Matrix with double values.
+ * A sparse matrix with double values in Compressed Sparse Row (CSR) format.
+ * 
+ * <p>
+ * This is a helper class for graph representation and thus does not provide a fully fledged matrix.
  * 
  * @author Dimitrios Michail
  */
@@ -118,21 +121,22 @@ class CSRDoubleMatrix
     }
 
     /**
-     * Set all non-zero entries of a row to a specific value. 
+     * Set all non-zero entries of a row to a specific value.
      * 
      * @param row the row
      * @param value the value
      */
-    public void setNonZeros(int row, double value) { 
+    public void setNonZeros(int row, double value)
+    {
         assert row >= 0 && row < rowOffsets.length;
-        
+
         int curPos = rowOffsets[row];
-        int toPos= rowOffsets[row+1];
-        for(int i = curPos; i < toPos; i++) { 
+        int toPos = rowOffsets[row + 1];
+        for (int i = curPos; i < toPos; i++) {
             columnValues[i] = value;
         }
     }
-    
+
     /**
      * Get the number of non-zero entries of a row.
      * 
@@ -178,11 +182,11 @@ class CSRDoubleMatrix
      * @param row the row
      * @return the non-zero entries of a row as a set.
      */
-    public Set<Pair<Integer, Double>> rowSet(int row)
+    public Set<Pair<Integer, Double>> nonZerosSet(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
-        return new RowSet(row);
+        return new NonZerosSet(row);
     }
 
     /**
@@ -191,20 +195,20 @@ class CSRDoubleMatrix
      * @param row the row
      * @return the position of non-zero entries of a row as a set.
      */
-    public Set<Integer> rowPositionSet(int row)
+    public Set<Integer> nonZerosPositionSet(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
-        return new RowPositionSet(row);
+        return new NonZerosPositionSet(row);
     }
 
-    private class RowSet
+    private class NonZerosSet
         extends
         AbstractSet<Pair<Integer, Double>>
     {
         private int row;
 
-        public RowSet(int row)
+        public NonZerosSet(int row)
         {
             this.row = row;
         }
@@ -222,13 +226,13 @@ class CSRDoubleMatrix
         }
     }
 
-    private class RowPositionSet
+    private class NonZerosPositionSet
         extends
         AbstractSet<Integer>
     {
         private int row;
 
-        public RowPositionSet(int row)
+        public NonZerosPositionSet(int row)
         {
             this.row = row;
         }

@@ -73,14 +73,14 @@ public class SparseDirectedGraph
     public Integer getEdgeSource(Integer e)
     {
         assertEdgeExist(e);
-        return outIncidenceMatrixT.nonZerosIterator(e).next();
+        return outIncidenceMatrixT.nonZerosPositionIterator(e).next();
     }
 
     @Override
     public Integer getEdgeTarget(Integer e)
     {
         assertEdgeExist(e);
-        return inIncidenceMatrixT.nonZerosIterator(e).next();
+        return inIncidenceMatrixT.nonZerosPositionIterator(e).next();
     }
 
 }

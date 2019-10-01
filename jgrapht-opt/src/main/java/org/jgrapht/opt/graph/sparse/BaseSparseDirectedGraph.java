@@ -141,7 +141,7 @@ public abstract class BaseSparseDirectedGraph
     {
         assertVertexExist(vertex);
         return new UnmodifiableUnionSet<>(
-            outIncidenceMatrix.rowSet(vertex), inIncidenceMatrix.rowSet(vertex));
+            outIncidenceMatrix.nonZerosSet(vertex), inIncidenceMatrix.nonZerosSet(vertex));
     }
 
     @Override
@@ -155,7 +155,7 @@ public abstract class BaseSparseDirectedGraph
     public Set<Integer> incomingEdgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return inIncidenceMatrix.rowSet(vertex);
+        return inIncidenceMatrix.nonZerosSet(vertex);
     }
 
     @Override
@@ -169,7 +169,7 @@ public abstract class BaseSparseDirectedGraph
     public Set<Integer> outgoingEdgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return outIncidenceMatrix.rowSet(vertex);
+        return outIncidenceMatrix.nonZerosSet(vertex);
     }
 
     @Override
@@ -226,7 +226,7 @@ public abstract class BaseSparseDirectedGraph
             return null;
         }
 
-        Iterator<Integer> it = outIncidenceMatrix.nonZerosIterator(sourceVertex);
+        Iterator<Integer> it = outIncidenceMatrix.nonZerosPositionIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
             if (getEdgeTarget(eId) == targetVertex) {
@@ -248,7 +248,7 @@ public abstract class BaseSparseDirectedGraph
 
         Set<Integer> result = new HashSet<>();
 
-        Iterator<Integer> it = outIncidenceMatrix.nonZerosIterator(sourceVertex);
+        Iterator<Integer> it = outIncidenceMatrix.nonZerosPositionIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
 
