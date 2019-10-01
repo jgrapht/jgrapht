@@ -32,6 +32,11 @@ class IntegerSet
 {
     private int n;
 
+    /**
+     * Create an integer set from 0 to n-1.
+     * 
+     * @param n the number n
+     */
     public IntegerSet(int n)
     {
         this.n = n;

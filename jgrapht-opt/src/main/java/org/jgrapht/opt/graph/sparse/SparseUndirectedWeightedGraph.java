@@ -24,40 +24,41 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.DefaultGraphType;
 
 /**
- * A sparse unmodifiable undirected graph.
+ * A sparse unmodifiable undirected and weighted graph.
  * 
  * @author Dimitrios Michail
  */
-public class SparseUndirectedGraph
+public class SparseUndirectedWeightedGraph
     extends
     AbstractGraph<Integer, Integer>
 {
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
     private CSRBooleanMatrix incidenceMatrix;
-    private CSRBooleanMatrix incidenceMatrixT;
+    private CSRDoubleMatrix incidenceMatrixT;
 
-    public SparseUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
+    public SparseUndirectedWeightedGraph(
+        int numVertices, List<Triple<Integer, Integer, Double>> edges)
     {
         List<Pair<Integer, Integer>> nonZeros = new ArrayList<>();
-        List<Pair<Integer, Integer>> nonZerosTranspose = new ArrayList<>();
+        List<Triple<Integer, Integer, Double>> nonZerosTranspose = new ArrayList<>();
         int eIndex = 0;
-        for (Pair<Integer, Integer> e : edges) {
+        for (Triple<Integer, Integer, Double> e : edges) {
             nonZeros.add(Pair.of(e.getFirst(), eIndex));
             nonZeros.add(Pair.of(e.getSecond(), eIndex));
-            nonZerosTranspose.add(Pair.of(eIndex, e.getFirst()));
-            nonZerosTranspose.add(Pair.of(eIndex, e.getSecond()));
+            nonZerosTranspose.add(Triple.of(eIndex, e.getFirst(), e.getThird()));
+            nonZerosTranspose.add(Triple.of(eIndex, e.getSecond(), e.getThird()));
             eIndex++;
         }
         incidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), nonZeros);
-        incidenceMatrixT = new CSRBooleanMatrix(edges.size(), numVertices, nonZerosTranspose);
+        incidenceMatrixT = new CSRDoubleMatrix(edges.size(), numVertices, nonZerosTranspose);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class SparseUndirectedGraph
         while (it.hasNext()) {
             int eId = it.next();
 
-            Iterator<Integer> vIt = incidenceMatrixT.nonZerosIterator(eId);
+            Iterator<Integer> vIt = incidenceMatrixT.nonZerosPositionIterator(eId);
             int v = vIt.next();
             int u = vIt.next();
 
@@ -100,7 +101,7 @@ public class SparseUndirectedGraph
         while (it.hasNext()) {
             int eId = it.next();
 
-            Iterator<Integer> vIt = incidenceMatrixT.nonZerosIterator(eId);
+            Iterator<Integer> vIt = incidenceMatrixT.nonZerosPositionIterator(eId);
             int v = vIt.next();
             int u = vIt.next();
 
@@ -235,14 +236,14 @@ public class SparseUndirectedGraph
     public Integer getEdgeSource(Integer e)
     {
         assertEdgeExist(e);
-        return incidenceMatrixT.nonZerosIterator(e).next();
+        return incidenceMatrixT.nonZerosPositionIterator(e).next();
     }
 
     @Override
     public Integer getEdgeTarget(Integer e)
     {
         assertEdgeExist(e);
-        Iterator<Integer> it = incidenceMatrixT.nonZerosIterator(e);
+        Iterator<Integer> it = incidenceMatrixT.nonZerosPositionIterator(e);
         it.next();
         return it.next();
     }
@@ -251,20 +252,22 @@ public class SparseUndirectedGraph
     public GraphType getType()
     {
         return new DefaultGraphType.Builder()
-            .undirected().weighted(false).modifiable(false).allowMultipleEdges(true)
+            .undirected().weighted(true).modifiable(false).allowMultipleEdges(true)
             .allowSelfLoops(true).build();
     }
 
     @Override
     public double getEdgeWeight(Integer e)
     {
-        return Graph.DEFAULT_EDGE_WEIGHT;
+        assertEdgeExist(e);
+        return incidenceMatrixT.nonZerosIterator(e).next().getSecond();
     }
 
     @Override
     public void setEdgeWeight(Integer e, double weight)
     {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
+        assertEdgeExist(e);
+        incidenceMatrixT.setNonZeros(e, weight);
     }
 
     protected boolean assertVertexExist(Integer v)

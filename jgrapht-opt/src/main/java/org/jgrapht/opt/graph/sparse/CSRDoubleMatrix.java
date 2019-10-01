@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.Triple;
  * 
  * @author Dimitrios Michail
  */
-public class CSRDoubleMatrix
+class CSRDoubleMatrix
     implements
     Serializable
 {
@@ -70,11 +70,11 @@ public class CSRDoubleMatrix
 
         Iterator<Triple<Integer, Integer, Double>> it =
             entries.stream().sorted(new TripleComparator()).iterator();
-        
+
         int cIndex = 0;
         while (it.hasNext()) {
             Triple<Integer, Integer, Double> e = it.next();
-            
+
             // add column index
             int column = e.getSecond();
             if (column < 0 || column >= columns) {
@@ -83,15 +83,15 @@ public class CSRDoubleMatrix
             columnIndices[cIndex] = column;
             columnValues[cIndex] = e.getThird();
             ++cIndex;
-            
+
             // count non-zero per row
             int row = e.getFirst();
-            rowOffsets[row+1]++;
+            rowOffsets[row + 1]++;
         }
-        
+
         // prefix sum
         int prefix = 0;
-        for(int i = 1; i < rowOffsets.length; i++) { 
+        for (int i = 1; i < rowOffsets.length; i++) {
             prefix += rowOffsets[i];
             rowOffsets[i] = prefix;
         }
@@ -117,6 +117,22 @@ public class CSRDoubleMatrix
         return rowOffsets.length - 1;
     }
 
+    /**
+     * Set all non-zero entries of a row to a specific value. 
+     * 
+     * @param row the row
+     * @param value the value
+     */
+    public void setNonZeros(int row, double value) { 
+        assert row >= 0 && row < rowOffsets.length;
+        
+        int curPos = rowOffsets[row];
+        int toPos= rowOffsets[row+1];
+        for(int i = curPos; i < toPos; i++) { 
+            columnValues[i] = value;
+        }
+    }
+    
     /**
      * Get the number of non-zero entries of a row.
      * 
@@ -157,16 +173,29 @@ public class CSRDoubleMatrix
     }
 
     /**
-     * Get the position of non-zero entries of a row as a set.
+     * Get the non-zero entries of a row as a set.
      * 
      * @param row the row
-     * @return the position of non-zero entries of a row as a set.
+     * @return the non-zero entries of a row as a set.
      */
     public Set<Pair<Integer, Double>> rowSet(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
         return new RowSet(row);
+    }
+
+    /**
+     * Get the position of non-zero entries of a row as a set.
+     * 
+     * @param row the row
+     * @return the position of non-zero entries of a row as a set.
+     */
+    public Set<Integer> rowPositionSet(int row)
+    {
+        assert row >= 0 && row < rowOffsets.length;
+
+        return new RowPositionSet(row);
     }
 
     private class RowSet
@@ -184,6 +213,30 @@ public class CSRDoubleMatrix
         public Iterator<Pair<Integer, Double>> iterator()
         {
             return new NonZerosIterator(row);
+        }
+
+        @Override
+        public int size()
+        {
+            return rowOffsets[row + 1] - rowOffsets[row];
+        }
+    }
+
+    private class RowPositionSet
+        extends
+        AbstractSet<Integer>
+    {
+        private int row;
+
+        public RowPositionSet(int row)
+        {
+            this.row = row;
+        }
+
+        @Override
+        public Iterator<Integer> iterator()
+        {
+            return new NonZerosPositionIterator(row);
         }
 
         @Override

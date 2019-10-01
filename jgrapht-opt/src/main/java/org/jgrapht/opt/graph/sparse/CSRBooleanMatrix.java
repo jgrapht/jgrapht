@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.Pair;
  * @author Dimitrios Michail
  *
  */
-public class CSRBooleanMatrix
+class CSRBooleanMatrix
     implements
     Serializable
 {
@@ -68,26 +68,26 @@ public class CSRBooleanMatrix
 
         Iterator<Pair<Integer, Integer>> it =
             entries.stream().sorted(new PairComparator()).iterator();
-        
+
         int cIndex = 0;
         while (it.hasNext()) {
             Pair<Integer, Integer> e = it.next();
-            
+
             // add column index
             int column = e.getSecond();
             if (column < 0 || column >= columns) {
                 throw new IllegalArgumentException("Entry at invalid column: " + column);
             }
             columnIndices[cIndex++] = column;
-            
+
             // count non-zero per row
             int row = e.getFirst();
-            rowOffsets[row+1]++;
+            rowOffsets[row + 1]++;
         }
-        
+
         // prefix sum
         int prefix = 0;
-        for(int i = 1; i < rowOffsets.length; i++) { 
+        for (int i = 1; i < rowOffsets.length; i++) {
             prefix += rowOffsets[i];
             rowOffsets[i] = prefix;
         }
