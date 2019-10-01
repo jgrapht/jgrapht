@@ -5,8 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -103,7 +105,7 @@ public class SparseGraphTest
         assertEquals(
             IntStream.range(0, 6).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
             g.vertexSet());
-        
+
         GraphType type = g.getType();
         assertTrue(type.isAllowingCycles());
         assertTrue(type.isAllowingMultipleEdges());
@@ -113,6 +115,19 @@ public class SparseGraphTest
         assertFalse(type.isDirected());
         assertFalse(type.isMixed());
         assertFalse(type.isWeighted());
+
+        int i = 0;
+        for (Pair<Integer, Integer> p : edges) {
+            assertEquals(Integer.valueOf(i), g.getEdge(p.getFirst(), p.getSecond()));
+            i++;
+        }
+
+        int j = 0;
+        for (Pair<Integer, Integer> p : edges) {
+            Set<Integer> edgeSet = Collections.singleton(Integer.valueOf(j));
+            assertEquals(edgeSet, g.getAllEdges(p.getFirst(), p.getSecond()));
+            j++;
+        }
     }
 
     /**
@@ -203,7 +218,7 @@ public class SparseGraphTest
         assertEquals(5d, g.getEdgeWeight(4), 1e-16);
         g.setEdgeWeight(4, 14d);
         assertEquals(14d, g.getEdgeWeight(4), 1e-16);
-        
+
         assertEquals(
             IntStream.range(0, edges.size()).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
             g.edgeSet());
@@ -220,6 +235,19 @@ public class SparseGraphTest
         assertFalse(type.isDirected());
         assertFalse(type.isMixed());
         assertTrue(type.isWeighted());
+
+        int i = 0;
+        for (Triple<Integer, Integer, Double> p : edges) {
+            assertEquals(Integer.valueOf(i), g.getEdge(p.getFirst(), p.getSecond()));
+            i++;
+        }
+
+        int j = 0;
+        for (Triple<Integer, Integer, Double> p : edges) {
+            Set<Integer> edgeSet = Collections.singleton(Integer.valueOf(j));
+            assertEquals(edgeSet, g.getAllEdges(p.getFirst(), p.getSecond()));
+            j++;
+        }
     }
 
     @Test
@@ -340,16 +368,40 @@ public class SparseGraphTest
         assertFalse(type.isUndirected());
         assertFalse(type.isMixed());
         assertFalse(type.isWeighted());
+        
+        assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
+        assertEquals(Collections.singleton(Integer.valueOf(0)), g.getAllEdges(0, 1));
+        assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
+        assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));        
+        assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
+        assertEquals(Collections.singleton(Integer.valueOf(2)), g.getAllEdges(1, 4));
+        assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
+        assertEquals(Collections.singleton(Integer.valueOf(3)), g.getAllEdges(1, 5));
+        assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
+        assertEquals(Collections.singleton(Integer.valueOf(4)), g.getAllEdges(1, 6));
+        assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
+        assertEquals(new HashSet<>(Arrays.asList(5,6,7)), g.getAllEdges(2, 4));
+        assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
+        assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));        
+        assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
+        assertEquals(Collections.singleton(Integer.valueOf(9)), g.getAllEdges(4, 5));
+        assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
+        assertEquals(Collections.singleton(Integer.valueOf(10)), g.getAllEdges(5, 6));
+        assertEquals(Integer.valueOf(11), g.getEdge(7, 6));
+        assertEquals(Collections.singleton(Integer.valueOf(11)), g.getAllEdges(7, 6));
+        assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
+        assertEquals(Collections.singleton(Integer.valueOf(12)), g.getAllEdges(7, 7));
     }
-    
+
     @Test
     public void testDirectedWeighted()
     {
         List<Triple<Integer, Integer, Double>> edges = Arrays
             .asList(
-                Triple.of(0, 1, 0d), Triple.of(1, 0, 1d), Triple.of(1, 4, 2d), Triple.of(1, 5, 3d), Triple.of(1, 6, 4d),
-                Triple.of(2, 4, 5d), Triple.of(2, 4, 6d), Triple.of(2, 4, 7d), Triple.of(3, 4, 8d), Triple.of(4, 5, 9d),
-                Triple.of(5, 6, 10d), Triple.of(7, 6, 11d), Triple.of(7, 7, 12d));
+                Triple.of(0, 1, 0d), Triple.of(1, 0, 1d), Triple.of(1, 4, 2d), Triple.of(1, 5, 3d),
+                Triple.of(1, 6, 4d), Triple.of(2, 4, 5d), Triple.of(2, 4, 6d), Triple.of(2, 4, 7d),
+                Triple.of(3, 4, 8d), Triple.of(4, 5, 9d), Triple.of(5, 6, 10d),
+                Triple.of(7, 6, 11d), Triple.of(7, 7, 12d));
 
         int vertices = 8;
         Graph<Integer, Integer> g = new SparseDirectedWeightedGraph(vertices, edges);
@@ -464,12 +516,12 @@ public class SparseGraphTest
         assertEquals(Integer.valueOf(7), g.getEdgeTarget(12));
         assertEquals(12d, g.getEdgeWeight(12), 1e-16);
 
-        for(int i = 0; i < edges.size(); i++) {
-            assertEquals(Double.valueOf(i), g.getEdgeWeight(i), 1e-16);            
+        for (int i = 0; i < edges.size(); i++) {
+            assertEquals(Double.valueOf(i), g.getEdgeWeight(i), 1e-16);
             g.setEdgeWeight(i, 100 + g.getEdgeWeight(i));
-            assertEquals(Double.valueOf(i)+100, g.getEdgeWeight(i), 1e-16);
+            assertEquals(Double.valueOf(i) + 100, g.getEdgeWeight(i), 1e-16);
         }
-        
+
         GraphType type = g.getType();
         assertTrue(type.isAllowingCycles());
         assertTrue(type.isAllowingMultipleEdges());
@@ -479,5 +531,28 @@ public class SparseGraphTest
         assertFalse(type.isModifiable());
         assertFalse(type.isUndirected());
         assertFalse(type.isMixed());
+        
+        assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
+        assertEquals(Collections.singleton(Integer.valueOf(0)), g.getAllEdges(0, 1));
+        assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
+        assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));        
+        assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
+        assertEquals(Collections.singleton(Integer.valueOf(2)), g.getAllEdges(1, 4));
+        assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
+        assertEquals(Collections.singleton(Integer.valueOf(3)), g.getAllEdges(1, 5));
+        assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
+        assertEquals(Collections.singleton(Integer.valueOf(4)), g.getAllEdges(1, 6));
+        assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
+        assertEquals(new HashSet<>(Arrays.asList(5,6,7)), g.getAllEdges(2, 4));
+        assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
+        assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));        
+        assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
+        assertEquals(Collections.singleton(Integer.valueOf(9)), g.getAllEdges(4, 5));
+        assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
+        assertEquals(Collections.singleton(Integer.valueOf(10)), g.getAllEdges(5, 6));
+        assertEquals(Integer.valueOf(11), g.getEdge(7, 6));
+        assertEquals(Collections.singleton(Integer.valueOf(11)), g.getAllEdges(7, 6));
+        assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
+        assertEquals(Collections.singleton(Integer.valueOf(12)), g.getAllEdges(7, 7));
     }
 }
