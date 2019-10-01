@@ -17,6 +17,7 @@
  */
 package org.jgrapht.opt.graph.sparse;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +50,11 @@ import org.jgrapht.alg.util.Triple;
 public class SparseUndirectedWeightedGraph
     extends
     BaseSparseUndirectedGraph
+    implements
+    Serializable
 {
+    private static final long serialVersionUID = -5410680356868181247L;
+
     protected CSRDoubleMatrix incidenceMatrixT;
 
     /**

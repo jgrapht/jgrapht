@@ -40,7 +40,7 @@ class CSRDoubleMatrix
     implements
     Serializable
 {
-    private static final long serialVersionUID = -8639339411487665967L;
+    private static final long serialVersionUID = -4032723158625763923L;
 
     private int columns;
     private int[] rowOffsets;
