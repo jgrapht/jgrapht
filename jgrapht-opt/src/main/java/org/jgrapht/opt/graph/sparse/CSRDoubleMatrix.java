@@ -26,14 +26,14 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 
 /**
- * Compressed Sparse Row Boolean Matrix
+ * Compressed Sparse Row Matrix with double values.
  * 
  * @author Dimitrios Michail
- *
  */
-public class CSRBooleanMatrix
+public class CSRDoubleMatrix
     implements
     Serializable
 {
@@ -42,15 +42,16 @@ public class CSRBooleanMatrix
     private int columns;
     private int[] rowOffsets;
     private int[] columnIndices;
+    private double[] columnValues;
 
     /**
-     * Create a new CSR boolean matrix
+     * Create a new CSR matrix
      * 
      * @param rows the number of rows
      * @param columns the number of columns
      * @param entries the position of the entries of the matrix
      */
-    public CSRBooleanMatrix(int rows, int columns, List<Pair<Integer, Integer>> entries)
+    public CSRDoubleMatrix(int rows, int columns, List<Triple<Integer, Integer, Double>> entries)
     {
         if (rows < 1) {
             throw new IllegalArgumentException("Rows must be positive");
@@ -70,11 +71,11 @@ public class CSRBooleanMatrix
         int rIndex = 0;
         int prefix = 0;
 
-        Iterator<Pair<Integer, Integer>> it =
-            entries.stream().sorted(new PairComparator()).iterator();
-        Pair<Integer, Integer> prev = null;
+        Iterator<Triple<Integer, Integer, Double>> it =
+            entries.stream().sorted(new TripleComparator()).iterator();
+        Triple<Integer, Integer, Double> prev = null;
         while (it.hasNext()) {
-            Pair<Integer, Integer> e = it.next();
+            Triple<Integer, Integer, Double> e = it.next();
 
             int row = e.getFirst();
             if (row < 0 || row >= rows) {
@@ -93,7 +94,9 @@ public class CSRBooleanMatrix
             if (column < 0 || column >= columns) {
                 throw new IllegalArgumentException("Entry at invalid column: " + column);
             }
-            columnIndices[cIndex++] = column;
+            columnIndices[cIndex] = column;
+            columnValues[cIndex] = e.getThird();
+            cIndex++;
             prev = e;
         }
         rowOffsets[++rIndex] = ++prefix;
@@ -138,7 +141,7 @@ public class CSRBooleanMatrix
      * @param row the row
      * @return an iterator over the non-zero entries of a row
      */
-    public Iterator<Integer> nonZerosIterator(int row)
+    public Iterator<Pair<Integer, Double>> nonZerosIterator(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
@@ -151,7 +154,7 @@ public class CSRBooleanMatrix
      * @param row the row
      * @return the position of non-zero entries of a row as a set.
      */
-    public Set<Integer> rowSet(int row)
+    public Set<Pair<Integer, Double>> rowSet(int row)
     {
         assert row >= 0 && row < rowOffsets.length;
 
@@ -160,9 +163,8 @@ public class CSRBooleanMatrix
 
     private class RowSet
         extends
-        AbstractSet<Integer>
+        AbstractSet<Pair<Integer, Double>>
     {
-
         private int row;
 
         public RowSet(int row)
@@ -171,7 +173,7 @@ public class CSRBooleanMatrix
         }
 
         @Override
-        public Iterator<Integer> iterator()
+        public Iterator<Pair<Integer, Double>> iterator()
         {
             return new ColumnIterator(row);
         }
@@ -186,9 +188,8 @@ public class CSRBooleanMatrix
 
     private class ColumnIterator
         implements
-        Iterator<Integer>
+        Iterator<Pair<Integer, Double>>
     {
-
         private int curPos;
         private int toPos;
 
@@ -205,23 +206,25 @@ public class CSRBooleanMatrix
         }
 
         @Override
-        public Integer next()
+        public Pair<Integer, Double> next()
         {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return columnIndices[curPos++];
+            Pair<Integer, Double> value = Pair.of(columnIndices[curPos], columnValues[curPos]);
+            curPos++;
+            return value;
         }
 
     }
 
-    private class PairComparator
+    private class TripleComparator
         implements
-        Comparator<Pair<Integer, Integer>>
+        Comparator<Triple<Integer, Integer, Double>>
     {
 
         @Override
-        public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2)
+        public int compare(Triple<Integer, Integer, Double> o1, Triple<Integer, Integer, Double> o2)
         {
             if (o1.getFirst() < o2.getFirst()) {
                 return -1;

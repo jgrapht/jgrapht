@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.opt.graph.sparse;
 
 import java.util.ArrayList;
@@ -6,15 +23,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.DefaultGraphType;
 
-public class CSRUndirectedGraph
+/**
+ * A sparse unmodifiable undirected graph.
+ * 
+ * @author Dimitrios Michail
+ */
+public class SparseUndirectedGraph
     extends
     AbstractGraph<Integer, Integer>
 {
@@ -23,7 +43,7 @@ public class CSRUndirectedGraph
     private CSRBooleanMatrix incidenceMatrix;
     private CSRBooleanMatrix incidenceMatrixT;
 
-    public CSRUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
+    public SparseUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
         List<Pair<Integer, Integer>> nonZeros = new ArrayList<>();
         List<Pair<Integer, Integer>> nonZerosTranspose = new ArrayList<>();
@@ -50,11 +70,11 @@ public class CSRUndirectedGraph
         }
 
         Set<Integer> result = new HashSet<>();
-        Iterator<Integer> it = incidenceMatrix.columnIterator(sourceVertex);
+        Iterator<Integer> it = incidenceMatrix.nonZerosIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
 
-            Iterator<Integer> vIt = incidenceMatrixT.columnIterator(eId);
+            Iterator<Integer> vIt = incidenceMatrixT.nonZerosIterator(eId);
             int v = vIt.next();
             int u = vIt.next();
 
@@ -75,11 +95,11 @@ public class CSRUndirectedGraph
             return null;
         }
 
-        Iterator<Integer> it = incidenceMatrix.columnIterator(sourceVertex);
+        Iterator<Integer> it = incidenceMatrix.nonZerosIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
 
-            Iterator<Integer> vIt = incidenceMatrixT.columnIterator(eId);
+            Iterator<Integer> vIt = incidenceMatrixT.nonZerosIterator(eId);
             int v = vIt.next();
             int u = vIt.next();
 
@@ -141,9 +161,7 @@ public class CSRUndirectedGraph
     @Override
     public Set<Integer> edgeSet()
     {
-        return IntStream
-            .range(0, incidenceMatrix.columns()).mapToObj(Integer::valueOf)
-            .collect(Collectors.toSet());
+        return new IntegerSet(incidenceMatrix.columns());
     }
 
     @Override
@@ -209,23 +227,21 @@ public class CSRUndirectedGraph
     @Override
     public Set<Integer> vertexSet()
     {
-        return IntStream
-            .range(0, incidenceMatrix.rows()).mapToObj(Integer::valueOf)
-            .collect(Collectors.toSet());
+        return new IntegerSet(incidenceMatrix.rows());
     }
 
     @Override
     public Integer getEdgeSource(Integer e)
     {
         assertEdgeExist(e);
-        return incidenceMatrixT.columnIterator(e).next();
+        return incidenceMatrixT.nonZerosIterator(e).next();
     }
 
     @Override
     public Integer getEdgeTarget(Integer e)
     {
         assertEdgeExist(e);
-        Iterator<Integer> it = incidenceMatrixT.columnIterator(e);
+        Iterator<Integer> it = incidenceMatrixT.nonZerosIterator(e);
         it.next();
         return it.next();
     }
