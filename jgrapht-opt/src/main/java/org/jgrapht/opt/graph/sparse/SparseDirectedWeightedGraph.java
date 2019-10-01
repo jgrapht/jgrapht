@@ -18,220 +18,68 @@
 package org.jgrapht.opt.graph.sparse;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.graph.AbstractGraph;
-import org.jgrapht.graph.DefaultGraphType;
-import org.jgrapht.util.UnmodifiableUnionSet;
 
 /**
- * A sparse unmodifiable directed weighted graph.
+ * Sparse unmodifiable directed weighted graph.
+ *
+ * <p>
+ * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
+ * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
+ * 
+ * <p>
+ * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
+ * weights can be changed even after the graph is constructed.
+ * 
+ * <p>
+ * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
+ * Compressed Sparse Row (CSR). This is a classic format for write-once read-many use cases. Thus,
+ * the graph is unmodifiable. In order to also support constant time source and target lookups from
+ * an edge identifier we also store the two transposed incidence matrices again in compressed sparse
+ * row format. In these transposed matrices we also maintain the edge weights.
  * 
  * @author Dimitrios Michail
  */
 public class SparseDirectedWeightedGraph
     extends
-    AbstractGraph<Integer, Integer>
+    BaseSparseDirectedGraph
 {
-    private static final String UNMODIFIABLE = "this graph is unmodifiable";
+    protected CSRDoubleMatrix outIncidenceMatrixT;
+    protected CSRDoubleMatrix inIncidenceMatrixT;
 
-    private CSRBooleanMatrix outIncidenceMatrix;
-    private CSRDoubleMatrix outIncidenceMatrixT;
-    private CSRBooleanMatrix inIncidenceMatrix;
-    private CSRDoubleMatrix inIncidenceMatrixT;
-
-    public SparseDirectedWeightedGraph(int numVertices, List<Triple<Integer, Integer, Double>> edges)
+    /**
+     * Create a new graph from an edge list.
+     * 
+     * @param numVertices the number of vertices
+     * @param edges the edge list with additional weights
+     */
+    public SparseDirectedWeightedGraph(
+        int numVertices, List<Triple<Integer, Integer, Double>> edges)
     {
-        List<Pair<Integer, Integer>> outgoing = new ArrayList<>();
+        super(
+            numVertices,
+            edges
+                .stream().map(e -> Pair.of(e.getFirst(), e.getSecond()))
+                .collect(Collectors.toList()));
+
         List<Triple<Integer, Integer, Double>> outgoingT = new ArrayList<>();
-        List<Pair<Integer, Integer>> incoming = new ArrayList<>();
         List<Triple<Integer, Integer, Double>> incomingT = new ArrayList<>();
 
         int eIndex = 0;
         for (Triple<Integer, Integer, Double> e : edges) {
-            outgoing.add(Pair.of(e.getFirst(), eIndex));
             outgoingT.add(Triple.of(eIndex, e.getFirst(), e.getThird()));
-            incoming.add(Pair.of(e.getSecond(), eIndex));
             incomingT.add(Triple.of(eIndex, e.getSecond(), e.getThird()));
             eIndex++;
         }
 
-        outIncidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), outgoing);
         outIncidenceMatrixT = new CSRDoubleMatrix(edges.size(), numVertices, outgoingT);
-
-        inIncidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), incoming);
         inIncidenceMatrixT = new CSRDoubleMatrix(edges.size(), numVertices, incomingT);
-    }
-
-    @Override
-    public Set<Integer> getAllEdges(Integer sourceVertex, Integer targetVertex)
-    {
-        if (sourceVertex < 0 || sourceVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-        if (targetVertex < 0 || targetVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-
-        Set<Integer> result = new HashSet<>();
-
-        Iterator<Integer> it = outIncidenceMatrix.nonZerosIterator(sourceVertex);
-        while (it.hasNext()) {
-            int eId = it.next();
-
-            if (getEdgeTarget(eId) == targetVertex) {
-                result.add(eId);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Integer getEdge(Integer sourceVertex, Integer targetVertex)
-    {
-        if (sourceVertex < 0 || sourceVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-        if (targetVertex < 0 || targetVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-
-        Iterator<Integer> it = outIncidenceMatrix.nonZerosIterator(sourceVertex);
-        while (it.hasNext()) {
-            int eId = it.next();
-            if (getEdgeTarget(eId) == targetVertex) {
-                return eId;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Supplier<Integer> getVertexSupplier()
-    {
-        return null;
-    }
-
-    @Override
-    public Supplier<Integer> getEdgeSupplier()
-    {
-        return null;
-    }
-
-    @Override
-    public Integer addEdge(Integer sourceVertex, Integer targetVertex)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean addEdge(Integer sourceVertex, Integer targetVertex, Integer e)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public Integer addVertex()
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean addVertex(Integer v)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean containsEdge(Integer e)
-    {
-        return e >= 0 && e < outIncidenceMatrix.columns();
-    }
-
-    @Override
-    public boolean containsVertex(Integer v)
-    {
-        return v >= 0 && v < outIncidenceMatrix.rows();
-    }
-
-    @Override
-    public Set<Integer> edgeSet()
-    {
-        return new IntegerSet(outIncidenceMatrix.columns());
-    }
-
-    @Override
-    public int degreeOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return outIncidenceMatrix.nonZeros(vertex) + inIncidenceMatrix.nonZeros(vertex);
-    }
-
-    @Override
-    public Set<Integer> edgesOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return new UnmodifiableUnionSet<>(
-            outIncidenceMatrix.rowSet(vertex), inIncidenceMatrix.rowSet(vertex));
-    }
-
-    @Override
-    public int inDegreeOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return inIncidenceMatrix.nonZeros(vertex);
-    }
-
-    @Override
-    public Set<Integer> incomingEdgesOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return inIncidenceMatrix.rowSet(vertex);
-    }
-
-    @Override
-    public int outDegreeOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return outIncidenceMatrix.nonZeros(vertex);
-    }
-
-    @Override
-    public Set<Integer> outgoingEdgesOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return outIncidenceMatrix.rowSet(vertex);
-    }
-
-    @Override
-    public Integer removeEdge(Integer sourceVertex, Integer targetVertex)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean removeEdge(Integer e)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean removeVertex(Integer v)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public Set<Integer> vertexSet()
-    {
-        return new IntegerSet(outIncidenceMatrix.rows());
     }
 
     @Override
@@ -251,18 +99,16 @@ public class SparseDirectedWeightedGraph
     @Override
     public GraphType getType()
     {
-        return new DefaultGraphType.Builder()
-            .directed().weighted(true).modifiable(false).allowMultipleEdges(true)
-            .allowSelfLoops(true).build();
+        return super.getType().asWeighted();
     }
 
     @Override
     public double getEdgeWeight(Integer e)
     {
         assertEdgeExist(e);
-        
+
         Iterator<Pair<Integer, Double>> it = outIncidenceMatrixT.nonZerosIterator(e);
-        if (it.hasNext()) { 
+        if (it.hasNext()) {
             return it.next().getSecond();
         }
         return inIncidenceMatrixT.nonZerosIterator(e).next().getSecond();
@@ -272,27 +118,9 @@ public class SparseDirectedWeightedGraph
     public void setEdgeWeight(Integer e, double weight)
     {
         assertEdgeExist(e);
-        
+
         outIncidenceMatrixT.setNonZeros(e, weight);
         inIncidenceMatrixT.setNonZeros(e, weight);
-    }
-
-    protected boolean assertVertexExist(Integer v)
-    {
-        if (v >= 0 && v < outIncidenceMatrix.rows()) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
-        }
-    }
-
-    protected boolean assertEdgeExist(Integer e)
-    {
-        if (e >= 0 && e < outIncidenceMatrixT.rows()) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("no such edge in graph: " + e.toString());
-        }
     }
 
 }
