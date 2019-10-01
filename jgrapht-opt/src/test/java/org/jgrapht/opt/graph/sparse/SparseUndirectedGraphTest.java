@@ -101,4 +101,46 @@ public class SparseUndirectedGraphTest
             g.vertexSet());
     }
 
+    @Test
+    public void testDirected()
+    {
+        List<Pair<Integer, Integer>> edges = Arrays
+            .asList(
+                Pair.of(0, 1), Pair.of(1, 0), Pair.of(1, 4), Pair.of(1, 5), Pair.of(1, 6),
+                Pair.of(2, 4), Pair.of(2, 4), Pair.of(2, 4), Pair.of(3, 4), Pair.of(4, 5),
+                Pair.of(5, 6), Pair.of(7, 6), Pair.of(7, 7));
+
+        int vertices = 8;
+        SparseDirectedGraph g = new SparseDirectedGraph(vertices, edges);
+
+        assertEquals(vertices, g.vertexSet().size());
+        assertEquals(edges.size(), g.edgeSet().size());
+        
+        assertEquals(
+            IntStream.range(0, edges.size()).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
+            g.edgeSet());
+        assertEquals(
+            IntStream.range(0, vertices).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
+            g.vertexSet());
+        
+        for(int i = 0; i < vertices; i++) { 
+            assertTrue(g.containsVertex(i));    
+        }
+
+        assertEquals(2, g.degreeOf(0));
+        assertEquals(1, g.inDegreeOf(0));
+        assertEquals(1, g.outDegreeOf(0));
+        assertEquals(new HashSet<>(Arrays.asList(0, 1)), g.edgesOf(0));
+        assertEquals(new HashSet<>(Arrays.asList(1)), g.incomingEdgesOf(0));
+        assertEquals(new HashSet<>(Arrays.asList(0)), g.outgoingEdgesOf(0));
+        
+        assertEquals(5, g.degreeOf(1));
+        assertEquals(1, g.inDegreeOf(1));
+        assertEquals(4, g.outDegreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2, 3, 4)), g.edgesOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(0)), g.incomingEdgesOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(1, 2, 3, 4)), g.outgoingEdgesOf(1));
+        
+        
+    }
 }

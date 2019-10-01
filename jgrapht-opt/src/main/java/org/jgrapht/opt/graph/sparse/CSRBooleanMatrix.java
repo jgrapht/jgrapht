@@ -142,7 +142,7 @@ public class CSRBooleanMatrix
     {
         assert row >= 0 && row < rowOffsets.length;
 
-        return new ColumnIterator(row);
+        return new NonZerosIterator(row);
     }
 
     /**
@@ -162,7 +162,6 @@ public class CSRBooleanMatrix
         extends
         AbstractSet<Integer>
     {
-
         private int row;
 
         public RowSet(int row)
@@ -173,7 +172,7 @@ public class CSRBooleanMatrix
         @Override
         public Iterator<Integer> iterator()
         {
-            return new ColumnIterator(row);
+            return new NonZerosIterator(row);
         }
 
         @Override
@@ -181,18 +180,16 @@ public class CSRBooleanMatrix
         {
             return rowOffsets[row + 1] - rowOffsets[row];
         }
-
     }
 
-    private class ColumnIterator
+    private class NonZerosIterator
         implements
         Iterator<Integer>
     {
-
         private int curPos;
         private int toPos;
 
-        public ColumnIterator(int row)
+        public NonZerosIterator(int row)
         {
             this.curPos = rowOffsets[row];
             this.toPos = rowOffsets[row + 1];

@@ -145,7 +145,20 @@ public class CSRDoubleMatrix
     {
         assert row >= 0 && row < rowOffsets.length;
 
-        return new ColumnIterator(row);
+        return new NonZerosIterator(row);
+    }
+
+    /**
+     * Get an iterator over the positions of the non-zero entries of a row.
+     * 
+     * @param row the row
+     * @return an iterator over the positions of the non-zero entries of a row
+     */
+    public Iterator<Integer> nonZerosPositionIterator(int row)
+    {
+        assert row >= 0 && row < rowOffsets.length;
+
+        return new NonZerosPositionIterator(row);
     }
 
     /**
@@ -175,7 +188,7 @@ public class CSRDoubleMatrix
         @Override
         public Iterator<Pair<Integer, Double>> iterator()
         {
-            return new ColumnIterator(row);
+            return new NonZerosIterator(row);
         }
 
         @Override
@@ -183,17 +196,16 @@ public class CSRDoubleMatrix
         {
             return rowOffsets[row + 1] - rowOffsets[row];
         }
-
     }
 
-    private class ColumnIterator
+    private class NonZerosIterator
         implements
         Iterator<Pair<Integer, Double>>
     {
         private int curPos;
         private int toPos;
 
-        public ColumnIterator(int row)
+        public NonZerosIterator(int row)
         {
             this.curPos = rowOffsets[row];
             this.toPos = rowOffsets[row + 1];
@@ -215,14 +227,41 @@ public class CSRDoubleMatrix
             curPos++;
             return value;
         }
+    }
 
+    private class NonZerosPositionIterator
+        implements
+        Iterator<Integer>
+    {
+        private int curPos;
+        private int toPos;
+
+        public NonZerosPositionIterator(int row)
+        {
+            this.curPos = rowOffsets[row];
+            this.toPos = rowOffsets[row + 1];
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return (curPos < toPos);
+        }
+
+        @Override
+        public Integer next()
+        {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return columnIndices[curPos++];
+        }
     }
 
     private class TripleComparator
         implements
         Comparator<Triple<Integer, Integer, Double>>
     {
-
         @Override
         public int compare(Triple<Integer, Integer, Double> o1, Triple<Integer, Integer, Double> o2)
         {
@@ -237,7 +276,6 @@ public class CSRDoubleMatrix
             }
             return 0;
         }
-
     }
 
 }
