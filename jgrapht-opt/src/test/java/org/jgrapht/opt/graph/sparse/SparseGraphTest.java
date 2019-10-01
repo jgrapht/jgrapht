@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 import org.jgrapht.alg.util.Pair;
 import org.junit.Test;
 
-public class SparseUndirectedGraphTest
+public class SparseGraphTest
 {
 
     /**
@@ -141,6 +141,74 @@ public class SparseUndirectedGraphTest
         assertEquals(new HashSet<>(Arrays.asList(0)), g.incomingEdgesOf(1));
         assertEquals(new HashSet<>(Arrays.asList(1, 2, 3, 4)), g.outgoingEdgesOf(1));
         
+        assertEquals(3, g.degreeOf(2));
+        assertEquals(0, g.inDegreeOf(2));
+        assertEquals(3, g.outDegreeOf(2));
+        assertEquals(new HashSet<>(Arrays.asList(5, 6, 7)), g.edgesOf(2));
+        assertEquals(new HashSet<>(), g.incomingEdgesOf(2));
+        assertEquals(new HashSet<>(Arrays.asList(5, 6, 7)), g.outgoingEdgesOf(2));
+        
+        assertEquals(1, g.degreeOf(3));
+        assertEquals(0, g.inDegreeOf(3));
+        assertEquals(1, g.outDegreeOf(3));
+        assertEquals(new HashSet<>(Arrays.asList(8)), g.edgesOf(3));
+        assertEquals(new HashSet<>(), g.incomingEdgesOf(3));
+        assertEquals(new HashSet<>(Arrays.asList(8)), g.outgoingEdgesOf(3));
+        
+        assertEquals(6, g.degreeOf(4));
+        assertEquals(5, g.inDegreeOf(4));
+        assertEquals(1, g.outDegreeOf(4));
+        assertEquals(new HashSet<>(Arrays.asList(2, 5, 6, 7, 8, 9)), g.edgesOf(4));
+        assertEquals(new HashSet<>(Arrays.asList(2, 5, 6, 7, 8)), g.incomingEdgesOf(4));
+        assertEquals(new HashSet<>(Arrays.asList(9)), g.outgoingEdgesOf(4));
+        
+        assertEquals(3, g.degreeOf(5));
+        assertEquals(2, g.inDegreeOf(5));
+        assertEquals(1, g.outDegreeOf(5));
+        assertEquals(new HashSet<>(Arrays.asList(3, 9, 10)), g.edgesOf(5));
+        assertEquals(new HashSet<>(Arrays.asList(3, 9)), g.incomingEdgesOf(5));
+        assertEquals(new HashSet<>(Arrays.asList(10)), g.outgoingEdgesOf(5));
+        
+        assertEquals(3, g.degreeOf(6));
+        assertEquals(3, g.inDegreeOf(6));
+        assertEquals(0, g.outDegreeOf(6));
+        assertEquals(new HashSet<>(Arrays.asList(4, 10, 11)), g.edgesOf(6));
+        assertEquals(new HashSet<>(Arrays.asList(4, 10, 11)), g.incomingEdgesOf(6));
+        assertEquals(new HashSet<>(), g.outgoingEdgesOf(6));
+        
+        assertEquals(3, g.degreeOf(7));
+        assertEquals(1, g.inDegreeOf(7));
+        assertEquals(2, g.outDegreeOf(7));
+        assertEquals(new HashSet<>(Arrays.asList(11, 12)), g.edgesOf(7));
+        assertEquals(new HashSet<>(Arrays.asList(12)), g.incomingEdgesOf(7));
+        assertEquals(new HashSet<>(Arrays.asList(11, 12)), g.outgoingEdgesOf(7));
+        
+        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
+        assertEquals(Integer.valueOf(1), g.getEdgeTarget(0));
+        assertEquals(Integer.valueOf(1), g.getEdgeSource(1));
+        assertEquals(Integer.valueOf(0), g.getEdgeTarget(1));
+        assertEquals(Integer.valueOf(1), g.getEdgeSource(2));
+        assertEquals(Integer.valueOf(4), g.getEdgeTarget(2));
+        assertEquals(Integer.valueOf(1), g.getEdgeSource(3));
+        assertEquals(Integer.valueOf(5), g.getEdgeTarget(3));
+        assertEquals(Integer.valueOf(1), g.getEdgeSource(4));
+        assertEquals(Integer.valueOf(6), g.getEdgeTarget(4));
+        assertEquals(Integer.valueOf(2), g.getEdgeSource(5));
+        assertEquals(Integer.valueOf(4), g.getEdgeTarget(5));
+        assertEquals(Integer.valueOf(2), g.getEdgeSource(6));
+        assertEquals(Integer.valueOf(4), g.getEdgeTarget(6));
+        assertEquals(Integer.valueOf(2), g.getEdgeSource(7));
+        assertEquals(Integer.valueOf(4), g.getEdgeTarget(7));
+        assertEquals(Integer.valueOf(3), g.getEdgeSource(8));
+        assertEquals(Integer.valueOf(4), g.getEdgeTarget(8));
+        assertEquals(Integer.valueOf(4), g.getEdgeSource(9));
+        assertEquals(Integer.valueOf(5), g.getEdgeTarget(9));
+        assertEquals(Integer.valueOf(5), g.getEdgeSource(10));
+        assertEquals(Integer.valueOf(6), g.getEdgeTarget(10));
+        assertEquals(Integer.valueOf(7), g.getEdgeSource(11));
+        assertEquals(Integer.valueOf(6), g.getEdgeTarget(11));
+        assertEquals(Integer.valueOf(7), g.getEdgeSource(12));
+        assertEquals(Integer.valueOf(7), g.getEdgeTarget(12));
         
     }
 }

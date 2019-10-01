@@ -66,37 +66,31 @@ public class CSRBooleanMatrix
         this.rowOffsets = new int[rows + 1];
         this.columnIndices = new int[entries.size()];
 
-        int cIndex = 0;
-        int rIndex = 0;
-        int prefix = 0;
-
         Iterator<Pair<Integer, Integer>> it =
             entries.stream().sorted(new PairComparator()).iterator();
-        Pair<Integer, Integer> prev = null;
+        
+        int cIndex = 0;
         while (it.hasNext()) {
             Pair<Integer, Integer> e = it.next();
-
-            int row = e.getFirst();
-            if (row < 0 || row >= rows) {
-                throw new IllegalArgumentException("Entry at invalid row: " + row);
-            }
-
-            if (prev == null) {
-                rowOffsets[rIndex] = prefix;
-            } else if (row == prev.getFirst()) {
-                ++prefix;
-            } else {
-                rowOffsets[++rIndex] = ++prefix;
-            }
-
+            
+            // add column index
             int column = e.getSecond();
             if (column < 0 || column >= columns) {
                 throw new IllegalArgumentException("Entry at invalid column: " + column);
             }
             columnIndices[cIndex++] = column;
-            prev = e;
+            
+            // count non-zero per row
+            int row = e.getFirst();
+            rowOffsets[row+1]++;
         }
-        rowOffsets[++rIndex] = ++prefix;
+        
+        // prefix sum
+        int prefix = 0;
+        for(int i = 1; i < rowOffsets.length; i++) { 
+            prefix += rowOffsets[i];
+            rowOffsets[i] = prefix;
+        }
     }
 
     /**
