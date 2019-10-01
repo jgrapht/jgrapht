@@ -101,7 +101,7 @@ public class Triple<A, B, C>
     /**
      * Set the first element
      *
-     * @param f the element to be assigned
+     * @param a the element to be assigned
      */
     public void setFirst(A a)
     {
@@ -111,7 +111,7 @@ public class Triple<A, B, C>
     /**
      * Set the second element
      *
-     * @param s the element to be assigned
+     * @param b the element to be assigned
      */
     public void setSecond(B b)
     {
@@ -121,7 +121,7 @@ public class Triple<A, B, C>
     /**
      * Set the third element
      *
-     * @param s the element to be assigned
+     * @param c the element to be assigned
      */
     public void setThird(C c)
     {
