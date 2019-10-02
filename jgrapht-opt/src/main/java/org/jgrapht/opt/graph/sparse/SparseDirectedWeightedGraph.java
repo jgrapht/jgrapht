@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
@@ -78,8 +79,9 @@ public class SparseDirectedWeightedGraph
 
         int eIndex = 0;
         for (Triple<Integer, Integer, Double> e : edges) {
-            outgoingT.add(Triple.of(eIndex, e.getFirst(), e.getThird()));
-            incomingT.add(Triple.of(eIndex, e.getSecond(), e.getThird()));
+            double edgeWeight = e.getThird() != null ? e.getThird() : Graph.DEFAULT_EDGE_WEIGHT;
+            outgoingT.add(Triple.of(eIndex, e.getFirst(), edgeWeight));
+            incomingT.add(Triple.of(eIndex, e.getSecond(), edgeWeight));
             eIndex++;
         }
 
