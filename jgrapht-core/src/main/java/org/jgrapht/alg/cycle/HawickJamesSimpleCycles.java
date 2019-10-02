@@ -17,16 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.Collections.frequency;
 import static java.util.Collections.singletonList;
@@ -45,7 +38,10 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Luiz Kill
  */
-public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E> {
+public class HawickJamesSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
+{
 
     private Graph<V, E> graph;
 
@@ -71,7 +67,9 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
     /**
      * Create a simple cycle finder with an unspecified graph.
      */
-    public HawickJamesSimpleCycles() { }
+    public HawickJamesSimpleCycles()
+    {
+    }
 
     /**
      * Create a simple cycle finder for the specified graph.
@@ -81,12 +79,16 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
      * @throws IllegalArgumentException if the graph argument is <code>
      * null</code>.
      */
-    public HawickJamesSimpleCycles(Graph<V, E> graph) throws IllegalArgumentException {
+    public HawickJamesSimpleCycles(Graph<V, E> graph)
+        throws IllegalArgumentException
+    {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     @SuppressWarnings("unchecked")
-    private void initState() {
+    private void initState()
+    {
+        nCycles = 0;
         nVertices = graph.vertexSet().size();
         blocked = new boolean[nVertices];
         stack = new ArrayDeque<>(nVertices);
@@ -96,7 +98,7 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
             B[i] = new ArrayList<>();
         }
 
-        iToV = (V[])graph.vertexSet().toArray();
+        iToV = (V[]) graph.vertexSet().toArray();
         vToI = new HashMap<>();
         for (int i = 0; i < iToV.length; i++) {
             vToI.put(iToV[i], i);
@@ -108,7 +110,8 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
     }
 
     @SuppressWarnings("unchecked")
-    private List<Integer>[] buildAdjacencyList() {
+    private List<Integer>[] buildAdjacencyList()
+    {
         @SuppressWarnings("rawtypes") List[] Ak = new ArrayList[nVertices];
         for (int j = 0; j < nVertices; j++) {
             V v = iToV[j];
@@ -123,7 +126,8 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
         return Ak;
     }
 
-    private void clearState() {
+    private void clearState()
+    {
         Ak = null;
         nVertices = 0;
         blocked = null;
@@ -131,10 +135,12 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
         iToV = null;
         vToI = null;
         B = null;
-        operation = () -> { };
+        operation = () -> {
+        };
     }
 
-    private boolean circuit(Integer v, int steps) {
+    private boolean circuit(Integer v, int steps)
+    {
         boolean f = false;
 
         stack.push(v);
@@ -175,7 +181,8 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
         return f;
     }
 
-    private void unblock(Integer u) {
+    private void unblock(Integer u)
+    {
         blocked[u] = false;
 
         for (int wPos = 0; wPos < B[u].size(); wPos++) {
@@ -192,19 +199,21 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
 
     /**
      * Get the graph
-     *
+     * 
      * @return graph
      */
-    public Graph<V, E> getGraph() {
+    public Graph<V, E> getGraph()
+    {
         return graph;
     }
 
     /**
      * Set the graph
-     *
+     * 
      * @param graph graph
      */
-    public void setGraph(Graph<V, E> graph) {
+    public void setGraph(Graph<V, E> graph)
+    {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
@@ -212,7 +221,9 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public List<List<V>> findSimpleCycles() throws IllegalArgumentException {
+    public List<List<V>> findSimpleCycles()
+        throws IllegalArgumentException
+    {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
         }
@@ -230,7 +241,8 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
      * Print to the standard output all simple cycles without building a list to keep them, thus
      * avoiding high memory consumption when investigating large and much connected graphs.
      */
-    public void printSimpleCycles() {
+    public void printSimpleCycles()
+    {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
         }
@@ -247,10 +259,11 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
 
     /**
      * Count the number of simple cycles. It can count up to Long.MAX cycles in a graph.
-     *
+     * 
      * @return the number of simple cycles
      */
-    public long countSimpleCycles() {
+    public long countSimpleCycles()
+    {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
         }
@@ -263,7 +276,8 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
         return nCycles;
     }
 
-    private void analyzeCircuits() {
+    private void analyzeCircuits()
+    {
         for (int i = 0; i < nVertices; i++) {
             for (int j = 0; j < nVertices; j++) {
                 blocked[j] = false;
@@ -280,7 +294,8 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
      *
      * @param pathLimit maximum paths.
      */
-    public void setPathLimit(int pathLimit) {
+    public void setPathLimit(int pathLimit)
+    {
         this.pathLimit = pathLimit - 1;
         this.hasLimit = true;
     }
@@ -289,11 +304,13 @@ public class HawickJamesSimpleCycles<V, E> implements DirectedSimpleCycles<V, E>
      * This is the default behaviour of the algorithm.
      * It will keep looking as long as there are paths available.
      */
-    public void unlimitedPaths() {
+    public void unlimitedPaths()
+    {
         this.hasLimit = false;
     }
 
-    private boolean limitReached(int steps) {
+    private boolean limitReached(int steps)
+    {
         return hasLimit && steps >= pathLimit;
     }
 }
