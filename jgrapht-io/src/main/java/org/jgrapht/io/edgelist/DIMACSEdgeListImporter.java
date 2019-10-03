@@ -70,58 +70,31 @@ public class DIMACSEdgeListImporter
     implements
     EdgeListImporter
 {
+    private boolean renumberVertices;
+
     /**
      * Construct a new importer
      */
     public DIMACSEdgeListImporter()
     {
         super();
+        this.renumberVertices = true;
     }
 
-    private String[] split(final String src)
+    /**
+     * Set whether to renumber vertices or not.
+     * 
+     * If true then the vertices are assigned new numbers from $0$ to $n-1$ as they are first
+     * encountered in the file. Otherwise, the original numbering (minus one) of the DIMACS file is
+     * kept. Defaults to true.
+     * 
+     * @param renumberVertices whether to renumber vertices or not
+     * @return the importer
+     */
+    public DIMACSEdgeListImporter renumberVertices(boolean renumberVertices)
     {
-        if (src == null) {
-            return null;
-        }
-        return src.split("\\s+");
-    }
-
-    private String[] skipComments(BufferedReader input)
-    {
-        String[] cols = null;
-        try {
-            cols = split(input.readLine());
-            while ((cols != null)
-                && ((cols.length == 0) || cols[0].equals("c") || cols[0].startsWith("%")))
-            {
-                cols = split(input.readLine());
-            }
-        } catch (IOException e) {
-            // ignore
-        }
-        return cols;
-    }
-
-    private int readNodeCount(BufferedReader input)
-        throws ImportException
-    {
-        final String[] cols = skipComments(input);
-        if (cols[0].equals("p")) {
-            if (cols.length < 3) {
-                throw new ImportException("Failed to read number of vertices.");
-            }
-            Integer nodes;
-            try {
-                nodes = Integer.parseInt(cols[2]);
-            } catch (NumberFormatException e) {
-                throw new ImportException("Failed to read number of vertices.");
-            }
-            if (nodes < 0) {
-                throw new ImportException("Negative number of vertices.");
-            }
-            return nodes;
-        }
-        throw new ImportException("Failed to read number of vertices.");
+        this.renumberVertices = renumberVertices;
+        return this;
     }
 
     @Override
@@ -179,6 +152,68 @@ public class DIMACSEdgeListImporter
 
             }
             cols = skipComments(in);
+        }
+    }
+
+    private String[] split(final String src)
+    {
+        if (src == null) {
+            return null;
+        }
+        return src.split("\\s+");
+    }
+
+    private String[] skipComments(BufferedReader input)
+    {
+        String[] cols = null;
+        try {
+            cols = split(input.readLine());
+            while ((cols != null)
+                && ((cols.length == 0) || cols[0].equals("c") || cols[0].startsWith("%")))
+            {
+                cols = split(input.readLine());
+            }
+        } catch (IOException e) {
+            // ignore
+        }
+        return cols;
+    }
+
+    private int readNodeCount(BufferedReader input)
+        throws ImportException
+    {
+        final String[] cols = skipComments(input);
+        if (cols[0].equals("p")) {
+            if (cols.length < 3) {
+                throw new ImportException("Failed to read number of vertices.");
+            }
+            Integer nodes;
+            try {
+                nodes = Integer.parseInt(cols[2]);
+            } catch (NumberFormatException e) {
+                throw new ImportException("Failed to read number of vertices.");
+            }
+            if (nodes < 0) {
+                throw new ImportException("Negative number of vertices.");
+            }
+            return nodes;
+        }
+        throw new ImportException("Failed to read number of vertices.");
+    }
+
+    /**
+     * Map a vertex identifier to an integer.
+     * 
+     * @param id the vertex identifier
+     * @return the integer
+     */
+    @Override
+    protected Integer mapVertexToInteger(String id)
+    {
+        if (renumberVertices) {
+            return super.mapVertexToInteger(id);
+        } else {
+            return Integer.valueOf(id) - 1;
         }
     }
 
