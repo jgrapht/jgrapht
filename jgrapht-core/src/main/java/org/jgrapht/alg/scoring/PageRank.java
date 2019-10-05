@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2019, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,13 @@
  */
 package org.jgrapht.alg.scoring;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
 
 /**
  * PageRank implementation.
@@ -163,76 +166,99 @@ public final class PageRank<V, E>
         return scores.get(v);
     }
 
+    @SuppressWarnings("unchecked")
     private void run(double dampingFactor, int maxIterations, double tolerance)
     {
         // initialization
         int totalVertices = g.vertexSet().size();
         boolean weighted = g.getType().isWeighted();
-        Map<V, Double> weights;
+
+        double[] weights;
         if (weighted) {
-            weights = new HashMap<>(totalVertices);
+            weights = new double[totalVertices];
         } else {
-            weights = Collections.emptyMap();
+            weights = null;
         }
 
+        // initialize score and map vertices to [0,n)
         double initScore = 1.0d / totalVertices;
+        double[] curScore = new double[totalVertices];
+
+        Map<V, Integer> vertexIndexMap = new HashMap<>();
+        V[] vertexMap = (V[]) new Object[totalVertices];
+
+        int i = 0;
         for (V v : g.vertexSet()) {
-            scores.put(v, initScore);
+            vertexIndexMap.put(v, i);
+            vertexMap[i] = v;
+            curScore[i] = initScore;
             if (weighted) {
                 double sum = 0;
                 for (E e : g.outgoingEdgesOf(v)) {
                     sum += g.getEdgeWeight(e);
                 }
-                weights.put(v, sum);
+                weights[i] = sum;
             }
+            i++;
         }
 
         // run PageRank
-        Map<V, Double> nextScores = new HashMap<>();
+        double[] nextScore = new double[totalVertices];
         double maxChange = tolerance;
 
         while (maxIterations > 0 && maxChange >= tolerance) {
             // compute next iteration scores
             double r = 0d;
-            for (V v : g.vertexSet()) {
+            for (i = 0; i < totalVertices; i++) {
+                V v = vertexMap[i];
                 if (g.outgoingEdgesOf(v).size() > 0) {
-                    r += (1d - dampingFactor) * scores.get(v);
+                    r += (1d - dampingFactor) * curScore[i];
                 } else {
-                    r += scores.get(v);
+                    r += curScore[i];
                 }
             }
             r /= totalVertices;
 
             maxChange = 0d;
-            for (V v : g.vertexSet()) {
+            for (i = 0; i < totalVertices; i++) {
+                V v = vertexMap[i];
                 double contribution = 0d;
 
                 if (weighted) {
                     for (E e : g.incomingEdgesOf(v)) {
                         V w = Graphs.getOppositeVertex(g, e, v);
+                        int wIndex = vertexIndexMap.get(w);
                         contribution +=
-                            dampingFactor * scores.get(w) * g.getEdgeWeight(e) / weights.get(w);
+                            dampingFactor * curScore[wIndex] * g.getEdgeWeight(e) / weights[wIndex];
                     }
                 } else {
                     for (E e : g.incomingEdgesOf(v)) {
                         V w = Graphs.getOppositeVertex(g, e, v);
-                        contribution += dampingFactor * scores.get(w) / g.outgoingEdgesOf(w).size();
+                        int wIndex = vertexIndexMap.get(w);
+                        contribution +=
+                            dampingFactor * curScore[wIndex] / g.outgoingEdgesOf(w).size();
                     }
                 }
 
-                double vOldValue = scores.get(v);
+                double vOldValue = curScore[i];
                 double vNewValue = r + contribution;
                 maxChange = Math.max(maxChange, Math.abs(vNewValue - vOldValue));
-                nextScores.put(v, vNewValue);
+                nextScore[i] = vNewValue;
             }
 
             // swap scores
-            Map<V, Double> tmp = scores;
-            scores = nextScores;
-            nextScores = tmp;
+            double[] tmp = curScore;
+            curScore = nextScore;
+            nextScore = tmp;
 
             // progress
             maxIterations--;
+        }
+
+        // make results user friendly
+        for (i = 0; i < totalVertices; i++) {
+            V v = vertexMap[i];
+            scores.put(v, curScore[i]);
         }
 
     }
