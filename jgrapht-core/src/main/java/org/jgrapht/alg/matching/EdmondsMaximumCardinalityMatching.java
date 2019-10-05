@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,65 +17,64 @@
  */
 package org.jgrapht.alg.matching;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
-import java.util.stream.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.util.FixedSizeIntegerQueue;
 
 /**
- * This implementation of Edmonds' blossom algorithm computes maximum cardinality matchings in
- * undirected graphs. A matching in a graph $G(V,E)$ is a subset of edges $M$ such that no two edges
- * in $M$ have a vertex in common. A matching has at most $\frac{1}{2|V|}$ edges. A node $v$ in $G$
- * is matched by matching $M$ if $M$ contains an edge incident to $v$. A matching is perfect if all
- * nodes are matched. By definition, a perfect matching consists of exactly $\frac{1}{2|V|}$ edges.
- * This algorithm will return a perfect matching if one exists. If no perfect matching exists, then
- * the largest (non-perfect) matching is returned instead. This algorithm does NOT compute a maximum
- * weight matching. In the special case that the input graph is bipartite, consider using
- * {@link HopcroftKarpMaximumCardinalityBipartiteMatching} instead.
+ * Edmonds' blossom algorithm for maximum cardinality matching in general undirected graphs.
+ * 
+ * <p>
+ * A matching in a graph $G(V,E)$ is a subset of edges $M$ such that no two edges in $M$ have a
+ * vertex in common. A matching has at most $\frac{1}{2}|V|$ edges. A node $v$ in $G$ is matched by
+ * matching $M$ if $M$ contains an edge incident to $v$. A matching is perfect if all nodes are
+ * matched. By definition, a perfect matching consists of exactly $\frac{1}{2}|V|$ edges. This
+ * algorithm will return a perfect matching if one exists. If no perfect matching exists, then the
+ * largest (non-perfect) matching is returned instead. In the special case that the input graph is
+ * bipartite, consider using {@link HopcroftKarpMaximumCardinalityBipartiteMatching} instead.
+ * 
  * <p>
  * To compute a maximum cardinality matching, at most $n$ augmenting path computations are
  * performed. Each augmenting path computation takes $O(m \alpha(m,n))$ time, where $\alpha(m,n)$ is
- * an inverse of the Ackerman function, $n$ is the number of vertices, and $m$ the number of edges.
- * This results in a total runtime complexity of O(nm alpha(m,n)). In practice, the number of
+ * the inverse of the Ackerman function, $n$ is the number of vertices, and $m$ the number of edges.
+ * This results in a total runtime complexity of O(n m alpha(m,n)). In practice, the number of
  * augmenting path computations performed is far smaller than $n$, since an efficient heuristic is
- * used to compute a near-optimal initial solution. This implementation is highly efficient: a
- * maximum matching in a graph of 2000 vertices and 1.5 million edges is calculated in a few
- * milliseconds on a desktop computer.<br>
- * The runtime complexity of this implementation could be improved to $O(nm)$ when the UnionFind
+ * used to compute a near-optimal initial solution. The heuristic by default is the
+ * {@link GreedyMaximumCardinalityMatching} but can be changed using the appropriate constructor.
+ * 
+ * <p>
+ * The runtime complexity of this implementation could be improved to $O(n m)$ when the UnionFind
  * data structure used in this implementation is replaced by the linear-time set union data
  * structure proposed in: Gabow, H.N., Tarjan, R.E. A linear-time algorithm for a special case of
  * disjoint set union. Proc. Fifteenth Annual ACM Symposium on Theory of Computing, 1982, pp.
  * 246-251.
  * <p>
  * Edmonds' original algorithm first appeared in Edmonds, J. Paths, trees, and flowers. Canadian
- * Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity of $O(n^4)$. This
- * implementation however follows more closely the description provided in Tarjan, R.E. Data
- * Structures and Network Algorithms. Society for Industrial and Applied Mathematics, 1983, chapter
- * 9. In addition, the following sources were used for the implementation:
- *
- * <ul>
- * <li><a href=
- * "https://github.com/johnmay/beam/blob/master/core/src/main/java/uk/ac/ebi/beam/MaximumMatching.java">Java
- * implementation by John Mayfield</a></li>
- * <li><a href="http://www.keithschwarz.com/interesting/code/?dir=edmonds-matching">Java
- * implementation by Keith Schwarz</a></li>
- * <li><a href="http://www.boost.org/doc/libs/1_38_0/libs/graph/doc/maximum_matching.html">C++
- * implementation Boost library</a></li>
- * <li>Cook, W.J., Cunningham, W.H., Pulleyblank, W.R., Schrijver, A. Combinatorial Optimization.
- * Wiley 1997, chapter 5</li>
- * <li><a href="https://arxiv.org/pdf/1611.07541.pdf">Gabow, H.N. Data Structures for Weighted
- * Matching and Extensions to b-matching and f-factors, 2016</a></li>
- * </ul>
+ * Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity of $O(n^4)$.
+ * 
  * <p>
- * For future reference - A more efficient algorithm than the one implemented in this class exists:
- * Micali, S., Vazirani, V. An $O(\sqrt{n}m)$ algorithm for finding maximum matching in general
- * graphs. Proc. 21st Ann. Symp. on Foundations of Computer Science, IEEE, 1980, pp. 17–27. This is
- * the most efficient algorithm known for computing maximum cardinality matchings in general graphs.
- * More details on this algorithm can be found in:
+ * This is the algorithm and implementation described in the
+ * <a href="https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html">LEDA book</a>. See the LEDA
+ * Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
+ * 
+ * <p>
+ * For future reference - A more efficient algorithm exists: S. Micali and V. Vazirani. An
+ * $O(\sqrt{n}m)$ algorithm for finding maximum matching in general graphs. Proc. 21st Ann. Symp. on
+ * Foundations of Computer Science, IEEE, 1980, pp. 17–27. This is the most efficient algorithm
+ * known for computing maximum cardinality matchings in general graphs. More details on this
+ * algorithm can be found in:
  * <ul>
  * <li><a href="http://research.microsoft.com/apps/video/dl.aspx?id=171055">Presentation from
  * Vazirani 'Dispelling an Old Myth about an Ancient Algorithm'</a></li>
@@ -86,61 +85,23 @@ import java.util.stream.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
+ * @author Dimitrios Michail
  * @author Joris Kinable
  */
 public class EdmondsMaximumCardinalityMatching<V, E>
     implements
     MatchingAlgorithm<V, E>
 {
-    /* The graph we are matching on. */
     private final Graph<V, E> graph;
-    /* (Heuristic) matching algorithm used to compute an initial feasible solution */
-    private final MatchingAlgorithm<V, E> initializer;
-
-    /* Ordered list of vertices */
-    private List<V> vertices;
-    /* Mapping of a vertex to their unique position in the ordered list of vertices */
-    private Map<V, Integer> vertexIndexMap;
-
-    /* A matching for the input graph (can be an empty set of edges) */
-    private SimpleMatching matching;
-
-    /* Number of matched vertices. */
-    private int matchedVertices;
-
-    /* -----Algorithm data structures below---------- */
-
-    /** Storage of the forest, even and odd levels */
-    private Levels levels;
-
-    /** Special 'NIL' vertex. */
-    private static final int NIL = -1;
-
-    /** Queue of 'even' (exposed) vertices */
-    private FixedSizeIntegerQueue queue;
-
-    /** Union-Find to store blossoms. */
-    private UnionFind<Integer> uf;
-
-    /**
-     * For each odd vertex condensed into a blossom, a bridge is defined. Suppose the examination of
-     * edge $[v,w]$ causes a blossom to form containing odd vertex $x$. We define bridge(x) to be
-     * $[v,w]$ if $x$ is an ancestor of $v$ before the blossom is formed, or $[w,v]$ if $x$ is an
-     * ancestor of $w$.
-     */
-    private final Map<Integer, Pair<Integer, Integer>> bridges = new HashMap<>();
-
-    /** Pre-allocated array which stores augmenting paths. */
-    private int[] path;
-
-    /* Pre-allocated bit sets to track paths in the trees. */
-    private BitSet vAncestors, wAncestors;
+    private MatchingAlgorithm<V, E> initializer;
+    private Matching<V, E> result;
+    private Map<V, Integer> oddSetCover;
 
     /**
      * Constructs a new instance of the algorithm. {@link GreedyMaximumCardinalityMatching} is used
      * to quickly generate a near optimal initial solution.
      * 
-     * @param graph undirected graph (graph does not have to be simple)
+     * @param graph the input graph
      */
     public EdmondsMaximumCardinalityMatching(Graph<V, E> graph)
     {
@@ -152,7 +113,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      * 
      * @param graph undirected graph (graph does not have to be simple)
      * @param initializer heuristic matching algorithm used to quickly generate a (near optimal)
-     *        initial feasible solution.
+     *        initial feasible solution
      */
     public EdmondsMaximumCardinalityMatching(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
     {
@@ -161,532 +122,544 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     }
 
     /**
-     * Prepares the data structures
-     */
-    private void init()
-    {
-        vertices = new ArrayList<>();
-        vertices.addAll(graph.vertexSet());
-        vertexIndexMap = new HashMap<>();
-        for (int i = 0; i < vertices.size(); i++)
-            vertexIndexMap.put(vertices.get(i), i);
-        this.matching = new SimpleMatching(vertices.size());
-        this.matchedVertices = 0;
-
-        this.levels = new Levels(vertices.size());
-
-        this.queue = new FixedSizeIntegerQueue(vertices.size());
-        this.uf = new UnionFind<>(new HashSet<>(vertexIndexMap.values()));
-
-        // temp storage of paths in the algorithm
-        path = new int[vertices.size()];
-        vAncestors = new BitSet(vertices.size());
-        wAncestors = new BitSet(vertices.size());
-    }
-
-    /**
-     * Calculates an initial feasible matching.
+     * The actual implementation as an inner class. We use this pattern in order to free the work
+     * memory after computation. The outer class can cache the result but can also release all the
+     * auxiliary memory.
      * 
-     * @param initializer algorithm used to compute the initial matching
+     * @param <V> the vertex type
+     * @param <E> the edge type
      */
-    private void warmStart(MatchingAlgorithm<V, E> initializer)
+    private static class Algorithm<V, E>
     {
-        Matching<V, E> initialSolution = initializer.getMatching();
-        for (E e : initialSolution.getEdges()) {
-            V u = graph.getEdgeSource(e);
-            V v = graph.getEdgeTarget(e);
-            this.matching.match(vertexIndexMap.get(u), vertexIndexMap.get(v));
+        private static final int NULL = -1;
+
+        /**
+         * Even, odd and unlabeled labels.
+         */
+        private enum Label
+        {
+            EVEN,
+            ODD,
+            UNLABELED
         }
-        matchedVertices = initialSolution.getEdges().size() * 2;
-    }
 
-    /**
-     * Search for an augmenting path.
-     *
-     * @return true if an augmenting path was found, false otherwise
-     */
-    private boolean augment()
-    {
-        // reset data structures
-        levels.reset();
-        uf.reset();
-        bridges.clear();
-        queue.clear();
+        private final Graph<V, E> graph;
+        private MatchingAlgorithm<V, E> initializer;
 
-        Deque<Integer> exposed = new ArrayDeque<>(matching.getExposed());
+        private int nodes;
+        private Map<V, Integer> vertexIndexMap;
+        private V[] vertexMap;
 
-        while (!exposed.isEmpty()) {
-            int root = exposed.pop();
+        private int[] mate;
+        private Label[] label;
+        private int[] pred;
+        double strue;
+        private double[] path1;
+        private double[] path2;
+        private int[] sourceBridge;
+        private int[] targetBridge;
 
-            levels.setEven(root, root);
-            queue.enqueue(root);
-            // for each exposed vertex, start a bfs search
-            while (!queue.isEmpty()) {
-                int v = queue.poll(); // Even vertex
+        private VertexPartition base;
+        private FixedSizeIntegerQueue queue;
+        private List<Integer> labeledNodes;
 
-                for (V wOrig : Graphs.neighborListOf(graph, vertices.get(v))) {
-                    int w = vertexIndexMap.get(wOrig);
+        public Algorithm(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
+        {
+            this.graph = graph;
+            this.initializer = initializer;
+        }
 
-                    // vertex w is even: we may have encountered a blossom.
-                    if (levels.isEven(uf.find(w))) { // w is an even vertex
-                        // if v and w belong to the same blossom, the edge has been shrunken away
-                        // and we can ignore it. if not, we found a new blossom. We do not need to
-                        // check whether v and w belong to the same tree since each tree is fully
-                        // grown before we continue growing a new tree. Consequently, vertex w
-                        // can only belong to the same tree as v.
-                        if (!uf.inSameSet(v, w))
-                            blossom(v, w); // Create a new blossom using bridge edge (v,w)
-                    }
+        @SuppressWarnings("unchecked")
+        private void initialize()
+        {
+            // index graph
+            this.nodes = graph.vertexSet().size();
+            this.vertexIndexMap = new HashMap<>(nodes);
+            this.vertexMap = (V[]) new Object[nodes];
+            int vIndex = 0;
+            for (V vertex : graph.vertexSet()) {
+                vertexIndexMap.put(vertex, vIndex);
+                vertexMap[vIndex] = vertex;
+                vIndex++;
+            }
 
-                    // vertex w is either odd or unreached. If it is unreached, we have found an
-                    // augmenting path. If it is odd, we can grow the tree.
-                    else if (levels.isOddOrUnreached(w)) { // w is odd or unreached
+            this.mate = new int[nodes];
+            this.base = new VertexPartition(nodes);
+            this.label = new Label[nodes];
+            this.pred = new int[nodes];
+            this.path1 = new double[nodes];
+            this.path2 = new double[nodes];
+            this.sourceBridge = new int[nodes];
+            this.targetBridge = new int[nodes];
 
-                        if (matching.isExposed(w)) { // w is unreached: we found an augmenting path
-                            augment(v);
-                            augment(w);
-                            matching.match(v, w);
-                            return true;
+            for (int i = 0; i < nodes; i++) {
+                this.mate[i] = NULL;
+                this.label[i] = Label.EVEN;
+                this.pred[i] = NULL;
+                this.path1[i] = 0d;
+                this.path2[i] = 0d;
+                this.sourceBridge[i] = NULL;
+                this.targetBridge[i] = NULL;
+            }
+            this.strue = 0d;
+            this.queue = new FixedSizeIntegerQueue(nodes);
+            this.labeledNodes = new ArrayList<>();
+        }
+
+        private void runInitializer()
+        {
+            if (initializer == null) {
+                return;
+            }
+
+            for (E e : initializer.getMatching()) {
+                V u = graph.getEdgeSource(e);
+                V v = graph.getEdgeTarget(e);
+
+                int uIndex = vertexIndexMap.get(u);
+                int vIndex = vertexIndexMap.get(v);
+
+                mate[uIndex] = vIndex;
+                label[uIndex] = Label.UNLABELED;
+                mate[vIndex] = uIndex;
+                label[vIndex] = Label.UNLABELED;
+            }
+        }
+
+        private void findPath(Deque<Integer> p, int x, int y)
+        {
+            if (x == y) {
+                p.add(x);
+                return;
+            }
+            if (label[x] == Label.EVEN) {
+                p.add(x);
+                p.add(mate[x]);
+                findPath(p, pred[mate[x]], y);
+                return;
+            }
+            // x is ODD
+            p.add(x);
+            Deque<Integer> p2 = new ArrayDeque<>();
+            findPath(p2, sourceBridge[x], mate[x]);
+            while (!p2.isEmpty()) {
+                p.add(p2.removeLast());
+            }
+            findPath(p, targetBridge[x], y);
+        }
+
+        private void shrinkPath(int b, int v, int w)
+        {
+            int x = base.find(v);
+            while (x != b) {
+                base.union(x, b);
+                x = mate[x];
+                base.union(x, b);
+                base.name(b); // make sure b is called the same
+                queue.enqueue(x);
+                sourceBridge[x] = v;
+                targetBridge[x] = w;
+                x = base.find(pred[x]);
+            }
+        }
+
+        public Set<E> computeMatching()
+        {
+            initialize();
+            runInitializer();
+
+            for (int i = 0; i < nodes; i++) {
+                if (mate[i] != NULL) {
+                    continue;
+                }
+
+                queue.clear();
+                queue.enqueue(i);
+
+                labeledNodes.clear();
+                labeledNodes.add(i);
+
+                boolean breakThrough = false;
+
+                while (!breakThrough && !queue.isEmpty()) { // grow tree
+                    int v = queue.poll();
+                    V vAsVertex = vertexMap[v];
+                    for (E e : graph.edgesOf(vAsVertex)) {
+                        V wAsVertex = Graphs.getOppositeVertex(graph, e, vAsVertex);
+                        int w = vertexIndexMap.get(wAsVertex);
+
+                        if (base.find(v) == base.find(w) || label[base.find(w)] == Label.ODD) {
+                            continue;
                         }
 
-                        // w is an odd vertex: grow the tree
-                        levels.setOdd(w, v);
-                        int u = matching.opposite(w); // even vertex
-                        levels.setEven(u, w);
-                        queue.enqueue(u); // continue growing the tree from u
+                        if (label[w] == Label.UNLABELED) { // grow tree
+                            label[w] = Label.ODD;
+                            labeledNodes.add(w);
+                            pred[w] = v;
+                            label[mate[w]] = Label.EVEN;
+                            labeledNodes.add(mate[w]);
+                            queue.enqueue(mate[w]);
+                        } else { // augment or shrink blossom
+                            int hv = base.find(v);
+                            int hw = base.find(w);
+                            strue += 1d;
+                            path1[hv] = strue;
+                            path2[hw] = strue;
+
+                            while ((path1[hw] != strue && path2[hv] != strue)
+                                && (mate[hv] != NULL || mate[hw] != NULL))
+                            {
+                                if (mate[hv] != NULL) {
+                                    hv = base.find(pred[mate[hv]]);
+                                    path1[hv] = strue;
+                                }
+                                if (mate[hw] != NULL) {
+                                    hw = base.find(pred[mate[hw]]);
+                                    path2[hw] = strue;
+                                }
+                            }
+                            if (path1[hw] == strue || path2[hv] == strue) {
+                                // shrink blossom
+                                int b = (path1[hw] == strue) ? hw : hv; // base
+                                shrinkPath(b, v, w);
+                                shrinkPath(b, w, v);
+                            } else {
+                                // augment
+                                Deque<Integer> p = new ArrayDeque<>();
+                                findPath(p, v, hv);
+                                p.addFirst(w);
+                                while (!p.isEmpty()) {
+                                    int a = p.pop();
+                                    int b = p.pop();
+                                    mate[a] = b;
+                                    mate[b] = a;
+                                }
+                                labeledNodes.add(w);
+
+                                for (Integer k : labeledNodes) {
+                                    label[k] = Label.UNLABELED;
+                                }
+                                base.split(labeledNodes);
+
+                                breakThrough = true;
+                                break;
+                            }
+                        }
                     }
                 }
             }
-        }
 
-        // no augmenting paths, matching is maximum
-        return false;
-    }
+            // compute resulting matching
+            Set<E> matching = new HashSet<>();
+            for (E e : graph.edgeSet()) {
+                V u = graph.getEdgeSource(e);
+                V v = graph.getEdgeTarget(e);
 
-    /**
-     * Creates a new blossom using bridge $(v,w)$. The blossom is an odd cycle. Nodes $v$ and $w$
-     * are both even vertices.
-     *
-     * @param v endpoint of the bridge
-     * @param w another endpoint the bridge
-     */
-    private void blossom(int v, int w)
-    {
-        // Compute the base of the blossom. Let p_1, p_2 be the paths from the root of the tree to v
-        // resp. w. The base vertex is the last vertex p_1 and p_2 have in common. In a blossom, the
-        // base vertex is unique in the sense that it is the only vertex incident to 2 unmatched
-        // edges.
-        int base = nearestCommonAncestor(v, w);
+                if (u.equals(v)) {
+                    continue;
+                }
 
-        // Compute resp the left side (v to base) and right side (w to base) of the blossom.
-        blossomSupports(v, w, base);
-        blossomSupports(w, v, base);
+                int uIndex = vertexIndexMap.get(u);
+                int vIndex = vertexIndexMap.get(v);
 
-        // To complete the blossom, combine the left and the right sides.
-        uf.union(v, base);
-        uf.union(w, base);
-
-        // Blossoms are efficiently stored in a UnionFind data structure uf. Ideally, uf.find(x) for
-        // some vertex x returns the base u of the blossom containing x. However, when uf uses rank
-        // compression, it cannot be guaranteed that the vertex returned is indeed the base of the
-        // blossom. In fact, it can be any vertex of the blossom containing x. We therefore have to
-        // ensure that the predecessor of the blossom's representative is the predecessor of the
-        // actual base vertex.
-        levels.setEven(uf.find(base), levels.getEven(base));
-    }
-
-    /**
-     * This method creates one side of the blossom: the path from vertex $v$ to the base of the
-     * blossom. The vertices encountered on this path are grouped together (union). The odd vertices
-     * are added to the processing queue (odd vertices in a blossom become even) and a pointer to
-     * the bridge $(v,w)$ is stored for each odd vertex. Notice the orientation of the bridge: the
-     * first vertex of the bridge returned by bridge.get(x) is always on the same side of the
-     * blossom as $x$.
-     *
-     * @param v an endpoint of the blossom bridge
-     * @param w another endpoint of the blossom bridge
-     * @param base the base of the blossom
-     */
-    private void blossomSupports(int v, int w, int base)
-    {
-        Pair<Integer, Integer> bridge = new Pair<>(v, w);
-        v = uf.find(v);
-        int u = v;
-        while (v != base) {
-            uf.union(v, u);
-            u = levels.getEven(v); // odd vertex
-            this.bridges.put(u, bridge);
-            queue.enqueue(u);
-            uf.union(v, u);
-            v = uf.find(levels.getOdd(u)); // even vertex
-        }
-    }
-
-    /**
-     * Computes the base of the blossom formed by bridge edge $(v,w)$. The base vertex is the
-     * nearest common ancestor of $v$ and $w$.
-     * 
-     * @param v one side of the bridge
-     * @param w other side of the bridge
-     * @return base of the blossom
-     */
-    private int nearestCommonAncestor(int v, int w)
-    {
-        vAncestors.clear();
-        vAncestors.set(uf.find(v));
-        wAncestors.clear();
-        wAncestors.set(uf.find(w));
-
-        // Walk back from $v$ and $w$ in the direction of the root of the tree, until their paths
-        // intersect.
-        while (true) {
-
-            v = parent(v);
-            vAncestors.set(v);
-            w = parent(w);
-            wAncestors.set(w);
-
-            // vertex v is an ancestor of w, so v much be the base of the blossom
-            if (wAncestors.get(v)) {
-                return v;
+                if (uIndex != vIndex && mate[uIndex] == vIndex) {
+                    matching.add(e);
+                    // cleanup
+                    mate[uIndex] = uIndex;
+                    mate[vIndex] = vIndex;
+                }
             }
-            // vertex w is an ancestor of v, so w much be the base of the blossom
-            else if (vAncestors.get(w)) {
-                return w;
+
+            return matching;
+        }
+
+        public Map<V, Integer> computeOddSetCover()
+        {
+            int[] osc = new int[nodes];
+            Arrays.fill(osc, -1);
+            int numberOfUnlabeled = 0;
+            int arbUNode = -1;
+
+            for (int v = 0; v < nodes; v++) {
+                if (label[v] == Label.UNLABELED) {
+                    numberOfUnlabeled++;
+                    arbUNode = v;
+                }
             }
-        }
-    }
 
-    /**
-     * Compute the nearest even ancestor of even node $v$. If $v$ is the root of a tree, then this
-     * method returns $v$ itself.
-     *
-     * @param v even vertex
-     * @return the nearest even ancestor of $v$
-     */
-    private int parent(int v)
-    {
-        v = uf.find(v); // even vertex
-        int parent = uf.find(levels.getEven(v)); // odd vertex, or v if v is the root of its tree
-        if (parent == v)
-            return v; // root of tree
-        return uf.find(levels.getOdd(parent));
-    }
-
-    /**
-     * Construct a path from vertex $v$ to the root of its tree, and use the resulting path to
-     * augment the matching.
-     *
-     * @param v starting vertex (leaf in the tree)
-     */
-    private void augment(int v)
-    {
-        int n = buildPath(path, 0, v, NIL);
-        for (int i = 2; i < n; i += 2) {
-            matching.match(path[i], path[i - 1]);
-        }
-    }
-
-    /**
-     * Builds the path backwards from the specified start vertex to the end vertex. If the path
-     * reaches a blossom then the path through the blossom is lifted to the original graph.
-     *
-     * @param path path storage
-     * @param i offset (in path)
-     * @param start start vertex
-     * @param end end vertex
-     * @return the total length of the path.
-     */
-    private int buildPath(int[] path, int i, int start, int end)
-    {
-        while (true) {
-
-            // Lift the path through the blossom. The buildPath method always starts from an even
-            // vertex. Vertices which were originally odd become even
-            // when they are contracted into a blossom. If we start constructing the path from such
-            // an odd vertex, we must 'lift' the path through the blossom.
-            // To lift the path through the blossom, we have to walk from odd node u in the
-            // direction of the bridge, cross the bridge, and then
-            // continue in the direction of the tree root.
-            while (levels.isOdd(start)) {
-                Pair<Integer, Integer> bridge = bridges.get(start);
-
-                // From the start vertex u, walk in the direction of the bridge (v,w). The first
-                // edge encountered
-                // on the path from u to v is always a matched edge. Notice that the path from u to
-                // v leads away from the root of the tree. Since we only store
-                // pointers in the direction of the root, we have to compute a path from v to u, and
-                // reverse the resulting path.
-                int j = buildPath(path, i, bridge.getFirst(), start);
-                reverse(path, i, j - 1);
-                i = j;
-
-                // walk from the other side of the bridge up in the direction of the root.
-                start = bridge.getSecond();
+            if (numberOfUnlabeled > 0) {
+                osc[arbUNode] = 1;
+                int lambda = (numberOfUnlabeled == 2 ? 0 : 2);
+                for (int v = 0; v < nodes; v++) {
+                    if (label[v] == Label.UNLABELED && v != arbUNode) {
+                        osc[v] = lambda;
+                    }
+                }
             }
-            path[i++] = start; // even vertex
 
-            // root of the tree
-            if (matching.isExposed(start))
-                return i;
+            int kappa = (numberOfUnlabeled <= 2 ? 2 : 3);
+            for (int v = 0; v < nodes; v++) {
+                if (base.find(v) != v && osc[base.find(v)] == -1) {
+                    osc[base.find(v)] = kappa++;
+                }
+            }
 
-            path[i++] = matching.opposite(start); // odd vertex
+            for (int v = 0; v < nodes; v++) {
+                if (base.find(v) == v && osc[v] == -1) {
+                    if (label[v] == Label.EVEN) {
+                        osc[v] = 0;
+                    }
+                    if (label[v] == Label.ODD) {
+                        osc[v] = 1;
+                    }
+                }
+                if (base.find(v) != v) {
+                    osc[v] = osc[base.find(v)];
+                }
+            }
 
-            // base case
-            if (path[i - 1] == end)
-                return i;
+            Map<V, Integer> oddSetCover = new HashMap<>();
+            for (int v = 0; v < nodes; v++) {
+                oddSetCover.put(vertexMap[v], osc[v]);
+            }
 
-            start = levels.getOdd(path[i - 1]); // even vertex
+            return oddSetCover;
         }
+
     }
 
-    /**
-     * Returns a matching of maximum cardinality. Each time this method is invoked, the matching is
-     * computed from scratch. Consequently, it is possible to make changes to the graph and to
-     * re-invoke this method on the altered graph.
-     * 
-     * @return a matching of maximum cardinality.
-     */
     @Override
     public Matching<V, E> getMatching()
     {
-        this.init();
-        if (initializer != null)
-            this.warmStart(initializer);
+        if (result == null) {
+            Algorithm<V, E> alg = new Algorithm<>(graph, initializer);
+            Set<E> matchingEdges = alg.computeMatching();
 
-        // Continuously augment the matching until augmentation is no longer possible.
-        while (matchedVertices < graph.vertexSet().size() - 1 && augment()) {
-            matchedVertices += 2;
+            int cardinality = matchingEdges.size();
+            result = new MatchingImpl<>(graph, matchingEdges, cardinality);
+
+            oddSetCover = alg.computeOddSetCover();
         }
-
-        Set<E> edges = new LinkedHashSet<>();
-        double cost = 0;
-        for (int vx = 0; vx < vertices.size(); vx++) {
-            if (matching.isExposed(vx))
-                continue;
-            V v = vertices.get(vx);
-            V w = vertices.get(matching.opposite(vx));
-            E edge = graph.getEdge(v, w);
-            edges.add(edge);
-            cost += 0.5 * graph.getEdgeWeight(edge);
-        }
-
-        return new MatchingImpl<>(graph, edges, cost);
+        return result;
     }
 
     /**
-     * Checks whether the given matching is of maximum cardinality. A matching $m$ is maximum if
-     * there does not exist a different matching $m'$ in the graph which is of larger cardinality.
-     * This method is solely intended for verification purposes. Any matching returned by the
-     * {@link #getMatching()} method in this class is guaranteed to be maximum.
+     * Get an odd set cover which proves the optimality of the computed matching.
+     * 
      * <p>
-     * To attest whether the matching is maximum, we use the Tutte-Berge Formula which provides a
-     * tight bound on the cardinality of the matching. The Tutte-Berge Formula states: $m(G) =
-     * \frac{1}{2} \min_{X \subseteq V} ( |X| - c_{\text{odd}}(G - X) + |V|), where $m(G)$ is the
-     * size of the matching, $X$ a subset of vertices, $G-X$ the induced graph on vertex set $V(G)
-     * \setminus X$, and $c_{\text{odd}}(G)$ the number of connected components of odd cardinality
-     * in graph $G$.<br>
-     * Note: to compute this bound, we do not iterate over all possible subsets $X$ (this would be
-     * too expensive). Instead, $X$ is computed as a by-product of Edmonds' algorithm. Consequently,
-     * the runtime of this method equals the time required to test for the existence of a single
-     * augmenting path.<br>
-     * This method does NOT check whether the matching is valid.
+     * In order to check for optimality one needs to check that the odd-set-cover is a node labeling
+     * that (a) covers the graph and (b) whose capacity is equal to the cardinality of the matching.
+     * For (a) we check that every edge is either incident to a node with label 1 or connects two
+     * nodes labeled $i$ for some $i \ge 2$. For (b) we count for each $i$ the number $n_i$ of nodes
+     * with label $i$ and compute $S = n_1 + \sum_{i \ge 2} \floor{n_i/2}$.
      * 
-     * @param matching matching
-     * @return true if the matching is maximum, false otherwise.
+     * <p>
+     * Method {{@link #isOptimalMatching(Graph, Set, Map)} performs this check given a matching and
+     * an odd-set-cover.
+     * 
+     * @return an odd set cover whose capacity is the same as the matching's cardinality
      */
-    public boolean isMaximumMatching(Matching<V, E> matching)
+    public Map<V, Integer> getOddSetCover()
     {
-        // The matching is maximum if it is perfect, or if it leaves only one node exposed in a
-        // graph with an odd number of vertices
-        if (matching.getEdges().size() * 2 >= graph.vertexSet().size() - 1)
-            return true;
+        getMatching();
+        return oddSetCover;
+    }
 
-        this.init(); // Reset data structures and use the provided matching as a starting point
-        for (E e : matching.getEdges()) {
-            V u = graph.getEdgeSource(e);
-            V v = graph.getEdgeTarget(e);
-            Integer ux = vertexIndexMap.get(u);
-            Integer vx = vertexIndexMap.get(v);
-            this.matching.match(ux, vx);
+    /**
+     * Check whether a matching is optimal.
+     * 
+     * The method first checks whether the matching is indeed a matching. Then it checks whether the
+     * odd-set-cover provided is a node labeling that covers the graph and whose capacity is equal
+     * to the cardinality of the matching.
+     * 
+     * First, we count for each $i$ the number $n_i$ of nodes with label $i$, and then compute $S =
+     * n_1 + \sum_{i \ge 2} \floor{n_i/2}$. $S$ should be equal to the size of the matching. Then,
+     * we check that every edge is incident to a node label one or connects two nodes labeled $i$
+     * for some $i \ge 2$.
+     * 
+     * This method runs in linear time.
+     * 
+     * @param graph the graph
+     * @param matching a matching
+     * @param oddSetCover an odd set cover
+     * @return true if the matching is optimal, false otherwise
+     * 
+     * @param <V> graph vertex type
+     * @param <E> graph edge type
+     */
+    public static <V, E> boolean isOptimalMatching(
+        Graph<V, E> graph, Set<E> matching, Map<V, Integer> oddSetCover)
+    {
+        // check matching
+        Set<V> matched = new HashSet<>();
+        for (E e : matching) {
+            V s = graph.getEdgeSource(e);
+            if (!matched.add(s)) {
+                return false;
+            }
+
+            V t = graph.getEdgeTarget(e);
+            if (!matched.add(t)) {
+                return false;
+            }
         }
-        // Search for an augmenting path. If one is found, then clearly the matching is not maximum
-        if (augment())
+
+        // check optimality
+        int n = Math.max(2, graph.vertexSet().size());
+        int kappa = 1;
+        int[] count = new int[n];
+        for (int i = 0; i < n; i++) {
+            count[i] = 0;
+        }
+
+        for (V v : graph.vertexSet()) {
+            Integer osc = oddSetCover.get(v);
+            if (osc < 0 || osc >= n) {
+                return false;
+            }
+            count[osc]++;
+            if (osc > kappa) {
+                kappa = osc;
+            }
+        }
+
+        int s = count[1];
+        for (int i = 2; i <= kappa; i++) {
+            s += count[i] / 2;
+        }
+        if (s != matching.size()) {
             return false;
+        }
 
-        // A side effect of the Edmonds Blossom-Shrinking algorithm is that it computes what is
-        // known as the
-        // Edmonds-Gallai decomposition of a graph: it decomposes the graph into three disjoint sets
-        // of vertices: odd, even, or free.
-        // Let D(G) be the set of vertices such that for each v in D(G) there exists a maximum
-        // matching missing v. Let A(G) be the set of vertices such that each v in A(G)
-        // is a neighbor of D(G), but is not contained in D(G) itself. The set A(G) attains the
-        // minimum in the Tutte-Berge Formula. It can be shown that
-        // A(G)= {vertices labeled odd in the Edmonds Blossomg-Shrinking algorithm}. Note: we only
-        // take odd vertices that are not consumed by blossoms (every blossom is even).
-        Set<V> oddVertices = vertexIndexMap
-            .values().stream().filter(vx -> levels.isOdd(vx) && !bridges.containsKey(vx))
-            .map(vertices::get).collect(Collectors.toSet());
-        Set<V> otherVertices = graph
-            .vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
+        for (E e : graph.edgeSet()) {
+            V v = graph.getEdgeSource(e);
+            V w = graph.getEdgeTarget(e);
 
-        Graph<V, E> subgraph = new AsSubgraph<>(graph, otherVertices, null); // Induced subgraph
-                                                                             // defined on all
-                                                                             // vertices which are
-                                                                             // not odd.
-        List<Set<V>> connectedComponents = new ConnectivityInspector<>(subgraph).connectedSets();
-        long nrOddCardinalityComponents =
-            connectedComponents.stream().filter(s -> s.size() % 2 == 1).count();
+            int oscv = oddSetCover.get(v);
+            int oscw = oddSetCover.get(w);
 
-        return matching
-            .getEdges()
-            .size() == (graph.vertexSet().size() + oddVertices.size() - nrOddCardinalityComponents)
-                / 2.0;
+            if (v.equals(w) || oscv == 1 || oscw == 1 || (oscv == oscw && oscv >= 2)) {
+                continue;
+            }
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Storage of the forest, even and odd levels.
+     * Special integer vertex union-find.
      * 
-     * We explicitly maintain a dirty mark in order to be able to cleanup only the values that we
-     * have changed. This is important when the graph is sparse to avoid performing an $O(n)$
-     * operation per augmentation.
+     * @author Dimitrios Michail
      */
-    private static class Levels
+    private static class VertexPartition
     {
-        private int[] even, odd;
-        private List<Integer> dirty;
+        private Item[] items;
 
-        public Levels(int n)
+        public VertexPartition(int n)
         {
-            this.even = new int[n];
-            this.odd = new int[n];
-            this.dirty = new ArrayList<>();
-
-            Arrays.fill(even, NIL);
-            Arrays.fill(odd, NIL);
-        }
-
-        public int getEven(int v)
-        {
-            return even[v];
-        }
-
-        public void setEven(int v, int value)
-        {
-            even[v] = value;
-            if (value != NIL) {
-                dirty.add(v);
+            this.items = new Item[n];
+            for (int i = 0; i < n; i++) {
+                items[i] = new Item(i);
             }
         }
 
-        public int getOdd(int v)
+        public int find(int e)
         {
-            return odd[v];
+            return findItem(e).rep;
         }
 
-        public void setOdd(int v, int value)
+        public void union(int a, int b)
         {
-            odd[v] = value;
-            if (value != NIL) {
-                dirty.add(v);
+            assert a >= 0 && a < items.length;
+            assert b >= 0 && b < items.length;
+
+            Item ia = findItem(a);
+            Item ib = findItem(b);
+
+            // check if the elements are already in the same set
+            if (ia == ib) {
+                return;
+            }
+
+            // union by rank
+            if (ia.rank > ib.rank) {
+                ib.parent = ia;
+            } else if (ia.rank < ib.rank) {
+                ia.parent = ib;
+            } else {
+                ib.parent = ia;
+                ia.rank += 1;
             }
         }
 
-        public boolean isEven(int v)
+        /**
+         * Name the representative of the group where e belongs as e.
+         * 
+         * @param e a vertex
+         */
+        public void name(int e)
         {
-            return even[v] != NIL;
+            Item ie = findItem(e);
+            ie.rep = e;
         }
 
-        public boolean isOddOrUnreached(int v)
+        /**
+         * Split a partition. Assumes that it contains all members, otherwise bad things may happen.
+         * 
+         * @param toSplit all members of a partition
+         */
+        public void split(List<Integer> toSplit)
         {
-            return odd[v] == NIL;
-        }
-
-        public boolean isOdd(int v)
-        {
-            return odd[v] != NIL;
-        }
-
-        public void reset()
-        {
-            for (int v : dirty) {
-                even[v] = NIL;
-                odd[v] = NIL;
+            for (int i : toSplit) {
+                Item item = items[i];
+                item.parent = item;
+                item.rep = i;
+                item.rank = 0;
             }
-            dirty.clear();
-        }
-    }
-
-    /**
-     * Simple representation of a matching
-     */
-    private static class SimpleMatching
-    {
-        private static final int UNMATCHED = -1;
-        private final int[] match;
-        private Set<Integer> exposed;
-
-        private SimpleMatching(int n)
-        {
-            this.match = new int[n];
-            this.exposed = new HashSet<>(n);
-
-            Arrays.fill(match, UNMATCHED);
-            IntStream.range(0, n).forEach(exposed::add);
         }
 
-        /**
-         * Test whether a vertex is matched (i.e. incident to a matched edge).
-         */
-        boolean isMatched(int v)
+        private Item findItem(int e)
         {
-            return match[v] != UNMATCHED;
+            assert e >= 0 && e < items.length;
+
+            // lookup
+            Item current = items[e];
+            while (true) {
+                Item parent = current.parent;
+                if (parent.equals(current)) {
+                    break;
+                }
+                current = parent;
+            }
+
+            // path compression
+            final Item root = current;
+            current = items[e];
+            while (!current.equals(root)) {
+                Item parent = current.parent;
+                current.parent = root;
+                current = parent;
+            }
+
+            return root;
         }
 
-        /**
-         * Test whether a vertex is exposed (i.e. not incident to a matched edge).
-         */
-        boolean isExposed(int v)
+        // the item class
+        private static class Item
         {
-            return match[v] == UNMATCHED;
-        }
+            public int rep;
+            public int rank;
+            Item parent;
 
-        /**
-         * For a given vertex v and matched edge (v,w), this function returns vertex w.
-         */
-        int opposite(int v)
-        {
-            assert isMatched(v);
-            return match[v];
-        }
-
-        /**
-         * Add the edge $(u,v)$ to the matched edge set.
-         */
-        void match(int u, int v)
-        {
-            match[u] = v;
-            match[v] = u;
-            exposed.remove(u);
-            exposed.remove(v);
-        }
-
-        Set<Integer> getExposed()
-        {
-            return exposed;
+            public Item(int rep)
+            {
+                this.rep = rep;
+                this.rank = 0;
+                this.parent = this;
+            }
         }
 
     }
 
-    /** Utility function to reverse part of an array */
-    private void reverse(int[] path, int i, int j)
-    {
-        while (i < j) {
-            int tmp = path[i];
-            path[i] = path[j];
-            path[j] = tmp;
-            i++;
-            j--;
-        }
-    }
 }

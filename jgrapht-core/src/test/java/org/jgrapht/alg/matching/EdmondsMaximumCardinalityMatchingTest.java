@@ -17,17 +17,29 @@
  */
 package org.jgrapht.alg.matching;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
-import static org.junit.Assert.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
+import org.jgrapht.generate.BarabasiAlbertGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Tests for EdmondsMaximumCardinalityMatching
@@ -44,14 +56,18 @@ public final class EdmondsMaximumCardinalityMatchingTest
         Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
 
         int[][] edges = { { 0, 1 }, { 1, 2 }, { 0, 2 }, { 3, 4 }, { 4, 5 }, { 5, 6 }, { 3, 6 } };
-        for (int[] edge : edges)
+        for (int[] edge : edges) {
             g.addEdge(edge[0], edge[1]);
+        }
 
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         this.verifyMatching(g, match, 3);
-        assertTrue(matcher.isMaximumMatching(match));
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -70,7 +86,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         this.verifyMatching(g, match, 2);
-        assertTrue(matcher.isMaximumMatching(match));
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -87,7 +106,11 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertTrue(matcher.isMaximumMatching(match));
+        this.verifyMatching(g, match, 3);
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -106,7 +129,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertTrue(matcher.isMaximumMatching(match));
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -123,7 +149,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertTrue(matcher.isMaximumMatching(match));
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -140,7 +169,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertTrue(matcher.isMaximumMatching(match));
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -157,37 +189,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertTrue(matcher.isMaximumMatching(match));
-    }
 
-    @Test
-    public void testIsMaximumMatching4()
-    {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
-
-        DefaultEdge e12 = g.addEdge(1, 2);
-        g.addEdge(2, 3);
-        DefaultEdge e34 = g.addEdge(3, 4);
-        g.addEdge(4, 1);
-
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
-
-        // Perfect matching
-        Matching<Integer, DefaultEdge> m1 =
-            new MatchingAlgorithm.MatchingImpl<>(g, new HashSet<>(Arrays.asList(e12, e34)), 2);
-        assertTrue(matcher.isMaximumMatching(m1));
-
-        // Maximum matching in graph with odd number of vertices
-        g.addVertex(5);
-        g.addEdge(2, 5);
-        assertTrue(matcher.isMaximumMatching(m1));
-
-        // Not a maximum matching: augmenting path exists
-        Matching<Integer, DefaultEdge> m2 = new MatchingAlgorithm.MatchingImpl<>(
-            g, new HashSet<>(Collections.singletonList(e12)), 2);
-        assertFalse(matcher.isMaximumMatching(m2));
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -206,7 +211,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertTrue(matcher.isMaximumMatching(match));
+
+        Map<Integer, Integer> oddSetCover = matcher.getOddSetCover();
+        assertTrue(
+            EdmondsMaximumCardinalityMatching.isOptimalMatching(g, match.getEdges(), oddSetCover));
     }
 
     @Test
@@ -227,10 +235,6 @@ public final class EdmondsMaximumCardinalityMatchingTest
         mEdges.add(graph.getEdge(5, 8));
         Matching<Integer, DefaultEdge> m = new MatchingAlgorithm.MatchingImpl<>(graph, mEdges, 4);
         verifyMatching(graph, m, 4);
-
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
-        assertTrue(matcher.isMaximumMatching(m));
     }
 
     @Test
@@ -247,7 +251,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
 
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(g);
-        assertTrue(matcher.isMaximumMatching(matcher.getMatching()));
+
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(g, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -269,7 +276,64 @@ public final class EdmondsMaximumCardinalityMatchingTest
 
             Matching<Integer, DefaultEdge> m = matcher.getMatching();
             this.verifyMatching(graph, m, m.getEdges().size());
-            assertTrue(matcher.isMaximumMatching(m));
+            assertTrue(
+                EdmondsMaximumCardinalityMatching
+                    .isOptimalMatching(graph, m.getEdges(), matcher.getOddSetCover()));
+        }
+    }
+
+    @Test
+    public void testRandomGraphsBarabasiLarge()
+    {
+        Random random = new Random(1324);
+        int vertices = 250;
+
+        for (int k = 0; k < 10; k++) {
+
+            BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertGraphGenerator<>(6, 6, vertices, random);
+
+            Graph<Integer,
+                DefaultEdge> graph = GraphTypeBuilder
+                    .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).weighted(false).buildGraph();
+
+            generator.generateGraph(graph);
+
+            EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+                new EdmondsMaximumCardinalityMatching<>(graph);
+
+            Matching<Integer, DefaultEdge> m = matcher.getMatching();
+            assertTrue(
+                EdmondsMaximumCardinalityMatching
+                    .isOptimalMatching(graph, m.getEdges(), matcher.getOddSetCover()));
+        }
+    }
+
+    @Test
+    public void testRandomGraphsBarabasiLargeNoSeed()
+    {
+        int vertices = 250;
+
+        for (int k = 0; k < 10; k++) {
+
+            BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
+                new BarabasiAlbertGraphGenerator<>(6, 6, vertices);
+
+            Graph<Integer,
+                DefaultEdge> graph = GraphTypeBuilder
+                    .undirected().vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).weighted(false).buildGraph();
+
+            generator.generateGraph(graph);
+
+            EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+                new EdmondsMaximumCardinalityMatching<>(graph);
+
+            Matching<Integer, DefaultEdge> m = matcher.getMatching();
+            assertTrue(
+                EdmondsMaximumCardinalityMatching
+                    .isOptimalMatching(graph, m.getEdges(), matcher.getOddSetCover()));
         }
     }
 
@@ -290,7 +354,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
                     EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                         new EdmondsMaximumCardinalityMatching<>(graph);
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
-                    assertTrue(matcher.isMaximumMatching(m1));
+                    assertTrue(
+                        EdmondsMaximumCardinalityMatching
+                            .isOptimalMatching(graph, m1.getEdges(), matcher.getOddSetCover()));
                 }
             }
         }
@@ -325,6 +391,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 58);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -570,13 +640,17 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 183, 118 }, { 139, 33 }, { 95, 55 }, { 132, 150 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         Matching<Integer, DefaultEdge> m = matcher.getMatching();
         verifyMatching(graph, m, 100);
         assertTrue(m.isPerfect());
         for (Integer v : graph.vertexSet())
             assertTrue(m.isMatched(v));
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -711,9 +785,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 79, 18 }, { 186, 1 }, { 170, 195 }, { 115, 47 }, { 46, 173 }, { 83, 80 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 100);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -802,9 +880,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 108, 103 }, { 178, 174 }, { 184, 81 }, { 139, 21 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 99);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -881,9 +963,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 148, 5 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 98);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -948,9 +1034,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 26, 197 }, { 42, 164 }, { 35, 113 }, { 187, 172 }, { 173, 168 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 96);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -1008,9 +1098,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 78, 170 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 91);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -1059,9 +1153,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 176, 56 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 86);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -1102,9 +1200,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 81, 103 }, { 114, 193 }, { 191, 139 }, { 49, 191 }, { 92, 38 }, { 101, 70 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 75);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     @Test
@@ -1137,9 +1239,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 32, 143 }, { 79, 73 }, { 11, 146 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
             new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 66);
+        assertTrue(
+            EdmondsMaximumCardinalityMatching
+                .isOptimalMatching(
+                    graph, matcher.getMatching().getEdges(), matcher.getOddSetCover()));
     }
 
     private <V, E> void verifyMatching(Graph<V, E> g, Matching<V, E> m, int cardinality)
@@ -1161,10 +1267,6 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertEquals(cardinality, m.getEdges().size());
         assertEquals(m.getEdges().size() * 2, matched.size()); // Ensure that there are no
                                                                // self-loops
-
-        EdmondsMaximumCardinalityMatching<V, E> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
-        assertTrue(matcher.isMaximumMatching(m));
     }
 
     private static int maxEdges(int n)
