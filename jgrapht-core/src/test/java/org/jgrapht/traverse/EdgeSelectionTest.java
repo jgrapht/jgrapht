@@ -65,16 +65,16 @@ public class EdgeSelectionTest
                         edge.getColor().equals(oddEdgeColor);
                 }
             };
-        LexBreadthFirstIteratorTest.MyTraversalListener<StatefulVertex, StatefulEdge> listener =
-            new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
+        VertexTrackingTraversalListener<StatefulVertex, StatefulEdge> listener =
+            new VertexTrackingTraversalListener<>(graph);
 
         iterator.addTraversalListener(listener);
         StringBuilder traversedOrder = new StringBuilder();
         while (iterator.hasNext()) {
             traversedOrder.append(iterator.next().getState());
         }
-        assertEquals(graph.vertexSet(), listener.verticesTraversed);
-        assertEquals(graph.vertexSet(), listener.verticesFinished);
+        listener.checkAllVerticesTraversed();
+        listener.checkAllVerticesFinished();
         assertEquals("1342567", traversedOrder.toString());
     }
 

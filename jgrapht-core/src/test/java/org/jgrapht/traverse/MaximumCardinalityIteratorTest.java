@@ -44,16 +44,16 @@ public class MaximumCardinalityIteratorTest
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "c", "a");
         Graphs.addEdgeWithVertices(graph, "b", "d");
-        LexBreadthFirstIteratorTest.MyTraversalListener<String, DefaultEdge> listener =
-            new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
+        VertexTrackingTraversalListener<String, DefaultEdge> listener =
+            new VertexTrackingTraversalListener<>(graph);
         MaximumCardinalityIterator<String, DefaultEdge> iterator =
             new MaximumCardinalityIterator<>(graph);
         iterator.addTraversalListener(listener);
         for (int i = 0; i < 4; i++) {
             iterator.next();
         }
-        assertEquals(graph.vertexSet(), listener.verticesTraversed);
-        assertEquals(graph.vertexSet(), listener.verticesFinished);
+        listener.checkAllVerticesTraversed();
+        listener.checkAllVerticesFinished();
     }
 
     /**
