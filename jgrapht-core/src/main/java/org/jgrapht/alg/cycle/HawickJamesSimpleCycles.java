@@ -304,7 +304,7 @@ public class HawickJamesSimpleCycles<V, E>
      * This is the default behaviour of the algorithm.
      * It will keep looking as long as there are paths available.
      */
-    public void unlimitedPaths()
+    public void clearPathLimit()
     {
         this.hasLimit = false;
     }
