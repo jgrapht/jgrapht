@@ -28,6 +28,8 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the {@link ContractionHierarchyAlgorithm}..
+ * Tests for the {@link ContractionHierarchyAlgorithm}.
  */
 public class ContractionHierarchyAlgorithmTest {
     /**
@@ -116,7 +118,6 @@ public class ContractionHierarchyAlgorithmTest {
         assertNotNull(p);
 
         Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -151,10 +152,19 @@ public class ContractionHierarchyAlgorithmTest {
         assertEquals(5, contractionGraph.vertexSet().size());
         assertEquals(4, contractionGraph.edgeSet().size());
 
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(1), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(4)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(5)));
+        List<Pair<Integer, Integer>> vertexPairs = Arrays.asList(
+                Pair.of(1, 3),
+                Pair.of(2, 3),
+                Pair.of(3, 4),
+                Pair.of(3, 5)
+        );
+
+        for (Pair<Integer, Integer> pair : vertexPairs) {
+            assertTrue(contractionGraph.containsEdge(
+                    contractionMapping.get(pair.getFirst()),
+                    contractionMapping.get(pair.getSecond())
+            ));
+        }
     }
 
 
@@ -181,10 +191,19 @@ public class ContractionHierarchyAlgorithmTest {
         assertEquals(3, contractionGraph.vertexSet().size());
         assertEquals(4, contractionGraph.edgeSet().size());
 
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(1), contractionMapping.get(2)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(1)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(2)));
+        List<Pair<Integer, Integer>> vertexPairs = Arrays.asList(
+                Pair.of(1, 2),
+                Pair.of(2, 1),
+                Pair.of(2, 3),
+                Pair.of(3, 2)
+        );
+
+        for (Pair<Integer, Integer> pair : vertexPairs) {
+            assertTrue(contractionGraph.containsEdge(
+                    contractionMapping.get(pair.getFirst()),
+                    contractionMapping.get(pair.getSecond())
+            ));
+        }
     }
 
     @Test
@@ -203,7 +222,6 @@ public class ContractionHierarchyAlgorithmTest {
         assertNotNull(p);
 
         Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
 
         assertEquals(3, graph.vertexSet().size());
 
@@ -240,14 +258,23 @@ public class ContractionHierarchyAlgorithmTest {
         assertEquals(5, contractionGraph.vertexSet().size());
         assertEquals(8, contractionGraph.edgeSet().size());
 
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(1), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(1)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(2)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(4)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(4), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(5)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(5), contractionMapping.get(3)));
+        List<Pair<Integer, Integer>> vertexPairs = Arrays.asList(
+                Pair.of(1, 3),
+                Pair.of(3, 1),
+                Pair.of(2, 3),
+                Pair.of(3, 2),
+                Pair.of(3, 4),
+                Pair.of(4, 3),
+                Pair.of(3, 5),
+                Pair.of(5, 3)
+        );
+
+        for (Pair<Integer, Integer> pair : vertexPairs) {
+            assertTrue(contractionGraph.containsEdge(
+                    contractionMapping.get(pair.getFirst()),
+                    contractionMapping.get(pair.getSecond())
+            ));
+        }
     }
 
     @Test
@@ -289,33 +316,41 @@ public class ContractionHierarchyAlgorithmTest {
         assertEquals(9, contractionGraph.vertexSet().size());
         assertEquals(24, contractionGraph.edgeSet().size());
 
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(1), contractionMapping.get(2)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(1)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(1), contractionMapping.get(4)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(4), contractionMapping.get(1)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(3)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(2)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(2), contractionMapping.get(5)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(5), contractionMapping.get(2)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(3), contractionMapping.get(6)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(6), contractionMapping.get(3)));
+        List<Pair<Integer, Integer>> vertexPairs = Arrays.asList(
+                Pair.of(1, 2),
+                Pair.of(2, 1),
+                Pair.of(1, 4),
+                Pair.of(4, 1),
+                Pair.of(2, 3),
+                Pair.of(3, 2),
+                Pair.of(2, 5),
+                Pair.of(5, 2),
+                Pair.of(3, 6),
+                Pair.of(6, 3),
 
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(4), contractionMapping.get(5)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(5), contractionMapping.get(4)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(4), contractionMapping.get(7)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(7), contractionMapping.get(4)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(5), contractionMapping.get(6)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(6), contractionMapping.get(5)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(5), contractionMapping.get(8)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(8), contractionMapping.get(5)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(6), contractionMapping.get(9)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(9), contractionMapping.get(6)));
+                Pair.of(4, 5),
+                Pair.of(5, 4),
+                Pair.of(4, 7),
+                Pair.of(7, 4),
+                Pair.of(5, 6),
+                Pair.of(6, 5),
+                Pair.of(5, 8),
+                Pair.of(8, 5),
+                Pair.of(6, 9),
+                Pair.of(9, 6),
 
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(7), contractionMapping.get(8)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(8), contractionMapping.get(7)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(8), contractionMapping.get(9)));
-        assertTrue(contractionGraph.containsEdge(contractionMapping.get(9), contractionMapping.get(8)));
+                Pair.of(7, 8),
+                Pair.of(8, 7),
+                Pair.of(8, 9),
+                Pair.of(9, 8)
+        );
 
+        for (Pair<Integer, Integer> pair : vertexPairs) {
+            assertTrue(contractionGraph.containsEdge(
+                    contractionMapping.get(pair.getFirst()),
+                    contractionMapping.get(pair.getSecond())
+            ));
+        }
     }
 
 
