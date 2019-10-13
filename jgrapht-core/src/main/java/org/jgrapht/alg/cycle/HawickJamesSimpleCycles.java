@@ -188,8 +188,9 @@ public class HawickJamesSimpleCycles<V, E>
         for (int wPos = 0; wPos < B[u].size(); wPos++) {
             Integer w = B[u].get(wPos);
 
-            wPos -= frequency(B[u], w);
+            wPos -= B[u].size();
             B[u].removeAll(singletonList(w));
+            wPos -= B[u].size();
 
             if (blocked[w]) {
                 unblock(w);
