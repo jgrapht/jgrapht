@@ -19,6 +19,7 @@ package org.jgrapht.opt.graph.sparse;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -88,11 +89,7 @@ class CSRBooleanMatrix
         }
 
         // prefix sum
-        int prefix = 0;
-        for (int i = 1; i < rowOffsets.length; i++) {
-            prefix += rowOffsets[i];
-            rowOffsets[i] = prefix;
-        }
+        Arrays.parallelPrefix(rowOffsets, (x, y) -> x + y);
     }
 
     /**
