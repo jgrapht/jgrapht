@@ -21,7 +21,6 @@ import org.jgrapht.*;
 
 import java.util.*;
 
-import static java.util.Collections.frequency;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
@@ -188,9 +187,10 @@ public class HawickJamesSimpleCycles<V, E>
         for (int wPos = 0; wPos < B[u].size(); wPos++) {
             Integer w = B[u].get(wPos);
 
-            wPos -= B[u].size();
+            int sizeBeforeRemove = B[u].size();
             B[u].removeAll(singletonList(w));
-            wPos -= B[u].size();
+            wPos -= (sizeBeforeRemove - B[u].size());
+
 
             if (blocked[w]) {
                 unblock(w);
