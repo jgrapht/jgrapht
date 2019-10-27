@@ -1,0 +1,354 @@
+/*
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+package org.jgrapht.alg.shortestpath;
+
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.IdentityHashMap;
+import java.util.function.Supplier;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jheaps.AddressableHeap;
+import org.jheaps.AddressableHeap.Handle;
+import org.jheaps.array.DaryArrayAddressableHeap;
+
+/**
+ * Dijkstra Shortest Path implementation specialized for graphs with integer vertices.
+ * 
+ * <p>
+ * This class avoids using hash tables when the vertices are numbered from $0$ to $n-1$ where $n$ is
+ * the number of vertices of the graph. If vertices are not in this range, then automatically a
+ * {@link IdentityHashMap} is used in order to map them in that range.
+ * 
+ * <p>
+ * By default a 4-ary heap is used. The user is free to use a custom heap implementation during
+ * construction time.
+ * 
+ * <p>
+ * This implementation should be faster than our more generic one which is
+ * {@link DijkstraShortestPath}.
+ *
+ * @param <E> the graph edge type
+ * 
+ * @author Dimitrios Michail
+ */
+public final class IntVertexDijkstraShortestPath<E>
+    extends
+    BaseShortestPathAlgorithm<Integer, E>
+{
+    private final Supplier<AddressableHeap<Double, Integer>> heapSupplier;
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph.
+     *
+     * @param graph the graph
+     */
+    public IntVertexDijkstraShortestPath(Graph<Integer, E> graph)
+    {
+        this(graph, () -> new DaryArrayAddressableHeap<>(4));
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph.
+     *
+     * @param graph the graph
+     * @param heapSupplier supplier of the preferable heap implementation
+     */
+    public IntVertexDijkstraShortestPath(
+        Graph<Integer, E> graph, Supplier<AddressableHeap<Double, Integer>> heapSupplier)
+    {
+        super(graph);
+        this.heapSupplier = heapSupplier;
+    }
+
+    /**
+     * Find a path between two vertices. For a more advanced search (e.g. limited by radius or using
+     * another heap), use the constructor instead.
+     *
+     * @param graph the graph to be searched
+     * @param source the vertex at which the path should start
+     * @param sink the vertex at which the path should end
+     * @param <E> the graph edge type
+     * @return a shortest path, or null if no path exists
+     */
+    public static <E> GraphPath<Integer, E> findPathBetween(
+        Graph<Integer, E> graph, Integer source, Integer sink)
+    {
+        return new IntVertexDijkstraShortestPath<>(graph).getPath(source, sink);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphPath<Integer, E> getPath(Integer source, Integer sink)
+    {
+        if (!graph.containsVertex(source)) {
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
+        }
+        if (!graph.containsVertex(sink)) {
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
+        }
+        return new Algorithm().getPath(source, sink);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Note that in the case of Dijkstra's algorithm it is more efficient to compute all
+     * single-source shortest paths using this method than repeatedly invoking
+     * {@link #getPath(Object, Object)} for the same source but different sink vertex.
+     */
+    @Override
+    public SingleSourcePaths<Integer, E> getPaths(Integer source)
+    {
+        if (!graph.containsVertex(source)) {
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
+        }
+        return new Algorithm().getPaths(source);
+    }
+
+    /**
+     * The actual implementation class.
+     */
+    private class Algorithm
+    {
+        private int totalVertices;
+        private AddressableHeap<Double, Integer> heap;
+        private AddressableHeap.Handle<Double, Integer>[] nodes;
+        private double[] dist;
+        private E[] pred;
+        private IdentityHashMap<Integer, Integer> idMap;
+
+        @SuppressWarnings("unchecked")
+        public Algorithm()
+        {
+            this.totalVertices = graph.vertexSet().size();
+            this.nodes = (Handle<Double, Integer>[]) Array
+                .newInstance(AddressableHeap.Handle.class, totalVertices);
+            this.heap = heapSupplier.get();
+
+            this.dist = new double[totalVertices];
+            this.pred = (E[]) new Object[totalVertices];
+
+            boolean remapVertices = false;
+            int i = 0;
+            for (Integer v : graph.vertexSet()) {
+                if (v < 0 || v >= totalVertices) {
+                    remapVertices = true;
+                }
+                dist[i] = Double.POSITIVE_INFINITY;
+                pred[i] = null;
+                i++;
+            }
+
+            /*
+             * In case vertices are not in $[0 \ldots n-1$ where $n$ is the number of vertices, we
+             * map them.
+             */
+            if (remapVertices) {
+                idMap = new IdentityHashMap<>(totalVertices);
+                i = 0;
+                for (Integer v : graph.vertexSet()) {
+                    idMap.put(v, i++);
+                }
+            }
+        }
+
+        public SingleSourcePaths<Integer, E> getPaths(Integer source)
+        {
+            if (idMap == null) {
+                return getPathsWithoutIdMap(source, null);
+            } else {
+                return getPathsWithIdMap(source, null);
+            }
+        }
+
+        public SingleSourcePaths<Integer, E> getPathsWithoutIdMap(Integer source, Integer target)
+        {
+            dist[source] = 0d;
+            pred[source] = null;
+            nodes[source] = heap.insert(0d, source);
+
+            while (!heap.isEmpty()) {
+                AddressableHeap.Handle<Double, Integer> vNode = heap.deleteMin();
+                Integer v = vNode.getValue();
+                double vDistance = vNode.getKey();
+                dist[v] = vDistance;
+
+                if (v == target) {
+                    break;
+                }
+
+                for (E e : graph.outgoingEdgesOf(v)) {
+                    Integer u = Graphs.getOppositeVertex(graph, e, v);
+                    double eWeight = graph.getEdgeWeight(e);
+                    if (eWeight < 0.0) {
+                        throw new IllegalArgumentException("Negative edge weight not allowed");
+                    }
+                    AddressableHeap.Handle<Double, Integer> uNode = nodes[u];
+                    double uDist = vDistance + eWeight;
+                    if (uNode == null) {
+                        nodes[u] = heap.insert(uDist, u);
+                        pred[u] = e;
+                    } else if (uDist < uNode.getKey()) {
+                        uNode.decreaseKey(uDist);
+                        pred[u] = e;
+                    }
+                }
+            }
+
+            return new ArrayBasedSingleSourcePathsImpl(source, dist, pred, idMap);
+        }
+
+        public SingleSourcePaths<Integer, E> getPathsWithIdMap(Integer source, Integer target)
+        {
+            dist[idMap.get(source)] = 0d;
+            pred[idMap.get(source)] = null;
+            nodes[idMap.get(source)] = heap.insert(0d, source);
+
+            while (!heap.isEmpty()) {
+                AddressableHeap.Handle<Double, Integer> vNode = heap.deleteMin();
+                Integer v = vNode.getValue();
+                double vDistance = vNode.getKey();
+                dist[idMap.get(v)] = vDistance;
+
+                if (v == target) {
+                    break;
+                }
+
+                for (E e : graph.outgoingEdgesOf(v)) {
+                    Integer u = Graphs.getOppositeVertex(graph, e, v);
+                    double eWeight = graph.getEdgeWeight(e);
+                    if (eWeight < 0.0) {
+                        throw new IllegalArgumentException("Negative edge weight not allowed");
+                    }
+                    AddressableHeap.Handle<Double, Integer> uNode = nodes[idMap.get(u)];
+                    double uDist = vDistance + eWeight;
+                    if (uNode == null) {
+                        nodes[idMap.get(u)] = heap.insert(uDist, u);
+                        pred[idMap.get(u)] = e;
+                    } else if (uDist < uNode.getKey()) {
+                        uNode.decreaseKey(uDist);
+                        pred[idMap.get(u)] = e;
+                    }
+                }
+            }
+
+            return new ArrayBasedSingleSourcePathsImpl(source, dist, pred, idMap);
+        }
+
+        public GraphPath<Integer, E> getPath(Integer source, Integer target)
+        {
+            if (idMap == null) {
+                return getPathsWithoutIdMap(source, target).getPath(target);
+            } else {
+                return getPathsWithIdMap(source, target).getPath(target);
+            }
+        }
+
+    }
+
+    private class ArrayBasedSingleSourcePathsImpl
+        implements
+        SingleSourcePaths<Integer, E>,
+        Serializable
+    {
+        private static final long serialVersionUID = 2912496450441089175L;
+
+        private Integer source;
+        private double[] dist;
+        private E[] pred;
+        private IdentityHashMap<Integer, Integer> idMap;
+
+        public ArrayBasedSingleSourcePathsImpl(
+            Integer source, double[] dist, E[] pred, IdentityHashMap<Integer, Integer> idMap)
+        {
+            this.source = source;
+            this.dist = dist;
+            this.pred = pred;
+            this.idMap = idMap;
+        }
+
+        @Override
+        public Graph<Integer, E> getGraph()
+        {
+            return graph;
+        }
+
+        @Override
+        public Integer getSourceVertex()
+        {
+            return source;
+        }
+
+        @Override
+        public double getWeight(Integer targetVertex)
+        {
+            if (idMap == null) {
+                return dist[targetVertex];
+            } else {
+                return dist[idMap.get(targetVertex)];
+            }
+        }
+
+        @Override
+        public GraphPath<Integer, E> getPath(Integer targetVertex)
+        {
+            if (source.equals(targetVertex)) {
+                return GraphWalk.singletonWalk(graph, source, 0d);
+            }
+
+            Deque<E> edgeList = new ArrayDeque<>();
+            Integer cur = targetVertex;
+
+            double distance;
+            E e;
+            if (idMap != null) {
+                if (pred[idMap.get(cur)] == null) {
+                    return null;
+                }
+                while ((e = pred[idMap.get(cur)]) != null) {
+                    edgeList.addFirst(e);
+                    cur = Graphs.getOppositeVertex(graph, e, cur);
+                }
+                distance = dist[idMap.get(targetVertex)];
+            } else {
+                if (pred[cur] == null) {
+                    return null;
+                }
+                while ((e = pred[cur]) != null) {
+                    edgeList.addFirst(e);
+                    cur = Graphs.getOppositeVertex(graph, e, cur);
+                }
+                distance = dist[targetVertex];
+            }
+
+            return new GraphWalk<>(
+                graph, source, targetVertex, null, new ArrayList<>(edgeList), distance);
+        }
+
+    }
+
+}

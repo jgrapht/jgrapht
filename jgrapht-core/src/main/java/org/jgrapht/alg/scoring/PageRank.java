@@ -220,6 +220,7 @@ public final class PageRank<V, E>
         private int[] outDegree;
         private ArrayList<int[]> adjList;
 
+        @SuppressWarnings("unchecked")
         public Algorithm()
         {
             this.totalVertices = graph.vertexSet().size();
