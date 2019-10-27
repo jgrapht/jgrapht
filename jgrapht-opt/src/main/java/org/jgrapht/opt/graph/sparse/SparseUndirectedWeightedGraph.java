@@ -18,8 +18,6 @@
 package org.jgrapht.opt.graph.sparse;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,19 +42,22 @@ import org.jgrapht.alg.util.Triple;
  * Compressed Sparse Row (CSR). This is a classic format for write-once read-many use cases. Thus,
  * the graph is unmodifiable. In order to also support constant time source and target lookups from
  * an edge identifier we also store the transposed of the incidence matrix again in compressed
- * sparse row format. In this transposed matrix we also maintain the edge weights.
+ * sparse row format. The edge weights are maintained in an array indexed by the edge identifier.
  * 
  * @author Dimitrios Michail
  */
 public class SparseUndirectedWeightedGraph
     extends
-    BaseSparseUndirectedGraph
+    SparseUndirectedGraph
     implements
     Serializable
 {
     private static final long serialVersionUID = -5410680356868181247L;
 
-    protected CSRDoubleMatrix incidenceMatrixT;
+    /**
+     * The edge weights
+     */
+    protected double[] weights;
 
     /**
      * Create a new graph from an edge list
@@ -73,31 +74,13 @@ public class SparseUndirectedWeightedGraph
                 .stream().map(e -> Pair.of(e.getFirst(), e.getSecond()))
                 .collect(Collectors.toList()));
 
-        List<Triple<Integer, Integer, Double>> nonZerosTranspose = new ArrayList<>();
+        this.weights = new double[edges.size()];
+
         int eIndex = 0;
         for (Triple<Integer, Integer, Double> e : edges) {
             double edgeWeight = e.getThird() != null ? e.getThird() : Graph.DEFAULT_EDGE_WEIGHT;
-            nonZerosTranspose.add(Triple.of(eIndex, e.getFirst(), edgeWeight));
-            nonZerosTranspose.add(Triple.of(eIndex, e.getSecond(), edgeWeight));
-            eIndex++;
+            weights[eIndex++] = edgeWeight;
         }
-        incidenceMatrixT = new CSRDoubleMatrix(edges.size(), numVertices, nonZerosTranspose);
-    }
-
-    @Override
-    public Integer getEdgeSource(Integer e)
-    {
-        assertEdgeExist(e);
-        return incidenceMatrixT.nonZerosPositionIterator(e).next();
-    }
-
-    @Override
-    public Integer getEdgeTarget(Integer e)
-    {
-        assertEdgeExist(e);
-        Iterator<Integer> it = incidenceMatrixT.nonZerosPositionIterator(e);
-        it.next();
-        return it.next();
     }
 
     @Override
@@ -110,14 +93,14 @@ public class SparseUndirectedWeightedGraph
     public double getEdgeWeight(Integer e)
     {
         assertEdgeExist(e);
-        return incidenceMatrixT.nonZerosIterator(e).next().getSecond();
+        return weights[e];
     }
 
     @Override
     public void setEdgeWeight(Integer e, double weight)
     {
         assertEdgeExist(e);
-        incidenceMatrixT.setNonZeros(e, weight);
+        weights[e] = weight;
     }
 
 }

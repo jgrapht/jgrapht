@@ -17,15 +17,21 @@
  */
 package org.jgrapht.opt.graph.sparse;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.AbstractGraph;
+import org.jgrapht.graph.DefaultGraphType;
 
 /**
- * Sparse unmodifiable undirected graph.
+ * Base implementation of a sparse unmodifiable undirected graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
@@ -42,12 +48,11 @@ import org.jgrapht.alg.util.Pair;
  */
 public class SparseUndirectedGraph
     extends
-    BaseSparseUndirectedGraph
-    implements
-    Serializable
+    AbstractGraph<Integer, Integer>
 {
-    private static final long serialVersionUID = -4254356821672793855L;
+    protected static final String UNMODIFIABLE = "this graph is unmodifiable";
 
+    protected CSRBooleanMatrix incidenceMatrix;
     protected CSRBooleanMatrix incidenceMatrixT;
 
     /**
@@ -58,16 +63,159 @@ public class SparseUndirectedGraph
      */
     public SparseUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
-        super(numVertices, edges);
-
+        List<Pair<Integer, Integer>> nonZeros = new ArrayList<>();
         List<Pair<Integer, Integer>> nonZerosTranspose = new ArrayList<>();
+
         int eIndex = 0;
         for (Pair<Integer, Integer> e : edges) {
+            nonZeros.add(Pair.of(e.getFirst(), eIndex));
             nonZerosTranspose.add(Pair.of(eIndex, e.getFirst()));
+            nonZeros.add(Pair.of(e.getSecond(), eIndex));
             nonZerosTranspose.add(Pair.of(eIndex, e.getSecond()));
             eIndex++;
         }
+        incidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), nonZeros);
         incidenceMatrixT = new CSRBooleanMatrix(edges.size(), numVertices, nonZerosTranspose);
+    }
+
+    @Override
+    public Supplier<Integer> getVertexSupplier()
+    {
+        return null;
+    }
+
+    @Override
+    public Supplier<Integer> getEdgeSupplier()
+    {
+        return null;
+    }
+
+    @Override
+    public Integer addEdge(Integer sourceVertex, Integer targetVertex)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean addEdge(Integer sourceVertex, Integer targetVertex, Integer e)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public Integer addVertex()
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean addVertex(Integer v)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean containsEdge(Integer e)
+    {
+        return e >= 0 && e < incidenceMatrix.columns();
+    }
+
+    @Override
+    public boolean containsVertex(Integer v)
+    {
+        return v >= 0 && v < incidenceMatrix.rows();
+    }
+
+    @Override
+    public Set<Integer> edgeSet()
+    {
+        return new IntegerSet(incidenceMatrix.columns());
+    }
+
+    @Override
+    public int degreeOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZeros(vertex);
+    }
+
+    @Override
+    public Set<Integer> edgesOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZerosSet(vertex);
+    }
+
+    @Override
+    public int inDegreeOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZeros(vertex);
+    }
+
+    @Override
+    public Set<Integer> incomingEdgesOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZerosSet(vertex);
+    }
+
+    @Override
+    public int outDegreeOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZeros(vertex);
+    }
+
+    @Override
+    public Set<Integer> outgoingEdgesOf(Integer vertex)
+    {
+        assertVertexExist(vertex);
+        return incidenceMatrix.nonZerosSet(vertex);
+    }
+
+    @Override
+    public Integer removeEdge(Integer sourceVertex, Integer targetVertex)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean removeEdge(Integer e)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public boolean removeVertex(Integer v)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+
+    @Override
+    public Set<Integer> vertexSet()
+    {
+        return new IntegerSet(incidenceMatrix.rows());
+    }
+
+    @Override
+    public GraphType getType()
+    {
+        return new DefaultGraphType.Builder()
+            .undirected().weighted(false).modifiable(false).allowMultipleEdges(true)
+            .allowSelfLoops(true).build();
+    }
+
+    @Override
+    public double getEdgeWeight(Integer e)
+    {
+        return Graph.DEFAULT_EDGE_WEIGHT;
+    }
+
+    @Override
+    public void setEdgeWeight(Integer e, double weight)
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
     @Override
@@ -84,6 +232,87 @@ public class SparseUndirectedGraph
         Iterator<Integer> it = incidenceMatrixT.nonZerosPositionIterator(e);
         it.next();
         return it.next();
+    }
+
+    @Override
+    public Integer getEdge(Integer sourceVertex, Integer targetVertex)
+    {
+        if (sourceVertex < 0 || sourceVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+        if (targetVertex < 0 || targetVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+
+        Iterator<Integer> it = incidenceMatrix.nonZerosPositionIterator(sourceVertex);
+        while (it.hasNext()) {
+            int eId = it.next();
+
+            int v = getEdgeSource(eId);
+            int u = getEdgeTarget(eId);
+
+            if (v == sourceVertex && u == targetVertex || v == targetVertex && u == sourceVertex) {
+                return eId;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Set<Integer> getAllEdges(Integer sourceVertex, Integer targetVertex)
+    {
+        if (sourceVertex < 0 || sourceVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+        if (targetVertex < 0 || targetVertex >= incidenceMatrix.rows()) {
+            return null;
+        }
+
+        Set<Integer> result = new HashSet<>();
+        Iterator<Integer> it = incidenceMatrix.nonZerosPositionIterator(sourceVertex);
+        while (it.hasNext()) {
+            int eId = it.next();
+
+            int v = getEdgeSource(eId);
+            int u = getEdgeTarget(eId);
+
+            if (v == sourceVertex && u == targetVertex || v == targetVertex && u == sourceVertex) {
+                result.add(eId);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Ensures that the specified vertex exists in this graph, or else throws exception.
+     *
+     * @param v vertex
+     * @return <code>true</code> if this assertion holds.
+     * @throws IllegalArgumentException if specified vertex does not exist in this graph.
+     */
+    protected boolean assertVertexExist(Integer v)
+    {
+        if (v >= 0 && v < incidenceMatrix.rows()) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
+        }
+    }
+
+    /**
+     * Ensures that the specified edge exists in this graph, or else throws exception.
+     *
+     * @param e edge
+     * @return <code>true</code> if this assertion holds.
+     * @throws IllegalArgumentException if specified edge does not exist in this graph.
+     */
+    protected boolean assertEdgeExist(Integer e)
+    {
+        if (e >= 0 && e < incidenceMatrix.columns()) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("no such edge in graph: " + e.toString());
+        }
     }
 
 }
