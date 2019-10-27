@@ -83,8 +83,8 @@ public final class IntVertexDijkstraShortestPath<E>
     }
 
     /**
-     * Find a path between two vertices. For a more advanced search (e.g. limited by radius or using
-     * another heap), use the constructor instead.
+     * Find a path between two vertices. For a more advanced search (e.g. using another heap), use
+     * the constructor instead.
      *
      * @param graph the graph to be searched
      * @param source the vertex at which the path should start
@@ -98,9 +98,6 @@ public final class IntVertexDijkstraShortestPath<E>
         return new IntVertexDijkstraShortestPath<>(graph).getPath(source, sink);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public GraphPath<Integer, E> getPath(Integer source, Integer sink)
     {
@@ -115,6 +112,7 @@ public final class IntVertexDijkstraShortestPath<E>
 
     /**
      * {@inheritDoc}
+     * 
      * <p>
      * Note that in the case of Dijkstra's algorithm it is more efficient to compute all
      * single-source shortest paths using this method than repeatedly invoking
@@ -130,7 +128,9 @@ public final class IntVertexDijkstraShortestPath<E>
     }
 
     /**
-     * The actual implementation class.
+     * The actual implementation class. We use this inner class pattern in order to allow the user
+     * to keep a reference to the implementation class, but allow the garbage collector to collect
+     * the auxiliary memory used during the algorithm's execution.
      */
     private class Algorithm
     {
@@ -164,7 +164,7 @@ public final class IntVertexDijkstraShortestPath<E>
             }
 
             /*
-             * In case vertices are not in $[0 \ldots n-1$ where $n$ is the number of vertices, we
+             * In case vertices are not in $[0 \ldots n)$ where $n$ is the number of vertices, we
              * map them.
              */
             if (remapVertices) {
