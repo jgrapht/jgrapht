@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
@@ -68,32 +68,32 @@ public class SimpleSparseGraph
     /**
      * Source vertex of edge
      */
-    protected Integer[] from;
+    protected int[] from;
 
     /**
      * Target vertex of edge
      */
-    protected Integer[] to;
+    protected int[] to;
 
     /**
      * Edges sorted with key (from, to)
      */
-    protected Integer[] outIndex;
+    protected int[] outIndex;
 
     /**
      * Edges sorted with key (to, from)
      */
-    protected Integer[] inIndex;
+    protected int[] inIndex;
 
     /**
      * Prefix sum of out-degrees
      */
-    protected Integer[] outPrefixScan;
+    protected int[] outPrefixScan;
 
     /**
      * Prefix sum of in-degrees
      */
-    protected Integer[] inPrefixScan;
+    protected int[] inPrefixScan;
 
     /**
      * Create a graph
@@ -107,8 +107,8 @@ public class SimpleSparseGraph
         this.n = numVertices;
         this.m = edges.size();
         this.directed = directed;
-        this.from = new Integer[m];
-        this.to = new Integer[m];
+        this.from = new int[m];
+        this.to = new int[m];
 
         /*
          * Write edge list
@@ -126,21 +126,35 @@ public class SimpleSparseGraph
         }
 
         /*
-         * Indirect sort by (source,target) and (target,source)
+         * Indirect sort by (source,target)
          */
-        this.outIndex = new Integer[m];
-        this.inIndex = new Integer[m];
+        Integer[] tmp = new Integer[m];
         for (i = 0; i < m; i++) {
-            outIndex[i] = inIndex[i] = i;
+            tmp[i] = i;
         }
-        Arrays.parallelSort(outIndex, new IndirectComparator(from, to));
-        Arrays.parallelSort(inIndex, new IndirectComparator(to, from));
+        Arrays.parallelSort(tmp, new IndirectComparator(from, to));
+        this.outIndex = new int[m];
+        for (i = 0; i < m; i++) {
+            outIndex[i] = tmp[i];
+        }
+
+        /*
+         * Indirect sort by (target,source)
+         */
+        for (i = 0; i < m; i++) {
+            tmp[i] = i;
+        }
+        Arrays.parallelSort(tmp, new IndirectComparator(to, from));
+        this.inIndex = new int[m];
+        for (i = 0; i < m; i++) {
+            inIndex[i] = tmp[i];
+        }
 
         /*
          * Count degrees (shifted by one) and prefix sum
          */
-        this.outPrefixScan = new Integer[n + 1];
-        this.inPrefixScan = new Integer[n + 1];
+        this.outPrefixScan = new int[n + 1];
+        this.inPrefixScan = new int[n + 1];
         for (i = 0; i < n + 1; i++) {
             outPrefixScan[i] = inPrefixScan[i] = 0;
         }
@@ -287,7 +301,7 @@ public class SimpleSparseGraph
     {
         assertVertexExist(vertex);
 
-        return edgeStream(vertex, true, true).collect(Collectors.toSet());
+        return edgeStream(vertex, true, true).boxed().collect(Collectors.toSet());
     }
 
     @Override
@@ -306,7 +320,8 @@ public class SimpleSparseGraph
     public Set<Integer> incomingEdgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return edgeStream(vertex, directed ? false : true, true).collect(Collectors.toSet());
+        return edgeStream(vertex, directed ? false : true, true)
+            .boxed().collect(Collectors.toSet());
     }
 
     @Override
@@ -325,7 +340,8 @@ public class SimpleSparseGraph
     public Set<Integer> outgoingEdgesOf(Integer vertex)
     {
         assertVertexExist(vertex);
-        return edgeStream(vertex, true, directed ? false : true).collect(Collectors.toSet());
+        return edgeStream(vertex, true, directed ? false : true)
+            .boxed().collect(Collectors.toSet());
     }
 
     @Override
@@ -432,11 +448,10 @@ public class SimpleSparseGraph
         implements
         Comparator<Integer>
     {
+        private int[] key1;
+        private int[] key2;
 
-        private Integer[] key1;
-        private Integer[] key2;
-
-        public IndirectComparator(Integer[] key1, Integer[] key2)
+        public IndirectComparator(int[] key1, int[] key2)
         {
             this.key1 = key1;
             this.key2 = key2;
@@ -475,8 +490,7 @@ public class SimpleSparseGraph
      * @param sortedIndex the index
      * @return the position found or -1 if not found
      */
-    private int binarySearchWithIndex(
-        int start, int end, int value, Integer[] array, Integer[] sortedIndex)
+    private int binarySearchWithIndex(int start, int end, int value, int[] array, int[] sortedIndex)
     {
         final int fixedEnd = end;
         while (start < end) {
@@ -497,15 +511,15 @@ public class SimpleSparseGraph
         return -1;
     }
 
-    private Stream<Integer> edgeStream(int vertex, boolean outgoing, boolean incoming)
+    private IntStream edgeStream(int vertex, boolean outgoing, boolean incoming)
     {
-        Stream<Integer> s;
+        IntStream s;
         if (outgoing && !incoming) {
             s = Arrays.stream(outIndex, outPrefixScan[vertex], outPrefixScan[vertex + 1]);
         } else if (!outgoing && incoming) {
             s = Arrays.stream(inIndex, inPrefixScan[vertex], inPrefixScan[vertex + 1]);
         } else {
-            s = Stream
+            s = IntStream
                 .concat(
                     Arrays.stream(outIndex, outPrefixScan[vertex], outPrefixScan[vertex + 1]),
                     Arrays.stream(inIndex, inPrefixScan[vertex], inPrefixScan[vertex + 1]));
