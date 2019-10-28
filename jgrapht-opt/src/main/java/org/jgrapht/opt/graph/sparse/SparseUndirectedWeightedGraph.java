@@ -27,22 +27,22 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 
 /**
- * Sparse unmodifiable undirected weighted graph.
+ * Sparse undirected weighted graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
  * 
  * <p>
+ * It stores the boolean incidence matrix of the graph (rows are vertices and columns are edges) as
+ * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
+ * from an edge identifier we also store the transposed of the incidence matrix again in compressed
+ * sparse row format. This is a classic format for write-once read-many use cases. Thus, the graph
+ * is unmodifiable. The edge weights are maintained in an array indexed by the edge identifier.
+ *
+ * <p>
  * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
  * weights can be changed even after the graph is constructed.
- * 
- * <p>
- * It stores the boolean incidence matrix of the graph (rows are vertices and columns are edges) as
- * Compressed Sparse Row (CSR). This is a classic format for write-once read-many use cases. Thus,
- * the graph is unmodifiable. In order to also support constant time source and target lookups from
- * an edge identifier we also store the transposed of the incidence matrix again in compressed
- * sparse row format. The edge weights are maintained in an array indexed by the edge identifier.
  * 
  * @author Dimitrios Michail
  */

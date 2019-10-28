@@ -31,7 +31,7 @@ import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.DefaultGraphType;
 
 /**
- * Base implementation of a sparse unmodifiable undirected graph.
+ * Sparse undirected graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
@@ -39,10 +39,10 @@ import org.jgrapht.graph.DefaultGraphType;
  * 
  * <p>
  * It stores the boolean incidence matrix of the graph (rows are vertices and columns are edges) as
- * Compressed Sparse Row (CSR). This is a classic format for write-once read-many use cases. Thus,
- * the graph is unmodifiable. In order to also support constant time source and target lookups from
- * an edge identifier we also store the transposed of the incidence matrix again in compressed
- * sparse row format.
+ * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
+ * from an edge identifier we also store the transposed of the incidence matrix again in compressed
+ * sparse rows format. This is a classic format for write-once read-many use cases. Thus, the graph
+ * is unmodifiable.
  * 
  * @author Dimitrios Michail
  */

@@ -27,15 +27,28 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 
 /**
- * Simple sparse unmodifiable weighted graph.
+ * A simple and efficient sparse weighted graph implementation.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
  * 
  * <p>
- * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
- * weights can be changed even after the graph is constructed.
+ * The representation uses six integer arrays, four of them have size $m$ where $m$ is the number of
+ * edges and two of them have size $n+1$ where $n$ is the number of vertices. The first two contain
+ * the source and target vertices of the edges. The third contains an index of the edge identifiers
+ * if sorted by the composite key (source, target), while the fourth contains an index of the edge
+ * identifiers if sorted by the composite key (target, source). The last two arrays contain the
+ * cumulative sum of the outgoing and incoming vertex degrees respectively.
+ *
+ * <p>
+ * This implementation supports both directed and undirected graphs. The graph is initialized from
+ * the constructor and cannot be modified afterwards.
+ *
+ * <p>
+ * The graph is weighted by maintaining an additional array with the edge weights. While
+ * unmodifiable with respect to the structure of the graph, the edge weights can be changed even
+ * after the graph is constructed.
  * 
  * @author Dimitrios Michail
  */

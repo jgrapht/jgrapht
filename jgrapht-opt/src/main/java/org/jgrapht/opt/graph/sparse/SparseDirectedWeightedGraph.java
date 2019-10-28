@@ -27,15 +27,11 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 
 /**
- * Sparse unmodifiable directed weighted graph.
+ * Sparse directed weighted graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
- * 
- * <p>
- * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
- * weights can be changed even after the graph is constructed.
  * 
  * <p>
  * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
@@ -43,6 +39,9 @@ import org.jgrapht.alg.util.Triple;
  * the graph is unmodifiable. In order to also support constant time source and target lookups from
  * an edge identifier we also store the two transposed incidence matrices again in compressed sparse
  * row format. The edge weights are maintained in an array indexed by the edge identifier.
+ * <p>
+ * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
+ * weights can be changed even after the graph is constructed.
  * 
  * @author Dimitrios Michail
  */

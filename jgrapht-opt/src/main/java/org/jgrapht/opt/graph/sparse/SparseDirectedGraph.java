@@ -31,7 +31,7 @@ import org.jgrapht.graph.DefaultGraphType;
 import org.jgrapht.util.UnmodifiableUnionSet;
 
 /**
- * Base implementation of a sparse unmodifiable directed graph.
+ * Sparse directed graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
@@ -39,8 +39,10 @@ import org.jgrapht.util.UnmodifiableUnionSet;
  * 
  * <p>
  * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
- * Compressed Sparse Row (CSR) together with their transpose matrices. This is a classic format for
- * write-once read-many use cases. Thus, the graph is unmodifiable.
+ * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
+ * from an edge identifier we also store the two transposed incidence matrices again in compressed
+ * sparse rows format. This is a classic format for write-once read-many use cases. Thus, the graph
+ * is unmodifiable.
  * 
  * @author Dimitrios Michail
  */
