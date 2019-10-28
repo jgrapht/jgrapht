@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.function.Supplier;
@@ -42,13 +43,18 @@ import org.jheaps.array.DaryArrayAddressableHeap;
  * {@link IdentityHashMap} is used in order to map them in that range.
  * 
  * <p>
- * By default a 4-ary heap is used. The user is free to use a custom heap implementation during
- * construction time.
+ * This implementation should be faster than our more generic one which is
+ * {@link DijkstraShortestPath} since it avoids the extensive use of hash tables.
  * 
  * <p>
- * This implementation should be faster than our more generic one which is
- * {@link DijkstraShortestPath}.
- *
+ * By default a 4-ary heap is used. The user is free to use a custom heap implementation during
+ * construction time. Regarding the choice of heap, it is generally known that it depends on the
+ * particular workload. For more details and experiments which can help someone make the choice,
+ * read the following paper: Larkin, Daniel H., Siddhartha Sen, and Robert E. Tarjan. "A
+ * back-to-basics empirical study of priority queues." 2014 Proceedings of the Sixteenth Workshop on
+ * Algorithm Engineering and Experiments (ALENEX). Society for Industrial and Applied Mathematics,
+ * 2014.
+ * 
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
@@ -139,7 +145,7 @@ public final class IntVertexDijkstraShortestPath<E>
         private AddressableHeap.Handle<Double, Integer>[] nodes;
         private double[] dist;
         private E[] pred;
-        private IdentityHashMap<Integer, Integer> idMap;
+        private IdentifierMap idMap;
 
         @SuppressWarnings("unchecked")
         public Algorithm()
@@ -168,7 +174,7 @@ public final class IntVertexDijkstraShortestPath<E>
              * map them.
              */
             if (remapVertices) {
-                idMap = new IdentityHashMap<>(totalVertices);
+                idMap = new IdentifierMap(totalVertices);
                 i = 0;
                 for (Integer v : graph.vertexSet()) {
                     idMap.put(v, i++);
@@ -280,10 +286,10 @@ public final class IntVertexDijkstraShortestPath<E>
         private Integer source;
         private double[] dist;
         private E[] pred;
-        private IdentityHashMap<Integer, Integer> idMap;
+        private IdentifierMap idMap;
 
         public ArrayBasedSingleSourcePathsImpl(
-            Integer source, double[] dist, E[] pred, IdentityHashMap<Integer, Integer> idMap)
+            Integer source, double[] dist, E[] pred, IdentifierMap idMap)
         {
             this.source = source;
             this.dist = dist;
@@ -348,7 +354,54 @@ public final class IntVertexDijkstraShortestPath<E>
             return new GraphWalk<>(
                 graph, source, targetVertex, null, new ArrayList<>(edgeList), distance);
         }
+    }
 
+    /**
+     * A very special case linear probing hash table, fit for this particular use case. The code
+     * assumes several invariants such as that the user will never add more elements than its
+     * capacity, etc.
+     */
+    private class IdentifierMap
+    {
+        private int[] keys;
+        private int[] values;
+        private int m;
+
+        public IdentifierMap(int m)
+        {
+            this.m = m;
+            this.keys = new int[m];
+            Arrays.fill(keys, -1);
+            this.values = new int[m];
+        }
+
+        public void put(int key, int value)
+        {
+            int i;
+            for (i = hash(key); keys[i] != -1; i = (i + 1) % m) {
+                if (keys[i] == key) {
+                    values[i] = value;
+                    return;
+                }
+            }
+            keys[i] = key;
+            values[i] = value;
+        }
+
+        public int get(int key)
+        {
+            for (int i = hash(key); keys[i] != -1; i = (i + 1) % m) {
+                if (keys[i] == key) {
+                    return values[i];
+                }
+            }
+            return -1;
+        }
+
+        private int hash(int key)
+        {
+            return (key & 0x7fffffff) % m;
+        }
     }
 
 }
