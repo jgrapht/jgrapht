@@ -23,7 +23,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.IdentityHashMap;
 import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
@@ -39,8 +38,8 @@ import org.jheaps.array.DaryArrayAddressableHeap;
  * 
  * <p>
  * This class avoids using hash tables when the vertices are numbered from $0$ to $n-1$ where $n$ is
- * the number of vertices of the graph. If vertices are not in this range, then automatically a
- * {@link IdentityHashMap} is used in order to map them in that range.
+ * the number of vertices of the graph. If vertices are not in this range, then they are mapped in
+ * this range using an open addressing hash table (linear probing).
  * 
  * <p>
  * This implementation should be faster than our more generic one which is
