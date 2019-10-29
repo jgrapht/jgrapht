@@ -527,20 +527,29 @@ public class SimpleSparseGraph
         return -1;
     }
 
+    /**
+     * Create a stream of a vertex incident edges. The stream may contain duplicate entries in case
+     * or loops, etc.
+     * 
+     * @param vertex the vertex
+     * @param outgoing whether to include outgoing edges
+     * @param incoming whether to include incoming edges
+     * @return an edge stream
+     */
     private IntStream edgeStream(int vertex, boolean outgoing, boolean incoming)
     {
-        IntStream s;
         if (outgoing && !incoming) {
-            s = Arrays.stream(outIndex, outPrefixScan[vertex], outPrefixScan[vertex + 1]);
+            return Arrays.stream(outIndex, outPrefixScan[vertex], outPrefixScan[vertex + 1]);
         } else if (!outgoing && incoming) {
-            s = Arrays.stream(inIndex, inPrefixScan[vertex], inPrefixScan[vertex + 1]);
-        } else {
-            s = IntStream
+            return Arrays.stream(inIndex, inPrefixScan[vertex], inPrefixScan[vertex + 1]);
+        } else if (outgoing && incoming) {
+            return IntStream
                 .concat(
                     Arrays.stream(outIndex, outPrefixScan[vertex], outPrefixScan[vertex + 1]),
                     Arrays.stream(inIndex, inPrefixScan[vertex], inPrefixScan[vertex + 1]));
+        } else {
+            return IntStream.empty();
         }
-        return s;
     }
 
 }
