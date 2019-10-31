@@ -52,9 +52,9 @@ import org.jgrapht.alg.util.Triple;
  * 
  * @author Dimitrios Michail
  */
-public class SimpleSparseWeightedGraph
+public class DefaultSparseWeightedGraph
     extends
-    SimpleSparseGraph
+    DefaultSparseGraph
     implements
     Serializable
 {
@@ -72,7 +72,7 @@ public class SimpleSparseWeightedGraph
      * @param numVertices the number of vertices
      * @param edges the edge list with additional weights
      */
-    public SimpleSparseWeightedGraph(
+    public DefaultSparseWeightedGraph(
         boolean directed, int numVertices, List<Triple<Integer, Integer, Double>> edges)
     {
         super(

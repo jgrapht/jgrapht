@@ -56,7 +56,7 @@ import org.jgrapht.graph.DefaultGraphType.Builder;
  *
  * @author Dimitrios Michail
  */
-public class SimpleSparseGraph
+public class DefaultSparseGraph
     extends
     AbstractGraph<Integer, Integer>
     implements
@@ -118,7 +118,7 @@ public class SimpleSparseGraph
      * @param numVertices the number of vertices
      * @param edges the edge list
      */
-    public SimpleSparseGraph(boolean directed, int numVertices, List<Pair<Integer, Integer>> edges)
+    public DefaultSparseGraph(boolean directed, int numVertices, List<Pair<Integer, Integer>> edges)
     {
         this.n = numVertices;
         this.m = edges.size();

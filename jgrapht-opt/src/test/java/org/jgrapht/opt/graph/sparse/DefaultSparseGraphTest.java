@@ -18,7 +18,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.junit.Test;
 
-public class SimpleSparseGraphTest
+public class DefaultSparseGraphTest
 {
 
     /**
@@ -32,7 +32,7 @@ public class SimpleSparseGraphTest
                 Pair.of(0, 5), Pair.of(0, 2), Pair.of(3, 4), Pair.of(1, 4), Pair.of(0, 1),
                 Pair.of(3, 1), Pair.of(2, 4));
 
-        Graph<Integer, Integer> g = new SimpleSparseGraph(false, 6, edges);
+        Graph<Integer, Integer> g = new DefaultSparseGraph(false, 6, edges);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsVertex(0));
@@ -142,7 +142,7 @@ public class SimpleSparseGraphTest
                 Triple.of(0, 5, 1d), Triple.of(0, 2, 2d), Triple.of(3, 4, 3d), Triple.of(1, 4, 4d),
                 Triple.of(0, 1, 5d), Triple.of(3, 1, 6d), Triple.of(2, 4, 7d));
 
-        Graph<Integer, Integer> g = new SimpleSparseWeightedGraph(false, 6, edges);
+        Graph<Integer, Integer> g = new DefaultSparseWeightedGraph(false, 6, edges);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsVertex(0));
@@ -259,7 +259,7 @@ public class SimpleSparseGraphTest
                 Pair.of(0, 0), Pair.of(0, 1), Pair.of(0, 2), Pair.of(0, 0), Pair.of(0, 1),
                 Pair.of(1, 1), Pair.of(1, 2));
 
-        Graph<Integer, Integer> g = new SimpleSparseGraph(false, 4, edges);
+        Graph<Integer, Integer> g = new DefaultSparseGraph(false, 4, edges);
 
         assertEquals(4, g.vertexSet().size());
         assertTrue(g.containsVertex(0));
@@ -338,7 +338,7 @@ public class SimpleSparseGraphTest
                 Pair.of(5, 6), Pair.of(7, 6), Pair.of(7, 7));
 
         int vertices = 8;
-        Graph<Integer, Integer> g = new SimpleSparseGraph(true, vertices, edges);
+        Graph<Integer, Integer> g = new DefaultSparseGraph(true, vertices, edges);
 
         assertEquals(vertices, g.vertexSet().size());
         assertEquals(edges.size(), g.edgeSet().size());
@@ -482,7 +482,7 @@ public class SimpleSparseGraphTest
                 Triple.of(7, 6, 11d), Triple.of(7, 7, 12d));
 
         int vertices = 8;
-        Graph<Integer, Integer> g = new SimpleSparseWeightedGraph(true, vertices, edges);
+        Graph<Integer, Integer> g = new DefaultSparseWeightedGraph(true, vertices, edges);
 
         assertEquals(vertices, g.vertexSet().size());
         assertEquals(edges.size(), g.edgeSet().size());
