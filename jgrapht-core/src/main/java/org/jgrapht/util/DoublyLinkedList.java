@@ -67,8 +67,8 @@ public class DoublyLinkedList<E> implements Iterable<E> {
 
     /**
      * Returns a reverse iterator over this list, which starts from the {@code element}.
-     * Note: the returned iterator will iterate over the all list, meaning it won't
-     * stop at the end of the list unless the {@code element} is the beginning of the list.
+     * Note: the returned iterator will iterate over the entire list, meaning that it won't
+     * stop at the end of the list unless the {@code element} is the last element of the list.
      * This method throws {@link NoSuchElementException} in the case {@code element} doesn't
      * belong to this list
      *
