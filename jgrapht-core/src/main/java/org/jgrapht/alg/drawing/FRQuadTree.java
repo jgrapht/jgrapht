@@ -23,15 +23,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.Boxes;
+import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.util.Pair;
 
 /**
- * A simple <a href="https://en.wikipedia.org/wiki/Quadtree">QuadTree</a> for indexing during force calculations
- * in the Fruchterman and Reingold Force-Directed Placement Algorithm.
+ * A simple <a href="https://en.wikipedia.org/wiki/Quadtree">QuadTree</a> for indexing during force
+ * calculations in the Fruchterman and Reingold Force-Directed Placement Algorithm.
  * 
  * <p>
  * The tree supports adding points one by one and maintains the centroid and total number of points
@@ -39,7 +38,7 @@ import org.jgrapht.alg.util.Pair;
  * 
  * @author Dimitrios Michail
  */
-class DoubleFRQuadTree
+class FRQuadTree
 {
     private static final int NW = 0;
     private static final int NE = 1;
@@ -53,7 +52,7 @@ class DoubleFRQuadTree
      * 
      * @param box the area
      */
-    public DoubleFRQuadTree(Box2D<Double> box)
+    public FRQuadTree(Box2D box)
     {
         this.root = new Node(box);
     }
@@ -63,7 +62,7 @@ class DoubleFRQuadTree
      * 
      * @param p the new point
      */
-    public void insert(Point2D<Double> p)
+    public void insert(Point2D p)
     {
         Node cur = root;
         while (true) {
@@ -74,13 +73,10 @@ class DoubleFRQuadTree
                 }
 
                 // split
-                Box2D<Double> rect = cur.getBox();
-                Pair<Box2D<Double>, Box2D<Double>> xsplit =
-                    Boxes.splitAlongXAxis(rect);
-                Pair<Box2D<Double>, Box2D<Double>> west =
-                    Boxes.splitAlongYAxis(xsplit.getFirst());
-                Pair<Box2D<Double>, Box2D<Double>> east =
-                    Boxes.splitAlongYAxis(xsplit.getSecond());
+                Box2D rect = cur.getBox();
+                Pair<Box2D, Box2D> xsplit = Boxes.splitAlongXAxis(rect);
+                Pair<Box2D, Box2D> west = Boxes.splitAlongYAxis(xsplit.getFirst());
+                Pair<Box2D, Box2D> east = Boxes.splitAlongYAxis(xsplit.getSecond());
 
                 // create 4 children
                 cur.children = new Node[4];
@@ -91,7 +87,7 @@ class DoubleFRQuadTree
 
                 // distribute old points and compute centroid
                 double centroidX = 0, centroidY = 0;
-                for (Point2D<Double> point : cur.points) {
+                for (Point2D point : cur.points) {
                     if (Boxes.containsPoint(cur.children[NW].getBox(), point)) {
                         cur.children[NW].points.add(point);
                     } else if (Boxes.containsPoint(cur.children[NE].getBox(), point)) {
@@ -105,18 +101,17 @@ class DoubleFRQuadTree
                     centroidY += point.getY();
                 }
                 cur.totalPoints = cur.points.size();
-                cur.centroid =
-                    DoublePoint2D.of(centroidX / cur.totalPoints, centroidY / cur.totalPoints);
-                
+                cur.centroid = Point2D.of(centroidX / cur.totalPoints, centroidY / cur.totalPoints);
+
                 // change from leaf to internal node
                 cur.points = null;
             }
 
             // here we are not a leaf
-            
+
             // count new point and update centroid
             cur.totalPoints++;
-            cur.centroid = DoublePoint2D
+            cur.centroid = Point2D
                 .of(
                     (cur.centroid.getX() * (cur.totalPoints - 1) + p.getX()) / cur.totalPoints,
                     (cur.centroid.getY() * (cur.totalPoints - 1) + p.getY()) / cur.totalPoints);
@@ -155,22 +150,22 @@ class DoubleFRQuadTree
     public class Node
     {
         // node region
-        Box2D<Double> box;
+        Box2D box;
 
         // internal node
         int totalPoints;
-        Point2D<Double> centroid;
+        Point2D centroid;
         Node[] children;
 
         // leaf node
-        List<Point2D<Double>> points;
+        List<Point2D> points;
 
         /**
          * Create a new node for a given area
          * 
          * @param box the area
          */
-        public Node(Box2D<Double> box)
+        public Node(Box2D box)
         {
             this.box = Objects.requireNonNull(box);
             this.points = new ArrayList<>();
@@ -191,12 +186,12 @@ class DoubleFRQuadTree
          * 
          * @return a list of points
          */
-        public List<Point2D<Double>> getPoints()
+        public List<Point2D> getPoints()
         {
             if (points != null) {
                 return points;
             } else {
-                List<Point2D<Double>> result = new ArrayList<>();
+                List<Point2D> result = new ArrayList<>();
                 getChildren().forEach(node -> {
                     result.addAll(node.getPoints());
                 });
@@ -223,7 +218,7 @@ class DoubleFRQuadTree
          * 
          * @return the area of the node
          */
-        public Box2D<Double> getBox()
+        public Box2D getBox()
         {
             return box;
         }
@@ -247,7 +242,7 @@ class DoubleFRQuadTree
          * 
          * @return the centroid of all points contained in this node
          */
-        public Point2D<Double> getCentroid()
+        public Point2D getCentroid()
         {
             if (points != null) {
                 int numPoints = points.size();
@@ -255,11 +250,11 @@ class DoubleFRQuadTree
                     throw new IllegalArgumentException("No points");
                 }
                 double x = 0, y = 0;
-                for (Point2D<Double> p : points) {
+                for (Point2D p : points) {
                     x += p.getX();
                     y += p.getY();
                 }
-                return DoublePoint2D.of(x / numPoints, y / numPoints);
+                return Point2D.of(x / numPoints, y / numPoints);
             } else {
                 return centroid;
             }

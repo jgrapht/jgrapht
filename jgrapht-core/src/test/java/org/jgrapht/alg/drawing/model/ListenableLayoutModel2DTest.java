@@ -32,11 +32,11 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Test {@link ListenableLayoutModel}.
+ * Test {@link ListenableLayoutModel2D}.
  * 
  * @author Dimitrios Michail
  */
-public class ListenableLayoutModelTest
+public class ListenableLayoutModel2DTest
 {
 
     @Test
@@ -50,61 +50,59 @@ public class ListenableLayoutModelTest
         String v1 = graph.addVertex();
         String v2 = graph.addVertex();
 
-        MapLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> delegate =
-            new MapLayoutModel<>(DoubleBox2D.of(0, 0, 2d, 2d));
+        MapLayoutModel2D<String> delegate = new MapLayoutModel2D<>(Box2D.of(0, 0, 2d, 2d));
 
-        ListenableLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> model =
-            new ListenableLayoutModel<>(delegate);
-        
+        ListenableLayoutModel2D<String> model = new ListenableLayoutModel2D<>(delegate);
+
         CountListener listener = new CountListener();
         model.addListener(listener);
 
-        assertEquals(DoubleBox2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
+        assertEquals(Box2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
         assertNull(model.getInitializer());
 
         assertNull(model.get(v1));
-        model.put(v1, DoublePoint2D.of(3, 5));
-        assertEquals(model.get(v1), DoublePoint2D.of(3, 5));
+        model.put(v1, Point2D.of(3, 5));
+        assertEquals(model.get(v1), Point2D.of(3, 5));
         assertFalse(model.isFixed(v1));
         assertEquals(1, listener.getCalled());
-        assertEquals(DoublePoint2D.of(3, 5), listener.getLastPoint());
+        assertEquals(Point2D.of(3, 5), listener.getLastPoint());
         assertEquals(v1, listener.getLastVertex());
         model.setFixed(v1, true);
         assertTrue(model.isFixed(v1));
-        model.put(v1, DoublePoint2D.of(10, 20));
-        assertEquals(model.get(v1), DoublePoint2D.of(3, 5));
+        model.put(v1, Point2D.of(10, 20));
+        assertEquals(model.get(v1), Point2D.of(3, 5));
         assertEquals(1, listener.getCalled());
-        assertEquals(DoublePoint2D.of(3, 5), listener.getLastPoint());
+        assertEquals(Point2D.of(3, 5), listener.getLastPoint());
         assertEquals(v1, listener.getLastVertex());
         model.setFixed(v1, false);
         assertFalse(model.isFixed(v1));
-        model.put(v1, DoublePoint2D.of(10, 20));
-        assertEquals(model.get(v1), DoublePoint2D.of(10, 20));
+        model.put(v1, Point2D.of(10, 20));
+        assertEquals(model.get(v1), Point2D.of(10, 20));
         assertEquals(2, listener.getCalled());
-        assertEquals(DoublePoint2D.of(10, 20), listener.getLastPoint());
+        assertEquals(Point2D.of(10, 20), listener.getLastPoint());
         assertEquals(v1, listener.getLastVertex());
 
-        model.put(v2, DoublePoint2D.of(5, 7));
+        model.put(v2, Point2D.of(5, 7));
         assertEquals(3, listener.getCalled());
-        assertEquals(DoublePoint2D.of(5, 7), listener.getLastPoint());
+        assertEquals(Point2D.of(5, 7), listener.getLastPoint());
         assertEquals(v2, listener.getLastVertex());
 
-        Map<String, Point2D<Double>> all = model.collect();
-        assertEquals(all.get(v1), DoublePoint2D.of(10, 20));
-        assertEquals(all.get(v2), DoublePoint2D.of(5, 7));
+        Map<String, Point2D> all = model.collect();
+        assertEquals(all.get(v1), Point2D.of(10, 20));
+        assertEquals(all.get(v2), Point2D.of(5, 7));
     }
 
     private static class CountListener
         implements
-        BiConsumer<String, Point2D<Double>>
+        BiConsumer<String, Point2D>
     {
 
         private int called = 0;
-        private Point2D<Double> lastPoint;
+        private Point2D lastPoint;
         private String lastVertex;
 
         @Override
-        public void accept(String t, Point2D<Double> u)
+        public void accept(String t, Point2D u)
         {
             lastPoint = u;
             lastVertex = t;
@@ -116,7 +114,7 @@ public class ListenableLayoutModelTest
             return called;
         }
 
-        public Point2D<Double> getLastPoint()
+        public Point2D getLastPoint()
         {
             return lastPoint;
         }

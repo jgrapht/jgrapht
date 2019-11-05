@@ -21,13 +21,12 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.LayoutModel;
-import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Box2D;
+import org.jgrapht.alg.drawing.model.LayoutModel2D;
+import org.jgrapht.alg.drawing.model.Point2D;
 
 /**
- * Random layout. The algorithm assigns vertex coordinates uniformly at random. 
+ * Random layout. The algorithm assigns vertex coordinates uniformly at random.
  * 
  * @author Dimitrios Michail
  * 
@@ -36,7 +35,7 @@ import org.jgrapht.alg.drawing.model.Box2D;
  */
 public class RandomLayoutAlgorithm2D<V, E>
     implements
-    LayoutAlgorithm2D<V, E, Double>
+    LayoutAlgorithm2D<V, E>
 {
     private Random rng;
 
@@ -69,11 +68,10 @@ public class RandomLayoutAlgorithm2D<V, E>
     }
 
     @Override
-    public void layout(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
-        Box2D<Double> drawableArea = model.getDrawableArea();
-        
+        Box2D drawableArea = model.getDrawableArea();
+
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinX();
         double width = drawableArea.getWidth();
@@ -84,7 +82,7 @@ public class RandomLayoutAlgorithm2D<V, E>
         for (V v : graph.vertexSet()) {
             double x = rng.nextDouble() * width;
             double y = rng.nextDouble() * height;
-            model.put(v, new DoublePoint2D(minX + x, minY + y));
+            model.put(v, Point2D.of(minX + x, minY + y));
         }
     }
 

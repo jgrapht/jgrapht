@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2019, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,12 +17,13 @@
  */
 package org.jgrapht.alg.drawing;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.DoubleBox2D;
+import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
+import org.jgrapht.alg.drawing.model.Point2D;
+import org.jgrapht.alg.drawing.model.Points;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
@@ -50,15 +51,14 @@ public class CircularLayoutAlgorithm2DTest
         String v4 = graph.addVertex();
 
         CircularLayoutAlgorithm2D<String, DefaultEdge> alg = new CircularLayoutAlgorithm2D<>(1d);
-        MapLayoutModel2D<String, Double> model =
-            new MapLayoutModel2D<>(DoubleBox2D.of(0d, 0d, 2d, 2d));
+        MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 2d, 2d));
 
         alg.layout(graph, model);
 
-        assertEquals(DoublePoint2D.of(2d, 1d), model.get(v1));
-        assertEquals(DoublePoint2D.of(1d, 2d), model.get(v2));
-        assertEquals(DoublePoint2D.of(0d, 1d), model.get(v3));
-        assertEquals(DoublePoint2D.of(1d, 0d), model.get(v4));
+        assertTrue(Points.equals(Point2D.of(2d, 1d), model.get(v1)));
+        assertTrue(Points.equals(Point2D.of(1d, 2d), model.get(v2)));
+        assertTrue(Points.equals(Point2D.of(0d, 1d), model.get(v3)));
+        assertTrue(Points.equals(Point2D.of(1d, 0d), model.get(v4)));
     }
 
     @Test
@@ -80,15 +80,14 @@ public class CircularLayoutAlgorithm2DTest
 
         CircularLayoutAlgorithm2D<String, DefaultEdge> alg =
             new CircularLayoutAlgorithm2D<>(1d, (a, b) -> a.compareTo(b));
-        MapLayoutModel2D<String, Double> model =
-            new MapLayoutModel2D<>(DoubleBox2D.of(0d, 0d, 2d, 2d));
+        MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 2d, 2d));
 
         alg.layout(graph, model);
 
-        assertEquals(DoublePoint2D.of(2d, 1d), model.get(v4));
-        assertEquals(DoublePoint2D.of(1d, 2d), model.get(v3));
-        assertEquals(DoublePoint2D.of(0d, 1d), model.get(v2));
-        assertEquals(DoublePoint2D.of(1d, 0d), model.get(v1));
+        assertTrue(Points.equals(Point2D.of(2d, 1d), model.get(v4)));
+        assertTrue(Points.equals(Point2D.of(1d, 2d), model.get(v3)));
+        assertTrue(Points.equals(Point2D.of(0d, 1d), model.get(v2)));
+        assertTrue(Points.equals(Point2D.of(1d, 0d), model.get(v1)));
     }
 
 }

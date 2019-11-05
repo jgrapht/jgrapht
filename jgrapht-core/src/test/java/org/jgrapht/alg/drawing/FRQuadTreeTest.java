@@ -18,24 +18,25 @@
 package org.jgrapht.alg.drawing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
 
-import org.jgrapht.alg.drawing.DoubleFRQuadTree.Node;
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.DoubleBox2D;
+import org.jgrapht.alg.drawing.FRQuadTree.Node;
+import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.Point2D;
+import org.jgrapht.alg.drawing.model.Points;
 import org.junit.Test;
 
 /**
- * Test {@link DoubleFRQuadTree}.
+ * Test {@link FRQuadTree}.
  * 
  * @author Dimitrios Michail
  */
-public class DoubleFRQuadTreeTest
+public class FRQuadTreeTest
 {
 
     @Test
@@ -44,13 +45,13 @@ public class DoubleFRQuadTreeTest
         double width = 100;
         double height = 100;
         int points = 10000;
-        DoubleBox2D region = DoubleBox2D.of(0, 0, width, height);
-        DoubleFRQuadTree tree = new DoubleFRQuadTree(region);
+        Box2D region = Box2D.of(0, 0, width, height);
+        FRQuadTree tree = new FRQuadTree(region);
 
         Random rng = new Random(17);
 
         for (int i = 0; i < points; i++) {
-            DoublePoint2D p = DoublePoint2D.of(rng.nextDouble() * width, rng.nextDouble() * height);
+            Point2D p = Point2D.of(rng.nextDouble() * width, rng.nextDouble() * height);
             tree.insert(p);
         }
 
@@ -62,7 +63,7 @@ public class DoubleFRQuadTreeTest
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
             if (cur.hasPoints()) {
-                assertEquals(cur.getCentroid(), centroid(cur.getPoints()));
+                assertTrue(Points.equals(cur.getCentroid(), centroid(cur.getPoints())));
             }
             int totalPoints = cur.getNumberOfPoints();
 
@@ -78,16 +79,16 @@ public class DoubleFRQuadTreeTest
 
     }
 
-    private Point2D<Double> centroid(List<Point2D<Double>> points)
+    private Point2D centroid(List<Point2D> points)
     {
         double x = 0d;
         double y = 0d;
-        for (Point2D<Double> p : points) {
+        for (Point2D p : points) {
             x += p.getX();
             y += p.getY();
         }
         int n = points.size();
-        return DoublePoint2D.of(x / n, y / n);
+        return Point2D.of(x / n, y / n);
     }
 
 }

@@ -17,28 +17,38 @@
  */
 package org.jgrapht.alg.drawing.model;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
- * A 2d layout model which uses a hashtable to store the vertices' locations.
+ * A layout model which uses a hashtable to store the vertices' locations.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
- * @param <N> the number type
  */
-public class MapLayoutModel2D<V, N extends Number>
-    extends
-    MapLayoutModel<V, N, Point2D<N>, Box2D<N>>
+public class MapLayoutModel2D<V>
+    implements
+    LayoutModel2D<V>
 {
+    protected Box2D drawableArea;
+    protected Function<V, Point2D> initializer;
+    protected Map<V, Point2D> points;
+    protected Set<V> fixed;
+
     /**
      * Create a new model.
      * 
      * @param drawableArea the drawable area
      */
-    public MapLayoutModel2D(Box2D<N> drawableArea)
+    public MapLayoutModel2D(Box2D drawableArea)
     {
-        super(drawableArea);
+        this(drawableArea, null);
     }
 
     /**
@@ -47,8 +57,82 @@ public class MapLayoutModel2D<V, N extends Number>
      * @param drawableArea the drawable area
      * @param initializer the vertex initializer
      */
-    public MapLayoutModel2D(Box2D<N> drawableArea, Function<V, Point2D<N>> initializer)
+    public MapLayoutModel2D(Box2D drawableArea, Function<V, Point2D> initializer)
     {
-        super(drawableArea, initializer);
+        this.drawableArea = drawableArea;
+        this.initializer = initializer;
+        this.points = new LinkedHashMap<>();
+        this.fixed = new HashSet<>();
     }
+
+    @Override
+    public Box2D getDrawableArea()
+    {
+        return drawableArea;
+    }
+
+    @Override
+    public void setDrawableArea(Box2D drawableArea)
+    {
+        this.drawableArea = drawableArea;
+    }
+
+    @Override
+    public Function<V, Point2D> getInitializer()
+    {
+        return initializer;
+    }
+
+    /**
+     * Set the vertex initializer
+     * 
+     * @param initializer the initializer
+     */
+    public void setInitializer(Function<V, Point2D> initializer)
+    {
+        this.initializer = initializer;
+    }
+
+    @Override
+    public Iterator<Entry<V, Point2D>> iterator()
+    {
+        return points.entrySet().iterator();
+    }
+
+    @Override
+    public Point2D get(V vertex)
+    {
+        return points.get(vertex);
+    }
+
+    @Override
+    public Point2D put(V vertex, Point2D point)
+    {
+        boolean isFixed = fixed.contains(vertex);
+        if (!isFixed) {
+            return points.put(vertex, point);
+        }
+        Point2D current = points.get(vertex);
+        if (current == null) {
+            points.put(vertex, point);
+        }
+        return current;
+    }
+
+    @Override
+    public void setFixed(V vertex, boolean fixed)
+    {
+        if (fixed) {
+            this.fixed.add(vertex);
+        } else {
+            this.fixed.remove(vertex);
+        }
+    }
+
+    @Override
+    public boolean isFixed(V vertex)
+    {
+        return fixed.contains(vertex);
+    }
+
 }

@@ -31,63 +31,60 @@ import java.util.function.Function;
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
- * @param <N> the number type
- * @param <P> the point type
- * @param <B> the box type 
  */
-public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, B extends Box<N>>
+public class ListenableLayoutModel2D<V>
     implements
-    LayoutModel<V, N, P, B>
+    LayoutModel2D<V>
 {
-    protected LayoutModel<V, N, P, B> model;
-    protected List<BiConsumer<V, P>> listeners;
+    protected LayoutModel2D<V> model;
+    protected List<BiConsumer<V, Point2D>> listeners;
 
     /**
      * Create a new model
      * 
      * @param model the underlying layout model
      */
-    public ListenableLayoutModel(LayoutModel<V, N, P, B> model)
+    public ListenableLayoutModel2D(LayoutModel2D<V> model)
     {
         this.model = Objects.requireNonNull(model);
         this.listeners = new ArrayList<>();
     }
 
     @Override
-    public B getDrawableArea()
+    public Box2D getDrawableArea()
     {
         return model.getDrawableArea();
     }
 
     @Override
-    public void setDrawableArea(B drawableArea)
+    public void setDrawableArea(Box2D drawableArea)
     {
         model.setDrawableArea(drawableArea);
     }
 
     @Override
-    public Function<V, P> getInitializer()
+    public Function<V, Point2D> getInitializer()
     {
         return model.getInitializer();
     }
 
     @Override
-    public Iterator<Entry<V, P>> iterator()
+    public Iterator<Entry<V, Point2D>> iterator()
     {
         return model.iterator();
     }
 
     @Override
-    public P get(V vertex)
+    public Point2D get(V vertex)
     {
         return model.get(vertex);
     }
 
     @Override
-    public P put(V vertex, P point)
+    public Point2D put(V vertex, Point2D point)
     {
         if (!model.isFixed(vertex)) {
-            P oldValue = model.put(vertex, point);
+            Point2D oldValue = model.put(vertex, point);
             notifyListeners(vertex, point);
             return oldValue;
         } else {
@@ -113,7 +110,7 @@ public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, B ex
      * @param listener the listener to add
      * @return the newly added listener
      */
-    public BiConsumer<V, P> addListener(BiConsumer<V, P> listener)
+    public BiConsumer<V, Point2D> addListener(BiConsumer<V, Point2D> listener)
     {
         listeners.add(listener);
         return listener;
@@ -125,7 +122,7 @@ public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, B ex
      * @param listener the listener to remove
      * @return true if the listener was removed, false otherwise
      */
-    public boolean removeListener(BiConsumer<V, P> listener)
+    public boolean removeListener(BiConsumer<V, Point2D> listener)
     {
         return listeners.remove(listener);
     }
@@ -136,9 +133,9 @@ public class ListenableLayoutModel<V, N extends Number, P extends Point<N>, B ex
      * @param vertex the vertex
      * @param point the vertex location
      */
-    protected void notifyListeners(V vertex, P point)
+    protected void notifyListeners(V vertex, Point2D point)
     {
-        for (BiConsumer<V, P> listener : listeners) {
+        for (BiConsumer<V, Point2D> listener : listeners) {
             listener.accept(vertex, point);
         }
     }

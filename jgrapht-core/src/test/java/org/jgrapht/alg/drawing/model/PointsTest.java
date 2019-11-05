@@ -32,16 +32,16 @@ public class PointsTest
     @Test
     public void testLength()
     {
-        DoublePoint2D p = DoublePoint2D.of(5, 5);
+        Point2D p = Point2D.of(5, 5);
         assertEquals(Math.sqrt(50), Points.length(p), 1e-9);
     }
     
     @Test
     public void testAdd()
     {
-        DoublePoint2D p1 = DoublePoint2D.of(5, 5);
-        DoublePoint2D p2 = DoublePoint2D.of(3, 4);
-        Point2D<Double> p3 = Points.add(p1,  p2);
+        Point2D p1 = Point2D.of(5, 5);
+        Point2D p2 = Point2D.of(3, 4);
+        Point2D p3 = Points.add(p1,  p2);
         assertEquals(8d, p3.getX(), 1e-9);
         assertEquals(9d, p3.getY(), 1e-9);
     }
@@ -49,9 +49,9 @@ public class PointsTest
     @Test
     public void testSub()
     {
-        DoublePoint2D p1 = DoublePoint2D.of(5, 5);
-        DoublePoint2D p2 = DoublePoint2D.of(3, 4);
-        Point2D<Double> p3 = Points.subtract(p1,  p2);
+        Point2D p1 = Point2D.of(5, 5);
+        Point2D p2 = Point2D.of(3, 4);
+        Point2D p3 = Points.subtract(p1,  p2);
         assertEquals(2d, p3.getX(), 1e-9);
         assertEquals(1d, p3.getY(), 1e-9);
     }
@@ -59,8 +59,8 @@ public class PointsTest
     @Test
     public void testMinus()
     {
-        DoublePoint2D p1 = DoublePoint2D.of(5, 3);
-        Point2D<Double> p2 = Points.minus(p1);
+        Point2D p1 = Point2D.of(5, 3);
+        Point2D p2 = Points.minus(p1);
         assertEquals(-5d, p2.getX(), 1e-9);
         assertEquals(-3d, p2.getY(), 1e-9);
     }
@@ -68,8 +68,8 @@ public class PointsTest
     @Test
     public void testScalarMultiply()
     {
-        DoublePoint2D p1 = DoublePoint2D.of(5, 3);
-        Point2D<Double> p2 = Points.scalarMultiply(p1,  2);
+        Point2D p1 = Point2D.of(5, 3);
+        Point2D p2 = Points.scalarMultiply(p1,  2);
         assertEquals(10d, p2.getX(), 1e-9);
         assertEquals(6d, p2.getY(), 1e-9);
     }

@@ -24,22 +24,21 @@ import java.util.Random;
 import java.util.function.BiFunction;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.LayoutModel;
-import org.jgrapht.alg.drawing.model.MapLayoutModel;
+import org.jgrapht.alg.drawing.model.Box2D;
+import org.jgrapht.alg.drawing.model.LayoutModel2D;
+import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Points;
-import org.jgrapht.alg.drawing.model.Box2D;
 
 /**
  * Fruchterman and Reingold Force-Directed Placement Algorithm.
  * 
- * The algorithm belongs in the broad category of 
- * <a href="https://en.wikipedia.org/wiki/Force-directed_graph_drawing">force directed graph drawing</a>
- * algorithms and is described in the paper:
+ * The algorithm belongs in the broad category of
+ * <a href="https://en.wikipedia.org/wiki/Force-directed_graph_drawing">force directed graph
+ * drawing</a> algorithms and is described in the paper:
  * 
  * <ul>
- * <li>Thomas M. J. Fruchterman and Edward M. Reingold. Graph drawing by force-directed placement. 
+ * <li>Thomas M. J. Fruchterman and Edward M. Reingold. Graph drawing by force-directed placement.
  * Software: Practice and experience, 21(11):1129--1164, 1991.</li>
  * </ul>
  * 
@@ -50,7 +49,7 @@ import org.jgrapht.alg.drawing.model.Box2D;
  */
 public class FRLayoutAlgorithm2D<V, E>
     implements
-    LayoutAlgorithm2D<V, E, Double>
+    LayoutAlgorithm2D<V, E>
 {
     /**
      * Default number of iterations
@@ -66,8 +65,7 @@ public class FRLayoutAlgorithm2D<V, E>
     protected double optimalDistance;
     protected double normalizationFactor;
     protected int iterations;
-    protected BiFunction<LayoutModel<V, Double, Point2D<Double>, Box2D<Double>>, Integer,
-        TemperatureModel> temperatureModelSupplier;
+    protected BiFunction<LayoutModel2D<V>, Integer, TemperatureModel> temperatureModelSupplier;
 
     /**
      * Create a new layout algorithm
@@ -128,8 +126,7 @@ public class FRLayoutAlgorithm2D<V, E>
      */
     public FRLayoutAlgorithm2D(
         int iterations, double normalizationFactor,
-        BiFunction<LayoutModel<V, Double, Point2D<Double>, Box2D<Double>>, Integer,
-            TemperatureModel> temperatureModelSupplier,
+        BiFunction<LayoutModel2D<V>, Integer, TemperatureModel> temperatureModelSupplier,
         Random rng)
     {
         this.rng = Objects.requireNonNull(rng);
@@ -139,11 +136,10 @@ public class FRLayoutAlgorithm2D<V, E>
     }
 
     @Override
-    public void layout(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
         // read area
-        Box2D<Double> drawableArea = model.getDrawableArea();
+        Box2D drawableArea = model.getDrawableArea();
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinY();
 
@@ -153,15 +149,14 @@ public class FRLayoutAlgorithm2D<V, E>
 
             // make sure all vertices have coordinates
             for (V v : graph.vertexSet()) {
-                Point2D<Double> vPos = model.get(v);
+                Point2D vPos = model.get(v);
                 if (vPos == null) {
-                    model.put(v, DoublePoint2D.of(minX, minY));
+                    model.put(v, Point2D.of(minX, minY));
                 }
             }
         } else {
             // assign random initial positions
-            MapLayoutModel<V, Double, Point2D<Double>, Box2D<Double>> randomModel =
-                new MapLayoutModel<>(drawableArea);
+            MapLayoutModel2D<V> randomModel = new MapLayoutModel2D<>(drawableArea);
             new RandomLayoutAlgorithm2D<V, E>(rng).layout(graph, randomModel);
             for (V v : graph.vertexSet()) {
                 model.put(v, randomModel.get(v));
@@ -185,10 +180,10 @@ public class FRLayoutAlgorithm2D<V, E>
         for (int i = 0; i < iterations; i++) {
 
             // repulsive forces
-            Map<V, Point2D<Double>> repulsiveDisp = calculateRepulsiveForces(graph, model);
+            Map<V, Point2D> repulsiveDisp = calculateRepulsiveForces(graph, model);
 
             // attractive forces
-            Map<V, Point2D<Double>> attractiveDisp = calculateAttractiveForces(graph, model);
+            Map<V, Point2D> attractiveDisp = calculateAttractiveForces(graph, model);
 
             // calculate current temperature
             double temp = temperatureModel.temperature(i, iterations);
@@ -197,15 +192,15 @@ public class FRLayoutAlgorithm2D<V, E>
             // and prevent from being displaced outside frame
             for (V v : graph.vertexSet()) {
                 // limit by temperature
-                Point2D<Double> vDisp = Points.add(repulsiveDisp.get(v), attractiveDisp.get(v));
+                Point2D vDisp = Points.add(repulsiveDisp.get(v), attractiveDisp.get(v));
                 double vDispLen = Points.length(vDisp);
-                Point2D<Double> vPos = Points
+                Point2D vPos = Points
                     .add(
                         model.get(v),
                         Points.scalarMultiply(vDisp, Math.min(vDispLen, temp) / vDispLen));
 
                 // limit by frame
-                vPos = DoublePoint2D
+                vPos = Point2D
                     .of(
                         Math.min(minX + width, Math.max(minX, vPos.getX())),
                         Math.min(minY + height, Math.max(minY, vPos.getY())));
@@ -245,24 +240,23 @@ public class FRLayoutAlgorithm2D<V, E>
      * @param model the model
      * @return the displacement per vertex due to the repulsive forces
      */
-    protected Map<V, Point2D<Double>> calculateRepulsiveForces(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    protected Map<V, Point2D> calculateRepulsiveForces(Graph<V, E> graph, LayoutModel2D<V> model)
     {
-        Point2D<Double> origin =
-            DoublePoint2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
-        Map<V, Point2D<Double>> disp = new HashMap<>();
+        Point2D origin =
+            Point2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
+        Map<V, Point2D> disp = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            Point2D<Double> vPos = Points.subtract(model.get(v), origin);
-            Point2D<Double> vDisp = DoublePoint2D.of(0d, 0d);
+            Point2D vPos = Points.subtract(model.get(v), origin);
+            Point2D vDisp = Point2D.of(0d, 0d);
 
             for (V u : graph.vertexSet()) {
                 if (v == u) {
                     continue;
                 }
-                Point2D<Double> uPos = Points.subtract(model.get(u), origin);
-                Point2D<Double> delta = Points.subtract(vPos, uPos);
+                Point2D uPos = Points.subtract(model.get(u), origin);
+                Point2D delta = Points.subtract(vPos, uPos);
                 double deltaLen = Points.length(delta);
-                Point2D<Double> dispContribution =
+                Point2D dispContribution =
                     Points.scalarMultiply(delta, repulsiveForce(deltaLen) / deltaLen);
                 vDisp = Points.add(vDisp, dispContribution);
             }
@@ -279,31 +273,36 @@ public class FRLayoutAlgorithm2D<V, E>
      * @param model the model
      * @return the displacement per vertex due to the attractive forces
      */
-    protected Map<V, Point2D<Double>> calculateAttractiveForces(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    protected Map<V, Point2D> calculateAttractiveForces(Graph<V, E> graph, LayoutModel2D<V> model)
     {
-        Point2D<Double> origin =
-            DoublePoint2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
-        Map<V, Point2D<Double>> disp = new HashMap<>();
+        Point2D origin =
+            Point2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
+        Map<V, Point2D> disp = new HashMap<>();
         for (E e : graph.edgeSet()) {
             V v = graph.getEdgeSource(e);
             V u = graph.getEdgeTarget(e);
-            Point2D<Double> vPos = Points.subtract(model.get(v), origin);
-            Point2D<Double> uPos = Points.subtract(model.get(u), origin);
+            Point2D vPos = Points.subtract(model.get(v), origin);
+            Point2D uPos = Points.subtract(model.get(u), origin);
 
-            Point2D<Double> delta = Points.subtract(vPos, uPos);
+            Point2D delta = Points.subtract(vPos, uPos);
             double deltaLen = Points.length(delta);
-            Point2D<Double> dispContribution =
+            Point2D dispContribution =
                 Points.scalarMultiply(delta, attractiveForce(deltaLen) / deltaLen);
-            disp.put(v, Points.add(disp.getOrDefault(v, DoublePoint2D.of(0d, 0d)), Points.minus(dispContribution)));
-            disp.put(u, Points.add(disp.getOrDefault(u, DoublePoint2D.of(0d, 0d)), dispContribution));
+            disp
+                .put(
+                    v,
+                    Points
+                        .add(
+                            disp.getOrDefault(v, Point2D.of(0d, 0d)),
+                            Points.minus(dispContribution)));
+            disp.put(u, Points.add(disp.getOrDefault(u, Point2D.of(0d, 0d)), dispContribution));
         }
         return disp;
     }
 
     /**
      * A general interface for a temperature model.
-
+     * 
      * <p>
      * The temperature should start from a high enough value and gradually become zero.
      */
@@ -320,7 +319,7 @@ public class FRLayoutAlgorithm2D<V, E>
         double temperature(int iteration, int maxIterations);
 
     }
-    
+
     /**
      * An inverse linear temperature model.
      */

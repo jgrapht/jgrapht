@@ -23,27 +23,24 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.LayoutAlgorithm;
+import org.jgrapht.alg.drawing.LayoutAlgorithm2D;
 
 /**
- * A general interface for the layout model. 
+ * A general interface for the 2D layout model.
  * 
- * The layout model provides the necessary components to a {@link LayoutAlgorithm} in order to
- * draw a graph. Its responsibility is to provide the available drawable area, to be able to 
- * store and answer queries about vertex coordinates, to allow someone to fix (make permanent) 
- * a vertex location and potentially provide an initializer. If provided, the initializer, maybe 
- * called by a layout algorithm in order to calculate initial positions for each vertex.  
+ * The layout model provides the necessary components to a {@link LayoutAlgorithm2D} in order to draw
+ * a graph. Its responsibility is to provide the available drawable area, to be able to store and
+ * answer queries about vertex coordinates, to allow someone to fix (make permanent) a vertex
+ * location and potentially provide an initializer. If provided, the initializer, maybe called by a
+ * layout algorithm in order to calculate initial positions for each vertex.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
- * @param <N> the number type
- * @param <P> the point type
- * @param <B> the box type 
  */
-public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends Box<N>>
+public interface LayoutModel2D<V>
     extends
-    Iterable<Map.Entry<V, P>>
+    Iterable<Map.Entry<V, Point2D>>
 {
 
     /**
@@ -51,14 +48,14 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
      * 
      * @return the drawable area of the model
      */
-    B getDrawableArea();
+    Box2D getDrawableArea();
 
     /**
      * Set the drawable area of the model.
      * 
      * @param drawableArea the drawable area to use
      */
-    void setDrawableArea(B drawableArea);
+    void setDrawableArea(Box2D drawableArea);
 
     /**
      * Get the last location of a particular vertex in the model. May return null if the vertex has
@@ -68,7 +65,7 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
      * @param vertex the graph vertex
      * @return the last location of the vertex
      */
-    P get(V vertex);
+    Point2D get(V vertex);
 
     /**
      * Set the location of a vertex.
@@ -78,13 +75,13 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
      * @return the previous location or null if the vertex did not have a previous location or if
      *         the model does not store locations
      */
-    P put(V vertex, P point);
+    Point2D put(V vertex, Point2D point);
 
     /**
      * Set a point as being a "fixed-point" or not.
      * 
      * It is the model's responsibility to make sure that changing the coordinates of a fixed point
-     * by calling {@link #put(Object, Point)} has no effect.    
+     * by calling {@link #put(Object, Point2D)} has no effect.
      * 
      * @param vertex a vertex
      * @param fixed whether it is a fixed point or not.
@@ -105,10 +102,10 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
      * 
      * @return a map with all the locations
      */
-    default Map<V, P> collect()
+    default Map<V, Point2D> collect()
     {
-        Map<V, P> map = new LinkedHashMap<>();
-        for (Map.Entry<V, P> p : this) {
+        Map<V, Point2D> map = new LinkedHashMap<>();
+        for (Map.Entry<V, Point2D> p : this) {
             map.put(p.getKey(), p.getValue());
         }
         return map;
@@ -121,16 +118,16 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
      * @return an iterator which returns all vertices with their locations. May return an empty
      *         iterator if the model does not store locations.
      */
-    Iterator<Map.Entry<V, P>> iterator();
+    Iterator<Map.Entry<V, Point2D>> iterator();
 
     /**
      * Get the initializer of the model. The role of the initializer is to set the initial
-     * coordinates of graph vertices. A particular layout algorithm may choose to ignore or 
-     * to execute the initializer in order to compute the initial vertex coordinates. 
+     * coordinates of graph vertices. A particular layout algorithm may choose to ignore or to
+     * execute the initializer in order to compute the initial vertex coordinates.
      * 
      * @return the initializer or null if no initializer is present
      */
-    Function<V, P> getInitializer();
+    Function<V, Point2D> getInitializer();
 
     /**
      * Initialize the coordinates for all vertices of the input graph using the model's initializer.
@@ -141,10 +138,10 @@ public interface LayoutModel<V, N extends Number, P extends Point<N>, B extends 
      */
     default <E> void init(Graph<V, E> graph)
     {
-        Function<V, P> initializer = getInitializer();
+        Function<V, Point2D> initializer = getInitializer();
         if (initializer != null) {
             for (V v : graph.vertexSet()) {
-                P value = initializer.apply(v);
+                Point2D value = initializer.apply(v);
                 if (value != null) {
                     put(v, value);
                 }

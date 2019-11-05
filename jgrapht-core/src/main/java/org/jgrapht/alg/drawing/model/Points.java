@@ -19,6 +19,8 @@ package org.jgrapht.alg.drawing.model;
 
 import java.util.function.BiFunction;
 
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
+
 /**
  * A collection of utilities to assist with point manipulation.
  * 
@@ -26,26 +28,18 @@ import java.util.function.BiFunction;
  */
 public abstract class Points
 {
+    private static final ToleranceDoubleComparator TOLERANCE_DOUBLE_COMPARATOR =
+        new ToleranceDoubleComparator(1e-9);
+
     /**
      * Compute the length of a vector
      * 
      * @param v the vector
      * @return the length of a vector
      */
-    public static double length(Point2D<Double> v)
+    public static double length(Point2D v)
     {
         return Math.sqrt(v.getX() * v.getX() + v.getY() * v.getY());
-    }
-    
-    /**
-     * Compute the length of a vector
-     * 
-     * @param v the vector
-     * @return the length of a vector
-     */
-    public static double length(Point3D<Double> v)
-    {
-        return Math.sqrt(v.getX() * v.getX() + v.getY() * v.getY() + v.getZ() * v.getZ());
     }
 
     /**
@@ -55,21 +49,9 @@ public abstract class Points
      * @param b the second vector
      * @return the vector $a+b$
      */
-    public static Point2D<Double> add(Point2D<Double> a, Point2D<Double> b)
+    public static Point2D add(Point2D a, Point2D b)
     {
-        return DoublePoint2D.of(a.getX() + b.getX(), a.getY() + b.getY());
-    }
-    
-    /**
-     * Add 3-dimensional vectors
-     * 
-     * @param a the first vector
-     * @param b the second vector
-     * @return the vector $a+b$
-     */
-    public static Point3D<Double> add(Point3D<Double> a, Point3D<Double> b)
-    {
-        return DoublePoint3D.of(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
+        return Point2D.of(a.getX() + b.getX(), a.getY() + b.getY());
     }
 
     /**
@@ -79,21 +61,9 @@ public abstract class Points
      * @param b the second vector
      * @return the vector $a-b$
      */
-    public static Point2D<Double> subtract(Point2D<Double> a, Point2D<Double> b)
+    public static Point2D subtract(Point2D a, Point2D b)
     {
-        return DoublePoint2D.of(a.getX() - b.getX(), a.getY() - b.getY());
-    }
-    
-    /**
-     * Subtract 3-dimensional vectors
-     * 
-     * @param a the first vector
-     * @param b the second vector
-     * @return the vector $a-b$
-     */
-    public static Point3D<Double> subtract(Point3D<Double> a, Point3D<Double> b)
-    {
-        return DoublePoint3D.of(a.getX() - b.getX(), a.getY() - b.getY(), a.getZ() - b.getZ());
+        return Point2D.of(a.getX() - b.getX(), a.getY() - b.getY());
     }
 
     /**
@@ -102,32 +72,9 @@ public abstract class Points
      * @param a the vector
      * @return the vector $-a$
      */
-    public static Point2D<Double> minus(Point2D<Double> a)
+    public static Point2D minus(Point2D a)
     {
         return scalarMultiply(a, -1.0);
-    }
-
-    /**
-     * Given a vector $a$ compute $-a$.
-     * 
-     * @param a the vector
-     * @return the vector $-a$
-     */
-    public static Point3D<Double> minus(Point3D<Double> a)
-    {
-        return scalarMultiply(a, -1.0);
-    }
-    
-    /**
-     * Multiply a vector with a scalar.
-     * 
-     * @param a the vector
-     * @param scalar the scalar
-     * @return the result of scalar multiplication
-     */
-    public static Point2D<Double> scalarMultiply(Point2D<Double> a, double scalar)
-    {
-        return scalarMultiply(a, scalar, (x, s) -> x * s);
     }
 
     /**
@@ -137,7 +84,7 @@ public abstract class Points
      * @param scalar the scalar
      * @return the result of scalar multiplication
      */
-    public static Point3D<Double> scalarMultiply(Point3D<Double> a, double scalar)
+    public static Point2D scalarMultiply(Point2D a, double scalar)
     {
         return scalarMultiply(a, scalar, (x, s) -> x * s);
     }
@@ -150,30 +97,28 @@ public abstract class Points
      * @param mult the multiplication operator
      * @return the result of scalar multiplication
      * 
-     * @param <N> the number type
      * @param <S> the scalar type
      */
-    public static <N, S> Point2D<N> scalarMultiply(Point2D<N> a, S scalar, BiFunction<N, S, N> mult)
+    public static <
+        S> Point2D scalarMultiply(Point2D a, S scalar, BiFunction<Double, S, Double> mult)
     {
-        return new Point2D<N>(mult.apply(a.getX(), scalar), mult.apply(a.getY(), scalar));
+        return Point2D.of(mult.apply(a.getX(), scalar), mult.apply(a.getY(), scalar));
     }
 
     /**
-     * Multiply a vector with a scalar.
+     * Compare two points for equality using tolerance 1e-9.
      * 
-     * @param a the vector
-     * @param scalar the scalar
-     * @param mult the multiplication operator
-     * @return the result of scalar multiplication
-     * 
-     * @param <N> the number type
-     * @param <S> the scalar type
+     * @param p1 the first point
+     * @param p2 the second point
+     * @return whether the two points are equal or not
      */
-    public static <N, S> Point3D<N> scalarMultiply(Point3D<N> a, S scalar, BiFunction<N, S, N> mult)
+    public static boolean equals(Point2D p1, Point2D p2)
     {
-        return new Point3D<N>(
-            mult.apply(a.getX(), scalar), mult.apply(a.getY(), scalar),
-            mult.apply(a.getZ(), scalar));
+        int xEquals = TOLERANCE_DOUBLE_COMPARATOR.compare(p1.getX(), p2.getX());
+        if (xEquals != 0) {
+            return false;
+        }
+        return TOLERANCE_DOUBLE_COMPARATOR.compare(p1.getY(), p2.getY()) == 0;
     }
 
 }

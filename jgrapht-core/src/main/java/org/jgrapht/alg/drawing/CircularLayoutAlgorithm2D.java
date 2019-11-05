@@ -22,8 +22,7 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.LayoutModel;
+import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
@@ -43,7 +42,7 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  */
 public class CircularLayoutAlgorithm2D<V, E>
     implements
-    LayoutAlgorithm2D<V, E, Double>
+    LayoutAlgorithm2D<V, E>
 {
     protected double radius;
     protected Comparator<Double> comparator;
@@ -85,10 +84,9 @@ public class CircularLayoutAlgorithm2D<V, E>
     }
 
     @Override
-    public void layout(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
-        Box2D<Double> drawableArea = model.getDrawableArea();
+        Box2D drawableArea = model.getDrawableArea();
 
         double width = drawableArea.getWidth();
         if (comparator.compare(2d * radius, width) > 0) {
@@ -119,7 +117,7 @@ public class CircularLayoutAlgorithm2D<V, E>
             double x = radius * Math.cos(angleStep * i) + width / 2;
             double y = radius * Math.sin(angleStep * i) + height / 2;
             V v = it.next();
-            model.put(v, new DoublePoint2D(minX + x, minY + y));
+            model.put(v, Point2D.of(minX + x, minY + y));
             i++;
         }
     }

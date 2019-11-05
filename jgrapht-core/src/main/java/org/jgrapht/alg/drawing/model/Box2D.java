@@ -17,18 +17,60 @@
  */
 package org.jgrapht.alg.drawing.model;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * A 2-dimensional box (rectangle).
  * 
  * @author Dimitrios Michail
  *
- * @param <N> the number type
  */
-public abstract class Box2D<N>
-    extends
-    Box<N>
+public class Box2D
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -1855277817131669241L;
+
+    /**
+     * The coordinates of the lower corner
+     */
+    protected double[] coordinates;
+
+    /**
+     * The side lengths
+     */
+    protected double[] sides;
+
+    /**
+     * Create a new box
+     * 
+     * @param width the width
+     * @param height the height
+     */
+    public Box2D(double width, double height)
+    {
+        this(0d, 0d, width, height);
+    }
+
+    /**
+     * Create a new box
+     * 
+     * @param x the x coordinate of the lower-left corner
+     * @param y the y coordinate of the lower-left corner
+     * @param width the width
+     * @param height the height
+     */
+    public Box2D(double x, double y, double width, double height)
+    {
+        this(new double[2], new double[2]);
+        assert width >= 0d && height >= 0d;
+        coordinates[0] = x;
+        coordinates[1] = y;
+        sides[0] = width;
+        sides[1] = height;
+    }
 
     /**
      * Create a new box
@@ -36,11 +78,16 @@ public abstract class Box2D<N>
      * @param coordinates the lower left corner coordinates
      * @param sides width and height
      */
-    public Box2D(N[] coordinates, N[] sides)
+    public Box2D(double[] coordinates, double[] sides)
     {
-        super(coordinates, sides);
         assert coordinates.length == 2;
         assert sides.length == 2;
+
+        this.coordinates = Objects.requireNonNull(coordinates);
+        this.sides = Objects.requireNonNull(sides);
+        if (coordinates.length != sides.length) {
+            throw new IllegalArgumentException("Box dimensions do not match");
+        }
     }
 
     /**
@@ -48,7 +95,7 @@ public abstract class Box2D<N>
      * 
      * @return the minimum x coordinate
      */
-    public N getMinX()
+    public double getMinX()
     {
         return coordinates[0];
     }
@@ -58,7 +105,7 @@ public abstract class Box2D<N>
      * 
      * @return the minimum y coordinate
      */
-    public N getMinY()
+    public double getMinY()
     {
         return coordinates[1];
     }
@@ -68,7 +115,7 @@ public abstract class Box2D<N>
      * 
      * @return the width
      */
-    public N getWidth()
+    public double getWidth()
     {
         return sides[0];
     }
@@ -78,16 +125,69 @@ public abstract class Box2D<N>
      * 
      * @return the height
      */
-    public N getHeight()
+    public double getHeight()
     {
         return sides[1];
     }
 
     @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.hashCode(coordinates);
+        result = prime * result + Arrays.hashCode(sides);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Box2D other = (Box2D) obj;
+        if (!Arrays.equals(coordinates, other.coordinates))
+            return false;
+        if (!Arrays.equals(sides, other.sides))
+            return false;
+        return true;
+    }
+
+    @Override
     public String toString()
     {
-        return "Box2D [minX=" + coordinates[0] + ", minY=" + coordinates[1] + ", width="
-            + sides[0] + ", height=" + sides[1] + "]";
+        return "Box2D [minX=" + coordinates[0] + ", minY=" + coordinates[1] + ", width=" + sides[0]
+            + ", height=" + sides[1] + "]";
+    }
+
+    /**
+     * Create a new box
+     * 
+     * @param width the width
+     * @param height the height
+     * @return the box
+     */
+    public static Box2D of(double width, double height)
+    {
+        return new Box2D(new double[] { 0.0, 0.0 }, new double[] { width, height });
+    }
+
+    /**
+     * Create a new box
+     * 
+     * @param x the x coordinate of the lower-left corner
+     * @param y the y coordinate of the lower-left corner
+     * @param width the width
+     * @param height the height
+     * @return the box
+     */
+    public static Box2D of(double x, double y, double width, double height)
+    {
+        return new Box2D(new double[] { x, y }, new double[] { width, height });
     }
 
 }

@@ -19,32 +19,30 @@ package org.jgrapht.alg.drawing.model;
 
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 
 /**
- * Test {@link BigDecimalPoint2D}.
+ * Test {@link Point2D}.
  * 
  * @author Dimitrios Michail
  */
-public class BigDecimalPoint2DTest
+public class Point2DTest
 {
 
     @Test
     public void testDefaultConstructor()
     {
-        BigDecimalPoint2D p = new BigDecimalPoint2D();
-        assertEquals(p.getX(), BigDecimal.ZERO);
-        assertEquals(p.getY(), BigDecimal.ZERO);
+        Point2D p = new Point2D(0d, 0d);
+        assertEquals(p.getX(), 0d, 1e-9);
+        assertEquals(p.getY(), 0d, 1e-9);
     }
 
     @Test
     public void testConstructorAndGetters()
     {
-        BigDecimalPoint2D p = new BigDecimalPoint2D(BigDecimal.valueOf(3d), BigDecimal.valueOf(2d));
-        assertEquals(p.getX(), BigDecimal.valueOf(3d));
-        assertEquals(p.getY(), BigDecimal.valueOf(2d));
+        Point2D p = new Point2D(3d, 2d);
+        assertEquals(p.getX(), 3d, 1e-9);
+        assertEquals(p.getY(), 2d, 1e-9);
     }
 
 }

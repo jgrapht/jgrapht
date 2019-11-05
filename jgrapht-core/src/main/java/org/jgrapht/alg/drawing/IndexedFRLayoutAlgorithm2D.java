@@ -24,22 +24,22 @@ import java.util.Map;
 import java.util.Random;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.drawing.DoubleFRQuadTree.Node;
-import org.jgrapht.alg.drawing.model.DoublePoint2D;
-import org.jgrapht.alg.drawing.model.LayoutModel;
+import org.jgrapht.alg.drawing.FRQuadTree.Node;
+import org.jgrapht.alg.drawing.model.Box2D;
+import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.drawing.model.Points;
-import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 /**
- * Fruchterman and Reingold Force-Directed Placement Algorithm using the 
+ * Fruchterman and Reingold Force-Directed Placement Algorithm using the
  * <a href="https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut</a> indexing
  * technique with a <a href="https://en.wikipedia.org/wiki/Quadtree">QuadTree</a>.
  * 
- * The Barnes-Hut indexing technique is described in the following paper: 
+ * The Barnes-Hut indexing technique is described in the following paper:
  * <ul>
- * <li>J. Barnes and P. Hut. A hierarchical O(N log N) force-calculation algorithm. Nature. 324(4):446--449, 1986.</li>
+ * <li>J. Barnes and P. Hut. A hierarchical O(N log N) force-calculation algorithm. Nature.
+ * 324(4):446--449, 1986.</li>
  * </ul>
  * 
  * @author Dimitrios Michail
@@ -128,48 +128,47 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
     }
 
     @Override
-    public void layout(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
         this.savedComparisons = 0;
         super.layout(graph, model);
     }
 
     @Override
-    protected Map<V, Point2D<Double>> calculateRepulsiveForces(
-        Graph<V, E> graph, LayoutModel<V, Double, Point2D<Double>, Box2D<Double>> model)
+    protected Map<V, Point2D> calculateRepulsiveForces(Graph<V, E> graph, LayoutModel2D<V> model)
     {
         // index all points
-        DoubleFRQuadTree quadTree = new DoubleFRQuadTree(model.getDrawableArea());
+        FRQuadTree quadTree = new FRQuadTree(model.getDrawableArea());
         for (V v : graph.vertexSet()) {
             quadTree.insert(model.get(v));
         }
-        
-        Point2D<Double> origin =
-            DoublePoint2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
+
+        Point2D origin =
+            Point2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
 
         // compute displacement with index
-        Map<V, Point2D<Double>> disp = new HashMap<>();
+        Map<V, Point2D> disp = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            Point2D<Double> vPos = Points.subtract(model.get(v), origin);
-            Point2D<Double> vDisp = DoublePoint2D.of(0d, 0d);
+            Point2D vPos = Points.subtract(model.get(v), origin);
+            Point2D vDisp = Point2D.of(0d, 0d);
 
             Deque<Node> queue = new ArrayDeque<>();
             queue.add(quadTree.getRoot());
-            
+
             while (!queue.isEmpty()) {
                 Node node = queue.removeFirst();
-                Box2D<Double> box = node.getBox();
+                Box2D box = node.getBox();
                 double boxWidth = box.getWidth();
 
-                Point2D<Double> uPos = null;
+                Point2D uPos = null;
                 if (node.isLeaf()) {
                     if (!node.hasPoints()) {
                         continue;
                     }
                     uPos = Points.subtract(node.getPoints().iterator().next(), origin);
                 } else {
-                    double distanceToCentroid = Points.length(Points.subtract(vPos, node.getCentroid()));
+                    double distanceToCentroid =
+                        Points.length(Points.subtract(vPos, node.getCentroid()));
                     if (comparator.compare(distanceToCentroid, 0d) == 0) {
                         savedComparisons += node.getNumberOfPoints() - 1;
                         continue;
@@ -187,9 +186,9 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
                 if (comparator.compare(vPos.getX(), uPos.getX()) != 0
                     || comparator.compare(vPos.getY(), uPos.getY()) != 0)
                 {
-                    Point2D<Double> delta = Points.subtract(vPos, uPos);
+                    Point2D delta = Points.subtract(vPos, uPos);
                     double deltaLen = Points.length(delta);
-                    Point2D<Double> dispContribution =
+                    Point2D dispContribution =
                         Points.scalarMultiply(delta, repulsiveForce(deltaLen) / deltaLen);
                     vDisp = Points.add(vDisp, dispContribution);
                 }

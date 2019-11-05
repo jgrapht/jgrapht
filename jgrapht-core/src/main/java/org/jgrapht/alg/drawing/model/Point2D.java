@@ -17,33 +17,31 @@
  */
 package org.jgrapht.alg.drawing.model;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 /**
- * A 2-dimensional point.
+ * A 2-dimensional point in Euclidean space.
  * 
  * @author Dimitrios Michail
- *
- * @param <N> the number type
  */
-public class Point2D<N>
-    extends
-    Point<N>
+public class Point2D
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -5410937389829502498L;
 
-    protected N x, y;
-    
+    protected double x, y;
+
     /**
      * Create a new point
      * 
      * @param x the x coordinate
      * @param y the y coordinate
      */
-    public Point2D(N x, N y)
+    public Point2D(double x, double y)
     {
-        this.x = Objects.requireNonNull(x);
-        this.y = Objects.requireNonNull(y);
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -55,13 +53,13 @@ public class Point2D<N>
     {
         return 2;
     }
-    
+
     /**
      * Get the x coordinate
      * 
      * @return the x coordinate
      */
-    public N getX()
+    public double getX()
     {
         return x;
     }
@@ -71,7 +69,7 @@ public class Point2D<N>
      * 
      * @return the y coordinate
      */
-    public N getY()
+    public double getY()
     {
         return y;
     }
@@ -81,8 +79,11 @@ public class Point2D<N>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((x == null) ? 0 : x.hashCode());
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -95,18 +96,30 @@ public class Point2D<N>
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Point2D<?> other = (Point2D<?>) obj;
-        if (x == null) {
-            if (other.x != null)
-                return false;
-        } else if (!x.equals(other.x))
+        Point2D other = (Point2D) obj;
+        if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
             return false;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
+        if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
             return false;
         return true;
+    }
+
+    /**
+     * Create a new point
+     * 
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the point
+     */
+    public static Point2D of(double x, double y)
+    {
+        return new Point2D(x, y);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "(" + x + ", " + y + ")";
     }
 
 }

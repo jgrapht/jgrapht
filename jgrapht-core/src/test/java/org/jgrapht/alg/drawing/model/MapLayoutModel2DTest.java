@@ -31,11 +31,11 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Test {@link MapLayoutModel}.
+ * Test {@link MapLayoutModel2D}.
  * 
  * @author Dimitrios Michail
  */
-public class MapLayoutModelTest
+public class MapLayoutModel2DTest
 {
 
     @Test
@@ -49,30 +49,29 @@ public class MapLayoutModelTest
         String v1 = graph.addVertex();
         String v2 = graph.addVertex();
 
-        MapLayoutModel<String, Double, Point2D<Double>, Box2D<Double>> model =
-            new MapLayoutModel<>(DoubleBox2D.of(0, 0, 2d, 2d));
+        MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0, 0, 2d, 2d));
 
-        assertEquals(DoubleBox2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
+        assertEquals(Box2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
         assertNull(model.getInitializer());
 
         assertNull(model.get(v1));
-        model.put(v1, DoublePoint2D.of(3, 5));
-        assertEquals(model.get(v1), DoublePoint2D.of(3, 5));
+        model.put(v1, Point2D.of(3, 5));
+        assertEquals(model.get(v1), Point2D.of(3, 5));
         assertFalse(model.isFixed(v1));
         model.setFixed(v1, true);
         assertTrue(model.isFixed(v1));
-        model.put(v1, DoublePoint2D.of(10, 20));
-        assertEquals(model.get(v1), DoublePoint2D.of(3, 5));
+        model.put(v1, Point2D.of(10, 20));
+        assertEquals(model.get(v1), Point2D.of(3, 5));
         model.setFixed(v1, false);
         assertFalse(model.isFixed(v1));
-        model.put(v1, DoublePoint2D.of(10, 20));
-        assertEquals(model.get(v1), DoublePoint2D.of(10, 20));
+        model.put(v1, Point2D.of(10, 20));
+        assertEquals(model.get(v1), Point2D.of(10, 20));
 
-        model.put(v2, DoublePoint2D.of(5, 7));
+        model.put(v2, Point2D.of(5, 7));
 
-        Map<String, Point2D<Double>> all = model.collect();
-        assertEquals(all.get(v1), DoublePoint2D.of(10, 20));
-        assertEquals(all.get(v2), DoublePoint2D.of(5, 7));
+        Map<String, Point2D> all = model.collect();
+        assertEquals(all.get(v1), Point2D.of(10, 20));
+        assertEquals(all.get(v2), Point2D.of(5, 7));
     }
 
 }

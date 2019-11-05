@@ -35,69 +35,50 @@ public class BoxesTest
     @Test
     public void testContainsPoint2D()
     {
-        DoubleBox2D region = DoubleBox2D.of(0, 0, 10, 10);
-        
-        assertTrue(Boxes.containsPoint(region, DoublePoint2D.of(5, 5)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint2D.of(10, 5)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint2D.of(10, 10)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint2D.of(0, 0)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint2D.of(0, 10)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint2D.of(10, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint2D.of(11, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint2D.of(0, 11)));
+        Box2D region = Box2D.of(0, 0, 10, 10);
+
+        assertTrue(Boxes.containsPoint(region, Point2D.of(5, 5)));
+        assertTrue(Boxes.containsPoint(region, Point2D.of(10, 5)));
+        assertTrue(Boxes.containsPoint(region, Point2D.of(10, 10)));
+        assertTrue(Boxes.containsPoint(region, Point2D.of(0, 0)));
+        assertTrue(Boxes.containsPoint(region, Point2D.of(0, 10)));
+        assertTrue(Boxes.containsPoint(region, Point2D.of(10, 0)));
+        assertFalse(Boxes.containsPoint(region, Point2D.of(11, 0)));
+        assertFalse(Boxes.containsPoint(region, Point2D.of(0, 11)));
     }
-    
-    @Test
-    public void testContainsPoint3D()
-    {
-        DoubleBox3D region = DoubleBox3D.of(0, 0, 0, 10, 10, 10);
-        
-        assertTrue(Boxes.containsPoint(region, DoublePoint3D.of(5, 5, 5)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint3D.of(10, 5, 5)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint3D.of(10, 10, 10)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint3D.of(0, 0, 0)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint3D.of(0, 10, 10)));
-        assertTrue(Boxes.containsPoint(region, DoublePoint3D.of(10, 0, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint3D.of(11, 0, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint3D.of(0, 11, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint3D.of(0, 0, 11)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint3D.of(-1, 0, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint3D.of(0, -1, 0)));
-        assertFalse(Boxes.containsPoint(region, DoublePoint3D.of(0, 0, -1)));
-    }
-    
+
     @Test
     public void testSplitAlongXAxis()
     {
-        DoubleBox2D region = DoubleBox2D.of(5, 5, 10, 10);
-        Pair<Box2D<Double>, Box2D<Double>> pair = Boxes.splitAlongXAxis(region);
-        Box2D<Double> westRegion = pair.getFirst();
-        Box2D<Double> eastRegion = pair.getSecond();
-        
+        Box2D region = Box2D.of(5, 5, 10, 10);
+        Pair<Box2D, Box2D> pair = Boxes.splitAlongXAxis(region);
+        Box2D westRegion = pair.getFirst();
+        Box2D eastRegion = pair.getSecond();
+
         assertEquals(5d, westRegion.getMinX(), 1e-9);
         assertEquals(5d, westRegion.getMinY(), 1e-9);
         assertEquals(10d, westRegion.getHeight(), 1e-9);
         assertEquals(5d, westRegion.getWidth(), 1e-9);
-        
+
         assertEquals(10d, eastRegion.getMinX(), 1e-9);
         assertEquals(5d, eastRegion.getMinY(), 1e-9);
         assertEquals(10d, eastRegion.getHeight(), 1e-9);
         assertEquals(5d, eastRegion.getWidth(), 1e-9);
     }
-    
+
     @Test
     public void testSplitAlongYAxis()
     {
-        DoubleBox2D region = DoubleBox2D.of(5, 5, 10, 10);
-        Pair<Box2D<Double>, Box2D<Double>> pair = Boxes.splitAlongYAxis(region);
-        Box2D<Double> southRegion = pair.getFirst();
-        Box2D<Double> northRegion = pair.getSecond();
-        
+        Box2D region = Box2D.of(5, 5, 10, 10);
+        Pair<Box2D, Box2D> pair = Boxes.splitAlongYAxis(region);
+        Box2D southRegion = pair.getFirst();
+        Box2D northRegion = pair.getSecond();
+
         assertEquals(5d, southRegion.getMinX(), 1e-9);
         assertEquals(5d, southRegion.getMinY(), 1e-9);
         assertEquals(5d, southRegion.getHeight(), 1e-9);
         assertEquals(10d, southRegion.getWidth(), 1e-9);
-        
+
         assertEquals(5d, northRegion.getMinX(), 1e-9);
         assertEquals(10d, northRegion.getMinY(), 1e-9);
         assertEquals(5d, northRegion.getHeight(), 1e-9);
