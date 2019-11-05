@@ -66,11 +66,15 @@ public class DoublyLinkedList<E> implements Iterable<E> {
     }
 
     /**
-     * Returns a reverse iterator over this list, which starts from the {@code element}.
-     * Note: the returned iterator will iterate over the entire list, meaning that it won't
-     * stop at the end of the list unless the {@code element} is the last element of the list.
+     * Returns an iterator over this list, which traverses the list in the reverse direction.
+     * The returned iterator will iterate over the <i>entire</i> list, that is, the list is
+     * treated as if it were cyclic. The iterator starts from {@code element}, and walks the
+     * list backwards, while wrapping around at the beginning of the list. For instance,
+     * for the list [1,2,3,4], {@code reverseIteratorFrom(3)} would return 3,2,1,4.
+     *
      * This method throws {@link NoSuchElementException} in the case {@code element} doesn't
-     * belong to this list
+     * belong to this list. This method invokes {@link #getNode(Object) getNode} to find the
+     * list node containing {@code element}.
      *
      * @param element an element to start an iteration from
      * @return an iterator over this list, which starts from the {@code element}
@@ -253,7 +257,7 @@ public class DoublyLinkedList<E> implements Iterable<E> {
 
     /**
      * Finds and returns the list node allocate for the {@code element}. If this list doesn't contain
-     * the {@code element}, returns {@code null}. The timer complexity of this method is linear in the
+     * the {@code element}, returns {@code null}. The time complexity of this method is linear in the
      * size of the list under the assumption that the element comparison is done in constant time.
      * Otherwise, the complexity is $\mathcal{O}(n\cdot h)$, where $n$ is the size of the list and $h$
      * is the time needed to compare two elements stored in this list.
