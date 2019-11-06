@@ -59,8 +59,9 @@ import org.jgrapht.io.ImportException;
  * }
  * </pre>
  *
- * <p>By default this importer recomputes node identifiers starting from $0$ as they are encountered
- * in the file. It is also possible to instruct the importer to keep the original file numbering of the 
+ * <p>
+ * By default this importer recomputes node identifiers starting from $0$ as they are encountered in
+ * the file. It is also possible to instruct the importer to keep the original file numbering of the
  * nodes simply by reducing them by one in order to make them zero-based.
  * 
  * Note: the current implementation does not fully implement the DIMACS specifications! Special
@@ -71,8 +72,6 @@ import org.jgrapht.io.ImportException;
 public class DIMACSEdgeListImporter
     extends
     AbstractBaseEdgeListImporter
-    implements
-    EdgeListImporter
 {
     private boolean renumberVertices;
 
@@ -88,9 +87,9 @@ public class DIMACSEdgeListImporter
     /**
      * Set whether to renumber vertices or not.
      * 
-     * If true then the vertices are assigned new numbers from $0$ to $n-1$ in the order that they 
-     * are first * encountered in the file. Otherwise, the original numbering (minus one in order to get a
-     * zero-based numbering) of the DIMACS file is kept. Defaults to true.
+     * If true then the vertices are assigned new numbers from $0$ to $n-1$ in the order that they
+     * are first * encountered in the file. Otherwise, the original numbering (minus one in order to
+     * get a zero-based numbering) of the DIMACS file is kept. Defaults to true.
      * 
      * @param renumberVertices whether to renumber vertices or not
      * @return the importer

@@ -22,11 +22,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * An integer set with numbers from 0 to n-1.
+ * An integer set containing all numbers from 0 to n-1.
  * 
  * @author Dimitrios Michail
  */
-class IntegerSet
+class CompleteIntegerSet
     extends
     AbstractSet<Integer>
 {
@@ -37,7 +37,7 @@ class IntegerSet
      * 
      * @param n the number n
      */
-    public IntegerSet(int n)
+    public CompleteIntegerSet(int n)
     {
         this.n = n;
     }
@@ -45,7 +45,7 @@ class IntegerSet
     @Override
     public Iterator<Integer> iterator()
     {
-        return new IntegerSetIterator(n);
+        return new CompleteIntegerSetIterator(n);
     }
 
     @Override
@@ -54,14 +54,14 @@ class IntegerSet
         return n;
     }
 
-    private class IntegerSetIterator
+    private class CompleteIntegerSetIterator
         implements
         Iterator<Integer>
     {
         private int n;
         private int current;
 
-        public IntegerSetIterator(int n)
+        public CompleteIntegerSetIterator(int n)
         {
             this.n = n;
             this.current = 0;

@@ -23,10 +23,6 @@ import java.util.*;
 /**
  * Generic pair.
  * 
- * <p>
- * Although the instances of this class are immutable, it is impossible to ensure that the
- * references passed to the constructor will not be modified by the caller.
- * 
  * @param <A> the first element type
  * @param <B> the second element type
  * 
@@ -110,6 +106,7 @@ public class Pair<A, B>
      * 
      * @param <E> the element type
      */
+    @SuppressWarnings("unlikely-arg-type")
     public <E> boolean hasElement(E e)
     {
         if (e == null) {
@@ -144,8 +141,7 @@ public class Pair<A, B>
     }
 
     /**
-     * Creates new pair of elements pulling of the necessity to provide corresponding types of the
-     * elements supplied.
+     * Create a new pair.
      *
      * @param a first element
      * @param b second element
@@ -157,4 +153,5 @@ public class Pair<A, B>
     {
         return new Pair<>(a, b);
     }
+
 }

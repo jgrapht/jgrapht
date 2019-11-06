@@ -129,7 +129,7 @@ public class SparseUndirectedGraph
     @Override
     public Set<Integer> edgeSet()
     {
-        return new IntegerSet(incidenceMatrix.columns());
+        return new CompleteIntegerSet(incidenceMatrix.columns());
     }
 
     @Override
@@ -195,7 +195,7 @@ public class SparseUndirectedGraph
     @Override
     public Set<Integer> vertexSet()
     {
-        return new IntegerSet(incidenceMatrix.rows());
+        return new CompleteIntegerSet(incidenceMatrix.rows());
     }
 
     @Override

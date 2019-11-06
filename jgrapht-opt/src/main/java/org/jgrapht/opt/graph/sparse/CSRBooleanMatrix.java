@@ -42,6 +42,20 @@ class CSRBooleanMatrix
 {
     private static final long serialVersionUID = -8639339411487665967L;
 
+    private static final Comparator<Pair<Integer, Integer>> INTEGER_PAIR_LEX_COMPARATOR =
+        (o1, o2) -> {
+            if (o1.getFirst() < o2.getFirst()) {
+                return -1;
+            } else if (o1.getFirst() > o2.getFirst()) {
+                return 1;
+            } else if (o1.getSecond() < o2.getSecond()) {
+                return -1;
+            } else if (o1.getSecond() > o2.getSecond()) {
+                return 1;
+            }
+            return 0;
+        };
+
     private int columns;
     private int[] rowOffsets;
     private int[] columnIndices;
@@ -70,7 +84,7 @@ class CSRBooleanMatrix
         this.columnIndices = new int[entries.size()];
 
         Iterator<Pair<Integer, Integer>> it =
-            entries.stream().sorted(new PairComparator()).iterator();
+            entries.stream().sorted(INTEGER_PAIR_LEX_COMPARATOR).iterator();
 
         int cIndex = 0;
         while (it.hasNext()) {
@@ -201,28 +215,6 @@ class CSRBooleanMatrix
                 throw new NoSuchElementException();
             }
             return columnIndices[curPos++];
-        }
-
-    }
-
-    private class PairComparator
-        implements
-        Comparator<Pair<Integer, Integer>>
-    {
-
-        @Override
-        public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2)
-        {
-            if (o1.getFirst() < o2.getFirst()) {
-                return -1;
-            } else if (o1.getFirst() > o2.getFirst()) {
-                return 1;
-            } else if (o1.getSecond() < o2.getSecond()) {
-                return -1;
-            } else if (o1.getSecond() > o2.getSecond()) {
-                return 1;
-            }
-            return 0;
         }
 
     }

@@ -24,7 +24,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.io.ImportException;
 
 /**
@@ -32,6 +35,57 @@ import org.jgrapht.io.ImportException;
  */
 public interface EdgeListImporter
 {
+
+    /**
+     * Add a node count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addNodeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Remove a node count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeNodeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Add an edge count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEdgeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Remove an edge count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeEdgeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Add an edge consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEdgeConsumer(BiConsumer<Pair<Integer, Integer>, Double> consumer);
+
+    /**
+     * Remove an edge consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeEdgeConsumer(BiConsumer<Pair<Integer, Integer>, Double> consumer);
+
+    /**
+     * Import an edge list
+     * 
+     * @param input the input reader
+     * @throws ImportException in case any error occurs, such as I/O or parse error
+     */
+    void importEdgeList(Reader input)
+        throws ImportException;
 
     /**
      * Import an edge list
@@ -44,15 +98,6 @@ public interface EdgeListImporter
     {
         importEdgeList(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
-
-    /**
-     * Import an edge list
-     * 
-     * @param input the input reader
-     * @throws ImportException in case any error occurs, such as I/O or parse error
-     */
-    void importEdgeList(Reader input)
-        throws ImportException;
 
     /**
      * Import an edge list

@@ -136,7 +136,7 @@ public class SparseDirectedGraph
     @Override
     public Set<Integer> edgeSet()
     {
-        return new IntegerSet(outIncidenceMatrix.columns());
+        return new CompleteIntegerSet(outIncidenceMatrix.columns());
     }
 
     @Override
@@ -203,7 +203,7 @@ public class SparseDirectedGraph
     @Override
     public Set<Integer> vertexSet()
     {
-        return new IntegerSet(outIncidenceMatrix.rows());
+        return new CompleteIntegerSet(outIncidenceMatrix.rows());
     }
 
     @Override

@@ -298,7 +298,7 @@ public class DefaultSparseGraph
     @Override
     public Set<Integer> edgeSet()
     {
-        return new IntegerSet(m);
+        return new CompleteIntegerSet(m);
     }
 
     @Override
@@ -378,7 +378,7 @@ public class DefaultSparseGraph
     @Override
     public Set<Integer> vertexSet()
     {
-        return new IntegerSet(n);
+        return new CompleteIntegerSet(n);
     }
 
     @Override
@@ -460,7 +460,7 @@ public class DefaultSparseGraph
     /**
      * A comparator for indirect sort.
      */
-    private class IndirectComparator
+    private static class IndirectComparator
         implements
         Comparator<Integer>
     {

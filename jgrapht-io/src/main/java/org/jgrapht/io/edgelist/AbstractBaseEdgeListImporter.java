@@ -33,6 +33,8 @@ import org.jgrapht.alg.util.Pair;
  * @author Dimitrios Michail
  */
 abstract class AbstractBaseEdgeListImporter
+    implements
+    EdgeListImporter
 {
     private List<Consumer<Integer>> nodeCountConsumers;
     private List<Consumer<Integer>> edgeCountConsumers;
@@ -53,61 +55,37 @@ abstract class AbstractBaseEdgeListImporter
         this.nextId = 0;
     }
 
-    /**
-     * Add a node count consumer.
-     * 
-     * @param consumer the consumer
-     */
+    @Override
     public void addNodeCountConsumer(Consumer<Integer> consumer)
     {
         nodeCountConsumers.add(consumer);
     }
 
-    /**
-     * Remove a node count consumer.
-     * 
-     * @param consumer the consumer
-     */
+    @Override
     public void removeNodeCountConsumer(Consumer<Integer> consumer)
     {
         nodeCountConsumers.remove(consumer);
     }
 
-    /**
-     * Add an edge count consumer.
-     * 
-     * @param consumer the consumer
-     */
+    @Override
     public void addEdgeCountConsumer(Consumer<Integer> consumer)
     {
         edgeCountConsumers.add(consumer);
     }
 
-    /**
-     * Remove an edge count consumer.
-     * 
-     * @param consumer the consumer
-     */
+    @Override
     public void removeEdgeCountConsumer(Consumer<Integer> consumer)
     {
         edgeCountConsumers.remove(consumer);
     }
 
-    /**
-     * Add an edge consumer.
-     * 
-     * @param consumer the consumer
-     */
+    @Override
     public void addEdgeConsumer(BiConsumer<Pair<Integer, Integer>, Double> consumer)
     {
         edgeConsumers.add(consumer);
     }
 
-    /**
-     * Remove an edge consumer.
-     * 
-     * @param consumer the consumer
-     */
+    @Override
     public void removeEdgeConsumer(BiConsumer<Pair<Integer, Integer>, Double> consumer)
     {
         edgeConsumers.remove(consumer);

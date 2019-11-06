@@ -23,10 +23,6 @@ import java.util.Objects;
 /**
  * Generic triple (3-tuple).
  * 
- * <p>
- * Although the instances of this class are immutable, it is impossible to ensure that the
- * references passed to the constructor will not be modified by the caller.
- * 
  * @param <A> the first element type
  * @param <B> the second element type
  * @param <C> the third element type
@@ -129,7 +125,7 @@ public class Triple<A, B, C>
     }
 
     /**
-     * Assess if this pair contains an element.
+     * Assess if this triple contains an element.
      *
      * @param e The element in question
      * @return true if contains the element, false otherwise
@@ -171,8 +167,7 @@ public class Triple<A, B, C>
     }
 
     /**
-     * Creates new pair of elements pulling of the necessity to provide corresponding types of the
-     * elements supplied.
+     * Create a new triple.
      *
      * @param a first element
      * @param b second element
