@@ -33,20 +33,28 @@ import org.jgrapht.util.SupplierUtil;
 /**
  * This generator implements Bollobás, Béla, et al. "Directed scale-free graphs." Proceedings of the
  * fourteenth annual ACM-SIAM symposium on Discrete algorithms. Society for Industrial and Applied
- * Mathematics, 2003.
+ * Mathematics, 2003.<br>
  * 
- * In the original paper, the graph continues to grow according to a certain power low until a
- * certain number of edges is reached irrespective to the number of nodes. However, because the
- * target number of edges is not known beforehand, in this implementation, I added another feature
- * that enables the user to grow the curve according to the power low until the target number of
- * edges or target number of nodes is reached.
+ * <pre>
+ * The authors are:
+ *  <b>Béla Bollobás</b>   University of Memphis, Memphis TN and Trinity College, Cambridge, UK
+ *  <b>Christian Borgs</b> Microsoft Research, Redmond, WA
+ *  <b>Jennifer Chayes</b> Microsoft Research, Redmond, WA
+ *  <b>Oliver Riordan</b>  Trinity College, Cambridge, UK
+ * </pre>
+ * <p>
+ * In their original paper, the graph continues to grow according to a certain power low until a
+ * certain number of edges is reached irrespective to the number of nodes.<br>
+ * However, because the target number of edges is not known beforehand, in this implementation, I
+ * added another feature that enables the user to grow the curve according to that power low until
+ * the target number of edges or target number of nodes is reached.
  * 
  * @author Amr ALHOSSARY
  *
  * @param <V> The Vertex class
  * @param <E> The Edge class
  */
-public class BollobasGraphGenerator<V, E>
+public class DirectedScaleFreeGraphGenerator<V, E>
     implements
     GraphGenerator<V, E, V>
 {
@@ -114,7 +122,7 @@ public class BollobasGraphGenerator<V, E>
      *        This parameter has lower priority than {@link #targetEdges} and will be used only if
      *        {@link #targetEdges} given is a <i>negative</i> number.
      */
-    public BollobasGraphGenerator(
+    public DirectedScaleFreeGraphGenerator(
         float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes)
     {
         this(alpha, gamma, deltaIn, deltaOut, targetEdges, targetNodes, new Random());
@@ -140,7 +148,7 @@ public class BollobasGraphGenerator<V, E>
      *        {@link #targetEdges} given is a <i>negative</i> number.
      * @param seed The seed to feed to the random number generator.
      */
-    public BollobasGraphGenerator(
+    public DirectedScaleFreeGraphGenerator(
         float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes,
         long seed)
     {
@@ -165,7 +173,7 @@ public class BollobasGraphGenerator<V, E>
      *        {@link #targetEdges} given is a <i>negative</i> number.
      * @param rng The {@link Random} object to use.
      */
-    public BollobasGraphGenerator(
+    public DirectedScaleFreeGraphGenerator(
         float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes,
         Random rng)
     {
@@ -332,8 +340,8 @@ public class BollobasGraphGenerator<V, E>
     {
         Graph<Integer, DefaultEdge> testGraph = new DefaultDirectedGraph<Integer, DefaultEdge>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
-        BollobasGraphGenerator<Integer, DefaultEdge> testGraphGenerator =
-            new BollobasGraphGenerator<Integer, DefaultEdge>(0.41f, 0.05f, 0.12f, 0.12f, -1, 100);
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> testGraphGenerator =
+            new DirectedScaleFreeGraphGenerator<Integer, DefaultEdge>(0.41f, 0.05f, 0.12f, 0.12f, -1, 100);
         testGraphGenerator.generateGraph(testGraph);
         System.out.println(testGraph);
         // GraphsIO.export(testGraph, System.out);
