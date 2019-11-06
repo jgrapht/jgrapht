@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2010-2019, by Michael Behrisch and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,18 +15,22 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io.edgelist;
+package org.jgrapht.nio.dimacs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.DIMACSFormat;
 import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.BaseConsumerImporter;
 
 /**
- * Imports a graph specified in DIMACS format.
+ * A general importer using consumers for DIMACS format.
  *
  * <p>
  * See {@link DIMACSFormat} for a description of all the supported DIMACS formats.
@@ -67,21 +71,28 @@ import org.jgrapht.io.ImportException;
  * Note: the current implementation does not fully implement the DIMACS specifications! Special
  * (rarely used) fields specified as 'Optional Descriptors' are currently not supported (ignored).
  *
+ * @author Michael Behrisch (adaptation of GraphReader class)
+ * @author Joris Kinable
  * @author Dimitrios Michail
+ * 
  */
-public class DIMACSEdgeListImporter
+public class DIMACSGenericImporter
     extends
-    AbstractBaseEdgeListImporter
+    BaseConsumerImporter<Integer, Triple<Integer, Integer, Double>>
 {
     private boolean renumberVertices;
+    private Map<String, Integer> vertexMap;
+    private int nextId;
 
     /**
      * Construct a new importer
      */
-    public DIMACSEdgeListImporter()
+    public DIMACSGenericImporter()
     {
         super();
         this.renumberVertices = true;
+        this.vertexMap = new HashMap<>();
+        this.nextId = 0;
     }
 
     /**
@@ -94,14 +105,14 @@ public class DIMACSEdgeListImporter
      * @param renumberVertices whether to renumber vertices or not
      * @return the importer
      */
-    public DIMACSEdgeListImporter renumberVertices(boolean renumberVertices)
+    public DIMACSGenericImporter renumberVertices(boolean renumberVertices)
     {
         this.renumberVertices = renumberVertices;
         return this;
     }
 
     @Override
-    public void importEdgeList(Reader input)
+    public void importInput(Reader input)
         throws ImportException
     {
         // convert to buffered
@@ -151,8 +162,7 @@ public class DIMACSEdgeListImporter
                 }
 
                 // notify
-                notifyEdge(from, to, weight);
-
+                notifyEdge(Triple.of(from, to, weight));
             }
             cols = skipComments(in);
         }
@@ -210,11 +220,12 @@ public class DIMACSEdgeListImporter
      * @param id the vertex identifier
      * @return the integer
      */
-    @Override
     protected Integer mapVertexToInteger(String id)
     {
         if (renumberVertices) {
-            return super.mapVertexToInteger(id);
+            return vertexMap.computeIfAbsent(id, (keyId) -> {
+                return nextId++;
+            });
         } else {
             return Integer.valueOf(id) - 1;
         }

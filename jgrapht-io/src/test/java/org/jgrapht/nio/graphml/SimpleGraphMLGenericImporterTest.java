@@ -15,20 +15,19 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io.edgelist;
+package org.jgrapht.nio.graphml;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.Triple;
+import org.jgrapht.alg.util.Quadruple;
 import org.jgrapht.io.ImportException;
 import org.junit.Test;
 
@@ -37,7 +36,7 @@ import org.junit.Test;
  * 
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLEdgeListImporterTest
+public class SimpleGraphMLGenericImporterTest
 {
 
     private static final String NL = System.getProperty("line.separator");
@@ -64,27 +63,22 @@ public class SimpleGraphMLEdgeListImporterTest
             "</graphml>";
         // @formatter:on
 
-        SimpleGraphMLEdgeListImporter importer = new SimpleGraphMLEdgeListImporter();
+        SimpleGraphMLGenericImporter importer = new SimpleGraphMLGenericImporter();
 
         List<Pair<Integer, Integer>> collected = new ArrayList<>();
-        importer.addEdgeConsumer((e, w) -> {
-            assertNull(w);
-            collected.add(e);
+        importer.addEdgeConsumer(q -> {
+            assertNull(q.getFourth());
+            collected.add(Pair.of(Integer.valueOf(q.getSecond()), Integer.valueOf(q.getThird())));
         });
-        importer.importEdgeList(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
-
-        Map<Integer, Integer> nameMap = new HashMap<>();
-        nameMap.put(2, 0);
-        nameMap.put(3, 1);
-        nameMap.put(1, 2);
+        importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         int[][] edges = { { 2, 3 }, { 1, 2 }, { 3, 1 } };
 
         int i = 0;
         for (int[] edge : edges) {
             Pair<Integer, Integer> e = collected.get(i);
-            assertEquals(nameMap.get(edge[0]), e.getFirst());
-            assertEquals(nameMap.get(edge[1]), e.getSecond());
+            assertEquals(Integer.valueOf(edge[0]), e.getFirst());
+            assertEquals(Integer.valueOf(edge[1]), e.getSecond());
             i++;
         }
     }
@@ -121,28 +115,46 @@ public class SimpleGraphMLEdgeListImporterTest
             "</graphml>";
         // @formatter:on
 
-        SimpleGraphMLEdgeListImporter importer = new SimpleGraphMLEdgeListImporter();
+        SimpleGraphMLGenericImporter importer = new SimpleGraphMLGenericImporter();
 
-        List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
-        importer.addEdgeConsumer((e, w) -> {
-            collected.add(Triple.of(e.getFirst(), e.getSecond(), w));
+        List<Quadruple<String, String, String, Double>> collected = new ArrayList<>();
+        List<Quadruple<String, String, String, Double>> collectedWithWeights = new ArrayList<>();
+        importer.addEdgeConsumer(q -> {
+            collected.add(q);
         });
-        importer.importEdgeList(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
-
-        Integer[][] edges = { { 0, 2, 2 }, { 0, 1, 3 }, { 1, 2, 1 } };
-
-        int i = 0;
-        for (Integer[] edge : edges) {
-            Triple<Integer, Integer, Double> e = collected.get(i);
-            assertEquals(Integer.valueOf(edge[0]), e.getFirst());
-            assertEquals(Integer.valueOf(edge[1]), e.getSecond());
-            if (i < 2) {
-                assertEquals(Double.valueOf(edge[2]), e.getThird());
-            } else {
-                assertNull(e.getThird());
+        importer.addEdgeAttributeConsumer((p,a)->{
+            if (p.getSecond().equals("weight")) { 
+                collectedWithWeights.add(p.getFirst());
             }
-            i++;
-        }
+        });
+        importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+
+        assertEquals(collected.get(0).getFirst(), "e0");
+        assertEquals(collected.get(0).getSecond(), "n0");
+        assertEquals(collected.get(0).getThird(), "n2");
+        assertNull(collected.get(0).getFourth());
+        
+        assertEquals(collectedWithWeights.get(0).getFirst(), "e0");
+        assertEquals(collectedWithWeights.get(0).getSecond(), "n0");
+        assertEquals(collectedWithWeights.get(0).getThird(), "n2");
+        assertEquals(collectedWithWeights.get(0).getFourth(), 2.0, 1e-9);
+
+        assertEquals(collected.get(1).getFirst(), "e1");
+        assertEquals(collected.get(1).getSecond(), "n0");
+        assertEquals(collected.get(1).getThird(), "n1");
+        assertNull(collected.get(1).getFourth());
+        
+        assertEquals(collectedWithWeights.get(1).getFirst(), "e1");
+        assertEquals(collectedWithWeights.get(1).getSecond(), "n0");
+        assertEquals(collectedWithWeights.get(1).getThird(), "n1");
+        assertEquals(collectedWithWeights.get(1).getFourth(), 3.0, 1e-9);
+
+        assertEquals(collected.get(2).getFirst(), "e2");
+        assertEquals(collected.get(2).getSecond(), "n1");
+        assertEquals(collected.get(2).getThird(), "n2");
+        assertNull(collected.get(2).getFourth());
+
+        assertTrue(collectedWithWeights.size() == 2);
 
     }
 

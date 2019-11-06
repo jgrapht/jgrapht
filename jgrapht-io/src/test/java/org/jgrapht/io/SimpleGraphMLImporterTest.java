@@ -174,6 +174,7 @@ public class SimpleGraphMLImporterTest
             "<node id=\"n2\">" + NL +
             "<data key=\"d0\">blue</data>" + NL +
             "</node>" + NL+
+            "<node id=\"n3\"/>" + NL +
             "<edge id=\"e0\" source=\"n0\" target=\"n2\">" + NL +
             "<data key=\"d1\">2.0</data>" + NL +
             "</edge>" + NL +
@@ -181,6 +182,9 @@ public class SimpleGraphMLImporterTest
             "<data key=\"d1\">3.0</data>" + NL +
             "</edge>" + NL +
             "<edge id=\"e2\" source=\"n1\" target=\"n2\"/>" + NL +
+            "<edge source=\"n0\" target=\"n3\">" + NL +
+            "<data key=\"d1\">99.0</data>" + NL +
+            "</edge>" + NL +
             "</graph>" + NL +
             "</graphml>";
         // @formatter:on
@@ -202,17 +206,20 @@ public class SimpleGraphMLImporterTest
         importer.addGraphAttributeConsumer((k, v) -> graphAttrs.put(k, v));
         importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
-        assertEquals(3, g.vertexSet().size());
-        assertEquals(3, g.edgeSet().size());
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(4, g.edgeSet().size());
         assertTrue(g.containsVertex("0"));
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
         assertTrue(g.containsEdge("0", "2"));
         assertTrue(g.containsEdge("0", "1"));
         assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("0", "3"));
         assertEquals(2.0, g.getEdgeWeight(g.getEdge("0", "2")), 1e-9);
         assertEquals(3.0, g.getEdgeWeight(g.getEdge("0", "1")), 1e-9);
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
+        assertEquals(99.0, g.getEdgeWeight(g.getEdge("0", "3")), 1e-9);
     }
 
     @Test(expected = ImportException.class)

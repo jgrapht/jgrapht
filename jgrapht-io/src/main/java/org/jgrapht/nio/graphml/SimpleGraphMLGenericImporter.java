@@ -15,32 +15,53 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io.edgelist;
+package org.jgrapht.nio.graphml;
 
-import org.jgrapht.alg.util.Pair;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.jgrapht.alg.util.Quadruple;
 import org.jgrapht.io.AttributeType;
+import org.jgrapht.io.DefaultAttribute;
+import org.jgrapht.io.GraphMLImporter;
 import org.jgrapht.io.ImportException;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-
-import javax.xml.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.xml.validation.*;
-import java.io.*;
-import java.util.*;
+import org.jgrapht.nio.BaseConsumerImporter;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Imports a graph from a GraphML data source.
+ * Imports a graph from a GraphML data source. The importer does not construct a graph but calls the
+ * provided consumers with the appropriate arguments. Vertices are returned simply by their vertex
+ * id and edges are returns as quadruples (id, source, target, weight) where both id and weight
+ * maybe null.
+ *
+ * <p>
+ * The importer notifies lazily and completely out-of-order for any additional vertex, edge or graph
+ * attributes in the input file. Users can register consumers for vertex, edge and graph attributes
+ * after construction of the importer. Finally, default attribute values are completely ignored.
+ * Lazily here means that an edge is first reported with a null weight and its weight is reported
+ * later using the edge attribute consumer.
  * 
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GraphML
- * specification, tailored towards parsing speed.
- * 
- * <p>
- * The importer notifies lazily as it encounters edges into registered consumers by the user.
- * Finally, default attribute values are completely ignored.
+ * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
+ * towards parsing speed.
  * 
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
@@ -100,22 +121,15 @@ import java.util.*;
  * </pre>
  * 
  * <p>
- * The importer reads the input into a graph which is provided by the user. In case the
- * corresponding edge key with attr.name="weight" is defined, the importer also reads edge weights.
- * Otherwise edge weights are ignored.
- * 
- * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
  * 
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLEdgeListImporter
+public class SimpleGraphMLGenericImporter
     extends
-    AbstractBaseEdgeListImporter
-    implements
-    EdgeListImporter
+    BaseConsumerImporter<String, Quadruple<String, String, String, Double>>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -127,7 +141,7 @@ public class SimpleGraphMLEdgeListImporter
     /**
      * Constructs a new importer.
      */
-    public SimpleGraphMLEdgeListImporter()
+    public SimpleGraphMLGenericImporter()
     {
         this.schemaValidation = true;
     }
@@ -173,14 +187,8 @@ public class SimpleGraphMLEdgeListImporter
         this.schemaValidation = schemaValidation;
     }
 
-    /**
-     * Import.
-     * 
-     * @param input the input reader
-     * @throws ImportException in case an error occurs, such as I/O or parse error
-     */
     @Override
-    public void importEdgeList(Reader input)
+    public void importInput(Reader input)
         throws ImportException
     {
         try {
@@ -189,7 +197,9 @@ public class SimpleGraphMLEdgeListImporter
             GraphMLHandler handler = new GraphMLHandler();
             xmlReader.setContentHandler(handler);
             xmlReader.setErrorHandler(handler);
+            notifyEvent(Event.START);
             xmlReader.parse(new InputSource(input));
+            notifyEvent(Event.EOF);
         } catch (Exception se) {
             throw new ImportException("Failed to parse GraphML", se);
         }
@@ -241,9 +251,12 @@ public class SimpleGraphMLEdgeListImporter
         DefaultHandler
     {
         private static final String GRAPH = "graph";
+        private static final String GRAPH_ID = "id";
+        private static final String GRAPH_EDGE_DEFAULT = "edgedefault";
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
         private static final String EDGE = "edge";
+        private static final String EDGE_ID = "id";
         private static final String EDGE_SOURCE = "source";
         private static final String EDGE_TARGET = "target";
         private static final String ALL = "all";
@@ -260,9 +273,9 @@ public class SimpleGraphMLEdgeListImporter
         private int insideData;
         private int insideGraph;
         private int insideNode;
+        private String currentNode;
         private int insideEdge;
-        private Pair<Integer, Integer> currentEdge;
-        private Double currentEdgeWeight;
+        private PartialEdge currentEdge;
         private Key currentKey;
         private String currentDataKey;
         private StringBuilder currentDataValue;
@@ -281,9 +294,9 @@ public class SimpleGraphMLEdgeListImporter
             insideData = 0;
             insideGraph = 0;
             insideNode = 0;
+            currentNode = null;
             insideEdge = 0;
             currentEdge = null;
-            currentEdgeWeight = null;
             currentKey = null;
             currentDataKey = null;
             currentDataValue = new StringBuilder();
@@ -303,6 +316,14 @@ public class SimpleGraphMLEdgeListImporter
                         "This importer does not support nested graphs");
                 }
                 insideGraph++;
+                findAttribute(GRAPH_ID, attributes)
+                    .ifPresent(
+                        value -> notifyGraphAttribute(
+                            GRAPH_ID, DefaultAttribute.createAttribute(value)));
+                findAttribute(GRAPH_EDGE_DEFAULT, attributes)
+                    .ifPresent(
+                        value -> notifyGraphAttribute(
+                            GRAPH_EDGE_DEFAULT, DefaultAttribute.createAttribute(value)));
                 break;
             case NODE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -313,7 +334,10 @@ public class SimpleGraphMLEdgeListImporter
                 String nodeId = findAttribute(NODE_ID, attributes)
                     .orElseThrow(
                         () -> new IllegalArgumentException("Node must have an identifier"));
-                mapVertexToInteger(nodeId);
+                currentNode = nodeId;
+                notifyVertex(currentNode);
+                notifyVertexAttribute(
+                    currentNode, NODE_ID, DefaultAttribute.createAttribute(nodeId));
                 break;
             case EDGE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -325,11 +349,19 @@ public class SimpleGraphMLEdgeListImporter
                     .orElseThrow(() -> new IllegalArgumentException("Edge source missing"));
                 String targetId = findAttribute(EDGE_TARGET, attributes)
                     .orElseThrow(() -> new IllegalArgumentException("Edge target missing"));
-
-                Integer source = mapVertexToInteger(sourceId);
-                Integer target = mapVertexToInteger(targetId);
-
-                currentEdge = Pair.of(source, target);
+                String edgeId = findAttribute(EDGE_ID, attributes).orElse(null);
+                currentEdge = new PartialEdge(edgeId, sourceId, targetId, null);
+                Quadruple<String, String, String, Double> actualEdge = Quadruple
+                    .of(currentEdge.id, currentEdge.source, currentEdge.target, currentEdge.weight);
+                notifyEdge(actualEdge);
+                notifyEdgeAttribute(
+                    actualEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(currentEdge.source));
+                notifyEdgeAttribute(
+                    actualEdge, EDGE_TARGET, DefaultAttribute.createAttribute(currentEdge.target));
+                if (currentEdge.id != null) {
+                    notifyEdgeAttribute(
+                        actualEdge, EDGE_ID, DefaultAttribute.createAttribute(currentEdge.id));
+                }
                 break;
             case KEY:
                 String keyId = findAttribute(KEY_ID, attributes)
@@ -362,14 +394,21 @@ public class SimpleGraphMLEdgeListImporter
                 insideGraph--;
                 break;
             case NODE:
+                currentNode = null;
                 insideNode--;
                 break;
             case EDGE:
-                if (currentEdge != null) {
-                    notifyEdge(currentEdge.getFirst(), currentEdge.getSecond(), currentEdgeWeight);
+                if (currentEdge != null && currentEdge.weight != null) {
+                    Quadruple<String, String, String,
+                        Double> actualEdge = Quadruple
+                            .of(
+                                currentEdge.id, currentEdge.source, currentEdge.target,
+                                currentEdge.weight);
+                    notifyEdgeAttribute(
+                        actualEdge, edgeWeightAttributeName,
+                        DefaultAttribute.createAttribute(currentEdge.id));
                 }
                 currentEdge = null;
-                currentEdgeWeight = null;
                 insideEdge--;
                 break;
             case KEY:
@@ -435,6 +474,14 @@ public class SimpleGraphMLEdgeListImporter
                 return;
             }
 
+            if (currentNode != null) {
+                Key key = nodeValidKeys.get(currentDataKey);
+                if (key != null) {
+                    notifyVertexAttribute(
+                        currentNode, key.attributeName,
+                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                }
+            }
             if (currentEdge != null) {
                 Key key = edgeValidKeys.get(currentDataKey);
                 if (key != null) {
@@ -443,12 +490,19 @@ public class SimpleGraphMLEdgeListImporter
                      */
                     if (key.attributeName.equals(edgeWeightAttributeName)) {
                         try {
-                            currentEdgeWeight = Double.parseDouble(currentDataValue.toString());
+                            currentEdge.weight = Double.parseDouble(currentDataValue.toString());
                         } catch (NumberFormatException e) {
                             // ignore
                         }
                     }
                 }
+            }
+
+            Key key = graphValidKeys.get(currentDataKey);
+            if (key != null) {
+                notifyGraphAttribute(
+                    key.attributeName,
+                    new DefaultAttribute<>(currentDataValue.toString(), key.type));
             }
         }
 
@@ -481,11 +535,13 @@ public class SimpleGraphMLEdgeListImporter
         String id;
         String attributeName;
         String target;
+        AttributeType type;
 
         public Key(String id, String attributeName, AttributeType type, String target)
         {
             this.id = id;
             this.attributeName = attributeName;
+            this.type = type;
             this.target = target;
         }
 
@@ -493,7 +549,22 @@ public class SimpleGraphMLEdgeListImporter
         {
             return id != null && attributeName != null && target != null;
         }
+    }
 
+    private static class PartialEdge
+    {
+        String id;
+        String source;
+        String target;
+        Double weight;
+
+        public PartialEdge(String id, String source, String target, Double weight)
+        {
+            this.id = id;
+            this.source = source;
+            this.target = target;
+            this.weight = weight;
+        }
     }
 
 }

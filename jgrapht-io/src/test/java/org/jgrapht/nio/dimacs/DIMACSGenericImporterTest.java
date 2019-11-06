@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io.edgelist;
+package org.jgrapht.nio.dimacs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -36,7 +36,7 @@ import org.junit.Test;
  * 
  * @author Dimitrios Michail
  */
-public class DIMACSEdgeListImporterTest
+public class DIMACSGenericImporterTest
 {
 
     /**
@@ -48,17 +48,17 @@ public class DIMACSEdgeListImporterTest
     {
         InputStream fstream = getClass().getClassLoader().getResourceAsStream("myciel3.col");
 
-        DIMACSEdgeListImporter importer = new DIMACSEdgeListImporter();
+        DIMACSGenericImporter importer = new DIMACSGenericImporter();
 
         importer.addNodeCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
         });
         List<Pair<Integer, Integer>> collected = new ArrayList<>();
-        importer.addEdgeConsumer((e, w) -> {
-            assertNull(w);
-            collected.add(e);
+        importer.addEdgeConsumer(t -> {
+            assertNull(t.getThird());
+            collected.add(Pair.of(t.getFirst(), t.getSecond()));
         });
-        importer.importEdgeList(fstream);
+        importer.importInput(fstream);
 
         int[][] edges = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 0, 4 }, { 1, 5 }, { 1, 6 }, { 1, 7 },
             { 5, 8 }, { 5, 3 }, { 5, 9 }, { 2, 8 }, { 2, 6 }, { 2, 9 }, { 8, 7 }, { 8, 4 },
@@ -96,16 +96,16 @@ public class DIMACSEdgeListImporterTest
         nameMap.put(10, 9);
         nameMap.put(11, 10);
 
-        DIMACSEdgeListImporter importer = new DIMACSEdgeListImporter();
+        DIMACSGenericImporter importer = new DIMACSGenericImporter();
 
         importer.addNodeCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
-        importer.addEdgeConsumer((e, w) -> {
-            collected.add(Triple.of(e.getFirst(), e.getSecond(), w));
+        importer.addEdgeConsumer(t -> {
+            collected.add(t);
         });
-        importer.importEdgeList(fstream);
+        importer.importInput(fstream);
 
         int[][] edges = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 7, 3 }, { 1, 9, 4 }, { 2, 3, 5 },
             { 2, 6, 6 }, { 2, 8, 7 }, { 3, 5, 8 }, { 3, 7, 9 }, { 3, 10, 10 }, { 4, 5, 11 },
@@ -145,17 +145,17 @@ public class DIMACSEdgeListImporterTest
         nameMap.put(10, 9);
         nameMap.put(11, 10);
 
-        DIMACSEdgeListImporter importer = new DIMACSEdgeListImporter();
+        DIMACSGenericImporter importer = new DIMACSGenericImporter();
         importer = importer.renumberVertices(false);
 
         importer.addNodeCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
-        importer.addEdgeConsumer((e, w) -> {
-            collected.add(Triple.of(e.getFirst(), e.getSecond(), w));
+        importer.addEdgeConsumer(t -> {
+            collected.add(t);
         });
-        importer.importEdgeList(fstream);
+        importer.importInput(fstream);
 
         int[][] edges = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 7, 3 }, { 1, 9, 4 }, { 2, 3, 5 },
             { 2, 6, 6 }, { 2, 8, 7 }, { 3, 5, 8 }, { 3, 7, 9 }, { 3, 10, 10 }, { 4, 5, 11 },

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by Michael Behrisch, Joris Kinable, Dimitrios 
+ * (C) Copyright 2010-2019, by Michael Behrisch and Contributors. 
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,14 @@
  */
 package org.jgrapht.io;
 
-import org.jgrapht.*;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
-import java.io.*;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Triple;
+import org.jgrapht.nio.dimacs.DIMACSGenericImporter;
 
 /**
  * Imports a graph specified in DIMACS format.
@@ -123,120 +127,63 @@ public class DIMACSImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        // convert to buffered
-        BufferedReader in;
-        if (input instanceof BufferedReader) {
-            in = (BufferedReader) input;
-        } else {
-            in = new BufferedReader(input);
-        }
-
-        // add nodes
-        final int size = readNodeCount(in);
-        Map<Integer, V> map = new HashMap<Integer, V>();
-        for (int i = 0; i < size; i++) {
-            Integer id = Integer.valueOf(i + 1);
-            V vertex = vertexProvider.buildVertex(id.toString(), new HashMap<String, Attribute>());
-            map.put(id, vertex);
-            graph.addVertex(vertex);
-        }
-
-        // add edges
-        String[] cols = skipComments(in);
-        while (cols != null) {
-            if (cols[0].equals("e") || cols[0].equals("a")) {
-                if (cols.length < 3) {
-                    throw new ImportException("Failed to parse edge:" + Arrays.toString(cols));
-                }
-                Integer source;
-                try {
-                    source = Integer.parseInt(cols[1]);
-                } catch (NumberFormatException e) {
-                    throw new ImportException(
-                        "Failed to parse edge source node:" + e.getMessage(), e);
-                }
-                Integer target;
-                try {
-                    target = Integer.parseInt(cols[2]);
-                } catch (NumberFormatException e) {
-                    throw new ImportException(
-                        "Failed to parse edge target node:" + e.getMessage(), e);
-                }
-
-                String label = "e_" + source + "_" + target;
-                V from = map.get(source);
-                if (from == null) {
-                    throw new ImportException("Node " + source + " does not exist");
-                }
-                V to = map.get(target);
-                if (to == null) {
-                    throw new ImportException("Node " + target + " does not exist");
-                }
-
-                try {
-                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, Attribute>());
-                    graph.addEdge(from, to, e);
-
-                    if (graph.getType().isWeighted()) {
-                        double weight = defaultWeight;
-                        if (cols.length > 3) {
-                            weight = Double.parseDouble(cols[3]);
-                        }
-                        graph.setEdgeWeight(e, weight);
-                    }
-                } catch (IllegalArgumentException e) {
-                    throw new ImportException("Failed to import DIMACS graph:" + e.getMessage(), e);
-                }
-            }
-            cols = skipComments(in);
-        }
-
+        DIMACSGenericImporter genericImporter = new DIMACSGenericImporter().renumberVertices(false);
+        GlobalConsumer globalConsumer = new GlobalConsumer(graph);
+        genericImporter.addNodeCountConsumer(globalConsumer.nodeCountConsumer);
+        genericImporter.addEdgeConsumer(globalConsumer.edgeConsumer);
+        genericImporter.importInput(input);
     }
 
-    private String[] split(final String src)
+    private class GlobalConsumer
     {
-        if (src == null) {
-            return null;
-        }
-        return src.split("\\s+");
-    }
+        private Graph<V, E> graph;
+        private Integer nodeCount;
+        private Map<Integer, V> map;
 
-    private String[] skipComments(BufferedReader input)
-    {
-        String[] cols = null;
-        try {
-            cols = split(input.readLine());
-            while ((cols != null)
-                && ((cols.length == 0) || cols[0].equals("c") || cols[0].startsWith("%")))
-            {
-                cols = split(input.readLine());
-            }
-        } catch (IOException e) {
-            // ignore
+        public GlobalConsumer(Graph<V, E> graph)
+        {
+            this.graph = graph;
+            this.nodeCount = null;
+            this.map = new HashMap<Integer, V>();
         }
-        return cols;
-    }
 
-    private int readNodeCount(BufferedReader input)
-        throws ImportException
-    {
-        final String[] cols = skipComments(input);
-        if (cols[0].equals("p")) {
-            if (cols.length < 3) {
-                throw new ImportException("Failed to read number of vertices.");
+        public final Consumer<Integer> nodeCountConsumer = (n) -> {
+            this.nodeCount = n;
+            for (int i = 0; i < nodeCount; i++) {
+                Integer id = Integer.valueOf(i+1);
+                V vertex =
+                    vertexProvider.buildVertex(id.toString(), new HashMap<String, Attribute>());
+                map.put(id, vertex);
+                graph.addVertex(vertex);
             }
-            Integer nodes;
+        };
+
+        public final Consumer<Triple<Integer, Integer, Double>> edgeConsumer = (t) -> {
+            int source = t.getFirst()+1;
+            int target = t.getSecond()+1;
+            String label = "e_" + source + "_" + target;
+
+            V from = map.get(source);
+            if (from == null) {
+                throw new ImportException("Node " + source + " does not exist");
+            }
+            V to = map.get(target);
+            if (to == null) {
+                throw new ImportException("Node " + target + " does not exist");
+            }
             try {
-                nodes = Integer.parseInt(cols[2]);
-            } catch (NumberFormatException e) {
-                throw new ImportException("Failed to read number of vertices.");
+                E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, Attribute>());
+                graph.addEdge(from, to, e);
+
+                if (graph.getType().isWeighted()) {
+                    double weight = t.getThird() == null ? defaultWeight : t.getThird();
+                    graph.setEdgeWeight(e, weight);
+                }
+            } catch (IllegalArgumentException e) {
+                throw new ImportException("Failed to import DIMACS graph:" + e.getMessage(), e);
             }
-            if (nodes < 0) {
-                throw new ImportException("Negative number of vertices.");
-            }
-            return nodes;
-        }
-        throw new ImportException("Failed to read number of vertices.");
+        };
+
     }
 
 }

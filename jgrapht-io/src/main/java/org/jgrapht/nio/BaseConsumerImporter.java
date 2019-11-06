@@ -1,0 +1,247 @@
+/*
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+package org.jgrapht.nio;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.io.Attribute;
+
+/**
+ * Base implementation for an importer which uses consumers to notify interested parties. Note that
+ * this importer does not compute anything, it simply calls the appropriate consumers to do the
+ * actual work.
+ *
+ * @author Dimitrios Michail
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
+public abstract class BaseConsumerImporter<V, E>
+    implements
+    ConsumerImporter<V, E>
+{
+    private List<Consumer<Integer>> nodeCountConsumers;
+    private List<Consumer<Integer>> edgeCountConsumers;
+    private List<Consumer<V>> vertexConsumers;
+    private List<Consumer<E>> edgeConsumers;
+    private List<BiConsumer<String, Attribute>> graphAttributeConsumers;
+    private List<BiConsumer<Pair<V, String>, Attribute>> vertexAttributeConsumers;
+    private List<BiConsumer<Pair<E, String>, Attribute>> edgeAttributeConsumers;
+    private List<Consumer<Event>> eventConsumers;
+
+    /**
+     * Constructor
+     */
+    public BaseConsumerImporter()
+    {
+        this.nodeCountConsumers = new ArrayList<>();
+        this.edgeCountConsumers = new ArrayList<>();
+        this.vertexConsumers = new ArrayList<>();
+        this.edgeConsumers = new ArrayList<>();
+        this.graphAttributeConsumers = new ArrayList<>();
+        this.vertexAttributeConsumers = new ArrayList<>();
+        this.edgeAttributeConsumers = new ArrayList<>();
+        this.eventConsumers = new ArrayList<>();
+    }
+
+    @Override
+    public void addEventConsumer(Consumer<Event> consumer)
+    {
+        eventConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeEventConsumer(Consumer<Event> consumer)
+    {
+        eventConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addNodeCountConsumer(Consumer<Integer> consumer)
+    {
+        nodeCountConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeNodeCountConsumer(Consumer<Integer> consumer)
+    {
+        nodeCountConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addEdgeCountConsumer(Consumer<Integer> consumer)
+    {
+        edgeCountConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeEdgeCountConsumer(Consumer<Integer> consumer)
+    {
+        edgeCountConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addVertexConsumer(Consumer<V> consumer)
+    {
+        vertexConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeVertexConsumer(Consumer<V> consumer)
+    {
+        vertexConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addEdgeConsumer(Consumer<E> consumer)
+    {
+        edgeConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeEdgeConsumer(Consumer<E> consumer)
+    {
+        edgeConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
+    {
+        graphAttributeConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
+    {
+        graphAttributeConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer)
+    {
+        vertexAttributeConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer)
+    {
+        vertexAttributeConsumers.remove(consumer);
+    }
+
+    @Override
+    public void addEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer)
+    {
+        edgeAttributeConsumers.add(consumer);
+    }
+
+    @Override
+    public void removeEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer)
+    {
+        edgeAttributeConsumers.remove(consumer);
+    }
+
+    /**
+     * Notify for the node count.
+     * 
+     * @param nodeCount the number of nodes in the graph
+     */
+    protected void notifyNodeCount(Integer nodeCount)
+    {
+        nodeCountConsumers.forEach(c -> c.accept(nodeCount));
+    }
+
+    /**
+     * Notify for the edge count.
+     * 
+     * @param edgeCount the number of edges in the graph
+     */
+    protected void notifyEdgeCount(Integer edgeCount)
+    {
+        edgeCountConsumers.forEach(c -> c.accept(edgeCount));
+    }
+
+    /**
+     * Notify for a vertex.
+     * 
+     * @param v the vertex
+     */
+    protected void notifyVertex(V v)
+    {
+        vertexConsumers.forEach(c -> c.accept(v));
+    }
+
+    /**
+     * Notify for an edge.
+     * 
+     * @param e the edge
+     */
+    protected void notifyEdge(E e)
+    {
+        edgeConsumers.forEach(c -> c.accept(e));
+    }
+
+    /**
+     * Notify for a graph attribute
+     * 
+     * @param key the attribute key
+     * @param value the attribute
+     */
+    protected void notifyGraphAttribute(String key, Attribute value)
+    {
+        graphAttributeConsumers.forEach(c -> c.accept(key, value));
+    }
+
+    /**
+     * Notify for a vertex attribute
+     * 
+     * @param v the vertex
+     * @param key the attribute key
+     * @param value the attribute
+     */
+    protected void notifyVertexAttribute(V v, String key, Attribute value)
+    {
+        vertexAttributeConsumers.forEach(c -> c.accept(Pair.of(v, key), value));
+    }
+
+    /**
+     * Notify for an edge attribute
+     * 
+     * @param e the edge
+     * @param key the attribute key
+     * @param value the attribute
+     */
+    protected void notifyEdgeAttribute(E e, String key, Attribute value)
+    {
+        edgeAttributeConsumers.forEach(c -> c.accept(Pair.of(e, key), value));
+    }
+
+    /**
+     * Notify for an importer event
+     * 
+     * @param event the event
+     */
+    protected void notifyEvent(Event event)
+    {
+        eventConsumers.forEach(c -> c.accept(event));
+    }
+
+}

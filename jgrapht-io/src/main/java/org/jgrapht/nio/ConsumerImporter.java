@@ -1,0 +1,197 @@
+/*
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+package org.jgrapht.nio;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.io.Attribute;
+import org.jgrapht.io.ImportException;
+
+/**
+ * Interface for an importer using consumers.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
+public interface ConsumerImporter<V, E>
+{
+    /**
+     * An event which may happen during import.
+     */
+    public enum Event
+    {
+        START,
+        EOF
+    }
+
+    /**
+     * Add an event consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEventConsumer(Consumer<Event> consumer);
+
+    /**
+     * Remove an event consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeEventConsumer(Consumer<Event> consumer);
+
+    /**
+     * Add a node count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addNodeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Remove a node count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeNodeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Add an edge count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEdgeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Remove an edge count consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeEdgeCountConsumer(Consumer<Integer> consumer);
+
+    /**
+     * Add a vertex consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addVertexConsumer(Consumer<V> consumer);
+
+    /**
+     * Remove a vertex consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeVertexConsumer(Consumer<V> consumer);
+
+    /**
+     * Add an edge consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEdgeConsumer(Consumer<E> consumer);
+
+    /**
+     * Remove an edge consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeEdgeConsumer(Consumer<E> consumer);
+
+    /**
+     * Add a graph attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addGraphAttributeConsumer(BiConsumer<String, Attribute> consumer);
+
+    /**
+     * Remove a graph attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeGraphAttributeConsumer(BiConsumer<String, Attribute> consumer);
+
+    /**
+     * Add a vertex attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer);
+
+    /**
+     * Remove a vertex attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer);
+
+    /**
+     * Add an edge attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer);
+
+    /**
+     * Remove an edge attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void removeEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer);
+
+    /**
+     * Import
+     * 
+     * @param input the input reader
+     * @throws ImportException in case any error occurs, such as I/O or parse error
+     */
+    void importInput(Reader input);
+
+    /**
+     * Import
+     * 
+     * @param in the input stream
+     * @throws ImportException in case any error occurs, such as I/O or parse error
+     */
+    default void importInput(InputStream in)
+    {
+        importInput(new InputStreamReader(in, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Import
+     * 
+     * @param file the file to read from
+     * @throws ImportException in case any error occurs, such as I/O or parse error
+     */
+    default void importInput(File file)
+    {
+        try {
+            importInput(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            throw new ImportException(e);
+        }
+    }
+
+}

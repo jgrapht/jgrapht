@@ -22,7 +22,7 @@ package org.jgrapht.io;
  */
 public class ImportException
     extends
-    Exception
+    RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
