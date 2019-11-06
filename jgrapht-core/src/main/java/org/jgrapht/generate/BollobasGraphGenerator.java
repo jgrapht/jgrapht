@@ -115,9 +115,9 @@ public class BollobasGraphGenerator<V, E>
      *        {@link #targetEdges} given is a <i>negative</i> number.
      */
     public BollobasGraphGenerator(
-        float alpha, float gamma, float dIn, float dOut, int targetEdges, int targetNodes)
+        float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes)
     {
-        this(alpha, gamma, dIn, dOut, targetEdges, targetNodes, new Random());
+        this(alpha, gamma, deltaIn, deltaOut, targetEdges, targetNodes, new Random());
     }
 
     /**
@@ -141,10 +141,10 @@ public class BollobasGraphGenerator<V, E>
      * @param seed The seed to feed to the random number generator.
      */
     public BollobasGraphGenerator(
-        float alpha, float gamma, float dIn, float dOut, int targetEdges, int targetNodes,
+        float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes,
         long seed)
     {
-        this(alpha, gamma, dIn, dOut, targetEdges, targetNodes, new Random(seed));
+        this(alpha, gamma, deltaIn, deltaOut, targetEdges, targetNodes, new Random(seed));
     }
 
     /**
@@ -325,6 +325,9 @@ public class BollobasGraphGenerator<V, E>
         return ret;
     }
 
+    /**A main function to be removed later
+     * @param args Passed-in arguments
+     */
     public static void main(String[] args)
     {
         Graph<Integer, DefaultEdge> testGraph = new DefaultDirectedGraph<Integer, DefaultEdge>(
