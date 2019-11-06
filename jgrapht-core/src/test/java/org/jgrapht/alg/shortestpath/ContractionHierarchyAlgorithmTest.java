@@ -20,18 +20,24 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyAlgorithm.ContractionEdge;
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyAlgorithm.ContractionVertex;
@@ -395,5 +401,152 @@ public class ContractionHierarchyAlgorithmTest {
                 contractionMapping.get(2),
                 contractionMapping.get(1)
         )), 1e-9);
+    }
+
+
+    @Test
+    public void testOnRandomGraphs() {
+        int numOfGraphs = 20;
+        int numOfVertices = 30;
+        double probability = 0.2;
+
+        for (int i = 0; i < numOfGraphs; ++i) {
+            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+            graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
+
+            generateRandomGraph(graph, numOfVertices, probability);
+
+            Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
+                    Map<Integer, ContractionVertex<Integer>>> contraction =
+                    new ContractionHierarchyAlgorithm<>(graph).computeContractionHierarchy();
+
+            assertCorrectMapping(graph, contraction.getFirst(), contraction.getSecond());
+            assertNoEdgesRemoved(graph, contraction.getFirst(), contraction.getSecond());
+            assertCorrectEdgeWeights(graph, contraction.getFirst(), contraction.getSecond());
+            assertCorrectContractionEdges(graph, contraction.getFirst(), contraction.getSecond());
+        }
+    }
+
+    /**
+     * Asserts that {@code mapping} includes all vertices in {@code graph} as keys,
+     * all vertices in {@code contractionGraph} as values and the values in {@code mapping}
+     * are unique.
+     *
+     * @param graph            graph
+     * @param contractionGraph contracted graph
+     * @param mapping          mapping from initial to contracted vertices
+     */
+    private void assertCorrectMapping(Graph<Integer, DefaultWeightedEdge> graph,
+                                      Graph<ContractionVertex<Integer>,
+                                              ContractionEdge<DefaultWeightedEdge>> contractionGraph,
+                                      Map<Integer, ContractionVertex<Integer>> mapping) {
+        assertEquals(graph.vertexSet(), mapping.keySet());
+        Set<ContractionVertex<Integer>> uniqueValues = new HashSet<>(mapping.values());
+        assertEquals(graph.vertexSet().size(), uniqueValues.size());
+        assertEquals(contractionGraph.vertexSet(), uniqueValues);
+    }
+
+    /**
+     * Asserts that for every edge in {@code graph} between $s$ and $t$ there exists
+     * an edge in {@code contractionGraph} between contracted $s$ and $t$.
+     *
+     * @param graph            graph
+     * @param contractionGraph contracted graph
+     * @param mapping          mapping from initial to contracted vertices
+     */
+    private void assertNoEdgesRemoved(Graph<Integer, DefaultWeightedEdge> graph,
+                                      Graph<ContractionVertex<Integer>,
+                                              ContractionEdge<DefaultWeightedEdge>> contractionGraph,
+                                      Map<Integer, ContractionVertex<Integer>> mapping) {
+        for (DefaultWeightedEdge edge : graph.edgeSet()) {
+            Integer source = graph.getEdgeSource(edge);
+            Integer target = graph.getEdgeTarget(edge);
+
+            assertTrue(contractionGraph.containsEdge(mapping.get(source), mapping.get(target)));
+        }
+    }
+
+    /**
+     * Asserts that every edge in {@code graph} between $s$ and $t$ has greater or equal weight than
+     * an edge in {@code contractedGraph} between the contracted $s$ and $t$.
+     *
+     * @param graph            graph
+     * @param contractionGraph contracted graph
+     * @param mapping          mapping from initial to contracted vertices
+     */
+    private void assertCorrectEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph,
+                                          Graph<ContractionVertex<Integer>,
+                                                  ContractionEdge<DefaultWeightedEdge>> contractionGraph,
+                                          Map<Integer, ContractionVertex<Integer>> mapping) {
+        for (DefaultWeightedEdge edge : graph.edgeSet()) {
+            Integer source = graph.getEdgeSource(edge);
+            Integer target = graph.getEdgeTarget(edge);
+            ContractionVertex<Integer> contractedSource = mapping.get(source);
+            ContractionVertex<Integer> contractedTarget = mapping.get(target);
+
+            double oldWeight = graph.getEdgeWeight(edge);
+            double newWeight = contractionGraph.getEdgeWeight(
+                    contractionGraph.getEdge(contractedSource, contractedTarget));
+            assertTrue(oldWeight >= newWeight);
+        }
+    }
+
+    /**
+     * Asserts for every edge $e1$ in {@code contractionGraph} which is not a shortcuts and contains an edge $e2$
+     * of the original {@code graph} that weight og $e1$ is equal to the weight of $e2$. Secondly for vertices in the
+     * {@code graph} which correspond to source $s$ and target $t$ of $e1$ asserts that there is an edge $e2$ between
+     * them and the weight of $e2$ is minimum among all edges between $s$ and $t$.
+     *
+     * @param graph graph
+     * @param contractionGraph contracted graph
+     * @param mapping mapping from initial to contracted vertices
+     */
+    private void assertCorrectContractionEdges(Graph<Integer, DefaultWeightedEdge> graph,
+                                               Graph<ContractionVertex<Integer>,
+                                                       ContractionEdge<DefaultWeightedEdge>> contractionGraph,
+                                               Map<Integer, ContractionVertex<Integer>> mapping) {
+        Map<ContractionVertex<Integer>, Integer> inverseMapping = new HashMap<>();
+        for (Map.Entry<Integer, ContractionVertex<Integer>> entry : mapping.entrySet()) {
+            inverseMapping.put(entry.getValue(), entry.getKey());
+        }
+
+        for (ContractionEdge<DefaultWeightedEdge> contractionEdge : contractionGraph.edgeSet()) {
+            if (contractionEdge.edge != null) { // it is not a shortcut edge
+                double edgeWeight = graph.getEdgeWeight(contractionEdge.edge);
+                assertEquals(edgeWeight, contractionGraph.getEdgeWeight(contractionEdge), 1e-9);
+
+                ContractionVertex<Integer> contractedSource = contractionGraph.getEdgeSource(contractionEdge);
+                ContractionVertex<Integer> contractedTarget = contractionGraph.getEdgeTarget(contractionEdge);
+
+                Integer source = inverseMapping.get(contractedSource);
+                Integer target = inverseMapping.get(contractedTarget);
+
+                boolean containsEdge = false;
+                for (DefaultWeightedEdge edge : graph.getAllEdges(source, target)) {
+                    assertTrue(graph.getEdgeWeight(edge) >= edgeWeight);
+                    if (edge.equals(contractionEdge.edge)) {
+                        containsEdge = true;
+                    }
+                }
+                assertTrue(containsEdge);
+            }
+        }
+    }
+
+
+    /**
+     * Generates random graph from the $G(n, p)$ model.
+     *
+     * @param graph graph instance for the generator
+     * @param n     the number of nodes
+     * @param p     the edge probability
+     */
+    private void generateRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p) {
+        Random random = new Random(SEED);
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
+                new GnpRandomGraphGenerator<>(n, p, SEED);
+        generator.generateGraph(graph);
+
+        graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextDouble()));
     }
 }

@@ -111,17 +111,17 @@ public class ContractionHierarchyAlgorithm<V, E> {
     /**
      * Vertices of the {@code contractionGraph}.
      */
-    private List<ContractionVertex<V>> verticesArray;
+    private List<ContractionVertex<V>> vertices;
     /**
      * Lists of shortcuts that correspond to vertices in the {@code contractionGraph}.
      * The id of a vertex is the position in this array, where corresponding shortcuts are stored.
      */
-    private List<List<Pair<ContractionEdge<E>, ContractionEdge<E>>>> shortcutsArray;
+    private List<List<Pair<ContractionEdge<E>, ContractionEdge<E>>>> shortcutEdges;
     /**
      * Data of each vertex int the {@code contractionGraph}. The id of a vertex is the position
-     * in this array, where corresponding data is stored.
+     * in this list, where corresponding data is stored.
      */
-    private List<VertexData> verticesDataArray;
+    private List<VertexData> verticesData;
 
     /**
      * Counter of contraction level that should be assigned to vertex that is being contracted.
@@ -237,14 +237,14 @@ public class ContractionHierarchyAlgorithm<V, E> {
         this.parallelism = parallelism;
         this.shortcutsSearchHeapSupplier = shortcutsSearchHeapSupplier;
 
-        verticesArray = new ArrayList<>(graph.vertexSet().size());
-        shortcutsArray = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
-        verticesDataArray = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
+        vertices = new ArrayList<>(graph.vertexSet().size());
+        shortcutEdges = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
+        verticesData = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
 
         contractionLevelCounter = new AtomicInteger();
 
         maskedContractionGraph = new MaskSubgraph<>(contractionGraph,
-                v -> verticesDataArray.get(v.vertexId) != null && verticesDataArray.get(v.vertexId).isContracted, e -> false);
+                v -> verticesData.get(v.vertexId) != null && verticesData.get(v.vertexId).isContracted, e -> false);
         contractionMapping = new HashMap<>();
 
         executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -259,14 +259,14 @@ public class ContractionHierarchyAlgorithm<V, E> {
 
                 @Override
                 public void accept(ContractionVertex<V> vertex) {
-                    verticesDataArray.set(vertex.vertexId, getVertexData(vertex, random.nextInt()));
+                    verticesData.set(vertex.vertexId, getVertexData(vertex, random.nextInt()));
                 }
             });
         }
 
 
-        computeIndependentSetConsumer = vertex -> verticesDataArray.get(vertex.vertexId).isIndependent = vertexIsIndependent(vertex);
-        computeShortcutsConsumer = vertex -> shortcutsArray.set(vertex.vertexId, getShortcuts(vertex));
+        computeIndependentSetConsumer = vertex -> verticesData.get(vertex.vertexId).isIndependent = vertexIsIndependent(vertex);
+        computeShortcutsConsumer = vertex -> shortcutEdges.set(vertex.vertexId, getShortcuts(vertex));
         updateNeighboursConsumer = vertex -> updateNeighboursData(vertex);
         markUpwardEdgesConsumer = vertex -> contractionGraph.outgoingEdgesOf(vertex).forEach(
                 e -> e.isUpward = contractionGraph.getEdgeSource(e).contractionLevel <
@@ -294,7 +294,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
     }
 
     /**
-     * Fills {@code contractionGraph} and {@code verticesArray}. If there exist multiple
+     * Fills {@code contractionGraph} and {@code vertices}. If there exist multiple
      * edges between two vertices in the original graph, the shortest is added to the
      * {@code contractionGraph}. Self loops of the original graph are ignored. If original
      * graph is undirected, each edge is transformed into two directed edges in the contraction graph.
@@ -303,7 +303,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
         int vertexId = 0;
         for (V vertex : graph.vertexSet()) {
             ContractionVertex<V> contractionVertex = new ContractionVertex<>(vertex, vertexId);
-            verticesArray.add(contractionVertex);
+            vertices.add(contractionVertex);
             ++vertexId;
 
             contractionGraph.addVertex(contractionVertex);
@@ -400,16 +400,16 @@ public class ContractionHierarchyAlgorithm<V, E> {
 
     /**
      * Determines if priority of {@code vertex1} is greater than the priority of {@code vertex2}.
-     * If priorities stored in {@code verticesDataArray} are equal, the tie breaking rule is used.
-     * First random values in {@code verticesDataArray} are checked. If they are also equal,
+     * If priorities stored in {@code verticesData} are equal, the tie breaking rule is used.
+     * First random values in {@code verticesData} are checked. If they are also equal,
      * ids of vertices are inspected. Each vertex has a unique id which guaranties that on each
      * iteration there exists at least one independent vertex.
      *
      * @return true iff priority of {@code vertex1} is greater than {@code vertex2}
      */
     private boolean isGreater(ContractionVertex<V> vertex1, ContractionVertex<V> vertex2) {
-        VertexData data1 = verticesDataArray.get(vertex1.vertexId);
-        VertexData data2 = verticesDataArray.get(vertex2.vertexId);
+        VertexData data1 = verticesData.get(vertex1.vertexId);
+        VertexData data2 = verticesData.get(vertex2.vertexId);
 
         if (data1.priority != data2.priority) {
             return data1.priority > data2.priority;
@@ -425,30 +425,30 @@ public class ContractionHierarchyAlgorithm<V, E> {
 
 
     /**
-     * Partitions vertices in {@code verticesArray} on the segment $[0,notContractedVerticesEnd)$
+     * Partitions vertices in {@code vertices} on the segment $[0,notContractedVerticesEnd)$
      * into correspondingly not independent and independent.
      *
      * @param notContractedVerticesEnd position after the last not yet contracted
-     *                                 vertex in {@code verticesArray}
+     *                                 vertex in {@code vertices}
      * @return position of first independent vertex in created partition
      */
     private int partitionIndependentSet(int notContractedVerticesEnd) {
         int left = 0;
         int right = notContractedVerticesEnd - 1;
         while (left <= right) {
-            while (!verticesDataArray.get(left).isIndependent) {
+            while (!verticesData.get(left).isIndependent) {
                 ++left;
             }
-            while (right >= 0 && verticesDataArray.get(right).isIndependent) {
+            while (right >= 0 && verticesData.get(right).isIndependent) {
                 --right;
             }
             if (left <= right) {
-                ContractionVertex<V> leftVertex = verticesArray.get(left);
-                ContractionVertex<V> rightVertex = verticesArray.get(right);
+                ContractionVertex<V> leftVertex = vertices.get(left);
+                ContractionVertex<V> rightVertex = vertices.get(right);
 
-                swap(verticesDataArray, left, right);
-                swap(verticesArray, left, right);
-                swap(shortcutsArray, left, right);
+                swap(verticesData, left, right);
+                swap(vertices, left, right);
+                swap(shortcutEdges, left, right);
                 int tmpId = leftVertex.vertexId;
                 leftVertex.vertexId = rightVertex.vertexId;
                 rightVertex.vertexId = tmpId;
@@ -480,7 +480,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param independentSetEnd   position after the last vertex in the independent set
      */
     private void contractIndependentSet(int independentSetStart, int independentSetEnd) {
-        verticesArray.subList(independentSetStart, independentSetEnd).forEach(v ->
+        vertices.subList(independentSetStart, independentSetEnd).forEach(v ->
                 contractVertex(v, contractionLevelCounter.getAndIncrement()));
     }
 
@@ -491,7 +491,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param contractionLevel vertex contraction level
      */
     private void contractVertex(ContractionVertex<V> vertex, int contractionLevel) {
-        List<Pair<ContractionEdge<E>, ContractionEdge<E>>> shortcuts = shortcutsArray.get(vertex.vertexId);
+        List<Pair<ContractionEdge<E>, ContractionEdge<E>>> shortcuts = this.shortcutEdges.get(vertex.vertexId);
 
         // add shortcuts
         for (Pair<ContractionEdge<E>, ContractionEdge<E>> shortcut : shortcuts) {
@@ -526,9 +526,9 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param vertex a vertex in the {@code contractionGraph}
      */
     private void updateNeighboursData(ContractionVertex<V> vertex) {
-        VertexData vertexData = verticesDataArray.get(vertex.vertexId);
+        VertexData vertexData = verticesData.get(vertex.vertexId);
         for (ContractionVertex<V> neighbour : Graphs.neighborSetOf(maskedContractionGraph, vertex)) {
-            VertexData neighbourData = verticesDataArray.get(neighbour.vertexId);
+            VertexData neighbourData = verticesData.get(neighbour.vertexId);
             neighbourData.depth = Math.max(neighbourData.depth, vertexData.depth + 1);
             updatePriority(neighbour, neighbourData);
         }
@@ -574,7 +574,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      */
     private VertexStatistics getStatistics(ContractionVertex<V> vertex) {
         ToStatisticsConsumer consumer = new ToStatisticsConsumer();
-        iterateShortcuts(vertex, consumer);
+        iterateShortcutEdges(vertex, consumer);
         maskedContractionGraph.edgesOf(vertex).forEach(edge -> {
             ++consumer.statistics.removedContractionEdges;
             consumer.statistics.removedOriginalEdges += edge.originalEdges;
@@ -590,7 +590,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      */
     private List<Pair<ContractionEdge<E>, ContractionEdge<E>>> getShortcuts(ContractionVertex<V> vertex) {
         ToListConsumer consumer = new ToListConsumer();
-        iterateShortcuts(vertex, consumer);
+        iterateShortcutEdges(vertex, consumer);
         return consumer.shortcuts;
     }
 
@@ -606,16 +606,16 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param vertex           a vertex in {@code contractionGraph}
      * @param shortcutConsumer consumer to supply shortcuts to
      */
-    private void iterateShortcuts(ContractionVertex<V> vertex,
-                                  BiConsumer<ContractionEdge<E>, ContractionEdge<E>> shortcutConsumer) {
+    private void iterateShortcutEdges(ContractionVertex<V> vertex,
+                                      BiConsumer<ContractionEdge<E>, ContractionEdge<E>> shortcutConsumer) {
         Set<ContractionVertex<V>> successors = new HashSet<>();
         double maxOutgoingEdgeWeight = Double.MIN_VALUE;
 
         for (ContractionEdge<E> outEdge : maskedContractionGraph.outgoingEdgesOf(vertex)) {
             ContractionVertex<V> successor = maskedContractionGraph.getEdgeTarget(outEdge);
 
-            if (verticesDataArray.get(successor.vertexId) != null
-                    && verticesDataArray.get(successor.vertexId).isIndependent) { // does not belong to overlay graph
+            if (verticesData.get(successor.vertexId) != null
+                    && verticesData.get(successor.vertexId).isIndependent) { // does not belong to overlay graph
                 continue;
             }
 
@@ -626,8 +626,8 @@ public class ContractionHierarchyAlgorithm<V, E> {
 
         for (ContractionEdge<E> inEdge : maskedContractionGraph.incomingEdgesOf(vertex)) {
             ContractionVertex<V> predecessor = contractionGraph.getEdgeSource(inEdge);
-            if (verticesDataArray.get(predecessor.vertexId) != null
-                    && verticesDataArray.get(predecessor.vertexId).isIndependent) { // does not belong to overlay graph
+            if (verticesData.get(predecessor.vertexId) != null
+                    && verticesData.get(predecessor.vertexId).isIndependent) { // does not belong to overlay graph
                 continue;
             }
 
@@ -735,8 +735,8 @@ public class ContractionHierarchyAlgorithm<V, E> {
             }
 
             if (successor.equals(vertexToIgnore) ||
-                    (verticesDataArray.get(successor.vertexId) != null
-                            && verticesDataArray.get(successor.vertexId).isIndependent)) {
+                    (verticesData.get(successor.vertexId) != null
+                            && verticesData.get(successor.vertexId).isIndependent)) {
                 // skip independent vertices because they do not belong to overlay graph
                 continue;
             }
@@ -778,7 +778,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      */
     private void markContracted(int independentSetStart, int independentSetEnd) {
         for (int i = independentSetStart; i < independentSetEnd; ++i) {
-            verticesDataArray.get(verticesArray.get(i).vertexId).isContracted = true;
+            verticesData.get(vertices.get(i).vertexId).isContracted = true;
         }
     }
 
@@ -856,8 +856,8 @@ public class ContractionHierarchyAlgorithm<V, E> {
      */
     public static class ContractionVertex<V1> {
         /**
-         * Identifies the position in {@code verticesData} and {@code shortcuts}
-         * arrays, that corresponds to this vertex.
+         * Identifies the position in {@code verticesData} and {@code shortcutEdges}
+         * lists, that corresponds to this vertex.
          */
         int vertexId;
         /**
@@ -995,7 +995,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * Task that is used to perform computing of initial priorities,
      * independent set and shortcuts, updating neighbours priorities
      * and marking upward edges. To achieve good load balancing
-     * segment of vertices in {@code verticesArray} is divided into chunks
+     * segment of vertices in {@code vertices} is divided into chunks
      * using {@code taskId}.
      */
     private class ContractionTask implements Runnable {
@@ -1004,11 +1004,11 @@ public class ContractionHierarchyAlgorithm<V, E> {
          */
         int taskId;
         /**
-         * Start if the working segment in {@code verticesArray} inclusively.
+         * Start if the working segment in {@code vertices} inclusively.
          */
         int segmentStart;
         /**
-         * End if the working segment in {@code verticesArray} exclusively.
+         * End if the working segment in {@code vertices} exclusively.
          */
         int segmentsEnd;
         /**
@@ -1030,7 +1030,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
             int start = workerSegmentStart(segmentStart, segmentsEnd);
             int end = workerSegmentEnd(segmentStart, segmentsEnd);
             for (int i = start; i < end; ++i) {
-                consumer.accept(verticesArray.get(i));
+                consumer.accept(vertices.get(i));
             }
         }
 
