@@ -28,9 +28,10 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.DIMACSFormat;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.ConsumerImporter;
 
 /**
- * A general importer using consumers for DIMACS format.
+ * A generic importer using consumers for DIMACS format.
  *
  * <p>
  * See {@link DIMACSFormat} for a description of all the supported DIMACS formats.
@@ -79,6 +80,8 @@ import org.jgrapht.nio.BaseConsumerImporter;
 public class DIMACSGenericImporter
     extends
     BaseConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    implements
+    ConsumerImporter<Integer, Triple<Integer, Integer, Double>>
 {
     private boolean renumberVertices;
     private Map<String, Integer> vertexMap;

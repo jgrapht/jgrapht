@@ -40,27 +40,18 @@ import org.jgrapht.io.ImportException;
 public interface ConsumerImporter<V, E>
 {
     /**
-     * An event which may happen during import.
-     */
-    public enum Event
-    {
-        START,
-        EOF
-    }
-
-    /**
-     * Add an event consumer.
+     * Add an ImportEvent consumer.
      * 
      * @param consumer the consumer
      */
-    void addEventConsumer(Consumer<Event> consumer);
+    void addImportEventConsumer(Consumer<ImportEvent> consumer);
 
     /**
-     * Remove an event consumer.
+     * Remove an ImportEvent consumer.
      * 
      * @param consumer the consumer
      */
-    void removeEventConsumer(Consumer<Event> consumer);
+    void removeImportEventConsumer(Consumer<ImportEvent> consumer);
 
     /**
      * Add a node count consumer.

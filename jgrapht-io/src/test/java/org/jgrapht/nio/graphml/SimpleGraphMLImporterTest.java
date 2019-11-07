@@ -15,12 +15,15 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio.graphml;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.io.Attribute;
+import org.jgrapht.io.DefaultAttribute;
+import org.jgrapht.io.ImportException;
 import org.jgrapht.util.*;
 import org.junit.*;
 
@@ -32,9 +35,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Tests
+ * 
  * @author Dimitrios Michail
  */
-@Deprecated
 public class SimpleGraphMLImporterTest
 {
 

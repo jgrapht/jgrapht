@@ -124,7 +124,10 @@ import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * 
+ * @deprecated Use {@link org.jgrapht.nio.graphml.SimpleGraphMLImporter} instead
  */
+@Deprecated
 public class SimpleGraphMLImporter<V, E>
     extends
     BaseListenableImporter<V, E>

@@ -24,24 +24,30 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Quadruple;
-import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.Attribute;
+import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.GraphMLImporter;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
-import org.jgrapht.nio.ImportEvent;
+import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
 
 /**
- * Imports a GraphML file as an edge list. Vertices are numbered from $0$ to $n-1$ in the order they
- * are first encountered in the input file.
+ * Imports a graph from a GraphML data source.
  * 
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GraphML
  * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
- * towards parsing speed. Default attribute values are completely ignored.
+ * towards parsing speed.
+ * 
+ * <p>
+ * The importer uses the graph suppliers ({@link Graph#getVertexSupplier()} and
+ * {@link Graph#getEdgeSupplier()}) in order to create new vertices and edges. Moreover, it notifies
+ * lazily and completely out-of-order for any additional vertex, edge or graph attributes in the
+ * input file. Users can register consumers for vertex, edge and graph attributes after construction
+ * of the importer. Finally, default attribute values are completely ignored.
  * 
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
@@ -101,17 +107,34 @@ import org.jgrapht.nio.ImportEvent;
  * </pre>
  * 
  * <p>
+ * The importer reads the input into a graph which is provided by the user. In case the graph is
+ * weighted and the corresponding edge key with attr.name="weight" is defined, the importer also
+ * reads edge weights. Otherwise edge weights are ignored. To test whether the graph is weighted,
+ * method {@link Graph#getType()} can be used.
+ * 
+ * <p>
+ * The provided graph object, where the imported graph will be stored, must be able to support the
+ * features of the graph that is read. For example if the GraphML file contains self-loops then the
+ * graph provided must also support self-loops. The same for multiple edges. Moreover, the parser
+ * completely ignores the attribute "edgedefault" which denotes whether an edge is directed or not.
+ * Whether edges are directed or not depends on the underlying implementation of the user provided
+ * graph object.
+ * 
+ * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
  * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLEdgeListImporter
+public class SimpleGraphMLImporter<V, E>
     extends
-    BaseConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    BaseConsumerImporter<V, E>
     implements
-    ConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    GraphImporter<V, E>
 {
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
 
@@ -121,7 +144,7 @@ public class SimpleGraphMLEdgeListImporter
     /**
      * Constructs a new importer.
      */
-    public SimpleGraphMLEdgeListImporter()
+    public SimpleGraphMLImporter()
     {
         this.schemaValidation = true;
     }
@@ -167,83 +190,104 @@ public class SimpleGraphMLEdgeListImporter
         this.schemaValidation = schemaValidation;
     }
 
+    /**
+     * Import a graph.
+     * 
+     * <p>
+     * The provided graph must be able to support the features of the graph that is read. For
+     * example if the GraphML file contains self-loops then the graph provided must also support
+     * self-loops. The same for multiple edges.
+     * 
+     * @param graph the output graph
+     * @param input the input reader
+     * @throws ImportException in case an error occurs, such as I/O or parse error
+     */
     @Override
-    public void importInput(Reader input)
+    public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         SimpleGraphMLGenericImporter genericImporter = new SimpleGraphMLGenericImporter();
         genericImporter.setEdgeWeightAttributeName(edgeWeightAttributeName);
         genericImporter.setSchemaValidation(schemaValidation);
-        Consumers consumers = new Consumers();
-        genericImporter.addImportEventConsumer(consumers.eventConsumer);
-        genericImporter.addVertexConsumer(consumers.vertexConsumer);
-        genericImporter.addEdgeConsumer(consumers.edgeConsumer);
-        genericImporter.addEdgeAttributeConsumer(consumers.edgeAttributeConsumer);
+
+        Consumers globalConsumer = new Consumers(graph);
+        genericImporter.addGraphAttributeConsumer(globalConsumer.graphAttributeConsumer);
+        genericImporter.addVertexAttributeConsumer(globalConsumer.vertexAttributeConsumer);
+        genericImporter.addEdgeAttributeConsumer(globalConsumer.edgeAttributeConsumer);
+        genericImporter.addVertexConsumer(globalConsumer.vertexConsumer);
+        genericImporter.addEdgeConsumer(globalConsumer.edgeConsumer);
         genericImporter.importInput(input);
     }
 
     private class Consumers
     {
-        private int nodeCount;
-        private Map<String, Integer> vertexMap;
-        private Triple<Integer, Integer, Double> lastTriple;
+        private Graph<V, E> graph;
+        private Map<String, V> nodesMap;
+        private E lastEdge;
         private Quadruple<String, String, String, Double> lastQuadruple;
 
-        public Consumers()
+        public Consumers(Graph<V, E> graph)
         {
-            this.nodeCount = 0;
-            this.vertexMap = new HashMap<>();
+            this.graph = graph;
+            this.nodesMap = new HashMap<>();
+            this.lastEdge = null;
+            this.lastQuadruple = null;
         }
 
-        public final Consumer<ImportEvent> eventConsumer = (e) -> {
-            if (ImportEvent.EOF.equals(e)) {
-                if (lastTriple != null) {
-                    notifyEdge(lastTriple);
-                    lastQuadruple = null;
-                    lastTriple = null;
-                }
-            }
+        public final BiConsumer<String, Attribute> graphAttributeConsumer = (key, a) -> {
+            notifyGraphAttribute(key, a);
         };
 
-        public final Consumer<String> vertexConsumer = (v) -> {
-            vertexMap.computeIfAbsent(v, k -> {
-                return Integer.valueOf(nodeCount++);
-            });
-        };
+        public final BiConsumer<Pair<String, String>, Attribute> vertexAttributeConsumer =
+            (vertexAndKey, a) -> {
+                notifyVertexAttribute(
+                    mapNode(vertexAndKey.getFirst()), vertexAndKey.getSecond(), a);
+            };
 
         public final BiConsumer<Pair<Quadruple<String, String, String, Double>, String>,
             Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
+                Quadruple<String, String, String, Double> qe = edgeAndKey.getFirst();
 
-                Quadruple<String, String, String, Double> q = edgeAndKey.getFirst();
-                String keyName = edgeAndKey.getSecond();
-                if (lastQuadruple == q && edgeWeightAttributeName.equals(keyName)) {
-                    lastQuadruple.setFourth(q.getFourth());
-                    lastTriple.setThird(q.getFourth());
+                if (qe == lastQuadruple) {
+                    if (qe.getFourth() != null
+                        && edgeWeightAttributeName.equals(edgeAndKey.getSecond())
+                        && graph.getType().isWeighted())
+                {
+                        graph.setEdgeWeight(lastEdge, qe.getFourth());
+                    }
+
+                    notifyEdgeAttribute(lastEdge, edgeAndKey.getSecond(), a);
                 }
             };
 
-        public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (q) -> {
-            if (q != lastQuadruple) {
-                if (lastQuadruple != null) {
-                    notifyEdge(lastTriple);
+        public final Consumer<String> vertexConsumer = (vId) -> {
+            mapNode(vId);
+        };
+
+        public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (qe) -> {
+            if (lastQuadruple != qe) {
+                String source = qe.getSecond();
+                String target = qe.getThird();
+                Double weight = qe.getFourth();
+
+                E e = graph.addEdge(mapNode(source), mapNode(target));
+                if (weight != null && graph.getType().isWeighted()) {
+                    graph.setEdgeWeight(e, weight);
                 }
-                lastQuadruple = q;
-                lastTriple = createTriple(q);
+
+                lastEdge = e;
+                lastQuadruple = qe;
             }
         };
 
-        private Triple<Integer, Integer, Double> createTriple(
-            Quadruple<String, String, String, Double> e)
+        private V mapNode(String vId)
         {
-            int source = vertexMap.computeIfAbsent(e.getSecond(), k -> {
-                return Integer.valueOf(nodeCount++);
-            });
-            int target = vertexMap.computeIfAbsent(e.getThird(), k -> {
-                return Integer.valueOf(nodeCount++);
-            });
-            Double weight = e.getFourth();
-
-            return Triple.of(source, target, weight);
+            V vertex = nodesMap.get(vId);
+            if (vertex == null) {
+                vertex = graph.addVertex();
+                nodesMap.put(vId, vertex);
+            }
+            return vertex;
         }
 
     }

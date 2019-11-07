@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio.dimacs;
 
 import java.io.Reader;
 import java.util.HashMap;
@@ -24,7 +24,10 @@ import java.util.function.Consumer;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.dimacs.DIMACSGenericImporter;
+import org.jgrapht.io.DIMACSFormat;
+import org.jgrapht.io.GraphImporter;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.BaseConsumerImporter;
 
 /**
  * Imports a graph specified in DIMACS format.
@@ -69,45 +72,32 @@ import org.jgrapht.nio.dimacs.DIMACSGenericImporter;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * @deprecated Use {@link org.jgrapht.nio.dimacs.DIMACSImporter} instead
  */
-@Deprecated
 public class DIMACSImporter<V, E>
     extends
-    AbstractBaseImporter<V, E>
+    BaseConsumerImporter<V, E>
     implements
     GraphImporter<V, E>
 {
     private final double defaultWeight;
 
-    // ~ Constructors ----------------------------------------------------------
-
     /**
      * Construct a new DIMACSImporter
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not be null.
-     * @param edgeProvider provider for the generation of edges. Must not be null.
      * @param defaultWeight default edge weight
      */
-    public DIMACSImporter(
-        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, double defaultWeight)
+    public DIMACSImporter(double defaultWeight)
     {
-        super(vertexProvider, edgeProvider);
         this.defaultWeight = defaultWeight;
     }
 
     /**
      * Construct a new DIMACSImporter
-     * 
-     * @param vertexProvider provider for the generation of vertices. Must not be null.
-     * @param edgeProvider provider for the generation of edges. Must not be null.
      */
-    public DIMACSImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
+    public DIMACSImporter()
     {
-        this(vertexProvider, edgeProvider, Graph.DEFAULT_EDGE_WEIGHT);
+        this(Graph.DEFAULT_EDGE_WEIGHT);
     }
-
-    // ~ Methods ---------------------------------------------------------------
 
     /**
      * Import a graph.
@@ -130,19 +120,19 @@ public class DIMACSImporter<V, E>
         throws ImportException
     {
         DIMACSGenericImporter genericImporter = new DIMACSGenericImporter().renumberVertices(false);
-        GlobalConsumer globalConsumer = new GlobalConsumer(graph);
-        genericImporter.addNodeCountConsumer(globalConsumer.nodeCountConsumer);
-        genericImporter.addEdgeConsumer(globalConsumer.edgeConsumer);
+        Consumers consumers = new Consumers(graph);
+        genericImporter.addNodeCountConsumer(consumers.nodeCountConsumer);
+        genericImporter.addEdgeConsumer(consumers.edgeConsumer);
         genericImporter.importInput(input);
     }
 
-    private class GlobalConsumer
+    private class Consumers
     {
         private Graph<V, E> graph;
         private Integer nodeCount;
         private Map<Integer, V> map;
 
-        public GlobalConsumer(Graph<V, E> graph)
+        public Consumers(Graph<V, E> graph)
         {
             this.graph = graph;
             this.nodeCount = null;
@@ -152,37 +142,27 @@ public class DIMACSImporter<V, E>
         public final Consumer<Integer> nodeCountConsumer = (n) -> {
             this.nodeCount = n;
             for (int i = 0; i < nodeCount; i++) {
-                Integer id = Integer.valueOf(i + 1);
-                V vertex =
-                    vertexProvider.buildVertex(id.toString(), new HashMap<String, Attribute>());
-                map.put(id, vertex);
-                graph.addVertex(vertex);
+                map.put(Integer.valueOf(i), graph.addVertex());
             }
         };
 
         public final Consumer<Triple<Integer, Integer, Double>> edgeConsumer = (t) -> {
-            int source = t.getFirst() + 1;
-            int target = t.getSecond() + 1;
-            String label = "e_" + source + "_" + target;
-
-            V from = map.get(source);
+            int source = t.getFirst();
+            V from = map.get(t.getFirst());
             if (from == null) {
                 throw new ImportException("Node " + source + " does not exist");
             }
+
+            int target = t.getSecond();
             V to = map.get(target);
             if (to == null) {
                 throw new ImportException("Node " + target + " does not exist");
             }
-            try {
-                E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, Attribute>());
-                graph.addEdge(from, to, e);
 
-                if (graph.getType().isWeighted()) {
-                    double weight = t.getThird() == null ? defaultWeight : t.getThird();
-                    graph.setEdgeWeight(e, weight);
-                }
-            } catch (IllegalArgumentException e) {
-                throw new ImportException("Failed to import DIMACS graph:" + e.getMessage(), e);
+            E e = graph.addEdge(from, to);
+            if (graph.getType().isWeighted()) {
+                double weight = t.getThird() == null ? defaultWeight : t.getThird();
+                graph.setEdgeWeight(e, weight);
             }
         };
 

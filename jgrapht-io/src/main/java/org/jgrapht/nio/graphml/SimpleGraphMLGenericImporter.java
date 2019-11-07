@@ -38,6 +38,8 @@ import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.GraphMLImporter;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -132,6 +134,8 @@ import org.xml.sax.helpers.DefaultHandler;
 public class SimpleGraphMLGenericImporter
     extends
     BaseConsumerImporter<String, Quadruple<String, String, String, Double>>
+    implements
+    ConsumerImporter<String, Quadruple<String, String, String, Double>>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -199,9 +203,9 @@ public class SimpleGraphMLGenericImporter
             GraphMLHandler handler = new GraphMLHandler();
             xmlReader.setContentHandler(handler);
             xmlReader.setErrorHandler(handler);
-            notifyEvent(Event.START);
+            notifyImportEvent(ImportEvent.START);
             xmlReader.parse(new InputSource(input));
-            notifyEvent(Event.EOF);
+            notifyImportEvent(ImportEvent.EOF);
         } catch (Exception se) {
             throw new ImportException("Failed to parse GraphML", se);
         }

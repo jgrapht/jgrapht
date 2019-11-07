@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable, Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2019, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,10 +15,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio.dimacs;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.io.*;
@@ -32,23 +35,17 @@ import static org.junit.Assert.*;
  * @author Joris Kinable
  * @author Dimitrios Michail
  */
-@Deprecated
 public class DIMACSImporterTest
 {
 
-    public <E> Graph<Integer, E> readGraph(
-        InputStream in, Class<? extends E> edgeClass, boolean weighted)
+    public <E> Graph<Integer, E> readGraph(InputStream in, Class<E> edgeClass, boolean weighted)
         throws ImportException
     {
-        Graph<Integer, E> g;
-        if (weighted) {
-            g = new DirectedWeightedPseudograph<Integer, E>(edgeClass);
-        } else {
-            g = new DirectedPseudograph<Integer, E>(edgeClass);
-        }
+        Graph<Integer, E> g = GraphTypeBuilder
+            .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(edgeClass).buildGraph();
 
-        DIMACSImporter<Integer, E> importer = new DIMACSImporter<>(
-            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeSupplier().get());
+        DIMACSImporter<Integer, E> importer = new DIMACSImporter<>();
         try {
             importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -75,7 +72,7 @@ public class DIMACSImporterTest
             { 3, 5 }, { 3, 7 }, { 3, 10 }, { 4, 5 }, { 4, 6 }, { 4, 10 }, { 5, 8 }, { 5, 9 },
             { 6, 11 }, { 7, 11 }, { 8, 11 }, { 9, 11 }, { 10, 11 } };
         for (int[] edge : edges)
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
+            assertTrue(graph.containsEdge(edge[0]-1, edge[1]-1));
     }
 
     /**
@@ -99,8 +96,8 @@ public class DIMACSImporterTest
             { 8, 11, 18 }, { 9, 11, 19 }, { 10, 11, 20 } };
 
         for (int[] edge : edges) {
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
-            DefaultWeightedEdge e = graph.getEdge(edge[0], edge[1]);
+            assertTrue(graph.containsEdge(edge[0]-1, edge[1]-1));
+            DefaultWeightedEdge e = graph.getEdge(edge[0]-1, edge[1]-1);
             assertEquals((int) graph.getEdgeWeight(e), edge[2]);
         }
     }
@@ -126,8 +123,8 @@ public class DIMACSImporterTest
 
         int[][] edges = { { 1, 2, 1 }, { 2, 1, 1 }, { 2, 3, 1 } };
         for (int[] edge : edges) {
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
-            DefaultWeightedEdge e = graph.getEdge(edge[0], edge[1]);
+            assertTrue(graph.containsEdge(edge[0]-1, edge[1]-1));
+            DefaultWeightedEdge e = graph.getEdge(edge[0]-1, edge[1]-1);
             assertEquals((int) graph.getEdgeWeight(e), edge[2]);
         }
     }

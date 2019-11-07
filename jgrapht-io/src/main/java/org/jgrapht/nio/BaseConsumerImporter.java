@@ -36,8 +36,6 @@ import org.jgrapht.io.Attribute;
  * @param <E> the graph edge type
  */
 public abstract class BaseConsumerImporter<V, E>
-    implements
-    ConsumerImporter<V, E>
 {
     private List<Consumer<Integer>> nodeCountConsumers;
     private List<Consumer<Integer>> edgeCountConsumers;
@@ -46,7 +44,7 @@ public abstract class BaseConsumerImporter<V, E>
     private List<BiConsumer<String, Attribute>> graphAttributeConsumers;
     private List<BiConsumer<Pair<V, String>, Attribute>> vertexAttributeConsumers;
     private List<BiConsumer<Pair<E, String>, Attribute>> edgeAttributeConsumers;
-    private List<Consumer<Event>> eventConsumers;
+    private List<Consumer<ImportEvent>> ImportEventConsumers;
 
     /**
      * Constructor
@@ -60,100 +58,164 @@ public abstract class BaseConsumerImporter<V, E>
         this.graphAttributeConsumers = new ArrayList<>();
         this.vertexAttributeConsumers = new ArrayList<>();
         this.edgeAttributeConsumers = new ArrayList<>();
-        this.eventConsumers = new ArrayList<>();
+        this.ImportEventConsumers = new ArrayList<>();
     }
 
-    @Override
-    public void addEventConsumer(Consumer<Event> consumer)
+    /**
+     * Add an ImportEvent consumer.
+     * 
+     * @param consumer the consumer
+     */
+    public void addImportEventConsumer(Consumer<ImportEvent> consumer)
     {
-        eventConsumers.add(consumer);
+        ImportEventConsumers.add(consumer);
     }
 
-    @Override
-    public void removeEventConsumer(Consumer<Event> consumer)
+    /**
+     * Remove an ImportEvent consumer.
+     * 
+     * @param consumer the consumer
+     */
+    public void removeImportEventConsumer(Consumer<ImportEvent> consumer)
     {
-        eventConsumers.remove(consumer);
+        ImportEventConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add a node count consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addNodeCountConsumer(Consumer<Integer> consumer)
     {
         nodeCountConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove a node count consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeNodeCountConsumer(Consumer<Integer> consumer)
     {
         nodeCountConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add an edge count consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addEdgeCountConsumer(Consumer<Integer> consumer)
     {
         edgeCountConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove an edge count consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeEdgeCountConsumer(Consumer<Integer> consumer)
     {
         edgeCountConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add a vertex consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addVertexConsumer(Consumer<V> consumer)
     {
         vertexConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove a vertex consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeVertexConsumer(Consumer<V> consumer)
     {
         vertexConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add an edge consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addEdgeConsumer(Consumer<E> consumer)
     {
         edgeConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove an edge consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeEdgeConsumer(Consumer<E> consumer)
     {
         edgeConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add a graph attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
     {
         graphAttributeConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove a graph attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
     {
         graphAttributeConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add a vertex attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer)
     {
         vertexAttributeConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove a vertex attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeVertexAttributeConsumer(BiConsumer<Pair<V, String>, Attribute> consumer)
     {
         vertexAttributeConsumers.remove(consumer);
     }
 
-    @Override
+    /**
+     * Add an edge attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void addEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer)
     {
         edgeAttributeConsumers.add(consumer);
     }
 
-    @Override
+    /**
+     * Remove an edge attribute consumer.
+     * 
+     * @param consumer the consumer
+     */
     public void removeEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer)
     {
         edgeAttributeConsumers.remove(consumer);
@@ -235,13 +297,13 @@ public abstract class BaseConsumerImporter<V, E>
     }
 
     /**
-     * Notify for an importer event
+     * Notify for an importer ImportEvent
      * 
-     * @param event the event
+     * @param importEvent the ImportEvent
      */
-    protected void notifyEvent(Event event)
+    protected void notifyImportEvent(ImportEvent importEvent)
     {
-        eventConsumers.forEach(c -> c.accept(event));
+        ImportEventConsumers.forEach(c -> c.accept(importEvent));
     }
 
 }
