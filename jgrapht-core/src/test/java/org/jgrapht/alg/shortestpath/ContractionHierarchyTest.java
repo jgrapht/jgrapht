@@ -39,16 +39,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import static org.jgrapht.alg.shortestpath.ContractionHierarchyAlgorithm.ContractionEdge;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchyAlgorithm.ContractionVertex;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionEdge;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the {@link ContractionHierarchyAlgorithm}.
+ * Tests for the {@link ContractionHierarchy}.
  */
-public class ContractionHierarchyAlgorithmTest {
+public class ContractionHierarchyTest {
     /**
      * Seed for random numbers generator used in tests.
      */
@@ -57,8 +57,8 @@ public class ContractionHierarchyAlgorithmTest {
     @Test
     public void testEmptyGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -85,8 +85,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 1, 2, 1);
         Graphs.addEdgeWithVertices(graph, 2, 3, 1);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -116,8 +116,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 3, 1, 1);
         Graphs.addEdgeWithVertices(graph, 1, 3, 1);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -142,8 +142,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 3, 4, 1);
         Graphs.addEdgeWithVertices(graph, 3, 5, 1);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -181,8 +181,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 1, 2, 1);
         Graphs.addEdgeWithVertices(graph, 2, 3, 1);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -220,8 +220,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 2, 3, 1);
         Graphs.addEdgeWithVertices(graph, 3, 1, 1);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -248,8 +248,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 3, 4, 1);
         Graphs.addEdgeWithVertices(graph, 3, 5, 1);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -306,8 +306,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 7, 8, 3);
         Graphs.addEdgeWithVertices(graph, 8, 9, 3);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -374,8 +374,8 @@ public class ContractionHierarchyAlgorithmTest {
         Graphs.addEdgeWithVertices(graph, 2, 2, 1);
         Graphs.addEdgeWithVertices(graph, 2, 2, 2);
 
-        ContractionHierarchyAlgorithm<Integer, DefaultWeightedEdge> contractor
-                = new ContractionHierarchyAlgorithm<>(graph, () -> new Random(SEED));
+        ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
+                = new ContractionHierarchy<>(graph, () -> new Random(SEED));
         Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                 Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
 
@@ -418,7 +418,7 @@ public class ContractionHierarchyAlgorithmTest {
 
             Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
                     Map<Integer, ContractionVertex<Integer>>> contraction =
-                    new ContractionHierarchyAlgorithm<>(graph).computeContractionHierarchy();
+                    new ContractionHierarchy<>(graph).computeContractionHierarchy();
 
             assertCorrectMapping(graph, contraction.getFirst(), contraction.getSecond());
             assertNoEdgesRemoved(graph, contraction.getFirst(), contraction.getSecond());

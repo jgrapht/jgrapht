@@ -87,7 +87,7 @@ import java.util.function.Supplier;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public class ContractionHierarchyAlgorithm<V, E> {
+public class ContractionHierarchy<V, E> {
     /**
      * The underlying graph.
      */
@@ -181,7 +181,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      *
      * @param graph graph
      */
-    public ContractionHierarchyAlgorithm(Graph<V, E> graph) {
+    public ContractionHierarchy(Graph<V, E> graph) {
         this(graph, Runtime.getRuntime().availableProcessors());
     }
 
@@ -191,7 +191,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param graph       graph
      * @param parallelism maximum number of threads used in the computations
      */
-    public ContractionHierarchyAlgorithm(Graph<V, E> graph, int parallelism) {
+    public ContractionHierarchy(Graph<V, E> graph, int parallelism) {
         this(graph, parallelism, Random::new, PairingHeap::new);
     }
 
@@ -203,7 +203,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param graph          graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
-    public ContractionHierarchyAlgorithm(Graph<V, E> graph, Supplier<Random> randomSupplier) {
+    public ContractionHierarchy(Graph<V, E> graph, Supplier<Random> randomSupplier) {
         this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier, PairingHeap::new);
     }
 
@@ -215,7 +215,7 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param parallelism    maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
-    public ContractionHierarchyAlgorithm(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier) {
+    public ContractionHierarchy(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier) {
         this(graph, parallelism, randomSupplier, PairingHeap::new);
     }
 
@@ -229,8 +229,8 @@ public class ContractionHierarchyAlgorithm<V, E> {
      * @param randomSupplier              supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
      */
-    public ContractionHierarchyAlgorithm(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
-                                         Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier) {
+    public ContractionHierarchy(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
+                                Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier) {
         this.graph = graph;
         this.contractionGraph = GraphTypeBuilder.<ContractionVertex<V>, ContractionEdge<E>>directed().weighted(true)
                 .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
