@@ -218,15 +218,15 @@ public class SimpleGraphMLImporter<V, E>
     {
         private Graph<V, E> graph;
         private Map<String, V> nodesMap;
-        private Map<String, E> edgeMap;
         private E lastEdge;
+        private Quadruple<String, String, String, Double> lastQuadruple;
 
         public GlobalConsumer(Graph<V, E> graph)
         {
             this.graph = graph;
             this.nodesMap = new HashMap<>();
-            this.edgeMap = new HashMap<>();
             this.lastEdge = null;
+            this.lastQuadruple = null;
         }
 
         public final BiConsumer<String, Attribute> graphAttributeConsumer = (key, a) -> {
@@ -242,30 +242,36 @@ public class SimpleGraphMLImporter<V, E>
             Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
                 Quadruple<String, String, String, Double> qe = edgeAndKey.getFirst();
 
-                E e = null;
-                String id = qe.getFirst();
-                if (id != null) {
-                    e = edgeMap.get(id);
-                } else {
-                    e = lastEdge;
-                }
+                if (qe == lastQuadruple) {
+                    if (qe.getFourth() != null
+                        && edgeWeightAttributeName.equals(edgeAndKey.getSecond())
+                        && graph.getType().isWeighted())
+                {
+                        graph.setEdgeWeight(lastEdge, qe.getFourth());
+                    }
 
-                if (e == null) {
-                    throw new IllegalArgumentException(
-                        "Found edge attribute before the actual edge");
+                    notifyEdge(lastEdge, edgeAndKey.getSecond(), a);
                 }
-
-                if (qe.getFourth() != null && edgeWeightAttributeName.equals(edgeAndKey.getSecond())
-                    && graph.getType().isWeighted())
-            {
-                    graph.setEdgeWeight(e, qe.getFourth());
-                }
-
-                notifyEdge(e, edgeAndKey.getSecond(), a);
             };
 
         public final Consumer<String> vertexConsumer = (vId) -> {
             mapNode(vId);
+        };
+
+        public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (qe) -> {
+            if (lastQuadruple != qe) {
+                String source = qe.getSecond();
+                String target = qe.getThird();
+                Double weight = qe.getFourth();
+
+                E e = graph.addEdge(mapNode(source), mapNode(target));
+                if (weight != null && graph.getType().isWeighted()) {
+                    graph.setEdgeWeight(e, weight);
+                }
+
+                lastEdge = e;
+                lastQuadruple = qe;
+            }
         };
 
         private V mapNode(String vId)
@@ -277,30 +283,6 @@ public class SimpleGraphMLImporter<V, E>
             }
             return vertex;
         }
-
-        public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (qe) -> {
-            String id = qe.getFirst();
-            String source = qe.getSecond();
-            String target = qe.getThird();
-            Double weight = qe.getFourth();
-            if (id != null) {
-                E e = edgeMap.get(id);
-                if (e == null) {
-                    e = graph.addEdge(mapNode(source), mapNode(target));
-                    edgeMap.put(id, e);
-                }
-                if (weight != null && graph.getType().isWeighted()) {
-                    graph.setEdgeWeight(e, weight);
-                }
-                lastEdge = null;
-            } else {
-                E e = graph.addEdge(mapNode(source), mapNode(target));
-                if (weight != null && graph.getType().isWeighted()) {
-                    graph.setEdgeWeight(e, weight);
-                }
-                lastEdge = e;
-            }
-        };
 
     }
 

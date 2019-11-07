@@ -182,7 +182,8 @@ public class SimpleGraphMLEdgeListImporter
     {
         private int nodeCount;
         private Map<String, Integer> vertexMap;
-        private Triple<Integer, Integer, Double> lastEdge;
+        private Triple<Integer, Integer, Double> lastTriple;
+        private Quadruple<String, String, String, Double> lastQuadruple;
 
         public GlobalConsumer()
         {
@@ -192,9 +193,10 @@ public class SimpleGraphMLEdgeListImporter
 
         public final Consumer<Event> eventConsumer = (e) -> {
             if (Event.EOF.equals(e)) {
-                if (lastEdge != null) {
-                    notifyEdge(lastEdge);
-                    lastEdge = null;
+                if (lastTriple != null) {
+                    notifyEdge(lastTriple);
+                    lastQuadruple = null;
+                    lastTriple = null;
                 }
             }
         };
@@ -207,16 +209,23 @@ public class SimpleGraphMLEdgeListImporter
 
         public final BiConsumer<Pair<Quadruple<String, String, String, Double>, String>,
             Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
-                if (edgeWeightAttributeName.equals(edgeAndKey.getSecond())) {
-                    lastEdge.setThird(edgeAndKey.getFirst().getFourth());
+
+                Quadruple<String, String, String, Double> q = edgeAndKey.getFirst();
+                String keyName = edgeAndKey.getSecond();
+                if (lastQuadruple == q && edgeWeightAttributeName.equals(keyName)) {
+                    lastQuadruple.setFourth(q.getFourth());
+                    lastTriple.setThird(q.getFourth());
                 }
             };
 
         public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (q) -> {
-            if (lastEdge != null) {
-                notifyEdge(lastEdge);
+            if (q != lastQuadruple) {
+                if (lastQuadruple != null) {
+                    notifyEdge(lastTriple);
+                }
+                lastQuadruple = q;
+                lastTriple = createTriple(q);
             }
-            lastEdge = createTriple(q);
         };
 
         private Triple<Integer, Integer, Double> createTriple(

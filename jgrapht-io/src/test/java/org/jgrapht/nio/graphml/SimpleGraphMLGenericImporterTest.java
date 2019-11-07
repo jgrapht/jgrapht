@@ -19,7 +19,6 @@ package org.jgrapht.nio.graphml;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -118,43 +117,25 @@ public class SimpleGraphMLGenericImporterTest
         SimpleGraphMLGenericImporter importer = new SimpleGraphMLGenericImporter();
 
         List<Quadruple<String, String, String, Double>> collected = new ArrayList<>();
-        List<Quadruple<String, String, String, Double>> collectedWithWeights = new ArrayList<>();
         importer.addEdgeConsumer(q -> {
             collected.add(q);
-        });
-        importer.addEdgeAttributeConsumer((p,a)->{
-            if (p.getSecond().equals("weight")) { 
-                collectedWithWeights.add(p.getFirst());
-            }
         });
         importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         assertEquals(collected.get(0).getFirst(), "e0");
         assertEquals(collected.get(0).getSecond(), "n0");
         assertEquals(collected.get(0).getThird(), "n2");
-        assertNull(collected.get(0).getFourth());
-        
-        assertEquals(collectedWithWeights.get(0).getFirst(), "e0");
-        assertEquals(collectedWithWeights.get(0).getSecond(), "n0");
-        assertEquals(collectedWithWeights.get(0).getThird(), "n2");
-        assertEquals(collectedWithWeights.get(0).getFourth(), 2.0, 1e-9);
+        assertEquals(collected.get(0).getFourth(), 2.0, 1e-9);
 
         assertEquals(collected.get(1).getFirst(), "e1");
         assertEquals(collected.get(1).getSecond(), "n0");
         assertEquals(collected.get(1).getThird(), "n1");
-        assertNull(collected.get(1).getFourth());
-        
-        assertEquals(collectedWithWeights.get(1).getFirst(), "e1");
-        assertEquals(collectedWithWeights.get(1).getSecond(), "n0");
-        assertEquals(collectedWithWeights.get(1).getThird(), "n1");
-        assertEquals(collectedWithWeights.get(1).getFourth(), 3.0, 1e-9);
+        assertEquals(collected.get(1).getFourth(), 3.0, 1e-9);
 
         assertEquals(collected.get(2).getFirst(), "e2");
         assertEquals(collected.get(2).getSecond(), "n1");
         assertEquals(collected.get(2).getThird(), "n2");
         assertNull(collected.get(2).getFourth());
-
-        assertTrue(collectedWithWeights.size() == 2);
 
     }
 

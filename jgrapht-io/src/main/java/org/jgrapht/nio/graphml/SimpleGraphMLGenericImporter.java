@@ -56,7 +56,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * attributes in the input file. Users can register consumers for vertex, edge and graph attributes
  * after construction of the importer. Finally, default attribute values are completely ignored.
  * Lazily here means that an edge is first reported with a null weight and its weight is reported
- * later using the edge attribute consumer.
+ * later using the edge attribute consumer. Since the same quadruple instance is used in all cases,
+ * an edge may appear having a null weight when it is first reported and having a non-null weight
+ * after the edge weight is reported.
  * 
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GraphML
@@ -275,7 +277,7 @@ public class SimpleGraphMLGenericImporter
         private int insideNode;
         private String currentNode;
         private int insideEdge;
-        private PartialEdge currentEdge;
+        private Quadruple<String, String, String, Double> currentEdge;
         private Key currentKey;
         private String currentDataKey;
         private StringBuilder currentDataValue;
@@ -350,18 +352,16 @@ public class SimpleGraphMLGenericImporter
                 String targetId = findAttribute(EDGE_TARGET, attributes)
                     .orElseThrow(() -> new IllegalArgumentException("Edge target missing"));
                 String edgeId = findAttribute(EDGE_ID, attributes).orElse(null);
-                currentEdge = new PartialEdge(edgeId, sourceId, targetId, null);
-                Quadruple<String, String, String, Double> actualEdge = Quadruple
-                    .of(currentEdge.id, currentEdge.source, currentEdge.target, currentEdge.weight);
-                notifyEdge(actualEdge);
-                notifyEdgeAttribute(
-                    actualEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(currentEdge.source));
-                notifyEdgeAttribute(
-                    actualEdge, EDGE_TARGET, DefaultAttribute.createAttribute(currentEdge.target));
-                if (currentEdge.id != null) {
+                currentEdge = Quadruple.of(edgeId, sourceId, targetId, null);
+                notifyEdge(currentEdge);
+                if (edgeId != null) {
                     notifyEdgeAttribute(
-                        actualEdge, EDGE_ID, DefaultAttribute.createAttribute(currentEdge.id));
+                        currentEdge, EDGE_ID, DefaultAttribute.createAttribute(edgeId));
                 }
+                notifyEdgeAttribute(
+                    currentEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(sourceId));
+                notifyEdgeAttribute(
+                    currentEdge, EDGE_TARGET, DefaultAttribute.createAttribute(targetId));
                 break;
             case KEY:
                 String keyId = findAttribute(KEY_ID, attributes)
@@ -398,15 +398,10 @@ public class SimpleGraphMLGenericImporter
                 insideNode--;
                 break;
             case EDGE:
-                if (currentEdge != null && currentEdge.weight != null) {
-                    Quadruple<String, String, String,
-                        Double> actualEdge = Quadruple
-                            .of(
-                                currentEdge.id, currentEdge.source, currentEdge.target,
-                                currentEdge.weight);
+                if (currentEdge != null && currentEdge.getFourth() != null) {
                     notifyEdgeAttribute(
-                        actualEdge, edgeWeightAttributeName,
-                        DefaultAttribute.createAttribute(currentEdge.id));
+                        currentEdge, edgeWeightAttributeName,
+                        DefaultAttribute.createAttribute(currentEdge.getFourth()));
                 }
                 currentEdge = null;
                 insideEdge--;
@@ -490,7 +485,7 @@ public class SimpleGraphMLGenericImporter
                      */
                     if (key.attributeName.equals(edgeWeightAttributeName)) {
                         try {
-                            currentEdge.weight = Double.parseDouble(currentDataValue.toString());
+                            currentEdge.setFourth(Double.parseDouble(currentDataValue.toString()));
                         } catch (NumberFormatException e) {
                             // ignore
                         }
@@ -548,22 +543,6 @@ public class SimpleGraphMLGenericImporter
         public boolean isValid()
         {
             return id != null && attributeName != null && target != null;
-        }
-    }
-
-    private static class PartialEdge
-    {
-        String id;
-        String source;
-        String target;
-        Double weight;
-
-        public PartialEdge(String id, String source, String target, Double weight)
-        {
-            this.id = id;
-            this.source = source;
-            this.target = target;
-            this.weight = weight;
         }
     }
 

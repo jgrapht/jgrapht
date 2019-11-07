@@ -150,7 +150,7 @@ public class DIMACSImporter<V, E>
         public final Consumer<Integer> nodeCountConsumer = (n) -> {
             this.nodeCount = n;
             for (int i = 0; i < nodeCount; i++) {
-                Integer id = Integer.valueOf(i+1);
+                Integer id = Integer.valueOf(i + 1);
                 V vertex =
                     vertexProvider.buildVertex(id.toString(), new HashMap<String, Attribute>());
                 map.put(id, vertex);
@@ -159,8 +159,8 @@ public class DIMACSImporter<V, E>
         };
 
         public final Consumer<Triple<Integer, Integer, Double>> edgeConsumer = (t) -> {
-            int source = t.getFirst()+1;
-            int target = t.getSecond()+1;
+            int source = t.getFirst() + 1;
+            int target = t.getSecond() + 1;
             String label = "e_" + source + "_" + target;
 
             V from = map.get(source);
