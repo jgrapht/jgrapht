@@ -220,6 +220,8 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         Set<E> newEdgesSet = new HashSet<>();
         final int MAX_VERTEX_FAILURES = 1000;
 
+        if(targetEdges == 0 || (targetEdges < 0 && targetNodes == 0))
+            return;
         V initV = target.addVertex();
         newNodesSet.add(initV);
 

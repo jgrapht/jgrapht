@@ -56,21 +56,64 @@ public class DirectedScaleFreeGraphGeneratorTest
     public void testNumberOfEdges()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
-            new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 500, 0);
+            new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 1000, 0);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
-        assertEquals(500, g.edgeSet().size());
+        assertEquals(1000, g.edgeSet().size());
     }
 
     @Test
     public void testNumberOfNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
-            new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, 500);
+            new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, 1000);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
-        assertEquals(500, g.vertexSet().size());
+        assertEquals(1000, g.vertexSet().size());
+    }
+
+    @Test
+    public void testZeroCases()
+    {
+        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+            new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, 0);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        generator.generateGraph(g);
+        assertEquals(0, g.vertexSet().size());
+        assertEquals(0, g.edgeSet().size());
+
+        generator = new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 0, 0);
+        g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        generator.generateGraph(g);
+        assertEquals(0, g.vertexSet().size());
+        assertEquals(0, g.edgeSet().size());
+    }
+
+    @Test
+    public void testNoOutDegreeZero()
+    {
+        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+            new DirectedScaleFreeGraphGenerator<>(0.3f, 0.0f, 0.5f, 0.5f, -1, 1000);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        generator.generateGraph(g);
+        long outDegreeZero = g.vertexSet().stream().filter(v -> g.outDegreeOf(v) == 0).count();
+        assertEquals(0, outDegreeZero);
+    }
+    
+    @Test
+    public void testNoInDegreeZero()
+    {
+        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+            new DirectedScaleFreeGraphGenerator<>(0.0f, 0.3f, 0.5f, 0.5f, -1, 1000);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        generator.generateGraph(g);
+        long inDegreeZero = g.vertexSet().stream().filter(v -> g.inDegreeOf(v) == 0).count();
+        assertEquals(0, inDegreeZero);
     }
 }
