@@ -301,6 +301,10 @@ public class DirectedScaleFreeGraphGenerator<V, E>
             }
 
             e = target.addEdge(v, w);
+            if (e == null) {
+                failuresCounter++;
+                continue;
+            }
             newNodesSet.add(v);
             newNodesSet.add(w);
             newEdgesSet.add(e);
@@ -345,11 +349,17 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         return ret;
     }
 
+    /**returns the Maximum allowed number of consecutive failed attempts to add an edge.
+     * @return maxFailure field.
+     */
     public int getMaxFailures()
     {
         return maxFailures;
     }
 
+    /**Sets the maximum allowed number of consecutive failed attempts to add an edge (must be non negative).
+     * @param maxFailures Maximum allowed (non negative) number of consecutive failed attempts to add an edge.
+     */
     public void setMaxFailures(int maxFailures)
     {
         if (maxFailures < 0) {

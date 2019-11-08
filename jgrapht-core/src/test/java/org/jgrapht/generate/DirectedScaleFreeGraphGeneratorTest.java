@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
@@ -57,7 +58,7 @@ public class DirectedScaleFreeGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
             new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 1000, 0);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
         assertEquals(1000, g.edgeSet().size());
