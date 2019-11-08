@@ -54,18 +54,18 @@ public interface ConsumerImporter<V, E>
     void removeImportEventConsumer(Consumer<ImportEvent> consumer);
 
     /**
-     * Add a node count consumer.
+     * Add a vertex count consumer.
      * 
      * @param consumer the consumer
      */
-    void addNodeCountConsumer(Consumer<Integer> consumer);
+    void addVertexCountConsumer(Consumer<Integer> consumer);
 
     /**
-     * Remove a node count consumer.
+     * Remove a vertex count consumer.
      * 
      * @param consumer the consumer
      */
-    void removeNodeCountConsumer(Consumer<Integer> consumer);
+    void removeVertexCountConsumer(Consumer<Integer> consumer);
 
     /**
      * Add an edge count consumer.

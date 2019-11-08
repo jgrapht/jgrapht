@@ -37,7 +37,7 @@ import org.jgrapht.io.Attribute;
  */
 public abstract class BaseConsumerImporter<V, E>
 {
-    private List<Consumer<Integer>> nodeCountConsumers;
+    private List<Consumer<Integer>> vertexCountConsumers;
     private List<Consumer<Integer>> edgeCountConsumers;
     private List<Consumer<V>> vertexConsumers;
     private List<Consumer<E>> edgeConsumers;
@@ -51,7 +51,7 @@ public abstract class BaseConsumerImporter<V, E>
      */
     public BaseConsumerImporter()
     {
-        this.nodeCountConsumers = new ArrayList<>();
+        this.vertexCountConsumers = new ArrayList<>();
         this.edgeCountConsumers = new ArrayList<>();
         this.vertexConsumers = new ArrayList<>();
         this.edgeConsumers = new ArrayList<>();
@@ -82,23 +82,23 @@ public abstract class BaseConsumerImporter<V, E>
     }
 
     /**
-     * Add a node count consumer.
+     * Add a vertex count consumer.
      * 
      * @param consumer the consumer
      */
-    public void addNodeCountConsumer(Consumer<Integer> consumer)
+    public void addVertexCountConsumer(Consumer<Integer> consumer)
     {
-        nodeCountConsumers.add(consumer);
+        vertexCountConsumers.add(consumer);
     }
 
     /**
-     * Remove a node count consumer.
+     * Remove a vertex count consumer.
      * 
      * @param consumer the consumer
      */
-    public void removeNodeCountConsumer(Consumer<Integer> consumer)
+    public void removeVertexCountConsumer(Consumer<Integer> consumer)
     {
-        nodeCountConsumers.remove(consumer);
+        vertexCountConsumers.remove(consumer);
     }
 
     /**
@@ -222,13 +222,13 @@ public abstract class BaseConsumerImporter<V, E>
     }
 
     /**
-     * Notify for the node count.
+     * Notify for the vertex count.
      * 
-     * @param nodeCount the number of nodes in the graph
+     * @param vertexCount the number of vertices in the graph
      */
-    protected void notifyNodeCount(Integer nodeCount)
+    protected void notifyVertexCount(Integer vertexCount)
     {
-        nodeCountConsumers.forEach(c -> c.accept(nodeCount));
+        vertexCountConsumers.forEach(c -> c.accept(vertexCount));
     }
 
     /**

@@ -131,7 +131,7 @@ public class DIMACSImporter<V, E>
     {
         DIMACSGenericImporter genericImporter = new DIMACSGenericImporter().renumberVertices(false);
         GlobalConsumer globalConsumer = new GlobalConsumer(graph);
-        genericImporter.addNodeCountConsumer(globalConsumer.nodeCountConsumer);
+        genericImporter.addVertexCountConsumer(globalConsumer.nodeCountConsumer);
         genericImporter.addEdgeConsumer(globalConsumer.edgeConsumer);
         genericImporter.importInput(input);
     }

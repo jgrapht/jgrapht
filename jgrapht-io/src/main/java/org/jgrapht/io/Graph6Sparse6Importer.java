@@ -36,7 +36,9 @@ import java.util.*;
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
+ * @deprecated Use {@link org.jgrapht.nio.graph6.Graph6Sparse6Importer} instead
  */
+@Deprecated
 public class Graph6Sparse6Importer<V, E>
     extends
     AbstractBaseImporter<V, E>

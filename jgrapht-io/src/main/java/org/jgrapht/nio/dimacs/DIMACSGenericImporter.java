@@ -128,7 +128,7 @@ public class DIMACSGenericImporter
 
         // nodes
         final int size = readNodeCount(in);
-        notifyNodeCount(size);
+        notifyVertexCount(size);
 
         // add edges
         String[] cols = skipComments(in);

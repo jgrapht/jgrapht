@@ -50,7 +50,7 @@ public class DIMACSGenericImporterTest
 
         DIMACSGenericImporter importer = new DIMACSGenericImporter();
 
-        importer.addNodeCountConsumer(count -> {
+        importer.addVertexCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
         });
         List<Pair<Integer, Integer>> collected = new ArrayList<>();
@@ -98,7 +98,7 @@ public class DIMACSGenericImporterTest
 
         DIMACSGenericImporter importer = new DIMACSGenericImporter();
 
-        importer.addNodeCountConsumer(count -> {
+        importer.addVertexCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
@@ -148,7 +148,7 @@ public class DIMACSGenericImporterTest
         DIMACSGenericImporter importer = new DIMACSGenericImporter();
         importer = importer.renumberVertices(false);
 
-        importer.addNodeCountConsumer(count -> {
+        importer.addVertexCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
         });
         List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
