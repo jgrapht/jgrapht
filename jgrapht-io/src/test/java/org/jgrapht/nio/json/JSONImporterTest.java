@@ -15,25 +15,30 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.*;
-import org.junit.*;
-
-import java.io.*;
+package org.jgrapht.nio.json;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.io.Attribute;
+import org.jgrapht.io.AttributeType;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Tests for {@link JsonImporter}.
  * 
  * @author Dimitrios Michail
  */
-@Deprecated
 public class JSONImporterTest
 {
 
@@ -59,14 +64,10 @@ public class JSONImporterTest
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(4, g.vertexSet().size());
@@ -101,14 +102,10 @@ public class JSONImporterTest
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(4, g.vertexSet().size());
@@ -144,11 +141,7 @@ public class JSONImporterTest
                 .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
     }
 
@@ -175,11 +168,7 @@ public class JSONImporterTest
                 .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
     }
 
@@ -205,10 +194,7 @@ public class JSONImporterTest
                 .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        JSONImporter<String,
-            DefaultEdge> importer = new JSONImporter<>(
-                (label, attributes) -> label,
-                (from, to, label, attributes) -> g.getEdgeSupplier().get());
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
     }
 
@@ -235,14 +221,10 @@ public class JSONImporterTest
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(4, g.vertexSet().size());
@@ -279,14 +261,10 @@ public class JSONImporterTest
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(4, g.vertexSet().size());
@@ -316,35 +294,41 @@ public class JSONImporterTest
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (id, attributes) -> {
-            if (id.equals("1")) {
-                assertTrue(attributes.get("label").getType().equals(AttributeType.STRING));
-                assertTrue(attributes.get("label").getValue().equals("Label"));
-                assertTrue(attributes.get("int").getType().equals(AttributeType.INT));
-                assertTrue(attributes.get("int").getValue().equals("4"));
-                assertTrue(attributes.get("double").getType().equals(AttributeType.DOUBLE));
-                assertTrue(attributes.get("double").getValue().equals("0.5"));
-                assertTrue(attributes.get("boolean").getType().equals(AttributeType.BOOLEAN));
-                assertTrue(attributes.get("boolean").getValue().equals("true"));
-                assertTrue(attributes.get("boolean1").getType().equals(AttributeType.BOOLEAN));
-                assertTrue(attributes.get("boolean1").getValue().equals("false"));
-                assertTrue(attributes.get("novalue").getType().equals(AttributeType.NULL));
-                assertTrue(attributes.get("novalue").getValue().equals("null"));
-            }
-            return id;
-        };
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
 
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        Map<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
+        importer.addVertexAttributeConsumer((p, a) -> {
+            Map<String, Attribute> attrs = vertexAttributes.get(p.getFirst());
+            if (attrs == null) {
+                attrs = new HashMap<>();
+                vertexAttributes.put(p.getFirst(), attrs);
+            }
+            attrs.put(p.getSecond(), a);
+        });
+
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(1, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
         assertTrue(g.containsVertex("1"));
+
+        Map<String, Attribute> attributes = vertexAttributes.get("1");
+        assertNotNull(attributes);
+        assertTrue(attributes.get("label").getType().equals(AttributeType.STRING));
+        assertTrue(attributes.get("label").getValue().equals("Label"));
+        assertTrue(attributes.get("int").getType().equals(AttributeType.INT));
+        assertTrue(attributes.get("int").getValue().equals("4"));
+        assertTrue(attributes.get("double").getType().equals(AttributeType.DOUBLE));
+        assertTrue(attributes.get("double").getValue().equals("0.5"));
+        assertTrue(attributes.get("boolean").getType().equals(AttributeType.BOOLEAN));
+        assertTrue(attributes.get("boolean").getValue().equals("true"));
+        assertTrue(attributes.get("boolean1").getType().equals(AttributeType.BOOLEAN));
+        assertTrue(attributes.get("boolean1").getValue().equals("false"));
+        assertTrue(attributes.get("novalue").getType().equals(AttributeType.NULL));
+        assertTrue(attributes.get("novalue").getValue().equals("null"));
     }
 
     @Test
@@ -365,36 +349,42 @@ public class JSONImporterTest
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (id, attributes) -> {
-            return id;
-        };
-        EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
-            if (from.equals("1") && to.equals("1")) {
-                assertTrue(attributes.get("label").getType().equals(AttributeType.STRING));
-                assertTrue(attributes.get("label").getValue().equals("Label"));
-                assertTrue(attributes.get("int").getType().equals(AttributeType.INT));
-                assertTrue(attributes.get("int").getValue().equals("4"));
-                assertTrue(attributes.get("double").getType().equals(AttributeType.DOUBLE));
-                assertTrue(attributes.get("double").getValue().equals("0.5"));
-                assertTrue(attributes.get("boolean").getType().equals(AttributeType.BOOLEAN));
-                assertTrue(attributes.get("boolean").getValue().equals("true"));
-                assertTrue(attributes.get("boolean1").getType().equals(AttributeType.BOOLEAN));
-                assertTrue(attributes.get("boolean1").getValue().equals("false"));
-                assertTrue(attributes.get("novalue").getType().equals(AttributeType.NULL));
-                assertTrue(attributes.get("novalue").getValue().equals("null"));
-            }
-            return g.getEdgeSupplier().get();
-        };
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
 
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
+        importer.addEdgeAttributeConsumer((p, a) -> {
+            Map<String, Attribute> attrs = edgeAttributes.get(p.getFirst());
+            if (attrs == null) {
+                attrs = new HashMap<>();
+                edgeAttributes.put(p.getFirst(), attrs);
+            }
+            attrs.put(p.getSecond(), a);
+        });
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(1, g.vertexSet().size());
         assertEquals(1, g.edgeSet().size());
         assertTrue(g.containsVertex("1"));
+
+        DefaultEdge edge = g.getEdge("1", "1");
+        assertNotNull(edge);
+        Map<String, Attribute> attributes = edgeAttributes.get(edge);
+        assertNotNull(attributes);
+        assertTrue(attributes.get("label").getType().equals(AttributeType.STRING));
+        assertTrue(attributes.get("label").getValue().equals("Label"));
+        assertTrue(attributes.get("int").getType().equals(AttributeType.INT));
+        assertTrue(attributes.get("int").getValue().equals("4"));
+        assertTrue(attributes.get("double").getType().equals(AttributeType.DOUBLE));
+        assertTrue(attributes.get("double").getValue().equals("0.5"));
+        assertTrue(attributes.get("boolean").getType().equals(AttributeType.BOOLEAN));
+        assertTrue(attributes.get("boolean").getValue().equals("true"));
+        assertTrue(attributes.get("boolean1").getType().equals(AttributeType.BOOLEAN));
+        assertTrue(attributes.get("boolean1").getValue().equals("false"));
+        assertTrue(attributes.get("novalue").getType().equals(AttributeType.NULL));
+        assertTrue(attributes.get("novalue").getValue().equals("null"));
     }
 
     @Test
@@ -416,41 +406,62 @@ public class JSONImporterTest
 
         Graph<String,
             DefaultEdge> g = GraphTypeBuilder
-                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (id, attributes) -> {
-            if (id.equals("1")) {
-                assertTrue(attributes.get("custom").getType().equals(AttributeType.UNKNOWN));
-                assertTrue(attributes.get("custom").getValue().equals("{\"pi\":3.14}"));
-            } else if (id.equals("2")) {
-                assertTrue(attributes.get("array").getType().equals(AttributeType.UNKNOWN));
-                assertTrue(attributes.get("array").getValue().equals("[{\"obj\":3.14}]"));
-            }
-            return id;
-        };
-        EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
-            if (from.equals("1") && to.equals("2")) {
-                assertTrue(attributes.get("array").getType().equals(AttributeType.UNKNOWN));
-                assertTrue(
-                    attributes.get("array").getValue().equals("[{\"key1\":1},{\"key2\":2}]"));
-            } else if (from.equals("2") && to.equals("1")) {
-                assertTrue(attributes.get("obj").getType().equals(AttributeType.UNKNOWN));
-                assertTrue(
-                    attributes
-                        .get("obj").getValue().equals("{\"key1\":[{\"key1\":1},{\"key2\":2}]}"));
-            }
-            return g.getEdgeSupplier().get();
-        };
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
 
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        Map<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
+        importer.addVertexAttributeConsumer((p, a) -> {
+            Map<String, Attribute> attrs = vertexAttributes.get(p.getFirst());
+            if (attrs == null) {
+                attrs = new HashMap<>();
+                vertexAttributes.put(p.getFirst(), attrs);
+            }
+            attrs.put(p.getSecond(), a);
+        });
+
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
+        importer.addEdgeAttributeConsumer((p, a) -> {
+            Map<String, Attribute> attrs = edgeAttributes.get(p.getFirst());
+            if (attrs == null) {
+                attrs = new HashMap<>();
+                edgeAttributes.put(p.getFirst(), attrs);
+            }
+            attrs.put(p.getSecond(), a);
+        });
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(2, g.vertexSet().size());
         assertEquals(2, g.edgeSet().size());
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsVertex("2"));
+
+        Map<String, Attribute> attributes = vertexAttributes.get("1");
+        assertNotNull(attributes);
+        assertTrue(attributes.get("custom").getType().equals(AttributeType.UNKNOWN));
+        assertTrue(attributes.get("custom").getValue().equals("{\"pi\":3.14}"));
+
+        attributes = vertexAttributes.get("2");
+        assertNotNull(attributes);
+        assertTrue(attributes.get("array").getType().equals(AttributeType.UNKNOWN));
+        assertTrue(attributes.get("array").getValue().equals("[{\"obj\":3.14}]"));
+
+        DefaultEdge edge = g.getEdge("1", "2");
+        assertNotNull(edge);
+        attributes = edgeAttributes.get(edge);
+        assertNotNull(attributes);
+        assertTrue(attributes.get("array").getType().equals(AttributeType.UNKNOWN));
+        assertTrue(attributes.get("array").getValue().equals("[{\"key1\":1},{\"key2\":2}]"));
+
+        edge = g.getEdge("2", "1");
+        assertNotNull(edge);
+        attributes = edgeAttributes.get(edge);
+        assertNotNull(attributes);
+        assertTrue(attributes.get("obj").getType().equals(AttributeType.UNKNOWN));
+        assertTrue(
+            attributes.get("obj").getValue().equals("{\"key1\":[{\"key1\":1},{\"key2\":2}]}"));
     }
 
     @Test
@@ -477,11 +488,7 @@ public class JSONImporterTest
                 .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
-
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>(vp, ep);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(4, g.vertexSet().size());

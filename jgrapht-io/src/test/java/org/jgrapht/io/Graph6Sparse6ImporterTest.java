@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Joris Kinable
  */
+@Deprecated
 public class Graph6Sparse6ImporterTest
 {
 
