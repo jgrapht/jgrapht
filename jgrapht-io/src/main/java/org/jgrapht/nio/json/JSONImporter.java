@@ -35,7 +35,7 @@ import org.jgrapht.nio.BaseConsumerImporter;
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
  * 
- * Below is a small example of a graph in GML format.
+ * Below is a small example of a graph in JSON format.
  * 
  * <pre>
  * {
