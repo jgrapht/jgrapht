@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.Quadruple;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.ImportException;
 import org.junit.Test;
 
@@ -66,8 +66,8 @@ public class SimpleGraphMLGenericImporterTest
 
         List<Pair<Integer, Integer>> collected = new ArrayList<>();
         importer.addEdgeConsumer(q -> {
-            assertNull(q.getFourth());
-            collected.add(Pair.of(Integer.valueOf(q.getSecond()), Integer.valueOf(q.getThird())));
+            assertNull(q.getThird());
+            collected.add(Pair.of(Integer.valueOf(q.getFirst()), Integer.valueOf(q.getSecond())));
         });
         importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
@@ -116,26 +116,23 @@ public class SimpleGraphMLGenericImporterTest
 
         SimpleGraphMLGenericImporter importer = new SimpleGraphMLGenericImporter();
 
-        List<Quadruple<String, String, String, Double>> collected = new ArrayList<>();
+        List<Triple<String, String, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(q -> {
             collected.add(q);
         });
         importer.importInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
-        assertEquals(collected.get(0).getFirst(), "e0");
-        assertEquals(collected.get(0).getSecond(), "n0");
-        assertEquals(collected.get(0).getThird(), "n2");
-        assertEquals(collected.get(0).getFourth(), 2.0, 1e-9);
+        assertEquals(collected.get(0).getFirst(), "n0");
+        assertEquals(collected.get(0).getSecond(), "n2");
+        assertEquals(collected.get(0).getThird(), 2.0, 1e-9);
 
-        assertEquals(collected.get(1).getFirst(), "e1");
-        assertEquals(collected.get(1).getSecond(), "n0");
-        assertEquals(collected.get(1).getThird(), "n1");
-        assertEquals(collected.get(1).getFourth(), 3.0, 1e-9);
+        assertEquals(collected.get(1).getFirst(), "n0");
+        assertEquals(collected.get(1).getSecond(), "n1");
+        assertEquals(collected.get(1).getThird(), 3.0, 1e-9);
 
-        assertEquals(collected.get(2).getFirst(), "e2");
-        assertEquals(collected.get(2).getSecond(), "n1");
-        assertEquals(collected.get(2).getThird(), "n2");
-        assertNull(collected.get(2).getFourth());
+        assertEquals(collected.get(2).getFirst(), "n1");
+        assertEquals(collected.get(2).getSecond(), "n2");
+        assertNull(collected.get(2).getThird());
 
     }
 

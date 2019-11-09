@@ -32,7 +32,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.jgrapht.alg.util.Quadruple;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.AttributeType;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.GraphMLImporter;
@@ -133,9 +133,9 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class SimpleGraphMLGenericImporter
     extends
-    BaseConsumerImporter<String, Quadruple<String, String, String, Double>>
+    BaseConsumerImporter<String, Triple<String, String, Double>>
     implements
-    ConsumerImporter<String, Quadruple<String, String, String, Double>>
+    ConsumerImporter<String, Triple<String, String, Double>>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -282,7 +282,7 @@ public class SimpleGraphMLGenericImporter
         private int insideNode;
         private String currentNode;
         private int insideEdge;
-        private Quadruple<String, String, String, Double> currentEdge;
+        private Triple<String, String, Double> currentEdge;
         private Key currentKey;
         private String currentDataKey;
         private StringBuilder currentDataValue;
@@ -357,7 +357,7 @@ public class SimpleGraphMLGenericImporter
                 String targetId = findAttribute(EDGE_TARGET, attributes)
                     .orElseThrow(() -> new IllegalArgumentException("Edge target missing"));
                 String edgeId = findAttribute(EDGE_ID, attributes).orElse(null);
-                currentEdge = Quadruple.of(edgeId, sourceId, targetId, null);
+                currentEdge = Triple.of(sourceId, targetId, null);
                 notifyEdge(currentEdge);
                 if (edgeId != null) {
                     notifyEdgeAttribute(
@@ -403,10 +403,10 @@ public class SimpleGraphMLGenericImporter
                 insideNode--;
                 break;
             case EDGE:
-                if (currentEdge != null && currentEdge.getFourth() != null) {
+                if (currentEdge != null && currentEdge.getThird() != null) {
                     notifyEdgeAttribute(
                         currentEdge, edgeWeightAttributeName,
-                        DefaultAttribute.createAttribute(currentEdge.getFourth()));
+                        DefaultAttribute.createAttribute(currentEdge.getThird()));
                 }
                 currentEdge = null;
                 insideEdge--;
@@ -490,7 +490,7 @@ public class SimpleGraphMLGenericImporter
                      */
                     if (key.attributeName.equals(edgeWeightAttributeName)) {
                         try {
-                            currentEdge.setFourth(Double.parseDouble(currentDataValue.toString()));
+                            currentEdge.setThird(Double.parseDouble(currentDataValue.toString()));
                         } catch (NumberFormatException e) {
                             // ignore
                         }

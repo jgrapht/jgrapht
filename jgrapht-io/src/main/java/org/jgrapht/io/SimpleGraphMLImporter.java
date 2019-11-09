@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.Quadruple;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
 
 /**
@@ -222,14 +222,14 @@ public class SimpleGraphMLImporter<V, E>
         private Graph<V, E> graph;
         private Map<String, V> nodesMap;
         private E lastEdge;
-        private Quadruple<String, String, String, Double> lastQuadruple;
+        private Triple<String, String, Double> lastTriple;
 
         public GlobalConsumer(Graph<V, E> graph)
         {
             this.graph = graph;
             this.nodesMap = new HashMap<>();
             this.lastEdge = null;
-            this.lastQuadruple = null;
+            this.lastTriple = null;
         }
 
         public final BiConsumer<String, Attribute> graphAttributeConsumer = (key, a) -> {
@@ -241,16 +241,16 @@ public class SimpleGraphMLImporter<V, E>
                 notifyVertex(mapNode(vertexAndKey.getFirst()), vertexAndKey.getSecond(), a);
             };
 
-        public final BiConsumer<Pair<Quadruple<String, String, String, Double>, String>,
+        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
             Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
-                Quadruple<String, String, String, Double> qe = edgeAndKey.getFirst();
+                Triple<String, String, Double> qe = edgeAndKey.getFirst();
 
-                if (qe == lastQuadruple) {
-                    if (qe.getFourth() != null
+                if (qe == lastTriple) {
+                    if (qe.getThird() != null
                         && edgeWeightAttributeName.equals(edgeAndKey.getSecond())
                         && graph.getType().isWeighted())
                 {
-                        graph.setEdgeWeight(lastEdge, qe.getFourth());
+                        graph.setEdgeWeight(lastEdge, qe.getThird());
                     }
 
                     notifyEdge(lastEdge, edgeAndKey.getSecond(), a);
@@ -261,11 +261,11 @@ public class SimpleGraphMLImporter<V, E>
             mapNode(vId);
         };
 
-        public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (qe) -> {
-            if (lastQuadruple != qe) {
-                String source = qe.getSecond();
-                String target = qe.getThird();
-                Double weight = qe.getFourth();
+        public final Consumer<Triple<String, String, Double>> edgeConsumer = (qe) -> {
+            if (lastTriple != qe) {
+                String source = qe.getFirst();
+                String target = qe.getSecond();
+                Double weight = qe.getThird();
 
                 E e = graph.addEdge(mapNode(source), mapNode(target));
                 if (weight != null && graph.getType().isWeighted()) {
@@ -273,7 +273,7 @@ public class SimpleGraphMLImporter<V, E>
                 }
 
                 lastEdge = e;
-                lastQuadruple = qe;
+                lastTriple = qe;
             }
         };
 

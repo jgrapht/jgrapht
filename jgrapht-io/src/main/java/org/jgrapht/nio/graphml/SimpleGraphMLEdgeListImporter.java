@@ -25,7 +25,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.Quadruple;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.GraphMLImporter;
@@ -187,8 +186,8 @@ public class SimpleGraphMLEdgeListImporter
     {
         private int nodeCount;
         private Map<String, Integer> vertexMap;
-        private Triple<Integer, Integer, Double> lastTriple;
-        private Quadruple<String, String, String, Double> lastQuadruple;
+        private Triple<Integer, Integer, Double> lastIntegerTriple;
+        private Triple<String, String, Double> lastTriple;
 
         public Consumers()
         {
@@ -199,9 +198,9 @@ public class SimpleGraphMLEdgeListImporter
         public final Consumer<ImportEvent> eventConsumer = (e) -> {
             if (ImportEvent.EOF.equals(e)) {
                 if (lastTriple != null) {
-                    notifyEdge(lastTriple);
-                    lastQuadruple = null;
+                    notifyEdge(lastIntegerTriple);
                     lastTriple = null;
+                    lastIntegerTriple = null;
                 }
             }
         };
@@ -212,37 +211,36 @@ public class SimpleGraphMLEdgeListImporter
             });
         };
 
-        public final BiConsumer<Pair<Quadruple<String, String, String, Double>, String>,
+        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
             Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
-
-                Quadruple<String, String, String, Double> q = edgeAndKey.getFirst();
+                Triple<String, String, Double> q = edgeAndKey.getFirst();
                 String keyName = edgeAndKey.getSecond();
-                if (lastQuadruple == q && edgeWeightAttributeName.equals(keyName)) {
-                    lastQuadruple.setFourth(q.getFourth());
-                    lastTriple.setThird(q.getFourth());
+                if (lastTriple == q && edgeWeightAttributeName.equals(keyName)) {
+                    lastTriple.setThird(q.getThird());
+                    lastIntegerTriple.setThird(q.getThird());
                 }
             };
 
-        public final Consumer<Quadruple<String, String, String, Double>> edgeConsumer = (q) -> {
-            if (q != lastQuadruple) {
-                if (lastQuadruple != null) {
-                    notifyEdge(lastTriple);
+        public final Consumer<Triple<String, String, Double>> edgeConsumer = (q) -> {
+            if (q != lastTriple) {
+                if (lastTriple != null) {
+                    notifyEdge(lastIntegerTriple);
                 }
-                lastQuadruple = q;
-                lastTriple = createTriple(q);
+                lastTriple = q;
+                lastIntegerTriple = createIntegerTriple(q);
             }
         };
 
-        private Triple<Integer, Integer, Double> createTriple(
-            Quadruple<String, String, String, Double> e)
+        private Triple<Integer, Integer, Double> createIntegerTriple(
+            Triple<String, String, Double> e)
         {
-            int source = vertexMap.computeIfAbsent(e.getSecond(), k -> {
+            int source = vertexMap.computeIfAbsent(e.getFirst(), k -> {
                 return Integer.valueOf(nodeCount++);
             });
-            int target = vertexMap.computeIfAbsent(e.getThird(), k -> {
+            int target = vertexMap.computeIfAbsent(e.getSecond(), k -> {
                 return Integer.valueOf(nodeCount++);
             });
-            Double weight = e.getFourth();
+            Double weight = e.getThird();
 
             return Triple.of(source, target, weight);
         }
