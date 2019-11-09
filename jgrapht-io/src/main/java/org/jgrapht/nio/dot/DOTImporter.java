@@ -63,16 +63,14 @@ public class DOTImporter<V, E>
     implements
     GraphImporter<V, E>
 {
-    /**
-     * Default key used for vertex ID.
-     */
-    public static final String DEFAULT_VERTEX_ID_KEY = "ID";
+    private static final String DEFAULT_VERTEX_ID_KEY = "ID";
 
     /**
      * Constructs a new importer.
      */
     public DOTImporter()
     {
+        super();
     }
 
     @Override

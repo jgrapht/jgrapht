@@ -88,6 +88,7 @@ public class DIMACSImporter<V, E>
      */
     public DIMACSImporter(double defaultWeight)
     {
+        super();
         this.defaultWeight = defaultWeight;
     }
 

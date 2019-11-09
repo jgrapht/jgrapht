@@ -119,6 +119,7 @@ public class GmlGenericImporter
      */
     public GmlGenericImporter()
     {
+        super();
     }
 
     @Override

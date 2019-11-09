@@ -81,6 +81,7 @@ public class DOTGenericImporter
      */
     public DOTGenericImporter()
     {
+        super();
         Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
         lookupMap.put("\\\\", "\\");
         lookupMap.put("\\\"", "\"");

@@ -100,6 +100,7 @@ public class JSONGenericImporter
      */
     public JSONGenericImporter()
     {
+        super();
     }
 
     @Override

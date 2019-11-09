@@ -119,6 +119,7 @@ public class GmlImporter<V, E>
      */
     public GmlImporter()
     {
+        super();
     }
 
     /**
@@ -186,7 +187,7 @@ public class GmlImporter<V, E>
             if (graphType.isWeighted() && t.getThird() != null) {
                 graph.setEdgeWeight(e, t.getThird());
             }
-            
+
             notifyEdge(e);
 
             lastTriple = t;
@@ -206,7 +207,7 @@ public class GmlImporter<V, E>
             if (v == null) {
                 v = graph.addVertex();
                 map.put(id, v);
-                
+
                 /*
                  * Notify the first time we create the node.
                  */

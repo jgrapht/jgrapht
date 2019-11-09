@@ -123,6 +123,7 @@ public class SimpleGraphMLEdgeListImporter
      */
     public SimpleGraphMLEdgeListImporter()
     {
+        super();
         this.schemaValidation = true;
     }
 

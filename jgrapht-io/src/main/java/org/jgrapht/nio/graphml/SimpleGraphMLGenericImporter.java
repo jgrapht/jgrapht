@@ -149,6 +149,7 @@ public class SimpleGraphMLGenericImporter
      */
     public SimpleGraphMLGenericImporter()
     {
+        super();
         this.schemaValidation = true;
     }
 

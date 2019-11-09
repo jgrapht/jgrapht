@@ -70,6 +70,7 @@ public class Graph6Sparse6Importer<V, E>
      */
     public Graph6Sparse6Importer()
     {
+        super();
     }
 
     /**

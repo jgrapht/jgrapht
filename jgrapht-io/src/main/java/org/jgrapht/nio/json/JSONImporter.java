@@ -92,6 +92,7 @@ public class JSONImporter<V, E>
      */
     public JSONImporter()
     {
+        super();
     }
 
     /**

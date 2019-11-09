@@ -74,6 +74,7 @@ public class Graph6Sparse6GenericImporter
      */
     public Graph6Sparse6GenericImporter()
     {
+        super();
     }
 
     @Override
