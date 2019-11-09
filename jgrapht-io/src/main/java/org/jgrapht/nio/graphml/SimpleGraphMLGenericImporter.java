@@ -35,7 +35,6 @@ import javax.xml.validation.SchemaFactory;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.AttributeType;
 import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.GraphMLImporter;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseConsumerImporter;
 import org.jgrapht.nio.ConsumerImporter;

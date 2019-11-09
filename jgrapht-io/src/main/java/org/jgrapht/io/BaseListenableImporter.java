@@ -33,7 +33,9 @@ import java.util.function.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @deprecated Utility class which is no longer needed.
  */
+@Deprecated
 class BaseListenableImporter<V, E>
 {
 

@@ -20,7 +20,6 @@ package org.jgrapht.nio.graphml;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -29,25 +28,14 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.DefaultAttribute;
+import org.jgrapht.io.EdgeProvider;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
+import org.jgrapht.io.VertexProvider;
 import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
 
 /**
  * Imports a graph from a GraphML data source.
- * 
- * <p>
- * This is a simple implementation with supports only a limited set of features of the GraphML
- * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
- * towards parsing speed.
- * 
- * <p>
- * The importer uses the graph suppliers ({@link Graph#getVertexSupplier()} and
- * {@link Graph#getEdgeSupplier()}) in order to create new vertices and edges. Moreover, it notifies
- * lazily and completely out-of-order for any additional vertex, edge or graph attributes in the
- * input file. Users can register consumers for vertex, edge and graph attributes after construction
- * of the importer. Finally, default attribute values are completely ignored.
  * 
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
@@ -65,24 +53,22 @@ import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
- *   <key id="d0" for="node" attr.name="color" attr.type="string" />
+ *   <key id="d0" for="node" attr.name="color" attr.type="string">
+ *     <default>yellow</default>
+ *   </key>
  *   <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
  *   <graph id="G" edgedefault="undirected">
  *     <node id="n0">
  *       <data key="d0">green</data>
  *     </node>
- *     <node id="n1">
- *       <data key="d0">black</data>
- *     </node>     
+ *     <node id="n1"/>
  *     <node id="n2">
  *       <data key="d0">blue</data>
  *     </node>
  *     <node id="n3">
  *       <data key="d0">red</data>
  *     </node>
- *     <node id="n4">
- *       <data key="d0">white</data>
- *     </node>
+ *     <node id="n4"/>
  *     <node id="n5">
  *       <data key="d0">turquoise</data>
  *     </node>
@@ -113,6 +99,10 @@ import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
  * method {@link Graph#getType()} can be used.
  * 
  * <p>
+ * GraphML-Attributes Values are read as string key-value pairs and passed on to the vertex or edge
+ * attribute consumers respectively.
+ * 
+ * <p>
  * The provided graph object, where the imported graph will be stored, must be able to support the
  * features of the graph that is read. For example if the GraphML file contains self-loops then the
  * graph provided must also support self-loops. The same for multiple edges. Moreover, the parser
@@ -124,30 +114,32 @@ import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLImporter<V, E>
+public class GraphMLImporter<V, E>
     extends
     BaseConsumerImporter<V, E>
     implements
     GraphImporter<V, E>
 {
-    private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
     private static final String DEFAULT_VERTEX_ID_KEY = "ID";
+    
+    // special attributes
+    private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
+    private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
+    
 
     private boolean schemaValidation;
-    private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
 
     /**
      * Constructs a new importer.
      */
-    public SimpleGraphMLImporter()
+    public GraphMLImporter()
     {
-        super();
         this.schemaValidation = true;
     }
 
@@ -168,8 +160,10 @@ public class SimpleGraphMLImporter<V, E>
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
     {
-        this.edgeWeightAttributeName = Objects
-            .requireNonNull(edgeWeightAttributeName, "Edge weight attribute name cannot be null");
+        if (edgeWeightAttributeName == null) {
+            throw new IllegalArgumentException("Edge weight attribute name cannot be null");
+        }
+        this.edgeWeightAttributeName = edgeWeightAttributeName;
     }
 
     /**
@@ -200,6 +194,13 @@ public class SimpleGraphMLImporter<V, E>
      * example if the GraphML file contains self-loops then the graph provided must also support
      * self-loops. The same for multiple edges.
      * 
+     * <p>
+     * If the provided graph is a weighted graph, the importer also reads edge weights.
+     * 
+     * <p>
+     * GraphML-Attributes Values are read as string key-value pairs and passed on to the
+     * {@link VertexProvider} and {@link EdgeProvider} respectively.
+     * 
      * @param graph the output graph
      * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse error
@@ -208,7 +209,7 @@ public class SimpleGraphMLImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        SimpleGraphMLGenericImporter genericImporter = new SimpleGraphMLGenericImporter();
+        GraphMLGenericImporter genericImporter = new GraphMLGenericImporter();
         genericImporter.setEdgeWeightAttributeName(edgeWeightAttributeName);
         genericImporter.setSchemaValidation(schemaValidation);
 
@@ -297,5 +298,4 @@ public class SimpleGraphMLImporter<V, E>
         }
 
     }
-
 }

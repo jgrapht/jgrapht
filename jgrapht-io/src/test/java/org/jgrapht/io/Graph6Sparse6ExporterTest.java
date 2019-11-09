@@ -17,23 +17,30 @@
  */
 package org.jgrapht.io;
 
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
-
-import java.io.*;
-import java.util.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphMetrics;
+import org.jgrapht.Graphs;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.NamedGraphGenerator;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Tests for Graph6Sparse6Exporter
  *
  * @author Joris Kinable
  */
+@Deprecated
 public class Graph6Sparse6ExporterTest
 {
 
