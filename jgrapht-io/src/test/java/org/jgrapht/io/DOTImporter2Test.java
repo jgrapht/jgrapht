@@ -30,6 +30,7 @@ import static org.junit.Assert.fail;
 /**
  * 2nd part of tests for DOTImporter. See also {@link DOTImporter1Test}.
  */
+@Deprecated
 public class DOTImporter2Test
 {
     private static final String NL = "\n";
@@ -335,14 +336,14 @@ public class DOTImporter2Test
 
         for (DefaultEdge e : edgeAttributes.keySet()) {
             String f = graph.getEdgeSource(e);
-            String t = graph.getEdgeSource(e);
+            String t = graph.getEdgeTarget(e);
             Map<String, Attribute> attrs = edgeAttributes.get(e);
             if (f.equals("a0") && t.equals("a1")) {
-                assertEquals("5.0", attrs.get("weight"));
+                assertEquals("5.0", attrs.get("weight").getValue());
             } else if (f.equals("a2") && t.equals("a3")) {
-                assertEquals("5.0", attrs.get("weight"));
+                assertEquals("2.0", attrs.get("weight").getValue());
             } else if (f.equals("a4") && t.equals("a5")) {
-                assertEquals("15.0", attrs.get("weight"));
+                assertEquals("15.0", attrs.get("weight").getValue());
             }
         }
     }

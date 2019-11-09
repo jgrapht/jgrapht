@@ -29,6 +29,7 @@ import static org.junit.Assert.*;
 /**
  * 1st part of tests for DOTImporter. See also {@link DOTImporter2Test}.
  */
+@Deprecated
 public class DOTImporter1Test
 {
 

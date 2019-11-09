@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2019, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,43 +15,61 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio.dot;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.apache.commons.text.*;
-import org.apache.commons.text.translate.*;
-import org.jgrapht.*;
+import java.io.Reader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.io.*;
-import java.util.*;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CommonTokenFactory;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.UnbufferedCharStream;
+import org.antlr.v4.runtime.UnbufferedTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.text.translate.AggregateTranslator;
+import org.apache.commons.text.translate.CharSequenceTranslator;
+import org.apache.commons.text.translate.LookupTranslator;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.io.Attribute;
+import org.jgrapht.io.DefaultAttribute;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.ConsumerImporter;
 
 /**
  * Import a graph from a DOT file.
- *
+ * 
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
  * http://en.wikipedia.org/wiki/DOT_language</a> and
  * <a href="http://www.graphviz.org/doc/info/lang.html">
  * http://www.graphviz.org/doc/info/lang.html</a>
- * </p>
+ * 
+ * <p>
+ * The importer notifies interested parties using consumers.
  *
  * @author Dimitrios Michail
- *
- * @param <V> the graph vertex type
- * @param <E> the graph edge type
- * 
- * @deprecated Use {@link org.jgrapht.nio.dot.DOTImporter} instead
  */
-@Deprecated
-public class DOTImporter<V, E>
+public class DOTGenericImporter
     extends
-    AbstractBaseImporter<V, E>
+    BaseConsumerImporter<String, Pair<String, String>>
     implements
-    GraphImporter<V, E>
+    ConsumerImporter<String, Pair<String, String>>
 {
     /**
-     * Default key used in the graph updater (if provided) for the graph ID.
+     * Default key used for the graph ID.
      */
     public static final String DEFAULT_GRAPH_ID_KEY = "ID";
 
@@ -60,59 +78,19 @@ public class DOTImporter<V, E>
 
     /**
      * Constructs a new importer.
-     *
-     * @param vertexProvider used to create vertices
-     * @param edgeProvider used to create edges
      */
-    public DOTImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
+    public DOTGenericImporter()
     {
-        this(vertexProvider, edgeProvider, null);
-    }
-
-    /**
-     * Constructs a new importer.
-     *
-     * @param vertexProvider used to create vertices
-     * @param edgeProvider used to create edges
-     * @param vertexUpdater used to further update vertices
-     */
-    public DOTImporter(
-        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider,
-        ComponentUpdater<V> vertexUpdater)
-    {
-        this(vertexProvider, edgeProvider, vertexUpdater, null);
-    }
-
-    /**
-     * Constructs a new importer.
-     *
-     * @param vertexProvider used to create vertices
-     * @param edgeProvider used to create edges
-     * @param vertexUpdater used to further update vertices
-     * @param graphUpdater used to update graph attributes, like the graph identifier
-     */
-    public DOTImporter(
-        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider,
-        ComponentUpdater<V> vertexUpdater, ComponentUpdater<Graph<V, E>> graphUpdater)
-    {
-        super(vertexProvider, edgeProvider, (vertexUpdater != null) ? vertexUpdater : (c, a) -> {
-        }, (graphUpdater != null) ? graphUpdater : (c, a) -> {
-        });
-
         Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
         lookupMap.put("\\\\", "\\");
         lookupMap.put("\\\"", "\"");
         lookupMap.put("\\'", "'");
         lookupMap.put("\\", "");
         UNESCAPE_ID = new AggregateTranslator(new LookupTranslator(lookupMap));
-
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void importGraph(Graph<V, E> g, Reader in)
+    public void importInput(Reader in)
         throws ImportException
     {
         try {
@@ -137,7 +115,7 @@ public class DOTImporter<V, E>
              * Disable parse tree building and attach listener.
              */
             parser.setBuildParseTree(false);
-            parser.addParseListener(new CreateGraphDOTListener(g));
+            parser.addParseListener(new NotifyDOTListener());
 
             /**
              * Parse
@@ -170,22 +148,19 @@ public class DOTImporter<V, E>
      * Listen on parser events and construct the graph. The listener is strongly dependent on the
      * grammar.
      */
-    private class CreateGraphDOTListener
+    private class NotifyDOTListener
         extends
         DOTBaseListener
     {
-        // graph to update
-        private Graph<V, E> graph;
-        private Map<String, V> vertices;
+        private Set<String> vertices;
 
         // stacks to maintain scope and state
         private Deque<SubgraphScope> subgraphScopes;
         private Deque<State> stack;
 
-        public CreateGraphDOTListener(Graph<V, E> graph)
+        public NotifyDOTListener()
         {
-            this.graph = graph;
-            this.vertices = new HashMap<>();
+            this.vertices = new HashSet<>();
             this.stack = new ArrayDeque<>();
             this.subgraphScopes = new ArrayDeque<>();
         }
@@ -216,16 +191,7 @@ public class DOTImporter<V, E>
         @Override
         public void exitGraphHeader(DOTParser.GraphHeaderContext ctx)
         {
-            /*
-             * Validate graph for directed or undirected. We do not validate for strict on purpose,
-             * but let the user decide the behavior by using the appropriate graph class.
-             */
-            if (ctx.DIGRAPH() != null && !graph.getType().isDirected()) {
-                throw new IllegalArgumentException("Provided graph is not directed");
-            }
-            if (ctx.GRAPH() != null && !graph.getType().isUndirected()) {
-                throw new IllegalArgumentException("Provided graph is not undirected");
-            }
+            // nothing
         }
 
         @Override
@@ -247,18 +213,8 @@ public class DOTImporter<V, E>
             State idPartial = s.children.peekFirst();
 
             if (idPartial != null) {
-                try {
-                    // notify graph updater
-                    graphUpdater
-                        .update(
-                            graph,
-                            Collections
-                                .singletonMap(
-                                    DEFAULT_GRAPH_ID_KEY,
-                                    DefaultAttribute.createAttribute(idPartial.getId())));
-                } catch (Exception e) {
-                    throw new IllegalArgumentException("Graph update failed: " + e.getMessage(), e);
-                }
+                notifyGraphAttribute(
+                    DEFAULT_GRAPH_ID_KEY, DefaultAttribute.createAttribute(idPartial.getId()));
             }
 
             // add as child of parent
@@ -393,8 +349,8 @@ public class DOTImporter<V, E>
                     // last node with attributes
                     break;
                 } else if (prev != null) {
-                    for (V sourceVertex : prev.getVertices()) {
-                        for (V targetVertex : cur.getVertices()) {
+                    for (String sourceVertex : prev.getVertices()) {
+                        for (String targetVertex : cur.getVertices()) {
                             // find default attributes
                             Map<String, Attribute> edgeAttrs =
                                 new HashMap<>(subgraphScopes.element().edgeAttrs);
@@ -403,17 +359,10 @@ public class DOTImporter<V, E>
                                 edgeAttrs.putAll(attrs);
                             }
 
-                            try {
-                                String edgeLabel = null;
-                                if (edgeAttrs.containsKey("label")) {
-                                    edgeLabel = edgeAttrs.get("label").toString();
-                                }
-                                E e = edgeProvider
-                                    .buildEdge(sourceVertex, targetVertex, edgeLabel, edgeAttrs);
-                                graph.addEdge(sourceVertex, targetVertex, e);
-                            } catch (Exception e) {
-                                throw new IllegalArgumentException(
-                                    "Edge creation failed: " + e.getMessage(), e);
+                            Pair<String, String> pe = Pair.of(sourceVertex, targetVertex);
+                            notifyEdge(pe);
+                            for (String key : edgeAttrs.keySet()) {
+                                notifyEdgeAttribute(pe, key, edgeAttrs.get(key));
                             }
                         }
                     }
@@ -440,7 +389,7 @@ public class DOTImporter<V, E>
             // read key value pair
             State s = stack.pop();
             State idPairChild = s.children.peekFirst();
-            if (idPairChild == null) {
+            if (idPairChild == null || idPairChild.ids == null) {
                 return;
             }
             String key = idPairChild.ids.get(0);
@@ -450,14 +399,7 @@ public class DOTImporter<V, E>
             SubgraphScope scope = subgraphScopes.element();
             scope.graphAttrs.put(key, DefaultAttribute.createAttribute(value));
             if (subgraphScopes.size() == 1) {
-                try {
-                    graphUpdater
-                        .update(
-                            graph,
-                            Collections.singletonMap(key, DefaultAttribute.createAttribute(value)));
-                } catch (Exception e) {
-                    throw new IllegalArgumentException("Graph update failed: " + e.getMessage(), e);
-                }
+                notifyGraphAttribute(key, DefaultAttribute.createAttribute(value));
             }
         }
 
@@ -494,26 +436,26 @@ public class DOTImporter<V, E>
             }
 
             // create or update vertex
-            V v = vertices.get(nodeId);
-            if (v == null) {
+            if (!vertices.contains(nodeId)) {
                 SubgraphScope scope = subgraphScopes.element();
                 // find default attributes
                 Map<String, Attribute> defaultAttrs = new HashMap<>(scope.nodeAttrs);
                 // append extra attributes
                 defaultAttrs.putAll(attrs);
-                try {
-                    v = vertexProvider.buildVertex(nodeId, defaultAttrs);
-                } catch (Exception e) {
-                    throw new IllegalArgumentException(
-                        "Vertex creation failed: " + e.getMessage(), e);
+
+                notifyVertex(nodeId);
+                for (String key : defaultAttrs.keySet()) {
+                    notifyVertexAttribute(nodeId, key, defaultAttrs.get(key));
                 }
-                graph.addVertex(v);
-                vertices.put(nodeId, v);
-                scope.addVertex(v);
+
+                vertices.add(nodeId);
+                scope.addVertex(nodeId);
             } else {
-                vertexUpdater.update(v, attrs);
+                for (String key : attrs.keySet()) {
+                    notifyVertexAttribute(nodeId, key, attrs.get(key));
+                }
             }
-            s.addVertex(v);
+            s.addVertex(nodeId);
 
             // add as child of parent
             s.children.clear();
@@ -546,22 +488,18 @@ public class DOTImporter<V, E>
             String nodeId = nodeIdPartial.getId();
 
             // create or update vertex
-            V v = vertices.get(nodeId);
-            if (v == null) {
+            if (!vertices.contains(nodeId)) {
                 SubgraphScope scope = subgraphScopes.element();
                 // find default attributes
                 Map<String, Attribute> defaultAttrs = new HashMap<>(scope.nodeAttrs);
-                try {
-                    v = vertexProvider.buildVertex(nodeId, defaultAttrs);
-                } catch (Exception e) {
-                    throw new IllegalArgumentException(
-                        "Vertex creation failed: " + e.getMessage(), e);
+                notifyVertex(nodeId);
+                for (String key : defaultAttrs.keySet()) {
+                    notifyVertexAttribute(nodeId, key, defaultAttrs.get(key));
                 }
-                graph.addVertex(v);
-                vertices.put(nodeId, v);
-                scope.addVertex(v);
+                vertices.add(nodeId);
+                scope.addVertex(nodeId);
             }
-            s.addVertex(v);
+            s.addVertex(nodeId);
 
             // add as child of parent
             s.children.clear();
@@ -719,7 +657,7 @@ public class DOTImporter<V, E>
         LinkedList<State> children;
         List<String> ids;
         Map<String, Attribute> attrs;
-        List<V> vertices;
+        List<String> vertices;
         SubgraphScope subgraph;
 
         public State()
@@ -733,7 +671,7 @@ public class DOTImporter<V, E>
 
         public String getId()
         {
-            if (ids.isEmpty()) {
+            if (ids == null || ids.isEmpty()) {
                 return "";
             } else {
                 return ids.get(0);
@@ -764,7 +702,7 @@ public class DOTImporter<V, E>
             this.attrs.putAll(attrs);
         }
 
-        public void addVertex(V v)
+        public void addVertex(String v)
         {
             if (this.vertices == null) {
                 this.vertices = new ArrayList<>();
@@ -772,7 +710,7 @@ public class DOTImporter<V, E>
             this.vertices.add(v);
         }
 
-        public List<V> getVertices()
+        public List<String> getVertices()
         {
             if (vertices != null) {
                 return vertices;
@@ -791,7 +729,7 @@ public class DOTImporter<V, E>
         Map<String, Attribute> graphAttrs;
         Map<String, Attribute> nodeAttrs;
         Map<String, Attribute> edgeAttrs;
-        List<V> vertices;
+        List<String> vertices;
 
         public SubgraphScope()
         {
@@ -801,7 +739,7 @@ public class DOTImporter<V, E>
             this.vertices = null;
         }
 
-        public void addVertex(V v)
+        public void addVertex(String v)
         {
             if (this.vertices == null) {
                 this.vertices = new ArrayList<>();
@@ -809,7 +747,7 @@ public class DOTImporter<V, E>
             this.vertices.add(v);
         }
 
-        public void addVertices(List<V> v)
+        public void addVertices(List<String> v)
         {
             if (this.vertices == null) {
                 this.vertices = new ArrayList<>();
