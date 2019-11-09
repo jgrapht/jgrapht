@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2019, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,22 +15,37 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio.gml;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.io.Attribute;
+import org.jgrapht.io.AttributeType;
+import org.jgrapht.io.ExportException;
+import org.jgrapht.io.GmlExporter;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Tests for {@link GmlImporter}.
  * 
  * @author Dimitrios Michail
  */
-@Deprecated
 public class GmlImporterTest
 {
 
@@ -429,20 +444,6 @@ public class GmlImporterTest
     }
 
     @Test
-    public void testMissingVertices()
-    {
-        // @formatter:off
-        String input = "graph [ edge [ source 1 target 2 ] ]";
-        // @formatter:on
-
-        try {
-            readGraph(input, DefaultEdge.class, false, false);
-            fail("Node is missing?");
-        } catch (ImportException e) {
-        }
-    }
-
-    @Test
     public void testExportImport()
         throws ImportException,
         ExportException,
@@ -484,14 +485,11 @@ public class GmlImporterTest
                        "edge [ source 1 target 1 ] ]"; 
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        VertexProvider<String> vp = (label, attributes) -> label;
-        EdgeProvider<String, DefaultEdge> ep =
-            (from, to, label, attributes) -> g.getEdgeSupplier().get();
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         try {
-            GmlImporter<String, DefaultEdge> importer = new GmlImporter<>(vp, ep);
+            GmlImporter<String, DefaultEdge> importer = new GmlImporter<>();
             importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {
@@ -632,25 +630,31 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
-        VertexProvider<String> vp = (id, attributes) -> {
-            assertNotNull(attributes);
-            if (Integer.parseInt(id) >= 4) {
-                assertEquals("Node\t\t?", attributes.get("label").getValue());
-            } else {
-                assertEquals("Node\t\t" + id, attributes.get("label").getValue());
+        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>();
+
+        Map<String, Map<String, Attribute>> attrs = new HashMap<>();
+        importer.addVertexAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = attrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                attrs.put(p.getFirst(), map);
             }
-            return id;
-        };
-        EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
-            assertNotNull(attributes);
-            assertEquals("Edge " + from + "-" + to, attributes.get("label").getValue());
-            assertEquals("Name " + from + to, attributes.get("name").getValue());
-            return g.getEdgeSupplier().get();
-        };
+            map.put(p.getSecond(), a);
+        });
 
-        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>(vp, ep);
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttrs = new HashMap<>();
+        importer.addEdgeAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = edgeAttrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                edgeAttrs.put(p.getFirst(), map);
+            }
+            map.put(p.getSecond(), a);
+        });
+
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
@@ -659,9 +663,28 @@ public class GmlImporterTest
         assertTrue(g.containsVertex("2"));
         assertTrue(g.containsVertex("3"));
         assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsVertex("5"));
         assertTrue(g.containsEdge("1", "2"));
         assertTrue(g.containsEdge("2", "3"));
         assertTrue(g.containsEdge("3", "1"));
+
+        assertEquals(attrs.get("1").get("ID").getValue(), "1");
+        assertEquals(attrs.get("1").get("label").getValue(), "Node\t\t1");
+        assertEquals(attrs.get("2").get("ID").getValue(), "2");
+        assertEquals(attrs.get("2").get("label").getValue(), "Node\t\t2");
+        assertEquals(attrs.get("3").get("ID").getValue(), "3");
+        assertEquals(attrs.get("3").get("label").getValue(), "Node\t\t3");
+        assertEquals(attrs.get("4").get("ID").getValue(), "4");
+        assertEquals(attrs.get("4").get("label").getValue(), "Node\t\t?");
+        assertEquals(attrs.get("5").get("ID").getValue(), "5");
+        assertEquals(attrs.get("5").get("label").getValue(), "Node\t\t?");
+
+        assertEquals(edgeAttrs.get(g.getEdge("1", "2")).get("label").getValue(), "Edge 1-2");
+        assertEquals(edgeAttrs.get(g.getEdge("1", "2")).get("name").getValue(), "Name 12");
+        assertEquals(edgeAttrs.get(g.getEdge("3", "1")).get("label").getValue(), "Edge 3-1");
+        assertEquals(edgeAttrs.get(g.getEdge("3", "1")).get("name").getValue(), "Name 31");
+        assertEquals(edgeAttrs.get(g.getEdge("2", "3")).get("label").getValue(), "Edge 2-3");
+        assertEquals(edgeAttrs.get(g.getEdge("2", "3")).get("name").getValue(), "Name 23");
     }
 
     @Test
@@ -695,38 +718,31 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
-        VertexProvider<String> vp = (id, attributes) -> {
-            assertNotNull(attributes);
-            if (Integer.parseInt(id) == 1) {
-                assertEquals("2", attributes.get("frequency").getValue());
-                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-                assertEquals("1.2", attributes.get("customweight").getValue());
-                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
-            } else if (Integer.parseInt(id) == 2) {
-                assertEquals("3", attributes.get("frequency").getValue());
-                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-                assertEquals("2.1", attributes.get("customweight").getValue());
-                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
-            } else {
-                assertEquals("5", attributes.get("frequency").getValue());
-                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-                assertEquals("5.5", attributes.get("customweight").getValue());
-                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>();
+
+        Map<String, Map<String, Attribute>> attrs = new HashMap<>();
+        importer.addVertexAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = attrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                attrs.put(p.getFirst(), map);
             }
-            return id;
-        };
-        EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
-            assertNotNull(attributes);
-            assertEquals("6", attributes.get("frequency").getValue());
-            assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-            assertEquals("7.5", attributes.get("customweight").getValue());
-            assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
-            return g.getEdgeSupplier().get();
-        };
+            map.put(p.getSecond(), a);
+        });
 
-        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>(vp, ep);
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttrs = new HashMap<>();
+        importer.addEdgeAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = edgeAttrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                edgeAttrs.put(p.getFirst(), map);
+            }
+            map.put(p.getSecond(), a);
+        });
+
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(3, g.vertexSet().size());
@@ -734,6 +750,31 @@ public class GmlImporterTest
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsVertex("2"));
         assertTrue(g.containsEdge("1", "2"));
+
+        assertEquals(attrs.get("1").get("ID").getValue(), "1");
+        assertEquals(attrs.get("1").get("frequency").getValue(), "2");
+        assertEquals(attrs.get("1").get("frequency").getType(), AttributeType.INT);
+        assertEquals(attrs.get("1").get("customweight").getValue(), "1.2");
+        assertEquals(attrs.get("1").get("customweight").getType(), AttributeType.DOUBLE);
+
+        assertEquals(attrs.get("2").get("ID").getValue(), "2");
+        assertEquals(attrs.get("2").get("frequency").getValue(), "3");
+        assertEquals(attrs.get("2").get("frequency").getType(), AttributeType.INT);
+        assertEquals(attrs.get("2").get("customweight").getValue(), "2.1");
+        assertEquals(attrs.get("2").get("customweight").getType(), AttributeType.DOUBLE);
+
+        assertEquals(attrs.get("3").get("ID").getValue(), "3");
+        assertEquals(attrs.get("3").get("frequency").getValue(), "5");
+        assertEquals(attrs.get("3").get("frequency").getType(), AttributeType.INT);
+        assertEquals(attrs.get("3").get("customweight").getValue(), "5.5");
+        assertEquals(attrs.get("3").get("customweight").getType(), AttributeType.DOUBLE);
+
+        assertEquals(edgeAttrs.get(g.getEdge("1", "2")).get("frequency").getValue(), "6");
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("frequency").getType(), AttributeType.INT);
+        assertEquals(edgeAttrs.get(g.getEdge("1", "2")).get("customweight").getValue(), "7.5");
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("customweight").getType(), AttributeType.DOUBLE);
     }
 
     @Test
@@ -778,53 +819,31 @@ public class GmlImporterTest
                      + "]\n";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedWeightedPseudograph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
-        VertexProvider<String> vp = (id, attributes) -> {
-            assertNotNull(attributes);
-            if (Integer.parseInt(id) == 1) {
-                assertEquals("2", attributes.get("frequency").getValue());
-                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-                assertEquals("1.2", attributes.get("customweight").getValue());
-                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
-                assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
-                assertEquals(
-                    "[ one [ one 1.0 two 2.0 ] two [ one \"1\" two \"2\" ] ]",
-                    attributes.get("deep").getValue());
-            } else if (Integer.parseInt(id) == 2) {
-                assertEquals("3", attributes.get("frequency").getValue());
-                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-                assertEquals("2.1", attributes.get("customweight").getValue());
-                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
-                assertEquals(AttributeType.UNKNOWN, attributes.get("points").getType());
-                assertEquals("[ x 1.0 y 2.0 z 3.0 ]", attributes.get("points").getValue());
-                assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
-                assertEquals(
-                    "[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]",
-                    attributes.get("deep").getValue());
-            } else {
-                assertEquals("5", attributes.get("frequency").getValue());
-                assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-                assertEquals("5.5", attributes.get("customweight").getValue());
-                assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
+        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>();
+
+        Map<String, Map<String, Attribute>> attrs = new HashMap<>();
+        importer.addVertexAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = attrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                attrs.put(p.getFirst(), map);
             }
-            return id;
-        };
-        EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
-            assertNotNull(attributes);
-            assertEquals("6", attributes.get("frequency").getValue());
-            assertEquals(AttributeType.INT, attributes.get("frequency").getType());
-            assertEquals("7.5", attributes.get("customweight").getValue());
-            assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
-            assertEquals(AttributeType.UNKNOWN, attributes.get("points").getType());
-            assertEquals("[ x 1.0 y 2.0 ]", attributes.get("points").getValue());
-            assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
-            assertEquals(
-                "[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]", attributes.get("deep").getValue());
-            return g.getEdgeSupplier().get();
-        };
+            map.put(p.getSecond(), a);
+        });
 
-        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>(vp, ep);
+        Map<DefaultEdge, Map<String, Attribute>> edgeAttrs = new HashMap<>();
+        importer.addEdgeAttributeConsumer((p, a) -> {
+            Map<String, Attribute> map = edgeAttrs.get(p.getFirst());
+            if (map == null) {
+                map = new HashMap<>();
+                edgeAttrs.put(p.getFirst(), map);
+            }
+            map.put(p.getSecond(), a);
+        });
+
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(3, g.vertexSet().size());
@@ -832,31 +851,73 @@ public class GmlImporterTest
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsVertex("2"));
         assertTrue(g.containsEdge("1", "2"));
+
+        assertEquals(attrs.get("1").get("ID").getValue(), "1");
+        assertEquals(attrs.get("1").get("frequency").getValue(), "2");
+        assertEquals(attrs.get("1").get("frequency").getType(), AttributeType.INT);
+        assertEquals(attrs.get("1").get("customweight").getValue(), "1.2");
+        assertEquals(attrs.get("1").get("customweight").getType(), AttributeType.DOUBLE);
+        assertEquals(
+            attrs.get("1").get("deep").getValue(),
+            "[ one [ one 1.0 two 2.0 ] two [ one \"1\" two \"2\" ] ]");
+        assertEquals(attrs.get("1").get("deep").getType(), AttributeType.UNKNOWN);
+
+        assertEquals(attrs.get("2").get("ID").getValue(), "2");
+        assertEquals(attrs.get("2").get("frequency").getValue(), "3");
+        assertEquals(attrs.get("2").get("frequency").getType(), AttributeType.INT);
+        assertEquals(attrs.get("2").get("customweight").getValue(), "2.1");
+        assertEquals(attrs.get("2").get("customweight").getType(), AttributeType.DOUBLE);
+        assertEquals(
+            attrs.get("2").get("deep").getValue(), "[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]");
+        assertEquals(attrs.get("2").get("deep").getType(), AttributeType.UNKNOWN);
+        assertEquals(attrs.get("2").get("points").getValue(), "[ x 1.0 y 2.0 z 3.0 ]");
+        assertEquals(attrs.get("2").get("points").getType(), AttributeType.UNKNOWN);
+
+        assertEquals(attrs.get("3").get("ID").getValue(), "3");
+        assertEquals(attrs.get("3").get("frequency").getValue(), "5");
+        assertEquals(attrs.get("3").get("frequency").getType(), AttributeType.INT);
+        assertEquals(attrs.get("3").get("customweight").getValue(), "5.5");
+        assertEquals(attrs.get("3").get("customweight").getType(), AttributeType.DOUBLE);
+
+        assertEquals(edgeAttrs.get(g.getEdge("1", "2")).get("frequency").getValue(), "6");
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("frequency").getType(), AttributeType.INT);
+        assertEquals(edgeAttrs.get(g.getEdge("1", "2")).get("customweight").getValue(), "7.5");
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("customweight").getType(), AttributeType.DOUBLE);
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("deep").getValue(),
+            "[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]");
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("deep").getType(), AttributeType.UNKNOWN);
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("points").getValue(), "[ x 1.0 y 2.0 ]");
+        assertEquals(
+            edgeAttrs.get(g.getEdge("1", "2")).get("points").getType(), AttributeType.UNKNOWN);
+
     }
 
     // ~ Private Methods ------------------------------------------------------
 
     private <E> Graph<String, E> readGraph(
-        String input, Class<? extends E> edgeClass, boolean directed, boolean weighted)
+        String input, Class<E> edgeClass, boolean directed, boolean weighted)
         throws ImportException
     {
         Graph<String, E> g;
+
         if (directed) {
-            if (weighted) {
-                g = new DirectedWeightedPseudograph<>(edgeClass);
-            } else {
-                g = new DirectedPseudograph<>(edgeClass);
-            }
+            g = GraphTypeBuilder
+                .directed().weighted(weighted).allowingSelfLoops(true).allowingMultipleEdges(true)
+                .edgeClass(edgeClass).vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .buildGraph();
         } else {
-            if (weighted) {
-                g = new WeightedPseudograph<>(edgeClass);
-            } else {
-                g = new Pseudograph<>(edgeClass);
-            }
+            g = GraphTypeBuilder
+                .undirected().weighted(weighted).allowingSelfLoops(true).allowingMultipleEdges(true)
+                .edgeClass(edgeClass).vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .buildGraph();
         }
 
-        GmlImporter<String, E> importer =
-            new GmlImporter<>((l, a) -> l, (f, t, l, a) -> g.getEdgeSupplier().get());
+        GmlImporter<String, E> importer = new GmlImporter<>();
         importer.importGraph(g, new StringReader(input));
 
         return g;

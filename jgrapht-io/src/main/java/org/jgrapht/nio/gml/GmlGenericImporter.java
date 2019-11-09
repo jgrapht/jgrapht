@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio.gml;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -32,8 +32,14 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.text.StringEscapeUtils;
-import org.jgrapht.Graph;
-import org.jgrapht.io.GmlParser.GmlContext;
+import org.jgrapht.alg.util.Triple;
+import org.jgrapht.io.Attribute;
+import org.jgrapht.io.AttributeType;
+import org.jgrapht.io.DefaultAttribute;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.gml.GmlParser.GmlContext;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
@@ -73,9 +79,9 @@ import org.jgrapht.io.GmlParser.GmlContext;
  * </pre>
  * 
  * <p>
- * In case the graph is weighted then the importer also reads edge weights. Otherwise edge weights
- * are ignored. The importer also supports reading additional string attributes such as label or
- * custom user attributes. String attributes are unescaped as if they are Java strings.
+ * If the input file contains edge weights then the importer also reads edge weights. The importer
+ * also supports reading additional string attributes such as label or custom user attributes.
+ * String attributes are unescaped as if they are Java strings.
  * 
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
@@ -100,48 +106,23 @@ import org.jgrapht.io.GmlParser.GmlContext;
  * 
  * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
  * 
- * @param <V> the vertex type
- * @param <E> the edge type
- * 
  * @author Dimitrios Michail
- * @deprecated Use {@link org.jgrapht.nio.gml.GmlImporter} instead
  */
-@Deprecated
-public class GmlImporter<V, E>
+public class GmlGenericImporter
     extends
-    AbstractBaseImporter<V, E>
+    BaseConsumerImporter<Integer, Triple<Integer, Integer, Double>>
     implements
-    GraphImporter<V, E>
+    ConsumerImporter<Integer, Triple<Integer, Integer, Double>>
 {
     /**
      * Constructs a new importer.
-     * 
-     * @param vertexProvider provider for the generation of vertices. Must not be null.
-     * @param edgeProvider provider for the generation of edges. Must not be null.
      */
-    public GmlImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
+    public GmlGenericImporter()
     {
-        super(vertexProvider, edgeProvider);
     }
 
-    /**
-     * Import a graph.
-     * 
-     * <p>
-     * The provided graph must be able to support the features of the graph that is read. For
-     * example if the gml file contains self-loops then the graph provided must also support
-     * self-loops. The same for multiple edges.
-     * 
-     * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
-     * edge weights are ignored.
-     * 
-     * @param graph the output graph
-     * @param input the input reader
-     * @throws ImportException in case an error occurs, such as I/O or parse error
-     */
     @Override
-    public void importGraph(Graph<V, E> graph, Reader input)
+    public void importInput(Reader input)
         throws ImportException
     {
         try {
@@ -162,11 +143,9 @@ public class GmlImporter<V, E>
 
             // Walk it and attach our listener
             ParseTreeWalker walker = new ParseTreeWalker();
-            CreateGraphGmlListener listener = new CreateGraphGmlListener();
+            NotifyGmlListener listener = new NotifyGmlListener();
             walker.walk(listener, graphContext);
-
-            // update graph
-            listener.updateGraph(graph);
+            listener.notifySingletons();
         } catch (IOException e) {
             throw new ImportException("Failed to import gml graph: " + e.getMessage(), e);
         } catch (ParseCancellationException pe) {
@@ -191,8 +170,8 @@ public class GmlImporter<V, E>
         }
     }
 
-    // create graph from parse tree
-    private class CreateGraphGmlListener
+    // notify from parse tree
+    private class NotifyGmlListener
         extends
         GmlBaseListener
     {
@@ -205,7 +184,6 @@ public class GmlImporter<V, E>
         private static final String TARGET = "target";
 
         // current state of parser
-        private boolean foundGraph;
         private boolean insideGraph;
         private boolean insideNode;
         private boolean insideEdge;
@@ -216,67 +194,29 @@ public class GmlImporter<V, E>
         private Double weight;
         private Map<String, Attribute> attributes;
         private StringBuilder stringBuffer;
+        private int maxNodeId;
+        private List<Singleton> singletons;
 
-        // collected nodes and edges
-        private Map<Integer, Node> nodes;
-        private List<Node> singletons;
-        private List<PartialEdge> edges;
-
-        public void updateGraph(Graph<V, E> graph)
-            throws ImportException
+        public void notifySingletons()
         {
-            if (foundGraph) {
-                boolean isWeighted = graph.getType().isWeighted();
-
-                // add nodes
-                int maxVertexId = 1;
-                Map<Integer, V> map = new HashMap<Integer, V>();
-                for (Integer id : nodes.keySet()) {
-                    Node n = nodes.get(id);
-                    maxVertexId = Math.max(maxVertexId, id);
-                    V vertex = vertexProvider.buildVertex(id.toString(), n.attributes);
-                    map.put(id, vertex);
-                    graph.addVertex(vertex);
+            for (Singleton s : singletons) {
+                maxNodeId++;
+                notifyVertex(maxNodeId);
+                for (String attrKey : s.attributes.keySet()) {
+                    notifyVertexAttribute(maxNodeId, attrKey, s.attributes.get(attrKey));
                 }
-
-                // add singleton nodes
-                for (Node n : singletons) {
-                    String id = String.valueOf(++maxVertexId);
-                    graph.addVertex(vertexProvider.buildVertex(id, n.attributes));
-                }
-
-                // add edges
-                for (PartialEdge pe : edges) {
-                    String label = "e_" + pe.source + "_" + pe.target;
-                    V from = map.get(pe.source);
-                    if (from == null) {
-                        throw new ImportException("Node " + pe.source + " does not exist");
-                    }
-                    V to = map.get(pe.target);
-                    if (to == null) {
-                        throw new ImportException("Node " + pe.target + " does not exist");
-                    }
-                    E e = edgeProvider.buildEdge(from, to, label, pe.attributes);
-                    graph.addEdge(from, to, e);
-                    if (pe.weight != null && isWeighted) {
-                        graph.setEdgeWeight(e, pe.weight);
-                    }
-                }
-
             }
         }
 
         @Override
         public void enterGml(GmlParser.GmlContext ctx)
         {
-            foundGraph = false;
             insideGraph = false;
             insideNode = false;
             insideEdge = false;
-            nodes = new HashMap<>();
-            singletons = new ArrayList<>();
-            edges = new ArrayList<PartialEdge>();
             level = 0;
+            singletons = new ArrayList<>();
+            maxNodeId = 0;
         }
 
         @Override
@@ -353,7 +293,6 @@ public class GmlImporter<V, E>
         {
             String key = ctx.ID().getText();
             if (level == 0 && key.equals(GRAPH)) {
-                foundGraph = true;
                 insideGraph = true;
             } else if (level == 1 && insideGraph && key.equals(NODE)) {
                 insideNode = true;
@@ -388,15 +327,26 @@ public class GmlImporter<V, E>
                 insideGraph = false;
             } else if (level == 1 && insideGraph && key.equals(NODE)) {
                 if (nodeId == null) {
-                    singletons.add(new Node(attributes));
+                    singletons.add(new Singleton(attributes));
                 } else {
-                    nodes.put(nodeId, new Node(attributes));
+                    notifyVertex(nodeId);
+                    for (String attrKey : attributes.keySet()) {
+                        notifyVertexAttribute(nodeId, attrKey, attributes.get(attrKey));
+                    }
+                    maxNodeId = Math.max(maxNodeId, nodeId);
                 }
                 insideNode = false;
                 attributes = null;
             } else if (level == 1 && insideGraph && key.equals(EDGE)) {
                 if (sourceId != null && targetId != null) {
-                    edges.add(new PartialEdge(sourceId, targetId, weight, attributes));
+                    Triple<Integer, Integer, Double> et = Triple.of(sourceId, targetId, weight);
+                    notifyEdge(et);
+                    if (weight != null) {
+                        notifyEdgeAttribute(et, WEIGHT, DefaultAttribute.createAttribute(weight));
+                    }
+                    for (String attrKey : attributes.keySet()) {
+                        notifyEdgeAttribute(et, attrKey, attributes.get(attrKey));
+                    }
                 }
                 insideEdge = false;
                 attributes = null;
@@ -481,29 +431,12 @@ public class GmlImporter<V, E>
 
     }
 
-    private class Node
+    private class Singleton
     {
         Map<String, Attribute> attributes;
 
-        public Node(Map<String, Attribute> attributes)
+        public Singleton(Map<String, Attribute> attributes)
         {
-            this.attributes = attributes;
-        }
-    }
-
-    private class PartialEdge
-    {
-        Integer source;
-        Integer target;
-        Double weight;
-        Map<String, Attribute> attributes;
-
-        public PartialEdge(
-            Integer source, Integer target, Double weight, Map<String, Attribute> attributes)
-        {
-            this.source = source;
-            this.target = target;
-            this.weight = weight;
             this.attributes = attributes;
         }
     }

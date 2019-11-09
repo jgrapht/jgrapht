@@ -139,6 +139,7 @@ public class DOTImporter<V, E>
             }
 
             E e = graph.addEdge(from, to);
+            notifyEdge(e);
 
             lastPair = p;
             lastEdge = e;
