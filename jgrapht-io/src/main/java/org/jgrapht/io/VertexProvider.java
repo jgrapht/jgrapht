@@ -23,7 +23,9 @@ import java.util.*;
  * Creates a vertex.
  *
  * @param <V> the vertex type
+ * @deprecated
  */
+@Deprecated
 public interface VertexProvider<V>
 {
     /**
