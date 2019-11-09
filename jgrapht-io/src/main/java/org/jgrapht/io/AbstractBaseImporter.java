@@ -28,7 +28,7 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
- * @deprecated
+ * @deprecated Use new importers.
  */
 @Deprecated
 abstract class AbstractBaseImporter<V, E>
