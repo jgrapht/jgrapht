@@ -35,7 +35,7 @@ import org.jgrapht.io.Attribute;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public abstract class BaseConsumerImporter<V, E>
+public abstract class BaseEventDrivenImporter<V, E>
 {
     private List<Consumer<Integer>> vertexCountConsumers;
     private List<Consumer<Integer>> edgeCountConsumers;
@@ -49,7 +49,7 @@ public abstract class BaseConsumerImporter<V, E>
     /**
      * Constructor
      */
-    public BaseConsumerImporter()
+    public BaseEventDrivenImporter()
     {
         this.vertexCountConsumers = new ArrayList<>();
         this.edgeCountConsumers = new ArrayList<>();

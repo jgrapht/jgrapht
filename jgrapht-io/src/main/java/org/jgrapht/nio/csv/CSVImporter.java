@@ -31,7 +31,7 @@ import org.jgrapht.io.CSVFormat;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.
@@ -68,7 +68,7 @@ import org.jgrapht.nio.BaseConsumerImporter;
  */
 public class CSVImporter<V, E>
     extends
-    BaseConsumerImporter<V, E>
+    BaseEventDrivenImporter<V, E>
     implements
     GraphImporter<V, E>
 {
@@ -203,7 +203,7 @@ public class CSVImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        CSVGenericImporter genericImporter = new CSVGenericImporter();
+        CSVEventDrivenImporter genericImporter = new CSVEventDrivenImporter();
         genericImporter.setDelimiter(delimiter);
         genericImporter.setFormat(format);
         genericImporter

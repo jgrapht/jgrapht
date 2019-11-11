@@ -26,7 +26,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
 
 /**
  * Importer which reads graphs in graph6 or sparse6 format.
@@ -61,7 +61,7 @@ import org.jgrapht.nio.BaseConsumerImporter;
  */
 public class Graph6Sparse6Importer<V, E>
     extends
-    BaseConsumerImporter<V, E>
+    BaseEventDrivenImporter<V, E>
     implements
     GraphImporter<V, E>
 {
@@ -89,7 +89,7 @@ public class Graph6Sparse6Importer<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        Graph6Sparse6GenericImporter genericImporter = new Graph6Sparse6GenericImporter();
+        Graph6Sparse6EventDrivenImporter genericImporter = new Graph6Sparse6EventDrivenImporter();
         Consumers consumers = new Consumers(graph);
         genericImporter.addVertexConsumer(consumers.vertexConsumer);
         genericImporter.addEdgeConsumer(consumers.edgeConsumer);

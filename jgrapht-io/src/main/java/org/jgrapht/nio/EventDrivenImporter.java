@@ -37,7 +37,7 @@ import org.jgrapht.io.ImportException;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public interface ConsumerImporter<V, E>
+public interface EventDrivenImporter<V, E>
 {
     /**
      * Add an ImportEvent consumer.

@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.graphml.SimpleGraphMLGenericImporter;
+import org.jgrapht.nio.graphml.SimpleGraphMLEventDrivenImporter;
 
 /**
  * Imports a graph from a GraphML data source.
@@ -204,7 +204,7 @@ public class SimpleGraphMLImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        SimpleGraphMLGenericImporter genericImporter = new SimpleGraphMLGenericImporter();
+        SimpleGraphMLEventDrivenImporter genericImporter = new SimpleGraphMLEventDrivenImporter();
         genericImporter.setEdgeWeightAttributeName(edgeWeightAttributeName);
         genericImporter.setSchemaValidation(schemaValidation);
 

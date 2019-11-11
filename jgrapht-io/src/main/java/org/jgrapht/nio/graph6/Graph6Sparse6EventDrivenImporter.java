@@ -19,8 +19,8 @@ package org.jgrapht.nio.graph6;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 
 import java.io.*;
 
@@ -52,11 +52,11 @@ import java.io.*;
  *
  * @author Joris Kinable
  */
-public class Graph6Sparse6GenericImporter
+public class Graph6Sparse6EventDrivenImporter
     extends
-    BaseConsumerImporter<Integer, Pair<Integer, Integer>>
+    BaseEventDrivenImporter<Integer, Pair<Integer, Integer>>
     implements
-    ConsumerImporter<Integer, Pair<Integer, Integer>>
+    EventDrivenImporter<Integer, Pair<Integer, Integer>>
 {
     private static final String GRAPH_STRING_SEEMS_TO_BE_CORRUPT_INVALID_NUMBER_OF_VERTICES =
         "Graph string seems to be corrupt. Invalid number of vertices.";
@@ -72,7 +72,7 @@ public class Graph6Sparse6GenericImporter
     /**
      * Construct a new importer
      */
-    public Graph6Sparse6GenericImporter()
+    public Graph6Sparse6EventDrivenImporter()
     {
         super();
     }

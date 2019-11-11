@@ -31,7 +31,7 @@ import org.jgrapht.io.Attribute;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
@@ -105,7 +105,7 @@ import org.jgrapht.nio.BaseConsumerImporter;
  */
 public class GmlImporter<V, E>
     extends
-    BaseConsumerImporter<V, E>
+    BaseEventDrivenImporter<V, E>
     implements
     GraphImporter<V, E>
 {
@@ -142,7 +142,7 @@ public class GmlImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        GmlGenericImporter genericImporter = new GmlGenericImporter();
+        GmlEventDrivenImporter genericImporter = new GmlEventDrivenImporter();
         Consumers consumers = new Consumers(graph);
         genericImporter.addVertexConsumer(consumers.vertexConsumer);
         genericImporter.addVertexAttributeConsumer(consumers.vertexAttributeConsumer);

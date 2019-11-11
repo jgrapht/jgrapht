@@ -36,8 +36,8 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.AttributeType;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 import org.jgrapht.nio.ImportEvent;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -130,11 +130,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLGenericImporter
+public class SimpleGraphMLEventDrivenImporter
     extends
-    BaseConsumerImporter<String, Triple<String, String, Double>>
+    BaseEventDrivenImporter<String, Triple<String, String, Double>>
     implements
-    ConsumerImporter<String, Triple<String, String, Double>>
+    EventDrivenImporter<String, Triple<String, String, Double>>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -146,7 +146,7 @@ public class SimpleGraphMLGenericImporter
     /**
      * Constructs a new importer.
      */
-    public SimpleGraphMLGenericImporter()
+    public SimpleGraphMLEventDrivenImporter()
     {
         super();
         this.schemaValidation = true;

@@ -39,8 +39,8 @@ import org.jgrapht.io.Attribute;
 import org.jgrapht.io.AttributeType;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 import org.jgrapht.nio.json.JsonParser.JsonContext;
 
 /**
@@ -89,16 +89,16 @@ import org.jgrapht.nio.json.JsonParser.JsonContext;
  * 
  * @author Dimitrios Michail
  */
-public class JSONGenericImporter
+public class JSONEventDrivenImporter
     extends
-    BaseConsumerImporter<String, Triple<String, String, Double>>
+    BaseEventDrivenImporter<String, Triple<String, String, Double>>
     implements
-    ConsumerImporter<String, Triple<String, String, Double>>
+    EventDrivenImporter<String, Triple<String, String, Double>>
 {
     /**
      * Constructs a new importer.
      */
-    public JSONGenericImporter()
+    public JSONEventDrivenImporter()
     {
         super();
     }

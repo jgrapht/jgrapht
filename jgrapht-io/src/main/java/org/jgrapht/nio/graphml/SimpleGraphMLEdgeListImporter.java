@@ -28,8 +28,8 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 import org.jgrapht.nio.ImportEvent;
 
 /**
@@ -107,9 +107,9 @@ import org.jgrapht.nio.ImportEvent;
  */
 public class SimpleGraphMLEdgeListImporter
     extends
-    BaseConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
     implements
-    ConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
 {
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
 
@@ -170,7 +170,7 @@ public class SimpleGraphMLEdgeListImporter
     public void importInput(Reader input)
         throws ImportException
     {
-        SimpleGraphMLGenericImporter genericImporter = new SimpleGraphMLGenericImporter();
+        SimpleGraphMLEventDrivenImporter genericImporter = new SimpleGraphMLEventDrivenImporter();
         genericImporter.setEdgeWeightAttributeName(edgeWeightAttributeName);
         genericImporter.setSchemaValidation(schemaValidation);
         Consumers consumers = new Consumers();

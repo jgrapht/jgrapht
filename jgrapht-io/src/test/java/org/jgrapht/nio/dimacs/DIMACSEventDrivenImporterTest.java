@@ -36,7 +36,7 @@ import org.junit.Test;
  * 
  * @author Dimitrios Michail
  */
-public class DIMACSGenericImporterTest
+public class DIMACSEventDrivenImporterTest
 {
 
     /**
@@ -48,7 +48,7 @@ public class DIMACSGenericImporterTest
     {
         InputStream fstream = getClass().getClassLoader().getResourceAsStream("myciel3.col");
 
-        DIMACSGenericImporter importer = new DIMACSGenericImporter();
+        DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter();
 
         importer.addVertexCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
@@ -96,7 +96,7 @@ public class DIMACSGenericImporterTest
         nameMap.put(10, 9);
         nameMap.put(11, 10);
 
-        DIMACSGenericImporter importer = new DIMACSGenericImporter();
+        DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter();
 
         importer.addVertexCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
@@ -145,7 +145,7 @@ public class DIMACSGenericImporterTest
         nameMap.put(10, 9);
         nameMap.put(11, 10);
 
-        DIMACSGenericImporter importer = new DIMACSGenericImporter();
+        DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter();
         importer = importer.renumberVertices(false);
 
         importer.addVertexCountConsumer(count -> {

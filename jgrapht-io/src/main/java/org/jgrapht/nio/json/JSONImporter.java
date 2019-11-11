@@ -30,7 +30,7 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
@@ -83,7 +83,7 @@ import org.jgrapht.nio.BaseConsumerImporter;
  */
 public class JSONImporter<V, E>
     extends
-    BaseConsumerImporter<V, E>
+    BaseEventDrivenImporter<V, E>
     implements
     GraphImporter<V, E>
 {
@@ -115,7 +115,7 @@ public class JSONImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        JSONGenericImporter genericImporter = new JSONGenericImporter();
+        JSONEventDrivenImporter genericImporter = new JSONEventDrivenImporter();
         Consumers consumers = new Consumers(graph);
         genericImporter.addVertexConsumer(consumers.vertexConsumer);
         genericImporter.addVertexAttributeConsumer(consumers.vertexAttributeConsumer);

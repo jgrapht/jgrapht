@@ -35,7 +35,7 @@ import org.junit.Test;
  * 
  * @author Dimitrios Michail
  */
-public class SimpleGraphMLGenericImporterTest
+public class SimpleGraphMLEventDrivenImporterTest
 {
 
     private static final String NL = System.getProperty("line.separator");
@@ -62,7 +62,7 @@ public class SimpleGraphMLGenericImporterTest
             "</graphml>";
         // @formatter:on
 
-        SimpleGraphMLGenericImporter importer = new SimpleGraphMLGenericImporter();
+        SimpleGraphMLEventDrivenImporter importer = new SimpleGraphMLEventDrivenImporter();
 
         List<Pair<Integer, Integer>> collected = new ArrayList<>();
         importer.addEdgeConsumer(q -> {
@@ -114,7 +114,7 @@ public class SimpleGraphMLGenericImporterTest
             "</graphml>";
         // @formatter:on
 
-        SimpleGraphMLGenericImporter importer = new SimpleGraphMLGenericImporter();
+        SimpleGraphMLEventDrivenImporter importer = new SimpleGraphMLEventDrivenImporter();
 
         List<Triple<String, String, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(q -> {

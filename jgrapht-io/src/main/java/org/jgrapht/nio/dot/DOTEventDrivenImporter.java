@@ -45,8 +45,8 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 
 /**
  * Import a graph from a DOT file.
@@ -62,11 +62,11 @@ import org.jgrapht.nio.ConsumerImporter;
  *
  * @author Dimitrios Michail
  */
-public class DOTGenericImporter
+public class DOTEventDrivenImporter
     extends
-    BaseConsumerImporter<String, Pair<String, String>>
+    BaseEventDrivenImporter<String, Pair<String, String>>
     implements
-    ConsumerImporter<String, Pair<String, String>>
+    EventDrivenImporter<String, Pair<String, String>>
 {
     /**
      * Default key used for the graph ID.
@@ -79,7 +79,7 @@ public class DOTGenericImporter
     /**
      * Constructs a new importer.
      */
-    public DOTGenericImporter()
+    public DOTEventDrivenImporter()
     {
         super();
         Map<CharSequence, CharSequence> lookupMap = new HashMap<>();

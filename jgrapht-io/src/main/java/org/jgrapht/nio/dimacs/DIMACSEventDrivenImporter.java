@@ -27,8 +27,8 @@ import java.util.Map;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.DIMACSFormat;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 
 /**
  * A generic importer using consumers for DIMACS format.
@@ -77,11 +77,11 @@ import org.jgrapht.nio.ConsumerImporter;
  * @author Dimitrios Michail
  * 
  */
-public class DIMACSGenericImporter
+public class DIMACSEventDrivenImporter
     extends
-    BaseConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
     implements
-    ConsumerImporter<Integer, Triple<Integer, Integer, Double>>
+    EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
 {
     private boolean renumberVertices;
     private Map<String, Integer> vertexMap;
@@ -90,7 +90,7 @@ public class DIMACSGenericImporter
     /**
      * Construct a new importer
      */
-    public DIMACSGenericImporter()
+    public DIMACSEventDrivenImporter()
     {
         super();
         this.renumberVertices = true;
@@ -108,7 +108,7 @@ public class DIMACSGenericImporter
      * @param renumberVertices whether to renumber vertices or not
      * @return the importer
      */
-    public DIMACSGenericImporter renumberVertices(boolean renumberVertices)
+    public DIMACSEventDrivenImporter renumberVertices(boolean renumberVertices)
     {
         this.renumberVertices = renumberVertices;
         return this;

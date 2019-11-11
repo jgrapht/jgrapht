@@ -36,8 +36,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.CSVFormat;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.nio.BaseConsumerImporter;
-import org.jgrapht.nio.ConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.EventDrivenImporter;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.
@@ -69,11 +69,11 @@ import org.jgrapht.nio.ConsumerImporter;
  * 
  * @author Dimitrios Michail
  */
-public class CSVGenericImporter
+public class CSVEventDrivenImporter
     extends
-    BaseConsumerImporter<String, Triple<String, String, Double>>
+    BaseEventDrivenImporter<String, Triple<String, String, Double>>
     implements
-    ConsumerImporter<String, Triple<String, String, Double>>
+    EventDrivenImporter<String, Triple<String, String, Double>>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -84,7 +84,7 @@ public class CSVGenericImporter
     /**
      * Constructs a new importer using the {@link CSVFormat#ADJACENCY_LIST} format as default.
      */
-    public CSVGenericImporter()
+    public CSVEventDrivenImporter()
     {
         this(CSVFormat.ADJACENCY_LIST, DEFAULT_DELIMITER);
     }
@@ -94,7 +94,7 @@ public class CSVGenericImporter
      * 
      * @param format format to use out of the supported ones
      */
-    public CSVGenericImporter(CSVFormat format)
+    public CSVEventDrivenImporter(CSVFormat format)
     {
         this(format, DEFAULT_DELIMITER);
     }
@@ -105,7 +105,7 @@ public class CSVGenericImporter
      * @param format format to use out of the supported ones
      * @param delimiter delimiter to use (comma, semicolon, pipe, etc.)
      */
-    public CSVGenericImporter(CSVFormat format, char delimiter)
+    public CSVEventDrivenImporter(CSVFormat format, char delimiter)
     {
         this.format = format;
         if (!DSVUtils.isValidDelimiter(delimiter)) {

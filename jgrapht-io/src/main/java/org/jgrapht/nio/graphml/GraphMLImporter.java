@@ -28,11 +28,9 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.EdgeProvider;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
-import org.jgrapht.nio.BaseConsumerImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
 
 /**
  * Imports a graph from a GraphML data source.
@@ -122,7 +120,7 @@ import org.jgrapht.nio.BaseConsumerImporter;
  */
 public class GraphMLImporter<V, E>
     extends
-    BaseConsumerImporter<V, E>
+    BaseEventDrivenImporter<V, E>
     implements
     GraphImporter<V, E>
 {
@@ -209,7 +207,7 @@ public class GraphMLImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        GraphMLGenericImporter genericImporter = new GraphMLGenericImporter();
+        GraphMLEventDrivenImporter genericImporter = new GraphMLEventDrivenImporter();
         genericImporter.setEdgeWeightAttributeName(edgeWeightAttributeName);
         genericImporter.setSchemaValidation(schemaValidation);
 

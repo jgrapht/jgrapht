@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.dimacs.DIMACSGenericImporter;
+import org.jgrapht.nio.dimacs.DIMACSEventDrivenImporter;
 
 /**
  * Imports a graph specified in DIMACS format.
@@ -129,7 +129,7 @@ public class DIMACSImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        DIMACSGenericImporter genericImporter = new DIMACSGenericImporter().renumberVertices(false);
+        DIMACSEventDrivenImporter genericImporter = new DIMACSEventDrivenImporter().renumberVertices(false);
         GlobalConsumer globalConsumer = new GlobalConsumer(graph);
         genericImporter.addVertexCountConsumer(globalConsumer.nodeCountConsumer);
         genericImporter.addEdgeConsumer(globalConsumer.edgeConsumer);
