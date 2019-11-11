@@ -28,7 +28,7 @@ import java.util.*;
  * cardinality in a bipartite graph. The algorithm runs in $O(|E| \cdot \sqrt{|V|})$ time. This
  * implementation accepts undirected graphs which may contain self-loops and multiple edges. To
  * compute a maximum cardinality matching in general (non-bipartite) graphs, use
- * {@link EdmondsMaximumCardinalityMatching} instead.
+ * {@link SparseEdmondsMaximumCardinalityMatching} instead.
  *
  * <p>
  * The Hopcroft Karp matching algorithm computes augmenting paths of increasing length, until no

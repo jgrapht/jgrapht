@@ -88,7 +88,7 @@ import org.jgrapht.alg.util.FixedSizeIntegerQueue;
  * @author Dimitrios Michail
  * @author Joris Kinable
  */
-public class EdmondsMaximumCardinalityMatching<V, E>
+public class SparseEdmondsMaximumCardinalityMatching<V, E>
     implements
     MatchingAlgorithm<V, E>
 {
@@ -103,7 +103,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      * 
      * @param graph the input graph
      */
-    public EdmondsMaximumCardinalityMatching(Graph<V, E> graph)
+    public SparseEdmondsMaximumCardinalityMatching(Graph<V, E> graph)
     {
         this(graph, new GreedyMaximumCardinalityMatching<>(graph, false));
     }
@@ -115,7 +115,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      * @param initializer heuristic matching algorithm used to quickly generate a (near optimal)
      *        initial feasible solution
      */
-    public EdmondsMaximumCardinalityMatching(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
+    public SparseEdmondsMaximumCardinalityMatching(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer = initializer;

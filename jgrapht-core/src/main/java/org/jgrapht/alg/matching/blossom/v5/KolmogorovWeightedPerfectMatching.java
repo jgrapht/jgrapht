@@ -43,7 +43,7 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
  * two vertices can belong to the matching in the corresponding optimization problems. Currently,
  * users are responsible for doing this reduction themselves before invoking the algorithm.
  * <p>
- * Note that if the graph is unweighted and dense, {@link EdmondsMaximumCardinalityMatching} may be
+ * Note that if the graph is unweighted and dense, {@link SparseEdmondsMaximumCardinalityMatching} may be
  * a better choice.
  * <p>
  * For more information about the algorithm see the following paper: <i>Kolmogorov, V. Math. Prog.

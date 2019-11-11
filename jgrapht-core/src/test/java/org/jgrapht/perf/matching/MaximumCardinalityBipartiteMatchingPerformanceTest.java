@@ -95,7 +95,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
             Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition,
             Set<Integer> secondPartition)
         {
-            return new EdmondsMaximumCardinalityMatching<>(graph);
+            return new SparseEdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 

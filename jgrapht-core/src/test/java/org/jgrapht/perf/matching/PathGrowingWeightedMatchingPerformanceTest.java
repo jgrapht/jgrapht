@@ -114,7 +114,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsMaximumCardinalityMatching<>(graph);
+            return new SparseEdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 
