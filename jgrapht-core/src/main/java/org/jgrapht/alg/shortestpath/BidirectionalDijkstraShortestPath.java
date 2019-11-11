@@ -208,27 +208,27 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     /**
      * Maintains search frontier during shortest path computation.
      *
-     * @param <V1> vertices type
-     * @param <E1> edges type
+     * @param <V> vertices type
+     * @param <E> edges type
      */
-    static class DijkstraSearchFrontier<V1, E1>
+    static class DijkstraSearchFrontier<V, E>
         extends
-        BaseSearchFrontier<V1, E1>
+        BaseSearchFrontier<V, E>
     {
 
-        final AddressableHeap<Double, Pair<V1, E1>> heap;
-        final Map<V1, AddressableHeap.Handle<Double, Pair<V1, E1>>> seen;
+        final AddressableHeap<Double, Pair<V, E>> heap;
+        final Map<V, AddressableHeap.Handle<Double, Pair<V, E>>> seen;
 
-        DijkstraSearchFrontier(Graph<V1, E1> graph, Supplier<AddressableHeap<Double, Pair<V1, E1>>> heapSupplier)
+        DijkstraSearchFrontier(Graph<V, E> graph, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
         {
             super(graph);
             this.heap = heapSupplier.get();
             this.seen = new HashMap<>();
         }
 
-        void updateDistance(V1 v, E1 e, double distance)
+        void updateDistance(V v, E e, double distance)
         {
-            AddressableHeap.Handle<Double, Pair<V1, E1>> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
             if (node == null) {
                 node = heap.insert(distance, new Pair<>(v, e));
                 seen.put(v, node);
@@ -241,9 +241,9 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         @Override
-        public double getDistance(V1 v)
+        public double getDistance(V v)
         {
-            AddressableHeap.Handle<Double, Pair<V1, E1>> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
             if (node == null) {
                 return Double.POSITIVE_INFINITY;
             } else {
@@ -252,9 +252,9 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         @Override
-        public E1 getTreeEdge(V1 v)
+        public E getTreeEdge(V v)
         {
-            AddressableHeap.Handle<Double, Pair<V1, E1>> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
             if (node == null) {
                 return null;
             } else {

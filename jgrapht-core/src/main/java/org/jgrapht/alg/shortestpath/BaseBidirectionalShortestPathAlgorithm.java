@@ -101,22 +101,22 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E>
     /**
      * Base class of the search frontier used by bidirectional shortest path algorithms.
      *
-     * @param <V1> vertices type
-     * @param <E1> edges type
+     * @param <V> vertices type
+     * @param <E> edges type
      */
-    abstract static class BaseSearchFrontier<V1, E1>
+    abstract static class BaseSearchFrontier<V, E>
     {
         /**
          * Frontier`s graph.
          */
-        final Graph<V1, E1> graph;
+        final Graph<V, E> graph;
 
         /**
          * Constructs instance for a given {@code graph}.
          *
          * @param graph graph
          */
-        BaseSearchFrontier(Graph<V1, E1> graph)
+        BaseSearchFrontier(Graph<V, E> graph)
         {
             this.graph = graph;
         }
@@ -127,7 +127,7 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E>
          * @param v vertex
          * @return distance to {@code v}
          */
-        abstract double getDistance(V1 v);
+        abstract double getDistance(V v);
 
         /**
          * Returns edge which connects {@code v} to its predecessor in the shortest paths tree of
@@ -136,6 +136,6 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E>
          * @param v vertex
          * @return edge in shortest paths tree
          */
-        abstract E1 getTreeEdge(V1 v);
+        abstract E getTreeEdge(V v);
     }
 }
