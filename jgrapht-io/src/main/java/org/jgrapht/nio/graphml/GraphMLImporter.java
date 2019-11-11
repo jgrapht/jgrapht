@@ -125,11 +125,10 @@ public class GraphMLImporter<V, E>
     GraphImporter<V, E>
 {
     private static final String DEFAULT_VERTEX_ID_KEY = "ID";
-    
+
     // special attributes
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
     private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
-    
 
     private boolean schemaValidation;
 
@@ -196,8 +195,8 @@ public class GraphMLImporter<V, E>
      * If the provided graph is a weighted graph, the importer also reads edge weights.
      * 
      * <p>
-     * GraphML-Attributes Values are read as string key-value pairs and passed on to the
-     * {@link VertexProvider} and {@link EdgeProvider} respectively.
+     * GraphML-Attributes Values are read as string key-value pairs and propagated to the user as
+     * events.
      * 
      * @param graph the output graph
      * @param input the input reader
