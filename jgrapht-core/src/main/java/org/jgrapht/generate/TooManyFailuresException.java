@@ -29,7 +29,7 @@ public class TooManyFailuresException
 {
 
     /** Serial Version ID */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7986467967127358163L;
 
     /**
      * Constructs a new too many failures Exception with null as its detail message. The cause is

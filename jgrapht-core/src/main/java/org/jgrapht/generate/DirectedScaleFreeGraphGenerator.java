@@ -27,10 +27,11 @@ import java.util.Set;
 import org.jgrapht.Graph;
 
 /**
- * Create a directed scale-free graph according to a power low, as described in
- * <a href="https://dl.acm.org/citation.cfm?id=644133">Bollobás et al.</a>
+ * A generator for directed scale-free graphs.
  * <p>
- * This generator implements Béla Bollobás, Christian Borgs, Jennifer Chayes, and Oliver Riordan.
+ * This generator creates a directed scale-free graph according to a power law, as described in
+ * <a href="https://dl.acm.org/citation.cfm?id=644133">Bollobás et al.</a>
+ * The paper can be cited as Béla Bollobás, Christian Borgs, Jennifer Chayes, and Oliver Riordan.
  * "Directed scale-free graphs." Proceedings of the fourteenth annual ACM-SIAM symposium on Discrete
  * algorithms. Society for Industrial and Applied Mathematics, 2003.
  * <p>
@@ -47,10 +48,10 @@ import org.jgrapht.Graph;
  * </ul>
  * 
  * <p>
- * In their original paper, the graph continues to grow according to a certain power low until a
+ * In their original paper, the graph continues to grow according to a certain power law until a
  * certain number of edges is reached irrespective to the number of nodes.<br>
  * However, because the target number of edges is not known beforehand, in this implementation, we
- * added another feature that enables the user to grow the curve according to that power low until
+ * added another feature that enables the user to grow the curve according to that power law until
  * the target number of edges or target number of nodes is reached.
  * 
  * @author Amr ALHOSSARY
@@ -76,7 +77,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
      * delta_in criteria. This equals 1 - gamma. Gamma refers to the probability that the new edge
      * is from an existing vertex v to a new vertex w.
      */
-    final float alphaPlusBeta;
+    private final float alphaPlusBeta;
 
     /** In-degree bias used for Alpha and Beta */
     private final float deltaIn;
@@ -123,7 +124,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     private boolean allowingSelfLoops = true;
 
     /**
-     * Constructs a Generator with a Random Number Generator using a random seed.
+     * Constructs a Generator.
      * 
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
@@ -148,7 +149,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
-     * Constructs a Generator with a Random Number Generator using the given seed.
+     * Constructs a Generator using a seed for the random number generator.
      * 
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
@@ -175,6 +176,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
+     * Construct a new generator using the provided random number generator.
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -264,15 +266,15 @@ public class DirectedScaleFreeGraphGenerator<V, E>
                 if (targetEdges < 0 && newNodesSet.size() == targetNodes)
                     break;
                 v = newV = target.addVertex();
-                w = picAVertex(target, newNodesSet, newEdgesSet, Direction.IN, deltaIn);
+                w = pickAVertex(target, newNodesSet, newEdgesSet, Direction.IN, deltaIn);
             } else if (tributaries <= alphaPlusBeta) {
-                v = picAVertex(target, newNodesSet, newEdgesSet, Direction.OUT, deltaOut);
-                w = picAVertex(target, newNodesSet, newEdgesSet, Direction.IN, deltaIn);
+                v = pickAVertex(target, newNodesSet, newEdgesSet, Direction.OUT, deltaOut);
+                w = pickAVertex(target, newNodesSet, newEdgesSet, Direction.IN, deltaIn);
             } else {// gamma
                     // stop adding nodes if you will exceed the target
                 if (targetEdges < 0 && newNodesSet.size() == targetNodes)
                     break;
-                v = picAVertex(target, newNodesSet, newEdgesSet, Direction.OUT, deltaOut);
+                v = pickAVertex(target, newNodesSet, newEdgesSet, Direction.OUT, deltaOut);
                 w = newW = target.addVertex();
             }
 
@@ -312,6 +314,8 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
+     * Select a vertex from the currently available vertices, using the passed bias.
+     * 
      * @param target The target graph
      * @param allNewNodes All (new) nodes in the target graph
      * @param allNewEdgesSet All (new) edges in the target graph
@@ -319,7 +323,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
      * @param bias deltaIn or deltaOut value according to #directioIn
      * @return the selected node.
      */
-    private V picAVertex(
+    private V pickAVertex(
         Graph<V, E> target, Set<V> allNewNodes, Set<E> allNewEdgesSet, Direction direction,
         float bias)
     {
@@ -349,7 +353,9 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         return ret;
     }
 
-    /**returns the Maximum allowed number of consecutive failed attempts to add an edge.
+    /**
+     * Returns the maximum allowed number of consecutive failed attempts to add an edge.
+     * 
      * @return maxFailure field.
      */
     public int getMaxFailures()
@@ -357,8 +363,12 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         return maxFailures;
     }
 
-    /**Sets the maximum allowed number of consecutive failed attempts to add an edge (must be non negative).
-     * @param maxFailures Maximum allowed (non negative) number of consecutive failed attempts to add an edge.
+    /**
+     * Sets the maximum allowed number of consecutive failed attempts to add an edge (must be non
+     * negative).
+     * 
+     * @param maxFailures Maximum allowed (non negative) number of consecutive failed attempts to
+     *        add an edge.
      */
     public void setMaxFailures(int maxFailures)
     {
@@ -369,7 +379,10 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
-     * @return whether the generated graph many contain multiple (parallel) edges between the same
+     * Returns whether the generated graph may contain multiple (parallel) edges between the same
+     * two vertices.
+     * 
+     * @return whether the generated graph may contain multiple (parallel) edges between the same
      *         two vertices
      */
     public boolean isAllowingMultipleEdges()
@@ -378,7 +391,10 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
-     * @param allowingMultipleEdges whether the generated graph many contain multiple (parallel)
+     * Sets whether the generated graph may contain multiple (parallel) edges between the same two
+     * vertices
+     * 
+     * @param allowingMultipleEdges whether the generated graph may contain multiple (parallel)
      *        edges between the same two vertices
      */
     public void setAllowingMultipleEdges(boolean allowingMultipleEdges)
@@ -387,6 +403,9 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
+     * Returns whether the generated graph may contain multiple (parallel) edges between the same
+     * two vertices
+     * 
      * @return whether the generated graph many contain multiple (parallel) edges between the same
      *         two vertices
      */
@@ -396,6 +415,9 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
+     * Sets whether the generated graph may contain multiple (parallel) edges between the same two
+     * vertices
+     * 
      * @param allowingSelfLoops whether the generated graph many contain multiple (parallel) edges
      *        between the same two vertices
      */
