@@ -27,20 +27,44 @@ import java.util.*;
  * @param <T> the component type
  *
  * @author Trevor Harmon
+ * @author Amr ALHOSSARY (?)
  */
 public class IntegerComponentNameProvider<T>
     implements
     ComponentNameProvider<T>
 {
-    private int nextID = 1;
+    private static final int DEFAULT_BASE = 1;
+    
+    /**
+     * The first ID to use.
+     */
+    private int base;
+    private int nextID;
     private final Map<T, Integer> idMap = new HashMap<>();
+
+    /**
+     * Create a provider with the default base id (1).
+     */
+    public IntegerComponentNameProvider()
+    {
+        this(DEFAULT_BASE);
+    }
+
+    /**create a provider with a given arbitrary base
+     * @param base the first Id to use.
+     */
+    public IntegerComponentNameProvider(int base)
+    {
+        this.base = base;
+        clear();
+    }
 
     /**
      * Clears all cached identifiers, and resets the unique identifier counter.
      */
     public void clear()
     {
-        nextID = 1;
+        nextID = base;
         idMap.clear();
     }
 
