@@ -27,14 +27,14 @@ import java.util.*;
  * @param <T> the component type
  *
  * @author Trevor Harmon
- * @author Amr ALHOSSARY (?)
+ * @author Amr ALHOSSARY
  */
 public class IntegerComponentNameProvider<T>
     implements
     ComponentNameProvider<T>
 {
     private static final int DEFAULT_BASE = 1;
-    
+
     /**
      * The first ID to use.
      */
@@ -50,7 +50,9 @@ public class IntegerComponentNameProvider<T>
         this(DEFAULT_BASE);
     }
 
-    /**create a provider with a given arbitrary base
+    /**
+     * Create a provider with a given arbitrary base
+     * 
      * @param base the first Id to use.
      */
     public IntegerComponentNameProvider(int base)
