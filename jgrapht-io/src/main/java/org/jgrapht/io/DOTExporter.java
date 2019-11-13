@@ -39,7 +39,9 @@ import java.util.regex.*;
  * @param <E> the graph edge type
  *
  * @author Trevor Harmon
+ * @deprecated In favor of {@link org.jgrapht.nio.dot.DOTExporter}.
  */
+@Deprecated
 public class DOTExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

@@ -24,7 +24,9 @@ package org.jgrapht.io;
  * @param <T> the component type
  * 
  * @author Trevor Harmon
+ * @deprecated In favor of using lambdas.
  */
+@Deprecated
 public class StringComponentNameProvider<T>
     implements
     ComponentNameProvider<T>

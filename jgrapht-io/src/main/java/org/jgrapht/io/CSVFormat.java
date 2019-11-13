@@ -153,8 +153,9 @@ package org.jgrapht.io;
  * </ul>
  * 
  * @author Dimitrios Michail
- *
+ * @deprecated No longer used.
  */
+@Deprecated
 public enum CSVFormat
 {
     /**

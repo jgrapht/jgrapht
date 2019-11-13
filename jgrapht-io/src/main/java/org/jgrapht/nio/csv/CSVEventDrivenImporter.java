@@ -34,7 +34,6 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.CSVFormat;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
@@ -47,7 +46,7 @@ import org.jgrapht.nio.EventDrivenImporter;
  * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
  * used by <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi </a>. For some
  * of the formats, the behavior of the importer can be adjusted using the
- * {@link #setParameter(org.jgrapht.io.CSVFormat.Parameter, boolean) setParameter} method. See
+ * {@link #setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter, boolean) setParameter} method. See
  * {@link CSVFormat} for a description of the formats.
  * </p>
  * 

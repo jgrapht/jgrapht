@@ -19,6 +19,8 @@ package org.jgrapht.io;
 
 import java.util.*;
 
+import org.jgrapht.nio.IntegerIdProvider;
+
 /**
  * Assigns a unique integer to represent each component. Each instance of provider maintains an
  * internal map between every component it has ever seen and the unique integer representing that
@@ -27,7 +29,10 @@ import java.util.*;
  * @param <T> the component type
  *
  * @author Trevor Harmon
+ * 
+ * @deprecated Use {@link IntegerIdProvider} instead.
  */
+@Deprecated
 public class IntegerComponentNameProvider<T>
     implements
     ComponentNameProvider<T>

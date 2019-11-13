@@ -25,7 +25,9 @@ import java.util.*;
  * @author Dimitrios Michail
  *
  * @param <T> the component type
+ * @deprecated In favor of using lambdas.
  */
+@Deprecated
 public class EmptyComponentAttributeProvider<T>
     implements
     ComponentAttributeProvider<T>

@@ -32,7 +32,6 @@ import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.io.Attribute;
-import org.jgrapht.io.CSVFormat;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;

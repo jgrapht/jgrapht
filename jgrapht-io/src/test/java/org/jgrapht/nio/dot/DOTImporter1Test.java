@@ -31,11 +31,9 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.Multigraph;
 import org.jgrapht.io.Attribute;
-import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.ExportException;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.io.IntegerComponentNameProvider;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
@@ -285,8 +283,7 @@ public class DOTImporter1Test
         start.addEdge("1", "2");
         start.addEdge("1", "3");
 
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
-            vertex -> vertex, null, new IntegerComponentNameProvider<DefaultEdge>());
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(v -> v);
 
         GraphImporter<String, DefaultEdge> importer = new DOTImporter<>();
 

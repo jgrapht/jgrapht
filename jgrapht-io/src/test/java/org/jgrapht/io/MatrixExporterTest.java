@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Charles Fry
  */
+@Deprecated
 public class MatrixExporterTest
 {
     // ~ Static fields/initializers ---------------------------------------------

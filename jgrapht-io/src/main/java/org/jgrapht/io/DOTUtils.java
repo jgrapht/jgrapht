@@ -23,7 +23,9 @@ import java.util.regex.*;
  * Class with DOT format related utilities.
  * 
  * @author Christoph Zauner
+ * @deprecated No longer used.
  */
+@Deprecated
 class DOTUtils
 {
     /** Keyword for representing strict graphs. */

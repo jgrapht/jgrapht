@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author Trevor Harmon
  */
+@Deprecated
 public class DOTExporterTest
 {
     // ~ Static fields/initializers ---------------------------------------------

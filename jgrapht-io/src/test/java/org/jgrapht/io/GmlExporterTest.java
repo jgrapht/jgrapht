@@ -29,6 +29,7 @@ import static org.junit.Assert.*;
  * @author John V. Sichi
  * @author Dimitrios Michail
  */
+@Deprecated
 public class GmlExporterTest
 {
     // ~ Static fields/initializers

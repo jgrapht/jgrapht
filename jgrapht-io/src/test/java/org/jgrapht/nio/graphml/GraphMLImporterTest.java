@@ -40,7 +40,6 @@ import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.io.Attribute;
 import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.GraphMLExporter;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;

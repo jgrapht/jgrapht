@@ -26,7 +26,9 @@ package org.jgrapht.io;
  * each different challenge.
  * 
  * @author Dimitrios Michail
+ * @deprecated In favor of new input/output
  */
+@Deprecated
 public enum DIMACSFormat
 {
     /**

@@ -39,7 +39,9 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @deprecated In favor of {@link org.jgrapht.nio.gml.GmlImporter}.
  */
+@Deprecated
 public class GmlExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

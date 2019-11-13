@@ -21,7 +21,9 @@ package org.jgrapht.io;
  * Provides a name for a component.
  *
  * @param <T> the type of the component
+ * @deprecated In favor of using lambdas.
  */
+@Deprecated
 public interface ComponentNameProvider<T>
 {
 

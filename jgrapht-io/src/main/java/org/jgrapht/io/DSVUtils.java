@@ -26,7 +26,9 @@ package org.jgrapht.io;
  * @see CSVExporter
  * 
  * @author Dimitrios Michail
+ * @deprecated No longer needed.
  */
+@Deprecated
 class DSVUtils
 {
     private static final char DSV_QUOTE = '"';

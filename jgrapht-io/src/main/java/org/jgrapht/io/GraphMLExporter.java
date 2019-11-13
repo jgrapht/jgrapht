@@ -41,7 +41,9 @@ import java.util.Map.*;
  *
  * @author Trevor Harmon
  * @author Dimitrios Michail
+ * @deprecated Deprecated in favor of {@link org.jgrapht.nio.graphml.GraphMLExporter}.
  */
+@Deprecated
 public class GraphMLExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

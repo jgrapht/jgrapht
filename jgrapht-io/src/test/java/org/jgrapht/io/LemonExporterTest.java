@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
  * 
  * @author Dimitrios Michail
  */
+@Deprecated
 public class LemonExporterTest
 {
     private static final String V1 = "v1";

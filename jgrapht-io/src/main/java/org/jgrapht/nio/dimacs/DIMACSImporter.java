@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.DIMACSFormat;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;

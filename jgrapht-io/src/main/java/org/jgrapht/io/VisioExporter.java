@@ -39,7 +39,9 @@ import java.io.*;
  * @param <E> the graph edge type
  *
  * @author Avner Linder
+ * @deprecated Use {@link org.jgrapht.nio.csv.VisioExporter} instead. 
  */
+@Deprecated
 public class VisioExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

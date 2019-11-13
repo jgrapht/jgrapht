@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.DIMACSFormat;
 import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;

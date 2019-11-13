@@ -35,7 +35,9 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @deprecated In favor of {@link org.jgrapht.nio.dimacs.DIMACSImporter}.
  */
+@Deprecated
 public class DIMACSExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

@@ -26,6 +26,7 @@ import static org.junit.Assert.assertEquals;
  * 
  * @author Dimitrios Michail
  */
+@Deprecated
 public class DSVUtilsTest
 {
 

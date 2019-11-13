@@ -49,7 +49,9 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * @deprecated Use {@link org.jgrapht.nio.json.JSONExporter} instead.
  */
+@Deprecated
 public class JSONExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

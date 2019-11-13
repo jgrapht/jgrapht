@@ -27,7 +27,6 @@ import java.util.function.Consumer;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.CSVFormat;
 import org.jgrapht.io.DefaultAttribute;
 import org.jgrapht.io.GraphImporter;
 import org.jgrapht.io.ImportException;
@@ -41,7 +40,7 @@ import org.jgrapht.nio.BaseEventDrivenImporter;
  * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
  * used by <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi </a>. For some
  * of the formats, the behavior of the importer can be adjusted using the
- * {@link #setParameter(org.jgrapht.io.CSVFormat.Parameter, boolean) setParameter} method. See
+ * {@link #setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter, boolean) setParameter} method. See
  * {@link CSVFormat} for a description of the formats.
  * </p>
  * 

@@ -34,7 +34,9 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @deprecated Use {@link org.jgrapht.nio.lemon.LemonExporter} instead. 
  */
+@Deprecated
 public class LemonExporter<V, E>
     extends
     AbstractBaseExporter<V, E>

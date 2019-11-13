@@ -32,6 +32,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test JSONExporter
  */
+@Deprecated
 public class JSONExporterTest
 {
 

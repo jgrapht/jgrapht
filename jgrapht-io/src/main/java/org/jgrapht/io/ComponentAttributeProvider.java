@@ -25,7 +25,9 @@ import java.util.*;
  * @param <T> the type for which attributes are provided for
  *
  * @author John Sichi
+ * @deprecated In favor of using lambdas.
  */
+@Deprecated
 public interface ComponentAttributeProvider<T>
 {
     /**

@@ -34,6 +34,7 @@ import static org.junit.Assert.fail;
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
+@Deprecated
 public class GraphMLExporterTest
 {
     // ~ Static fields/initializers

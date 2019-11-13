@@ -42,7 +42,9 @@ import java.util.*;
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
+ * @deprecated In favor of {@link org.jgrapht.nio.graph6.Graph6Sparse6Exporter}.
  */
+@Deprecated
 public class Graph6Sparse6Exporter<V, E>
     implements
     GraphExporter<V, E>

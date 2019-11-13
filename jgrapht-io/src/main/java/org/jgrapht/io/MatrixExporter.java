@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2017, by Charles Fry, Dimitrios Michail and Contributors.
+ * (C) Copyright 2005-2019, by Charles Fry and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,21 @@
  */
 package org.jgrapht.io;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.io.*;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.util.ModifiableInteger;
 
 /**
  * Exports a graph to a plain text matrix format, which can be processed by matrix manipulation
- * software, such as <a href="http://rs.cipr.uib.no/mtj/"> MTJ</a> or
+ * software, such as <a href="http://rs.cipr.uib.no/mtj/">MTJ</a> or
  * <a href="http://www.mathworks.com/products/matlab/">MATLAB</a>.
  * 
  * <p>
@@ -39,7 +45,9 @@ import java.util.*;
  * 
  * @author Charles Fry
  * @author Dimitrios Michail
+ * @deprecated Use {@link org.jgrapht.nio.matrix.MatrixExporter} instead.
  */
+@Deprecated
 public class MatrixExporter<V, E>
     extends
     AbstractBaseExporter<V, E>
