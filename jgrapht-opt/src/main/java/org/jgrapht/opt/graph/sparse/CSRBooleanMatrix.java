@@ -18,10 +18,10 @@
 package org.jgrapht.opt.graph.sparse;
 
 import java.io.Serializable;
-import java.util.AbstractSet;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -162,31 +162,9 @@ class CSRBooleanMatrix
     {
         assert row >= 0 && row < rowOffsets.length;
 
-        return new NonZerosSet(row);
-    }
-
-    private class NonZerosSet
-        extends
-        AbstractSet<Integer>
-    {
-        private int row;
-
-        public NonZerosSet(int row)
-        {
-            this.row = row;
-        }
-
-        @Override
-        public Iterator<Integer> iterator()
-        {
-            return new NonZerosIterator(row);
-        }
-
-        @Override
-        public int size()
-        {
-            return rowOffsets[row + 1] - rowOffsets[row];
-        }
+        Set<Integer> nonZeros = new LinkedHashSet<>();
+        new NonZerosIterator(row).forEachRemaining(nonZeros::add);
+        return nonZeros;
     }
 
     private class NonZerosIterator

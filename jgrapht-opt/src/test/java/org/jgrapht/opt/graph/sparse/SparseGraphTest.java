@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2019-2019, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.opt.graph.sparse;
 
 import static org.junit.Assert.assertEquals;
@@ -9,6 +26,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,23 +36,56 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.junit.Test;
 
+/**
+ * Tests
+ * 
+ * @author Dimitrios Michail
+ */
 public class SparseGraphTest
 {
 
-    /**
-     * Test undirected sparse CSR
-     */
     @Test
     public void testUndirected()
     {
+        testUndirected((vc, edges) -> new SparseUndirectedGraph(vc, edges));
+    }
+
+    @Test
+    public void testUndirectedWithLoops()
+    {
+        testUndirectedWithLoops((vc, edges) -> new SparseUndirectedGraph(vc, edges));
+    }
+
+    @Test
+    public void testUndirectedWeighted()
+    {
+        testUndirectedWeighted((vc, edges) -> new SparseUndirectedWeightedGraph(vc, edges));
+    }
+
+    @Test
+    public void testDirected()
+    {
+        testDirected((vc, edges) -> new SparseDirectedGraph(vc, edges));
+    }
+
+    @Test
+    public void testDirectedWeighted()
+    {
+        testDirectedWeighted((vc, edges) -> new SparseDirectedWeightedGraph(vc, edges));
+    }
+
+    public static void testUndirected(
+        BiFunction<Integer, List<Pair<Integer, Integer>>, Graph<Integer, Integer>> graphSupplier)
+    {
+        final Integer vertexCount = 6;
         List<Pair<Integer, Integer>> edges = Arrays
             .asList(
                 Pair.of(0, 5), Pair.of(0, 2), Pair.of(3, 4), Pair.of(1, 4), Pair.of(0, 1),
                 Pair.of(3, 1), Pair.of(2, 4));
 
-        Graph<Integer, Integer> g = new SparseUndirectedGraph(6, edges);
+        Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
 
-        assertEquals(6, g.vertexSet().size());
+        assertEquals(vertexCount.intValue(), g.vertexSet().size());
         assertTrue(g.containsVertex(0));
         assertTrue(g.containsVertex(1));
         assertTrue(g.containsVertex(2));
@@ -128,20 +179,99 @@ public class SparseGraphTest
             assertEquals(edgeSet, g.getAllEdges(p.getFirst(), p.getSecond()));
             j++;
         }
+
     }
 
-    /**
-     * Test undirected weighted sparse CSR
-     */
-    @Test
-    public void testUndirectedWeighted()
+    public static void testUndirectedWithLoops(
+        BiFunction<Integer, List<Pair<Integer, Integer>>, Graph<Integer, Integer>> graphSupplier)
     {
+        final int vertexCount = 4;
+        List<Pair<Integer, Integer>> edges = Arrays
+            .asList(
+                Pair.of(0, 0), Pair.of(0, 1), Pair.of(0, 2), Pair.of(0, 0), Pair.of(0, 1),
+                Pair.of(1, 1), Pair.of(1, 2));
+
+        Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
+
+        assertEquals(4, g.vertexSet().size());
+        assertTrue(g.containsVertex(0));
+        assertTrue(g.containsVertex(1));
+        assertTrue(g.containsVertex(2));
+        assertTrue(g.containsVertex(3));
+
+        assertEquals(7, g.degreeOf(0));
+        assertEquals(7, g.inDegreeOf(0));
+        assertEquals(7, g.outDegreeOf(0));
+        assertEquals(new HashSet<>(Arrays.asList(0, 3, 1, 4, 2)), g.edgesOf(0));
+        assertEquals(new HashSet<>(Arrays.asList(0, 3, 1, 4, 2)), g.incomingEdgesOf(0));
+        assertEquals(new HashSet<>(Arrays.asList(0, 3, 1, 4, 2)), g.outgoingEdgesOf(0));
+
+        assertEquals(5, g.degreeOf(1));
+        assertEquals(5, g.inDegreeOf(1));
+        assertEquals(5, g.outDegreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(1, 4, 5, 6)), g.edgesOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(1, 4, 5, 6)), g.incomingEdgesOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(1, 4, 5, 6)), g.outgoingEdgesOf(1));
+
+        assertEquals(2, g.degreeOf(2));
+        assertEquals(2, g.inDegreeOf(2));
+        assertEquals(2, g.outDegreeOf(2));
+        assertEquals(new HashSet<>(Arrays.asList(2, 6)), g.edgesOf(2));
+        assertEquals(new HashSet<>(Arrays.asList(2, 6)), g.incomingEdgesOf(2));
+        assertEquals(new HashSet<>(Arrays.asList(2, 6)), g.outgoingEdgesOf(2));
+
+        assertEquals(0, g.degreeOf(3));
+        assertEquals(0, g.inDegreeOf(3));
+        assertEquals(0, g.outDegreeOf(3));
+        assertEquals(new HashSet<>(Arrays.asList()), g.edgesOf(3));
+        assertEquals(new HashSet<>(Arrays.asList()), g.incomingEdgesOf(3));
+        assertEquals(new HashSet<>(Arrays.asList()), g.outgoingEdgesOf(3));
+
+        assertEquals(Integer.valueOf(0), g.getEdgeSource(0));
+        assertEquals(Integer.valueOf(0), g.getEdgeTarget(0));
+        assertEquals(Integer.valueOf(0), g.getEdgeSource(1));
+        assertEquals(Integer.valueOf(1), g.getEdgeTarget(1));
+        assertEquals(Integer.valueOf(0), g.getEdgeSource(2));
+        assertEquals(Integer.valueOf(2), g.getEdgeTarget(2));
+        assertEquals(Integer.valueOf(0), g.getEdgeSource(3));
+        assertEquals(Integer.valueOf(0), g.getEdgeTarget(3));
+        assertEquals(Integer.valueOf(0), g.getEdgeSource(4));
+        assertEquals(Integer.valueOf(1), g.getEdgeTarget(4));
+        assertEquals(Integer.valueOf(1), g.getEdgeSource(5));
+        assertEquals(Integer.valueOf(1), g.getEdgeTarget(5));
+        assertEquals(Integer.valueOf(1), g.getEdgeSource(6));
+        assertEquals(Integer.valueOf(2), g.getEdgeTarget(6));
+
+        assertEquals(
+            IntStream.range(0, edges.size()).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
+            g.edgeSet());
+        assertEquals(
+            IntStream.range(0, 4).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
+            g.vertexSet());
+
+        GraphType type = g.getType();
+        assertTrue(type.isAllowingCycles());
+        assertTrue(type.isAllowingMultipleEdges());
+        assertTrue(type.isAllowingSelfLoops());
+        assertTrue(type.isUndirected());
+        assertFalse(type.isModifiable());
+        assertFalse(type.isDirected());
+        assertFalse(type.isMixed());
+        assertFalse(type.isWeighted());
+
+    }
+
+    public static void testUndirectedWeighted(
+        BiFunction<Integer, List<Triple<Integer, Integer, Double>>,
+            Graph<Integer, Integer>> graphSupplier)
+    {
+        final Integer vertexCount = 6;
         List<Triple<Integer, Integer, Double>> edges = Arrays
             .asList(
                 Triple.of(0, 5, 1d), Triple.of(0, 2, 2d), Triple.of(3, 4, 3d), Triple.of(1, 4, 4d),
                 Triple.of(0, 1, 5d), Triple.of(3, 1, 6d), Triple.of(2, 4, 7d));
 
-        Graph<Integer, Integer> g = new SparseUndirectedWeightedGraph(6, edges);
+        Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
 
         assertEquals(6, g.vertexSet().size());
         assertTrue(g.containsVertex(0));
@@ -250,29 +380,29 @@ public class SparseGraphTest
         }
     }
 
-    @Test
-    public void testDirected()
+    public static void testDirected(
+        BiFunction<Integer, List<Pair<Integer, Integer>>, Graph<Integer, Integer>> graphSupplier)
     {
+        final Integer vertexCount = 8;
         List<Pair<Integer, Integer>> edges = Arrays
             .asList(
                 Pair.of(0, 1), Pair.of(1, 0), Pair.of(1, 4), Pair.of(1, 5), Pair.of(1, 6),
                 Pair.of(2, 4), Pair.of(2, 4), Pair.of(2, 4), Pair.of(3, 4), Pair.of(4, 5),
                 Pair.of(5, 6), Pair.of(7, 6), Pair.of(7, 7));
 
-        int vertices = 8;
-        Graph<Integer, Integer> g = new SparseDirectedGraph(vertices, edges);
+        Graph<Integer, Integer> g = graphSupplier.apply(vertexCount, edges);
 
-        assertEquals(vertices, g.vertexSet().size());
+        assertEquals(vertexCount.intValue(), g.vertexSet().size());
         assertEquals(edges.size(), g.edgeSet().size());
 
         assertEquals(
             IntStream.range(0, edges.size()).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
             g.edgeSet());
         assertEquals(
-            IntStream.range(0, vertices).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
+            IntStream.range(0, vertexCount).mapToObj(Integer::valueOf).collect(Collectors.toSet()),
             g.vertexSet());
 
-        for (int i = 0; i < vertices; i++) {
+        for (int i = 0; i < vertexCount; i++) {
             assertTrue(g.containsVertex(i));
         }
 
@@ -368,11 +498,11 @@ public class SparseGraphTest
         assertFalse(type.isUndirected());
         assertFalse(type.isMixed());
         assertFalse(type.isWeighted());
-        
+
         assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
         assertEquals(Collections.singleton(Integer.valueOf(0)), g.getAllEdges(0, 1));
         assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
-        assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));        
+        assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));
         assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
         assertEquals(Collections.singleton(Integer.valueOf(2)), g.getAllEdges(1, 4));
         assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
@@ -380,9 +510,9 @@ public class SparseGraphTest
         assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
         assertEquals(Collections.singleton(Integer.valueOf(4)), g.getAllEdges(1, 6));
         assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
-        assertEquals(new HashSet<>(Arrays.asList(5,6,7)), g.getAllEdges(2, 4));
+        assertEquals(new HashSet<>(Arrays.asList(5, 6, 7)), g.getAllEdges(2, 4));
         assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
-        assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));        
+        assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));
         assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
         assertEquals(Collections.singleton(Integer.valueOf(9)), g.getAllEdges(4, 5));
         assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
@@ -391,10 +521,12 @@ public class SparseGraphTest
         assertEquals(Collections.singleton(Integer.valueOf(11)), g.getAllEdges(7, 6));
         assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
         assertEquals(Collections.singleton(Integer.valueOf(12)), g.getAllEdges(7, 7));
+
     }
 
-    @Test
-    public void testDirectedWeighted()
+    public static void testDirectedWeighted(
+        BiFunction<Integer, List<Triple<Integer, Integer, Double>>,
+            Graph<Integer, Integer>> graphSupplier)
     {
         List<Triple<Integer, Integer, Double>> edges = Arrays
             .asList(
@@ -404,7 +536,8 @@ public class SparseGraphTest
                 Triple.of(7, 6, 11d), Triple.of(7, 7, 12d));
 
         int vertices = 8;
-        Graph<Integer, Integer> g = new SparseDirectedWeightedGraph(vertices, edges);
+
+        Graph<Integer, Integer> g = graphSupplier.apply(vertices, edges);
 
         assertEquals(vertices, g.vertexSet().size());
         assertEquals(edges.size(), g.edgeSet().size());
@@ -531,11 +664,11 @@ public class SparseGraphTest
         assertFalse(type.isModifiable());
         assertFalse(type.isUndirected());
         assertFalse(type.isMixed());
-        
+
         assertEquals(Integer.valueOf(0), g.getEdge(0, 1));
         assertEquals(Collections.singleton(Integer.valueOf(0)), g.getAllEdges(0, 1));
         assertEquals(Integer.valueOf(1), g.getEdge(1, 0));
-        assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));        
+        assertEquals(Collections.singleton(Integer.valueOf(1)), g.getAllEdges(1, 0));
         assertEquals(Integer.valueOf(2), g.getEdge(1, 4));
         assertEquals(Collections.singleton(Integer.valueOf(2)), g.getAllEdges(1, 4));
         assertEquals(Integer.valueOf(3), g.getEdge(1, 5));
@@ -543,9 +676,9 @@ public class SparseGraphTest
         assertEquals(Integer.valueOf(4), g.getEdge(1, 6));
         assertEquals(Collections.singleton(Integer.valueOf(4)), g.getAllEdges(1, 6));
         assertEquals(Integer.valueOf(5), g.getEdge(2, 4));
-        assertEquals(new HashSet<>(Arrays.asList(5,6,7)), g.getAllEdges(2, 4));
+        assertEquals(new HashSet<>(Arrays.asList(5, 6, 7)), g.getAllEdges(2, 4));
         assertEquals(Integer.valueOf(8), g.getEdge(3, 4));
-        assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));        
+        assertEquals(Collections.singleton(Integer.valueOf(8)), g.getAllEdges(3, 4));
         assertEquals(Integer.valueOf(9), g.getEdge(4, 5));
         assertEquals(Collections.singleton(Integer.valueOf(9)), g.getAllEdges(4, 5));
         assertEquals(Integer.valueOf(10), g.getEdge(5, 6));
@@ -554,5 +687,7 @@ public class SparseGraphTest
         assertEquals(Collections.singleton(Integer.valueOf(11)), g.getAllEdges(7, 6));
         assertEquals(Integer.valueOf(12), g.getEdge(7, 7));
         assertEquals(Collections.singleton(Integer.valueOf(12)), g.getAllEdges(7, 7));
+
     }
+
 }

@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Dimitrios Michail
  */
-class CompleteIntegerSet
+public class CompleteIntegerSet
     extends
     AbstractSet<Integer>
 {
@@ -46,6 +46,16 @@ class CompleteIntegerSet
     public Iterator<Integer> iterator()
     {
         return new CompleteIntegerSetIterator(n);
+    }
+
+    @Override
+    public boolean contains(Object o)
+    {
+        if (o instanceof Integer) {
+            Integer x = (Integer) o;
+            return x >= 0 && x < n;
+        }
+        return false;
     }
 
     @Override

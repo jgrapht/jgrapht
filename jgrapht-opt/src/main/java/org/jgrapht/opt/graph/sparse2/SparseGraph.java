@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.opt.graph.sparse;
+package org.jgrapht.opt.graph.sparse2;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -34,6 +34,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.DefaultGraphType;
 import org.jgrapht.graph.DefaultGraphType.Builder;
+import org.jgrapht.opt.graph.sparse.CompleteIntegerSet;
 
 /**
  * A simple and efficient sparse graph implementation.
@@ -56,7 +57,7 @@ import org.jgrapht.graph.DefaultGraphType.Builder;
  *
  * @author Dimitrios Michail
  */
-public class DefaultSparseGraph
+class SparseGraph
     extends
     AbstractGraph<Integer, Integer>
     implements
@@ -118,7 +119,7 @@ public class DefaultSparseGraph
      * @param numVertices the number of vertices
      * @param edges the edge list
      */
-    public DefaultSparseGraph(boolean directed, int numVertices, List<Pair<Integer, Integer>> edges)
+    public SparseGraph(boolean directed, int numVertices, List<Pair<Integer, Integer>> edges)
     {
         this.n = numVertices;
         this.m = edges.size();

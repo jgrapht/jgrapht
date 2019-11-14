@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.opt.graph.sparse;
+package org.jgrapht.opt.graph.sparse2;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,7 +27,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 
 /**
- * A simple and efficient sparse weighted graph implementation.
+ * A simple and efficient sparse weighted directed graph implementation.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
@@ -42,8 +42,7 @@ import org.jgrapht.alg.util.Triple;
  * cumulative sum of the outgoing and incoming vertex degrees respectively.
  *
  * <p>
- * This implementation supports both directed and undirected graphs. The graph is initialized from
- * the constructor and cannot be modified afterwards.
+ * The graph is initialized from the constructor and cannot be modified afterwards.
  *
  * <p>
  * The graph is weighted by maintaining an additional array with the edge weights. While
@@ -52,13 +51,13 @@ import org.jgrapht.alg.util.Triple;
  * 
  * @author Dimitrios Michail
  */
-public class DefaultSparseWeightedGraph
+public class SparseDirectedWeightedGraph
     extends
-    DefaultSparseGraph
+    SparseDirectedGraph
     implements
     Serializable
 {
-    private static final long serialVersionUID = -5017683469930711930L;
+    private static final long serialVersionUID = -1774158696217338958L;
 
     /**
      * The edge weights
@@ -68,15 +67,14 @@ public class DefaultSparseWeightedGraph
     /**
      * Create a new graph from an edge list.
      * 
-     * @param directed whether the graph is directed or not
      * @param numVertices the number of vertices
      * @param edges the edge list with additional weights
      */
-    public DefaultSparseWeightedGraph(
-        boolean directed, int numVertices, List<Triple<Integer, Integer, Double>> edges)
+    public SparseDirectedWeightedGraph(
+        int numVertices, List<Triple<Integer, Integer, Double>> edges)
     {
         super(
-            directed, numVertices,
+            numVertices,
             edges
                 .stream().map(e -> Pair.of(e.getFirst(), e.getSecond()))
                 .collect(Collectors.toList()));
