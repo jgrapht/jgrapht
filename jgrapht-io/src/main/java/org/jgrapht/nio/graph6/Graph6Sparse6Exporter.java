@@ -17,12 +17,19 @@
  */
 package org.jgrapht.nio.graph6;
 
-import org.jgrapht.*;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-import java.io.*;
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.GraphExporter;
 
 /**
  * Exporter which exports graphs in graph6 or sparse6 format. A description of the format can be

@@ -34,8 +34,8 @@ import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 

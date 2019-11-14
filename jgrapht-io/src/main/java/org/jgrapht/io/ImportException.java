@@ -19,7 +19,9 @@ package org.jgrapht.io;
 
 /**
  * An exception that the library throws in case of graph import errors.
+ * @deprecated In favor of nio package.
  */
+@Deprecated
 public class ImportException
     extends
     RuntimeException

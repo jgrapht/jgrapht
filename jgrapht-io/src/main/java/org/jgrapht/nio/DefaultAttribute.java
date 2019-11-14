@@ -15,9 +15,9 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * Default implementation of an attribute.
@@ -25,9 +25,7 @@ import java.io.*;
  * @param <T> the underlying type
  * 
  * @author Dimitrios Michail
- * @deprecated In favor of nio package.
  */
-@Deprecated
 public class DefaultAttribute<T>
     implements
     Attribute,

@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.ImportException;
 import org.junit.Test;
 
 /**
@@ -42,7 +41,6 @@ public class SimpleGraphMLEventDrivenImporterTest
 
     @Test
     public void testUndirectedUnweighted()
-        throws ImportException
     {
         // @formatter:off
         String input = 
@@ -84,7 +82,6 @@ public class SimpleGraphMLEventDrivenImporterTest
 
     @Test
     public void testWithAttributesWeightedGraphs()
-        throws ImportException
     {
         // @formatter:off
         String input =

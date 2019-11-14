@@ -15,21 +15,24 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio;
 
-import org.jgrapht.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
-import java.io.*;
-import java.nio.charset.*;
+import org.jgrapht.Graph;
 
 /**
  * Interface for graph exporters
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * @deprecated In favor of nio package.
  */
-@Deprecated
 public interface GraphExporter<V, E>
 {
 
@@ -41,7 +44,6 @@ public interface GraphExporter<V, E>
      * @throws ExportException in case any error occurs
      */
     default void exportGraph(Graph<V, E> g, OutputStream out)
-        throws ExportException
     {
         exportGraph(g, new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
@@ -53,8 +55,7 @@ public interface GraphExporter<V, E>
      * @param writer the output writer
      * @throws ExportException in case any error occurs
      */
-    void exportGraph(Graph<V, E> g, Writer writer)
-        throws ExportException;
+    void exportGraph(Graph<V, E> g, Writer writer);
 
     /**
      * Export a graph
@@ -64,7 +65,6 @@ public interface GraphExporter<V, E>
      * @throws ExportException in case any error occurs
      */
     default void exportGraph(Graph<V, E> g, File file)
-        throws ExportException
     {
         try {
             exportGraph(g, new FileWriter(file));

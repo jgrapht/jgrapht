@@ -17,22 +17,23 @@
  */
 package org.jgrapht.nio.graphml;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.util.*;
-import org.junit.*;
-
-import java.io.*;
-import java.nio.charset.*;
-import java.util.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.ImportException;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Tests

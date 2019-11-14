@@ -17,16 +17,18 @@
  */
 package org.jgrapht.nio.gml;
 
-import org.apache.commons.text.*;
-import org.jgrapht.*;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.GraphExporter;
-import org.jgrapht.nio.BaseExporter;
-import org.jgrapht.nio.IntegerIdProvider;
-
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
+
+import org.apache.commons.text.StringEscapeUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.GraphExporter;
+import org.jgrapht.nio.IntegerIdProvider;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).

@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio;
 
 import org.jgrapht.*;
 
@@ -27,9 +27,7 @@ import java.nio.charset.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * @deprecated In favor of nio package.
  */
-@Deprecated
 public interface GraphImporter<V, E>
 {
 
@@ -41,7 +39,6 @@ public interface GraphImporter<V, E>
      * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     default void importGraph(Graph<V, E> g, InputStream in)
-        throws ImportException
     {
         importGraph(g, new InputStreamReader(in, StandardCharsets.UTF_8));
     }
@@ -53,8 +50,7 @@ public interface GraphImporter<V, E>
      * @param in the input reader
      * @throws ImportException in case any error occurs, such as I/O or parse error
      */
-    void importGraph(Graph<V, E> g, Reader in)
-        throws ImportException;
+    void importGraph(Graph<V, E> g, Reader in);
 
     /**
      * Import a graph
@@ -64,7 +60,6 @@ public interface GraphImporter<V, E>
      * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     default void importGraph(Graph<V, E> g, File file)
-        throws ImportException
     {
         try {
             importGraph(

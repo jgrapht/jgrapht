@@ -17,15 +17,22 @@
  */
 package org.jgrapht.nio.gml;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.io.ExportException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.nio.ExportException;
 import org.jgrapht.nio.IntegerIdProvider;
-import org.junit.*;
-
-import java.io.*;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests

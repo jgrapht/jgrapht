@@ -31,7 +31,6 @@ import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.io.ImportException;
 import org.junit.Test;
 
 /**
@@ -483,7 +482,6 @@ public class CSVExporterTest
 
     @Test
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
-        throws ImportException
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex("'john doe'");

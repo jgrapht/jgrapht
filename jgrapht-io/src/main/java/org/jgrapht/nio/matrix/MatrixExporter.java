@@ -28,9 +28,9 @@ import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
 import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.GraphExporter;
 import org.jgrapht.nio.IntegerIdProvider;
 import org.jgrapht.util.ModifiableInteger;
 

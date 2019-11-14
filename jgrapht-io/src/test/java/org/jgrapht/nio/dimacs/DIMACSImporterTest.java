@@ -20,7 +20,7 @@ package org.jgrapht.nio.dimacs;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
@@ -39,7 +39,6 @@ public class DIMACSImporterTest
 {
 
     public <E> Graph<Integer, E> readGraph(InputStream in, Class<E> edgeClass, boolean weighted)
-        throws ImportException
     {
         Graph<Integer, E> g = GraphTypeBuilder
             .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(weighted)
@@ -60,7 +59,6 @@ public class DIMACSImporterTest
      */
     @Test
     public void testReadDIMACSInstance()
-        throws ImportException
     {
         InputStream fstream = getClass().getClassLoader().getResourceAsStream("myciel3.col");
         Graph<Integer, DefaultEdge> graph = readGraph(fstream, DefaultEdge.class, false);
@@ -80,7 +78,6 @@ public class DIMACSImporterTest
      */
     @Test
     public void testReadWeightedDIMACSInstance()
-        throws ImportException
     {
         InputStream fstream =
             getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");
@@ -104,7 +101,6 @@ public class DIMACSImporterTest
 
     @Test
     public void testReadDIMACSShortestPathFormat()
-        throws ImportException
     {
         // @formatter:off
         String input = "p sp 3 3\n" +
@@ -131,7 +127,6 @@ public class DIMACSImporterTest
 
     @Test
     public void testWrongDIMACSInstance1()
-        throws ImportException
     {
         // @formatter:off
         String input = "p edge ERROR 5\n"
@@ -150,7 +145,6 @@ public class DIMACSImporterTest
 
     @Test
     public void testWrongDIMACSInstance2()
-        throws ImportException
     {
         // @formatter:off
         String input = "p edge -10 5\n"

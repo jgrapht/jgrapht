@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2019, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,17 @@
  */
 package org.jgrapht.io;
 
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import org.jgrapht.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.graphml.SimpleGraphMLEventDrivenImporter;
+import javax.xml.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+import javax.xml.validation.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a GraphML data source.
@@ -124,8 +124,7 @@ import org.jgrapht.nio.graphml.SimpleGraphMLEventDrivenImporter;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * 
- * @deprecated Use {@link org.jgrapht.nio.graphml.SimpleGraphMLImporter} instead
+ * @deprecated In favor of {@link org.jgrapht.nio.graphml.SimpleGraphMLImporter}.
  */
 @Deprecated
 public class SimpleGraphMLImporter<V, E>
@@ -134,6 +133,8 @@ public class SimpleGraphMLImporter<V, E>
     implements
     GraphImporter<V, E>
 {
+    private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
+    private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
 
     private boolean schemaValidation;
@@ -204,87 +205,364 @@ public class SimpleGraphMLImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        SimpleGraphMLEventDrivenImporter genericImporter = new SimpleGraphMLEventDrivenImporter();
-        genericImporter.setEdgeWeightAttributeName(edgeWeightAttributeName);
-        genericImporter.setSchemaValidation(schemaValidation);
-
-        GlobalConsumer globalConsumer = new GlobalConsumer(graph);
-        genericImporter.addGraphAttributeConsumer(globalConsumer.graphAttributeConsumer);
-        genericImporter.addVertexAttributeConsumer(globalConsumer.vertexAttributeConsumer);
-        genericImporter.addEdgeAttributeConsumer(globalConsumer.edgeAttributeConsumer);
-        genericImporter.addVertexConsumer(globalConsumer.vertexConsumer);
-        genericImporter.addEdgeConsumer(globalConsumer.edgeConsumer);
-        genericImporter.importInput(input);
+        try {
+            // parse
+            XMLReader xmlReader = createXMLReader();
+            GraphMLHandler handler = new GraphMLHandler(graph);
+            xmlReader.setContentHandler(handler);
+            xmlReader.setErrorHandler(handler);
+            xmlReader.parse(new InputSource(input));
+        } catch (Exception se) {
+            throw new ImportException("Failed to parse GraphML", se);
+        }
     }
 
-    private class GlobalConsumer
+    private XMLReader createXMLReader()
+        throws ImportException
     {
-        private Graph<V, E> graph;
-        private Map<String, V> nodesMap;
-        private E lastEdge;
-        private Triple<String, String, Double> lastTriple;
+        try {
+            SchemaFactory schemaFactory =
+                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-        public GlobalConsumer(Graph<V, E> graph)
+            // create parser
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            if (schemaValidation) {
+                // load schema
+                InputStream xsdStream =
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        GRAPHML_SCHEMA_FILENAME);
+                if (xsdStream == null) {
+                    throw new ImportException("Failed to locate GraphML xsd");
+                }
+                InputStream xlinkStream =
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        XLINK_SCHEMA_FILENAME);
+                if (xlinkStream == null) {
+                    throw new ImportException("Failed to locate XLink xsd");
+                }
+                Source[] sources = new Source[2];
+                sources[0] = new StreamSource(xlinkStream);
+                sources[1] = new StreamSource(xsdStream);
+                Schema schema = schemaFactory.newSchema(sources);
+
+                spf.setSchema(schema);
+            }
+            spf.setNamespaceAware(true);
+            SAXParser saxParser = spf.newSAXParser();
+
+            // create reader
+            return saxParser.getXMLReader();
+        } catch (Exception se) {
+            throw new ImportException("Failed to parse GraphML", se);
+        }
+    }
+
+    // content handler
+    private class GraphMLHandler
+        extends
+        DefaultHandler
+    {
+        private static final String GRAPH = "graph";
+        private static final String GRAPH_ID = "id";
+        private static final String GRAPH_EDGE_DEFAULT = "edgedefault";
+        private static final String NODE = "node";
+        private static final String NODE_ID = "id";
+        private static final String EDGE = "edge";
+        private static final String EDGE_ID = "id";
+        private static final String EDGE_SOURCE = "source";
+        private static final String EDGE_TARGET = "target";
+        private static final String ALL = "all";
+        private static final String KEY = "key";
+        private static final String KEY_FOR = "for";
+        private static final String KEY_ATTR_NAME = "attr.name";
+        private static final String KEY_ATTR_TYPE = "attr.type";
+        private static final String KEY_ID = "id";
+        private static final String DEFAULT = "default";
+        private static final String DATA = "data";
+        private static final String DATA_KEY = "key";
+
+        private Graph<V, E> graph;
+        private boolean isWeighted;
+        private Map<String, V> nodes;
+
+        // parser state
+        private int insideDefault;
+        private int insideKey;
+        private int insideData;
+        private int insideGraph;
+        private int insideNode;
+        private V currentNode;
+        private int insideEdge;
+        private E currentEdge;
+        private Key currentKey;
+        private String currentDataKey;
+        private StringBuilder currentDataValue;
+        private Map<String, Key> nodeValidKeys;
+        private Map<String, Key> edgeValidKeys;
+        private Map<String, Key> graphValidKeys;
+
+        public GraphMLHandler(Graph<V, E> graph)
         {
-            this.graph = graph;
-            this.nodesMap = new HashMap<>();
-            this.lastEdge = null;
-            this.lastTriple = null;
+            this.graph = Objects.requireNonNull(graph);
+            this.isWeighted = graph.getType().isWeighted();
         }
 
-        public final BiConsumer<String, Attribute> graphAttributeConsumer = (key, a) -> {
-            notifyGraph(key, a);
-        };
-
-        public final BiConsumer<Pair<String, String>, Attribute> vertexAttributeConsumer =
-            (vertexAndKey, a) -> {
-                notifyVertex(mapNode(vertexAndKey.getFirst()), vertexAndKey.getSecond(), a);
-            };
-
-        public final BiConsumer<Pair<Triple<String, String, Double>, String>,
-            Attribute> edgeAttributeConsumer = (edgeAndKey, a) -> {
-                Triple<String, String, Double> qe = edgeAndKey.getFirst();
-
-                if (qe == lastTriple) {
-                    if (qe.getThird() != null
-                        && edgeWeightAttributeName.equals(edgeAndKey.getSecond())
-                        && graph.getType().isWeighted())
-                {
-                        graph.setEdgeWeight(lastEdge, qe.getThird());
-                    }
-
-                    notifyEdge(lastEdge, edgeAndKey.getSecond(), a);
-                }
-            };
-
-        public final Consumer<String> vertexConsumer = (vId) -> {
-            mapNode(vId);
-        };
-
-        public final Consumer<Triple<String, String, Double>> edgeConsumer = (qe) -> {
-            if (lastTriple != qe) {
-                String source = qe.getFirst();
-                String target = qe.getSecond();
-                Double weight = qe.getThird();
-
-                E e = graph.addEdge(mapNode(source), mapNode(target));
-                if (weight != null && graph.getType().isWeighted()) {
-                    graph.setEdgeWeight(e, weight);
-                }
-
-                lastEdge = e;
-                lastTriple = qe;
-            }
-        };
-
-        private V mapNode(String vId)
+        @Override
+        public void startDocument()
+            throws SAXException
         {
-            V vertex = nodesMap.get(vId);
-            if (vertex == null) {
-                vertex = graph.addVertex();
-                nodesMap.put(vId, vertex);
+            nodes = new HashMap<>();
+            insideDefault = 0;
+            insideKey = 0;
+            insideData = 0;
+            insideGraph = 0;
+            insideNode = 0;
+            currentNode = null;
+            insideEdge = 0;
+            currentEdge = null;
+            currentKey = null;
+            currentDataKey = null;
+            currentDataValue = new StringBuilder();
+            nodeValidKeys = new HashMap<>();
+            edgeValidKeys = new HashMap<>();
+            graphValidKeys = new HashMap<>();
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+            throws SAXException
+        {
+            switch (localName) {
+            case GRAPH:
+                if (insideGraph > 0) {
+                    throw new IllegalArgumentException(
+                        "This importer does not support nested graphs");
+                }
+                insideGraph++;
+                findAttribute(GRAPH_ID, attributes).ifPresent(
+                    value -> notifyGraph(GRAPH_ID, DefaultAttribute.createAttribute(value)));
+                findAttribute(GRAPH_EDGE_DEFAULT, attributes).ifPresent(
+                    value -> notifyGraph(
+                        GRAPH_EDGE_DEFAULT, DefaultAttribute.createAttribute(value)));
+                break;
+            case NODE:
+                if (insideNode > 0 || insideEdge > 0) {
+                    throw new IllegalArgumentException(
+                        "Nodes cannot be inside other nodes or edges");
+                }
+                insideNode++;
+                String nodeId = findAttribute(NODE_ID, attributes).orElseThrow(
+                    () -> new IllegalArgumentException("Node must have an identifier"));
+                V vertex = nodes.get(nodeId);
+                if (vertex == null) {
+                    vertex = graph.addVertex();
+                    nodes.put(nodeId, vertex);
+                }
+                currentNode = vertex;
+                notifyVertex(currentNode, NODE_ID, DefaultAttribute.createAttribute(nodeId));
+                break;
+            case EDGE:
+                if (insideNode > 0 || insideEdge > 0) {
+                    throw new IllegalArgumentException(
+                        "Edges cannot be inside other nodes or edges");
+                }
+                insideEdge++;
+                String sourceId = findAttribute(EDGE_SOURCE, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Edge source missing"));
+                String targetId = findAttribute(EDGE_TARGET, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Edge target missing"));
+                V source = nodes.computeIfAbsent(sourceId, k -> graph.addVertex());
+                V target = nodes.computeIfAbsent(targetId, k -> graph.addVertex());
+                currentEdge = graph.addEdge(source, target);
+                notifyEdge(currentEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(sourceId));
+                notifyEdge(currentEdge, EDGE_TARGET, DefaultAttribute.createAttribute(targetId));
+                findAttribute(EDGE_ID, attributes).ifPresent(
+                    value -> notifyEdge(
+                        currentEdge, EDGE_ID, DefaultAttribute.createAttribute(value)));
+                break;
+            case KEY:
+                insideKey++;
+                String keyId = findAttribute(KEY_ID, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Key id missing"));
+                String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Key attribute name missing"));
+                currentKey = new Key(
+                    keyId, keyAttrName, findAttribute(KEY_ATTR_TYPE, attributes)
+                        .map(AttributeType::create).orElse(AttributeType.UNKNOWN),
+                    findAttribute(KEY_FOR, attributes).orElse("ALL"));
+                break;
+            case DEFAULT:
+                insideDefault++;
+                break;
+            case DATA:
+                insideData++;
+                findAttribute(DATA_KEY, attributes).ifPresent(data -> currentDataKey = data);
+                break;
+            default:
+                break;
             }
-            return vertex;
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName)
+            throws SAXException
+        {
+            switch (localName) {
+            case GRAPH:
+                insideGraph--;
+                break;
+            case NODE:
+                currentNode = null;
+                insideNode--;
+                break;
+            case EDGE:
+                currentEdge = null;
+                insideEdge--;
+                break;
+            case KEY:
+                insideKey--;
+                registerKey();
+                currentKey = null;
+                break;
+            case DEFAULT:
+                insideDefault--;
+                break;
+            case DATA:
+                if (--insideData == 0) {
+                    notifyData();
+                    currentDataValue.setLength(0);
+                    currentDataKey = null;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
+        @Override
+        public void characters(char ch[], int start, int length)
+            throws SAXException
+        {
+            if (insideData == 1) {
+                currentDataValue.append(ch, start, length);
+            }
+        }
+
+        @Override
+        public void warning(SAXParseException e)
+            throws SAXException
+        {
+            throw e;
+        }
+
+        public void error(SAXParseException e)
+            throws SAXException
+        {
+            throw e;
+        }
+
+        public void fatalError(SAXParseException e)
+            throws SAXException
+        {
+            throw e;
+        }
+
+        private Optional<String> findAttribute(String localName, Attributes attributes)
+        {
+            for (int i = 0; i < attributes.getLength(); i++) {
+                String attrLocalName = attributes.getLocalName(i);
+                if (attrLocalName.equals(localName)) {
+                    return Optional.ofNullable(attributes.getValue(i));
+                }
+            }
+            return Optional.empty();
+        }
+
+        private void notifyData()
+        {
+            if (currentDataKey == null || currentDataValue.length() == 0) {
+                return;
+            }
+
+            if (currentNode != null) {
+                Key key = nodeValidKeys.get(currentDataKey);
+                if (key != null) {
+                    notifyVertex(
+                        currentNode, key.attributeName,
+                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                }
+            }
+            if (currentEdge != null) {
+                Key key = edgeValidKeys.get(currentDataKey);
+                if (key != null) {
+                    /*
+                     * Handle special weight key
+                     */
+                    if (isWeighted && key.attributeName.equals(edgeWeightAttributeName)) {
+                        try {
+                            graph.setEdgeWeight(
+                                currentEdge, Double.parseDouble(currentDataValue.toString()));
+                        } catch (NumberFormatException e) {
+                            // ignore
+                        }
+                    }
+                    notifyEdge(
+                        currentEdge, key.attributeName,
+                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                }
+            }
+            if (graph != null) {
+                Key key = graphValidKeys.get(currentDataKey);
+                if (key != null) {
+                    notifyGraph(
+                        key.attributeName,
+                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                }
+            }
+        }
+
+        private void registerKey()
+        {
+            if (currentKey.isValid()) {
+                switch (currentKey.target) {
+                case NODE:
+                    nodeValidKeys.put(currentKey.id, currentKey);
+                    break;
+                case EDGE:
+                    edgeValidKeys.put(currentKey.id, currentKey);
+                    break;
+                case GRAPH:
+                    graphValidKeys.put(currentKey.id, currentKey);
+                    break;
+                case ALL:
+                    nodeValidKeys.put(currentKey.id, currentKey);
+                    edgeValidKeys.put(currentKey.id, currentKey);
+                    graphValidKeys.put(currentKey.id, currentKey);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private static class Key
+    {
+        String id;
+        String attributeName;
+        String target;
+        AttributeType type;
+
+        public Key(String id, String attributeName, AttributeType type, String target)
+        {
+            this.id = id;
+            this.attributeName = attributeName;
+            this.type = type;
+            this.target = target;
+        }
+
+        public boolean isValid()
+        {
+            return id != null && attributeName != null && target != null;
         }
 
     }

@@ -30,7 +30,7 @@ import java.util.Map;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.ImportException;
 import org.junit.Test;
 
 /**
@@ -45,7 +45,6 @@ public class SimpleGraphMLEdgeListImporterTest
 
     @Test
     public void testUndirectedUnweighted()
-        throws ImportException
     {
         // @formatter:off
         String input = 

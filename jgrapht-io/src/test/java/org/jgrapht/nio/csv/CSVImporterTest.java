@@ -31,8 +31,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
@@ -48,7 +48,6 @@ public class CSVImporterTest
     public <E> Graph<String, E> readGraph(
         String input, CSVFormat format, Character delimiter, Class<E> edgeClass, boolean directed,
         boolean weighted)
-        throws ImportException
     {
         Graph<String, E> g;
 
@@ -77,7 +76,6 @@ public class CSVImporterTest
 
     @Test
     public void testEdgeListDirectedUnweighted()
-        throws ImportException
     {
         // @formatter:off
         String input = "1,2\n"
@@ -103,7 +101,6 @@ public class CSVImporterTest
 
     @Test
     public void testEdgeListDirectedWeighted()
-        throws ImportException
     {
         // @formatter:off
         String input = "1,2,1.0\n"
@@ -133,7 +130,6 @@ public class CSVImporterTest
 
     @Test
     public void testEdgeListDirectedUnweightedWithSemicolon()
-        throws ImportException
     {
         // @formatter:off
         String input = "1;2\n"
@@ -159,7 +155,6 @@ public class CSVImporterTest
 
     @Test
     public void testAdjacencyListDirectedUnweightedWithSemicolon()
-        throws ImportException
     {
         // @formatter:off
         String input = "1;2;3;4\n"
@@ -193,7 +188,6 @@ public class CSVImporterTest
 
     @Test
     public void testAdjacencyListDirectedWeightedWithSemicolon()
-        throws ImportException
     {
         // @formatter:off
         String input = "1;2;2.1;3;3.1;4;4.1\n"
@@ -237,7 +231,6 @@ public class CSVImporterTest
 
     @Test
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
-        throws ImportException
     {
         // @formatter:off
         String input = "'john doe';fred\n"
@@ -263,7 +256,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNoNodeIdZeroNoEdgeWeighted()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -314,7 +306,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNoNodeIdWeighted()
-        throws ImportException
     {
         // @formatter:off
         String input = 
@@ -364,7 +355,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNoNodeIdZeroNoEdge()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -403,7 +393,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNoNodeId()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -442,7 +431,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNodeIdZeroNoEdge()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -484,7 +472,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffled()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -542,7 +529,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeWeightedShuffledZeroWeightsAsDouble()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -587,7 +573,6 @@ public class CSVImporterTest
 
     @Test
     public void testDoubleOnUnweighted()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -615,7 +600,6 @@ public class CSVImporterTest
 
     @Test
     public void testWrongHeaderNodeIds()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -643,7 +627,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNoNodeIdMissingEntries()
-        throws ImportException
     {
         // @formatter:off
         String input =
@@ -668,7 +651,6 @@ public class CSVImporterTest
 
     @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffledAndTabDelimiter()
-        throws ImportException
     {
         // @formatter:off
         String input =

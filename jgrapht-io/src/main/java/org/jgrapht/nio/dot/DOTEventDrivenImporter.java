@@ -42,11 +42,11 @@ import org.apache.commons.text.translate.AggregateTranslator;
 import org.apache.commons.text.translate.CharSequenceTranslator;
 import org.apache.commons.text.translate.LookupTranslator;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Import a graph from a DOT file.

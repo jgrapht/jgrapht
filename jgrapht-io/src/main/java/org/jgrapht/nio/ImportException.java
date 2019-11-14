@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2015-2017, by Wil Selwood and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,41 +15,40 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio;
 
 /**
- * An exception that the library throws in case of graph export errors.
+ * An exception that the library throws in case of graph import errors.
  * 
- * @deprecated In favor of nio package.
+ * @author Wil Selwood
  */
-@Deprecated
-public class ExportException
+public class ImportException
     extends
     RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs an {@code ExportException} with {@code null} as its error detail message.
+     * Constructs an {@code ImportException} with {@code null} as its error detail message.
      */
-    public ExportException()
+    public ImportException()
     {
         super();
     }
 
     /**
-     * Constructs an {@code ExportException} with the specified detail message.
+     * Constructs an {@code ImportException} with the specified detail message.
      *
      * @param message The detail message (which is saved for later retrieval by the
      *        {@link #getMessage()} method)
      */
-    public ExportException(String message)
+    public ImportException(String message)
     {
         super(message);
     }
 
     /**
-     * Constructs an {@code ExportException} with the specified detail message and cause.
+     * Constructs an {@code ImportException} with the specified detail message and cause.
      *
      * <p>
      * Note that the detail message associated with {@code cause} is <i>not</i> automatically
@@ -62,13 +61,13 @@ public class ExportException
      *        method). (A null value is permitted, and indicates that the cause is nonexistent or
      *        unknown.)
      */
-    public ExportException(String message, Throwable cause)
+    public ImportException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
     /**
-     * Constructs an {@code ExportException} with the specified cause and a detail message of
+     * Constructs an {@code ImportException} with the specified cause and a detail message of
      * {@code (cause==null ? null : cause.toString())} (which typically contains the class and
      * detail message of {@code cause}). This constructor is useful for IO exceptions that are
      * little more than wrappers for other throwables.
@@ -78,7 +77,7 @@ public class ExportException
      *        unknown.)
      *
      */
-    public ExportException(Throwable cause)
+    public ImportException(Throwable cause)
     {
         super(cause);
     }

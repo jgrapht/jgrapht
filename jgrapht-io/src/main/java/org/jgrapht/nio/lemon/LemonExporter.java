@@ -25,8 +25,8 @@ import java.util.function.Function;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.jgrapht.Graph;
-import org.jgrapht.io.GraphExporter;
 import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.GraphExporter;
 import org.jgrapht.nio.IntegerIdProvider;
 
 /**

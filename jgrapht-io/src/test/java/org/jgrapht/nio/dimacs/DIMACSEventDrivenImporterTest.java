@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.ImportException;
 import org.junit.Test;
 
 /**
@@ -44,7 +43,6 @@ public class DIMACSEventDrivenImporterTest
      */
     @Test
     public void testReadDIMACSInstance()
-        throws ImportException
     {
         InputStream fstream = getClass().getClassLoader().getResourceAsStream("myciel3.col");
 
@@ -78,7 +76,6 @@ public class DIMACSEventDrivenImporterTest
      */
     @Test
     public void testReadWeightedDIMACSInstance()
-        throws ImportException
     {
         InputStream fstream =
             getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");
@@ -127,7 +124,6 @@ public class DIMACSEventDrivenImporterTest
      */
     @Test
     public void testReadWeightedWithourRenumberingDIMACSInstance()
-        throws ImportException
     {
         InputStream fstream =
             getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");

@@ -15,15 +15,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio;
 
 /**
  * An attribute
  * 
  * @author Dimitrios Michail
- * @deprecated In favor of nio package.
  */
-@Deprecated
 public interface Attribute
 {
     /**

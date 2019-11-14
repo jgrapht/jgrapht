@@ -32,11 +32,11 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.jgrapht.Graph;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.GraphExporter;
 import org.jgrapht.nio.IntegerIdProvider;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -345,7 +345,6 @@ public class GraphMLExporter<V, E>
      */
     @Override
     public void exportGraph(Graph<V, E> g, Writer writer)
-        throws ExportException
     {
         try {
             // Prepare an XML file to receive the GraphML data

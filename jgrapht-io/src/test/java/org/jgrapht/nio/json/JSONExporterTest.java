@@ -31,10 +31,10 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.IntegerIdProvider;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
@@ -47,8 +47,7 @@ public class JSONExporterTest
 
     @Test
     public void testBasic()
-        throws UnsupportedEncodingException,
-        ExportException
+        throws UnsupportedEncodingException
     {
         String expected =
             "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"nodes\":[{\"id\":\"1\"},{\"id\":\"2\"},{\"id\":\"3\"},{\"id\":\"4\"}],\"edges\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\"},{\"id\":\"2\",\"source\":\"2\",\"target\":\"3\"},{\"id\":\"3\",\"source\":\"3\",\"target\":\"4\"},{\"id\":\"4\",\"source\":\"1\",\"target\":\"4\"}]}";

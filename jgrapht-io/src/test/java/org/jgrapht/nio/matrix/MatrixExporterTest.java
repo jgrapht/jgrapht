@@ -27,8 +27,8 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.GraphExporter;
 import org.junit.Test;
 
 /**
@@ -62,7 +62,6 @@ public class MatrixExporterTest
 
     @Test
     public void testLaplacian()
-        throws ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);

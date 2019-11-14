@@ -27,11 +27,11 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.GraphImporter;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
@@ -140,7 +140,6 @@ public class GmlImporter<V, E>
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
-        throws ImportException
     {
         GmlEventDrivenImporter genericImporter = new GmlEventDrivenImporter();
         Consumers consumers = new Consumers(graph);

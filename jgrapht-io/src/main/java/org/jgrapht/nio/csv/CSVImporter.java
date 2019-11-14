@@ -27,10 +27,10 @@ import java.util.function.Consumer;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.GraphImporter;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.

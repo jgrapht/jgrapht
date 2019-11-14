@@ -39,13 +39,13 @@ import javax.xml.validation.SchemaFactory;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
 import org.jgrapht.nio.ImportEvent;
+import org.jgrapht.nio.ImportException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -194,7 +194,6 @@ public class GraphMLEventDrivenImporter
 
     @Override
     public void importInput(Reader input)
-        throws ImportException
     {
         try {
             // parse

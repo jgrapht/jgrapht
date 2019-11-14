@@ -33,10 +33,10 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 

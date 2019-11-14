@@ -28,8 +28,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.ImportException;
 
 /**
  * Interface for an importer using consumers.

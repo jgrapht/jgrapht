@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportException;
 
 /**
  * A generic importer using consumers for DIMACS format.
@@ -115,7 +115,6 @@ public class DIMACSEventDrivenImporter
 
     @Override
     public void importInput(Reader input)
-        throws ImportException
     {
         // convert to buffered
         BufferedReader in;

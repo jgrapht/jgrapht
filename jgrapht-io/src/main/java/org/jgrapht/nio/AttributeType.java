@@ -15,15 +15,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.io;
+package org.jgrapht.nio;
 
 /**
  * Denotes the type of an attribute.
  * 
  * @author Dimitrios Michail
- * @deprecated In favor of nio package.
  */
-@Deprecated
 public enum AttributeType
 {
     NULL("null"),

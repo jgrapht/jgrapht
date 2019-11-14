@@ -24,9 +24,9 @@ import java.util.function.Consumer;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.GraphImporter;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Importer which reads graphs in graph6 or sparse6 format.
@@ -87,7 +87,6 @@ public class Graph6Sparse6Importer<V, E>
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
-        throws ImportException
     {
         Graph6Sparse6EventDrivenImporter genericImporter = new Graph6Sparse6EventDrivenImporter();
         Consumers consumers = new Consumers(graph);

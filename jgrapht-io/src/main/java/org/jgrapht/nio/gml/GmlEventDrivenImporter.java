@@ -33,12 +33,12 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.gml.GmlParser.GmlContext;
 
 /**

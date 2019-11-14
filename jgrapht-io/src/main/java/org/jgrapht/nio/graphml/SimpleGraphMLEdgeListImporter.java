@@ -26,11 +26,11 @@ import java.util.function.Consumer;
 
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
 import org.jgrapht.nio.ImportEvent;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Imports a GraphML file as an edge list. Vertices are numbered from $0$ to $n-1$ in the order they

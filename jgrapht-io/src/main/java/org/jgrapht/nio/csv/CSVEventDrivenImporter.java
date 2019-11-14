@@ -34,9 +34,9 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.ImportException;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.

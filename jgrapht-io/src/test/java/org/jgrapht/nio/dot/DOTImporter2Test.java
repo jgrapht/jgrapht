@@ -29,10 +29,10 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.GraphImporter;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 

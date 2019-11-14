@@ -29,7 +29,6 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.ExportException;
 import org.junit.Test;
 
 /**
@@ -112,8 +111,7 @@ public class LemonExporterTest
     
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException,
-        ExportException
+        throws UnsupportedEncodingException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
@@ -131,8 +129,7 @@ public class LemonExporterTest
 
     @Test
     public void testUnweightedUndirected()
-        throws UnsupportedEncodingException,
-        ExportException
+        throws UnsupportedEncodingException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -151,8 +148,7 @@ public class LemonExporterTest
 
     @Test
     public void testWeightedUndirected()
-        throws UnsupportedEncodingException,
-        ExportException
+        throws UnsupportedEncodingException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
@@ -174,8 +170,7 @@ public class LemonExporterTest
     
     @Test
     public void testUndirectedWithEscape()
-        throws UnsupportedEncodingException,
-        ExportException
+        throws UnsupportedEncodingException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);

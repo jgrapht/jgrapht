@@ -35,12 +35,12 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.json.JsonParser.JsonContext;
 
 /**
@@ -105,7 +105,6 @@ public class JSONEventDrivenImporter
 
     @Override
     public void importInput(Reader input)
-        throws ImportException
     {
         try {
             ThrowingErrorListener errorListener = new ThrowingErrorListener();

@@ -23,7 +23,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.io.Attribute;
 
 /**
  * Base implementation for an importer which uses consumers to notify interested parties. Note that

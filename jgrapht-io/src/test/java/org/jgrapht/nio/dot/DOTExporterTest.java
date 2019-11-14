@@ -35,10 +35,10 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.ExportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.ExportException;
 import org.junit.Test;
 
 /**

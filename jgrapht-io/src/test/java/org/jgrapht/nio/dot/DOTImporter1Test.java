@@ -30,10 +30,10 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.Multigraph;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.ImportException;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.GraphImporter;
+import org.jgrapht.nio.ImportException;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
