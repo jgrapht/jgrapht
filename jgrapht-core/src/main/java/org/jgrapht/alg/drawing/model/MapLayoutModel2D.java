@@ -112,11 +112,7 @@ public class MapLayoutModel2D<V>
         if (!isFixed) {
             return points.put(vertex, point);
         }
-        Point2D current = points.get(vertex);
-        if (current == null) {
-            points.put(vertex, point);
-        }
-        return current;
+        return points.putIfAbsent(vertex, point);
     }
 
     @Override

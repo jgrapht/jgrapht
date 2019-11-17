@@ -294,7 +294,7 @@ public class FRLayoutAlgorithm2D<V, E>
                     Points
                         .add(
                             disp.getOrDefault(v, Point2D.of(0d, 0d)),
-                            Points.minus(dispContribution)));
+                            Points.negate(dispContribution)));
             disp.put(u, Points.add(disp.getOrDefault(u, Point2D.of(0d, 0d)), dispContribution));
         }
         return disp;

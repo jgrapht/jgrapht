@@ -60,7 +60,7 @@ public class PointsTest
     public void testMinus()
     {
         Point2D p1 = Point2D.of(5, 3);
-        Point2D p2 = Points.minus(p1);
+        Point2D p2 = Points.negate(p1);
         assertEquals(-5d, p2.getX(), 1e-9);
         assertEquals(-3d, p2.getY(), 1e-9);
     }

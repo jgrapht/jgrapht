@@ -32,7 +32,8 @@ public abstract class Points
         new ToleranceDoubleComparator(1e-9);
 
     /**
-     * Compute the length of a vector
+     * Compute the length of a vector. The length of vector $(x,y)$ is 
+     * given by $\sqrt{x^2+y^2}$.  
      * 
      * @param v the vector
      * @return the length of a vector
@@ -41,7 +42,7 @@ public abstract class Points
     {
         return Math.sqrt(v.getX() * v.getX() + v.getY() * v.getY());
     }
-
+    
     /**
      * Add 2-dimensional vectors
      * 
@@ -72,7 +73,7 @@ public abstract class Points
      * @param a the vector
      * @return the vector $-a$
      */
-    public static Point2D minus(Point2D a)
+    public static Point2D negate(Point2D a)
     {
         return scalarMultiply(a, -1.0);
     }

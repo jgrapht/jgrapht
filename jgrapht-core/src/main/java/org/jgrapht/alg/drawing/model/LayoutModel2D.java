@@ -28,9 +28,9 @@ import org.jgrapht.alg.drawing.LayoutAlgorithm2D;
 /**
  * A general interface for the 2D layout model.
  * 
- * The layout model provides the necessary components to a {@link LayoutAlgorithm2D} in order to draw
- * a graph. Its responsibility is to provide the available drawable area, to be able to store and
- * answer queries about vertex coordinates, to allow someone to fix (make permanent) a vertex
+ * The layout model provides the necessary components to a {@link LayoutAlgorithm2D} in order to
+ * draw a graph. Its responsibility is to provide the available drawable area, to be able to store
+ * and answer queries about vertex coordinates, to allow someone to fix (make permanent) a vertex
  * location and potentially provide an initializer. If provided, the initializer, maybe called by a
  * layout algorithm in order to calculate initial positions for each vertex.
  * 
@@ -90,6 +90,9 @@ public interface LayoutModel2D<V>
 
     /**
      * Check whether a vertex is a fixed point.
+     * 
+     * It is the model's responsibility to make sure that changing the coordinates of a fixed point
+     * by calling {@link #put(Object, Point2D)} has no effect.
      * 
      * @param vertex the vertex
      * @return true if a fixed point, false otherwise

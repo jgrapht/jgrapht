@@ -31,6 +31,13 @@ import org.jgrapht.alg.util.Pair;
 /**
  * A simple <a href="https://en.wikipedia.org/wiki/Quadtree">QuadTree</a> for indexing during force
  * calculations in the Fruchterman and Reingold Force-Directed Placement Algorithm.
+ *
+ * <p>
+ * See the following paper for the definition of a QuadTree.
+ * <ul>
+ * <li>Raphael Finkel and J.L. Bentley. Quad Trees: A Data Structure for Retrieval on Composite
+ * Keys. Acta Informatica, 4(1):1--9, 1974.</li>
+ * </ul>
  * 
  * <p>
  * The tree supports adding points one by one and maintains the centroid and total number of points
