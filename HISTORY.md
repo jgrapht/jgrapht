@@ -6,7 +6,7 @@ Changes to JGraphT in each version:
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Format code in parallel (contributed by Joris Kinable)
     - Fix edge reuse bug in KDisjointShortestPaths implementations (contributed by Benjamin Krogh)
-    - Updated Yen`s algorithm to operate on pseudo graphs correctly (contributed by Semen Chudakov)
+    - Updated Yen's algorithm to operate on pseudo graphs correctly (contributed by Semen Chudakov)
     - Updated Guava to version 28.0 (contributed by John Sichi)
     - Fixed bug in `BiconnectivityInspector` which would occasionally return an incorrect set of biconnected components (contributed by Reynaldo Gil Pons)
 	- Allow edge selection to be overridden in `CrossComponentIterator` (contributed by Sean Hudson)
@@ -14,6 +14,9 @@ Changes to JGraphT in each version:
     - Fixed bug in `BetweennessCentrality` which occasionally returned in incorrect centrality score for vertices in weighted graphs (contributed by Gil Pons)
     - Added path length limit to `HawickJamesSimpleCycles` (contributed by Edwin Ouwehand)
     - Added links in Guava adapater package-info (contributed by John Sichi)
+    - Added Boyer-Myrvold planarity testing algorithm (contributed by Timofey Chudakov)
+    - Added contraction hierarchy precomputation algorithm (contributed by Semen Chudakov)
+    - Enhanced `IntegerComponentNameProvider` to take arbitrary base (contributed by Amr Alhossary)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

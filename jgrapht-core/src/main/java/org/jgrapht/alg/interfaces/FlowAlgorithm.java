@@ -35,7 +35,7 @@ public interface FlowAlgorithm<V, E>
      *
      * @return flow
      */
-    default Flow getFlow()
+    default Flow<E> getFlow()
     {
         return new FlowImpl<>(this.getFlowMap());
     }

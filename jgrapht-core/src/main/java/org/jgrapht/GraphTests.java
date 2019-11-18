@@ -21,6 +21,7 @@ import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.partition.*;
+import org.jgrapht.alg.planar.BoyerMyrvoldPlanarityInspector;
 
 import java.util.*;
 import java.util.stream.*;
@@ -543,6 +544,142 @@ public abstract class GraphTests
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new BergeGraphInspector<V, E>().isBerge(graph);
+    }
+
+    /**
+     * Checks that the specified graph is planar. A graph is
+     * <a href="https://en.wikipedia.org/wiki/Planar_graph">planar</a> if it can be drawn on a
+     * two-dimensional plane without any of its edges crossing. The implementation of the method
+     * is delegated to the {@link org.jgrapht.alg.planar.BoyerMyrvoldPlanarityInspector}. Also,
+     * use this class to get a planar embedding of the graph in case it is planar, or a Kuratowski
+     * subgraph as a certificate of nonplanarity.
+     *
+     * @param graph the graph to test planarity of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is planar, false otherwise
+     * @see PlanarityTestingAlgorithm
+     * @see BoyerMyrvoldPlanarityInspector
+     */
+    public static <V, E> boolean isPlanar(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new BoyerMyrvoldPlanarityInspector<>(graph).isPlanar();
+    }
+
+    /**
+     * Checks whether the {@code graph} is a
+     * <a href="https://en.wikipedia.org/wiki/Kuratowski%27s_theorem#Kuratowski_subgraphs">Kuratowski subdivision</a>.
+     * Effectively checks whether the {@code graph} is a $K_{3,3}$ subdivision or $K_{5}$ subdivision
+     *
+     * @param graph the graph to test
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the {@code graph} is a Kuratowski subdivision, false otherwise
+     */
+    public static <V, E> boolean isKuratowskiSubdivision(Graph<V, E> graph)
+    {
+        return isK33Subdivision(graph) || isK5Subdivision(graph);
+    }
+
+    /**
+     * Checks whether the {@code graph} is a $K_{3,3}$ subdivision.
+     *
+     * @param graph the graph to test
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the {@code graph} is a $K_{3,3}$ subdivision, false otherwise
+     */
+    public static <V, E> boolean isK33Subdivision(Graph<V, E> graph)
+    {
+        List<V> degree3 = new ArrayList<>();
+        // collect all vertices with degree 3
+        for (V vertex : graph.vertexSet()) {
+            int degree = graph.degreeOf(vertex);
+            if (degree == 3) {
+                degree3.add(vertex);
+            } else if (degree != 2) {
+                return false;
+            }
+        }
+        if (degree3.size() != 6) {
+            return false;
+        }
+        V vertex = degree3.remove(degree3.size() - 1);
+        Set<V> reachable = reachableWithDegree(graph, vertex, 3);
+        if (reachable.size() != 3) {
+            return false;
+        }
+        degree3.removeAll(reachable);
+        return reachable.equals(reachableWithDegree(graph, degree3.get(0), 3))
+                && reachable.equals(reachableWithDegree(graph, degree3.get(1), 3));
+    }
+
+    /**
+     * Checks whether the {@code graph} is a $K_5$ subdivision.
+     *
+     * @param graph the graph to test
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the {@code graph} is a $K_5$ subdivision, false otherwise
+     */
+    public static <V, E> boolean isK5Subdivision(Graph<V, E> graph)
+    {
+        Set<V> degree5 = new HashSet<>();
+        for (V vertex : graph.vertexSet()) {
+            int degree = graph.degreeOf(vertex);
+            if (degree == 4) {
+                degree5.add(vertex);
+            } else if (degree != 2) {
+                return false;
+            }
+        }
+        if (degree5.size() != 5) {
+            return false;
+        }
+        for (V vertex : degree5) {
+            Set<V> reachable = reachableWithDegree(graph, vertex, 4);
+            if (reachable.size() != 4 || !degree5.containsAll(reachable) || reachable.contains(vertex)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Uses BFS to find all vertices of the {@code graph} which have a degree {@code degree}.
+     * This method doesn't advance to new nodes after it finds a node with a degree {@code degree}
+     *
+     * @param graph       the graph to search in
+     * @param startVertex the start vertex
+     * @param degree      the degree of desired vertices
+     * @param <V>         the graph vertex type
+     * @param <E>         the graph edge type
+     * @return all vertices of the {@code graph} reachable from {@code startVertex}, which have
+     * degree {@code degree}
+     */
+    private static <V, E> Set<V> reachableWithDegree(Graph<V, E> graph, V startVertex, int degree)
+    {
+        Set<V> visited = new HashSet<>();
+        Set<V> reachable = new HashSet<>();
+        Queue<V> queue = new ArrayDeque<>();
+        queue.add(startVertex);
+        while (!queue.isEmpty()) {
+            V current = queue.poll();
+            visited.add(current);
+            for (E e : graph.edgesOf(current)) {
+                V opposite = Graphs.getOppositeVertex(graph, e, current);
+                if (visited.contains(opposite)) {
+                    continue;
+                }
+                if (graph.degreeOf(opposite) == degree) {
+                    reachable.add(opposite);
+                } else {
+                    queue.add(opposite);
+                }
+            }
+        }
+        return reachable;
     }
 
     /**
