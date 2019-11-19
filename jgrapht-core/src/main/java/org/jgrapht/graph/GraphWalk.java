@@ -224,6 +224,10 @@ public class GraphWalk<V, E>
         @SuppressWarnings("unchecked") GraphWalk<V, E> other = (GraphWalk<V, E>) o;
         if (this.isEmpty() && other.isEmpty())
             return true;
+
+        if (this.isEmpty())
+            return false;
+
         if (!this.startVertex.equals(other.getStartVertex())
             || !this.endVertex.equals(other.getEndVertex()))
             return false;

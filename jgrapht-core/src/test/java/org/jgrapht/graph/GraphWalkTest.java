@@ -311,10 +311,10 @@ public class GraphWalkTest
             new GraphWalk<>(graph1, null, null, null, Collections.emptyList(), 0);
 
         Graph<Integer, DefaultEdge> graph2 = new SimpleGraph<>(DefaultEdge.class);
-        graph.addVertex(0);
+        graph2.addVertex(0);
         GraphWalk<Integer, DefaultEdge> gw2 =
             new GraphWalk<>(graph2, 0, 0, Collections.singletonList(0), Collections.emptyList(), 0);
-        Assert.assertFalse(gw1->equals(gw2));
+        Assert.assertNotEquals(gw1, gw2);
     }
 
 }
