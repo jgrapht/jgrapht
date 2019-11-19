@@ -19,8 +19,8 @@ package org.jgrapht.alg.clustering;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -103,12 +103,12 @@ public class KSpanningTreeClustering<V, E>
         /*
          * Transform and return result
          */
-        Map<V, Set<V>> clusterMap = new HashMap<>();
+        Map<V, Set<V>> clusterMap = new LinkedHashMap<>();
         for (V v : graph.vertexSet()) {
             V rv = forest.find(v);
             Set<V> cluster = clusterMap.get(rv);
             if (cluster == null) {
-                cluster = new HashSet<>();
+                cluster = new LinkedHashSet<>();
                 clusterMap.put(rv, cluster);
             }
             cluster.add(v);
