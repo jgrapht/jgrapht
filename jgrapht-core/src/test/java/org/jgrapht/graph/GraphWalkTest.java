@@ -303,4 +303,18 @@ public class GraphWalkTest
         Assert.assertEquals(gw1, gw3);
     }
 
+    @Test
+    public void testFirstEmptyWalkEquality()
+    {
+        Graph<Integer, DefaultEdge> graph1 = new SimpleGraph<>(DefaultEdge.class);
+        GraphWalk<Integer, DefaultEdge> gw1 =
+            new GraphWalk<>(graph1, null, null, null, Collections.emptyList(), 0);
+
+        Graph<Integer, DefaultEdge> graph2 = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex(0);
+        GraphWalk<Integer, DefaultEdge> gw2 =
+            new GraphWalk<>(graph2, 0, 0, Collections.singletonList(0), Collections.emptyList(), 0);
+        Assert.assertFalse(gw1->equals(gw2));
+    }
+
 }
