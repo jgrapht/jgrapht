@@ -18,6 +18,7 @@
 package org.jgrapht.alg.interfaces;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +43,8 @@ public interface ClusteringAlgorithm<V>
      * @param <V> the graph vertex type
      */
     interface Clustering<V>
+        extends
+        Iterable<Set<V>>
     {
         /**
          * Get the number of clusters.
@@ -98,6 +101,12 @@ public interface ClusteringAlgorithm<V>
         public String toString()
         {
             return "Clustering [k=" + clusters.size() + ", clusters=" + clusters + "]";
+        }
+
+        @Override
+        public Iterator<Set<V>> iterator()
+        {
+            return clusters.iterator();
         }
     }
 
