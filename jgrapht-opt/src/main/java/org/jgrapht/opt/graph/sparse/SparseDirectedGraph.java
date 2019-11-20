@@ -18,8 +18,8 @@
 package org.jgrapht.opt.graph.sparse;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -254,6 +254,11 @@ public class SparseDirectedGraph
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * This operation costs $O(d)$ where $d$ is the out-degree of the source vertex.
+     */
     @Override
     public Integer getEdge(Integer sourceVertex, Integer targetVertex)
     {
@@ -274,6 +279,11 @@ public class SparseDirectedGraph
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * This operation costs $O(d)$ where $d$ is the out-degree of the source vertex.
+     */
     @Override
     public Set<Integer> getAllEdges(Integer sourceVertex, Integer targetVertex)
     {
@@ -284,7 +294,7 @@ public class SparseDirectedGraph
             return null;
         }
 
-        Set<Integer> result = new HashSet<>();
+        Set<Integer> result = new LinkedHashSet<>();
 
         Iterator<Integer> it = outIncidenceMatrix.nonZerosPositionIterator(sourceVertex);
         while (it.hasNext()) {

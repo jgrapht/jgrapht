@@ -19,14 +19,14 @@ package org.jgrapht.opt.graph.sparse;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.stream.IntStream;
 
 /**
  * An integer set containing all numbers from 0 to n-1.
  * 
  * @author Dimitrios Michail
  */
-public class CompleteIntegerSet
+class CompleteIntegerSet
     extends
     AbstractSet<Integer>
 {
@@ -45,7 +45,7 @@ public class CompleteIntegerSet
     @Override
     public Iterator<Integer> iterator()
     {
-        return new CompleteIntegerSetIterator(n);
+        return IntStream.range(0, n).iterator();
     }
 
     @Override
@@ -62,36 +62,6 @@ public class CompleteIntegerSet
     public int size()
     {
         return n;
-    }
-
-    private class CompleteIntegerSetIterator
-        implements
-        Iterator<Integer>
-    {
-        private int n;
-        private int current;
-
-        public CompleteIntegerSetIterator(int n)
-        {
-            this.n = n;
-            this.current = 0;
-        }
-
-        @Override
-        public boolean hasNext()
-        {
-            return current < n;
-        }
-
-        @Override
-        public Integer next()
-        {
-            if (current >= n) {
-                throw new NoSuchElementException();
-            }
-            return current++;
-        }
-
     }
 
 }
