@@ -35,10 +35,11 @@ import org.jgrapht.alg.util.Triple;
  * 
  * <p>
  * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
- * Compressed Sparse Row (CSR). This is a classic format for write-once read-many use cases. Thus,
- * the graph is unmodifiable. In order to also support constant time source and target lookups from
- * an edge identifier we also store the two transposed incidence matrices again in compressed sparse
- * row format. The edge weights are maintained in an array indexed by the edge identifier.
+ * Compressed Sparse Rows (CSR). Constant time source and target lookups are provided by storing the
+ * edge lists in arrays. This is a classic format for write-once read-many use cases. Thus, the
+ * graph is unmodifiable. The edge weights are maintained in an array indexed by the edge
+ * identifier.
+ *
  * <p>
  * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
  * weights can be changed even after the graph is constructed.

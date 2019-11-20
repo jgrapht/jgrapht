@@ -31,7 +31,7 @@ import org.jgrapht.graph.DefaultGraphType;
 import org.jgrapht.util.UnmodifiableUnionSet;
 
 /**
- * Sparse directed graph.
+ * A sparse directed graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
@@ -39,10 +39,9 @@ import org.jgrapht.util.UnmodifiableUnionSet;
  * 
  * <p>
  * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
- * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
- * from an edge identifier we also store the two transposed incidence matrices again in compressed
- * sparse rows format. This is a classic format for write-once read-many use cases. Thus, the graph
- * is unmodifiable.
+ * Compressed Sparse Rows (CSR). Constant time source and target lookups are provided by storing the
+ * edge lists in arrays. This is a classic format for write-once read-many use cases. Thus, the
+ * graph is unmodifiable.
  * 
  * @author Dimitrios Michail
  */
@@ -52,10 +51,25 @@ public class SparseDirectedGraph
 {
     protected static final String UNMODIFIABLE = "this graph is unmodifiable";
 
+    /**
+     * Source vertex of edge
+     */
+    protected int[] source;
+
+    /**
+     * Target vertex of edge
+     */
+    protected int[] target;
+
+    /**
+     * Incidence matrix with outgoing edges
+     */
     protected CSRBooleanMatrix outIncidenceMatrix;
-    protected CSRBooleanMatrix outIncidenceMatrixT;
+
+    /**
+     * Incidence matrix with incoming edges
+     */
     protected CSRBooleanMatrix inIncidenceMatrix;
-    protected CSRBooleanMatrix inIncidenceMatrixT;
 
     /**
      * Create a new graph from an edge list.
@@ -66,23 +80,23 @@ public class SparseDirectedGraph
     public SparseDirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
         List<Pair<Integer, Integer>> outgoing = new ArrayList<>();
-        List<Pair<Integer, Integer>> outgoingT = new ArrayList<>();
         List<Pair<Integer, Integer>> incoming = new ArrayList<>();
-        List<Pair<Integer, Integer>> incomingT = new ArrayList<>();
+
+        final int m = edges.size();
+        source = new int[m];
+        target = new int[m];
 
         int eIndex = 0;
         for (Pair<Integer, Integer> e : edges) {
+            source[eIndex] = e.getFirst();
+            target[eIndex] = e.getSecond();
             outgoing.add(Pair.of(e.getFirst(), eIndex));
-            outgoingT.add(Pair.of(eIndex, e.getFirst()));
             incoming.add(Pair.of(e.getSecond(), eIndex));
-            incomingT.add(Pair.of(eIndex, e.getSecond()));
             eIndex++;
         }
 
-        outIncidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), outgoing);
-        outIncidenceMatrixT = new CSRBooleanMatrix(edges.size(), numVertices, outgoingT);
-        inIncidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), incoming);
-        inIncidenceMatrixT = new CSRBooleanMatrix(edges.size(), numVertices, incomingT);
+        outIncidenceMatrix = new CSRBooleanMatrix(numVertices, m, outgoing);
+        inIncidenceMatrix = new CSRBooleanMatrix(numVertices, m, incoming);
     }
 
     @Override
@@ -210,14 +224,14 @@ public class SparseDirectedGraph
     public Integer getEdgeSource(Integer e)
     {
         assertEdgeExist(e);
-        return outIncidenceMatrixT.nonZerosPositionIterator(e).next();
+        return source[e];
     }
 
     @Override
     public Integer getEdgeTarget(Integer e)
     {
         assertEdgeExist(e);
-        return inIncidenceMatrixT.nonZerosPositionIterator(e).next();
+        return target[e];
     }
 
     @Override
