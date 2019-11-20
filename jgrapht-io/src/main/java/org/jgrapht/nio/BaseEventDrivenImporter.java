@@ -43,7 +43,7 @@ public abstract class BaseEventDrivenImporter<V, E>
     private List<BiConsumer<String, Attribute>> graphAttributeConsumers;
     private List<BiConsumer<Pair<V, String>, Attribute>> vertexAttributeConsumers;
     private List<BiConsumer<Pair<E, String>, Attribute>> edgeAttributeConsumers;
-    private List<Consumer<ImportEvent>> ImportEventConsumers;
+    private List<Consumer<ImportEvent>> importEventConsumers;
 
     /**
      * Constructor
@@ -57,7 +57,7 @@ public abstract class BaseEventDrivenImporter<V, E>
         this.graphAttributeConsumers = new ArrayList<>();
         this.vertexAttributeConsumers = new ArrayList<>();
         this.edgeAttributeConsumers = new ArrayList<>();
-        this.ImportEventConsumers = new ArrayList<>();
+        this.importEventConsumers = new ArrayList<>();
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class BaseEventDrivenImporter<V, E>
      */
     public void addImportEventConsumer(Consumer<ImportEvent> consumer)
     {
-        ImportEventConsumers.add(consumer);
+        importEventConsumers.add(consumer);
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class BaseEventDrivenImporter<V, E>
      */
     public void removeImportEventConsumer(Consumer<ImportEvent> consumer)
     {
-        ImportEventConsumers.remove(consumer);
+        importEventConsumers.remove(consumer);
     }
 
     /**
@@ -302,7 +302,7 @@ public abstract class BaseEventDrivenImporter<V, E>
      */
     protected void notifyImportEvent(ImportEvent importEvent)
     {
-        ImportEventConsumers.forEach(c -> c.accept(importEvent));
+        importEventConsumers.forEach(c -> c.accept(importEvent));
     }
 
 }

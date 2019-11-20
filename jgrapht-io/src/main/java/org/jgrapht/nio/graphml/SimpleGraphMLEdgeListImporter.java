@@ -195,7 +195,7 @@ public class SimpleGraphMLEdgeListImporter
         }
 
         public final Consumer<ImportEvent> eventConsumer = (e) -> {
-            if (ImportEvent.EOF.equals(e)) {
+            if (ImportEvent.END.equals(e)) {
                 if (lastTriple != null) {
                     notifyEdge(lastIntegerTriple);
                     lastTriple = null;

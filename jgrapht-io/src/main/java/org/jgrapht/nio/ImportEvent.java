@@ -29,7 +29,7 @@ public enum ImportEvent
      */
     START,
     /**
-     * End of input
+     * End of the import
      */
-    EOF
+    END
 }

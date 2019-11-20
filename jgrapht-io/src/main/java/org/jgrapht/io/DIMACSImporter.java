@@ -65,7 +65,9 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * @deprecated In favor of {@link org.jgrapht.nio.dimacs.DIMACSImporter}.
  */
+@Deprecated
 public class DIMACSImporter<V, E>
     extends
     AbstractBaseImporter<V, E>

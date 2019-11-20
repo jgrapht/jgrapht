@@ -204,7 +204,7 @@ public class GraphMLEventDrivenImporter
             notifyImportEvent(ImportEvent.START);
             xmlReader.parse(new InputSource(input));
             handler.notifyInterestedParties();
-            notifyImportEvent(ImportEvent.EOF);
+            notifyImportEvent(ImportEvent.END);
         } catch (Exception se) {
             throw new ImportException("Failed to parse GraphML", se);
         }

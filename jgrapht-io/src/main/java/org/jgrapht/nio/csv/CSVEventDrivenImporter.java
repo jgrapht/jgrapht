@@ -36,6 +36,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.jgrapht.nio.ImportException;
 
 /**
@@ -187,6 +188,7 @@ public class CSVEventDrivenImporter
     public void importInput(Reader input)
         throws ImportException
     {
+        notifyImportEvent(ImportEvent.START);
         switch (format) {
         case EDGE_LIST:
         case ADJACENCY_LIST:
@@ -196,6 +198,7 @@ public class CSVEventDrivenImporter
             read(input, new MatrixCSVListener());
             break;
         }
+        notifyImportEvent(ImportEvent.END);
     }
 
     private void read(Reader input, CSVBaseListener listener)

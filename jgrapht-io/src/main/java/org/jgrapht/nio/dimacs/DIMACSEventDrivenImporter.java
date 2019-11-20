@@ -27,6 +27,7 @@ import java.util.Map;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.jgrapht.nio.ImportException;
 
 /**
@@ -124,6 +125,8 @@ public class DIMACSEventDrivenImporter
             in = new BufferedReader(input);
         }
 
+        notifyImportEvent(ImportEvent.START);
+        
         // nodes
         final int size = readNodeCount(in);
         notifyVertexCount(size);
@@ -167,6 +170,8 @@ public class DIMACSEventDrivenImporter
             }
             cols = skipComments(in);
         }
+        
+        notifyImportEvent(ImportEvent.END);
     }
 
     private String[] split(final String src)

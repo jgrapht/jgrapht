@@ -40,6 +40,7 @@ import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.json.JsonParser.JsonContext;
 
@@ -125,7 +126,9 @@ public class JSONEventDrivenImporter
             // Walk it and attach our listener
             ParseTreeWalker walker = new ParseTreeWalker();
             NotifyJsonListener listener = new NotifyJsonListener();
+            notifyImportEvent(ImportEvent.START);
             walker.walk(listener, graphContext);
+            notifyImportEvent(ImportEvent.END);
         } catch (IOException e) {
             throw new ImportException("Failed to import json graph: " + e.getMessage(), e);
         } catch (ParseCancellationException pe) {

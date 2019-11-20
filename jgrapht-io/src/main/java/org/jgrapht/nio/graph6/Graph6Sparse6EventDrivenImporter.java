@@ -24,6 +24,7 @@ import java.io.Reader;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.jgrapht.nio.ImportException;
 
 /**
@@ -91,6 +92,8 @@ public class Graph6Sparse6EventDrivenImporter
             in = new BufferedReader(input);
         }
 
+        notifyImportEvent(ImportEvent.START);
+        
         // read line
         String g6 = null;
         try {
@@ -107,6 +110,8 @@ public class Graph6Sparse6EventDrivenImporter
 
         // do the actual parsing
         new Parser(g6).parse();
+        
+        notifyImportEvent(ImportEvent.END);
     }
 
     /**

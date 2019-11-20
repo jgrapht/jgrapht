@@ -38,6 +38,7 @@ import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.gml.GmlParser.GmlContext;
 
@@ -145,8 +146,10 @@ public class GmlEventDrivenImporter
             // Walk it and attach our listener
             ParseTreeWalker walker = new ParseTreeWalker();
             NotifyGmlListener listener = new NotifyGmlListener();
+            notifyImportEvent(ImportEvent.START);
             walker.walk(listener, graphContext);
             listener.notifySingletons();
+            notifyImportEvent(ImportEvent.END);
         } catch (IOException e) {
             throw new ImportException("Failed to import gml graph: " + e.getMessage(), e);
         } catch (ParseCancellationException pe) {

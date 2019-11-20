@@ -46,6 +46,7 @@ import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
 import org.jgrapht.nio.ImportException;
 
 /**
@@ -121,7 +122,9 @@ public class DOTEventDrivenImporter
             /**
              * Parse
              */
+            notifyImportEvent(ImportEvent.START);
             parser.graph();
+            notifyImportEvent(ImportEvent.END);
         } catch (ParseCancellationException | IllegalArgumentException e) {
             throw new ImportException("Failed to import DOT graph: " + e.getMessage(), e);
         }
