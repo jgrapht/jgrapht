@@ -30,10 +30,10 @@ import org.jgrapht.Graph;
  * A generator for directed scale-free graphs.
  * <p>
  * This generator creates a directed scale-free graph according to a power law, as described in
- * <a href="https://dl.acm.org/citation.cfm?id=644133">Bollobás et al.</a>
- * The paper can be cited as Béla Bollobás, Christian Borgs, Jennifer Chayes, and Oliver Riordan.
- * "Directed scale-free graphs." Proceedings of the fourteenth annual ACM-SIAM symposium on Discrete
- * algorithms. Society for Industrial and Applied Mathematics, 2003.
+ * <a href="https://dl.acm.org/citation.cfm?id=644133">Bollobás et al.</a> The paper can be cited as
+ * Béla Bollobás, Christian Borgs, Jennifer Chayes, and Oliver Riordan. "Directed scale-free
+ * graphs." Proceedings of the fourteenth annual ACM-SIAM symposium on Discrete algorithms. Society
+ * for Industrial and Applied Mathematics, 2003.
  * <p>
  * In This generator, the graph continues to grow one edge per step, according to the probabilities
  * alpha, beta, and gamma (which sum up to 1).<br>
@@ -176,7 +176,41 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
+     * Constructs a Generator using a seed for the random number generator and sets the two
+     * relaxation options <code>allowingMultipleEdges</code> and <code>allowingSelfLoops</code>.
+     * 
+     * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
+     *        w, where w is chosen according to d_in + delta_in.
+     * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
+     *        w, where v is chosen according to d_out + delta_out.
+     * @param deltaIn The in-degree bias used for Alpha and Beta.
+     * @param deltaOut The out-degree bias used for Beta and Gamma.
+     * @param targetEdges Target total number of edges to reach. It has a higher priority than
+     *        {@link #targetNodes}. Zero is a valid value.<br>
+     *        If negative number, the user does not care about the total number of edges and is
+     *        interested only in the number of nodes, therefore, {@link #targetNodes} will be
+     *        considered instead. Otherwise, {@link #targetEdges} will be considered and
+     *        {@link #targetEdges} will be ignored.
+     * @param targetNodes Target number of nodes to reach. Zero is a valid value.<br>
+     *        This parameter has lower priority than {@link #targetEdges} and will be used only if
+     *        {@link #targetEdges} given is a <i>negative</i> number.
+     * @param seed The seed to feed to the random number generator.
+     * @param allowingMultipleEdges whether the generator allows multiple parallel edges between the
+     *        same two vertices (v, w).
+     * @param allowingSelfLoops whether the generator allows self loops from the a vertex to itself.
+     */
+    public DirectedScaleFreeGraphGenerator(
+        float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes,
+        long seed, boolean allowingMultipleEdges, boolean allowingSelfLoops)
+    {
+        this(alpha, gamma, deltaIn, deltaOut, targetEdges, targetNodes, seed);
+        this.allowingMultipleEdges = allowingMultipleEdges;
+        this.allowingSelfLoops = allowingSelfLoops;
+    }
+
+    /**
      * Construct a new generator using the provided random number generator.
+     * 
      * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
      *        w, where w is chosen according to d_in + delta_in.
      * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
@@ -225,6 +259,39 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     }
 
     /**
+     * Construct a new generator using the provided random number generator and sets the two
+     * relaxation options <code>allowingMultipleEdges</code> and <code>allowingSelfLoops</code>.
+     * 
+     * @param alpha The probability that the new edge is from a new vertex v to an existing vertex
+     *        w, where w is chosen according to d_in + delta_in.
+     * @param gamma The probability that the new edge is from an existing vertex v to a new vertex
+     *        w, where v is chosen according to d_out + delta_out.
+     * @param deltaIn The in-degree bias used for Alpha and Beta.
+     * @param deltaOut The out-degree bias used for Beta and Gamma.
+     * @param targetEdges Target total number of edges to reach. It has a higher priority than
+     *        {@link #targetNodes}. Zero is a valid value.<br>
+     *        If negative number, the user does not care about the total number of edges and is
+     *        interested only in the number of nodes, therefore, {@link #targetNodes} will be
+     *        considered instead. Otherwise, {@link #targetEdges} will be considered and
+     *        {@link #targetEdges} will be ignored.
+     * @param targetNodes Target number of nodes to reach. Zero is a valid value.<br>
+     *        This parameter has lower priority than {@link #targetEdges} and will be used only if
+     *        {@link #targetEdges} given is a <i>negative</i> number.
+     * @param rng The {@link Random} object to use.
+     * @param allowingMultipleEdges whether the generator allows multiple parallel edges between the
+     *        same two vertices (v, w).
+     * @param allowingSelfLoops whether the generator allows self loops from the a vertex to itself.
+     */
+    public DirectedScaleFreeGraphGenerator(
+        float alpha, float gamma, float deltaIn, float deltaOut, int targetEdges, int targetNodes,
+        Random rng, boolean allowingMultipleEdges, boolean allowingSelfLoops)
+    {
+        this(alpha, gamma, deltaIn, deltaOut, targetEdges, targetNodes, rng);
+        this.allowingMultipleEdges = allowingMultipleEdges;
+        this.allowingSelfLoops = allowingSelfLoops;
+    }
+
+    /**
      * Generates an instance of the {@link Graph}.
      * 
      * @param target the target graph
@@ -232,10 +299,27 @@ public class DirectedScaleFreeGraphGenerator<V, E>
      * 
      * @throws TooManyFailuresException When the method fails {@link #maxFailures} times to add a
      *         new edge to the growing graph.
+     * @throws IllegalArgumentException When the graph does not support Multiple edges or self loop
+     *         while the generator does.
      */
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
+        /**
+         * Used to cache the next vertex, for the unlikely case of failing to add a vertex, just to add
+         * it in the next attempt.
+         */
+        V cachedLastFailedVertex = null;
+
+        if (this.allowingMultipleEdges && !target.getType().isAllowingMultipleEdges()) {
+            throw new IllegalArgumentException(
+                "Generator allows Multiple Edges while graph does not. Consider changing this generaor parameters or the target graph type.");
+        }
+        if (this.allowingSelfLoops && !target.getType().isAllowingSelfLoops()) {
+            throw new IllegalArgumentException(
+                "Generator allows Self loops while graph does not. Consider changing this generaor parameters or the target graph type.");
+        }
+
         Set<V> newNodesSet = new HashSet<>();
         Set<E> newEdgesSet = new HashSet<>();
 
@@ -258,14 +342,15 @@ public class DirectedScaleFreeGraphGenerator<V, E>
                         + maxFailures + ").");
             }
 
-            V v, w, newV = null, newW = null;
+            V v = null, w = null;
+            boolean newV = false, newW = false;
             E e;
             float tributaries = rng.nextFloat();
             if (tributaries <= alpha) {
                 // stop adding nodes if you will exceed the target
                 if (targetEdges < 0 && newNodesSet.size() == targetNodes)
                     break;
-                v = newV = target.addVertex();
+                newV = true;
                 w = pickAVertex(target, newNodesSet, newEdgesSet, Direction.IN, deltaIn);
             } else if (tributaries <= alphaPlusBeta) {
                 v = pickAVertex(target, newNodesSet, newEdgesSet, Direction.OUT, deltaOut);
@@ -275,20 +360,12 @@ public class DirectedScaleFreeGraphGenerator<V, E>
                 if (targetEdges < 0 && newNodesSet.size() == targetNodes)
                     break;
                 v = pickAVertex(target, newNodesSet, newEdgesSet, Direction.OUT, deltaOut);
-                w = newW = target.addVertex();
+                newW = true;
             }
 
-            if (v == null || w == null) {
-                if (v == null) {
-                    target.removeVertex(newW);
-                }
-                if (w == null) {
-                    target.removeVertex(newV);
-                }
+            if ((newV && w == null) || (newW && v == null)) {
                 failuresCounter++;
                 continue;
-            } else {
-                failuresCounter = 0;
             }
 
             // check for self loops
@@ -296,17 +373,48 @@ public class DirectedScaleFreeGraphGenerator<V, E>
                 failuresCounter++;
                 continue;
             }
+
             // check for multiple parallel targetEdges
             if (!allowingMultipleEdges && target.containsEdge(v, w)) {
                 failuresCounter++;
                 continue;
             }
 
+            if (newV) {
+                if (cachedLastFailedVertex == null) {
+                    v = target.addVertex();
+                    cachedLastFailedVertex = v;
+                } else {
+                    v = cachedLastFailedVertex;
+                    if (! target.addVertex(v)) {
+                        failuresCounter++;
+                        continue;
+                    }
+                }
+            }
+            if (newW) {
+                if (cachedLastFailedVertex == null) {
+                    w = target.addVertex();
+                    cachedLastFailedVertex = w;
+                } else {
+                    w = cachedLastFailedVertex;
+                    if (! target.addVertex(w)) {
+                        failuresCounter++;
+                        continue;
+                    }
+                }
+            }
+
             e = target.addEdge(v, w);
             if (e == null) {
+                target.removeVertex(cachedLastFailedVertex);
                 failuresCounter++;
                 continue;
             }
+
+            cachedLastFailedVertex = null;
+            failuresCounter = 0;
+
             newNodesSet.add(v);
             newNodesSet.add(w);
             newEdgesSet.add(e);

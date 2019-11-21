@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
@@ -54,10 +55,41 @@ public class DirectedScaleFreeGraphGeneratorTest
     }
 
     @Test
+    public void testIncompatibleGraph()
+    {
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
+            new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 1000, 0);
+        generator.setAllowingMultipleEdges(true);
+        generator.setAllowingSelfLoops(false);
+        DefaultDirectedGraph<Integer, DefaultEdge> g =
+            new DefaultDirectedGraph<Integer, DefaultEdge>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        try {
+            generator.generateGraph(g);
+            fail("Bad checking for allowingMultipleEdges");
+        } catch (IllegalArgumentException e) {
+        }
+
+        generator = new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 1000, 0);
+        generator.setAllowingMultipleEdges(false);
+        generator.setAllowingSelfLoops(true);
+        DirectedMultigraph<Integer, DefaultEdge> directedMultigraph =
+            new DirectedMultigraph<Integer, DefaultEdge>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        try {
+            generator.generateGraph(directedMultigraph);
+            fail("Bad checking for allowingSelfLoops");
+        } catch (IllegalArgumentException e) {
+        }
+
+    }
+
+    @Test
     public void testNumberOfEdges()
     {
-        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
             new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 1000, 0);
+        generator.setAllowingMultipleEdges(false);
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
@@ -67,8 +99,9 @@ public class DirectedScaleFreeGraphGeneratorTest
     @Test
     public void testNumberOfNodes()
     {
-        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
             new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, 1000);
+        generator.setAllowingMultipleEdges(false);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
@@ -78,16 +111,17 @@ public class DirectedScaleFreeGraphGeneratorTest
     @Test
     public void testZeroCases()
     {
-        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
             new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, -1, 0);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+        generator.setAllowingMultipleEdges(false);
+        DirectedPseudograph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
 
         generator = new DirectedScaleFreeGraphGenerator<>(0.33f, 0.33f, 0.5f, 0.5f, 0, 0);
-        g = new DefaultDirectedGraph<>(
+        g = new DirectedPseudograph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
@@ -97,24 +131,27 @@ public class DirectedScaleFreeGraphGeneratorTest
     @Test
     public void testNoOutDegreeZero()
     {
-        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
             new DirectedScaleFreeGraphGenerator<>(0.3f, 0.0f, 0.5f, 0.5f, -1, 1000);
+        generator.setAllowingMultipleEdges(false);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
         long outDegreeZero = g.vertexSet().stream().filter(v -> g.outDegreeOf(v) == 0).count();
         assertEquals(0, outDegreeZero);
     }
-    
+
     @Test
     public void testNoInDegreeZero()
     {
-        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
             new DirectedScaleFreeGraphGenerator<>(0.0f, 0.3f, 0.5f, 0.5f, -1, 1000);
+        generator.setAllowingMultipleEdges(false);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(g);
         long inDegreeZero = g.vertexSet().stream().filter(v -> g.inDegreeOf(v) == 0).count();
         assertEquals(0, inDegreeZero);
     }
+
 }
