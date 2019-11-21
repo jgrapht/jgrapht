@@ -63,8 +63,9 @@ public class SparseUndirectedGraph
      */
     public SparseUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
-        List<Pair<Integer, Integer>> nonZeros = new ArrayList<>();
-        List<Pair<Integer, Integer>> nonZerosTranspose = new ArrayList<>();
+        final int m = edges.size();
+        List<Pair<Integer, Integer>> nonZeros = new ArrayList<>(m);
+        List<Pair<Integer, Integer>> nonZerosTranspose = new ArrayList<>(m);
 
         int eIndex = 0;
         for (Pair<Integer, Integer> e : edges) {
@@ -74,7 +75,7 @@ public class SparseUndirectedGraph
             nonZerosTranspose.add(Pair.of(eIndex, e.getSecond()));
             eIndex++;
         }
-        incidenceMatrix = new CSRBooleanMatrix(numVertices, edges.size(), nonZeros);
+        incidenceMatrix = new CSRBooleanMatrix(numVertices, m, nonZeros);
         incidenceMatrixT = new CSRBooleanMatrix(edges.size(), numVertices, nonZerosTranspose);
     }
 

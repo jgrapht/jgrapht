@@ -79,13 +79,12 @@ public class SparseDirectedGraph
      */
     public SparseDirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
-        List<Pair<Integer, Integer>> outgoing = new ArrayList<>();
-        List<Pair<Integer, Integer>> incoming = new ArrayList<>();
-
         final int m = edges.size();
         source = new int[m];
         target = new int[m];
 
+        List<Pair<Integer, Integer>> outgoing = new ArrayList<>(m);
+        List<Pair<Integer, Integer>> incoming = new ArrayList<>(m);
         int eIndex = 0;
         for (Pair<Integer, Integer> e : edges) {
             source[eIndex] = e.getFirst();

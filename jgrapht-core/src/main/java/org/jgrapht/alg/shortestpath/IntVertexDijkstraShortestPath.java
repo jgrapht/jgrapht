@@ -121,7 +121,7 @@ public final class IntVertexDijkstraShortestPath<E>
      * <p>
      * Note that in the case of Dijkstra's algorithm it is more efficient to compute all
      * single-source shortest paths using this method than repeatedly invoking
-     * {@link #getPath(Object, Object)} for the same source but different sink vertex.
+     * {@link #getPath(Integer, Integer)} for the same source but different sink vertex.
      */
     @Override
     public SingleSourcePaths<Integer, E> getPaths(Integer source)

@@ -205,9 +205,7 @@ public class SimpleGraphMLEdgeListImporter
         };
 
         public final Consumer<String> vertexConsumer = (v) -> {
-            vertexMap.computeIfAbsent(v, k -> {
-                return Integer.valueOf(nodeCount++);
-            });
+            vertexMap.computeIfAbsent(v, k -> nodeCount++);
         };
 
         public final BiConsumer<Pair<Triple<String, String, Double>, String>,
