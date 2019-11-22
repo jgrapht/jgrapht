@@ -36,8 +36,8 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
 
 /**
  * Implementation of the hierarchical query algorithm based on the bidirectional Dijkstra search.
- * It is designed to operate on contracted graphs which makes it fast for road networks (sparse graphs
- * with low average outdegree of vertices).
+ * This algorithm is designed to contracted graphs. The best speedup is achieved on sparse graphs
+ * with low average outdegree.
  *
  * <p>
  * The query algorithm is originally described the article: Robert Geisberger, Peter Sanders, Dominik Schultes,
@@ -54,17 +54,18 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
  * For the shortest path query from $s$ to $t$, a modified bidirectional Dijkstra shortest path search is
  * performed. The forward search from $s$ operates on $G_{&#92;uparrow}$ and the backward search from $t$ -
  * on the $G_{\downarrow}$. In each direction only the edges of the corresponding part of the graph are
- * considered. Both searches eventually meet at the vertex $v$, which has the highest order in the shortest
- * path from $s$ to $t$. Whenever a node is settled in one direction that is already settled in the other
- * direction, a new candidate for a shortest path is found. Search is aborted in one direction if the smallest
- * element in the queue is at least as large as the best candidate path found so far.
+ * considered. Both searches eventually meet at the vertex $v$, which has the highest level in the shortest
+ * path from $s$ to $t$. Whenever a search in one direction reaches a vertex that has already been processed
+ * in other direction, a new candidate for a shortest path is found. Search is aborted in one direction
+ * if the smallest element in the corresponding priority queue is at least as large as the best candidate path
+ * found so far.
  *
  * <p>
- * After computing contracted path algorithm unpacks it recursively into resulting path using bypassed edge
- * stored in the contraction hierarchy graph.
+ * After computing a contracted path, the algorithm unpacks it recursively into the actual shortest path using
+ * the bypassed edges stored in the contraction hierarchy graph.
  *
  * <p>
- * There is a possibility to provide an already computed contraction for the graph. For now there is no mean
+ * There is a possibility to provide an already computed contraction for the graph. For now there is no means
  * to ensure that the specified contraction is correct, nor to fail-fast. If algorithm uses an incorrect contraction,
  * the results of the search are unpredictable.
  *
@@ -355,11 +356,11 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
     /**
      * Maintains search frontier during shortest path computation.
      *
-     * @param <V1> vertices type
-     * @param <E1> edges type
+     * @param <V> vertices type
+     * @param <E> edges type
      */
-    static class ContractionSearchFrontier<V1, E1>
-            extends DijkstraSearchFrontier<V1, E1> {
+    static class ContractionSearchFrontier<V, E>
+            extends DijkstraSearchFrontier<V, E> {
         boolean isFinished;
 
         /**
@@ -369,8 +370,8 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
          * @param graph        the graph
          * @param heapSupplier supplier for the preferable heap implementation
          */
-        ContractionSearchFrontier(Graph<V1, E1> graph,
-                                  Supplier<AddressableHeap<Double, Pair<V1, E1>>> heapSupplier) {
+        ContractionSearchFrontier(Graph<V, E> graph,
+                                  Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier) {
             super(graph, heapSupplier);
         }
     }

@@ -202,7 +202,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest {
     }
 
     /**
-     * Connects {@code graph} connected.
+     * Makes {@code graph} connected.
      *
      * @param graph graph
      */
