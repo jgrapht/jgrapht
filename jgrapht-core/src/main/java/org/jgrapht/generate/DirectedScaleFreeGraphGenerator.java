@@ -305,12 +305,6 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
-        /**
-         * Used to cache the next vertex, for the unlikely case of failing to add a vertex, just to add
-         * it in the next attempt.
-         */
-        V cachedLastFailedVertex = null;
-
         if (this.allowingMultipleEdges && !target.getType().isAllowingMultipleEdges()) {
             throw new IllegalArgumentException(
                 "Generator allows Multiple Edges while graph does not. Consider changing this generaor parameters or the target graph type.");
@@ -381,38 +375,13 @@ public class DirectedScaleFreeGraphGenerator<V, E>
             }
 
             if (newV) {
-                if (cachedLastFailedVertex == null) {
-                    v = target.addVertex();
-                    cachedLastFailedVertex = v;
-                } else {
-                    v = cachedLastFailedVertex;
-                    if (! target.addVertex(v)) {
-                        failuresCounter++;
-                        continue;
-                    }
-                }
+                v = target.addVertex();
             }
             if (newW) {
-                if (cachedLastFailedVertex == null) {
-                    w = target.addVertex();
-                    cachedLastFailedVertex = w;
-                } else {
-                    w = cachedLastFailedVertex;
-                    if (! target.addVertex(w)) {
-                        failuresCounter++;
-                        continue;
-                    }
-                }
+                w = target.addVertex();
             }
 
             e = target.addEdge(v, w);
-            if (e == null) {
-                target.removeVertex(cachedLastFailedVertex);
-                failuresCounter++;
-                continue;
-            }
-
-            cachedLastFailedVertex = null;
             failuresCounter = 0;
 
             newNodesSet.add(v);
