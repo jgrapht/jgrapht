@@ -145,7 +145,7 @@ public class DijkstraShortestPathTest
             Double.POSITIVE_INFINITY, new DijkstraShortestPath<>(g).getPathWeight(V1, V5), 0);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testNonNegativeWeights()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -155,11 +155,8 @@ public class DijkstraShortestPathTest
         DefaultWeightedEdge we12 = g.addEdge(V1, V2);
         g.setEdgeWeight(we12, -100.0);
 
-        try {
-            new DijkstraShortestPath<>(g).getPath(V1, V2);
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
+        //Invalid: Negative edge weight not allowed
+        new DijkstraShortestPath<>(g).getPath(V1, V2);
     }
 
 }
