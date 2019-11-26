@@ -307,11 +307,11 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     {
         if (this.allowingMultipleEdges && !target.getType().isAllowingMultipleEdges()) {
             throw new IllegalArgumentException(
-                "Generator allows Multiple Edges while graph does not. Consider changing this generaor parameters or the target graph type.");
+                "Generator allows Multiple Edges while graph does not. Consider changing this generator parameters or the target graph type.");
         }
         if (this.allowingSelfLoops && !target.getType().isAllowingSelfLoops()) {
             throw new IllegalArgumentException(
-                "Generator allows Self loops while graph does not. Consider changing this generaor parameters or the target graph type.");
+                "Generator allows Self loops while graph does not. Consider changing this generator parameters or the target graph type.");
         }
 
         Set<V> newNodesSet = new HashSet<>();
