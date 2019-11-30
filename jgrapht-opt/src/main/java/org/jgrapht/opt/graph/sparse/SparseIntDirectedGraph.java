@@ -45,7 +45,7 @@ import org.jgrapht.util.UnmodifiableUnionSet;
  * 
  * @author Dimitrios Michail
  */
-public class SparseDirectedGraph
+public class SparseIntDirectedGraph
     extends
     AbstractGraph<Integer, Integer>
 {
@@ -77,7 +77,7 @@ public class SparseDirectedGraph
      * @param numVertices the number of vertices
      * @param edges the edge list
      */
-    public SparseDirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
+    public SparseIntDirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
         final int m = edges.size();
         source = new int[m];

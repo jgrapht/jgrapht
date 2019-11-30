@@ -46,7 +46,7 @@ import org.jgrapht.graph.DefaultGraphType;
  * 
  * @author Dimitrios Michail
  */
-public class SparseUndirectedGraph
+public class SparseIntUndirectedGraph
     extends
     AbstractGraph<Integer, Integer>
 {
@@ -61,7 +61,7 @@ public class SparseUndirectedGraph
      * @param numVertices number of vertices
      * @param edges edge list
      */
-    public SparseUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
+    public SparseIntUndirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
         final int m = edges.size();
         List<Pair<Integer, Integer>> nonZeros = new ArrayList<>(m);

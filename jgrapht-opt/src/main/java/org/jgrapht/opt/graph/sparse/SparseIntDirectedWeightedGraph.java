@@ -27,18 +27,18 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 
 /**
- * Sparse undirected weighted graph.
+ * Sparse directed weighted graph.
  *
  * <p>
  * Assuming the graph has $n$ vertices, the vertices are numbered from $0$ to $n-1$. Similarly,
  * edges are numbered from $0$ to $m-1$ where $m$ is the total number of edges.
  * 
  * <p>
- * It stores the boolean incidence matrix of the graph (rows are vertices and columns are edges) as
- * Compressed Sparse Rows (CSR). In order to also support constant time source and target lookups
- * from an edge identifier we also store the transposed of the incidence matrix again in compressed
- * sparse row format. This is a classic format for write-once read-many use cases. Thus, the graph
- * is unmodifiable. The edge weights are maintained in an array indexed by the edge identifier.
+ * It stores two boolean incidence matrix of the graph (rows are vertices and columns are edges) as
+ * Compressed Sparse Rows (CSR). Constant time source and target lookups are provided by storing the
+ * edge lists in arrays. This is a classic format for write-once read-many use cases. Thus, the
+ * graph is unmodifiable. The edge weights are maintained in an array indexed by the edge
+ * identifier.
  *
  * <p>
  * The graph is weighted. While unmodifiable with respect to the structure of the graph, the edge
@@ -46,13 +46,13 @@ import org.jgrapht.alg.util.Triple;
  * 
  * @author Dimitrios Michail
  */
-public class SparseUndirectedWeightedGraph
+public class SparseIntDirectedWeightedGraph
     extends
-    SparseUndirectedGraph
+    SparseIntDirectedGraph
     implements
     Serializable
 {
-    private static final long serialVersionUID = -5410680356868181247L;
+    private static final long serialVersionUID = -7601401110000642281L;
 
     /**
      * The edge weights
@@ -60,12 +60,12 @@ public class SparseUndirectedWeightedGraph
     protected double[] weights;
 
     /**
-     * Create a new graph from an edge list
+     * Create a new graph from an edge list.
      * 
-     * @param numVertices number of vertices
-     * @param edges edge list with weights
+     * @param numVertices the number of vertices
+     * @param edges the edge list with additional weights
      */
-    public SparseUndirectedWeightedGraph(
+    public SparseIntDirectedWeightedGraph(
         int numVertices, List<Triple<Integer, Integer, Double>> edges)
     {
         super(

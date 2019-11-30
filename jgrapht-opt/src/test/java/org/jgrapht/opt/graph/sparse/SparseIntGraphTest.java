@@ -41,37 +41,37 @@ import org.junit.Test;
  * 
  * @author Dimitrios Michail
  */
-public class SparseGraphTest
+public class SparseIntGraphTest
 {
 
     @Test
     public void testUndirected()
     {
-        testUndirected((vc, edges) -> new SparseUndirectedGraph(vc, edges));
+        testUndirected((vc, edges) -> new SparseIntUndirectedGraph(vc, edges));
     }
 
     @Test
     public void testUndirectedWithLoops()
     {
-        testUndirectedWithLoops((vc, edges) -> new SparseUndirectedGraph(vc, edges));
+        testUndirectedWithLoops((vc, edges) -> new SparseIntUndirectedGraph(vc, edges));
     }
 
     @Test
     public void testUndirectedWeighted()
     {
-        testUndirectedWeighted((vc, edges) -> new SparseUndirectedWeightedGraph(vc, edges));
+        testUndirectedWeighted((vc, edges) -> new SparseIntUndirectedWeightedGraph(vc, edges));
     }
 
     @Test
     public void testDirected()
     {
-        testDirected((vc, edges) -> new SparseDirectedGraph(vc, edges));
+        testDirected((vc, edges) -> new SparseIntDirectedGraph(vc, edges));
     }
 
     @Test
     public void testDirectedWeighted()
     {
-        testDirectedWeighted((vc, edges) -> new SparseDirectedWeightedGraph(vc, edges));
+        testDirectedWeighted((vc, edges) -> new SparseIntDirectedWeightedGraph(vc, edges));
     }
 
     public static void testUndirected(
