@@ -49,6 +49,10 @@ public class ContractionHierarchyBidirectionalDijkstraTest {
      */
     private static final long SEED = 19L;
 
+    /**
+     * This test asserts that not exception is thrown when
+     * an algorithm object is initialized with an empty graph.
+     */
     @Test
     public void testEmptyGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
