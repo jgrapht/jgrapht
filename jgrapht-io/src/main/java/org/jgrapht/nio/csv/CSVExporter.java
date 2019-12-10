@@ -45,8 +45,8 @@ import org.jgrapht.nio.IntegerIdProvider;
  * The default output respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller
  * can also adjust the separator to something like semicolon or pipe instead of comma. In such a
  * case, all fields are escaped using the new separator. See
- * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
- * values</a> for more information.
+ * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-separated values</a>
+ * for more information.
  * </p>
  * 
  * @see CSVFormat

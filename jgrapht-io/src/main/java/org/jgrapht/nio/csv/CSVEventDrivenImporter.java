@@ -45,7 +45,7 @@ import org.jgrapht.nio.ImportException;
  * <p>
  * The importer supports various different formats which can be adjusted using the
  * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
- * used by <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi </a>. For some
+ * used by <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi</a>. For some
  * of the formats, the behavior of the importer can be adjusted using the
  * {@link #setParameter(org.jgrapht.nio.csv.CSVFormat.Parameter, boolean) setParameter} method. See
  * {@link CSVFormat} for a description of the formats.
@@ -55,8 +55,8 @@ import org.jgrapht.nio.ImportException;
  * The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
  * also adjust the separator to something like semicolon or pipe instead of comma. In such a case,
  * all fields are unescaped using the new separator. See
- * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
- * values</a> for more information.
+ * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-separated values</a>
+ * for more information.
  * </p>
  * 
  * <p>

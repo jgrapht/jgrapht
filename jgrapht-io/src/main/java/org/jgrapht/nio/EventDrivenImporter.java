@@ -150,7 +150,7 @@ public interface EventDrivenImporter<V, E>
     void removeEdgeAttributeConsumer(BiConsumer<Pair<E, String>, Attribute> consumer);
 
     /**
-     * Import
+     * Import a graph
      * 
      * @param input the input reader
      * @throws ImportException in case any error occurs, such as I/O or parse error
@@ -158,7 +158,7 @@ public interface EventDrivenImporter<V, E>
     void importInput(Reader input);
 
     /**
-     * Import
+     * Import a graph
      * 
      * @param in the input stream
      * @throws ImportException in case any error occurs, such as I/O or parse error
@@ -169,7 +169,7 @@ public interface EventDrivenImporter<V, E>
     }
 
     /**
-     * Import
+     * Import a graph
      * 
      * @param file the file to read from
      * @throws ImportException in case any error occurs, such as I/O or parse error

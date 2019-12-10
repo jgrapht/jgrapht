@@ -231,6 +231,10 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
         assertEquals(cardinality, m.getEdges().size());
         assertEquals(m.getEdges().size() * 2, matched.size()); // Ensure that there are no
                                                                // self-loops
+
+        DenseEdmondsMaximumCardinalityMatching<V, E> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
+        assertTrue(matcher.isMaximumMatching(m)); // Certify that the matching is indeed maximum
     }
 
     private static int maxEdges(int n)
