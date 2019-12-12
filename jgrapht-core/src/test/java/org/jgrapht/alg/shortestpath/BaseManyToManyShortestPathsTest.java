@@ -58,7 +58,7 @@ public class BaseManyToManyShortestPathsTest {
      */
     protected void testDifferentSourcesAndTargetsSimpleGraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = algorithm.getManyTwoManyPaths(
+                = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(4, 1, 2)),
                 new HashSet<>(Arrays.asList(8, 9, 6))
         );
@@ -99,7 +99,7 @@ public class BaseManyToManyShortestPathsTest {
      */
     protected void testDifferentSourcesAndTargetsMultigraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = algorithm.getManyTwoManyPaths(
+                = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(1, 4)),
                 new HashSet<>(Arrays.asList(2, 5))
         );
@@ -126,7 +126,7 @@ public class BaseManyToManyShortestPathsTest {
      */
     protected void testSourcesEqualTargetsSimpleGraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = algorithm.getManyTwoManyPaths(
+                = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(1, 5, 9)),
                 new HashSet<>(Arrays.asList(1, 5, 9))
         );
@@ -167,7 +167,7 @@ public class BaseManyToManyShortestPathsTest {
      */
     protected void testSourcesEqualTargetsMultigraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = algorithm.getManyTwoManyPaths(
+                = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(2, 4, 6)),
                 new HashSet<>(Arrays.asList(2, 4, 6))
         );
@@ -209,10 +209,10 @@ public class BaseManyToManyShortestPathsTest {
     protected void test(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm,
                         Graph<Integer, DefaultWeightedEdge> graph, Set<Integer> sources, Set<Integer> targets) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> sourcesToTargetsPaths
-                = algorithm.getManyTwoManyPaths(sources, targets);
+                = algorithm.getManyToManyPaths(sources, targets);
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> sourcesToSourcesPaths
-                = algorithm.getManyTwoManyPaths(sources, sources);
+                = algorithm.getManyToManyPaths(sources, sources);
 
         assertCorrectPaths(graph, sourcesToTargetsPaths, sources, targets);
         assertCorrectPaths(graph, sourcesToSourcesPaths, sources, sources);

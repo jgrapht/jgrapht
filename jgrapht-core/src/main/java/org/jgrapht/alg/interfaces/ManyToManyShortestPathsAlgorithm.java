@@ -34,16 +34,16 @@ public interface ManyToManyShortestPathsAlgorithm<V, E> {
      * Computes shortest paths from all vertices in {@code sources}
      * to all vertices in {@code targets}.
      *
-     * @param sources list if sources vertices
+     * @param sources list of sources vertices
      * @param targets list of target vertices
      * @return computed shortest paths
      */
-    ManyToManyShortestPaths<V, E> getManyTwoManyPaths(Set<V> sources, Set<V> targets);
+    ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets);
 
     /**
      * A set of paths from all sources vertices to all target vertices.
      *
-     * @param <V> the graph verticex type
+     * @param <V> the graph vertices type
      * @param <E> the graph edge type
      */
     interface ManyToManyShortestPaths<V, E> {

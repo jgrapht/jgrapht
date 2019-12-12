@@ -24,10 +24,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -44,19 +42,19 @@ public class DefaultManyToManyShortestPathsTest extends BaseManyToManyShortestPa
     @Test
     public void testEmptyGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new DefaultManyToManyShortestPaths<>(graph).getManyTwoManyPaths(Collections.emptySet(), Collections.emptySet());
+        new DefaultManyToManyShortestPaths<>(graph).getManyToManyPaths(Collections.emptySet(), Collections.emptySet());
     }
 
     @Test(expected = NullPointerException.class)
     public void testSourcesIsNull() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new DefaultManyToManyShortestPaths<>(graph).getManyTwoManyPaths(null, Collections.emptySet());
+        new DefaultManyToManyShortestPaths<>(graph).getManyToManyPaths(null, Collections.emptySet());
     }
 
     @Test(expected = NullPointerException.class)
     public void testTargetsIsNull() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new DefaultManyToManyShortestPaths<>(graph).getManyTwoManyPaths(Collections.emptySet(), null);
+        new DefaultManyToManyShortestPaths<>(graph).getManyToManyPaths(Collections.emptySet(), null);
     }
 
     @Test
@@ -66,7 +64,7 @@ public class DefaultManyToManyShortestPathsTest extends BaseManyToManyShortestPa
         graph.addVertex(2);
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new DefaultManyToManyShortestPaths<>(graph).getManyTwoManyPaths(
+                = new DefaultManyToManyShortestPaths<>(graph).getManyToManyPaths(
                 new HashSet<>(Collections.singletonList(1)), new HashSet<>(Collections.singletonList(2)));
 
         assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 2), 1e-9);

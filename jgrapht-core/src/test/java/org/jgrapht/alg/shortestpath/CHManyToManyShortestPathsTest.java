@@ -47,19 +47,19 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     @Test
     public void testEmptyGraph() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new CHManyToManyShortestPaths<>(graph).getManyTwoManyPaths(Collections.emptySet(), Collections.emptySet());
+        new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(Collections.emptySet(), Collections.emptySet());
     }
 
     @Test(expected = NullPointerException.class)
     public void testSourcesIsNull() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new CHManyToManyShortestPaths<>(graph).getManyTwoManyPaths(null, Collections.emptySet());
+        new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(null, Collections.emptySet());
     }
 
     @Test(expected = NullPointerException.class)
     public void testTargetsIsNull() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new CHManyToManyShortestPaths<>(graph).getManyTwoManyPaths(Collections.emptySet(), null);
+        new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(Collections.emptySet(), null);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
         graph.addVertex(2);
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new CHManyToManyShortestPaths<>(graph).getManyTwoManyPaths(
+                = new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(
                 new HashSet<>(Collections.singletonList(1)), new HashSet<>(Collections.singletonList(2)));
 
         assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 2), 1e-9);
@@ -134,7 +134,7 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
                 = new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond())
-                .getManyTwoManyPaths(
+                .getManyToManyPaths(
                         new HashSet<>(Arrays.asList(1, 3, 7, 9)),
                         new HashSet<>(Collections.singletonList(5))
                 );
@@ -162,7 +162,7 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
                 = new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond())
-                .getManyTwoManyPaths(
+                .getManyToManyPaths(
                         new HashSet<>(Arrays.asList(2, 3, 4, 5, 6)),
                         new HashSet<>(Collections.singletonList(1))
                 );

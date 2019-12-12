@@ -62,7 +62,7 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
      * {@inheritDoc}
      */
     @Override
-    public ManyToManyShortestPaths<V, E> getManyTwoManyPaths(Set<V> sources, Set<V> targets) {
+    public ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets) {
         Objects.requireNonNull(sources, "sources cannot be null!");
         Objects.requireNonNull(targets, "targets cannot be null!");
 

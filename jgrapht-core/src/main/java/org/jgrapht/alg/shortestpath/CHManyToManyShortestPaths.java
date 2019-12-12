@@ -115,7 +115,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
      * {@inheritDoc}
      */
     @Override
-    public ManyToManyShortestPaths<V, E> getManyTwoManyPaths(Set<V> sources, Set<V> targets) {
+    public ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets) {
         Objects.requireNonNull(sources, "sources cannot be null!");
         Objects.requireNonNull(targets, "targets cannot be null!");
 
@@ -140,9 +140,9 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
                 middleVertices = new HashMap<>();
 
         Set<ContractionVertex<V>> contractedSources = sources.stream()
-                .map(v -> contractionMapping.get(v)).collect(Collectors.toCollection(HashSet::new));
+                .map(contractionMapping::get).collect(Collectors.toCollection(HashSet::new));
         Set<ContractionVertex<V>> contractedTargets = targets.stream()
-                .map(v -> contractionMapping.get(v)).collect(Collectors.toCollection(HashSet::new));
+                .map(contractionMapping::get).collect(Collectors.toCollection(HashSet::new));
 
         Map<ContractionVertex<V>, List<BucketEntry>> bucketsMap = new HashMap<>();
         for (ContractionVertex<V> vertex : searchContractionGraph.vertexSet()) {
