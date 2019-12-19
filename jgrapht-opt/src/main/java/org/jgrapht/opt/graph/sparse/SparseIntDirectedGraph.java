@@ -43,6 +43,20 @@ import org.jgrapht.util.UnmodifiableUnionSet;
  * edge lists in arrays. This is a classic format for write-once read-many use cases. Thus, the
  * graph is unmodifiable.
  * 
+ * <p>
+ * The question of whether a sparse or dense representation is more appropriate is highly dependent
+ * on various factors such as the graph, the machine running the algorithm and the algorithm itself.
+ * Wilkinson defined a matrix as "sparse" if it has enough zeros that it pays to take advantage of
+ * them. For more details see
+ * <ul>
+ * <li>Wilkinson, J. H. 1971. Linear algebra; part II: the algebraic eigenvalue problem. In Handbook
+ * for Automatic Computation, J. H. Wilkinson and C. Reinsch, Eds. Vol. 2. Springer-Verlag, Berlin,
+ * New York.</li>
+ * </ul>
+ * 
+ * Additional information about sparse representations can be found in the
+ * <a href="https://en.wikipedia.org/wiki/Sparse_matrix">wikipedia</a>.
+ * 
  * @author Dimitrios Michail
  */
 public class SparseIntDirectedGraph
