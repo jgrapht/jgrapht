@@ -30,13 +30,17 @@ import java.util.*;
  * The travelling salesman problem (TSP) asks the following question: "Given a list of cities and
  * the distances between each pair of cities, what is the shortest possible route that visits each
  * city exactly once and returns to the origin city?".
+ * </p>
  * 
  * <p>
  * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates k
- * random initial tours and then iteratively improves the tours until a local minimum is reached. In
- * each iteration it applies the best possible 2-opt move which means to find the best pair of edges
+ * initial tours and then iteratively improves the tours until a local minimum is reached. In each 
+ * iteration it applies the best possible 2-opt move which means to find the best pair of edges
  * $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour
- * length.
+ * length. The default initial tours use RandomTour, however an alternative algorithm can be
+ * provided to create the initial tour. Initial tours generated using NearestNeighborHeuristicTSP 
+ * give good results and performance.
+ * </p>
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/2-opt">wikipedia</a> for more details.
@@ -52,10 +56,12 @@ import java.util.*;
  */
 public class TwoOptHeuristicTSP<V, E>
     implements
-    HamiltonianCycleAlgorithm<V, E>
+    HamiltonianCycleAlgorithm<V, E>,
+    HamiltonianCycleImprovementAlgorithm<V, E>
 {
-    private int k;
-    private Random rng;
+    private final int k;
+    private final HamiltonianCycleAlgorithm<V, E> initializer;
+    private final double minCostImprovement;
 
     private Graph<V, E> graph;
     private int n;
@@ -100,11 +106,42 @@ public class TwoOptHeuristicTSP<V, E>
      */
     public TwoOptHeuristicTSP(int k, Random rng)
     {
+        this(k, new RandomTour<>(rng));
+    }
+    
+    /**
+     * Constructor
+     * 
+     * @param initializer Algorithm to generate initial tour
+     */
+    public TwoOptHeuristicTSP(HamiltonianCycleAlgorithm<V, E> initializer) {
+        this(1, initializer);
+    }
+
+    /**
+     * Constructor
+     * 
+     * @param k how many initial tours to check
+     * @param initializer Algorithm to generate initial tour
+     */
+    public TwoOptHeuristicTSP(int k, HamiltonianCycleAlgorithm<V, E> initializer) {
+        this(k, initializer, 1e-8);
+    }
+    
+    /**
+     * Constructor
+     * 
+     * @param k how many initial tours to check
+     * @param initializer Algorithm to generate initial tours
+     * @param minCostImprovement Minimum cost improvement per iteration
+     */
+    public TwoOptHeuristicTSP(int k, HamiltonianCycleAlgorithm<V, E> initializer, double minCostImprovement) {
         if (k < 1) {
             throw new IllegalArgumentException("k must be at least one");
         }
         this.k = k;
-        this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
+        this.initializer = Objects.requireNonNull(initializer, "Initial solver algorithm cannot be null");
+        this.minCostImprovement = Math.abs(minCostImprovement);
     }
 
     /**
@@ -136,9 +173,9 @@ public class TwoOptHeuristicTSP<V, E>
         /*
          * Execute 2-opt from k random permutations
          */
-        GraphPath<V, E> best = tourToPath(improve(createRandomTour()));
+        GraphPath<V, E> best = tourToPath(improve(createInitialTour()));
         for (int i = 1; i < k; i++) {
-            GraphPath<V, E> other = tourToPath(improve(createRandomTour()));
+            GraphPath<V, E> other = tourToPath(improve(createInitialTour()));
             if (other.getWeight() < best.getWeight()) {
                 best = other;
             }
@@ -152,6 +189,7 @@ public class TwoOptHeuristicTSP<V, E>
      * @param tour a tour
      * @return a possibly improved tour
      */
+    @Override
     public GraphPath<V, E> improveTour(GraphPath<V, E> tour)
     {
         init(tour.getGraph());
@@ -197,24 +235,13 @@ public class TwoOptHeuristicTSP<V, E>
     }
 
     /**
-     * Create a random tour
+     * Create an initial tour
      * 
-     * @return a random tour
+     * @return a complete tour
      */
-    private int[] createRandomTour()
+    private int[] createInitialTour()
     {
-        int[] tour = new int[n + 1];
-        for (int i = 0; i < n; i++) {
-            tour[i] = i;
-        }
-        for (int i = n; i > 1; i--) {
-            int j = rng.nextInt(i);
-            int tmp = tour[i - 1];
-            tour[i - 1] = tour[j];
-            tour[j] = tmp;
-        }
-        tour[n] = tour[0];
-        return tour;
+        return pathToTour(initializer.getTour(graph));
     }
 
     /**
@@ -231,9 +258,11 @@ public class TwoOptHeuristicTSP<V, E>
     private int[] improve(int[] tour)
     {
         int[] newTour = new int[n + 1];
+        boolean moved;
         double minChange;
         do {
-            minChange = 0d;
+            moved = false;
+            minChange = -minCostImprovement;
             int mini = -1;
             int minj = -1;
             for (int i = 0; i < n - 2; i++) {
@@ -251,7 +280,7 @@ public class TwoOptHeuristicTSP<V, E>
                 }
             }
             if (mini != -1 && minj != -1) {
-                // apply move
+                // apply move                
                 int a = 0;
                 for (int k = 0; k <= mini; k++) {
                     newTour[a++] = tour[k];
@@ -266,8 +295,9 @@ public class TwoOptHeuristicTSP<V, E>
                 int[] tmp = tour;
                 tour = newTour;
                 newTour = tmp;
+                moved = true;
             }
-        } while (minChange < 0d);
+        } while (moved);
 
         return tour;
     }
@@ -280,7 +310,7 @@ public class TwoOptHeuristicTSP<V, E>
      */
     private GraphPath<V, E> tourToPath(int[] tour)
     {
-        List<E> tourEdges = new ArrayList<E>(n);
+        List<E> tourEdges = new ArrayList<>(n);
         List<V> tourVertices = new ArrayList<>(n + 1);
         double tourWeight = 0d;
 
