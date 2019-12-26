@@ -60,7 +60,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
  * </p>
  *
  * <p>
- * The runtime complexity of this class is $O(V^2 log(V))$.
+ * The runtime complexity of this class is $O(V^2)$.
  * </p>
  *
  * @param <V> the graph vertex type

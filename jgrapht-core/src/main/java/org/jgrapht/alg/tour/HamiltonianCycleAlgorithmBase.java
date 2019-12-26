@@ -26,8 +26,16 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.graph.GraphWalk;
 
 /**
+ * Base class for TSP solver algorithms.
  *
- * @author peter
+ * <p>
+ * This class provides implementations of utilities for TSP solver classes.
+ * </p>
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Peter Harman
  */
 public abstract class HamiltonianCycleAlgorithmBase<V, E> implements HamiltonianCycleAlgorithm<V, E> {
 
