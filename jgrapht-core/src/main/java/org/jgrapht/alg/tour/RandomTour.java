@@ -42,10 +42,18 @@ public class RandomTour<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
 
     private final Random rng;
 
+    /**
+     * Construct with default random number generator
+     */
     public RandomTour() {
         this(new Random());
     }
 
+    /**
+     * Construct with specified random number generator
+     * 
+     * @param rng The random number generator
+     */
     public RandomTour(Random rng) {
         this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
     }

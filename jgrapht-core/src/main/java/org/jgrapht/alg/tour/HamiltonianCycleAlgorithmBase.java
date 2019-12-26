@@ -69,8 +69,8 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
     /**
      * Creates a tour for a graph with 1 vertex
      *
-     * @param graph
-     * @return
+     * @param graph The graph
+     * @return A tour with a single vertex
      */
     protected GraphPath<V, E> getSingletonTour(Graph<V, E> graph) {
         assert graph.vertexSet().size() == 1;
