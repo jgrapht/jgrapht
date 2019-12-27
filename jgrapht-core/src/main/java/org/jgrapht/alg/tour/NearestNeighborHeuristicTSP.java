@@ -75,7 +75,7 @@ public class NearestNeighborHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param first First vertex to visit, or bull to choose at random
+     * @param first First vertex to visit, or null to choose at random
      */
     public NearestNeighborHeuristicTSP(V first) {
         this(first, new Random());
