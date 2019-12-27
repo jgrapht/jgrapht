@@ -18,6 +18,7 @@
 package org.jgrapht.alg.tour;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -66,21 +67,8 @@ public class RandomTourTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
         if (n == 1) {
             return getSingletonTour(graph);
         }
-        int[] tour = new int[n + 1];
-        for (int i = 0; i < n; i++) {
-            tour[i] = i;
-        }
-        for (int i = n; i > 1; i--) {
-            int j = rng.nextInt(i);
-            int tmp = tour[i - 1];
-            tour[i - 1] = tour[j];
-            tour[j] = tmp;
-        }
-        tour[n] = tour[0];
-        List<V> tourVertices = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            tourVertices.add(vertices.get(tour[i]));
-        }
-        return listToTour(tourVertices, graph);
+        // Randomly permute the vertex list
+        Collections.shuffle(vertices, rng);
+        return listToTour(vertices, graph);
     }
 }
