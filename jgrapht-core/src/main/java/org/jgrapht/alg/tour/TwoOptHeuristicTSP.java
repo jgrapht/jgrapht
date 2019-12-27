@@ -106,7 +106,19 @@ public class TwoOptHeuristicTSP<V, E>
      */
     public TwoOptHeuristicTSP(int k, Random rng)
     {
-        this(k, new RandomTour<>(rng));
+        this(k, new RandomTourTSP<>(rng));
+    }
+
+    /**
+     * Constructor
+     * 
+     * @param k how many initial random tours to check
+     * @param rng random number generator
+     * @param minCostImprovement Minimum cost improvement per iteration
+     */
+    public TwoOptHeuristicTSP(int k, Random rng, double minCostImprovement)
+    {
+        this(k, new RandomTourTSP<>(rng), minCostImprovement);
     }
     
     /**

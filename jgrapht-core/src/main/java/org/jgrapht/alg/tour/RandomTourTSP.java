@@ -37,15 +37,16 @@ import org.jgrapht.GraphPath;
  * @param <E> the graph edge type
  *
  * @author Peter Harman
+ * @author Dimitrios Michail
  */
-public class RandomTour<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
+public class RandomTourTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
 
     private final Random rng;
 
     /**
      * Construct with default random number generator
      */
-    public RandomTour() {
+    public RandomTourTSP() {
         this(new Random());
     }
 
@@ -54,7 +55,7 @@ public class RandomTour<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
      * 
      * @param rng The random number generator
      */
-    public RandomTour(Random rng) {
+    public RandomTourTSP(Random rng) {
         this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
     }
 

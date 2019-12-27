@@ -108,8 +108,8 @@ public class NearestInsertionHeuristicTSP<V, E> extends
     }
 
     /**
-     * Improves an existing tour. With this algorithm this does not improve the
-     * cost, but instead adds any missing vertices to the tour. It also removes
+     * Improves an existing tour. Using this algorithm will not improve the cost, 
+     * but instead adds any missing vertices to the tour. It also removes
      * vertices from the tour if not in the graph, so this can be used to update
      * a tour following changes to a graph.
      *
@@ -129,7 +129,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @param graph The graph
      * @return Vertices of an initial sub-tour
      */
-    private List<V> subtour(final Graph<V, E> graph) {
+    private List<V> subtour(Graph<V, E> graph) {
         // Check that graph is appropriate
         GraphTests.requireUndirected(graph);
         if (!GraphTests.isComplete(graph)) {

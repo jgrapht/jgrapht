@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator.OfDouble;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.SlowTests;
@@ -36,14 +38,16 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
- * Tests of Travelling Salesman Problem algorithms based on a random set of 2D points,
- * with graphs of increasing size
- * 
+ * Tests of Travelling Salesman Problem algorithms based on a random set of 2D
+ * points, with graphs of increasing size
+ *
  * @author Peter Harman
  */
 @Category(SlowTests.class)
 @RunWith(Parameterized.class)
 public class GeometricTSPTest {
+
+    private static final Logger LOG = Logger.getLogger(GeometricTSPTest.class.getName());
 
     private static final OfDouble RNG = new Random().doubles(0.0, 100.0).iterator();
     private final Graph<Point2D, DefaultWeightedEdge> graph;
@@ -81,18 +85,17 @@ public class GeometricTSPTest {
         for (int i = 0; i < points.length; i++) {
             for (int j = i + 1; j < points.length; j++) {
                 builder.addEdge(points[i], points[j], points[i].distance(points[j]));
-                //builder.addEdge(points[j], points[i], points[i].distance(points[j]));
             }
         }
         return builder.build();
     }
 
     void testWith(String description, HamiltonianCycleAlgorithm<Point2D, DefaultWeightedEdge> algorithm) {
-        System.out.printf("TSP: Method %s, Size %d, ", description, graph.vertexSet().size());
         long t0 = System.currentTimeMillis();
         GraphPath<Point2D, DefaultWeightedEdge> tour = algorithm.getTour(graph);
         long t = System.currentTimeMillis() - t0;
-        System.out.printf("Time %d ms, Weight %f\n", t, tour.getWeight());
+        LOG.log(Level.FINE, "TSP: Method {0}, Size {1}, Time {2} ms, Weight {3}",
+                new Object[]{description, graph.vertexSet().size(), t, tour.getWeight()});
         assertHamiltonian(graph, tour);
     }
 
@@ -113,7 +116,7 @@ public class GeometricTSPTest {
 
     @Test
     public void testRandom() {
-        testWith("Random", new RandomTour<>());
+        testWith("Random", new RandomTourTSP<>());
     }
 
     @Test
