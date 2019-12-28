@@ -47,20 +47,18 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class GeometricTSPTest {
 
-    private static final Logger LOG = Logger.getLogger(GeometricTSPTest.class.getName());
-
     private static final OfDouble RNG = new Random().doubles(0.0, 100.0).iterator();
     private final Graph<Point2D, DefaultWeightedEdge> graph;
 
-    public GeometricTSPTest(Graph<Point2D, DefaultWeightedEdge> graph) {
+    public GeometricTSPTest(Graph<Point2D, DefaultWeightedEdge> graph, Integer size) {
         this.graph = graph;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{1} Points")
     public static Object[][] graphs() {
         List<Object[]> graphs = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            graphs.add(new Object[]{generate((int) Math.pow(10, i))});
+            graphs.add(new Object[]{generate((int) Math.pow(10, i)), (int) Math.pow(10, i)});
         }
         return graphs.toArray(new Object[0][]);
     }
@@ -91,11 +89,7 @@ public class GeometricTSPTest {
     }
 
     void testWith(String description, HamiltonianCycleAlgorithm<Point2D, DefaultWeightedEdge> algorithm) {
-        long t0 = System.currentTimeMillis();
         GraphPath<Point2D, DefaultWeightedEdge> tour = algorithm.getTour(graph);
-        long t = System.currentTimeMillis() - t0;
-        LOG.log(Level.FINE, "TSP: Method {0}, Size {1}, Time {2} ms, Weight {3}",
-                new Object[]{description, graph.vertexSet().size(), t, tour.getWeight()});
         assertHamiltonian(graph, tour);
     }
 
