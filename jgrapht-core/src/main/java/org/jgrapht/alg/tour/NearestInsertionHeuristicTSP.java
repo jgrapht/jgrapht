@@ -18,6 +18,7 @@
 package org.jgrapht.alg.tour;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -155,9 +156,8 @@ public class NearestInsertionHeuristicTSP<V, E> extends
         }
         if (subtourVertices.isEmpty()) {
             // If no initial subtour exists, create one based on the shortest edge
-            E shortestEdge = graph.edgeSet().stream()
-                    .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
-                    .findFirst().get();
+            E shortestEdge = Collections.min(graph.edgeSet(),
+                    (e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)));
             subtourVertices.add(graph.getEdgeSource(shortestEdge));
             subtourVertices.add(graph.getEdgeTarget(shortestEdge));
         }
@@ -172,8 +172,8 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @param graph The graph
      * @return Map storing closest unvisited vertex for each tour vertex
      */
-    private Map<V, Closest<V, E>> getClosest(List<V> tourVertices, Set<V> unvisited, Graph<V, E> graph) {
-        return tourVertices.stream().collect(Collectors.toMap((v) -> v, (v) -> getClosest(v, unvisited, graph)));
+    private Map<V, Closest<V>> getClosest(List<V> tourVertices, Set<V> unvisited, Graph<V, E> graph) {
+        return tourVertices.stream().collect(Collectors.toMap(v -> v, v -> getClosest(v, unvisited, graph)));
     }
 
     /**
@@ -184,19 +184,17 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @param graph The graph
      * @return Closest unvisited vertex
      */
-    private Closest<V, E> getClosest(V tourVertex, Set<V> unvisited, Graph<V, E> graph) {
+    private Closest<V> getClosest(V tourVertex, Set<V> unvisited, Graph<V, E> graph) {
         V closest = null;
-        E closestEdge = null;
         double minDist = Double.MAX_VALUE;
         for (V unvisitedVertex : unvisited) {
             double vDist = getDistance(graph, tourVertex, unvisitedVertex);
             if (vDist < minDist) {
                 closest = unvisitedVertex;
-                closestEdge = graph.getEdge(tourVertex, unvisitedVertex);
                 minDist = vDist;
             }
         }
-        return new Closest<>(tourVertex, closest, closestEdge, minDist);
+        return new Closest<>(tourVertex, closest, minDist);
     }
 
     /**
@@ -207,13 +205,13 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @param chosen Latest vertex added to tour
      * @param unvisited Set of unvisited vertices
      * @param graph The graph
-     * @return Updated map
      */
-    private Map<V, Closest<V, E>> updateClosest(Map<V, Closest<V, E>> currentClosest, Closest<V, E> chosen, Set<V> unvisited, Graph<V, E> graph) {
+    private void updateClosest(Map<V, Closest<V>> currentClosest, Closest<V> chosen, Set<V> unvisited, Graph<V, E> graph) {
         // Update the set of unvisited vertices, and exit if none remain
         unvisited.remove(chosen.getUnvisitedVertex());
         if (unvisited.isEmpty()) {
-            return new HashMap<>(0);
+            currentClosest.clear();
+            return;
         }
         // Update any entries impacted by the choice of new vertex
         currentClosest.replaceAll((v, c) -> {
@@ -223,7 +221,6 @@ public class NearestInsertionHeuristicTSP<V, E> extends
             return c;
         });
         currentClosest.put(chosen.getUnvisitedVertex(), getClosest(chosen.getUnvisitedVertex(), unvisited, graph));
-        return currentClosest;
     }
 
     /**
@@ -233,8 +230,8 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * vertex
      * @return First result of sorting values
      */
-    private Closest<V, E> chooseClosest(Map<V, Closest<V, E>> closestVertices) {
-        return closestVertices.values().stream().sorted().findFirst().get();
+    private Closest<V> chooseClosest(Map<V, Closest<V>> closestVertices) {
+        return Collections.min(closestVertices.values());
     }
 
     /**
@@ -260,10 +257,10 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @param graph The graph
      * @return List of vertices representing the complete tour
      */
-    private List<V> augment(List<V> subtour, Map<V, Closest<V, E>> closestVertices, Set<V> unvisited, Graph<V, E> graph) {
+    private List<V> augment(List<V> subtour, Map<V, Closest<V>> closestVertices, Set<V> unvisited, Graph<V, E> graph) {
         while (!unvisited.isEmpty()) {
             // Select a city not in the subtour, having the shortest distance to any one of the cities in the subtoor.
-            Closest<V, E> closestVertex = chooseClosest(closestVertices);
+            Closest<V> closestVertex = chooseClosest(closestVertices);
 
             // Determine the vertices either side of the selected tour vertex
             int i = subtour.indexOf(closestVertex.getTourVertex());
@@ -297,19 +294,16 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * vertex in the tour.
      *
      * @param <V> vertex type
-     * @param <E> edge type
      */
-    private static class Closest<V, E> implements Comparable<Closest<V, E>> {
+    private static class Closest<V> implements Comparable<Closest<V>> {
 
         private final V tourVertex;
         private final V unvisitedVertex;
-        private final E edge;
         private final double distance;
 
-        Closest(V tourVertex, V unvisitedVertex, E edge, double distance) {
+        Closest(V tourVertex, V unvisitedVertex, double distance) {
             this.tourVertex = tourVertex;
             this.unvisitedVertex = unvisitedVertex;
-            this.edge = edge;
             this.distance = distance;
         }
 
@@ -321,16 +315,12 @@ public class NearestInsertionHeuristicTSP<V, E> extends
             return unvisitedVertex;
         }
 
-        public E getEdge() {
-            return edge;
-        }
-
         public double getDistance() {
             return distance;
         }
 
         @Override
-        public int compareTo(Closest<V, E> o) {
+        public int compareTo(Closest<V> o) {
             return Double.compare(distance, o.distance);
         }
 

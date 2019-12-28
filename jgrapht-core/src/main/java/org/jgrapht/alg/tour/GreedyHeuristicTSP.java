@@ -77,7 +77,7 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
                 .collect(Collectors.toCollection(() -> new ArrayDeque<>()));
         Set<E> tourEdges = new HashSet<>(n);
         // Create a sub-graph that only includes the tour edges
-        Graph<V, E> tourGraph = new MaskSubgraph<>(graph, (v) -> false, (e) -> !tourEdges.contains(e));
+        Graph<V, E> tourGraph = new MaskSubgraph<>(graph, v -> false, e -> !tourEdges.contains(e));
         // Iterate until the tour is complete
         while (!edges.isEmpty() && tourEdges.size() < n) {
             // Select the shortest available edge
@@ -85,7 +85,7 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
             V vertex1 = graph.getEdgeSource(edge);
             V vertex2 = graph.getEdgeTarget(edge);
             // If it matches constraints, add it to the tour
-            if (canAddEdge(tourGraph, edge, vertex1, vertex2, tourEdges.size() == n - 1)) {
+            if (canAddEdge(tourGraph, vertex1, vertex2, tourEdges.size() == n - 1)) {
                 tourEdges.add(edge);
             }
         }
@@ -105,13 +105,12 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
      * are at the last edge.
      *
      * @param tourGraph The graph masked to only include tour edges
-     * @param edge The proposed edge
-     * @param vertex1 First vertex
-     * @param vertex2 Second vertex
+     * @param vertex1 First vertex of proposed edge
+     * @param vertex2 Second vertex of proposed edge
      * @param lastEdge true if we are looking for the last edge
      * @return true if this edge can be added
      */
-    private boolean canAddEdge(Graph<V, E> tourGraph, E edge, V vertex1, V vertex2, boolean lastEdge) {
+    private boolean canAddEdge(Graph<V, E> tourGraph, V vertex1, V vertex2, boolean lastEdge) {
         // Would form a tree rather than loop
         if (tourGraph.degreeOf(vertex1) > 1 || tourGraph.degreeOf(vertex2) > 1) {
             return false;

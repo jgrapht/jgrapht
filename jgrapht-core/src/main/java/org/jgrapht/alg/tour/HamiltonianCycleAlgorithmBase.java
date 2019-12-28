@@ -47,7 +47,7 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
      * @return a graph path
      */
     protected GraphPath<V, E> listToTour(List<V> tour, Graph<V, E> graph) {
-        List<E> edges = new ArrayList<>(tour.size());
+        List<E> edges = new ArrayList<>(tour.size() + 1);
         double tourWeight = 0d;
 
         for (int i = 1; i < tour.size(); i++) {
