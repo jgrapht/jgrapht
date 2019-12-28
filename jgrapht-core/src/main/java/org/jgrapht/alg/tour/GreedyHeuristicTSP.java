@@ -73,7 +73,7 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
         }
         // Sort all the edges by weight
         Deque<E> edges = graph.edgeSet().stream()
-                .sorted((e1, e2) -> (int) Math.signum(graph.getEdgeWeight(e1) - graph.getEdgeWeight(e2)))
+                .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
                 .collect(Collectors.toCollection(() -> new ArrayDeque<>()));
         Set<E> tourEdges = new HashSet<>(n);
         // Create a sub-graph that only includes the tour edges

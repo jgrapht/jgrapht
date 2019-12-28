@@ -156,7 +156,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
         if (subtourVertices.isEmpty()) {
             // If no initial subtour exists, create one based on the shortest edge
             E shortestEdge = graph.edgeSet().stream()
-                    .sorted((e1, e2) -> (int) Math.signum(graph.getEdgeWeight(e1) - graph.getEdgeWeight(e2)))
+                    .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
                     .findFirst().get();
             subtourVertices.add(graph.getEdgeSource(shortestEdge));
             subtourVertices.add(graph.getEdgeTarget(shortestEdge));
@@ -331,7 +331,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
 
         @Override
         public int compareTo(Closest<V, E> o) {
-            return (int) Math.signum(distance - o.distance);
+            return Double.compare(distance, o.distance);
         }
 
     }
