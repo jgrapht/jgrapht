@@ -17,13 +17,11 @@
  */
 package org.jgrapht.alg.tour;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator.OfDouble;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.SlowTests;
@@ -48,9 +46,9 @@ import org.junit.runners.Parameterized;
 public class GeometricTSPTest {
 
     private static final OfDouble RNG = new Random().doubles(0.0, 100.0).iterator();
-    private final Graph<Point2D, DefaultWeightedEdge> graph;
+    private final Graph<Vector2D, DefaultWeightedEdge> graph;
 
-    public GeometricTSPTest(Graph<Point2D, DefaultWeightedEdge> graph, Integer size) {
+    public GeometricTSPTest(Graph<Vector2D, DefaultWeightedEdge> graph, Integer size) {
         this.graph = graph;
     }
 
@@ -58,27 +56,28 @@ public class GeometricTSPTest {
     public static Object[][] graphs() {
         List<Object[]> graphs = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            graphs.add(new Object[]{generate((int) Math.pow(10, i)), (int) Math.pow(10, i)});
+            int size = (int) Math.pow(10, i);
+            graphs.add(new Object[]{generate(size), size});
         }
         return graphs.toArray(new Object[0][]);
     }
 
-    static Graph<Point2D, DefaultWeightedEdge> generate(int n) {
-        Point2D[] points = new Point2D[n];
+    static Graph<Vector2D, DefaultWeightedEdge> generate(int n) {
+        Vector2D[] points = new Vector2D[n];
         for (int i = 0; i < n; i++) {
-            points[i] = new Point2D.Double(RNG.next(), RNG.next());
+            points[i] = new Vector2D(RNG.next(), RNG.next());
         }
         return generate(points);
     }
 
-    static Graph<Point2D, DefaultWeightedEdge> generate(Point2D[] points) {
-        GraphBuilder<Point2D, DefaultWeightedEdge, Graph<Point2D, DefaultWeightedEdge>> builder = GraphTypeBuilder.undirected()
-                .vertexClass(Point2D.class)
+    static Graph<Vector2D, DefaultWeightedEdge> generate(Vector2D[] points) {
+        GraphBuilder<Vector2D, DefaultWeightedEdge, Graph<Vector2D, DefaultWeightedEdge>> builder = GraphTypeBuilder.undirected()
+                .vertexClass(Vector2D.class)
                 .edgeClass(DefaultWeightedEdge.class)
                 .weighted(true)
                 .buildGraphBuilder();
-        for (int i = 0; i < points.length; i++) {
-            builder.addVertex(points[i]);
+        for (Vector2D point : points) {
+            builder.addVertex(point);
         }
         for (int i = 0; i < points.length; i++) {
             for (int j = i + 1; j < points.length; j++) {
@@ -88,8 +87,8 @@ public class GeometricTSPTest {
         return builder.build();
     }
 
-    void testWith(String description, HamiltonianCycleAlgorithm<Point2D, DefaultWeightedEdge> algorithm) {
-        GraphPath<Point2D, DefaultWeightedEdge> tour = algorithm.getTour(graph);
+    void testWith(String description, HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> algorithm) {
+        GraphPath<Vector2D, DefaultWeightedEdge> tour = algorithm.getTour(graph);
         assertHamiltonian(graph, tour);
     }
 
