@@ -19,7 +19,6 @@ package org.jgrapht.alg.tour;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -129,16 +128,13 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      *
      * @param graph The graph
      * @return Vertices of an initial sub-tour
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if the graph is not complete
+     * @throws IllegalArgumentException if the graph contains no vertices
      */
     private List<V> subtour(Graph<V, E> graph) {
         // Check that graph is appropriate
-        GraphTests.requireUndirected(graph);
-        if (!GraphTests.isComplete(graph)) {
-            throw new IllegalArgumentException("Graph is not complete");
-        }
-        if (graph.vertexSet().isEmpty()) {
-            throw new IllegalArgumentException("Graph contains no vertices");
-        }
+        checkGraph(graph);
         List<V> subtourVertices = new ArrayList<>();
         if (subtour != null) {
             if (subtour.getStartVertex().equals(subtour.getEndVertex())) {
@@ -188,7 +184,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
         V closest = null;
         double minDist = Double.MAX_VALUE;
         for (V unvisitedVertex : unvisited) {
-            double vDist = getDistance(graph, tourVertex, unvisitedVertex);
+            double vDist = graph.getEdgeWeight(graph.getEdge(tourVertex, unvisitedVertex));
             if (vDist < minDist) {
                 closest = unvisitedVertex;
                 minDist = vDist;
@@ -269,12 +265,12 @@ public class NearestInsertionHeuristicTSP<V, E> extends
 
             // Find an edge in the subtour such that the cost of inserting the selected city between the edge’s cities will be minimal.
             // Making assumption this is a neighbouring edge, test the edges before and after
-            double insertionCostBefore = getDistance(graph, vertexBefore, closestVertex.getUnvisitedVertex())
+            double insertionCostBefore = graph.getEdgeWeight(graph.getEdge(vertexBefore, closestVertex.getUnvisitedVertex()))
                     + closestVertex.getDistance()
-                    - getDistance(graph, vertexBefore, closestVertex.getTourVertex());
-            double insertionCostAfter = getDistance(graph, vertexAfter, closestVertex.getUnvisitedVertex())
+                    - graph.getEdgeWeight(graph.getEdge(vertexBefore, closestVertex.getTourVertex()));
+            double insertionCostAfter = graph.getEdgeWeight(graph.getEdge(vertexAfter, closestVertex.getUnvisitedVertex()))
                     + closestVertex.getDistance()
-                    - getDistance(graph, vertexAfter, closestVertex.getTourVertex());
+                    - graph.getEdgeWeight(graph.getEdge(vertexAfter, closestVertex.getTourVertex()));
 
             // Add the selected vertex to the tour
             if (insertionCostBefore < insertionCostAfter) {

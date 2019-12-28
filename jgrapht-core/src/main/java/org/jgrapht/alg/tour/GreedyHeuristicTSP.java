@@ -64,8 +64,19 @@ import org.jgrapht.traverse.DepthFirstIterator;
  */
 public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
 
+    /**
+     * Computes a tour using the greedy heuristic.
+     *
+     * @param graph the input graph
+     * @return a tour
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if the graph is not complete
+     * @throws IllegalArgumentException if the graph contains no vertices
+     */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
+        // Check that graph is appropriate
+        checkGraph(graph);
         int n = graph.vertexSet().size();
         // Handle single vertex graph
         if (n == 1) {

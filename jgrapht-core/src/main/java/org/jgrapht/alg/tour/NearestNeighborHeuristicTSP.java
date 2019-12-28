@@ -142,13 +142,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      */
     private V first(Set<V> unvisited, Graph<V, E> graph) {
         // Check that graph is appropriate
-        graph = GraphTests.requireUndirected(graph);
-        if (!GraphTests.isComplete(graph)) {
-            throw new IllegalArgumentException("Graph is not complete");
-        }
-        if (graph.vertexSet().isEmpty()) {
-            throw new IllegalArgumentException("Graph contains no vertices");
-        }
+        checkGraph(graph);
         unvisited.addAll(graph.vertexSet());
         if (first == null || !graph.vertexSet().contains(first)) {
             first = (V) unvisited.toArray()[rng.nextInt(unvisited.size())];
@@ -169,10 +163,10 @@ public class NearestNeighborHeuristicTSP<V, E>
     private V nearest(V current, Set<V> unvisited, Graph<V, E> graph) {
         Iterator<V> it = unvisited.iterator();
         V closest = it.next();
-        double minDist = getDistance(graph, current, closest);
+        double minDist = graph.getEdgeWeight(graph.getEdge(current, closest));
         while (it.hasNext()) {
             V v = it.next();
-            double vDist = getDistance(graph, current, v);
+            double vDist = graph.getEdgeWeight(graph.getEdge(current, v));
             if (vDist < minDist) {
                 closest = v;
                 minDist = vDist;

@@ -60,8 +60,19 @@ public class RandomTourTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
         this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
     }
 
+    /**
+     * Computes a tour using the greedy heuristic.
+     *
+     * @param graph the input graph
+     * @return a tour
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if the graph is not complete
+     * @throws IllegalArgumentException if the graph contains no vertices
+     */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
+        // Check that graph is appropriate
+        checkGraph(graph);
         List<V> vertices = new ArrayList<>(graph.vertexSet());
         int n = vertices.size();
         if (n == 1) {

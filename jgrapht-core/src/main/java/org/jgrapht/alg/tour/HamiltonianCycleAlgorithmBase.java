@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.graph.GraphWalk;
 
@@ -79,20 +80,22 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
         return new GraphWalk<>(
                 graph, start, start, Collections.singletonList(start), Collections.emptyList(), 0d);
     }
-
+    
     /**
-     * Return weight between vertices ignoring edge direction
-     *
+     * Checks that graph is undirected, complete, and non-empty
+     * 
      * @param graph the graph
-     * @param v1 first vertex
-     * @param v2 second vertex
-     * @return weight of edge v1 to v2 or v2 to v1
+     * @throws IllegalArgumentException if graph is not undirected
+     * @throws IllegalArgumentException if graph is not complete
+     * @throws IllegalArgumentException if graph contains no vertices
      */
-    protected double getDistance(Graph<V, E> graph, V v1, V v2) {
-        E e = graph.getEdge(v1, v2);
-        if (e == null) {
-            e = graph.getEdge(v2, v1);
+    protected void checkGraph(Graph<V,E> graph) {
+        graph = GraphTests.requireUndirected(graph);
+        if (!GraphTests.isComplete(graph)) {
+            throw new IllegalArgumentException("Graph is not complete");
         }
-        return graph.getEdgeWeight(e);
+        if (graph.vertexSet().isEmpty()) {
+            throw new IllegalArgumentException("Graph contains no vertices");
+        }
     }
 }
