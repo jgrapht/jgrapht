@@ -19,6 +19,7 @@ package org.jgrapht.alg.tour;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -49,21 +50,21 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
     protected GraphPath<V, E> listToTour(List<V> tour, Graph<V, E> graph) {
         List<E> edges = new ArrayList<>(tour.size() + 1);
         double tourWeight = 0d;
-
-        for (int i = 1; i < tour.size(); i++) {
-            V u = tour.get(i - 1);
-            V v = tour.get(i);
+        Iterator<V> tourIterator = tour.iterator();
+        V first = tourIterator.next();
+        V u = first;
+        while(tourIterator.hasNext()) {
+            V v = tourIterator.next();
             E e = graph.getEdge(u, v);
             edges.add(e);
             tourWeight += graph.getEdgeWeight(e);
+            u = v;
         }
-        V u = tour.get(tour.size() - 1);
-        V v = tour.get(0);
-        E e = graph.getEdge(u, v);
+        E e = graph.getEdge(u, first);
         edges.add(e);
         tourWeight += graph.getEdgeWeight(e);
         tour.add(tour.get(0));
-        return new GraphWalk<>(graph, tour.get(0), tour.get(0), tour, edges, tourWeight);
+        return new GraphWalk<>(graph, first, first, tour, edges, tourWeight);
     }
 
     /**
