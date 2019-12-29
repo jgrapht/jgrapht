@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.matching.blossom.v5;
 
+import org.jgrapht.util.*;
 import org.jheaps.*;
 
 import java.util.*;
@@ -42,7 +43,7 @@ public class BlossomVDebugger
      */
     public static <V, E> Map<V, BlossomVNode> getVertexMap(BlossomVState<V, E> state)
     {
-        Map<V, BlossomVNode> vertexMap = new HashMap<>(state.nodeNum);
+        Map<V, BlossomVNode> vertexMap = CollectionUtil.newHashMapWithExpectedSize(state.nodeNum);
         for (int i = 0; i < state.nodeNum; i++) {
             vertexMap.put(state.graphVertices.get(i), state.nodes[i]);
         }
@@ -59,7 +60,7 @@ public class BlossomVDebugger
      */
     public static <V, E> Map<E, BlossomVEdge> getEdgeMap(BlossomVState<V, E> state)
     {
-        Map<E, BlossomVEdge> edgeMap = new HashMap<>(state.edgeNum);
+        Map<E, BlossomVEdge> edgeMap = CollectionUtil.newHashMapWithExpectedSize(state.edgeNum);
         for (int i = 0; i < state.edgeNum; i++) {
             edgeMap.put(state.graphEdges.get(i), state.edges[i]);
         }

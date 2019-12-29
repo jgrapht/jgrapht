@@ -18,6 +18,7 @@
 package org.jgrapht.alg.color;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -62,7 +63,7 @@ public class LargestDegreeFirstColoring<V, E>
         // compute degrees and maximum degree
         int n = graph.vertexSet().size();
         int maxDegree = 0;
-        Map<V, Integer> degree = new HashMap<>(n);
+        Map<V, Integer> degree = CollectionUtil.newHashMapWithExpectedSize(n);
         for (V v : graph.vertexSet()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);

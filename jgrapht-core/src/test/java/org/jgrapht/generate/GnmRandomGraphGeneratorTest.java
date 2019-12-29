@@ -513,7 +513,7 @@ public class GnmRandomGraphGeneratorTest
             // create a map between vertex value to its order(1st,2nd,etc)
             // "CAT"=1 "DOG"=2 "RHINO"=3
 
-            this.mapVertexToOrder = new HashMap<>(vertexSet.size());
+            this.mapVertexToOrder = CollectionUtil.newHashMapWithExpectedSize(vertexSet.size());
 
             int counter = 0;
             for (V vertex : vertexSet) {

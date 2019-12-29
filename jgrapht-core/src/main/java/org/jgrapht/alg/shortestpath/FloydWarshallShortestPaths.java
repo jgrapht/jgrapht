@@ -75,7 +75,7 @@ public class FloydWarshallShortestPaths<V, E>
         Collections.sort(
             vertices, new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
         this.degrees = new ArrayList<>();
-        this.vertexIndices = new HashMap<>(this.vertices.size());
+        this.vertexIndices = CollectionUtil.newHashMapWithExpectedSize(this.vertices.size());
 
         int i = 0;
         int minDegreeOne = vertices.size();

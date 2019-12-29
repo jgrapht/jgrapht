@@ -304,7 +304,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
         graphEdges = new ArrayList<>(m);
         graphVertices = new ArrayList<>(n);
 
-        Map<V, Node> nodeMap = new HashMap<>(n);
+        Map<V, Node> nodeMap = CollectionUtil.newHashMapWithExpectedSize(n);
         Graph<V, E> graph = problem.getGraph();
 
         // convert vertices into internal nodes
@@ -598,7 +598,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
      */
     private MinimumCostFlow<E> finish()
     {
-        Map<E, Double> flowMap = new HashMap<>(m);
+        Map<E, Double> flowMap = CollectionUtil.newHashMapWithExpectedSize(m);
         double totalCost = 0;
         // check feasibility
         for (Arc arc = nodes[n].firstNonSaturated; arc != null; arc = arc.next) {

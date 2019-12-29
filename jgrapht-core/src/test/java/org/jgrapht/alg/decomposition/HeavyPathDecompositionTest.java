@@ -146,7 +146,8 @@ public class HeavyPathDecompositionTest
 
             Collections.reverse(postOrder);
 
-            Map<V, Integer> sizeSubtree = new HashMap<>(graph.vertexSet().size());
+            Map<V, Integer> sizeSubtree =
+                CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
             for (V v : postOrder) {
                 sizeSubtree.put(v, 1);
 

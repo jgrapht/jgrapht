@@ -19,6 +19,7 @@ package org.jgrapht.alg.color;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -58,7 +59,7 @@ public class BrownBacktrackColoring<V, E>
         final int numVertices = graph.vertexSet().size();
         vertexList = new ArrayList<>(numVertices);
         neighbors = new int[numVertices][];
-        indexMap = new HashMap<>(numVertices);
+        indexMap = CollectionUtil.newHashMapWithExpectedSize(numVertices);
         for (V vertex : graph.vertexSet()) {
             neighbors[vertexList.size()] = new int[graph.edgesOf(vertex).size()];
             indexMap.put(vertex, vertexList.size());

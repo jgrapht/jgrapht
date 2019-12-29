@@ -20,6 +20,7 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -248,7 +249,8 @@ public class ChordalityInspector<V, E>
      */
     private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
     {
-        Map<V, Integer> vertexInOrder = new HashMap<>(vertexOrder.size());
+        Map<V, Integer> vertexInOrder =
+            CollectionUtil.newHashMapWithExpectedSize(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
             vertexInOrder.put(vertex, i++);
@@ -278,7 +280,8 @@ public class ChordalityInspector<V, E>
         // then it finds a chordless subcycle in linear time and returns it.
 
         List<V> cycle = new ArrayList<>(Arrays.asList(a, b, c));
-        Map<V, Boolean> visited = new HashMap<>(graph.vertexSet().size());
+        Map<V, Boolean> visited =
+            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }

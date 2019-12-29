@@ -19,6 +19,7 @@ package org.jgrapht.alg.connectivity;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -108,7 +109,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
      */
     private void createVertexData()
     {
-        vertexToVertexData = new HashMap<V, VertexData<V>>(graph.vertexSet().size());
+        vertexToVertexData = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         for (V vertex : graph.vertexSet()) {
             vertexToVertexData.put(vertex, new VertexData2<V>(vertex, false, false));

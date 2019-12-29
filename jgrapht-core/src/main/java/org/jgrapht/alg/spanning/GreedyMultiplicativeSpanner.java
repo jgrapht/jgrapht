@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
 import org.jheaps.*;
 import org.jheaps.tree.*;
 
@@ -150,12 +151,12 @@ public class GreedyMultiplicativeSpanner<V, E>
             spanner = GraphTypeBuilder
                 .<V, E> undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
                 .edgeSupplier(graph.getEdgeSupplier()).buildGraph();
-            touchedVertices = new ArrayDeque<V>(graph.vertexSet().size());
+            touchedVertices = new ArrayDeque<>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
                 touchedVertices.push(v);
             }
-            vertexDistance = new HashMap<>(graph.vertexSet().size());
+            vertexDistance = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
             queue = new ArrayDeque<>();
         }
 

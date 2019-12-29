@@ -47,7 +47,7 @@ public class VertexToIntegerMapping<V>
     {
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
 
-        vertexMap = new HashMap<>(vertices.size());
+        vertexMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
         indexList = new ArrayList<>(vertices.size());
 
         for (V v : vertices) {
@@ -68,7 +68,7 @@ public class VertexToIntegerMapping<V>
     {
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
 
-        vertexMap = new HashMap<>(vertices.size());
+        vertexMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
         indexList = vertices;
 
         for (int i = 0; i < vertices.size(); i++) {
@@ -93,7 +93,7 @@ public class VertexToIntegerMapping<V>
     {
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
 
-        vertexMap = new HashMap<>(vertices.size());
+        vertexMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
         indexList = new ArrayList<>(vertices.size());
 
         for (V v : vertices) {

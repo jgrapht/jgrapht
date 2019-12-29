@@ -32,6 +32,7 @@ import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.FixedSizeIntegerQueue;
+import org.jgrapht.util.*;
 
 /**
  * Edmonds' blossom algorithm for maximum cardinality matching in general undirected graphs.
@@ -174,7 +175,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
         {
             // index graph
             this.nodes = graph.vertexSet().size();
-            this.vertexIndexMap = new HashMap<>(nodes);
+            this.vertexIndexMap = CollectionUtil.newHashMapWithExpectedSize(nodes);
             this.vertexMap = (V[]) new Object[nodes];
             int vIndex = 0;
             for (V vertex : graph.vertexSet()) {

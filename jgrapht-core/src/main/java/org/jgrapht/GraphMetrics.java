@@ -19,6 +19,7 @@ package org.jgrapht;
 
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.alg.util.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -273,7 +274,8 @@ public abstract class GraphMetrics
          */
 
         // Fix vertex order for unique comparison of vertices
-        Map<V, Integer> vertexOrder = new HashMap<>(graph.vertexSet().size());
+        Map<V, Integer> vertexOrder =
+            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         int k = 0;
         for (V v : graph.vertexSet()) {
             vertexOrder.put(v, k++);

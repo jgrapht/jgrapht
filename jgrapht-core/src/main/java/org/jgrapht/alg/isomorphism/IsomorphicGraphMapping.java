@@ -18,6 +18,7 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -58,8 +59,10 @@ public class IsomorphicGraphMapping<V, E>
         this.graph1 = g1.getGraph();
         this.graph2 = g2.getGraph();
 
-        this.forwardMapping = new HashMap<>(this.graph1.vertexSet().size());
-        this.backwardMapping = new HashMap<>(this.graph1.vertexSet().size());
+        this.forwardMapping =
+            CollectionUtil.newHashMapWithExpectedSize(this.graph1.vertexSet().size());
+        this.backwardMapping =
+            CollectionUtil.newHashMapWithExpectedSize(this.graph1.vertexSet().size());
 
         for (V v : graph1.vertexSet()) {
             int vNumber = g1.getVertexNumber(v);
@@ -318,8 +321,8 @@ public class IsomorphicGraphMapping<V, E>
      */
     public IsomorphicGraphMapping<V, E> compose(IsomorphicGraphMapping<V, E> otherMapping)
     {
-        Map<V, V> fMap = new HashMap<>(forwardMapping.size());
-        Map<V, V> bMap = new HashMap<>(forwardMapping.size());
+        Map<V, V> fMap = CollectionUtil.newHashMapWithExpectedSize(forwardMapping.size());
+        Map<V, V> bMap = CollectionUtil.newHashMapWithExpectedSize(forwardMapping.size());
 
         for (V v : graph1.vertexSet()) {
             V u = otherMapping.getVertexCorrespondence(forwardMapping.get(v), true);
@@ -341,8 +344,8 @@ public class IsomorphicGraphMapping<V, E>
      */
     public static <V, E> IsomorphicGraphMapping<V, E> identity(Graph<V, E> graph)
     {
-        Map<V, V> fMap = new HashMap<>(graph.vertexSet().size());
-        Map<V, V> bMap = new HashMap<>(graph.vertexSet().size());
+        Map<V, V> fMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
+        Map<V, V> bMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         for (V v : graph.vertexSet()) {
             fMap.put(v, v);

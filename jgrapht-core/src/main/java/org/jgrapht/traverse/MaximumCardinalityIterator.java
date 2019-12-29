@@ -18,6 +18,7 @@
 package org.jgrapht.traverse;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -81,7 +82,7 @@ public class MaximumCardinalityIterator<V, E>
             GraphTests.requireUndirected(graph);
             buckets = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
             buckets.set(0, new HashSet<>(graph.vertexSet()));
-            cardinalityMap = new HashMap<>(graph.vertexSet().size());
+            cardinalityMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 cardinalityMap.put(v, 0);
             }

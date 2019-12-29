@@ -19,6 +19,7 @@ package org.jgrapht.alg.color;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -84,15 +85,15 @@ public class SaturationDegreeColoring<V, E>
          */
         int n = graph.vertexSet().size();
         int maxColor = -1;
-        Map<V, Integer> colors = new HashMap<>(n);
-        Map<V, BitSet> adjColors = new HashMap<>(n);
-        Map<V, Integer> saturation = new HashMap<>(n);
+        Map<V, Integer> colors = CollectionUtil.newHashMapWithExpectedSize(n);
+        Map<V, BitSet> adjColors = CollectionUtil.newHashMapWithExpectedSize(n);
+        Map<V, Integer> saturation = CollectionUtil.newHashMapWithExpectedSize(n);
 
         /*
          * Compute degrees, available colors, and maximum degree.
          */
         int maxDegree = 0;
-        Map<V, Integer> degree = new HashMap<>(n);
+        Map<V, Integer> degree = CollectionUtil.newHashMapWithExpectedSize(n);
         for (V v : graph.vertexSet()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);

@@ -18,6 +18,7 @@
 package org.jgrapht.traverse;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -201,7 +202,7 @@ public class LexBreadthFirstIterator<V, E>
         BucketList(Collection<V> vertices)
         {
             head = new Bucket(vertices);
-            bucketMap = new HashMap<>(vertices.size());
+            bucketMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
             for (V vertex : vertices) {
                 bucketMap.put(vertex, head);
             }

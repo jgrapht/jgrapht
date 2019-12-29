@@ -18,6 +18,7 @@
 package org.jgrapht.alg.matching.blossom.v5;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 import org.jheaps.*;
 import org.jheaps.tree.*;
 
@@ -201,7 +202,7 @@ class BlossomVInitializer<V, E>
         edges = new BlossomVEdge[expectedEdgeNum];
         graphVertices = new ArrayList<>(nodeNum);
         graphEdges = new ArrayList<>(expectedEdgeNum);
-        HashMap<V, BlossomVNode> vertexMap = new HashMap<>(nodeNum);
+        HashMap<V, BlossomVNode> vertexMap = CollectionUtil.newHashMapWithExpectedSize(nodeNum);
         int i = 0;
         // maps nodes
         for (V vertex : graph.vertexSet()) {
