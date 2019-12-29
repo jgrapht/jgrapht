@@ -19,6 +19,7 @@ package org.jgrapht.alg.interfaces;
 
 import org.jgrapht.GraphPath;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Set;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public interface ManyToManyShortestPathsAlgorithm<V, E> {
+public interface ManyToManyShortestPathsAlgorithm<V, E> extends ShortestPathAlgorithm<V, E> {
 
     /**
      * Computes shortest paths from all vertices in {@code sources}
@@ -69,5 +70,49 @@ public interface ManyToManyShortestPathsAlgorithm<V, E> {
          * {@link Double#POSITIVE_INFINITY} in case no such path exists
          */
         double getWeight(V source, V target);
+    }
+
+    /**
+     * Base class for many-to-many shortest paths implementations.
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    abstract class BaseManyToManyShortestPathsImpl<V, E> implements ManyToManyShortestPaths<V, E> {
+        /**
+         * Set of source vertices.
+         */
+        private final Set<V> sources;
+        /**
+         * Set of source vertices.
+         */
+        private final Set<V> targets;
+
+        /**
+         * Constructs an instance for the given {@code sources} and {@code targets}.
+         *
+         * @param sources source vertices
+         * @param targets target vertices
+         */
+        protected BaseManyToManyShortestPathsImpl(Set<V> sources, Set<V> targets) {
+            this.sources = sources;
+            this.targets = targets;
+        }
+
+        /**
+         * Checks that {@code source} and {@code target} are not null and are
+         * present in the {@code graph}.
+         *
+         * @param source a source vertex
+         * @param target a target vertex
+         */
+        protected void assertCorrectSourceAndTarget(V source, V target) {
+            Objects.requireNonNull(source, "source should not be null!");
+            Objects.requireNonNull(target, "target should not be null!");
+
+            if (!sources.contains(source) || !targets.contains(target)) {
+                throw new IllegalArgumentException("paths between " + source + " and " + target + " is not computed");
+            }
+        }
     }
 }

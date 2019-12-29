@@ -39,7 +39,8 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Base test for many-to-many shortest paths algorithms. Currently extended by {@link CHManyToManyShortestPathsTest}
+ * Base test for many-to-many shortest paths algorithms. Currently extended by
+ * {@link CHManyToManyShortestPathsTest}, {@link DijkstraManyToManyShortestPathsTest}
  * and {@link DefaultManyToManyShortestPathsTest}.
  *
  * @author Semen Chudakov
@@ -56,7 +57,8 @@ public class BaseManyToManyShortestPathsTest {
      *
      * @param algorithm algorithms to test
      */
-    protected void testDifferentSourcesAndTargetsSimpleGraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
+    protected void testDifferentSourcesAndTargetsSimpleGraph(
+            ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
                 = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(4, 1, 2)),
@@ -97,7 +99,8 @@ public class BaseManyToManyShortestPathsTest {
      *
      * @param algorithm algorithms to test
      */
-    protected void testDifferentSourcesAndTargetsMultigraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
+    protected void testDifferentSourcesAndTargetsMultigraph(
+            ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
                 = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(1, 4)),
@@ -124,7 +127,8 @@ public class BaseManyToManyShortestPathsTest {
      *
      * @param algorithm algorithms to test
      */
-    protected void testSourcesEqualTargetsSimpleGraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
+    protected void testSourcesEqualTargetsSimpleGraph(
+            ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
                 = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(1, 5, 9)),
@@ -165,7 +169,8 @@ public class BaseManyToManyShortestPathsTest {
      *
      * @param algorithm algorithms to test
      */
-    protected void testSourcesEqualTargetsMultigraph(ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
+    protected void testSourcesEqualTargetsMultigraph(
+            ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm) {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
                 = algorithm.getManyToManyPaths(
                 new HashSet<>(Arrays.asList(2, 4, 6)),

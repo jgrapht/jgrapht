@@ -18,20 +18,66 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * Base class for many-to-many shortest paths algorithms. Currently extended by
- * {@link CHManyToManyShortestPaths} and {@link DefaultManyToManyShortestPaths}.
+ * {@link CHManyToManyShortestPaths} and {@link DijkstraManyToManyShortestPaths}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
+ * @author Dimitrios Michail
  */
-public abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPathsAlgorithm<V, E> {
+abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPathsAlgorithm<V, E> {
+
+    protected final Graph<V, E> graph;
+
+    /**
+     * Constructs a new instance of the algorithm for a given graph.
+     *
+     * @param graph the graph
+     */
+    public BaseManyToManyShortestPaths(Graph<V, E> graph) {
+        this.graph = Objects.requireNonNull(graph, "Graph is null");
+    }
+
+
+    @Override
+    public GraphPath<V, E> getPath(V source, V sink) {
+        return getManyToManyPaths(Collections.singleton(source), Collections.singleton(sink)).getPath(source, sink);
+    }
+
+    @Override
+    public double getPathWeight(V source, V sink) {
+        GraphPath<V, E> p = getPath(source, sink);
+        if (p == null) {
+            return Double.POSITIVE_INFINITY;
+        } else {
+            return p.getWeight();
+        }
+    }
+
+    @Override
+    public SingleSourcePaths<V, E> getPaths(V source) {
+        if (!graph.containsVertex(source)) {
+            throw new IllegalArgumentException("graph must contain the source vertex");
+        }
+
+        Map<V, GraphPath<V, E>> paths = new HashMap<>();
+        for (V v : graph.vertexSet()) {
+            paths.put(v, getPath(source, v));
+        }
+        return new ListSingleSourcePathsImpl<>(graph, source, paths);
+    }
 
     /**
      * Computes shortest paths tree starting at {@code source} and stopping as

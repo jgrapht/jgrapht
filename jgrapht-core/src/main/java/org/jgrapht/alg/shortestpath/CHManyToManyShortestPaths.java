@@ -67,11 +67,6 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
  */
 public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E> {
     /**
-     * The underlying graph.
-     */
-    private final Graph<V, E> graph;
-
-    /**
      * Contraction hierarchy for {@code graph}.
      */
     private Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph;
@@ -88,7 +83,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
      * @param graph a graph
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph) {
-        this.graph = graph;
+        super(graph);
         Pair<Graph<ContractionVertex<V>, ContractionEdge<E>>, Map<V, ContractionVertex<V>>> p
                 = new ContractionHierarchy<>(graph).computeContractionHierarchy();
         this.contractionGraph = p.getFirst();
@@ -106,7 +101,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
     public CHManyToManyShortestPaths(Graph<V, E> graph,
                                      Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
                                      Map<V, ContractionVertex<V>> contractionMapping) {
-        this.graph = graph;
+        super(graph);
         this.contractionGraph = contractionGraph;
         this.contractionMapping = contractionMapping;
     }
@@ -339,7 +334,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
      * unpacking edges stored in the shortest paths trees corresponding to source and
      * target vertices.
      */
-    private class CHManyToManyShortestPathsImpl implements ManyToManyShortestPaths<V, E> {
+    private class CHManyToManyShortestPathsImpl extends BaseManyToManyShortestPathsImpl<V, E> {
         /**
          * The underlying graph.
          */
@@ -352,9 +347,6 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
          * Mapping from original to contracted vertices.
          */
         private final Map<V, ContractionVertex<V>> contractionMapping;
-
-        private final Set<V> sources;
-        private final Set<V> targets;
 
         /**
          * Stores forward search space for each start vertex.
@@ -396,11 +388,10 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
                                                      Pair<Double, ContractionEdge<E>>>> backwardSearchSpaces,
                                              Map<Pair<ContractionVertex<V>, ContractionVertex<V>>,
                                                      Pair<Double, ContractionVertex<V>>> distanceAndMiddleVertexMap) {
+            super(sources, targets);
             this.graph = graph;
             this.contractionGraph = contractionGraph;
             this.contractionMapping = contractionMapping;
-            this.sources = sources;
-            this.targets = targets;
             this.forwardSearchSpaces = forwardSearchSpaces;
             this.backwardSearchSpaces = backwardSearchSpaces;
             this.distanceAndMiddleVertexMap = distanceAndMiddleVertexMap;
@@ -411,12 +402,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
          */
         @Override
         public GraphPath<V, E> getPath(V source, V target) {
-            Objects.requireNonNull(source, "source should not be null!");
-            Objects.requireNonNull(target, "target should not be null!");
-
-            if (!sources.contains(source) || !targets.contains(target)) {
-                throw new IllegalArgumentException("paths between " + source + " and " + target + " not computed");
-            }
+            assertCorrectSourceAndTarget(source,target);
 
             LinkedList<E> edgeList = new LinkedList<>();
             LinkedList<V> vertexList = new LinkedList<>();
@@ -476,12 +462,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
          */
         @Override
         public double getWeight(V source, V target) {
-            Objects.requireNonNull(source, "source should not be null!");
-            Objects.requireNonNull(target, "target should not be null!");
-
-            if (!sources.contains(source) || !targets.contains(target)) {
-                throw new IllegalArgumentException("paths between " + source + " and " + target + " not computed");
-            }
+            assertCorrectSourceAndTarget(source,target);
 
             Pair<ContractionVertex<V>, ContractionVertex<V>> contractedVertices =
                     Pair.of(contractionMapping.get(source), contractionMapping.get(target));

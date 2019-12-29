@@ -20,23 +20,24 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.util.Pair;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
- * Naive algorithm for many-to-many shortest paths problem.
+ * Naive algorithm for many-to-many shortest paths problem using.
  *
  * <p>
- * Complexity of the algorithm is $O(|S|)(V\log V + E)$, where $S$ is the set of source vertices,
- * $V$ is the set of graph vertices and $E$ is the set of graph edges of the graph.
+ * For every pair of source and target vertices computes a shortest path between them and
+ * caches the result.
  *
  * <p>
  * For each source vertex a single source shortest paths search is performed, which is stopped
- * as soon as all target vertices are reached. Shortest paths trees is constructed using
+ * as soon as all target vertices are reached. Shortest paths trees are constructed using
  * {@link DijkstraClosestFirstIterator}.
  *
  * @param <V> the graph vertex type
@@ -44,65 +45,74 @@ import java.util.Set;
  * @author Semen Chudakov
  */
 public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E> {
-    /**
-     * The underlying graph.
-     */
-    private final Graph<V, E> graph;
 
     /**
-     * Constructs an instance of the algorithm for a given {@code graph}.
+     * provides implementation of {@link ShortestPathAlgorithm} for a given graph.
+     */
+    private final Function<Graph<V, E>, ShortestPathAlgorithm<V, E>> function;
+
+    /**
+     * Constructs a new instance of the algorithm for a given {@code graph}.
+     * The function is defaulted to {@link BidirectionalDijkstraShortestPath}.
      *
-     * @param graph underlying graph
+     * @param graph a graph
      */
     public DefaultManyToManyShortestPaths(Graph<V, E> graph) {
-        this.graph = graph;
+        this(graph, g -> new BidirectionalDijkstraShortestPath<>(g));
     }
 
     /**
-     * {@inheritDoc}
+     * Constructs a new instance of the algorithm for a given {@code graph} and {@code function}.
+     *
+     * @param graph    a graph
+     * @param function provides implementation of {@link ShortestPathAlgorithm}
      */
+    public DefaultManyToManyShortestPaths(Graph<V, E> graph, Function<Graph<V, E>, ShortestPathAlgorithm<V, E>> function) {
+        super(graph);
+        this.function = function;
+    }
+
     @Override
     public ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets) {
         Objects.requireNonNull(sources, "sources cannot be null!");
         Objects.requireNonNull(targets, "targets cannot be null!");
 
-        Map<V, ShortestPathAlgorithm.SingleSourcePaths<V, E>> searchSpaces = new HashMap<>();
-
-        Set<V> targetsSet = new HashSet<>(targets);
+        ShortestPathAlgorithm<V, E> algorithm = function.apply(graph);
+        Map<Pair<V, V>, GraphPath<V, E>> pathMap = new HashMap<>();
 
         for (V source : sources) {
-            searchSpaces.put(source, getShortestPathsTree(graph, source, targetsSet));
+            for (V target : targets) {
+                pathMap.put(Pair.of(source, target), algorithm.getPath(source, target));
+            }
         }
 
-        return new DefaultManyToManyShortestPathsImpl(sources, targets, searchSpaces);
+        return new DefaultManyToManyShortestPathsImpl(sources, targets, pathMap);
     }
 
     /**
      * Implementation of the
      * {@link org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths}.
-     * For each source vertex a single source shortest paths tree is stored. It is used to retrieve
-     * both actual paths and theirs weights.
+     * For each pair of source and target vertices stores a corresponding path between them.
      */
-    private class DefaultManyToManyShortestPathsImpl implements ManyToManyShortestPaths<V, E> {
-
-        private final Set<V> sources;
-        private final Set<V> targets;
+    private class DefaultManyToManyShortestPathsImpl extends BaseManyToManyShortestPathsImpl<V, E> {
 
         /**
          * Map from source vertices to corresponding single source shortest path trees.
          */
-        private final Map<V, ShortestPathAlgorithm.SingleSourcePaths<V, E>> searchSpaces;
+        private final Map<Pair<V, V>, GraphPath<V, E>> pathsMap;
 
         /**
-         * Constructs an instance of the algorithm for the given {@code searchSpaces}.
+         * Constructs an instance of the algorithm for the given {@code sources},
+         * {@code pathsMap} and {@code searchSpaces}.
          *
-         * @param searchSpaces single source shortest paths trees map
+         * @param sources  source vertices
+         * @param targets  target vertices
+         * @param pathsMap single source shortest paths trees map
          */
-        private DefaultManyToManyShortestPathsImpl(Set<V> sources, Set<V> targets,
-                                                   Map<V, ShortestPathAlgorithm.SingleSourcePaths<V, E>> searchSpaces) {
-            this.sources = sources;
-            this.targets = targets;
-            this.searchSpaces = searchSpaces;
+        DefaultManyToManyShortestPathsImpl(Set<V> sources, Set<V> targets,
+                                           Map<Pair<V, V>, GraphPath<V, E>> pathsMap) {
+            super(sources, targets);
+            this.pathsMap = pathsMap;
         }
 
         /**
@@ -110,13 +120,9 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
          */
         @Override
         public GraphPath<V, E> getPath(V source, V target) {
-            Objects.requireNonNull(source, "source should not be null!");
-            Objects.requireNonNull(target, "target should not be null!");
-
-            if (!sources.contains(source) || !targets.contains(target)) {
-                throw new IllegalArgumentException("paths between " + source + " and " + target + " not computed");
-            }
-            return searchSpaces.get(source).getPath(target);
+            assertCorrectSourceAndTarget(source, target);
+            Pair<V, V> sourceTargetPair = Pair.of(source, target);
+            return pathsMap.get(sourceTargetPair);
         }
 
         /**
@@ -124,13 +130,14 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
          */
         @Override
         public double getWeight(V source, V target) {
-            Objects.requireNonNull(source, "source should not be null!");
-            Objects.requireNonNull(target, "target should not be null!");
+            assertCorrectSourceAndTarget(source, target);
+            Pair<V, V> sourceTargetPair = Pair.of(source, target);
 
-            if (!sources.contains(source) || !targets.contains(target)) {
-                throw new IllegalArgumentException("paths between " + source + " and " + target + " not computed");
+            GraphPath<V, E> path = pathsMap.get(sourceTargetPair);
+            if (path == null) {
+                return Double.POSITIVE_INFINITY;
             }
-            return searchSpaces.get(source).getWeight(target);
+            return path.getWeight();
         }
     }
 }
