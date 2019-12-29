@@ -18,6 +18,7 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -127,12 +128,12 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
 
-        partitionA = new LinkedHashMap<>(n1);
+        partitionA = CollectionUtil.newLinkedHashMapWithExpectedSize(n1);
         for (int i = 0; i < n1; i++) {
             partitionA.put(i, target.addVertex());
         }
 
-        partitionB = new LinkedHashMap<>(n2);
+        partitionB = CollectionUtil.newLinkedHashMapWithExpectedSize(n2);
         for (int i = 0; i < n2; i++) {
             partitionB.put(i, target.addVertex());
         }

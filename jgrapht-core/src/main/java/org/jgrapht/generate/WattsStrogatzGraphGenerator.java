@@ -18,6 +18,7 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -156,7 +157,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
         // create ring lattice
         List<V> ring = new ArrayList<>(n);
-        Map<V, List<E>> adj = new LinkedHashMap<>(n);
+        Map<V, List<E>> adj = CollectionUtil.newLinkedHashMapWithExpectedSize(n);
 
         for (int i = 0; i < n; i++) {
             V v = target.addVertex();
