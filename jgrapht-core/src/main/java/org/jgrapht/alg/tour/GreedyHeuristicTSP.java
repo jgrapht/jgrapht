@@ -18,17 +18,15 @@
 package org.jgrapht.alg.tour;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.graph.MaskSubgraph;
-import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.alg.util.UnionFind;
+import org.jgrapht.util.ModifiableInteger;
 
 /**
  * The greedy heuristic algorithm for the TSP problem.
@@ -90,8 +88,11 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
                 .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
                 .collect(Collectors.toCollection(() -> new ArrayDeque<>()));
         Set<E> tourEdges = new HashSet<>(n);
-        // Create a sub-graph that only includes the tour edges
-        Graph<V, E> tourGraph = new MaskSubgraph<>(graph, v -> false, e -> !tourEdges.contains(e));
+        // Create a Map to track the degree of each vertex in tour
+        Map<V,ModifiableInteger> vertexDegree = graph.vertexSet().stream()
+                .collect(Collectors.toMap(v -> v, v -> new ModifiableInteger(0)));
+        // Create a UnionFind to track forming of loops
+        UnionFind<V> tourSet = new UnionFind<>(graph.vertexSet());
         // Iterate until the tour is complete
         while (!edges.isEmpty() && tourEdges.size() < n) {
             // Select the shortest available edge
@@ -99,17 +100,15 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
             V vertex1 = graph.getEdgeSource(edge);
             V vertex2 = graph.getEdgeTarget(edge);
             // If it matches constraints, add it to the tour
-            if (canAddEdge(tourGraph, vertex1, vertex2, tourEdges.size() == n - 1)) {
+            if (canAddEdge(vertexDegree, tourSet, vertex1, vertex2, tourEdges.size() == n - 1)) {
                 tourEdges.add(edge);
+                vertexDegree.get(vertex1).increment();
+                vertexDegree.get(vertex2).increment();
+                tourSet.union(vertex1, vertex2);
             }
         }
         // Build the tour into a GraphPath
-        List<V> tourVertices = new ArrayList<>(n);
-        Iterator<V> dfs = new DepthFirstIterator<>(tourGraph);
-        while (dfs.hasNext()) {
-            tourVertices.add(dfs.next());
-        }
-        return listToTour(tourVertices, graph);
+        return edgeSetToTour(tourEdges, graph);
     }
 
     /**
@@ -118,25 +117,19 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
      * and we are not at the last edge, or false if we do not create a cycle and
      * are at the last edge.
      *
-     * @param tourGraph The graph masked to only include tour edges
+     * @param vertexDegree A Map tracking the degree of each vertex in the tour
+     * @param tourSet A UnionFind tracking the connectivity of the tour
      * @param vertex1 First vertex of proposed edge
      * @param vertex2 Second vertex of proposed edge
      * @param lastEdge true if we are looking for the last edge
      * @return true if this edge can be added
      */
-    private boolean canAddEdge(Graph<V, E> tourGraph, V vertex1, V vertex2, boolean lastEdge) {
+    private boolean canAddEdge(Map<V,ModifiableInteger> vertexDegree, UnionFind<V> tourSet, V vertex1, V vertex2, boolean lastEdge) {
         // Would form a tree rather than loop
-        if (tourGraph.degreeOf(vertex1) > 1 || tourGraph.degreeOf(vertex2) > 1) {
+        if (vertexDegree.get(vertex1).getValue() > 1 || vertexDegree.get(vertex2).getValue() > 1) {
             return false;
         }
         // Test if a path already exists between the vertices
-        Iterator<V> dfs = new DepthFirstIterator<>(tourGraph, vertex1);
-        while (dfs.hasNext()) {
-            V v = dfs.next();
-            if (v.equals(vertex2)) {
-                return lastEdge;
-            }
-        }
-        return !lastEdge;
+        return tourSet.inSameSet(vertex1, vertex2) ? lastEdge : !lastEdge;
     }
 }

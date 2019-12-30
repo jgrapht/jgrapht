@@ -21,11 +21,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.MaskSubgraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 /**
  * Base class for TSP solver algorithms.
@@ -48,13 +51,13 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
      * @param graph the graph
      * @return a graph path
      */
-    protected GraphPath<V, E> listToTour(List<V> tour, Graph<V, E> graph) {
+    protected GraphPath<V, E> vertexListToTour(List<V> tour, Graph<V, E> graph) {
         List<E> edges = new ArrayList<>(tour.size() + 1);
         double tourWeight = 0d;
         Iterator<V> tourIterator = tour.iterator();
         V first = tourIterator.next();
         V u = first;
-        while(tourIterator.hasNext()) {
+        while (tourIterator.hasNext()) {
             V v = tourIterator.next();
             E e = graph.getEdge(u, v);
             edges.add(e);
@@ -64,8 +67,39 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
         E e = graph.getEdge(u, first);
         edges.add(e);
         tourWeight += graph.getEdgeWeight(e);
-        tour.add(tour.get(0));
+        tour.add(first);
         return new GraphWalk<>(graph, first, first, tour, edges, tourWeight);
+    }
+
+    /**
+     * Transform from a Set representation to a graph path.
+     *
+     * @param tour a set containing the edges of the tour
+     * @param graph the graph
+     * @return a graph path
+     */
+    protected GraphPath<V, E> edgeSetToTour(Set<E> tour, Graph<V, E> graph) {
+        List<V> vertices = new ArrayList<>(tour.size() + 1);
+        List<E> edges = new ArrayList<>(tour.size());
+        double tourWeight = 0d;
+        Iterator<V> tourIterator = new DepthFirstIterator<>(
+                new MaskSubgraph<>(graph, v -> false, e -> !tour.contains(e)));
+        V first = tourIterator.next();
+        V u = first;
+        while (tourIterator.hasNext()) {
+            vertices.add(u);
+            V v = tourIterator.next();
+            E e = graph.getEdge(u, v);
+            edges.add(e);
+            tourWeight += graph.getEdgeWeight(e);
+            u = v;
+        }
+        vertices.add(u);
+        vertices.add(first);
+        E e = graph.getEdge(u, first);
+        edges.add(e);
+        tourWeight += graph.getEdgeWeight(e);
+        return new GraphWalk<>(graph, first, first, vertices, edges, tourWeight);
     }
 
     /**
@@ -80,16 +114,16 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E> implements Hamiltonian
         return new GraphWalk<>(
                 graph, start, start, Collections.singletonList(start), Collections.emptyList(), 0d);
     }
-    
+
     /**
      * Checks that graph is undirected, complete, and non-empty
-     * 
+     *
      * @param graph the graph
      * @throws IllegalArgumentException if graph is not undirected
      * @throws IllegalArgumentException if graph is not complete
      * @throws IllegalArgumentException if graph contains no vertices
      */
-    protected void checkGraph(Graph<V,E> graph) {
+    protected void checkGraph(Graph<V, E> graph) {
         graph = GraphTests.requireUndirected(graph);
         if (!GraphTests.isComplete(graph)) {
             throw new IllegalArgumentException("Graph is not complete");

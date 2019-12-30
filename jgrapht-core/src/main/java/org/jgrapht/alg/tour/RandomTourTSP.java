@@ -80,6 +80,6 @@ public class RandomTourTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E> {
         }
         // Randomly permute the vertex list
         Collections.shuffle(vertices, rng);
-        return listToTour(vertices, graph);
+        return vertexListToTour(vertices, graph);
     }
 }

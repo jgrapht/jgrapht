@@ -147,7 +147,7 @@ public class NearestNeighborHeuristicTSP<V, E>
             current = nearest(current, unvisited, graph);
             visited.add(current);
         }
-        return listToTour(visited, graph);
+        return vertexListToTour(visited, graph);
     }
 
     /**

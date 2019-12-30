@@ -110,7 +110,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
-        return listToTour(augment(subtour(graph), graph), graph);
+        return vertexListToTour(augment(subtour(graph), graph), graph);
     }
 
     /**
@@ -132,7 +132,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
 
         this.subtour = tour;
         Graph<V, E> graph = this.subtour.getGraph();
-        return listToTour(augment(subtour(graph), graph), graph);
+        return vertexListToTour(augment(subtour(graph), graph), graph);
     }
 
     /**
