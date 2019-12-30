@@ -47,14 +47,17 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
  * Society for Industrial and Applied Mathematics, Philadelphia, PA, USA, 36-45.
  *
  * <p>
- * First a backward single source shortest paths search is performed for each target vertex. During
- * the searches a bucket $b(v)$ is associated with each vertex $v$ in the graph. A bucket stores
- * a set of pairs $(t,d)$, where $t$ is a target vertex current search is performed from and $d$ is the computed
- * distance from $v$ to this target. Then a forward single source shortest paths search is performed
- * from every source vertex. When a search settles a vertex $v$ with distance $d(s,v)$, where $s$ is current
- * source vertex, its bucket is scanned. For each entry $(t,d)$ if $d(s,t) &gt; d(s,v) + d$ values of paths weight
- * between $s$ and $t$ and its middle vertex is updated. The middle vertices are then used to restored
- * actual path from the information in the shortest paths trees.
+ * First contraction hierarchy is constructed. Then for each target vertex a backward
+ * single source shortest paths search is performed on the contracted graph. During
+ * the searches a bucket $b(v)$ is associated with each vertex $v$ in the graph. A
+ * bucket stores a set of pairs $(t,d)$, where $t$ is a target vertex current search
+ * is performed from and $d$ is the computed distance from $v$ to this target. Then
+ * a forward single source shortest paths search is performed from every source vertex.
+ * When a search settles a vertex $v$ with distance $d(s,v)$, where $s$ is current source
+ * vertex, its bucket is scanned. For each entry $(t,d)$ if $d(s,t) &gt; d(s,v) + d$
+ * values of paths weight between $s$ and $t$ and its middle vertex is updated. The
+ * middle vertices are then used to restored actual path from the information in the
+ * shortest paths trees.
  *
  * <p>
  * The efficiency of this algorithm is derived from the fact that contraction hierarchy produces fairly small

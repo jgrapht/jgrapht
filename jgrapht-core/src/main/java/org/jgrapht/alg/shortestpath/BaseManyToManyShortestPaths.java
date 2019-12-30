@@ -50,12 +50,17 @@ abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPa
         this.graph = Objects.requireNonNull(graph, "Graph is null");
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GraphPath<V, E> getPath(V source, V sink) {
         return getManyToManyPaths(Collections.singleton(source), Collections.singleton(sink)).getPath(source, sink);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getPathWeight(V source, V sink) {
         GraphPath<V, E> p = getPath(source, sink);
@@ -66,6 +71,9 @@ abstract class BaseManyToManyShortestPaths<V, E> implements ManyToManyShortestPa
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source) {
         if (!graph.containsVertex(source)) {

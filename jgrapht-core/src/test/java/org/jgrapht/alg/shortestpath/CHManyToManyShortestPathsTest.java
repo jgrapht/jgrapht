@@ -20,9 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -30,12 +28,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionEdge;
 import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Test for {@link CHManyToManyShortestPaths}.
@@ -46,81 +42,42 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
 
     @Test
     public void testEmptyGraph() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(Collections.emptySet(), Collections.emptySet());
+        super.testEmptyGraph();
     }
 
     @Test(expected = NullPointerException.class)
     public void testSourcesIsNull() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(null, Collections.emptySet());
+        super.testSourcesIsNull();
     }
 
     @Test(expected = NullPointerException.class)
     public void testTargetsIsNull() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(Collections.emptySet(), null);
+        super.testTargetsIsNull();
     }
 
     @Test
     public void testNoPath() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
-
-        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new CHManyToManyShortestPaths<>(graph).getManyToManyPaths(
-                new HashSet<>(Collections.singletonList(1)), new HashSet<>(Collections.singletonList(2)));
-
-        assertEquals(Double.POSITIVE_INFINITY, shortestPaths.getWeight(1, 2), 1e-9);
-        assertNull(shortestPaths.getPath(1, 2));
+        super.testNoPath();
     }
 
     @Test
-    public void testDifferentSourcesAndTargets1() {
-        Graph<Integer, DefaultWeightedEdge> graph = getSimpleGraph();
-
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
-                new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-
-        testDifferentSourcesAndTargetsSimpleGraph(new CHManyToManyShortestPaths<>(
-                graph, contraction.getFirst(), contraction.getSecond()));
+    public void testDifferentSourcesAndTargetsSimpleGraph() {
+        super.testDifferentSourcesAndTargetsSimpleGraph();
     }
 
     @Test
-    public void testDifferentSourcesAndTargets2() {
-        Graph<Integer, DefaultWeightedEdge> graph = getMultigraph();
-
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
-                new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-
-        testDifferentSourcesAndTargetsMultigraph(new CHManyToManyShortestPaths<>(
-                graph, contraction.getFirst(), contraction.getSecond()));
+    public void testDifferentSourcesAndTargetsMultigraph() {
+        super.testDifferentSourcesAndTargetsMultigraph();
     }
 
     @Test
-    public void testSourcesEqualTargets1() {
-        Graph<Integer, DefaultWeightedEdge> graph = getSimpleGraph();
-
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
-                new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-
-        testSourcesEqualTargetsSimpleGraph(new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond()));
+    public void testSourcesEqualTargetsSimpleGraph() {
+        super.testSourcesEqualTargetsSimpleGraph();
     }
 
     @Test
-    public void testSourcesEqualTargets2() {
-        Graph<Integer, DefaultWeightedEdge> graph = getMultigraph();
-
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
-                new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-
-
-        testSourcesEqualTargetsMultigraph(new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond()));
+    public void testSourcesEqualTargetsMultigraph() {
+        super.testSourcesEqualTargetsMultigraph();
     }
 
     @Test
@@ -185,30 +142,16 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
 
     @Test
     public void testOnRandomGraphs() {
-        int numOfVertices = 100;
-        int vertexDegree = 5;
-        int numOfIterations = 10;
-        int maxNumOfRandomVertices = 15;
+        super.testOnRandomGraphs(40, 5,
+                new int[][]{{10, 15}, {10, 10}, {15, 10}}, 10);
+    }
 
-        Random random = new Random(SEED);
-
-        for (int i = 0; i < numOfIterations; i++) {
-            Graph<Integer, DefaultWeightedEdge> graph = generateRandomGraph(
-                    numOfVertices, vertexDegree * numOfVertices, random);
-
-            Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                    Map<Integer, ContractionVertex<Integer>>> contraction
-                    = new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-
-            ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> algorithm
-                    = new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond());
-
-            int numOfSources = random.nextInt(maxNumOfRandomVertices);
-            int numOfTargets = random.nextInt(maxNumOfRandomVertices);
-
-            Set<Integer> sources = getRandomVertices(graph, numOfSources, random);
-            Set<Integer> targets = getRandomVertices(graph, numOfTargets, random);
-            test(algorithm, graph, sources, targets);
-        }
+    @Override
+    protected ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> getAlgorithm(
+            Graph<Integer, DefaultWeightedEdge> graph) {
+        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
+                Map<Integer, ContractionVertex<Integer>>> contraction =
+                new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+        return new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond());
     }
 }
