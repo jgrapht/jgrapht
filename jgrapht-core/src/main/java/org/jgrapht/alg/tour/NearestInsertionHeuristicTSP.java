@@ -39,32 +39,33 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
  * </p>
  *
  * <p>
- * Insertion heuristics are quite straighforward, and there are many variants to 
- * choose from. The basics of insertion heuristics is to start with a tour of a 
- * subset of all cities, and then inserting the rest by some heuristic. The 
- * initial subtour is often a triangle or the convex hull. One can also start 
- * with a single edge as subtour. This implementation uses the shortest edge by
+ * Insertion heuristics are quite straightforward, and there are many variants
+ * to choose from. The basics of insertion heuristics is to start with a tour of
+ * a subset of all cities, and then inserting the rest by some heuristic. The
+ * initial sub-tour is often a triangle or the convex hull. One can also start
+ * with a single edge as sub-tour. This implementation uses the shortest edge by
  * default as the initial sub-tour.
  * </p>
  *
  * <p>
  * The implementation of this class is based on: <br>
- * Nilsson, Christian. "Heuristics for the traveling salesman problem." Linkoping University 38 (2003)
+ * Nilsson, Christian. "Heuristics for the traveling salesman problem."
+ * Linkoping University 38 (2003)
  * </p>
- * 
+ *
  * <p>
- * This implementation can also be used in order to try to improve an existing tour. See method
- * {@link #improveTour(GraphPath)}.
+ * This implementation can also be used in order to try to improve an existing
+ * tour. See method {@link #improveTour(GraphPath)}.
  * </p>
  *
  * <p>
  * The runtime complexity of this class is $O(V^2)$.
  * </p>
- * 
+ *
  * <p>
  * This algorithm requires that the graph is complete.
  * </p>
-*
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -103,6 +104,9 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
+        // Check that graph is appropriate
+        checkGraph(graph);
+
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
@@ -110,16 +114,22 @@ public class NearestInsertionHeuristicTSP<V, E> extends
     }
 
     /**
-     * Improves an existing tour. Using this algorithm will not improve the cost, 
-     * but instead adds any missing vertices to the tour. It also removes
+     * Improves an existing tour. Using this algorithm will not improve the
+     * cost, but instead adds any missing vertices to the tour. It also removes
      * vertices from the tour if not in the graph, so this can be used to update
      * a tour following changes to a graph.
      *
      * @param tour The existing tour
      * @return A valid and complete tour for the same graph
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if the graph is not complete
+     * @throws IllegalArgumentException if the graph contains no vertices
      */
     @Override
     public GraphPath<V, E> improveTour(GraphPath<V, E> tour) {
+        // Check that graph is appropriate
+        checkGraph(this.subtour.getGraph());
+
         this.subtour = tour;
         Graph<V, E> graph = this.subtour.getGraph();
         return listToTour(augment(subtour(graph), graph), graph);
@@ -130,13 +140,8 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      *
      * @param graph The graph
      * @return Vertices of an initial sub-tour
-     * @throws IllegalArgumentException if the graph is not undirected
-     * @throws IllegalArgumentException if the graph is not complete
-     * @throws IllegalArgumentException if the graph contains no vertices
      */
     private List<V> subtour(Graph<V, E> graph) {
-        // Check that graph is appropriate
-        checkGraph(graph);
         List<V> subtourVertices = new ArrayList<>();
         if (subtour != null) {
             if (subtour.getStartVertex().equals(subtour.getEndVertex())) {
@@ -240,8 +245,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @return List of vertices representing the complete tour
      */
     private List<V> augment(List<V> subtour, Graph<V, E> graph) {
-        Set<V> unvisited = new HashSet<>();
-        unvisited.addAll(graph.vertexSet());
+        Set<V> unvisited = new HashSet<>(graph.vertexSet());
         unvisited.removeAll(subtour);
         return augment(subtour, getClosest(subtour, unvisited, graph), unvisited, graph);
     }

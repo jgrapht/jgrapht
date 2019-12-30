@@ -44,13 +44,14 @@ import org.jgrapht.GraphPath;
  *
  * <p>
  * The implementation of this class is based on: <br>
- * Nilsson, Christian. "Heuristics for the traveling salesman problem." Linkoping University 38 (2003)
+ * Nilsson, Christian. "Heuristics for the traveling salesman problem."
+ * Linkoping University 38 (2003)
  * </p>
  *
  * <p>
  * The runtime complexity of this class is $O(V^2)$.
  * </p>
- * 
+ *
  * <p>
  * This algorithm requires that the graph is complete.
  * </p>
@@ -78,9 +79,10 @@ public class NearestNeighborHeuristicTSP<V, E>
      * Constructor
      *
      * @param first First vertex to visit, or null to choose at random
+     * @throws NullPointerException if first is null
      */
     public NearestNeighborHeuristicTSP(V first) {
-        this(first, new Random());
+        this(Objects.requireNonNull(first, "Specified initial vertex cannot be null"), new Random());
     }
 
     /**
@@ -95,12 +97,22 @@ public class NearestNeighborHeuristicTSP<V, E>
     /**
      * Constructor
      *
+     * @param rng Random number generator
+     * @throws NullPointerException if rng is null
+     */
+    public NearestNeighborHeuristicTSP(Random rng) {
+        this(null, Objects.requireNonNull(rng, "Random number generator cannot be null"));
+    }
+
+    /**
+     * Constructor
+     *
      * @param first First vertex to visit, or null to choose at random
      * @param rng Random number generator
      */
-    public NearestNeighborHeuristicTSP(V first, Random rng) {
+    private NearestNeighborHeuristicTSP(V first, Random rng) {
         this.first = first;
-        this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
+        this.rng = rng;
     }
 
     /**
@@ -114,13 +126,19 @@ public class NearestNeighborHeuristicTSP<V, E>
      */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
+        // Check that graph is appropriate
+        checkGraph(graph);
+
         // Handle a graph with single vertex
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
-        Set<V> unvisited = new HashSet<>();
+        // Create Set to contain all but first vertex
+        Set<V> unvisited = new HashSet<>(graph.vertexSet());
         // Get the initial vertex
-        V current = first(unvisited, graph);
+        V current = first(graph);
+        unvisited.remove(current);
+        // Create List to store the tour
         List<V> visited = new ArrayList<>(unvisited.size() + 1);
         visited.add(current);
         // Iterate until tour is complete
@@ -134,23 +152,14 @@ public class NearestNeighborHeuristicTSP<V, E>
 
     /**
      * Get or determine the first vertex
-     * 
-     * @param unvisited Set to populate with unvisited vertices
+     *
      * @param graph The graph
      * @return A suitable vertex to start
-     * @throws IllegalArgumentException if the graph is not undirected
-     * @throws IllegalArgumentException if the graph is not complete
-     * @throws IllegalArgumentException if the graph contains no vertices
      */
-    private V first(Set<V> unvisited, Graph<V, E> graph) {
-        // Check that graph is appropriate
-        checkGraph(graph);
-        unvisited.addAll(graph.vertexSet());
+    private V first(Graph<V, E> graph) {
         if (first == null || !graph.vertexSet().contains(first)) {
-            first = (V) unvisited.toArray()[rng.nextInt(unvisited.size())];
+            first = (V) graph.vertexSet().toArray()[rng.nextInt(graph.vertexSet().size())];
         }
-        // Create Set containing all but first vertex
-        unvisited.remove(first);
         return first;
     }
 
