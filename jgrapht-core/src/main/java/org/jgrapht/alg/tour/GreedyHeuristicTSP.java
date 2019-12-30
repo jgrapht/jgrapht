@@ -49,12 +49,15 @@ import org.jgrapht.traverse.DepthFirstIterator;
  *
  * <p>
  * The implementation of this class is based on: <br>
- * <a href="http://160592857366.free.fr/joe/ebooks/ShareData/Heuristics%20for%20the%20Traveling%20Salesman%20Problem%20By%20Christian%20Nillson.pdf">Nilsson
- * C., "Heuristics for the Traveling Salesman Problem"</a>
+ * Nilsson, Christian. "Heuristics for the traveling salesman problem." Linkoping University 38 (2003)
  * </p>
  *
  * <p>
  * The runtime complexity of this class is $O(V^2 log(V))$.
+ * </p>
+ * 
+ * <p>
+ * This algorithm requires that the graph is complete.
  * </p>
  *
  * @param <V> the graph vertex type
