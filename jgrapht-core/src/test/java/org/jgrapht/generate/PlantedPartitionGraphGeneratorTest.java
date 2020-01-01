@@ -311,7 +311,7 @@ public class PlantedPartitionGraphGeneratorTest
 
         List<Set<Integer>> groundTruthCommunities = new ArrayList<>(l);
         for (int i = 0; i < l; i++) {
-            groundTruthCommunities.add(new LinkedHashSet<>(k));
+            groundTruthCommunities.add(CollectionUtil.newLinkedHashSetWithExpectedSize(k));
             for (int j = 0; j < k; j++) {
                 groundTruthCommunities.get(i).add(i * k + j);
             }

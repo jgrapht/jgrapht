@@ -119,7 +119,7 @@ public class ColorRefinementAlgorithm<V, E>
     private Set<Integer> calculateColorDegrees(int refiningColor, ColoringRepresentation rep)
     {
         int n = graph.vertexSet().size();
-        Set<Integer> adjacentColors = new LinkedHashSet<>(n);
+        Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
 
         // calculate color degree and update maxColorDegree
         for (V v : rep.colorClasses.get(refiningColor)) {

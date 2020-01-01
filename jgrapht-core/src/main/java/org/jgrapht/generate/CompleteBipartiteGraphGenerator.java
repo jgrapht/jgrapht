@@ -18,6 +18,7 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -51,8 +52,8 @@ public class CompleteBipartiteGraphGenerator<V, E>
         }
         this.sizeA = partitionA;
         this.sizeB = partitionB;
-        this.partitionA=new LinkedHashSet<>(sizeA);
-        this.partitionB=new LinkedHashSet<>(sizeB);
+        this.partitionA = CollectionUtil.newLinkedHashSetWithExpectedSize(sizeA);
+        this.partitionB = CollectionUtil.newLinkedHashSetWithExpectedSize(sizeB);
     }
 
     /**

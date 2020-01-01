@@ -20,6 +20,7 @@ package org.jgrapht.alg.matching;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 import org.junit.experimental.categories.*;
 
@@ -173,13 +174,13 @@ public class MaximumWeightBipartiteMatchingTest
             Graph<Integer, DefaultWeightedEdge> g =
                 new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-            Set<Integer> partitionA = new LinkedHashSet<>(n);
+            Set<Integer> partitionA = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
             for (int i = 0; i < n; i++) {
                 g.addVertex(i);
                 partitionA.add(i);
             }
 
-            Set<Integer> partitionB = new LinkedHashSet<>(n);
+            Set<Integer> partitionB = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
             for (int i = 0; i < n; i++) {
                 g.addVertex(n + i);
                 partitionB.add(n + i);

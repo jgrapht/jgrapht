@@ -19,6 +19,7 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -103,7 +104,7 @@ public class TreeMeasurer<V, E>
         if (diameterPath.size() % 2 == 1)
             graphCenter = Collections.singleton(diameterPath.get(diameterPath.size() / 2));
         else {
-            graphCenter = new LinkedHashSet<>(2);
+            graphCenter = CollectionUtil.newLinkedHashSetWithExpectedSize(2);
             graphCenter.add(diameterPath.get(diameterPath.size() / 2));
             graphCenter.add(diameterPath.get(diameterPath.size() / 2 - 1));
         }

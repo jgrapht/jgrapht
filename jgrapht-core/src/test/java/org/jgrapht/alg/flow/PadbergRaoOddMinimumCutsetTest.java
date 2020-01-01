@@ -216,7 +216,8 @@ public class PadbergRaoOddMinimumCutsetTest
                 // and
                 // |V|-1
 
-                Set<Integer> oddVertices = new LinkedHashSet<>(nrOfOddVertices);
+                Set<Integer> oddVertices =
+                    CollectionUtil.newLinkedHashSetWithExpectedSize(nrOfOddVertices);
                 List<Integer> allVertices = new ArrayList<>(randomGraph.vertexSet());
                 for (int k = 0; k < nrOfOddVertices; k++) {
                     oddVertices.add(allVertices.remove(rand.nextInt(allVertices.size())));
