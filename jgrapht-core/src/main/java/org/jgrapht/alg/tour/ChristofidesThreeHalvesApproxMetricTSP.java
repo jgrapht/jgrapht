@@ -23,6 +23,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.blossom.v5.*;
 import org.jgrapht.alg.spanning.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -147,7 +148,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
             eulerianCycleAlgorithm.getEulerianCycle(mstAndMatching);
 
         // form a closed tour from the Hamiltonian cycle
-        Set<V> visited = new HashSet<>(n);
+        Set<V> visited = CollectionUtil.newHashSetWithExpectedSize(n);
         List<V> tourVertices = eulerianCycle
             .getVertexList().stream().filter(visited::add).collect(Collectors.toList());
         tourVertices.add(tourVertices.get(0));

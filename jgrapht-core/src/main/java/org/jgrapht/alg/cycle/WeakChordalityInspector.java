@@ -398,7 +398,7 @@ public class WeakChordalityInspector<V, E>
             bucketsByLabel.add(new HashSet<>());
         }
         List<Integer> labels = new ArrayList<>(Collections.nCopies(n, -1));
-        Set<Integer> unvisited = new HashSet<>(separator.size());
+        Set<Integer> unvisited = CollectionUtil.newHashSetWithExpectedSize(separator.size());
         separator.forEach(pair -> {
             unvisited.add(pair.getFirst());
             labels.set(pair.getFirst(), 0);

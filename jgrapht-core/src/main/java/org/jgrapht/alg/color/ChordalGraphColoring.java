@@ -99,7 +99,8 @@ public class ChordalGraphColoring<V, E>
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
             for (V vertex : perfectEliminationOrder) {
                 Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
-                Set<Integer> predecessorColors = new HashSet<>(predecessors.size());
+                Set<Integer> predecessorColors =
+                    CollectionUtil.newHashSetWithExpectedSize(predecessors.size());
                 predecessors.forEach(v -> predecessorColors.add(vertexColoring.get(v)));
 
                 // find the minimum unused color in the set of predecessors

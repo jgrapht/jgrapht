@@ -527,7 +527,7 @@ public class GnmRandomGraphGeneratorTest
             // on directed graph, edge A->B must be (A,B)
             // on undirected graph, edge A-B can be (A,B) or (B,A)
 
-            this.labelsEdgesSet = new HashSet<>(edgeSet.size());
+            this.labelsEdgesSet = CollectionUtil.newHashSetWithExpectedSize(edgeSet.size());
             for (E edge : edgeSet) {
                 V sourceVertex = g.getEdgeSource(edge);
                 int sourceLabel = mapVertexToOrder.get(sourceVertex);

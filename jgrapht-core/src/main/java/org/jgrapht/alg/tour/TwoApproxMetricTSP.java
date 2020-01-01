@@ -22,6 +22,7 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.spanning.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -106,7 +107,7 @@ public class TwoApproxMetricTSP<V, E>
          * Perform a depth-first-search traversal
          */
         int n = graph.vertexSet().size();
-        Set<V> found = new HashSet<>(n);
+        Set<V> found = CollectionUtil.newHashSetWithExpectedSize(n);
         List<V> tour = new ArrayList<>(n + 1);
         V start = graph.vertexSet().iterator().next();
         DepthFirstIterator<V, DefaultEdge> dfsIt = new DepthFirstIterator<>(mst, start);

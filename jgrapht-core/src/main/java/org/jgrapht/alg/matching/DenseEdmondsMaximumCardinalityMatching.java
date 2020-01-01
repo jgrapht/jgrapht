@@ -22,6 +22,7 @@ import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -629,7 +630,7 @@ public class DenseEdmondsMaximumCardinalityMatching<V, E>
         private SimpleMatching(int n)
         {
             this.match = new int[n];
-            this.exposed = new HashSet<>(n);
+            this.exposed = CollectionUtil.newHashSetWithExpectedSize(n);
 
             Arrays.fill(match, UNMATCHED);
             IntStream.range(0, n).forEach(exposed::add);

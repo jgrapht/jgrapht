@@ -64,7 +64,8 @@ public class PrimMinimumSpanningTree<V, E>
     @SuppressWarnings("unchecked")
     public SpanningTree<E> getSpanningTree()
     {
-        Set<E> minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());
+        Set<E> minimumSpanningTreeEdgeSet =
+            CollectionUtil.newHashSetWithExpectedSize(g.vertexSet().size());
         double spanningTreeWeight = 0d;
 
         final int N = g.vertexSet().size();
