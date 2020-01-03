@@ -54,8 +54,8 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
  * </p>
  *
  * <p>
- * This implementation can also be used in order to try to improve an existing
- * tour. See method {@link #improveTour(GraphPath)}.
+ * This implementation can also be used in order to augment an existing partial
+ * tour. See method {@link #augmentTour(GraphPath)}.
  * </p>
  *
  * <p>
@@ -72,8 +72,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
  * @author Peter Harman
  */
 public class NearestInsertionHeuristicTSP<V, E> extends
-        HamiltonianCycleAlgorithmBase<V, E>
-        implements HamiltonianCycleImprovementAlgorithm<V, E> {
+        HamiltonianCycleAlgorithmBase<V, E> {
 
     private GraphPath<V, E> subtour;
 
@@ -114,10 +113,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
     }
 
     /**
-     * Improves an existing tour. Using this algorithm will not improve the
-     * cost, but instead adds any missing vertices to the tour. It also removes
-     * vertices from the tour if not in the graph, so this can be used to update
-     * a tour following changes to a graph.
+     * Augments an existing partial tour to create a complete tour.
      *
      * @param tour The existing tour
      * @return A valid and complete tour for the same graph
@@ -125,8 +121,7 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      * @throws IllegalArgumentException if the graph is not complete
      * @throws IllegalArgumentException if the graph contains no vertices
      */
-    @Override
-    public GraphPath<V, E> improveTour(GraphPath<V, E> tour) {
+    public GraphPath<V, E> augmentTour(GraphPath<V, E> tour) {
         // Check that graph is appropriate
         checkGraph(this.subtour.getGraph());
 
@@ -145,16 +140,10 @@ public class NearestInsertionHeuristicTSP<V, E> extends
         List<V> subtourVertices = new ArrayList<>();
         if (subtour != null) {
             if (subtour.getStartVertex().equals(subtour.getEndVertex())) {
-                subtour.getVertexList()
-                        .subList(1, subtour.getVertexList().size())
-                        .stream()
-                        .filter(v -> graph.containsVertex(v))
-                        .forEachOrdered(v -> subtourVertices.add(v));
+                subtourVertices.addAll(subtour.getVertexList()
+                        .subList(1, subtour.getVertexList().size()));
             } else {
-                subtour.getVertexList()
-                        .stream()
-                        .filter(v -> graph.containsVertex(v))
-                        .forEachOrdered(v -> subtourVertices.add(v));
+                subtourVertices.addAll(subtour.getVertexList());
             }
         }
         if (subtourVertices.isEmpty()) {
