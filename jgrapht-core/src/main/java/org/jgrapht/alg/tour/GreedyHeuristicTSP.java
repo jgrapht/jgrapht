@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.UnionFind;
-import org.jgrapht.util.ModifiableInteger;
 
 /**
  * The greedy heuristic algorithm for the TSP problem.
@@ -89,8 +88,8 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
                 .collect(Collectors.toCollection(() -> new ArrayDeque<>()));
         Set<E> tourEdges = new HashSet<>(n);
         // Create a Map to track the degree of each vertex in tour
-        Map<V,ModifiableInteger> vertexDegree = graph.vertexSet().stream()
-                .collect(Collectors.toMap(v -> v, v -> new ModifiableInteger(0)));
+        Map<V,Integer> vertexDegree = graph.vertexSet().stream()
+                .collect(Collectors.toMap(v -> v, v -> 0));
         // Create a UnionFind to track forming of loops
         UnionFind<V> tourSet = new UnionFind<>(graph.vertexSet());
         // Iterate until the tour is complete
@@ -102,8 +101,8 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
             // If it matches constraints, add it to the tour
             if (canAddEdge(vertexDegree, tourSet, vertex1, vertex2, tourEdges.size() == n - 1)) {
                 tourEdges.add(edge);
-                vertexDegree.get(vertex1).increment();
-                vertexDegree.get(vertex2).increment();
+                vertexDegree.put(vertex1, vertexDegree.get(vertex1) + 1);
+                vertexDegree.put(vertex2, vertexDegree.get(vertex2) + 1);
                 tourSet.union(vertex1, vertex2);
             }
         }
@@ -124,9 +123,9 @@ public class GreedyHeuristicTSP<V, E> extends HamiltonianCycleAlgorithmBase<V, E
      * @param lastEdge true if we are looking for the last edge
      * @return true if this edge can be added
      */
-    private boolean canAddEdge(Map<V,ModifiableInteger> vertexDegree, UnionFind<V> tourSet, V vertex1, V vertex2, boolean lastEdge) {
+    private boolean canAddEdge(Map<V,Integer> vertexDegree, UnionFind<V> tourSet, V vertex1, V vertex2, boolean lastEdge) {
         // Would form a tree rather than loop
-        if (vertexDegree.get(vertex1).getValue() > 1 || vertexDegree.get(vertex2).getValue() > 1) {
+        if (vertexDegree.get(vertex1) > 1 || vertexDegree.get(vertex2) > 1) {
             return false;
         }
         // Test if a path already exists between the vertices
