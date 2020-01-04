@@ -113,24 +113,6 @@ public class NearestInsertionHeuristicTSP<V, E> extends
     }
 
     /**
-     * Augments an existing partial tour to create a complete tour.
-     *
-     * @param tour The existing tour
-     * @return A valid and complete tour for the same graph
-     * @throws IllegalArgumentException if the graph is not undirected
-     * @throws IllegalArgumentException if the graph is not complete
-     * @throws IllegalArgumentException if the graph contains no vertices
-     */
-    public GraphPath<V, E> augmentTour(GraphPath<V, E> tour) {
-        // Check that graph is appropriate
-        checkGraph(this.subtour.getGraph());
-
-        this.subtour = tour;
-        Graph<V, E> graph = this.subtour.getGraph();
-        return vertexListToTour(augment(subtour(graph), graph), graph);
-    }
-
-    /**
      * Get or create a sub-tour to start augmenting
      *
      * @param graph The graph
