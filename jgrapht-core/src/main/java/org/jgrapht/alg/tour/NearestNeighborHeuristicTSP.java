@@ -123,6 +123,8 @@ public class NearestNeighborHeuristicTSP<V, E>
      * @throws IllegalArgumentException if the graph is not undirected
      * @throws IllegalArgumentException if the graph is not complete
      * @throws IllegalArgumentException if the graph contains no vertices
+     * @throws IllegalArgumentException if the specified initial vertex is not
+     * in the graph
      */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
@@ -155,10 +157,14 @@ public class NearestNeighborHeuristicTSP<V, E>
      *
      * @param graph The graph
      * @return A suitable vertex to start
+     * @throws IllegalArgumentException if the specified initial vertex is not
+     * in the graph
      */
     private V first(Graph<V, E> graph) {
-        if (first == null || !graph.vertexSet().contains(first)) {
+        if (first == null) {
             first = (V) graph.vertexSet().toArray()[rng.nextInt(graph.vertexSet().size())];
+        } else if (!graph.vertexSet().contains(first)) {
+            throw new IllegalArgumentException("Specified initial vertex is not in graph");
         }
         return first;
     }

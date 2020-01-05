@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
 
 /**
@@ -97,9 +98,12 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      *
      * @param graph the input graph
      * @return a tour
-     * @throws IllegalArgumentException if the graph is not undirected
-     * @throws IllegalArgumentException if the graph is not complete
-     * @throws IllegalArgumentException if the graph contains no vertices
+     * @throws IllegalArgumentException If the graph is not undirected
+     * @throws IllegalArgumentException If the graph is not complete
+     * @throws IllegalArgumentException If the graph contains no vertices
+     * @throws IllegalArgumentException If the specified sub-tour is for a different Graph instance
+     * @throws IllegalArgumentException If the graph does not contain specified sub-tour vertices
+     * @throws IllegalArgumentException If the graph does not contain specified sub-tour edges
      */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
@@ -117,10 +121,22 @@ public class NearestInsertionHeuristicTSP<V, E> extends
      *
      * @param graph The graph
      * @return Vertices of an initial sub-tour
+     * @throws IllegalArgumentException If the specified sub-tour is for a different Graph instance
+     * @throws IllegalArgumentException If the graph does not contain specified sub-tour vertices
+     * @throws IllegalArgumentException If the graph does not contain specified sub-tour edges
      */
     private List<V> subtour(Graph<V, E> graph) {
         List<V> subtourVertices = new ArrayList<>();
         if (subtour != null) {
+            if (subtour.getGraph() != null && !graph.equals(subtour.getGraph())) {
+                throw new IllegalArgumentException("Specified sub-tour is for a different Graph instance");
+            }
+            if (!graph.vertexSet().containsAll(subtour.getVertexList())) {
+                throw new IllegalArgumentException("Graph does not contain specified sub-tour vertices");
+            }
+            if (!graph.edgeSet().containsAll(subtour.getEdgeList())) {
+                throw new IllegalArgumentException("Graph does not contain specified sub-tour edges");
+            }
             if (subtour.getStartVertex().equals(subtour.getEndVertex())) {
                 subtourVertices.addAll(subtour.getVertexList()
                         .subList(1, subtour.getVertexList().size()));
