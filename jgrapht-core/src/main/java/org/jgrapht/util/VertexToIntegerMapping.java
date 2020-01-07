@@ -33,28 +33,8 @@ import java.util.*;
  */
 public class VertexToIntegerMapping<V>
 {
-
     private final Map<V, Integer> vertexMap;
     private final List<V> indexList;
-
-    /**
-     * Create a new mapping from a set of vertices.
-     *
-     * @param vertices the input set of vertices
-     * @throws NullPointerException if {@code vertices} is {@code null}
-     */
-    public VertexToIntegerMapping(Set<V> vertices)
-    {
-        Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
-
-        vertexMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
-        indexList = new ArrayList<>(vertices.size());
-
-        for (V v : vertices) {
-            vertexMap.put(v, vertexMap.size());
-            indexList.add(v);
-        }
-    }
 
     /**
      * Create a new mapping from a list of vertices. The input list will be used as the
@@ -71,12 +51,8 @@ public class VertexToIntegerMapping<V>
         vertexMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
         indexList = vertices;
 
-        for (int i = 0; i < vertices.size(); i++) {
-            V v = vertices.get(i);
-
-            if (!vertexMap.containsKey(v)) {
-                vertexMap.put(v, i);
-            } else {
+        for (V v : vertices) {
+            if (vertexMap.put(v, vertexMap.size()) != null) {
                 throw new IllegalArgumentException("vertices are not distinct");
             }
         }
@@ -91,19 +67,10 @@ public class VertexToIntegerMapping<V>
      */
     public VertexToIntegerMapping(Collection<V> vertices)
     {
-        Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
-
-        vertexMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
-        indexList = new ArrayList<>(vertices.size());
-
-        for (V v : vertices) {
-            if (!vertexMap.containsKey(v)) {
-                vertexMap.put(v, vertexMap.size());
-                indexList.add(v);
-            } else {
-                throw new IllegalArgumentException("vertices are not distinct");
-            }
-        }
+        this(
+            new ArrayList<>(
+                Objects
+                    .requireNonNull(vertices, "the input collection of vertices cannot be null")));
     }
 
     /**
