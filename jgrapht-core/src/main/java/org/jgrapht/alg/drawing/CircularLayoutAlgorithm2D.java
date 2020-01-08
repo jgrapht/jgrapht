@@ -41,8 +41,8 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * @param <E> the edge type
  */
 public class CircularLayoutAlgorithm2D<V, E>
-    implements
-    LayoutAlgorithm2D<V, E>
+    extends
+    BaseLayoutAlgorithm2D<V, E>
 {
     protected double radius;
     protected Comparator<Double> comparator;
@@ -86,6 +86,8 @@ public class CircularLayoutAlgorithm2D<V, E>
     @Override
     public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
+        super.init(graph, model);
+
         Box2D drawableArea = model.getDrawableArea();
 
         double width = drawableArea.getWidth();
@@ -98,8 +100,6 @@ public class CircularLayoutAlgorithm2D<V, E>
         }
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinY();
-
-        model.init(graph);
 
         int n = graph.vertexSet().size();
         double angleStep = 2 * Math.PI / n;

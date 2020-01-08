@@ -58,7 +58,6 @@ public class ListenableLayoutModel2DTest
         model.addListener(listener);
 
         assertEquals(Box2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
-        assertNull(model.getInitializer());
 
         assertNull(model.get(v1));
         model.put(v1, Point2D.of(3, 5));

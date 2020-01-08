@@ -52,7 +52,6 @@ public class MapLayoutModel2DTest
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0, 0, 2d, 2d));
 
         assertEquals(Box2D.of(0d, 0d, 2d, 2d), model.getDrawableArea());
-        assertNull(model.getInitializer());
 
         assertNull(model.get(v1));
         model.put(v1, Point2D.of(3, 5));

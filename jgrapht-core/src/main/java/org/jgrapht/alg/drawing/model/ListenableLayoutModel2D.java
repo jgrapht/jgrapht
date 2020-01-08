@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * A layout model wrapper which adds support for listeners.
@@ -60,12 +59,6 @@ public class ListenableLayoutModel2D<V>
     public void setDrawableArea(Box2D drawableArea)
     {
         model.setDrawableArea(drawableArea);
-    }
-
-    @Override
-    public Function<V, Point2D> getInitializer()
-    {
-        return model.getInitializer();
     }
 
     @Override

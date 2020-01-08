@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Function;
 
 /**
  * A layout model which uses a hashtable to store the vertices' locations.
@@ -37,7 +36,6 @@ public class MapLayoutModel2D<V>
     LayoutModel2D<V>
 {
     protected Box2D drawableArea;
-    protected Function<V, Point2D> initializer;
     protected Map<V, Point2D> points;
     protected Set<V> fixed;
 
@@ -48,19 +46,7 @@ public class MapLayoutModel2D<V>
      */
     public MapLayoutModel2D(Box2D drawableArea)
     {
-        this(drawableArea, null);
-    }
-
-    /**
-     * Create a new model.
-     * 
-     * @param drawableArea the drawable area
-     * @param initializer the vertex initializer
-     */
-    public MapLayoutModel2D(Box2D drawableArea, Function<V, Point2D> initializer)
-    {
         this.drawableArea = drawableArea;
-        this.initializer = initializer;
         this.points = new LinkedHashMap<>();
         this.fixed = new HashSet<>();
     }
@@ -75,22 +61,6 @@ public class MapLayoutModel2D<V>
     public void setDrawableArea(Box2D drawableArea)
     {
         this.drawableArea = drawableArea;
-    }
-
-    @Override
-    public Function<V, Point2D> getInitializer()
-    {
-        return initializer;
-    }
-
-    /**
-     * Set the vertex initializer
-     * 
-     * @param initializer the initializer
-     */
-    public void setInitializer(Function<V, Point2D> initializer)
-    {
-        this.initializer = initializer;
     }
 
     @Override

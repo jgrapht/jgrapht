@@ -48,8 +48,8 @@ import org.jgrapht.alg.drawing.model.Points;
  * @param <E> the edge type
  */
 public class FRLayoutAlgorithm2D<V, E>
-    implements
-    LayoutAlgorithm2D<V, E>
+    extends
+    BaseLayoutAlgorithm2D<V, E>
 {
     /**
      * Default number of iterations
@@ -143,9 +143,9 @@ public class FRLayoutAlgorithm2D<V, E>
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinY();
 
-        if (model.getInitializer() != null) {
+        if (getInitializer() != null) {
             // respect user initializer
-            model.init(graph);
+            init(graph, model);
 
             // make sure all vertices have coordinates
             for (V v : graph.vertexSet()) {

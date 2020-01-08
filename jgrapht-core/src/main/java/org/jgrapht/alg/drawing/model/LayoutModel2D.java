@@ -20,9 +20,7 @@ package org.jgrapht.alg.drawing.model;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 
-import org.jgrapht.Graph;
 import org.jgrapht.alg.drawing.LayoutAlgorithm2D;
 
 /**
@@ -30,9 +28,8 @@ import org.jgrapht.alg.drawing.LayoutAlgorithm2D;
  * 
  * The layout model provides the necessary components to a {@link LayoutAlgorithm2D} in order to
  * draw a graph. Its responsibility is to provide the available drawable area, to be able to store
- * and answer queries about vertex coordinates, to allow someone to fix (make permanent) a vertex
- * location and potentially provide an initializer. If provided, the initializer, maybe called by a
- * layout algorithm in order to calculate initial positions for each vertex.
+ * and answer queries about vertex coordinates, and to allow someone to fix (make permanent) a
+ * vertex location.
  * 
  * @author Dimitrios Michail
  *
@@ -122,34 +119,5 @@ public interface LayoutModel2D<V>
      *         iterator if the model does not store locations.
      */
     Iterator<Map.Entry<V, Point2D>> iterator();
-
-    /**
-     * Get the initializer of the model. The role of the initializer is to set the initial
-     * coordinates of graph vertices. A particular layout algorithm may choose to ignore or to
-     * execute the initializer in order to compute the initial vertex coordinates.
-     * 
-     * @return the initializer or null if no initializer is present
-     */
-    Function<V, Point2D> getInitializer();
-
-    /**
-     * Initialize the coordinates for all vertices of the input graph using the model's initializer.
-     * 
-     * @param graph the graph
-     * 
-     * @param <E> the edge type
-     */
-    default <E> void init(Graph<V, E> graph)
-    {
-        Function<V, Point2D> initializer = getInitializer();
-        if (initializer != null) {
-            for (V v : graph.vertexSet()) {
-                Point2D value = initializer.apply(v);
-                if (value != null) {
-                    put(v, value);
-                }
-            }
-        }
-    }
 
 }

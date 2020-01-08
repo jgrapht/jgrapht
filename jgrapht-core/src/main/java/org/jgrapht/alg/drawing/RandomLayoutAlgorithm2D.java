@@ -34,8 +34,8 @@ import org.jgrapht.alg.drawing.model.Point2D;
  * @param <E> the edge type
  */
 public class RandomLayoutAlgorithm2D<V, E>
-    implements
-    LayoutAlgorithm2D<V, E>
+    extends
+    BaseLayoutAlgorithm2D<V, E>
 {
     private Random rng;
 
@@ -70,14 +70,14 @@ public class RandomLayoutAlgorithm2D<V, E>
     @Override
     public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
+        super.init(graph, model);
+
         Box2D drawableArea = model.getDrawableArea();
 
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinX();
         double width = drawableArea.getWidth();
         double height = drawableArea.getHeight();
-
-        model.init(graph);
 
         for (V v : graph.vertexSet()) {
             double x = rng.nextDouble() * width;
