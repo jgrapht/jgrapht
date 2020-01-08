@@ -252,7 +252,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 for (Node node : list) {
                     nodes.set(i++, node);
                     if (node.parentEdge != null) {
-                        node.listNode = node.parentEdge.source.separatedDfsChildList.addLast(node);
+                        node.listNode = node.parentEdge.source.separatedDfsChildList.addElementLast(node);
                     }
                 }
             }
@@ -316,8 +316,8 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
         Node root = info.parent;
         Node virtualRootChild = virtualRoot.parentEdge.target;
 
-        root.pertinentRoots.remove(virtualRoot.listNode);
-        root.separatedDfsChildList.remove(virtualRootChild.listNode);
+        root.pertinentRoots.removeNode(virtualRoot.listNode);
+        root.separatedDfsChildList.removeNode(virtualRootChild.listNode);
 
         root.mergeChildEdges(virtualRoot.embedded, info.vIn, info.vOut, info.parentNext, virtualRoot.parentEdge);
 
@@ -424,7 +424,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 }
                 if (!current.pertinentRoots.isEmpty()) {
                     int parentComponentEntryDir = currentComponentEntryDir;
-                    Node root = current.pertinentRoots.getFirstElement();
+                    Node root = current.pertinentRoots.getFirst();
 
                     if (DEBUG) {
                         System.out.printf("Descending to the root = %s\n", root.toString());
@@ -518,10 +518,10 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                 if (newStart != end) {
                     if (rootChild.lowpoint < end.dfsIndex) {
                         // the component in externally active
-                        root.listNode = newStart.pertinentRoots.addLast(root);
+                        root.listNode = newStart.pertinentRoots.addElementLast(root);
                     } else {
                         // the component is internally active
-                        root.listNode = newStart.pertinentRoots.addFirst(root);
+                        root.listNode = newStart.pertinentRoots.addElementFirst(root);
                     }
                 } else {
                     break;
@@ -867,7 +867,9 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                  * The iteration is performed in the reverse order since the infos are pushed on
                  * the stack and therefore will be processed in the again reverse order
                  */
-                for (Iterator<Edge> iterator = info.current.embedded.reverseIteratorFrom(info.prevEdge); iterator.hasNext(); ) {
+                Iterator<Edge> iterator =
+                    info.current.embedded.wrappingIterator(info.prevEdge, true);
+                while (iterator.hasNext()) {
                     Edge currentEdge = iterator.next();
                     Node opposite = currentEdge.getOpposite(info.current);
                     if ((!canGo.test(opposite) || opposite.visited != 0) && !isFinish.test(opposite)) {
@@ -896,7 +898,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
         OuterFaceCirculator circulator = componentRoot.iterator(0);
         Node current = circulator.next();
         while (current != w) {
-            if (findPathDfs(current, current.embedded.getFirstElement(), n -> !n.marked, n -> n.boundaryHeight < 0, result)) {
+            if (findPathDfs(current, current.embedded.getFirst(), n -> !n.marked, n -> n.boundaryHeight < 0, result)) {
                 return result;
             }
             current = circulator.next();
@@ -995,7 +997,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
             return;
         }
         Node componentParent = componentRoot.getParent();
-        Edge edgeToNext = componentRoot.embedded.getLastElement(), edgeToPrev = componentRoot.embedded.getFirstElement();
+        Edge edgeToNext = componentRoot.embedded.getLast(), edgeToPrev = componentRoot.embedded.getFirst();
         Node next = edgeToNext.getOpposite(componentParent), prev = edgeToPrev.getOpposite(componentParent);
 
         componentRoot.outerFaceNeighbors[0] = next;
@@ -1004,8 +1006,8 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
         prev.outerFaceNeighbors[0] = componentRoot;
         Node current = componentRoot.outerFaceNeighbors[0];
         do {
-            edgeToNext = current.embedded.getLastElement();
-            edgeToPrev = current.embedded.getFirstElement();
+            edgeToNext = current.embedded.getLast();
+            edgeToPrev = current.embedded.getFirst();
             next = edgeToNext.getOpposite(current);
             prev = edgeToPrev.getOpposite(current);
             if (prev != componentParent) {
@@ -1585,13 +1587,13 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
          * @return an edge from the current node to the next node
          */
         Edge edgeToNext() {
-            Edge edge = prev.embedded.getFirstElement();
+            Edge edge = prev.embedded.getFirst();
             Node target = toExistingNode(current);
             Node source = toExistingNode(prev);
             if (edge.getOpposite(source) == target) {
                 return edge;
             } else {
-                return prev.embedded.getLastElement();
+                return prev.embedded.getLast();
             }
         }
 
@@ -1958,7 +1960,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
          */
         boolean isExternallyActiveWrtTo(Node node) {
             return leastAncestor < node.dfsIndex ||
-                    (!separatedDfsChildList.isEmpty() && separatedDfsChildList.getFirstElement().lowpoint < node.dfsIndex);
+                    (!separatedDfsChildList.isEmpty() && separatedDfsChildList.getFirst().lowpoint < node.dfsIndex);
         }
 
         /**
@@ -2014,16 +2016,13 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
             return new OuterFaceCirculator(outerFaceNeighbors[direction], this);
         }
 
-        void removeShortCircuitEdges() {
-            List<DoublyLinkedList.ListNode<Edge>> toRemove = new ArrayList<>();
-            for (DoublyLinkedList.ListIterator<Edge> iterator = embedded.listIterator(); iterator.hasNext(); ) {
-                DoublyLinkedList.ListNode<Edge> currentNode = iterator.nextNode();
-                if (currentNode.getValue().shortCircuit) {
-                    toRemove.add(currentNode);
+        void removeShortCircuitEdges()
+        {
+            for (Iterator<Edge> iterator = embedded.iterator(); iterator.hasNext();) {
+                Edge edge = iterator.next();
+                if (edge.shortCircuit) {
+                    iterator.remove();
                 }
-            }
-            for (DoublyLinkedList.ListNode<Edge> removeNode : toRemove) {
-                embedded.remove(removeNode);
             }
         }
 
@@ -2121,7 +2120,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
             if (prev.isRootVertex()) {
                 prev = prev.getParent();
             }
-            Edge firstEdge = embedded.getFirstElement();
+            Edge firstEdge = embedded.getFirst();
             if (firstEdge.getOpposite(this) == prev) {
                 // edge on the new inner face is at the beginning of the list
                 embedded.addFirst(edge);
@@ -2146,7 +2145,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
          */
         void mergeChildEdges(DoublyLinkedList<Edge> edges, int vIn, int vOut, Node parentNext, Edge parentEdge) {
             assert !embedded.isEmpty();
-            Node firstOpposite = embedded.getFirstElement().getOpposite(this);
+            Node firstOpposite = embedded.getFirst().getOpposite(this);
             boolean alongParentTraversal = firstOpposite != parentNext;
             boolean actionAppend = false, invert = false;
             if (vIn == 0) {
