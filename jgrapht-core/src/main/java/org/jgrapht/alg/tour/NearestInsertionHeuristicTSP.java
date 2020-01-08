@@ -26,8 +26,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
 
 /**
  * The nearest insertion heuristic algorithm for the TSP problem.
@@ -56,7 +54,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleImprovementAlgorithm;
  *
  * <p>
  * This implementation can also be used in order to augment an existing partial
- * tour. See method {@link #augmentTour(GraphPath)}.
+ * tour. See constructor {@link #NearestInsertionHeuristicTSP(GraphPath)}.
  * </p>
  *
  * <p>
@@ -86,6 +84,9 @@ public class NearestInsertionHeuristicTSP<V, E> extends
 
     /**
      * Constructor
+     * 
+     * Specifies an existing sub-tour that will be augmented to form a complete
+     * tour when {@link #getTour(org.jgrapht.Graph) } is called
      *
      * @param subtour Initial sub-tour, or null to start with shortest edge
      */
