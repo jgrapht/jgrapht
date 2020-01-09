@@ -278,8 +278,7 @@ public class ContractionHierarchy<V, E> {
      *
      * @return contraction hierarchy and mapping of original to contracted vertices
      */
-    public Pair<Graph<ContractionVertex<V>, ContractionEdge<E>>, Map<V, ContractionVertex<V>>>
-    computeContractionHierarchy() {
+    public ContractionHierarchyData<V, E> computeContractionHierarchy() {
         fillContractionGraphAndVerticesArray();
         // compute initial priorities in parallel
         submitTasks(0, contractionGraph.vertexSet().size(), computeInitialPrioritiesConsumers);
@@ -290,7 +289,7 @@ public class ContractionHierarchy<V, E> {
         submitTasks(0, contractionGraph.vertexSet().size(), markUpwardEdgesConsumer);
         shutdownExecutor();
 
-        return Pair.of(contractionGraph, contractionMapping);
+        return new ContractionHierarchyData<>(contractionGraph, contractionMapping);
     }
 
     /**
@@ -844,6 +843,56 @@ public class ContractionHierarchy<V, E> {
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Return type of this algorithm. Contains {@code contractionGraph} and {@code contractionMapping}.
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public static class ContractionHierarchyData<V, E> {
+        /**
+         * Graph that stores the computed contraction hierarchy.
+         */
+        private Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph;
+        /**
+         * Mapping of the vertices in the original graph to the vertices in the
+         * contraction hierarchy graph.
+         */
+        private Map<V, ContractionVertex<V>> contractionMapping;
+
+        /**
+         * Returns contracted graph.
+         *
+         * @return contracted graph
+         */
+        public Graph<ContractionVertex<V>, ContractionEdge<E>> getContractionGraph() {
+            return contractionGraph;
+        }
+
+        /**
+         * Returns mapping of the vertices in the original graph to
+         * the vertices in the contracted graph.
+         *
+         * @return vertices mapping
+         */
+        public Map<V, ContractionVertex<V>> getContractionMapping() {
+            return contractionMapping;
+        }
+
+        /**
+         * Constructs a new instance for the given {@code contractionGraph} and
+         * {@code contractionMapping}.
+         *
+         * @param contractionGraph   contracted graph
+         * @param contractionMapping vertices mapping
+         */
+        ContractionHierarchyData(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
+                                 Map<V, ContractionVertex<V>> contractionMapping) {
+            this.contractionGraph = contractionGraph;
+            this.contractionMapping = contractionMapping;
         }
     }
 

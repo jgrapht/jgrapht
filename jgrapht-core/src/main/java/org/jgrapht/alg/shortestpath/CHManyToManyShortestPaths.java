@@ -86,27 +86,21 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
      * @param graph a graph
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph) {
-        super(graph);
-        Pair<Graph<ContractionVertex<V>, ContractionEdge<E>>, Map<V, ContractionVertex<V>>> p
-                = new ContractionHierarchy<>(graph).computeContractionHierarchy();
-        this.contractionGraph = p.getFirst();
-        this.contractionMapping = p.getSecond();
+        this(graph, new ContractionHierarchy<>(graph).computeContractionHierarchy());
     }
 
     /**
      * Constructs an instance of the algorithm for a given {@code graph},
      * {@code contractionGraph} and {@code contractionMapping}.
      *
-     * @param graph              a graph
-     * @param contractionGraph   contraction hierarchy for {@code graph}
-     * @param contractionMapping mapping from original to contracted vertices
+     * @param graph                    a graph
+     * @param contractionHierarchyData contraction of the {@code graph}
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph,
-                                     Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                     Map<V, ContractionVertex<V>> contractionMapping) {
+                                     ContractionHierarchy.ContractionHierarchyData<V, E> contractionHierarchyData) {
         super(graph);
-        this.contractionGraph = contractionGraph;
-        this.contractionMapping = contractionMapping;
+        this.contractionGraph = contractionHierarchyData.getContractionGraph();
+        this.contractionMapping = contractionHierarchyData.getContractionMapping();
     }
 
     /**

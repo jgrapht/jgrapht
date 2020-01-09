@@ -103,62 +103,39 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
      * @param graph the graph
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph) {
-        super(graph);
-        Pair<Graph<ContractionVertex<V>, ContractionEdge<E>>, Map<V, ContractionVertex<V>>> p
-                = new ContractionHierarchy<>(graph).computeContractionHierarchy();
-        init(p.getFirst(), p.getSecond(), Double.POSITIVE_INFINITY, PairingHeap::new);
+        this(graph, new ContractionHierarchy<>(graph).computeContractionHierarchy(),
+                Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given graph, contracted graph
      * and contraction mapping.
      *
-     * @param graph              the graph
-     * @param contractedGraph    contracted graph
-     * @param contractionMapping mapping from vertices in
-     *                           graph to vertices in {@code contractionGraph}
+     * @param graph the graph
+     * @param data  contraction of the {@code graph}
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     Graph<ContractionVertex<V>, ContractionEdge<E>> contractedGraph,
-                                                     Map<V, ContractionVertex<V>> contractionMapping) {
-        this(graph, contractedGraph, contractionMapping, Double.POSITIVE_INFINITY, PairingHeap::new);
+                                                     ContractionHierarchy.ContractionHierarchyData<V, E> data) {
+        this(graph, data, Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given graph, contracted graph,
      * contraction mapping, radius and heap supplier.
      *
-     * @param graph              the graph
-     * @param contractedGraph    contracted graph
-     * @param contractionMapping mapping from vertices in
-     *                           graph to vertices in {@code contractionGraph}
-     * @param radius             search radius
-     * @param heapSupplier       supplier of the preferable heap implementation
+     * @param graph        the graph
+     * @param data         contraction of the {@code graph}
+     * @param radius       search radius
+     * @param heapSupplier supplier of the preferable heap implementation
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     Graph<ContractionVertex<V>, ContractionEdge<E>> contractedGraph,
-                                                     Map<V, ContractionVertex<V>> contractionMapping,
+                                                     ContractionHierarchy.ContractionHierarchyData<V, E> data,
                                                      double radius,
                                                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>,
                                                              ContractionEdge<E>>>> heapSupplier) {
         super(graph);
-        init(contractedGraph, contractionMapping, radius, heapSupplier);
-    }
-
-    /**
-     * Initializes fields of a new instance of the algorithm.
-     *
-     * @param contractedGraph    contracted graph
-     * @param contractionMapping mapping from original to contracted vertices
-     * @param radius             search radius
-     * @param heapSupplier       supplier of the preferable heap implementation
-     */
-    private void init(Graph<ContractionVertex<V>, ContractionEdge<E>> contractedGraph,
-                      Map<V, ContractionVertex<V>> contractionMapping,
-                      double radius,
-                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>>> heapSupplier) {
-        this.contractionGraph = contractedGraph;
-        this.contractionMapping = contractionMapping;
+        this.contractionGraph = data.getContractionGraph();
+        this.contractionMapping = data.getContractionMapping();
         this.radius = radius;
         this.heapSupplier = heapSupplier;
     }

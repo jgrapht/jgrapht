@@ -19,18 +19,14 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Random;
 
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionEdge;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -84,17 +80,15 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     public void testMoreSourcesThanTargets1() {
         Graph<Integer, DefaultWeightedEdge> graph = getSimpleGraph();
 
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data =
                 new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond())
-                .getManyToManyPaths(
-                        new HashSet<>(Arrays.asList(1, 3, 7, 9)),
-                        new HashSet<>(Collections.singletonList(5))
-                );
+                = new CHManyToManyShortestPaths<>(graph, data).getManyToManyPaths(
+                new HashSet<>(Arrays.asList(1, 3, 7, 9)),
+                new HashSet<>(Collections.singletonList(5))
+        );
 
         assertEquals(2.0, shortestPaths.getWeight(1, 5), 1e-9);
         assertEquals(Arrays.asList(1, 4, 5), shortestPaths.getPath(1, 5).getVertexList());
@@ -113,16 +107,14 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     public void testMoreSourcesThanTargets2() {
         Graph<Integer, DefaultWeightedEdge> graph = getMultigraph();
 
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data =
                 new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond())
-                .getManyToManyPaths(
-                        new HashSet<>(Arrays.asList(2, 3, 4, 5, 6)),
-                        new HashSet<>(Collections.singletonList(1))
-                );
+                = new CHManyToManyShortestPaths<>(graph, data).getManyToManyPaths(
+                new HashSet<>(Arrays.asList(2, 3, 4, 5, 6)),
+                new HashSet<>(Collections.singletonList(1))
+        );
 
         assertEquals(3.0, shortestPaths.getWeight(2, 1), 1e-9);
         assertEquals(Arrays.asList(2, 1), shortestPaths.getPath(2, 1).getVertexList());
@@ -149,9 +141,8 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     @Override
     protected ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> getAlgorithm(
             Graph<Integer, DefaultWeightedEdge> graph) {
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> contraction =
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data =
                 new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-        return new CHManyToManyShortestPaths<>(graph, contraction.getFirst(), contraction.getSecond());
+        return new CHManyToManyShortestPaths<>(graph, data);
     }
 }

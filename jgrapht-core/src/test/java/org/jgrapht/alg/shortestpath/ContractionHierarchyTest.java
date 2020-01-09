@@ -59,14 +59,14 @@ public class ContractionHierarchyTest {
         Graph<Integer, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
+                = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
 
         assertNotNull(contractionGraph);
@@ -87,13 +87,13 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
+                = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -118,12 +118,12 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
+                = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -144,13 +144,12 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -183,13 +182,12 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -222,12 +220,12 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
+                = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
 
         assertEquals(3, graph.vertexSet().size());
 
@@ -250,13 +248,12 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -308,13 +305,13 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
+                = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -376,13 +373,13 @@ public class ContractionHierarchyTest {
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractor
                 = new ContractionHierarchy<>(graph, () -> new Random(SEED));
-        Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p = contractor.computeContractionHierarchy();
+        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
+                = contractor.computeContractionHierarchy();
 
-        assertNotNull(p);
+        assertNotNull(data);
 
-        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = p.getFirst();
-        Map<Integer, ContractionVertex<Integer>> contractionMapping = p.getSecond();
+        Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+        Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
 
         assertTrue(contractionGraph.getType().isDirected());
         assertTrue(contractionGraph.getType().isSimple());
@@ -416,14 +413,16 @@ public class ContractionHierarchyTest {
 
             generateRandomGraph(graph, numOfVertices, probability);
 
-            Pair<Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>>,
-                    Map<Integer, ContractionVertex<Integer>>> contraction =
+            ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data =
                     new ContractionHierarchy<>(graph).computeContractionHierarchy();
 
-            assertCorrectMapping(graph, contraction.getFirst(), contraction.getSecond());
-            assertNoEdgesRemoved(graph, contraction.getFirst(), contraction.getSecond());
-            assertCorrectEdgeWeights(graph, contraction.getFirst(), contraction.getSecond());
-            assertCorrectContractionEdges(graph, contraction.getFirst(), contraction.getSecond());
+            Graph<ContractionVertex<Integer>, ContractionEdge<DefaultWeightedEdge>> contractionGraph = data.getContractionGraph();
+            Map<Integer, ContractionVertex<Integer>> contractionMapping = data.getContractionMapping();
+
+            assertCorrectMapping(graph, contractionGraph, contractionMapping);
+            assertNoEdgesRemoved(graph, contractionGraph, contractionMapping);
+            assertCorrectEdgeWeights(graph, contractionGraph, contractionMapping);
+            assertCorrectContractionEdges(graph, contractionGraph, contractionMapping);
         }
     }
 
@@ -497,9 +496,9 @@ public class ContractionHierarchyTest {
      * {@code graph} which correspond to source $s$ and target $t$ of $e1$ asserts that there is an edge $e2$ between
      * them and the weight of $e2$ is minimum among all edges between $s$ and $t$.
      *
-     * @param graph graph
+     * @param graph            graph
      * @param contractionGraph contracted graph
-     * @param mapping mapping from initial to contracted vertices
+     * @param mapping          mapping from initial to contracted vertices
      */
     private void assertCorrectContractionEdges(Graph<Integer, DefaultWeightedEdge> graph,
                                                Graph<ContractionVertex<Integer>,
