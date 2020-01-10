@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -170,8 +171,8 @@ public class ContractionHierarchyBidirectionalDijkstraTest {
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
                 new DijkstraShortestPath<>(graph).getPaths(source);
 
-        ContractionHierarchy.ContractionHierarchyData<Integer, DefaultWeightedEdge> data
-                = new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+        ContractionHierarchy<Integer, DefaultWeightedEdge> data
+                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> contractionDijkstra =
                 new ContractionHierarchyBidirectionalDijkstra<>(graph, data).getPaths(source);

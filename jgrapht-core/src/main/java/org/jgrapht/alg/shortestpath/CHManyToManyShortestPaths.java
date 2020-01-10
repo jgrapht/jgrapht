@@ -34,8 +34,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionEdge;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionEdge;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionVertex;
 
 /**
  * Efficient algorithm for the many-to-many shortest paths problem based on contraction hierarchy.
@@ -70,7 +71,11 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
  */
 public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E> {
     /**
-     * Contraction hierarchy for {@code graph}.
+     * Contraction hierarchy of {@code graph}.
+     */
+    private ContractionHierarchy<V, E> contractionHierarchy;
+    /**
+     * Contracted version of {@code graph}.
      */
     private Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph;
     /**
@@ -86,21 +91,22 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
      * @param graph a graph
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph) {
-        this(graph, new ContractionHierarchy<>(graph).computeContractionHierarchy());
+        this(graph, new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
     }
 
     /**
      * Constructs an instance of the algorithm for a given {@code graph},
      * {@code contractionGraph} and {@code contractionMapping}.
      *
-     * @param graph                    a graph
-     * @param contractionHierarchyData contraction of the {@code graph}
+     * @param graph                a graph
+     * @param contractionHierarchy contraction of the {@code graph}
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph,
-                                     ContractionHierarchy.ContractionHierarchyData<V, E> contractionHierarchyData) {
+                                     ContractionHierarchy<V, E> contractionHierarchy) {
         super(graph);
-        this.contractionGraph = contractionHierarchyData.getContractionGraph();
-        this.contractionMapping = contractionHierarchyData.getContractionMapping();
+        this.contractionHierarchy = contractionHierarchy;
+        this.contractionGraph = contractionHierarchy.getContractionGraph();
+        this.contractionMapping = contractionHierarchy.getContractionMapping();
     }
 
     /**
@@ -155,8 +161,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
         if (reversed) {
             return new CHManyToManyShortestPathsImpl(
                     graph,
-                    contractionGraph,
-                    contractionMapping,
+                    contractionHierarchy,
                     targets,
                     sources,
                     backwardSearchSpaces,
@@ -166,8 +171,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
         } else {
             return new CHManyToManyShortestPathsImpl(
                     graph,
-                    contractionGraph,
-                    contractionMapping,
+                    contractionHierarchy,
                     sources,
                     targets,
                     forwardSearchSpaces,
@@ -368,15 +372,13 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
          * and {@code distanceAndMiddleVertexMap}.
          *
          * @param graph                      underlying graph.
-         * @param contractionGraph           contraction hierarchy for {@code graph}
-         * @param contractionMapping         mapping from original to contracted vertices
+         * @param hierarchy                  contraction hierarchy
          * @param forwardSearchSpaces        search spaces of source vertices
          * @param backwardSearchSpaces       search spaces of target vertices
          * @param distanceAndMiddleVertexMap weights and middle vertices of paths
          */
         public CHManyToManyShortestPathsImpl(Graph<V, E> graph,
-                                             Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                             Map<V, ContractionVertex<V>> contractionMapping,
+                                             ContractionHierarchy<V, E> hierarchy,
                                              Set<V> sources,
                                              Set<V> targets,
                                              Map<ContractionVertex<V>, Map<ContractionVertex<V>,
@@ -387,8 +389,8 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
                                                      Pair<Double, ContractionVertex<V>>> distanceAndMiddleVertexMap) {
             super(sources, targets);
             this.graph = graph;
-            this.contractionGraph = contractionGraph;
-            this.contractionMapping = contractionMapping;
+            this.contractionGraph = hierarchy.getContractionGraph();
+            this.contractionMapping = hierarchy.getContractionMapping();
             this.forwardSearchSpaces = forwardSearchSpaces;
             this.backwardSearchSpaces = backwardSearchSpaces;
             this.distanceAndMiddleVertexMap = distanceAndMiddleVertexMap;
@@ -399,7 +401,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
          */
         @Override
         public GraphPath<V, E> getPath(V source, V target) {
-            assertCorrectSourceAndTarget(source,target);
+            assertCorrectSourceAndTarget(source, target);
 
             LinkedList<E> edgeList = new LinkedList<>();
             LinkedList<V> vertexList = new LinkedList<>();
@@ -459,7 +461,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
          */
         @Override
         public double getWeight(V source, V target) {
-            assertCorrectSourceAndTarget(source,target);
+            assertCorrectSourceAndTarget(source, target);
 
             Pair<ContractionVertex<V>, ContractionVertex<V>> contractedVertices =
                     Pair.of(contractionMapping.get(source), contractionMapping.get(target));

@@ -87,7 +87,7 @@ import java.util.function.Supplier;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public class ContractionHierarchy<V, E> {
+public class ContractionHierarchyPrecomputation<V, E> {
     /**
      * The underlying graph.
      */
@@ -181,7 +181,7 @@ public class ContractionHierarchy<V, E> {
      *
      * @param graph graph
      */
-    public ContractionHierarchy(Graph<V, E> graph) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph) {
         this(graph, Runtime.getRuntime().availableProcessors());
     }
 
@@ -191,7 +191,7 @@ public class ContractionHierarchy<V, E> {
      * @param graph       graph
      * @param parallelism maximum number of threads used in the computations
      */
-    public ContractionHierarchy(Graph<V, E> graph, int parallelism) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism) {
         this(graph, parallelism, Random::new, PairingHeap::new);
     }
 
@@ -203,7 +203,7 @@ public class ContractionHierarchy<V, E> {
      * @param graph          graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
-    public ContractionHierarchy(Graph<V, E> graph, Supplier<Random> randomSupplier) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier) {
         this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier, PairingHeap::new);
     }
 
@@ -215,7 +215,7 @@ public class ContractionHierarchy<V, E> {
      * @param parallelism    maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
-    public ContractionHierarchy(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier) {
         this(graph, parallelism, randomSupplier, PairingHeap::new);
     }
 
@@ -229,8 +229,8 @@ public class ContractionHierarchy<V, E> {
      * @param randomSupplier              supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
      */
-    public ContractionHierarchy(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
-                                Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
+                                              Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier) {
         this.graph = graph;
         this.contractionGraph = GraphTypeBuilder.<ContractionVertex<V>, ContractionEdge<E>>directed().weighted(true)
                 .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
@@ -278,7 +278,7 @@ public class ContractionHierarchy<V, E> {
      *
      * @return contraction hierarchy and mapping of original to contracted vertices
      */
-    public ContractionHierarchyData<V, E> computeContractionHierarchy() {
+    public ContractionHierarchy<V, E> computeContractionHierarchy() {
         fillContractionGraphAndVerticesArray();
         // compute initial priorities in parallel
         submitTasks(0, contractionGraph.vertexSet().size(), computeInitialPrioritiesConsumers);
@@ -289,7 +289,7 @@ public class ContractionHierarchy<V, E> {
         submitTasks(0, contractionGraph.vertexSet().size(), markUpwardEdgesConsumer);
         shutdownExecutor();
 
-        return new ContractionHierarchyData<>(contractionGraph, contractionMapping);
+        return new ContractionHierarchy<>(contractionGraph, contractionMapping);
     }
 
     /**
@@ -852,7 +852,7 @@ public class ContractionHierarchy<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static class ContractionHierarchyData<V, E> {
+    public static class ContractionHierarchy<V, E> {
         /**
          * Graph that stores the computed contraction hierarchy.
          */
@@ -889,8 +889,8 @@ public class ContractionHierarchy<V, E> {
          * @param contractionGraph   contracted graph
          * @param contractionMapping vertices mapping
          */
-        ContractionHierarchyData(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                 Map<V, ContractionVertex<V>> contractionMapping) {
+        ContractionHierarchy(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
+                             Map<V, ContractionVertex<V>> contractionMapping) {
             this.contractionGraph = contractionGraph;
             this.contractionMapping = contractionMapping;
         }

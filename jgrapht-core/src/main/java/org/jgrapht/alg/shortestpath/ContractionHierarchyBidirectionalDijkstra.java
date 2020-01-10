@@ -31,8 +31,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath.DijkstraSearchFrontier;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionEdge;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionEdge;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionVertex;
 
 /**
  * Implementation of the hierarchical query algorithm based on the bidirectional Dijkstra search.
@@ -72,7 +73,7 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
- * @see ContractionHierarchy
+ * @see ContractionHierarchyPrecomputation
  * @since July 2019
  */
 public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortestPathAlgorithm<V, E> {
@@ -103,7 +104,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
      * @param graph the graph
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph) {
-        this(graph, new ContractionHierarchy<>(graph).computeContractionHierarchy(),
+        this(graph, new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy(),
                 Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
@@ -111,12 +112,12 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
      * Constructs a new instance of the algorithm for a given graph, contracted graph
      * and contraction mapping.
      *
-     * @param graph the graph
-     * @param data  contraction of the {@code graph}
+     * @param graph     the graph
+     * @param hierarchy contraction of the {@code graph}
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     ContractionHierarchy.ContractionHierarchyData<V, E> data) {
-        this(graph, data, Double.POSITIVE_INFINITY, PairingHeap::new);
+                                                     ContractionHierarchy<V, E> hierarchy) {
+        this(graph, hierarchy, Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
     /**
@@ -124,18 +125,18 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
      * contraction mapping, radius and heap supplier.
      *
      * @param graph        the graph
-     * @param data         contraction of the {@code graph}
+     * @param hierarchy         contraction of the {@code graph}
      * @param radius       search radius
      * @param heapSupplier supplier of the preferable heap implementation
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     ContractionHierarchy.ContractionHierarchyData<V, E> data,
+                                                     ContractionHierarchy<V, E> hierarchy,
                                                      double radius,
                                                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>,
                                                              ContractionEdge<E>>>> heapSupplier) {
         super(graph);
-        this.contractionGraph = data.getContractionGraph();
-        this.contractionMapping = data.getContractionMapping();
+        this.contractionGraph = hierarchy.getContractionGraph();
+        this.contractionMapping = hierarchy.getContractionMapping();
         this.radius = radius;
         this.heapSupplier = heapSupplier;
     }
