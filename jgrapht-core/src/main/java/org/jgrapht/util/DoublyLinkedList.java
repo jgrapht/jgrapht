@@ -31,8 +31,8 @@ import java.util.function.*;
  * {@code DoublyLinkedList}.
  * </p>
  * <p>
- * A {@code DoublyLinkedList} supports {@code null} elements but do not support
- * {@code null ListNodes}. This class is not thread safe and need to be synchronized externally if
+ * A {@code DoublyLinkedList} supports {@code null} elements but does not support
+ * {@code null ListNodes}. This class is not thread safe and needs to be synchronized externally if
  * modified by concurrent threads.
  * </p>
  * <p>
@@ -47,9 +47,7 @@ import java.util.function.*;
  * increases the memory occupied by this list implementation compared to {@code LinkedList} for the
  * same elements. Instances of {@code LinkedList.Node} have three references each (the element, next
  * and previous), Instances {@code DoublyLinkedList.ListNode} have four (the element, next, previous
- * and the list). Because usually each {@code Object} has a header that also requires memory, the
- * memory consumption of this implementation is less than 33.3% greater compared to
- * {@code LinkedList} (the exact number depends on the executing JVM).
+ * and the list).
  * </p>
  *
  * @param <E> the list element type
@@ -71,18 +69,27 @@ public class DoublyLinkedList<E>
         return head.prev;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty()
     {
         return head == null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size()
     {
         return size;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear()
     {
@@ -102,6 +109,17 @@ public class DoublyLinkedList<E>
 
     // internal modification methods
 
+    /**
+     * Adds the given {@link ListNode} to this {@code List}.
+     * <p>
+     * Sets the {@code list} reference of {@code node} to this list, increases this lists
+     * {@code size} and {@code modcount} by one.
+     * </p>
+     * 
+     * @param node to add to this list
+     * @throws IllegalArgumentException if {@code node} is already contained in this or another
+     *         {@code DoublyLinkedList}
+     */
     private void addListNode(ListNode<E> node)
     { // call this before any modification of this list is done
         if (node.list != null) {
@@ -114,7 +132,11 @@ public class DoublyLinkedList<E>
         modCount++;
     }
 
-    /** Atomically adds all {@link ListNode ListNodes} of {@code list} to this list. */
+    /**
+     * Atomically moves all {@link ListNode ListNodes} from {@code list} to this list as if each
+     * node was removed with {@link #removeListNode(ListNode)} from {@code list} and subsequently
+     * added to this list by {@link #addListNode(ListNode)}.
+     */
     private void moveAllListNodes(DoublyLinkedList<E> list)
     { // call this before any modification of this list is done
 
@@ -129,7 +151,18 @@ public class DoublyLinkedList<E>
         list.modCount++;
     }
 
-    /** Returns true if {@code node} was successfully removed from the list. */
+    /**
+     * Removes the given {@link ListNode} from this {@code List}, if it is contained in this
+     * {@code List}.
+     * <p>
+     * If {@code node} is contained in this list, sets the {@code list}, {@code next} and
+     * {@code prev} reference of {@code node} to {@code null} decreases this list's {@code size} and
+     * increases the {@code modcount} by one.
+     * </p>
+     * 
+     * @param node to remove from this list
+     * @return true if {@code node} was removed from this list, else false
+     */
     private boolean removeListNode(ListNode<E> node)
     { // call this before any modification of this list is done
         if (node.list == this) {
@@ -549,6 +582,9 @@ public class DoublyLinkedList<E>
 
     // List methods (shortcut for most commonly used methods to avoid iterator creation)
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void add(int index, E element)
     {
@@ -559,12 +595,18 @@ public class DoublyLinkedList<E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E get(int index)
     {
         return getNode(index).value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E remove(int index)
     {
@@ -575,18 +617,27 @@ public class DoublyLinkedList<E>
 
     // Deque methods
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addFirst(E e)
     {
         addElementFirst(e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addLast(E e)
     {
         addElementLast(e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean offerFirst(E e)
     {
@@ -594,6 +645,9 @@ public class DoublyLinkedList<E>
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean offerLast(E e)
     {
@@ -601,6 +655,9 @@ public class DoublyLinkedList<E>
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E removeFirst()
     {
@@ -613,6 +670,9 @@ public class DoublyLinkedList<E>
         return node.value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E removeLast()
     {
@@ -625,6 +685,9 @@ public class DoublyLinkedList<E>
         return node.value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E pollFirst()
     {
@@ -636,6 +699,9 @@ public class DoublyLinkedList<E>
         return node.value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E pollLast()
     {
@@ -647,30 +713,45 @@ public class DoublyLinkedList<E>
         return node.value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E getFirst()
     {
         return getFirstNode().value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E getLast()
     {
         return getLastNode().value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E peekFirst()
     {
         return isEmpty() ? null : getFirst();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E peekLast()
     {
         return isEmpty() ? null : getLast();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeFirstOccurrence(Object o)
     {
@@ -682,6 +763,9 @@ public class DoublyLinkedList<E>
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeLastOccurrence(Object o)
     {
@@ -695,30 +779,45 @@ public class DoublyLinkedList<E>
 
     // Queue methods
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean offer(E e)
     {
         return offerLast(e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E remove()
     {
         return removeFirst();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E poll()
     {
         return pollFirst();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E element()
     {
         return getFirst();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E peek()
     {
@@ -727,12 +826,18 @@ public class DoublyLinkedList<E>
 
     // Stack methods
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void push(E e)
     {
         addFirst(e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E pop()
     {
@@ -844,24 +949,36 @@ public class DoublyLinkedList<E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public NodeIterator<E> descendingIterator()
     {
         return reverseIterator(listIterator(size));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public NodeIterator<E> iterator()
     {
         return listIterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ListNodeIterator<E> listIterator()
     {
         return listIterator(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ListNodeIterator<E> listIterator(int index)
     {
@@ -898,6 +1015,9 @@ public class DoublyLinkedList<E>
         extends
         Iterator<E>
     {
+        /**
+         * {@inheritDoc}
+         */
         @Override
         default E next()
         {
@@ -925,12 +1045,18 @@ public class DoublyLinkedList<E>
         ListIterator<E>,
         NodeIterator<E>
     {
+        /**
+         * {@inheritDoc}
+         */
         @Override
         default E next()
         {
             return nextNode().value;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         default E previous()
         {
@@ -984,30 +1110,45 @@ public class DoublyLinkedList<E>
             this.next = startNode;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean hasNext()
         {
             return nextIndex < size;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean hasPrevious()
         {
             return nextIndex > 0;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int nextIndex()
         {
             return nextIndex;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int previousIndex()
         {
             return nextIndex - 1;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public ListNode<E> nextNode()
         {
@@ -1022,6 +1163,9 @@ public class DoublyLinkedList<E>
             return last;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public ListNode<E> previousNode()
         {
@@ -1035,6 +1179,9 @@ public class DoublyLinkedList<E>
             return last;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void add(E e)
         {
@@ -1053,6 +1200,9 @@ public class DoublyLinkedList<E>
             expectedModCount++;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void set(E e)
         {
@@ -1073,6 +1223,9 @@ public class DoublyLinkedList<E>
             expectedModCount += 2; // because of unlink and add
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void remove()
         {
@@ -1113,18 +1266,27 @@ public class DoublyLinkedList<E>
     {
         return new NodeIterator<E>()
         {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public boolean hasNext()
             {
                 return listIterator.hasPrevious();
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public ListNode<E> nextNode()
             {
                 return listIterator.previousNode();
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void remove()
             {
@@ -1159,6 +1321,9 @@ public class DoublyLinkedList<E>
             this.value = value;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public String toString()
         {

@@ -30,6 +30,8 @@ import org.junit.runners.*;
 import org.junit.runners.Parameterized.*;
 
 /**
+ * Tests for {@link DoublyLinkedList}.
+ * 
  * @author Hannes Wellmann
  *
  */
