@@ -37,7 +37,11 @@ public interface GraphExporter<V, E>
 {
 
     /**
-     * Export a graph
+     * Export a graph to the given {@link OutputStream}.
+     * <p>
+     * It is the callers responsibility to ensure the {@code OutputStream} is closed after this
+     * method returned.
+     * </p>
      * 
      * @param g the graph to export
      * @param out the output stream
@@ -49,7 +53,11 @@ public interface GraphExporter<V, E>
     }
 
     /**
-     * Export a graph
+     * Export a graph using the given {@link Writer}.
+     * <p>
+     * It is the callers responsibility to ensure the {@code Writer} is closed after this method
+     * returned.
+     * </p>
      * 
      * @param g the graph to export
      * @param writer the output writer
@@ -58,7 +66,7 @@ public interface GraphExporter<V, E>
     void exportGraph(Graph<V, E> g, Writer writer);
 
     /**
-     * Export a graph
+     * Export a graph to the given {@link File}.
      * 
      * @param g the graph to export
      * @param file the file to write to
@@ -66,11 +74,10 @@ public interface GraphExporter<V, E>
      */
     default void exportGraph(Graph<V, E> g, File file)
     {
-        try {
-            exportGraph(g, new FileWriter(file));
+        try (FileWriter writer = new FileWriter(file)) {
+            exportGraph(g, writer);
         } catch (IOException e) {
             throw new ExportException(e);
         }
     }
-
 }

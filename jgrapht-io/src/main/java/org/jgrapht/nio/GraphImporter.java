@@ -32,7 +32,11 @@ public interface GraphImporter<V, E>
 {
 
     /**
-     * Import a graph
+     * Import a graph from the given {@link InputStream}.
+     * <p>
+     * It is the callers responsibility to ensure the {@code InputStream} is closed after this
+     * method returned.
+     * </p>
      * 
      * @param g the graph
      * @param in the input stream
@@ -44,7 +48,11 @@ public interface GraphImporter<V, E>
     }
 
     /**
-     * Import a graph
+     * Import a graph using the given {@link Reader}.
+     * <p>
+     * It is the callers responsibility to ensure the {@code Reader} is closed after this method
+     * returned.
+     * </p>
      * 
      * @param g the graph
      * @param in the input reader
@@ -53,7 +61,7 @@ public interface GraphImporter<V, E>
     void importGraph(Graph<V, E> g, Reader in);
 
     /**
-     * Import a graph
+     * Import a graph from the given {@link file}.
      * 
      * @param g the graph
      * @param file the file to read from
@@ -61,12 +69,10 @@ public interface GraphImporter<V, E>
      */
     default void importGraph(Graph<V, E> g, File file)
     {
-        try {
-            importGraph(
-                g, new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+        try (InputStreamReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
+            importGraph(g, reader);
         } catch (IOException e) {
             throw new ImportException(e);
         }
     }
-
 }
