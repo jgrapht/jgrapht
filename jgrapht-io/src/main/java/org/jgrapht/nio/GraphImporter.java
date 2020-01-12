@@ -61,7 +61,7 @@ public interface GraphImporter<V, E>
     void importGraph(Graph<V, E> g, Reader in);
 
     /**
-     * Import a graph from the given {@link file}.
+     * Import a graph from the given {@link File}.
      * 
      * @param g the graph
      * @param file the file to read from
