@@ -868,7 +868,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
                  * the stack and therefore will be processed in the again reverse order
                  */
                 Iterator<Edge> iterator =
-                    info.current.embedded.wrappingIterator(info.prevEdge, true);
+                    info.current.embedded.reverseCircularIterator(info.prevEdge);
                 while (iterator.hasNext()) {
                     Edge currentEdge = iterator.next();
                     Node opposite = currentEdge.getOpposite(info.current);

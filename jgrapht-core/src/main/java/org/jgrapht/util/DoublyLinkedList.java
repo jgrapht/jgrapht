@@ -930,36 +930,54 @@ public class DoublyLinkedList<E>
 
     /**
      * Returns a {@link NodeIterator} that starts at the first {@link ListNode} of this list that is
-     * equal to the specified {@code firstElement}, iterates in forward or reversed direction and
-     * wraps around the end of this list until the first node.
+     * equal to the specified {@code firstElement}, iterates in forward direction over the end of
+     * this list until the first node.
      * <p>
      * The first call to {@link NodeIterator#nextNode()} returns the first {@code node} that holds a
-     * value such that {@code Objects.equals(node.getValue, firstElement)} returns {@code true}. If
-     * {@code reversed} is {@code true} the returned {@code NodeIterator} iterates in reverse
-     * direction returning the respective previous element in subsequent calls to
-     * {@code next(Node)}, if {@code reversed} is {@code false} it iterates in forward direction.
-     * The returned iterator ignores the actual bounds of this {@code DoublyLinkedList} and iterates
-     * until the node before the first one is reached. Its {@link NodeIterator#hasNext() hasNext()}
-     * returns {@code false} if the next node would be the first one.
+     * value such that {@code Objects.equals(node.getValue, firstElement)} returns {@code true}. The
+     * returned {@code NodeIterator} iterates in forward direction returning the respective next
+     * element in subsequent calls to {@code next(Node)}. The returned iterator ignores the actual
+     * bounds of this {@code DoublyLinkedList} and iterates until the node before the first one is
+     * reached. Its {@link NodeIterator#hasNext() hasNext()} returns {@code false} if the next node
+     * would be the first one.
      * </p>
      * 
      * @param firstElement equal to the first {@code next()}
-     * @param reversed if true the returned {@code NodeIterator} iterates in reversed direction over
-     *        this list, else it iterates in forward direction.
-     * @return a wrapping {@code NodeIterator} iterating from {@code firstElement} in the specified
-     *         direction
+     * @return a circular {@code NodeIterator} iterating forward from {@code firstElement}
      */
-    public NodeIterator<E> wrappingIterator(E firstElement, boolean reversed)
+    public NodeIterator<E> circularIterator(E firstElement)
     {
         ListNode<E> startNode = nodeOf(firstElement);
         if (startNode == null) {
             throw new NoSuchElementException();
         }
-        if (!reversed) {
-            return new ListNodeIteratorImpl(0, startNode);
-        } else {
-            return reverseIterator(new ListNodeIteratorImpl(size, startNode.next));
+        return new ListNodeIteratorImpl(0, startNode);
+    }
+
+    /**
+     * Returns a {@link NodeIterator} that starts at the first {@link ListNode} of this list that is
+     * equal to the specified {@code firstElement}, iterates in reverse direction over the end of
+     * this list until the first node.
+     * <p>
+     * The first call to {@link NodeIterator#nextNode()} returns the first {@code node} that holds a
+     * value such that {@code Objects.equals(node.getValue, firstElement)} returns {@code true}. The
+     * returned {@code NodeIterator} iterates in reverse direction returning the respective previous
+     * element in subsequent calls to {@code next(Node)}. The returned iterator ignores the actual
+     * bounds of this {@code DoublyLinkedList} and iterates until the node before the first one is
+     * reached. Its {@link NodeIterator#hasNext() hasNext()} returns {@code false} if the next node
+     * would be the first one.
+     * </p>
+     * 
+     * @param firstElement equal to the first {@code next()}
+     * @return a circular {@code NodeIterator} iterating backwards from {@code firstElement}
+     */
+    public NodeIterator<E> reverseCircularIterator(E firstElement)
+    {
+        ListNode<E> startNode = nodeOf(firstElement);
+        if (startNode == null) {
+            throw new NoSuchElementException();
         }
+        return reverseIterator(new ListNodeIteratorImpl(size, startNode.next));
     }
 
     /**
@@ -1273,7 +1291,7 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * Returns a {@link NodeIterator} that iterates in reversed order, assuming the cursor of the
+     * Returns a {@link NodeIterator} that iterates in reverse order, assuming the cursor of the
      * specified {@link ListNodeIterator} is behind the tail of the list.
      */
     private static <E> NodeIterator<E> reverseIterator(ListNodeIterator<E> listIterator)

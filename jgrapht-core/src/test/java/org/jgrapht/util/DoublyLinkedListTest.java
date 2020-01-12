@@ -1179,14 +1179,14 @@ public class DoublyLinkedListTest
     // test iterator
 
     /**
-     * Test for {@link DoublyLinkedList#wrappingIterator(Object)}.
+     * Test for {@link DoublyLinkedList#circularIterator(Object)}.
      */
     @Test
-    public void testWrappingIterator_forward()
+    public void testCircularIterator()
     {
         if (size == 0) {
             thrown.expect(NoSuchElementException.class);
-            list.wrappingIterator("anything", false);
+            list.circularIterator("anything");
             return;
         }
 
@@ -1196,7 +1196,7 @@ public class DoublyLinkedListTest
         expectedList.addAll(expectedElements.subList(startIndex, expectedElements.size()));
         expectedList.addAll(expectedElements.subList(0, startIndex));
 
-        NodeIterator<String> wrappingIterator = list.wrappingIterator(firstElement, false);
+        NodeIterator<String> wrappingIterator = list.circularIterator(firstElement);
         for (String expectedElement : expectedList) {
             assertTrue(wrappingIterator.hasNext());
             assertThat(wrappingIterator.next(), is(sameInstance(expectedElement)));
@@ -1204,12 +1204,15 @@ public class DoublyLinkedListTest
         assertFalse(wrappingIterator.hasNext());
     }
 
+    /**
+     * Test for {@link DoublyLinkedList#reverseCircularIterator(Object)}.
+     */
     @Test
-    public void testWrappingIterator_reversed()
+    public void testReverseCircularIterator()
     {
         if (size == 0) {
             thrown.expect(NoSuchElementException.class);
-            list.wrappingIterator("anything", false);
+            list.reverseCircularIterator("anything");
             return;
         }
         int startIndex = size / 3;
@@ -1221,7 +1224,7 @@ public class DoublyLinkedListTest
         expectedList.addAll(expectedElements.subList(0, startIndex + 1));
         Collections.reverse(expectedList);
 
-        NodeIterator<String> wrappingIterator = list.wrappingIterator(firstElement, true);
+        NodeIterator<String> wrappingIterator = list.reverseCircularIterator(firstElement);
         for (String expectedElement : expectedList) {
             assertTrue(wrappingIterator.hasNext());
             assertThat(wrappingIterator.next(), is(sameInstance(expectedElement)));
