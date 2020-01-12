@@ -2018,12 +2018,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E> implements PlanarityTestingAlg
 
         void removeShortCircuitEdges()
         {
-            for (Iterator<Edge> iterator = embedded.iterator(); iterator.hasNext();) {
-                Edge edge = iterator.next();
-                if (edge.shortCircuit) {
-                    iterator.remove();
-                }
-            }
+            embedded.removeIf(e -> e.shortCircuit);
         }
 
         /**
