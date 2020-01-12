@@ -20,6 +20,8 @@ package org.jgrapht.util;
 import java.util.*;
 import java.util.function.*;
 
+import org.jgrapht.alg.util.*;
+
 /**
  * {@code DoublyLinkedList} implements a doubly linked {@link List} data structure, that exposes its
  * {@link ListNode ListNodes} where the data is stored in.
@@ -484,7 +486,7 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> nodeOf(Object element)
     {
-        return searchNode(() -> head, n -> n.next, element, INDEX_NOT_USED);
+        return searchNode(() -> head, n -> n.next, element).getFirst();
     }
 
     /**
@@ -500,30 +502,41 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> lastNodeOf(Object element)
     {
-        return searchNode(this::tail, n -> n.prev, element, INDEX_NOT_USED);
+        return searchNode(this::tail, n -> n.prev, element).getFirst();
     }
 
-    /** A dummy instance used if the index of the found node is not used. */
-    private static final ModifiableInteger INDEX_NOT_USED = new ModifiableInteger(0);
-
-    private ListNode<E> searchNode(
-        Supplier<ListNode<E>> first, UnaryOperator<ListNode<E>> next, Object e,
-        ModifiableInteger index)
+    /**
+     * Returns a {@link Pair} of the first encountered {@link ListNode} in this list, whose
+     * {@code value} is equal to the given {@code element}, and its index. Or if this list does not
+     * contain such node a Pair of {@code null} and {@code -1};
+     * <p>
+     * The search starts at the node supplied by {@code first} and advances in the direction induced
+     * by the specified {@code next} operator.
+     * </p>
+     * 
+     * @param first supplier of the first node to check if this list is not empty
+     * @param next {@code Function} to get from the current node the next node to check
+     * @param element for that the first node with equal value is searched.
+     * @return a {@link Pair} of the first encountered {@code ListNode} holding a {@code value}
+     *         equal to {@code element} and its index, or if no such node was found a
+     *         {@code Pair.of(null, -1)}
+     */
+    private Pair<ListNode<E>, Integer> searchNode(
+        Supplier<ListNode<E>> first, UnaryOperator<ListNode<E>> next, Object element)
     {
         if (!isEmpty()) {
-            index.value = 0;
+            int index = 0;
             ListNode<E> firstNode = first.get();
             ListNode<E> node = firstNode;
             do {
-                if (Objects.equals(node.value, e)) {
-                    return node;
+                if (Objects.equals(node.value, element)) {
+                    return Pair.of(node, index);
                 }
-                index.value++;
+                index++;
                 node = next.apply(node);
             } while (node != firstNode);
         }
-        index.value = -1;
-        return null;
+        return Pair.of(null, -1);
     }
 
     /**
@@ -997,12 +1010,13 @@ public class DoublyLinkedList<E>
      */
     public ListNodeIterator<E> listIterator(E element)
     {
-        ModifiableInteger startIndex = new ModifiableInteger(0);
-        ListNode<E> startNode = searchNode(() -> head, n -> n.next, element, startIndex);
+        Pair<ListNode<E>, Integer> startPair = searchNode(() -> head, n -> n.next, element);
+        ListNode<E> startNode = startPair.getFirst();
+        int startIndex = startPair.getSecond();
         if (startNode == null) {
             throw new NoSuchElementException();
         }
-        return new ListNodeIteratorImpl(startIndex.value, startNode);
+        return new ListNodeIteratorImpl(startIndex, startNode);
     }
 
     /**
