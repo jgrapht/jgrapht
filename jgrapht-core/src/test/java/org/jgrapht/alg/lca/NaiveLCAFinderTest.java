@@ -193,4 +193,20 @@ public class NaiveLCAFinderTest
         checkLcas(finder, "c", "d", Arrays.asList("a", "b"));
     }
 
+    @Test
+    public void testLcaIsOneOfTheNodes(){
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        g.addVertex(0);
+        for (int i = 1; i <= 10; i++) {
+            g.addVertex(i);
+            g.addEdge(i - 1, i);
+        }
+        g.addEdge(0, 10);
+
+        NaiveLCAFinder<Integer, DefaultEdge> finder = new NaiveLCAFinder<>(g);
+
+        checkLcas(finder, 1, 10, Collections.singleton(1));
+    }
+
 }

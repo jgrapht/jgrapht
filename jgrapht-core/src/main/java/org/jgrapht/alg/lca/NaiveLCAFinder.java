@@ -107,15 +107,13 @@ public class NaiveLCAFinder<V, E>
     @Override
     public V getLCA(V a, V b)
     {
-        if (!graph.containsVertex(a))
-            throw new IllegalArgumentException("invalid vertex: " + a);
-
-        if (!graph.containsVertex(b))
-            throw new IllegalArgumentException("invalid vertex: " + b);
-
-        return findLca(
-            Collections.singleton(a), Collections.singleton(b), new LinkedHashSet<>(),
-            new LinkedHashSet<>());
+        checkNodes(a, b);
+        Set<V> lcaSet = getLCASet(a, b);
+        if(lcaSet.isEmpty()){
+            return null;
+        }else{
+            return lcaSet.iterator().next();
+        }
     }
 
     /**
@@ -124,24 +122,19 @@ public class NaiveLCAFinder<V, E>
     @Override
     public Set<V> getLCASet(V a, V b)
     {
-        @SuppressWarnings("unchecked") Set<V>[] visitedSets =
-            (Set<V>[]) Array.newInstance(Set.class, 2);
-        // set of nodes visited from a
-        visitedSets[0] = new LinkedHashSet<>();
-        // set of nodes visited from b
-        visitedSets[1] = new LinkedHashSet<>();
+        checkNodes(a, b);
 
-        doubleBfs(a, b, visitedSets);
+        List<Set<V>> visitedSets = doubleBfs(a, b);
         // all common ancestors of both a and b
         Set<V> intersection;
 
         // optimization trick: save the intersection using the smaller set
-        if (visitedSets[0].size() < visitedSets[1].size()) {
-            visitedSets[0].retainAll(visitedSets[1]);
-            intersection = visitedSets[0];
+        if (visitedSets.get(0).size() < visitedSets.get(1).size()) {
+            visitedSets.get(0).retainAll(visitedSets.get(1));
+            intersection = visitedSets.get(0);
         } else {
-            visitedSets[1].retainAll(visitedSets[0]);
-            intersection = visitedSets[1];
+            visitedSets.get(1).retainAll(visitedSets.get(0));
+            intersection = visitedSets.get(1);
         }
 
         /*
@@ -170,113 +163,48 @@ public class NaiveLCAFinder<V, E>
      * has been visited from both a and b, it is no longer expanded in our search (we know that its
      * ancestors won't be part of the SLCA(x, y) set).
      */
-    private void doubleBfs(V a, V b, Set<V>[] visitedSets)
+    private List<Set<V>> doubleBfs(V a, V b)
     {
-        @SuppressWarnings("unchecked") Queue<V>[] queues =
-            (Queue<V>[]) Array.newInstance(Queue.class, 2);
-        queues[0] = new ArrayDeque<>();
-        queues[1] = new ArrayDeque<>();
+        List<Queue<V>> queues = new ArrayList<>(Arrays.asList(new ArrayDeque<>(), new ArrayDeque<>()));
+        List<Set<V>> visitedSets = new ArrayList<>(Arrays.asList(new HashSet<>(), new HashSet<>()));
 
-        queues[0].add(a);
-        queues[1].add(b);
+        queues.get(0).add(a);
+        queues.get(1).add(b);
 
-        visitedSets[0].add(a);
-        visitedSets[1].add(b);
+        visitedSets.get(0).add(a);
+        visitedSets.get(1).add(b);
 
-        for (int ind = 0; !queues[0].isEmpty() || !queues[1].isEmpty(); ind ^= 1) {
-            if (!queues[ind].isEmpty()) {
-                V node = queues[ind].poll();
+        for (int ind = 0; !queues.get(0).isEmpty() || !queues.get(1).isEmpty(); ind ^= 1) {
+            if (!queues.get(ind).isEmpty()) {
+                V node = queues.get(ind).poll();
 
-                if (!visitedSets[0].contains(node) || !visitedSets[1].contains(node))
+                if (!visitedSets.get(0).contains(node) || !visitedSets.get(1).contains(node))
                     for (E edge : graph.incomingEdgesOf(node)) {
                         if (graph.getEdgeTarget(edge).equals(node)) {
                             V source = graph.getEdgeSource(edge);
 
-                            if (!visitedSets[ind].contains(source)) {
-                                queues[ind].add(source);
-                                visitedSets[ind].add(source);
+                            if (!visitedSets.get(ind).contains(source)) {
+                                queues.get(ind).add(source);
+                                visitedSets.get(ind).add(source);
                             }
                         }
                     }
             }
         }
+        return visitedSets;
     }
 
     /**
-     * Recurse through the descendants of aSet and bSet looking for the LCA of a and b, which are
-     * members of sets aSeenSet and bSeenSet respectively, along with all elements on the paths from
-     * every member of aSet and bSet
+     * Checks whether both {@code a} and {@code b} belong to the specified graph
+     *
+     * @param a first node
+     * @param b second node
      */
-    private V findLca(
-        Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
-    {
-        while (true) {
-            // if there is no LCA...
-            if ((aSet.size() == 0) && (bSet.size() == 0)) {
-                return null;
-            }
+    private void checkNodes(V a, V b){
+        if (!graph.containsVertex(a))
+            throw new IllegalArgumentException("invalid vertex: " + a);
 
-            // does aSet intersect with bSeenSet
-            if (!Collections.disjoint(aSet, bSeenSet)) {
-                return overlappingMember(aSet, bSeenSet);
-            }
-
-            // does bSet intersect with aSeenSet
-            if (!Collections.disjoint(bSet, aSeenSet)) {
-                return overlappingMember(bSet, aSeenSet);
-            }
-            if (!Collections.disjoint(aSet, bSet)) {
-                return overlappingMember(aSet, bSet);
-            }
-
-            aSeenSet.addAll(aSet);
-            bSeenSet.addAll(bSet);
-
-            aSet = allParents(aSet);
-
-            // no point doing the same again (and it can stop us getting stuck in
-            // an infinite loop)
-            aSet.removeAll(aSeenSet);
-
-            bSet = allParents(bSet);
-            bSet.removeAll(bSeenSet);
-        }
-    }
-
-    /**
-     * Find the immediate parents of every item in the given set, and return a set containing all
-     * those parents
-     *
-     * @param vertexSet the set of vertex to find parents of
-     *
-     * @return a set of every parent of every vertex passed in
-     */
-    private Set<V> allParents(Set<V> vertexSet)
-    {
-        HashSet<V> result = new HashSet<>();
-        for (V e : vertexSet) {
-            for (E edge : graph.incomingEdgesOf(e)) {
-                if (graph.getEdgeTarget(edge).equals(e)) {
-                    result.add(graph.getEdgeSource(edge));
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Return a single vertex that is both in $x$ and $y$. If there is more than one then select the
-     * first element from the iterator returned from $y$, after all the elements of $x$ have been
-     * removed. this allows an orderedSet to be passed in to give predictable results.
-     *
-     * @param x set containing vertex
-     * @param y set containing vertex, which may be ordered to give predictable results
-     *
-     * @return the first element of $y$ that is also in $x$, or null if no such element
-     */
-    private V overlappingMember(Set<V> x, Set<V> y)
-    {
-        y.retainAll(x);
-        return y.iterator().next();
+        if (!graph.containsVertex(b))
+            throw new IllegalArgumentException("invalid vertex: " + b);
     }
 }
