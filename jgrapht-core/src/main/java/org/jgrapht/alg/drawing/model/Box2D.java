@@ -99,7 +99,7 @@ public class Box2D
     {
         return coordinates[0];
     }
-
+    
     /**
      * Get the minimum y coordinate
      * 
@@ -130,6 +130,27 @@ public class Box2D
         return sides[1];
     }
 
+    /**
+     * Get the maximum x coordinate
+     * 
+     * @return the maximum x coordinate
+     */
+    public double getMaxX() { 
+        return coordinates[0] + sides[0];
+    }
+
+    /**
+     * Get the maximum y coordinate
+     * 
+     * @return the maximum y coordinate
+     */
+    public double getMaxY() { 
+        return coordinates[1] + sides[1];
+    }
+
+
+
+    
     @Override
     public int hashCode()
     {

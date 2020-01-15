@@ -22,51 +22,60 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * Test {@link DoubleBox2D}.
+ * Test {@link Box2D}.
  * 
  * @author Dimitrios Michail
  */
 public class Box2DTest
 {
+    private static final double EPS = 1e-9;
 
     @Test
     public void testConstructor1()
     {
         Box2D p = new Box2D(5, 10);
-        assertEquals(p.getWidth(), 5d, 1e-9);
-        assertEquals(p.getHeight(), 10d, 1e-9);
-        assertEquals(p.getMinX(), 0d, 1e-9);
-        assertEquals(p.getMinY(), 0d, 1e-9);
+        assertEquals(p.getWidth(), 5d, EPS);
+        assertEquals(p.getHeight(), 10d, EPS);
+        assertEquals(p.getMinX(), 0d, EPS);
+        assertEquals(p.getMinY(), 0d, EPS);
+        assertEquals(p.getMaxX(), 5d, EPS);
+        assertEquals(p.getMaxY(), 10d, EPS);
     }
 
     @Test
     public void testConstructor2()
     {
         Box2D p = new Box2D(5, 4, 7, 8);
-        assertEquals(p.getWidth(), 7d, 1e-9);
-        assertEquals(p.getHeight(), 8d, 1e-9);
-        assertEquals(p.getMinX(), 5d, 1e-9);
-        assertEquals(p.getMinY(), 4d, 1e-9);
+        assertEquals(p.getWidth(), 7d, EPS);
+        assertEquals(p.getHeight(), 8d, EPS);
+        assertEquals(p.getMinX(), 5d, EPS);
+        assertEquals(p.getMinY(), 4d, EPS);
+        assertEquals(p.getMaxX(), 12d, EPS);
+        assertEquals(p.getMaxY(), 12d, EPS);
     }
 
     @Test
     public void testFactoryMethod1()
     {
         Box2D p = Box2D.of(5, 10);
-        assertEquals(p.getWidth(), 5d, 1e-9);
-        assertEquals(p.getHeight(), 10d, 1e-9);
-        assertEquals(p.getMinX(), 0d, 1e-9);
-        assertEquals(p.getMinY(), 0d, 1e-9);
+        assertEquals(p.getWidth(), 5d, EPS);
+        assertEquals(p.getHeight(), 10d, EPS);
+        assertEquals(p.getMinX(), 0d, EPS);
+        assertEquals(p.getMinY(), 0d, EPS);
+        assertEquals(p.getMaxX(), 5d, EPS);
+        assertEquals(p.getMaxY(), 10d, EPS);
     }
 
     @Test
     public void testFactoryMethod2()
     {
         Box2D p = Box2D.of(5, 4, 7, 8);
-        assertEquals(p.getWidth(), 7d, 1e-9);
-        assertEquals(p.getHeight(), 8d, 1e-9);
-        assertEquals(p.getMinX(), 5d, 1e-9);
-        assertEquals(p.getMinY(), 4d, 1e-9);
+        assertEquals(p.getWidth(), 7d, EPS);
+        assertEquals(p.getHeight(), 8d, EPS);
+        assertEquals(p.getMinX(), 5d, EPS);
+        assertEquals(p.getMinY(), 4d, EPS);
+        assertEquals(p.getMaxX(), 5d + 7d, EPS);
+        assertEquals(p.getMaxY(), 4d + 8d, EPS);
     }
 
 }
