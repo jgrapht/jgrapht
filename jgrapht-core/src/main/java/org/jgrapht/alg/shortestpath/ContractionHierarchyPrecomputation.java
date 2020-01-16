@@ -247,7 +247,7 @@ public class ContractionHierarchyPrecomputation<V, E> {
                 v -> verticesData.get(v.vertexId) != null && verticesData.get(v.vertexId).isContracted, e -> false);
         contractionMapping = new HashMap<>();
 
-        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        executor = Executors.newFixedThreadPool(parallelism);
         completionService = new ExecutorCompletionService<>(executor);
 
         tasks = new ArrayList<>(parallelism);
