@@ -433,7 +433,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
                     break;
                 }
 
-                ContractionHierarchyBidirectionalDijkstra.unpackBackward(contractionGraph, e, vertexList, edgeList);
+                contractionHierarchy.unpackBackward(e, vertexList, edgeList);
                 v = contractionGraph.getEdgeSource(e);
             }
 
@@ -446,7 +446,7 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
                     break;
                 }
 
-                ContractionHierarchyBidirectionalDijkstra.unpackForward(contractionGraph, e, vertexList, edgeList);
+                contractionHierarchy.unpackForward(e, vertexList, edgeList);
                 v = contractionGraph.getEdgeTarget(e);
             }
 

@@ -79,6 +79,10 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.Co
 public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortestPathAlgorithm<V, E> {
 
     /**
+     * Contraction hierarchy which is used to compute shortest paths.
+     */
+    private ContractionHierarchy<V, E> contractionHierarchy;
+    /**
      * Contracted graph, which is used during the queries.
      */
     private Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph;
@@ -129,6 +133,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
                                                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>,
                                                              ContractionEdge<E>>>> heapSupplier) {
         super(hierarchy.getGraph());
+        this.contractionHierarchy = hierarchy;
         this.contractionGraph = hierarchy.getContractionGraph();
         this.contractionMapping = hierarchy.getContractionMapping();
         this.radius = radius;
@@ -271,7 +276,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
                 break;
             }
 
-            unpackBackward(contractionGraph, e, vertexList, edgeList);
+            contractionHierarchy.unpackBackward(e, vertexList, edgeList);
             v = contractionGraph.getEdgeSource(e);
         }
 
@@ -284,47 +289,11 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
                 break;
             }
 
-            unpackForward(contractionGraph, e, vertexList, edgeList);
+            contractionHierarchy.unpackForward(e, vertexList, edgeList);
             v = contractionGraph.getEdgeTarget(e);
         }
 
         return new GraphWalk<>(graph, source.vertex, sink.vertex, vertexList, edgeList, weight);
-    }
-
-    /**
-     * Unpacks {@code edge} by recursively going from target to source.
-     *
-     * @param edge       edge to unpack
-     * @param vertexList vertex list of the path
-     * @param edgeList   edge list of the path
-     */
-    static <V, E> void unpackBackward(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                      ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
-        if (edge.bypassedEdges == null) {
-            vertexList.addFirst(contractionGraph.getEdgeSource(edge).vertex);
-            edgeList.addFirst(edge.edge);
-        } else {
-            unpackBackward(contractionGraph, edge.bypassedEdges.getSecond(), vertexList, edgeList);
-            unpackBackward(contractionGraph, edge.bypassedEdges.getFirst(), vertexList, edgeList);
-        }
-    }
-
-    /**
-     * Unpacks {@code edge} by recursively going from source to target.
-     *
-     * @param edge       edge to unpack
-     * @param vertexList vertex list of the path
-     * @param edgeList   edge list of the path
-     */
-    static <V, E> void unpackForward(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                     ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
-        if (edge.bypassedEdges == null) {
-            vertexList.addLast(contractionGraph.getEdgeTarget(edge).vertex);
-            edgeList.addLast(edge.edge);
-        } else {
-            unpackForward(contractionGraph, edge.bypassedEdges.getFirst(), vertexList, edgeList);
-            unpackForward(contractionGraph, edge.bypassedEdges.getSecond(), vertexList, edgeList);
-        }
     }
 
     /**

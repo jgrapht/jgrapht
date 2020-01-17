@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -906,9 +907,46 @@ public class ContractionHierarchyPrecomputation<V, E> {
          */
         ContractionHierarchy(Graph<V, E> graph, Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
                              Map<V, ContractionVertex<V>> contractionMapping) {
+            this.graph = graph;
             this.contractionGraph = contractionGraph;
             this.contractionMapping = contractionMapping;
         }
+
+
+        /**
+         * Unpacks {@code edge} by recursively going from target to source.
+         *
+         * @param edge       edge to unpack
+         * @param vertexList vertex list of the path
+         * @param edgeList   edge list of the path
+         */
+        public void unpackBackward(ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
+            if (edge.bypassedEdges == null) {
+                vertexList.addFirst(contractionGraph.getEdgeSource(edge).vertex);
+                edgeList.addFirst(edge.edge);
+            } else {
+                unpackBackward(edge.bypassedEdges.getSecond(), vertexList, edgeList);
+                unpackBackward(edge.bypassedEdges.getFirst(), vertexList, edgeList);
+            }
+        }
+
+        /**
+         * Unpacks {@code edge} by recursively going from source to target.
+         *
+         * @param edge       edge to unpack
+         * @param vertexList vertex list of the path
+         * @param edgeList   edge list of the path
+         */
+        public void unpackForward(ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
+            if (edge.bypassedEdges == null) {
+                vertexList.addLast(contractionGraph.getEdgeTarget(edge).vertex);
+                edgeList.addLast(edge.edge);
+            } else {
+                unpackForward(edge.bypassedEdges.getFirst(), vertexList, edgeList);
+                unpackForward(edge.bypassedEdges.getSecond(), vertexList, edgeList);
+            }
+        }
+
     }
 
 
