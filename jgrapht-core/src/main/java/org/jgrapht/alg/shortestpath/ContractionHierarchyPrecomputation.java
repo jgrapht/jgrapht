@@ -204,7 +204,7 @@ public class ContractionHierarchyPrecomputation<V, E> {
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier) {
-        this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier, PairingHeap::new);
+        this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier);
     }
 
     /**
@@ -289,7 +289,7 @@ public class ContractionHierarchyPrecomputation<V, E> {
         submitTasks(0, contractionGraph.vertexSet().size(), markUpwardEdgesConsumer);
         shutdownExecutor();
 
-        return new ContractionHierarchy<>(contractionGraph, contractionMapping);
+        return new ContractionHierarchy<>(graph, contractionGraph, contractionMapping);
     }
 
     /**
@@ -846,6 +846,7 @@ public class ContractionHierarchyPrecomputation<V, E> {
         }
     }
 
+
     /**
      * Return type of this algorithm. Contains {@code contractionGraph} and {@code contractionMapping}.
      *
@@ -853,6 +854,10 @@ public class ContractionHierarchyPrecomputation<V, E> {
      * @param <E> the graph edge type
      */
     public static class ContractionHierarchy<V, E> {
+        /**
+         * The underlying graph.
+         */
+        private Graph<V, E> graph;
         /**
          * Graph that stores the computed contraction hierarchy.
          */
@@ -862,6 +867,15 @@ public class ContractionHierarchyPrecomputation<V, E> {
          * contraction hierarchy graph.
          */
         private Map<V, ContractionVertex<V>> contractionMapping;
+
+        /**
+         * Returns the underlying graph of this contraction hierarchy.
+         *
+         * @return underlying graph of this contraction hierarchy
+         */
+        public Graph<V, E> getGraph() {
+            return graph;
+        }
 
         /**
          * Returns contracted graph.
@@ -883,13 +897,14 @@ public class ContractionHierarchyPrecomputation<V, E> {
         }
 
         /**
-         * Constructs a new instance for the given {@code contractionGraph} and
+         * Constructs a new instance for the given {@code graph}, {@code contractionGraph} and
          * {@code contractionMapping}.
          *
+         * @param graph              graph
          * @param contractionGraph   contracted graph
          * @param contractionMapping vertices mapping
          */
-        ContractionHierarchy(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
+        ContractionHierarchy(Graph<V, E> graph, Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
                              Map<V, ContractionVertex<V>> contractionMapping) {
             this.contractionGraph = contractionGraph;
             this.contractionMapping = contractionMapping;

@@ -99,42 +99,36 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
     private double radius;
 
     /**
-     * Constructs a new instance of the algorithm for a given graph.
+     * Constructs a new instance of the algorithm for a given {@code graph}.
      *
      * @param graph the graph
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph) {
-        this(graph, new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy(),
-                Double.POSITIVE_INFINITY, PairingHeap::new);
+        this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, contracted graph
-     * and contraction mapping.
+     * Constructs a new instance of the algorithm for a given {@code hierarchy}.
      *
-     * @param graph     the graph
      * @param hierarchy contraction of the {@code graph}
      */
-    public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     ContractionHierarchy<V, E> hierarchy) {
-        this(graph, hierarchy, Double.POSITIVE_INFINITY, PairingHeap::new);
+    public ContractionHierarchyBidirectionalDijkstra(ContractionHierarchy<V, E> hierarchy) {
+        this(hierarchy, Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, contracted graph,
-     * contraction mapping, radius and heap supplier.
+     * Constructs a new instance of the algorithm for the given {@code hierarchy},
+     * {@code radius} and {@code heapSupplier}.
      *
-     * @param graph        the graph
-     * @param hierarchy         contraction of the {@code graph}
+     * @param hierarchy    contraction of the {@code graph}
      * @param radius       search radius
      * @param heapSupplier supplier of the preferable heap implementation
      */
-    public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     ContractionHierarchy<V, E> hierarchy,
+    public ContractionHierarchyBidirectionalDijkstra(ContractionHierarchy<V, E> hierarchy,
                                                      double radius,
                                                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>,
                                                              ContractionEdge<E>>>> heapSupplier) {
-        super(graph);
+        super(hierarchy.getGraph());
         this.contractionGraph = hierarchy.getContractionGraph();
         this.contractionMapping = hierarchy.getContractionMapping();
         this.radius = radius;

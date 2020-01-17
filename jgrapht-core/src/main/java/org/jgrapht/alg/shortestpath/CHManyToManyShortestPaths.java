@@ -91,19 +91,16 @@ public class CHManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths
      * @param graph a graph
      */
     public CHManyToManyShortestPaths(Graph<V, E> graph) {
-        this(graph, new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
+        this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
     }
 
     /**
-     * Constructs an instance of the algorithm for a given {@code graph},
-     * {@code contractionGraph} and {@code contractionMapping}.
+     * Constructs an instance of the algorithm for a given {@code contractionHierarchy}.
      *
-     * @param graph                a graph
      * @param contractionHierarchy contraction of the {@code graph}
      */
-    public CHManyToManyShortestPaths(Graph<V, E> graph,
-                                     ContractionHierarchy<V, E> contractionHierarchy) {
-        super(graph);
+    public CHManyToManyShortestPaths(ContractionHierarchy<V, E> contractionHierarchy) {
+        super(contractionHierarchy.getGraph());
         this.contractionHierarchy = contractionHierarchy;
         this.contractionGraph = contractionHierarchy.getContractionGraph();
         this.contractionMapping = contractionHierarchy.getContractionMapping();

@@ -175,7 +175,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest {
                 = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> contractionDijkstra =
-                new ContractionHierarchyBidirectionalDijkstra<>(graph, data).getPaths(source);
+                new ContractionHierarchyBidirectionalDijkstra<>(data).getPaths(source);
 
         assertEqualPaths(dijkstraShortestPaths, contractionDijkstra, graph.vertexSet());
     }

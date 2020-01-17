@@ -81,12 +81,12 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     public void testMoreSourcesThanTargets1() {
         Graph<Integer, DefaultWeightedEdge> graph = getSimpleGraph();
 
-        ContractionHierarchy<Integer, DefaultWeightedEdge> data =
+        ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
                 new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new CHManyToManyShortestPaths<>(graph, data).getManyToManyPaths(
+                = new CHManyToManyShortestPaths<>(hierarchy).getManyToManyPaths(
                 new HashSet<>(Arrays.asList(1, 3, 7, 9)),
                 new HashSet<>(Collections.singletonList(5))
         );
@@ -108,11 +108,11 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     public void testMoreSourcesThanTargets2() {
         Graph<Integer, DefaultWeightedEdge> graph = getMultigraph();
 
-        ContractionHierarchy<Integer, DefaultWeightedEdge> data =
+        ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
                 new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer, DefaultWeightedEdge> shortestPaths
-                = new CHManyToManyShortestPaths<>(graph, data).getManyToManyPaths(
+                = new CHManyToManyShortestPaths<>(hierarchy).getManyToManyPaths(
                 new HashSet<>(Arrays.asList(2, 3, 4, 5, 6)),
                 new HashSet<>(Collections.singletonList(1))
         );
@@ -142,8 +142,8 @@ public class CHManyToManyShortestPathsTest extends BaseManyToManyShortestPathsTe
     @Override
     protected ManyToManyShortestPathsAlgorithm<Integer, DefaultWeightedEdge> getAlgorithm(
             Graph<Integer, DefaultWeightedEdge> graph) {
-        ContractionHierarchy<Integer, DefaultWeightedEdge> data =
+        ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
                 new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
-        return new CHManyToManyShortestPaths<>(graph, data);
+        return new CHManyToManyShortestPaths<>(hierarchy);
     }
 }
