@@ -50,6 +50,22 @@ public interface ManyToManyShortestPathsAlgorithm<V, E> extends ShortestPathAlgo
     interface ManyToManyShortestPaths<V, E> {
 
         /**
+         * Returns the set of source vertices for which this many-to-many shortest paths
+         * were computed.
+         *
+         * @return the set of source vertices
+         */
+        Set<V> getSources();
+
+        /**
+         * Returns the set of target vertices for which this many-to-many shortest paths
+         * were computed.
+         *
+         * @return the set of target vertices
+         */
+        Set<V> getTargets();
+
+        /**
          * Return the path from the {@code source} vertex to the {@code target} vertex.
          * If no such path exists, null is returned.
          *
@@ -87,6 +103,16 @@ public interface ManyToManyShortestPathsAlgorithm<V, E> extends ShortestPathAlgo
          * Set of source vertices.
          */
         private final Set<V> targets;
+
+        @Override
+        public Set<V> getSources() {
+            return sources;
+        }
+
+        @Override
+        public Set<V> getTargets() {
+            return targets;
+        }
 
         /**
          * Constructs an instance for the given {@code sources} and {@code targets}.
