@@ -414,7 +414,7 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         float indicatorAccumulator = 0;
         V ret;
         float denominator = allNewEdgesSet.size() + allNewNodesSize * bias;
-        float nominator;
+        float numerator;
 
         float r = rng.nextFloat();
         // multiply r by denominator instead of dividing all individual values by it.
@@ -422,9 +422,9 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         Iterator<V> verticesIterator = allNewNodes.iterator();
         do {
             ret = verticesIterator.next();
-            nominator = (direction == Direction.IN) ? (target.inDegreeOf(ret) + bias)
+            numerator = (direction == Direction.IN) ? (target.inDegreeOf(ret) + bias)
                 : (target.outDegreeOf(ret) + bias);
-            indicatorAccumulator += nominator;
+            indicatorAccumulator += numerator;
         } while (verticesIterator.hasNext() && indicatorAccumulator < r);
 
         return ret;
