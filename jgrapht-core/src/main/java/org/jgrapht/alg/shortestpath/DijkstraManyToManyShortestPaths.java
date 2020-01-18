@@ -101,8 +101,8 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
         private final Map<V, ShortestPathAlgorithm.SingleSourcePaths<V, E>> searchSpaces;
 
         /**
-         * Constructs an instance of the algorithm for the given {@code sources}, {@code reversed}
-         * {@code targets} and {@code searchSpaces}.
+         * Constructs an instance of the algorithm for the given {@code sources}, {@code targets},
+         * {@code reversed} and {@code searchSpaces}.
          *
          * @param sources      source vertices
          * @param targets      target vertices

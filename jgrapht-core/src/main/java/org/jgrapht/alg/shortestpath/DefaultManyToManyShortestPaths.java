@@ -20,7 +20,6 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.util.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,9 +35,9 @@ import java.util.function.Function;
  * caches the result.
  *
  * <p>
- * For each source vertex a single source shortest paths search is performed, which is stopped
- * as soon as all target vertices are reached. Shortest paths trees are constructed using
- * {@link DijkstraClosestFirstIterator}.
+ * For each pair of {@code source} and {@code target} vertex a {@link ShortestPathAlgorithm}
+ * is used to compute the path. There is a way to provide the preferable implementation
+ * of the interface via the {@code function}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -47,13 +46,13 @@ import java.util.function.Function;
 public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E> {
 
     /**
-     * provides implementation of {@link ShortestPathAlgorithm} for a given graph.
+     * Provides implementation of {@link ShortestPathAlgorithm} for a given graph.
      */
     private final Function<Graph<V, E>, ShortestPathAlgorithm<V, E>> function;
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph}.
-     * The function is defaulted to {@link BidirectionalDijkstraShortestPath}.
+     * The {@code function} is defaulted to returning {@link BidirectionalDijkstraShortestPath}.
      *
      * @param graph a graph
      */
@@ -78,15 +77,19 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
         Objects.requireNonNull(targets, "targets cannot be null!");
 
         ShortestPathAlgorithm<V, E> algorithm = function.apply(graph);
-        Map<Pair<V, V>, GraphPath<V, E>> pathMap = new HashMap<>();
+        Map<V, Map<V, GraphPath<V, E>>> pathMap = new HashMap<>();
+
+        for (V source : sources) {
+            pathMap.put(source, new HashMap<>());
+        }
 
         for (V source : sources) {
             for (V target : targets) {
-                pathMap.put(Pair.of(source, target), algorithm.getPath(source, target));
+                pathMap.get(source).put(target, algorithm.getPath(source, target));
             }
         }
 
-        return new DefaultManyToManyShortestPathsImpl(sources, targets, pathMap);
+        return new DefaultManyToManyShortestPathsImpl<>(sources, targets, pathMap);
     }
 
     /**
@@ -94,23 +97,23 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
      * {@link org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths}.
      * For each pair of source and target vertices stores a corresponding path between them.
      */
-    private class DefaultManyToManyShortestPathsImpl extends BaseManyToManyShortestPathsImpl<V, E> {
+    static class DefaultManyToManyShortestPathsImpl<V, E> extends BaseManyToManyShortestPathsImpl<V, E> {
 
         /**
-         * Map from source vertices to corresponding single source shortest path trees.
+         * Map with paths between sources and targets.
          */
-        private final Map<Pair<V, V>, GraphPath<V, E>> pathsMap;
+        private final Map<V, Map<V, GraphPath<V, E>>> pathsMap;
 
         /**
          * Constructs an instance of the algorithm for the given {@code sources},
-         * {@code pathsMap} and {@code searchSpaces}.
+         * {@code targets} and {@code pathsMap}.
          *
          * @param sources  source vertices
          * @param targets  target vertices
-         * @param pathsMap single source shortest paths trees map
+         * @param pathsMap map with paths between sources and targets
          */
         DefaultManyToManyShortestPathsImpl(Set<V> sources, Set<V> targets,
-                                           Map<Pair<V, V>, GraphPath<V, E>> pathsMap) {
+                                           Map<V, Map<V, GraphPath<V, E>>> pathsMap) {
             super(sources, targets);
             this.pathsMap = pathsMap;
         }
@@ -121,8 +124,7 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
         @Override
         public GraphPath<V, E> getPath(V source, V target) {
             assertCorrectSourceAndTarget(source, target);
-            Pair<V, V> sourceTargetPair = Pair.of(source, target);
-            return pathsMap.get(sourceTargetPair);
+            return pathsMap.get(source).get(target);
         }
 
         /**
@@ -131,9 +133,8 @@ public class DefaultManyToManyShortestPaths<V, E> extends BaseManyToManyShortest
         @Override
         public double getWeight(V source, V target) {
             assertCorrectSourceAndTarget(source, target);
-            Pair<V, V> sourceTargetPair = Pair.of(source, target);
 
-            GraphPath<V, E> path = pathsMap.get(sourceTargetPair);
+            GraphPath<V, E> path = pathsMap.get(source).get(target);
             if (path == null) {
                 return Double.POSITIVE_INFINITY;
             }
