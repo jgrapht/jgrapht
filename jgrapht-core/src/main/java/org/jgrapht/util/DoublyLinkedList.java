@@ -63,10 +63,10 @@ public class DoublyLinkedList<E>
     Deque<E>
 {
     /** The first element of the list, {@code null} if this list is empty. */
-    private ListNode<E> head = null;
+    private ListNodeImpl<E> head = null;
     private int size;
 
-    private ListNode<E> tail()
+    private ListNodeImpl<E> tail()
     {
         return head.prev;
     }
@@ -96,9 +96,9 @@ public class DoublyLinkedList<E>
     public void clear()
     {
         if (!isEmpty()) {
-            ListNode<E> node = head;
+            ListNodeImpl<E> node = head;
             do {
-                ListNode<E> next = node.next;
+                ListNodeImpl<E> next = node.next;
                 boolean removed = removeListNode(node); // clears all links of removed node
                 assert removed;
                 node = next;
@@ -122,7 +122,7 @@ public class DoublyLinkedList<E>
      * @throws IllegalArgumentException if {@code node} is already contained in this or another
      *         {@code DoublyLinkedList}
      */
-    private void addListNode(ListNode<E> node)
+    private void addListNode(ListNodeImpl<E> node)
     { // call this before any modification of this list is done
         if (node.list != null) {
             String list = (node.list == this) ? "this" : "other";
@@ -142,8 +142,8 @@ public class DoublyLinkedList<E>
     private void moveAllListNodes(DoublyLinkedList<E> list)
     { // call this before any modification of this list is done
 
-        for (NodeIterator<E> iterator = list.iterator(); iterator.hasNext();) {
-            ListNode<E> node = iterator.nextNode();
+        for (ListNodeIteratorImpl it = list.new ListNodeIteratorImpl(0); it.hasNext();) {
+            ListNodeImpl<E> node = it.nextNode();
             assert node.list == list;
             node.list = this;
         }
@@ -165,7 +165,7 @@ public class DoublyLinkedList<E>
      * @param node to remove from this list
      * @return true if {@code node} was removed from this list, else false
      */
-    private boolean removeListNode(ListNode<E> node)
+    private boolean removeListNode(ListNodeImpl<E> node)
     { // call this before any modification of this list is done
         if (node.list == this) {
 
@@ -180,14 +180,14 @@ public class DoublyLinkedList<E>
         return false;
     }
 
-    private static <E> void link(ListNode<E> predecessor, ListNode<E> successor)
+    private static <E> void link(ListNodeImpl<E> predecessor, ListNodeImpl<E> successor)
     {
         predecessor.next = successor;
         successor.prev = predecessor;
     }
 
     /** Insert non null {@code node} before non null {@code successor} into the list. */
-    private void linkBefore(ListNode<E> node, ListNode<E> successor)
+    private void linkBefore(ListNodeImpl<E> node, ListNodeImpl<E> successor)
     {
         addListNode(node);
         link(successor.prev, node);
@@ -195,7 +195,7 @@ public class DoublyLinkedList<E>
     }
 
     /** Insert non null {@code node} as last node into the list. */
-    private void linkLast(ListNode<E> node)
+    private void linkLast(ListNodeImpl<E> node)
     {
         if (isEmpty()) { // node will be the first and only one
             addListNode(node);
@@ -216,9 +216,9 @@ public class DoublyLinkedList<E>
         if (previousSize == 0) {
             head = list.head; // head and tail already linked together
         } else {
-            ListNode<E> refNode = (index == previousSize) ? head : getNode(index);
+            ListNodeImpl<E> refNode = (index == previousSize) ? head : getNodeAt(index);
 
-            ListNode<E> listTail = list.tail();
+            ListNodeImpl<E> listTail = list.tail();
             link(refNode.prev, list.head); // changes list.tail()
             link(listTail, refNode);
 
@@ -231,10 +231,10 @@ public class DoublyLinkedList<E>
     }
 
     /** Remove the non null {@code node} from the list. */
-    private boolean unlink(ListNode<E> node)
+    private boolean unlink(ListNodeImpl<E> node)
     {
-        ListNode<E> prev = node.prev;
-        ListNode<E> next = node.next;
+        ListNodeImpl<E> prev = node.prev;
+        ListNodeImpl<E> next = node.next;
         if (removeListNode(node)) { // clears prev and next of node
             if (size == 0) {
                 head = null;
@@ -275,13 +275,14 @@ public class DoublyLinkedList<E>
      */
     public void addNode(int index, ListNode<E> node)
     {
+        ListNodeImpl<E> nodeImpl = (ListNodeImpl<E>) node;
         if (index == size) { // also true if this is empty
-            linkLast(node);
+            linkLast(nodeImpl);
         } else {
-            ListNode<E> successor = index == 0 ? head : getNode(index);
-            linkBefore(node, successor);
+            ListNodeImpl<E> successor = index == 0 ? head : getNodeAt(index);
+            linkBefore(nodeImpl, successor);
             if (head == successor) {
-                head = node;
+                head = nodeImpl;
             }
         }
     }
@@ -333,12 +334,15 @@ public class DoublyLinkedList<E>
      */
     public void addNodeBefore(ListNode<E> successor, ListNode<E> node)
     {
-        if (successor.list != this) {
-            throw new IllegalArgumentException("Node <" + successor + "> not in this list");
+        ListNodeImpl<E> successorImpl = (ListNodeImpl<E>) successor;
+        ListNodeImpl<E> nodeImpl = (ListNodeImpl<E>) node;
+
+        if (successorImpl.list != this) {
+            throw new IllegalArgumentException("Node <" + successorImpl + "> not in this list");
         }
-        linkBefore(node, successor);
-        if (head == successor) {
-            head = node;
+        linkBefore(nodeImpl, successorImpl);
+        if (head == successorImpl) {
+            head = nodeImpl;
         }
     }
 
@@ -389,10 +393,15 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> getNode(int index)
     {
+        return getNodeAt(index);
+    }
+
+    private ListNodeImpl<E> getNodeAt(int index)
+    {
         if (index < 0 || size <= index) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-        ListNode<E> node;
+        ListNodeImpl<E> node;
         if (index < size / 2) {
             node = head;
             for (int i = 0; i < index; i++) {
@@ -430,7 +439,7 @@ public class DoublyLinkedList<E>
         if (!containsNode(node)) {
             return -1;
         }
-        ListNode<E> current = head;
+        ListNodeImpl<E> current = head;
         for (int i = 0; i < size; i++) {
             if (current == node) {
                 return i;
@@ -453,7 +462,7 @@ public class DoublyLinkedList<E>
      */
     public boolean containsNode(ListNode<E> node)
     {
-        return node.list == this;
+        return ((ListNodeImpl<E>) node).list == this;
     }
 
     /**
@@ -470,7 +479,7 @@ public class DoublyLinkedList<E>
      */
     public boolean removeNode(ListNode<E> node)
     {
-        return unlink(node);
+        return unlink((ListNodeImpl<E>) node);
     }
 
     /**
@@ -521,13 +530,13 @@ public class DoublyLinkedList<E>
      *         equal to {@code element} and its index, or if no such node was found a
      *         {@code Pair.of(null, -1)}
      */
-    private Pair<ListNode<E>, Integer> searchNode(
-        Supplier<ListNode<E>> first, UnaryOperator<ListNode<E>> next, Object element)
+    private Pair<ListNodeImpl<E>, Integer> searchNode(
+        Supplier<ListNodeImpl<E>> first, UnaryOperator<ListNodeImpl<E>> next, Object element)
     {
         if (!isEmpty()) {
             int index = 0;
-            ListNode<E> firstNode = first.get();
-            ListNode<E> node = firstNode;
+            ListNodeImpl<E> firstNode = first.get();
+            ListNodeImpl<E> node = firstNode;
             do {
                 if (Objects.equals(node.value, element)) {
                     return Pair.of(node, index);
@@ -553,7 +562,7 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> addElementFirst(E element)
     {
-        ListNode<E> node = new ListNode<>(element);
+        ListNode<E> node = new ListNodeImpl<>(element);
         addNode(0, node);
         return node;
     }
@@ -571,7 +580,7 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> addElementLast(E element)
     {
-        ListNode<E> node = new ListNode<>(element);
+        ListNode<E> node = new ListNodeImpl<>(element);
         addNode(size, node);
         return node;
     }
@@ -588,7 +597,7 @@ public class DoublyLinkedList<E>
      */
     public ListNode<E> addElementBeforeNode(ListNode<E> successor, E element)
     {
-        ListNode<E> node = new ListNode<>(element);
+        ListNode<E> node = new ListNodeImpl<>(element);
         addNodeBefore(successor, node);
         return node;
     }
@@ -614,7 +623,7 @@ public class DoublyLinkedList<E>
     @Override
     public E get(int index)
     {
-        return getNode(index).value;
+        return getNodeAt(index).value;
     }
 
     /**
@@ -625,7 +634,7 @@ public class DoublyLinkedList<E>
     {
         ListNode<E> node = getNode(index);
         removeNode(node);
-        return node.value;
+        return node.getValue();
     }
 
     // Deque methods
@@ -680,7 +689,7 @@ public class DoublyLinkedList<E>
 
         ListNode<E> node = head;
         removeNode(node); // changes head
-        return node.value;
+        return node.getValue();
     }
 
     /**
@@ -695,7 +704,7 @@ public class DoublyLinkedList<E>
 
         ListNode<E> node = tail();
         removeNode(node); // changes tail
-        return node.value;
+        return node.getValue();
     }
 
     /**
@@ -709,7 +718,7 @@ public class DoublyLinkedList<E>
         }
         ListNode<E> node = head;
         removeNode(node); // changes head
-        return node.value;
+        return node.getValue();
     }
 
     /**
@@ -723,7 +732,7 @@ public class DoublyLinkedList<E>
         }
         ListNode<E> node = tail();
         removeNode(node); // changes tail()
-        return node.value;
+        return node.getValue();
     }
 
     /**
@@ -732,7 +741,7 @@ public class DoublyLinkedList<E>
     @Override
     public E getFirst()
     {
-        return getFirstNode().value;
+        return getFirstNode().getValue();
     }
 
     /**
@@ -741,7 +750,7 @@ public class DoublyLinkedList<E>
     @Override
     public E getLast()
     {
-        return getLastNode().value;
+        return getLastNode().getValue();
     }
 
     /**
@@ -870,10 +879,10 @@ public class DoublyLinkedList<E>
         if (size < 2) {
             return;
         }
-        ListNode<E> newHead = tail();
-        ListNode<E> current = head;
+        ListNodeImpl<E> newHead = tail();
+        ListNodeImpl<E> current = head;
         do {
-            ListNode<E> next = current.next;
+            ListNodeImpl<E> next = current.next;
 
             current.next = current.prev;
             current.prev = next;
@@ -947,7 +956,7 @@ public class DoublyLinkedList<E>
      */
     public NodeIterator<E> circularIterator(E firstElement)
     {
-        ListNode<E> startNode = nodeOf(firstElement);
+        ListNodeImpl<E> startNode = (ListNodeImpl<E>) nodeOf(firstElement);
         if (startNode == null) {
             throw new NoSuchElementException();
         }
@@ -973,7 +982,7 @@ public class DoublyLinkedList<E>
      */
     public NodeIterator<E> reverseCircularIterator(E firstElement)
     {
-        ListNode<E> startNode = nodeOf(firstElement);
+        ListNodeImpl<E> startNode = (ListNodeImpl<E>) nodeOf(firstElement);
         if (startNode == null) {
             throw new NoSuchElementException();
         }
@@ -1028,8 +1037,8 @@ public class DoublyLinkedList<E>
      */
     public ListNodeIterator<E> listIterator(E element)
     {
-        Pair<ListNode<E>, Integer> startPair = searchNode(() -> head, n -> n.next, element);
-        ListNode<E> startNode = startPair.getFirst();
+        Pair<ListNodeImpl<E>, Integer> startPair = searchNode(() -> head, n -> n.next, element);
+        ListNodeImpl<E> startNode = startPair.getFirst();
         int startIndex = startPair.getSecond();
         if (startNode == null) {
             throw new NoSuchElementException();
@@ -1053,7 +1062,7 @@ public class DoublyLinkedList<E>
         @Override
         default E next()
         {
-            return nextNode().value;
+            return nextNode().getValue();
         }
 
         /**
@@ -1083,7 +1092,7 @@ public class DoublyLinkedList<E>
         @Override
         default E next()
         {
-            return nextNode().value;
+            return nextNode().getValue();
         }
 
         /**
@@ -1092,7 +1101,7 @@ public class DoublyLinkedList<E>
         @Override
         default E previous()
         {
-            return previousNode().value;
+            return previousNode().getValue();
         }
 
         /**
@@ -1116,9 +1125,9 @@ public class DoublyLinkedList<E>
         /** Index in this list of the ListNode returned next. */
         private int nextIndex;
         /** ListNode this iterator will return next. Null if this list is empty. */
-        private ListNode<E> next;
+        private ListNodeImpl<E> next;
         /** ListNode this iterator returned last. */
-        private ListNode<E> last = null;
+        private ListNodeImpl<E> last = null;
 
         /**
          * The number of modifications the list have had at the moment when this iterator was
@@ -1132,11 +1141,11 @@ public class DoublyLinkedList<E>
             if (startIndex == size) {
                 this.next = isEmpty() ? null : head;
             } else {
-                this.next = getNode(startIndex);
+                this.next = getNodeAt(startIndex);
             }
         }
 
-        private ListNodeIteratorImpl(int startIndex, ListNode<E> startNode)
+        private ListNodeIteratorImpl(int startIndex, ListNodeImpl<E> startNode)
         {
             this.nextIndex = startIndex;
             this.next = startNode;
@@ -1182,7 +1191,7 @@ public class DoublyLinkedList<E>
          * {@inheritDoc}
          */
         @Override
-        public ListNode<E> nextNode()
+        public ListNodeImpl<E> nextNode()
         {
             checkForComodification();
             if (!hasNext()) {
@@ -1248,9 +1257,9 @@ public class DoublyLinkedList<E>
             boolean wasLast = last == tail();
             removeNode(last);
             if (wasLast) { // or the sole node
-                last = addElementLast(e);
+                last = (ListNodeImpl<E>) addElementLast(e);
             } else {
-                last = addElementBeforeNode(nextNode, e);
+                last = (ListNodeImpl<E>) addElementBeforeNode(nextNode, e);
             }
             expectedModCount += 2; // because of unlink and add
         }
@@ -1266,7 +1275,7 @@ public class DoublyLinkedList<E>
             }
             checkForComodification();
 
-            ListNode<E> lastsNext = last.next;
+            ListNodeImpl<E> lastsNext = last.next;
             removeNode(last);
             if (next == last) { // previousNode() called before
                 // removed element after cursor (which would have been next)
@@ -1328,7 +1337,7 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * Container to store the elements of a {@link DoublyLinkedList}.
+     * Node in that the elements of a {@link DoublyLinkedList}.
      * <p>
      * A {@link ListNode} is either contain exactly once in exactly one {@code DoublyLinkedList} or
      * contained in no {@code DoublyLinkedList}.
@@ -1336,19 +1345,35 @@ public class DoublyLinkedList<E>
      * 
      * @param <V> the type of the element stored in this node
      */
-    public static class ListNode<V>
+    public interface ListNode<V>
+    {
+        /**
+         * Returns the value this list node stores
+         *
+         * @return the value this list node stores
+         */
+        V getValue();
+    }
+
+    /**
+     * The default {@link ListNode} implementation that enables checks and enforcement of a single
+     * container list policy.
+     */
+    private static class ListNodeImpl<V>
+        implements
+        ListNode<V>
     {
         private final V value;
         private DoublyLinkedList<V> list = null;
-        private ListNode<V> next = null;
-        private ListNode<V> prev = null;
+        private ListNodeImpl<V> next = null;
+        private ListNodeImpl<V> prev = null;
 
         /**
          * Creates new list node
          *
          * @param value the value this list node stores
          */
-        ListNode(V value)
+        ListNodeImpl(V value)
         {
             this.value = value;
         }
@@ -1367,10 +1392,9 @@ public class DoublyLinkedList<E>
         }
 
         /**
-         * Returns the value this list node stores
-         *
-         * @return the value this list node stores
+         * {@inheritDoc}
          */
+        @Override
         public V getValue()
         {
             return value;
