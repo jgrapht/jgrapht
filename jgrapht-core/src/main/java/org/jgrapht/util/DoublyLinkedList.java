@@ -326,13 +326,13 @@ public class DoublyLinkedList<E>
      * This method has constant runtime complexity O(1).
      * </p>
      * 
-     * @param successor {@code ListNode} before which the {@code node} is inserted
      * @param node to insert
+     * @param successor {@code ListNode} before which the {@code node} is inserted
      * @throws IllegalArgumentException if {@code node} is already contained in this or another
      *         {@code DoublyLinkedList} or {@code successor} is not contained in this list
      * @throws NullPointerException if {@code successor} or {@code node} is {@code null}
      */
-    public void addNodeBefore(ListNode<E> successor, ListNode<E> node)
+    public void addNodeBefore(ListNode<E> node, ListNode<E> successor)
     {
         ListNodeImpl<E> successorImpl = (ListNodeImpl<E>) successor;
         ListNodeImpl<E> nodeImpl = (ListNodeImpl<E>) node;
@@ -598,7 +598,7 @@ public class DoublyLinkedList<E>
     public ListNode<E> addElementBeforeNode(ListNode<E> successor, E element)
     {
         ListNode<E> node = new ListNodeImpl<>(element);
-        addNodeBefore(successor, node);
+        addNodeBefore(node, successor);
         return node;
     }
 

@@ -231,7 +231,7 @@ public class DoublyLinkedListTest
 
         ListNode<String> node = createFreeListNode(element);
         ListNode<String> beforeNode = list.getNode(index);
-        list.addNodeBefore(beforeNode, node);
+        list.addNodeBefore(node, beforeNode);
 
         assertTrue(list.containsNode(node));
         assertSameContent(list, expectedList);
@@ -243,7 +243,7 @@ public class DoublyLinkedListTest
         ListNode<String> node = createFreeListNode("another");
         ListNode<String> beforeNode = createListNodeInOtherList();
 
-        list.addNodeBefore(beforeNode, node);
+        list.addNodeBefore(node, beforeNode);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -252,7 +252,7 @@ public class DoublyLinkedListTest
         ListNode<String> node = createFreeListNode("another");
         ListNode<String> beforeNode = createFreeListNode("another");
 
-        list.addNodeBefore(beforeNode, node);
+        list.addNodeBefore(node, beforeNode);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -264,7 +264,7 @@ public class DoublyLinkedListTest
         ListNode<String> node = createListNodeInOtherList();
         ListNode<String> beforeNode = list.getNode(size / 2);
 
-        list.addNodeBefore(beforeNode, node);
+        list.addNodeBefore(node, beforeNode);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -276,7 +276,7 @@ public class DoublyLinkedListTest
         ListNode<String> node = list.getFirstNode();
         ListNode<String> beforeNode = list.getNode(size / 2);
 
-        list.addNodeBefore(beforeNode, node);
+        list.addNodeBefore(node, beforeNode);
     }
 
     /** Test for {@link DoublyLinkedList#getFirstNode()}. */
