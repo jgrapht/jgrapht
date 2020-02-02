@@ -48,8 +48,8 @@ import org.jgrapht.alg.util.*;
  * of the {@code List} nodes of this List have a reference to the List they belong to. This
  * increases the memory occupied by this list implementation compared to {@code LinkedList} for the
  * same elements. Instances of {@code LinkedList.Node} have three references each (the element, next
- * and previous), Instances {@code DoublyLinkedList.ListNode} have four (the element, next, previous
- * and the list).
+ * and previous), instances of {@code DoublyLinkedList.ListNode} have four (the element, next,
+ * previous and the list).
  * </p>
  *
  * @param <E> the list element type
@@ -118,7 +118,7 @@ public class DoublyLinkedList<E>
      * {@code size} and {@code modcount} by one.
      * </p>
      * 
-     * @param node to add to this list
+     * @param node the node to add to this list
      * @throws IllegalArgumentException if {@code node} is already contained in this or another
      *         {@code DoublyLinkedList}
      */
@@ -136,8 +136,8 @@ public class DoublyLinkedList<E>
 
     /**
      * Atomically moves all {@link ListNode ListNodes} from {@code list} to this list as if each
-     * node was removed with {@link #removeListNode(ListNode)} from {@code list} and subsequently
-     * added to this list by {@link #addListNode(ListNode)}.
+     * node was removed with {@link #removeListNode(ListNodeImpl)} from {@code list} and
+     * subsequently added to this list by {@link #addListNode(ListNodeImpl)}.
      */
     private void moveAllListNodes(DoublyLinkedList<E> list)
     { // call this before any modification of this list is done
@@ -162,7 +162,7 @@ public class DoublyLinkedList<E>
      * increases the {@code modcount} by one.
      * </p>
      * 
-     * @param node to remove from this list
+     * @param node the node to remove from this list
      * @return true if {@code node} was removed from this list, else false
      */
     private boolean removeListNode(ListNodeImpl<E> node)
@@ -180,7 +180,14 @@ public class DoublyLinkedList<E>
         return false;
     }
 
-    private static <E> void link(ListNodeImpl<E> predecessor, ListNodeImpl<E> successor)
+    /**
+     * Establishes the links between the given {@link ListNodeImpl nodes} in such a way that the
+     * {@code predecessor} is linked before the {@code successor}.
+     * 
+     * @param predecessor the first node linked before the other
+     * @param successor the second node linked after the other
+     */
+    private void link(ListNodeImpl<E> predecessor, ListNodeImpl<E> successor)
     {
         predecessor.next = successor;
         successor.prev = predecessor;
@@ -266,7 +273,7 @@ public class DoublyLinkedList<E>
      * </p>
      * 
      * @param index index at which the specified {@code node} is to be inserted
-     * @param node to add
+     * @param node the node to add
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index > size()})
      * @throws IllegalArgumentException if {@code node} is already part of this or another
@@ -293,7 +300,7 @@ public class DoublyLinkedList<E>
      * This method has constant runtime complexity O(1).
      * </p>
      * 
-     * @param node to add
+     * @param node the node to add
      * @throws IllegalArgumentException if {@code node} is already part of this or another
      *         {@code DoublyLinkedList}
      * @throws NullPointerException if {@code node} is {@code null}
@@ -309,7 +316,7 @@ public class DoublyLinkedList<E>
      * This method has constant runtime complexity O(1).
      * </p>
      * 
-     * @param node to add
+     * @param node the node to add
      * @throws IllegalArgumentException if {@code node} is already part of this or another
      *         {@code DoublyLinkedList}
      * @throws NullPointerException if {@code node} is {@code null}
@@ -326,7 +333,7 @@ public class DoublyLinkedList<E>
      * This method has constant runtime complexity O(1).
      * </p>
      * 
-     * @param node to insert
+     * @param node the node to add
      * @param successor {@code ListNode} before which the {@code node} is inserted
      * @throws IllegalArgumentException if {@code node} is already contained in this or another
      *         {@code DoublyLinkedList} or {@code successor} is not contained in this list
@@ -386,7 +393,7 @@ public class DoublyLinkedList<E>
      * This method has linear runtime complexity O(n).
      * </p>
      * 
-     * @param index of the {@code ListNode} to return
+     * @param index index of the {@code ListNode} to return
      * @return the {@code ListNode} at the specified position in this list
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
@@ -396,6 +403,14 @@ public class DoublyLinkedList<E>
         return getNodeAt(index);
     }
 
+    /**
+     * Returns the {@link ListNodeImpl node} at the specified position in this list.
+     * 
+     * @param index index of the {@code ListNodeImpl} to return
+     * @return the {@code ListNode} at the specified position in this list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         ({@code index < 0 || index >= size()})
+     */
     private ListNodeImpl<E> getNodeAt(int index)
     {
         if (index < 0 || size <= index) {
@@ -429,7 +444,7 @@ public class DoublyLinkedList<E>
      * time O(1) if {@code node} is not {@link #containsNode(ListNode) contained} in this list.
      * </p>
      * 
-     * @param node to search for
+     * @param node the node to search for
      * @return the index of the specified {@code node} in this list, or -1 if this list does not
      *         contain {@code node}
      * @throws NullPointerException if {@code node} is {@code null}
@@ -456,7 +471,7 @@ public class DoublyLinkedList<E>
      * This method has constant runtime complexity O(1).
      * </p>
      * 
-     * @param node whose presence in this {@code DoublyLinkedList} is to be tested
+     * @param node the node whose presence in this {@code DoublyLinkedList} is to be tested
      * @return true if this {@code DoublyLinkedList} contains the {@link ListNode}
      * @throws NullPointerException if {@code node} is {@code null}
      */
@@ -473,7 +488,7 @@ public class DoublyLinkedList<E>
      * This method has constant runtime complexity O(1).
      * </p>
      *
-     * @param node to remove from this list
+     * @param node the node to remove from this list
      * @return true if node was removed from this list
      * @throws NullPointerException if {@code node} is {@code null}
      */
@@ -490,7 +505,7 @@ public class DoublyLinkedList<E>
      * This method has linear runtime complexity O(n).
      * </p>
      * 
-     * @param element whose {@code ListNode} is to return
+     * @param element the element whose {@code ListNode} is to return
      * @return the first {@code ListNode} holding the {@code element} or null if no node was found
      */
     public ListNode<E> nodeOf(Object element)
@@ -506,7 +521,7 @@ public class DoublyLinkedList<E>
      * This method has linear runtime complexity O(n).
      * </p>
      * 
-     * @param element whose {@code ListNode} is to return
+     * @param element the element whose {@code ListNode} is to return
      * @return the last {@code ListNode} holding the {@code element} or null if no node was found
      */
     public ListNode<E> lastNodeOf(Object element)
@@ -525,7 +540,7 @@ public class DoublyLinkedList<E>
      * 
      * @param first supplier of the first node to check if this list is not empty
      * @param next {@code Function} to get from the current node the next node to check
-     * @param element for that the first node with equal value is searched.
+     * @param element the element for that the first node with equal value is searched.
      * @return a {@link Pair} of the first encountered {@code ListNode} holding a {@code value}
      *         equal to {@code element} and its index, or if no such node was found a
      *         {@code Pair.of(null, -1)}
@@ -557,7 +572,7 @@ public class DoublyLinkedList<E>
      * {@code ListNode}.
      * </p>
      * 
-     * @param element to add
+     * @param element the element to add
      * @return the {@code ListNode} allocated to store the {@code value}
      */
     public ListNode<E> addElementFirst(E element)
@@ -575,7 +590,7 @@ public class DoublyLinkedList<E>
      * {@code ListNode}.
      * </p>
      * 
-     * @param element to add
+     * @param element the element to add
      * @return the {@code ListNode} allocated to store the {@code value}
      */
     public ListNode<E> addElementLast(E element)
@@ -590,7 +605,7 @@ public class DoublyLinkedList<E>
      * Returns the {@code ListNode} allocated to store the {@code value}.
      *
      * @param successor {@code ListNode} before which the node holding {@code value} is inserted
-     * @param element to add
+     * @param element the element to add
      * @return the {@code ListNode} allocated to store the {@code value}
      * @throws IllegalArgumentException if {@code successor} is not contained in this list
      * @throws NullPointerException if {@code successor} is {@code null}
@@ -899,7 +914,8 @@ public class DoublyLinkedList<E>
      * {@code movedList} are moved to this list. When this method terminates this list contains all
      * nodes of {@code movedList} and {@code movedList} is empty.
      *
-     * @param index of the first element of {@code list} in this {@code list} after it was added
+     * @param index index of the first element of {@code list} in this {@code list} after it was
+     *        added
      * @param movedList the {@code DoublyLinkedList} to move to this one
      * @throws NullPointerException if {@code movedList} is {@code null}
      */
@@ -951,7 +967,7 @@ public class DoublyLinkedList<E>
      * would be the first one.
      * </p>
      * 
-     * @param firstElement equal to the first {@code next()}
+     * @param firstElement the element equal to the first {@code next()}
      * @return a circular {@code NodeIterator} iterating forward from {@code firstElement}
      */
     public NodeIterator<E> circularIterator(E firstElement)
@@ -977,7 +993,7 @@ public class DoublyLinkedList<E>
      * would be the first one.
      * </p>
      * 
-     * @param firstElement equal to the first {@code next()}
+     * @param firstElement the element equal to the first {@code next()}
      * @return a circular {@code NodeIterator} iterating backwards from {@code firstElement}
      */
     public NodeIterator<E> reverseCircularIterator(E firstElement)
@@ -1337,10 +1353,10 @@ public class DoublyLinkedList<E>
     }
 
     /**
-     * Node in that the elements of a {@link DoublyLinkedList}.
+     * Container for the elements stored in a {@link DoublyLinkedList}.
      * <p>
-     * A {@link ListNode} is either contain exactly once in exactly one {@code DoublyLinkedList} or
-     * contained in no {@code DoublyLinkedList}.
+     * A {@link ListNode} is either contained exactly once in exactly one {@code DoublyLinkedList}
+     * or contained in no {@code DoublyLinkedList}.
      * </p>
      * 
      * @param <V> the type of the element stored in this node
@@ -1348,9 +1364,9 @@ public class DoublyLinkedList<E>
     public interface ListNode<V>
     {
         /**
-         * Returns the value this list node stores
+         * Returns the immutable value this {@code ListNode} contains.
          *
-         * @return the value this list node stores
+         * @return the value this list node contains
          */
         V getValue();
     }
