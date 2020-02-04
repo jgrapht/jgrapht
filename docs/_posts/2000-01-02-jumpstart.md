@@ -21,7 +21,7 @@ easily add us as a dependency to your project:
 
 ## Development Environment
 
-First, find out how to set up [your favorite IDE (or the command line)](https://github.com/jgrapht/jgrapht/wiki/How-to-use-JGraphT-as-a-dependency-in-your-projects) to work with JGraphT.
+First, find out how to set up [your favorite IDE (or the command line)](https://github.com/jgrapht/jgrapht/wiki/Users:-How-to-use-JGraphT-as-a-dependency-in-your-projects) to work with JGraphT.
 
 <br>
 
