@@ -1,10 +1,7 @@
 package org.jgrapht.generate;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.Random;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -134,27 +131,14 @@ public class DirectedScaleFreeGraphGeneratorTest
     @Test
     public void testNoOutDegreeZero()
     {
-        int success = 0, total = 100;
-        final double threshold = 0.95;
-        final Random random = new Random();
-        for (int i = 0; i < total; i++) {
-            long seed = random.nextLong();
-            DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
-                new DirectedScaleFreeGraphGenerator<>(0.1f, 0.0f, 0.5f, 0.5f, -1, 1000, seed);
-            generator.setAllowingMultipleEdges(false);
-            Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-            generator.generateGraph(g);
-            long outDegreeZero = g.vertexSet().stream().filter(v -> g.outDegreeOf(v) == 0).count();
-            if (outDegreeZero == 0) {
-                success++;
-            }
-//            else {
-//                System.err.println("Failed with seed = "+ seed + ", outDegreeZero = "+ outDegreeZero);
-//            }
-        }
-        final float successRate = success * 1.0f / total;
-        assertTrue("success rate is only" + successRate + "! Must be >=" + threshold, successRate >= threshold);
+        DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
+            new DirectedScaleFreeGraphGenerator<>(0.3f, 0.0f, 0.5f, 0.5f, -1, 1000, 12345);
+        generator.setAllowingMultipleEdges(false);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        generator.generateGraph(g);
+        long outDegreeZero = g.vertexSet().stream().filter(v -> g.outDegreeOf(v) == 0).count();
+        assertEquals(0, outDegreeZero);
     }
 
     @Test
