@@ -510,9 +510,6 @@ public class HeavyPathDecomposition<V, E>
          * Return the internal path array. For each vertex $v$, $pathArray[normalizeVertex(v)] = i$
          * iff $v$ appears on path $i$ or $-1$ if $v$ doesn't belong to any path.
          *
-         * <p>
-         * Note: the indexing of paths is consistent with {@link PathDecomposition#getPaths()}.
-         *
          * @return internal path array
          */
         public int[] getPathArray()
@@ -535,9 +532,6 @@ public class HeavyPathDecomposition<V, E>
         /**
          * Return the internal firstNodeInPath array. For each path $i$, $firstNodeInPath[i] =
          * normalizeVertex(v)$ iff $v$ appears as the first vertex on the path.
-         *
-         * <p>
-         * Note: the indexing of paths is consistent with {@link PathDecomposition#getPaths()}.
          *
          * @return internal firstNodeInPath array
          */

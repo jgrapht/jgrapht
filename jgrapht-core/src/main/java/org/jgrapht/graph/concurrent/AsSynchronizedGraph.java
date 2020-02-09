@@ -561,7 +561,7 @@ public class AsSynchronizedGraph<V, E>
      * Return whether the graph uses cache for <code>edgesOf</code>, <code>incomingEdgesOf</code>
      * and <code>outgoingEdgesOf</code> methods.
      * 
-     * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
+     * @return <code>true</code> if cache is in use, <code>false</code> if cache is not in use.
      */
     public boolean isCacheEnabled()
     {
@@ -576,7 +576,7 @@ public class AsSynchronizedGraph<V, E>
     /**
      * Return whether copyless mode is used for collection-returning methods.
      * 
-     * @return <tt>true</tt> if the graph uses copyless mode, <tt>false</tt> otherwise
+     * @return <code>true</code> if the graph uses copyless mode, <code>false</code> otherwise
      */
     public boolean isCopyless()
     {
@@ -587,7 +587,7 @@ public class AsSynchronizedGraph<V, E>
      * Set the cache strategy for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
      * <code>outgoingEdgesOf</code> methods.
      *
-     * @param cacheEnabled a flag whether to use cache for those methods, if <tt>true</tt>, cache
+     * @param cacheEnabled a flag whether to use cache for those methods, if <code>true</code>, cache
      *        will be used for those methods, otherwise cache will not be used.
      * @return the AsSynchronizedGraph
      */
@@ -668,7 +668,7 @@ public class AsSynchronizedGraph<V, E>
     /**
      * Return whether fair mode is used for synchronizing access to this graph.
      * 
-     * @return <tt>true</tt> if the graph uses fair mode, <tt>false</tt> if non-fair mode
+     * @return <code>true</code> if the graph uses fair mode, <code>false</code> if non-fair mode
      */
     public boolean isFair()
     {
@@ -751,7 +751,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether copyless mode is used for iteration.
          * 
-         * @return <tt>true</tt> if the set uses copyless mode, <tt>false</tt> otherwise
+         * @return <code>true</code> if the set uses copyless mode, <code>false</code> otherwise
          */
         public boolean isCopyless()
         {
@@ -1112,7 +1112,7 @@ public class AsSynchronizedGraph<V, E>
          * Return whether the graph uses cache for <code>edgesOf</code>,
          * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
          * 
-         * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
+         * @return <code>true</code> if cache is in use, <code>false</code> if cache is not in use.
          */
         boolean isCacheEnabled();
     }
@@ -1467,7 +1467,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether a cache will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if cache will be used, <tt>false</tt> if cache will not be used
+         * @return <code>true</code> if cache will be used, <code>false</code> if cache will not be used
          */
         public boolean isCacheEnable()
         {
@@ -1499,7 +1499,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether copyless mode will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if constructed as copyless, <tt>false</tt> otherwise
+         * @return <code>true</code> if constructed as copyless, <code>false</code> otherwise
          */
         public boolean isCopyless()
         {
@@ -1531,7 +1531,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether fair mode will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if constructed as fair mode, <tt>false</tt> if non-fair
+         * @return <code>true</code> if constructed as fair mode, <code>false</code> if non-fair
          */
         public boolean isFair()
         {

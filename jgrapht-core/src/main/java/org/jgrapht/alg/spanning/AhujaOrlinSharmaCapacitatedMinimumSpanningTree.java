@@ -45,8 +45,7 @@ import java.util.*;
  * algorithm for subset disjoint cycles by Ahuja et al. That is, the algorithm may run in
  * exponential time. This algorithm is implemented in two different version: a local search and a
  * tabu search. In both cases we have to find the best neighbor of the current capacitated spanning
- * tree. For further information about finding such an improving neighbor
- * {@link ImprovementGraph} @see ImprovementGraph
+ * tree. 
  *
  * @param <V> the vertex type
  * @param <E> the edge type

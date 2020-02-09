@@ -219,11 +219,11 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * Returns <tt>true</tt> if there are no more uniterated vertices in the currently iterated
-     * connected component; <tt>false</tt> otherwise.
+     * Returns <code>true</code> if there are no more uniterated vertices in the currently iterated
+     * connected component; <code>false</code> otherwise.
      *
-     * @return <tt>true</tt> if there are no more uniterated vertices in the currently iterated
-     *         connected component; <tt>false</tt> otherwise.
+     * @return <code>true</code> if there are no more uniterated vertices in the currently iterated
+     *         connected component; <code>false</code> otherwise.
      */
     protected abstract boolean isConnectedComponentExhausted();
 
@@ -264,7 +264,7 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex vertex in question
      *
-     * @return <tt>true</tt> if vertex has already been seen
+     * @return <code>true</code> if vertex has already been seen
      */
     protected boolean isSeenVertex(V vertex)
     {

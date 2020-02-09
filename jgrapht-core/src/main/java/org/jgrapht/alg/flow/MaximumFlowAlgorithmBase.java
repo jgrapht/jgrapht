@@ -321,8 +321,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns current source vertex, or <tt>null</tt> if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
+     * Returns current source vertex, or <code>null</code> if there was no <code>
+     * calculateMaximumFlow</code> calls.
      *
      * @return current source
      */
@@ -332,8 +332,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns current sink vertex, or <tt>null</tt> if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
+     * Returns current sink vertex, or <code>null</code> if there was no <code>
+     * calculateMaximumFlow</code> calls.
      *
      * @return current sink
      */
@@ -343,8 +343,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns maximum flow value, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call.
+     * Returns maximum flow value, that was calculated during last <code>
+     * calculateMaximumFlow</code> call.
      *
      * @return maximum flow value
      */
@@ -354,9 +354,9 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns maximum flow, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
+     * Returns maximum flow, that was calculated during last <code>
+     * calculateMaximumFlow</code> call, or <code>null</code>, if there was no <code>
+     * calculateMaximumFlow</code> calls.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */

@@ -26,8 +26,8 @@ import java.util.*;
  * A topological ordering iterator for a directed acyclic graph.
  * 
  * <p>
- * A topological order is a permutation <tt>p</tt> of the vertices of a graph such that an edge
- * <tt>(i,j)</tt> implies that <tt>i</tt> appears before <tt>j</tt> in <tt>p</tt>. For more
+ * A topological order is a permutation <code>p</code> of the vertices of a graph such that an edge
+ * <code>(i,j)</code> implies that <code>i</code> appears before <code>j</code> in <code>p</code>. For more
  * information see <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
  * <a href="http://mathworld.wolfram.com/TopologicalSort.html">wolfram</a>.
  *

@@ -96,7 +96,7 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return <tt>true</tt> if the target graph did not already contain the specified edge.
+     * @return <code>true</code> if the target graph did not already contain the specified edge.
      */
     public static <V,
         E> boolean addEdgeWithVertices(Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
@@ -206,7 +206,7 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return <tt>true</tt> if this graph changed as a result of the call
+     * @return <code>true</code> if this graph changed as a result of the call
      */
     public static <V, E> boolean addAllEdges(
         Graph<? super V, ? super E> destination, Graph<V, E> source, Collection<? extends E> edges)
@@ -234,11 +234,11 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return <tt>true</tt> if graph changed as a result of the call
+     * @return <code>true</code> if graph changed as a result of the call
      *
      * @throws NullPointerException if the specified vertices contains one or more null vertices, or
-     *         if the specified vertex collection is <tt>
-     * null</tt>.
+     *         if the specified vertex collection is <code>
+     * null</code>.
      *
      * @see Graph#addVertex(Object)
      */

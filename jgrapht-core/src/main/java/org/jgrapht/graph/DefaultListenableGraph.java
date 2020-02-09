@@ -31,7 +31,7 @@ import java.util.*;
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods.
+ * but relies on <code>Object</code>'s <code>equals</code> and <code>hashCode</code> methods.
  * </p>
  *
  * @param <V> the graph vertex type

@@ -36,8 +36,8 @@ public interface MaximumFlowAlgorithm<V, E>
 {
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
-     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Returns an object containing detailed
+     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then calculates
+     * maximum flow from <code>source</code> to <code>sink</code>. Returns an object containing detailed
      * information about the flow.
      *
      * @param source source of the flow inside the network
@@ -48,10 +48,10 @@ public interface MaximumFlowAlgorithm<V, E>
     MaximumFlow<E> getMaximumFlow(V source, V sink);
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
-     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
-     * <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different.
+     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then calculates
+     * maximum flow from <code>source</code> to <code>sink</code>. Note, that <code>source</code> and
+     * <code>sink</code> must be vertices of the <code>
+     * network</code> passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex

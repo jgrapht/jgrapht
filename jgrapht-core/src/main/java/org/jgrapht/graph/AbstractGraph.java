@@ -23,7 +23,7 @@ import org.jgrapht.util.*;
 import java.util.*;
 
 /**
- * A skeletal implementation of the <tt>Graph</tt> interface, to minimize the effort required to
+ * A skeletal implementation of the <code>Graph</code> interface, to minimize the effort required to
  * implement graph interfaces. This implementation is applicable to both: directed graphs and
  * undirected graphs.
  *
@@ -139,7 +139,7 @@ public abstract class AbstractGraph<V, E>
      *
      * @param edges edges to be removed from this graph.
      *
-     * @return <tt>true</tt> if this graph changed as a result of the call.
+     * @return <code>true</code> if this graph changed as a result of the call.
      *
      * @see Graph#removeEdge(Object)
      * @see Graph#containsEdge(Object)
