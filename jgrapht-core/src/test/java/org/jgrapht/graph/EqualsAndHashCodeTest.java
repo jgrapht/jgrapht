@@ -283,6 +283,8 @@ public class EqualsAndHashCodeTest
         private static final long serialVersionUID = 1L;
         private String label;
 
+        public CustomEdge() {}
+        
         public CustomEdge(String label)
         {
             this.label = label;

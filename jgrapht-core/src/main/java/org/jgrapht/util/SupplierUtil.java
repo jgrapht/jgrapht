@@ -20,6 +20,8 @@ package org.jgrapht.util;
 import org.jgrapht.graph.*;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.*;
 
@@ -57,13 +59,17 @@ public class SupplierUtil
      */
     public static <T> Supplier<T> createSupplier(Class<? extends T> clazz)
     {
-        return (Supplier<T> & Serializable) () -> {
-            try {
-                return clazz.getDeclaredConstructor().newInstance();
-            } catch (Exception ex) {
-                throw new RuntimeException("Supplier failed", ex);
-            }
-        };
+        try {
+            final Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
+            if ((!Modifier.isPublic(constructor.getModifiers())
+                || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers()))
+                && !constructor.isAccessible())
+                constructor.setAccessible(true);
+            return new ConstructorSupplier<>(constructor);
+        } catch (ReflectiveOperationException e) {
+            String error = e.getMessage();
+            return new AlwaysFailingSupplier<T>(error);
+        }
     }
 
     /**
@@ -235,6 +241,87 @@ public class SupplierUtil
         public String get()
         {
             return UUID.randomUUID().toString();
+        }
+    }
+
+    private static class ConstructorSupplier<T>
+        implements
+        Supplier<T>,
+        Serializable
+    {
+        private final Constructor<? extends T> constructor;
+
+        private static class SerializedForm<T>
+            implements
+            Serializable
+        {
+            private static final long serialVersionUID = -2385289829144892760L;
+
+            private final Class<T> type;
+
+            public SerializedForm(Class<T> type)
+            {
+                this.type = type;
+            }
+
+            Object readResolve()
+                throws ObjectStreamException
+            {
+                try {
+                    return new ConstructorSupplier<T>(type.getDeclaredConstructor());
+                } catch (ReflectiveOperationException e) {
+                    InvalidObjectException ex = new InvalidObjectException(
+                        "Failed to get no-args constructor from " + type);
+                    ex.initCause(e);
+                    throw ex;
+                }
+            }
+        }
+
+        public ConstructorSupplier(Constructor<? extends T> constructor)
+        {
+            this.constructor = constructor;
+        }
+
+        @Override
+        public T get()
+        {
+            try {
+                return constructor.newInstance();
+            } catch (ReflectiveOperationException ex) {
+                throw new RuntimeException("Supplier failed", ex);
+            }
+        }
+
+        Object writeReplace()
+            throws ObjectStreamException
+        {
+            return new SerializedForm<>(constructor.getDeclaringClass());
+        }
+    }
+
+    private static class AlwaysFailingSupplier<T>
+        implements
+        Supplier<T>,
+        Serializable
+    {
+        private static final long serialVersionUID = -560480634880773413L;
+        
+        private String error;
+
+        public AlwaysFailingSupplier()
+        {
+        }
+
+        public AlwaysFailingSupplier(String error)
+        {
+            this.error = error;
+        }
+
+        @Override
+        public T get()
+        {
+            throw new RuntimeException(error);
         }
     }
 
