@@ -1,0 +1,322 @@
+/*
+ * (C) Copyright 2020-2020, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
+package org.jgrapht.alg.clustering;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
+import org.jgrapht.alg.util.Pair;
+
+/**
+ * A label propagation clustering algorithm.
+ * 
+ * <p>
+ * The algorithm is a near linear time algorithm capable of discovering communities in large graphs.
+ * It is described in detail in the following
+ * <a href="http://dx.doi.org/10.1103/PhysRevE.76.036106">paper</a>:
+ * <ul>
+ * <li>Raghavan, U. N., Albert, R., & Kumara, S. (2007). Near linear time algorithm to detect
+ * community structures in large-scale networks. Physical review E, 76(3), 036106.</li>
+ * </ul>
+ * 
+ * <p>
+ * As the paper title suggests the running time is close to linear. The algorithm runs in
+ * iterations, each of which runs in $O(n + m)$ where $n$ is the number of vertices and $m$ is the
+ * number of edges. The authors found experimentally that in most cases, 95% of the nodes or more
+ * are classified correctly by the end of iteration 5. See the paper for more details.
+ * 
+ * @author Dimitrios Michail
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
+public class LabelPropagationClustering<V, E>
+    implements
+    ClusteringAlgorithm<V>
+{
+    private Graph<V, E> graph;
+    private int maxIterations;
+    private Random rng;
+    private Clustering<V> result;
+
+    /**
+     * Create a new clustering algorithm.
+     * 
+     * @param graph the graph (needs to be undirected)
+     */
+    public LabelPropagationClustering(Graph<V, E> graph)
+    {
+        this(graph, 0, new Random());
+    }
+
+    /**
+     * Create a new clustering algorithm.
+     * 
+     * @param graph the graph (needs to be undirected)
+     * @param rng random number generator
+     */
+    public LabelPropagationClustering(Graph<V, E> graph, Random rng)
+    {
+        this(graph, 0, rng);
+    }
+
+    /**
+     * Create a new clustering algorithm.
+     * 
+     * @param graph the graph (needs to be undirected)
+     * @param maxIterations maximum number of iterations (zero means no limit)
+     */
+    public LabelPropagationClustering(Graph<V, E> graph, int maxIterations)
+    {
+        this(graph, maxIterations, new Random());
+    }
+
+    /**
+     * Create a new clustering algorithm.
+     * 
+     * @param graph the graph (needs to be undirected)
+     * @param maxIterations maximum number of iterations (zero means no limit)
+     * @param rng random number generator
+     */
+    public LabelPropagationClustering(Graph<V, E> graph, int maxIterations, Random rng)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.maxIterations = maxIterations;
+        this.rng = Objects.requireNonNull(rng);
+        if (maxIterations < 0) {
+            throw new IllegalArgumentException("Max iterations cannot be negative");
+        }
+    }
+
+    @Override
+    public Clustering<V> getClustering()
+    {
+        if (result == null) {
+            result =
+                new ClusteringImpl<>(new Implementation<>(graph, rng, maxIterations).compute());
+        }
+        return result;
+    }
+
+    /**
+     * The actual implementation
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    private static class Implementation<V, E>
+    {
+        private Graph<V, E> graph;
+        private Random rng;
+        private int maxIterations;
+        private Map<V, String> labels;
+
+        public Implementation(Graph<V, E> graph, Random rng, int maxIterations)
+        {
+            this.graph = graph;
+            this.rng = rng;
+            this.maxIterations = maxIterations;
+            this.labels = new HashMap<>();
+
+            int i = 0;
+            for (V v : graph.vertexSet()) {
+                labels.put(v, String.valueOf(i++));
+            }
+        }
+
+        public List<Set<V>> compute()
+        {
+            int currentIteration = 0;
+            while (true) {
+                // is there a limit on the number of iterations?
+                if (maxIterations > 0 && currentIteration > maxIterations) {
+                    break;
+                }
+
+                // perform synchronous label update (to avoid oscillations)
+                boolean anyChange = false;
+                List<V> allVertices = new ArrayList<>(graph.vertexSet());
+                Collections.shuffle(allVertices, rng);
+                for (V v : allVertices) {
+                    if (updateLabel(v)) {
+                        anyChange = true;
+                    }
+                }
+
+                // Perform the iterative process until every node in the network has a
+                // label to which the maximum number of its neighbors belong to, or no change
+                // happens.
+                if (anyChange == false || shouldStop()) {
+                    break;
+                }
+
+                currentIteration++;
+            }
+
+            return computeCommunities();
+        }
+
+        private boolean shouldStop()
+        {
+            for (V v : graph.vertexSet()) {
+                Pair<Map<String, Integer>, Integer> labelCountsAndMaximum =
+                    getNeighborLabelCountsAndMaximum(v);
+                Map<String, Integer> counts = labelCountsAndMaximum.getFirst();
+
+                String vLabel = labels.get(v);
+                int vLabelCount = counts.getOrDefault(vLabel, 0);
+                for (E e : graph.edgesOf(v)) {
+                    V u = Graphs.getOppositeVertex(graph, e, v);
+                    String uLabel = labels.get(u);
+                    int uLabelCount = counts.getOrDefault(uLabel, 0);
+                    if (vLabelCount < uLabelCount) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private Pair<Map<String, Integer>, Integer> getNeighborLabelCountsAndMaximum(V v)
+        {
+            Map<String, Integer> counts = new HashMap<>();
+
+            int maxCount = 0;
+            for (E e : graph.edgesOf(v)) {
+                V u = Graphs.getOppositeVertex(graph, e, v);
+                String uLabel = labels.get(u);
+                int newCount = counts.getOrDefault(uLabel, 0) + 1;
+                counts.put(uLabel, newCount);
+                if (newCount > maxCount) {
+                    maxCount = newCount;
+                }
+            }
+
+            return Pair.of(counts, maxCount);
+        }
+
+        /**
+         * Update the label of a vertex.
+         * 
+         * @param the vertex
+         * @return true if a label change occurred
+         */
+        private boolean updateLabel(V v)
+        {
+            Pair<Map<String, Integer>, Integer> labelCountsAndMaximum =
+                getNeighborLabelCountsAndMaximum(v);
+            Map<String, Integer> counts = labelCountsAndMaximum.getFirst();
+
+            final int maxCount = labelCountsAndMaximum.getSecond();
+            ArrayList<String> maxLabels = counts
+                .entrySet().stream().filter(e -> e.getValue() == maxCount).map(e -> e.getKey())
+                .collect(Collectors.toCollection(ArrayList::new));
+            String newLabel = maxLabels.get(rng.nextInt(maxLabels.size()));
+            String oldLabel = labels.get(v);
+
+            if (oldLabel.equals(newLabel)) {
+                return false;
+            } else {
+                labels.put(v, newLabel);
+                return true;
+            }
+        }
+
+        /*
+         * Compute the final communities from the labels. We need to do some extra work due to the
+         * way the algorithm works, as described in the following paragraph from the original paper.
+         * 
+         * "When the algorithm terminates it is possible that two or more disconnected groups of
+         * nodes have the same label (the groups are connected in the network via other nodes of
+         * different labels). This happens when two or more neighbors of a node receive its label
+         * and pass the labels in different directions, which ultimately leads to different
+         * communities adopting the same label. In such cases, after the algorithm terminates one
+         * can run a simple breadth-first search on the sub-networks of each individual groups to
+         * separate the disconnected communities."
+         */
+        private List<Set<V>> computeCommunities()
+        {
+            Map<V, String> finalLabels = new HashMap<>();
+            int nextLabel = 0;
+
+            for (V v : graph.vertexSet()) {
+                if (finalLabels.containsKey(v)) {
+                    continue;
+                }
+
+                // start a BFS
+                Deque<V> frontier = new ArrayDeque<>();
+                String currentLabel = String.valueOf(nextLabel++);
+                finalLabels.put(v, currentLabel);
+                frontier.addLast(v);
+
+                while (!frontier.isEmpty()) {
+                    V u = frontier.removeFirst();
+                    String uLabel = labels.get(u);
+
+                    for (E e : graph.edgesOf(u)) {
+                        V w = Graphs.getOppositeVertex(graph, e, u);
+                        String wLabel = labels.get(w);
+                        if (!wLabel.equals(uLabel) || finalLabels.containsKey(w)) {
+                            continue;
+                        }
+                        finalLabels.put(w, currentLabel);
+                        frontier.addLast(w);
+                    }
+                }
+            }
+
+            return convert(graph, finalLabels);
+        }
+
+        private List<Set<V>> convert(Graph<V, E> graph, Map<V, String> labels)
+        {
+            Map<String, Set<V>> clusterMap = new LinkedHashMap<>();
+            for (V v : graph.vertexSet()) {
+                String rv = labels.get(v);
+                if (rv == null) {
+                    throw new IllegalArgumentException("Not all vertices have labels.");
+                }
+                Set<V> cluster = clusterMap.get(rv);
+                if (cluster == null) {
+                    cluster = new LinkedHashSet<>();
+                    clusterMap.put(rv, cluster);
+                }
+                cluster.add(v);
+            }
+            return new ArrayList<>(clusterMap.values());
+        }
+
+    }
+
+}

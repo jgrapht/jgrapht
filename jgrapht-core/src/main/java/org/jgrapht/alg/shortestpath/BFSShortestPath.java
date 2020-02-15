@@ -73,12 +73,11 @@ public class BFSShortestPath<V, E>
          * Declaring queue
          */
         Deque<V> queue = new ArrayDeque<>();
-
         queue.add(source);
 
         /*
-         * It takes the top most vertex from queue,relax its outgoing edges,updates the distance of
-         * the neighbouring vertices ans pushes them into queue
+         * Take the top most vertex from the queue, relax its outgoing edges, update the distance of
+         * the neighbouring vertices and push them into the queue
          */
         while (!queue.isEmpty()) {
             V v = queue.poll();
@@ -88,7 +87,6 @@ public class BFSShortestPath<V, E>
                     queue.add(u);
                     double newDist = distanceAndPredecessorMap.get(v).getFirst() + 1.0;
                     distanceAndPredecessorMap.put(u, Pair.of(newDist, e));
-
                 }
             }
         }
