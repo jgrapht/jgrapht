@@ -45,7 +45,7 @@ import org.jgrapht.alg.util.Pair;
  * It is described in detail in the following
  * <a href="http://dx.doi.org/10.1103/PhysRevE.76.036106">paper</a>:
  * <ul>
- * <li>Raghavan, U. N., Albert, R., & Kumara, S. (2007). Near linear time algorithm to detect
+ * <li>Raghavan, U. N., Albert, R., and Kumara, S. (2007). Near linear time algorithm to detect
  * community structures in large-scale networks. Physical review E, 76(3), 036106.</li>
  * </ul>
  * 
@@ -54,6 +54,11 @@ import org.jgrapht.alg.util.Pair;
  * iterations, each of which runs in $O(n + m)$ where $n$ is the number of vertices and $m$ is the
  * number of edges. The authors found experimentally that in most cases, 95% of the nodes or more
  * are classified correctly by the end of iteration 5. See the paper for more details.
+ * 
+ * <p>
+ * The algorithm is randomized, meaning that two runs on the same graph may return different
+ * results. If the user requires deterministic behavior, the random number generator can be provided
+ * by the constructor.
  * 
  * @author Dimitrios Michail
  *
@@ -141,6 +146,13 @@ public class LabelPropagationClustering<V, E>
         private int maxIterations;
         private Map<V, String> labels;
 
+        /**
+         * Initialize the computation
+         * 
+         * @param graph the graph
+         * @param rng the random number generator
+         * @param maxIterations maximum iterations
+         */
         public Implementation(Graph<V, E> graph, Random rng, int maxIterations)
         {
             this.graph = graph;
@@ -154,6 +166,11 @@ public class LabelPropagationClustering<V, E>
             }
         }
 
+        /**
+         * Main loop of the algorithm
+         * 
+         * @return the clusters
+         */
         public List<Set<V>> compute()
         {
             int currentIteration = 0;
@@ -173,9 +190,7 @@ public class LabelPropagationClustering<V, E>
                     }
                 }
 
-                // Perform the iterative process until every node in the network has a
-                // label to which the maximum number of its neighbors belong to, or no change
-                // happens.
+                // stopping criterion
                 if (anyChange == false || shouldStop()) {
                     break;
                 }
@@ -186,6 +201,12 @@ public class LabelPropagationClustering<V, E>
             return computeCommunities();
         }
 
+        /**
+         * Stopping criterion. Perform the iterative process until every node in the network has a
+         * label equal to a label that the maximum number of its neighbors belong to.
+         * 
+         * @return true whether we should stop, false otherwise
+         */
         private boolean shouldStop()
         {
             for (V v : graph.vertexSet()) {
@@ -207,6 +228,14 @@ public class LabelPropagationClustering<V, E>
             return true;
         }
 
+        /**
+         * Compute the frequency of the labels of all neighbors of a vertex and the maximum
+         * frequency.
+         * 
+         * @param v the input vertex
+         * @return the frequency of the labels of all neighbors of a vertex and the maximum
+         *         frequency
+         */
         private Pair<Map<String, Integer>, Integer> getNeighborLabelCountsAndMaximum(V v)
         {
             Map<String, Integer> counts = new HashMap<>();
@@ -252,7 +281,7 @@ public class LabelPropagationClustering<V, E>
             }
         }
 
-        /*
+        /**
          * Compute the final communities from the labels. We need to do some extra work due to the
          * way the algorithm works, as described in the following paragraph from the original paper.
          * 
@@ -263,6 +292,8 @@ public class LabelPropagationClustering<V, E>
          * communities adopting the same label. In such cases, after the algorithm terminates one
          * can run a simple breadth-first search on the sub-networks of each individual groups to
          * separate the disconnected communities."
+         * 
+         * @return the clustering
          */
         private List<Set<V>> computeCommunities()
         {
@@ -299,6 +330,13 @@ public class LabelPropagationClustering<V, E>
             return convert(graph, finalLabels);
         }
 
+        /**
+         * Convert from a map representation to a list of sets.
+         * 
+         * @param graph the graph
+         * @param labels the map representation
+         * @return the list of sets
+         */
         private List<Set<V>> convert(Graph<V, E> graph, Map<V, String> labels)
         {
             Map<String, Set<V>> clusterMap = new LinkedHashMap<>();
