@@ -52,9 +52,19 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  * + d(a_u, v)$ is minimum over all such pairs. Here $d(s,t)$ is the distance from vertex
  * $s$ to vertex $t$.
  *
+ * <p>
+ * The algorithm is designed to operate on sparse graph with low average outdegree. Comparing
+ * to {@link ContractionHierarchyBidirectionalDijkstra} it uses significantly more time on the
+ * precomputation stage. Because of that it makes sense to use this algorithm on large instances
+ * (i.e. with more than 10.000 vertices), where it shows substantially better performance results
+ * than {@link ContractionHierarchyBidirectionalDijkstra}. Typically this algorithm is used as the
+ * backend for large scale shortest path search engines, e.g.
+ * <a href="https://www.openstreetmap.org">OpenStreetMap</a>.
+ *
  * @param <V> graph vertex type
  * @param <E> graph edge type
  * @see TransitNodeRoutingPrecomputation
+ * @see BidirectionalDijkstraShortestPath
  */
 public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E> {
 
