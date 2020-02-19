@@ -25,90 +25,36 @@ import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.commons.lang3.mutable.*;
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.nio.*;
 import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
+import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
 import org.junit.*;
-import org.junit.rules.*;
 
 public class TSPLIBImporterTest
 {
 
-    private static String get3DPointsFileContent(String edgeWeightType)
-    {
-        StringJoiner c = new StringJoiner(System.lineSeparator());
-        c.add("NAME : theNameOfThisFile");
-        c.add("COMMENT : The first line of the comment");
-        c.add("COMMENT : A second line");
-        c.add("TYPE : TSP");
-        c.add("DIMENSION : 4");
-        c.add("EDGE_WEIGHT_TYPE : " + edgeWeightType);
-        c.add("NODE_COORD_TYPE : THREED_COORDS");
-        c.add("NODE_COORD_SECTION");
-        c.add("1 10.0 15.0 3.7");
-        c.add("2 14.0 15.0 3.7");
-        c.add("3 14.0 20.0 3.7");
-        c.add("4 14.0 20.0 3.7");
-        return c.toString();
-    }
-
-    private static String get2DPointsFileContent(String edgeWeightType)
-    {
-        StringJoiner c = new StringJoiner(System.lineSeparator());
-        c.add("NAME : theNameOfThisFile");
-        c.add("COMMENT : The first line of the comment");
-        c.add("COMMENT : A second line");
-        c.add("TYPE : TSP");
-        c.add("DIMENSION : 4");
-        c.add("EDGE_WEIGHT_TYPE : " + edgeWeightType);
-        c.add("NODE_COORD_TYPE : TWOD_COORDS");
-        c.add("NODE_COORD_SECTION");
-        c.add("1 10.2 15.0");
-        c.add("2 14.2 15.0");
-        c.add("3 14.8 20.0");
-        c.add("4 10.8 20.0");
-        c.add("EOF");
-        return c.toString();
-    }
-
-    private static class ArrayVector
+    private static class TestVector
     {
         private final int index;
         private final double[] elements;
 
-        public ArrayVector(int index, double... elements)
+        public TestVector(int index, double... elements)
         {
             this.index = index;
             this.elements = elements;
         }
 
-        public ArrayVector(double... elements)
+        public int getIndex()
         {
-            this(-1, elements);
+            return index;
         }
 
-        public double getElementValue(int i)
+        public double[] getElementValues()
         {
-            return elements[i];
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return 31 + Arrays.hashCode(elements);
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof ArrayVector)) {
-                return false;
-            }
-            return Arrays.equals(elements, ((ArrayVector) obj).elements);
+            return Arrays.copyOf(elements, elements.length);
         }
 
         private static DecimalFormat indexFormat = new DecimalFormat("0000");
@@ -125,85 +71,204 @@ public class TSPLIBImporterTest
         }
     }
 
-    private static List<ArrayVector> getExpected2DPoints()
+    private static StringJoiner get3DPointsFileContent(String edgeWeightType)
     {
-        return Arrays
-            .asList(vector(10.2, 15.0), vector(14.2, 15.0), vector(14.8, 20.0), vector(10.8, 20.0));
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : " + edgeWeightType);
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.0 15.0 3.7");
+        fileContent.add("2 14.0 15.0 3.7");
+        fileContent.add("3 14.0 20.0 3.7");
+        fileContent.add("4 14.0 20.0 3.7");
+        return fileContent;
     }
 
-    private static List<ArrayVector> getExpected3DPoints()
+    private static List<TestVector> getExpected3DPoints()
     {
         return Arrays
             .asList(
-                vector(10.0, 15.0, 3.7), vector(14.0, 15.0, 3.7), vector(14.0, 20.0, 3.7),
-                vector(14.0, 20.0, 3.7));
+                new TestVector(1, 10.0, 15.0, 3.7), new TestVector(2, 14.0, 15.0, 3.7),
+                new TestVector(3, 14.0, 20.0, 3.7), new TestVector(4, 14.0, 20.0, 3.7));
     }
 
-    private static ArrayVector vector(double... elements)
+    private static StringJoiner get2DPointsFileContent(String edgeWeightType)
     {
-        return new ArrayVector(elements);
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : " + edgeWeightType);
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.2 15.0");
+        fileContent.add("2 14.2 15.0");
+        fileContent.add("3 14.8 20.0");
+        fileContent.add("4 10.8 20.0");
+        fileContent.add("EOF");
+        return fileContent;
     }
 
-    /** Assert content equal graphs */
-    private static <V, E> void assertEqualGraphs(Graph<V, E> expectedGraph, Graph<V, E> actualGraph)
+    private static List<TestVector> getExpected2DPoints()
     {
-        assertEquals(actualGraph.vertexSet(), expectedGraph.vertexSet());
-
-        Set<E> actualEdgeSet = actualGraph.edgeSet();
-        Set<E> expectedEdgeSet = expectedGraph.edgeSet();
-        assertEquals("Unequal edgeSet size", expectedEdgeSet.size(), actualEdgeSet.size());
-
-        for (E expectedEdge : expectedEdgeSet) {
-
-            E actualEdge = actualGraph
-                .getEdge(
-                    expectedGraph.getEdgeSource(expectedEdge),
-                    expectedGraph.getEdgeTarget(expectedEdge));
-
-            assertTrue(actualEdge != null);
-
-            assertEquals(
-                expectedGraph.getEdgeWeight(expectedEdge), actualGraph.getEdgeWeight(actualEdge),
-                1e-5);
-        }
+        return Arrays
+            .asList(
+                new TestVector(1, 10.2, 15.0), new TestVector(2, 14.2, 15.0),
+                new TestVector(3, 14.8, 20.0), new TestVector(4, 10.8, 20.0));
     }
 
     // ----------------------------------------------------------------------
-    // Tests
+    // tests
 
     @Test
-    public void testTSPLIBFileDataValues()
+    public void testMetaDataValues()
     {
-        String fileContent = get3DPointsFileContent("EUC_3D");
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("NAME : theNameOfThisFile");
+        fileContent.add("COMMENT : The first line of the comment");
+        fileContent.add("COMMENT : A second line");
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("NODE_COORD_TYPE: THREED_COORDS");
+        fileContent.add("CAPACITY : 7");
+        fileContent.add("EDGE_WEIGHT_FORMAT: FULL_MATRIX");
+        fileContent.add("EDGE_DATA_FORMAT: ADJ_LIST");
+        fileContent.add("DISPLAY_DATA_TYPE  :   TWOD_DISPLAY");
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.2 15.0");
+        fileContent.add("EOF");
 
-        TSPLIBImporter<ArrayVector> importer =
-            new TSPLIBImporter<>(ArrayVector::new, ArrayVector::getElementValue);
-        importer
-            .importGraph(
-                new SimpleWeightedGraph<>(null, DefaultWeightedEdge::new),
-                new StringReader(fileContent));
-        TSPLIBFileData<ArrayVector> fileData = importer.getLastImportData();
+        Metadata<Object, DefaultWeightedEdge> metaData =
+            importGraphFromFile(fileContent).getSecond();
 
-        assertEquals("theNameOfThisFile", fileData.getName());
-        assertEquals("TSP", fileData.getType());
+        Specification spec = metaData.getSpecification();
+        assertEquals("theNameOfThisFile", spec.getName());
+        assertEquals("TSP", spec.getType());
         assertEquals(
-            "The first line of the comment" + System.lineSeparator() + "A second line",
-            fileData.getComment());
-        assertEquals(Integer.valueOf(4), fileData.getDimension());
-        assertEquals("EUC_3D", fileData.getEdgeWeightType());
-        assertEquals("THREED_COORDS", fileData.getNodeCoordType());
+            Arrays.asList("The first line of the comment", "A second line"), spec.getComments());
+        assertEquals(Integer.valueOf(4), spec.getDimension());
+        assertEquals(Integer.valueOf(7), spec.getCapacity());
+        assertEquals("EUC_2D", spec.getEdgeWeightType());
+        assertEquals("FULL_MATRIX", spec.getEdgeWeightFormat());
+        assertEquals("ADJ_LIST", spec.getEdgeDataFormat());
+        assertEquals("THREED_COORDS", spec.getNodeCoordType());
+        assertEquals("TWOD_DISPLAY", spec.getDisplayDataType());
 
-        assertFalse(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
+        assertTrue(metaData.hasDistinctNodeLocations());
+        assertTrue(metaData.hasDistinctNeighborDistances());
+    }
+
+    @Test
+    public void testImportGraph_withNodeCoordSection()
+    {
+        StringJoiner fileContent = get2DPointsFileContent("EUC_2D");
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph =
+            getExpectedGraph(getExpected2DPoints());
+
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> importFile =
+            importGraphFromFile(fileContent);
+        Graph<Object, DefaultWeightedEdge> graph = importFile.getFirst();
+        Metadata<Object, DefaultWeightedEdge> metaData = importFile.getSecond();
+
+        assertGraphVertexNodes(expectedGraph, graph, metaData);
+
+        assertTrue(metaData.hasDistinctNodeLocations());
+        assertTrue(metaData.hasDistinctNeighborDistances());
+    }
+
+    @Test
+    public void testImportGraph_withNodeCoordSectionAndTourSection()
+    {
+
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("7 10.2 15.0");
+        fileContent.add("2 14.2 15.0");
+        fileContent.add("9 14.8 20.0");
+        fileContent.add("4 10.8 20.0");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9");
+        fileContent.add("4");
+        fileContent.add("7");
+        fileContent.add("2");
+        fileContent.add("-1");
+        fileContent.add("EOF");
+
+        List<TestVector> expectedVectors = new ArrayList<>();
+        expectedVectors.add(new TestVector(7, 10.2, 15.0));
+        expectedVectors.add(new TestVector(2, 14.2, 15.0));
+        expectedVectors.add(new TestVector(9, 14.8, 20.0));
+        expectedVectors.add(new TestVector(4, 10.8, 20.0));
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(expectedVectors);
+
+        List<Integer> expectedTour = Arrays.asList(9, 4, 7, 2);
+
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> importData =
+            importGraphFromFile(fileContent);
+        Graph<Object, DefaultWeightedEdge> graph = importData.getFirst();
+        Metadata<Object, DefaultWeightedEdge> metaData = importData.getSecond();
+
+        assertGraphVertexNodes(expectedGraph, graph, metaData);
+        assertTrue(metaData.hasDistinctNodeLocations());
+        assertTrue(metaData.hasDistinctNeighborDistances());
+
+        assertTour(metaData.getTour(), expectedTour, metaData.getVertexToNodeMapping());
+    }
+
+    @Test
+    public void testImportTour_onlyWithTourSection()
+    {
+        StringJoiner otherFileContent = new StringJoiner(System.lineSeparator());
+        otherFileContent.add("DIMENSION : 4");
+        otherFileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        otherFileContent.add("NODE_COORD_SECTION");
+        otherFileContent.add("7 10.2 15.0");
+        otherFileContent.add("2 14.2 15.0");
+        otherFileContent.add("9 14.8 20.0");
+        otherFileContent.add("4 10.8 20.0");
+
+        Metadata<Object, DefaultWeightedEdge> otherFilesMetaData =
+            importGraphFromFile(otherFileContent).getSecond();
+
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("DIMENSION : 4");
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_2D");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("9");
+        fileContent.add("4");
+        fileContent.add("7");
+        fileContent.add("2");
+        fileContent.add("-1");
+        fileContent.add("EOF");
+
+        List<Integer> expectedTour = Arrays.asList(9, 4, 7, 2);
+
+        TSPLIBImporter<Object, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
+        StringReader reader = new StringReader(fileContent.toString());
+        List<Object> tour = importer.importTour(otherFilesMetaData, reader);
+
+        assertTour(tour, expectedTour, otherFilesMetaData.getVertexToNodeMapping());
+    }
+
+    private static <
+        T> void assertTour(List<T> vertexTour, List<Integer> expectedTour, Map<T, Node> vertex2node)
+    {
+        List<Integer> integerTour = vertexTour
+            .stream().map(vertex2node::get).map(Node::getNumber).collect(Collectors.toList());
+        assertEquals(expectedTour, integerTour);
     }
 
     // edge weight functions tests
 
     @Test
-    public void testImportGraph_EUC2DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeEUC2D()
     {
-        List<ArrayVector> vertices = getExpected2DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected2DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 7.); // round sqrt(46.16)
@@ -212,40 +277,44 @@ public class TSPLIBImporterTest
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 6.); // round sqrt(36.56)
         Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 4.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get2DPointsFileContent("EUC_2D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get2DPointsFileContent("EUC_2D"));
 
-        // Check weights and complete connection
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertTrue(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
+        assertTrue(graphData.getSecond().hasDistinctNodeLocations());
+        assertTrue(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_EUC3DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeEUC3D()
     {
-        List<ArrayVector> vertices = getExpected3DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected3DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 6.); // round sqrt(41)
+        Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(3), 6.); // round sqrt(41)
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(2), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 0.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get3DPointsFileContent("EUC_3D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get3DPointsFileContent("EUC_3D"));
 
-        // Check weights
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertFalse(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
-
+        assertFalse(graphData.getSecond().hasDistinctNodeLocations());
+        assertFalse(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_MAX2DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeMAX2D()
     {
-        List<ArrayVector> vertices = getExpected2DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected2DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 5.);
@@ -254,41 +323,44 @@ public class TSPLIBImporterTest
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 5.);
         Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 4.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get2DPointsFileContent("MAX_2D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get2DPointsFileContent("MAX_2D"));
 
-        // Check weights
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertTrue(fileData.hasDistinctVertices());
-        assertFalse(fileData.hasDistinctEdgesPerVertex());
-
+        assertTrue(graphData.getSecond().hasDistinctNodeLocations());
+        assertFalse(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_MAX3DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeMAX3D()
     {
-        List<ArrayVector> vertices = getExpected3DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected3DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(3), 5.);
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(2), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 0.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get3DPointsFileContent("MAX_3D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get3DPointsFileContent("MAX_3D"));
 
-        // Check weights
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertFalse(fileData.hasDistinctVertices());
-        assertFalse(fileData.hasDistinctEdgesPerVertex());
-
+        assertFalse(graphData.getSecond().hasDistinctNodeLocations());
+        assertFalse(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_MAN2DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeMAN2D()
     {
-        List<ArrayVector> vertices = getExpected2DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected2DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 10.0);
@@ -297,40 +369,44 @@ public class TSPLIBImporterTest
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 8.);
         Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 4.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get2DPointsFileContent("MAN_2D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get2DPointsFileContent("MAN_2D"));
 
-        // Check weights
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertTrue(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
-
+        assertTrue(graphData.getSecond().hasDistinctNodeLocations());
+        assertTrue(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_MAN3DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeMAN3D()
     {
-        List<ArrayVector> vertices = getExpected3DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected3DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 9.);
+        Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(3), 9.);
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(2), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 5.);
+        Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 0.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get3DPointsFileContent("MAN_3D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get3DPointsFileContent("MAN_3D"));
 
-        // Check weights
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertFalse(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
+        assertFalse(graphData.getSecond().hasDistinctNodeLocations());
+        assertFalse(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_CEIL2DEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeCEIL2D()
     {
-        List<ArrayVector> vertices = getExpected2DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected2DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 4.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 7.); // round sqrt(46.16)
@@ -339,20 +415,21 @@ public class TSPLIBImporterTest
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 7.); // round sqrt(36.56)
         Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 4.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get2DPointsFileContent("CEIL_2D"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get2DPointsFileContent("CEIL_2D"));
 
-        // Check weights and complete connection
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertTrue(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
+        assertTrue(graphData.getSecond().hasDistinctNodeLocations());
+        assertTrue(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
-    public void testImportGraph_GEOEdgeWeightType()
+    public void testImportGraph_EdgeWeightTypeGEO()
     {
-        List<ArrayVector> vertices = getExpected2DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        List<TestVector> vertices = getExpected2DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 446);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 727);
@@ -361,53 +438,56 @@ public class TSPLIBImporterTest
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 680);
         Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 446);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get2DPointsFileContent("GEO"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get2DPointsFileContent("GEO"));
 
-        // Check weights and complete connection
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        // Check coordinates, weights and complete connection
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertTrue(fileData.hasDistinctVertices());
-        assertTrue(fileData.hasDistinctEdgesPerVertex());
+        assertTrue(graphData.getSecond().hasDistinctNodeLocations());
+        assertTrue(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     @Test
     public void testCompute2DGeographicalDistance()
     {
-        MutableInt index = new MutableInt(0);
-        TSPLIBImporter<ArrayVector> importer = new TSPLIBImporter<>(
-            e -> new ArrayVector(index.getAndIncrement(), e), ArrayVector::getElementValue);
+        TSPLIBImporter<TestVector, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
 
         int halfCircleCircumfence = (int) (TSPLIBImporter.PI * TSPLIBImporter.RRR);
         int quarterCircleCircumfence = (int) (TSPLIBImporter.PI * TSPLIBImporter.RRR / 2);
 
-        int d0 = importer.compute2DGeographicalDistance(vector(0.0, 0.0), vector(0.0, 90.0));
+        int d0 = importer.compute2DGeographicalDistance(node(0.0, 0.0), node(0.0, 90.0));
         assertEquals(quarterCircleCircumfence, d0, 1.0);
 
-        int d1 = importer.compute2DGeographicalDistance(vector(23.0, 15.0), vector(-23.0, 105.0));
+        int d1 = importer.compute2DGeographicalDistance(node(23.0, 15.0), node(-23.0, 105.0));
         assertEquals(10997, d1, 1.0);
 
-        int d2 = importer.compute2DGeographicalDistance(vector(0.0, -90.2), vector(0.0, 89.8));
+        int d2 = importer.compute2DGeographicalDistance(node(0.0, -90.2), node(0.0, 89.8));
         assertEquals(halfCircleCircumfence, d2, 1.0);
 
-        int d3 = importer.compute2DGeographicalDistance(vector(20.0, -90.7), vector(-20.0, 89.3));
+        int d3 = importer.compute2DGeographicalDistance(node(20.0, -90.7), node(-20.0, 89.3));
         assertEquals(halfCircleCircumfence, d3, 1.0);
 
-        int d4 = importer.compute2DGeographicalDistance(vector(20.0, -70.0), vector(-20.0, 110.0));
+        int d4 = importer.compute2DGeographicalDistance(node(20.0, -70.0), node(-20.0, 110.0));
         assertEquals(halfCircleCircumfence, d4, 1.0);
 
-        int d5 = importer.compute2DGeographicalDistance(vector(40.48, -74.0), vector(52.3, 13.24));
+        int d5 = importer.compute2DGeographicalDistance(node(40.48, -74.0), node(52.3, 13.24));
         assertEquals(6386, d5, 1.0);
 
-        int d6 =
-            importer.compute2DGeographicalDistance(vector(1.48, 113.24), vector(-6.36, -65.24));
+        int d6 = importer.compute2DGeographicalDistance(node(1.48, 113.24), node(-6.36, -65.24));
         assertEquals(19488, d6, 1.0);
     }
 
-    @Test
-    public void testImportGraph_ATTEdgeWeightType()
+    private static Node node(double... elements)
     {
-        List<ArrayVector> vertices = getExpected2DPoints();
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
+        return new Node(-1, elements);
+    }
+
+    @Test
+    public void testImportGraph_EdgeWeightTypeATT()
+    {
+        List<TestVector> vertices = getExpected2DPoints();
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph = getExpectedGraph(vertices);
 
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(1), 2.);
         Graphs.addEdge(expectedGraph, vertices.get(0), vertices.get(2), 3.); // round sqrt(46.16)
@@ -416,142 +496,259 @@ public class TSPLIBImporterTest
         Graphs.addEdge(expectedGraph, vertices.get(1), vertices.get(3), 2.); // round sqrt(36.56)
         Graphs.addEdge(expectedGraph, vertices.get(2), vertices.get(3), 2.);
 
-        TSPLIBFileData<ArrayVector> fileData = importFile(get2DPointsFileContent("ATT"));
+        Pair<Graph<Object, DefaultWeightedEdge>, Metadata<Object, DefaultWeightedEdge>> graphData =
+            importGraphFromFile(get2DPointsFileContent("ATT"));
 
-        // Check weights and complete connection
-        assertEqualGraphs(expectedGraph, fileData.getGraph());
+        assertEqualGraphData(expectedGraph, graphData);
 
-        assertTrue(fileData.hasDistinctVertices());
-        assertFalse(fileData.hasDistinctEdgesPerVertex());
+        assertTrue(graphData.getSecond().hasDistinctNodeLocations());
+        assertFalse(graphData.getSecond().hasDistinctNeighborDistances());
     }
 
     // exception tests
 
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
     @Test
-    public void testImportGraph_NotSupportedEdgeWeightType_IllegalStateException()
+    public void testImportGraph_ProvideNotWeightedGraph_ImportException()
     {
-        String fileContent = "EDGE_WEIGHT_TYPE : XRAY1";
+        Graph<TestVector, DefaultWeightedEdge> graph =
+            new SimpleGraph<>(null, DefaultWeightedEdge::new, false);
 
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Unsupported EDGE_WEIGHT_TYPE <XRAY1>");
+        RuntimeException expectedCause = new IllegalArgumentException("Graph must be weighted");
 
-        importFile(fileContent);
+        TSPLIBImporter<TestVector, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
+        expectGraphImportFailedException(
+            () -> importer.importGraph(graph, new StringReader("")), expectedCause);
     }
 
     @Test
-    public void testImportGraph_OnlyNodeCoordSection_IllegalStateException()
-    {
-        StringJoiner c = new StringJoiner(System.lineSeparator());
-        c.add("NODE_COORD_SECTION");
-        c.add("1 10.2 15.0");
-        c.add("2 14.2 15.0");
-
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Missing data to read <NODE_COORD_SECTION>");
-
-        importFile(c.toString());
-    }
-
-    @Test
-    public void testImportGraph_MissingValue_IllegalStateException()
+    public void testImportGraph_MissingValue_ImportException()
     {
         String fileContent = "NAME : ";
 
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Missing value for key NAME");
+        RuntimeException expectedCause = new IllegalStateException("Missing value for key NAME");
 
-        importFile(fileContent);
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
     }
 
     @Test
-    public void testImportGraph_MultipleValues_IllegalStateException()
+    public void testImportGraph_MultipleValues_ImportException()
     {
-        StringJoiner c = new StringJoiner(System.lineSeparator());
-        c.add("TYPE : TSP");
-        c.add("TYPE : TSP");
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("TYPE : TSP");
+        fileContent.add("TYPE : TSP");
 
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Multiple values for key TYPE");
+        RuntimeException expectedCause = new IllegalStateException("Multiple values for key TYPE");
 
-        importFile(c.toString());
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
     }
 
     @Test
-    public void testImportGraph_WrongNodeCoordinateElementCount_IllegalArgumentException()
+    public void testImportGraph_invalidSpecificationValue_ImportException()
     {
-        StringJoiner c = new StringJoiner(System.lineSeparator());
-        c.add("EDGE_WEIGHT_TYPE : EUC_3D");
-        c.add("NODE_COORD_SECTION");
-        c.add("1 10.2 15.0");
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("EDGE_WEIGHT_FORMAT : some String");
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Unexpected number of line elements: 3 in line: 1 10.2 15.0");
+        RuntimeException expectedCause =
+            new IllegalArgumentException("Invalid EDGE_WEIGHT_FORMAT value <some String>");
 
-        importFile(c.toString());
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
     }
 
     @Test
-    public void testImportGraph_ProvidePseudograph_IllegalArgumentException()
+    public void testImportGraph_nonNumberDimension_ImportException()
     {
-        Graph<ArrayVector, DefaultWeightedEdge> graph =
-            new Pseudograph<>(null, DefaultWeightedEdge::new, true);
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("DIMENSION : A_STRING");
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Provided graph must be empty and must have simple weighted type");
+        RuntimeException expectedCause =
+            new IllegalArgumentException("Invalid DIMENSION integer value <A_STRING>");
 
-        new TSPLIBImporter<>(ArrayVector::new, ArrayVector::getElementValue)
-            .importGraph(graph, new StringReader(""));
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
     }
 
     @Test
-    public void testImportGraph_ProvideSimpleNotWeightedGraph_IllegalArgumentException()
+    public void testImportGraph_NotSupportedEdgeWeightType_ImportException()
     {
-        Graph<ArrayVector, DefaultWeightedEdge> graph =
-            new SimpleGraph<>(null, DefaultWeightedEdge::new, false);
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("EDGE_WEIGHT_TYPE : XRAY1");
+        fileContent.add("DIMENSION:1");
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.2 15.0");
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Provided graph must be empty and must have simple weighted type");
+        RuntimeException expectedCause =
+            new IllegalStateException("Unsupported EDGE_WEIGHT_TYPE <XRAY1>");
 
-        new TSPLIBImporter<>(ArrayVector::new, ArrayVector::getElementValue)
-            .importGraph(graph, new StringReader(""));
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
     }
 
     @Test
-    public void testImportGraph_ProvideNotEmptySimpleWeightedGraph_IllegalArgumentException()
+    public void testImportGraph_OnlyNodeCoordSection_ImportException()
     {
-        Graph<ArrayVector, DefaultWeightedEdge> graph =
-            new SimpleWeightedGraph<>(null, DefaultWeightedEdge::new);
-        graph.addVertex(new ArrayVector(0, 0, 0));
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.2 15.0");
+        fileContent.add("2 14.2 15.0");
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Provided graph must be empty and must have simple weighted type");
+        RuntimeException expectedCause =
+            new IllegalStateException("Missing data to read <NODE_COORD_SECTION>");
 
-        new TSPLIBImporter<>(ArrayVector::new, ArrayVector::getElementValue)
-            .importGraph(graph, new StringReader(""));
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
+    }
+
+    @Test
+    public void testImportGraph_WrongNodeCoordinateElementCount_ImportException()
+    {
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("EDGE_WEIGHT_TYPE : EUC_3D");
+        fileContent.add("DIMENSION: 1");
+        fileContent.add("NODE_COORD_SECTION");
+        fileContent.add("1 10.2 15.0");
+
+        RuntimeException expectedCause =
+            new IllegalArgumentException("Unexpected number of elements <3> in line: 1 10.2 15.0");
+
+        expectGraphImportFailedException(() -> importGraphFromFile(fileContent), expectedCause);
+    }
+
+    @Test
+    public void testImportTour_missingVertexInTour_ImportException()
+    {
+
+        Metadata<Object, DefaultWeightedEdge> otherMetaData =
+            importGraphFromFile(get2DPointsFileContent("EUC_2D")).getSecond();
+
+        StringJoiner fileContent = new StringJoiner(System.lineSeparator());
+        fileContent.add("DIMENSION: 1");
+        fileContent.add("TOUR_SECTION");
+        fileContent.add("8");
+        fileContent.add("-1");
+
+        RuntimeException expectedCause = new IllegalStateException("Missing vertex with number 8");
+
+        TSPLIBImporter<Object, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
+
+        expectTourImportFailedException(
+            () -> importer.importTour(otherMetaData, new StringReader(fileContent.toString())),
+            expectedCause);
     }
 
     // utility methods
 
-    private static TSPLIBFileData<ArrayVector> importFile(String fileContent)
+    private static Pair<Graph<Object, DefaultWeightedEdge>,
+        Metadata<Object, DefaultWeightedEdge>> importGraphFromFile(StringJoiner fileContent)
     {
-        TSPLIBImporter<ArrayVector> importer =
-            new TSPLIBImporter<>(ArrayVector::new, ArrayVector::getElementValue);
-
-        importer.importGraph(null, new StringReader(fileContent));
-
-        return importer.getLastImportData();
+        return importGraphFromFile(fileContent.toString());
     }
 
-    private static Graph<ArrayVector, DefaultWeightedEdge> getExpectedGraph(
-        List<ArrayVector> vertices)
+    private static Pair<Graph<Object, DefaultWeightedEdge>,
+        Metadata<Object, DefaultWeightedEdge>> importGraphFromFile(String fileContent)
     {
-        Graph<ArrayVector, DefaultWeightedEdge> expectedGraph =
+        Graph<Object, DefaultWeightedEdge> graph =
+            new SimpleWeightedGraph<>(Object::new, DefaultWeightedEdge::new);
+
+        TSPLIBImporter<Object, DefaultWeightedEdge> importer = new TSPLIBImporter<>();
+        importer.importGraph(graph, new StringReader(fileContent));
+        return Pair.of(graph, importer.getMetadata());
+    }
+
+    private static Graph<TestVector, DefaultWeightedEdge> getExpectedGraph(
+        List<TestVector> vertices)
+    {
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph =
             new SimpleWeightedGraph<>(null, DefaultWeightedEdge::new);
         Graphs.addAllVertices(expectedGraph, vertices);
-
         return expectedGraph;
+    }
+
+    // assertions
+
+    /** Check coordinates, weights and complete connection. */
+    private static <V> void assertEqualGraphData(
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph,
+        Pair<Graph<V, DefaultWeightedEdge>, Metadata<V, DefaultWeightedEdge>> actualData)
+    {
+        Graph<V, DefaultWeightedEdge> graph = actualData.getFirst();
+        Metadata<V, DefaultWeightedEdge> metadata = actualData.getSecond();
+
+        // assert if the read numbers are as expected
+
+        assertGraphVertexNodes(expectedGraph, graph, metadata);
+
+        // assert if the computed edge weights/ distances are as expected
+        Set<DefaultWeightedEdge> expectedEdgeSet = expectedGraph.edgeSet();
+        assertEquals("Unequal edgeSet size", expectedEdgeSet.size(), graph.edgeSet().size());
+
+        Map<Integer, V> number2vertex = new HashMap<>();
+        metadata.getVertexToNodeMapping().forEach((v, n) -> number2vertex.put(n.getNumber(), v));
+
+        for (DefaultWeightedEdge expectedEdge : expectedEdgeSet) {
+            int sourceNumber = expectedGraph.getEdgeSource(expectedEdge).getIndex();
+            int targetNumber = expectedGraph.getEdgeTarget(expectedEdge).getIndex();
+            V source = number2vertex.get(sourceNumber);
+            V target = number2vertex.get(targetNumber);
+
+            DefaultWeightedEdge actualEdge = graph.getEdge(source, target);
+
+            assertTrue(actualEdge != null);
+            assertEquals(
+                expectedGraph.getEdgeWeight(expectedEdge), graph.getEdgeWeight(actualEdge), 1e-5);
+        }
+    }
+
+    private static <T> void assertGraphVertexNodes(
+        Graph<TestVector, DefaultWeightedEdge> expectedGraph, Graph<T, DefaultWeightedEdge> graph,
+        Metadata<T, DefaultWeightedEdge> metadata)
+    {
+
+        Map<T, Node> vertex2node = metadata.getVertexToNodeMapping();
+        List<Node> sortedVertexNodes =
+            graph.vertexSet().stream().map(vertex2node::get).collect(Collectors.toList());
+        sortedVertexNodes.sort((n1, n2) -> Integer.compare(n1.getNumber(), n2.getNumber()));
+
+        List<TestVector> expectedSortedVectors = new ArrayList<>(expectedGraph.vertexSet());
+        expectedSortedVectors.sort((v1, v2) -> Integer.compare(v1.getIndex(), v2.getIndex()));
+
+        // assert if the read coordinates are as expected
+        assertEquals(expectedSortedVectors.size(), sortedVertexNodes.size());
+        for (int i = 0; i < expectedSortedVectors.size(); i++) {
+            TestVector expectedVector = expectedSortedVectors.get(i);
+            Node actualNode = sortedVertexNodes.get(i);
+            assertEquals(expectedVector.getIndex(), actualNode.getNumber());
+            assertEqualElements(expectedVector.getElementValues(), actualNode.getCoordinates());
+        }
+    }
+
+    private static void assertEqualElements(double[] expected, double[] actual)
+    {
+        if (!Arrays.equals(actual, expected)) {
+            fail(
+                "Expected is " + Arrays.toString(expected) + " but was " + Arrays.toString(actual));
+        }
+    }
+
+    private void expectGraphImportFailedException(Runnable action, RuntimeException expectedCause)
+    {
+        expectImportFailedException(action, expectedCause, "graph");
+    }
+
+    private void expectTourImportFailedException(Runnable action, RuntimeException expectedCause)
+    {
+        expectImportFailedException(action, expectedCause, "tour");
+    }
+
+    private void expectImportFailedException(
+        Runnable action, RuntimeException expectedCause, String importTarget)
+    {
+        try {
+            action.run();
+            fail("Expected exception: " + ImportException.class.getName());
+        } catch (ImportException e) {
+            Throwable cause = e.getCause();
+            assertEquals(
+                "Failed to import " + importTarget + " from TSPLIB-file: " + cause.getMessage(),
+                e.getMessage());
+            assertEquals(expectedCause.getClass(), cause.getClass());
+            assertEquals(expectedCause.getMessage(), cause.getMessage());
+        }
     }
 }
