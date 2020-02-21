@@ -92,7 +92,7 @@ public class DOTExporter<V, E>
 
         // graph attributes
         for (Entry<String, Attribute> attr : graphAttributeProvider
-            .orElse(() -> Collections.emptyMap()).get().entrySet())
+            .orElse(Collections::emptyMap).get().entrySet())
         {
             out.print(INDENT);
             out.print(attr.getKey());
