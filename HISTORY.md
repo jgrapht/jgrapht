@@ -3,7 +3,7 @@
 Changes to JGraphT in each version:
 
 - **version 1.4.1** (under development):
-    - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11, added parallel unit testing (contributed by Joris Kinable)
+    - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
