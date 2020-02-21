@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.jheaps</groupId>
 			<artifactId>jheaps</artifactId>
-			<version>0.11</version>
+			<version>0.13</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -44,13 +44,13 @@
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>
-			<version>1.21</version>
+			<version>1.23</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-generator-annprocess</artifactId>
-			<version>1.21</version>
+			<version>1.23</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
