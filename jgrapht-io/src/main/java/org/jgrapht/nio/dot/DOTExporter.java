@@ -209,19 +209,9 @@ public class DOTExporter<V, E>
             return;
         }
         out.print(" [ ");
-        final Attribute labelAttribute = attributes.get("label");
-        if (labelAttribute != null) {
-            renderAttribute(out, "label", labelAttribute);
-        }
-        if (attributes != null) {
-            for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
-                String name = entry.getKey();
-                if (name.equals("label")) {
-                    // already handled by special case above
-                    continue;
-                }
-                renderAttribute(out, name, entry.getValue());
-            }
+        for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
+            String name = entry.getKey();
+            renderAttribute(out, name, entry.getValue());
         }
         out.print("]");
     }
