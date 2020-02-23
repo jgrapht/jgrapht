@@ -62,7 +62,7 @@ public class SupplierUtil
             final Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
             if ((!Modifier.isPublic(constructor.getModifiers())
                 || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers()))
-                && !constructor.isAccessible())
+                && !constructor.canAccess(null))
                 constructor.setAccessible(true);
             return new ConstructorSupplier<>(constructor);
         } catch (ReflectiveOperationException e) {
