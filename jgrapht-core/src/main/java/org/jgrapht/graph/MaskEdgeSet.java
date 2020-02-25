@@ -17,12 +17,14 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.util.TypeUtil;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
+import java.io.Serializable;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Helper for {@link MaskSubgraph}.
@@ -83,14 +85,17 @@ class MaskEdgeSet<V, E>
      * {@inheritDoc}
      */
     @Override
-    public int size()
-    {
+    public int size() {
         return (int) edgeSet
-            .stream()
-            .filter(
-                e -> !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
-                    && !vertexMask.test(graph.getEdgeTarget(e)))
-            .count();
+                .stream()
+                .filter(
+                        e -> !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
+                                && !vertexMask.test(graph.getEdgeTarget(e)))
+                .count();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return !iterator().hasNext();
+    }
 }

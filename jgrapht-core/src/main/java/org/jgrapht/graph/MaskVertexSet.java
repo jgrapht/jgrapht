@@ -17,11 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.util.*;
+import org.jgrapht.util.TypeUtil;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
+import java.io.Serializable;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Helper for {@link MaskSubgraph}.
@@ -70,9 +72,15 @@ class MaskVertexSet<V>
      * {@inheritDoc}
      */
     @Override
-    public int size()
-    {
+    public int size() {
         return (int) vertexSet.stream().filter(mask.negate()).count();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty() {
+        return !iterator().hasNext();
+    }
 }
