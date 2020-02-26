@@ -26,7 +26,6 @@ import java.util.stream.IntStream;
 import static java.lang.Math.abs;
 import static org.junit.Assert.*;
 import static org.jgrapht.util.AVLTree.TreeNode;
-import static sun.swing.MenuItemLayoutHelper.max;
 
 /**
  * Tests for {@link AVLTree}
@@ -238,7 +237,7 @@ public class AVLTreeTest {
         DiagnosticInfo leftInfo = diagnostic(node.getLeft());
         DiagnosticInfo rightInfo = diagnostic(node.getRight());
 
-        assertEquals(node.getHeight(), max(leftInfo.height, rightInfo.height) + 1);
+        assertEquals(node.getHeight(), Math.max(leftInfo.height, rightInfo.height) + 1);
         assertEquals(node.getSubtreeSize(), leftInfo.size + rightInfo.size + 1);
 
 
