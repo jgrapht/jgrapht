@@ -803,6 +803,33 @@ public class AVLTree<T> implements Iterable<T> {
         }
 
         /**
+         * Returns a parent of this node
+         *
+         * @return a parent of this node
+         */
+        public TreeNode<T> getParent() {
+            return parent;
+        }
+
+        /**
+         * Returns a left child of this node
+         *
+         * @return a left child of this node
+         */
+        public TreeNode<T> getLeft() {
+            return left;
+        }
+
+        /**
+         * Returns a right child of this node
+         *
+         * @return a right child of this node
+         */
+        public TreeNode<T> getRight() {
+            return right;
+        }
+
+        /**
          * Returns a height of this node
          *
          * @return a height of this node
@@ -818,33 +845,6 @@ public class AVLTree<T> implements Iterable<T> {
          */
         int getSubtreeSize() {
             return subtreeSize;
-        }
-
-        /**
-         * Returns a parent of this node
-         *
-         * @return a parent of this node
-         */
-        TreeNode<T> getParent() {
-            return parent;
-        }
-
-        /**
-         * Returns a left child of this node
-         *
-         * @return a left child of this node
-         */
-        TreeNode<T> getLeft() {
-            return left;
-        }
-
-        /**
-         * Returns a right child of this node
-         *
-         * @return a right child of this node
-         */
-        TreeNode<T> getRight() {
-            return right;
         }
 
         /**
@@ -969,14 +969,34 @@ public class AVLTree<T> implements Iterable<T> {
             return this == parent.right;
         }
 
+        /**
+         * Returns a successor of this node according to the tree in order traversal,
+         * or {@code null} if this node is a maximum node in the tree
+         *
+         * @return successor of this node, or {@code} null if this node in a maximum node
+         * in the tree
+         */
         public TreeNode<T> getSuccessor() {
             return successor;
         }
 
+        /**
+         * Returns a predecessor of this node according to the tree in order traversal,
+         * or {@code null} if this node is a minimum node in the tree
+         *
+         * @return predecessor of this node, or {@code} null if this node in a minimum node
+         * in the tree
+         */
         public TreeNode<T> getPredecessor() {
             return predecessor;
         }
 
+        /**
+         * Updates the successor reference of this node. If the {@code node} is
+         * not {@code null}, updates its predecessor reference as well
+         *
+         * @param node new successor
+         */
         void setSuccessor(TreeNode<T> node) {
             successor = node;
             if (node != null) {
@@ -984,6 +1004,12 @@ public class AVLTree<T> implements Iterable<T> {
             }
         }
 
+        /**
+         * Updates the predecessor reference of this node. If the {@code node} is
+         * not {@code null}, updates its successor reference as well
+         *
+         * @param node new predecessor
+         */
         void setPredecessor(TreeNode<T> node) {
             predecessor = node;
             if (node != null) {
@@ -991,6 +1017,12 @@ public class AVLTree<T> implements Iterable<T> {
             }
         }
 
+        /**
+         * Sets the left child reference of this node to {@code node}. If the {@code node}
+         * is not {@code null}, updates its parent reference as well.
+         *
+         * @param node a new left child
+         */
         void setLeftChild(TreeNode<T> node) {
             left = node;
             if (node != null) {
@@ -1003,6 +1035,12 @@ public class AVLTree<T> implements Iterable<T> {
             }
         }
 
+        /**
+         * Sets the right child reference of this node to {@code node}. If the {@code node}
+         * is not {@code null}, updates its parent reference as well.
+         *
+         * @param node a new right child
+         */
         void setRightChild(TreeNode<T> node) {
             right = node;
             if (node != null) {
@@ -1015,6 +1053,14 @@ public class AVLTree<T> implements Iterable<T> {
             }
         }
 
+        /**
+         * Substitutes the {@code prevChild} with the {@code newChild}. If the
+         * {@code newChild} is not {@code null}, updates its parent reference
+         * as well
+         *
+         * @param prevChild either left or right child of this node
+         * @param newChild  a new child of this node
+         */
         void substituteChild(TreeNode<T> prevChild, TreeNode<T> newChild) {
             assert left == prevChild || right == prevChild;
             assert !(left == prevChild && right == prevChild);
@@ -1025,6 +1071,9 @@ public class AVLTree<T> implements Iterable<T> {
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public String toString() {
             return String.format("{%s}: [parent = %s, left = %s, right = %s], [subtreeMin = %s, subtreeMax = %s], [predecessor = %s, successor = %s], [height = %d, subtreeSize = %d]",

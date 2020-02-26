@@ -28,6 +28,11 @@ import static org.junit.Assert.*;
 import static org.jgrapht.util.AVLTree.TreeNode;
 import static sun.swing.MenuItemLayoutHelper.max;
 
+/**
+ * Tests for {@link AVLTree}
+ *
+ * @author Timofey Chudakov
+ */
 public class AVLTreeTest {
     private static final Random rng = new Random(17L);
 
@@ -226,7 +231,42 @@ public class AVLTreeTest {
         }
     }
 
-    private class DiagnosticInfo {
+    DiagnosticInfo diagnostic(TreeNode<Integer> node) {
+        if (node == null) {
+            return new DiagnosticInfo(null, null, 0, 0);
+        }
+        DiagnosticInfo leftInfo = diagnostic(node.getLeft());
+        DiagnosticInfo rightInfo = diagnostic(node.getRight());
+
+        assertEquals(node.getHeight(), max(leftInfo.height, rightInfo.height) + 1);
+        assertEquals(node.getSubtreeSize(), leftInfo.size + rightInfo.size + 1);
+
+
+        assertTrue(abs(node.getLeftHeight() - node.getRightHeight()) < 2);
+
+        if (node.getLeft() == null) {
+            assertEquals(node.getSubtreeMin(), node);
+        } else {
+            assertEquals(node.getLeft().getParent(),  node);
+
+            assertEquals(node.getSubtreeMin(), leftInfo.subtreeMin);
+            assertEquals(node.getPredecessor(), leftInfo.subtreeMax);
+            assertEquals(leftInfo.subtreeMax.getSuccessor(), node);
+        }
+
+        if (node.getRight() == null) {
+            assert node.getSubtreeMax() == node;
+        } else {
+            assertEquals(node.getRight().getParent(), node);
+            assertEquals(node.getSubtreeMax(), rightInfo.subtreeMax);
+            assertEquals(node.getSuccessor(), rightInfo.subtreeMin);
+            assertEquals(rightInfo.subtreeMin.predecessor, node);
+        }
+
+        return new DiagnosticInfo(node.getSubtreeMin(), node.getSubtreeMax(), node.getHeight(), node.getSubtreeSize());
+    }
+
+    private static class DiagnosticInfo {
         TreeNode<Integer> subtreeMin;
         TreeNode<Integer> subtreeMax;
         int height;
@@ -238,41 +278,6 @@ public class AVLTreeTest {
             this.height = height;
             this.size = size;
         }
-    }
-
-    DiagnosticInfo diagnostic(TreeNode<Integer> node) {
-        if (node == null) {
-            return new DiagnosticInfo(null, null, 0, 0);
-        }
-        DiagnosticInfo left = diagnostic(node.left);
-        DiagnosticInfo right = diagnostic(node.right);
-
-        assertEquals(node.height, max(left.height, right.height) + 1);
-        assertEquals(node.subtreeSize, left.size + right.size + 1);
-
-
-        assertTrue(abs(node.getLeftHeight() - node.getRightHeight()) < 2);
-
-        if (node.left == null) {
-            assertEquals(node.subtreeMin, node);
-        } else {
-            assertEquals(node.left.parent,  node);
-
-            assertEquals(node.subtreeMin, left.subtreeMin);
-            assertEquals(node.predecessor, left.subtreeMax);
-            assertEquals(left.subtreeMax.successor, node);
-        }
-
-        if (node.right == null) {
-            assert node.subtreeMax == node;
-        } else {
-            assertEquals(node.right.parent, node);
-            assertEquals(node.subtreeMax, right.subtreeMax);
-            assertEquals(node.successor, right.subtreeMin);
-            assertEquals(right.subtreeMin.predecessor, node);
-        }
-
-        return new DiagnosticInfo(node.subtreeMin, node.subtreeMax, node.height, node.subtreeSize);
     }
 
 }

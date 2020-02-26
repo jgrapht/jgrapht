@@ -28,17 +28,37 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for {@link TreeDynamicConnectivity}
+ *
+ * @author Timofey Chudakov
+ */
 public class TreeDynamicConnectivityTest {
     private static final Random rng = new Random(17L);
-    private static int count = 0;
+
+    @Test
+    public void testTreeDynamicConnectivity_addNode_removeNode() {
+        for (int treeSize = 1; treeSize < 50; treeSize++) {
+            TreeDynamicConnectivity<Integer> connectivity = new TreeDynamicConnectivity<>();
+            for (int node = 0; node < treeSize; node++) {
+                assertFalse(connectivity.contains(node));
+                assertTrue(connectivity.add(node));
+                assertTrue(connectivity.contains(node));
+                assertFalse(connectivity.add(node));
+                assertTrue(connectivity.remove(node));
+                assertFalse(connectivity.contains(node));
+                assertFalse(connectivity.remove(node));
+            }
+        }
+    }
 
     @Test
     public void testTreeDynamicConnectivity_2Trees() {
         for (int firstTreeSize = 1; firstTreeSize < 50; firstTreeSize++) {
             for (int secondTreeSize = 1; secondTreeSize < 50; secondTreeSize++) {
-                System.out.printf("First size = %d, second size = %d\n", firstTreeSize, secondTreeSize);
+//                System.out.printf("First size = %d, second size = %d\n", firstTreeSize, secondTreeSize);
 
-                Graph<Integer, DefaultEdge> firstTree = generateTree(firstTreeSize, 0);
+                Graph<Integer, DefaultEdge> firstTree = generateTree(firstTreeSize);
                 Graph<Integer, DefaultEdge> secondTree = generateTree(secondTreeSize, firstTreeSize);
 
                 TreeDynamicConnectivity<Integer> connectivity = new TreeDynamicConnectivity<>();
@@ -48,40 +68,52 @@ public class TreeDynamicConnectivityTest {
 
                 for (int v1 : firstTree.vertexSet()) {
                     for (int v2 : secondTree.vertexSet()) {
-//                        System.out.printf("V1 = %d, v2 = %d\n", v1, v2);
                         assertFalse(connectivity.connected(v1, v2));
-                        connectivity.link(v1, v2);
-                        connectivity.diagnostic();
+
+                        assertTrue(connectivity.link(v1, v2));
                         assertTrue(connectivity.connected(v1, v2));
-                        connectivity.cut(v1, v2);
-                        connectivity.diagnostic();
+
+                        assertFalse(connectivity.link(v1, v2));
+                        assertTrue(connectivity.connected(v1, v2));
+
+                        assertTrue(connectivity.cut(v1, v2));
+                        assertFalse(connectivity.connected(v1, v2));
+
+                        assertFalse(connectivity.cut(v1, v2));
                         assertFalse(connectivity.connected(v1, v2));
                     }
                 }
+
+                destroyTree(firstTree, connectivity);
+                destroyTree(secondTree, connectivity);
             }
         }
     }
 
-    private void action(){
-        count += 1;
-//        System.out.println("Count = " +count);
+    private void destroyTree(Graph<Integer, DefaultEdge> graph, TreeDynamicConnectivity<Integer> connectivity) {
+        for (int v : graph.vertexSet()) {
+            assertTrue(connectivity.contains(v));
+            assertTrue(connectivity.remove(v));
+            assertFalse(connectivity.contains(v));
+        }
     }
 
     private void connectTree(Graph<Integer, DefaultEdge> graph, TreeDynamicConnectivity<Integer> connectivity) {
-//        System.out.println(graph);
         for (Integer v : graph.vertexSet()) {
-            connectivity.add(v);
-            connectivity.diagnostic();
+            assertFalse(connectivity.contains(v));
+            assertTrue(connectivity.add(v));
+            assertTrue(connectivity.contains(v));
         }
         for (DefaultEdge e : graph.edgeSet()) {
             int source = graph.getEdgeSource(e), target = graph.getEdgeTarget(e);
             assertFalse(connectivity.connected(source, target));
-            action();
-            connectivity.link(source, target);
-            connectivity.diagnostic();
-
+            assertTrue(connectivity.link(source, target));
             assertTrue(connectivity.connected(source, target));
         }
+    }
+
+    private Graph<Integer, DefaultEdge> generateTree(int nodeNum) {
+        return generateTree(nodeNum, 0);
     }
 
     private Graph<Integer, DefaultEdge> generateTree(int nodeNum, int start) {
