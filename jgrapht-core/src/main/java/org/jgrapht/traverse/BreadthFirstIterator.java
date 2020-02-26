@@ -17,9 +17,11 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * A breadth-first iterator for a directed or undirected graph.
@@ -164,19 +166,17 @@ public class BreadthFirstIterator<V, E>
         return queue.removeFirst();
     }
 
-    static class SearchNodeData<E>
-    {
+    protected static class SearchNodeData<E> {
         /**
          * Edge to parent
          */
-        final E edge;
+        private final E edge;
         /**
          * Depth of node in search tree
          */
-        final int depth;
+        private final int depth;
 
-        SearchNodeData(E edge, int depth)
-        {
+        public SearchNodeData(E edge, int depth) {
             this.edge = edge;
             this.depth = depth;
         }
