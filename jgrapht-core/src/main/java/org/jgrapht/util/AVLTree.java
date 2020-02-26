@@ -21,9 +21,6 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static java.lang.Math.abs;
-import static sun.swing.MenuItemLayoutHelper.max;
-
 /**
  * Implementation of the <a href="https://en.wikipedia.org/wiki/AVL_tree">AVL tree</a> data
  * structure. <b>Note:</b> this tree doesn't use key comparisons, so this tree can't be used
@@ -493,7 +490,7 @@ public class AVLTree<T> implements Iterable<T> {
      */
     private TreeNode<T> rotateLeft(TreeNode<T> node) {
         TreeNode<T> right = node.right;
-        right.parent = null; // todo: remove if possible
+        right.parent = null;
 
         node.setRightChild(right.left);
 

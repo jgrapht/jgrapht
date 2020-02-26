@@ -92,8 +92,7 @@ public class TreeDynamicConnectivityPerformanceTest {
 
         @Setup(Level.Iteration)
         public void init() {
-            // todo: fix seed
-            BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen = new BarabasiAlbertForestGenerator<>(1, treeSize);
+            BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen = new BarabasiAlbertForestGenerator<>(1, treeSize, rng);
             forest = new DefaultUndirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
             Graph<Integer, DefaultEdge> secondTree = new DefaultUndirectedGraph<>(SupplierUtil.createIntegerSupplier(treeSize), SupplierUtil.createDefaultEdgeSupplier(), false);
             connectivity = new TreeDynamicConnectivity<>();
