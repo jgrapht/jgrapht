@@ -176,6 +176,10 @@ public class BreadthFirstIterator<V, E>
          */
         private final int depth;
 
+        /**
+         * @param edge  Edge to parent
+         * @param depth Depth of node in search tree
+         */
         public SearchNodeData(E edge, int depth) {
             this.edge = edge;
             this.depth = depth;
