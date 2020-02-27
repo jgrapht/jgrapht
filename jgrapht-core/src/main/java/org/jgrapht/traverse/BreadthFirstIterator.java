@@ -17,11 +17,9 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 /**
  * A breadth-first iterator for a directed or undirected graph.
@@ -33,11 +31,13 @@ import java.util.Deque;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  */
 public class BreadthFirstIterator<V, E>
-        extends
-        CrossComponentIterator<V, E, BreadthFirstIterator.SearchNodeData<E>> {
+    extends
+    CrossComponentIterator<V, E, BreadthFirstIterator.SearchNodeData<E>>
+{
     private Deque<V> queue = new ArrayDeque<>();
 
     /**
@@ -45,7 +45,8 @@ public class BreadthFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      */
-    public BreadthFirstIterator(Graph<V, E> g) {
+    public BreadthFirstIterator(Graph<V, E> g)
+    {
         this(g, (V) null);
     }
 
@@ -55,10 +56,11 @@ public class BreadthFirstIterator<V, E>
      * vertex. If the specified start vertex is <code>null</code>, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
-     * @param g           the graph to be iterated.
+     * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      */
-    public BreadthFirstIterator(Graph<V, E> g, V startVertex) {
+    public BreadthFirstIterator(Graph<V, E> g, V startVertex)
+    {
         super(g, startVertex);
     }
 
@@ -68,10 +70,11 @@ public class BreadthFirstIterator<V, E>
      * vertices. If the specified start vertices is <code>null</code>, iteration will start at an
      * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
      *
-     * @param g             the graph to be iterated.
+     * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
      */
-    public BreadthFirstIterator(Graph<V, E> g, Iterable<V> startVertices) {
+    public BreadthFirstIterator(Graph<V, E> g, Iterable<V> startVertices)
+    {
         super(g, startVertices);
     }
 
@@ -79,7 +82,8 @@ public class BreadthFirstIterator<V, E>
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
     @Override
-    protected boolean isConnectedComponentExhausted() {
+    protected boolean isConnectedComponentExhausted()
+    {
         return queue.isEmpty();
     }
 
@@ -87,9 +91,10 @@ public class BreadthFirstIterator<V, E>
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
     @Override
-    protected void encounterVertex(V vertex, E edge) {
+    protected void encounterVertex(V vertex, E edge)
+    {
         int depth = (edge == null ? 0
-                : getSeenData(Graphs.getOppositeVertex(graph, edge, vertex)).depth + 1);
+            : getSeenData(Graphs.getOppositeVertex(graph, edge, vertex)).depth + 1);
         putSeenData(vertex, new SearchNodeData<>(edge, depth));
         queue.add(vertex);
     }
@@ -98,7 +103,8 @@ public class BreadthFirstIterator<V, E>
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
     @Override
-    protected void encounterVertexAgain(V vertex, E edge) {
+    protected void encounterVertexAgain(V vertex, E edge)
+    {
     }
 
     /**
@@ -109,7 +115,8 @@ public class BreadthFirstIterator<V, E>
      * @param v vertex
      * @return parent node of vertex $v$ in the BFS search tree, or null if $v$ is a root node
      */
-    public V getParent(V v) {
+    public V getParent(V v)
+    {
         assert getSeenData(v) != null;
         E edge = getSeenData(v).edge;
         if (edge == null)
@@ -125,9 +132,10 @@ public class BreadthFirstIterator<V, E>
      *
      * @param v vertex
      * @return edge connecting vertex $v$ in the BFS search tree to its parent, or null if $v$ is a
-     * root node
+     *         root node
      */
-    public E getSpanningTreeEdge(V v) {
+    public E getSpanningTreeEdge(V v)
+    {
         assert getSeenData(v) != null;
         return getSeenData(v).edge;
     }
@@ -141,7 +149,8 @@ public class BreadthFirstIterator<V, E>
      * @param v vertex
      * @return depth of vertex $v$ in the search tree
      */
-    public int getDepth(V v) {
+    public int getDepth(V v)
+    {
         assert getSeenData(v) != null;
         return getSeenData(v).depth;
     }
@@ -150,11 +159,13 @@ public class BreadthFirstIterator<V, E>
      * @see CrossComponentIterator#provideNextVertex()
      */
     @Override
-    protected V provideNextVertex() {
+    protected V provideNextVertex()
+    {
         return queue.removeFirst();
     }
 
-    protected static class SearchNodeData<E> {
+    protected static class SearchNodeData<E>
+    {
 
         private final E edge;
         private final int depth;
@@ -162,14 +173,16 @@ public class BreadthFirstIterator<V, E>
         /**
          * Edge to parent
          */
-        public E getEdge() {
+        public E getEdge()
+        {
             return edge;
         }
 
         /**
          * Depth of node in search tree
          */
-        public int getDepth() {
+        public int getDepth()
+        {
             return depth;
         }
 
@@ -177,7 +190,8 @@ public class BreadthFirstIterator<V, E>
          * @param edge  Edge to parent
          * @param depth Depth of node in search tree
          */
-        public SearchNodeData(E edge, int depth) {
+        public SearchNodeData(E edge, int depth)
+        {
             this.edge = edge;
             this.depth = depth;
         }
