@@ -35,11 +35,11 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Timofey Chudakov
  */
-@Fork(value = 1, warmups = 0)
+@Fork(value = 3, warmups = 0)
 @BenchmarkMode(Mode.SampleTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 1, time = 3)
-@Measurement(iterations = 2, time = 5)
+@Warmup(iterations = 1, time = 1)
+@Measurement(iterations = 5, time = 1)
 public class TreeDynamicConnectivityPerformanceTest {
     private static final Random rng = new Random(17L);
 
@@ -81,7 +81,7 @@ public class TreeDynamicConnectivityPerformanceTest {
 
     @State(Scope.Benchmark)
     public static class Data {
-        @Param({"1000", "3000", "10000", "50000", "100000"})
+        @Param({"10", "100", "1000", "10000", "100000", "1000000"})
         public int treeSize;
         public Graph<Integer, DefaultEdge> forest;
         public TreeDynamicConnectivity<Integer> connectivity;
