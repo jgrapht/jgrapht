@@ -17,11 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.junit.*;
 
-import java.util.Iterator;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -73,7 +72,8 @@ public class MaskVertexSetTest
     }
 
     @Test
-    public void testIterator() {
+    public void testIterator()
+    {
         Iterator<String> it = testMaskVertexSet.iterator();
         assertTrue(it.hasNext());
         assertEquals(v2, it.next());

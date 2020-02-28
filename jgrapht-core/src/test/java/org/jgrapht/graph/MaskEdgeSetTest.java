@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.junit.*;
 
-import java.util.Iterator;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -29,7 +29,8 @@ import static org.junit.Assert.*;
  *
  * @author Andrew Gainer-Dewar
  */
-public class MaskEdgeSetTest {
+public class MaskEdgeSetTest
+{
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";
@@ -40,7 +41,8 @@ public class MaskEdgeSetTest {
     private DefaultDirectedGraph<String, DefaultEdge> directed;
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
@@ -56,11 +58,12 @@ public class MaskEdgeSetTest {
         loop2 = directed.addEdge(v4, v4);
 
         testMaskedEdgeSet =
-                new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v.equals(v1), e -> e == e2);
+            new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v == v1, e -> e == e2);
     }
 
     @Test
-    public void testContains() {
+    public void testContains()
+    {
         assertFalse(testMaskedEdgeSet.contains(e1));
         assertFalse(testMaskedEdgeSet.contains(e2));
         assertTrue(testMaskedEdgeSet.contains(e3));
@@ -72,12 +75,14 @@ public class MaskEdgeSetTest {
     }
 
     @Test
-    public void testSize() {
+    public void testSize()
+    {
         assertEquals(2, testMaskedEdgeSet.size());
     }
 
     @Test
-    public void testIterator() {
+    public void testIterator()
+    {
         Iterator<DefaultEdge> it = testMaskedEdgeSet.iterator();
         assertTrue(it.hasNext());
         assertEquals(e3, it.next());
