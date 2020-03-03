@@ -45,6 +45,11 @@ import java.util.function.*;
  * vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
  * vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
  * multiple times.
+ * 
+ * <p>
+ * The user can also bypass vertex creation by providing a custom vertex factory method using
+ * {@link #setVertexFactory(Function)}. The factory receives the vertex identifier and should
+ * provide a graph vertex.
  *
  * @author Dimitrios Michail
  *
@@ -58,6 +63,8 @@ public class DOTImporter<V, E>
     GraphImporter<V, E>
 {
     private static final String DEFAULT_VERTEX_ID_KEY = "ID";
+
+    private Function<String, V> vertexFactory;
 
     /**
      * Constructs a new importer.
@@ -77,15 +84,45 @@ public class DOTImporter<V, E>
         genericImporter.addEdgeConsumer(consumers.edgeConsumer);
         genericImporter.addEdgeAttributeConsumer(consumers.edgeAttributeConsumer);
         genericImporter.addGraphAttributeConsumer(consumers.graphAttributeConsumer);
+        if (vertexFactory != null) {
+            consumers.vertexFactory = vertexFactory;
+        }
         genericImporter.importInput(input);
+    }
+
+    /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<String, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * The vertex factory will receive as input the vertex identifier from the input and return a
+     * graph vertex.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<String, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
     }
 
     private class Consumers
     {
+
         private Graph<V, E> graph;
         private Map<String, V> map;
         private Pair<String, String> lastPair;
         private E lastEdge;
+        public Function<String, V> vertexFactory;
 
         public Consumers(Graph<V, E> graph)
         {
@@ -101,7 +138,13 @@ public class DOTImporter<V, E>
             if (map.containsKey(t)) {
                 throw new ImportException("Node " + t + " already exists");
             }
-            V v = graph.addVertex();
+            V v;
+            if (vertexFactory != null) {
+                v = vertexFactory.apply(t);
+                graph.addVertex(v);
+            } else {
+                v = graph.addVertex();
+            }
             map.put(t, v);
             notifyVertex(v);
             notifyVertexAttribute(v, DEFAULT_VERTEX_ID_KEY, DefaultAttribute.createAttribute(t));

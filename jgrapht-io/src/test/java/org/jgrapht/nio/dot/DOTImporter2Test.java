@@ -272,6 +272,34 @@ public class DOTImporter2Test
     }
 
     @Test
+    public void testDOT5()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "digraph {" + NL +
+                       "  a -- b -- c;" + NL +
+                       "  k:1 -- q:a:3 -- d:3;" + NL +
+                       "}";
+        // @formatter:on
+
+        DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
+        importer.setVertexFactory(id->id);
+        DirectedPseudograph<String, DefaultEdge> graph = new DirectedPseudograph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        importer.importGraph(graph, new StringReader(input));
+
+        DirectedPseudograph<String, DefaultEdge> expected = new DirectedPseudograph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graphs.addAllVertices(expected, Arrays.asList("a", "b", "c", "k", "q", "d"));
+        expected.addEdge("a", "b");
+        expected.addEdge("b", "c");
+        expected.addEdge("k", "q");
+        expected.addEdge("q", "d");
+
+        assertEquals(expected.toString(), graph.toString());
+    }
+    
+    @Test
     public void testNodeSubgraphEdges()
         throws ImportException
     {
