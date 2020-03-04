@@ -116,6 +116,18 @@ import java.util.function.*;
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
  * 
+ * <p>
+ * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
+ * vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
+ * vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
+ * multiple times.
+ * 
+ * <p>
+ * The default behavior of the importer is to use the graph vertex supplier in order to create
+ * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
+ * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
+ * graph vertex given the vertex identifier read from file.
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
@@ -127,11 +139,15 @@ public class SimpleGraphMLImporter<V, E>
     implements
     GraphImporter<V, E>
 {
-    private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
-    private static final String DEFAULT_VERTEX_ID_KEY = "ID";
+    /**
+     * Default key used for vertex ID.
+     */
+    public static final String DEFAULT_VERTEX_ID_KEY = "ID";
 
+    private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
     private boolean schemaValidation;
     private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
+    private Function<String, V> vertexFactory;
 
     /**
      * Constructs a new importer.
@@ -181,6 +197,32 @@ public class SimpleGraphMLImporter<V, E>
     public void setSchemaValidation(boolean schemaValidation)
     {
         this.schemaValidation = schemaValidation;
+    }
+
+    /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<String, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<String, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
     }
 
     /**
@@ -280,7 +322,12 @@ public class SimpleGraphMLImporter<V, E>
         {
             V vertex = nodesMap.get(vId);
             if (vertex == null) {
-                vertex = graph.addVertex();
+                if (vertexFactory != null) {
+                    vertex = vertexFactory.apply(vId);
+                    graph.addVertex(vertex);
+                } else {
+                    vertex = graph.addVertex();
+                }
                 nodesMap.put(vId, vertex);
             }
             return vertex;

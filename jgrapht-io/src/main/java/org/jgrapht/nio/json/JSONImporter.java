@@ -69,6 +69,18 @@ import java.util.function.*;
  * the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same
  * is done for arrays or any other arbitrary nested structure.
  * 
+ * <p>
+ * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
+ * vertices in the original dot file are reported as a vertex attribute named "ID". Thus, in case
+ * vertices in the dot file also contain an "ID" attribute, such an attribute will be reported
+ * multiple times.
+ * 
+ * <p>
+ * The default behavior of the importer is to use the graph vertex supplier in order to create
+ * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
+ * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
+ * graph vertex given the vertex identifier read from file.
+ * 
  * @param <V> the vertex type
  * @param <E> the edge type
  * 
@@ -80,6 +92,13 @@ public class JSONImporter<V, E>
     implements
     GraphImporter<V, E>
 {
+    /**
+     * Default key used for vertex ID.
+     */
+    public static final String DEFAULT_VERTEX_ID_KEY = "ID";
+
+    private Function<String, V> vertexFactory;
+
     /**
      * Construct a new importer
      */
@@ -116,6 +135,32 @@ public class JSONImporter<V, E>
         genericImporter.importInput(input);
     }
 
+    /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<String, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<String, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
+    }
+
     private class Consumers
     {
         private Graph<V, E> graph;
@@ -135,7 +180,18 @@ public class JSONImporter<V, E>
             if (map.containsKey(t)) {
                 throw new ImportException("Node " + t + " already exists");
             }
-            map.put(t, graph.addVertex());
+
+            V v;
+            if (vertexFactory != null) {
+                v = vertexFactory.apply(t);
+                graph.addVertex(v);
+            } else {
+                v = graph.addVertex();
+            }
+            map.put(t, v);
+
+            notifyVertex(v);
+            notifyVertexAttribute(v, DEFAULT_VERTEX_ID_KEY, DefaultAttribute.createAttribute(t));
         };
 
         public final BiConsumer<Pair<String, String>, Attribute> vertexAttributeConsumer =
@@ -164,6 +220,7 @@ public class JSONImporter<V, E>
             if (graphType.isWeighted() && t.getThird() != null) {
                 graph.setEdgeWeight(e, t.getThird());
             }
+            notifyEdge(e);
 
             lastTriple = t;
             lastEdge = e;

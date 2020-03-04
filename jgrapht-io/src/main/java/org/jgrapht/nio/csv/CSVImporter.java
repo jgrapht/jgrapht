@@ -51,6 +51,16 @@ import java.util.function.*;
  * {@link CSVFormat#ADJACENCY_LIST}.
  * </p>
  * 
+ * <p>
+ * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
+ * vertices in the original file are reported as a vertex attribute named "ID".
+ * 
+ * <p>
+ * The default behavior of the importer is to use the graph vertex supplier in order to create
+ * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
+ * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
+ * graph vertex given the vertex identifier read from file.
+ * 
  * @see CSVFormat
  *
  * @param <V> the graph vertex type
@@ -71,6 +81,7 @@ public class CSVImporter<V, E>
     private CSVFormat format;
     private char delimiter;
     private final Set<CSVFormat.Parameter> parameters;
+    private Function<String, V> vertexFactory;
 
     /**
      * Constructs a new importer using the {@link CSVFormat#ADJACENCY_LIST} format as default.
@@ -177,6 +188,32 @@ public class CSVImporter<V, E>
     }
 
     /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<String, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<String, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
+    }
+
+    /**
      * Import a graph.
      * 
      * <p>
@@ -198,14 +235,17 @@ public class CSVImporter<V, E>
         CSVEventDrivenImporter genericImporter = new CSVEventDrivenImporter();
         genericImporter.setDelimiter(delimiter);
         genericImporter.setFormat(format);
-        genericImporter.setParameter(
-            CSVFormat.Parameter.EDGE_WEIGHTS, isParameter(CSVFormat.Parameter.EDGE_WEIGHTS));
-        genericImporter.setParameter(
-            CSVFormat.Parameter.MATRIX_FORMAT_NODEID,
-            isParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID));
-        genericImporter.setParameter(
-            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-            isParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE));
+        genericImporter
+            .setParameter(
+                CSVFormat.Parameter.EDGE_WEIGHTS, isParameter(CSVFormat.Parameter.EDGE_WEIGHTS));
+        genericImporter
+            .setParameter(
+                CSVFormat.Parameter.MATRIX_FORMAT_NODEID,
+                isParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID));
+        genericImporter
+            .setParameter(
+                CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+                isParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE));
 
         Consumers consumers = new Consumers(graph);
         genericImporter.addVertexConsumer(consumers.vertexConsumer);
@@ -230,7 +270,13 @@ public class CSVImporter<V, E>
             if (map.containsKey(t)) {
                 throw new ImportException("Node " + t + " already exists");
             }
-            V v = graph.addVertex();
+            V v;
+            if (vertexFactory != null) {
+                v = vertexFactory.apply(t);
+                graph.addVertex(v);
+            } else {
+                v = graph.addVertex();
+            }
             map.put(t, v);
             notifyVertex(v);
             notifyVertexAttribute(v, DEFAULT_VERTEX_ID_KEY, DefaultAttribute.createAttribute(t));

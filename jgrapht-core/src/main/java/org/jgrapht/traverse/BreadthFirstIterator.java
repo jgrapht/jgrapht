@@ -79,7 +79,7 @@ public class BreadthFirstIterator<V, E>
     }
 
     /**
-     * @see CrossComponentIterator#isConnectedComponentExhausted()
+     * {@inheritDoc}
      */
     @Override
     protected boolean isConnectedComponentExhausted()
@@ -88,7 +88,7 @@ public class BreadthFirstIterator<V, E>
     }
 
     /**
-     * @see CrossComponentIterator#encounterVertex(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     protected void encounterVertex(V vertex, E edge)
@@ -100,7 +100,7 @@ public class BreadthFirstIterator<V, E>
     }
 
     /**
-     * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     protected void encounterVertexAgain(V vertex, E edge)
@@ -164,14 +164,32 @@ public class BreadthFirstIterator<V, E>
         return queue.removeFirst();
     }
 
+    /**
+     * Data kept for discovered vertices.
+     *
+     * @param <E> the graph edge type
+     */
     protected static class SearchNodeData<E>
     {
-
         private final E edge;
         private final int depth;
 
         /**
+         * Constructor
+         * 
+         * @param edge edge to parent
+         * @param depth depth of node in search tree
+         */
+        public SearchNodeData(E edge, int depth)
+        {
+            this.edge = edge;
+            this.depth = depth;
+        }
+
+        /**
          * Edge to parent
+         * 
+         * @return the edge to the parent
          */
         public E getEdge()
         {
@@ -180,20 +198,12 @@ public class BreadthFirstIterator<V, E>
 
         /**
          * Depth of node in search tree
+         * 
+         * @return the depth of the node in the search tree
          */
         public int getDepth()
         {
             return depth;
-        }
-
-        /**
-         * @param edge  Edge to parent
-         * @param depth Depth of node in search tree
-         */
-        public SearchNodeData(E edge, int depth)
-        {
-            this.edge = edge;
-            this.depth = depth;
         }
     }
 }

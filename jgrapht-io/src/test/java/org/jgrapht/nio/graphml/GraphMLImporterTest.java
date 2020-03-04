@@ -75,6 +75,48 @@ public class GraphMLImporterTest
     }
 
     @Test
+    public void testVertexFactory()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = 
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "<node id=\"1\"/>" + NL +
+            "<node id=\"2\"/>" + NL + 
+            "<node id=\"3\"/>" + NL +  
+            "<edge source=\"1\" target=\"2\"/>" + NL + 
+            "<edge source=\"3\" target=\"1\"/>"+ NL + 
+            "</graph>" + NL + 
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<>();
+        importer.setVertexFactory(id->String.valueOf("node"+id));
+        importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("node1"));
+        assertTrue(g.containsVertex("node2"));
+        assertTrue(g.containsVertex("node3"));
+        assertTrue(g.containsEdge("node1", "node2"));
+        assertTrue(g.containsEdge("node2", "node3"));
+        assertTrue(g.containsEdge("node3", "node1"));
+    }
+    
+    @Test
     public void testUndirectedUnweightedFromInputStream()
         throws ImportException
     {

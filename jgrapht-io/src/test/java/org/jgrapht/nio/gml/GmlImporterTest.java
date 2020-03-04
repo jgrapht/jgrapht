@@ -145,6 +145,40 @@ public class GmlImporterTest
     }
 
     @Test
+    public void testVertexFactory()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "graph [\n"
+                     + "  directed 1\n"
+                     + "  node [\n"
+                     + "    id 1\n"
+                     + "  ]\n"
+                     + "  node [\n"
+                     + "    id 8\n"
+                     + "  ]\n"
+                     + "]";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g;
+        g = GraphTypeBuilder
+                .directed().weighted(false).allowingSelfLoops(true).allowingMultipleEdges(true)
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .buildGraph();
+
+        GmlImporter<String, DefaultEdge> importer = new GmlImporter<>();
+        importer.setVertexFactory(id->String.valueOf(id+100));
+        
+        importer.importGraph(g, new StringReader(input));
+        
+        assertEquals(2, g.vertexSet().size());
+        assertEquals(0, g.edgeSet().size());
+        assertTrue(g.containsVertex("101"));
+        assertTrue(g.containsVertex("108"));
+    }
+    
+    @Test
     public void testIgnore()
         throws ImportException
     {

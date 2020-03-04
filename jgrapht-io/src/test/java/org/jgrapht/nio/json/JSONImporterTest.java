@@ -74,6 +74,45 @@ public class JSONImporterTest
         assertTrue(g.containsEdge("1", "2"));
         assertTrue(g.containsEdge("1", "3"));
     }
+    
+    @Test
+    public void testVertexFactory()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "{\n"
+                     + "  \"nodes\": [\n"    
+                     + "  { \"id\":\"1\" },\n"
+                     + "  { \"id\":\"2\" },\n"
+                     + "  { \"id\":\"3\" },\n"
+                     + "  { \"id\":\"4\" }\n"
+                     + "  ],\n"
+                     + "  \"edges\": [\n"    
+                     + "  { \"source\":\"1\", \"target\":\"2\" },\n"
+                     + "  { \"source\":\"1\", \"target\":\"3\" }\n"
+                     + "  ]\n"
+                     + "}";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+        importer.setVertexFactory(id->String.valueOf("node"+id));
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(2, g.edgeSet().size());
+        assertTrue(g.containsVertex("node1"));
+        assertTrue(g.containsVertex("node2"));
+        assertTrue(g.containsVertex("node3"));
+        assertTrue(g.containsVertex("node4"));
+        assertTrue(g.containsEdge("node1", "node2"));
+        assertTrue(g.containsEdge("node1", "node3"));
+    }
 
     @Test
     public void testMixedStringAndIntegerIds()

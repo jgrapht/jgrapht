@@ -90,6 +90,16 @@ import java.util.function.*;
  * 
  * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
  * 
+ * <p>
+ * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
+ * vertices in the original file are reported as a vertex attribute named "ID".
+ * 
+ * <p>
+ * The default behavior of the importer is to use the graph vertex supplier in order to create
+ * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
+ * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
+ * graph vertex given the vertex identifier read from file.
+ * 
  * @param <V> the vertex type
  * @param <E> the edge type
  * 
@@ -105,6 +115,8 @@ public class GmlImporter<V, E>
      * Default key used for vertex ID.
      */
     public static final String DEFAULT_VERTEX_ID_KEY = "ID";
+
+    private Function<Integer, V> vertexFactory;
 
     /**
      * Constructs a new importer.
@@ -140,6 +152,32 @@ public class GmlImporter<V, E>
         genericImporter.addEdgeConsumer(consumers.edgeConsumer);
         genericImporter.addEdgeAttributeConsumer(consumers.edgeAttributeConsumer);
         genericImporter.importInput(input);
+    }
+
+    /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<Integer, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<Integer, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
     }
 
     private class Consumers
@@ -196,7 +234,12 @@ public class GmlImporter<V, E>
         {
             V v = map.get(id);
             if (v == null) {
-                v = graph.addVertex();
+                if (vertexFactory != null) {
+                    v = vertexFactory.apply(id);
+                    graph.addVertex(v);
+                } else {
+                    v = graph.addVertex();
+                }
                 map.put(id, v);
 
                 /*

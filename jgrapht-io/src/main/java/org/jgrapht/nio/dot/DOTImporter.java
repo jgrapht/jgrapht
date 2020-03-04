@@ -47,9 +47,10 @@ import java.util.function.*;
  * multiple times.
  * 
  * <p>
- * The user can also bypass vertex creation by providing a custom vertex factory method using
- * {@link #setVertexFactory(Function)}. The factory receives the vertex identifier and should
- * provide a graph vertex.
+ * The default behavior of the importer is to use the graph vertex supplier in order to create
+ * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
+ * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
+ * graph vertex given the vertex identifier read from file.
  *
  * @author Dimitrios Michail
  *
@@ -62,7 +63,10 @@ public class DOTImporter<V, E>
     implements
     GraphImporter<V, E>
 {
-    private static final String DEFAULT_VERTEX_ID_KEY = "ID";
+    /**
+     * Default key used for vertex ID.
+     */
+    public static final String DEFAULT_VERTEX_ID_KEY = "ID";
 
     private Function<String, V> vertexFactory;
 
@@ -84,9 +88,6 @@ public class DOTImporter<V, E>
         genericImporter.addEdgeConsumer(consumers.edgeConsumer);
         genericImporter.addEdgeAttributeConsumer(consumers.edgeAttributeConsumer);
         genericImporter.addGraphAttributeConsumer(consumers.graphAttributeConsumer);
-        if (vertexFactory != null) {
-            consumers.vertexFactory = vertexFactory;
-        }
         genericImporter.importInput(input);
     }
 
@@ -105,8 +106,9 @@ public class DOTImporter<V, E>
      * Set the user custom vertex factory. The default behavior is being null in which case the
      * graph vertex supplier is used.
      * 
-     * The vertex factory will receive as input the vertex identifier from the input and return a
-     * graph vertex.
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
      * 
      * @param vertexFactory a vertex factory
      */
@@ -117,12 +119,10 @@ public class DOTImporter<V, E>
 
     private class Consumers
     {
-
         private Graph<V, E> graph;
         private Map<String, V> map;
         private Pair<String, String> lastPair;
         private E lastEdge;
-        public Function<String, V> vertexFactory;
 
         public Consumers(Graph<V, E> graph)
         {
