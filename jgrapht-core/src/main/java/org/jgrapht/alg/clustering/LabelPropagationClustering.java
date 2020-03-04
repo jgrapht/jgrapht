@@ -216,13 +216,9 @@ public class LabelPropagationClustering<V, E>
 
                 String vLabel = labels.get(v);
                 int vLabelCount = counts.getOrDefault(vLabel, 0);
-                for (E e : graph.edgesOf(v)) {
-                    V u = Graphs.getOppositeVertex(graph, e, v);
-                    String uLabel = labels.get(u);
-                    int uLabelCount = counts.getOrDefault(uLabel, 0);
-                    if (vLabelCount < uLabelCount) {
-                        return false;
-                    }
+                int maxCount = labelCountsAndMaximum.getSecond();
+                if(maxCount > vLabelCount){
+                    return false;
                 }
             }
             return true;
@@ -230,23 +226,25 @@ public class LabelPropagationClustering<V, E>
 
         /**
          * Compute the frequency of the labels of all neighbors of a vertex and the maximum
-         * frequency.
+         * frequency of the vertices, which have a label not equal to the input vertex label.
          * 
          * @param v the input vertex
          * @return the frequency of the labels of all neighbors of a vertex and the maximum
-         *         frequency
+         *         label frequency of the vertices with a label not equal to the input vertex
+         *         label
          */
         private Pair<Map<String, Integer>, Integer> getNeighborLabelCountsAndMaximum(V v)
         {
             Map<String, Integer> counts = new HashMap<>();
 
+            String vLabel = labels.get(v);
             int maxCount = 0;
             for (E e : graph.edgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 String uLabel = labels.get(u);
                 int newCount = counts.getOrDefault(uLabel, 0) + 1;
                 counts.put(uLabel, newCount);
-                if (newCount > maxCount) {
+                if (newCount > maxCount && !uLabel.equals(vLabel)) {
                     maxCount = newCount;
                 }
             }
@@ -257,7 +255,7 @@ public class LabelPropagationClustering<V, E>
         /**
          * Update the label of a vertex.
          * 
-         * @param the vertex
+         * @param v the vertex
          * @return true if a label change occurred
          */
         private boolean updateLabel(V v)
@@ -266,12 +264,14 @@ public class LabelPropagationClustering<V, E>
                 getNeighborLabelCountsAndMaximum(v);
             Map<String, Integer> counts = labelCountsAndMaximum.getFirst();
 
-            final int maxCount = labelCountsAndMaximum.getSecond();
+            String oldLabel = labels.get(v);
+            int vLabelCount = counts.getOrDefault(oldLabel, 0);
+            final int maxCount = Math.max(labelCountsAndMaximum.getSecond(), vLabelCount);
+
             ArrayList<String> maxLabels = counts
-                .entrySet().stream().filter(e -> e.getValue() == maxCount).map(e -> e.getKey())
+                .entrySet().stream().filter(e -> e.getValue() == maxCount).map(Map.Entry::getKey)
                 .collect(Collectors.toCollection(ArrayList::new));
             String newLabel = maxLabels.get(rng.nextInt(maxLabels.size()));
-            String oldLabel = labels.get(v);
 
             if (oldLabel.equals(newLabel)) {
                 return false;
