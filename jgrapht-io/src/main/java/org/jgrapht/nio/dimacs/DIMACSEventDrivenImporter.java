@@ -60,7 +60,8 @@ import java.util.*;
  * <p>
  * By default this importer recomputes node identifiers starting from $0$ as they are encountered in
  * the file. It is also possible to instruct the importer to keep the original file numbering of the
- * nodes simply by reducing them by one in order to make them zero-based.
+ * nodes. Additionally you can also instruct the importer to use zero-based numbering or keep the
+ * original number of DIMACS which starts from one.
  * 
  * Note: the current implementation does not fully implement the DIMACS specifications! Special
  * (rarely used) fields specified as 'Optional Descriptors' are currently not supported (ignored).
@@ -76,7 +77,9 @@ public class DIMACSEventDrivenImporter
     implements
     EventDrivenImporter<Integer, Triple<Integer, Integer, Double>>
 {
+    private boolean zeroBasedNumbering;
     private boolean renumberVertices;
+
     private Map<String, Integer> vertexMap;
     private int nextId;
 
@@ -86,16 +89,31 @@ public class DIMACSEventDrivenImporter
     public DIMACSEventDrivenImporter()
     {
         super();
+        this.zeroBasedNumbering = true;
         this.renumberVertices = true;
         this.vertexMap = new HashMap<>();
-        this.nextId = 0;
+    }
+
+    /**
+     * Set whether to use zero-based numbering for vertices.
+     * 
+     * The DIMACS format by default starts vertices numbering from one. If true then we will use
+     * zero-based numbering. Default to true.
+     * 
+     * @param zeroBasedNumbering whether to use zero-based numbering
+     * @return the importer
+     */
+    public DIMACSEventDrivenImporter zeroBasedNumbering(boolean zeroBasedNumbering)
+    {
+        this.zeroBasedNumbering = zeroBasedNumbering;
+        return this;
     }
 
     /**
      * Set whether to renumber vertices or not.
      * 
      * If true then the vertices are assigned new numbers from $0$ to $n-1$ in the order that they
-     * are first * encountered in the file. Otherwise, the original numbering (minus one in order to
+     * are first encountered in the file. Otherwise, the original numbering (minus one in order to
      * get a zero-based numbering) of the DIMACS file is kept. Defaults to true.
      * 
      * @param renumberVertices whether to renumber vertices or not
@@ -116,6 +134,12 @@ public class DIMACSEventDrivenImporter
             in = (BufferedReader) input;
         } else {
             in = new BufferedReader(input);
+        }
+
+        if (zeroBasedNumbering) {
+            this.nextId = 0;
+        } else {
+            this.nextId = 1;
         }
 
         notifyImportEvent(ImportEvent.START);
@@ -226,7 +250,11 @@ public class DIMACSEventDrivenImporter
                 return nextId++;
             });
         } else {
-            return Integer.valueOf(id) - 1;
+            if (zeroBasedNumbering) {
+                return Integer.valueOf(id) - 1;
+            } else {
+                return Integer.valueOf(id);
+            }
         }
     }
 

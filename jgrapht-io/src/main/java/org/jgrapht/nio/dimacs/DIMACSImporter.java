@@ -75,6 +75,12 @@ public class DIMACSImporter<V, E>
     implements
     GraphImporter<V, E>
 {
+    /**
+     * Default key used for vertex ID.
+     */
+    public static final String DEFAULT_VERTEX_ID_KEY = "ID";
+
+    private Function<Integer, V> vertexFactory;
     private final double defaultWeight;
 
     /**
@@ -94,6 +100,32 @@ public class DIMACSImporter<V, E>
     public DIMACSImporter()
     {
         this(Graph.DEFAULT_EDGE_WEIGHT);
+    }
+
+    /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<Integer, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<Integer, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
     }
 
     /**
@@ -117,7 +149,7 @@ public class DIMACSImporter<V, E>
         throws ImportException
     {
         DIMACSEventDrivenImporter genericImporter =
-            new DIMACSEventDrivenImporter().renumberVertices(false);
+            new DIMACSEventDrivenImporter().renumberVertices(false).zeroBasedNumbering(false);
         Consumers consumers = new Consumers(graph);
         genericImporter.addVertexCountConsumer(consumers.nodeCountConsumer);
         genericImporter.addEdgeConsumer(consumers.edgeConsumer);
@@ -139,8 +171,23 @@ public class DIMACSImporter<V, E>
 
         public final Consumer<Integer> nodeCountConsumer = (n) -> {
             this.nodeCount = n;
-            for (int i = 0; i < nodeCount; i++) {
-                map.put(Integer.valueOf(i), graph.addVertex());
+            for (int i = 1; i <= nodeCount; i++) {
+                V v;
+                if (vertexFactory != null) {
+                    v = vertexFactory.apply(i);
+                    graph.addVertex(v);
+                } else {
+                    v = graph.addVertex();
+                }
+
+                map.put(i, v);
+
+                /*
+                 * Notify the first time we create the node.
+                 */
+                notifyVertex(v);
+                notifyVertexAttribute(
+                    v, DEFAULT_VERTEX_ID_KEY, DefaultAttribute.createAttribute(i));
             }
         };
 
@@ -162,6 +209,8 @@ public class DIMACSImporter<V, E>
                 double weight = t.getThird() == null ? defaultWeight : t.getThird();
                 graph.setEdgeWeight(e, weight);
             }
+
+            notifyEdge(e);
         };
 
     }

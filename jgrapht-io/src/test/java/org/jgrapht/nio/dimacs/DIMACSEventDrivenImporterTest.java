@@ -119,7 +119,55 @@ public class DIMACSEventDrivenImporterTest
      * Read and parse an weighted instance
      */
     @Test
-    public void testReadWeightedWithourRenumberingDIMACSInstance()
+    public void testReadWeightedWithoutZeroBasedDIMACSInstance()
+    {
+        InputStream fstream =
+            getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");
+
+        Map<Integer, Integer> nameMap = new HashMap<>();
+        nameMap.put(1, 1);
+        nameMap.put(2, 2);
+        nameMap.put(4, 3);
+        nameMap.put(7, 4);
+        nameMap.put(9, 5);
+        nameMap.put(3, 6);
+        nameMap.put(6, 7);
+        nameMap.put(8, 8);
+        nameMap.put(5, 9);
+        nameMap.put(10, 10);
+        nameMap.put(11, 11);
+
+        DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().zeroBasedNumbering(false);
+
+        importer.addVertexCountConsumer(count -> {
+            assertEquals(count, Integer.valueOf(11));
+        });
+        List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
+        importer.addEdgeConsumer(t -> {
+            collected.add(t);
+        });
+        importer.importInput(fstream);
+
+        int[][] edges = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 7, 3 }, { 1, 9, 4 }, { 2, 3, 5 },
+            { 2, 6, 6 }, { 2, 8, 7 }, { 3, 5, 8 }, { 3, 7, 9 }, { 3, 10, 10 }, { 4, 5, 11 },
+            { 4, 6, 12 }, { 4, 10, 13 }, { 5, 8, 14 }, { 5, 9, 15 }, { 6, 11, 16 }, { 7, 11, 17 },
+            { 8, 11, 18 }, { 9, 11, 19 }, { 10, 11, 20 } };
+
+        int i = 0;
+        for (int[] edge : edges) {
+            Triple<Integer, Integer, Double> e = collected.get(i);
+            assertEquals(nameMap.get(edge[0]), e.getFirst());
+            assertEquals(nameMap.get(edge[1]), e.getSecond());
+            assertEquals(Double.valueOf(edge[2]), e.getThird());
+            i++;
+        }
+    }
+    
+    /**
+     * Read and parse an weighted instance
+     */
+    @Test
+    public void testReadWeightedWithoutRenumberingDIMACSInstance()
     {
         InputStream fstream =
             getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");
@@ -164,4 +212,53 @@ public class DIMACSEventDrivenImporterTest
         }
     }
 
+    /**
+     * Read and parse an weighted instance
+     */
+    @Test
+    public void testReadWeightedWithoutRenumberingAndWithoutZeroBasedDIMACSInstance()
+    {
+        InputStream fstream =
+            getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");
+
+        Map<Integer, Integer> nameMap = new HashMap<>();
+        nameMap.put(1, 1);
+        nameMap.put(2, 2);
+        nameMap.put(3, 3);
+        nameMap.put(4, 4);
+        nameMap.put(5, 5);
+        nameMap.put(6, 6);
+        nameMap.put(7, 7);
+        nameMap.put(8, 8);
+        nameMap.put(9, 9);
+        nameMap.put(10, 10);
+        nameMap.put(11, 11);
+
+        DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter();
+        importer = importer.renumberVertices(false).zeroBasedNumbering(false);
+
+        importer.addVertexCountConsumer(count -> {
+            assertEquals(count, Integer.valueOf(11));
+        });
+        List<Triple<Integer, Integer, Double>> collected = new ArrayList<>();
+        importer.addEdgeConsumer(t -> {
+            collected.add(t);
+        });
+        importer.importInput(fstream);
+
+        int[][] edges = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 7, 3 }, { 1, 9, 4 }, { 2, 3, 5 },
+            { 2, 6, 6 }, { 2, 8, 7 }, { 3, 5, 8 }, { 3, 7, 9 }, { 3, 10, 10 }, { 4, 5, 11 },
+            { 4, 6, 12 }, { 4, 10, 13 }, { 5, 8, 14 }, { 5, 9, 15 }, { 6, 11, 16 }, { 7, 11, 17 },
+            { 8, 11, 18 }, { 9, 11, 19 }, { 10, 11, 20 } };
+
+        int i = 0;
+        for (int[] edge : edges) {
+            Triple<Integer, Integer, Double> e = collected.get(i);
+            assertEquals(nameMap.get(edge[0]), e.getFirst());
+            assertEquals(nameMap.get(edge[1]), e.getSecond());
+            assertEquals(Double.valueOf(edge[2]), e.getThird());
+            i++;
+        }
+    }
+    
 }

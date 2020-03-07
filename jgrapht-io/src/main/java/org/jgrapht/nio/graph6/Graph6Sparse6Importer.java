@@ -51,6 +51,18 @@ import java.util.function.*;
  * <code>":?@MnDA\\oi"</code>
  * </pre>
  *
+ * <p>
+ * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
+ * vertices in the original file are reported as a vertex attribute named "ID". Note, however, that
+ * in this file format the identifiers from the input files are always going to be integers starting
+ * from zero, as the format does not retain such information in order to achieve compactness.
+ * 
+ * <p>
+ * The default behavior of the importer is to use the graph vertex supplier in order to create
+ * vertices. The user can also bypass vertex creation by providing a custom vertex factory method
+ * using {@link #setVertexFactory(Function)}. The factory method is responsible to create a new
+ * graph vertex given the vertex identifier read from file.
+ *
  * @author Dimitrios Michail
  *
  * @param <V> graph vertex type
@@ -63,11 +75,44 @@ public class Graph6Sparse6Importer<V, E>
     GraphImporter<V, E>
 {
     /**
+     * Default key used for vertex ID.
+     */
+    public static final String DEFAULT_VERTEX_ID_KEY = "ID";
+
+    private Function<Integer, V> vertexFactory;
+
+    /**
      * Construct a new importer
      */
     public Graph6Sparse6Importer()
     {
         super();
+    }
+
+    /**
+     * Get the user custom vertex factory. This is null by default and the graph supplier is used
+     * instead.
+     * 
+     * @return the user custom vertex factory
+     */
+    public Function<Integer, V> getVertexFactory()
+    {
+        return vertexFactory;
+    }
+
+    /**
+     * Set the user custom vertex factory. The default behavior is being null in which case the
+     * graph vertex supplier is used.
+     * 
+     * If supplied the vertex factory is called every time a new vertex is encountered in the file.
+     * The method is called with parameter the vertex identifier from the file and should return the
+     * actual graph vertex to add to the graph.
+     * 
+     * @param vertexFactory a vertex factory
+     */
+    public void setVertexFactory(Function<Integer, V> vertexFactory)
+    {
+        this.vertexFactory = vertexFactory;
     }
 
     /**
@@ -107,7 +152,20 @@ public class Graph6Sparse6Importer<V, E>
             if (map.containsKey(t)) {
                 throw new ImportException("Node " + t + " reported twice");
             }
-            map.put(t, graph.addVertex());
+            V v;
+            if (vertexFactory != null) {
+                v = vertexFactory.apply(t);
+                graph.addVertex(v);
+            } else {
+                v = graph.addVertex();
+            }
+            map.put(t, v);
+
+            /*
+             * Notify the first time we create the node.
+             */
+            notifyVertex(v);
+            notifyVertexAttribute(v, DEFAULT_VERTEX_ID_KEY, DefaultAttribute.createAttribute(t));
         };
 
         public final Consumer<Pair<Integer, Integer>> edgeConsumer = (p) -> {
@@ -123,7 +181,8 @@ public class Graph6Sparse6Importer<V, E>
                 throw new ImportException("Node " + target + " does not exist");
             }
 
-            graph.addEdge(from, to);
+            E e = graph.addEdge(from, to);
+            notifyEdge(e);
         };
 
     }

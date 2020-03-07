@@ -124,6 +124,40 @@ public class DIMACSImporterTest
             assertEquals((int) graph.getEdgeWeight(e), edge[2]);
         }
     }
+    
+    @Test
+    public void testReadDIMACSShortestPathFormatWithVertexFactory()
+    {
+        // @formatter:off
+        String input = "p sp 3 3\n" +
+                       "a 1 2\n" +
+                       "a 2 1\n" +
+                       "a 2 3\n";
+        // @formatter:on
+
+        Graph<Integer, DefaultWeightedEdge> graph = GraphTypeBuilder
+            .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
+            .vertexSupplier(SupplierUtil.createIntegerSupplier())
+            .edgeSupplier(SupplierUtil.createDefaultWeightedEdgeSupplier()).buildGraph();
+
+        DIMACSImporter<Integer, DefaultWeightedEdge> importer = new DIMACSImporter<>();
+        importer.setVertexFactory(id->id+100);
+        try {
+            importer.importGraph(graph, new InputStreamReader(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // cannot happen
+        }
+
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(3, graph.edgeSet().size());
+
+        int[][] edges = { { 101, 102, 1 }, { 102, 101, 1 }, { 102, 103, 1 } };
+        for (int[] edge : edges) {
+            assertTrue(graph.containsEdge(edge[0], edge[1]));
+            DefaultWeightedEdge e = graph.getEdge(edge[0], edge[1]);
+            assertEquals((int) graph.getEdgeWeight(e), edge[2]);
+        }
+    }
 
     @Test
     public void testWrongDIMACSInstance1()
