@@ -39,12 +39,12 @@ import static org.jgrapht.util.AVLTree.TreeNode;
  *     <li>Removing an element in $\mathcal{O}(deg(element)\cdot\log n + 1)$</li>
  * </ul>
  * <p>
- * This data structure doesn't allow to store graphs with cycle. Also, the edges are considered to
+ * This data structure doesn't allow to store graphs with cycles. Also, the edges are considered to
  * be undirected. The memory complexity is linear in the number of inserted elements.
  * The implementation is based on the <a href="https://en.wikipedia.org/wiki/Euler_tour_technique">
  * Euler tour technique</a>.
  *
- * @param <T> as element type
+ * @param <T> element type
  * @author Timofey Chudakov
  */
 public class TreeDynamicConnectivity<T> {
