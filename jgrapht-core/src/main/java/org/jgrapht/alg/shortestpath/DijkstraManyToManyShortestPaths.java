@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2019, by Semen Chudakov and Contributors.
+ * (C) Copyright 2019-2020, by Semen Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,26 +17,20 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.graph.EdgeReversedGraph;
-import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Naive algorithm for many-to-many shortest paths problem using {@link DijkstraClosestFirstIterator}.
+ * Naive algorithm for many-to-many shortest paths problem using
+ * {@link DijkstraClosestFirstIterator}.
  *
  * <p>
- * Complexity of the algorithm is $O(min(|S|,|T|)*(V\log V + E))$, where $S$ is the set of source vertices,
- * $T$ is the set of target vertices, $V$ is the set of graph vertices and $E$ is the set of graph edges of
- * the graph.
+ * Complexity of the algorithm is $O(min(|S|,|T|)*(V\log V + E))$, where $S$ is the set of source
+ * vertices, $T$ is the set of target vertices, $V$ is the set of graph vertices and $E$ is the set
+ * of graph edges of the graph.
  *
  * <p>
  * For each source vertex a single source shortest paths search is performed, which is stopped
@@ -56,14 +50,18 @@ import java.util.Set;
  * @see DefaultManyToManyShortestPaths
  * @see CHManyToManyShortestPaths
  */
-public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortestPaths<V, E> {
+public class DijkstraManyToManyShortestPaths<V, E>
+    extends
+    BaseManyToManyShortestPaths<V, E>
+{
 
     /**
      * Constructs an instance of the algorithm for a given {@code graph}.
      *
      * @param graph underlying graph
      */
-    public DijkstraManyToManyShortestPaths(Graph<V, E> graph) {
+    public DijkstraManyToManyShortestPaths(Graph<V, E> graph)
+    {
         super(graph);
     }
 
@@ -71,7 +69,8 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
      * {@inheritDoc}
      */
     @Override
-    public ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets) {
+    public ManyToManyShortestPaths<V, E> getManyToManyPaths(Set<V> sources, Set<V> targets)
+    {
         Objects.requireNonNull(sources, "sources cannot be null!");
         Objects.requireNonNull(targets, "targets cannot be null!");
 
@@ -97,7 +96,10 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
      * For each source vertex a single source shortest paths tree is stored. It is used to retrieve
      * both actual paths and theirs weights.
      */
-    private class DijkstraManyToManyShortestPathsImpl extends BaseManyToManyShortestPathsImpl<V, E> {
+    private class DijkstraManyToManyShortestPathsImpl
+        extends
+        BaseManyToManyShortestPathsImpl<V, E>
+    {
 
         /**
          * Indicates is the search spaces were computed on the edge reversed graph.
@@ -113,13 +115,15 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
          * Constructs an instance of the algorithm for the given {@code sources}, {@code targets},
          * {@code reversed} and {@code searchSpaces}.
          *
-         * @param sources      source vertices
-         * @param targets      target vertices
-         * @param reversed     if search spaces are reversed
+         * @param sources source vertices
+         * @param targets target vertices
+         * @param reversed if search spaces are reversed
          * @param searchSpaces single source shortest paths trees map
          */
-        DijkstraManyToManyShortestPathsImpl(Set<V> sources, Set<V> targets, boolean reversed,
-                                            Map<V, ShortestPathAlgorithm.SingleSourcePaths<V, E>> searchSpaces) {
+        DijkstraManyToManyShortestPathsImpl(
+            Set<V> sources, Set<V> targets, boolean reversed,
+            Map<V, ShortestPathAlgorithm.SingleSourcePaths<V, E>> searchSpaces)
+        {
             super(sources, targets);
             this.reversed = reversed;
             this.searchSpaces = searchSpaces;
@@ -129,7 +133,8 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
          * {@inheritDoc}
          */
         @Override
-        public GraphPath<V, E> getPath(V source, V target) {
+        public GraphPath<V, E> getPath(V source, V target)
+        {
             assertCorrectSourceAndTarget(source, target);
             if (reversed) {
                 GraphPath<V, E> reversedPath = searchSpaces.get(target).getPath(source);
@@ -137,7 +142,8 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
                 List<E> edges = reversedPath.getEdgeList();
                 Collections.reverse(vertices);
                 Collections.reverse(edges);
-                return new GraphWalk<>(graph, source, target, vertices, edges, reversedPath.getWeight());
+                return new GraphWalk<>(
+                    graph, source, target, vertices, edges, reversedPath.getWeight());
             } else {
                 return searchSpaces.get(source).getPath(target);
             }
@@ -147,7 +153,8 @@ public class DijkstraManyToManyShortestPaths<V, E> extends BaseManyToManyShortes
          * {@inheritDoc}
          */
         @Override
-        public double getWeight(V source, V target) {
+        public double getWeight(V source, V target)
+        {
             assertCorrectSourceAndTarget(source, target);
             return searchSpaces.get(source).getWeight(target);
         }
