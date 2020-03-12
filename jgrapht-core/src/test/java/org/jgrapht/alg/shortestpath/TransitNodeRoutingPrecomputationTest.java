@@ -111,7 +111,7 @@ public class TransitNodeRoutingPrecomputationTest {
         assertEquals(expectedPath2, forwardAccessVertices.get(0).getPath());
 
         // locality filter
-        assertFalse(routing.getLocalityFiler().isLocal(vertex, vertex));
+        assertFalse(routing.getLocalityFilter().isLocal(vertex, vertex));
     }
 
     @Test
@@ -182,12 +182,12 @@ public class TransitNodeRoutingPrecomputationTest {
         assertEquals(expectedPath4, cv3BackwardAccessVertices.get(0).getPath());
 
         // locality filter
-        assertTrue(routing.getLocalityFiler().isLocal(v1, v1));
-        assertFalse(routing.getLocalityFiler().isLocal(v1, v2));
-        assertTrue(routing.getLocalityFiler().isLocal(v1, v3));
-        assertFalse(routing.getLocalityFiler().isLocal(v2, v2));
-        assertFalse(routing.getLocalityFiler().isLocal(v2, v3));
-        assertTrue(routing.getLocalityFiler().isLocal(v3, v3));
+        assertTrue(routing.getLocalityFilter().isLocal(v1, v1));
+        assertFalse(routing.getLocalityFilter().isLocal(v1, v2));
+        assertTrue(routing.getLocalityFilter().isLocal(v1, v3));
+        assertFalse(routing.getLocalityFilter().isLocal(v2, v2));
+        assertFalse(routing.getLocalityFilter().isLocal(v2, v3));
+        assertTrue(routing.getLocalityFilter().isLocal(v3, v3));
     }
 
     @Test

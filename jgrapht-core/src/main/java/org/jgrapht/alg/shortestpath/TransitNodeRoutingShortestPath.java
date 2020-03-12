@@ -32,7 +32,7 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.Co
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionVertex;
 import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.AccessVertex;
 import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.AccessVertices;
-import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.LocalityFiler;
+import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.LocalityFilter;
 import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.TransitNodeRouting;
 
 /**
@@ -44,9 +44,9 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  *
  * <p>
  * The shortest paths between vertices $u$ and $v$ is computed in the following way.
- * First, a locality filter is used to determine is the vertices are local to each other.
+ * First, a locality filter is used to determine if the vertices are local to each other.
  * If so, a fallback shortest path algorithm is used to compute the path. Otherwise, there
- * is a shortest path between the vertices which contain a transit vertex. Therefore the
+ * is a shortest path between the vertices which contains a transit vertex. Therefore the
  * forward access vertices of $u$ and backward access vertices of $v$ are inspected to find
  * a pair of such access vertices $(a_u, a_v)$ so that the value of $d(u,a_u) + d(a_u, a_v)
  * + d(a_u, v)$ is minimum over all such pairs. Here $d(s,t)$ is the distance from vertex
@@ -90,7 +90,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      * Locality filter which is used to determine if two vertices in the graph
      * are local to each other or not.
      */
-    private LocalityFiler<V> localityFiler;
+    private LocalityFilter<V> localityFilter;
 
     /**
      * Constructs a new instance for the given {@code graph}.
@@ -109,7 +109,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
     public TransitNodeRoutingShortestPath(TransitNodeRouting<V, E> transitNodeRouting) {
         super(transitNodeRouting.getContractionHierarchy().getGraph());
         this.contractionHierarchy = transitNodeRouting.getContractionHierarchy();
-        this.localityFiler = transitNodeRouting.getLocalityFiler();
+        this.localityFilter = transitNodeRouting.getLocalityFilter();
         this.accessVertices = transitNodeRouting.getAccessVertices();
         this.manyToManyShortestPaths = transitNodeRouting.getTransitVerticesPaths();
         this.localQueriesAlgorithm = new ContractionHierarchyBidirectionalDijkstra<>(
@@ -121,7 +121,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink) {
-        if (localityFiler.isLocal(source, sink)) {
+        if (localityFilter.isLocal(source, sink)) {
             return localQueriesAlgorithm.getPath(source, sink);
         } else {
             Pair<AccessVertex<V, E>, AccessVertex<V, E>> p = getMinWeightAccessVertices(source, sink);
@@ -143,7 +143,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      */
     @Override
     public double getPathWeight(V source, V sink) {
-        if (localityFiler.isLocal(source, sink)) {
+        if (localityFilter.isLocal(source, sink)) {
             return localQueriesAlgorithm.getPathWeight(source, sink);
         } else {
             Pair<AccessVertex<V, E>, AccessVertex<V, E>> p = getMinWeightAccessVertices(source, sink);

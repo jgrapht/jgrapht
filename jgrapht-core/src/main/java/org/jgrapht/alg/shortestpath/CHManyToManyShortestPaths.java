@@ -59,7 +59,7 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.Co
  * restored actual path from the information in the shortest paths trees.
  *
  * <p>
- * Additionally if $|S|$ > $|T|$ the algorithm is execution on the reversed graph. This allows
+ * Additionally if $|S|$ > $|T|$ the algorithm is executed on the reversed graph. This allows
  * to reduce the number of buckets and optimize memory usage of the algorithm.
  *
  * <p>
@@ -67,8 +67,8 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.Co
  * fairly small shortest paths trees. This allows to both speedup the computations and decrease
  * memory usage to store the paths. The bottleneck of the algorithm is the contraction hierarchy
  * computation, which can lead to significant overhead for dense graphs both in terms of running
- * time and space complexity. Therefore the ideal use case for this algorithm are sparse graphs
- * of any size with low average out-degree id vertices.
+ * time and space complexity. Therefore the ideal use cases for this algorithm are sparse graphs
+ * of any size with low average out-degree of vertices.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

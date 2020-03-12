@@ -64,8 +64,8 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * Peter. (2013). Transit Node Routing Reconsidered. 7933. 10.1007/978-3-642-38527-8_7.
  *
  * <p>
- * TNR in itself is not a complete algorithm, but a framework which is used to speed up shortest
- * paths computations. Formally the framework consists of the following parts:
+ * As mentioned is the original paper, TNR in itself is not a complete algorithm, but a framework which is used to speed
+ * up shortest paths computations. Formally the framework consists of the following parts:
  * <p>
  * <ul style="list-style-type:circle;">
  * <li>set $T ⊆ V$ of transit vertices;</li>
@@ -80,7 +80,9 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  *
  * <p>
  * To implement the TNR framework means to define how to select transit vertices and how to compute
- * distance table $D_{T}$, access vertices and locality filter.
+ * distance table $D_{T}$, access vertices and locality filter. This implementation selects transit
+ * vertices to be to $k$ vertices form the contraction hierarchy. To the details of how other parts
+ * of this TNR work please refer to the original paper.
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ExecutorService}.
@@ -92,8 +94,8 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
 public class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Special Voronoi diagram cell id to indicate, that a vertex does not
-     * belong to any cell. For usual Voronoi cell the ids of contracted vertices
-     * are used. Once those ids are non-negative, this value if guaranteed to be unique.
+     * belong to any cells. For usual Voronoi cell the ids of contracted vertices
+     * are used. Once those ids are non-negative, this value is guaranteed to be unique.
      */
     private static final int NO_VORONOI_CELL = -1;
 
@@ -261,7 +263,7 @@ public class TransitNodeRoutingPrecomputation<V, E> {
                 .getManyToManyPaths(transitVerticesSet, transitVerticesSet);
         transitVerticesPaths = unpackPaths(contractedPaths);
 
-        Pair<AccessVertices<V, E>, LocalityFiler<V>> avAndLf = computeAVAndLF();
+        Pair<AccessVertices<V, E>, LocalityFilter<V>> avAndLf = computeAVAndLF();
         shutdownExecutor();
 
         return new TransitNodeRouting<>(contractionHierarchy, contractedTransitVerticesSet,
@@ -321,11 +323,11 @@ public class TransitNodeRoutingPrecomputation<V, E> {
     }
 
     /**
-     * Computes in parallel  access vertices and locality filter for the transit node routing.
+     * Computes in parallel access vertices and locality filter for the transit node routing.
      *
      * @return pair of access vertices and locality filter.
      */
-    private Pair<AccessVertices<V, E>, LocalityFiler<V>> computeAVAndLF() {
+    private Pair<AccessVertices<V, E>, LocalityFilter<V>> computeAVAndLF() {
         LocalityFilterBuilder localityFilterBuilder =
                 new LocalityFilterBuilder(contractionGraph.vertexSet().size());
 
@@ -720,21 +722,29 @@ public class TransitNodeRoutingPrecomputation<V, E> {
 
 
         /**
-         * Builds an instance of {@code LocalityFiler} using {@code visitedForwardVoronoiCells}
+         * Builds an instance of {@code LocalityFilter} using {@code visitedForwardVoronoiCells}
          * and {@code visitedBackwardVoronoiCells}.
          *
          * @return locality filter
          */
-        public LocalityFiler<V> buildLocalityFilter() {
-            return new LocalityFiler<>(contractionMapping, visitedForwardVoronoiCells, visitedBackwardVoronoiCells);
+        public LocalityFilter<V> buildLocalityFilter() {
+            return new LocalityFilter<>(contractionMapping, visitedForwardVoronoiCells, visitedBackwardVoronoiCells);
         }
     }
 
 
     /**
-     * Return type of this algorithm. Contains {@code contractionHierarchy},
-     * {@code transitVertices}, {@code transitVerticesPaths}, {@code voronoiDiagram},
-     * {@code accessVertices} and {@code localityFiler}.
+     * This class represents return type of this algorithm and contains all data computed during
+     * the execution of the algorithm. Formally it consists of:
+     *
+     * <ul style="list-style-type:circle;">
+     * <li>{@link ContractionHierarchy} which was used to compute this transit node routing;</li>
+     * <li>set of selected transit vertices;</li>
+     * <li>{@link ManyToManyShortestPaths} between transit vertices;</li>
+     * <li>{@link VoronoiDiagram} computed using transit vertices a cell centers;</li>
+     * <li>{@link AccessVertices};</li>
+     * <li>{@link LocalityFilter}.</li>
+     * </ul>
      *
      * @param <V> graph vertex type
      * @param <E> graph edge type
@@ -767,7 +777,7 @@ public class TransitNodeRoutingPrecomputation<V, E> {
         /**
          * Locality filter of this transit node routing.
          */
-        private LocalityFiler<V> localityFiler;
+        private LocalityFilter<V> localityFilter;
 
         /**
          * Returns contraction hierarchy of this transit node routing.
@@ -819,33 +829,33 @@ public class TransitNodeRoutingPrecomputation<V, E> {
          *
          * @return locality filter of this transit node routing
          */
-        public LocalityFiler<V> getLocalityFiler() {
-            return localityFiler;
+        public LocalityFilter<V> getLocalityFilter() {
+            return localityFilter;
         }
 
 
         /**
          * Constructs a new instance for the given {@code contractionHierarchy},
          * {@code transitVertices}, {@code transitVerticesPaths}, {@code voronoiDiagram},
-         * {@code accessVertices} and {@code localityFiler}.
+         * {@code accessVertices} and {@code localityFilter}.
          *
          * @param contractionHierarchy contraction hierarchy
          * @param transitVertices      transit vertices
          * @param transitVerticesPaths paths between transit vertices
          * @param voronoiDiagram       Voronoi diagram
          * @param accessVertices       access vertices
-         * @param localityFiler        locality filter
+         * @param localityFilter       locality filter
          */
         public TransitNodeRouting(ContractionHierarchy<V, E> contractionHierarchy,
                                   Set<ContractionVertex<V>> transitVertices,
                                   ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<V, E> transitVerticesPaths,
                                   VoronoiDiagram<V> voronoiDiagram,
-                                  AccessVertices<V, E> accessVertices, LocalityFiler<V> localityFiler) {
+                                  AccessVertices<V, E> accessVertices, LocalityFilter<V> localityFilter) {
             this.contractionHierarchy = contractionHierarchy;
             this.transitVertices = transitVertices;
             this.transitVerticesPaths = transitVerticesPaths;
             this.voronoiDiagram = voronoiDiagram;
-            this.localityFiler = localityFiler;
+            this.localityFilter = localityFilter;
             this.accessVertices = accessVertices;
         }
     }
@@ -854,7 +864,7 @@ public class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Voronoi diagram for a graph. Formally each cell in the diagram is defined as
      * $Vor(v) = \{u ∈ V : ∀w ∈ T$ \ $ \{v\} : \mu(u, v) ≤ \mu(u, w)\}$, where $V$ is the vertex set,
-     * $T$ is a set of vertices representing Voronoi cells centers and $\mu(u,v)$ denotes distance
+     * $T$ is a set of vertaccess verticesices representing Voronoi cells centers and $\mu(u,v)$ denotes distance
      * between vertices $u$ and $v$.
      *
      * @param <V> graph vertex type
@@ -887,12 +897,20 @@ public class TransitNodeRoutingPrecomputation<V, E> {
     }
 
     /**
-     * Search space based locality filter. For every vertex in the {@code contractionGraph}
-     * stores two sets of visited Voronoi cells by forward and backward {@code ContractionHierarchyBFS}.
+     * Search space based locality filter.
+     *
+     * <p>
+     * Formally a locality filter is defined as $L : V × V → \{true, false\}$.
+     * $L(s, t)$ must be $true$ when no shortest path between $s$ and $t$ contains
+     * a transit vertex.
+     *
+     * <p>
+     * For every vertex in the {@code contractionGraph} stores two sets of visited Voronoi
+     * cells by forward and backward {@code ContractionHierarchyBFS}.
      *
      * @param <V> graph vertex type
      */
-    public static class LocalityFiler<V> {
+    public static class LocalityFilter<V> {
         /**
          * Mapping of vertices in the initial graph to the vertices in
          * the contraction graph.
@@ -918,9 +936,9 @@ public class TransitNodeRoutingPrecomputation<V, E> {
          * @param visitedForwardVoronoiCells  visited Voronoi cells ids by a forward search
          * @param visitedBackwardVoronoiCells visited Voronoi cells ids by a backward search
          */
-        public LocalityFiler(Map<V, ContractionVertex<V>> contractionMapping,
-                             List<Set<Integer>> visitedForwardVoronoiCells,
-                             List<Set<Integer>> visitedBackwardVoronoiCells) {
+        public LocalityFilter(Map<V, ContractionVertex<V>> contractionMapping,
+                              List<Set<Integer>> visitedForwardVoronoiCells,
+                              List<Set<Integer>> visitedBackwardVoronoiCells) {
             this.contractionMapping = contractionMapping;
             this.visitedForwardVoronoiCells = visitedForwardVoronoiCells;
             this.visitedBackwardVoronoiCells = visitedBackwardVoronoiCells;
@@ -1019,6 +1037,14 @@ public class TransitNodeRoutingPrecomputation<V, E> {
 
     /**
      * Forward or backward access vertex computed for a certain vertex $v$ in the graph.
+     * <p>
+     * In the transit node routing if $u$ is a forward access vertex for $v$, it means that
+     * if you want go far away from $v$, it is highly likely that you would need to
+     * pass through $u$. Correspondingly, if $u$ is a backward access vertex for $v$, it
+     * means that if you want to go to $v$ from far away, you would highly likely go through
+     * $u$.
+     *
+     * <p>
      * Stores transit vertex and the shortest path between $v$ and {@code vertex}.
      * If this is a forward access vertex, then {@code vertex} is the ending vertex in the
      * {@code path}, Otherwise it is a starting vertex of the {@code path}.
