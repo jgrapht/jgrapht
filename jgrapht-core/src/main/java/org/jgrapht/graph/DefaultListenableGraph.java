@@ -148,6 +148,16 @@ public class DefaultListenableGraph<V, E>
     }
 
     @Override
+    public V addVertex() {
+        V v = super.addVertex();
+        if (v != null) { 
+            fireVertexAdded(v);    
+        }
+        return v;
+    }
+    
+    
+    @Override
     public boolean addVertex(V v)
     {
         boolean modified = super.addVertex(v);

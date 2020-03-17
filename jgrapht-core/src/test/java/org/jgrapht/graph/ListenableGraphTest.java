@@ -17,12 +17,18 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.junit.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.event.VertexSetListener;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Unit test for {@link ListenableGraph} class.
@@ -160,6 +166,31 @@ public class ListenableGraphTest
     }
 
     /**
+     * Tests VertexSetListener listener.
+     * (Issue #887).
+     */
+    @Test
+    public void testWithVertexSupplier()
+    {
+        Graph<String,
+            DefaultEdge> wrappedGraph = GraphTypeBuilder
+                .undirected().weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+                .vertexSupplier(SupplierUtil.createStringSupplier(15)).buildGraph();
+
+        ListenableGraph<String, DefaultEdge> g = new DefaultListenableGraph<>(wrappedGraph);
+        SimpleVertexListener<String> listener = new SimpleVertexListener<>();
+        g.addVertexSetListener(listener);
+
+        g.addVertex();
+        assertEquals("15", listener.getLastVertex());
+        String other = "other";
+        g.addVertex(other);
+        assertEquals("other", listener.getLastVertex());
+        g.addVertex();
+        assertEquals("16", listener.getLastVertex());
+    }
+
+    /**
      * Tests that the combination of weights plus listener works.
      */
     @Test
@@ -283,5 +314,33 @@ public class ListenableGraphTest
         {
             lastWeightUpdate = e.getEdgeWeight();
         }
+    }
+
+    /**
+     * A listener on the tested graph.
+     */
+    private class SimpleVertexListener<V>
+        implements
+        VertexSetListener<V>
+    {
+        private V lastVertex;
+
+        @Override
+        public void vertexAdded(GraphVertexChangeEvent<V> e)
+        {
+            lastVertex = e.getVertex();
+        }
+
+        @Override
+        public void vertexRemoved(GraphVertexChangeEvent<V> e)
+        {
+            lastVertex = e.getVertex();
+        }
+
+        public V getLastVertex()
+        {
+            return lastVertex;
+        }
+
     }
 }
