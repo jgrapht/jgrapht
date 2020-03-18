@@ -288,7 +288,7 @@ public class EppsteinShortestPathIterator<V, E>
      */
     private void addCrossEdges()
     {
-        Queue<PathsGraphVertex> queue = new LinkedList<>();
+        Queue<PathsGraphVertex> queue = new ArrayDeque<>();
         PathsGraphVertex sourceMapping = hMapping.get(source);
         Set<PathsGraphVertex> seen = new HashSet<>();
         if (sourceMapping != null) { // no sidetracks on the paths from source to sink

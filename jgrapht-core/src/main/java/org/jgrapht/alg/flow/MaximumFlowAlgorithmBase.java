@@ -461,7 +461,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     {
         // the source partition contains all vertices reachable from s in the residual graph
         this.sourcePartition = new LinkedHashSet<>();
-        Queue<VertexExtensionBase> processQueue = new LinkedList<>();
+        Queue<VertexExtensionBase> processQueue = new ArrayDeque<>();
         processQueue.add(vertexExtensionManager.getExtension(getCurrentSource()));
         while (!processQueue.isEmpty()) {
             VertexExtensionBase vx = processQueue.poll();

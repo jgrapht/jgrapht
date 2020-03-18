@@ -320,7 +320,7 @@ public class WeakChordalityInspector<V, E>
      */
     private void sortSeparatorsList(List<Pair<List<Pair<Integer, Integer>>, E>> separators)
     {
-        Queue<Pair<List<Pair<Integer, Integer>>, E>> mainQueue = new LinkedList<>();
+        Queue<Pair<List<Pair<Integer, Integer>>, E>> mainQueue = new ArrayDeque<>();
         int maxSeparatorLength = 0;
         for (Pair<List<Pair<Integer, Integer>>, E> separator : separators) {
             if (separator.getFirst().size() > maxSeparatorLength) {

@@ -199,7 +199,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
      */
     private double calculateMinCutWithTreeCompression()
     {
-        Queue<Set<V>> queue = new LinkedList<>();
+        Queue<Set<V>> queue = new ArrayDeque<>();
         queue.add(oddVertices);
 
         // Keep splitting the clusters until each resulting cluster containes exactly one vertex.

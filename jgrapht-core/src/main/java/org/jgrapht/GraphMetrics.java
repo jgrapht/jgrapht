@@ -117,7 +117,7 @@ public abstract class GraphMetrics
         // Array storing the depth of each vertex in the search tree
         int[] depth = new int[vertices.size()];
         // Queue for BFS
-        Queue<V> queue = new LinkedList<>();
+        Queue<V> queue = new ArrayDeque<>();
 
         // Check whether the graph has self-loops
         if (graph.getType().isAllowingSelfLoops())

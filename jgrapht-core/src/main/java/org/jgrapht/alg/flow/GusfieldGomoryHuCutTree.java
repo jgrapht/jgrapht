@@ -339,7 +339,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     {
         boolean[] visited = new boolean[vertexList.size()];
         Map<V, V> predecessorMap = new HashMap<V, V>();
-        Queue<V> queue = new LinkedList<V>();
+        Queue<V> queue = new ArrayDeque<>();
         queue.add(source);
 
         boolean found = false;

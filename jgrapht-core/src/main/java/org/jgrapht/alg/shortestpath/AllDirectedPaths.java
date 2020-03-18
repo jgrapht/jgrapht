@@ -122,7 +122,7 @@ public class AllDirectedPaths<V, E>
          */
         Map<E, Integer> edgeMinDistances = new HashMap<>();
         Map<V, Integer> vertexMinDistances = new HashMap<>();
-        Queue<V> verticesToProcess = new LinkedList<>();
+        Queue<V> verticesToProcess = new ArrayDeque<>();
 
         // Input sanity checking
         if (maxPathLength != null) {

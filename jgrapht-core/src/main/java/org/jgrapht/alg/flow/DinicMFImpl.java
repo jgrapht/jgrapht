@@ -158,7 +158,7 @@ public class DinicMFImpl<V, E>
             getVertexExtension(v).level = -1;
         }
 
-        Queue<VertexExtension> queue = new LinkedList<>();
+        Queue<VertexExtension> queue = new ArrayDeque<>();
         queue.offer(currentSource);
 
         currentSource.level = 0;

@@ -194,7 +194,7 @@ public final class EdmondsKarpMFImpl<V, E>
             getVertexExtension(v).lastArcs = null;
         }
 
-        Queue<VertexExtension> queue = new LinkedList<>();
+        Queue<VertexExtension> queue = new ArrayDeque<>();
         queue.offer(currentSource);
 
         currentSource.visited = true;

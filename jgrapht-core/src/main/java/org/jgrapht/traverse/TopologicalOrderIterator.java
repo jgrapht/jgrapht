@@ -94,7 +94,7 @@ public class TopologicalOrderIterator<V, E>
 
         // create queue
         if (comparator == null) {
-            this.queue = new LinkedList<>();
+            this.queue = new ArrayDeque<>();
         } else {
             this.queue = new PriorityQueue<>(comparator);
         }
