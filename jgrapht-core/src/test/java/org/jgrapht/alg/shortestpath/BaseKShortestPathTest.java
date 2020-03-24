@@ -17,8 +17,9 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
  * Base test for K shortest paths algorithms. Currently extended by {@link YenShortestPathIterator}
@@ -56,6 +57,12 @@ class BaseKShortestPathTest
     protected final int[][] pseudograph2 =
         { { 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 2 }, { 1, 2, 3 }, { 1, 2, 4 }, { 2, 2, 5 }, { 2, 3, 6 },
             { 2, 3, 7 }, { 3, 3, 8 }, { 3, 4, 9 }, { 3, 4, 10 }, { 4, 4, 11 } };
+
+    protected final int[][] pseudograph3 =
+            { {1, 2, 1}, {1, 2, 2}, {1, 2, 3}, {2, 3, 4}, {2, 3, 5} };
+
+    protected final int[][] pseudograph4 =
+            {{1, 2, 1}, {2, 3, 1}, {3, 4, 1}, {1, 4, 7}, {2, 4, 7}, {3, 4, 7}};
 
     protected void readGraph(Graph<Integer, DefaultWeightedEdge> graph, int[][] representation)
     {

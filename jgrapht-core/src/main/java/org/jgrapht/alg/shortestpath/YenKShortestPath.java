@@ -19,7 +19,6 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jheaps.*;
 
 import java.util.*;
 
@@ -27,8 +26,8 @@ import java.util.*;
  * Implementation of Yen`s algorithm for finding $k$ shortest loopless paths.
  *
  * <p>
- * The time complexity of the algorithm is $O(kn(m + n log n))$, where $n$ is the amount of vertices
- * in the graph, $m$ is the amount of edges in the graph and $k$ is the amount of paths needed.
+ * The time complexity of the algorithm is $O(kn(m + n log n))$, where $n$ is the number of vertices
+ * in the graph, $m$ is the number of edges in the graph and $k$ is the number of paths needed.
  *
  * <p>
  * The algorithm is originally described in: Q. V. Martins, Ernesto and M. B. Pascoal, Marta.
@@ -37,15 +36,14 @@ import java.util.*;
  *
  * <p>
  * The implementation iterates over the existing loopless path between the {@code source} and the
- * {@code sink} and forms the resulting list. During the execution the algorithm keeps track of how
- * many candidates with minimum weight exist. If the amount is greater or equal to the amount of
- * path needed to complete the execution, the algorithm retrieves the rest of the path from the
- * candidates heap and adds them to the resulting list.
+ * {@code sink} and forms the resulting list. It is possible to provide validation for paths, which
+ * will be computed, using the {@link PathValidator}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
  * @see YenShortestPathIterator
+ * @see PathValidator
  */
 public class YenKShortestPath<V, E>
     implements
@@ -57,13 +55,32 @@ public class YenKShortestPath<V, E>
     private final Graph<V, E> graph;
 
     /**
+     * Provides validation for the paths which will be computed. Is the validator
+     * is $null$, this means that all paths are valid.
+     */
+    private PathValidator<V,E> pathValidator;
+
+    /**
      * Constructs an instance of the algorithm for the given {@code graph}.
      *
      * @param graph graph
      */
     public YenKShortestPath(Graph<V, E> graph)
     {
+        this(graph, null);
+    }
+
+    /**
+     * Constructs an instance of the algorithm for the given {@code graph}
+     * and {@code pathValidator}.
+     *
+     * @param graph graph
+     * @param pathValidator validator for computed paths
+     */
+    public YenKShortestPath(Graph<V, E> graph, PathValidator<V,E> pathValidator)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
+        this.pathValidator = pathValidator;
     }
 
     /**
@@ -83,16 +100,8 @@ public class YenKShortestPath<V, E>
             throw new IllegalArgumentException("k should be positive");
         }
         List<GraphPath<V, E>> result = new ArrayList<>();
-        YenShortestPathIterator<V, E> iterator = new YenShortestPathIterator<>(graph, source, sink);
+        YenShortestPathIterator<V, E> iterator = new YenShortestPathIterator<>(graph, source, sink, pathValidator);
         for (int i = 0; i < k && iterator.hasNext(); i++) {
-            int amountOfPathLeft = k - i;
-            if (iterator.getNumberOfCandidatesWithMinimumWeight() == amountOfPathLeft) {
-                AddressableHeap<Double, GraphPath<V, E>> candidates = iterator.getCandidatePaths();
-                for (int j = 0; j < amountOfPathLeft; j++) {
-                    result.add(candidates.deleteMin().getValue());
-                }
-                break;
-            }
             result.add(iterator.next());
         }
         return result;
