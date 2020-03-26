@@ -524,7 +524,7 @@ public class YenShortestPathIteratorTest
             new GnpRandomGraphGenerator<>(n, p, SEED);
         generator.generateGraph(graph);
 
-        graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextInt(10)));
+        graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextDouble()));
     }
 
     /**
