@@ -18,12 +18,15 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -33,6 +36,47 @@ import static org.junit.Assert.assertTrue;
  */
 public class IncomingOutgoingEdgesTest
 {
+
+    public static void testAddDuplicateEdgeDirectedGraph(
+        Supplier<Graph<Integer, DefaultEdge>> graphSupplier)
+    {
+        Graph<Integer, DefaultEdge> g = graphSupplier.get();
+        assertTrue(g.getType().isDirected());
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+
+        DefaultEdge e = new DefaultEdge();
+        g.addEdge(1, 2, e);
+        assertTrue(g.edgeSet().size() == 1);
+        assertEquals(Collections.emptySet(), g.incomingEdgesOf(1));
+        assertEquals(0, g.inDegreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.outgoingEdgesOf(1));
+        assertEquals(1, g.outDegreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.incomingEdgesOf(2));
+        assertEquals(1, g.inDegreeOf(2));
+        assertEquals(Collections.emptySet(), g.outgoingEdgesOf(2));
+        assertEquals(0, g.outDegreeOf(2));
+        assertEquals(Collections.emptySet(), g.incomingEdgesOf(3));
+        assertEquals(0, g.inDegreeOf(3));
+        assertEquals(Collections.emptySet(), g.outgoingEdgesOf(3));
+        assertEquals(0, g.outDegreeOf(3));
+
+        assertFalse(g.addEdge(1, 3, e));
+        assertTrue(g.edgeSet().size() == 1);
+        assertEquals(Collections.emptySet(), g.incomingEdgesOf(1));
+        assertEquals(0, g.inDegreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.outgoingEdgesOf(1));
+        assertEquals(1, g.outDegreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.incomingEdgesOf(2));
+        assertEquals(1, g.inDegreeOf(2));
+        assertEquals(Collections.emptySet(), g.outgoingEdgesOf(2));
+        assertEquals(0, g.outDegreeOf(2));
+        assertEquals(Collections.emptySet(), g.incomingEdgesOf(3));
+        assertEquals(0, g.inDegreeOf(3));
+        assertEquals(Collections.emptySet(), g.outgoingEdgesOf(3));
+        assertEquals(0, g.outDegreeOf(3));
+    }
 
     public static void testDirectedGraph(Supplier<Graph<Integer, DefaultEdge>> graphSupplier)
     {
@@ -103,8 +147,58 @@ public class IncomingOutgoingEdgesTest
     public void testDirectedGraph()
     {
         testDirectedGraph(() -> new DirectedPseudograph<>(DefaultEdge.class));
+
+        testAddDuplicateEdgeDirectedGraph(
+            () -> GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
+        testAddDuplicateEdgeDirectedGraph(
+            () -> GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(false)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
+        testAddDuplicateEdgeDirectedGraph(
+            () -> GraphTypeBuilder
+                .directed().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
+        testAddDuplicateEdgeDirectedGraph(
+            () -> GraphTypeBuilder
+                .directed().allowingMultipleEdges(false).allowingSelfLoops(false)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
     }
 
+    public static void testAddDuplicateEdgeUndirectedGraph(
+        Supplier<Graph<Integer, DefaultEdge>> graphSupplier)
+    {
+        Graph<Integer, DefaultEdge> g = graphSupplier.get();
+        assertTrue(g.getType().isUndirected());
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+
+        DefaultEdge e = new DefaultEdge();
+        g.addEdge(1, 2, e);
+        assertTrue(g.edgeSet().size() == 1);
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(1));
+        assertEquals(1, g.degreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(2));
+        assertEquals(1, g.degreeOf(2));
+        assertEquals(Collections.emptySet(), g.edgesOf(3));
+        assertEquals(0, g.degreeOf(3));
+
+        assertFalse(g.addEdge(1, 3, e));
+        assertTrue(g.edgeSet().size() == 1);
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(1));
+        assertEquals(1, g.degreeOf(1));
+        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(2));
+        assertEquals(1, g.degreeOf(2));
+        assertEquals(Collections.emptySet(), g.edgesOf(3));
+        assertEquals(0, g.degreeOf(3));
+    }
+    
     /**
      * Test the most general version of the undirected graph.
      */
@@ -179,6 +273,27 @@ public class IncomingOutgoingEdgesTest
     public void testUndirectedGraph()
     {
         testUndirectedGraph(() -> new Pseudograph<>(DefaultEdge.class));
+        
+        testAddDuplicateEdgeUndirectedGraph(
+            () -> GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
+        testAddDuplicateEdgeUndirectedGraph(
+            () -> GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(false)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
+        testAddDuplicateEdgeUndirectedGraph(
+            () -> GraphTypeBuilder
+                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
+        testAddDuplicateEdgeUndirectedGraph(
+            () -> GraphTypeBuilder
+                .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph());
     }
 
 }

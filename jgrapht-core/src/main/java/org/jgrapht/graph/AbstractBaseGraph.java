@@ -256,11 +256,22 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         if (!type.isAllowingMultipleEdges()) {
-            return specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)
-                && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+            // check that second operation will succeed
+            if (intrusiveEdgesSpecifics.containsEdge(e)) { 
+                return false;
+            }
+            if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) { 
+                return false;
+            }
+            // cannot fail due to first check
+            intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+            return true;
         } else {
-            return specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)
-                && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+            if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+                return true;
+            }
+            return false;
         }
     }
 
