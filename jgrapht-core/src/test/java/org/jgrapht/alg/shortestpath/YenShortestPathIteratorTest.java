@@ -433,7 +433,7 @@ public class YenShortestPathIteratorTest
             DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph =
                 new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
             graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
-            getRandomGraph(graph, n, p);
+            getRandomGraph(graph, n, p, random);
             Integer source = (int) (random.nextDouble() * n);
             Integer target = (int) (random.nextDouble() * n);
             Set<DefaultWeightedEdge> randomEdges = getRandomEdges(graph, numberOfRandomEdges);
@@ -517,11 +517,10 @@ public class YenShortestPathIteratorTest
      * @param n the number of nodes
      * @param p the edge probability
      */
-    private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p)
+    private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p, Random random)
     {
-        Random random = new Random(SEED);
-        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-            new GnpRandomGraphGenerator<>(n, p, SEED);
+        GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> generator =
+                new GnpRandomGraphGenerator<>(n, p, random, false);
         generator.generateGraph(graph);
 
         graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextDouble()));

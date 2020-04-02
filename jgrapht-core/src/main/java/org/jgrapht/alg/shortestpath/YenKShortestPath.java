@@ -56,7 +56,7 @@ public class YenKShortestPath<V, E>
 
     /**
      * Provides validation for the paths which will be computed. Is the validator
-     * is $null$, this means that all paths are valid.
+     * is {@code null}, this means that all paths are valid.
      */
     private PathValidator<V,E> pathValidator;
 

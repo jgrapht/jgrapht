@@ -52,9 +52,6 @@ import java.util.function.*;
  *
  * <p>
  * Additionally, the algorithm supports path validation by means of {@link PathValidator}.
- * To do so, there is a boolean flag for every candidate in the queue, which indicates, if
- * the path is valid ot not. Invalid paths are kept in the queue, because it is possible
- * to build a valid path by deviating from invalid path.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -90,6 +87,9 @@ public class YenShortestPathIterator<V, E>
 
     /**
      * Heap of the candidate path generated so far and sorted my their weights.
+     * There is a boolean flag for every candidate in the queue, which indicates, if
+     * the path is valid ot not. Invalid paths are kept in the queue, because it is possible
+     * to build a valid path by deviating from an invalid one.
      */
     private AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>> candidatePaths;
 
@@ -101,7 +101,7 @@ public class YenShortestPathIterator<V, E>
     /**
      * For each path $P$ stores the vertex $u$ such that $pathValidator#isValidPath([start_vertex, u], (u,v)) = false$,
      * where $[start_vertex, u]$ denotes the subpath of $P$ from its start to vertex $u$ and $v$ is the next vertex
-     * in $P$ after $u$. Stores $null$, if there is no such vertex.
+     * in $P$ after $u$. Stores {@code null}, if there is no such vertex.
      */
     private Map<GraphPath<V,E>, V> lastDeviations;
 
@@ -109,6 +109,12 @@ public class YenShortestPathIterator<V, E>
      * Stores number of valid candidates in {@code candidatePaths}.
      */
     private int numberOfValidPathInQueue;
+
+    /**
+     * Indicates if the {@code lazyComputeShortestPath} procedure
+     * has already been executed.
+     */
+    private boolean shortestPathComputed;
 
 
     /**
@@ -121,12 +127,12 @@ public class YenShortestPathIterator<V, E>
      */
     public YenShortestPathIterator(Graph<V, E> graph, V source, V sink)
     {
-        this(graph, source, sink, null);
+        this(graph, source, sink, PairingHeap::new);
     }
 
     /**
      * Constructs an instance of the algorithm for given {@code graph}, {@code source},
-     * {@code sink} and {@code pathValidator}. The {@code pathValidator} can be $null$,
+     * {@code sink} and {@code pathValidator}. The {@code pathValidator} can be {@code null},
      * which will indicate that all paths are valid.
      *
      * @param graph         graph
@@ -140,8 +146,23 @@ public class YenShortestPathIterator<V, E>
 
     /**
      * Constructs an instance of the algorithm for given {@code graph}, {@code source},
+     * {@code sink} and {@code heapSupplier}.
+     *
+     * @param graph         graph
+     * @param source        source vertex
+     * @param sink          sink vertex
+     * @param heapSupplier  supplier of the preferable heap implementation
+     */
+    public YenShortestPathIterator(
+            Graph<V, E> graph, V source, V sink,
+            Supplier<AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>>> heapSupplier){
+        this(graph, source, sink, heapSupplier, null);
+    }
+
+    /**
+     * Constructs an instance of the algorithm for given {@code graph}, {@code source},
      * {@code sink}, {@code heapSupplier} and {@code pathValidator}. The {@code pathValidator}
-     * can be $null$, which will indicate that all paths are valid.
+     * can be {@code null}, which will indicate that all paths are valid.
      *
      * @param graph         graph
      * @param source        source vertex
@@ -159,7 +180,7 @@ public class YenShortestPathIterator<V, E>
             throw new IllegalArgumentException("Graph should contain source vertex!");
         }
         this.source = source;
-        if (!graph.containsVertex(source)) {
+        if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException("Graph should contain sink vertex!");
         }
         this.sink = sink;
@@ -169,23 +190,33 @@ public class YenShortestPathIterator<V, E>
         this.candidatePaths = heapSupplier.get();
         this.firstDeviations = new HashMap<>();
         this.lastDeviations = new HashMap<>();
+    }
 
-        GraphPath<V, E> shortestPath = DijkstraShortestPath.findPathBetween(graph, source, sink);
+    /**
+     * Computes shortest path between {@code source} and {@code sink}.
+     * If the shortest path is not valid, proceeds computing deviations
+     * until first valid path is computed.
+     */
+    private void lazyComputeShortestPath() {
+        if (!shortestPathComputed) {
+            GraphPath<V, E> shortestPath = DijkstraShortestPath.findPathBetween(graph, source, sink);
 
-        if (shortestPath != null) {
-            V lastValidDeviation = getLastValidDeviation(shortestPath, source);
-            boolean shortestPathIsValid = lastValidDeviation == null;
+            if (shortestPath != null) {
+                V lastValidDeviation = getLastValidDeviation(shortestPath, source);
+                boolean shortestPathIsValid = lastValidDeviation == null;
 
-            candidatePaths.insert(shortestPath.getWeight(), Pair.of(shortestPath, shortestPathIsValid));
-            firstDeviations.put(shortestPath, source);
-            lastDeviations.put(shortestPath, lastValidDeviation);
+                candidatePaths.insert(shortestPath.getWeight(), Pair.of(shortestPath, shortestPathIsValid));
+                firstDeviations.put(shortestPath, source);
+                lastDeviations.put(shortestPath, lastValidDeviation);
 
-            if(shortestPathIsValid){
-                ++numberOfValidPathInQueue;
+                if (shortestPathIsValid) {
+                    ++numberOfValidPathInQueue;
+                }
+
+                ensureAtLeastOneValidPathInQueue();
             }
-
-            ensureAtLeastOneValidPathInQueue();
         }
+        shortestPathComputed = true;
     }
 
     /**
@@ -242,6 +273,7 @@ public class YenShortestPathIterator<V, E>
     @Override
     public boolean hasNext()
     {
+        lazyComputeShortestPath();
         return !candidatePaths.isEmpty();
     }
 
@@ -251,6 +283,7 @@ public class YenShortestPathIterator<V, E>
     @Override
     public GraphPath<V, E> next()
     {
+        lazyComputeShortestPath();
         if (candidatePaths.isEmpty()) {
             throw new NoSuchElementException();
         }
