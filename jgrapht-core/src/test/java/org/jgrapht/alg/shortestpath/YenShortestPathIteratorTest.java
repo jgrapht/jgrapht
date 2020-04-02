@@ -19,9 +19,7 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
@@ -37,18 +35,6 @@ public class YenShortestPathIteratorTest
     extends
     BaseKShortestPathTest
 {
-
-    /**
-     * Seed value which is used to generate random graphs by
-     * {@code getRandomGraph(Graph, int, double)} method.
-     */
-    private static final long SEED = 13l;
-    /**
-     * Number of path to iterate over for each random graph in the
-     * {@code testOnRandomGraph(Graph, Integer, Integer)} method.
-     */
-    private static final int NUMBER_OF_PATH_TO_ITERATE = 100;
-
     @Test(expected = IllegalArgumentException.class)
     public void testNoSourceGraph()
     {
@@ -422,65 +408,6 @@ public class YenShortestPathIteratorTest
         verifyNextPath(iterator, 8.0, false);
     }
 
-    @Test
-    public void testOnRandomGraphs()
-    {
-        Random random = new Random(SEED);
-        int n = 50;
-        double p = 0.05;
-        int numberOfRandomEdges = 10;
-        for (int i = 0; i < 10; i++) {
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
-            getRandomGraph(graph, n, p, random);
-            Integer source = (int) (random.nextDouble() * n);
-            Integer target = (int) (random.nextDouble() * n);
-            Set<DefaultWeightedEdge> randomEdges = getRandomEdges(graph, numberOfRandomEdges);
-            PathValidator<Integer, DefaultWeightedEdge> pathValidator = (path, edge) -> !randomEdges.contains(edge);
-            testOnRandomGraph(graph, source, target, pathValidator);
-        }
-    }
-
-    /**
-     * If the overall number of paths between {@code source} and {@code target} is denoted by $n$
-     * and the value of {@code #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$ then the method
-     * iterates over $p = min\{n, m\}$ such paths and verifies that they are built correctly. The
-     * method uses the {@link KShortestSimplePaths} implementation to verify the order of paths
-     * returned by {@link YenShortestPathIterator}. Additionally it is checked that all paths
-     * returned by the iterator are unique.
-     *
-     * @param graph graph the iterator is being tested on
-     * @param source source vertex
-     * @param target target vertex
-     */
-    private void testOnRandomGraph(
-        Graph<Integer, DefaultWeightedEdge> graph, Integer source, Integer target,
-        PathValidator<Integer,DefaultWeightedEdge> pathValidator)
-    {
-
-        Set<GraphPath<Integer, DefaultWeightedEdge>> paths = new HashSet<>();
-        List<GraphPath<Integer, DefaultWeightedEdge>> expectedPaths =
-            new KShortestSimplePaths<>(graph, pathValidator).getPaths(source, target, NUMBER_OF_PATH_TO_ITERATE);
-        Iterator<GraphPath<Integer, DefaultWeightedEdge>> expectedPathsIterator =
-            expectedPaths.iterator();
-        YenShortestPathIterator<Integer, DefaultWeightedEdge> yenPathIterator =
-            new YenShortestPathIterator<>(graph, source, target, pathValidator);
-
-        for (int i = 0; i < NUMBER_OF_PATH_TO_ITERATE && yenPathIterator.hasNext()
-            && expectedPathsIterator.hasNext(); ++i)
-        {
-            GraphPath<Integer, DefaultWeightedEdge> expected = expectedPathsIterator.next();
-            GraphPath<Integer, DefaultWeightedEdge> actual = yenPathIterator.next();
-
-            assertEquals(expected.getWeight(), actual.getWeight(), 1e-9);
-            ((GraphWalk<Integer, DefaultWeightedEdge>) actual).verify();
-            paths.add(actual);
-        }
-
-        assertEquals(expectedPaths.size(), paths.size());
-    }
-
     /**
      * Performs assertions to check correctness of the next path which the {@code it} is expected to
      * return.
@@ -508,39 +435,5 @@ public class YenShortestPathIteratorTest
     {
         Set<Integer> uniqueVertices = new HashSet<>(path.getVertexList());
         assertEquals(path.getVertexList().size(), uniqueVertices.size());
-    }
-
-    /**
-     * Generates random graph from the $G(n, p)$ model.
-     *
-     * @param graph graph instance for the generator
-     * @param n the number of nodes
-     * @param p the edge probability
-     */
-    private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p, Random random)
-    {
-        GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> generator =
-                new GnpRandomGraphGenerator<>(n, p, random, false);
-        generator.generateGraph(graph);
-
-        graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextDouble()));
-    }
-
-    /**
-     * Computes a set of random vertices of {@code graph}. The size of the
-     * set is {@code numberOfEdges}.
-     *
-     * @param graph a graph
-     * @param numberOfEdges number of random vertices
-     * @return set of random vertices
-     */
-    private Set<DefaultWeightedEdge> getRandomEdges(Graph<Integer, DefaultWeightedEdge> graph, int numberOfEdges) {
-        Set<DefaultWeightedEdge> result = CollectionUtil.newHashSetWithExpectedSize(numberOfEdges);
-        Object[] edges =  graph.edgeSet().toArray();
-        Random random = new Random(SEED);
-        while (result.size() != numberOfEdges) {
-            result.add((DefaultWeightedEdge) edges[random.nextInt(edges.length)]);
-        }
-        return result;
     }
 }
