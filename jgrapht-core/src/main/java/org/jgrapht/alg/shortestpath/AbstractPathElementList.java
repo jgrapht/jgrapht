@@ -49,20 +49,15 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
     /**
      * Creates paths obtained by concatenating the specified edge to the specified paths.
      *
-     * @param maxSize maximum number of paths the list is able to store.
      * @param elementList paths, list of <code>AbstractPathElement</code>.
      * @param edge edge reaching the end vertex of the created paths.
      *
      * @throws NullPointerException if the specified prevPathElementList or edge is
      *         <code>null</code>.
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or $0$.
      */
     protected AbstractPathElementList(
-        Graph<V, E> graph, int maxSize, AbstractPathElementList<V, E, T> elementList, E edge)
+        Graph<V, E> graph, AbstractPathElementList<V, E, T> elementList, E edge)
     {
-        if (maxSize <= 0) {
-            throw new IllegalArgumentException("maxSize is negative or 0");
-        }
         if (elementList == null) {
             throw new NullPointerException("elementList is null");
         }
@@ -71,25 +66,19 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
         }
 
         this.graph = graph;
-        this.maxSize = maxSize;
+        this.maxSize = Integer.MAX_VALUE;
         this.vertex = Graphs.getOppositeVertex(graph, edge, elementList.getVertex());
     }
 
     /**
      * Creates a list with an empty path. The list size is $1$.
      *
-     * @param maxSize maximum number of paths the list is able to store.
-     *
      * @throws NullPointerException if the specified path-element is <code>
      * null</code>.
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or 0.
      * @throws IllegalArgumentException if <code>pathElement</code> is not empty.
      */
-    protected AbstractPathElementList(Graph<V, E> graph, int maxSize, T pathElement)
+    protected AbstractPathElementList(Graph<V, E> graph, T pathElement)
     {
-        if (maxSize <= 0) {
-            throw new IllegalArgumentException("maxSize is negative or 0");
-        }
         if (pathElement == null) {
             throw new NullPointerException("pathElement is null");
         }
@@ -98,7 +87,7 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
         }
 
         this.graph = graph;
-        this.maxSize = maxSize;
+        this.maxSize = Integer.MAX_VALUE;
         this.vertex = pathElement.getVertex();
 
         this.pathElements.add(pathElement);
@@ -106,19 +95,11 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
 
     /**
      * Creates an empty list. The list size is $0$.
-     *
-     * @param maxSize maximum number of paths the list is able to store.
-     *
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or $0$.
      */
-    protected AbstractPathElementList(Graph<V, E> graph, int maxSize, V vertex)
+    protected AbstractPathElementList(Graph<V, E> graph, V vertex)
     {
-        if (maxSize <= 0) {
-            throw new IllegalArgumentException("maxSize is negative or 0");
-        }
-
         this.graph = graph;
-        this.maxSize = maxSize;
+        this.maxSize = Integer.MAX_VALUE;
         this.vertex = vertex;
     }
 

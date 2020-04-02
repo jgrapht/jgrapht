@@ -17,12 +17,16 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
+import org.jgrapht.graph.GraphWalk;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * The algorithm determines the k shortest simple paths in increasing order of weight. Weights can
@@ -140,8 +144,14 @@ public class KShortestSimplePaths<V, E>
             throw new IllegalArgumentException("Number of paths must be positive");
         }
 
+        if (startVertex.equals(endVertex)) {
+            GraphPath<V, E> result = new GraphWalk<>(graph, startVertex, endVertex,
+                    Collections.singletonList(startVertex), Collections.emptyList(), 0.0);
+            return Collections.singletonList(result);
+        }
+
         KShortestSimplePathsIterator<V, E> iter =
-            new KShortestSimplePathsIterator<>(graph, startVertex, endVertex, k, pathValidator);
+            new KShortestSimplePathsIterator<>(graph, startVertex, endVertex, pathValidator);
 
         /*
          * at the i-th pass the shortest paths with less (or equal) than i edges are calculated
@@ -154,13 +164,14 @@ public class KShortestSimplePaths<V, E>
         if (pathElements == null) {
             return Collections.<GraphPath<V, E>> emptyList();
         } else {
-            return pathElements
-                .stream()
-                .map(
-                    e -> new GraphWalk<V, E>(
-                        graph, startVertex, e.getVertex(), null, e.createEdgeListPath(),
-                        e.getWeight()))
-                .collect(Collectors.toCollection(ArrayList::new));
+            List<GraphPath<V, E>> result = new ArrayList<>();
+            for (int i = 0; i < k && i < pathElements.size(); ++i) {
+                RankingPathElement<V,E> element = pathElements.get(i);
+                GraphPath<V,E> path = new GraphWalk<V, E>(graph, startVertex, element.getVertex(),
+                        null, element.createEdgeListPath(), element.getWeight());
+                result.add(path);
+            }
+            return result;
         }
     }
 

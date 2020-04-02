@@ -40,11 +40,6 @@ class KShortestSimplePathsIterator<V, E>
     private Graph<V, E> graph;
 
     /**
-     * Number of paths stored at each end vertex.
-     */
-    private int k;
-
-    /**
      * Vertices whose ranking shortest paths have been modified during the previous pass.
      */
     private Set<V> prevImprovedVertices;
@@ -84,22 +79,20 @@ class KShortestSimplePathsIterator<V, E>
      * @param graph graph on which shortest paths are searched.
      * @param startVertex start vertex of the calculated paths.
      * @param endVertex end vertex of the calculated paths.
-     * @param maxSize number of paths stored at end vertex of the graph.
      */
-    public KShortestSimplePathsIterator(Graph<V, E> graph, V startVertex, V endVertex, int maxSize)
+    public KShortestSimplePathsIterator(Graph<V, E> graph, V startVertex, V endVertex)
     {
-        this(graph, startVertex, endVertex, maxSize, null);
+        this(graph, startVertex, endVertex,  null);
     }
 
     /**
      * @param graph graph on which shortest paths are searched.
      * @param startVertex start vertex of the calculated paths.
      * @param endVertex end vertex of the calculated paths.
-     * @param maxSize number of paths stored at end vertex of the graph.
      * @param pathValidator the path validator to use
      */
     public KShortestSimplePathsIterator(
-        Graph<V, E> graph, V startVertex, V endVertex, int maxSize,
+        Graph<V, E> graph, V startVertex, V endVertex,
         PathValidator<V, E> pathValidator)
     {
         assertKShortestPathsIterator(graph, startVertex);
@@ -108,7 +101,6 @@ class KShortestSimplePathsIterator<V, E>
         this.startVertex = startVertex;
         this.endVertex = endVertex;
 
-        this.k = maxSize;
 
         this.seenDataContainer = new HashMap<>();
         this.prevSeenDataContainer = new HashMap<>();
@@ -221,7 +213,7 @@ class KShortestSimplePathsIterator<V, E>
         // the end-vertex
 
         return new RankingPathElementList<>(
-            this.graph, this.k, oppositeData, edge, this.endVertex, this.pathValidator);
+            this.graph, oppositeData, edge, this.endVertex, this.pathValidator);
     }
 
     /**
@@ -230,7 +222,7 @@ class KShortestSimplePathsIterator<V, E>
     private void encounterStartVertex()
     {
         RankingPathElementList<V, E> data = new RankingPathElementList<>(
-            this.graph, this.k, new RankingPathElement<>(this.startVertex), this.pathValidator);
+            this.graph, new RankingPathElement<>(this.startVertex), this.pathValidator);
 
         this.seenDataContainer.put(this.startVertex, data);
         this.prevSeenDataContainer.put(this.startVertex, data);
@@ -248,7 +240,7 @@ class KShortestSimplePathsIterator<V, E>
             RankingPathElementList<V, E> pathElementList = this.seenDataContainer.get(vertex);
 
             RankingPathElementList<V, E> improvedPaths = new RankingPathElementList<>(
-                this.graph, pathElementList.maxSize, vertex, this.pathValidator);
+                this.graph, vertex, this.pathValidator);
 
             for (RankingPathElement<V, E> path : pathElementList) {
                 if (path.getHopCount() == this.passNumber) {
