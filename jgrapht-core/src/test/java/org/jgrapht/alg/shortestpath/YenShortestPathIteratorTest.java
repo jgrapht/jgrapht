@@ -17,12 +17,24 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.WeightedPseudograph;
+import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -318,41 +330,40 @@ public class YenShortestPathIteratorTest
         graph.addVertex("15");
         graph.addVertex("21");
 
-        graph.addEdge("19", "1e");
+        DefaultEdge e1 = graph.addEdge("19", "1e");
         graph.addEdge("19", "1c");
         graph.addEdge("19", "1b");
         graph.addEdge("19", "1d");
-        graph.addEdge("19", "1f");
-        graph.addEdge("19", "16");
+        DefaultEdge e5 = graph.addEdge("19", "1f");
+        DefaultEdge e6 = graph.addEdge("19", "16");
         graph.addEdge("12", "17");
         graph.addEdge("12", "14");
         graph.addEdge("12", "15");
-        graph.addEdge("12", "16");
-        graph.addEdge("12", "16");
-        graph.addEdge("12", "18");
-        graph.addEdge("12", "21");
-        graph.addEdge("21", "1f");
+        DefaultEdge e10 = graph.addEdge("12", "16");
+        DefaultEdge e11 = graph.addEdge("12", "16");
+        DefaultEdge e12 = graph.addEdge("12", "18");
+        DefaultEdge e13 = graph.addEdge("12", "21");
+        DefaultEdge e14 = graph.addEdge("21", "1f");
 
         KShortestPathAlgorithm<String, DefaultEdge> yen = new YenKShortestPath<>(graph);
-        KShortestPathAlgorithm<String, DefaultEdge> simple = new KShortestSimplePaths<>(graph);
 
         // should contain exactly 3 elements each
         List<GraphPath<String, DefaultEdge>> yenPaths = yen.getPaths("1e", "18", 7);
-        List<GraphPath<String, DefaultEdge>> kSimplePaths = simple.getPaths("1e", "18", 7);
 
-        yenPaths.sort(Comparator.comparingDouble(GraphPath::getWeight));
-        kSimplePaths.sort(Comparator.comparingDouble(GraphPath::getWeight));
+        List<DefaultEdge> expectedEdgeList1 = Arrays.asList(e1, e6, e10, e12);
+        List<DefaultEdge> expectedEdgeList2 = Arrays.asList(e1, e6, e11, e12);
+        List<DefaultEdge> expectedEdgeList3 = Arrays.asList(e1, e5, e14, e13, e12);
+
+        boolean option1 = yenPaths.get(0).getEdgeList().equals(expectedEdgeList1)
+                && yenPaths.get(1).getEdgeList().equals(expectedEdgeList2);
+        boolean option2 = yenPaths.get(0).getEdgeList().equals(expectedEdgeList2)
+                && yenPaths.get(1).getEdgeList().equals(expectedEdgeList1);
+
 
         assertEquals(3, yenPaths.size());
-        assertEquals(3, kSimplePaths.size());
-
-        boolean option1 = yenPaths.get(0).equals(kSimplePaths.get(0))
-            && yenPaths.get(1).equals(kSimplePaths.get(1));
-        boolean option2 = yenPaths.get(0).equals(kSimplePaths.get(1))
-            && yenPaths.get(1).equals(kSimplePaths.get(0));
 
         assertTrue(option1 ^ option2);
-        assertEquals(kSimplePaths.get(2), yenPaths.get(2));
+        assertEquals(expectedEdgeList3, yenPaths.get(2).getEdgeList());
     }
 
     @Test

@@ -17,13 +17,24 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.util.CollectionUtil;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -135,16 +146,16 @@ public class YenKShortestPathTest
     }
 
     /**
-     * If the overall number of paths between {@code source} and {@code target} is denoted by $n$
-     * and the value of {@code #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$ then the method
-     * iterates over $p = min\{n, m\}$ such paths and verifies that they are built correctly. The
-     * method uses the {@link KShortestSimplePaths} implementation to verify the order of paths
-     * returned by {@link YenShortestPathIterator}. Additionally it is checked that all paths
-     * returned by the iterator are unique.
+     * Computes all simple shortest paths between {@code source} and {@code target}
+     * without {@code pathValidator}. The computes all shortest paths between {@code source}
+     * and {@code target} with {@code pathValidator}. Finally, checks that only valid
+     * paths are returned using {@code isValidPath}.
+     *
      *
      * @param graph graph the iterator is being tested on
      * @param source source vertex
      * @param target target vertex
+     * @param pathValidator validator for returned paths paths
      */
     private void testOnRandomGraph(
             Graph<Integer, DefaultWeightedEdge> graph, Integer source, Integer target,
@@ -182,6 +193,17 @@ public class YenKShortestPathTest
         assertEquals(validatedPaths.size(), uniquePaths.size());
     }
 
+    /**
+     * Checks that {@code path} is valid w.r.t. the {@code pathValidator}.
+     * For the original path $source = v_1, ... ,v_n = target$ for every
+     * pair of consecutive intermediate vertices $v_i, v_{i+1}$ checks
+     * that the edge $(v_i, v_{i+1})$ can be added to the subpath
+     * $v1, ..., v_i$.
+     *
+     * @param path path to be checked for correctness
+     * @param pathValidator validator
+     * @return {@code true} iff {@code path} is correct w.r.t. {@code pathValidator}
+     */
     private boolean isValidPath(GraphPath<Integer, DefaultWeightedEdge> path,
                                 PathValidator<Integer, DefaultWeightedEdge> pathValidator) {
         Graph<Integer,DefaultWeightedEdge> graph = path.getGraph();
@@ -245,6 +267,13 @@ public class YenKShortestPathTest
         return result;
     }
 
+    /**
+     * Checks that {@code paths} has weights identical to {@code weights}
+     * in the same order.
+     *
+     * @param paths   graph paths
+     * @param weights expected weights
+     */
     private void assertSameWeights(
         List<GraphPath<Integer, DefaultWeightedEdge>> paths, List<Double> weights)
     {
