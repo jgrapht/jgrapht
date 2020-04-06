@@ -147,7 +147,7 @@ public class YenKShortestPathTest
 
     /**
      * Computes all simple shortest paths between {@code source} and {@code target}
-     * without {@code pathValidator}. The computes all shortest paths between {@code source}
+     * without {@code pathValidator}. Then computes all shortest paths between {@code source}
      * and {@code target} with {@code pathValidator}. Finally, checks that only valid
      * paths are returned using {@code isValidPath}.
      *

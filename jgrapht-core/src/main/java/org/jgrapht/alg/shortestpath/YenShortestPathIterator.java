@@ -17,14 +17,28 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jheaps.*;
-import org.jheaps.tree.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.MaskSubgraph;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Iterator over the shortest loopless paths between two vertices in a graph sorted by weight.
@@ -77,6 +91,12 @@ public class YenShortestPathIterator<V, E>
 
     /**
      * Provides possibility to validate computed paths and exclude invalid ones.
+     * Whenever a candidate path $P$ first deviation vertex $u$ is produces by this
+     * algorithm it is passed to {@code getLastValidDeviation()} to find the last
+     * valid deviation vertex $v$ for it. The algorithm puts obtained vertex in
+     * {@code lastDeviations} map. If vertex $v$ is {@code null}, the candidate is
+     * considered correct. Otherwise for the path $P$ deviation are built only from
+     * vertices between $u$ and $v$ inclusive.
      */
     private PathValidator<V, E> pathValidator;
 
@@ -88,13 +108,18 @@ public class YenShortestPathIterator<V, E>
     /**
      * Heap of the candidate path generated so far and sorted my their weights.
      * There is a boolean flag for every candidate in the queue, which indicates, if
-     * the path is valid ot not. Invalid paths are kept in the queue, because it is possible
-     * to build a valid path by deviating from an invalid one.
+     * the path is valid ot not. An invalid path is a path which contains an edge which
+     * fails the {@code pathValidator} check.  Invalid paths are kept in the queue, because
+     * it is possible to build a valid path by deviating from an invalid one.
      */
     private AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>> candidatePaths;
 
     /**
-     * Keeps track of the vertex at which each path deviates from its "parent" path.
+     * For each path $P$, stores its deviation point.
+     * <p>
+     * A path deviation point is a first node in the path that doesn't belong to the parent path.
+     * If the path doesn't have a parent (which is only possible for one shortest path between the
+     * {@code source} and the {@code sink}), this map stores its first node.
      */
     private Map<GraphPath<V, E>, V> firstDeviations;
 
@@ -111,7 +136,7 @@ public class YenShortestPathIterator<V, E>
     private int numberOfValidPathInQueue;
 
     /**
-     * Indicates if the {@code lazyComputeShortestPath} procedure
+     * Indicates if the {@code lazyInitializePathHeap} procedure
      * has already been executed.
      */
     private boolean shortestPathComputed;
@@ -193,11 +218,14 @@ public class YenShortestPathIterator<V, E>
     }
 
     /**
-     * Computes shortest path between {@code source} and {@code sink}.
-     * If the shortest path is not valid, proceeds computing deviations
-     * until first valid path is computed.
+     * Lazily initializes the path heap by computing the shortest path between
+     * the {@code source} and the {@code sink} and building a necessary amount
+     * of paths until at least one valid path is found.
+     *
+     * Note: this computation is done only once during the first call to either
+     * {@code hasNext()} or {@code next()}.
      */
-    private void lazyComputeShortestPath() {
+    private void lazyInitializePathHeap() {
         if (!shortestPathComputed) {
             GraphPath<V, E> shortestPath = DijkstraShortestPath.findPathBetween(graph, source, sink);
 
@@ -273,7 +301,7 @@ public class YenShortestPathIterator<V, E>
     @Override
     public boolean hasNext()
     {
-        lazyComputeShortestPath();
+        lazyInitializePathHeap();
         return !candidatePaths.isEmpty();
     }
 
@@ -283,8 +311,7 @@ public class YenShortestPathIterator<V, E>
     @Override
     public GraphPath<V, E> next()
     {
-        lazyComputeShortestPath();
-        if (candidatePaths.isEmpty()) {
+        if (!hasNext()) {
             throw new NoSuchElementException();
         }
 

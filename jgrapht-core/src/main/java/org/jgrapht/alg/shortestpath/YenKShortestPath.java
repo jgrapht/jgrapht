@@ -36,8 +36,8 @@ import java.util.*;
  *
  * <p>
  * The implementation iterates over the existing loopless path between the {@code source} and the
- * {@code sink} and forms the resulting list. It is possible to provide validation for paths, which
- * will be computed, using the {@link PathValidator}.
+ * {@code sink} and forms the resulting list. It is possible to provide a {@link PathValidator} to filter
+ * the resulting path list
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -55,7 +55,7 @@ public class YenKShortestPath<V, E>
     private final Graph<V, E> graph;
 
     /**
-     * Provides validation for the paths which will be computed. Is the validator
+     * Provides validation for the paths which will be computed. If the validator
      * is {@code null}, this means that all paths are valid.
      */
     private PathValidator<V,E> pathValidator;
