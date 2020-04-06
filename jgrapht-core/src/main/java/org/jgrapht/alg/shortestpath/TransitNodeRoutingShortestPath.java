@@ -53,7 +53,7 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  * $s$ to vertex $t$.
  *
  * <p>
- * The algorithm is designed to operate on sparse graph with low average outdegree. Comparing
+ * The algorithm is designed to operate on sparse graphs with low average outdegree. Comparing
  * to {@link ContractionHierarchyBidirectionalDijkstra} it uses significantly more time on the
  * precomputation stage. Because of that it makes sense to use this algorithm on large instances
  * (i.e. with more than 10.000 vertices), where it shows substantially better performance results
@@ -63,6 +63,7 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
+ * @author Semen Chudakov
  * @see TransitNodeRoutingPrecomputation
  * @see BidirectionalDijkstraShortestPath
  */

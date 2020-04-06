@@ -41,6 +41,8 @@ import static org.junit.Assert.assertNull;
 
 /**
  * Test for the {@link TransitNodeRoutingShortestPath}.
+ *
+ * @author Semen Chudakov
  */
 public class TransitNodeRoutingShortestPathTest {
     /**

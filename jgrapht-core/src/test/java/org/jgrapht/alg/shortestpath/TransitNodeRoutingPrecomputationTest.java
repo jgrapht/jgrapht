@@ -50,6 +50,8 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the {@link TransitNodeRoutingPrecomputation}.
+ *
+ * @author Semen Chudakov
  */
 public class TransitNodeRoutingPrecomputationTest {
     /**

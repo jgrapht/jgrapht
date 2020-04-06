@@ -89,9 +89,10 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
+ * @author Semen Chudakov
  * @see ContractionHierarchyPrecomputation
  */
-public class TransitNodeRoutingPrecomputation<V, E> {
+class TransitNodeRoutingPrecomputation<V, E> {
     /**
      * Special Voronoi diagram cell id to indicate, that a vertex does not
      * belong to any cells. For usual Voronoi cell the ids of contracted vertices
