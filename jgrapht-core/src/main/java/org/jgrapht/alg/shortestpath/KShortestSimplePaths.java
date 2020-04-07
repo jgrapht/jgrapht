@@ -40,8 +40,9 @@ import java.util.stream.Collectors;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
+ * @deprecated Use {@link YenKShortestPath} instead.
  */
+@Deprecated
 public class KShortestSimplePaths<V, E>
     implements
     KShortestPathAlgorithm<V, E>
