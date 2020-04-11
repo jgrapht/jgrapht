@@ -211,7 +211,10 @@ public class GmlExporterTest
             + "\tnode" + NL
             + "\t[" + NL            
             + "\t\tid 3" + NL
-            + "\t\tlabel \"v3\"" + NL            
+            + "\t\tlabel \"v3\"" + NL
+            + "\t\tcost 5.5" + NL
+            + "\t\tlength 100" + NL
+            + "\t\tvisited \"false\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
             + "\t[" + NL            
@@ -480,6 +483,11 @@ public class GmlExporterTest
             }
             if (v.equals(V2)) {
                 map.put("color", DefaultAttribute.createAttribute("black"));
+            }
+            if (v.equals(V3)) {
+                map.put("cost", DefaultAttribute.createAttribute(5.5d));
+                map.put("length", DefaultAttribute.createAttribute(100L));
+                map.put("visited", DefaultAttribute.createAttribute(false));
             }
             return map;
         });

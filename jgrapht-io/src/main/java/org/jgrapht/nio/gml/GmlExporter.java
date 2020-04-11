@@ -197,6 +197,28 @@ public class GmlExporter<V, E>
         out.println("Version" + DELIM + VERSION);
     }
 
+    private void exportAttribute(PrintWriter out, String key, Attribute attribute)
+    {
+        AttributeType type = attribute.getType();
+        switch (type) {
+        case INT:
+            out.println(TAB2 + key + DELIM + Integer.valueOf(attribute.getValue()));
+            break;
+        case LONG:
+            out.println(TAB2 + key + DELIM + Long.valueOf(attribute.getValue()));
+            break;
+        case FLOAT:
+            out.println(TAB2 + key + DELIM + Float.valueOf(attribute.getValue()));
+            break;
+        case DOUBLE:
+            out.println(TAB2 + key + DELIM + Double.valueOf(attribute.getValue()));
+            break;
+        default:
+            out.println(TAB2 + key + DELIM + quoted(attribute.getValue()));
+            break;
+        }
+    }
+
     private void exportVertices(PrintWriter out, Graph<V, E> g)
     {
         boolean exportVertexLabels = parameters.contains(Parameter.EXPORT_VERTEX_LABELS);
@@ -229,10 +251,7 @@ public class GmlExporter<V, E>
                             return;
                         }
 
-                        out
-                            .println(
-                                TAB2 + customAttributeKey + DELIM
-                                    + quoted(customAttributeValue.getValue()));
+                        exportAttribute(out, customAttributeKey, customAttributeValue);
                     });
                 });
             }
@@ -263,12 +282,13 @@ public class GmlExporter<V, E>
             out.println(TAB2 + "target" + DELIM + t);
 
             if (exportEdgeLabels) {
-                String label = getEdgeAttribute(edge, LABEL_ATTRIBUTE_KEY)
-                    .map(Attribute::getValue).orElse(edge.toString());
-                out.println(TAB2 + "label" + DELIM + quoted(label));
+                Attribute label = getEdgeAttribute(edge, LABEL_ATTRIBUTE_KEY)
+                    .orElse(DefaultAttribute.createAttribute(edge.toString()));
+                exportAttribute(out, "label", label);
             }
             if (exportEdgeWeights && g.getType().isWeighted()) {
-                out.println(TAB2 + "weight" + DELIM + Double.toString(g.getEdgeWeight(edge)));
+                exportAttribute(
+                    out, "weight", DefaultAttribute.createAttribute(g.getEdgeWeight(edge)));
             }
             if (exportCustomEdgeAttributes) {
                 getEdgeAttributes(edge).ifPresent(edgeAttributes -> {
@@ -291,10 +311,7 @@ public class GmlExporter<V, E>
                             return;
                         }
 
-                        out
-                            .println(
-                                TAB2 + customAttributeKey + DELIM
-                                    + quoted(customAttributeValue.getValue()));
+                        exportAttribute(out, customAttributeKey, customAttributeValue);
                     });
                 });
             }
