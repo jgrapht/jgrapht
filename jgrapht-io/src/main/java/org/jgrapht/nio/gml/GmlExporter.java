@@ -59,8 +59,8 @@ public class GmlExporter<V, E>
     private static final String LABEL_ATTRIBUTE_KEY = "label";
     private static final String WEIGHT_ATTRIBUTE_KEY = "weight";
 
-    private static Set<String> FORBIDDEN_VERTEX_CUSTOM_ATTRIBUTE_KEYS = Set.of("id");
-    private static Set<String> FORBIDDEN_EDGE_CUSTOM_ATTRIBUTE_KEYS =
+    private static final Set<String> FORBIDDEN_VERTEX_CUSTOM_ATTRIBUTE_KEYS = Set.of("id");
+    private static final Set<String> FORBIDDEN_EDGE_CUSTOM_ATTRIBUTE_KEYS =
         Set.of("id", "source", "target");
 
     private final Set<Parameter> parameters;
