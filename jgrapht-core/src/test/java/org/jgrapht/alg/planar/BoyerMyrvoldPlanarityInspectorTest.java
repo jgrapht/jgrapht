@@ -34,16 +34,28 @@ public class BoyerMyrvoldPlanarityInspectorTest
 {
 
     /**
+     * Creates graph from an edge list
+     *
+     * @param edges graph edges
+     * @return created graph
+     */
+    private Graph<Integer, DefaultEdge> getGraph(int[][] edges)
+    {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        for (int[] edge : edges) {
+            Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
+        }
+        return graph;
+    }
+
+    /**
      * Does a generic verification of the algorithm on the graph defined by the {@code edges}
      *
      * @param edges an array of the edge of the graph
      */
     private void testOnGraph(int[][] edges)
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        }
+        Graph<Integer, DefaultEdge> graph = getGraph(edges);
         PlanarityTestingAlgorithm<Integer, DefaultEdge> inspector =
             new BoyerMyrvoldPlanarityInspector<>(graph);
         boolean planar = inspector.isPlanar();
@@ -92,6 +104,24 @@ public class BoyerMyrvoldPlanarityInspectorTest
             assertEquals(2, (int) cnt.get(edge));
         }
         assertEquals(2 * graph.edgeSet().size(), degreeSum);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNonPlanarGraphNoEmbedding()
+    {
+        int[][] k_5 = {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4},};
+        Graph<Integer, DefaultEdge> graph = getGraph(k_5);
+        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm = new BoyerMyrvoldPlanarityInspector<>(graph);
+        algorithm.getEmbedding();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPlanarGraphNoKuratowskiSubdivision()
+    {
+        int[][] k_4 = {{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3},};
+        Graph<Integer, DefaultEdge> graph = getGraph(k_4);
+        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm = new BoyerMyrvoldPlanarityInspector<>(graph);
+        algorithm.getKuratowskiSubdivision();
     }
 
     @Test

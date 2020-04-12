@@ -1482,7 +1482,11 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
     @Override
     public Embedding<V, E> getEmbedding()
     {
-        return lazyComputeEmbedding();
+        if(isPlanar()){
+            return lazyComputeEmbedding();
+        }else{
+            throw new IllegalArgumentException("Graph is not planar");
+        }
     }
 
     /**
@@ -1494,7 +1498,11 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
     @Override
     public Graph<V, E> getKuratowskiSubdivision()
     {
-        return lazyExtractKuratowskiSubdivision();
+        if(isPlanar()){
+            throw new IllegalArgumentException("Graph is planar");
+        }else{
+            return lazyExtractKuratowskiSubdivision();
+        }
     }
 
     /**
