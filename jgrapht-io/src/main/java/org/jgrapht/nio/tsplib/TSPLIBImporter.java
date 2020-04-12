@@ -470,8 +470,8 @@ public class TSPLIBImporter<V, E>
      * are referred to the <em>NODE_COORD_SECTION</em> in the same source.
      * </p>
      * <p>
-     * {@link Metadata} of the import can be obtained with {@link #getLastImportData()} after this
-     * method returned. If the readers source contains a <em>TOUR_SECTION</em> the imported tour can
+     * {@link Metadata} of the import can be obtained with {@link #getMetadata()} after this
+     * method returns. If the readers source contains a <em>TOUR_SECTION</em> the imported tour can
      * be obtained from {@link Metadata#getTour()}.
      * </p>
      * <p>
@@ -646,8 +646,8 @@ public class TSPLIBImporter<V, E>
      * to the nodes respectively vertices in the given {@code metadata}.
      * </p>
      * <p>
-     * The {@link Metadata} of the import can be obtained with {@link #getLastImportData()} after
-     * this method returned. The {@code Metadata#getVertexToNodeMapping() vertexToNodeMapping} in
+     * The {@link Metadata} of the import can be obtained with {@link #getMetadata()} after
+     * this method returns. The {@code Metadata#getVertexToNodeMapping() vertexToNodeMapping} in
      * the metadata of this import is the same as in the given {@code metadata}.
      * </p>
      * <p>
