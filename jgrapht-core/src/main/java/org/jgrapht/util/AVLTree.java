@@ -573,7 +573,6 @@ public class AVLTree<T> implements Iterable<T> {
             builder.append(node.toString()).append("\n");
         }
         return builder.toString();
-//        return "";
     }
 
     /**
