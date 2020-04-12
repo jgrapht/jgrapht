@@ -43,6 +43,10 @@ import static org.jgrapht.util.AVLTree.TreeNode;
  * be undirected. The memory complexity is linear in the number of inserted elements.
  * The implementation is based on the <a href="https://en.wikipedia.org/wiki/Euler_tour_technique">
  * Euler tour technique</a>.
+ * <p>
+ * For the description of the Euler tour data structure, we refer to the <i>Monika Rauch Henzinger,
+ * Valerie King: Randomized dynamic graph algorithms with polylogarithmic time per operation.
+ * STOC 1995: 519-527</i>
  *
  * @param <T> element type
  * @author Timofey Chudakov
@@ -76,7 +80,7 @@ public class TreeDynamicConnectivity<T> {
 
     /**
      * Adds an {@code element} to this data structure. If the {@code element} has
-     * been added before, this method returns {@code false} and has node effect.
+     * been added before, this method returns {@code false} and has no effect.
      * <p>
      * This method has $\mathcal{O}(\log 1)$ running time complexity
      *
