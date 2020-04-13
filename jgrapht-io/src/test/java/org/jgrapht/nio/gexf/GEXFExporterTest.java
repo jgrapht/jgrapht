@@ -58,6 +58,9 @@ public class GEXFExporterTest
 				+ "      version=\"1.2\" "
 				+ "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
 				+ "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<meta>" + NL
+				+ "  <creator>The JGraphT Library</creator>" + NL
+				+ "</meta>" + NL
 				+ "<graph defaultedgetype=\"directed\">" + NL 
 				+ "  <attributes class=\"node\">" + NL
 				+ "    <attribute id=\"0\" title=\"color\" type=\"string\"/>" + NL
@@ -155,6 +158,10 @@ public class GEXFExporterTest
                 + "      version=\"1.2\" "
                 + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
                 + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+                + "<meta>" + NL
+                + "  <creator>The JGraphT Library</creator>" + NL
+                + "  <description>Test</description>" + NL
+                + "</meta>" + NL                
                 + "<graph defaultedgetype=\"undirected\">" + NL 
                 + "  <attributes class=\"node\">" + NL
                 + "    <attribute id=\"0\" title=\"color\" type=\"string\"/>" + NL
@@ -205,6 +212,7 @@ public class GEXFExporterTest
         GEXFExporter<String, DefaultEdge> exporter = new GEXFExporter<>();
         exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_TYPES, true);
+        exporter.setDescription("Test");
 
         exporter.registerAttribute("color", AttributeCategory.NODE, GEXFAttributeType.STRING, null);
         exporter.registerAttribute("city", AttributeCategory.NODE, GEXFAttributeType.STRING, null);

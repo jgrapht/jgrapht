@@ -78,6 +78,10 @@ public class GEXFExporter<V, E>
     private Map<String, AttributeDetails> registeredEdgeAttributes;
     private final Set<Parameter> parameters;
 
+    private String creator = "The JGraphT Library";
+    private String keywords;
+    private String description;
+
     /**
      * Parameters that affect the behavior of the exporter.
      */
@@ -96,7 +100,11 @@ public class GEXFExporter<V, E>
          * If set the exporter outputs edge types. Edge types are looked up from the type of the
          * graph. Mixed graphs are not supported.
          */
-        EXPORT_EDGE_TYPES
+        EXPORT_EDGE_TYPES,
+        /**
+         * If set the exporter outputs the metadata information. This is true by default.
+         */
+        EXPORT_META,
     }
 
     /**
@@ -146,6 +154,9 @@ public class GEXFExporter<V, E>
         this.registeredVertexAttributes = new LinkedHashMap<>();
         this.registeredEdgeAttributes = new LinkedHashMap<>();
         this.parameters = new HashSet<>();
+
+        // enable meta by default
+        this.setParameter(Parameter.EXPORT_META, true);
     }
 
     /**
@@ -266,6 +277,66 @@ public class GEXFExporter<V, E>
     }
 
     /**
+     * Get the creator for the meta field.
+     * 
+     * @return the creator for the meta field
+     */
+    public String getCreator()
+    {
+        return creator;
+    }
+
+    /**
+     * Set the creator for the meta field.
+     * 
+     * @param creator the creator for the meta field
+     */
+    public void setCreator(String creator)
+    {
+        this.creator = creator;
+    }
+
+    /**
+     * Get the keywords for the meta field.
+     * 
+     * @return the keywords for the meta field
+     */
+    public String getKeywords()
+    {
+        return keywords;
+    }
+
+    /**
+     * Set the keywords for the meta field.
+     * 
+     * @param keywords the keywords for the meta field
+     */
+    public void setKeywords(String keywords)
+    {
+        this.keywords = keywords;
+    }
+
+    /**
+     * Get the description for the meta field.
+     * 
+     * @return the description for the meta field
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+
+    /**
+     * Set the description for the meta field.
+     * 
+     * @param description the description for the meta field
+     */
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    /**
      * Exports a graph in GraphML format.
      *
      * @param g the graph
@@ -288,6 +359,7 @@ public class GEXFExporter<V, E>
             handler.startDocument();
 
             writeHeader(handler);
+            writeMeta(handler);
             writeGraphStart(handler, g);
             writeVertexAttributes(handler);
             writeEdgeAttributes(handler);
@@ -318,6 +390,36 @@ public class GEXFExporter<V, E>
                 "http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd");
         attr.addAttribute("", "", "version", "CDATA", "1.2");
         handler.startElement("http://www.gexf.net/1.2draft", "", "gexf", attr);
+    }
+
+    private void writeMeta(TransformerHandler handler)
+        throws SAXException
+    {
+        boolean exportMeta = parameters.contains(Parameter.EXPORT_META);
+        if (!exportMeta) {
+            return;
+        }
+        if (creator == null && description == null && keywords == null) {
+            return;
+        }
+
+        handler.startElement("", "", "meta", null);
+        if (creator != null) {
+            handler.startElement("", "", "creator", null);
+            handler.characters(creator.toCharArray(), 0, creator.length());
+            handler.endElement("", "", "creator");
+        }
+        if (description != null) {
+            handler.startElement("", "", "description", null);
+            handler.characters(description.toCharArray(), 0, description.length());
+            handler.endElement("", "", "description");
+        }
+        if (keywords != null) {
+            handler.startElement("", "", "keywords", null);
+            handler.characters(keywords.toCharArray(), 0, keywords.length());
+            handler.endElement("", "", "keywords");
+        }
+        handler.endElement("", "", "meta");
     }
 
     private void writeGraphStart(TransformerHandler handler, Graph<V, E> g)

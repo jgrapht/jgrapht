@@ -284,7 +284,7 @@ public class SimpleGEXFEventDrivenImporter
                 break;
             case NODE:
                 insideNode++;
-                if (insideNode == 1 && insideEdge == 1) {
+                if (insideNode == 1 ^ insideEdge == 1) {
                     String nodeId = findAttribute(NODE_ID, attributes)
                         .orElseThrow(
                             () -> new IllegalArgumentException("Node must have an identifier"));
@@ -300,7 +300,7 @@ public class SimpleGEXFEventDrivenImporter
                 break;
             case EDGE:
                 insideEdge++;
-                if (insideNode == 1 && insideEdge == 1) {
+                if (insideNode == 1 ^ insideEdge == 1) {
                     String sourceId = findAttribute(EDGE_SOURCE, attributes)
                         .orElseThrow(() -> new IllegalArgumentException("Edge source missing"));
                     String targetId = findAttribute(EDGE_TARGET, attributes)

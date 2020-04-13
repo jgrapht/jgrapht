@@ -66,7 +66,57 @@ public class SimpleGEXFImporterTest
             + "    <edges>" + NL
             + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
-            + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
+            + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
+            + "    </edges>" + NL
+            + "  </graph>" + NL 
+            + "</gexf>";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        new SimpleGEXFImporter<String, DefaultEdge>()
+            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("0"));
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsEdge("0", "1"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("2", "0"));
+    }
+    
+    @Test
+    public void testUndirectedUnweightedWithMeta()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = 
+              "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+            + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
+            + "      version=\"1.2\" "
+            + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
+            + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+            + "  <meta lastmodifieddate=\"2019-10-26\">" + NL
+            + "    <creator>JGraphT</creator>" + NL
+            + "    <description>JGraphT test</description>" + NL
+            + "    <keywords>graph, jgrapht</keywords>" + NL
+            + "  </meta>" + NL
+            + "  <graph defaultedgetype=\"undirected\">" + NL
+            + "    <nodes>" + NL
+            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"2\" label=\"2\"/>" + NL
+            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "    </nodes>" + NL
+            + "    <edges>" + NL
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
+            + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
             + "  </graph>" + NL 
             + "</gexf>";
