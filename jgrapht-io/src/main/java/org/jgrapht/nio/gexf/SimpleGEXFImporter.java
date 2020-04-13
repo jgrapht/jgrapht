@@ -37,7 +37,8 @@ import java.util.function.*;
  * {@link Graph#getEdgeSupplier()}) in order to create new vertices and edges. Moreover, it notifies
  * lazily and completely out-of-order for any additional vertex, edge or graph attributes in the
  * input file. Users can register consumers for vertex, edge and graph attributes after construction
- * of the importer. Finally, default attribute values are completely ignored.
+ * of the importer. Finally, default attribute values and any nested elements are completely
+ * ignored.
  * 
  * <p>
  * For a description of the format see <a href="https://gephi.org/gexf/format/index.html">
@@ -100,7 +101,8 @@ import java.util.function.*;
  * 
  * <p>
  * The graph vertices and edges are build using the corresponding graph suppliers. The id of the
- * vertices in the input file are reported as a vertex attribute named "ID".
+ * vertices in the input file are reported as a vertex attribute named
+ * {@link #DEFAULT_VERTEX_ID_KEY}.
  * 
  * <p>
  * The default behavior of the importer is to use the graph vertex supplier in order to create
