@@ -92,7 +92,7 @@ public class YenShortestPathIterator<V, E>
     /**
      * Provides possibility to validate computed paths and exclude invalid ones.
      * Whenever a candidate path $P$ first deviation vertex $u$ is produces by this
-     * algorithm it is passed to {@code getLastValidDeviation()} to find the last
+     * algorithm, it is passed to {@code getLastValidDeviation()} to find the last
      * valid deviation vertex $v$ for it. The algorithm puts obtained vertex in
      * {@code lastDeviations} map. If vertex $v$ is {@code null}, the candidate is
      * considered correct. Otherwise for the path $P$ deviation are built only from
@@ -109,7 +109,7 @@ public class YenShortestPathIterator<V, E>
      * Heap of the candidate path generated so far and sorted my their weights.
      * There is a boolean flag for every candidate in the queue, which indicates, if
      * the path is valid ot not. An invalid path is a path which contains an edge which
-     * fails the {@code pathValidator} check.  Invalid paths are kept in the queue, because
+     * fails the {@code pathValidator} check. Invalid paths are kept in the queue, because
      * it is possible to build a valid path by deviating from an invalid one.
      */
     private AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>> candidatePaths;
