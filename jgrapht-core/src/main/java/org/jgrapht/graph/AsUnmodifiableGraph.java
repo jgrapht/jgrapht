@@ -78,6 +78,15 @@ public class AsUnmodifiableGraph<V, E>
     }
 
     /**
+     * @see Graph#addVertex()
+     */
+    @Override
+    public V addVertex()
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+    
+    /**
      * @see Graph#addVertex(Object)
      */
     @Override
