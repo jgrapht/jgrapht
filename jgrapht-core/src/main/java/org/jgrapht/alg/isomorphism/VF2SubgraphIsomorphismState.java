@@ -43,8 +43,8 @@ class VF2SubgraphIsomorphismState<V, E>
     @Override
     public boolean isFeasiblePair()
     {
-        String pairstr = "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ")",
-            abortmsg = pairstr + " does not fit in the current matching";
+        final String pairstr = (DEBUG) ? "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ")" : null;
+        final String abortmsg = (DEBUG) ? pairstr + " does not fit in the current matching" : null;
 
         // check for semantic equality of both vertexes
         if (!areCompatibleVertexes(addVertex1, addVertex2)) {
