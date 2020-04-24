@@ -317,7 +317,7 @@ abstract class VF2State<V, E>
     {
         int addedVertex2 = core1[addedVertex1];
 
-        showLog(
+        if (DEBUG) showLog(
             "backtrack", "remove (" + g1.getVertex(addedVertex1) + ", " + g2.getVertex(addedVertex2)
                 + ") from the matching");
 
