@@ -40,6 +40,7 @@ class GraphOrdering<V, E>
     private int[][] outgoingEdges;
     private int[][] incomingEdges;
     private Boolean[][] adjMatrix;
+    private E[] edgeCache;
 
     private boolean cacheEdges;
 
@@ -50,6 +51,7 @@ class GraphOrdering<V, E>
      * @param cacheEdges if true, the class creates a adjacency matrix and two arrays for incoming
      *        and outgoing edges for fast access.
      */
+    @SuppressWarnings("unchecked")
     public GraphOrdering(Graph<V, E> graph, boolean orderByDegree, boolean cacheEdges)
     {
         this.graph = graph;
@@ -68,6 +70,7 @@ class GraphOrdering<V, E>
             outgoingEdges = new int[vertexCount][];
             incomingEdges = new int[vertexCount][];
             adjMatrix = new Boolean[vertexCount][vertexCount];
+            edgeCache = (E[]) new Object[vertexCount*vertexCount];
         }
 
         Integer i = 0;
@@ -201,9 +204,22 @@ class GraphOrdering<V, E>
      */
     public E getEdge(int v1Number, int v2Number)
     {
+        
+        if (cacheEdges) {
+            final E cache = edgeCache[v1Number*vertexCount+v2Number];
+            if (cache != null){
+                return cache;
+            }
+        }
+        
         V v1 = getVertex(v1Number), v2 = getVertex(v2Number);
 
-        return graph.getEdge(v1, v2);
+        E edge = graph.getEdge(v1, v2);
+        if (cacheEdges) {
+            edgeCache[v1Number*vertexCount+v2Number] = edge;
+        }
+        
+        return edge;
     }
 
     public int getVertexNumber(V v)
