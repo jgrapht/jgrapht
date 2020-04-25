@@ -174,7 +174,7 @@ class VF2SubgraphIsomorphismState<V, E>
         if ((termInPred1 >= termInPred2) && (termOutPred1 >= termOutPred2)
             && (newPred1 >= newPred2))
         {
-            showLog("isFeasiblePair", pairstr + " fits");
+            if (DEBUG) showLog("isFeasiblePair", pairstr + " fits");
             return true;
         } else {
             if (DEBUG) {
