@@ -149,6 +149,7 @@ public class MaximumWeightBipartiteMatchingTest
         assertTrue(matchings.getEdges().contains(e3));
         assertTrue(matchings.getEdges().contains(e5));
         assertTrue(matchings.getEdges().contains(e7));
+        assertEquals(5d, matchings.getWeight(), 1e-9);
     }
 
     @Test

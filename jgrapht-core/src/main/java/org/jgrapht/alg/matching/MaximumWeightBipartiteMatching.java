@@ -334,7 +334,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             V t = graph.getEdgeTarget(e);
             matchedEdge.remove(s);
             matchedEdge.remove(t);
-            matchingWeight.subtract(w);
+            matchingWeight = matchingWeight.subtract(w);
             matching.remove(e);
         }
 
@@ -344,7 +344,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             V t = graph.getEdgeTarget(e);
             matchedEdge.put(s, e);
             matchedEdge.put(t, e);
-            matchingWeight.add(w);
+            matchingWeight = matchingWeight.add(w);
             matching.add(e);
         }
     }
