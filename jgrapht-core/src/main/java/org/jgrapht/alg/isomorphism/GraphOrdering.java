@@ -45,7 +45,7 @@ class GraphOrdering<V, E>
      * 1 - edge exists
      * -1 - no edge exists
      */
-    private short[][] adjMatrix;
+    private byte[][] adjMatrix;
 
     private boolean cacheEdges;
 
@@ -73,7 +73,7 @@ class GraphOrdering<V, E>
         if (cacheEdges) {
             outgoingEdges = new int[vertexCount][];
             incomingEdges = new int[vertexCount][];
-            adjMatrix = new short[vertexCount][vertexCount];
+            adjMatrix = new byte[vertexCount][vertexCount];
         }
 
         Integer i = 0;
@@ -169,7 +169,7 @@ class GraphOrdering<V, E>
     {
         
         if (cacheEdges) {
-            final short cache = adjMatrix[v1Number][v2Number];
+            final byte cache = adjMatrix[v1Number][v2Number];
             if(cache != 0){
                 return cache > 0;
             }
@@ -179,7 +179,7 @@ class GraphOrdering<V, E>
         V v2 = getVertex(v2Number);
         boolean containsEdge = graph.containsEdge(v1, v2);
         if(cacheEdges) {
-            adjMatrix[v1Number][v2Number] = (short) ((containsEdge) ? 1 : -1);
+            adjMatrix[v1Number][v2Number] = (byte) ((containsEdge) ? 1 : -1);
         }
 
         return containsEdge;
