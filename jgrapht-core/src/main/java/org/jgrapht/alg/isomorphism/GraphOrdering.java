@@ -39,11 +39,13 @@ class GraphOrdering<V, E>
 
     private int[][] outgoingEdges;
     private int[][] incomingEdges;
-    /*
-     * if caching is enabled, this contains cached information on edges existing, values:
-     * 0 - no cached value
-     * 1 - edge exists
-     * -1 - no edge exists
+    /**
+     * if caching is enabled, adjMatrix contains cached information on existing edges, values:
+     * <ul>
+     * <li>0 - no cached value</li>
+     * <li>1 - edge exists</li>
+     * <li>-1 - no edge exists</li>
+     * </ul>
      */
     private byte[] adjMatrix;
 
@@ -168,8 +170,9 @@ class GraphOrdering<V, E>
     public boolean hasEdge(int v1Number, int v2Number)
     {
         
+        final int cacheIndex = v1Number*vertexCount+v2Number;
         if (cacheEdges) {
-            final byte cache = adjMatrix[v1Number*vertexCount+v2Number];
+            final byte cache = adjMatrix[cacheIndex];
             if(cache != 0){
                 return cache > 0;
             }
@@ -179,7 +182,7 @@ class GraphOrdering<V, E>
         V v2 = getVertex(v2Number);
         boolean containsEdge = graph.containsEdge(v1, v2);
         if(cacheEdges) {
-            adjMatrix[v1Number*vertexCount+v2Number] = (byte) ((containsEdge) ? 1 : -1);
+            adjMatrix[cacheIndex] = (byte) ((containsEdge) ? 1 : -1);
         }
 
         return containsEdge;
