@@ -173,8 +173,9 @@ class GraphOrdering<V, E>
     public boolean hasEdge(int v1Number, int v2Number)
     {
         
-        final int cacheIndex = 2*(v1Number*vertexCount+v2Number);
+        int cacheIndex = 0;
         if (cacheEdges) {
+            cacheIndex = 2*(v1Number*vertexCount+v2Number);
             final boolean isCached = adjMatrix.get(cacheIndex);
             if(isCached){
                 return adjMatrix.get(cacheIndex+1);
