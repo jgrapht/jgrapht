@@ -40,17 +40,14 @@ class GraphOrdering<V, E>
     private int[][] outgoingEdges;
     private int[][] incomingEdges;
     /**
-     * If caching is enabled, adjMatrix contains cached information on existing edges. Its a flattened
-     * bitset of size 2 times vertexCount squared. Each element is hence represented with two bits.
-     * Possible patterns are
+     * if caching is enabled, adjMatrix contains cached information on existing edges, values:
      * <ul>
-     * <li>00 - no cached information</li>
-     * <li>10 - edge exists</li>
-     * <li>-11 - no edge exists</li>
-     * <li>01 - not a valid pattern</li>
+     * <li>0 - no cached value</li>
+     * <li>1 - edge exists</li>
+     * <li>-1 - no edge exists</li>
      * </ul>
      */
-    private BitSet adjMatrix;
+    private byte[] adjMatrix;
 
     private boolean cacheEdges;
 
@@ -78,7 +75,7 @@ class GraphOrdering<V, E>
         if (cacheEdges) {
             outgoingEdges = new int[vertexCount][];
             incomingEdges = new int[vertexCount][];
-            adjMatrix = new BitSet(2*vertexCount*vertexCount);
+            adjMatrix = new byte[vertexCount*vertexCount];
         }
 
         Integer i = 0;
@@ -175,10 +172,10 @@ class GraphOrdering<V, E>
         
         int cacheIndex = 0;
         if (cacheEdges) {
-            cacheIndex = 2*(v1Number*vertexCount+v2Number);
-            final boolean isCached = adjMatrix.get(cacheIndex);
-            if(isCached){
-                return adjMatrix.get(cacheIndex+1);
+            cacheIndex = v1Number*vertexCount+v2Number;
+            final byte cache = adjMatrix[cacheIndex];
+            if(cache != 0){
+                return cache > 0;
             }
         }
         
@@ -186,8 +183,7 @@ class GraphOrdering<V, E>
         V v2 = getVertex(v2Number);
         boolean containsEdge = graph.containsEdge(v1, v2);
         if(cacheEdges) {
-            adjMatrix.set(cacheIndex, true);
-            adjMatrix.set(cacheIndex+1, containsEdge);
+            adjMatrix[cacheIndex] = (byte) ((containsEdge) ? 1 : -1);
         }
 
         return containsEdge;
