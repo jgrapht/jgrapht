@@ -40,7 +40,7 @@ class GraphOrdering<V, E>
     private int[][] outgoingEdges;
     private int[][] incomingEdges;
     /**
-     * if caching is enabled, adjMatrix contains cached information on existing edges, values:
+     * if caching is enabled, adjMatrix contains cached information on existing edges, valid values:
      * <ul>
      * <li>0 - no cached value</li>
      * <li>1 - edge exists</li>
