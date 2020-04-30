@@ -232,9 +232,9 @@ class GraphOrdering<V, E>
                 // edge cache has not been initialized yet for this element
                 hasEdge(v1Number, v2Number);
             }
-            final E cache = edgeCache[cacheIndex];
+            final E edge = edgeCache[cacheIndex];
 
-            return cache;
+            return edge;
         }
         
         V v1 = getVertex(v1Number), v2 = getVertex(v2Number);
