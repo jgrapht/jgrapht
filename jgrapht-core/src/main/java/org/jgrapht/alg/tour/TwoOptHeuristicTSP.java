@@ -19,6 +19,7 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -52,6 +53,7 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @author Hannes Wellmann
  */
 public class TwoOptHeuristicTSP<V, E>
     extends
@@ -66,8 +68,7 @@ public class TwoOptHeuristicTSP<V, E>
     private Graph<V, E> graph;
     private int n;
     private double[][] dist;
-    private Map<V, Integer> index;
-    private Map<Integer, V> revIndex;
+    private VertexToIntegerMapping<V> vertex2index;
 
     /**
      * Constructor. By default one initial random tour is used.
@@ -215,22 +216,20 @@ public class TwoOptHeuristicTSP<V, E>
     private void init(Graph<V, E> graph)
     {
         this.graph = graph;
-        this.n = graph.vertexSet().size();
+        Set<V> vertexSet = graph.vertexSet();
+        this.n = vertexSet.size();
         this.dist = new double[n][n];
-        this.index = new HashMap<>();
-        this.revIndex = new HashMap<>();
-        int i = 0;
-        for (V v : graph.vertexSet()) {
-            index.put(v, i);
-            revIndex.put(i, v);
-            i++;
-        }
+        vertex2index = new VertexToIntegerMapping<>(vertexSet);
+
+        Map<V, Integer> index = vertex2index.getVertexMap();
 
         for (E e : graph.edgeSet()) {
+
             V s = graph.getEdgeSource(e);
             int si = index.get(s);
             V t = graph.getEdgeTarget(e);
             int ti = index.get(t);
+
             double weight = graph.getEdgeWeight(e);
             dist[si][ti] = weight;
             dist[ti][si] = weight;
@@ -260,11 +259,8 @@ public class TwoOptHeuristicTSP<V, E>
      */
     private int[] improve(int[] tour)
     {
-        int[] newTour = new int[n + 1];
-        boolean moved;
         double minChange;
-        do {
-            moved = false;
+        while (true) {
             minChange = -minCostImprovement;
             int mini = -1;
             int minj = -1;
@@ -283,26 +279,12 @@ public class TwoOptHeuristicTSP<V, E>
                 }
             }
             if (mini != -1 && minj != -1) {
-                // apply move
-                int a = 0;
-                for (int k = 0; k <= mini; k++) {
-                    newTour[a++] = tour[k];
-                }
-                for (int k = minj; k >= mini + 1; k--) {
-                    newTour[a++] = tour[k];
-                }
-                for (int k = minj + 1; k < n + 1; k++) {
-                    newTour[a++] = tour[k];
-                }
-                // swap tours
-                int[] tmp = tour;
-                tour = newTour;
-                newTour = tmp;
-                moved = true;
+                // apply move: reverse path from mini+1 to minj (both inclusive)
+                reverse(tour, mini + 1, minj);
+            } else {
+                return tour;
             }
-        } while (moved);
-
-        return tour;
+        }
     }
 
     /**
@@ -313,6 +295,7 @@ public class TwoOptHeuristicTSP<V, E>
      */
     private GraphPath<V, E> tourToPath(int[] tour)
     {
+        List<V> revIndex = vertex2index.getIndexList();
         List<V> tourVertices = new ArrayList<>(n + 1);
         for (int vi : tour) {
             V v = revIndex.get(vi);
@@ -329,21 +312,24 @@ public class TwoOptHeuristicTSP<V, E>
      */
     private int[] pathToTour(GraphPath<V, E> path)
     {
-        Set<V> visited = new HashSet<>();
-        int i = 0;
-        int[] tour = new int[n + 1];
-        V v = path.getStartVertex();
-        tour[i++] = index.get(v);
-        for (E e : path.getEdgeList()) {
-            v = Graphs.getOppositeVertex(graph, e, v);
-            if (!visited.add(v)) {
-                throw new IllegalArgumentException("Not a valid tour");
-            }
-            tour[i++] = index.get(v);
-        }
-        if (i < n + 1) {
+        boolean[] visited = new boolean[n];
+        Map<V, Integer> index = vertex2index.getVertexMap();
+
+        List<V> vertexList = path.getVertexList(); // first and last element are the starting vertex
+        if (vertexList.size() != n + 1) {
             throw new IllegalArgumentException("Not a valid tour");
         }
+
+        int[] tour = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            int vi = index.get(vertexList.get(i));
+            if (visited[vi]) {
+                throw new IllegalArgumentException("Not a valid tour");
+            }
+            visited[vi] = true;
+            tour[i] = vi;
+        }
+        tour[n] = tour[0];
         return tour;
     }
 }
