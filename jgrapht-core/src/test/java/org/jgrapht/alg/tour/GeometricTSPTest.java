@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.tour;
 
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
+
 import org.apache.commons.math3.geometry.euclidean.twod.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -29,8 +31,6 @@ import org.junit.runners.*;
 
 import java.util.*;
 import java.util.PrimitiveIterator.*;
-
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
 
 /**
  * Tests of Travelling Salesman Problem algorithms based on a random set of 2D points, with graphs
@@ -124,14 +124,16 @@ public class GeometricTSPTest
     public void testTwoOptNearestNeighbour()
     {
         testWith(
-            "Two-opt of nearest neighbour",
-            new TwoOptHeuristicTSP<>(new NearestNeighborHeuristicTSP<>()));
+            "Two-opt of nearest neighbour", new TwoOptHeuristicTSP<Vector2D, DefaultWeightedEdge>()
+                .setInitializer(new NearestNeighborHeuristicTSP<>()));
     }
 
     @Test
     public void testTwoOpt1()
     {
-        testWith("Two-opt, 1 attempt from random", new TwoOptHeuristicTSP<>(1));
+        testWith(
+            "Two-opt, 1 attempt from random",
+            new TwoOptHeuristicTSP<Vector2D, DefaultWeightedEdge>().setPasses(1));
     }
 
     @Test
