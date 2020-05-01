@@ -19,7 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import java.util.*;
 
-class VF2SubgraphIsomorphismState<V, E>
+final class VF2SubgraphIsomorphismState<V, E>
     extends
     VF2State<V, E>
 {
@@ -56,9 +56,11 @@ class VF2SubgraphIsomorphismState<V, E>
             newSucc1 = 0, newSucc2 = 0;
 
         // check outgoing edges of addVertex1
-        for (int other1 : g1.getOutEdges(addVertex1)) {
+        final int[] outE1 = g1.getOutEdges(addVertex1);
+        for (int i = 0; i < outE1.length; i++) {
+            final int other1 = outE1[i];
             if (core1[other1] != NULL_NODE) {
-                int other2 = core1[other1];
+                final int other2 = core1[other1];
                 if (!g2.hasEdge(addVertex2, other2)
                     || !areCompatibleEdges(addVertex1, other1, addVertex2, other2))
                 {
@@ -68,20 +70,25 @@ class VF2SubgraphIsomorphismState<V, E>
                     return false;
                 }
             } else {
-                if (in1[other1] > 0) {
+                final int in1O1 = in1[other1];
+                final int out1O1 = out1[other1];
+                if ((in1O1 == 0) && (out1O1 == 0)) {
+                    newSucc1++;
+                    continue;
+                }
+                if (in1O1 > 0) {
                     termInSucc1++;
                 }
-                if (out1[other1] > 0) {
+                if (out1O1 > 0) {
                     termOutSucc1++;
-                }
-                if ((in1[other1] == 0) && (out1[other1] == 0)) {
-                    newSucc1++;
                 }
             }
         }
 
         // check outgoing edges of addVertex2
-        for (int other2 : g2.getOutEdges(addVertex2)) {
+        final int[] outE2 = g2.getOutEdges(addVertex2);
+        for (int i = 0; i < outE2.length; i++) {
+            final int other2 = outE2[i];
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
                 if (!g1.hasEdge(addVertex1, other1)) {
@@ -91,14 +98,17 @@ class VF2SubgraphIsomorphismState<V, E>
                     return false;
                 }
             } else {
-                if (in2[other2] > 0) {
+                final int in2O2 = in2[other2];
+                final int out2O2 = out2[other2];
+                if ((in2O2 == 0) && (out2O2 == 0)) {
+                    newSucc2++;
+                    continue;
+                }
+                if (in2O2 > 0) {
                     termInSucc2++;
                 }
-                if (out2[other2] > 0) {
+                if (out2O2 > 0) {
                     termOutSucc2++;
-                }
-                if ((in2[other2] == 0) && (out2[other2] == 0)) {
-                    newSucc2++;
                 }
             }
         }
@@ -124,9 +134,11 @@ class VF2SubgraphIsomorphismState<V, E>
         }
 
         // check incoming edges of addVertex1
-        for (int other1 : g1.getInEdges(addVertex1)) {
+        final int[] inE1 = g1.getInEdges(addVertex1);
+        for (int i = 0; i < inE1.length; i++) {
+            final int other1 = inE1[i];
             if (core1[other1] != NULL_NODE) {
-                int other2 = core1[other1];
+                final int other2 = core1[other1];
                 if (!g2.hasEdge(other2, addVertex2)
                     || !areCompatibleEdges(other1, addVertex1, other2, addVertex2))
                 {
@@ -136,22 +148,27 @@ class VF2SubgraphIsomorphismState<V, E>
                     return false;
                 }
             } else {
-                if (in1[other1] > 0) {
+                final int in1O1 = in1[other1];
+                final int out1O1 = out1[other1];
+                if ((in1O1 == 0) && (out1O1 == 0)) {
+                    newPred1++;
+                    continue;
+                }
+                if (in1O1 > 0) {
                     termInPred1++;
                 }
-                if (out1[other1] > 0) {
+                if (out1O1 > 0) {
                     termOutPred1++;
-                }
-                if ((in1[other1] == 0) && (out1[other1] == 0)) {
-                    newPred1++;
                 }
             }
         }
 
         // check incoming edges of addVertex2
-        for (int other2 : g2.getInEdges(addVertex2)) {
+        final int[] inE2 = g2.getInEdges(addVertex2);
+        for (int i = 0; i < inE2.length; i++) {
+            final int other2 = inE2[i];
             if (core2[other2] != NULL_NODE) {
-                int other1 = core2[other2];
+                final int other1 = core2[other2];
                 if (!g1.hasEdge(other1, addVertex1)) {
                     if (DEBUG) showLog(
                         "isFeasiblePair", abortmsg + ": edge from " + g1.getVertex(other1) + " to "
@@ -159,14 +176,17 @@ class VF2SubgraphIsomorphismState<V, E>
                     return false;
                 }
             } else {
-                if (in2[other2] > 0) {
+                final int in2O2 = in2[other2];
+                final int out2O2 = out2[other2];
+                if ((in2O2 == 0) && (out2O2 == 0)) {
+                    newPred2++;
+                    continue;
+                }
+                if (in2O2 > 0) {
                     termInPred2++;
                 }
-                if (out2[other2] > 0) {
+                if (out2O2 > 0) {
                     termOutPred2++;
-                }
-                if ((in2[other2] == 0) && (out2[other2] == 0)) {
-                    newPred2++;
                 }
             }
         }

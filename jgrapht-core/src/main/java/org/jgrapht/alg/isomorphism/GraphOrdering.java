@@ -29,17 +29,17 @@ import java.util.*;
  * @param <E> the type of the edges
  */
 
-class GraphOrdering<V, E>
+final class GraphOrdering<V, E>
 {
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-    private Map<V, Integer> mapVertexToOrder;
-    private ArrayList<V> mapOrderToVertex;
-    private int vertexCount;
+    private final Map<V, Integer> mapVertexToOrder;
+    private final ArrayList<V> mapOrderToVertex;
+    private final int vertexCount;
 
-    private int[][] outgoingEdges;
-    private int[][] incomingEdges;
-    private E[] edgeCache;
+    private final int[][] outgoingEdges;
+    private final int[][] incomingEdges;
+    private final E[] edgeCache;
     /**
      * if caching is enabled, adjMatrix contains cached information on existing edges, valid values:
      * <ul>
@@ -48,9 +48,9 @@ class GraphOrdering<V, E>
      * <li>-1 - no edge exists</li>
      * </ul>
      */
-    private byte[] adjMatrix;
+    private final byte[] adjMatrix;
 
-    private boolean cacheEdges;
+    private final boolean cacheEdges;
 
     /**
      * @param graph the graph to be ordered
@@ -79,6 +79,11 @@ class GraphOrdering<V, E>
             incomingEdges = new int[vertexCount][];
             edgeCache = (E[]) new Object[vertexCount*vertexCount];
             adjMatrix = new byte[vertexCount*vertexCount];
+        } else {
+            outgoingEdges = null;
+            incomingEdges = null;
+            edgeCache = null;
+            adjMatrix = null;
         }
 
         Integer i = 0;

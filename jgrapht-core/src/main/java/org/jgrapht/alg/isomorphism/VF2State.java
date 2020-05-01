@@ -33,15 +33,17 @@ abstract class VF2State<V, E>
 
     protected static final boolean DEBUG = false;
 
-    protected int[] core1, core2, in1, in2, out1, out2;
+    protected final int[] core1, core2, in1, in2, out1, out2;
 
-    protected int coreLen, n1, n2, t1BothLen, t2BothLen, t1InLen, t2InLen, t1OutLen, t2OutLen,
+    protected final int n1, n2;
+
+    protected int coreLen, t1BothLen, t2BothLen, t1InLen, t2InLen, t1OutLen, t2OutLen,
         addedVertex1, addVertex1, addVertex2;
 
-    protected GraphOrdering<V, E> g1, g2;
+    protected final GraphOrdering<V, E> g1, g2;
 
-    protected Comparator<V> vertexComparator;
-    protected Comparator<E> edgeComparator;
+    protected final Comparator<V> vertexComparator;
+    protected final Comparator<E> edgeComparator;
 
     /**
      * @param g1 GraphOrdering on first graph
