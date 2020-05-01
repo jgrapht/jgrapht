@@ -80,7 +80,7 @@ public class NearestInsertionHeuristicTSP<V, E>
 
     /**
      * Constructor
-     * 
+     *
      * Specifies an existing sub-tour that will be augmented to form a complete tour when
      * {@link #getTour(org.jgrapht.Graph) } is called
      *
@@ -106,9 +106,7 @@ public class NearestInsertionHeuristicTSP<V, E>
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
-        // Check that graph is appropriate
         checkGraph(graph);
-
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
@@ -149,9 +147,10 @@ public class NearestInsertionHeuristicTSP<V, E>
         }
         if (subtourVertices.isEmpty()) {
             // If no initial subtour exists, create one based on the shortest edge
-            E shortestEdge = Collections.min(
-                graph.edgeSet(),
-                (e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)));
+            E shortestEdge = Collections
+                .min(
+                    graph.edgeSet(),
+                    (e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)));
             subtourVertices.add(graph.getEdgeSource(shortestEdge));
             subtourVertices.add(graph.getEdgeTarget(shortestEdge));
         }
@@ -220,8 +219,10 @@ public class NearestInsertionHeuristicTSP<V, E>
             }
             return c;
         });
-        currentClosest.put(
-            chosen.getUnvisitedVertex(), getClosest(chosen.getUnvisitedVertex(), unvisited, graph));
+        currentClosest
+            .put(
+                chosen.getUnvisitedVertex(),
+                getClosest(chosen.getUnvisitedVertex(), unvisited, graph));
     }
 
     /**

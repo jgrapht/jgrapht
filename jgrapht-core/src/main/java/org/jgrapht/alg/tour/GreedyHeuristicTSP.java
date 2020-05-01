@@ -19,6 +19,7 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -47,7 +48,7 @@ import java.util.stream.*;
  * <p>
  * The runtime complexity of this class is $O(V^2 log(V))$.
  * </p>
- * 
+ *
  * <p>
  * This algorithm requires that the graph is complete.
  * </p>
@@ -74,24 +75,23 @@ public class GreedyHeuristicTSP<V, E>
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
-        // Check that graph is appropriate
         checkGraph(graph);
         int n = graph.vertexSet().size();
-        // Handle single vertex graph
         if (n == 1) {
             return getSingletonTour(graph);
         }
+
         // Sort all the edges by weight
         Deque<E> edges = graph
             .edgeSet().stream()
             .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
-            .collect(Collectors.toCollection(() -> new ArrayDeque<>()));
-        Set<E> tourEdges = new HashSet<>(n);
+            .collect(Collectors.toCollection(ArrayDeque::new));
+        Set<E> tourEdges = CollectionUtil.newHashSetWithExpectedSize(n);
         // Create a Map to track the degree of each vertex in tour
-        Map<V, Integer> vertexDegree =
-            graph.vertexSet().stream().collect(Collectors.toMap(v -> v, v -> 0));
+        Map<V, Integer> vertexDegree = CollectionUtil.newHashMapWithExpectedSize(n);
         // Create a UnionFind to track forming of loops
         UnionFind<V> tourSet = new UnionFind<>(graph.vertexSet());
+
         // Iterate until the tour is complete
         while (!edges.isEmpty() && tourEdges.size() < n) {
             // Select the shortest available edge
@@ -101,8 +101,8 @@ public class GreedyHeuristicTSP<V, E>
             // If it matches constraints, add it to the tour
             if (canAddEdge(vertexDegree, tourSet, vertex1, vertex2, tourEdges.size() == n - 1)) {
                 tourEdges.add(edge);
-                vertexDegree.put(vertex1, vertexDegree.get(vertex1) + 1);
-                vertexDegree.put(vertex2, vertexDegree.get(vertex2) + 1);
+                vertexDegree.merge(vertex1, 1, Integer::sum);
+                vertexDegree.merge(vertex2, 1, Integer::sum);
                 tourSet.union(vertex1, vertex2);
             }
         }
@@ -126,7 +126,9 @@ public class GreedyHeuristicTSP<V, E>
         Map<V, Integer> vertexDegree, UnionFind<V> tourSet, V vertex1, V vertex2, boolean lastEdge)
     {
         // Would form a tree rather than loop
-        if (vertexDegree.get(vertex1) > 1 || vertexDegree.get(vertex2) > 1) {
+        if (vertexDegree.getOrDefault(vertex1, 0) > 1
+            || vertexDegree.getOrDefault(vertex2, 0) > 1)
+        {
             return false;
         }
         // Test if a path already exists between the vertices

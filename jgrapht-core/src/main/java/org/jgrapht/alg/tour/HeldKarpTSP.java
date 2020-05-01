@@ -18,8 +18,6 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
 import java.util.*;
@@ -51,22 +49,16 @@ import java.util.*;
  * @author Alexandru Valeanu
  */
 public class HeldKarpTSP<V, E>
-    implements
-    HamiltonianCycleAlgorithm<V, E>
+    extends
+    HamiltonianCycleAlgorithmBase<V, E>
 {
-
-    /**
-     * Construct a new instance
-     */
-    public HeldKarpTSP()
-    {
-    }
 
     private double memo(int previousNode, int state, double[][] C, double[][] W)
     {
         // have we seen this state before?
-        if (C[previousNode][state] != Double.MIN_VALUE)
+        if (C[previousNode][state] != Double.MIN_VALUE) {
             return C[previousNode][state];
+        }
 
         // no cycle has been found yet
         double totalCost = Double.MAX_VALUE;
@@ -74,8 +66,9 @@ public class HeldKarpTSP<V, E>
         // check if all nodes have been visited (i.e. state + 1 == 2^n)
         if (state == (1 << W.length) - 1) {
             // check if there is a return edge we can use
-            if (W[previousNode][0] != Double.MAX_VALUE)
+            if (W[previousNode][0] != Double.MAX_VALUE) {
                 totalCost = W[previousNode][0];
+            }
         } else {
             // try to find the 'best' next (i.e. unvisited and adjacent to previousNode) node in the
             // tour
@@ -101,10 +94,10 @@ public class HeldKarpTSP<V, E>
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
+        requireNotEmpty(graph);
         final int n = graph.vertexSet().size(); // number of nodes
-
-        if (n == 0) {
-            throw new IllegalArgumentException("Graph contains no vertices");
+        if (n == 1) {
+            return getSingletonTour(graph);
         }
 
         if (n > 31) {
@@ -115,24 +108,35 @@ public class HeldKarpTSP<V, E>
                     + "for graphs with more than 31 vertices.");
         }
 
-        if (n == 1) {
-            V startNode = graph.vertexSet().iterator().next();
-            return new GraphWalk<>(
-                graph, startNode, startNode, Collections.singletonList(startNode), null, 0);
-        }
+        // Normalize the graph by mapping each vertex to an integer.
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
 
         // W[u, v] = the cost of the minimum weight between u and v
-        double[][] W = new double[n][n];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(W[i], Double.MAX_VALUE);
+        double[][] W = computeMinimumWeights(vertexToIntegerMapping.getVertexMap(), graph);
+
+        // C[prevNode, state] = the minimum cost of a tour that ends in prevNode and contains all
+        // nodes in the bitmask state
+        double[][] C = new double[n][1 << n];
+        fill(C, Double.MIN_VALUE);
+
+        // start the tour from node 0 (because the tour is a cycle the start vertex does not matter)
+        double tourWeight = memo(0, 1, C, W);
+
+        // check if there is no tour
+        if (tourWeight == Double.MAX_VALUE) {
+            return null;
         }
 
-        /*
-         * Normalize the graph by mapping each vertex to an integer.
-         */
-        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
-        Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
-        List<V> indexList = vertexToIntegerMapping.getIndexList();
+        List<V> vertexList = reconstructTour(vertexToIntegerMapping.getIndexList(), W, C);
+        return vertexListToTour(vertexList, graph);
+    }
+
+    private double[][] computeMinimumWeights(Map<V, Integer> vertexMap, Graph<V, E> graph)
+    {
+        final int n = vertexMap.size();
+
+        double[][] W = new double[n][n];
+        fill(W, Double.MAX_VALUE);
 
         for (E e : graph.edgeSet()) {
             V source = graph.getEdgeSource(e);
@@ -145,29 +149,24 @@ public class HeldKarpTSP<V, E>
             W[u][v] = Math.min(W[u][v], graph.getEdgeWeight(e));
 
             // If the graph is undirected we need to also consider the reverse edge
-            if (graph.getType().isUndirected())
+            if (graph.getType().isUndirected()) {
                 W[v][u] = Math.min(W[v][u], graph.getEdgeWeight(e));
+            }
         }
+        return W;
+    }
 
-        // C[prevNode, state] = the minimum cost of a tour that ends in prevNode and contains all
-        // nodes in the bitmask state
-        double[][] C = new double[n][1 << n];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(C[i], Double.MIN_VALUE);
+    private static void fill(double[][] array, double value)
+    {
+        for (double[] element : array) {
+            Arrays.fill(element, value);
         }
+    }
 
-        // start the tour from node 0 (because the tour is a cycle the start vertex does not matter)
-        double tourWeight = memo(0, 1, C, W);
-
-        // check if there is no tour
-        if (tourWeight == Double.MAX_VALUE)
-            return null;
-
-        /*
-         * Reconstruct the tour
-         */
+    private List<V> reconstructTour(List<V> indexList, double[][] W, double[][] C)
+    {
+        final int n = indexList.size();
         List<V> vertexList = new ArrayList<>(n);
-        List<E> edgeList = new ArrayList<>(n);
 
         int lastNode = 0;
         int lastState = 1;
@@ -179,9 +178,10 @@ public class HeldKarpTSP<V, E>
             for (int node = 1; node < n; node++) {
                 if ((lastState & (1 << node)) == 0 && W[lastNode][node] != Double.MAX_VALUE
                     && C[node][lastState ^ (1 << node)] != Double.MIN_VALUE
-                    && Double.compare(
-                        C[node][lastState ^ (1 << node)] + W[lastNode][node],
-                        C[lastNode][lastState]) == 0)
+                    && Double
+                        .compare(
+                            C[node][lastState ^ (1 << node)] + W[lastNode][node],
+                            C[lastNode][lastState]) == 0)
                 {
                     nextNode = node;
                     break;
@@ -190,16 +190,9 @@ public class HeldKarpTSP<V, E>
 
             assert nextNode != -1;
             vertexList.add(indexList.get(nextNode));
-            edgeList.add(graph.getEdge(indexList.get(lastNode), indexList.get(nextNode)));
             lastState ^= 1 << nextNode;
             lastNode = nextNode;
         }
-
-        // add start vertex
-        vertexList.add(indexList.get(0));
-        edgeList.add(graph.getEdge(indexList.get(lastNode), indexList.get(0)));
-
-        return new GraphWalk<>(
-            graph, indexList.get(0), indexList.get(0), vertexList, edgeList, tourWeight);
+        return vertexList;
     }
 }

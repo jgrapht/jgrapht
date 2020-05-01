@@ -18,8 +18,6 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
 
 import java.util.*;
 
@@ -39,9 +37,14 @@ import java.util.*;
  * </p>
  *
  * <p>
- * This is an implementation of the algorithm described by E. M. Palmer in his paper. The algorithm
- * takes a simple graph that meets Ore's condition (see {@link GraphTests#hasOreProperty(Graph)})
- * and returns a Hamiltonian cycle. The algorithm runs in $O(|V|^2)$ time and uses $O(|V|)$ space.
+ * This is an implementation of the CRISS-CROSS algorithm described by E. M. Palmer in his paper.
+ * The algorithm takes a simple graph that meets Ore's condition (see
+ * {@link GraphTests#hasOreProperty(Graph)}) and returns a Hamiltonian cycle. The algorithm runs in
+ * $O(|V|^3)$ time and uses $O(|V|)$ space. In contrast to the most other algorithms in this package
+ * this algorithm does only attempt to find any Hamiltonian cycle in the graph and does not attempt
+ * to find the shortest cycle. The advantage of this algorithm is that accepted graphs only need to
+ * meet Ore's condition which is less strict than the completeness requirement of most of the other
+ * algorithms.
  * </p>
  *
  * <p>
@@ -59,15 +62,9 @@ import java.util.*;
  * @author Alexandru Valeanu
  */
 public class PalmerHamiltonianCycle<V, E>
-    implements
-    HamiltonianCycleAlgorithm<V, E>
+    extends
+    HamiltonianCycleAlgorithmBase<V, E>
 {
-    /**
-     * Construct a new instance
-     */
-    public PalmerHamiltonianCycle()
-    {
-    }
 
     /**
      * Computes a Hamiltonian tour.
@@ -78,44 +75,47 @@ public class PalmerHamiltonianCycle<V, E>
      * @throws IllegalArgumentException if the graph doesn't meet Ore's condition
      * @see GraphTests#hasOreProperty(Graph)
      */
+    @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
-        if (!GraphTests.hasOreProperty(graph))
+        if (!GraphTests.hasOreProperty(graph)) { // requires vertexSet().size() >= 3
             throw new IllegalArgumentException("Graph doesn't have Ore's property");
+        }
 
         List<V> indexList = new ArrayList<>(graph.vertexSet());
 
         // n - number of vertices
-        final int n = graph.vertexSet().size();
+        final int n = indexList.size();
 
-        // L[u] = the node just before u (in the cycle)
-        // R[u] = the node after u (in the cycle)
-        int[] L = new int[n], R = new int[n];
+        int[] L = new int[n]; // L[u] = the node just before u (in the cycle)
+        int[] R = new int[n]; // R[u] = the node after u (in the cycle)
 
         // arrange nodes in a cycle: 0, 1, 2, ..., n - 1, 0
-        for (int i = 0; i < n; i++) {
-            L[i] = (i - 1 + n) % n;
-            R[i] = (i + 1) % n;
+        for (int i = 0; i < n - 1; i++) {
+            L[i + 1] = i; // L = [n-1, 0, ..., n-2]
+            R[i] = i + 1; // R = [1, ..., n-1, 0]
         }
+        L[0] = n - 1;
+        R[n - 1] = 0;
 
         boolean changed;
-
         do {
             changed = false;
 
-            // search for a gap (two consecutive vertices x and R[x] that are not adjacent in the
-            // graph)
+            // search for a gap, i.e.: two consecutive vertices x and R[x] that are not adjacent
+            // (connected by a edge) in the graph
             int x = 0;
 
             search: do {
                 // check if we found a gap in our cycle
-                if (!graph.containsEdge(indexList.get(x), indexList.get(R[x]))) {
+                if (!containsEdge(x, R[x], graph, indexList)) {
                     changed = true;
 
                     /*
                      * Search for a node y such that the four vertices x, R[x], y, and R[y] are all
                      * distinct and such that the graph contains edges from x to y and from R[y] to
-                     * R[x]
+                     * R[x] ("a pair of crossing chords from the vertices of the gap to some other
+                     * pair of consecutive vertices that may or may not be adjacent" )
                      */
                     int y = 0;
                     do {
@@ -123,8 +123,8 @@ public class PalmerHamiltonianCycle<V, E>
                         int p = y, q = R[y];
 
                         if (v != p && u != p && u != q) {
-                            if (graph.containsEdge(indexList.get(u), indexList.get(p))
-                                && graph.containsEdge(indexList.get(v), indexList.get(q)))
+                            if (containsEdge(u, p, graph, indexList)
+                                && containsEdge(v, q, graph, indexList))
                             {
                                 R[u] = L[u];
                                 L[u] = p;
@@ -140,34 +140,33 @@ public class PalmerHamiltonianCycle<V, E>
                                     R[z] = L[z];
                                     L[z] = tmp;
                                 }
-
                                 break search;
                             }
                         }
-
                         y = R[y];
                     } while (y != 0);
                 }
-
                 x = R[x];
             } while (x != 0);
 
         } while (changed);
 
-        List<V> vertexList = new ArrayList<>(n);
-        List<E> edgeList = new ArrayList<>(n);
+        return buildTour(R, indexList, graph);
+    }
 
+    private static <V, E> boolean containsEdge(int u, int v, Graph<V, E> graph, List<V> indexList)
+    {
+        return graph.containsEdge(indexList.get(u), indexList.get(v));
+    }
+
+    private GraphPath<V, E> buildTour(int[] R, List<V> indexList, Graph<V, E> graph)
+    {
+        List<V> vertexList = new ArrayList<>(indexList.size() + 1);
         int x = 0;
         do {
             vertexList.add(indexList.get(x));
-            edgeList.add(graph.getEdge(indexList.get(x), indexList.get(R[x])));
             x = R[x];
         } while (x != 0);
-
-        // add start vertex
-        vertexList.add(indexList.get(0));
-
-        return new GraphWalk<>(
-            graph, indexList.get(0), indexList.get(0), vertexList, edgeList, edgeList.size());
+        return vertexListToTour(vertexList, graph);
     }
 }

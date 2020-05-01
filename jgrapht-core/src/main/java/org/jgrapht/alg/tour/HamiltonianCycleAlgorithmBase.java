@@ -44,29 +44,38 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E>
     /**
      * Transform from a List representation to a graph path.
      *
-     * @param tour a list containing the vertices of the tour
+     * @param tour a list containing the vertices of the tour (is modified)
      * @param graph the graph
      * @return a graph path
      */
     protected GraphPath<V, E> vertexListToTour(List<V> tour, Graph<V, E> graph)
     {
-        List<E> edges = new ArrayList<>(tour.size() + 1);
+        tour.add(tour.get(0));
+        return closedVertexListToTour(tour, graph);
+    }
+
+    /**
+     * Transform from a closed List representation (first and last vertex element are the same) to a
+     * graph path.
+     *
+     * @param tour a closed list containing the vertices of the tour
+     * @param graph the graph
+     * @return a graph path
+     */
+    protected GraphPath<V, E> closedVertexListToTour(List<V> tour, Graph<V, E> graph)
+    {
+        assert tour.get(0) == tour.get(tour.size() - 1);
+
+        List<E> edges = new ArrayList<>(tour.size() - 1);
         double tourWeight = 0d;
-        Iterator<V> tourIterator = tour.iterator();
-        V first = tourIterator.next();
-        V u = first;
-        while (tourIterator.hasNext()) {
-            V v = tourIterator.next();
+        V u = tour.get(0);
+        for (V v : tour.subList(1, tour.size())) {
             E e = graph.getEdge(u, v);
             edges.add(e);
             tourWeight += graph.getEdgeWeight(e);
             u = v;
         }
-        E e = graph.getEdge(u, first);
-        edges.add(e);
-        tourWeight += graph.getEdgeWeight(e);
-        tour.add(first);
-        return new GraphWalk<>(graph, first, first, tour, edges, tourWeight);
+        return new GraphWalk<>(graph, tour.get(0), tour.get(0), tour, edges, tourWeight);
     }
 
     /**
@@ -79,26 +88,12 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E>
     protected GraphPath<V, E> edgeSetToTour(Set<E> tour, Graph<V, E> graph)
     {
         List<V> vertices = new ArrayList<>(tour.size() + 1);
-        List<E> edges = new ArrayList<>(tour.size());
-        double tourWeight = 0d;
-        Iterator<V> tourIterator =
-            new DepthFirstIterator<>(new MaskSubgraph<>(graph, v -> false, e -> !tour.contains(e)));
-        V first = tourIterator.next();
-        V u = first;
-        while (tourIterator.hasNext()) {
-            vertices.add(u);
-            V v = tourIterator.next();
-            E e = graph.getEdge(u, v);
-            edges.add(e);
-            tourWeight += graph.getEdgeWeight(e);
-            u = v;
-        }
-        vertices.add(u);
-        vertices.add(first);
-        E e = graph.getEdge(u, first);
-        edges.add(e);
-        tourWeight += graph.getEdgeWeight(e);
-        return new GraphWalk<>(graph, first, first, vertices, edges, tourWeight);
+
+        MaskSubgraph<V, E> tourGraph =
+            new MaskSubgraph<>(graph, v -> false, e -> !tour.contains(e));
+        new DepthFirstIterator<>(tourGraph).forEachRemaining(vertices::add);
+
+        return vertexListToTour(vertices, graph);
     }
 
     /**
@@ -125,10 +120,23 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E>
      */
     protected void checkGraph(Graph<V, E> graph)
     {
-        graph = GraphTests.requireUndirected(graph);
+        GraphTests.requireUndirected(graph);
+
+        requireNotEmpty(graph);
+
         if (!GraphTests.isComplete(graph)) {
             throw new IllegalArgumentException("Graph is not complete");
         }
+    }
+
+    /**
+     * Checks that graph is not empty
+     *
+     * @param graph the graph
+     * @throws IllegalArgumentException if graph contains no vertices
+     */
+    protected void requireNotEmpty(Graph<V, E> graph)
+    {
         if (graph.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Graph contains no vertices");
         }
