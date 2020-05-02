@@ -285,5 +285,62 @@ public class JSONExporterTest
         assertEquals(3, graph2.getAllEdges(1, 4).size());
 
     }
+    
+    @Test
+    public void testExportAndImportWithEscape()
+        throws ExportException,
+        ImportException
+    {
+        Graph<String,
+            DefaultWeightedEdge> graph1 = GraphTypeBuilder
+                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                .vertexSupplier(SupplierUtil.createStringSupplier()).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).buildGraph();
+
+        String difficultId = "I have \"\" in my id";
+        
+        graph1.addVertex("1");
+        graph1.addVertex(difficultId);
+        graph1.addVertex("3");
+        graph1.addVertex("4");
+        graph1.addVertex("5");
+
+        graph1.addEdge("1", difficultId);
+        graph1.addEdge("1", "3");
+        graph1.addEdge("1", "4");
+        graph1.addEdge("1", "4");
+        graph1.addEdge("1", "4");
+        graph1.addEdge("4", "4");
+
+        JSONExporter<String, DefaultWeightedEdge> exporter =
+            new JSONExporter<>(x -> String.valueOf(x));
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(graph1, os);
+        String output1 = os.toString();
+
+        Graph<String,
+            DefaultWeightedEdge> graph2 = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER).buildGraph();
+
+        JSONImporter<String, DefaultWeightedEdge> importer = new JSONImporter<>();
+        importer.setVertexFactory(x->x);
+        importer.importGraph(graph2, new StringReader(output1));
+
+        assertEquals(5, graph2.vertexSet().size());
+        assertEquals(6, graph2.edgeSet().size());
+        assertTrue(graph2.containsVertex("1"));
+        assertTrue(graph2.containsVertex(difficultId));
+        assertTrue(graph2.containsVertex("3"));
+        assertTrue(graph2.containsVertex("4"));
+        assertTrue(graph2.containsVertex("5"));
+        assertTrue(graph2.containsEdge("1", difficultId));
+        assertTrue(graph2.containsEdge("1", "3"));
+        assertTrue(graph2.containsEdge("1", "4"));
+        assertTrue(graph2.containsEdge("4", "4"));
+        assertEquals(3, graph2.getAllEdges("1", "4").size());
+
+    }
 
 }
