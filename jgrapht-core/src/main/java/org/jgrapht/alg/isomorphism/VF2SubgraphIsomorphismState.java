@@ -19,7 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import java.util.*;
 
-final class VF2SubgraphIsomorphismState<V, E>
+class VF2SubgraphIsomorphismState<V, E>
     extends
     VF2State<V, E>
 {
