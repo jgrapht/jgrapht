@@ -230,7 +230,11 @@ public class HawickJamesSimpleCycles<V, E>
 
         initState();
         cycles = new ArrayList<>();
-        operation = () -> cycles.add(stack.stream().map(v -> iToV[v]).collect(toList()));
+        operation = () -> {
+            List<V> cycle = stack.stream().map(v -> iToV[v]).collect(toList());
+            Collections.reverse(cycle);
+            cycles.add(cycle);
+        };
         analyzeCircuits();
         List<List<V>> result = cycles;
         clearState();

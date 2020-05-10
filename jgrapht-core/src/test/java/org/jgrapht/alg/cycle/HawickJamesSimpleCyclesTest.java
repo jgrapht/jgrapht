@@ -22,6 +22,7 @@ import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -199,7 +200,7 @@ public class HawickJamesSimpleCyclesTest
         List<List<String>> cycles = new HawickJamesSimpleCycles<>(graph).findSimpleCycles();
 
         assertEquals(3, cycles.size());
-        assertEquals(asList("B", "A"), cycles.get(0));
+        assertEquals(asList("A", "B"), cycles.get(0));
         assertEquals(singletonList("A"), cycles.get(1));
         assertEquals(singletonList("B"), cycles.get(2));
     }
@@ -308,4 +309,36 @@ public class HawickJamesSimpleCyclesTest
         assertTrue(cycles.get(0).containsAll(asList("A", "B")));
         assertTrue(cycles.get(1).containsAll(asList("C", "D")));
     }
+    
+    @Test
+    public void testOrder()
+    {
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("0");
+        graph.addVertex("1");
+        graph.addVertex("2");
+        graph.addVertex("3");
+        graph.addVertex("4");
+        graph.addVertex("5");
+
+        graph.addEdge("0", "1");
+        graph.addEdge("1", "2");
+        graph.addEdge("2", "3");
+        graph.addEdge("3", "0");
+        graph.addEdge("1", "4");
+        graph.addEdge("4", "5");
+        graph.addEdge("5", "2");
+
+        HawickJamesSimpleCycles<String, DefaultEdge> hjsc = new HawickJamesSimpleCycles<>(graph);
+
+        List<List<String>> cycles = hjsc.findSimpleCycles();
+        assertEquals(2, cycles.size());
+        
+        String cycle0 = cycles.get(0).stream().collect(Collectors.joining(","));
+        String cycle1 = cycles.get(1).stream().collect(Collectors.joining(","));
+        
+        assertEquals(cycle0, "0,1,2,3");
+        assertEquals(cycle1, "0,1,4,5,2,3");
+    }
+    
 }
