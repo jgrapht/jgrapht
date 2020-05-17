@@ -313,6 +313,10 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             return comparator.compare(capacity, flow) > 0;
         }
 
+        public double getResidualCapacity(){
+            return capacity - flow;
+        }
+
         @Override
         public String toString()
         {
