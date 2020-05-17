@@ -252,11 +252,11 @@ public class NearestNeighborHeuristicTSP<V, E>
     {
         if (initiaVertex != null) { // not null means hasNext
             V first = initiaVertex.next();
+            if (!initiaVertex.hasNext()) {
+                initiaVertex = null; // release the resource backing the iterator immediately
+            }
             if (!graph.vertexSet().contains(first)) {
                 throw new IllegalArgumentException("Specified initial vertex is not in graph");
-            }
-            if (!initiaVertex.hasNext()) {
-                initiaVertex = null; // release resources as soon as possible
             }
             return first;
         } else {
