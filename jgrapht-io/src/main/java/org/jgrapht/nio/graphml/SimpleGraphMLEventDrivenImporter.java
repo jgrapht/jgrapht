@@ -474,6 +474,10 @@ public class SimpleGraphMLEventDrivenImporter
                         } catch (NumberFormatException e) {
                             // ignore
                         }
+                    } else {
+                        notifyEdgeAttribute(
+                            currentEdge, key.attributeName,
+                            new DefaultAttribute<>(currentDataValue.toString(), key.type));
                     }
                 }
             }

@@ -90,6 +90,7 @@ public class SimpleGraphMLEventDrivenImporterTest
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
             "<key id=\"d1\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\"/>" + NL +
+            "<key id=\"d2\" for=\"edge\" attr.name=\"cost\" attr.type=\"double\"/>" + NL +
             "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
             "<node id=\"n0\">" + NL +
             "<data key=\"d0\">green</data>" + NL +
@@ -103,6 +104,7 @@ public class SimpleGraphMLEventDrivenImporterTest
             "</edge>" + NL +
             "<edge id=\"e1\" source=\"n0\" target=\"n1\">" + NL +
             "<data key=\"d1\">3.0</data>" + NL +
+            "<data key=\"d2\">13.0</data>" + NL +
             "</edge>" + NL +
             "<edge id=\"e2\" source=\"n1\" target=\"n2\"/>" + NL +
             "</graph>" + NL +
@@ -110,6 +112,15 @@ public class SimpleGraphMLEventDrivenImporterTest
         // @formatter:on
 
         SimpleGraphMLEventDrivenImporter importer = new SimpleGraphMLEventDrivenImporter();
+        
+        importer.addEdgeAttributeConsumer((p,a)->{
+            String key = p.getSecond();
+            String value = a.getValue();
+            
+            if (key.equals("cost")) { 
+                assertEquals(value, "13.0");
+            }
+        });
 
         List<Triple<String, String, Double>> collected = new ArrayList<>();
         importer.addEdgeConsumer(q -> {
