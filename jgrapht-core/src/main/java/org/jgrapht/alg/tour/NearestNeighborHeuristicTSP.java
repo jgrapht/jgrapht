@@ -37,6 +37,18 @@ import java.util.*;
  * </p>
  *
  * <p>
+ * The tour computed with a {@code Nearest-Neighbor-Heuristic} can vary depending on the first
+ * vertex visited. The first vertex for the next or for multiple subsequent tour computations (calls
+ * of {@link #getTour(Graph)}) can be specified in the constructors
+ * {@link #NearestNeighborHeuristicTSP(Object)} or {@link #NearestNeighborHeuristicTSP(Iterable)}.
+ * This can be used for example to ensure that the first vertices visited are different for
+ * subsequent calls of {@code  getTour(Graph)}. Once each specified first vertex is used, the first
+ * vertex in subsequent tour computations is selected randomly from the graph. Alternatively
+ * {@link #NearestNeighborHeuristicTSP(Random)} or {@link #NearestNeighborHeuristicTSP(long)} can be
+ * used to specify a {@code Random} used to randomly select the vertex visited first.
+ * </p>
+ *
+ * <p>
  * The implementation of this class is based on: <br>
  * Nilsson, Christian. "Heuristics for the traveling salesman problem." Linkoping University 38
  * (2003)
@@ -75,13 +87,30 @@ public class NearestNeighborHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param first First vertex to visit, or null to choose at random
+     * @param first First vertex to visit
      * @throws NullPointerException if first is null
      */
     public NearestNeighborHeuristicTSP(V first)
     {
         this(
-            Objects.requireNonNull(first, "Specified initial vertex cannot be null"), new Random());
+            Collections
+                .singletonList(
+                    Objects.requireNonNull(first, "Specified initial vertex cannot be null")),
+            new Random());
+    }
+
+    /**
+     * Constructor
+     *
+     * @param initialVertices The Iterable of vertices visited first in subsequent tour computations
+     *        (per call of {@link #getTour(Graph)} another vertex of the Iterable is used as first)
+     * @throws NullPointerException if first is null
+     */
+    public NearestNeighborHeuristicTSP(Iterable<V> initialVertices)
+    {
+        this(
+            Objects.requireNonNull(initialVertices, "Specified initial vertices cannot be null"),
+            new Random());
     }
 
     /**
@@ -108,40 +137,20 @@ public class NearestNeighborHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param first First vertex to visit, or null to choose at random
+     * @param initialVertices The Iterable of vertices visited first in subsequent tour
+     *        computations, or null to choose at random
      * @param rng Random number generator
      */
-    private NearestNeighborHeuristicTSP(V first, Random rng)
+    private NearestNeighborHeuristicTSP(Iterable<V> initialVertices, Random rng)
     {
-        if (first != null) {
-            setInitialVertices(Collections.singletonList(first));
+        if (initialVertices != null) {
+            Iterator<V> iterator = initialVertices.iterator();
+            this.initiaVertex = iterator.hasNext() ? iterator : null;
         }
         this.rng = rng;
     }
 
-    /**
-     * Set the {@code initial vertices} visited first in the subsequent tour computations.
-     * <p>
-     * Each vertex returned by the {@link Iterator} of the given {@code initialVertices} is used as
-     * first vertex in a separate subsequent call to {@link #getTour(Graph)}. Once the obtained
-     * iterator is exhausted, the current {@link #setRandomNumberGenerator(Random) Random} is used
-     * to randomly select a first vertex.
-     * </p>
-     * <p>
-     * This method can be used to specify the first visited vertex for multiple subsequent calls of
-     * {@code  getTour(Graph)}, for example to ensure that the first vertices visited are different.
-     * </p>
-     *
-     * @param initialVertices the vertices visited first in separate subsequent tour computations
-     * @return this algorithm object
-     */
-    public NearestNeighborHeuristicTSP<V, E> setInitialVertices(Iterable<V> initialVertices)
-    {
-        Objects.requireNonNull(initialVertices, "Specified initial vertices cannot be null");
-        Iterator<V> iterator = initialVertices.iterator();
-        this.initiaVertex = iterator.hasNext() ? iterator : null;
-        return this;
-    }
+    // algorithm
 
     /**
      * Computes a tour using the nearest neighbour heuristic.

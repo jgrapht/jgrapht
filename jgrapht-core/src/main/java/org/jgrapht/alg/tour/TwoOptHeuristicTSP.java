@@ -32,13 +32,13 @@ import java.util.*;
  * </p>
  *
  * <p>
- * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates k
- * initial tours and then iteratively improves the tours until a local minimum is reached. In each
- * iteration it applies the best possible 2-opt move which means to find the best pair of edges
- * $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour
- * length. The default initial tours use RandomTour, however an alternative algorithm can be
- * provided to create the initial tour. Initial tours generated using NearestNeighborHeuristicTSP
- * give good results and performance.
+ * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates
+ * <em>passes<em> initial tours and then iteratively improves the tours until a local minimum is
+ * reached. In each iteration it applies the best possible 2-opt move which means to find the best
+ * pair of edges $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$
+ * minimizes the tour length. The default initial tours use RandomTour, however an alternative
+ * algorithm can be provided to create the initial tour. Initial tours generated using
+ * NearestNeighborHeuristicTSP give good results and performance.
  * </p>
  *
  * <p>
@@ -59,7 +59,7 @@ public class TwoOptHeuristicTSP<V, E>
     implements
     HamiltonianCycleImprovementAlgorithm<V, E>
 {
-    private final int k;
+    private final int passes;
     private final HamiltonianCycleAlgorithm<V, E> initializer;
     private final double minCostImprovement;
 
@@ -80,45 +80,45 @@ public class TwoOptHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param k how many initial random tours to check
+     * @param passes how many initial random tours to check
      */
-    public TwoOptHeuristicTSP(int k)
+    public TwoOptHeuristicTSP(int passes)
     {
-        this(k, new Random());
+        this(passes, new Random());
     }
 
     /**
      * Constructor
      *
-     * @param k how many initial random tours to check
+     * @param passes how many initial random tours to check
      * @param seed seed for the random number generator
      */
-    public TwoOptHeuristicTSP(int k, long seed)
+    public TwoOptHeuristicTSP(int passes, long seed)
     {
-        this(k, new Random(seed));
+        this(passes, new Random(seed));
     }
 
     /**
      * Constructor
      *
-     * @param k how many initial random tours to check
+     * @param passes how many initial random tours to check
      * @param rng random number generator
      */
-    public TwoOptHeuristicTSP(int k, Random rng)
+    public TwoOptHeuristicTSP(int passes, Random rng)
     {
-        this(k, new RandomTourTSP<>(rng));
+        this(passes, new RandomTourTSP<>(rng));
     }
 
     /**
      * Constructor
      *
-     * @param k how many initial random tours to check
+     * @param passes how many initial random tours to check
      * @param rng random number generator
      * @param minCostImprovement Minimum cost improvement per iteration
      */
-    public TwoOptHeuristicTSP(int k, Random rng, double minCostImprovement)
+    public TwoOptHeuristicTSP(int passes, Random rng, double minCostImprovement)
     {
-        this(k, new RandomTourTSP<>(rng), minCostImprovement);
+        this(passes, new RandomTourTSP<>(rng), minCostImprovement);
     }
 
     /**
@@ -134,32 +134,34 @@ public class TwoOptHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param k how many initial tours to check
+     * @param passes how many initial tours to check
      * @param initializer Algorithm to generate initial tour
      */
-    public TwoOptHeuristicTSP(int k, HamiltonianCycleAlgorithm<V, E> initializer)
+    public TwoOptHeuristicTSP(int passes, HamiltonianCycleAlgorithm<V, E> initializer)
     {
-        this(k, initializer, 1e-8);
+        this(passes, initializer, 1e-8);
     }
 
     /**
      * Constructor
      *
-     * @param k how many initial tours to check
+     * @param passes how many initial tours to check
      * @param initializer Algorithm to generate initial tours
      * @param minCostImprovement Minimum cost improvement per iteration
      */
     public TwoOptHeuristicTSP(
-        int k, HamiltonianCycleAlgorithm<V, E> initializer, double minCostImprovement)
+        int passes, HamiltonianCycleAlgorithm<V, E> initializer, double minCostImprovement)
     {
-        if (k < 1) {
-            throw new IllegalArgumentException("k must be at least one");
+        if (passes < 1) {
+            throw new IllegalArgumentException("passes must be at least one");
         }
-        this.k = k;
+        this.passes = passes;
         this.initializer =
             Objects.requireNonNull(initializer, "Initial solver algorithm cannot be null");
         this.minCostImprovement = Math.abs(minCostImprovement);
     }
+
+    // algorithm
 
     /**
      * Computes a 2-approximate tour.
@@ -183,7 +185,7 @@ public class TwoOptHeuristicTSP<V, E>
 
         // Execute 2-opt from k random permutations
         GraphPath<V, E> best = tourToPath(improve(createInitialTour()));
-        for (int i = 1; i < k; i++) {
+        for (int i = 1; i < passes; i++) {
             GraphPath<V, E> other = tourToPath(improve(createInitialTour()));
             if (other.getWeight() < best.getWeight()) {
                 best = other;

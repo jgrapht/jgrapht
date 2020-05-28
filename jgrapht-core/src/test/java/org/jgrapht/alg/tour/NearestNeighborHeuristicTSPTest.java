@@ -90,7 +90,7 @@ public class NearestNeighborHeuristicTSPTest
     }
 
     @Test
-    public void testSetRandomNumberGenerator()
+    public void testConstructorWithRandomNumberGenerator()
         throws URISyntaxException,
         IOException
     {
@@ -102,8 +102,7 @@ public class NearestNeighborHeuristicTSPTest
         Random testRnd = new Random(randomSeed);
 
         HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> alg =
-            new NearestNeighborHeuristicTSP<Vector2D, DefaultWeightedEdge>()
-                .setRandomNumberGenerator(new Random(randomSeed));
+            new NearestNeighborHeuristicTSP<>(new Random(randomSeed));
 
         for (int i = 0; i < tours; i++) {
             Vector2D expectedStartVertex = orderedVertices.get(testRnd.nextInt(tours));
@@ -115,26 +114,25 @@ public class NearestNeighborHeuristicTSPTest
     }
 
     @Test
-    public void testSetFirst()
+    public void testConstructorWithFirst()
     {
         Vector2D first = locations.get(2);
         HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> alg =
-            new NearestNeighborHeuristicTSP<Vector2D, DefaultWeightedEdge>().setFirst(first);
+            new NearestNeighborHeuristicTSP<>(first);
 
         GraphPath<Vector2D, DefaultWeightedEdge> tour = alg.getTour(graph);
         assertStartVertex(tour, first);
     }
 
     @Test
-    public void testSetInitialVertices()
+    public void testConstructorWithInitialVertices()
     {
         List<Vector2D> initalVertices = new ArrayList<>(graph.vertexSet());
         long seed = stringBytesAsLong("JGraphT"); // a fixed seed
         Collections.shuffle(initalVertices, new Random(seed));
 
         HamiltonianCycleAlgorithm<Vector2D, DefaultWeightedEdge> alg =
-            new NearestNeighborHeuristicTSP<Vector2D, DefaultWeightedEdge>()
-                .setInitialVertices(initalVertices);
+            new NearestNeighborHeuristicTSP<>(initalVertices);
 
         for (Vector2D expectedStartVertex : initalVertices) {
             GraphPath<Vector2D, DefaultWeightedEdge> tour = alg.getTour(graph);
@@ -145,15 +143,13 @@ public class NearestNeighborHeuristicTSPTest
     @Test
     public void testGetTour()
     {
-        NearestNeighborHeuristicTSP<Vector2D, DefaultWeightedEdge> alg =
-            new NearestNeighborHeuristicTSP<>();
-
         for (int i = 0; i < locations.size(); i++) {
             Vector2D startVertex = locations.get(i);
             GraphPath<Vector2D, DefaultWeightedEdge> expectedTour = expectedTours.get(i);
 
             GraphPath<Vector2D, DefaultWeightedEdge> tour =
-                alg.setFirst(startVertex).getTour(graph);
+                new NearestNeighborHeuristicTSP<Vector2D, DefaultWeightedEdge>(startVertex)
+                    .getTour(graph);
 
             assertThat(tour, is(equalTo(expectedTour)));
         }
