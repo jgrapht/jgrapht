@@ -41,41 +41,25 @@ public class RandomTourTSP<V, E>
     HamiltonianCycleAlgorithmBase<V, E>
 {
 
-    private Random rng;
+    private final Random rng;
 
     /**
      * Construct with default random number generator
      */
     public RandomTourTSP()
     {
-        this.rng = new Random();
+        this(new Random());
     }
 
     /**
      * Construct with specified random number generator
      *
      * @param rng The random number generator
-     * @deprecated use {@link #RandomTourTSP() } and {@link #setRng(Random)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public RandomTourTSP(Random rng)
     {
         this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
     }
-
-    /**
-     * Set the {@link Random} used to create random tours.
-     *
-     * @param rng the {@code Random} to use
-     * @return this algorithm object
-     */
-    public RandomTourTSP<V, E> setRng(Random rng)
-    {
-        this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
-        return this;
-    }
-
-    // algorithm
 
     /**
      * Computes a tour using the greedy heuristic.

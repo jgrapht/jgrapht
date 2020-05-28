@@ -75,7 +75,7 @@ public class NearestInsertionHeuristicTSP<V, E>
      */
     public NearestInsertionHeuristicTSP()
     {
-        this.subtour = null;
+        this(null);
     }
 
     /**
@@ -85,29 +85,11 @@ public class NearestInsertionHeuristicTSP<V, E>
      * {@link #getTour(org.jgrapht.Graph) } is called
      *
      * @param subtour Initial sub-tour, or null to start with shortest edge
-     * @deprecated use {@link #NearestInsertionHeuristicTSP()} and {@link #setSubtour(GraphPath)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public NearestInsertionHeuristicTSP(GraphPath<V, E> subtour)
     {
         this.subtour = subtour;
     }
-
-    /**
-     * Set an existing sub-tour that will be augmented to form a complete tour when
-     * {@link #getTour(org.jgrapht.Graph) } is called.
-     *
-     * @param subtour Initial sub-tour, or null to start with shortest edge
-     * @return this algorithm object
-     *
-     */
-    public NearestInsertionHeuristicTSP<V, E> setSubtour(GraphPath<V, E> subtour)
-    {
-        this.subtour = subtour;
-        return this;
-    }
-
-    // algorithm
 
     /**
      * Computes a tour using the nearest insertion heuristic.
@@ -356,5 +338,6 @@ public class NearestInsertionHeuristicTSP<V, E>
         {
             return Double.compare(distance, o.distance);
         }
+
     }
 }

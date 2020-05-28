@@ -59,9 +59,9 @@ public class TwoOptHeuristicTSP<V, E>
     implements
     HamiltonianCycleImprovementAlgorithm<V, E>
 {
-    private int passes;
-    private HamiltonianCycleAlgorithm<V, E> initializer;
-    private double minCostImprovement;
+    private final int k;
+    private final HamiltonianCycleAlgorithm<V, E> initializer;
+    private final double minCostImprovement;
 
     private Graph<V, E> graph;
     private int n;
@@ -74,18 +74,14 @@ public class TwoOptHeuristicTSP<V, E>
      */
     public TwoOptHeuristicTSP()
     {
-        this.passes = 1;
-        this.initializer = new RandomTourTSP<>();
-        this.minCostImprovement = 1e-8;
+        this(1, new Random());
     }
 
     /**
      * Constructor
      *
      * @param k how many initial random tours to check
-     * @deprecated use {@link #TwoOptHeuristicTSP()} and {@link #setPasses(int)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(int k)
     {
         this(k, new Random());
@@ -96,10 +92,7 @@ public class TwoOptHeuristicTSP<V, E>
      *
      * @param k how many initial random tours to check
      * @param seed seed for the random number generator
-     * @deprecated use {@link #TwoOptHeuristicTSP()} , {@link #setPasses(int)} and
-     *             {@link #setInitializer(HamiltonianCycleAlgorithm)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(int k, long seed)
     {
         this(k, new Random(seed));
@@ -110,10 +103,7 @@ public class TwoOptHeuristicTSP<V, E>
      *
      * @param k how many initial random tours to check
      * @param rng random number generator
-     * @deprecated use {@link #TwoOptHeuristicTSP()} , {@link #setPasses(int)} and
-     *             {@link #setInitializer(HamiltonianCycleAlgorithm)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(int k, Random rng)
     {
         this(k, new RandomTourTSP<>(rng));
@@ -125,11 +115,7 @@ public class TwoOptHeuristicTSP<V, E>
      * @param k how many initial random tours to check
      * @param rng random number generator
      * @param minCostImprovement Minimum cost improvement per iteration
-     * @deprecated use {@link #TwoOptHeuristicTSP()} , {@link #setPasses(int)},
-     *             {@link #setInitializer(HamiltonianCycleAlgorithm)} and
-     *             {@link #setMinCostImprovement(double)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(int k, Random rng, double minCostImprovement)
     {
         this(k, new RandomTourTSP<>(rng), minCostImprovement);
@@ -139,10 +125,7 @@ public class TwoOptHeuristicTSP<V, E>
      * Constructor
      *
      * @param initializer Algorithm to generate initial tour
-     * @deprecated use {@link #TwoOptHeuristicTSP()} and
-     *             {@link #setInitializer(HamiltonianCycleAlgorithm)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(HamiltonianCycleAlgorithm<V, E> initializer)
     {
         this(1, initializer);
@@ -153,10 +136,7 @@ public class TwoOptHeuristicTSP<V, E>
      *
      * @param k how many initial tours to check
      * @param initializer Algorithm to generate initial tour
-     * @deprecated use {@link #TwoOptHeuristicTSP()} , {@link #setPasses(int)} and
-     *             {@link #setInitializer(HamiltonianCycleAlgorithm)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(int k, HamiltonianCycleAlgorithm<V, E> initializer)
     {
         this(k, initializer, 1e-8);
@@ -168,72 +148,18 @@ public class TwoOptHeuristicTSP<V, E>
      * @param k how many initial tours to check
      * @param initializer Algorithm to generate initial tours
      * @param minCostImprovement Minimum cost improvement per iteration
-     * @deprecated use {@link #TwoOptHeuristicTSP()} , {@link #setPasses(int)},
-     *             {@link #setInitializer(HamiltonianCycleAlgorithm)} and
-     *             {@link #setMinCostImprovement(double)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public TwoOptHeuristicTSP(
         int k, HamiltonianCycleAlgorithm<V, E> initializer, double minCostImprovement)
     {
-        setPasses(k);
-        setInitializer(initializer);
-        setMinCostImprovement(minCostImprovement);
-    }
-
-    // setters
-
-    /**
-     * Set the number of passes done in {@link #getTour(Graph)}.
-     * <p>
-     * In each pass an initial tour is computed with the
-     * {@link #setInitializer(HamiltonianCycleAlgorithm) initializer}, which is then improved with
-     * this {@code TwoOptHeuristicTSP}. The result with the lowest path costs respectively path
-     * length of all passes is returned as the final result of {@code getTour(Graph)}.
-     * </p>
-     *
-     * @param passes the number of passes done in {@code getTour(Graph)}
-     * @return this algorithm object
-     */
-    public TwoOptHeuristicTSP<V, E> setPasses(int passes)
-    {
-        if (passes < 1) {
-            throw new IllegalArgumentException("passes must be at least one");
+        if (k < 1) {
+            throw new IllegalArgumentException("k must be at least one");
         }
-        this.passes = passes;
-        return this;
-    }
-
-    /**
-     * Set the {@link HamiltonianCycleAlgorithm} used to compute the initial tour in each pass.
-     *
-     * @param initializer the {@code HamiltonianCycleAlgorithm} to compute the initial tour
-     * @return this algorithm object
-     */
-    public TwoOptHeuristicTSP<V, E> setInitializer(HamiltonianCycleAlgorithm<V, E> initializer)
-    {
+        this.k = k;
         this.initializer =
             Objects.requireNonNull(initializer, "Initial solver algorithm cannot be null");
-        return this;
-    }
-
-    /**
-     * Set the required {@code minimum cost improvement} a tour modification must produce in order
-     * to be considered as improvement.
-     * <p>
-     * A value to close to zero can cause an endless loop.
-     * </p>
-     *
-     * @param minCostImprovement the minimal cost improvement a tour move must produce
-     * @return this algorithm object
-     */
-    public TwoOptHeuristicTSP<V, E> setMinCostImprovement(double minCostImprovement)
-    {
         this.minCostImprovement = Math.abs(minCostImprovement);
-        return this;
     }
-
-    // algorithm
 
     /**
      * Computes a 2-approximate tour.
@@ -257,7 +183,7 @@ public class TwoOptHeuristicTSP<V, E>
 
         // Execute 2-opt from k random permutations
         GraphPath<V, E> best = tourToPath(improve(createInitialTour()));
-        for (int i = 1; i < passes; i++) {
+        for (int i = 1; i < k; i++) {
             GraphPath<V, E> other = tourToPath(improve(createInitialTour()));
             if (other.getWeight() < best.getWeight()) {
                 best = other;

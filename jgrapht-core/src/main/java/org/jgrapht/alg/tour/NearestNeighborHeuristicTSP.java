@@ -37,14 +37,6 @@ import java.util.*;
  * </p>
  *
  * <p>
- * The tour computed with a {@code Nearest-Neighbor-Heuristic} can vary depending on their first
- * vertex visited. The first vertices for the next or for multiple subsequent tour computations can
- * be controlled with {@link #setFirst(Object)} or {@link #setInitialVertices(Iterable)}.
- * Additionally the {@link #setRandomNumberGenerator(Random) random number generator} can be
- * specified used to randomly select the vertex visited first.
- * </p>
- *
- * <p>
  * The implementation of this class is based on: <br>
  * Nilsson, Christian. "Heuristics for the traveling salesman problem." Linkoping University 38
  * (2003)
@@ -77,8 +69,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      */
     public NearestNeighborHeuristicTSP()
     {
-        this.rng = new Random();
-        this.initiaVertex = null;
+        this(null, new Random());
     }
 
     /**
@@ -86,10 +77,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      *
      * @param first First vertex to visit, or null to choose at random
      * @throws NullPointerException if first is null
-     * @deprecated use {@link #NearestNeighborHeuristicTSP()} and {@link #setFirst(Object)}
-     *
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public NearestNeighborHeuristicTSP(V first)
     {
         this(
@@ -100,10 +88,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      * Constructor
      *
      * @param seed seed for the random number generator
-     * @deprecated use {@link #NearestNeighborHeuristicTSP()} and
-     *             {@link #setRandomNumberGenerator(Random)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public NearestNeighborHeuristicTSP(long seed)
     {
         this(null, new Random(seed));
@@ -114,10 +99,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      *
      * @param rng Random number generator
      * @throws NullPointerException if rng is null
-     * @deprecated use {@link #NearestNeighborHeuristicTSP()} and
-     *             {@link #setRandomNumberGenerator(Random)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     public NearestNeighborHeuristicTSP(Random rng)
     {
         this(null, Objects.requireNonNull(rng, "Random number generator cannot be null"));
@@ -128,57 +110,13 @@ public class NearestNeighborHeuristicTSP<V, E>
      *
      * @param first First vertex to visit, or null to choose at random
      * @param rng Random number generator
-     * @deprecated use {@link #NearestNeighborHeuristicTSP()},
-     *             {@link #setRandomNumberGenerator(Random)} and {@link #setFirst(Object)}
      */
-    @Deprecated(since = "1.4.1", forRemoval = true)
     private NearestNeighborHeuristicTSP(V first, Random rng)
     {
         if (first != null) {
             setInitialVertices(Collections.singletonList(first));
         }
         this.rng = rng;
-    }
-
-    // setters
-
-    /**
-     * Set the {@link Random} used to obtain the initial vertex for subsequent tour computations.
-     * <p>
-     * Vertices previously provided via {@link #setFirst(Object)} or
-     * {@link #setInitialVertices(Iterable)} are discarded.
-     * <p>
-     *
-     * @param rng the {@code Random} to use
-     * @return this algorithm object
-     */
-    public NearestNeighborHeuristicTSP<V, E> setRandomNumberGenerator(Random rng)
-    {
-        this.rng = rng;
-        this.initiaVertex = null;
-        return this;
-    }
-
-    /**
-     * Set the {@code initial vertex} visited first in the next tour computation
-     * ({@link #getTour(Graph)}).
-     * <p>
-     * For the tour computation after the next the current {@link #setRandomNumberGenerator(Random)
-     * Random} is used to randomly select a first vertex, if no initial vertex is specified in the
-     * meantime.
-     * </p>
-     * <p>
-     * Passing {@code null} discards all vertices provided previously via {@link #setFirst(Object)}
-     * or {@link #setInitialVertices(Iterable)}.
-     * </p>
-     *
-     * @param first the vertices visited first in the next tour computation ({@link #getTour(Graph)}
-     * @return this algorithm object
-     */
-    public NearestNeighborHeuristicTSP<V, E> setFirst(V first)
-    {
-        return setInitialVertices(
-            first != null ? Collections.singleton(first) : Collections.emptyList());
     }
 
     /**
@@ -204,8 +142,6 @@ public class NearestNeighborHeuristicTSP<V, E>
         this.initiaVertex = iterator.hasNext() ? iterator : null;
         return this;
     }
-
-    // algorithm
 
     /**
      * Computes a tour using the nearest neighbour heuristic.
@@ -250,7 +186,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      */
     private V first(Graph<V, E> graph)
     {
-        if (initiaVertex != null) { // not null means hasNext
+        if (initiaVertex != null) {
             V first = initiaVertex.next();
             if (!initiaVertex.hasNext()) {
                 initiaVertex = null; // release the resource backing the iterator immediately
