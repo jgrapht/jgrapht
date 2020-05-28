@@ -132,13 +132,13 @@ public class CollectionUtil
         if (iterable instanceof List) {
             return ((List<E>) iterable).get(index);
         }
-        try {
-            Iterator<E> it = iterable.iterator();
-            for (int i = 0; i < index; i++) {
-                it.next();
-            }
+        Iterator<E> it = iterable.iterator();
+        for (int i = 0; i < index && it.hasNext(); i++) {
+            it.next();
+        }
+        if (it.hasNext()) {
             return it.next();
-        } catch (NoSuchElementException e) {
+        } else {
             throw new IndexOutOfBoundsException(index);
         }
     }

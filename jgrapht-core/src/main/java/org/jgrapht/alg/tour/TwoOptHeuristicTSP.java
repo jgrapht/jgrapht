@@ -183,7 +183,7 @@ public class TwoOptHeuristicTSP<V, E>
         // Initialize vertex index and distances
         init(graph);
 
-        // Execute 2-opt from k random permutations
+        // Execute 2-opt for the specified number of passes and a new permutation in each pass
         GraphPath<V, E> best = tourToPath(improve(createInitialTour()));
         for (int i = 1; i < passes; i++) {
             GraphPath<V, E> other = tourToPath(improve(createInitialTour()));

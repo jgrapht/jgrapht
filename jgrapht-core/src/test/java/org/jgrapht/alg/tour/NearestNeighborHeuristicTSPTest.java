@@ -32,6 +32,18 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+/**
+ * Tests for {@link NearestNeighborHeuristicTSP}.
+ * <p>
+ * The test data used in this test are designed so that for one vertex, the weight of each touching
+ * edges is distinct to the other touching edges of that vertex. This has the intended consequence
+ * that for a given first vertex the expected tour computed with the
+ * {@code NearestNeighborHeuristic} is unambiguous and the result must never change.
+ * </p>
+ *
+ * @author Hannes Wellmann
+ *
+ */
 public class NearestNeighborHeuristicTSPTest
 {
     private static List<Vector2D> locations;
