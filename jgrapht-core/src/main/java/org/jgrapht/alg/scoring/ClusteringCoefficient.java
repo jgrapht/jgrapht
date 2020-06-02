@@ -42,7 +42,7 @@ import java.util.*;
  * coefficients of all the vertices of the graph.
  *
  * <p>
- * The global clustering coefficient of a graph is based on triplets of nodes. A triple is three 
+ * The global clustering coefficient of a graph is based on triplets of nodes. A triplet is three 
  * graph nodes which are connected either by two edges or by three edges. A triplet which is connected
  * by two edges, is called an open triplet. A triplet which is connected with three edges is 
  * called a closed triplet. The global clustering coefficient is defined as the number of 
