@@ -71,7 +71,7 @@ The files below make up the table of contents for a release distribution archive
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
-The JGraphT [wiki](https://github.com/jgrapht/jgrapht/wiki) provides various helpful pages for new users, including a [How to use JGraphT in your projects](https://github.com/jgrapht/jgrapht/wiki/How-to-use-JGraphT-as-a-dependency-in-your-projects) page.
+The JGraphT [wiki](https://github.com/jgrapht/jgrapht/wiki) provides various helpful pages for new users, including a [How to use JGraphT in your projects](https://github.com/jgrapht/jgrapht/wiki/Users%3A-How-to-use-JGraphT-as-a-dependency-in-your-projects) page.
 The package `org.jgrapht.demo` includes small demo applications to help you get started. If you spawn your own demo app and think others can use it, please send it to us and we will add it to that package.
 
 To run the graph visualization demo from the downloaded release, try executing this command in the lib directory:
