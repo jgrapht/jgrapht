@@ -1943,7 +1943,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
         /**
          * Stores some value to indicate whether this node is visited in the current context or not.
          * During the testing phase, if this value if equal to the dfs index of the currently
-         * processed node $v$, than this node is visited, otherwise not. During the Kuratowski
+         * processed node $v$, then this node is visited, otherwise not. During the Kuratowski
          * subdivision extraction phase, the value of $0$ indicates that the node isn't visited,
          * otherwise, the node is considered to be visited.
          */
@@ -1972,7 +1972,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
          */
         Edge parentEdge;
         /**
-         * If this node has a back edge incident to the currently processed node $v$, than this
+         * If this node has a back edge incident to the currently processed node $v$, then this
          * variable stores this edge
          */
         Edge edgeToEmbed;

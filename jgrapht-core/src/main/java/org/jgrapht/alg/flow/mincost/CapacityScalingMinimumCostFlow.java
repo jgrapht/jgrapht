@@ -686,7 +686,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
         int labelType;
         /**
          * The excess of this node. If this value is positive, then this is a source node. If this
-         * value is 0, than this is a transhipment node. If this value if negative, this is a sink
+         * value is 0, then this is a transhipment node. If this value if negative, this is a sink
          * node.
          */
         int excess;

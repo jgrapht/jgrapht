@@ -62,7 +62,7 @@ import java.util.stream.*;
  * such identity, at a severe performance cost. Currently it is no longer enforced. If you want to
  * achieve a "live-window" functionality, your safest tactics would be to NOT override the
  * <code>equals()</code> methods of your vertices and edges. If you use a class that has already
- * overridden the <code>equals()</code> method, such as <code>String</code>, than you can use a
+ * overridden the <code>equals()</code> method, such as <code>String</code>, then you can use a
  * wrapper around it, or else use it directly but exercise a great care to avoid having
  * different-but-equal instances in the subgraph and the base graph.
  * </p>
