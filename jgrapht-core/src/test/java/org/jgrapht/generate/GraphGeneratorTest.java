@@ -118,7 +118,7 @@ public class GraphGeneratorTest
             nextVertex = g.getEdgeTarget(nextEdge);
             assertEquals(1, g.inDegreeOf(nextVertex));
             assertEquals(1, g.outDegreeOf(nextVertex));
-            assertTrue(!seen.contains(nextVertex));
+            assertFalse(seen.contains(nextVertex));
             seen.add(nextVertex);
         }
 
