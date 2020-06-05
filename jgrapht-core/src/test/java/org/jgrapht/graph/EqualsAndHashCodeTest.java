@@ -23,6 +23,7 @@ import org.junit.*;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class EqualsAndHashCodeTest
@@ -67,7 +68,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, e23);
 
         assertTrue(g2.equals(g1));
-        assertTrue(!g3.equals(g2));
+        assertFalse(g3.equals(g2));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -105,7 +106,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, e23);
 
         assertTrue(g2.equals(g1));
-        assertTrue(!g3.equals(g2));
+        assertFalse(g3.equals(g2));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -139,7 +140,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, v2 + v3);
 
         assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
+        assertFalse(g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -180,7 +181,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, e23);
 
         assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
+        assertFalse(g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -213,7 +214,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v3, v1, new CustomEdge("v3-v1"));
 
         assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
+        assertFalse(g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -270,7 +271,7 @@ public class EqualsAndHashCodeTest
         assertTrue(g3.equals(g4));
         assertEquals(g4.hashCode(), g3.hashCode());
 
-        assertTrue(!g4.equals(g5));
+        assertFalse(g4.equals(g5));
     }
 
     /**

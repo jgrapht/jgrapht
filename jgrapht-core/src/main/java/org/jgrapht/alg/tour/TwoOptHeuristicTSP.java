@@ -33,7 +33,7 @@ import java.util.*;
  *
  * <p>
  * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates
- * <em>passes<em> initial tours and then iteratively improves the tours until a local minimum is
+ * <em>passes</em> initial tours and then iteratively improves the tours until a local minimum is
  * reached. In each iteration it applies the best possible 2-opt move which means to find the best
  * pair of edges $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$
  * minimizes the tour length. The default initial tours use RandomTour, however an alternative

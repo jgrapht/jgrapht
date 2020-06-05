@@ -140,7 +140,7 @@ public interface Graph<V, E>
     /**
      * Creates a new edge in this graph, going from the source vertex to the target vertex, and
      * returns the created edge. Some graphs do not allow edge-multiplicity. In such cases, if the
-     * graph already contains an edge from the specified source to the specified target, than this
+     * graph already contains an edge from the specified source to the specified target, then this
      * method does not change the graph and returns <code>null</code>.
      *
      * <p>
@@ -182,7 +182,7 @@ public interface Graph<V, E>
      * <code>e2.equals(e)</code>. If this graph already contains such an edge, the call leaves this
      * graph unchanged and returns <code>false</code>. Some graphs do not allow edge-multiplicity.
      * In such cases, if the graph already contains an edge from the specified source to the
-     * specified target, than this method does not change the graph and returns <code>
+     * specified target, then this method does not change the graph and returns <code>
      * false</code>. If the edge was added to the graph, returns <code>
      * true</code>.
      *

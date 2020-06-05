@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.4.1** (2-Jun-2020):
+- **version 1.5.0** (under development)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
     - Bring back vertex factory in importers (contributed by Dimitrios Michail)
     - Added `LabelPropagationClustering` algorithm (contributed by Dimitrios Michail)
@@ -28,6 +28,7 @@ Changes to JGraphT in each version:
     - Optimized `isFeasiblePair` and finalized fields (contributed by Johannes M Dieterich)
     - Unified TSP algorithms internal implementation (contributes by Hannes Wellmann)
     - Deprecated `KShortestSimplePaths` due to bug reported in #892 (contributed by Semen Chudakov)
+    - Clean up some docs and tests (contributed by Oliver Kopp)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
