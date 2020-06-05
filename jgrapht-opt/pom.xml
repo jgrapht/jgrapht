@@ -62,13 +62,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jgrapht-core</artifactId>
-			<type>test-jar</type>
-      		<scope>test</scope>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>it.unimi.dsi</groupId>
 			<artifactId>fastutil</artifactId>
