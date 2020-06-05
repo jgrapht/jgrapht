@@ -30,7 +30,7 @@ JGraphT may be used under the terms of either the
 or the
 
  * Eclipse Public License (EPL)
-   >http://www.eclipse.org/org/documents/epl-v20.php>
+   <http://www.eclipse.org/org/documents/epl-v20.php>
 
 As a recipient of JGraphT, you may choose which license to receive the code under.
 
