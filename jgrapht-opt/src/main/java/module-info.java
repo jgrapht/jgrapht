@@ -1,4 +1,4 @@
-open module org.jgrapht.opt
+module org.jgrapht.opt
 {
     exports org.jgrapht.opt.graph.fastutil;
     exports org.jgrapht.opt.graph.sparse;
