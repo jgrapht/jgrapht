@@ -161,7 +161,7 @@ final class RankingPathElementList<V, E>
      * <ul>
      * <li>w/o guard-vertex: $O(knp)$ where $k$ is the max size limit of the list and $np$ is the
      * maximum number of vertices in the paths stored in the list</li>
-     * <li>with guard-vertex: $O(k(m+n)$</code>) where $k$ is the max size limit of the list, $m$ is
+     * <li>with guard-vertex: $O(k(m+n)$ where $k$ is the max size limit of the list, $m$ is
      * the number of edges of the graph and $n$ is the number of vertices of the graph, $O(m + n)$
      * being the complexity of the <code>
      * ConnectivityInspector</code> to check whether a path exists towards the guard-vertex</li>
