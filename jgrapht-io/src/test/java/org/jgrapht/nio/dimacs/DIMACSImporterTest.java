@@ -124,7 +124,7 @@ public class DIMACSImporterTest
             assertEquals((int) graph.getEdgeWeight(e), edge[2]);
         }
     }
-    
+
     @Test
     public void testReadDIMACSShortestPathFormatWithVertexFactory()
     {
@@ -135,15 +135,19 @@ public class DIMACSImporterTest
                        "a 2 3\n";
         // @formatter:on
 
-        Graph<Integer, DefaultWeightedEdge> graph = GraphTypeBuilder
-            .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
-            .vertexSupplier(SupplierUtil.createIntegerSupplier())
-            .edgeSupplier(SupplierUtil.createDefaultWeightedEdgeSupplier()).buildGraph();
+        Graph<Integer,
+            DefaultWeightedEdge> graph = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultWeightedEdgeSupplier()).buildGraph();
 
         DIMACSImporter<Integer, DefaultWeightedEdge> importer = new DIMACSImporter<>();
-        importer.setVertexFactory(id->id+100);
+        importer.setVertexFactory(id -> id + 100);
         try {
-            importer.importGraph(graph, new InputStreamReader(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
+            importer
+                .importGraph(
+                    graph, new InputStreamReader(
+                        new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             // cannot happen
         }

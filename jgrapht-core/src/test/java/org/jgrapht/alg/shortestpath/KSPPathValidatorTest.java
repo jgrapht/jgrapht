@@ -100,9 +100,10 @@ public class KSPPathValidatorTest
                     if (partialPath == null) {
                         return true;
                     }
-                    return Math.abs(
-                        partialPath.getEndVertex() - Graphs
-                            .getOppositeVertex(ring, edge, partialPath.getEndVertex())) == 1;
+                    return Math
+                        .abs(
+                            partialPath.getEndVertex() - Graphs
+                                .getOppositeVertex(ring, edge, partialPath.getEndVertex())) == 1;
                 });
 
             for (int j = 0; j < size; j++) {

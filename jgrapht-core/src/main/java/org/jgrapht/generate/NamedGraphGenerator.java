@@ -76,14 +76,18 @@ public class NamedGraphGenerator<V, E>
         vertexMap.clear();
         for (int i = 0; i < 9; i++)
             for (int j = 0; j < 3; j++) {
-                this.addEdge(
-                    targetGraph, doyleHash(i, j), doyleHash(mod(4 * i + 1, 9), mod(j - 1, 3)));
-                this.addEdge(
-                    targetGraph, doyleHash(i, j), doyleHash(mod(4 * i - 1, 9), mod(j - 1, 3)));
-                this.addEdge(
-                    targetGraph, doyleHash(i, j), doyleHash(mod(7 * i + 7, 9), mod(j + 1, 3)));
-                this.addEdge(
-                    targetGraph, doyleHash(i, j), doyleHash(mod(7 * i - 7, 9), mod(j + 1, 3)));
+                this
+                    .addEdge(
+                        targetGraph, doyleHash(i, j), doyleHash(mod(4 * i + 1, 9), mod(j - 1, 3)));
+                this
+                    .addEdge(
+                        targetGraph, doyleHash(i, j), doyleHash(mod(4 * i - 1, 9), mod(j - 1, 3)));
+                this
+                    .addEdge(
+                        targetGraph, doyleHash(i, j), doyleHash(mod(7 * i + 7, 9), mod(j + 1, 3)));
+                this
+                    .addEdge(
+                        targetGraph, doyleHash(i, j), doyleHash(mod(7 * i - 7, 9), mod(j + 1, 3)));
             }
     }
 

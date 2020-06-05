@@ -313,9 +313,10 @@ public class ChinesePostmanTest
         Assert.assertEquals(expectedLength, path.getLength());
         Assert.assertEquals(expectedLength, path.getEdgeList().size());
         Assert.assertEquals(expectedWeight, path.getWeight(), 0.00000001);
-        Assert.assertEquals(
-            expectedWeight, path.getEdgeList().stream().mapToDouble(graph::getEdgeWeight).sum(),
-            0.00000001);
+        Assert
+            .assertEquals(
+                expectedWeight, path.getEdgeList().stream().mapToDouble(graph::getEdgeWeight).sum(),
+                0.00000001);
 
         // all edges of the graph must be visited at least once
         Assert.assertTrue(path.getEdgeList().containsAll(graph.edgeSet()));

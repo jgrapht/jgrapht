@@ -409,8 +409,9 @@ public class HierholzerEulerianCycleTest
             }
             List<DefaultEdge> edges = new ArrayList<>(g.edgeSet());
             for (DefaultEdge e : edges) {
-                IntStream.rangeClosed(0, 2 * rng.nextInt(10)).forEach(
-                    i -> g.addEdge(g.getEdgeSource(e), g.getEdgeTarget(e)));
+                IntStream
+                    .rangeClosed(0, 2 * rng.nextInt(10))
+                    .forEach(i -> g.addEdge(g.getEdgeSource(e), g.getEdgeTarget(e)));
             }
 
             GraphPath<Integer, DefaultEdge> cycle =

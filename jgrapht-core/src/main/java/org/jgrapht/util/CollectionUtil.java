@@ -21,7 +21,7 @@ import java.util.*;
 
 /**
  * Utility class to create {@link Collection} instances.
- * 
+ *
  * @author Hannes Wellmann
  *
  */
@@ -41,7 +41,7 @@ public class CollectionUtil
      * the maximum number of entries divided by the load factor, no rehash operations will ever
      * occur".
      * </p>
-     * 
+     *
      * @param <K> the type of keys in the returned {@code HashMap}
      * @param <V> the type of values in the returned {@code HashMap}
      * @param expectedSize of mappings that will be put into the returned {@code HashMap}
@@ -61,7 +61,7 @@ public class CollectionUtil
      * is not equivalent to the number of mappings it can hold without rehashing. See
      * {@link #newHashMapWithExpectedSize(int)} for details.
      * </p>
-     * 
+     *
      * @param <K> the type of keys in the returned {@code LinkedHashMap}
      * @param <V> the type of values in the returned {@code LinkedHashMap}
      * @param expectedSize of mappings that will be put into the returned {@code LinkedHashMap}
@@ -81,7 +81,7 @@ public class CollectionUtil
      * capacity is not equivalent to the number of elements it can hold without rehashing. See
      * {@link #newHashMapWithExpectedSize(int)} for details.
      * </p>
-     * 
+     *
      * @param <E> the type of elements in the returned {@code HashSet}
      * @param expectedSize of elements that will be add to the returned {@code HashSet}
      * @return an empty {@code HashSet} with sufficient capacity to hold expectedSize elements
@@ -100,7 +100,7 @@ public class CollectionUtil
      * capacity is not equivalent to the number of elements it can hold without rehashing. See
      * {@link #newHashMapWithExpectedSize(int)} for details.
      * </p>
-     * 
+     *
      * @param <E> the type of elements in the returned {@code LinkedHashSet}
      * @param expectedSize of elements that will be add to the returned {@code LinkedHashSet}
      * @return an empty {@code LinkedHashSet} with sufficient capacity to hold expectedSize elements
@@ -114,5 +114,32 @@ public class CollectionUtil
     private static int capacityForSize(int size)
     { // consider default load factor 0.75f of (Linked)HashMap
         return (int) (size / 0.75f + 1.0f); // let (Linked)HashMap limit it if it's too large
+    }
+
+    /**
+     * Returns from the given {@code Iterable} the element with the given {@code index}.
+     * <p>
+     * The order to which the index applies is that defined by the {@link Iterable#iterator()}.
+     * </p>
+     *
+     * @param <E> the type of elements in the {@code Iterable}
+     * @param iterable the Iterable from which the element at {@code index} is returned
+     * @param index the index of the returned element
+     * @return the element with {@code index} in the {@code iterable}
+     */
+    public static <E> E getElement(Iterable<E> iterable, int index)
+    {
+        if (iterable instanceof List) {
+            return ((List<E>) iterable).get(index);
+        }
+        Iterator<E> it = iterable.iterator();
+        for (int i = 0; i < index && it.hasNext(); i++) {
+            it.next();
+        }
+        if (it.hasNext()) {
+            return it.next();
+        } else {
+            throw new IndexOutOfBoundsException(index);
+        }
     }
 }

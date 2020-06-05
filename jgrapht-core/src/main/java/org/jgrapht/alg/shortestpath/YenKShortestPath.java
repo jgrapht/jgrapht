@@ -36,8 +36,8 @@ import java.util.*;
  *
  * <p>
  * The implementation iterates over the existing loopless path between the {@code source} and the
- * {@code sink} and forms the resulting list. It is possible to provide a {@link PathValidator} to filter
- * the resulting path list
+ * {@code sink} and forms the resulting list. It is possible to provide a {@link PathValidator} to
+ * filter the resulting path list
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -55,10 +55,10 @@ public class YenKShortestPath<V, E>
     private final Graph<V, E> graph;
 
     /**
-     * Provides validation for the paths which will be computed. If the validator
-     * is {@code null}, this means that all paths are valid.
+     * Provides validation for the paths which will be computed. If the validator is {@code null},
+     * this means that all paths are valid.
      */
-    private PathValidator<V,E> pathValidator;
+    private PathValidator<V, E> pathValidator;
 
     /**
      * Constructs an instance of the algorithm for the given {@code graph}.
@@ -71,13 +71,13 @@ public class YenKShortestPath<V, E>
     }
 
     /**
-     * Constructs an instance of the algorithm for the given {@code graph}
-     * and {@code pathValidator}.
+     * Constructs an instance of the algorithm for the given {@code graph} and
+     * {@code pathValidator}.
      *
      * @param graph graph
      * @param pathValidator validator for computed paths
      */
-    public YenKShortestPath(Graph<V, E> graph, PathValidator<V,E> pathValidator)
+    public YenKShortestPath(Graph<V, E> graph, PathValidator<V, E> pathValidator)
     {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
         this.pathValidator = pathValidator;
@@ -100,7 +100,8 @@ public class YenKShortestPath<V, E>
             throw new IllegalArgumentException("k should be positive");
         }
         List<GraphPath<V, E>> result = new ArrayList<>();
-        YenShortestPathIterator<V, E> iterator = new YenShortestPathIterator<>(graph, source, sink, pathValidator);
+        YenShortestPathIterator<V, E> iterator =
+            new YenShortestPathIterator<>(graph, source, sink, pathValidator);
         for (int i = 0; i < k && iterator.hasNext(); i++) {
             result.add(iterator.next());
         }

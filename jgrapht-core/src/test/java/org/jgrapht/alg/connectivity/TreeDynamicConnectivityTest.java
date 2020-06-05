@@ -17,27 +17,29 @@
  */
 package org.jgrapht.alg.connectivity;
 
-import org.jgrapht.Graph;
-import org.jgrapht.generate.BarabasiAlbertForestGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import java.util.Random;
+import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link TreeDynamicConnectivity}
  *
  * @author Timofey Chudakov
  */
-public class TreeDynamicConnectivityTest {
+public class TreeDynamicConnectivityTest
+{
     private static final Random rng = new Random(17L);
 
     @Test
-    public void testTreeDynamicConnectivity_addNode_removeNode() {
+    public void testTreeDynamicConnectivity_addNode_removeNode()
+    {
         for (int treeSize = 1; treeSize < 50; treeSize++) {
             TreeDynamicConnectivity<Integer> connectivity = new TreeDynamicConnectivity<>();
             for (int node = 0; node < treeSize; node++) {
@@ -53,13 +55,16 @@ public class TreeDynamicConnectivityTest {
     }
 
     @Test
-    public void testTreeDynamicConnectivity_2Trees() {
+    public void testTreeDynamicConnectivity_2Trees()
+    {
         for (int firstTreeSize = 1; firstTreeSize < 50; firstTreeSize++) {
             for (int secondTreeSize = 1; secondTreeSize < 50; secondTreeSize++) {
-//                System.out.printf("First size = %d, second size = %d\n", firstTreeSize, secondTreeSize);
+                // System.out.printf("First size = %d, second size = %d\n", firstTreeSize,
+                // secondTreeSize);
 
                 Graph<Integer, DefaultEdge> firstTree = generateTree(firstTreeSize);
-                Graph<Integer, DefaultEdge> secondTree = generateTree(secondTreeSize, firstTreeSize);
+                Graph<Integer, DefaultEdge> secondTree =
+                    generateTree(secondTreeSize, firstTreeSize);
 
                 TreeDynamicConnectivity<Integer> connectivity = new TreeDynamicConnectivity<>();
 
@@ -90,7 +95,9 @@ public class TreeDynamicConnectivityTest {
         }
     }
 
-    private void destroyTree(Graph<Integer, DefaultEdge> graph, TreeDynamicConnectivity<Integer> connectivity) {
+    private void destroyTree(
+        Graph<Integer, DefaultEdge> graph, TreeDynamicConnectivity<Integer> connectivity)
+    {
         for (int v : graph.vertexSet()) {
             assertTrue(connectivity.contains(v));
             assertTrue(connectivity.remove(v));
@@ -98,7 +105,9 @@ public class TreeDynamicConnectivityTest {
         }
     }
 
-    private void connectTree(Graph<Integer, DefaultEdge> graph, TreeDynamicConnectivity<Integer> connectivity) {
+    private void connectTree(
+        Graph<Integer, DefaultEdge> graph, TreeDynamicConnectivity<Integer> connectivity)
+    {
         for (Integer v : graph.vertexSet()) {
             assertFalse(connectivity.contains(v));
             assertTrue(connectivity.add(v));
@@ -112,17 +121,20 @@ public class TreeDynamicConnectivityTest {
         }
     }
 
-    private Graph<Integer, DefaultEdge> generateTree(int nodeNum) {
+    private Graph<Integer, DefaultEdge> generateTree(int nodeNum)
+    {
         return generateTree(nodeNum, 0);
     }
 
-    private Graph<Integer, DefaultEdge> generateTree(int nodeNum, int start) {
-        Graph<Integer, DefaultEdge> tree =
-                new DefaultUndirectedGraph<>(SupplierUtil.createIntegerSupplier(start),
-                        SupplierUtil.createDefaultEdgeSupplier(),
-                        false);
+    private Graph<Integer, DefaultEdge> generateTree(int nodeNum, int start)
+    {
+        Graph<Integer,
+            DefaultEdge> tree = new DefaultUndirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(start), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
 
-        BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen = new BarabasiAlbertForestGenerator<>(1, nodeNum, rng);
+        BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen =
+            new BarabasiAlbertForestGenerator<>(1, nodeNum, rng);
         gen.generateGraph(tree);
         return tree;
     }

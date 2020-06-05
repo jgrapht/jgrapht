@@ -105,9 +105,9 @@ public class ChinesePostman<V, E>
     {
 
         // 1. Find all odd degree vertices (there should be an even number of those)
-        List<V> oddDegreeVertices =
-            graph.vertexSet().stream().filter(v -> graph.degreeOf(v) % 2 == 1).collect(
-                Collectors.toList());
+        List<V> oddDegreeVertices = graph
+            .vertexSet().stream().filter(v -> graph.degreeOf(v) % 2 == 1)
+            .collect(Collectors.toList());
 
         // 2. Compute all pairwise shortest paths for the oddDegreeVertices
         Map<Pair<V, V>, GraphPath<V, E>> shortestPaths = new HashMap<>();
@@ -130,8 +130,9 @@ public class ChinesePostman<V, E>
             for (V v : oddDegreeVertices) {
                 if (u == v)
                     continue;
-                Graphs.addEdge(
-                    auxGraph, u, v, shortestPaths.get(new UnorderedPair<>(u, v)).getWeight());
+                Graphs
+                    .addEdge(
+                        auxGraph, u, v, shortestPaths.get(new UnorderedPair<>(u, v)).getWeight());
             }
         }
         MatchingAlgorithm.Matching<V, DefaultWeightedEdge> matching =
@@ -282,8 +283,10 @@ public class ChinesePostman<V, E>
                                                                                                // direction
                                                                                                // of
                                                                                                // path
-                    vertexList.addAll(
-                        shortcut.getVertexList().subList(1, shortcut.getVertexList().size() - 1));
+                    vertexList
+                        .addAll(
+                            shortcut
+                                .getVertexList().subList(1, shortcut.getVertexList().size() - 1));
                     edgeList.addAll(shortcut.getEdgeList());
                 } else {
                     List<V> reverseVertices = new ArrayList<>(

@@ -99,9 +99,10 @@ public class BrownBacktrackColoring<V, E>
                     recursiveColor(pos + 1);
                 } else { // Otherwise we have found a feasible coloring
                     chi = colorCount[pos];
-                    System.arraycopy(
-                        partialColorAssignment, 0, completeColorAssignment, 0,
-                        partialColorAssignment.length);
+                    System
+                        .arraycopy(
+                            partialColorAssignment, 0, completeColorAssignment, 0,
+                            partialColorAssignment.length);
                 }
             }
         }
@@ -113,9 +114,10 @@ public class BrownBacktrackColoring<V, E>
                 recursiveColor(pos + 1);
             } else {
                 chi = colorCount[pos];
-                System.arraycopy(
-                    partialColorAssignment, 0, completeColorAssignment, 0,
-                    partialColorAssignment.length);
+                System
+                    .arraycopy(
+                        partialColorAssignment, 0, completeColorAssignment, 0,
+                        partialColorAssignment.length);
             }
         }
         partialColorAssignment[pos] = 0;

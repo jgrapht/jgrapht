@@ -17,30 +17,18 @@
  */
 package org.jgrapht.nio.gexf;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
+import org.jgrapht.*;
+import org.jgrapht.nio.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
-
-import org.jgrapht.Graph;
-import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.BaseExporter;
-import org.jgrapht.nio.ExportException;
-import org.jgrapht.nio.GraphExporter;
-import org.jgrapht.nio.IntegerIdProvider;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.*;
+import javax.xml.transform.stream.*;
+import java.io.*;
+import java.util.*;
+import java.util.Map.*;
+import java.util.function.*;
 
 /**
  * Exports a graph as GEXF (Graph Exchange XML Format).

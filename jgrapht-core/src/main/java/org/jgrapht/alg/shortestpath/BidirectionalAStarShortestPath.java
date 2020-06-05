@@ -382,9 +382,10 @@ public class BidirectionalAStarShortestPath<V, E>
         boolean stop(double bestPath)
         {
             return forward.openList.isEmpty() || backward.openList.isEmpty()
-                || Math.max(
-                    forward.openList.findMin().getKey(),
-                    backward.openList.findMin().getKey()) >= bestPath;
+                || Math
+                    .max(
+                        forward.openList.findMin().getKey(),
+                        backward.openList.findMin().getKey()) >= bestPath;
         }
     }
 }

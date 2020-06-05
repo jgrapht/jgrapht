@@ -17,24 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.jgrapht.util.CollectionUtil;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -134,22 +123,23 @@ public class YenKShortestPathTest
         int numberOfRandomEdges = 5;
         for (int i = 0; i < 50; i++) {
             DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph =
-                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
             graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
             getRandomGraph(graph, n, p, random);
             Integer source = (int) (random.nextDouble() * n);
             Integer target = (int) (random.nextDouble() * n);
             Set<DefaultWeightedEdge> randomEdges = getRandomEdges(graph, numberOfRandomEdges);
-            PathValidator<Integer, DefaultWeightedEdge> pathValidator = (path, edge) -> !randomEdges.contains(edge);
+            PathValidator<Integer, DefaultWeightedEdge> pathValidator =
+                (path, edge) -> !randomEdges.contains(edge);
             testOnRandomGraph(graph, source, target, pathValidator);
         }
     }
 
     /**
-     * Computes all simple shortest paths between {@code source} and {@code target}
-     * without {@code pathValidator}. Then computes all shortest paths between {@code source}
-     * and {@code target} with {@code pathValidator}. Finally, checks that only valid
-     * paths are returned using {@code isValidPath}.
+     * Computes all simple shortest paths between {@code source} and {@code target} without
+     * {@code pathValidator}. Then computes all shortest paths between {@code source} and
+     * {@code target} with {@code pathValidator}. Finally, checks that only valid paths are returned
+     * using {@code isValidPath}.
      *
      *
      * @param graph graph the iterator is being tested on
@@ -158,27 +148,28 @@ public class YenKShortestPathTest
      * @param pathValidator validator for returned paths paths
      */
     private void testOnRandomGraph(
-            Graph<Integer, DefaultWeightedEdge> graph, Integer source, Integer target,
-            PathValidator<Integer,DefaultWeightedEdge> pathValidator)
+        Graph<Integer, DefaultWeightedEdge> graph, Integer source, Integer target,
+        PathValidator<Integer, DefaultWeightedEdge> pathValidator)
     {
         int maximumNumberOfPaths = Integer.MAX_VALUE; // iterate all paths
 
-        List<GraphPath<Integer, DefaultWeightedEdge>> paths
-                = new YenKShortestPath<>(graph).getPaths(source, target, maximumNumberOfPaths);
-        List<GraphPath<Integer, DefaultWeightedEdge>> validatedPaths
-                = new YenKShortestPath<>(graph, pathValidator).getPaths(source, target, maximumNumberOfPaths);
+        List<GraphPath<Integer, DefaultWeightedEdge>> paths =
+            new YenKShortestPath<>(graph).getPaths(source, target, maximumNumberOfPaths);
+        List<GraphPath<Integer, DefaultWeightedEdge>> validatedPaths =
+            new YenKShortestPath<>(graph, pathValidator)
+                .getPaths(source, target, maximumNumberOfPaths);
 
-        Set<GraphPath<Integer,DefaultWeightedEdge>> uniquePaths = new HashSet<>();
+        Set<GraphPath<Integer, DefaultWeightedEdge>> uniquePaths = new HashSet<>();
 
         int pathsIndex = 0;
         int validatedPathsIndex = 0;
-        while (pathsIndex < paths.size() || validatedPathsIndex < validatedPaths.size())
-        {
+        while (pathsIndex < paths.size() || validatedPathsIndex < validatedPaths.size()) {
             GraphPath<Integer, DefaultWeightedEdge> path = paths.get(pathsIndex);
-            if(!isValidPath(path, pathValidator)){
+            if (!isValidPath(path, pathValidator)) {
                 ++pathsIndex;
-            }else{
-                GraphPath<Integer, DefaultWeightedEdge> validatedPath = validatedPaths.get(validatedPathsIndex);
+            } else {
+                GraphPath<Integer, DefaultWeightedEdge> validatedPath =
+                    validatedPaths.get(validatedPathsIndex);
 
                 assertEquals(validatedPath, path);
                 ((GraphWalk<Integer, DefaultWeightedEdge>) validatedPath).verify();
@@ -194,19 +185,19 @@ public class YenKShortestPathTest
     }
 
     /**
-     * Checks that {@code path} is valid w.r.t. the {@code pathValidator}.
-     * For the original path $source = v_1, ... ,v_n = target$ for every
-     * pair of consecutive intermediate vertices $v_i, v_{i+1}$ checks
-     * that the edge $(v_i, v_{i+1})$ can be added to the subpath
-     * $v1, ..., v_i$.
+     * Checks that {@code path} is valid w.r.t. the {@code pathValidator}. For the original path
+     * $source = v_1, ... ,v_n = target$ for every pair of consecutive intermediate vertices $v_i,
+     * v_{i+1}$ checks that the edge $(v_i, v_{i+1})$ can be added to the subpath $v1, ..., v_i$.
      *
      * @param path path to be checked for correctness
      * @param pathValidator validator
      * @return {@code true} iff {@code path} is correct w.r.t. {@code pathValidator}
      */
-    private boolean isValidPath(GraphPath<Integer, DefaultWeightedEdge> path,
-                                PathValidator<Integer, DefaultWeightedEdge> pathValidator) {
-        Graph<Integer,DefaultWeightedEdge> graph = path.getGraph();
+    private boolean isValidPath(
+        GraphPath<Integer, DefaultWeightedEdge> path,
+        PathValidator<Integer, DefaultWeightedEdge> pathValidator)
+    {
+        Graph<Integer, DefaultWeightedEdge> graph = path.getGraph();
         List<Integer> vertices = path.getVertexList();
         List<DefaultWeightedEdge> edges = path.getEdgeList();
 
@@ -220,10 +211,10 @@ public class YenKShortestPathTest
             List<Integer> verticesSublist = vertices.subList(0, i + 1);
             List<DefaultWeightedEdge> edgesSublist = edges.subList(0, i);
 
-            GraphPath<Integer, DefaultWeightedEdge> subpath
-                    = new GraphWalk<>(graph, startVertex, endVertex, verticesSublist, edgesSublist, weight);
+            GraphPath<Integer, DefaultWeightedEdge> subpath = new GraphWalk<>(
+                graph, startVertex, endVertex, verticesSublist, edgesSublist, weight);
 
-            if(!pathValidator.isValidPath(subpath, edge)){
+            if (!pathValidator.isValidPath(subpath, edge)) {
                 return false;
             }
 
@@ -240,26 +231,29 @@ public class YenKShortestPathTest
      * @param n the number of nodes
      * @param p the edge probability
      */
-    private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p, Random random)
+    private void getRandomGraph(
+        Graph<Integer, DefaultWeightedEdge> graph, int n, double p, Random random)
     {
         GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> generator =
-                new GnpRandomGraphGenerator<>(n, p, random, false);
+            new GnpRandomGraphGenerator<>(n, p, random, false);
         generator.generateGraph(graph);
 
         graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextDouble()));
     }
 
     /**
-     * Computes a set of random vertices of {@code graph}. The size of the
-     * set is {@code numberOfEdges}.
+     * Computes a set of random vertices of {@code graph}. The size of the set is
+     * {@code numberOfEdges}.
      *
      * @param graph a graph
      * @param numberOfEdges number of random vertices
      * @return set of random vertices
      */
-    private Set<DefaultWeightedEdge> getRandomEdges(Graph<Integer, DefaultWeightedEdge> graph, int numberOfEdges) {
+    private Set<DefaultWeightedEdge> getRandomEdges(
+        Graph<Integer, DefaultWeightedEdge> graph, int numberOfEdges)
+    {
         Set<DefaultWeightedEdge> result = CollectionUtil.newHashSetWithExpectedSize(numberOfEdges);
-        Object[] edges =  graph.edgeSet().toArray();
+        Object[] edges = graph.edgeSet().toArray();
         Random random = new Random(SEED);
         while (result.size() != numberOfEdges) {
             result.add((DefaultWeightedEdge) edges[random.nextInt(edges.length)]);
@@ -268,10 +262,9 @@ public class YenKShortestPathTest
     }
 
     /**
-     * Checks that {@code paths} has weights identical to {@code weights}
-     * in the same order.
+     * Checks that {@code paths} has weights identical to {@code weights} in the same order.
      *
-     * @param paths   graph paths
+     * @param paths graph paths
      * @param weights expected weights
      */
     private void assertSameWeights(

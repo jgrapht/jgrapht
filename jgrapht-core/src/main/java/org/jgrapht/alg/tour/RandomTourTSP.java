@@ -53,7 +53,7 @@ public class RandomTourTSP<V, E>
 
     /**
      * Construct with specified random number generator
-     * 
+     *
      * @param rng The random number generator
      */
     public RandomTourTSP(Random rng)
@@ -76,8 +76,7 @@ public class RandomTourTSP<V, E>
         // Check that graph is appropriate
         checkGraph(graph);
         List<V> vertices = new ArrayList<>(graph.vertexSet());
-        int n = vertices.size();
-        if (n == 1) {
+        if (vertices.size() == 1) {
             return getSingletonTour(graph);
         }
         // Randomly permute the vertex list

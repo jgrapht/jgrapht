@@ -912,8 +912,10 @@ class BlossomVInitializer<V, E>
                                 minusNode.addChild(plusNode, minusNode.matched, true);
 
                                 if (DEBUG) {
-                                    System.out.println(
-                                        "New branch root is " + plusNode + ", eps = " + branchEps);
+                                    System.out
+                                        .println(
+                                            "New branch root is " + plusNode + ", eps = "
+                                                + branchEps);
                                 }
                                 // Start a new branch
                                 currentNode = branchRoot = plusNode;

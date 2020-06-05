@@ -49,12 +49,16 @@ public class FloydWarshallPseudographsTest
         Random rng = new Random();
 
         List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
-        graphs.add(
-            () -> new DirectedWeightedPseudograph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
-        graphs.add(
-            () -> new WeightedPseudograph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
+        graphs
+            .add(
+                () -> new DirectedWeightedPseudograph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
+        graphs
+            .add(
+                () -> new WeightedPseudograph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
 
         for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =

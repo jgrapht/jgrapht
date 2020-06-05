@@ -22,7 +22,7 @@ import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -309,7 +309,7 @@ public class HawickJamesSimpleCyclesTest
         assertTrue(cycles.get(0).containsAll(asList("A", "B")));
         assertTrue(cycles.get(1).containsAll(asList("C", "D")));
     }
-    
+
     @Test
     public void testOrder()
     {
@@ -333,12 +333,12 @@ public class HawickJamesSimpleCyclesTest
 
         List<List<String>> cycles = hjsc.findSimpleCycles();
         assertEquals(2, cycles.size());
-        
+
         String cycle0 = cycles.get(0).stream().collect(Collectors.joining(","));
         String cycle1 = cycles.get(1).stream().collect(Collectors.joining(","));
-        
+
         assertEquals(cycle0, "0,1,2,3");
         assertEquals(cycle1, "0,1,4,5,2,3");
     }
-    
+
 }

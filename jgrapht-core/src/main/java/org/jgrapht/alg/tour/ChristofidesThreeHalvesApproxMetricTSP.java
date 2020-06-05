@@ -74,16 +74,9 @@ import java.util.stream.*;
  * @author Dimitrios Michail
  */
 public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
-    implements
-    HamiltonianCycleAlgorithm<V, E>
+    extends
+    HamiltonianCycleAlgorithmBase<V, E>
 {
-
-    /**
-     * Empty constructor
-     */
-    public ChristofidesThreeHalvesApproxMetricTSP()
-    {
-    }
 
     /**
      * Computes a $3/2$-approximate tour.
@@ -97,34 +90,21 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("Graph must be undirected");
-        }
-        if (!GraphTests.isComplete(graph)) {
-            throw new IllegalArgumentException("Graph must be complete");
-        }
-        if (graph.vertexSet().isEmpty()) {
-            throw new IllegalArgumentException("Graph contains no vertices");
-        }
-
-        /*
-         * Special case singleton vertex
-         */
-        if (graph.vertexSet().size() == 1) {
-            V start = graph.vertexSet().iterator().next();
-            return new GraphWalk<>(
-                graph, start, start, Collections.singletonList(start), Collections.emptyList(), 0d);
-        }
-
+        checkGraph(graph);
         int n = graph.vertexSet().size();
+        if (n == 1) {
+            return getSingletonTour(graph);
+        }
+
         // add all vertices of the graph to the auxiliary graph
-        Graph<V, DefaultEdge> mstAndMatching = new Pseudograph<>(DefaultEdge.class);
+        Graph<V, DefaultEdge> mstAndMatching = new Pseudograph<>(null, DefaultEdge::new, false);
         graph.vertexSet().forEach(mstAndMatching::addVertex);
 
         // add all edges of a minimum spanning tree to the auxiliary graph
         SpanningTreeAlgorithm<E> spanningTreeAlgorithm = new KruskalMinimumSpanningTree<>(graph);
-        spanningTreeAlgorithm.getSpanningTree().getEdges().forEach(
-            e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
+        spanningTreeAlgorithm
+            .getSpanningTree().getEdges()
+            .forEach(e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
 
         // find odd degree vertices
         Set<V> oddDegreeVertices = mstAndMatching
@@ -138,8 +118,9 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
         Graph<V, E> subgraph = new AsSubgraph<>(graph, oddDegreeVertices);
         MatchingAlgorithm<V, E> matchingAlgorithm =
             new KolmogorovWeightedPerfectMatching<>(subgraph);
-        matchingAlgorithm.getMatching().getEdges().forEach(
-            e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
+        matchingAlgorithm
+            .getMatching().getEdges()
+            .forEach(e -> mstAndMatching.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e)));
 
         // find an Eulerian cycle in the auxiliary graph
         EulerianCycleAlgorithm<V, DefaultEdge> eulerianCycleAlgorithm =
@@ -151,22 +132,7 @@ public class ChristofidesThreeHalvesApproxMetricTSP<V, E>
         Set<V> visited = CollectionUtil.newHashSetWithExpectedSize(n);
         List<V> tourVertices = eulerianCycle
             .getVertexList().stream().filter(visited::add).collect(Collectors.toList());
-        tourVertices.add(tourVertices.get(0));
 
-        // compute tour edges
-        List<E> tourEdges = new ArrayList<>(n);
-        double tourWeight = 0;
-        V prev;
-        V next = tourVertices.get(0);
-        for (int i = 1; i <= n; i++) {
-            prev = next;
-            next = tourVertices.get(i);
-            E edge = graph.getEdge(prev, next);
-            tourEdges.add(edge);
-            tourWeight += graph.getEdgeWeight(edge);
-        }
-
-        return new GraphWalk<>(
-            graph, tourVertices.get(0), tourVertices.get(0), tourVertices, tourEdges, tourWeight);
+        return vertexListToTour(tourVertices, graph);
     }
 }

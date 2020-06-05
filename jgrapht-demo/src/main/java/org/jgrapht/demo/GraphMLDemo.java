@@ -17,28 +17,18 @@
  */
 package org.jgrapht.demo;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.nio.*;
+import org.jgrapht.nio.graphml.*;
+import org.jgrapht.nio.graphml.GraphMLExporter.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.AttributeType;
-import org.jgrapht.nio.DefaultAttribute;
-import org.jgrapht.nio.GraphExporter;
-import org.jgrapht.nio.GraphImporter;
-import org.jgrapht.nio.IntegerIdProvider;
-import org.jgrapht.nio.graphml.GraphMLExporter;
-import org.jgrapht.nio.graphml.GraphMLExporter.AttributeCategory;
-import org.jgrapht.nio.graphml.GraphMLImporter;
-import org.jgrapht.util.SupplierUtil;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in
@@ -250,8 +240,8 @@ public final class GraphMLDemo
 
             if (attrName.equals("color")) {
                 String color = attrValue.getValue();
-                switch (color) { 
-                case "black": 
+                switch (color) {
+                case "black":
                     v.setColor(Color.BLACK);
                     break;
                 case "white":

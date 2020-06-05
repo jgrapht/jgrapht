@@ -80,9 +80,10 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
             MatchingAlgorithm.Matching<Integer, DefaultEdge> m =
                 createSolver(graph, firstPartition, secondPartition).getMatching();
             time = System.currentTimeMillis() - time;
-            System.out.println(
-                "time: " + time + " obj :" + m.getEdges().size() + " vertices: "
-                    + graph.vertexSet().size() + " edges: " + graph.edgeSet().size());
+            System.out
+                .println(
+                    "time: " + time + " obj :" + m.getEdges().size() + " vertices: "
+                        + graph.vertexSet().size() + " edges: " + graph.edgeSet().size());
         }
     }
 

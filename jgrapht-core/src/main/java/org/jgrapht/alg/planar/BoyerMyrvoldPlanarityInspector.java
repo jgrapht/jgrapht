@@ -341,8 +341,9 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
         root.pertinentRoots.removeNode(virtualRoot.listNode);
         root.separatedDfsChildList.removeNode(virtualRootChild.listNode);
 
-        root.mergeChildEdges(
-            virtualRoot.embedded, info.vIn, info.vOut, info.parentNext, virtualRoot.parentEdge);
+        root
+            .mergeChildEdges(
+                virtualRoot.embedded, info.vIn, info.vOut, info.parentNext, virtualRoot.parentEdge);
 
         root.substituteAnother(info.parentNext, info.childPrev);
         info.childPrev.substitute(virtualRoot, root);
@@ -477,10 +478,11 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
                     }
 
                     if (currentComponentEntryDir == 0) {
-                        stack.add(
-                            new MergeInfo(
-                                current, circulator.next(), root, root.outerFaceNeighbors[1],
-                                parentComponentEntryDir, currentComponentEntryDir));
+                        stack
+                            .add(
+                                new MergeInfo(
+                                    current, circulator.next(), root, root.outerFaceNeighbors[1],
+                                    parentComponentEntryDir, currentComponentEntryDir));
                         current = ccwActiveNode;
                         circulator = ccwCirculator;
 
@@ -488,10 +490,11 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
                             embedShortCircuit(root, 1, cwCirculator);
                         }
                     } else {
-                        stack.add(
-                            new MergeInfo(
-                                current, circulator.next(), root, root.outerFaceNeighbors[0],
-                                parentComponentEntryDir, currentComponentEntryDir));
+                        stack
+                            .add(
+                                new MergeInfo(
+                                    current, circulator.next(), root, root.outerFaceNeighbors[0],
+                                    parentComponentEntryDir, currentComponentEntryDir));
                         current = cwActiveNode;
                         circulator = cwCirculator;
 
@@ -1294,12 +1297,15 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
             Edge xBackEdge = searchEdge(x, v.height);
             Edge yBackEdge = searchEdge(y, v.height);
             if (DEBUG) {
-                System.out.printf(
-                    "Failed v = %s, failed edge = %s\n", failedV.toString(false),
-                    failedEdge.toString());
+                System.out
+                    .printf(
+                        "Failed v = %s, failed edge = %s\n", failedV.toString(false),
+                        failedEdge.toString());
                 System.out.printf("x = %s, y = %s\n", x.toString(false), y.toString(false));
-                System.out.printf(
-                    "xBackEdge = %s, yBackEdge = %s\n", xBackEdge.toString(), yBackEdge.toString());
+                System.out
+                    .printf(
+                        "xBackEdge = %s, yBackEdge = %s\n", xBackEdge.toString(),
+                        yBackEdge.toString());
             }
             Node backLower = lowest(xBackEdge.target, yBackEdge.target);
             Node backHigher = highest(xBackEdge.target, yBackEdge.target);
@@ -1482,9 +1488,9 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
     @Override
     public Embedding<V, E> getEmbedding()
     {
-        if(isPlanar()){
+        if (isPlanar()) {
             return lazyComputeEmbedding();
-        }else{
+        } else {
             throw new IllegalArgumentException("Graph is not planar");
         }
     }
@@ -1498,9 +1504,9 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
     @Override
     public Graph<V, E> getKuratowskiSubdivision()
     {
-        if(isPlanar()){
+        if (isPlanar()) {
             throw new IllegalArgumentException("Graph is planar");
-        }else{
+        } else {
             return lazyExtractKuratowskiSubdivision();
         }
     }
@@ -1656,10 +1662,11 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
         @Override
         public String toString()
         {
-            return String.format(
-                "Parent dir = {%s -> %s}, child_dir = {%s -> %s}, inverted = %b, vIn = %d, vOut = %d",
-                parent.toString(false), parentNext.toString(false), childPrev.toString(false),
-                child.toString(false), isInverted(), vIn, vOut);
+            return String
+                .format(
+                    "Parent dir = {%s -> %s}, child_dir = {%s -> %s}, inverted = %b, vIn = %d, vOut = %d",
+                    parent.toString(false), parentNext.toString(false), childPrev.toString(false),
+                    child.toString(false), isInverted(), vIn, vOut);
         }
     }
 
@@ -1936,7 +1943,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
         /**
          * Stores some value to indicate whether this node is visited in the current context or not.
          * During the testing phase, if this value if equal to the dfs index of the currently
-         * processed node $v$, than this node is visited, otherwise not. During the Kuratowski
+         * processed node $v$, then this node is visited, otherwise not. During the Kuratowski
          * subdivision extraction phase, the value of $0$ indicates that the node isn't visited,
          * otherwise, the node is considered to be visited.
          */
@@ -1965,7 +1972,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
          */
         Edge parentEdge;
         /**
-         * If this node has a back edge incident to the currently processed node $v$, than this
+         * If this node has a back edge incident to the currently processed node $v$, then this
          * variable stores this edge
          */
         Edge edgeToEmbed;
@@ -2374,18 +2381,20 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
                 childListString = builder.append("}").toString();
             }
             if (rootVertex) {
-                return String.format(
-                    "R {%s}: neighbors = [%s, %s], embedded = %s, visited = %d, back_edge_flag = %d, dfs_index = %d",
-                    toString(false), neighbor1, neighbor2, embedded.toString(), visited,
-                    backEdgeFlag, dfsIndex);
+                return String
+                    .format(
+                        "R {%s}: neighbors = [%s, %s], embedded = %s, visited = %d, back_edge_flag = %d, dfs_index = %d",
+                        toString(false), neighbor1, neighbor2, embedded.toString(), visited,
+                        backEdgeFlag, dfsIndex);
             } else {
-                return String.format(
-                    "{%s}:  neighbors = [%s, %s], embedded = %s, visited = %d, back_edge_flag = %d, dfs_index = %d, separated = %s, tree_edges = %s, down_edges = %s, back_edges = %s, parent = %s, lowpoint = %d, least_ancestor = %d",
-                    toString(false), neighbor1, neighbor2, embedded.toString(), visited,
-                    backEdgeFlag, dfsIndex, childListString, treeEdges.toString(),
-                    downEdges.toString(), backEdges.toString(),
-                    parentEdge == null ? "null" : parentEdge.source.toString(false), lowpoint,
-                    leastAncestor);
+                return String
+                    .format(
+                        "{%s}:  neighbors = [%s, %s], embedded = %s, visited = %d, back_edge_flag = %d, dfs_index = %d, separated = %s, tree_edges = %s, down_edges = %s, back_edges = %s, parent = %s, lowpoint = %d, least_ancestor = %d",
+                        toString(false), neighbor1, neighbor2, embedded.toString(), visited,
+                        backEdgeFlag, dfsIndex, childListString, treeEdges.toString(),
+                        downEdges.toString(), backEdges.toString(),
+                        parentEdge == null ? "null" : parentEdge.source.toString(false), lowpoint,
+                        leastAncestor);
             }
         }
 
@@ -2399,9 +2408,10 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
         {
             if (!full) {
                 if (rootVertex) {
-                    return String.format(
-                        "%s^%s", parentEdge.source.graphVertex.toString(),
-                        parentEdge.target.graphVertex.toString());
+                    return String
+                        .format(
+                            "%s^%s", parentEdge.source.graphVertex.toString(),
+                            parentEdge.target.graphVertex.toString());
                 } else {
                     return graphVertex.toString();
                 }

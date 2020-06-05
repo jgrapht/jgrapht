@@ -17,20 +17,16 @@
  */
 package org.jgrapht.alg.clustering;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.ClusteringAlgorithm.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
+
 import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
 
 /**
  * Tests
@@ -85,7 +81,7 @@ public class LabelPropagationClusteringTest
 
         for (int i = 0; i < 8; i++)
             g.addVertex();
-        
+
         // clique1
         g.addEdge(0, 1);
         g.addEdge(0, 2);
@@ -93,7 +89,7 @@ public class LabelPropagationClusteringTest
         g.addEdge(1, 2);
         g.addEdge(1, 3);
         g.addEdge(2, 3);
-        
+
         // clique2
         g.addEdge(4, 5);
         g.addEdge(4, 6);
@@ -101,21 +97,21 @@ public class LabelPropagationClusteringTest
         g.addEdge(5, 6);
         g.addEdge(5, 7);
         g.addEdge(6, 7);
-        
+
         // one edge between them
         g.addEdge(3, 4);
 
         LabelPropagationClustering<Integer, DefaultEdge> alg =
             new LabelPropagationClustering<>(g, 0, new Random(13));
         Clustering<Integer> clustering = alg.getClustering();
-        
+
         assertEquals(2, clustering.getNumberClusters());
         List<Set<Integer>> clusters = clustering.getClusters();
 
         assertEquals(new HashSet<>(Arrays.asList(0, 1, 2, 3)), clusters.get(0));
         assertEquals(new HashSet<>(Arrays.asList(4, 5, 6, 7)), clusters.get(1));
     }
-    
+
     @Test
     public void test3()
     {
@@ -128,7 +124,7 @@ public class LabelPropagationClusteringTest
         for (int i = 0; i < 12; i++) {
             g.addVertex();
         }
-        
+
         // clique1
         g.addEdge(0, 1);
         g.addEdge(0, 2);
@@ -136,7 +132,7 @@ public class LabelPropagationClusteringTest
         g.addEdge(1, 2);
         g.addEdge(1, 3);
         g.addEdge(2, 3);
-        
+
         // clique2
         g.addEdge(4, 5);
         g.addEdge(4, 6);
@@ -144,7 +140,7 @@ public class LabelPropagationClusteringTest
         g.addEdge(5, 6);
         g.addEdge(5, 7);
         g.addEdge(6, 7);
-        
+
         // clique3
         g.addEdge(8, 9);
         g.addEdge(8, 10);
@@ -152,7 +148,7 @@ public class LabelPropagationClusteringTest
         g.addEdge(9, 10);
         g.addEdge(9, 11);
         g.addEdge(10, 11);
-        
+
         // one edge between them
         g.addEdge(3, 4);
         g.addEdge(7, 8);
@@ -160,7 +156,7 @@ public class LabelPropagationClusteringTest
         LabelPropagationClustering<Integer, DefaultEdge> alg =
             new LabelPropagationClustering<>(g, 0, new Random(13));
         Clustering<Integer> clustering = alg.getClustering();
-        
+
         assertEquals(3, clustering.getNumberClusters());
         List<Set<Integer>> clusters = clustering.getClusters();
 

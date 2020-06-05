@@ -112,9 +112,10 @@ class FRQuadTree
 
             // count new point and update centroid
             cur.totalPoints++;
-            cur.centroid = Point2D.of(
-                (cur.centroid.getX() * (cur.totalPoints - 1) + p.getX()) / cur.totalPoints,
-                (cur.centroid.getY() * (cur.totalPoints - 1) + p.getY()) / cur.totalPoints);
+            cur.centroid = Point2D
+                .of(
+                    (cur.centroid.getX() * (cur.totalPoints - 1) + p.getX()) / cur.totalPoints,
+                    (cur.centroid.getY() * (cur.totalPoints - 1) + p.getY()) / cur.totalPoints);
 
             // non-leaf
             if (Boxes.containsPoint(cur.children[NW].getBox(), p)) {

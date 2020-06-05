@@ -104,8 +104,9 @@ public class DIMACSExporter<V, E>
         out.println("c");
         out.println("c SOURCE: " + HEADER);
         out.println("c");
-        out.println(
-            "p " + format.getProblem() + " " + g.vertexSet().size() + " " + g.edgeSet().size());
+        out
+            .println(
+                "p " + format.getProblem() + " " + g.vertexSet().size() + " " + g.edgeSet().size());
 
         boolean exportEdgeWeights = parameters.contains(Parameter.EXPORT_EDGE_WEIGHTS);
 

@@ -285,7 +285,7 @@ public class JSONExporterTest
         assertEquals(3, graph2.getAllEdges(1, 4).size());
 
     }
-    
+
     @Test
     public void testExportAndImportWithEscape()
         throws ExportException,
@@ -298,7 +298,7 @@ public class JSONExporterTest
                 .allowingSelfLoops(true).buildGraph();
 
         String difficultId = "I have \"\" in my id";
-        
+
         graph1.addVertex("1");
         graph1.addVertex(difficultId);
         graph1.addVertex("3");
@@ -325,7 +325,7 @@ public class JSONExporterTest
                 .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER).buildGraph();
 
         JSONImporter<String, DefaultWeightedEdge> importer = new JSONImporter<>();
-        importer.setVertexFactory(x->x);
+        importer.setVertexFactory(x -> x);
         importer.importGraph(graph2, new StringReader(output1));
 
         assertEquals(5, graph2.vertexSet().size());

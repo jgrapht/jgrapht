@@ -85,7 +85,7 @@ public class AsUnmodifiableGraph<V, E>
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
-    
+
     /**
      * @see Graph#addVertex(Object)
      */

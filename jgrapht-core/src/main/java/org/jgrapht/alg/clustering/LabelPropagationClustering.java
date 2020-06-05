@@ -17,25 +17,12 @@
  */
 package org.jgrapht.alg.clustering;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
-import org.jgrapht.alg.util.Pair;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * A label propagation clustering algorithm.
@@ -217,7 +204,7 @@ public class LabelPropagationClustering<V, E>
                 String vLabel = labels.get(v);
                 int vLabelCount = counts.getOrDefault(vLabel, 0);
                 int maxCount = labelCountsAndMaximum.getSecond();
-                if(maxCount > vLabelCount){
+                if (maxCount > vLabelCount) {
                     return false;
                 }
             }
@@ -229,9 +216,8 @@ public class LabelPropagationClustering<V, E>
          * frequency of the vertices, which have a label not equal to the input vertex label.
          * 
          * @param v the input vertex
-         * @return the frequency of the labels of all neighbors of a vertex and the maximum
-         *         label frequency of the vertices with a label not equal to the input vertex
-         *         label
+         * @return the frequency of the labels of all neighbors of a vertex and the maximum label
+         *         frequency of the vertices with a label not equal to the input vertex label
          */
         private Pair<Map<String, Integer>, Integer> getNeighborLabelCountsAndMaximum(V v)
         {

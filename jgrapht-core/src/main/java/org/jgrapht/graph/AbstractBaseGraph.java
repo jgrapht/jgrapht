@@ -116,12 +116,14 @@ public abstract class AbstractBaseGraph<V, E>
 
         this.graphSpecificsStrategy =
             Objects.requireNonNull(graphSpecificsStrategy, GRAPH_SPECIFICS_STRATEGY_REQUIRED);
-        this.specifics = Objects.requireNonNull(
-            graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
-            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
-            graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
-            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.specifics = Objects
+            .requireNonNull(
+                graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
+                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.intrusiveEdgesSpecifics = Objects
+            .requireNonNull(
+                graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
+                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -257,10 +259,10 @@ public abstract class AbstractBaseGraph<V, E>
 
         if (!type.isAllowingMultipleEdges()) {
             // check that second operation will succeed
-            if (intrusiveEdgesSpecifics.containsEdge(e)) { 
+            if (intrusiveEdgesSpecifics.containsEdge(e)) {
                 return false;
             }
-            if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) { 
+            if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
                 return false;
             }
             // cannot fail due to first check

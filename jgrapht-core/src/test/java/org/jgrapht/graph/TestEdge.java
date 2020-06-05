@@ -17,6 +17,8 @@
  */
 package org.jgrapht.graph;
 
+import java.util.Objects;
+
 /**
  * {@link org.jgrapht.graph.DefaultEdge} does not implement hashCode() or equals(). Therefore
  * comparing two graphs does not work as expected out of the box.
@@ -38,11 +40,7 @@ public class TestEdge
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getSource() == null) ? 0 : getSource().hashCode());
-        result = prime * result + ((getTarget() == null) ? 0 : getTarget().hashCode());
-        return result;
+        return Objects.hash(source, target);
     }
 
     @Override
@@ -55,17 +53,7 @@ public class TestEdge
         if (getClass() != obj.getClass())
             return false;
         TestEdge other = (TestEdge) obj;
-        if (getSource() == null) {
-            if (other.getSource() != null)
-                return false;
-        } else if (!getSource().equals(other.getSource()))
-            return false;
-        if (getTarget() == null) {
-            if (other.getTarget() != null)
-                return false;
-        } else if (!getTarget().equals(other.getTarget()))
-            return false;
-        return true;
+        return Objects.equals(source, other.source) && Objects.equals(target, other.target);
     }
 
 }

@@ -53,16 +53,18 @@ public class VertexDegreeComparatorTest
             randomGraphGenerator.generateGraph(graph);
             List<Integer> vertices = new ArrayList<>(graph.vertexSet());
             // Sort in ascending vertex degree
-            Collections.sort(
-                vertices,
-                new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
+            Collections
+                .sort(
+                    vertices,
+                    new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
             for (int i = 0; i < vertices.size() - 1; i++)
                 assertTrue(graph.degreeOf(vertices.get(i)) <= graph.degreeOf(vertices.get(i + 1)));
 
             // Sort in descending vertex degree
-            Collections.sort(
-                vertices,
-                new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.DESCENDING));
+            Collections
+                .sort(
+                    vertices,
+                    new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.DESCENDING));
             for (int i = 0; i < vertices.size() - 1; i++)
                 assertTrue(graph.degreeOf(vertices.get(i)) >= graph.degreeOf(vertices.get(i + 1)));
         }

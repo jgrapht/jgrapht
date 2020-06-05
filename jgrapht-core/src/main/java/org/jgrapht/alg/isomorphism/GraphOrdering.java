@@ -29,17 +29,17 @@ import java.util.*;
  * @param <E> the type of the edges
  */
 
-class GraphOrdering<V, E>
+final class GraphOrdering<V, E>
 {
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-    private Map<V, Integer> mapVertexToOrder;
-    private ArrayList<V> mapOrderToVertex;
-    private int vertexCount;
+    private final Map<V, Integer> mapVertexToOrder;
+    private final ArrayList<V> mapOrderToVertex;
+    private final int vertexCount;
 
-    private int[][] outgoingEdges;
-    private int[][] incomingEdges;
-    private E[] edgeCache;
+    private final int[][] outgoingEdges;
+    private final int[][] incomingEdges;
+    private final E[] edgeCache;
     /**
      * if caching is enabled, adjMatrix contains cached information on existing edges, valid values:
      * <ul>
@@ -48,9 +48,9 @@ class GraphOrdering<V, E>
      * <li>-1 - no edge exists</li>
      * </ul>
      */
-    private byte[] adjMatrix;
+    private final byte[] adjMatrix;
 
-    private boolean cacheEdges;
+    private final boolean cacheEdges;
 
     /**
      * @param graph the graph to be ordered
@@ -77,8 +77,13 @@ class GraphOrdering<V, E>
         if (cacheEdges) {
             outgoingEdges = new int[vertexCount][];
             incomingEdges = new int[vertexCount][];
-            edgeCache = (E[]) new Object[vertexCount*vertexCount];
-            adjMatrix = new byte[vertexCount*vertexCount];
+            edgeCache = (E[]) new Object[vertexCount * vertexCount];
+            adjMatrix = new byte[vertexCount * vertexCount];
+        } else {
+            outgoingEdges = null;
+            incomingEdges = null;
+            edgeCache = null;
+            adjMatrix = null;
         }
 
         Integer i = 0;
@@ -172,10 +177,10 @@ class GraphOrdering<V, E>
      */
     public boolean hasEdge(int v1Number, int v2Number)
     {
-        
+
         int cacheIndex = 0;
         if (cacheEdges) {
-            cacheIndex = v1Number*vertexCount+v2Number;
+            cacheIndex = v1Number * vertexCount + v2Number;
             final byte cache = adjMatrix[cacheIndex];
             if (cache != 0) {
                 return cache > 0;
@@ -196,7 +201,7 @@ class GraphOrdering<V, E>
                 }
             }
         }
-        
+
         V v1 = getVertex(v1Number);
         V v2 = getVertex(v2Number);
         boolean containsEdge = graph.containsEdge(v1, v2);
@@ -224,11 +229,11 @@ class GraphOrdering<V, E>
      */
     public E getEdge(int v1Number, int v2Number)
     {
-        
+
         if (cacheEdges) {
-            final int cacheIndex = v1Number*vertexCount+v2Number;
+            final int cacheIndex = v1Number * vertexCount + v2Number;
             final byte containsEdge = adjMatrix[cacheIndex];
-            if(containsEdge == 0){
+            if (containsEdge == 0) {
                 // edge cache has not been initialized yet for this element
                 hasEdge(v1Number, v2Number);
             }
@@ -236,11 +241,11 @@ class GraphOrdering<V, E>
 
             return edge;
         }
-        
+
         V v1 = getVertex(v1Number), v2 = getVertex(v2Number);
 
         E edge = graph.getEdge(v1, v2);
-        
+
         return edge;
     }
 

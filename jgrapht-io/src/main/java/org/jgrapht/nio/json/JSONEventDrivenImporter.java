@@ -17,33 +17,17 @@
  */
 package org.jgrapht.nio.json;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.apache.commons.text.StringEscapeUtils;
-import org.jgrapht.Graph;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
+import org.apache.commons.text.*;
+import org.jgrapht.*;
 import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.AttributeType;
-import org.jgrapht.nio.BaseEventDrivenImporter;
-import org.jgrapht.nio.DefaultAttribute;
-import org.jgrapht.nio.EventDrivenImporter;
-import org.jgrapht.nio.ImportEvent;
-import org.jgrapht.nio.ImportException;
-import org.jgrapht.nio.json.JsonParser.JsonContext;
+import org.jgrapht.nio.*;
+import org.jgrapht.nio.json.JsonParser.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.

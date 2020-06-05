@@ -329,8 +329,9 @@ public class PadbergRaoOddMinimumCutset<V, E>
     {
         Predicate<E> predicate = e -> sourcePartitionMinimumCut.contains(network.getEdgeSource(e))
             ^ sourcePartitionMinimumCut.contains(network.getEdgeTarget(e));
-        return network.edgeSet().stream().filter(predicate).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return network
+            .edgeSet().stream().filter(predicate)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

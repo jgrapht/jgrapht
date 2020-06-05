@@ -106,19 +106,23 @@ public class Graph6Sparse6ImporterTest
         // Klein7RegularGraph
         String input = ":B_`V";
 
-        Graph<String, DefaultEdge> graph = GraphTypeBuilder
-            .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
-            .vertexSupplier(SupplierUtil.createStringSupplier())
-            .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+        Graph<String,
+            DefaultEdge> graph = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         Graph6Sparse6Importer<String, DefaultEdge> importer = new Graph6Sparse6Importer<>();
-        importer.setVertexFactory(id->String.valueOf("node"+id));
+        importer.setVertexFactory(id -> String.valueOf("node" + id));
         try {
-            importer.importGraph(graph, new InputStreamReader(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
+            importer
+                .importGraph(
+                    graph, new InputStreamReader(
+                        new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             // cannot happen
         }
-        
+
         Graph<String, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList("node0", "node1", "node2"));
         orig.addEdge("node0", "node1");
@@ -130,7 +134,7 @@ public class Graph6Sparse6ImporterTest
         this.compare(orig, graph);
         assertEquals(orig.toString(), graph.toString());
     }
-    
+
     @Test
     public void testNumberVertices1()
         throws ImportException

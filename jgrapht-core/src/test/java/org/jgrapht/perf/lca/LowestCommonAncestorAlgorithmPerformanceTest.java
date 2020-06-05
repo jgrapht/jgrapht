@@ -67,8 +67,9 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
 
             solver = createSolver(tree, tree.vertexSet().iterator().next());
 
-            queries = LCATreeTestBase.generateQueries(
-                PERF_BENCHMARK_QUERIES_COUNT, new ArrayList<>(tree.vertexSet()), random);
+            queries = LCATreeTestBase
+                .generateQueries(
+                    PERF_BENCHMARK_QUERIES_COUNT, new ArrayList<>(tree.vertexSet()), random);
         }
 
         @Benchmark
@@ -112,8 +113,9 @@ public class LowestCommonAncestorAlgorithmPerformanceTest
 
             solver = createSolver(forest, roots);
 
-            queries = LCATreeTestBase.generateQueries(
-                PERF_BENCHMARK_QUERIES_COUNT, new ArrayList<>(forest.vertexSet()), random);
+            queries = LCATreeTestBase
+                .generateQueries(
+                    PERF_BENCHMARK_QUERIES_COUNT, new ArrayList<>(forest.vertexSet()), random);
         }
 
         @Benchmark

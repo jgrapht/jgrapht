@@ -518,8 +518,10 @@ public class CapacityScalingMinimumCostFlow<V, E>
                 if (DEBUG) {
                     System.out.println(String.format("Distance = %.1f", distance));
                     for (Node node : nodes) {
-                        System.out.println(
-                            String.format("Id = %d, potential = %.1f", node.id, node.potential));
+                        System.out
+                            .println(
+                                String
+                                    .format("Id = %d, potential = %.1f", node.id, node.potential));
                     }
                 }
                 return;
@@ -684,7 +686,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
         int labelType;
         /**
          * The excess of this node. If this value is positive, then this is a source node. If this
-         * value is 0, than this is a transhipment node. If this value if negative, this is a sink
+         * value is 0, then this is a transhipment node. If this value if negative, this is a sink
          * node.
          */
         int excess;
@@ -924,11 +926,12 @@ public class CapacityScalingMinimumCostFlow<V, E>
         @Override
         public String toString()
         {
-            return String.format(
-                "(%d, %d), residual capacity = %s, reduced cost = %.1f, cost = %.1f",
-                revArc.head.id, head.id,
-                residualCapacity >= CAP_INF ? "INF" : String.valueOf(residualCapacity),
-                getReducedCost(), cost);
+            return String
+                .format(
+                    "(%d, %d), residual capacity = %s, reduced cost = %.1f, cost = %.1f",
+                    revArc.head.id, head.id,
+                    residualCapacity >= CAP_INF ? "INF" : String.valueOf(residualCapacity),
+                    getReducedCost(), cost);
         }
     }
 }

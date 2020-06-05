@@ -53,9 +53,10 @@ public abstract class MinimumSourceSinkCutTest
         Set<Integer> sinkPartition = mc.getSinkPartition();
         Set<DefaultWeightedEdge> cutEdges = mc.getCutEdges();
 
-        this.verifyDirected(
-            network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
-            cutEdges);
+        this
+            .verifyDirected(
+                network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
+                cutEdges);
     }
 
     void verifyDirected(
@@ -93,9 +94,10 @@ public abstract class MinimumSourceSinkCutTest
         Set<Integer> sinkPartition = mc.getSinkPartition();
         Set<DefaultWeightedEdge> cutEdges = mc.getCutEdges();
 
-        this.verifyUndirected(
-            network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
-            cutEdges);
+        this
+            .verifyUndirected(
+                network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
+                cutEdges);
     }
 
     void verifyUndirected(

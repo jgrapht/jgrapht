@@ -64,9 +64,10 @@ public final class PerformanceDemo
         int numEdgesPerVertex = 200;
         int numElements = numVertices * (1 + numEdgesPerVertex);
 
-        System.out.println(
-            "\n" + "allocating graph with " + numElements
-                + " elements (may take a few tens of seconds)...");
+        System.out
+            .println(
+                "\n" + "allocating graph with " + numElements
+                    + " elements (may take a few tens of seconds)...");
 
         for (int i = 0; i < numVertices; i++) {
             curr = new Object();

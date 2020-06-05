@@ -267,9 +267,10 @@ public class RecursiveExactVCImpl<V, E>
      */
     private double calculateUpperBound()
     {
-        return Math.min(
-            new GreedyVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight(),
-            new ClarksonTwoApproxVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight());
+        return Math
+            .min(
+                new GreedyVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight(),
+                new ClarksonTwoApproxVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight());
     }
 
     /**

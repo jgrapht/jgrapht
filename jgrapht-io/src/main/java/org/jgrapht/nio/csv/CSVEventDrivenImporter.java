@@ -404,9 +404,10 @@ public class CSVEventDrivenImporter
                     } else {
                         if (assumeEdgeWeights) {
                             notifyEdge(
-                                Triple.of(
-                                    currentVertexName, columnIndex.get(target),
-                                    Double.valueOf(entryAsInteger)));
+                                Triple
+                                    .of(
+                                        currentVertexName, columnIndex.get(target),
+                                        Double.valueOf(entryAsInteger)));
                         } else {
                             notifyEdge(Triple.of(currentVertexName, columnIndex.get(target), null));
                         }

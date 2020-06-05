@@ -137,7 +137,8 @@ public class DIMACSEventDrivenImporterTest
         nameMap.put(10, 10);
         nameMap.put(11, 11);
 
-        DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().zeroBasedNumbering(false);
+        DIMACSEventDrivenImporter importer =
+            new DIMACSEventDrivenImporter().zeroBasedNumbering(false);
 
         importer.addVertexCountConsumer(count -> {
             assertEquals(count, Integer.valueOf(11));
@@ -162,7 +163,7 @@ public class DIMACSEventDrivenImporterTest
             i++;
         }
     }
-    
+
     /**
      * Read and parse an weighted instance
      */
@@ -260,5 +261,5 @@ public class DIMACSEventDrivenImporterTest
             i++;
         }
     }
-    
+
 }

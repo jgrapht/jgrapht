@@ -298,9 +298,10 @@ public class DijkstraShortestPathPerformanceTest
     {
         System.out.println("All-Pairs Shortest Paths Benchmark");
         System.out.println("---------");
-        System.out.println(
-            "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT + ", p = "
-                + PERF_BENCHMARK_EDGES_PROP);
+        System.out
+            .println(
+                "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT + ", p = "
+                    + PERF_BENCHMARK_EDGES_PROP);
         System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
         System.out.println("Averaging results over " + REPEAT + " executions");
 

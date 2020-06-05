@@ -56,9 +56,10 @@ public class VF2GraphIsomorphismInspectorTest
         Iterator<GraphMapping<String, DefaultEdge>> iter = vf2.getMappings();
 
         Set<String> mappings = new HashSet<>(
-            Arrays.asList(
-                "[v1=v1 v2=v2 v3=v3]", "[v1=v1 v2=v3 v3=v2]", "[v1=v2 v2=v1 v3=v3]",
-                "[v1=v2 v2=v3 v3=v1]", "[v1=v3 v2=v1 v3=v2]", "[v1=v3 v2=v2 v3=v1]"));
+            Arrays
+                .asList(
+                    "[v1=v1 v2=v2 v3=v3]", "[v1=v1 v2=v3 v3=v2]", "[v1=v2 v2=v1 v3=v3]",
+                    "[v1=v2 v2=v3 v3=v1]", "[v1=v3 v2=v1 v3=v2]", "[v1=v3 v2=v2 v3=v1]"));
         assertEquals(true, mappings.remove(iter.next().toString()));
         assertEquals(true, mappings.remove(iter.next().toString()));
         assertEquals(true, mappings.remove(iter.next().toString()));

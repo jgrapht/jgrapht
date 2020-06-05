@@ -111,8 +111,9 @@ public class SimpleGraphMLImporterTest
                 .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
-        SimpleGraphMLImporter<String, DefaultEdge> importer = new SimpleGraphMLImporter<String, DefaultEdge>();
-        importer.setVertexFactory(id->String.valueOf("node"+id));
+        SimpleGraphMLImporter<String, DefaultEdge> importer =
+            new SimpleGraphMLImporter<String, DefaultEdge>();
+        importer.setVertexFactory(id -> String.valueOf("node" + id));
         importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         assertEquals(3, g.vertexSet().size());
@@ -124,7 +125,7 @@ public class SimpleGraphMLImporterTest
         assertTrue(g.containsEdge("node2", "node3"));
         assertTrue(g.containsEdge("node3", "node1"));
     }
-    
+
     @Test
     public void testUndirectedUnweightedWithConsumers()
         throws ImportException

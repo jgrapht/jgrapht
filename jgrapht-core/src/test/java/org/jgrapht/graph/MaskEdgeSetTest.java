@@ -17,7 +17,6 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.junit.*;
 
 import java.util.*;
@@ -92,12 +91,14 @@ public class MaskEdgeSetTest
     }
 
     @Test
-    public void testIsEmpty() {
+    public void testIsEmpty()
+    {
         assertFalse(testMaskedEdgeSet.isEmpty());
-        testMaskedEdgeSet = new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v.equals(v1), e -> true);
+        testMaskedEdgeSet =
+            new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v.equals(v1), e -> true);
         assertTrue(testMaskedEdgeSet.isEmpty());
         testMaskedEdgeSet =
-                new MaskEdgeSet<>(directed, directed.edgeSet(), v -> true, e -> e == e2);
+            new MaskEdgeSet<>(directed, directed.edgeSet(), v -> true, e -> e == e2);
         assertTrue(testMaskedEdgeSet.isEmpty());
     }
 }

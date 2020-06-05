@@ -17,17 +17,17 @@
  */
 package org.jgrapht.nio.tsplib;
 
-import static java.util.Arrays.*;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.nio.*;
+import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.nio.*;
-import org.jgrapht.util.*;
+import static java.util.Arrays.asList;
 
 /**
  * Importer for files in the
@@ -470,9 +470,9 @@ public class TSPLIBImporter<V, E>
      * are referred to the <em>NODE_COORD_SECTION</em> in the same source.
      * </p>
      * <p>
-     * {@link Metadata} of the import can be obtained with {@link #getMetadata()} after this
-     * method returns. If the readers source contains a <em>TOUR_SECTION</em> the imported tour can
-     * be obtained from {@link Metadata#getTour()}.
+     * {@link Metadata} of the import can be obtained with {@link #getMetadata()} after this method
+     * returns. If the readers source contains a <em>TOUR_SECTION</em> the imported tour can be
+     * obtained from {@link Metadata#getTour()}.
      * </p>
      * <p>
      * This implementation is not thread-safe and must be synchronized externally if called by
@@ -646,9 +646,9 @@ public class TSPLIBImporter<V, E>
      * to the nodes respectively vertices in the given {@code metadata}.
      * </p>
      * <p>
-     * The {@link Metadata} of the import can be obtained with {@link #getMetadata()} after
-     * this method returns. The {@code Metadata#getVertexToNodeMapping() vertexToNodeMapping} in
-     * the metadata of this import is the same as in the given {@code metadata}.
+     * The {@link Metadata} of the import can be obtained with {@link #getMetadata()} after this
+     * method returns. The {@code Metadata#getVertexToNodeMapping() vertexToNodeMapping} in the
+     * metadata of this import is the same as in the given {@code metadata}.
      * </p>
      * <p>
      * This implementation is not thread-safe and must be synchronized externally if called by

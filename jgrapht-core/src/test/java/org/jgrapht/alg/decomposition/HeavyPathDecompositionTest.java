@@ -229,8 +229,9 @@ public class HeavyPathDecompositionTest
             new HeavyPathDecomposition<>(graph, "1");
 
         Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
-        Assert.assertTrue(
-            isValidDecomposition(graph, Collections.singleton("1"), heavyPathDecomposition));
+        Assert
+            .assertTrue(
+                isValidDecomposition(graph, Collections.singleton("1"), heavyPathDecomposition));
     }
 
     @Test
@@ -243,8 +244,9 @@ public class HeavyPathDecompositionTest
             new HeavyPathDecomposition<>(graph, "a");
 
         Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(
-            isValidDecomposition(graph, Collections.singleton("a"), heavyPathDecomposition));
+        Assert
+            .assertTrue(
+                isValidDecomposition(graph, Collections.singleton("a"), heavyPathDecomposition));
     }
 
     @Test
@@ -262,8 +264,9 @@ public class HeavyPathDecompositionTest
             new HeavyPathDecomposition<>(graph, 1);
 
         Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(
-            isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
+        Assert
+            .assertTrue(
+                isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
     }
 
     @Test
@@ -281,8 +284,9 @@ public class HeavyPathDecompositionTest
             new HeavyPathDecomposition<>(graph, 5);
 
         Assert.assertEquals(2, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(
-            isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
+        Assert
+            .assertTrue(
+                isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
     }
 
     @Test
@@ -307,8 +311,9 @@ public class HeavyPathDecompositionTest
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
             new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertTrue(
-            isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
+        Assert
+            .assertTrue(
+                isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
     }
 
     @Test

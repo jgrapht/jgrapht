@@ -212,9 +212,10 @@ public class BaseHeuristicSearchTest
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)
         {
-            return Math.sqrt(
-                Math.pow(sourceVertex.x - targetVertex.x, 2)
-                    + Math.pow(sourceVertex.y - targetVertex.y, 2));
+            return Math
+                .sqrt(
+                    Math.pow(sourceVertex.x - targetVertex.x, 2)
+                        + Math.pow(sourceVertex.y - targetVertex.y, 2));
         }
 
         @Override

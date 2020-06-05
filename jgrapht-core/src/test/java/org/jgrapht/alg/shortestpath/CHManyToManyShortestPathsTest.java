@@ -95,8 +95,8 @@ public class CHManyToManyShortestPathsTest
                 .computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
-            DefaultWeightedEdge> shortestPaths =
-                new CHManyToManyShortestPaths<>(hierarchy).getManyToManyPaths(
+            DefaultWeightedEdge> shortestPaths = new CHManyToManyShortestPaths<>(hierarchy)
+                .getManyToManyPaths(
                     new HashSet<>(Arrays.asList(1, 3, 7, 9)),
                     new HashSet<>(Collections.singletonList(5)));
 
@@ -123,8 +123,8 @@ public class CHManyToManyShortestPathsTest
                 .computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
-            DefaultWeightedEdge> shortestPaths =
-                new CHManyToManyShortestPaths<>(hierarchy).getManyToManyPaths(
+            DefaultWeightedEdge> shortestPaths = new CHManyToManyShortestPaths<>(hierarchy)
+                .getManyToManyPaths(
                     new HashSet<>(Arrays.asList(2, 3, 4, 5, 6)),
                     new HashSet<>(Collections.singletonList(1)));
 

@@ -344,9 +344,10 @@ public class GmlEventDrivenImporter
                 if (level == 2) {
                     stringBuffer.append(' ');
                     stringBuffer.append(']');
-                    attributes.put(
-                        key,
-                        new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
+                    attributes
+                        .put(
+                            key,
+                            new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
                     stringBuffer = null;
                 } else if (level >= 3) {
                     stringBuffer.append(' ');

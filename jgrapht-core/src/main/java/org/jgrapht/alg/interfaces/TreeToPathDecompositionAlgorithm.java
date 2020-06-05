@@ -98,9 +98,9 @@ public interface TreeToPathDecompositionAlgorithm<V, E>
         {
             this.edges = edges;
 
-            Set<GraphPath<V, E>> arrayUnenforcedSet =
-                paths.stream().map(path -> new GraphWalk<>(graph, path, path.size())).collect(
-                    Collectors.toCollection(ArrayUnenforcedSet::new));
+            Set<GraphPath<V, E>> arrayUnenforcedSet = paths
+                .stream().map(path -> new GraphWalk<>(graph, path, path.size()))
+                .collect(Collectors.toCollection(ArrayUnenforcedSet::new));
 
             this.paths = Collections.unmodifiableSet(arrayUnenforcedSet);
         }

@@ -18,16 +18,14 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -198,7 +196,7 @@ public class IncomingOutgoingEdgesTest
         assertEquals(Collections.emptySet(), g.edgesOf(3));
         assertEquals(0, g.degreeOf(3));
     }
-    
+
     /**
      * Test the most general version of the undirected graph.
      */
@@ -273,7 +271,7 @@ public class IncomingOutgoingEdgesTest
     public void testUndirectedGraph()
     {
         testUndirectedGraph(() -> new Pseudograph<>(DefaultEdge.class));
-        
+
         testAddDuplicateEdgeUndirectedGraph(
             () -> GraphTypeBuilder
                 .undirected().allowingMultipleEdges(true).allowingSelfLoops(true)

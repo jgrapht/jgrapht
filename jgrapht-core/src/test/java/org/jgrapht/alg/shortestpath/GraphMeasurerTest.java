@@ -261,9 +261,10 @@ public class GraphMeasurerTest
         Set<Integer> graphPseudoPeriphery3 = gdm.getGraphPseudoPeriphery();
         assertEquals(
             new HashSet<>(
-                Arrays.asList(
-                    6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46, 48, 51, 53, 60, 61,
-                    63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)),
+                Arrays
+                    .asList(
+                        6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46, 48, 51, 53, 60,
+                        61, 63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)),
             graphPseudoPeriphery3);
     }
 }

@@ -102,11 +102,12 @@ public class JohnsonShortestPathsTest
         Random rng = new Random();
 
         List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
-        graphs.add(
-            () -> GraphTypeBuilder
-                .directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
-                .allowingSelfLoops(true).buildGraph());
+        graphs
+            .add(
+                () -> GraphTypeBuilder
+                    .directed().vertexSupplier(SupplierUtil.createIntegerSupplier())
+                    .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
+                    .allowingSelfLoops(true).buildGraph());
 
         for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =

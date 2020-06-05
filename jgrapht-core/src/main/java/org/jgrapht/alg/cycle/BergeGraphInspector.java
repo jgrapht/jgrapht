@@ -112,19 +112,22 @@ public class BergeGraphInspector<V, E>
             if (g.containsEdge(m, b2) || g.containsEdge(m, b3) || g.containsEdge(m, s2)
                 || g.containsEdge(m, s3) || S == null || T == null)
                 return null;
-            if (S.getVertexList().stream().anyMatch(
-                t -> g.containsEdge(t, b2) || g.containsEdge(t, b3) || g.containsEdge(t, s2)
-                    || g.containsEdge(t, s3))
-                || T.getVertexList().stream().anyMatch(
-                    t -> t != b1 && (g.containsEdge(t, b2) || g.containsEdge(t, b3)
-                        || g.containsEdge(t, s2) || g.containsEdge(t, s3))))
+            if (S
+                .getVertexList().stream().anyMatch(
+                    t -> g.containsEdge(t, b2) || g.containsEdge(t, b3) || g.containsEdge(t, s2)
+                        || g.containsEdge(t, s3))
+                || T
+                    .getVertexList().stream().anyMatch(
+                        t -> t != b1 && (g.containsEdge(t, b2) || g.containsEdge(t, b3)
+                            || g.containsEdge(t, s2) || g.containsEdge(t, s3))))
                 return null;
             List<V> intersection = intersectGraphPaths(S, T);
             if (intersection.size() != 1 || !intersection.contains(m))
                 return null;
-            if (S.getVertexList().stream().anyMatch(
-                s -> s != m
-                    && T.getVertexList().stream().anyMatch(t -> t != m && g.containsEdge(s, t))))
+            if (S
+                .getVertexList().stream().anyMatch(
+                    s -> s != m && T
+                        .getVertexList().stream().anyMatch(t -> t != m && g.containsEdge(s, t))))
                 return null;
             List<E> edgeList = new LinkedList<>();
             edgeList.addAll(T.getEdgeList());
@@ -268,57 +271,75 @@ public class BergeGraphInspector<V, E>
                                     for (V m1 : M) {
                                         Set<V> validInterior = new HashSet<>();
                                         validInterior.addAll(M);
-                                        validInterior.removeIf(
-                                            i -> g.containsEdge(i, b2) || g.containsEdge(i, s2)
-                                                || g.containsEdge(i, b3) || g.containsEdge(i, s3));
+                                        validInterior
+                                            .removeIf(
+                                                i -> g.containsEdge(i, b2) || g.containsEdge(i, s2)
+                                                    || g.containsEdge(i, b3)
+                                                    || g.containsEdge(i, s3));
 
                                         validInterior.add(m1);
                                         validInterior.add(s1);
                                         Graph<V, E> subg = new AsSubgraph<>(g, validInterior);
-                                        S1.put(
-                                            m1, new DijkstraShortestPath<>(subg).getPath(m1, s1));
+                                        S1
+                                            .put(
+                                                m1,
+                                                new DijkstraShortestPath<>(subg).getPath(m1, s1));
                                         validInterior.remove(s1);
                                         validInterior.add(b1);
                                         subg = new AsSubgraph<>(g, validInterior);
-                                        T1.put(
-                                            m1, new DijkstraShortestPath<>(subg).getPath(b1, m1));
+                                        T1
+                                            .put(
+                                                m1,
+                                                new DijkstraShortestPath<>(subg).getPath(b1, m1));
 
                                     }
                                     for (V m2 : M) {
                                         Set<V> validInterior = new HashSet<>();
                                         validInterior.addAll(M);
-                                        validInterior.removeIf(
-                                            i -> g.containsEdge(i, b1) || g.containsEdge(i, s1)
-                                                || g.containsEdge(i, b3) || g.containsEdge(i, s3));
+                                        validInterior
+                                            .removeIf(
+                                                i -> g.containsEdge(i, b1) || g.containsEdge(i, s1)
+                                                    || g.containsEdge(i, b3)
+                                                    || g.containsEdge(i, s3));
                                         validInterior.add(m2);
                                         validInterior.add(s2);
                                         Graph<V, E> subg = new AsSubgraph<>(g, validInterior);
-                                        S2.put(
-                                            m2, new DijkstraShortestPath<>(subg).getPath(m2, s2));
+                                        S2
+                                            .put(
+                                                m2,
+                                                new DijkstraShortestPath<>(subg).getPath(m2, s2));
                                         validInterior.remove(s2);
                                         validInterior.add(b2);
                                         subg = new AsSubgraph<>(g, validInterior);
-                                        T2.put(
-                                            m2, new DijkstraShortestPath<>(subg).getPath(b2, m2));
+                                        T2
+                                            .put(
+                                                m2,
+                                                new DijkstraShortestPath<>(subg).getPath(b2, m2));
 
                                     }
                                     for (V m3 : M) {
                                         Set<V> validInterior = new HashSet<>();
                                         validInterior.addAll(M);
-                                        validInterior.removeIf(
-                                            i -> g.containsEdge(i, b1) || g.containsEdge(i, s1)
-                                                || g.containsEdge(i, b2) || g.containsEdge(i, s2));
+                                        validInterior
+                                            .removeIf(
+                                                i -> g.containsEdge(i, b1) || g.containsEdge(i, s1)
+                                                    || g.containsEdge(i, b2)
+                                                    || g.containsEdge(i, s2));
                                         validInterior.add(m3);
                                         validInterior.add(s3);
 
                                         Graph<V, E> subg = new AsSubgraph<>(g, validInterior);
-                                        S3.put(
-                                            m3, new DijkstraShortestPath<>(subg).getPath(m3, s3));
+                                        S3
+                                            .put(
+                                                m3,
+                                                new DijkstraShortestPath<>(subg).getPath(m3, s3));
                                         validInterior.remove(s3);
                                         validInterior.add(b3);
                                         subg = new AsSubgraph<>(g, validInterior, null);
-                                        T3.put(
-                                            m3, new DijkstraShortestPath<>(subg).getPath(b3, m3));
+                                        T3
+                                            .put(
+                                                m3,
+                                                new DijkstraShortestPath<>(subg).getPath(b3, m3));
                                     }
 
                                     // Check if all edges of a pyramid are valid
@@ -873,9 +894,10 @@ public class BergeGraphInspector<V, E>
     private Set<V> findMaximalConnectedSubset(Graph<V, E> g, Set<V> X, V v1, V v2, V v5)
     {
         Set<V> FPrime = new ConnectivityInspector<>(g).connectedSetOf(v5);
-        FPrime.removeIf(
-            t -> t != v5 && isYXComplete(g, t, X) || v1 == t || v2 == t || g.containsEdge(v1, t)
-                || g.containsEdge(v2, t));
+        FPrime
+            .removeIf(
+                t -> t != v5 && isYXComplete(g, t, X) || v1 == t || v2 == t || g.containsEdge(v1, t)
+                    || g.containsEdge(v2, t));
         return FPrime;
     }
 

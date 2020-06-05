@@ -74,7 +74,7 @@ public class JSONImporterTest
         assertTrue(g.containsEdge("1", "2"));
         assertTrue(g.containsEdge("1", "3"));
     }
-    
+
     @Test
     public void testVertexFactory()
         throws ImportException
@@ -101,7 +101,7 @@ public class JSONImporterTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
-        importer.setVertexFactory(id->String.valueOf("node"+id));
+        importer.setVertexFactory(id -> String.valueOf("node" + id));
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(4, g.vertexSet().size());

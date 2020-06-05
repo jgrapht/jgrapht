@@ -17,24 +17,20 @@
  */
 package org.jgrapht.nio.gexf;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.nio.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.AttributeType;
-import org.jgrapht.nio.DefaultAttribute;
-import org.jgrapht.nio.ImportException;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
 
 /**
  * Tests
@@ -90,7 +86,7 @@ public class SimpleGEXFImporterTest
         assertTrue(g.containsEdge("1", "2"));
         assertTrue(g.containsEdge("2", "0"));
     }
-    
+
     @Test
     public void testUndirectedUnweightedWithMeta()
         throws ImportException
@@ -399,7 +395,7 @@ public class SimpleGEXFImporterTest
         new SimpleGEXFImporter<String, DefaultEdge>()
             .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
     }
-    
+
     @Test
     public void testIgnoringNested()
         throws ImportException
@@ -439,9 +435,11 @@ public class SimpleGEXFImporterTest
                 .vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
-        SimpleGEXFImporter<String, DefaultEdge> simpleGEXFImporter = new SimpleGEXFImporter<String, DefaultEdge>();
-        simpleGEXFImporter.setVertexFactory(id->id);
-        simpleGEXFImporter.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        SimpleGEXFImporter<String, DefaultEdge> simpleGEXFImporter =
+            new SimpleGEXFImporter<String, DefaultEdge>();
+        simpleGEXFImporter.setVertexFactory(id -> id);
+        simpleGEXFImporter
+            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());

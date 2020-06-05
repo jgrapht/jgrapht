@@ -556,8 +556,9 @@ public class StackBFSFundamentalCycleBasisTest
     public void test1()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(
-            graph, IntStream.rangeClosed(1, 7).boxed().collect(Collectors.toList()));
+        Graphs
+            .addAllVertices(
+                graph, IntStream.rangeClosed(1, 7).boxed().collect(Collectors.toList()));
         graph.addEdge(1, 2);
         graph.addEdge(1, 3);
         graph.addEdge(2, 4);

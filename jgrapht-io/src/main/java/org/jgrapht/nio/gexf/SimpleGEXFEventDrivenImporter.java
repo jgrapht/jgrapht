@@ -17,34 +17,18 @@
  */
 package org.jgrapht.nio.gexf;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.nio.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-
-import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.AttributeType;
-import org.jgrapht.nio.BaseEventDrivenImporter;
-import org.jgrapht.nio.DefaultAttribute;
-import org.jgrapht.nio.EventDrivenImporter;
-import org.jgrapht.nio.ImportEvent;
-import org.jgrapht.nio.ImportException;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+import javax.xml.validation.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a GEXF data source. The importer does not construct a graph but calls the

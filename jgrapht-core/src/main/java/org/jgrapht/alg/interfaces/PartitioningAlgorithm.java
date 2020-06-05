@@ -116,9 +116,11 @@ public interface PartitioningAlgorithm<V>
          */
         public PartitioningImpl(List<Set<V>> classes)
         {
-            this.classes = Collections.unmodifiableList(
-                Objects.requireNonNull(classes).stream().map(Collections::unmodifiableSet).collect(
-                    Collectors.toList()));
+            this.classes = Collections
+                .unmodifiableList(
+                    Objects
+                        .requireNonNull(classes).stream().map(Collections::unmodifiableSet)
+                        .collect(Collectors.toList()));
         }
 
         /**
@@ -138,10 +140,11 @@ public interface PartitioningAlgorithm<V>
                     .computeIfAbsent(entry.getValue(), x -> new HashSet<>()).add(entry.getKey());
             }
 
-            this.classes = Collections.unmodifiableList(
-                partitionIndexToVertexMap
-                    .values().stream().map(Collections::unmodifiableSet)
-                    .collect(Collectors.toList()));
+            this.classes = Collections
+                .unmodifiableList(
+                    partitionIndexToVertexMap
+                        .values().stream().map(Collections::unmodifiableSet)
+                        .collect(Collectors.toList()));
         }
 
         /**

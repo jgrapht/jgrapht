@@ -101,8 +101,9 @@ public class TransitiveReductionTest
             // System.out.println(Arrays.deepToString(transitively_reduced_matrix)
             // + " transitive reduction");
 
-            Assert.assertArrayEquals(
-                expected_transitively_reduced_matrix, transitively_reduced_matrix);
+            Assert
+                .assertArrayEquals(
+                    expected_transitively_reduced_matrix, transitively_reduced_matrix);
         }
     }
 

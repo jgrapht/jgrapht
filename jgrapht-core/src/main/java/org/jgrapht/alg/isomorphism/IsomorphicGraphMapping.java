@@ -220,9 +220,10 @@ public class IsomorphicGraphMapping<V, E>
     @Override
     public int hashCode()
     {
-        return Objects.hash(
-            forwardMapping, backwardMapping, System.identityHashCode(graph1),
-            System.identityHashCode(graph2));
+        return Objects
+            .hash(
+                forwardMapping, backwardMapping, System.identityHashCode(graph1),
+                System.identityHashCode(graph2));
     }
 
     @Override
@@ -239,8 +240,9 @@ public class IsomorphicGraphMapping<V, E>
         int i = 0;
         for (Map.Entry<String, V> entry : vertexMap.entrySet()) {
             V u = getVertexCorrespondence(entry.getValue(), true);
-            str.append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=").append(
-                (u == null) ? "~~" : u);
+            str
+                .append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=")
+                .append((u == null) ? "~~" : u);
         }
 
         return str + "]";

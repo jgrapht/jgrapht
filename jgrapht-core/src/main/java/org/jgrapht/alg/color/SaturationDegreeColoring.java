@@ -110,8 +110,9 @@ public class SaturationDegreeColoring<V, E>
         for (V v : graph.vertexSet()) {
             handles.put(v, new HeapHandle(v));
         }
-        heap.bulkInsert(
-            handles.values().toArray((HeapHandle[]) Array.newInstance(HeapHandle.class, 0)));
+        heap
+            .bulkInsert(
+                handles.values().toArray((HeapHandle[]) Array.newInstance(HeapHandle.class, 0)));
 
         /*
          * Color vertices

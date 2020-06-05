@@ -23,8 +23,7 @@ import org.jgrapht.nio.*;
 import org.junit.*;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 

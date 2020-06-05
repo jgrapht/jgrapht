@@ -183,11 +183,12 @@ public interface CapacitatedSpanningTreeAlgorithm<V, E>
 
                 if (spanningTreeGraph.containsEdge(root, next)) {
                     if (!currentSubtree.isEmpty()) {
-                        if (!currentSubtree.equals(
-                            this
-                                .getPartition()
-                                .get(this.getLabels().get(currentSubtree.iterator().next()))
-                                .getFirst()))
+                        if (!currentSubtree
+                            .equals(
+                                this
+                                    .getPartition()
+                                    .get(this.getLabels().get(currentSubtree.iterator().next()))
+                                    .getFirst()))
                         {
                             return false;
                         }

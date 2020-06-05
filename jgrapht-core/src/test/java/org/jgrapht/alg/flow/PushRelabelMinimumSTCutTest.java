@@ -95,9 +95,10 @@ public class PushRelabelMinimumSTCutTest
             Set<Integer> sinkPartition = prSolver.getSinkPartition();
             Set<DefaultWeightedEdge> cutEdges = prSolver.getCutEdges();
 
-            this.verifyDirected(
-                network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
-                cutEdges);
+            this
+                .verifyDirected(
+                    network, source, sink, expectedCutWeight, cutWeight, sourcePartition,
+                    sinkPartition, cutEdges);
         }
     }
 
@@ -121,9 +122,10 @@ public class PushRelabelMinimumSTCutTest
             Set<Integer> sinkPartition = prSolver.getSinkPartition();
             Set<DefaultWeightedEdge> cutEdges = prSolver.getCutEdges();
 
-            this.verifyUndirected(
-                network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
-                cutEdges);
+            this
+                .verifyUndirected(
+                    network, source, sink, expectedCutWeight, cutWeight, sourcePartition,
+                    sinkPartition, cutEdges);
         }
     }
 }

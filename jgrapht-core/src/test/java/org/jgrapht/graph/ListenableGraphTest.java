@@ -17,18 +17,14 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.jgrapht.event.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import org.jgrapht.Graph;
-import org.jgrapht.ListenableGraph;
-import org.jgrapht.event.GraphEdgeChangeEvent;
-import org.jgrapht.event.GraphListener;
-import org.jgrapht.event.GraphVertexChangeEvent;
-import org.jgrapht.event.VertexSetListener;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
 
 /**
  * Unit test for {@link ListenableGraph} class.
@@ -166,8 +162,7 @@ public class ListenableGraphTest
     }
 
     /**
-     * Tests VertexSetListener listener.
-     * (Issue #887).
+     * Tests VertexSetListener listener. (Issue #887).
      */
     @Test
     public void testWithVertexSupplier()

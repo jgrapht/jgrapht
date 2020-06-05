@@ -24,36 +24,31 @@ import org.jgrapht.alg.util.*;
 import java.util.*;
 
 /**
- * Clustering coefficient.
+ * Clustering coefficient. This implementation computes the global, the local and the average
+ * clustering coefficient in an undirected or a directed network.
  *
  * <p>
- * Computes the
+ * The
  * <a href="https://en.wikipedia.org/wiki/Clustering_coefficient#Local_clustering_coefficient">local
- * clustering coefficient</a> of each vertex of a graph. The local clustering coefficient of a node
- * $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}$
- * where $\sigma_{st}$ is the total number of shortest paths from node $s$ to node $t$ and
- * $\sigma_{st}(v)$ is the number of those paths that pass through $v$. For more details see
- * <a href="https://en.wikipedia.org/wiki/Clustering_coefficient">wikipedia</a>.
+ * clustering coefficient</a> of a vertex in a graph quantifies how close its neighbors are to being
+ * a clique. For a vertex $v$ it counts how many of its direct neighbors are connected by an edge
+ * over the total number of neighbor pairs. In the case of undirected graphs the total number of
+ * possible neighbor pairs is only half compared to directed graphs.
+ * 
+ * <p>
+ * The local clustering coefficient of a graph was introduced in <i>D. J. Watts and Steven Strogatz
+ * (June 1998). "Collective dynamics of 'small-world' networks". Nature. 393 (6684): 440–442.
+ * doi:10.1038/30918</i>. It is simply the average of the local clustering coefficients of all the
+ * vertices of the graph.
  *
  * <p>
- * This implementation computes both the global, the local and the average clustering coefficient in
- * an undirected or a directed network.
- * </p>
- *
- * <p>
- * Global clustering coefficient was introduced in <i>R. D. Luce and A. D. Perry (1949). "A method
- * of matrix analysis of group structure". Psychometrika. 14 (1): 95–116. doi:10.1007/BF02289146</i>
- * </p>
- *
- * <p>
- * Local clustering coefficient was introduced in <i>D. J. Watts and Steven Strogatz (June 1998).
- * "Collective dynamics of 'small-world' networks". Nature. 393 (6684): 440–442.
- * doi:10.1038/30918</i>
- * </p>
- *
- * <p>
- * This implementation also computes the global clustering coefficient as well as the average
- * clustering coefficient.
+ * The global clustering coefficient of a graph is based on triplets of nodes. A triplet is three
+ * graph nodes which are connected either by two edges or by three edges. A triplet which is
+ * connected by two edges, is called an open triplet. A triplet which is connected with three edges
+ * is called a closed triplet. The global clustering coefficient is defined as the number of closed
+ * triplets over the total number of triplets (open and closed). It was introduced in <i>R. D. Luce
+ * and A. D. Perry (1949). "A method of matrix analysis of group structure". Psychometrika. 14 (1):
+ * 95–116. doi:10.1007/BF02289146</i>.
  *
  * <p>
  * The running time is $O(|V| + \Delta(G)^2)$ where $|V|$ is the number of vertices and $\Delta(G)$

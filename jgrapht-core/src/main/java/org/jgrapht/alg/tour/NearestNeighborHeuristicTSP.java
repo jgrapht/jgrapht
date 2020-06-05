@@ -18,6 +18,7 @@
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -33,6 +34,18 @@ import java.util.*;
  * <p>
  * This is perhaps the simplest and most straightforward TSP heuristic. The key to this algorithm is
  * to always visit the nearest city.
+ * </p>
+ *
+ * <p>
+ * The tour computed with a {@code Nearest-Neighbor-Heuristic} can vary depending on the first
+ * vertex visited. The first vertex for the next or for multiple subsequent tour computations (calls
+ * of {@link #getTour(Graph)}) can be specified in the constructors
+ * {@link #NearestNeighborHeuristicTSP(Object)} or {@link #NearestNeighborHeuristicTSP(Iterable)}.
+ * This can be used for example to ensure that the first vertices visited are different for
+ * subsequent calls of {@code  getTour(Graph)}. Once each specified first vertex is used, the first
+ * vertex in subsequent tour computations is selected randomly from the graph. Alternatively
+ * {@link #NearestNeighborHeuristicTSP(Random)} or {@link #NearestNeighborHeuristicTSP(long)} can be
+ * used to specify a {@code Random} used to randomly select the vertex visited first.
  * </p>
  *
  * <p>
@@ -60,7 +73,8 @@ public class NearestNeighborHeuristicTSP<V, E>
 {
 
     private Random rng;
-    private V first;
+    /** Nulled, if it has no next */
+    private Iterator<V> initiaVertex;
 
     /**
      * Constructor. By default a random vertex is chosen to start.
@@ -73,13 +87,30 @@ public class NearestNeighborHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param first First vertex to visit, or null to choose at random
+     * @param first First vertex to visit
      * @throws NullPointerException if first is null
      */
     public NearestNeighborHeuristicTSP(V first)
     {
         this(
-            Objects.requireNonNull(first, "Specified initial vertex cannot be null"), new Random());
+            Collections
+                .singletonList(
+                    Objects.requireNonNull(first, "Specified initial vertex cannot be null")),
+            new Random());
+    }
+
+    /**
+     * Constructor
+     *
+     * @param initialVertices The Iterable of vertices visited first in subsequent tour computations
+     *        (per call of {@link #getTour(Graph)} another vertex of the Iterable is used as first)
+     * @throws NullPointerException if first is null
+     */
+    public NearestNeighborHeuristicTSP(Iterable<V> initialVertices)
+    {
+        this(
+            Objects.requireNonNull(initialVertices, "Specified initial vertices cannot be null"),
+            new Random());
     }
 
     /**
@@ -106,14 +137,20 @@ public class NearestNeighborHeuristicTSP<V, E>
     /**
      * Constructor
      *
-     * @param first First vertex to visit, or null to choose at random
+     * @param initialVertices The Iterable of vertices visited first in subsequent tour
+     *        computations, or null to choose at random
      * @param rng Random number generator
      */
-    private NearestNeighborHeuristicTSP(V first, Random rng)
+    private NearestNeighborHeuristicTSP(Iterable<V> initialVertices, Random rng)
     {
-        this.first = first;
+        if (initialVertices != null) {
+            Iterator<V> iterator = initialVertices.iterator();
+            this.initiaVertex = iterator.hasNext() ? iterator : null;
+        }
         this.rng = rng;
     }
+
+    // algorithm
 
     /**
      * Computes a tour using the nearest neighbour heuristic.
@@ -128,10 +165,7 @@ public class NearestNeighborHeuristicTSP<V, E>
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
-        // Check that graph is appropriate
         checkGraph(graph);
-
-        // Handle a graph with single vertex
         if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
@@ -161,12 +195,19 @@ public class NearestNeighborHeuristicTSP<V, E>
      */
     private V first(Graph<V, E> graph)
     {
-        if (first == null) {
-            first = (V) graph.vertexSet().toArray()[rng.nextInt(graph.vertexSet().size())];
-        } else if (!graph.vertexSet().contains(first)) {
-            throw new IllegalArgumentException("Specified initial vertex is not in graph");
+        if (initiaVertex != null) {
+            V first = initiaVertex.next();
+            if (!initiaVertex.hasNext()) {
+                initiaVertex = null; // release the resource backing the iterator immediately
+            }
+            if (!graph.vertexSet().contains(first)) {
+                throw new IllegalArgumentException("Specified initial vertex is not in graph");
+            }
+            return first;
+        } else {
+            Set<V> vertices = graph.vertexSet();
+            return CollectionUtil.getElement(vertices, rng.nextInt(vertices.size()));
         }
-        return first;
     }
 
     /**
@@ -193,5 +234,4 @@ public class NearestNeighborHeuristicTSP<V, E>
         unvisited.remove(closest);
         return closest;
     }
-
 }

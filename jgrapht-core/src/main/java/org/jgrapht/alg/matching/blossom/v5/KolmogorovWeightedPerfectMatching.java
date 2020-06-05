@@ -399,8 +399,9 @@ public class KolmogorovWeightedPerfectMatching<V, E>
                 while (iterationTreeNum == state.treeNum) {
                     if (DEBUG) {
                         printState();
-                        System.out.println(
-                            "Current tree is " + tree + ", current root is " + currentRoot);
+                        System.out
+                            .println(
+                                "Current tree is " + tree + ", current root is " + currentRoot);
                     }
 
                     if (!tree.plusInfinityEdges.isEmpty()) {

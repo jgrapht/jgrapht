@@ -138,10 +138,11 @@ public class EppsteinShortestPathIterator<V, E>
         GraphPath<V, E> shortestPath = shortestPaths.getPath(source);
         if (shortestPath != null) {
             distanceAndPredecessorMap = shortestPaths.getDistanceAndPredecessorMap();
-            pathsQueue.add(
-                new EppsteinGraphPath(
-                    graph, new ArrayList<>(0), distanceAndPredecessorMap,
-                    shortestPath.getWeight()));
+            pathsQueue
+                .add(
+                    new EppsteinGraphPath(
+                        graph, new ArrayList<>(0), distanceAndPredecessorMap,
+                        shortestPath.getWeight()));
             hMapping = new HashMap<>();
 
             buildPathsGraph();
@@ -222,9 +223,10 @@ public class EppsteinShortestPathIterator<V, E>
         List<PathsGraphVertex> sidetracks = new ArrayList<>(path.pathsGraphVertices);
         sidetracks.add(extendingVertex);
 
-        pathsQueue.add(
-            new EppsteinGraphPath(
-                graph, sidetracks, distanceAndPredecessorMap, path.weight + weight));
+        pathsQueue
+            .add(
+                new EppsteinGraphPath(
+                    graph, sidetracks, distanceAndPredecessorMap, path.weight + weight));
     }
 
     /**
@@ -264,8 +266,9 @@ public class EppsteinShortestPathIterator<V, E>
                         stack.removeLast();
                         insertVertex(v, null);
                     } else {
-                        V predecessor = Graphs.getOppositeVertex(
-                            graph, distanceAndPredecessorMap.get(v).getSecond(), v);
+                        V predecessor = Graphs
+                            .getOppositeVertex(
+                                graph, distanceAndPredecessorMap.get(v).getSecond(), v);
 
                         if (hMapping.containsKey(predecessor)) {
                             stack.removeLast();

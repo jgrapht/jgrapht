@@ -193,9 +193,10 @@ public class ColorRefinementAlgorithm<V, E>
         for (int i = 1; i <= rep.maxColorDegree[color]; ++i) {
             numColorDegree.put(i, 0);
         }
-        numColorDegree.put(
-            0,
-            rep.colorClasses.get(color).size() - rep.positiveDegreeColorClasses.get(color).size());
+        numColorDegree
+            .put(
+                0, rep.colorClasses.get(color).size()
+                    - rep.positiveDegreeColorClasses.get(color).size());
         for (V v : rep.positiveDegreeColorClasses.get(color)) {
             numColorDegree
                 .put(rep.colorDegree.get(v), numColorDegree.get(rep.colorDegree.get(v)) + 1);

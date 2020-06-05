@@ -273,9 +273,10 @@ public class KShortestPathCostTest
             paths = kPaths.getPaths(graph.getEdgeSource(src), graph.getEdgeTarget(src), 5);
             for (GraphPath<String, DefaultWeightedEdge> path : paths) {
                 for (DefaultWeightedEdge edge : path.getEdgeList()) {
-                    System.out.print(
-                        "<" + graph.getEdgeSource(edge) + "\t" + graph.getEdgeTarget(edge) + "\t"
-                            + edge + ">\t");
+                    System.out
+                        .print(
+                            "<" + graph.getEdgeSource(edge) + "\t" + graph.getEdgeTarget(edge)
+                                + "\t" + edge + ">\t");
                 }
                 System.out.println(": " + path.getWeight());
             }

@@ -305,9 +305,9 @@ public class GusfieldGomoryHuCutTree<V, E>
 
         Set<DefaultWeightedEdge> pathEdges =
             this.findPathBetween(gomoryHuTree, lastInvokedSource, lastInvokedTarget);
-        DefaultWeightedEdge cheapestEdge =
-            pathEdges.stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight)).orElseThrow(
-                () -> new RuntimeException("path is empty?!"));
+        DefaultWeightedEdge cheapestEdge = pathEdges
+            .stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight))
+            .orElseThrow(() -> new RuntimeException("path is empty?!"));
 
         // Remove the selected edge from the gomoryHuTree graph. The resulting graph consists of 2
         // components

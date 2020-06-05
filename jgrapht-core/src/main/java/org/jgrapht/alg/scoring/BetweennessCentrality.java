@@ -211,8 +211,10 @@ public class BetweennessCentrality<V, E>
         while (!stack.isEmpty()) {
             V w = stack.pop();
             for (V v : predecessors.get(w)) {
-                dependency.put(
-                    v, dependency.get(v) + (sigma.get(v) / sigma.get(w)) * (1 + dependency.get(w)));
+                dependency
+                    .put(
+                        v, dependency.get(v)
+                            + (sigma.get(v) / sigma.get(w)) * (1 + dependency.get(w)));
             }
             if (!w.equals(s)) {
                 this.scores.put(w, this.scores.get(w) + dependency.get(w));

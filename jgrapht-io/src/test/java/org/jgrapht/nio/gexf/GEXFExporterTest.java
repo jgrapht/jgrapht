@@ -17,23 +17,20 @@
  */
 package org.jgrapht.nio.gexf;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.nio.*;
+import org.jgrapht.nio.gexf.GEXFExporter.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+import org.xmlunit.builder.*;
+import org.xmlunit.diff.*;
+
+import java.io.*;
+import java.util.*;
+
 import static org.junit.Assert.assertFalse;
-
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.DefaultAttribute;
-import org.jgrapht.nio.gexf.GEXFExporter.AttributeCategory;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
 
 /**
  * Tests

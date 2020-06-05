@@ -18,20 +18,20 @@
 
 package org.jgrapht.nio.tsplib;
 
-import static org.junit.Assert.*;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.nio.*;
+import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
+import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
+import org.junit.*;
 
 import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.nio.*;
-import org.jgrapht.nio.tsplib.TSPLIBImporter.*;
-import org.jgrapht.nio.tsplib.TSPLIBImporter.Node;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 public class TSPLIBImporterTest
 {

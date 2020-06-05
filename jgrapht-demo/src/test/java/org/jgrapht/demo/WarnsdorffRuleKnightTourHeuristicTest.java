@@ -91,61 +91,80 @@ public class WarnsdorffRuleKnightTourHeuristicTest
 
         return !structured || ((moves
             .contains(new Pair<>(new Pair<>(1 + shiftX, shiftY), new Pair<>(shiftX, 2 + shiftY)))
-            || moves.contains(
-                new Pair<>(new Pair<>(shiftX, 2 + shiftY), new Pair<>(1 + shiftX, shiftY))))
-            && moves.contains(
-                new Pair<>(new Pair<>(2 + shiftX, shiftY), new Pair<>(shiftX, 1 + shiftY)))
-            || moves.contains(
-                new Pair<>(new Pair<>(shiftX, 1 + shiftY), new Pair<>(2 + shiftX, shiftY)))
+            || moves
+                .contains(
+                    new Pair<>(new Pair<>(shiftX, 2 + shiftY), new Pair<>(1 + shiftX, shiftY))))
+            && moves
+                .contains(
+                    new Pair<>(new Pair<>(2 + shiftX, shiftY), new Pair<>(shiftX, 1 + shiftY)))
+            || moves
+                .contains(
+                    new Pair<>(new Pair<>(shiftX, 1 + shiftY), new Pair<>(2 + shiftX, shiftY)))
 
                 &&
 
-                moves.contains(
+                moves
+                    .contains(
+                        new Pair<>(
+                            new Pair<>(n - 3 + shiftX, shiftY),
+                            new Pair<>(n - 1 + shiftX, 1 + shiftY)))
+            || moves
+                .contains(
                     new Pair<>(
-                        new Pair<>(n - 3 + shiftX, shiftY), new Pair<>(n - 1 + shiftX, 1 + shiftY)))
-            || moves.contains(
-                new Pair<>(
-                    new Pair<>(n - 1 + shiftX, 1 + shiftY), new Pair<>(n - 3 + shiftX, shiftY)))
-                && moves.contains(
+                        new Pair<>(n - 1 + shiftX, 1 + shiftY), new Pair<>(n - 3 + shiftX, shiftY)))
+                && moves
+                    .contains(
+                        new Pair<>(
+                            new Pair<>(n - 2 + shiftX, shiftY),
+                            new Pair<>(n - 1 + shiftX, 2 + shiftY)))
+            || moves
+                .contains(
                     new Pair<>(
-                        new Pair<>(n - 2 + shiftX, shiftY), new Pair<>(n - 1 + shiftX, 2 + shiftY)))
-            || moves.contains(
-                new Pair<>(
-                    new Pair<>(n - 1 + shiftX, 2 + shiftY), new Pair<>(n - 2 + shiftX, shiftY)))
+                        new Pair<>(n - 1 + shiftX, 2 + shiftY), new Pair<>(n - 2 + shiftX, shiftY)))
 
                 &&
 
-                moves.contains(
+                moves
+                    .contains(
+                        new Pair<>(
+                            new Pair<>(shiftX, m - 3 + shiftY),
+                            new Pair<>(1 + shiftX, m - 1 + shiftY)))
+            || moves
+                .contains(
                     new Pair<>(
-                        new Pair<>(shiftX, m - 3 + shiftY), new Pair<>(1 + shiftX, m - 1 + shiftY)))
-            || moves.contains(
-                new Pair<>(
-                    new Pair<>(1 + shiftX, m - 1 + shiftY), new Pair<>(shiftX, m - 3 + shiftY)))
-                && moves.contains(
+                        new Pair<>(1 + shiftX, m - 1 + shiftY), new Pair<>(shiftX, m - 3 + shiftY)))
+                && moves
+                    .contains(
+                        new Pair<>(
+                            new Pair<>(shiftX, m - 2 + shiftY),
+                            new Pair<>(2 + shiftX, m - 1 + shiftY)))
+            || moves
+                .contains(
                     new Pair<>(
-                        new Pair<>(shiftX, m - 2 + shiftY), new Pair<>(2 + shiftX, m - 1 + shiftY)))
-            || moves.contains(
-                new Pair<>(
-                    new Pair<>(2 + shiftX, m - 1 + shiftY), new Pair<>(shiftX, m - 2 + shiftY)))
+                        new Pair<>(2 + shiftX, m - 1 + shiftY), new Pair<>(shiftX, m - 2 + shiftY)))
 
                 &&
 
-                moves.contains(
+                moves
+                    .contains(
+                        new Pair<>(
+                            new Pair<>(n - 3 + shiftX, m - 1 + shiftY),
+                            new Pair<>(n - 1 + shiftX, m - 2 + shiftY)))
+            || moves
+                .contains(
                     new Pair<>(
-                        new Pair<>(n - 3 + shiftX, m - 1 + shiftY),
-                        new Pair<>(n - 1 + shiftX, m - 2 + shiftY)))
-            || moves.contains(
-                new Pair<>(
-                    new Pair<>(n - 1 + shiftX, m - 2 + shiftY),
-                    new Pair<>(n - 3 + shiftX, m - 1 + shiftY)))
-                && moves.contains(
+                        new Pair<>(n - 1 + shiftX, m - 2 + shiftY),
+                        new Pair<>(n - 3 + shiftX, m - 1 + shiftY)))
+                && moves
+                    .contains(
+                        new Pair<>(
+                            new Pair<>(n - 2 + shiftX, m - 1 + shiftY),
+                            new Pair<>(n - 1 + shiftX, m - 3 + shiftY)))
+            || moves
+                .contains(
                     new Pair<>(
-                        new Pair<>(n - 2 + shiftX, m - 1 + shiftY),
-                        new Pair<>(n - 1 + shiftX, m - 3 + shiftY)))
-            || moves.contains(
-                new Pair<>(
-                    new Pair<>(n - 1 + shiftX, m - 3 + shiftY),
-                    new Pair<>(n - 2 + shiftX, n - 2 + shiftY))));
+                        new Pair<>(n - 1 + shiftX, m - 3 + shiftY),
+                        new Pair<>(n - 2 + shiftX, n - 2 + shiftY))));
     }
 
     private void checkCorrectness(

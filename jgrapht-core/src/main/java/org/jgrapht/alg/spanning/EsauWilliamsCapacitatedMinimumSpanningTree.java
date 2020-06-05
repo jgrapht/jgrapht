@@ -188,9 +188,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
                 // store closest vertex to v1
                 closestVertex.put(v, closestVertexToV);
                 // store the maximum saving and the corresponding vertex
-                savings.put(
-                    v, getDistance(shortestGate.getOrDefault(bestSolution.getLabel(v), v), root)
-                        - getDistance(v, closestVertexToV));
+                savings
+                    .put(
+                        v, getDistance(shortestGate.getOrDefault(bestSolution.getLabel(v), v), root)
+                            - getDistance(v, closestVertexToV));
             }
 
             // calculate list of best operations
@@ -218,9 +219,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
                 if (bestSolution.getPartitionWeight(labelOfVertexToMove) < bestSolution
                     .getPartitionWeight(labelOfClosestMoveVertex))
                 {
-                    bestSolution.moveVertices(
-                        bestSolution.getPartitionSet(labelOfVertexToMove), labelOfVertexToMove,
-                        labelOfClosestMoveVertex);
+                    bestSolution
+                        .moveVertices(
+                            bestSolution.getPartitionSet(labelOfVertexToMove), labelOfVertexToMove,
+                            labelOfClosestMoveVertex);
 
                     if (getDistance(shortestGate1, root) < getDistance(shortestGate2, root)) {
                         shortestGate.put(labelOfClosestMoveVertex, shortestGate1);
@@ -228,9 +230,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
                         shortestGate.put(labelOfClosestMoveVertex, shortestGate2);
                     }
                 } else {
-                    bestSolution.moveVertices(
-                        bestSolution.getPartitionSet(labelOfClosestMoveVertex),
-                        labelOfClosestMoveVertex, labelOfVertexToMove);
+                    bestSolution
+                        .moveVertices(
+                            bestSolution.getPartitionSet(labelOfClosestMoveVertex),
+                            labelOfClosestMoveVertex, labelOfVertexToMove);
 
                     if (getDistance(shortestGate1, root) < getDistance(shortestGate2, root)) {
                         shortestGate.put(labelOfVertexToMove, shortestGate1);

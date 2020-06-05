@@ -17,18 +17,16 @@
  */
 package org.jgrapht.perf.connectivity;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.connectivity.TreeDynamicConnectivity;
-import org.jgrapht.generate.BarabasiAlbertForestGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.traverse.BreadthFirstIterator;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Performance test for {@link TreeDynamicConnectivity}
@@ -40,11 +38,13 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 1, time = 1)
 @Measurement(iterations = 5, time = 1)
-public class TreeDynamicConnectivityPerformanceTest {
+public class TreeDynamicConnectivityPerformanceTest
+{
     private static final Random rng = new Random(17L);
 
     @Benchmark
-    public List<Boolean> testTreeDynamicConnectivity(Data data) {
+    public List<Boolean> testTreeDynamicConnectivity(Data data)
+    {
         List<Boolean> res = new ArrayList<>();
         for (int v1 : data.firstSet) {
             for (int v2 : data.secondSet) {
@@ -57,7 +57,8 @@ public class TreeDynamicConnectivityPerformanceTest {
     }
 
     @Benchmark
-    public List<Boolean> testTreeNaiveConnectivity(Data data) {
+    public List<Boolean> testTreeNaiveConnectivity(Data data)
+    {
         List<Boolean> res = new ArrayList<>();
         for (int v1 : data.firstSet) {
             for (int v2 : data.secondSet) {
@@ -69,7 +70,8 @@ public class TreeDynamicConnectivityPerformanceTest {
         return res;
     }
 
-    private boolean isConnected(Graph<Integer, DefaultEdge> graph, int v1, int v2) {
+    private boolean isConnected(Graph<Integer, DefaultEdge> graph, int v1, int v2)
+    {
         BreadthFirstIterator<Integer, DefaultEdge> iterator = new BreadthFirstIterator<>(graph, v1);
         while (iterator.hasNext()) {
             if (iterator.next().equals(v2)) {
@@ -80,8 +82,9 @@ public class TreeDynamicConnectivityPerformanceTest {
     }
 
     @State(Scope.Benchmark)
-    public static class Data {
-        @Param({"10", "100", "1000", "10000", "100000", "1000000"})
+    public static class Data
+    {
+        @Param({ "10", "100", "1000", "10000", "100000", "1000000" })
         public int treeSize;
         public Graph<Integer, DefaultEdge> forest;
         public TreeDynamicConnectivity<Integer> connectivity;
@@ -91,10 +94,17 @@ public class TreeDynamicConnectivityPerformanceTest {
         int connectNode2;
 
         @Setup(Level.Iteration)
-        public void init() {
-            BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen = new BarabasiAlbertForestGenerator<>(1, treeSize, rng);
-            forest = new DefaultUndirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
-            Graph<Integer, DefaultEdge> secondTree = new DefaultUndirectedGraph<>(SupplierUtil.createIntegerSupplier(treeSize), SupplierUtil.createDefaultEdgeSupplier(), false);
+        public void init()
+        {
+            BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen =
+                new BarabasiAlbertForestGenerator<>(1, treeSize, rng);
+            forest = new DefaultUndirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
+            Graph<Integer,
+                DefaultEdge> secondTree = new DefaultUndirectedGraph<>(
+                    SupplierUtil.createIntegerSupplier(treeSize),
+                    SupplierUtil.createDefaultEdgeSupplier(), false);
             connectivity = new TreeDynamicConnectivity<>();
 
             gen.generateGraph(forest);
@@ -119,7 +129,8 @@ public class TreeDynamicConnectivityPerformanceTest {
             connectNode2 = rng.nextInt(treeSize) + treeSize;
         }
 
-        private Set<Integer> gen(int from, int to, int num) {
+        private Set<Integer> gen(int from, int to, int num)
+        {
             Set<Integer> res = new HashSet<>();
             int dist = to - from;
             while (res.size() < num) {

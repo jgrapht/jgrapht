@@ -212,10 +212,11 @@ public class DeltaSteppingShortestPath<V, E>
      */
     private double getMaxEdgeWeight()
     {
-        ForkJoinTask<Double> task = ForkJoinPool.commonPool().submit(
-            new MaxEdgeWeightTask(
-                graph.edgeSet().spliterator(),
-                graph.edgeSet().size() / (TASKS_TO_THREADS_RATIO * parallelism) + 1));
+        ForkJoinTask<Double> task = ForkJoinPool
+            .commonPool().submit(
+                new MaxEdgeWeightTask(
+                    graph.edgeSet().spliterator(),
+                    graph.edgeSet().size() / (TASKS_TO_THREADS_RATIO * parallelism) + 1));
         return task.join();
     }
 
@@ -342,8 +343,9 @@ public class DeltaSteppingShortestPath<V, E>
      */
     private void fillDistanceAndPredecessorMap()
     {
-        graph.vertexSet().parallelStream().forEach(
-            v -> distanceAndPredecessorMap.put(v, Pair.of(Double.POSITIVE_INFINITY, null)));
+        graph
+            .vertexSet().parallelStream().forEach(
+                v -> distanceAndPredecessorMap.put(v, Pair.of(Double.POSITIVE_INFINITY, null)));
     }
 
     /**

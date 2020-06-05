@@ -219,8 +219,10 @@ public class UnionFind<T>
         return setRep
             .keySet().stream()
             .map(
-                key -> "{" + key + ":" + setRep.get(key).stream().map(Objects::toString).collect(
-                    Collectors.joining(",")) + "}")
+                key -> "{" + key + ":"
+                    + setRep
+                        .get(key).stream().map(Objects::toString).collect(Collectors.joining(","))
+                    + "}")
             .collect(Collectors.joining(", ", "{", "}"));
     }
 }

@@ -7,7 +7,7 @@
 #Path to eclipse. Needs eclipse Neon or newer.
 eclipse_path=/opt/eclipse/eclipse
 #Path to Java
-java_path=/usr/lib/jvm/java-8-oracle/bin/java
+java_path=/usr/lib/jvm/java-11-openjdk-amd64/bin/java
 #format configuration
 config_file=./etc/org.eclipse.jdt.core.prefs
 #get the root dir (1st ancestor of the location where this script is stored)

@@ -269,9 +269,11 @@ public class ContractionHierarchyPrecomputation<V, E>
         computeShortcutsConsumer =
             vertex -> shortcutEdges.set(vertex.vertexId, getShortcuts(vertex));
         updateNeighboursConsumer = vertex -> updateNeighboursData(vertex);
-        markUpwardEdgesConsumer = vertex -> contractionGraph.outgoingEdgesOf(vertex).forEach(
-            e -> e.isUpward = contractionGraph.getEdgeSource(e).contractionLevel < contractionGraph
-                .getEdgeTarget(e).contractionLevel);
+        markUpwardEdgesConsumer = vertex -> contractionGraph
+            .outgoingEdgesOf(vertex).forEach(
+                e -> e.isUpward =
+                    contractionGraph.getEdgeSource(e).contractionLevel < contractionGraph
+                        .getEdgeTarget(e).contractionLevel);
     }
 
     /**
@@ -488,8 +490,9 @@ public class ContractionHierarchyPrecomputation<V, E>
      */
     private void contractIndependentSet(int independentSetStart, int independentSetEnd)
     {
-        vertices.subList(independentSetStart, independentSetEnd).forEach(
-            v -> contractVertex(v, contractionLevelCounter.getAndIncrement()));
+        vertices
+            .subList(independentSetStart, independentSetEnd)
+            .forEach(v -> contractVertex(v, contractionLevelCounter.getAndIncrement()));
     }
 
     /**
@@ -677,9 +680,10 @@ public class ContractionHierarchyPrecomputation<V, E>
                 {
                     shortcutConsumer.accept(inEdge, outEdge);
                     if (graph.getType().isUndirected()) {
-                        shortcutConsumer.accept(
-                            contractionGraph.getEdge(successor, vertex),
-                            contractionGraph.getEdge(vertex, predecessor));
+                        shortcutConsumer
+                            .accept(
+                                contractionGraph.getEdge(successor, vertex),
+                                contractionGraph.getEdge(vertex, predecessor));
                     }
                 }
             }

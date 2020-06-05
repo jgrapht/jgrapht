@@ -103,7 +103,7 @@ public class GraphMLImporterTest
                 .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<>();
-        importer.setVertexFactory(id->String.valueOf("node"+id));
+        importer.setVertexFactory(id -> String.valueOf("node" + id));
         importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         assertEquals(3, g.vertexSet().size());
@@ -115,7 +115,7 @@ public class GraphMLImporterTest
         assertTrue(g.containsEdge("node2", "node3"));
         assertTrue(g.containsEdge("node3", "node1"));
     }
-    
+
     @Test
     public void testUndirectedUnweightedFromInputStream()
         throws ImportException

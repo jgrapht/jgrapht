@@ -288,9 +288,9 @@ public abstract class GraphMetrics
         vertexList.sort(comparator);
 
         // vertex v is a heavy-hitter iff degree(v) >= sqrtV
-        List<V> heavyHitterVertices =
-            vertexList.stream().filter(x -> graph.degreeOf(x) >= sqrtV).collect(
-                Collectors.toCollection(ArrayList::new));
+        List<V> heavyHitterVertices = vertexList
+            .stream().filter(x -> graph.degreeOf(x) >= sqrtV)
+            .collect(Collectors.toCollection(ArrayList::new));
 
         // count the number of triangles formed from only heavy-hitter vertices
         long numberTriangles = naiveCountTriangles(graph, heavyHitterVertices);

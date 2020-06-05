@@ -207,12 +207,15 @@ public class AllDirectedPathsTest
 
         Assert.assertFalse("We should find at least some paths!", paths.isEmpty());
 
-        paths.forEach(
-            path -> Assert.assertEquals(
-                String.format(
-                    "The path %s has length %d even though we requested only paths of length 0",
-                    path, path.getLength()),
-                0, path.getLength()));
+        paths
+            .forEach(
+                path -> Assert
+                    .assertEquals(
+                        String
+                            .format(
+                                "The path %s has length %d even though we requested only paths of length 0",
+                                path, path.getLength()),
+                        0, path.getLength()));
     }
 
     private static Graph<String, DefaultEdge> toyGraph()

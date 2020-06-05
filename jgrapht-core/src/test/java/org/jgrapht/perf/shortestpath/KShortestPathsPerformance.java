@@ -17,73 +17,60 @@
  */
 package org.jgrapht.perf.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
-import org.jgrapht.alg.shortestpath.BhandariKDisjointShortestPaths;
-import org.jgrapht.alg.shortestpath.EppsteinKShortestPath;
-import org.jgrapht.alg.shortestpath.PathValidator;
-import org.jgrapht.alg.shortestpath.SuurballeKDisjointShortestPaths;
-import org.jgrapht.alg.shortestpath.YenKShortestPath;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.jgrapht.util.CollectionUtil;
-import org.jgrapht.util.SupplierUtil;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.openjdk.jmh.annotations.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @Fork(value = 1, warmups = 0, jvmArgs = "--illegal-access=permit")
 @Warmup(iterations = 3, time = 10)
 @Measurement(iterations = 8, time = 10)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class KShortestPathsPerformance {
+public class KShortestPathsPerformance
+{
 
     private static final Random random = new Random(19L);
 
     @Benchmark
-    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testYenKShortestPaths(YenState state) {
+    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testYenKShortestPaths(YenState state)
+    {
         return computeResult(new YenKShortestPath<>(state.graph, state.pathValidator), state);
     }
 
     @Benchmark
-    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testEppsteinKShortestPaths(RandomGraphState state) {
+    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testEppsteinKShortestPaths(
+        RandomGraphState state)
+    {
         return computeResult(new EppsteinKShortestPath<>(state.graph), state);
     }
 
     @Benchmark
-    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testBhandariKDisjointShortestPaths(RandomGraphState state) {
+    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testBhandariKDisjointShortestPaths(
+        RandomGraphState state)
+    {
         return computeResult(new BhandariKDisjointShortestPaths<>(state.graph), state);
     }
 
     @Benchmark
-    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testSuurballeKDisjointShortestPaths(RandomGraphState state) {
+    public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testSuurballeKDisjointShortestPaths(
+        RandomGraphState state)
+    {
         return computeResult(new SuurballeKDisjointShortestPaths<>(state.graph), state);
     }
 
     private List<List<GraphPath<Integer, DefaultWeightedEdge>>> computeResult(
-            KShortestPathAlgorithm<Integer, DefaultWeightedEdge> algorithm, RandomGraphState state) {
-        List<List<GraphPath<Integer, DefaultWeightedEdge>>> result = new ArrayList<>(state.numberOfQueries);
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> algorithm, RandomGraphState state)
+    {
+        List<List<GraphPath<Integer, DefaultWeightedEdge>>> result =
+            new ArrayList<>(state.numberOfQueries);
         for (Pair<Integer, Integer> query : state.queries) {
             int source = query.getFirst();
             int target = query.getSecond();
@@ -93,14 +80,15 @@ public class KShortestPathsPerformance {
     }
 
     @State(Scope.Benchmark)
-    public static class RandomGraphState {
-        @Param({"100"})
+    public static class RandomGraphState
+    {
+        @Param({ "100" })
         int n;
-        @Param({"0.3", "0.5"})
+        @Param({ "0.3", "0.5" })
         double p;
-        @Param({"50"})
+        @Param({ "50" })
         int k;
-        @Param({"20"})
+        @Param({ "20" })
         int numberOfQueries;
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator;
@@ -108,11 +96,13 @@ public class KShortestPathsPerformance {
         List<Pair<Integer, Integer>> queries;
 
         @Setup(Level.Iteration)
-        public void generateGraph() {
+        public void generateGraph()
+        {
             generateGraphAndQueries();
         }
 
-        protected void generateGraphAndQueries(){
+        protected void generateGraphAndQueries()
+        {
             generator = new GnpRandomGraphGenerator<>(n, p);
             graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
             graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
@@ -122,7 +112,8 @@ public class KShortestPathsPerformance {
             queries = selectQueries();
         }
 
-        private List<Pair<Integer, Integer>> selectQueries() {
+        private List<Pair<Integer, Integer>> selectQueries()
+        {
             Set<Pair<Integer, Integer>> result = new HashSet<>(numberOfQueries);
             Object[] vertices = graph.vertexSet().toArray();
             while (result.size() < numberOfQueries) {
@@ -138,14 +129,16 @@ public class KShortestPathsPerformance {
             return new ArrayList<>(result);
         }
 
-        private void makeConnected(Graph<Integer, DefaultWeightedEdge> graph) {
+        private void makeConnected(Graph<Integer, DefaultWeightedEdge> graph)
+        {
             Object[] vertices = graph.vertexSet().toArray();
             for (int i = 0; i < vertices.length - 1; i++) {
                 graph.addEdge((Integer) vertices[i], (Integer) vertices[i + 1]);
             }
         }
 
-        private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph) {
+        private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph)
+        {
             for (DefaultWeightedEdge edge : graph.edgeSet()) {
                 double weight = Math.abs(random.nextInt(Integer.MAX_VALUE));
                 graph.setEdgeWeight(edge, weight);
@@ -153,16 +146,20 @@ public class KShortestPathsPerformance {
         }
     }
 
-    public static class YenState extends RandomGraphState {
-        @Param({"true", "false"})
+    public static class YenState
+        extends
+        RandomGraphState
+    {
+        @Param({ "true", "false" })
         boolean createPathValidator;
-        @Param({"20"})
+        @Param({ "20" })
         int numberOfRandomEdges;
         PathValidator<Integer, DefaultWeightedEdge> pathValidator;
 
         @Override
         @Setup(Level.Iteration)
-        public void generateGraph() {
+        public void generateGraph()
+        {
             generateGraphAndQueries();
             if (createPathValidator) {
                 pathValidator = getPathValidator();
@@ -171,13 +168,16 @@ public class KShortestPathsPerformance {
             }
         }
 
-        private PathValidator<Integer, DefaultWeightedEdge> getPathValidator() {
+        private PathValidator<Integer, DefaultWeightedEdge> getPathValidator()
+        {
             Set<DefaultWeightedEdge> randomEdges = getRandomEdges();
             return (path, edge) -> !randomEdges.contains(edge);
         }
 
-        private Set<DefaultWeightedEdge> getRandomEdges() {
-            Set<DefaultWeightedEdge> result = CollectionUtil.newHashSetWithExpectedSize(numberOfRandomEdges);
+        private Set<DefaultWeightedEdge> getRandomEdges()
+        {
+            Set<DefaultWeightedEdge> result =
+                CollectionUtil.newHashSetWithExpectedSize(numberOfRandomEdges);
             Object[] edges = graph.edgeSet().toArray();
             while (result.size() != numberOfQueries) {
                 int index = (int) (Math.random() * edges.length);
@@ -187,4 +187,3 @@ public class KShortestPathsPerformance {
         }
     }
 }
-

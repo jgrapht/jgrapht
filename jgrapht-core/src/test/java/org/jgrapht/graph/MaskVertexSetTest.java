@@ -85,7 +85,8 @@ public class MaskVertexSetTest
     }
 
     @Test
-    public void testIsEmpty() {
+    public void testIsEmpty()
+    {
         assertFalse(testMaskVertexSet.isEmpty());
         testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), v -> true);
         assertTrue(testMaskVertexSet.isEmpty());

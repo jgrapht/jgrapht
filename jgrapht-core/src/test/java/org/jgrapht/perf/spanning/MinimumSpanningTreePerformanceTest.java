@@ -175,9 +175,10 @@ public class MinimumSpanningTreePerformanceTest
     {
         System.out.println("Minimum Spanning Tree Benchmark using dense graphs");
         System.out.println("-------------------------------");
-        System.out.println(
-            "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_DENSE + ", p = "
-                + PERF_BENCHMARK_EDGES_PROP_DENSE);
+        System.out
+            .println(
+                "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_DENSE
+                    + ", p = " + PERF_BENCHMARK_EDGES_PROP_DENSE);
         System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
         System.out.println("Averaging results over " + REPEAT + " executions");
 
@@ -224,9 +225,10 @@ public class MinimumSpanningTreePerformanceTest
     {
         System.out.println("Minimum Spanning Tree Benchmark using sparse graphs");
         System.out.println("-------------------------------");
-        System.out.println(
-            "Using G(n,M) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_SPARSE + ", M = "
-                + PERF_BENCHMARK_EDGES_COUNT_SPARSE);
+        System.out
+            .println(
+                "Using G(n,M) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_SPARSE
+                    + ", M = " + PERF_BENCHMARK_EDGES_COUNT_SPARSE);
         System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
         System.out.println("Averaging results over " + REPEAT + " executions");
 

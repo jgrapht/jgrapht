@@ -467,18 +467,20 @@ public class GraphMLExporterTest
 
         exporter.setVertexAttributeProvider((v) -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
-            map.put(
-                "custom_vertex_label",
-                DefaultAttribute.createAttribute("myvertex-" + String.valueOf(v)));
+            map
+                .put(
+                    "custom_vertex_label",
+                    DefaultAttribute.createAttribute("myvertex-" + String.valueOf(v)));
             return map;
         });
         exporter.setVertexLabelAttributeName("custom_vertex_label");
 
         exporter.setEdgeAttributeProvider((e) -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
-            map.put(
-                "custom_edge_label",
-                DefaultAttribute.createAttribute("myedge-" + String.valueOf(e)));
+            map
+                .put(
+                    "custom_edge_label",
+                    DefaultAttribute.createAttribute("myedge-" + String.valueOf(e)));
             return map;
         });
         exporter.setEdgeLabelAttributeName("custom_edge_label");
@@ -582,10 +584,12 @@ public class GraphMLExporterTest
         });
 
         exporter.setExportEdgeWeights(true);
-        exporter.registerAttribute(
-            "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
-        exporter.registerAttribute(
-            "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
+        exporter
+            .registerAttribute(
+                "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
+        exporter
+            .registerAttribute(
+                "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
@@ -640,10 +644,12 @@ public class GraphMLExporterTest
 
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
         exporter.setExportEdgeWeights(true);
-        exporter.registerAttribute(
-            "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
-        exporter.registerAttribute(
-            "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
+        exporter
+            .registerAttribute(
+                "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
+        exporter
+            .registerAttribute(
+                "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");

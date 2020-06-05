@@ -17,39 +17,39 @@
  */
 package org.jgrapht.util;
 
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Implementation of the <a href="https://en.wikipedia.org/wiki/AVL_tree">AVL tree</a> data
- * structure. <b>Note:</b> this tree doesn't use key comparisons, so this tree can't be used
- * as a binary search tree. This implies that the same key can be added to this tree multiple
- * times.
+ * structure. <b>Note:</b> this tree doesn't use key comparisons, so this tree can't be used as a
+ * binary search tree. This implies that the same key can be added to this tree multiple times.
  * <p>
- * AVL tree is a self-balancing binary tree data structure. In an AVL tree, the heights of
- * two child subtrees differ by at most one. This ensures that the height of the tree is
- * $\mathcal{O}(\log n)$ where $n$ is the number of elements in the tree. Also this tree
- * doesn't support key comparisons, it does define an element order. As a result, this tree
- * can be used to query node successor/predecessor.
+ * AVL tree is a self-balancing binary tree data structure. In an AVL tree, the heights of two child
+ * subtrees differ by at most one. This ensures that the height of the tree is $\mathcal{O}(\log n)$
+ * where $n$ is the number of elements in the tree. Also this tree doesn't support key comparisons,
+ * it does define an element order. As a result, this tree can be used to query node
+ * successor/predecessor.
  * <p>
- * Subtree query means that the result is being computed only on the subtree nodes. This
- * tree supports the following operations:
+ * Subtree query means that the result is being computed only on the subtree nodes. This tree
+ * supports the following operations:
  * <ul>
- *     <li>Min/max insertion and deletion in $\mathcal{O}(\log n)$ time</li>
- *     <li>Subtree min/max queries in $\mathcal{O}(1)$ time</li>
- *     <li>Node successor/predecessor queries in $\mathcal{O}(1)$ time</li>
- *     <li>Tree split in $\mathcal{O}(\log n)$ time</li>
- *     <li>Tree merge in $\mathcal{O}(\log n)$ time</li>
+ * <li>Min/max insertion and deletion in $\mathcal{O}(\log n)$ time</li>
+ * <li>Subtree min/max queries in $\mathcal{O}(1)$ time</li>
+ * <li>Node successor/predecessor queries in $\mathcal{O}(1)$ time</li>
+ * <li>Tree split in $\mathcal{O}(\log n)$ time</li>
+ * <li>Tree merge in $\mathcal{O}(\log n)$ time</li>
  * </ul>
  * <p>
- * This implementation gives users access to the tree nodes which hold the inserted elements.
- * The user is able to store the tree nodes references but isn't able to modify them.
+ * This implementation gives users access to the tree nodes which hold the inserted elements. The
+ * user is able to store the tree nodes references but isn't able to modify them.
  *
  * @param <T> the key data type
  * @author Timofey Chudakov
  */
-public class AVLTree<T> implements Iterable<T> {
+public class AVLTree<T>
+    implements
+    Iterable<T>
+{
     /**
      * An auxiliary node which's always present in a tree and doesn't contain any data.
      */
@@ -62,7 +62,8 @@ public class AVLTree<T> implements Iterable<T> {
     /**
      * Constructs an empty tree
      */
-    public AVLTree() {
+    public AVLTree()
+    {
     }
 
     /**
@@ -70,18 +71,20 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param root the root of the newly create tree
      */
-    private AVLTree(TreeNode<T> root) {
+    private AVLTree(TreeNode<T> root)
+    {
         makeRoot(root);
     }
 
     /**
-     * Adds {@code value} as a maximum element to this tree.
-     * The running time of this method is $\mathcal{O}(\log n)$
+     * Adds {@code value} as a maximum element to this tree. The running time of this method is
+     * $\mathcal{O}(\log n)$
      *
      * @param value a value to add as a tree max
      * @return a tree node holding the {@code value}
      */
-    public TreeNode<T> addMax(T value) {
+    public TreeNode<T> addMax(T value)
+    {
         TreeNode<T> newMax = new TreeNode<>(value);
         addMaxNode(newMax);
         return newMax;
@@ -92,7 +95,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param newMax a node to add as a tree max
      */
-    public void addMaxNode(TreeNode<T> newMax) {
+    public void addMaxNode(TreeNode<T> newMax)
+    {
         registerModification();
 
         if (isEmpty()) {
@@ -111,7 +115,8 @@ public class AVLTree<T> implements Iterable<T> {
      * @param value a value to add as a tree min
      * @return a tree node holding the {@code value}
      */
-    public TreeNode<T> addMin(T value) {
+    public TreeNode<T> addMin(T value)
+    {
         TreeNode<T> newMin = new TreeNode<>(value);
         addMinNode(newMin);
         return newMin;
@@ -122,7 +127,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param newMin a node to add as a tree min
      */
-    public void addMinNode(TreeNode<T> newMin) {
+    public void addMinNode(TreeNode<T> newMin)
+    {
         registerModification();
         if (isEmpty()) {
             virtualRoot.left = newMin;
@@ -137,15 +143,15 @@ public class AVLTree<T> implements Iterable<T> {
     /**
      * Splits the tree into two parts.
      * <p>
-     * The first part contains the nodes which are smaller than or equal to the
-     * {@code node}. The first part stays in this tree. The second part contains
-     * the nodes which are strictly greater than the {@code node}. The second part
-     * is returned as a tree.
+     * The first part contains the nodes which are smaller than or equal to the {@code node}. The
+     * first part stays in this tree. The second part contains the nodes which are strictly greater
+     * than the {@code node}. The second part is returned as a tree.
      *
      * @param node a separating node
      * @return a tree containing the nodes which are strictly greater than the {@code node}
      */
-    public AVLTree<T> splitAfter(TreeNode<T> node) {
+    public AVLTree<T> splitAfter(TreeNode<T> node)
+    {
         registerModification();
 
         TreeNode<T> parent = node.parent;
@@ -188,15 +194,15 @@ public class AVLTree<T> implements Iterable<T> {
     /**
      * Splits the tree into two parts.
      * <p>
-     * The first part contains the nodes which are smaller than the {@code node}.
-     * The first part stays in this tree. The second part contains the nodes which
-     * are greater than or equal to the {@code node}. The second part is returned as
-     * a tree.
+     * The first part contains the nodes which are smaller than the {@code node}. The first part
+     * stays in this tree. The second part contains the nodes which are greater than or equal to the
+     * {@code node}. The second part is returned as a tree.
      *
      * @param node a separating node
      * @return a tree containing the nodes which are greater than or equal to the {@code node}
      */
-    public AVLTree<T> splitBefore(TreeNode<T> node) {
+    public AVLTree<T> splitBefore(TreeNode<T> node)
+    {
         registerModification();
 
         TreeNode<T> predecessor = predecessor(node);
@@ -216,7 +222,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param tree a tree to append
      */
-    public void mergeAfter(AVLTree<T> tree) {
+    public void mergeAfter(AVLTree<T> tree)
+    {
         registerModification();
         if (tree.isEmpty()) {
             return;
@@ -239,7 +246,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param tree a tree to prepend
      */
-    public void mergeBefore(AVLTree<T> tree) {
+    public void mergeBefore(AVLTree<T> tree)
+    {
         registerModification();
 
         tree.mergeAfter(this);
@@ -252,7 +260,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return the removed node or {@code null} if this tree is empty
      */
-    public TreeNode<T> removeMin() {
+    public TreeNode<T> removeMin()
+    {
         registerModification();
 
         if (isEmpty()) {
@@ -276,7 +285,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return the removed node or {@code null} if this tree is empty
      */
-    public TreeNode<T> removeMax() {
+    public TreeNode<T> removeMax()
+    {
         registerModification();
         if (isEmpty()) {
             return null;
@@ -296,29 +306,32 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return the root of this tree or null if this tree is empty.
      */
-    public TreeNode<T> getRoot() {
+    public TreeNode<T> getRoot()
+    {
         return virtualRoot.left;
     }
 
     /**
-     * Returns the node following the {@code node} in the order defined by this tree.
-     * Returns null if the {@code node} is the maximum node in the tree.
+     * Returns the node following the {@code node} in the order defined by this tree. Returns null
+     * if the {@code node} is the maximum node in the tree.
      *
      * @param node a node to compute successor of
      * @return the successor of the {@code node}
      */
-    public TreeNode<T> successor(TreeNode<T> node) {
+    public TreeNode<T> successor(TreeNode<T> node)
+    {
         return node.successor;
     }
 
     /**
-     * Returns the node, which is before the {@code node} in the order defined by this tree.
-     * Returns null if the {@code node} is the minimum node in the tree.
+     * Returns the node, which is before the {@code node} in the order defined by this tree. Returns
+     * null if the {@code node} is the minimum node in the tree.
      *
      * @param node a node to compute predecessor of
      * @return the predecessor of the {@code node}
      */
-    public TreeNode<T> predecessor(TreeNode<T> node) {
+    public TreeNode<T> predecessor(TreeNode<T> node)
+    {
         return node.predecessor;
     }
 
@@ -327,7 +340,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return the minimum node in this tree or null if the tree is empty.
      */
-    public TreeNode<T> getMin() {
+    public TreeNode<T> getMin()
+    {
         return getRoot() == null ? null : getRoot().getSubtreeMin();
     }
 
@@ -336,7 +350,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return the maximum node in this tree or null if the tree is empty.
      */
-    public TreeNode<T> getMax() {
+    public TreeNode<T> getMax()
+    {
         return getRoot() == null ? null : getRoot().getSubtreeMax();
     }
 
@@ -345,17 +360,19 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return {@code true} if this tree is empty, {@code false otherwise}
      */
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return getRoot() == null;
     }
 
     /**
      * Removes all nodes from this tree.
      * <p>
-     * <b>Note:</b> the memory allocated for the tree structure won't be deallocated
-     * until there are active external referenced to the nodes of this tree.
+     * <b>Note:</b> the memory allocated for the tree structure won't be deallocated until there are
+     * active external referenced to the nodes of this tree.
      */
-    public void clear() {
+    public void clear()
+    {
         registerModification();
 
         virtualRoot.left = null;
@@ -366,7 +383,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @return the size of this tree
      */
-    public int getSize() {
+    public int getSize()
+    {
         return virtualRoot.left == null ? 0 : virtualRoot.left.subtreeSize;
     }
 
@@ -375,7 +393,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param node a new root of this tree
      */
-    private void makeRoot(TreeNode<T> node) {
+    private void makeRoot(TreeNode<T> node)
+    {
         virtualRoot.left = node;
         if (node != null) {
             node.subtreeMax.successor = null;
@@ -387,16 +406,17 @@ public class AVLTree<T> implements Iterable<T> {
     /**
      * Traverses the tree up until the virtual root and splits it into two parts.
      * <p>
-     * The algorithm is described in <i>Donald E. Knuth. The art of computer programming.
-     * Second Edition. Volume 3 / Sorting and Searching, p. 474</i>.
+     * The algorithm is described in <i>Donald E. Knuth. The art of computer programming. Second
+     * Edition. Volume 3 / Sorting and Searching, p. 474</i>.
      *
-     * @param left     a left subtree
-     * @param right    a right subtree
-     * @param p        next parent node
+     * @param left a left subtree
+     * @param right a right subtree
+     * @param p next parent node
      * @param leftMove {@code true} if we're moving from the left child, {@code false} otherwise.
      * @return the resulting right tree
      */
-    private AVLTree<T> split(TreeNode<T> left, TreeNode<T> right, TreeNode<T> p, boolean leftMove) {
+    private AVLTree<T> split(TreeNode<T> left, TreeNode<T> right, TreeNode<T> p, boolean leftMove)
+    {
         while (p != virtualRoot) {
             boolean nextMove = p.isLeftChild();
             TreeNode<T> nextP = p.parent;
@@ -421,15 +441,16 @@ public class AVLTree<T> implements Iterable<T> {
     /**
      * Merges the {@code left} and {@code right} subtrees using the {@code junctionNode}.
      * <p>
-     * The algorithm is described in <i>Donald E. Knuth. The art of computer programming.
-     * Second Edition. Volume 3 / Sorting and Searching, p. 474</i>.
+     * The algorithm is described in <i>Donald E. Knuth. The art of computer programming. Second
+     * Edition. Volume 3 / Sorting and Searching, p. 474</i>.
      *
      * @param junctionNode a node between left and right subtrees
-     * @param left         a left subtree
-     * @param right        a right subtree
+     * @param left a left subtree
+     * @param right a right subtree
      * @return the root of the resulting tree
      */
-    private TreeNode<T> merge(TreeNode<T> junctionNode, TreeNode<T> left, TreeNode<T> right) {
+    private TreeNode<T> merge(TreeNode<T> junctionNode, TreeNode<T> left, TreeNode<T> right)
+    {
         if (left == null && right == null) {
             junctionNode.reset();
             return junctionNode;
@@ -457,7 +478,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param tree a tree to swap content of
      */
-    private void swap(AVLTree<T> tree) {
+    private void swap(AVLTree<T> tree)
+    {
         TreeNode<T> t = virtualRoot.left;
         makeRoot(tree.virtualRoot.left);
         tree.makeRoot(t);
@@ -469,7 +491,8 @@ public class AVLTree<T> implements Iterable<T> {
      * @param node a node to rotate
      * @return a new parent of the {@code node}
      */
-    private TreeNode<T> rotateRight(TreeNode<T> node) {
+    private TreeNode<T> rotateRight(TreeNode<T> node)
+    {
         TreeNode<T> left = node.left;
         left.parent = null;
 
@@ -488,7 +511,8 @@ public class AVLTree<T> implements Iterable<T> {
      * @param node a node to rotate
      * @return a new parent of the {@code node}
      */
-    private TreeNode<T> rotateLeft(TreeNode<T> node) {
+    private TreeNode<T> rotateLeft(TreeNode<T> node)
+    {
         TreeNode<T> right = node.right;
         right.parent = null;
 
@@ -507,7 +531,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param node a node to start tree balancing from
      */
-    private void balance(TreeNode<T> node) {
+    private void balance(TreeNode<T> node)
+    {
         balance(node, virtualRoot);
     }
 
@@ -517,7 +542,8 @@ public class AVLTree<T> implements Iterable<T> {
      * @param node a node to start tree balancing from
      * @param stop a node to stop balancing at (this node is not being balanced)
      */
-    private void balance(TreeNode<T> node, TreeNode<T> stop) {
+    private void balance(TreeNode<T> node, TreeNode<T> stop)
+    {
         if (node == stop) {
             return;
         }
@@ -537,7 +563,8 @@ public class AVLTree<T> implements Iterable<T> {
      * @param node a node to balance
      * @return a new parent of {@code node} if the balancing occurs, {@code node} otherwise
      */
-    private TreeNode<T> balanceNode(TreeNode<T> node) {
+    private TreeNode<T> balanceNode(TreeNode<T> node)
+    {
         node.updateHeightAndSubtreeSize();
         if (node.isLeftDoubleHeavy()) {
             if (node.left.isRightHeavy()) {
@@ -558,7 +585,8 @@ public class AVLTree<T> implements Iterable<T> {
     /**
      * Registers a modifying operation
      */
-    private void registerModification() {
+    private void registerModification()
+    {
         ++modCount;
     }
 
@@ -566,9 +594,10 @@ public class AVLTree<T> implements Iterable<T> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuilder builder = new StringBuilder();
-        for (Iterator<TreeNode<T>> i = nodeIterator(); i.hasNext(); ) {
+        for (Iterator<TreeNode<T>> i = nodeIterator(); i.hasNext();) {
             TreeNode<T> node = i.next();
             builder.append(node.toString()).append("\n");
         }
@@ -579,35 +608,40 @@ public class AVLTree<T> implements Iterable<T> {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<T> iterator()
+    {
         return new TreeValuesIterator();
     }
 
     /**
-     * Returns an iterator over the tree nodes rather than the node values.
-     * The tree are returned in the same order as the tree values.
+     * Returns an iterator over the tree nodes rather than the node values. The tree are returned in
+     * the same order as the tree values.
      *
      * @return an iterator over the tree nodes
      */
-    public Iterator<TreeNode<T>> nodeIterator() {
+    public Iterator<TreeNode<T>> nodeIterator()
+    {
         return new TreeNodeIterator();
     }
 
     /**
-     * Iterator over the values stored in this tree. This implementation
-     * uses the {@code TreeNodeIterator} to iterator over the values.
+     * Iterator over the values stored in this tree. This implementation uses the
+     * {@code TreeNodeIterator} to iterator over the values.
      */
-    private class TreeValuesIterator implements Iterator<T> {
+    private class TreeValuesIterator
+        implements
+        Iterator<T>
+    {
         /**
          * Internally used {@code TreeNodeIterator}
          */
         private TreeNodeIterator iterator;
 
-
         /**
          * Constructs a new {@code TreeValuesIterator}
          */
-        public TreeValuesIterator() {
+        public TreeValuesIterator()
+        {
             iterator = new TreeNodeIterator();
         }
 
@@ -615,7 +649,8 @@ public class AVLTree<T> implements Iterable<T> {
          * {@inheritDoc}
          */
         @Override
-        public boolean hasNext() {
+        public boolean hasNext()
+        {
             return iterator.hasNext();
         }
 
@@ -623,16 +658,20 @@ public class AVLTree<T> implements Iterable<T> {
          * {@inheritDoc}
          */
         @Override
-        public T next() {
+        public T next()
+        {
             return iterator.next().getValue();
         }
     }
 
     /**
-     * Iterator over the tree nodes. The nodes are returned according to the in order
-     * tree traversal.
+     * Iterator over the tree nodes. The nodes are returned according to the in order tree
+     * traversal.
      */
-    private class TreeNodeIterator implements Iterator<TreeNode<T>> {
+    private class TreeNodeIterator
+        implements
+        Iterator<TreeNode<T>>
+    {
         /**
          * A node that is returned next or {@code null} if all nodes are traversed
          */
@@ -645,7 +684,8 @@ public class AVLTree<T> implements Iterable<T> {
         /**
          * Constructs a new {@code TreeNodeIterator}
          */
-        public TreeNodeIterator() {
+        public TreeNodeIterator()
+        {
             nextNode = getMin();
             expectedModCount = modCount;
         }
@@ -654,7 +694,8 @@ public class AVLTree<T> implements Iterable<T> {
          * {@inheritDoc}
          */
         @Override
-        public boolean hasNext() {
+        public boolean hasNext()
+        {
             checkForComodification();
             return nextNode != null;
         }
@@ -663,7 +704,8 @@ public class AVLTree<T> implements Iterable<T> {
          * {@inheritDoc}
          */
         @Override
-        public TreeNode<T> next() {
+        public TreeNode<T> next()
+        {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -675,7 +717,8 @@ public class AVLTree<T> implements Iterable<T> {
         /**
          * Checks if the tree has been modified during the iteration process
          */
-        private void checkForComodification() {
+        private void checkForComodification()
+        {
             if (expectedModCount != modCount) {
                 throw new ConcurrentModificationException();
             }
@@ -687,7 +730,8 @@ public class AVLTree<T> implements Iterable<T> {
      *
      * @param <T> a tree node value type
      */
-    public static class TreeNode<T> {
+    public static class TreeNode<T>
+    {
         /**
          * A value stored in this tree node
          */
@@ -735,7 +779,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @param value a value to store in this node
          */
-        TreeNode(T value) {
+        TreeNode(T value)
+        {
             this.value = value;
             reset();
         }
@@ -745,7 +790,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a value stored in this node
          */
-        public T getValue() {
+        public T getValue()
+        {
             return value;
         }
 
@@ -754,7 +800,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a root of the tree this node is stored in
          */
-        public TreeNode<T> getRoot() {
+        public TreeNode<T> getRoot()
+        {
             TreeNode<T> current = this;
             while (current.parent != null) {
                 current = current.parent;
@@ -767,7 +814,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a minimum node stored in the subtree rooted at this node
          */
-        public TreeNode<T> getSubtreeMin() {
+        public TreeNode<T> getSubtreeMin()
+        {
             return subtreeMin;
         }
 
@@ -776,7 +824,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a maximum node stored in the subtree rooted at this node
          */
-        public TreeNode<T> getSubtreeMax() {
+        public TreeNode<T> getSubtreeMax()
+        {
             return subtreeMax;
         }
 
@@ -785,7 +834,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a minimum node stored in the tree
          */
-        public TreeNode<T> getTreeMin() {
+        public TreeNode<T> getTreeMin()
+        {
             return getRoot().getSubtreeMin();
         }
 
@@ -794,7 +844,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a maximum node stored in the tree
          */
-        public TreeNode<T> getTreeMax() {
+        public TreeNode<T> getTreeMax()
+        {
             return getRoot().getSubtreeMax();
         }
 
@@ -803,7 +854,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a parent of this node
          */
-        public TreeNode<T> getParent() {
+        public TreeNode<T> getParent()
+        {
             return parent;
         }
 
@@ -812,7 +864,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a left child of this node
          */
-        public TreeNode<T> getLeft() {
+        public TreeNode<T> getLeft()
+        {
             return left;
         }
 
@@ -821,7 +874,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a right child of this node
          */
-        public TreeNode<T> getRight() {
+        public TreeNode<T> getRight()
+        {
             return right;
         }
 
@@ -830,7 +884,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a height of this node
          */
-        int getHeight() {
+        int getHeight()
+        {
             return height;
         }
 
@@ -839,14 +894,16 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a subtree size of the tree rooted at this node
          */
-        int getSubtreeSize() {
+        int getSubtreeSize()
+        {
             return subtreeSize;
         }
 
         /**
          * Resets this node to the default state
          */
-        void reset() {
+        void reset()
+        {
             this.height = 1;
             this.subtreeSize = 1;
             this.subtreeMin = this;
@@ -859,7 +916,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a height of the right subtree
          */
-        int getRightHeight() {
+        int getRightHeight()
+        {
             return right == null ? 0 : right.height;
         }
 
@@ -868,7 +926,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a height of the right subtree
          */
-        int getLeftHeight() {
+        int getLeftHeight()
+        {
             return left == null ? 0 : left.height;
         }
 
@@ -877,7 +936,8 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a size of the left subtree
          */
-        int getLeftSubtreeSize() {
+        int getLeftSubtreeSize()
+        {
             return left == null ? 0 : left.subtreeSize;
         }
 
@@ -886,114 +946,121 @@ public class AVLTree<T> implements Iterable<T> {
          *
          * @return a size of the right subtree
          */
-        int getRightSubtreeSize() {
+        int getRightSubtreeSize()
+        {
             return right == null ? 0 : right.subtreeSize;
         }
 
         /**
-         * Updates the height and subtree size of this node according
-         * to the values of the left and right children
+         * Updates the height and subtree size of this node according to the values of the left and
+         * right children
          */
-        void updateHeightAndSubtreeSize() {
+        void updateHeightAndSubtreeSize()
+        {
             height = Math.max(getLeftHeight(), getRightHeight()) + 1;
             subtreeSize = getLeftSubtreeSize() + getRightSubtreeSize() + 1;
         }
 
         /**
-         * Returns {@code true} if this node is unbalanced and the left child's height
-         * is greater, {@code false otherwise}
+         * Returns {@code true} if this node is unbalanced and the left child's height is greater,
+         * {@code false otherwise}
          *
-         * @return {@code true} if this node is unbalanced and the left child's height
-         * is greater, {@code false otherwise}
+         * @return {@code true} if this node is unbalanced and the left child's height is greater,
+         *         {@code false otherwise}
          */
-        boolean isLeftDoubleHeavy() {
+        boolean isLeftDoubleHeavy()
+        {
             return getLeftHeight() > getRightHeight() + 1;
         }
 
         /**
-         * Returns {@code true} if this node is unbalanced and the right child's height
-         * is greater, {@code false otherwise}
+         * Returns {@code true} if this node is unbalanced and the right child's height is greater,
+         * {@code false otherwise}
          *
-         * @return {@code true} if this node is unbalanced and the right child's height
-         * is greater, {@code false otherwise}
+         * @return {@code true} if this node is unbalanced and the right child's height is greater,
+         *         {@code false otherwise}
          */
-        boolean isRightDoubleHeavy() {
+        boolean isRightDoubleHeavy()
+        {
             return getRightHeight() > getLeftHeight() + 1;
         }
 
         /**
-         * Returns {@code true} if the height of the left child is greater than the height
-         * of the right child
+         * Returns {@code true} if the height of the left child is greater than the height of the
+         * right child
          *
-         * @return {@code true} if the height of the left child is greater than the height
-         * of the right child
+         * @return {@code true} if the height of the left child is greater than the height of the
+         *         right child
          */
-        boolean isLeftHeavy() {
+        boolean isLeftHeavy()
+        {
             return getLeftHeight() > getRightHeight();
         }
 
         /**
-         * Returns {@code true} if the height of the right child is greater than the height
-         * of the left child
+         * Returns {@code true} if the height of the right child is greater than the height of the
+         * left child
          *
-         * @return {@code true} if the height of the right child is greater than the height
-         * of the left child
+         * @return {@code true} if the height of the right child is greater than the height of the
+         *         left child
          */
-        boolean isRightHeavy() {
+        boolean isRightHeavy()
+        {
             return getRightHeight() > getLeftHeight();
         }
 
         /**
-         * Returns {@code true} if this node is a left child of its parent, {@code false}
-         * otherwise
+         * Returns {@code true} if this node is a left child of its parent, {@code false} otherwise
          *
-         * @return {@code true} if this node is a left child of its parent, {@code false}
-         * otherwise
+         * @return {@code true} if this node is a left child of its parent, {@code false} otherwise
          */
-        boolean isLeftChild() {
+        boolean isLeftChild()
+        {
             return this == parent.left;
         }
 
         /**
-         * Returns {@code true} if this node is a right child of its parent, {@code false}
-         * otherwise
+         * Returns {@code true} if this node is a right child of its parent, {@code false} otherwise
          *
-         * @return {@code true} if this node is a right child of its parent, {@code false}
-         * otherwise
+         * @return {@code true} if this node is a right child of its parent, {@code false} otherwise
          */
-        boolean isRightChild() {
+        boolean isRightChild()
+        {
             return this == parent.right;
         }
 
         /**
-         * Returns a successor of this node according to the tree in order traversal,
-         * or {@code null} if this node is a maximum node in the tree
+         * Returns a successor of this node according to the tree in order traversal, or
+         * {@code null} if this node is a maximum node in the tree
          *
-         * @return successor of this node, or {@code} null if this node in a maximum node
-         * in the tree
+         * @return successor of this node, or {@code} null if this node in a maximum node in the
+         *         tree
          */
-        public TreeNode<T> getSuccessor() {
+        public TreeNode<T> getSuccessor()
+        {
             return successor;
         }
 
         /**
-         * Returns a predecessor of this node according to the tree in order traversal,
-         * or {@code null} if this node is a minimum node in the tree
+         * Returns a predecessor of this node according to the tree in order traversal, or
+         * {@code null} if this node is a minimum node in the tree
          *
-         * @return predecessor of this node, or {@code} null if this node in a minimum node
-         * in the tree
+         * @return predecessor of this node, or {@code} null if this node in a minimum node in the
+         *         tree
          */
-        public TreeNode<T> getPredecessor() {
+        public TreeNode<T> getPredecessor()
+        {
             return predecessor;
         }
 
         /**
-         * Updates the successor reference of this node. If the {@code node} is
-         * not {@code null}, updates its predecessor reference as well
+         * Updates the successor reference of this node. If the {@code node} is not {@code null},
+         * updates its predecessor reference as well
          *
          * @param node new successor
          */
-        void setSuccessor(TreeNode<T> node) {
+        void setSuccessor(TreeNode<T> node)
+        {
             successor = node;
             if (node != null) {
                 node.predecessor = this;
@@ -1001,12 +1068,13 @@ public class AVLTree<T> implements Iterable<T> {
         }
 
         /**
-         * Updates the predecessor reference of this node. If the {@code node} is
-         * not {@code null}, updates its successor reference as well
+         * Updates the predecessor reference of this node. If the {@code node} is not {@code null},
+         * updates its successor reference as well
          *
          * @param node new predecessor
          */
-        void setPredecessor(TreeNode<T> node) {
+        void setPredecessor(TreeNode<T> node)
+        {
             predecessor = node;
             if (node != null) {
                 node.successor = this;
@@ -1014,12 +1082,13 @@ public class AVLTree<T> implements Iterable<T> {
         }
 
         /**
-         * Sets the left child reference of this node to {@code node}. If the {@code node}
-         * is not {@code null}, updates its parent reference as well.
+         * Sets the left child reference of this node to {@code node}. If the {@code node} is not
+         * {@code null}, updates its parent reference as well.
          *
          * @param node a new left child
          */
-        void setLeftChild(TreeNode<T> node) {
+        void setLeftChild(TreeNode<T> node)
+        {
             left = node;
             if (node != null) {
                 node.parent = this;
@@ -1032,12 +1101,13 @@ public class AVLTree<T> implements Iterable<T> {
         }
 
         /**
-         * Sets the right child reference of this node to {@code node}. If the {@code node}
-         * is not {@code null}, updates its parent reference as well.
+         * Sets the right child reference of this node to {@code node}. If the {@code node} is not
+         * {@code null}, updates its parent reference as well.
          *
          * @param node a new right child
          */
-        void setRightChild(TreeNode<T> node) {
+        void setRightChild(TreeNode<T> node)
+        {
             right = node;
             if (node != null) {
                 node.parent = this;
@@ -1050,14 +1120,14 @@ public class AVLTree<T> implements Iterable<T> {
         }
 
         /**
-         * Substitutes the {@code prevChild} with the {@code newChild}. If the
-         * {@code newChild} is not {@code null}, updates its parent reference
-         * as well
+         * Substitutes the {@code prevChild} with the {@code newChild}. If the {@code newChild} is
+         * not {@code null}, updates its parent reference as well
          *
          * @param prevChild either left or right child of this node
-         * @param newChild  a new child of this node
+         * @param newChild a new child of this node
          */
-        void substituteChild(TreeNode<T> prevChild, TreeNode<T> newChild) {
+        void substituteChild(TreeNode<T> prevChild, TreeNode<T> newChild)
+        {
             assert left == prevChild || right == prevChild;
             assert !(left == prevChild && right == prevChild);
             if (left == prevChild) {
@@ -1071,19 +1141,17 @@ public class AVLTree<T> implements Iterable<T> {
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            return String.format("{%s}: [parent = %s, left = %s, right = %s], [subtreeMin = %s, subtreeMax = %s], [predecessor = %s, successor = %s], [height = %d, subtreeSize = %d]",
-                    value,
-                    parent == null ? "null" : parent.value,
-                    left == null ? "null" : left.value,
-                    right == null ? "null" : right.value,
+        public String toString()
+        {
+            return String
+                .format(
+                    "{%s}: [parent = %s, left = %s, right = %s], [subtreeMin = %s, subtreeMax = %s], [predecessor = %s, successor = %s], [height = %d, subtreeSize = %d]",
+                    value, parent == null ? "null" : parent.value,
+                    left == null ? "null" : left.value, right == null ? "null" : right.value,
                     subtreeMin == null ? "null" : subtreeMin.value,
                     subtreeMax == null ? "null" : subtreeMax.value,
                     predecessor == null ? "null" : predecessor.value,
-                    successor == null ? "null" : successor.value,
-                    height,
-                    subtreeSize
-            );
+                    successor == null ? "null" : successor.value, height, subtreeSize);
         }
     }
 

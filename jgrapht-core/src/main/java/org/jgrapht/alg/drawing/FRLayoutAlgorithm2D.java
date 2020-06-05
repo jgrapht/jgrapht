@@ -187,14 +187,16 @@ public class FRLayoutAlgorithm2D<V, E>
                 // limit by temperature
                 Point2D vDisp = Points.add(repulsiveDisp.get(v), attractiveDisp.get(v));
                 double vDispLen = Points.length(vDisp);
-                Point2D vPos = Points.add(
-                    model.get(v),
-                    Points.scalarMultiply(vDisp, Math.min(vDispLen, temp) / vDispLen));
+                Point2D vPos = Points
+                    .add(
+                        model.get(v),
+                        Points.scalarMultiply(vDisp, Math.min(vDispLen, temp) / vDispLen));
 
                 // limit by frame
-                vPos = Point2D.of(
-                    Math.min(minX + width, Math.max(minX, vPos.getX())),
-                    Math.min(minY + height, Math.max(minY, vPos.getY())));
+                vPos = Point2D
+                    .of(
+                        Math.min(minX + width, Math.max(minX, vPos.getX())),
+                        Math.min(minY + height, Math.max(minY, vPos.getY())));
 
                 // store result
                 model.put(v, vPos);
@@ -279,9 +281,13 @@ public class FRLayoutAlgorithm2D<V, E>
             double deltaLen = Points.length(delta);
             Point2D dispContribution =
                 Points.scalarMultiply(delta, attractiveForce(deltaLen) / deltaLen);
-            disp.put(
-                v, Points.add(
-                    disp.getOrDefault(v, Point2D.of(0d, 0d)), Points.negate(dispContribution)));
+            disp
+                .put(
+                    v,
+                    Points
+                        .add(
+                            disp.getOrDefault(v, Point2D.of(0d, 0d)),
+                            Points.negate(dispContribution)));
             disp.put(u, Points.add(disp.getOrDefault(u, Point2D.of(0d, 0d)), dispContribution));
         }
         return disp;

@@ -64,9 +64,10 @@ public abstract class Boxes
     {
         double newWidth = box.getWidth() / 2d;
         double height = box.getHeight();
-        return Pair.of(
-            Box2D.of(box.getMinX(), box.getMinY(), newWidth, height),
-            Box2D.of(box.getMinX() + newWidth, box.getMinY(), newWidth, height));
+        return Pair
+            .of(
+                Box2D.of(box.getMinX(), box.getMinY(), newWidth, height),
+                Box2D.of(box.getMinX() + newWidth, box.getMinY(), newWidth, height));
     }
 
     /**
@@ -79,9 +80,10 @@ public abstract class Boxes
     {
         double width = box.getWidth();
         double newHeight = box.getHeight() / 2d;
-        return Pair.of(
-            Box2D.of(box.getMinX(), box.getMinY(), width, newHeight),
-            Box2D.of(box.getMinX(), box.getMinY() + newHeight, width, newHeight));
+        return Pair
+            .of(
+                Box2D.of(box.getMinX(), box.getMinY(), width, newHeight),
+                Box2D.of(box.getMinX(), box.getMinY() + newHeight, width, newHeight));
     }
 
     /**

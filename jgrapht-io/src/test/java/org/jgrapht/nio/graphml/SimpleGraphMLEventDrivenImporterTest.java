@@ -112,12 +112,12 @@ public class SimpleGraphMLEventDrivenImporterTest
         // @formatter:on
 
         SimpleGraphMLEventDrivenImporter importer = new SimpleGraphMLEventDrivenImporter();
-        
-        importer.addEdgeAttributeConsumer((p,a)->{
+
+        importer.addEdgeAttributeConsumer((p, a) -> {
             String key = p.getSecond();
             String value = a.getValue();
-            
-            if (key.equals("cost")) { 
+
+            if (key.equals("cost")) {
                 assertEquals(value, "13.0");
             }
         });

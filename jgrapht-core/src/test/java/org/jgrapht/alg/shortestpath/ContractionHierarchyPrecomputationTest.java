@@ -162,9 +162,10 @@ public class ContractionHierarchyPrecomputationTest
 
         for (Pair<Integer, Integer> pair : vertexPairs) {
             assertTrue(
-                contractionGraph.containsEdge(
-                    contractionMapping.get(pair.getFirst()),
-                    contractionMapping.get(pair.getSecond())));
+                contractionGraph
+                    .containsEdge(
+                        contractionMapping.get(pair.getFirst()),
+                        contractionMapping.get(pair.getSecond())));
         }
     }
 
@@ -200,9 +201,10 @@ public class ContractionHierarchyPrecomputationTest
 
         for (Pair<Integer, Integer> pair : vertexPairs) {
             assertTrue(
-                contractionGraph.containsEdge(
-                    contractionMapping.get(pair.getFirst()),
-                    contractionMapping.get(pair.getSecond())));
+                contractionGraph
+                    .containsEdge(
+                        contractionMapping.get(pair.getFirst()),
+                        contractionMapping.get(pair.getSecond())));
         }
     }
 
@@ -265,15 +267,17 @@ public class ContractionHierarchyPrecomputationTest
         assertEquals(5, contractionGraph.vertexSet().size());
         assertEquals(8, contractionGraph.edgeSet().size());
 
-        List<Pair<Integer, Integer>> vertexPairs = Arrays.asList(
-            Pair.of(1, 3), Pair.of(3, 1), Pair.of(2, 3), Pair.of(3, 2), Pair.of(3, 4),
-            Pair.of(4, 3), Pair.of(3, 5), Pair.of(5, 3));
+        List<Pair<Integer, Integer>> vertexPairs = Arrays
+            .asList(
+                Pair.of(1, 3), Pair.of(3, 1), Pair.of(2, 3), Pair.of(3, 2), Pair.of(3, 4),
+                Pair.of(4, 3), Pair.of(3, 5), Pair.of(5, 3));
 
         for (Pair<Integer, Integer> pair : vertexPairs) {
             assertTrue(
-                contractionGraph.containsEdge(
-                    contractionMapping.get(pair.getFirst()),
-                    contractionMapping.get(pair.getSecond())));
+                contractionGraph
+                    .containsEdge(
+                        contractionMapping.get(pair.getFirst()),
+                        contractionMapping.get(pair.getSecond())));
         }
     }
 
@@ -320,20 +324,22 @@ public class ContractionHierarchyPrecomputationTest
         assertEquals(9, contractionGraph.vertexSet().size());
         assertEquals(24, contractionGraph.edgeSet().size());
 
-        List<Pair<Integer, Integer>> vertexPairs = Arrays.asList(
-            Pair.of(1, 2), Pair.of(2, 1), Pair.of(1, 4), Pair.of(4, 1), Pair.of(2, 3),
-            Pair.of(3, 2), Pair.of(2, 5), Pair.of(5, 2), Pair.of(3, 6), Pair.of(6, 3),
+        List<Pair<Integer, Integer>> vertexPairs = Arrays
+            .asList(
+                Pair.of(1, 2), Pair.of(2, 1), Pair.of(1, 4), Pair.of(4, 1), Pair.of(2, 3),
+                Pair.of(3, 2), Pair.of(2, 5), Pair.of(5, 2), Pair.of(3, 6), Pair.of(6, 3),
 
-            Pair.of(4, 5), Pair.of(5, 4), Pair.of(4, 7), Pair.of(7, 4), Pair.of(5, 6),
-            Pair.of(6, 5), Pair.of(5, 8), Pair.of(8, 5), Pair.of(6, 9), Pair.of(9, 6),
+                Pair.of(4, 5), Pair.of(5, 4), Pair.of(4, 7), Pair.of(7, 4), Pair.of(5, 6),
+                Pair.of(6, 5), Pair.of(5, 8), Pair.of(8, 5), Pair.of(6, 9), Pair.of(9, 6),
 
-            Pair.of(7, 8), Pair.of(8, 7), Pair.of(8, 9), Pair.of(9, 8));
+                Pair.of(7, 8), Pair.of(8, 7), Pair.of(8, 9), Pair.of(9, 8));
 
         for (Pair<Integer, Integer> pair : vertexPairs) {
             assertTrue(
-                contractionGraph.containsEdge(
-                    contractionMapping.get(pair.getFirst()),
-                    contractionMapping.get(pair.getSecond())));
+                contractionGraph
+                    .containsEdge(
+                        contractionMapping.get(pair.getFirst()),
+                        contractionMapping.get(pair.getSecond())));
         }
     }
 
@@ -378,13 +384,15 @@ public class ContractionHierarchyPrecomputationTest
 
         assertEquals(
             1,
-            contractionGraph.getEdgeWeight(
-                contractionGraph.getEdge(contractionMapping.get(1), contractionMapping.get(2))),
+            contractionGraph
+                .getEdgeWeight(
+                    contractionGraph.getEdge(contractionMapping.get(1), contractionMapping.get(2))),
             1e-9);
         assertEquals(
             1,
-            contractionGraph.getEdgeWeight(
-                contractionGraph.getEdge(contractionMapping.get(2), contractionMapping.get(1))),
+            contractionGraph
+                .getEdgeWeight(
+                    contractionGraph.getEdge(contractionMapping.get(2), contractionMapping.get(1))),
             1e-9);
     }
 

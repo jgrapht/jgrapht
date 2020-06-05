@@ -109,18 +109,21 @@ public class BoyerMyrvoldPlanarityInspectorTest
     @Test(expected = IllegalArgumentException.class)
     public void testNonPlanarGraphNoEmbedding()
     {
-        int[][] k_5 = {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4},};
+        int[][] k_5 = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 0, 4 }, { 1, 2 }, { 1, 3 }, { 1, 4 },
+            { 2, 3 }, { 2, 4 }, { 3, 4 }, };
         Graph<Integer, DefaultEdge> graph = getGraph(k_5);
-        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm = new BoyerMyrvoldPlanarityInspector<>(graph);
+        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm =
+            new BoyerMyrvoldPlanarityInspector<>(graph);
         algorithm.getEmbedding();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testPlanarGraphNoKuratowskiSubdivision()
     {
-        int[][] k_4 = {{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3},};
+        int[][] k_4 = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, };
         Graph<Integer, DefaultEdge> graph = getGraph(k_4);
-        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm = new BoyerMyrvoldPlanarityInspector<>(graph);
+        PlanarityTestingAlgorithm<Integer, DefaultEdge> algorithm =
+            new BoyerMyrvoldPlanarityInspector<>(graph);
         algorithm.getKuratowskiSubdivision();
     }
 

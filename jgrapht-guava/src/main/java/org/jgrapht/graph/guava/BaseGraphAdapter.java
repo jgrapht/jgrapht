@@ -223,8 +223,9 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public Set<EndpointPair<V>> incomingEdgesOf(V vertex)
     {
-        return graph.predecessors(vertex).stream().map(other -> createEdge(other, vertex)).collect(
-            collectingAndThen(toSet(), Collections::unmodifiableSet));
+        return graph
+            .predecessors(vertex).stream().map(other -> createEdge(other, vertex))
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
@@ -236,8 +237,9 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public Set<EndpointPair<V>> outgoingEdgesOf(V vertex)
     {
-        return graph.successors(vertex).stream().map(other -> createEdge(vertex, other)).collect(
-            collectingAndThen(toSet(), Collections::unmodifiableSet));
+        return graph
+            .successors(vertex).stream().map(other -> createEdge(vertex, other))
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override

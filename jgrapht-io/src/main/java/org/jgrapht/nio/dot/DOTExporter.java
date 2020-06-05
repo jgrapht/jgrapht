@@ -222,7 +222,7 @@ public class DOTExporter<V, E>
         final String attrValue = attribute.getValue();
         if (AttributeType.HTML.equals(attribute.getType())) {
             out.print("<" + attrValue + ">");
-        } else if(AttributeType.IDENTIFIER.equals(attribute.getType())) {
+        } else if (AttributeType.IDENTIFIER.equals(attribute.getType())) {
             out.print(attrValue);
         } else {
             out.print("\"" + escapeDoubleQuotes(attrValue) + "\"");

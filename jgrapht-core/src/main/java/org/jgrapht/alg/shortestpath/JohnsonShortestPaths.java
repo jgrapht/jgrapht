@@ -283,9 +283,10 @@ public class JohnsonShortestPaths<V, E>
 
                 Pair<Double, E> newPair;
                 if (oldPair != null) {
-                    newPair = Pair.of(
-                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                        oldPair.getSecond());
+                    newPair = Pair
+                        .of(
+                            oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                            oldPair.getSecond());
                 } else {
                     newPair = Pair.of(Double.POSITIVE_INFINITY, null);
                 }

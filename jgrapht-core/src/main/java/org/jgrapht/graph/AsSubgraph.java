@@ -62,7 +62,7 @@ import java.util.stream.*;
  * such identity, at a severe performance cost. Currently it is no longer enforced. If you want to
  * achieve a "live-window" functionality, your safest tactics would be to NOT override the
  * <code>equals()</code> methods of your vertices and edges. If you use a class that has already
- * overridden the <code>equals()</code> method, such as <code>String</code>, than you can use a
+ * overridden the <code>equals()</code> method, such as <code>String</code>, then you can use a
  * wrapper around it, or else use it directly but exercise a great care to avoid having
  * different-but-equal instances in the subgraph and the base graph.
  * </p>
@@ -339,8 +339,9 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.edgesOf(vertex).stream().filter(edgeSet::contains).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return base
+            .edgesOf(vertex).stream().filter(edgeSet::contains)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -379,8 +380,9 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.incomingEdgesOf(vertex).stream().filter(edgeSet::contains).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return base
+            .incomingEdgesOf(vertex).stream().filter(edgeSet::contains)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -404,8 +406,9 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.outgoingEdgesOf(vertex).stream().filter(edgeSet::contains).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return base
+            .outgoingEdgesOf(vertex).stream().filter(edgeSet::contains)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -530,8 +533,9 @@ public class AsSubgraph<V, E>
             if (vertexFilter.size() > base.vertexSet().size()) {
                 base.vertexSet().stream().filter(vertexFilter::contains).forEach(vertexSet::add);
             } else {
-                vertexFilter.stream().filter(v -> v != null && base.containsVertex(v)).forEach(
-                    vertexSet::add);
+                vertexFilter
+                    .stream().filter(v -> v != null && base.containsVertex(v))
+                    .forEach(vertexSet::add);
             }
         }
 

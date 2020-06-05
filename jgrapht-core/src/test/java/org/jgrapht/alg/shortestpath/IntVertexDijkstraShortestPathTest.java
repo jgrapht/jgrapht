@@ -144,9 +144,12 @@ public class IntVertexDijkstraShortestPathTest
                 .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
-        Graphs.addAllVertices(
-            g,
-            Arrays.asList(offset + 0, offset + 1, offset + 2, offset + 3, offset + 4, offset + 5));
+        Graphs
+            .addAllVertices(
+                g,
+                Arrays
+                    .asList(
+                        offset + 0, offset + 1, offset + 2, offset + 3, offset + 4, offset + 5));
         DefaultWeightedEdge e01 = g.addEdge(offset + 0, offset + 1);
         g.setEdgeWeight(e01, 10.0);
         DefaultWeightedEdge e02 = g.addEdge(offset + 0, offset + 2);

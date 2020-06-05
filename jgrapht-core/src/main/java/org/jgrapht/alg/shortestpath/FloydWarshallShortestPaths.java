@@ -72,8 +72,10 @@ public class FloydWarshallShortestPaths<V, E>
          * vertex which has degree at least one and at least two.
          */
         this.vertices = new ArrayList<>(graph.vertexSet());
-        Collections.sort(
-            vertices, new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
+        Collections
+            .sort(
+                vertices,
+                new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
         this.degrees = new ArrayList<>();
         this.vertexIndices = CollectionUtil.newHashMapWithExpectedSize(this.vertices.size());
 

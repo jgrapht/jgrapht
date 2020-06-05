@@ -96,11 +96,11 @@ public class DirectedScaleFreeGraphGenerator<V, E>
     /**
      * An enum to indicate the vertex selection using its inDegree or outDegree
      */
-    private static enum Direction
+    private enum Direction
     {
         IN,
         OUT
-    };
+    }
 
     /**
      * Maximum number of consecutive failed attempts to add an edge.
@@ -242,8 +242,9 @@ public class DirectedScaleFreeGraphGenerator<V, E>
         }
         if (deltaIn < 0 || deltaOut < 0) {
             throw new IllegalArgumentException(
-                String.format(
-                    "deltaIn and deltaOut values of (%f, %f) are invalid", deltaIn, deltaOut));
+                String
+                    .format(
+                        "deltaIn and deltaOut values of (%f, %f) are invalid", deltaIn, deltaOut));
         }
         if (targetEdges < 0 && targetNodes < 0) {
             throw new IllegalArgumentException(

@@ -1434,7 +1434,8 @@ public class DoublyLinkedList<E>
          * {@inheritDoc}
          */
         @Override
-        public ListNodeImpl<V> getNext() {
+        public ListNodeImpl<V> getNext()
+        {
             return next;
         }
 
@@ -1442,7 +1443,8 @@ public class DoublyLinkedList<E>
          * {@inheritDoc}
          */
         @Override
-        public ListNodeImpl<V> getPrev() {
+        public ListNodeImpl<V> getPrev()
+        {
             return prev;
         }
     }
