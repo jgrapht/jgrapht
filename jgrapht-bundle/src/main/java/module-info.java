@@ -1,3 +1,0 @@
-module org.jgrapht.bundle
-{
-}
