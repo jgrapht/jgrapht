@@ -5,3 +5,4 @@ module org.jgrapht.ext
     requires transitive org.jgrapht.core;
     requires transitive com.github.vlsi.mxgraph.jgraphx;
 }
+
