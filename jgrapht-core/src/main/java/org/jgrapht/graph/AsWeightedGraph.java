@@ -188,10 +188,12 @@ public class AsWeightedGraph<V, E>
     @Override
     public void setEdgeWeight(E e, double weight)
     {
-        assert weightFunction == null
-            || cacheWeights : "Cannot set an edge weight when a weight function is used and caching is disabled";
         assert e != null;
-
+        
+        if (weightFunction != null && !cacheWeights) { 
+            throw new UnsupportedOperationException("Cannot set an edge weight when a weight function is used and caching is disabled");
+        }
+        
         this.weights.put(e, weight);
 
         if (this.writeWeightsThrough)
