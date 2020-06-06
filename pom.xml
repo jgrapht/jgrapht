@@ -107,11 +107,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>jgrapht-bundle</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 			    <groupId>org.xmlunit</groupId>
 			    <artifactId>xmlunit-core</artifactId>
 			    <version>2.6.3</version>
@@ -180,11 +175,19 @@
 	                <artifactId>maven-jar-plugin</artifactId>
 	                <version>2.4</version>
                 </plugin>
-                <plugin>
+				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
 					<version>3.5.0</version>
-				</plugin>
+					<executions>
+						<execution>
+							<phase>process-classes</phase>
+							<goals>
+								<goal>manifest</goal>
+							</goals>
+						</execution>
+					</executions>					
+				</plugin>                
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>				
 					<artifactId>maven-assembly-plugin</artifactId>
@@ -275,7 +278,6 @@
 		<module>jgrapht-ext</module>
 		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>
-		<module>jgrapht-bundle</module>
 		<module>jgrapht-dist</module>
 	</modules>
 

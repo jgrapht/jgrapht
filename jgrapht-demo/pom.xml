@@ -34,9 +34,6 @@
 							<mainClass>org.jgrapht.demo.JGraphXAdapterDemo</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
-						<manifestEntries>
-							<Automatic-Module-Name>org.jgrapht.demo</Automatic-Module-Name>
-						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>

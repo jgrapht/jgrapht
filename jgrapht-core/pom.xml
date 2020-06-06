@@ -60,6 +60,10 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+			</plugin>			
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<executions>
@@ -85,24 +89,6 @@
 		                <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
 	        	</configuration>
       		</plugin>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<instructions>
-						<Automatic-Module-Name>org.jgrapht.core</Automatic-Module-Name>
-						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
-					</instructions>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>
