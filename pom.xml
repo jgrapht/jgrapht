@@ -212,6 +212,19 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.2.1</version>
+					<executions>
+				    	<execution>
+				      		<id>attach-sources</id>
+				      		<goals>
+				        		<goal>jar</goal>
+				      		</goals>
+				    	</execution>
+				  	</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.2.0</version>
 					<configuration>
@@ -228,6 +241,14 @@
                                                 </doctitle>
 						<detectJavaApiLink>false</detectJavaApiLink> <!-- Temporary fix for https://stackoverflow.com/questions/58836862/jdk-11-and-javadoc -->
 					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
@@ -263,6 +284,16 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+    		<plugin>
+      			<groupId>org.apache.maven.plugins</groupId>
+      			<artifactId>maven-javadoc-plugin</artifactId>
+     		</plugin>
+     		<plugin>
+      			<groupId>org.apache.maven.plugins</groupId>
+      			<artifactId>maven-source-plugin</artifactId>
+     		</plugin>
+  		</plugins>
 	</build>
 
 	<modules>
