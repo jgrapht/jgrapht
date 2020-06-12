@@ -134,8 +134,19 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.8.1</version>
 					<configuration>
-						<release>11</release>
-					</configuration>
+					  <release>11</release>
+                                        </configuration>
+                                        <executions>
+                                          <execution>
+                                            <id>default-compile</id>
+					    <configuration>
+					      <failOnWarning>true</failOnWarning>
+					      <compilerArgs>
+					        <arg>-Xlint:all,-deprecation</arg>
+					      </compilerArgs>
+					    </configuration>
+                                          </execution>
+                                        </executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

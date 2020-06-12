@@ -18,6 +18,7 @@
 package org.jgrapht.alg.flow;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.util.extension.*;
@@ -284,7 +285,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
 
         public <VE extends VertexExtensionBase> VE getSource()
         {
-            return (VE) source;
+            return TypeUtil.uncheckedCast(source);
         }
 
         public void setSource(VertexExtensionBase source)
@@ -294,7 +295,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
 
         public <VE extends VertexExtensionBase> VE getTarget()
         {
-            return (VE) target;
+            return TypeUtil.uncheckedCast(target);
         }
 
         public void setTarget(VertexExtensionBase target)
