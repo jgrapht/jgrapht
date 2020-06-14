@@ -18,7 +18,6 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.BaseIntrusiveEdgesSpecifics.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 

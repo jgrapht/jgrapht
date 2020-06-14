@@ -19,8 +19,6 @@ package org.jgrapht.alg.lca;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.util.*;

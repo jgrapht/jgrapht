@@ -17,12 +17,12 @@
  */
 package org.jgrapht.graph.guava;
 
-import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
+
+import com.google.common.graph.*;
 
 import static org.junit.Assert.*;
 

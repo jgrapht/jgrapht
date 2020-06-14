@@ -41,7 +41,7 @@ public class ChordalGraphIndependentSetFinderTest
     public void testGetMaximumIndependentSet1()
     {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+        new ChordalityInspector<>(graph);
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNotNull(set);
         assertEquals(0, set.size());
@@ -84,7 +84,7 @@ public class ChordalGraphIndependentSetFinderTest
             { 3, 4 }, { 3, 4 }, { 4, 4 }, { 4, 4 }, { 4, 5 }, { 4, 5 }, };
         Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
 
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+        new ChordalityInspector<>(graph);
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNotNull(set);
         assertEquals(2, set.size());

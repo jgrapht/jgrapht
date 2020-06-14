@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
+@SuppressWarnings("unused")
 public class BlossomVNodeTest
 {
 

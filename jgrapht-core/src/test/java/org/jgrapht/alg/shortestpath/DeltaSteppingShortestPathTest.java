@@ -19,18 +19,16 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.Triple;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
-import org.junit.rules.*;
 
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Test case for {@link DeltaSteppingShortestPath}.
@@ -69,9 +67,6 @@ public class DeltaSteppingShortestPathTest
     private static final String X = "X";
     private static final String Z = "Z";
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
     @Test
     public void testEmptyGraph()
     {
@@ -90,8 +85,9 @@ public class DeltaSteppingShortestPathTest
         Graphs.addAllVertices(graph, Arrays.asList(S, T));
         Graphs.addEdge(graph, S, T, -10.0);
 
-        exception.expect(IllegalArgumentException.class);
-        new DeltaSteppingShortestPath<>(graph, executor).getPaths(S);
+        DeltaSteppingShortestPath<String, DefaultWeightedEdge> shortestPath =
+            new DeltaSteppingShortestPath<>(graph, executor);
+        assertThrows(IllegalArgumentException.class, () -> shortestPath.getPaths(S));
     }
 
     @Test

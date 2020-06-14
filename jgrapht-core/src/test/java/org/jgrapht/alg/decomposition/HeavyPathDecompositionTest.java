@@ -29,7 +29,7 @@ import org.junit.experimental.categories.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static org.jgrapht.util.MathUtil.log2;
+import static org.jgrapht.util.MathUtil.*;
 
 /**
  * Tests for {@link HeavyPathDecomposition}
@@ -188,8 +188,7 @@ public class HeavyPathDecompositionTest
     @Test(expected = NullPointerException.class)
     public void testNullGraph()
     {
-        HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition =
-            new HeavyPathDecomposition<>(null, 1);
+        new HeavyPathDecomposition<>(null, 1);
     }
 
     @Test(expected = NullPointerException.class)
@@ -198,8 +197,7 @@ public class HeavyPathDecompositionTest
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         String s = null;
 
-        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
-            new HeavyPathDecomposition<>(graph, s);
+        new HeavyPathDecomposition<>(graph, s);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -208,8 +206,7 @@ public class HeavyPathDecompositionTest
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         graph.addVertex("a");
 
-        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
-            new HeavyPathDecomposition<>(graph, "b");
+        new HeavyPathDecomposition<>(graph, "b");
     }
 
     @Test

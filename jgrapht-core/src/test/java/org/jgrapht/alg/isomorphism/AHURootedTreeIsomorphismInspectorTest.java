@@ -55,8 +55,7 @@ public class AHURootedTreeIsomorphismInspectorTest
     @Test(expected = NullPointerException.class)
     public void testNullGraphs()
     {
-        AHURootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHURootedTreeIsomorphismInspector<>(null, null, null, null);
+        new AHURootedTreeIsomorphismInspector<>(null, null, null, null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -64,8 +63,7 @@ public class AHURootedTreeIsomorphismInspectorTest
     {
         Graph<String, DefaultEdge> tree1 = new SimpleGraph<>(DefaultEdge.class);
 
-        AHURootedTreeIsomorphismInspector<String, DefaultEdge> isomorphism =
-            new AHURootedTreeIsomorphismInspector<>(tree1, null, null, null);
+        new AHURootedTreeIsomorphismInspector<>(tree1, null, null, null);
     }
 
     @Test

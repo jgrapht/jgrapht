@@ -17,7 +17,7 @@
  */
 package org.jgrapht.generate.netgen;
 
-import org.junit.Test;
+import org.junit.*;
 
 import static org.jgrapht.generate.netgen.NetworkGenerator.*;
 
@@ -58,7 +58,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testNodeNum_NodeNumNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setArcNum(20).setSourceNum(2).setSinkNum(3).setTSourceNum(1).setTSinkNum(1)
             .setTotalSupply(50).setMinCap(1).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();
@@ -81,7 +81,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testArcNum_ArcNumNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setNodeNum(10).setSourceNum(2).setSinkNum(3).setTSourceNum(1).setTSinkNum(1)
             .setTotalSupply(50).setMinCap(1).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();
@@ -152,7 +152,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSourceNum_SourceNumNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setNodeNum(10).setArcNum(20).setSinkNum(3).setTSourceNum(1).setTSinkNum(1)
             .setTotalSupply(50).setMinCap(1).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();
@@ -173,7 +173,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSourceNum_SinkNumNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setNodeNum(10).setArcNum(20).setSourceNum(2).setTSourceNum(1).setTSinkNum(1)
             .setTotalSupply(50).setMinCap(1).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();
@@ -228,7 +228,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSupply_SupplyNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setNodeNum(10).setArcNum(20).setSourceNum(2).setSinkNum(3).setTSourceNum(1)
             .setTSinkNum(1).setMinCap(1).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();
@@ -275,7 +275,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testCapacities_MinimumCapacityNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setNodeNum(10).setArcNum(20).setSourceNum(2).setSinkNum(3).setTSourceNum(1)
             .setTSinkNum(1).setTotalSupply(50).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();
@@ -284,7 +284,7 @@ public class NetworkGeneratorConfigBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testCapacities_MaximumCapacityNotSet_IllegalArgumentException()
     {
-        NetworkGeneratorConfig config = new NetworkGeneratorConfigBuilder()
+        new NetworkGeneratorConfigBuilder()
             .setNodeNum(10).setArcNum(20).setSourceNum(2).setSinkNum(3).setTSourceNum(1)
             .setTSinkNum(1).setTotalSupply(50).setMaxCap(10).setMinCost(0).setMaxCost(10)
             .setPercentCapacitated(100).setPercentWithInfCost(0).build();

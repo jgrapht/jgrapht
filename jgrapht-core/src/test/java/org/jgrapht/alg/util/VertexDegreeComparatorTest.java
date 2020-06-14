@@ -25,7 +25,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for VertexDegreeComparator
@@ -37,12 +37,8 @@ public class VertexDegreeComparatorTest
 
     protected static final int TEST_REPEATS = 20;
 
-    private GraphGenerator<Integer, DefaultEdge, Integer> randomGraphGenerator;
-
-    public VertexDegreeComparatorTest()
-    {
-        randomGraphGenerator = new GnmRandomGraphGenerator<>(100, 1000, 0);
-    }
+    private final GraphGenerator<Integer, DefaultEdge, Integer> randomGraphGenerator =
+        new GnmRandomGraphGenerator<>(100, 1000, 0);
 
     @Test
     public void testVertexDegreeComparator()
@@ -52,23 +48,14 @@ public class VertexDegreeComparatorTest
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             randomGraphGenerator.generateGraph(graph);
             List<Integer> vertices = new ArrayList<>(graph.vertexSet());
+
             // Sort in ascending vertex degree
-            Collections
-                .sort(
-                    vertices,
-                    new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
-            for (int i = 0; i < vertices.size() - 1; i++)
+            vertices.sort(VertexDegreeComparator.of(graph));
+
+            for (int i = 0; i < vertices.size() - 1; i++) {
                 assertTrue(graph.degreeOf(vertices.get(i)) <= graph.degreeOf(vertices.get(i + 1)));
-
-            // Sort in descending vertex degree
-            Collections
-                .sort(
-                    vertices,
-                    new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.DESCENDING));
-            for (int i = 0; i < vertices.size() - 1; i++)
-                assertTrue(graph.degreeOf(vertices.get(i)) >= graph.degreeOf(vertices.get(i + 1)));
+            }
         }
-
     }
 
 }

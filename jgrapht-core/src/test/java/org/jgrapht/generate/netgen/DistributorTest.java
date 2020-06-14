@@ -17,12 +17,10 @@
  */
 package org.jgrapht.generate.netgen;
 
-import org.junit.Test;
+import org.junit.*;
 
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
 import static org.junit.Assert.*;
 
@@ -74,7 +72,7 @@ public class DistributorTest
                 return 0;
             }
         });
-        List<Integer> distribution = distributor.getDistribution(List.of(1, 2, 3), 12);
+        distributor.getDistribution(List.of(1, 2, 3), 12);
     }
 
     @Test
@@ -116,7 +114,7 @@ public class DistributorTest
             }
         });
 
-        List<Integer> distribution = distributor.getDistribution(List.of(1, 2, 3), 8);
+        distributor.getDistribution(List.of(1, 2, 3), 8);
     }
 
     @Test

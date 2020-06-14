@@ -335,11 +335,8 @@ public class PlantedPartitionGraphGeneratorTest
 
         PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        try {
-            List<Set<Integer>> communities = gen.getCommunities();
-            fail("gen.getCommunities() did not throw an IllegalStateException as expected");
-        } catch (IllegalStateException e) {
-        }
+
+        assertThrows(IllegalStateException.class, () -> gen.getCommunities());
     }
 
     @Test
@@ -357,11 +354,8 @@ public class PlantedPartitionGraphGeneratorTest
         gen.generateGraph(g);
         Graph<Integer, DefaultEdge> f = new SimpleGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
-        try {
-            gen.generateGraph(f);
-            fail("gen.getCommunities() did not throw an IllegalStateException as expected");
-        } catch (IllegalStateException e) {
-        }
+
+        assertThrows(IllegalStateException.class, () -> gen.generateGraph(f));
     }
 
 }

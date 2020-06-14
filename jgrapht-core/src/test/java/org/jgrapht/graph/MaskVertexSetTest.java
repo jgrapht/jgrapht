@@ -57,6 +57,7 @@ public class MaskVertexSetTest
     }
 
     @Test
+    @SuppressWarnings("unlikely-arg-type")
     public void testContains()
     {
         assertFalse(testMaskVertexSet.contains(v1));

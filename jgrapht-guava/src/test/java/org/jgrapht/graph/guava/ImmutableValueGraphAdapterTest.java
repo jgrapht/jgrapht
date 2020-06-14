@@ -17,14 +17,14 @@
  */
 package org.jgrapht.graph.guava;
 
-import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+
+import com.google.common.graph.*;
 
 import static org.junit.Assert.*;
 
@@ -56,7 +56,7 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String,
+        @SuppressWarnings("unchecked") Graph<String,
             EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
@@ -74,12 +74,8 @@ public class ImmutableValueGraphAdapterTest
         assertEquals(5.0, g.getEdgeWeight(EndpointPair.ordered("v4", "v4")), 1e-9);
         assertEquals(6.0, g.getEdgeWeight(EndpointPair.ordered("v5", "v2")), 1e-9);
 
-        try {
-            g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 1.0);
-            fail("Immutable");
-        } catch (UnsupportedOperationException e) {
-            // ignore
-        }
+        EndpointPair<String> endPoints = EndpointPair.ordered("v1", "v2");
+        assertThrows(UnsupportedOperationException.class, () -> g.setEdgeWeight(endPoints, 1.0));
     }
 
     /**
@@ -118,12 +114,8 @@ public class ImmutableValueGraphAdapterTest
         assertEquals(5.0, g.getEdgeWeight(EndpointPair.ordered("v4", "v4")), 1e-9);
         assertEquals(6.0, g.getEdgeWeight(EndpointPair.ordered("v5", "v2")), 1e-9);
 
-        try {
-            g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 1.0);
-            fail("Immutable");
-        } catch (UnsupportedOperationException e) {
-            // ignore
-        }
+        EndpointPair<String> endPoints = EndpointPair.ordered("v1", "v2");
+        assertThrows(UnsupportedOperationException.class, () -> g.setEdgeWeight(endPoints, 1.0));
     }
 
     /**
@@ -142,10 +134,11 @@ public class ImmutableValueGraphAdapterTest
         ImmutableValueGraph<String, MyValue> immutableValueGraph =
             ImmutableValueGraph.copyOf(mutableValueGraph);
 
-        Graph<String, EndpointPair<String>> graph = new ImmutableValueGraphAdapter<>(
-            immutableValueGraph, (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        @SuppressWarnings("unchecked") Graph<String, EndpointPair<String>> graph =
+            new ImmutableValueGraphAdapter<>(
+                immutableValueGraph, (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
-        assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
+        assertEquals(5.0, graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
     }
 
     /**
@@ -168,7 +161,7 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String,
+        @SuppressWarnings("unchecked") Graph<String,
             EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
@@ -288,7 +281,7 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String,
+        @SuppressWarnings("unchecked") Graph<String,
             EndpointPair<String>> initialGraph = new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
@@ -354,7 +347,7 @@ public class ImmutableValueGraphAdapterTest
 
         private static final long serialVersionUID = 1L;
 
-        private double value;
+        private final double value;
 
         public MyValue(double value)
         {

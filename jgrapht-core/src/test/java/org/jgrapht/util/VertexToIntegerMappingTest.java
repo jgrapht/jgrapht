@@ -34,7 +34,7 @@ public class VertexToIntegerMappingTest
     @Test(expected = NullPointerException.class)
     public void testNullSet()
     {
-        VertexToIntegerMapping<Integer> mapping = new VertexToIntegerMapping<>((Set<Integer>) null);
+        new VertexToIntegerMapping<>((Set<Integer>) null);
     }
 
     @Test
@@ -49,8 +49,7 @@ public class VertexToIntegerMappingTest
     @Test(expected = IllegalArgumentException.class)
     public void testNotUniqueElements()
     {
-        VertexToIntegerMapping<Integer> mapping =
-            new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1));
+        new VertexToIntegerMapping<>(Arrays.asList(1, 2, 1));
     }
 
     @Test

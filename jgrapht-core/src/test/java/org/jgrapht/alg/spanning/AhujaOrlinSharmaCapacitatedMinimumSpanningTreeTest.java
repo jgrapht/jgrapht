@@ -186,8 +186,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
     public void testInstance3()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -269,8 +268,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
     public void testInstance4()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 8; ++i) {
             graph.addVertex(i);
@@ -363,8 +361,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
     public void testInstance5()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 9; ++i) {
             graph.addVertex(i);
@@ -464,8 +461,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
     public void testInstance6()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -782,11 +778,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer,
-                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
-                    new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                        graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false,
-                        true, 10, 15);
+            new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false, true, 10,
+                15);
         } catch (IllegalArgumentException e) {
             testOK = true;
         }
@@ -808,11 +802,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer,
-                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
-                    new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                        graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false,
-                        true, 10, 15);
+            new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false, true, 10,
+                15);
         } catch (IllegalArgumentException e) {
             testOK = true;
         }

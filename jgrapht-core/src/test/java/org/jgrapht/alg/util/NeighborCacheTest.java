@@ -20,12 +20,11 @@ package org.jgrapht.alg.util;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
-import org.junit.rules.*;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
 /**
@@ -40,9 +39,6 @@ public class NeighborCacheTest
     private static final String V1 = "v1";
     private static final String V2 = "v2";
     private static final String V3 = "v3";
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -216,9 +212,7 @@ public class NeighborCacheTest
 
         graph.removeVertex(B);
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("no such vertex");
-        cache.neighborListOf(B);
+        assertThrows(IllegalArgumentException.class, () -> cache.neighborListOf(B));
     }
 
 }

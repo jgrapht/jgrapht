@@ -24,7 +24,7 @@ import org.junit.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Tests for overriding the {@link CrossComponentIterator#selectOutgoingEdges selectOutgoingEdges}
@@ -44,7 +44,7 @@ public class EdgeSelectionTest
     {
         Graph<StatefulVertex, StatefulEdge> graph = createGraph();
         DepthFirstIterator<StatefulVertex, StatefulEdge> iterator =
-            new DepthFirstIterator<StatefulVertex, StatefulEdge>(graph)
+            new DepthFirstIterator<>(graph)
             {
                 String evenEdgeColor = "BLUE";
                 String oddEdgeColor = "RED";
@@ -119,6 +119,7 @@ public class EdgeSelectionTest
         extends
         DefaultWeightedEdge
     {
+        private static final long serialVersionUID = 1L;
         private final String color;
 
         StatefulEdge(String color)

@@ -33,6 +33,7 @@ import static org.junit.Assert.*;
  *
  * @author Dimitrios Michail
  */
+@SuppressWarnings("unchecked")
 public class MutableValueGraphAdapterTest
 {
 
@@ -77,12 +78,8 @@ public class MutableValueGraphAdapterTest
         assertEquals(1.0d, g.getEdgeWeight(EndpointPair.ordered("v1", "v5")), 1e-9);
 
         // check that the adapter is only one way
-        try {
-            g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 1.0);
-            fail("One way adapter only");
-        } catch (UnsupportedOperationException e) {
-            // ignore
-        }
+        EndpointPair<String> endPoints = EndpointPair.ordered("v1", "v2");
+        assertThrows(UnsupportedOperationException.class, () -> g.setEdgeWeight(endPoints, 1.0));
     }
 
     /**
@@ -146,11 +143,11 @@ public class MutableValueGraphAdapterTest
                 valueGraph, new MyValue(1.0),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
-        assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
+        assertEquals(5.0, graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
 
         valueGraph.putEdgeValue("v1", "v2", new MyValue(9.0));
 
-        assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 9.0, 1e-9);
+        assertEquals(9.0, graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
     }
 
     /**
@@ -353,8 +350,8 @@ public class MutableValueGraphAdapterTest
         assertTrue(g2.containsVertex("v3"));
         assertTrue(g2.containsVertex("v4"));
         assertTrue(g2.containsVertex("v5"));
-        assertTrue(g2.vertexSet().size() == 5);
-        assertTrue(g2.edgeSet().size() == 6);
+        assertEquals(5, g2.vertexSet().size());
+        assertEquals(6, g2.edgeSet().size());
         assertTrue(g2.containsEdge("v1", "v2"));
         assertTrue(g2.containsEdge("v2", "v3"));
         assertTrue(g2.containsEdge("v2", "v4"));
@@ -402,8 +399,8 @@ public class MutableValueGraphAdapterTest
         assertTrue(g2.containsVertex("v1"));
         assertTrue(g2.containsVertex("v2"));
         assertTrue(g2.containsVertex("v3"));
-        assertTrue(g2.vertexSet().size() == 3);
-        assertTrue(g2.edgeSet().size() == 3);
+        assertEquals(3, g2.vertexSet().size());
+        assertEquals(3, g2.edgeSet().size());
         assertTrue(g2.containsEdge("v1", "v2"));
         assertTrue(g2.containsEdge("v2", "v3"));
         assertTrue(g2.containsEdge("v3", "v3"));

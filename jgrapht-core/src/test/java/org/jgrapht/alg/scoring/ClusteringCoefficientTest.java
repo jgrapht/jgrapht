@@ -23,7 +23,7 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link ClusteringCoefficient}
@@ -120,8 +120,7 @@ public class ClusteringCoefficientTest
     @Test(expected = NullPointerException.class)
     public void testNullGraphClusteringCoefficient()
     {
-        ClusteringCoefficient<String, DefaultEdge> clusteringCoefficient =
-            new ClusteringCoefficient<>(null);
+        new ClusteringCoefficient<>(null);
     }
 
     @Test

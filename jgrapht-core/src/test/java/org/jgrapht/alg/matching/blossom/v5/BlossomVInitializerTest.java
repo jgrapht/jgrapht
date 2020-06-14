@@ -44,6 +44,7 @@ public class BlossomVInitializerTest
      * Tests greedy initialization
      */
     @Test
+    @SuppressWarnings("unused")
     public void testGreedyInitialization()
     {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
@@ -88,6 +89,7 @@ public class BlossomVInitializerTest
      * Tests simple initialization
      */
     @Test
+    @SuppressWarnings("unused")
     public void testSimpleInitialization()
     {
         Graph<Integer, DefaultWeightedEdge> graph =

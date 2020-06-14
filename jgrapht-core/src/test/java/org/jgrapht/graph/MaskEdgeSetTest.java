@@ -61,6 +61,7 @@ public class MaskEdgeSetTest
     }
 
     @Test
+    @SuppressWarnings("unlikely-arg-type")
     public void testContains()
     {
         assertFalse(testMaskedEdgeSet.contains(e1));

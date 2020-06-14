@@ -19,13 +19,13 @@ package org.jgrapht.util;
 
 import org.jgrapht.util.DoublyLinkedList.*;
 import org.junit.*;
-import org.junit.rules.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 import org.junit.runners.Parameterized.*;
 
 import java.util.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -57,9 +57,6 @@ public class DoublyLinkedListTest
         }
         return parameterSets;
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Parameterized.Parameter(0)
     public int size;
@@ -284,7 +281,8 @@ public class DoublyLinkedListTest
     public void testGetFirstNode()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.getFirstNode());
+            return;
         }
 
         ListNode<String> firstNode = list.getFirstNode();
@@ -298,7 +296,8 @@ public class DoublyLinkedListTest
     public void testGetLastNode()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.getLastNode());
+            return;
         }
 
         ListNode<String> firstNode = list.getLastNode();
@@ -622,15 +621,19 @@ public class DoublyLinkedListTest
     public void testAddElementBeforeNode_sucessorInList_ElementAdded()
     {
         if (size == 0) {
-            thrown.expect(NullPointerException.class);
+            ListNode<String> nodeBefore = null;
+            assertThrows(
+                NullPointerException.class, () -> list.addElementBeforeNode(nodeBefore, "another"));
+            return;
         }
+
         String another = "another";
         int i = (int) (size / 2.5);
 
         List<String> expectedList = new ArrayList<>(expectedElements);
         expectedList.add(i, another);
 
-        ListNode<String> nodeBefore = size > 0 ? list.getNode(i) : null;
+        ListNode<String> nodeBefore = list.getNode(i);
         ListNode<String> addedNode = list.addElementBeforeNode(nodeBefore, another);
 
         assertThat(addedNode, is(sameInstance(list.getNode(i))));
@@ -720,7 +723,8 @@ public class DoublyLinkedListTest
     public void testRemoveInt_atIndex0()
     {
         if (size == 0) {
-            thrown.expect(IndexOutOfBoundsException.class);
+            assertThrows(IndexOutOfBoundsException.class, () -> list.remove(0));
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedRemoved = expectedList.remove(0);
@@ -736,7 +740,8 @@ public class DoublyLinkedListTest
     public void testRemoveInt_inTheMiddle()
     {
         if (size == 0) {
-            thrown.expect(IndexOutOfBoundsException.class);
+            assertThrows(IndexOutOfBoundsException.class, () -> list.remove(size / 2));
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedRemoved = expectedList.remove(size / 2);
@@ -752,7 +757,8 @@ public class DoublyLinkedListTest
     public void testRemoveInt_atIndexSizeMinusOne()
     {
         if (size == 0) {
-            thrown.expect(IndexOutOfBoundsException.class);
+            assertThrows(IndexOutOfBoundsException.class, () -> list.remove(size - 1));
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedRemoved = expectedList.remove(size - 1);
@@ -836,7 +842,8 @@ public class DoublyLinkedListTest
     public void testRemoveFirst()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.removeFirst());
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedFirst = size > 0 ? expectedList.remove(0) : null;
@@ -854,7 +861,8 @@ public class DoublyLinkedListTest
     public void testRemoveLast()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.removeLast());
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedLast = size > 0 ? expectedList.remove(size - 1) : null;
@@ -902,7 +910,8 @@ public class DoublyLinkedListTest
     public void testGetFirst()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.getFirst());
+            return;
         }
         String first = list.getFirst();
 
@@ -917,7 +926,8 @@ public class DoublyLinkedListTest
     public void testGetLast()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.getLast());
+            return;
         }
         String last = list.getLast();
 
@@ -1008,7 +1018,8 @@ public class DoublyLinkedListTest
     public void testRemove()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.remove());
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedFirst = size > 0 ? expectedList.remove(0) : null;
@@ -1041,7 +1052,8 @@ public class DoublyLinkedListTest
     public void testElement()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.element());
+            return;
         }
         String first = list.element();
 
@@ -1086,7 +1098,8 @@ public class DoublyLinkedListTest
     public void testPop()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
+            assertThrows(NoSuchElementException.class, () -> list.pop());
+            return;
         }
         List<String> expectedList = new ArrayList<>(expectedElements);
         String expectedFirst = size > 0 ? expectedList.remove(0) : null;
@@ -1185,8 +1198,7 @@ public class DoublyLinkedListTest
     public void testCircularIterator()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
-            list.circularIterator("anything");
+            assertThrows(NoSuchElementException.class, () -> list.circularIterator("anything"));
             return;
         }
 
@@ -1211,8 +1223,8 @@ public class DoublyLinkedListTest
     public void testReverseCircularIterator()
     {
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
-            list.reverseCircularIterator("anything");
+            assertThrows(
+                NoSuchElementException.class, () -> list.reverseCircularIterator("anything"));
             return;
         }
         int startIndex = size / 3;
@@ -1262,14 +1274,11 @@ public class DoublyLinkedListTest
     @Test
     public void testListIteratorE()
     { // test only if returned ListIterator starts expected position beginning.
-        String element;
         if (size == 0) {
-            thrown.expect(NoSuchElementException.class);
-            element = null;
-        } else {
-            element = expectedElements.get(size / 3);
+            assertThrows(NoSuchElementException.class, () -> list.listIterator(null));
+            return;
         }
-
+        String element = expectedElements.get(size / 3);
         ListNodeIterator<String> listIterator = list.listIterator(element);
 
         assertTrue(listIterator.hasNext());
@@ -1362,7 +1371,7 @@ public class DoublyLinkedListTest
         assertThat(listIterator.nextIndex(), is(equalTo(size)));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testListIterator_iterateBehindTail()
     {
         ListNodeIterator<String> iterator = list.listIterator();
@@ -1370,10 +1379,10 @@ public class DoublyLinkedListTest
             iterator.next();
         }
         assertFalse(iterator.hasNext());
-        iterator.next();
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testListIterator_iterateBeforeHead()
     {
         ListNodeIterator<String> iterator = list.listIterator(size);
@@ -1381,7 +1390,7 @@ public class DoublyLinkedListTest
             iterator.previous();
         }
         assertFalse(iterator.hasPrevious());
-        iterator.previous();
+        assertThrows(NoSuchElementException.class, () -> iterator.previous());
     }
 
     @Test(expected = ConcurrentModificationException.class)
@@ -1400,12 +1409,11 @@ public class DoublyLinkedListTest
         if (size == 0) {
             return;
         }
-        thrown.expect(ConcurrentModificationException.class);
 
         ListNodeIterator<String> listIterator = list.listIterator();
         list.removeLast();
 
-        listIterator.next();
+        assertThrows(ConcurrentModificationException.class, () -> listIterator.next());
     }
 
     /** Test for {@link DoublyLinkedList.ListNodeIterator#remove()}. */
@@ -1475,9 +1483,7 @@ public class DoublyLinkedListTest
 
         // check if the last-node of the iterator is cleared correctly
 
-        thrown.expect(IllegalStateException.class);
-
-        listIterator.remove();
+        assertThrows(IllegalStateException.class, () -> listIterator.remove());
     }
 
     @Test
@@ -1492,9 +1498,7 @@ public class DoublyLinkedListTest
 
         // check if the last-node of the iterator is cleared correctly in add()
 
-        thrown.expect(IllegalStateException.class);
-
-        listIterator.remove();
+        assertThrows(IllegalStateException.class, () -> listIterator.remove());
     }
 
     /** Test for {@link DoublyLinkedList.ListNodeIterator#add(Object)}. */
@@ -1680,13 +1684,11 @@ public class DoublyLinkedListTest
     {
         if (size == 0) {
             return;
-        } else {
-            thrown.expect(IllegalStateException.class);
         }
         ListNodeIterator<String> listIterator = list.listIterator();
         listIterator.next();
         listIterator.remove();
-        listIterator.set("another");
+        assertThrows(IllegalStateException.class, () -> listIterator.set("another"));
     }
 
     // utility methods

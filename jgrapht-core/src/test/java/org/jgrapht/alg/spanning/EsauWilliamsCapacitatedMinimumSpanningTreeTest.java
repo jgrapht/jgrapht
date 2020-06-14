@@ -37,8 +37,7 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
     public void testInstance1()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 7; ++i) {
             graph.addVertex(i);
@@ -114,8 +113,7 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
     public void testInstance2()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -181,8 +179,7 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
     public void testInstance3()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -245,8 +242,7 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
     public void testInstanceWithRandomness()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 7; ++i) {
             graph.addVertex(i);
@@ -313,18 +309,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
 
         double capacity = 30.0;
 
-        boolean testOK = false;
-
-        try {
-            CapacitatedSpanningTreeAlgorithm<Integer,
-                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
-                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(
-                        graph, 0, capacity, demands, 1);
-        } catch (IllegalArgumentException e) {
-            testOK = true;
-        }
-
-        assertTrue(testOK);
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, capacity, demands, 1));
     }
 
     /**
@@ -344,18 +331,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
 
         double capacity = -1.0;
 
-        boolean testOK = false;
-
-        try {
-            CapacitatedSpanningTreeAlgorithm<Integer,
-                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
-                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(
-                        graph, 0, capacity, demands, 1);
-        } catch (IllegalArgumentException e) {
-            testOK = true;
-        }
-
-        assertTrue(testOK);
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, capacity, demands, 1));
     }
 
     /**

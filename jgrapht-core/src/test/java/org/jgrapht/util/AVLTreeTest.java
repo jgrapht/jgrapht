@@ -208,12 +208,6 @@ public class AVLTreeTest
         }
     }
 
-    private List<TreeNode<Integer>> fillNodes(AVLTree<Integer> tree)
-    {
-        final int nodeNum = 100;
-        return fillNodes(tree, 0, nodeNum);
-    }
-
     private List<TreeNode<Integer>> fillNodes(AVLTree<Integer> tree, int from, int to)
     {
         Deque<TreeNode<Integer>> nodes = new ArrayDeque<>();

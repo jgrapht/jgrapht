@@ -38,6 +38,7 @@ public class BlossomVTreeTest
     private BlossomVOptions noneOptions = new BlossomVOptions(NONE);
 
     @Test
+    @SuppressWarnings("unused")
     public void testTreeNodeIterator()
     {
         Graph<Integer, DefaultWeightedEdge> graph =

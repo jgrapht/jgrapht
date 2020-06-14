@@ -300,7 +300,7 @@ public class ChinesePostmanTest
         g.addVertex(1);
         g.addEdge(0, 1);
         g.addEdge(1, 0);
-        GraphPath<Integer, DefaultEdge> path = alg.getCPPSolution(g);
+        alg.getCPPSolution(g);
     }
 
     private <V,

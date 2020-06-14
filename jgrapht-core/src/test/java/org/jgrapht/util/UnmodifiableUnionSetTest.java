@@ -209,10 +209,8 @@ public class UnmodifiableUnionSetTest
         smaller.clearCallCounts();
         bigger.clearCallCounts();
 
-        int count = 0;
-        for (Integer i : union) {
-            count++;
-        }
+        int count = union.size();
+
         assertEquals(10, count);
         assertEquals(1, smaller.getSizeCallCount());
         assertEquals(1, bigger.getSizeCallCount());
@@ -257,15 +255,17 @@ public class UnmodifiableUnionSetTest
         public Iterator<E> iterator()
         {
             iteratorCalls++;
-            return new Iterator<E>()
+            return new Iterator<>()
             {
                 private Iterator<E> delegateIterator = delegate.iterator();
 
+                @Override
                 public boolean hasNext()
                 {
                     return delegateIterator.hasNext();
                 }
 
+                @Override
                 public E next()
                 {
                     iteratorNextCalls++;

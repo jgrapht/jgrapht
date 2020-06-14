@@ -19,17 +19,16 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
-import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link ContractionHierarchyBidirectionalDijkstra}.
@@ -70,8 +69,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
+        new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
     }
 
     @Test(expected = IllegalArgumentException.class)

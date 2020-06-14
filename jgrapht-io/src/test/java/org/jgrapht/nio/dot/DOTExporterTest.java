@@ -25,7 +25,8 @@ import org.junit.*;
 import java.io.*;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
 /**
@@ -83,7 +84,7 @@ public class DOTExporterTest
 
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>();
 
-        exporter.setVertexAttributeProvider((v) -> {
+        exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
             switch (v) {
             case V1:
@@ -137,7 +138,7 @@ public class DOTExporterTest
     public void testValidNodeIDs()
         throws ExportException
     {
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(x -> String.valueOf(x));
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(String::valueOf);
 
         List<String> validVertices =
             Arrays.asList("-9.78", "-.5", "12", "a", "12", "abc_78", "\"--34asdf\"");
@@ -152,21 +153,17 @@ public class DOTExporterTest
             Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
             graph.addVertex(vertex);
 
-            try {
-                exporter.exportGraph(graph, new ByteArrayOutputStream());
-                fail(vertex);
-            } catch (RuntimeException re) {
-                // this is a negative test so exception is expected
-            }
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            assertThrows(RuntimeException.class, () -> exporter.exportGraph(graph, out));
         }
     }
 
     @Test
     public void testQuotedNodeIDs()
     {
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(x -> String.valueOf(x));
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(String::valueOf);
 
-        exporter.setVertexAttributeProvider((v) -> {
+        exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
             map.put("label", DefaultAttribute.createAttribute(v));
             return map;
@@ -186,9 +183,9 @@ public class DOTExporterTest
     @Test
     public void testNodeHtmlLabelFromAttribute()
     {
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(x -> String.valueOf(x));
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(String::valueOf);
 
-        exporter.setVertexAttributeProvider((v) -> {
+        exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
             map.put("label", new DefaultAttribute<>("<b>html label</b>", AttributeType.HTML));
             return map;
@@ -213,9 +210,7 @@ public class DOTExporterTest
         final String customID = "MyGraph";
 
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>();
-        exporter.setGraphIdProvider(() -> {
-            return customID;
-        });
+        exporter.setGraphIdProvider(() -> customID);
 
         final String correctResult = "strict graph " + customID + " {" + NL + "}" + NL;
 

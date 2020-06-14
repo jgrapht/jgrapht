@@ -25,8 +25,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -77,33 +76,34 @@ public abstract class CrossComponentIteratorTest
     @Test
     public void testNonCrossComponentTraversal()
     {
-        final ModifiableInteger iteratorCalls = new ModifiableInteger();
-        final ModifiableInteger sizeCalls = new ModifiableInteger();
+        final ModifiableInteger iteratorCalls = new ModifiableInteger(0);
+        final ModifiableInteger sizeCalls = new ModifiableInteger(0);
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
-        Graph<String, DefaultWeightedEdge> wrapper =
-            new GraphDelegator<String, DefaultWeightedEdge>(graph)
-            {
-                @Override
-                public Set<String> vertexSet()
-                {
-                    return new AbstractSet<String>()
-                    {
-                        @Override
-                        public Iterator<String> iterator()
-                        {
-                            iteratorCalls.increment();
-                            return getDelegate().vertexSet().iterator();
-                        }
+        Graph<String, DefaultWeightedEdge> wrapper = new GraphDelegator<>(graph)
+        {
+            private static final long serialVersionUID = 1L;
 
-                        @Override
-                        public int size()
-                        {
-                            sizeCalls.increment();
-                            return getDelegate().vertexSet().size();
-                        }
-                    };
-                }
-            };
+            @Override
+            public Set<String> vertexSet()
+            {
+                return new AbstractSet<>()
+                {
+                    @Override
+                    public Iterator<String> iterator()
+                    {
+                        iteratorCalls.increment();
+                        return getDelegate().vertexSet().iterator();
+                    }
+
+                    @Override
+                    public int size()
+                    {
+                        sizeCalls.increment();
+                        return getDelegate().vertexSet().size();
+                    }
+                };
+            }
+        };
 
         AbstractGraphIterator<String, DefaultWeightedEdge> iterator =
             createIterator(wrapper, Arrays.asList("orphan"));
