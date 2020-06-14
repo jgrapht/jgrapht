@@ -1,23 +1,24 @@
 /*
- * (C) Copyright 2008-2018, by Andrew Newell and Contributors.
+ * (C) Copyright 2008-2020, by Andrew Newell and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -30,27 +31,50 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Andrew Newell
- * @since Dec 21, 2008
  */
 public class CompleteBipartiteGraphGenerator<V, E>
     implements
     GraphGenerator<V, E, V>
 {
     private final int sizeA, sizeB;
+    private final Set<V> partitionA, partitionB;
 
     /**
      * Creates a new CompleteBipartiteGraphGenerator object.
      *
-     * @param partitionOne number of vertices in the first partition
-     * @param partitionTwo number of vertices in the second partition
+     * @param partitionA number of vertices in the first partition
+     * @param partitionB number of vertices in the second partition
      */
-    public CompleteBipartiteGraphGenerator(int partitionOne, int partitionTwo)
+    public CompleteBipartiteGraphGenerator(int partitionA, int partitionB)
     {
-        if (partitionOne < 0 || partitionTwo < 0) {
+        if (partitionA < 0 || partitionB < 0) {
             throw new IllegalArgumentException("partition sizes must be non-negative");
         }
-        this.sizeA = partitionOne;
-        this.sizeB = partitionTwo;
+        this.sizeA = partitionA;
+        this.sizeB = partitionB;
+        this.partitionA = CollectionUtil.newLinkedHashSetWithExpectedSize(sizeA);
+        this.partitionB = CollectionUtil.newLinkedHashSetWithExpectedSize(sizeB);
+    }
+
+    /**
+     * Creates a new CompleteBipartiteGraphGenerator object. A complete bipartite graph is generated
+     * on the vertices provided between the vertices provided in the two partitions. Note that
+     * <i>all</i> vertices in both {@code partitionA} and {@code partitionB} must be present in the
+     * graph or an exception will be thrown during the invocation of
+     * {@link #generateGraph(Graph, Map)}
+     *
+     * @param partitionA first partition
+     * @param partitionB second partition
+     */
+    public CompleteBipartiteGraphGenerator(Set<V> partitionA, Set<V> partitionB)
+    {
+        if (partitionA.isEmpty() || partitionB.isEmpty()) {
+            throw new IllegalArgumentException("partitions must be non-empty");
+        }
+        this.sizeA = 0;
+        this.sizeB = 0;
+        this.partitionA = partitionA;
+        this.partitionB = partitionB;
     }
 
     /**
@@ -59,27 +83,19 @@ public class CompleteBipartiteGraphGenerator<V, E>
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
-        if ((sizeA < 1) && (sizeB < 1)) {
-            return;
-        }
-
         // Create vertices in each of the partitions
-        Set<V> a = new HashSet<>();
-        Set<V> b = new HashSet<>();
         for (int i = 0; i < sizeA; i++) {
-            a.add(target.addVertex());
+            partitionA.add(target.addVertex());
         }
         for (int i = 0; i < sizeB; i++) {
-            b.add(target.addVertex());
+            partitionB.add(target.addVertex());
         }
 
         // Add an edge for each pair of vertices in different partitions
-        for (V u : a) {
-            for (V v : b) {
+        for (V u : partitionA) {
+            for (V v : partitionB) {
                 target.addEdge(u, v);
             }
         }
     }
 }
-
-// End CompleteBipartiteGraphGenerator.java

@@ -1,42 +1,30 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
 
-import java.math.BigDecimal;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.FibonacciHeap;
+import java.math.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Maximum weight matching in bipartite graphs.
@@ -65,7 +53,7 @@ public class MaximumWeightBipartiteMatching<V, E>
     private final Set<V> partition2;
 
     private final Comparator<BigDecimal> comparator;
-    private final Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal,V>> heapSupplier;
+    private final Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal, V>> heapSupplier;
 
     // vertex potentials
     private Map<V, BigDecimal> pot;
@@ -94,7 +82,7 @@ public class MaximumWeightBipartiteMatching<V, E>
     {
         this(graph, partition1, partition2, (comparator) -> new FibonacciHeap<>(comparator));
     }
-    
+
     /**
      * Constructor.
      * 
@@ -104,7 +92,9 @@ public class MaximumWeightBipartiteMatching<V, E>
      * @param heapSupplier a supplier for the addressable heap to use in the algorithm.
      * @throws IllegalArgumentException if the graph is not undirected
      */
-    public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal,V>> heapSupplier)
+    public MaximumWeightBipartiteMatching(
+        Graph<V, E> graph, Set<V> partition1, Set<V> partition2,
+        Function<Comparator<BigDecimal>, AddressableHeap<BigDecimal, V>> heapSupplier)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = Objects.requireNonNull(partition1, "Partition 1 cannot be null");
@@ -214,8 +204,9 @@ public class MaximumWeightBipartiteMatching<V, E>
         for (E e1 : graph.edgesOf(a1)) {
             if (!matching.contains(e1)) {
                 V b1 = Graphs.getOppositeVertex(graph, e1, a1);
-                BigDecimal db1 = dist.get(a1).add(pot.get(a1)).add(pot.get(b1)).subtract(
-                    BigDecimal.valueOf(graph.getEdgeWeight(e1)));
+                BigDecimal db1 = dist
+                    .get(a1).add(pot.get(a1)).add(pot.get(b1))
+                    .subtract(BigDecimal.valueOf(graph.getEdgeWeight(e1)));
 
                 if (pred.get(b1) == null) {
                     dist.put(b1, db1);
@@ -274,9 +265,9 @@ public class MaximumWeightBipartiteMatching<V, E>
                     for (E e1 : graph.edgesOf(a1)) {
                         if (!matching.contains(e1)) {
                             V b1 = Graphs.getOppositeVertex(graph, e1, a1);
-                            BigDecimal db1 =
-                                dist.get(a1).add(pot.get(a1)).add(pot.get(b1)).subtract(
-                                    BigDecimal.valueOf(graph.getEdgeWeight(e1)));
+                            BigDecimal db1 = dist
+                                .get(a1).add(pot.get(a1)).add(pot.get(b1))
+                                .subtract(BigDecimal.valueOf(graph.getEdgeWeight(e1)));
                             if (pred.get(b1) == null) {
                                 dist.put(b1, db1);
                                 pred.put(b1, e1);
@@ -344,7 +335,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             V t = graph.getEdgeTarget(e);
             matchedEdge.remove(s);
             matchedEdge.remove(t);
-            matchingWeight.subtract(w);
+            matchingWeight = matchingWeight.subtract(w);
             matching.remove(e);
         }
 
@@ -354,7 +345,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             V t = graph.getEdgeTarget(e);
             matchedEdge.put(s, e);
             matchedEdge.put(t, e);
-            matchingWeight.add(w);
+            matchingWeight = matchingWeight.add(w);
             matching.add(e);
         }
     }

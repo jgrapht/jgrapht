@@ -1,38 +1,29 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.graph.AsGraphUnion;
-import org.jgrapht.graph.AsWeightedGraph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.TypeUtil;
+import java.util.*;
 
 /**
  * Johnson's all pairs shortest paths algorithm.
@@ -49,18 +40,22 @@ import org.jgrapht.util.TypeUtil;
  * <p>
  * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
  * provide a graph which is initialized with a vertex supplier.
+ * 
+ * <p>
+ * In case the algorithm detects a negative weight cycle it will throw an exception of type
+ * {@link NegativeCycleDetectedException} which will contain the detected negative weight cycle.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
- * @since February 2017
  */
 public class JohnsonShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private double[][] distance;
-    private E [][] pred;
+    private E[][] pred;
     private Map<V, Integer> vertexIndices;
 
     private final Comparator<Double> comparator;
@@ -92,6 +87,7 @@ public class JohnsonShortestPaths<V, E>
      *
      * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
      *         are already in the original graph
+     * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink)
@@ -102,24 +98,24 @@ public class JohnsonShortestPaths<V, E>
         if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
-        
+
         run();
-        
+
         if (source.equals(sink)) {
             return GraphWalk.singletonWalk(graph, source, 0d);
         }
-        
+
         int vSource = vertexIndices.get(source);
         int vSink = vertexIndices.get(sink);
-        
+
         V cur = sink;
         E e = pred[vSource][vSink];
-        if (e == null) { 
+        if (e == null) {
             return null;
         }
-        
+
         LinkedList<E> edgeList = new LinkedList<>();
-        while(e != null) { 
+        while (e != null) {
             edgeList.addFirst(e);
             cur = Graphs.getOppositeVertex(graph, e, cur);
             e = pred[vSource][vertexIndices.get(cur)];
@@ -152,6 +148,7 @@ public class JohnsonShortestPaths<V, E>
      *
      * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
      *         are already in the original graph
+     * @throws NegativeCycleDetectedException in case a negative weight cycle is detected
      */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
@@ -170,17 +167,24 @@ public class JohnsonShortestPaths<V, E>
         }
         GraphTests.requireDirectedOrUndirected(graph);
 
-        boolean graphHasNegativeEdgeWeights = false;
+        E detectedNegativeEdge = null;
         for (E e : graph.edgeSet()) {
             if (comparator.compare(graph.getEdgeWeight(e), 0.0) < 0) {
-                graphHasNegativeEdgeWeights = true;
+                detectedNegativeEdge = e;
                 break;
             }
         }
 
-        if (graphHasNegativeEdgeWeights) {
+        if (detectedNegativeEdge != null) {
             if (graph.getType().isUndirected()) {
-                throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+                V source = graph.getEdgeSource(detectedNegativeEdge);
+                double weight = graph.getEdgeWeight(detectedNegativeEdge);
+                GraphWalk<V,
+                    E> cycle = new GraphWalk<>(
+                        graph, source, source,
+                        Arrays.asList(detectedNegativeEdge, detectedNegativeEdge), 2d * weight);
+                throw new NegativeCycleDetectedException(
+                    GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE, cycle);
             }
             runWithNegativeEdgeWeights(graph);
         } else {
@@ -279,9 +283,10 @@ public class JohnsonShortestPaths<V, E>
 
                 Pair<Double, E> newPair;
                 if (oldPair != null) {
-                    newPair = Pair.of(
-                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                        oldPair.getSecond());
+                    newPair = Pair
+                        .of(
+                            oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                            oldPair.getSecond());
                 } else {
                     newPair = Pair.of(Double.POSITIVE_INFINITY, null);
                 }
@@ -358,7 +363,8 @@ public class JohnsonShortestPaths<V, E>
     }
 
     class JohnsonSingleSourcePaths
-        implements SingleSourcePaths<V, E>
+        implements
+        SingleSourcePaths<V, E>
     {
         private V source;
 

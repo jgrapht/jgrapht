@@ -1,43 +1,40 @@
 /*
- * (C) Copyright 2003-2018, by Linda Buisman and Contributors.
+ * (C) Copyright 2003-2020, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
+import java.util.*;
 
 /**
- *  Base class for vertex cover tests
+ * Base class for vertex cover tests
  *
  * @author Linda Buisman
  */
-public class VertexCoverTestUtils {
+public class VertexCoverTestUtils
+{
 
-    public VertexCoverTestUtils(){
+    public VertexCoverTestUtils()
+    {
     }
 
     // ~ Static fields/initializers ---------------------------------------------
@@ -59,7 +56,8 @@ public class VertexCoverTestUtils {
      *
      * @return returns true if the provided vertex cover is a valid cover in the given graph
      */
-    static boolean isCover(Graph<Integer, DefaultEdge> g, VertexCoverAlgorithm.VertexCover<Integer> vertexCover)
+    static boolean isCover(
+        Graph<Integer, DefaultEdge> g, VertexCoverAlgorithm.VertexCover<Integer> vertexCover)
     {
         Set<DefaultEdge> uncoveredEdges = new HashSet<>(g.edgeSet());
         for (Integer v : vertexCover)
@@ -76,10 +74,10 @@ public class VertexCoverTestUtils {
      */
     static Graph<Integer, DefaultEdge> createRandomPseudoGraph(int vertices)
     {
-        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(),
-                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator =
-                new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
+            new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
         graphGenerator.generateGraph(g);
         return g;
     }

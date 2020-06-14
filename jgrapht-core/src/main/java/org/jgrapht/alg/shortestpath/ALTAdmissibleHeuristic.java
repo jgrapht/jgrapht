@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
@@ -38,7 +38,7 @@ import java.util.*;
  * triangle-inequality. The heuristic's space requirement is $O(n)$ per landmark where n is the
  * number of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm
  * execution is performed per landmark.
- * 
+ *
  * <p>
  * The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
  * in detail in the following <a href=
@@ -49,18 +49,18 @@ import java.util.*;
  * Theory. In Proceedings of the sixteenth annual ACM-SIAM symposium on Discrete algorithms (SODA'
  * 05), 156--165, 2005.</li>
  * </ul>
- * 
+ *
  * <p>
  * Note that using this heuristic does not require the edge weights to satisfy the
  * triangle-inequality. The method depends on the triangle inequality with respect to the shortest
  * path distances in the graph, not an embedding in Euclidean space or some other metric, which need
  * not be present.
- * 
+ *
  * <p>
  * In general more landmarks will speed up A* but will need more space. Given an A* query with
  * vertices source and target, a good landmark appears "before" source or "after" target where
  * before and after are relative to the "direction" from source to target.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
@@ -78,10 +78,10 @@ public class ALTAdmissibleHeuristic<V, E>
 
     /**
      * Constructs a new {@link AStarAdmissibleHeuristic} using a set of landmarks.
-     * 
+     *
      * @param graph the graph
      * @param landmarks a set of vertices of the graph which will be used as landmarks
-     * 
+     *
      * @throws IllegalArgumentException if no landmarks are provided
      * @throws IllegalArgumentException if the graph contains edges with negative weights
      */
@@ -118,10 +118,10 @@ public class ALTAdmissibleHeuristic<V, E>
     /**
      * An admissible heuristic estimate from a source vertex to a target vertex. The estimate is
      * always non-negative and never overestimates the true distance.
-     * 
+     *
      * @param u the source vertex
      * @param t the target vertex
-     * 
+     *
      * @return an admissible heuristic estimate
      */
     @Override
@@ -174,7 +174,7 @@ public class ALTAdmissibleHeuristic<V, E>
 
     /**
      * Compute all distances to and from a landmark
-     * 
+     *
      * @param landmark the landmark
      */
     private void precomputeToFromLandmark(V landmark)
@@ -201,4 +201,12 @@ public class ALTAdmissibleHeuristic<V, E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <ET> boolean isConsistent(Graph<V, ET> graph)
+    {
+        return true;
+    }
 }

@@ -11,7 +11,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public abstract class BasePathGrowingWeightedMatchingTest
     extends
@@ -117,7 +118,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
                 new PathGrowingWeightedMatching<>(g, false);
             Matching<Integer, DefaultWeightedEdge> m2 = alg2.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg3 =
-                new EdmondsMaximumCardinalityMatching<>(g);
+                new SparseEdmondsMaximumCardinalityMatching<>(g);
             Matching<Integer, DefaultWeightedEdge> m3 = alg3.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 =
                 new GreedyWeightedMatching<>(g, false);

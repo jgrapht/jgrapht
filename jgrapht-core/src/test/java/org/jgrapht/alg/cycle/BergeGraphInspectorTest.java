@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Philipp S. Kaesgen and Contributors.
+ * (C) Copyright 2016-2020, by Philipp S. Kaesgen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
@@ -36,7 +36,7 @@ public class BergeGraphInspectorTest
     private void reset()
     {
         stimulus = new SimpleGraph<>(
-                SupplierUtil.createIntegerSupplier(), SupplierUtil.createIntegerSupplier(), false);
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createIntegerSupplier(), false);
     }
 
     private boolean verifyCertificate(GraphPath<Integer, Integer> certificate)
@@ -45,8 +45,7 @@ public class BergeGraphInspectorTest
             return false;
         Set<Integer> set = new HashSet<>();
         set.addAll(certificate.getVertexList());
-        Graph<Integer, Integer> subg =
-                new AsSubgraph<>(certificate.getGraph(), set);
+        Graph<Integer, Integer> subg = new AsSubgraph<>(certificate.getGraph(), set);
         return subg.vertexSet().size() == subg.edgeSet().size()
             && subg.edgeSet().size() == subg.vertexSet().size() && subg.vertexSet().size() % 2 == 1
             && subg.vertexSet().stream().allMatch(t -> subg.edgesOf(t).size() == 2);
@@ -609,7 +608,7 @@ public class BergeGraphInspectorTest
         while (repititions-- > 0) {
             int n1 = new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices) / 2
                 + minimalNumberOfVertices / 2, n2 = maximalNumberOfVertices - n1;
- 
+
             int maximalNumberOfEdges = n1 * n2;
             int numberOfEdges = new Random().nextInt(maximalNumberOfEdges);
 
@@ -621,45 +620,45 @@ public class BergeGraphInspectorTest
         }
 
     }
-    
+
     @Test
     @Category(OptionalTests.class)
     public void checkWheelGraphs()
     {
-    
+
         int repititions = repititionsPerTestCase;
         while (repititions-- > 0) {
-    
+
             int numberOfVertices =
                 new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices)
                     + minimalNumberOfVertices;
             if (numberOfVertices % 2 == 0)
                 numberOfVertices += 1;
             assertTrue(maximalNumberOfVertices > minimalNumberOfVertices);
-    
+
             reset();
             new WheelGraphGenerator<Integer, Integer>(numberOfVertices).generateGraph(stimulus);
-    
+
             assertTrue(dut.isBerge(stimulus));
         }
-    
+
         repititions = repititionsPerTestCase;
         while (repititions-- > 0) {
-    
+
             int numberOfVertices =
                 new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices)
                     + minimalNumberOfVertices;
             if (numberOfVertices % 2 == 1)
                 numberOfVertices += 1;
             assertTrue(maximalNumberOfVertices > minimalNumberOfVertices);
-    
+
             reset();
             new WheelGraphGenerator<Integer, Integer>(numberOfVertices).generateGraph(stimulus);
-    
+
             assertFalse(dut.isBerge(stimulus));
         }
     }
-    
+
     @Test
     @Category(OptionalTests.class)
     public void checkWindmillGraphs()
@@ -669,10 +668,10 @@ public class BergeGraphInspectorTest
             int m = 2;
             int numberOfVertices = new Random().nextInt(maximalNumberOfVertices - 3) + 3;
             reset();
-    
+
             new WindmillGraphsGenerator<Integer, Integer>(
                 WindmillGraphsGenerator.Mode.WINDMILL, m, numberOfVertices).generateGraph(stimulus);
-    
+
             assertTrue(dut.isBerge(stimulus));
         }
     }

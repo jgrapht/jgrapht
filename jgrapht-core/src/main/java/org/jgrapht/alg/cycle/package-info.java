@@ -1,7 +1,7 @@
 /**
  * Algorithms related to graph cycles.
  * 
- * <h3>Algorithms for enumeration of simple cycles in graphs</h3>
+ * <h2>Algorithms for enumeration of simple cycles in graphs</h2>
  * 
  * Contains four different algorithms for the enumeration of simple cycles in directed graphs. The
  * worst case time complexity of the algorithms is:
@@ -39,7 +39,7 @@
  * University of Utrecht, The Netherlands, 1987.</li>
  * </ol>
  *
- * <h3>Algorithms for the computation of undirected cycle basis</h3>
+ * <h2>Algorithms for the computation of undirected cycle basis</h2>
  * 
  * <ol>
  * <li>A variant of Paton's algorithm {@link org.jgrapht.alg.cycle.PatonCycleBase}, performing a BFS
@@ -65,7 +65,7 @@
  * Cycles in a Graph. ACM Trans. Math. Softw. 8, 1, 26-42, 1982.</li>
  * </ol>
  * 
- * <h3>Algorithms for the computation of Eulerian cycles</h3>
+ * <h2>Algorithms for the computation of Eulerian cycles</h2>
  * 
  * <ol>
  * <li>An implementation of {@link org.jgrapht.alg.cycle.HierholzerEulerianCycle Hierholzer}'s

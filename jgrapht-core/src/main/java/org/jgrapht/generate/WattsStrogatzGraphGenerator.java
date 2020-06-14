@@ -1,23 +1,24 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -58,7 +59,6 @@ import java.util.*;
  * 1999.
  * 
  * @author Dimitrios Michail
- * @since February 2017
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -157,7 +157,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
         // create ring lattice
         List<V> ring = new ArrayList<>(n);
-        Map<V, List<E>> adj = new LinkedHashMap<>(n);
+        Map<V, List<E>> adj = CollectionUtil.newLinkedHashMapWithExpectedSize(n);
 
         for (int i = 0; i < n; i++) {
             V v = target.addVertex();
@@ -167,7 +167,7 @@ public class WattsStrogatzGraphGenerator<V, E>
 
         for (int i = 0; i < n; i++) {
             V vi = ring.get(i);
-            List<E> viAdj = adj.get(i);
+            List<E> viAdj = adj.get(vi);
 
             for (int j = 1; j <= k / 2; j++) {
                 viAdj.add(target.addEdge(vi, ring.get((i + j) % n)));
@@ -177,10 +177,9 @@ public class WattsStrogatzGraphGenerator<V, E>
         // re-wire edges
         for (int r = 0; r < k / 2; r++) {
             for (int i = 0; i < n; i++) {
-                V v = ring.get(i);
-                E e = adj.get(i).get(r);
-
                 if (rng.nextDouble() < p) {
+                    V v = ring.get(i);
+                    E e = adj.get(v).get(r);
                     V other = ring.get(rng.nextInt(n));
                     if (!other.equals(v) && !target.containsEdge(v, other)) {
                         if (!addInsteadOfRewire) {

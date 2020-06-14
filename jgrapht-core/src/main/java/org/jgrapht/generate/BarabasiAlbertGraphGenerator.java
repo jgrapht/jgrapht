@@ -1,23 +1,23 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 import java.util.*;
 
@@ -41,10 +41,9 @@ import java.util.*;
  * The Structure and Function of Complex Networks. SIAM Rev., 45(2):167--256, 2003.
  *
  * <p>
- *  For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
+ * For a version that generates trees/forests see {@link BarabasiAlbertForestGenerator}.
  * 
  * @author Dimitrios Michail
- * @since February 2017
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

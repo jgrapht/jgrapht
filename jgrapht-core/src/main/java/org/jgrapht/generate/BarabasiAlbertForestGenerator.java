@@ -1,24 +1,23 @@
 /*
- * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
+import org.jgrapht.*;
 
 import java.util.*;
 
@@ -26,26 +25,28 @@ import java.util.*;
  * Barabási-Albert growth and preferential attachment forest generator.
  * 
  * <p>
- * The general graph generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of scaling in
- * random networks. Science, 286:509-512, 1999.
+ * The general graph generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of
+ * scaling in random networks. Science, 286:509-512, 1999.
  * 
  * <p>
- * The generator starts with a $t$ isolated nodes and grows the network by adding $n - t$
- * additional nodes. The additional nodes are added one by one and each of them is connected to
- * one previously added node, where the probability of connecting to a node is proportional to its
- * degree.
+ * The generator starts with a $t$ isolated nodes and grows the network by adding $n - t$ additional
+ * nodes. The additional nodes are added one by one and each of them is connected to one previously
+ * added node, where the probability of connecting to a node is proportional to its degree.
  * 
  * <p>
- * Note that this Barabàsi-Albert generator only works on undirected graphs. For a version that works on both directed
- * and undirected graphs and generates only connected graphs see {@link BarabasiAlbertGraphGenerator}.
+ * Note that this Barabàsi-Albert generator only works on undirected graphs. For a version that
+ * works on both directed and undirected graphs and generates only connected graphs see
+ * {@link BarabasiAlbertGraphGenerator}.
  * 
  * @author Alexandru Valeanu
- * @since June 2018
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E, V> {
+public class BarabasiAlbertForestGenerator<V, E>
+    implements
+    GraphGenerator<V, E, V>
+{
 
     private final Random rng;
     private final int t;
@@ -58,7 +59,8 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
      * @param n final number of nodes
      * @throws IllegalArgumentException in case of invalid parameters
      */
-    public BarabasiAlbertForestGenerator(int t, int n) {
+    public BarabasiAlbertForestGenerator(int t, int n)
+    {
         this(t, n, new Random());
     }
 
@@ -70,7 +72,8 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
      * @param seed seed for the random number generator
      * @throws IllegalArgumentException in case of invalid parameters
      */
-    public BarabasiAlbertForestGenerator(int t, int n, long seed) {
+    public BarabasiAlbertForestGenerator(int t, int n, long seed)
+    {
         this(t, n, new Random(seed));
     }
 
@@ -82,7 +85,8 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
      * @param rng the random number generator to use
      * @throws IllegalArgumentException in case of invalid parameters
      */
-    public BarabasiAlbertForestGenerator(int t, int n, Random rng) {
+    public BarabasiAlbertForestGenerator(int t, int n, Random rng)
+    {
         if (t < 1) {
             throw new IllegalArgumentException("invalid number of trees (" + t + " < 1)");
         }
@@ -102,8 +106,8 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
      * Generates an instance.
      *
      * <p>
-     * Note: An exception will be thrown if the target graph is not empty (i.e. contains
-     * at least one vertex)
+     * Note: An exception will be thrown if the target graph is not empty (i.e. contains at least
+     * one vertex)
      * </p>
      *
      * @param target the target graph
@@ -113,10 +117,11 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
      * @throws IllegalArgumentException if {@code target} is not empty
      */
     @Override
-    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap) {
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
+    {
         GraphTests.requireUndirected(target);
 
-        if (!target.vertexSet().isEmpty()){
+        if (!target.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("target graph is not empty");
         }
 

@@ -1,29 +1,27 @@
 /*
- * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 
 /**
  * A walk in a graph is an alternating sequence of vertices and edges, starting and ending at a
@@ -54,7 +52,7 @@ import java.util.function.Function;
  * walk. It is the responsibility of the invoking class to provide correct input data.
  *
  * <p>
- *     Note: Serialization of a GraphWalk implies the serialization of the entire underlying graph.
+ * Note: Serialization of a GraphWalk implies the serialization of the entire underlying graph.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -65,7 +63,8 @@ import java.util.function.Function;
  */
 public class GraphWalk<V, E>
     implements
-    GraphPath<V, E>, Serializable
+    GraphPath<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 7663410644865380676L;
     protected Graph<V, E> graph;
@@ -225,6 +224,10 @@ public class GraphWalk<V, E>
         @SuppressWarnings("unchecked") GraphWalk<V, E> other = (GraphWalk<V, E>) o;
         if (this.isEmpty() && other.isEmpty())
             return true;
+
+        if (this.isEmpty())
+            return false;
+
         if (!this.startVertex.equals(other.getStartVertex())
             || !this.endVertex.equals(other.getEndVertex()))
             return false;
@@ -540,5 +543,3 @@ class InvalidGraphWalkException
     }
 
 }
-
-// End GraphPathImpl.java

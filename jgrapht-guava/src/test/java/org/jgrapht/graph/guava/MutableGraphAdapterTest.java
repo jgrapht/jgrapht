@@ -1,24 +1,26 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
 import com.google.common.graph.*;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.vertexcover.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
@@ -165,10 +167,49 @@ public class MutableGraphAdapterTest
         assertEquals(new HashSet<>(Arrays.asList(e52, e55)), g.outgoingEdgesOf("v5"));
     }
 
+    @Test
+    public void testAlgorithmInvocation()
+    {
+        // @example:createGuavaGraph:begin
+        MutableGraph<String> guava = GraphBuilder.undirected().build();
+        guava.addNode("ul");
+        guava.addNode("um");
+        guava.addNode("ur");
+        guava.addNode("ml");
+        guava.addNode("mm");
+        guava.addNode("mr");
+        guava.addNode("ll");
+        guava.addNode("lm");
+        guava.addNode("lr");
+        guava.putEdge("ul", "um");
+        guava.putEdge("um", "ur");
+        guava.putEdge("ml", "mm");
+        guava.putEdge("mm", "mr");
+        guava.putEdge("ll", "lm");
+        guava.putEdge("lm", "lr");
+        guava.putEdge("ul", "ml");
+        guava.putEdge("ml", "ll");
+        guava.putEdge("um", "mm");
+        guava.putEdge("mm", "lm");
+        guava.putEdge("ur", "mr");
+        guava.putEdge("mr", "lr");
+        // @example:createGuavaGraph:end
+
+        // @example:adaptGuavaGraph:begin
+        Graph<String, EndpointPair<String>> jgrapht = new MutableGraphAdapter<>(guava);
+        // @example:adaptGuavaGraph:end
+
+        // @example:findVertexCover:begin
+        VertexCoverAlgorithm<String> alg = new RecursiveExactVCImpl<>(jgrapht);
+        VertexCoverAlgorithm.VertexCover<String> cover = alg.getVertexCover();
+        Set<String> expectedCover = new HashSet<String>(Arrays.asList("um", "ml", "mr", "lm"));
+        assertEquals(expectedCover, cover);
+        // @example:findVertexCover:end
+    }
+
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -195,8 +236,7 @@ public class MutableGraphAdapterTest
         g.addEdge("v5", "v5");
         g.addEdge("v5", "v2");
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, EndpointPair<String>> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -224,7 +264,6 @@ public class MutableGraphAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization1()
         throws Exception
@@ -249,8 +288,7 @@ public class MutableGraphAdapterTest
         g.addEdge("v2", "v3");
         g.addEdge("v3", "v3");
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>1.2.1-SNAPSHOT</version>
+		<version>1.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-guava</artifactId>
 	<name>JGraphT - Guava Adapter</name>
@@ -18,8 +18,8 @@
 			<distribution>repo</distribution>
 		</license>
 		<license>
-			<name>Eclipse Public License (EPL) 1.0</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<name>Eclipse Public License (EPL) 2.0</name>
+			<url>http://www.eclipse.org/legal/epl-v20.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>24.1-jre</version>
+            <version>28.2-jre</version>
             <exclusions>
                     <exclusion>
                         <groupId>com.google.code.findbugs</groupId>
@@ -88,11 +88,29 @@
                         <groupId>org.checkerframework</groupId>
                         <artifactId>checker-compat-qual</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.checkerframework</groupId>
+                        <artifactId>checker-qual</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>failureaccess</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>listenablefuture</artifactId>
+                    </exclusion>
       		</exclusions>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-core</artifactId>
+			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

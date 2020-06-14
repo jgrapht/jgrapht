@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2017-2017, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2017-2020, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
 
@@ -26,7 +26,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BetweennessCentralityTest
 {
@@ -168,6 +169,16 @@ public class BetweennessCentralityTest
         VertexScoringAlgorithm<String, Double> bc = new BetweennessCentrality<>(g);
         Map<String, Double> scores = bc.getScores();
         assertGraph5(scores);
+
+    }
+
+    @Test
+    public void testWeighted6()
+    {
+        Graph<Integer, DefaultWeightedEdge> g = createWeighted6();
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph6(scores);
 
     }
 
@@ -353,6 +364,13 @@ public class BetweennessCentralityTest
         assertEquals(0.0, scores.get(14), 0.0);
     }
 
+    private void assertGraph6(Map<Integer, Double> scores)
+    {
+        assertEquals(0.0, scores.get(0), 0.0);
+        assertEquals(1.0, scores.get(1), 0.0);
+        assertEquals(0.0, scores.get(2), 0.0);
+    }
+
     private Graph<Integer, DefaultEdge> createUnweighted1()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -502,6 +520,28 @@ public class BetweennessCentralityTest
 
         e = g.addEdge("G", "F");
         g.setEdgeWeight(e, 0.2);
+
+        return g;
+    }
+
+    private Graph<Integer, DefaultWeightedEdge> createWeighted6()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addVertex(2);
+
+        DefaultWeightedEdge e;
+
+        e = g.addEdge(2, 1);
+        g.setEdgeWeight(e, 1);
+
+        e = g.addEdge(1, 0);
+        g.setEdgeWeight(e, 1);
+
+        e = g.addEdge(2, 0);
+        g.setEdgeWeight(e, 49);
 
         return g;
     }

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2018-2018, by John Sichi and Contributors.
+ * (C) Copyright 2018-2020, by John Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.demo;
 
@@ -33,7 +33,7 @@ public final class GraphBuilderDemo
      * 
      * @param args command line arguments
      */
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
         Graph<Integer, DefaultEdge> kite = buildKiteGraph();
     }
@@ -43,32 +43,26 @@ public final class GraphBuilderDemo
      *
      * @return a modifiable empty graph instance
      */
-    //@example:buildType:begin
+    // @example:buildType:begin
     private static Graph<Integer, DefaultEdge> buildEmptySimpleGraph()
     {
-        return GraphTypeBuilder.<Integer, DefaultEdge>undirected().
-            allowingMultipleEdges(false).allowingSelfLoops(false).
-            edgeClass(DefaultEdge.class).weighted(false).buildGraph();
+        return GraphTypeBuilder
+            .<Integer, DefaultEdge> undirected().allowingMultipleEdges(false)
+            .allowingSelfLoops(false).edgeClass(DefaultEdge.class).weighted(false).buildGraph();
     }
-    //@example:buildType:end
-
+    // @example:buildType:end
 
     /**
      * Builds the <a href="http://mathworld.wolfram.com/KiteGraph.html">kite graph</a>.
      *
      * @return an unmodifiable instance of the kite graph
      */
-    //@example:buildEdges:begin
+    // @example:buildEdges:begin
     private static Graph<Integer, DefaultEdge> buildKiteGraph()
     {
-        return new GraphBuilder<>(buildEmptySimpleGraph()).
-            addEdgeChain(1, 2, 3, 4, 1).
-            addEdge(2, 4).
-            addEdge(3, 5).buildAsUnmodifiable();
+        return new GraphBuilder<>(buildEmptySimpleGraph())
+            .addEdgeChain(1, 2, 3, 4, 1).addEdge(2, 4).addEdge(3, 5).buildAsUnmodifiable();
     }
-    //@example:buildEdges:end
+    // @example:buildEdges:end
 
-    
 }
-
-// End GraphBuilderDemo.java

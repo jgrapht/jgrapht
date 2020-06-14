@@ -1,23 +1,22 @@
 /*
- * (C) Copyright 2016-2018, by Andrew Gainer-Dewar and Contributors.
+ * (C) Copyright 2016-2020, by Andrew Gainer-Dewar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.junit.*;
 
 import java.util.*;
@@ -38,11 +37,12 @@ public class MaskEdgeSetTest
     private DefaultEdge e1, e2, e3, loop1, loop2;
 
     private MaskEdgeSet<String, DefaultEdge> testMaskedEdgeSet;
+    private DefaultDirectedGraph<String, DefaultEdge> directed;
 
     @Before
     public void setUp()
     {
-        Graph<String, DefaultEdge> directed = new DefaultDirectedGraph<>(DefaultEdge.class);
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);
@@ -88,5 +88,17 @@ public class MaskEdgeSetTest
         assertTrue(it.hasNext());
         assertEquals(loop2, it.next());
         assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testIsEmpty()
+    {
+        assertFalse(testMaskedEdgeSet.isEmpty());
+        testMaskedEdgeSet =
+            new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v.equals(v1), e -> true);
+        assertTrue(testMaskedEdgeSet.isEmpty());
+        testMaskedEdgeSet =
+            new MaskEdgeSet<>(directed, directed.edgeSet(), v -> true, e -> e == e2);
+        assertTrue(testMaskedEdgeSet.isEmpty());
     }
 }

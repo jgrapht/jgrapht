@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2012-2018, by Vladimir Kostyukov and Contributors.
+ * (C) Copyright 2012-2020, by Vladimir Kostyukov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
@@ -22,7 +22,9 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class EqualsAndHashCodeTest
 {
@@ -66,7 +68,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, e23);
 
         assertTrue(g2.equals(g1));
-        assertTrue(!g3.equals(g2));
+        assertFalse(g3.equals(g2));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -104,7 +106,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, e23);
 
         assertTrue(g2.equals(g1));
-        assertTrue(!g3.equals(g2));
+        assertFalse(g3.equals(g2));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -138,7 +140,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, v2 + v3);
 
         assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
+        assertFalse(g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -179,7 +181,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v2, v3, e23);
 
         assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
+        assertFalse(g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -212,7 +214,7 @@ public class EqualsAndHashCodeTest
         g3.addEdge(v3, v1, new CustomEdge("v3-v1"));
 
         assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
+        assertFalse(g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
     }
@@ -269,7 +271,7 @@ public class EqualsAndHashCodeTest
         assertTrue(g3.equals(g4));
         assertEquals(g4.hashCode(), g3.hashCode());
 
-        assertTrue(!g4.equals(g5));
+        assertFalse(g4.equals(g5));
     }
 
     /**
@@ -281,6 +283,10 @@ public class EqualsAndHashCodeTest
     {
         private static final long serialVersionUID = 1L;
         private String label;
+
+        public CustomEdge()
+        {
+        }
 
         public CustomEdge(String label)
         {

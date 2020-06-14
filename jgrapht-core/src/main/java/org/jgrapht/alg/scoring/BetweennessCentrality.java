@@ -1,25 +1,26 @@
 /*
- * (C) Copyright 2017-2017, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2017-2020, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ import java.util.*;
  * Mathematical Sociology. 25 (2): 163–177.</li>
  * </ul>
  *
- * The running time is $O(nm) and $O(nm +n^2 \log n)$ for unweighted and weighted graph
+ * The running time is $O(nm)$ and $O(nm +n^2 \log n)$ for unweighted and weighted graph
  * respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
  * space complexity is $O(n + m)$.
  *
@@ -49,7 +50,6 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  * @author Assaf Mizrachi
- * @since December 2017
  */
 public class BetweennessCentrality<V, E>
     implements
@@ -185,11 +185,19 @@ public class BetweennessCentrality<V, E>
                 if (distance.get(w) == Double.POSITIVE_INFINITY) {
                     queue.insert(w, d);
                     distance.put(w, d);
+                    sigma.put(w, sigma.get(v));
+                    predecessors.get(w).add(v);
                 }
                 // shortest path to w via v?
-                if (distance.get(w) >= d) {
-                    queue.update(w, d);
+                else if (distance.get(w) == d) {
+                    // queue.update(w, d);
                     sigma.put(w, sigma.get(w) + sigma.get(v));
+                    predecessors.get(w).add(v);
+                } else if (distance.get(w) > d) {
+                    queue.update(w, d);
+                    distance.put(w, d);
+                    sigma.put(w, sigma.get(v));
+                    predecessors.get(w).clear();
                     predecessors.get(w).add(v);
                 }
             }
@@ -203,8 +211,10 @@ public class BetweennessCentrality<V, E>
         while (!stack.isEmpty()) {
             V w = stack.pop();
             for (V v : predecessors.get(w)) {
-                dependency.put(
-                    v, dependency.get(v) + (sigma.get(v) / sigma.get(w)) * (1 + dependency.get(w)));
+                dependency
+                    .put(
+                        v, dependency.get(v)
+                            + (sigma.get(v) / sigma.get(w)) * (1 + dependency.get(w)));
             }
             if (!w.equals(s)) {
                 this.scores.put(w, this.scores.get(w) + dependency.get(w));
@@ -228,14 +238,13 @@ public class BetweennessCentrality<V, E>
         MyQueue<V, Double>
     {
 
-        FibonacciHeap<V> delegate = new FibonacciHeap<>();
-        Map<V, FibonacciHeapNode<V>> seen = new HashMap<>();
+        AddressableHeap<Double, V> delegate = new PairingHeap<>();
+        Map<V, AddressableHeap.Handle<Double, V>> seen = new HashMap<>();
 
         @Override
         public void insert(V t, Double d)
         {
-            FibonacciHeapNode<V> node = new FibonacciHeapNode<>(t);
-            delegate.insert(node, d);
+            AddressableHeap.Handle<Double, V> node = delegate.insert(d, t);
             seen.put(t, node);
         }
 
@@ -245,13 +254,13 @@ public class BetweennessCentrality<V, E>
             if (!seen.containsKey(t)) {
                 throw new IllegalArgumentException("Element " + t + " does not exist in queue");
             }
-            delegate.decreaseKey(seen.get(t), d);
+            seen.get(t).decreaseKey(d);
         }
 
         @Override
         public V remove()
         {
-            return delegate.removeMin().getData();
+            return delegate.deleteMin().getValue();
         }
 
         @Override

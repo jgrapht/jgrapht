@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2015-2018, by Alexey Kudinkin, Joris Kinable and Contributors.
+ * (C) Copyright 2015-2020, by Alexey Kudinkin, Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
@@ -241,9 +241,10 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
 
         for (E e : network.edgeSet()) {
             AnnotatedFlowEdge annotatedFlowEdge = edgeExtensionManager.getExtension(e);
-            maxFlow.put(
-                e, directedGraph ? annotatedFlowEdge.flow
-                    : Math.max(annotatedFlowEdge.flow, annotatedFlowEdge.inverse.flow));
+            maxFlow
+                .put(
+                    e, directedGraph ? annotatedFlowEdge.flow
+                        : Math.max(annotatedFlowEdge.flow, annotatedFlowEdge.inverse.flow));
         }
 
         return maxFlow;
@@ -321,8 +322,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns current source vertex, or <tt>null</tt> if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
+     * Returns current source vertex, or <code>null</code> if there was no <code>
+     * calculateMaximumFlow</code> calls.
      *
      * @return current source
      */
@@ -332,8 +333,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns current sink vertex, or <tt>null</tt> if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
+     * Returns current sink vertex, or <code>null</code> if there was no <code>
+     * calculateMaximumFlow</code> calls.
      *
      * @return current sink
      */
@@ -343,8 +344,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns maximum flow value, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call.
+     * Returns maximum flow value, that was calculated during last <code>
+     * calculateMaximumFlow</code> call.
      *
      * @return maximum flow value
      */
@@ -354,9 +355,9 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Returns maximum flow, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
+     * Returns maximum flow, that was calculated during last <code>
+     * calculateMaximumFlow</code> call, or <code>null</code>, if there was no <code>
+     * calculateMaximumFlow</code> calls.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */
@@ -399,7 +400,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     @Override
     public double calculateMinCut(V source, V sink)
     {
-        return this.calculateMaximumFlow(source, sink);
+        return this.getMaximumFlowValue(source, sink);
     }
 
     @Override
@@ -436,20 +437,22 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         Set<V> p1 = getSourcePartition();
         if (directedGraph) {
             for (V vertex : p1) {
-                cutEdges.addAll(
-                    network
-                        .outgoingEdgesOf(vertex).stream()
-                        .filter(edge -> !p1.contains(network.getEdgeTarget(edge)))
-                        .collect(Collectors.toList()));
+                cutEdges
+                    .addAll(
+                        network
+                            .outgoingEdgesOf(vertex).stream()
+                            .filter(edge -> !p1.contains(network.getEdgeTarget(edge)))
+                            .collect(Collectors.toList()));
             }
         } else {
-            cutEdges.addAll(
-                network
-                    .edgeSet().stream()
-                    .filter(
-                        e -> p1.contains(network.getEdgeSource(e))
-                            ^ p1.contains(network.getEdgeTarget(e)))
-                    .collect(Collectors.toList()));
+            cutEdges
+                .addAll(
+                    network
+                        .edgeSet().stream()
+                        .filter(
+                            e -> p1.contains(network.getEdgeSource(e))
+                                ^ p1.contains(network.getEdgeTarget(e)))
+                        .collect(Collectors.toList()));
         }
         return cutEdges;
     }
@@ -461,7 +464,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     {
         // the source partition contains all vertices reachable from s in the residual graph
         this.sourcePartition = new LinkedHashSet<>();
-        Queue<VertexExtensionBase> processQueue = new LinkedList<>();
+        Queue<VertexExtensionBase> processQueue = new ArrayDeque<>();
         processQueue.add(vertexExtensionManager.getExtension(getCurrentSource()));
         while (!processQueue.isEmpty()) {
             VertexExtensionBase vx = processQueue.poll();
@@ -475,5 +478,3 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         }
     }
 }
-
-// End MaximumFlowAlgorithmBase.java

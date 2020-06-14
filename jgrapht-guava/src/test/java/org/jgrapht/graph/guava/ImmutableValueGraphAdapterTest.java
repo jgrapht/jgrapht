@@ -1,24 +1,25 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.guava;
 
 import com.google.common.graph.*;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.io.*;
@@ -58,7 +59,7 @@ public class ImmutableValueGraphAdapterTest
         Graph<String,
             EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -170,7 +171,7 @@ public class ImmutableValueGraphAdapterTest
         Graph<String,
             EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -269,7 +270,6 @@ public class ImmutableValueGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -291,10 +291,10 @@ public class ImmutableValueGraphAdapterTest
         Graph<String,
             EndpointPair<String>> initialGraph = new ImmutableValueGraphAdapter<>(
                 ImmutableValueGraph.copyOf(graph),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
-        Graph<String, EndpointPair<String>> g = (Graph<String,
-            EndpointPair<String>>) SerializationTestUtils.serializeAndDeserialize(initialGraph);
+        Graph<String, EndpointPair<String>> g =
+            SerializationTestUtils.serializeAndDeserialize(initialGraph);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

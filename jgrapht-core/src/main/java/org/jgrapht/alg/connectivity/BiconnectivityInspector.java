@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.connectivity;
 
@@ -21,7 +21,6 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Allows obtaining various connectivity aspects of a graph. The <i>inspected graph</i> is specified
@@ -283,7 +282,7 @@ public class BiconnectivityInspector<V, E>
             E edge = stack.peek();
             V source = graph.getEdgeSource(edge);
             V target = graph.getEdgeTarget(edge);
-            if (discTime.get(source) < discTimeCutpoint || discTime.get(target) < discTimeCutpoint)
+            if (discTime.get(source) < discTimeCutpoint && discTime.get(target) < discTimeCutpoint)
                 break;
             stack.pop();
             vertexComponent.add(source);
@@ -326,7 +325,7 @@ public class BiconnectivityInspector<V, E>
                     || (parent == null && children > 1))
                 {
                     this.cutpoints.add(v); // v is a cutpoint
-                    buildBlock(discTime.get(v)); // construct biconnected component
+                    buildBlock(discTime.get(nv)); // construct biconnected component
                 }
             } else if ((discTime.get(nv) < discTime.get(v)) && !nv.equals(parent)) { // found
                                                                                      // backedge
@@ -338,5 +337,3 @@ public class BiconnectivityInspector<V, E>
     }
 
 }
-
-// End BiconnectivityInspector.java

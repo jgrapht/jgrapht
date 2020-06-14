@@ -2,9 +2,9 @@
 
 <xs:schema targetNamespace="http://www.w3.org/1999/xlink"
 
-	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
 
-	elementFormDefault="qualified" attributeFormDefault="unqualified">
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
 
 	<xs:attribute name="type">
 		<xs:simpleType>

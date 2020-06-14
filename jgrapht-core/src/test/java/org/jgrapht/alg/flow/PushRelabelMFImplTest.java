@@ -1,30 +1,26 @@
 /*
- * (C) Copyright 2015-2018, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2020, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.junit.Assert;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,8 +36,10 @@ public class PushRelabelMFImplTest
     }
 
     @Test
-    public void testSimpleDirectedWeightedGraph(){
-        SimpleDirectedWeightedGraph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+    public void testSimpleDirectedWeightedGraph()
+    {
+        SimpleDirectedWeightedGraph<Integer, DefaultEdge> graph =
+            new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
 
         graph.addVertex(-1);
         graph.addVertex(-2);
@@ -92,7 +90,7 @@ public class PushRelabelMFImplTest
         MaximumFlowAlgorithm<String, DefaultEdge> mf1 = new PushRelabelMFImpl<>(g1);
         String sourceFlow = "v3";
         String sinkFlow = "v0";
-        double flow = mf1.calculateMaximumFlow(sourceFlow, sinkFlow);
+        double flow = mf1.getMaximumFlowValue(sourceFlow, sinkFlow);
         assertEquals(0.0, flow, 0);
     }
 }

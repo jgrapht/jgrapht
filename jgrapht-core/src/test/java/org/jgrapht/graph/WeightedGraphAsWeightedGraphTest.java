@@ -1,28 +1,27 @@
 /*
- * (C) Copyright 2018-2018, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2020, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.junit.Test;
+import java.util.*;
+import java.util.function.*;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
@@ -61,10 +60,9 @@ public class WeightedGraphAsWeightedGraphTest
     private void setUp()
     {
         Map<DefaultWeightedEdge, Double> graphWeights = createBackingGraph();
-        this.weightedGraph =
-            new AsWeightedGraph<>(this.backingGraph, graphWeights);
+        this.weightedGraph = new AsWeightedGraph<>(this.backingGraph, graphWeights);
     }
-    
+
     /**
      * Set up using explicit writeWeightsThrough setting (false) for AsWeightedGraph.
      */
@@ -72,8 +70,7 @@ public class WeightedGraphAsWeightedGraphTest
     {
         Map<DefaultWeightedEdge, Double> graphWeights = createBackingGraph();
         this.weightedGraph =
-            new AsWeightedGraph<>(this.backingGraph, graphWeights,
-                writeWeightsThrough);
+            new AsWeightedGraph<>(this.backingGraph, graphWeights, writeWeightsThrough);
     }
 
     private Map<DefaultWeightedEdge, Double> createBackingGraph()
@@ -96,8 +93,9 @@ public class WeightedGraphAsWeightedGraphTest
 
         return graphWeights;
     }
-    
-    @Test public void testSetEdgeWeight()
+
+    @Test
+    public void testSetEdgeWeight()
     {
         this.setUp(false);
 
@@ -108,7 +106,8 @@ public class WeightedGraphAsWeightedGraphTest
         assertEquals(this.defaultE12Weight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testSetEdgeWeightDefaultPropagation()
+    @Test
+    public void testSetEdgeWeightDefaultPropagation()
     {
         this.setUp();
 
@@ -119,7 +118,8 @@ public class WeightedGraphAsWeightedGraphTest
         assertEquals(newEdgeWeight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testSetEdgePropagatesChangesToBackingGraph()
+    @Test
+    public void testSetEdgePropagatesChangesToBackingGraph()
     {
         this.setUp(true);
 
@@ -130,30 +130,22 @@ public class WeightedGraphAsWeightedGraphTest
         assertEquals(newEdgeWeight, this.backingGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testGetEdgeWeight()
+    @Test
+    public void testGetEdgeWeight()
     {
         this.setUp(false);
         assertEquals(e23Weight, this.weightedGraph.getEdgeWeight(e23), 0);
     }
 
-    @Test public void testGetDefaultEdgeWeight()
+    @Test
+    public void testGetDefaultEdgeWeight()
     {
         this.setUp(false);
         assertEquals(defaultLoopWeight, this.weightedGraph.getEdgeWeight(loop), 0);
     }
 
-    @Test public void testSetEdgeWeightIfNullIsPassed()
-    {
-        this.setUp(false);
-        try {
-            this.weightedGraph.setEdgeWeight(null, 0);
-            fail("Expected a NullPointerException");
-        } catch (Exception e) {
-            assertTrue(e instanceof NullPointerException);
-        }
-    }
-
-    @Test public void testGetEdgeWeightOfNull()
+    @Test
+    public void testGetEdgeWeightOfNull()
     {
         this.setUp(false);
         try {
@@ -162,5 +154,24 @@ public class WeightedGraphAsWeightedGraphTest
         } catch (Exception e) {
             assertTrue(e instanceof NullPointerException);
         }
+    }
+
+    @Test
+    public void testWeightFunction()
+    {
+        Graph<Integer, DefaultWeightedEdge> g1 =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(g1, 0, 1, 2);
+        Graphs.addEdgeWithVertices(g1, 1, 2, 3);
+        Graphs.addEdgeWithVertices(g1, 2, 0, 4);
+        Function<DefaultWeightedEdge, Double> weightFunction =
+            e -> Math.pow(g1.getEdgeWeight(e), 2);
+        Graph<Integer, DefaultWeightedEdge> g2 =
+            new AsWeightedGraph<>(g1, weightFunction, true, false);
+        // Repeat twice to trigger caching
+        for (int i = 0; i < 2; i++)
+            for (DefaultWeightedEdge edge : g1.edgeSet())
+                assertEquals(
+                    g1.getEdgeWeight(edge) * g1.getEdgeWeight(edge), g2.getEdgeWeight(edge), 0);
     }
 }

@@ -3,25 +3,24 @@
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.Objects;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
+import java.io.*;
+import java.util.*;
 
 /**
  * Provides an unweighted view on a graph.
@@ -39,8 +38,11 @@ import org.jgrapht.GraphType;
  * @param <E> the graph edge type
  */
 public class AsUnweightedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable, Graph<V, E>
+    extends
+    GraphDelegator<V, E>
+    implements
+    Serializable,
+    Graph<V, E>
 {
 
     private static final long serialVersionUID = -5186421272597767751L;
@@ -57,17 +59,20 @@ public class AsUnweightedGraph<V, E>
         super(Objects.requireNonNull(g));
     }
 
-    @Override public double getEdgeWeight(E e)
+    @Override
+    public double getEdgeWeight(E e)
     {
         return Graph.DEFAULT_EDGE_WEIGHT;
     }
 
-    @Override public void setEdgeWeight(E e, double weight)
+    @Override
+    public void setEdgeWeight(E e, double weight)
     {
         throw new UnsupportedOperationException(EDGE_WEIGHT_IS_NOT_SUPPORTED);
     }
 
-    @Override public GraphType getType()
+    @Override
+    public GraphType getType()
     {
         return super.getType().asUnweighted();
     }

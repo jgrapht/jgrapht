@@ -1,35 +1,32 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.EdgeReversedGraph;
-import org.jgrapht.util.VertexToIntegerMapping;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * A collection of utilities to assist with graph manipulation.
  *
  * @author Barak Naveh
- * @since Jul 31, 2003
  */
 public abstract class Graphs
 {
@@ -99,7 +96,7 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return <tt>true</tt> if the target graph did not already contain the specified edge.
+     * @return <code>true</code> if the target graph did not already contain the specified edge.
      */
     public static <V,
         E> boolean addEdgeWithVertices(Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
@@ -209,7 +206,7 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return <tt>true</tt> if this graph changed as a result of the call
+     * @return <code>true</code> if this graph changed as a result of the call
      */
     public static <V, E> boolean addAllEdges(
         Graph<? super V, ? super E> destination, Graph<V, E> source, Collection<? extends E> edges)
@@ -237,11 +234,11 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return <tt>true</tt> if graph changed as a result of the call
+     * @return <code>true</code> if graph changed as a result of the call
      *
      * @throws NullPointerException if the specified vertices contains one or more null vertices, or
-     *         if the specified vertex collection is <tt>
-     * null</tt>.
+     *         if the specified vertex collection is <code>
+     * null</code>.
      *
      * @see Graph#addVertex(Object)
      */
@@ -581,8 +578,8 @@ public abstract class Graphs
     }
 
     /**
-     * Compute a new mapping from the vertices of a graph to the integer range $[0, n)$
-     * where $n$ is the number of vertices in the graph.
+     * Compute a new mapping from the vertices of a graph to the integer range $[0, n)$ where $n$ is
+     * the number of vertices in the graph.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -593,9 +590,8 @@ public abstract class Graphs
      *
      * @see VertexToIntegerMapping
      */
-    public static <V, E> VertexToIntegerMapping<V> getVertexToIntegerMapping(Graph<V, E> graph){
+    public static <V, E> VertexToIntegerMapping<V> getVertexToIntegerMapping(Graph<V, E> graph)
+    {
         return new VertexToIntegerMapping<>(Objects.requireNonNull(graph).vertexSet());
     }
 }
-
-// End Graphs.java

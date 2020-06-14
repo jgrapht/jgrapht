@@ -1,36 +1,42 @@
 /*
- * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import java.util.Map;
+import java.util.*;
 
-public class ClarksonTwoApproxVCImplTest extends WeightedVertexCoverTwoApproxTest {
+public class ClarksonTwoApproxVCImplTest
+    extends
+    WeightedVertexCoverTwoApproxTest
+{
 
     @Override
-    public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph) {
+    public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph)
+    {
         return new ClarksonTwoApproxVCImpl<>(graph);
     }
 
     @Override
-    public <V, E> VertexCoverAlgorithm<V> createWeightedSolver(Graph<V, E> graph, Map<V, Double> vertexWeightMap) {
+    public <V, E> VertexCoverAlgorithm<V> createWeightedSolver(
+        Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
         return new ClarksonTwoApproxVCImpl<>(graph, vertexWeightMap);
     }
 }

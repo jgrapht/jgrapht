@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2020, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.isomorphism;
 
@@ -33,15 +33,17 @@ abstract class VF2State<V, E>
 
     protected static final boolean DEBUG = false;
 
-    protected int[] core1, core2, in1, in2, out1, out2;
+    protected final int[] core1, core2, in1, in2, out1, out2;
 
-    protected int coreLen, n1, n2, t1BothLen, t2BothLen, t1InLen, t2InLen, t1OutLen, t2OutLen,
-        addedVertex1, addVertex1, addVertex2;
+    protected final int n1, n2;
 
-    protected GraphOrdering<V, E> g1, g2;
+    protected int coreLen, t1BothLen, t2BothLen, t1InLen, t2InLen, t1OutLen, t2OutLen, addedVertex1,
+        addVertex1, addVertex2;
 
-    protected Comparator<V> vertexComparator;
-    protected Comparator<E> edgeComparator;
+    protected final GraphOrdering<V, E> g1, g2;
+
+    protected final Comparator<V> vertexComparator;
+    protected final Comparator<E> edgeComparator;
 
     /**
      * @param g1 GraphOrdering on first graph
@@ -194,14 +196,16 @@ abstract class VF2State<V, E>
         }
 
         if ((addVertex1 < n1) && (addVertex2 < n2)) {
-            showLog(
-                "nextPair", "next candidate pair: (" + g1.getVertex(addVertex1) + ", "
-                    + g2.getVertex(addVertex2) + ")");
+            if (DEBUG)
+                showLog(
+                    "nextPair", "next candidate pair: (" + g1.getVertex(addVertex1) + ", "
+                        + g2.getVertex(addVertex2) + ")");
             return true;
         }
 
         // there are no more pairs..
-        showLog("nextPair", "no more candidate pairs");
+        if (DEBUG)
+            showLog("nextPair", "no more candidate pairs");
 
         addVertex1 = addVertex2 = NULL_NODE;
         return false;
@@ -212,9 +216,10 @@ abstract class VF2State<V, E>
      */
     public void addPair()
     {
-        showLog(
-            "addPair",
-            "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ") added");
+        if (DEBUG)
+            showLog(
+                "addPair",
+                "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ") added");
 
         coreLen++;
         addedVertex1 = addVertex1;
@@ -317,9 +322,10 @@ abstract class VF2State<V, E>
     {
         int addedVertex2 = core1[addedVertex1];
 
-        showLog(
-            "backtrack", "remove (" + g1.getVertex(addedVertex1) + ", " + g2.getVertex(addedVertex2)
-                + ") from the matching");
+        if (DEBUG)
+            showLog(
+                "backtrack", "remove (" + g1.getVertex(addedVertex1) + ", "
+                    + g2.getVertex(addedVertex2) + ") from the matching");
 
         if (in1[addedVertex1] == coreLen) {
             in1[addedVertex1] = 0;
@@ -423,5 +429,3 @@ abstract class VF2State<V, E>
         System.out.println((new String(indent)) + method + "> " + str);
     }
 }
-
-// End VF2State.java

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
@@ -62,7 +62,7 @@ import java.util.stream.*;
  * such identity, at a severe performance cost. Currently it is no longer enforced. If you want to
  * achieve a "live-window" functionality, your safest tactics would be to NOT override the
  * <code>equals()</code> methods of your vertices and edges. If you use a class that has already
- * overridden the <code>equals()</code> method, such as <code>String</code>, than you can use a
+ * overridden the <code>equals()</code> method, such as <code>String</code>, then you can use a
  * wrapper around it, or else use it directly but exercise a great care to avoid having
  * different-but-equal instances in the subgraph and the base graph.
  * </p>
@@ -87,7 +87,6 @@ import java.util.stream.*;
  * @author Barak Naveh
  * @see Graph
  * @see Set
- * @since Jul 18, 2003
  */
 public class AsSubgraph<V, E>
     extends
@@ -340,8 +339,9 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.edgesOf(vertex).stream().filter(edgeSet::contains).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return base
+            .edgesOf(vertex).stream().filter(edgeSet::contains)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -380,8 +380,9 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.incomingEdgesOf(vertex).stream().filter(edgeSet::contains).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return base
+            .incomingEdgesOf(vertex).stream().filter(edgeSet::contains)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -405,8 +406,9 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.outgoingEdgesOf(vertex).stream().filter(edgeSet::contains).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+        return base
+            .outgoingEdgesOf(vertex).stream().filter(edgeSet::contains)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -531,8 +533,9 @@ public class AsSubgraph<V, E>
             if (vertexFilter.size() > base.vertexSet().size()) {
                 base.vertexSet().stream().filter(vertexFilter::contains).forEach(vertexSet::add);
             } else {
-                vertexFilter.stream().filter(v -> v != null && base.containsVertex(v)).forEach(
-                    vertexSet::add);
+                vertexFilter
+                    .stream().filter(v -> v != null && base.containsVertex(v))
+                    .forEach(vertexSet::add);
             }
         }
 
@@ -568,7 +571,6 @@ public class AsSubgraph<V, E>
      * An internal listener on the base graph.
      *
      * @author Barak Naveh
-     * @since Jul 20, 2003
      */
     private class BaseGraphListener
         implements
@@ -626,5 +628,3 @@ public class AsSubgraph<V, E>
     }
 
 }
-
-// End Subgraph.java

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2015-2018, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2020, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.util;
 
@@ -22,10 +22,6 @@ import java.util.*;
 
 /**
  * Generic pair.
- * 
- * <p>
- * Although the instances of this class are immutable, it is impossible to ensure that the
- * references passed to the constructor will not be modified by the caller.
  * 
  * @param <A> the first element type
  * @param <B> the second element type
@@ -40,12 +36,12 @@ public class Pair<A, B>
     /**
      * The first pair element
      */
-    protected final A first;
+    protected A first;
 
     /**
      * The second pair element
      */
-    protected final B second;
+    protected B second;
 
     /**
      * Create a new pair
@@ -80,6 +76,28 @@ public class Pair<A, B>
     }
 
     /**
+     * Set the first element of the pair.
+     *
+     * @param f the element to be assigned.
+     */
+
+    public void setFirst(A f)
+    {
+        first = f;
+    }
+
+    /**
+     * Set the second element of the pair.
+     *
+     * @param s the element to be assigned.
+     */
+
+    public void setSecond(B s)
+    {
+        second = s;
+    }
+
+    /**
      * Assess if this pair contains an element.
      *
      * @param e The element in question
@@ -88,6 +106,7 @@ public class Pair<A, B>
      * 
      * @param <E> the element type
      */
+    @SuppressWarnings("unlikely-arg-type")
     public <E> boolean hasElement(E e)
     {
         if (e == null) {
@@ -122,8 +141,7 @@ public class Pair<A, B>
     }
 
     /**
-     * Creates new pair of elements pulling of the necessity to provide corresponding types of the
-     * elements supplied.
+     * Create a new pair.
      *
      * @param a first element
      * @param b second element
@@ -135,6 +153,5 @@ public class Pair<A, B>
     {
         return new Pair<>(a, b);
     }
-}
 
-// End Pair.java
+}

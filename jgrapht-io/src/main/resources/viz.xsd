@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.gexf.net/1.2draft/viz" xmlns:viz="http://www.gexf.net/1.2draft/viz">
+  
+  <!-- extension point -->
+  <!-- extension point -->
+  <!-- new point -->
+  <!-- new datatype -->
+  <xs:simpleType name="time-type">
+    <xs:union memberTypes="xs:integer xs:double xs:date xs:dateTime"/>
+  </xs:simpleType>
+  <xs:complexType name="spells-content">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" ref="viz:spell"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spell">
+    <xs:complexType>
+      <xs:attributeGroup ref="viz:spell-content"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- new point -->
+  <xs:attributeGroup name="spell-content">
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:attributeGroup>
+
+
+  <xs:complexType name="color-content">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="viz:spells"/>
+    </xs:sequence>
+    <xs:attribute name="r" use="required" type="viz:color-channel"/>
+    <xs:attribute name="g" use="required" type="viz:color-channel"/>
+    <xs:attribute name="b" use="required" type="viz:color-channel"/>
+    <xs:attribute name="a" type="viz:alpha-channel"/>
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:complexType>
+  <xs:element name="spells" type="viz:spells-content"/>
+  <!-- new point -->
+  <xs:complexType name="position-content">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="viz:spells"/>
+    </xs:sequence>
+    <xs:attribute name="x" use="required" type="viz:space-point"/>
+    <xs:attribute name="y" use="required" type="viz:space-point"/>
+    <xs:attribute name="z" use="required" type="viz:space-point"/>
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:complexType>
+  <!-- new point -->
+  <xs:complexType name="size-content">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="viz:spells"/>
+    </xs:sequence>
+    <xs:attribute name="value" use="required" type="viz:size-type"/>
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:complexType>
+  <!-- new point -->
+  <xs:complexType name="thickness-content">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="viz:spells"/>
+    </xs:sequence>
+    <xs:attribute name="value" use="required" type="viz:thickness-type"/>
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:complexType>
+  <!-- new point -->
+  <xs:complexType name="node-shape-content">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="viz:spells"/>
+    </xs:sequence>
+    <xs:attribute name="value" use="required" type="viz:node-shape-type"/>
+    <xs:attribute name="uri" type="xs:anyURI"/>
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:complexType>
+  <!-- new point -->
+  <xs:complexType name="edge-shape-content">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="viz:spells"/>
+    </xs:sequence>
+    <xs:attribute name="value" use="required" type="viz:edge-shape-type"/>
+    <xs:attribute name="start" type="viz:time-type"/>
+    <xs:attribute name="startopen" type="viz:time-type"/>
+    <xs:attribute name="end" type="viz:time-type"/>
+    <xs:attribute name="endopen" type="viz:time-type"/>
+  </xs:complexType>
+  <!-- new datatype -->
+  <xs:simpleType name="color-channel">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- new datatype -->
+  <xs:simpleType name="alpha-channel">
+    <xs:restriction base="xs:float">
+      <xs:minInclusive value="0.0"/>
+      <xs:maxInclusive value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- new datatype -->
+  <xs:simpleType name="size-type">
+    <xs:restriction base="xs:float">
+      <xs:minInclusive value="0.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- new datatype -->
+  <xs:simpleType name="thickness-type">
+    <xs:restriction base="xs:float">
+      <xs:minInclusive value="0.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- new datatype -->
+  <xs:simpleType name="node-shape-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="disc"/>
+      <xs:enumeration value="square"/>
+      <xs:enumeration value="triangle"/>
+      <xs:enumeration value="diamond"/>
+      <xs:enumeration value="image"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- new datatype -->
+  <xs:simpleType name="edge-shape-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="solid"/>
+      <xs:enumeration value="dotted"/>
+      <xs:enumeration value="dashed"/>
+      <xs:enumeration value="double"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- new datatype -->
+  <xs:simpleType name="space-point">
+    <xs:restriction base="xs:float"/>
+  </xs:simpleType>
+</xs:schema>

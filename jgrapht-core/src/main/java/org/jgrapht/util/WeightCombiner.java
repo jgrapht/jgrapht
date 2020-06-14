@@ -1,21 +1,23 @@
 /*
- * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2009-2020, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.util;
+
+import java.io.*;
 
 /**
  * Binary operator for edge weights. There are some prewritten operators.
@@ -25,32 +27,32 @@ public interface WeightCombiner
     /**
      * Sum of weights.
      */
-    WeightCombiner SUM = (a, b) -> a + b;
+    WeightCombiner SUM = (WeightCombiner & Serializable) (a, b) -> a + b;
 
     /**
      * Multiplication of weights.
      */
-    WeightCombiner MULT = (a, b) -> a * b;
+    WeightCombiner MULT = (WeightCombiner & Serializable) (a, b) -> a * b;
 
     /**
      * Minimum weight.
      */
-    WeightCombiner MIN = Math::min;
+    WeightCombiner MIN = (WeightCombiner & Serializable) Math::min;
 
     /**
      * Maximum weight.
      */
-    WeightCombiner MAX = Math::max;
+    WeightCombiner MAX = (WeightCombiner & Serializable) Math::max;
 
     /**
      * First weight.
      */
-    WeightCombiner FIRST = (a, b) -> a;
+    WeightCombiner FIRST = (WeightCombiner & Serializable) (a, b) -> a;
 
     /**
      * Second weight.
      */
-    WeightCombiner SECOND = (a, b) -> b;
+    WeightCombiner SECOND = (WeightCombiner & Serializable) (a, b) -> b;
 
     /**
      * Combines two weights.
@@ -62,5 +64,3 @@ public interface WeightCombiner
      */
     double combine(double a, double b);
 }
-
-// End WeightCombiner.java

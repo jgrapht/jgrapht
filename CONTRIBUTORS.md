@@ -1,11 +1,14 @@
 ## Contributors ##
 
+Copyright Notice: The JGraphT project source code is a composite of contributions by multiple authors. The copyright for each contribution is owned by the corresponding author. For details, please see [HISTORY.md](HISTORY.md) as well as the complete git history. All authors have agreed to license their contributions to the public as open source under the specific terms noted in [README.md](README.md).
+
 JGraphT wouldn't be the library it is today without the source contributions and suggestions made by the authors:
 
-- [Barak Naveh](http://sourceforge.net/users/barak_naveh/) (project founder)
+- [Barak Naveh](https://github.com/baraknaveh) (project founder)
 - [John V Sichi](https://github.com/jsichi) (current project administrator)
 - [Joris Kinable](https://github.com/jkinable) (JGraphtT Project Reviewer/Committer and Release Manager)
 - [Dimitrios Michail](https://github.com/d-michail) (JGraphT Project Reviewer/Committer)
+- [Timofey Chudakov](https://github.com/Toptachamann) (JGraphT Project Reviewer/Committer)
 - [Liviu Rau](http://sourceforge.net/users/liviu_aurelian/)
 - [Nathan Fiedler](http://www.bluemarsh.com/personal/index.html)
 - [Michael Behrisch](http://sourceforge.net/users/behrisch/)
@@ -61,7 +64,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Isaac Kleinman
 - Sebastian Hubenschmid
 - JeanYves Tinevez
-- Oliver Kopp
+- [Oliver Kopp](https://github.com/koppor)
 - Javier Gutierrez (javierj)
 - Nicolas Fortin
 - Peter Goldstein
@@ -102,7 +105,6 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Mariusz Smykuła](https://github.com/mariuszs)
 - [Pratik Tibrewal](https://github.com/tibrewalpratik17)
 - [Chen Kui](https://github.com/Yimismi)
-- [Timofey Chudakov](https://github.com/Toptachamann)
 - [Konstantinos Karatsenidis](https://github.com/gate2k1)
 - [Kirill Vishnyakov](https://github.com/LightnessOfBeing)
 - [Emilio Cruciani](https://github.com/ioemilio)
@@ -116,8 +118,31 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Oliver Feith](https://github.com/Watercrystal)
 - [Abdallah Atouani](https://github.com/AbdallahAt)
 - [Peter Harman](https://github.com/harmanpa)
+- [Nikhil Sharma](https://github.com/nks1558)
+- [Dennis Fischer](https://github.com/pdelvo)
+- [PHaroZ](https://github.com/PHaroZ)
+- [simlu](https://github.com/simlu)
+- [Karri Sai Satish Kumar Reddy](https://github.com/ksskreddy)
+- [Stephan Schroevers](https://github.com/Stephan202)
+- [Ned Twigg](https://github.com/nedtwigg)
+- [Karri Sai Satish Kumar Reddy](https://github.com/ksskreddy)
+- [Semen Chudakov](https://github.com/SChudakov)
+- [Lavish Kothari](https://github.com/LavishKothari)
+- [Andre Immig](https://github.com/Aimmig)
+- [Charul Bhanawat](https://github.com/CharulBhanawat13)
+- [Benjamin Krogh](https://github.com/bkrogh)
+- [Reynaldo Gil Pons](https://github.com/gilcu3)
+- [Sean Hudson](https://github.com/shduke)
+- [Edwin Ouwehand](https://github.com/EdwinOuwehand)
+- [Amr Alhossary](https://github.com/aalhossary)
+- [Volkov Viktor](https://github.com/bingo-soft)
+- [Hannes Wellmann](https://github.com/HannesWell)
+- [Shevek](https://github.com/shevek)
+- [Ritik Goyal](https://github.com/rtkg12)
+- [Johannes M Dieterich](https://github.com/iotamudelta)
+- [Milan Szoszkiewicz](https://github.com/szoszk)
 
-(if we have missed your name on this list, please email us to get it fixed).
+(If we have missed your name on this list, please email us to get it fixed.)
 
 Other people have also helped in different ways: reporting bugs, requesting features, commenting, and by merely asking very good questions.
 

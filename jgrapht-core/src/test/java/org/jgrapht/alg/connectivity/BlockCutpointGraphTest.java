@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.connectivity;
 
@@ -25,7 +25,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Joris Kinable
@@ -78,10 +79,10 @@ public class BlockCutpointGraphTest
         for (V cutpoint : cutpoints) {
             Graph<V, E> cpblock = bcGraph.getBlock(cutpoint);
             assertEquals(1, cpblock.vertexSet().size());
-            assertTrue(cpblock.vertexSet().contains(cutpoint));
+            assertTrue(cpblock.containsVertex(cutpoint));
 
             for (Graph<V, E> block : Graphs.neighborListOf(bcGraph, cpblock))
-                assertTrue(block.vertexSet().contains(cutpoint));
+                assertTrue(block.containsVertex(cutpoint));
         }
 
         // assert that the edge set is complete, i.e. there are edges between a block and all its
@@ -93,5 +94,3 @@ public class BlockCutpointGraphTest
 
     }
 }
-
-// End BlockCutpointGraphTest.java

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2020, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.color;
 
@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -46,7 +47,6 @@ import java.util.*;
  * @param <E> the graph edge type.
  *
  * @author Timofey Chudakov
- * @since March 2018
  */
 public class ChordalGraphColoring<V, E>
     implements
@@ -94,11 +94,13 @@ public class ChordalGraphColoring<V, E>
         if (coloring == null && chordalityInspector.isChordal()) {
             List<V> perfectEliminationOrder = chordalityInspector.getPerfectEliminationOrder();
 
-            Map<V, Integer> vertexColoring = new HashMap<>(perfectEliminationOrder.size());
+            Map<V, Integer> vertexColoring =
+                CollectionUtil.newHashMapWithExpectedSize(perfectEliminationOrder.size());
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
             for (V vertex : perfectEliminationOrder) {
                 Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
-                Set<Integer> predecessorColors = new HashSet<>(predecessors.size());
+                Set<Integer> predecessorColors =
+                    CollectionUtil.newHashSetWithExpectedSize(predecessors.size());
                 predecessors.forEach(v -> predecessorColors.add(vertexColoring.get(v)));
 
                 // find the minimum unused color in the set of predecessors
@@ -123,7 +125,8 @@ public class ChordalGraphColoring<V, E>
      */
     private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
     {
-        Map<V, Integer> vertexInOrder = new HashMap<>(vertexOrder.size());
+        Map<V, Integer> vertexInOrder =
+            CollectionUtil.newHashMapWithExpectedSize(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
             vertexInOrder.put(vertex, i++);

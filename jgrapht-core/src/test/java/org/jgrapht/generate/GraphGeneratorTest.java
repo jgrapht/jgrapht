@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2020, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
@@ -31,7 +31,6 @@ import static org.junit.Assert.*;
  * .
  *
  * @author John V. Sichi
- * @since Sep 17, 2003
  */
 public class GraphGeneratorTest
 {
@@ -119,7 +118,7 @@ public class GraphGeneratorTest
             nextVertex = g.getEdgeTarget(nextEdge);
             assertEquals(1, g.inDegreeOf(nextVertex));
             assertEquals(1, g.outDegreeOf(nextVertex));
-            assertTrue(!seen.contains(nextVertex));
+            assertFalse(seen.contains(nextVertex));
             seen.add(nextVertex);
         }
 
@@ -155,6 +154,21 @@ public class GraphGeneratorTest
 
         // complete graph with 10 vertices has 10*(10-1) = 90 edges
         assertEquals(90, completeGraph.edgeSet().size());
+    }
+
+    @Test
+    public void testCompleteGraphGeneratorWithPreexistingVertices()
+    {
+        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        for (int i = 0; i < 10; i++)
+            completeGraph.addVertex();
+        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
+            new CompleteGraphGenerator<>();
+        completeGenerator.generateGraph(completeGraph);
+
+        // complete graph with 10 vertices has 10*(10-1)/2 = 45 edges
+        assertEquals(45, completeGraph.edgeSet().size());
     }
 
     /**
@@ -199,6 +213,28 @@ public class GraphGeneratorTest
             SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteBipartiteGraphGenerator<Object, DefaultEdge> completeBipartiteGenerator =
             new CompleteBipartiteGraphGenerator<>(10, 4);
+        completeBipartiteGenerator.generateGraph(completeBipartiteGraph);
+
+        // Complete bipartite graph with 10 and 4 vertices should have 14
+        // total vertices and 4*10=40 total edges
+        assertEquals(14, completeBipartiteGraph.vertexSet().size());
+        assertEquals(40, completeBipartiteGraph.edgeSet().size());
+    }
+
+    @Test
+    public void testCompleteBipartiteGraphGeneratorWithPreexistingVertices()
+    {
+        Graph<Object, DefaultEdge> completeBipartiteGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Set<Object> partitionA = new HashSet<>();
+        for (int i = 0; i < 10; i++)
+            partitionA.add(completeBipartiteGraph.addVertex());
+        Set<Object> partitionB = new HashSet<>();
+        for (int i = 0; i < 4; i++)
+            partitionB.add(completeBipartiteGraph.addVertex());
+
+        CompleteBipartiteGraphGenerator<Object, DefaultEdge> completeBipartiteGenerator =
+            new CompleteBipartiteGraphGenerator<>(partitionA, partitionB);
         completeBipartiteGenerator.generateGraph(completeBipartiteGraph);
 
         // Complete bipartite graph with 10 and 4 vertices should have 14
@@ -334,5 +370,3 @@ public class GraphGeneratorTest
         }
     }
 }
-
-// End GraphGeneratorTest.java

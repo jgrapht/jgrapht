@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
@@ -30,7 +30,6 @@ import static org.junit.Assert.*;
  * A unit test for simple directed graph.
  *
  * @author Barak Naveh
- * @since Jul 25, 2003
  */
 public class SimpleDirectedGraphTest
 {
@@ -218,22 +217,22 @@ public class SimpleDirectedGraphTest
         assertEquals(0, g1.edgeSet().size());
 
         assertEquals(2, g2.edgeSet().size());
-        assertTrue(g2.edgeSet().contains(e12_1));
-        assertTrue(g2.edgeSet().contains(e21_1));
+        assertTrue(g2.containsEdge(e12_1));
+        assertTrue(g2.containsEdge(e21_1));
 
         assertEquals(6, g3.edgeSet().size());
-        assertTrue(g3.edgeSet().contains(e12_2));
-        assertTrue(g3.edgeSet().contains(e21_2));
-        assertTrue(g3.edgeSet().contains(e23_1));
-        assertTrue(g3.edgeSet().contains(e32_1));
-        assertTrue(g3.edgeSet().contains(e31_1));
-        assertTrue(g3.edgeSet().contains(e13_1));
+        assertTrue(g3.containsEdge(e12_2));
+        assertTrue(g3.containsEdge(e21_2));
+        assertTrue(g3.containsEdge(e23_1));
+        assertTrue(g3.containsEdge(e32_1));
+        assertTrue(g3.containsEdge(e31_1));
+        assertTrue(g3.containsEdge(e13_1));
 
         assertEquals(4, g4.edgeSet().size());
-        assertTrue(g4.edgeSet().contains(e12_3));
-        assertTrue(g4.edgeSet().contains(e23_2));
-        assertTrue(g4.edgeSet().contains(e34_1));
-        assertTrue(g4.edgeSet().contains(e41_1));
+        assertTrue(g4.containsEdge(e12_3));
+        assertTrue(g4.containsEdge(e23_2));
+        assertTrue(g4.containsEdge(e34_1));
+        assertTrue(g4.containsEdge(e41_1));
     }
 
     /**
@@ -489,22 +488,22 @@ public class SimpleDirectedGraphTest
     public void testVertexSet()
     {
         assertEquals(1, g1.vertexSet().size());
-        assertTrue(g1.vertexSet().contains(v1));
+        assertTrue(g1.containsVertex(v1));
 
         assertEquals(2, g2.vertexSet().size());
-        assertTrue(g2.vertexSet().contains(v1));
-        assertTrue(g2.vertexSet().contains(v2));
+        assertTrue(g2.containsVertex(v1));
+        assertTrue(g2.containsVertex(v2));
 
         assertEquals(3, g3.vertexSet().size());
-        assertTrue(g3.vertexSet().contains(v1));
-        assertTrue(g3.vertexSet().contains(v2));
-        assertTrue(g3.vertexSet().contains(v3));
+        assertTrue(g3.containsVertex(v1));
+        assertTrue(g3.containsVertex(v2));
+        assertTrue(g3.containsVertex(v3));
 
         assertEquals(4, g4.vertexSet().size());
-        assertTrue(g4.vertexSet().contains(v1));
-        assertTrue(g4.vertexSet().contains(v2));
-        assertTrue(g4.vertexSet().contains(v3));
-        assertTrue(g4.vertexSet().contains(v4));
+        assertTrue(g4.containsVertex(v1));
+        assertTrue(g4.containsVertex(v2));
+        assertTrue(g4.containsVertex(v3));
+        assertTrue(g4.containsVertex(v4));
     }
 
     @Test
@@ -622,5 +621,3 @@ public class SimpleDirectedGraphTest
         e41_1 = g4.addEdge(v4, v1);
     }
 }
-
-// End SimpleDirectedGraphTest.java

@@ -5,7 +5,7 @@
 	<artifactId>jgrapht</artifactId>
 	<packaging>pom</packaging>
 	<name>JGraphT - Parent</name>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>1.4.1-SNAPSHOT</version>
 	<description>A Java class library for graph-theory data structures and algorithms.</description>
 	<url>http://www.jgrapht.org</url>
 	<parent>
@@ -20,8 +20,8 @@
 			<distribution>repo</distribution>
 		</license>
 		<license>
-			<name>Eclipse Public License (EPL) 1.0</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<name>Eclipse Public License (EPL) 2.0</name>
+			<url>http://www.eclipse.org/legal/epl-v20.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -44,6 +44,24 @@
 			<archive>http://lists.sourceforge.net/lists/listinfo/jgrapht-announce</archive>
 		</mailingList>
 	</mailingLists>
+	
+	<developers>
+		<developer>
+	  	  <id>jsichi</id>
+	  	  <name>John V. Sichi</name>
+	  	  <email>jsichi@gmail.com</email>
+		</developer>
+		<developer>
+		  <id>jkinable</id>
+		  <name>Joris Kinable</name>
+		  <email>j.kinable@gmail.com</email>
+		</developer>
+		<developer>
+		  <id>d-michail</id>
+		  <name>Dimitrios Michail</name>
+		  <email>dimitrios.michail@gmail.com</email>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,6 +73,12 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>jgrapht-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>jgrapht-core</artifactId>
+				<type>test-jar</type>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -72,6 +96,11 @@
                 <artifactId>jgrapht-guava</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>jgrapht-opt</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>jgrapht-demo</artifactId>
@@ -85,13 +114,13 @@
 			<dependency>
 			    <groupId>org.xmlunit</groupId>
 			    <artifactId>xmlunit-core</artifactId>
-			    <version>2.5.1</version>
+			    <version>2.6.3</version>
 			    <scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.12</version>
+				<version>4.13</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -103,10 +132,9 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
+					<version>3.8.1</version>
 					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
+						<release>11</release>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -124,7 +152,7 @@
   						<dependency>
    							<groupId>org.apache.maven.surefire</groupId>
    							<artifactId>surefire-junit47</artifactId>
-   							<version>2.21.0</version>
+   							<version>3.0.0-M4</version>
   						</dependency>
  					</dependencies>
 					<executions>
@@ -178,13 +206,20 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.2.0</version>
 					<configuration>
-						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
 						<additionalJOption>--allow-script-in-comments</additionalJOption>
-						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;</header>
+						<doclint>none</doclint>
+						<source>11</source>
+						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;
+                                                &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"&gt;
+                                                </header>
+                                                <doctitle>${project.name} ${project.version} API
+                                                &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped.png?raw=true" style="height:100px;float:right" &gt;    
+                                                </doctitle>
+						<detectJavaApiLink>false</detectJavaApiLink> <!-- Temporary fix for https://stackoverflow.com/questions/58836862/jdk-11-and-javadoc -->
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -226,6 +261,7 @@
 	<modules>
 		<module>jgrapht-core</module>
 		<module>jgrapht-io</module>
+		<module>jgrapht-opt</module>
 		<module>jgrapht-ext</module>
 		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>
@@ -234,12 +270,6 @@
 	</modules>
 
 	<profiles>
-		<profile>
-			<id>touchgraph</id>
-			<modules>
-				<module>jgrapht-touchgraph</module>
-			</modules>
-		</profile>
 		<profile>
 			<id>checkstyle</id>
 			<build>
@@ -252,7 +282,7 @@
 							<dependency>
 								<groupId>com.puppycrawl.tools</groupId>
 								<artifactId>checkstyle</artifactId>
-								<version>8.8</version>
+								<version>8.18</version>
 							</dependency>
 						</dependencies>
 						<executions>

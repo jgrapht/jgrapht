@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2007-2018, by France Telecom and Contributors.
+ * (C) Copyright 2007-2020, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
@@ -22,7 +22,6 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * The algorithm determines the k shortest simple paths in increasing order of weight. Weights can
@@ -36,9 +35,9 @@ import java.util.stream.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
- * @since July 5, 2007
+ * @deprecated Use {@link YenKShortestPath} instead.
  */
+@Deprecated
 public class KShortestSimplePaths<V, E>
     implements
     KShortestPathAlgorithm<V, E>
@@ -129,7 +128,7 @@ public class KShortestSimplePaths<V, E>
         Objects.requireNonNull(startVertex, "Start vertex cannot be null");
         Objects.requireNonNull(endVertex, "End vertex cannot be null");
         if (endVertex.equals(startVertex)) {
-            throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
+            return Collections.emptyList();
         }
         if (!graph.containsVertex(startVertex)) {
             throw new IllegalArgumentException("Graph must contain the start vertex!");
@@ -141,8 +140,16 @@ public class KShortestSimplePaths<V, E>
             throw new IllegalArgumentException("Number of paths must be positive");
         }
 
+        if (startVertex.equals(endVertex)) {
+            GraphPath<V,
+                E> result = new GraphWalk<>(
+                    graph, startVertex, endVertex, Collections.singletonList(startVertex),
+                    Collections.emptyList(), 0.0);
+            return Collections.singletonList(result);
+        }
+
         KShortestSimplePathsIterator<V, E> iter =
-            new KShortestSimplePathsIterator<>(graph, startVertex, endVertex, k, pathValidator);
+            new KShortestSimplePathsIterator<>(graph, startVertex, endVertex, pathValidator);
 
         /*
          * at the i-th pass the shortest paths with less (or equal) than i edges are calculated
@@ -155,13 +162,16 @@ public class KShortestSimplePaths<V, E>
         if (pathElements == null) {
             return Collections.<GraphPath<V, E>> emptyList();
         } else {
-            return pathElements
-                .stream()
-                .map(
-                    e -> new GraphWalk<V, E>(
-                        graph, startVertex, e.getVertex(), null, e.createEdgeListPath(),
-                        e.getWeight()))
-                .collect(Collectors.toCollection(ArrayList::new));
+            List<GraphPath<V, E>> result = new ArrayList<>();
+            for (int i = 0; i < k && i < pathElements.size(); ++i) {
+                RankingPathElement<V, E> element = pathElements.get(i);
+                GraphPath<V,
+                    E> path = new GraphWalk<V, E>(
+                        graph, startVertex, element.getVertex(), null, element.createEdgeListPath(),
+                        element.getWeight());
+                result.add(path);
+            }
+            return result;
         }
     }
 

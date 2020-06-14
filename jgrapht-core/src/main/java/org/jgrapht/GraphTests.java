@@ -1,32 +1,30 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh, Dimitrios Michail and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.connectivity.BiconnectivityInspector;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.BergeGraphInspector;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
-import org.jgrapht.alg.cycle.WeakChordalityInspector;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.partition.*;
+import org.jgrapht.alg.planar.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * A collection of utilities to test for various graph properties.
@@ -43,8 +41,6 @@ public abstract class GraphTests
         "Graph must be directed or undirected";
     private static final String GRAPH_MUST_BE_UNDIRECTED = "Graph must be undirected";
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
-    private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
-    private static final String SECOND_PARTITION_CANNOT_BE_NULL = "Second partition cannot be null";
     private static final String GRAPH_MUST_BE_WEIGHTED = "Graph must be weighted";
 
     /**
@@ -243,11 +239,14 @@ public abstract class GraphTests
     }
 
     /**
-     * Test whether a directed graph is strongly connected.
+     * Test whether a graph is strongly connected.
      * 
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
+     * 
+     * <p>
+     * In case of undirected graphs this method delegated to {@link #isConnected(Graph)}.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -258,7 +257,11 @@ public abstract class GraphTests
     public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        if (graph.getType().isUndirected()) {
+            return isConnected(graph);
+        } else {
+            return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
+        }
     }
 
     /**
@@ -364,48 +367,11 @@ public abstract class GraphTests
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is bipartite, false otherwise
+     * @see BipartitePartitioning#isBipartite()
      */
     public static <V, E> boolean isBipartite(Graph<V, E> graph)
     {
-        if (isEmpty(graph)) {
-            return true;
-        }
-        try {
-            // at most n^2/4 edges
-            if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
-                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
-            {
-                return false;
-            }
-        } catch (ArithmeticException e) {
-            // ignore
-        }
-
-        Set<V> unknown = new HashSet<>(graph.vertexSet());
-        Set<V> odd = new HashSet<>();
-        Deque<V> queue = new LinkedList<>();
-
-        while (!unknown.isEmpty()) {
-            if (queue.isEmpty()) {
-                queue.add(unknown.iterator().next());
-            }
-
-            V v = queue.removeFirst();
-            unknown.remove(v);
-
-            for (E e : graph.edgesOf(v)) {
-                V n = Graphs.getOppositeVertex(graph, e, v);
-                if (unknown.contains(n)) {
-                    queue.add(n);
-                    if (!odd.contains(v)) {
-                        odd.add(n);
-                    }
-                } else if (odd.contains(v) == odd.contains(n)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return new BipartitePartitioning<>(graph).isBipartite();
     }
 
     /**
@@ -417,38 +383,16 @@ public abstract class GraphTests
      * @return true if the partition is a bipartite partition, false otherwise
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @see BipartitePartitioning#isValidPartitioning(PartitioningAlgorithm.Partitioning)
      */
+    @SuppressWarnings("unchecked")
     public static <V, E> boolean isBipartitePartition(
         Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
-        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        Objects.requireNonNull(firstPartition, FIRST_PARTITION_CANNOT_BE_NULL);
-        Objects.requireNonNull(secondPartition, SECOND_PARTITION_CANNOT_BE_NULL);
-
-        if (graph.vertexSet().size() != firstPartition.size() + secondPartition.size()) {
-            return false;
-        }
-
-        for (V v : graph.vertexSet()) {
-            Collection<? extends V> otherPartition;
-            if (firstPartition.contains(v)) {
-                otherPartition = secondPartition;
-            } else if (secondPartition.contains(v)) {
-                otherPartition = firstPartition;
-            } else {
-                // v does not belong to any of the two partitions
-                return false;
-            }
-
-            for (E e : graph.edgesOf(v)) {
-                V other = Graphs.getOppositeVertex(graph, e, v);
-                if (!otherPartition.contains(other)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return new BipartitePartitioning<>(graph)
+            .isValidPartitioning(
+                new PartitioningAlgorithm.PartitioningImpl<>(
+                    Arrays.asList((Set<V>) firstPartition, (Set<V>) secondPartition)));
     }
 
     /**
@@ -572,7 +516,8 @@ public abstract class GraphTests
     }
 
     /**
-     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a triangle of edges).
+     * Tests whether an undirected graph is triangle-free (i.e. no three distinct vertices form a
+     * triangle of edges).
      *
      * The implementation of this method uses {@link GraphMetrics#getNumberOfTriangles(Graph)}.
      *
@@ -600,6 +545,145 @@ public abstract class GraphTests
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new BergeGraphInspector<V, E>().isBerge(graph);
+    }
+
+    /**
+     * Checks that the specified graph is planar. A graph is
+     * <a href="https://en.wikipedia.org/wiki/Planar_graph">planar</a> if it can be drawn on a
+     * two-dimensional plane without any of its edges crossing. The implementation of the method is
+     * delegated to the {@link org.jgrapht.alg.planar.BoyerMyrvoldPlanarityInspector}. Also, use
+     * this class to get a planar embedding of the graph in case it is planar, or a Kuratowski
+     * subgraph as a certificate of nonplanarity.
+     *
+     * @param graph the graph to test planarity of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is planar, false otherwise
+     * @see PlanarityTestingAlgorithm
+     * @see BoyerMyrvoldPlanarityInspector
+     */
+    public static <V, E> boolean isPlanar(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new BoyerMyrvoldPlanarityInspector<>(graph).isPlanar();
+    }
+
+    /**
+     * Checks whether the {@code graph} is a <a href=
+     * "https://en.wikipedia.org/wiki/Kuratowski%27s_theorem#Kuratowski_subgraphs">Kuratowski
+     * subdivision</a>. Effectively checks whether the {@code graph} is a $K_{3,3}$ subdivision or
+     * $K_{5}$ subdivision
+     *
+     * @param graph the graph to test
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the {@code graph} is a Kuratowski subdivision, false otherwise
+     */
+    public static <V, E> boolean isKuratowskiSubdivision(Graph<V, E> graph)
+    {
+        return isK33Subdivision(graph) || isK5Subdivision(graph);
+    }
+
+    /**
+     * Checks whether the {@code graph} is a $K_{3,3}$ subdivision.
+     *
+     * @param graph the graph to test
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the {@code graph} is a $K_{3,3}$ subdivision, false otherwise
+     */
+    public static <V, E> boolean isK33Subdivision(Graph<V, E> graph)
+    {
+        List<V> degree3 = new ArrayList<>();
+        // collect all vertices with degree 3
+        for (V vertex : graph.vertexSet()) {
+            int degree = graph.degreeOf(vertex);
+            if (degree == 3) {
+                degree3.add(vertex);
+            } else if (degree != 2) {
+                return false;
+            }
+        }
+        if (degree3.size() != 6) {
+            return false;
+        }
+        V vertex = degree3.remove(degree3.size() - 1);
+        Set<V> reachable = reachableWithDegree(graph, vertex, 3);
+        if (reachable.size() != 3) {
+            return false;
+        }
+        degree3.removeAll(reachable);
+        return reachable.equals(reachableWithDegree(graph, degree3.get(0), 3))
+            && reachable.equals(reachableWithDegree(graph, degree3.get(1), 3));
+    }
+
+    /**
+     * Checks whether the {@code graph} is a $K_5$ subdivision.
+     *
+     * @param graph the graph to test
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the {@code graph} is a $K_5$ subdivision, false otherwise
+     */
+    public static <V, E> boolean isK5Subdivision(Graph<V, E> graph)
+    {
+        Set<V> degree5 = new HashSet<>();
+        for (V vertex : graph.vertexSet()) {
+            int degree = graph.degreeOf(vertex);
+            if (degree == 4) {
+                degree5.add(vertex);
+            } else if (degree != 2) {
+                return false;
+            }
+        }
+        if (degree5.size() != 5) {
+            return false;
+        }
+        for (V vertex : degree5) {
+            Set<V> reachable = reachableWithDegree(graph, vertex, 4);
+            if (reachable.size() != 4 || !degree5.containsAll(reachable)
+                || reachable.contains(vertex))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Uses BFS to find all vertices of the {@code graph} which have a degree {@code degree}. This
+     * method doesn't advance to new nodes after it finds a node with a degree {@code degree}
+     *
+     * @param graph the graph to search in
+     * @param startVertex the start vertex
+     * @param degree the degree of desired vertices
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return all vertices of the {@code graph} reachable from {@code startVertex}, which have
+     *         degree {@code degree}
+     */
+    private static <V, E> Set<V> reachableWithDegree(Graph<V, E> graph, V startVertex, int degree)
+    {
+        Set<V> visited = new HashSet<>();
+        Set<V> reachable = new HashSet<>();
+        Queue<V> queue = new ArrayDeque<>();
+        queue.add(startVertex);
+        while (!queue.isEmpty()) {
+            V current = queue.poll();
+            visited.add(current);
+            for (E e : graph.edgesOf(current)) {
+                V opposite = Graphs.getOppositeVertex(graph, e, current);
+                if (visited.contains(opposite)) {
+                    continue;
+                }
+                if (graph.degreeOf(opposite) == degree) {
+                    reachable.add(opposite);
+                } else {
+                    queue.add(opposite);
+                }
+            }
+        }
+        return reachable;
     }
 
     /**
@@ -744,5 +828,3 @@ public abstract class GraphTests
         return graph;
     }
 }
-
-// End GraphTests.java

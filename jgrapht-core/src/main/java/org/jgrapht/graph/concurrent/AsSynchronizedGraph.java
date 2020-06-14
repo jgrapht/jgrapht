@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2018-2018, by CHEN Kui and Contributors.
+ * (C) Copyright 2018-2020, by CHEN Kui and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.concurrent;
 
@@ -34,8 +34,9 @@ import java.util.stream.*;
  * accomplished through the created Graph.
  *
  * <p>
- * Users need to manually synchronize on edge supplier (see {@link Graph#getEdgeSupplier()}) if creating an edge needs to access
- * shared resources. Failure to follow this advice may result in non-deterministic behavior.
+ * Users need to manually synchronize on edge supplier (see {@link Graph#getEdgeSupplier()}) if
+ * creating an edge needs to access shared resources. Failure to follow this advice may result in
+ * non-deterministic behavior.
  * </p>
  *
  * <p>
@@ -110,7 +111,6 @@ import java.util.stream.*;
  * @param <E> the graph edge type
  *
  * @author CHEN Kui
- * @since Feb 23, 2018
  */
 public class AsSynchronizedGraph<V, E>
     extends
@@ -561,7 +561,7 @@ public class AsSynchronizedGraph<V, E>
      * Return whether the graph uses cache for <code>edgesOf</code>, <code>incomingEdgesOf</code>
      * and <code>outgoingEdgesOf</code> methods.
      * 
-     * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
+     * @return <code>true</code> if cache is in use, <code>false</code> if cache is not in use.
      */
     public boolean isCacheEnabled()
     {
@@ -576,7 +576,7 @@ public class AsSynchronizedGraph<V, E>
     /**
      * Return whether copyless mode is used for collection-returning methods.
      * 
-     * @return <tt>true</tt> if the graph uses copyless mode, <tt>false</tt> otherwise
+     * @return <code>true</code> if the graph uses copyless mode, <code>false</code> otherwise
      */
     public boolean isCopyless()
     {
@@ -587,8 +587,8 @@ public class AsSynchronizedGraph<V, E>
      * Set the cache strategy for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
      * <code>outgoingEdgesOf</code> methods.
      *
-     * @param cacheEnabled a flag whether to use cache for those methods, if <tt>true</tt>, cache
-     *        will be used for those methods, otherwise cache will not be used.
+     * @param cacheEnabled a flag whether to use cache for those methods, if <code>true</code>,
+     *        cache will be used for those methods, otherwise cache will not be used.
      * @return the AsSynchronizedGraph
      */
     public AsSynchronizedGraph<V, E> setCache(boolean cacheEnabled)
@@ -668,7 +668,7 @@ public class AsSynchronizedGraph<V, E>
     /**
      * Return whether fair mode is used for synchronizing access to this graph.
      * 
-     * @return <tt>true</tt> if the graph uses fair mode, <tt>false</tt> if non-fair mode
+     * @return <code>true</code> if the graph uses fair mode, <code>false</code> if non-fair mode
      */
     public boolean isFair()
     {
@@ -711,7 +711,6 @@ public class AsSynchronizedGraph<V, E>
      * @param <E> the class of the objects in the set
      *
      * @author CHEN Kui
-     * @since Feb 23, 2018
      */
     private static class CopyOnDemandSet<E>
         implements
@@ -752,7 +751,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether copyless mode is used for iteration.
          * 
-         * @return <tt>true</tt> if the set uses copyless mode, <tt>false</tt> otherwise
+         * @return <code>true</code> if the set uses copyless mode, <code>false</code> otherwise
          */
         public boolean isCopyless()
         {
@@ -1113,7 +1112,7 @@ public class AsSynchronizedGraph<V, E>
          * Return whether the graph uses cache for <code>edgesOf</code>,
          * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
          * 
-         * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
+         * @return <code>true</code> if cache is in use, <code>false</code> if cache is not in use.
          */
         boolean isCacheEnabled();
     }
@@ -1468,7 +1467,8 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether a cache will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if cache will be used, <tt>false</tt> if cache will not be used
+         * @return <code>true</code> if cache will be used, <code>false</code> if cache will not be
+         *         used
          */
         public boolean isCacheEnable()
         {
@@ -1500,7 +1500,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether copyless mode will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if constructed as copyless, <tt>false</tt> otherwise
+         * @return <code>true</code> if constructed as copyless, <code>false</code> otherwise
          */
         public boolean isCopyless()
         {
@@ -1532,7 +1532,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether fair mode will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if constructed as fair mode, <tt>false</tt> if non-fair
+         * @return <code>true</code> if constructed as fair mode, <code>false</code> if non-fair
          */
         public boolean isFair()
         {
@@ -1551,5 +1551,3 @@ public class AsSynchronizedGraph<V, E>
         }
     }
 }
-
-// End AsSynchronizedGraph.java

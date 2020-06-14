@@ -1,23 +1,24 @@
 /*
- * (C) Copyright 2015-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2015-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.specifics;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * An interface encapsulating the basic graph operations. Different implementations have different
@@ -76,10 +77,38 @@ public interface Specifics<V, E>
 
     /**
      * Adds the specified edge to the edge containers of its source and target vertices.
-     *
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
      * @param e the edge
+     * @return true if the edge was added, false otherwise
      */
-    void addEdgeToTouchingVertices(E e);
+    boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e);
+
+    /**
+     * Adds the specified edge to the edge containers of its source and target vertices only if the
+     * edge is not already in the graph.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
+     * @return true if the edge was added, false otherwise
+     */
+    boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e);
+
+    /**
+     * Creates an edge given an edge supplier and adds it to the edge containers of its source and
+     * target vertices only if the graph does not contain other edges with the same source and
+     * target vertices.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param edgeSupplier the function which will create the edge
+     * @return the newly created edge or null if an edge with the same source and target vertices
+     *         was already present
+     */
+    E createEdgeToTouchingVerticesIfAbsent(
+        V sourceVertex, V targetVertex, Supplier<E> edgeSupplier);
 
     /**
      * Returns the degree of the specified vertex. A degree of a vertex in an undirected graph is
@@ -136,7 +165,10 @@ public interface Specifics<V, E>
     /**
      * Removes the specified edge from the edge containers of its source and target vertices.
      *
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
      * @param e the edge
      */
-    void removeEdgeFromTouchingVertices(E e);
+    void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e);
+
 }

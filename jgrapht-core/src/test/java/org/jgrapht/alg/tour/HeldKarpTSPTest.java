@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2017-2018, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2017-2020, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.tour;
 
@@ -24,11 +24,14 @@ import org.junit.experimental.categories.*;
 
 import java.util.*;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
 import static org.junit.Assert.*;
 
 /**
+ * Tests for {@link HeldKarpTSP}
+ *
  * @author Alexandru Valeanu
+ *
  */
 @Category(SlowTests.class)
 public class HeldKarpTSPTest
@@ -209,6 +212,72 @@ public class HeldKarpTSPTest
         assertNotNull(tour);
         assertHamiltonian(g, tour);
         assertEquals(tour.getWeight(), 80d, 1e-9);
+    }
+
+    @Test
+    public void testUndirectedGraph2()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+
+        int[][] weights = new int[5][];
+
+        weights[0] = new int[] { 0, 8, 7, 5, 6 };
+        weights[1] = new int[] { 8, 0, 3, 1, 7 };
+        weights[2] = new int[] { 7, 3, 0, 8, 6 };
+        weights[3] = new int[] { 5, 1, 8, 0, 1 };
+        weights[4] = new int[] { 6, 7, 6, 1, 0 };
+
+        for (int i = 0; i < 5; i++) {
+            g.addVertex(i);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = i + 1; j < 5; j++) {
+                g.addEdge(i, j);
+                g.setEdgeWeight(g.getEdge(i, j), weights[i][j]);
+            }
+        }
+
+        GraphPath<Integer, DefaultWeightedEdge> tour =
+            new HeldKarpTSP<Integer, DefaultWeightedEdge>().getTour(g);
+
+        assertNotNull(tour);
+        assertHamiltonian(g, tour);
+        assertEquals(tour.getWeight(), 18d, 1e-9);
+    }
+
+    @Test
+    public void testDirectedWeightedPseudograph()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        int[][] weights = new int[5][];
+
+        weights[0] = new int[] { 0, 9, 3, 3, 7 };
+        weights[1] = new int[] { 9, 0, 10, 7, 5 };
+        weights[2] = new int[] { 3, 10, 0, 1, 1 };
+        weights[3] = new int[] { 3, 7, 1, 0, 10 };
+        weights[4] = new int[] { 7, 5, 1, 10, 0 };
+
+        for (int i = 0; i < 5; i++) {
+            g.addVertex(i);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                g.addEdge(i, j);
+                g.setEdgeWeight(g.getEdge(i, j), weights[i][j]);
+            }
+        }
+
+        GraphPath<Integer, DefaultWeightedEdge> tour =
+            new HeldKarpTSP<Integer, DefaultWeightedEdge>().getTour(g);
+
+        assertNotNull(tour);
+        assertHamiltonian(g, tour);
+        assertEquals(19d, tour.getWeight(), 1e-9);
     }
 
     @Test

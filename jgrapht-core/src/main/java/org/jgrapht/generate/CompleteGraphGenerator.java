@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by Tim Shearouse and Contributors.
+ * (C) Copyright 2003-2020, by Tim Shearouse and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
@@ -32,7 +32,6 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Tim Shearouse
- * @since Nov 02, 2008
  */
 public class CompleteGraphGenerator<V, E>
     implements
@@ -43,15 +42,30 @@ public class CompleteGraphGenerator<V, E>
     /**
      * Construct a new CompleteGraphGenerator.
      *
-     * @param size number of vertices to be generated
+     * The generator will first add {@code size} nodes to the target graph when invoking
+     * {@link #generateGraph(Graph, Map)}. Next, a complete graph is generated on <i>all</i> nodes
+     * present in the target graph, including any nodes that were already present in the target
+     * graph.
+     *
+     * @param size number of vertices that will be added to the graph
      * @throws IllegalArgumentException if the specified size is negative
      */
     public CompleteGraphGenerator(int size)
     {
-        if (size < 0) {
+        if (size < 0)
             throw new IllegalArgumentException("size must be non-negative");
-        }
         this.size = size;
+    }
+
+    /**
+     * Construct a new CompleteGraphGenerator.
+     *
+     * A complete graph will be generated using the vertices already present in the target graph
+     * when invoking {@link #generateGraph(Graph, Map)}
+     */
+    public CompleteGraphGenerator()
+    {
+        size = 0;
     }
 
     /**
@@ -60,10 +74,6 @@ public class CompleteGraphGenerator<V, E>
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
-        if (size < 1) {
-            return;
-        }
-
         /*
          * Ensure directed or undirected
          */
@@ -73,16 +83,15 @@ public class CompleteGraphGenerator<V, E>
         /*
          * Add vertices
          */
-        List<V> nodes = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            nodes.add(target.addVertex());
-        }
+        for (int i = 0; i < size; i++)
+            target.addVertex();
 
         /*
          * Add edges
          */
-        for (int i = 0; i < size; i++) {
-            for (int j = i + 1; j < size; j++) {
+        List<V> nodes = new ArrayList<>(target.vertexSet());
+        for (int i = 0; i < nodes.size(); i++) {
+            for (int j = i + 1; j < nodes.size(); j++) {
                 V v = nodes.get(i);
                 V u = nodes.get(j);
                 target.addEdge(v, u);
@@ -93,5 +102,3 @@ public class CompleteGraphGenerator<V, E>
         }
     }
 }
-
-// End CompleteGraphGenerator.java

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2020, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
@@ -22,7 +22,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A unit test for the AsDirectedGraph view.
@@ -43,25 +43,6 @@ public class AsUndirectedGraphTest
     private String v3 = "v3";
     private String v4 = "v4";
     private Graph<String, DefaultEdge> undirected;
-
-    /**
-     * .
-     */
-    @Before
-    public void setUp()
-    {
-        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
-        undirected = new AsUndirectedGraph<>(directed);
-
-        directed.addVertex(v1);
-        directed.addVertex(v2);
-        directed.addVertex(v3);
-        directed.addVertex(v4);
-        e12 = directed.addEdge(v1, v2);
-        e23 = directed.addEdge(v2, v3);
-        e24 = directed.addEdge(v2, v4);
-        loop = directed.addEdge(v4, v4);
-    }
 
     /**
      * .
@@ -224,6 +205,23 @@ public class AsUndirectedGraphTest
         assertEquals(
             "([v1, v2, v3, v4], [{v1,v2}, {v2,v3}, {v2,v4}, {v4,v4}])", undirected.toString());
     }
-}
 
-// End AsUndirectedGraphTest.java
+    /**
+     * .
+     */
+    @Before
+    public void setUp()
+    {
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
+        undirected = new AsUndirectedGraph<>(directed);
+
+        directed.addVertex(v1);
+        directed.addVertex(v2);
+        directed.addVertex(v3);
+        directed.addVertex(v4);
+        e12 = directed.addEdge(v1, v2);
+        e23 = directed.addEdge(v2, v3);
+        e24 = directed.addEdge(v2, v4);
+        loop = directed.addEdge(v4, v4);
+    }
+}

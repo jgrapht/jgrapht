@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
 
@@ -23,17 +23,17 @@ import org.jgrapht.alg.interfaces.*;
 import java.util.*;
 
 /**
- * A simple class which computes a random, maximum cardinality matching. The algorithm can run in
- * two modes: sorted or unsorted. When unsorted, the matching is obtained by iterating through the
- * edges and adding an edge if it doesn't conflict with the edges already in the matching. When
- * sorted, the edges are first sorted by the sum of degrees of their endpoints. After that, the
- * algorithm proceeds in the same manner. Running this algorithm in sorted mode can sometimes
- * produce better results, albeit at the cost of some additional computational overhead.
+ * The greedy algorithm for computing a maximum cardinality matching. The algorithm can run in two
+ * modes: sorted or unsorted. When unsorted, the matching is obtained by iterating through the edges
+ * and adding an edge if it doesn't conflict with the edges already in the matching. When sorted,
+ * the edges are first sorted by the sum of degrees of their endpoints. After that, the algorithm
+ * proceeds in the same manner. Running this algorithm in sorted mode can sometimes produce better
+ * results, albeit at the cost of some additional computational overhead.
  * <p>
  * Independent of the mode, the resulting matching is maximal, and is therefore guaranteed to
- * contain at least half of the edges that a maximum matching has ($\frac{1}{2}$ approximation).
- * Runtime complexity: $O(m)$ when the edges are not sorted, $O(m+ m \log n)$ otherwise, where $n$
- * is the number of vertices, and m the number of edges.
+ * contain at least half of the edges that a maximum cardinality matching has ($\frac{1}{2}$
+ * approximation). Runtime complexity: $O(m)$ when the edges are not sorted, $O(m + m \log n)$
+ * otherwise, where $n$ is the number of vertices, and $m$ the number of edges.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -44,7 +44,6 @@ public class GreedyMaximumCardinalityMatching<V, E>
     implements
     MatchingAlgorithm<V, E>
 {
-
     private final Graph<V, E> graph;
     private final boolean sort;
 
@@ -88,7 +87,6 @@ public class GreedyMaximumCardinalityMatching<V, E>
                 }
             }
         } else {
-
             for (V v : graph.vertexSet()) {
                 if (matched.contains(v))
                     continue;
@@ -112,7 +110,6 @@ public class GreedyMaximumCardinalityMatching<V, E>
         implements
         Comparator<E>
     {
-
         @Override
         public int compare(E e1, E e2)
         {

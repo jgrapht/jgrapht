@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.vertexcover;
 
@@ -43,7 +43,6 @@ import java.util.stream.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- * @since Nov 6, 2003
  */
 public class GreedyVCImpl<V, E>
     implements
@@ -96,9 +95,10 @@ public class GreedyVCImpl<V, E>
         // Create working graph: for every vertex, create a RatioVertex which maintains its own list
         // of neighbors
         Map<V, RatioVertex<V>> vertexEncapsulationMap = new HashMap<>();
-        graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).forEach(
-            v -> vertexEncapsulationMap
-                .put(v, new RatioVertex<>(vertexCounter++, v, vertexWeightMap.get(v))));
+        graph
+            .vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).forEach(
+                v -> vertexEncapsulationMap
+                    .put(v, new RatioVertex<>(vertexCounter++, v, vertexWeightMap.get(v))));
 
         for (E e : graph.edgeSet()) {
             V u = graph.getEdgeSource(e);
@@ -108,8 +108,9 @@ public class GreedyVCImpl<V, E>
             ux.addNeighbor(vx);
             vx.addNeighbor(ux);
 
-            assert (ux.neighbors.get(vx) == vx.neighbors.get(
-                ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+            assert (ux.neighbors.get(vx) == vx.neighbors
+                .get(
+                    ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
         TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
@@ -122,10 +123,11 @@ public class GreedyVCImpl<V, E>
 
             // Find a vertex vx for which W(vx)/degree(vx) is minimal
             RatioVertex<V> vx = workingGraph.pollFirst();
-            assert (workingGraph.parallelStream().allMatch(
-                ux -> vx.getRatio() <= ux
-                    .getRatio())) : "vx does not have the smallest ratio among all elements. VX: "
-                        + vx + " WorkingGraph: " + workingGraph;
+            assert (workingGraph
+                .parallelStream().allMatch(
+                    ux -> vx.getRatio() <= ux
+                        .getRatio())) : "vx does not have the smallest ratio among all elements. VX: "
+                            + vx + " WorkingGraph: " + workingGraph;
 
             for (RatioVertex<V> nx : vx.neighbors.keySet()) {
 
@@ -146,8 +148,9 @@ public class GreedyVCImpl<V, E>
             // Update cover
             cover.add(vx.v);
             weight += vertexWeightMap.get(vx.v);
-            assert (workingGraph.parallelStream().noneMatch(
-                ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
+            assert (workingGraph
+                .parallelStream().noneMatch(
+                    ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
         }
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }

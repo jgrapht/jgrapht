@@ -1,28 +1,29 @@
 /*
- * (C) Copyright 2015-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2015-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 /**
  * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of
@@ -47,31 +48,6 @@ public class UndirectedSpecifics<V, E>
     protected Graph<V, E> graph;
     protected Map<V, UndirectedEdgeContainer<V, E>> vertexMap;
     protected EdgeSetFactory<V, E> edgeSetFactory;
-
-    /**
-     * Construct a new undirected specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public UndirectedSpecifics(Graph<V, E> graph)
-    {
-        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
-
-    /**
-     * Construct a new undirected specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public UndirectedSpecifics(Graph<V, E> graph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
-    {
-        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
 
     /**
      * Construct a new undirected specifics.
@@ -166,20 +142,52 @@ public class UndirectedSpecifics<V, E>
         return equalStraight || equalInverted;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void addEdgeToTouchingVertices(E e)
+    public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
+        getEdgeContainer(sourceVertex).addEdge(e);
 
-        getEdgeContainer(source).addEdge(e);
-
-        if (!source.equals(target)) {
-            getEdgeContainer(target).addEdge(e);
+        if (!sourceVertex.equals(targetVertex)) {
+            getEdgeContainer(targetVertex).addEdge(e);
         }
+        return true;
+    }
+
+    @Override
+    public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
+    {
+        // lookup for edge with same source and target
+        UndirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        for (E edge : ec.vertexEdges) {
+            if (isEqualsStraightOrInverted(sourceVertex, targetVertex, edge)) {
+                return false;
+            }
+        }
+
+        // add
+        ec.addEdge(e);
+        getEdgeContainer(targetVertex).addEdge(e);
+        return true;
+    }
+
+    @Override
+    public E createEdgeToTouchingVerticesIfAbsent(
+        V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
+    {
+        // lookup for edge with same source and target
+        UndirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        for (E edge : ec.vertexEdges) {
+            if (isEqualsStraightOrInverted(sourceVertex, targetVertex, edge)) {
+                return null;
+            }
+        }
+
+        // create and add
+        E e = edgeSupplier.get();
+        ec.addEdge(e);
+        getEdgeContainer(targetVertex).addEdge(e);
+
+        return e;
     }
 
     /**
@@ -258,15 +266,12 @@ public class UndirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void removeEdgeFromTouchingVertices(E e)
+    public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
+        getEdgeContainer(sourceVertex).removeEdge(e);
 
-        getEdgeContainer(source).removeEdge(e);
-
-        if (!source.equals(target)) {
-            getEdgeContainer(target).removeEdge(e);
+        if (!sourceVertex.equals(targetVertex)) {
+            getEdgeContainer(targetVertex).removeEdge(e);
         }
     }
 
@@ -288,4 +293,5 @@ public class UndirectedSpecifics<V, E>
 
         return ec;
     }
+
 }

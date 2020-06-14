@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2009-2020, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
@@ -39,8 +39,10 @@ import java.util.function.*;
  * @author Ilya Razenshteyn
  */
 public class AsGraphUnion<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -3848082143382987713L;
 
@@ -110,12 +112,13 @@ public class AsGraphUnion<V, E>
 
         if (inG1 && inG2) {
             return new UnmodifiableUnionSet<>(
-                g1.getAllEdges(sourceVertex, targetVertex), g2.getAllEdges(sourceVertex, targetVertex));
+                g1.getAllEdges(sourceVertex, targetVertex),
+                g2.getAllEdges(sourceVertex, targetVertex));
         } else if (inG1) {
             return Collections.unmodifiableSet(g1.getAllEdges(sourceVertex, targetVertex));
         } else if (inG2) {
             return Collections.unmodifiableSet(g2.getAllEdges(sourceVertex, targetVertex));
-        } 
+        }
         return Collections.emptySet();
     }
 
@@ -238,8 +241,7 @@ public class AsGraphUnion<V, E>
         boolean inG2 = g2.containsVertex(vertex);
 
         if (inG1 && inG2) {
-            return new UnmodifiableUnionSet<>(
-                g1.edgesOf(vertex), g2.edgesOf(vertex));
+            return new UnmodifiableUnionSet<>(g1.edgesOf(vertex), g2.edgesOf(vertex));
         } else if (inG1) {
             return Collections.unmodifiableSet(g1.edgesOf(vertex));
         } else if (inG2) {
@@ -474,5 +476,3 @@ public class AsGraphUnion<V, E>
         throw new UnsupportedOperationException(READ_ONLY);
     }
 }
-
-// End GraphUnion.java

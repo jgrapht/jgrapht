@@ -1,23 +1,22 @@
 /*
- * (C) Copyright 2008-2018, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2020, by Peter Giles and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
@@ -62,7 +61,7 @@ import java.util.function.*;
  */
 public class DirectedAcyclicGraph<V, E>
     extends
-    SimpleDirectedGraph<V, E>
+    AbstractBaseGraph<V, E>
     implements
     Iterable<V>
 {
@@ -90,7 +89,7 @@ public class DirectedAcyclicGraph<V, E>
      */
     public DirectedAcyclicGraph(Class<? extends E> edgeClass)
     {
-        this(null, SupplierUtil.createSupplier(edgeClass), false);
+        this(null, SupplierUtil.createSupplier(edgeClass), false, false);
     }
 
     /**
@@ -105,7 +104,24 @@ public class DirectedAcyclicGraph<V, E>
     {
         this(
             vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
-            weighted);
+            weighted, false);
+    }
+
+    /**
+     * Construct a directed acyclic graph.
+     *
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param weighted if true the graph will be weighted, otherwise not
+     * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
+     */
+    public DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted,
+        boolean allowMultipleEdges)
+    {
+        this(
+            vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
+            weighted, allowMultipleEdges);
     }
 
     /**
@@ -124,7 +140,31 @@ public class DirectedAcyclicGraph<V, E>
         VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
         boolean weighted)
     {
-        super(vertexSupplier, edgeSupplier, weighted);
+        this(vertexSupplier, edgeSupplier, visitedStrategyFactory, topoOrderMap, weighted, false);
+    }
+
+    /**
+     * Construct a directed acyclic graph.
+     * 
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
+     *        implementation to adjust the performance tradeoffs.
+     * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
+     *        the way this class stores the topological order.
+     * @param weighted if true the graph will be weighted, otherwise not
+     * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
+     */
+    protected DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
+        VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
+        boolean weighted, boolean allowMultipleEdges)
+    {
+        super(
+            vertexSupplier, edgeSupplier,
+            new DefaultGraphType.Builder()
+                .directed().allowMultipleEdges(allowMultipleEdges).allowSelfLoops(false)
+                .weighted(weighted).allowCycles(false).build());
         this.visitedStrategyFactory =
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
@@ -158,14 +198,6 @@ public class DirectedAcyclicGraph<V, E>
         Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DirectedAcyclicGraph<>(null, edgeSupplier, false));
-    }
-
-    @Override
-    public GraphType getType()
-    {
-        return new DefaultGraphType.Builder()
-            .directed().weighted(super.getType().isWeighted()).allowMultipleEdges(false)
-            .allowSelfLoops(false).allowCycles(false).build();
     }
 
     @Override
@@ -1236,5 +1268,3 @@ public class DirectedAcyclicGraph<V, E>
         }
     }
 }
-
-// End DirectedAcyclicGraph.java

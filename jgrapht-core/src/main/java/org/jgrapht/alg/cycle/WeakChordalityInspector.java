@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2020, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -68,7 +69,6 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Timofey Chudakov
- * @since April 2018
  */
 public class WeakChordalityInspector<V, E>
 {
@@ -123,8 +123,8 @@ public class WeakChordalityInspector<V, E>
      */
     private void initMappings()
     {
-        vertices = new HashMap<>(n);
-        indices = new HashMap<>(n);
+        vertices = CollectionUtil.newHashMapWithExpectedSize(n);
+        indices = CollectionUtil.newHashMapWithExpectedSize(n);
         int i = 0;
         for (V v : graph.vertexSet()) {
             indices.put(i, v);
@@ -320,7 +320,7 @@ public class WeakChordalityInspector<V, E>
      */
     private void sortSeparatorsList(List<Pair<List<Pair<Integer, Integer>>, E>> separators)
     {
-        Queue<Pair<List<Pair<Integer, Integer>>, E>> mainQueue = new LinkedList<>();
+        Queue<Pair<List<Pair<Integer, Integer>>, E>> mainQueue = new ArrayDeque<>();
         int maxSeparatorLength = 0;
         for (Pair<List<Pair<Integer, Integer>>, E> separator : separators) {
             if (separator.getFirst().size() > maxSeparatorLength) {
@@ -398,7 +398,7 @@ public class WeakChordalityInspector<V, E>
             bucketsByLabel.add(new HashSet<>());
         }
         List<Integer> labels = new ArrayList<>(Collections.nCopies(n, -1));
-        Set<Integer> unvisited = new HashSet<>(separator.size());
+        Set<Integer> unvisited = CollectionUtil.newHashSetWithExpectedSize(separator.size());
         separator.forEach(pair -> {
             unvisited.add(pair.getFirst());
             labels.set(pair.getFirst(), 0);
@@ -536,7 +536,7 @@ public class WeakChordalityInspector<V, E>
     {
         // Generating the complement of the inspected graph
         ComplementGraphGenerator<V, E> generator = new ComplementGraphGenerator<>(graph, false);
-        Graph<V, E> complement = Pseudograph.<V, E>createBuilder(graph.getEdgeSupplier()).build();
+        Graph<V, E> complement = Pseudograph.<V, E> createBuilder(graph.getEdgeSupplier()).build();
         generator.generateGraph(complement);
 
         E cycleFormer = complement.getEdge(source, targetInSeparator);
@@ -595,7 +595,8 @@ public class WeakChordalityInspector<V, E>
     private GraphPath<V, E> findHole(
         Graph<V, E> graph, V sourceInSeparator, V source, V target, V targetInSeparator)
     {
-        Map<V, Boolean> visited = new HashMap<>(graph.vertexSet().size());
+        Map<V, Boolean> visited =
+            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }
@@ -729,7 +730,7 @@ public class WeakChordalityInspector<V, E>
         V source = graph.getEdgeSource(edge);
         V target = graph.getEdgeTarget(edge);
         Set<V> neighborhood = neighborhoodSetOf(graph, edge);
-        Map<V, Byte> dfsMap = new HashMap<>(graph.vertexSet().size());
+        Map<V, Byte> dfsMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         // 0 - unvisited (white), 1 - neighbor of the edge (red), 2 - visited (black)
         for (V vertex : graph.vertexSet()) {

@@ -1,28 +1,27 @@
 /*
- * (C) Copyright 2015-2018, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2020, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.alg.util.extension.*;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -197,10 +196,10 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
-     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
-     * <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different.
+     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then
+     * calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
+     * <code>source</code> and <code>sink</code> must be vertices of the <code>
+     * network</code> passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex

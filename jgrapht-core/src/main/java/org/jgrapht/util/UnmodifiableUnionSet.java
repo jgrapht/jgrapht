@@ -1,28 +1,24 @@
 /*
- * (C) Copyright 2018-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2018-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.util;
 
-import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * An unmodifiable live view of the union of two sets.
@@ -32,8 +28,10 @@ import java.util.Set;
  * @author Dimitrios Michail
  */
 public class UnmodifiableUnionSet<E>
-    extends AbstractSet<E>
-    implements Serializable
+    extends
+    AbstractSet<E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -1937327799873331354L;
 
@@ -50,20 +48,14 @@ public class UnmodifiableUnionSet<E>
     {
         Objects.requireNonNull(first);
         Objects.requireNonNull(second);
-        if (second.size() > first.size()) {
-            // always store largest set first
-            this.first = second;
-            this.second = first;
-        } else {
-            this.first = first;
-            this.second = second;
-        }
+        this.first = first;
+        this.second = second;
     }
 
     @Override
     public Iterator<E> iterator()
     {
-        return new UnionIterator();
+        return new UnionIterator(orderSetsBySize());
     }
 
     /**
@@ -74,32 +66,68 @@ public class UnmodifiableUnionSet<E>
     @Override
     public int size()
     {
-        int count = first.size();
-        for (E e : second) {
-            if (!first.contains(e)) {
+        SetSizeOrdering ordering = orderSetsBySize();
+        Set<E> bigger = ordering.bigger;
+        int count = ordering.biggerSize;
+        for (E e : ordering.smaller) {
+            if (!bigger.contains(e)) {
                 count++;
             }
         }
         return count;
     }
-    
+
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(Object o)
+    {
         return first.contains(o) || second.contains(o);
     }
 
-    private class UnionIterator
-        implements Iterator<E>
+    private SetSizeOrdering orderSetsBySize()
     {
+        int firstSize = first.size();
+        int secondSize = second.size();
+        if (secondSize > firstSize) {
+            return new SetSizeOrdering(second, first, secondSize, firstSize);
+        } else {
+            return new SetSizeOrdering(first, second, firstSize, secondSize);
+        }
+    }
 
-        private boolean inFirstSet;
+    // note that these inner classes could be static, but we
+    // declare them as non-static to avoid the clutter from
+    // duplicating the generic type parameter
+
+    private class SetSizeOrdering
+    {
+        final Set<E> bigger;
+        final Set<E> smaller;
+        final int biggerSize;
+        final int smallerSize;
+
+        SetSizeOrdering(Set<E> bigger, Set<E> smaller, int biggerSize, int smallerSize)
+        {
+            this.bigger = bigger;
+            this.smaller = smaller;
+            this.biggerSize = biggerSize;
+            this.smallerSize = smallerSize;
+        }
+    }
+
+    private class UnionIterator
+        implements
+        Iterator<E>
+    {
+        private SetSizeOrdering ordering;
+        private boolean inBiggerSet;
         private Iterator<E> iterator;
         private E cur;
 
-        public UnionIterator()
+        UnionIterator(SetSizeOrdering ordering)
         {
-            this.inFirstSet = true;
-            this.iterator = first.iterator();
+            this.ordering = ordering;
+            this.inBiggerSet = true;
+            this.iterator = ordering.bigger.iterator();
             this.cur = prefetch();
         }
 
@@ -126,17 +154,17 @@ public class UnmodifiableUnionSet<E>
         private E prefetch()
         {
             while (true) {
-                if (inFirstSet) {
+                if (inBiggerSet) {
                     if (iterator.hasNext()) {
                         return iterator.next();
                     } else {
-                        inFirstSet = false;
-                        iterator = second.iterator();
+                        inBiggerSet = false;
+                        iterator = ordering.smaller.iterator();
                     }
                 } else {
                     if (iterator.hasNext()) {
                         E elem = iterator.next();
-                        if (!first.contains(elem)) {
+                        if (!ordering.bigger.contains(elem)) {
                             return elem;
                         }
                     } else {

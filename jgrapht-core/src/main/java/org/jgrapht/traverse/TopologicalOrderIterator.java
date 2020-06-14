@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2004-2018, by Marden Neubert and Contributors.
+ * (C) Copyright 2004-2020, by Marden Neubert and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
@@ -26,9 +26,10 @@ import java.util.*;
  * A topological ordering iterator for a directed acyclic graph.
  * 
  * <p>
- * A topological order is a permutation <tt>p</tt> of the vertices of a graph such that an edge
- * <tt>(i,j)</tt> implies that <tt>i</tt> appears before <tt>j</tt> in <tt>p</tt>. For more
- * information see <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
+ * A topological order is a permutation <code>p</code> of the vertices of a graph such that an edge
+ * <code>(i,j)</code> implies that <code>i</code> appears before <code>j</code> in <code>p</code>.
+ * For more information see
+ * <a href="https://en.wikipedia.org/wiki/Topological_sorting">wikipedia</a> or
  * <a href="http://mathworld.wolfram.com/TopologicalSort.html">wolfram</a>.
  *
  * <p>
@@ -46,7 +47,6 @@ import java.util.*;
  *
  * @author Marden Neubert
  * @author Dimitrios Michail
- * @since December 2004
  */
 public class TopologicalOrderIterator<V, E>
     extends
@@ -94,7 +94,7 @@ public class TopologicalOrderIterator<V, E>
 
         // create queue
         if (comparator == null) {
-            this.queue = new LinkedList<>();
+            this.queue = new ArrayDeque<>();
         } else {
             this.queue = new PriorityQueue<>(comparator);
         }
@@ -205,5 +205,3 @@ public class TopologicalOrderIterator<V, E>
     }
 
 }
-
-// End TopologicalOrderIterator.java

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2012-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2012-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
 package org.jgrapht.demo;
@@ -27,7 +27,6 @@ import java.util.*;
  * An example of how to apply edge labels using a custom edge class.
  *
  * @author Barak Naveh
- * @since Jul 27, 2003
  */
 public class LabeledEdges
 {
@@ -41,7 +40,7 @@ public class LabeledEdges
      */
     public static void main(String[] args)
     {
-        //@example:create:begin
+        // @example:create:begin
         Graph<String, RelationshipEdge> graph = new DefaultDirectedGraph<>(RelationshipEdge.class);
 
         ArrayList<String> people = new ArrayList<String>();
@@ -54,9 +53,7 @@ public class LabeledEdges
         for (String person : people) {
             graph.addVertex(person);
             if (!person.equals("John")) {
-                graph.addEdge(
-                    "John", person,
-                    new RelationshipEdge(FRIEND));
+                graph.addEdge("John", person, new RelationshipEdge(FRIEND));
             }
         }
 
@@ -69,9 +66,9 @@ public class LabeledEdges
 
         // But Sarah doesn't really like James
         graph.addEdge("Sarah", "James", new RelationshipEdge(ENEMY));
-        //@example:create:end
+        // @example:create:end
 
-        //@example:print:begin
+        // @example:print:begin
         for (RelationshipEdge edge : graph.edgeSet()) {
             String v1 = graph.getEdgeSource(edge);
             String v2 = graph.getEdgeTarget(edge);
@@ -81,27 +78,27 @@ public class LabeledEdges
                 System.out.printf(v1 + " is a friend of " + v2 + "\n");
             }
         }
-        //@example:print:end
+        // @example:print:end
 
-        assert(isEnemyOf(graph, "James", "John"));
+        assert (isEnemyOf(graph, "James", "John"));
     }
 
-    //@example:isEnemyOf:begin
+    // @example:isEnemyOf:begin
     private static boolean isEnemyOf(
-        Graph<String, RelationshipEdge> graph,
-        String person1,
-        String person2)
+        Graph<String, RelationshipEdge> graph, String person1, String person2)
     {
         return graph.getEdge(person1, person2).getLabel().equals(ENEMY);
     }
-    //@example:isEnemyOf:end
+    // @example:isEnemyOf:end
 }
 
 /**
  * Custom edge class labeled with relationship type.
  */
-//@example:edgeclass:begin
-class RelationshipEdge extends DefaultEdge
+// @example:edgeclass:begin
+class RelationshipEdge
+    extends
+    DefaultEdge
 {
     private String label;
 
@@ -132,4 +129,4 @@ class RelationshipEdge extends DefaultEdge
         return "(" + getSource() + " : " + getTarget() + " : " + label + ")";
     }
 }
-//@example:edgeclass:end
+// @example:edgeclass:end

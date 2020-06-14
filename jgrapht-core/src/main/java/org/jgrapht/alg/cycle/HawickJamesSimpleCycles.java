@@ -1,25 +1,28 @@
 /*
- * (C) Copyright 2014-2018, by Luiz Kill and Contributors.
+ * (C) Copyright 2014-2020, by Luiz Kill and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
 import org.jgrapht.*;
 
 import java.util.*;
+
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
@@ -38,23 +41,11 @@ public class HawickJamesSimpleCycles<V, E>
     implements
     DirectedSimpleCycles<V, E>
 {
-    private enum Operation
-    {
-        ENUMERATE,
-        PRINT_ONLY,
-        COUNT_ONLY
-    }
 
-    // The graph
     private Graph<V, E> graph;
 
-    // Number of vertices
     private int nVertices = 0;
-
-    // Number of simple cycles
     private long nCycles = 0;
-
-    // Simple cycles found
     private List<List<V>> cycles = null;
 
     // The main state of the algorithm
@@ -64,9 +55,13 @@ public class HawickJamesSimpleCycles<V, E>
     private boolean[] blocked = null;
     private ArrayDeque<Integer> stack = null;
 
-    // Giving an index to every V
+    // Indexing the vertices
     private V[] iToV = null;
     private Map<V, Integer> vToI = null;
+
+    private int pathLimit = 0;
+    private boolean hasLimit = false;
+    private Runnable operation;
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -90,19 +85,15 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     @SuppressWarnings("unchecked")
-    private void initState(Operation o)
+    private void initState()
     {
         nCycles = 0;
         nVertices = graph.vertexSet().size();
-        if (o == Operation.ENUMERATE) {
-            cycles = new ArrayList<>();
-        }
         blocked = new boolean[nVertices];
         stack = new ArrayDeque<>(nVertices);
 
         B = new ArrayList[nVertices];
         for (int i = 0; i < nVertices; i++) {
-            // B[i] = new ArrayList<Integer>(nVertices);
             B[i] = new ArrayList<>();
         }
 
@@ -142,12 +133,12 @@ public class HawickJamesSimpleCycles<V, E>
         stack = null;
         iToV = null;
         vToI = null;
-
-        Ak = null;
         B = null;
+        operation = () -> {
+        };
     }
 
-    private boolean circuit(Integer v, Operation o)
+    private boolean circuit(Integer v, int steps)
     {
         boolean f = false;
 
@@ -160,28 +151,11 @@ public class HawickJamesSimpleCycles<V, E>
             }
 
             if (Objects.equals(w, start)) {
-                if (o == Operation.ENUMERATE) {
-                    List<V> cycle = new ArrayList<>(stack.size());
-
-                    for (Integer aStack : stack) {
-                        cycle.add(iToV[aStack]);
-                    }
-
-                    cycles.add(cycle);
-                }
-
-                if (o == Operation.PRINT_ONLY) {
-                    for (Integer i : stack) {
-                        System.out.print(iToV[i].toString() + " ");
-                    }
-                    System.out.println("");
-                }
-
-                nCycles++;
+                operation.run();
 
                 f = true;
             } else if (!blocked[w]) {
-                if (circuit(w, o)) {
+                if (limitReached(steps) || circuit(w, steps + 1)) {
                     f = true;
                 }
             }
@@ -213,7 +187,9 @@ public class HawickJamesSimpleCycles<V, E>
         for (int wPos = 0; wPos < B[u].size(); wPos++) {
             Integer w = B[u].get(wPos);
 
-            wPos -= removeFromList(B[u], w);
+            int sizeBeforeRemove = B[u].size();
+            B[u].removeAll(singletonList(w));
+            wPos -= (sizeBeforeRemove - B[u].size());
 
             if (blocked[w]) {
                 unblock(w);
@@ -222,29 +198,8 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     /**
-     * Remove all occurrences of a value from the list.
-     *
-     * @param u the Integer to be removed.
-     * @param list the list from which all the occurrences of u must be removed.
-     */
-    private int removeFromList(List<Integer> list, Integer u)
-    {
-        int nOccurrences = 0;
-
-        Iterator<Integer> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Integer w = iterator.next();
-            if (Objects.equals(w, u)) {
-                nOccurrences++;
-                iterator.remove();
-            }
-        }
-
-        return nOccurrences;
-    }
-
-    /**
      * Get the graph
+     * 
      * @return graph
      */
     public Graph<V, E> getGraph()
@@ -254,6 +209,7 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Set the graph
+     * 
      * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
@@ -272,18 +228,14 @@ public class HawickJamesSimpleCycles<V, E>
             throw new IllegalArgumentException("Null graph.");
         }
 
-        initState(Operation.ENUMERATE);
-
-        for (int i = 0; i < nVertices; i++) {
-            for (int j = 0; j < nVertices; j++) {
-                blocked[j] = false;
-                B[j].clear();
-            }
-
-            start = vToI.get(iToV[i]);
-            circuit(start, Operation.ENUMERATE);
-        }
-
+        initState();
+        cycles = new ArrayList<>();
+        operation = () -> {
+            List<V> cycle = stack.stream().map(v -> iToV[v]).collect(toList());
+            Collections.reverse(cycle);
+            cycles.add(cycle);
+        };
+        analyzeCircuits();
         List<List<V>> result = cycles;
         clearState();
         return result;
@@ -299,18 +251,13 @@ public class HawickJamesSimpleCycles<V, E>
             throw new IllegalArgumentException("Null graph.");
         }
 
-        initState(Operation.PRINT_ONLY);
+        initState();
+        operation = () -> {
+            stack.stream().map(i -> iToV[i].toString() + " ").forEach(System.out::print);
+            System.out.println();
+        };
 
-        for (int i = 0; i < nVertices; i++) {
-            for (int j = 0; j < nVertices; j++) {
-                blocked[j] = false;
-                B[j].clear();
-            }
-
-            start = vToI.get(iToV[i]);
-            circuit(start, Operation.PRINT_ONLY);
-        }
-
+        analyzeCircuits();
         clearState();
     }
 
@@ -325,8 +272,16 @@ public class HawickJamesSimpleCycles<V, E>
             throw new IllegalArgumentException("Null graph.");
         }
 
-        initState(Operation.COUNT_ONLY);
+        initState();
+        nCycles = 0;
+        operation = () -> nCycles++;
+        analyzeCircuits();
+        clearState();
+        return nCycles;
+    }
 
+    private void analyzeCircuits()
+    {
         for (int i = 0; i < nVertices; i++) {
             for (int j = 0; j < nVertices; j++) {
                 blocked[j] = false;
@@ -334,13 +289,32 @@ public class HawickJamesSimpleCycles<V, E>
             }
 
             start = vToI.get(iToV[i]);
-            circuit(start, Operation.COUNT_ONLY);
+            circuit(start, 0);
         }
+    }
 
-        clearState();
+    /**
+     * Limits the maximum number of edges in a cycle.
+     *
+     * @param pathLimit maximum paths.
+     */
+    public void setPathLimit(int pathLimit)
+    {
+        this.pathLimit = pathLimit - 1;
+        this.hasLimit = true;
+    }
 
-        return nCycles;
+    /**
+     * This is the default behaviour of the algorithm. It will keep looking as long as there are
+     * paths available.
+     */
+    public void clearPathLimit()
+    {
+        this.hasLimit = false;
+    }
+
+    private boolean limitReached(int steps)
+    {
+        return hasLimit && steps >= pathLimit;
     }
 }
-
-// End HawickAndJamesSimpleCycles.java

@@ -1,28 +1,26 @@
 /*
- * (C) Copyright 2018-2018, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2020, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.*;
 
 import static junit.framework.TestCase.fail;
 import static org.jgrapht.Graph.DEFAULT_EDGE_WEIGHT;
@@ -53,7 +51,8 @@ public class UnweightedGraphAsWeightedGraphTest
     /**
      * Similar set up as created by {@link AsUndirectedGraphTest}.
      */
-    @Before public void setUp()
+    @Before
+    public void setUp()
     {
         Graph<String, DefaultWeightedEdge> graph =
             new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
@@ -76,7 +75,8 @@ public class UnweightedGraphAsWeightedGraphTest
         this.weightedGraph = new AsWeightedGraph<>(graph, graphWeights);
     }
 
-    @Test public void testSetEdgeWeight()
+    @Test
+    public void testSetEdgeWeight()
     {
         double newEdgeWeight = -999;
         this.weightedGraph.setEdgeWeight(e12, newEdgeWeight);
@@ -84,27 +84,20 @@ public class UnweightedGraphAsWeightedGraphTest
         assertEquals(newEdgeWeight, this.weightedGraph.getEdgeWeight(e12), 0);
     }
 
-    @Test public void testGetEdgeWeight()
+    @Test
+    public void testGetEdgeWeight()
     {
         assertEquals(e23Weight, this.weightedGraph.getEdgeWeight(e23), 0);
     }
 
-    @Test public void testGetDefaultEdgeWeight()
+    @Test
+    public void testGetDefaultEdgeWeight()
     {
         assertEquals(DEFAULT_EDGE_WEIGHT, this.weightedGraph.getEdgeWeight(loop), 0);
     }
 
-    @Test public void testSetEdgeWeightIfNullIsPassed()
-    {
-        try {
-            this.weightedGraph.setEdgeWeight(null, 0);
-            fail("Expected a NullPointerException");
-        } catch (Exception e) {
-            assertTrue(e instanceof NullPointerException);
-        }
-    }
-
-    @Test public void testGetEdgeWeightOfNull()
+    @Test
+    public void testGetEdgeWeightOfNull()
     {
         try {
             this.weightedGraph.getEdgeWeight(null);
@@ -114,18 +107,18 @@ public class UnweightedGraphAsWeightedGraphTest
         }
     }
 
-    @Test public void testGetType()
+    @Test
+    public void testGetType()
     {
         assertTrue(this.weightedGraph.getType().isWeighted());
     }
 
-    @Test public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
+    @Test
+    public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
     {
         try {
             new AsWeightedGraph<>(
-                new DefaultUndirectedGraph<>(String.class),
-                new HashMap<>(),
-                true);
+                new DefaultUndirectedGraph<>(String.class), new HashMap<>(), true);
             fail("Expected a IllegalArgumentException");
         } catch (Exception e) {
             assertTrue(e instanceof IllegalArgumentException);

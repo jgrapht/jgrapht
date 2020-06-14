@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.scoring;
 
@@ -56,7 +56,6 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since August 2016
  */
 public final class PageRank<V, E>
     implements
@@ -78,69 +77,92 @@ public final class PageRank<V, E>
      */
     public static final double DAMPING_FACTOR_DEFAULT = 0.85d;
 
-    private final Graph<V, E> g;
+    /**
+     * The input graph
+     */
+    private final Graph<V, E> graph;
+
+    /**
+     * The damping factor
+     */
+    private final double dampingFactor;
+
+    /**
+     * Maximum iterations to run
+     */
+    private final int maxIterations;
+
+    /**
+     * The calculation will stop if the difference of PageRank values between iterations change less
+     * than this value
+     */
+    private final double tolerance;
+
+    /**
+     * The result
+     */
     private Map<V, Double> scores;
 
     /**
      * Create and execute an instance of PageRank.
      * 
-     * @param g the input graph
+     * @param graph the input graph
      */
-    public PageRank(Graph<V, E> g)
+    public PageRank(Graph<V, E> graph)
     {
-        this(g, DAMPING_FACTOR_DEFAULT, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
+        this(graph, DAMPING_FACTOR_DEFAULT, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
     }
 
     /**
      * Create and execute an instance of PageRank.
      * 
-     * @param g the input graph
+     * @param graph the input graph
      * @param dampingFactor the damping factor
      */
-    public PageRank(Graph<V, E> g, double dampingFactor)
+    public PageRank(Graph<V, E> graph, double dampingFactor)
     {
-        this(g, dampingFactor, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
+        this(graph, dampingFactor, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
     }
 
     /**
      * Create and execute an instance of PageRank.
      * 
-     * @param g the input graph
+     * @param graph the input graph
      * @param dampingFactor the damping factor
      * @param maxIterations the maximum number of iterations to perform
      */
-    public PageRank(Graph<V, E> g, double dampingFactor, int maxIterations)
+    public PageRank(Graph<V, E> graph, double dampingFactor, int maxIterations)
     {
-        this(g, dampingFactor, maxIterations, TOLERANCE_DEFAULT);
+        this(graph, dampingFactor, maxIterations, TOLERANCE_DEFAULT);
     }
 
     /**
      * Create and execute an instance of PageRank.
      * 
-     * @param g the input graph
+     * @param graph the input graph
      * @param dampingFactor the damping factor
      * @param maxIterations the maximum number of iterations to perform
      * @param tolerance the calculation will stop if the difference of PageRank values between
      *        iterations change less than this value
      */
-    public PageRank(Graph<V, E> g, double dampingFactor, int maxIterations, double tolerance)
+    public PageRank(Graph<V, E> graph, double dampingFactor, int maxIterations, double tolerance)
     {
-        this.g = g;
-        this.scores = new HashMap<>();
+        this.graph = graph;
 
         if (maxIterations <= 0) {
             throw new IllegalArgumentException("Maximum iterations must be positive");
         }
+        this.maxIterations = maxIterations;
 
         if (dampingFactor < 0.0 || dampingFactor > 1.0) {
             throw new IllegalArgumentException("Damping factor not valid");
         }
+        this.dampingFactor = dampingFactor;
 
         if (tolerance <= 0.0) {
             throw new IllegalArgumentException("Tolerance not valid, must be positive");
         }
-
-        run(dampingFactor, maxIterations, tolerance);
+        this.tolerance = tolerance;
     }
 
     /**
@@ -149,7 +171,10 @@ public final class PageRank<V, E>
     @Override
     public Map<V, Double> getScores()
     {
-        return Collections.unmodifiableMap(scores);
+        if (scores == null) {
+            scores = Collections.unmodifiableMap(new Algorithm().getScores());
+        }
+        return scores;
     }
 
     /**
@@ -158,82 +183,184 @@ public final class PageRank<V, E>
     @Override
     public Double getVertexScore(V v)
     {
-        if (!g.containsVertex(v)) {
+        if (!graph.containsVertex(v)) {
             throw new IllegalArgumentException("Cannot return score of unknown vertex");
         }
-        return scores.get(v);
+        return getScores().get(v);
     }
 
-    private void run(double dampingFactor, int maxIterations, double tolerance)
+    /**
+     * The actual implementation.
+     * 
+     * <p>
+     * We use this pattern with the inner class in order to be able to cache the result but also
+     * allow the garbage collector to acquire all auxiliary memory used during the execution of the
+     * algorithm.
+     * 
+     * @author Dimitrios Michail
+     * 
+     * @param <V> the graph type
+     * @param <E> the edge type
+     */
+    private class Algorithm
     {
-        // initialization
-        int totalVertices = g.vertexSet().size();
-        boolean weighted = g.getType().isWeighted();
-        Map<V, Double> weights;
-        if (weighted) {
-            weights = new HashMap<>(totalVertices);
-        } else {
-            weights = Collections.emptyMap();
-        }
+        private int totalVertices;
+        private boolean isWeighted;
 
-        double initScore = 1.0d / totalVertices;
-        for (V v : g.vertexSet()) {
-            scores.put(v, initScore);
-            if (weighted) {
-                double sum = 0;
-                for (E e : g.outgoingEdgesOf(v)) {
-                    sum += g.getEdgeWeight(e);
+        private Map<V, Integer> vertexIndexMap;
+        private V[] vertexMap;
+
+        private double[] weights;
+        private double[] curScore;
+        private double[] nextScore;
+        private int[] outDegree;
+        private ArrayList<int[]> adjList;
+
+        @SuppressWarnings("unchecked")
+        public Algorithm()
+        {
+            this.totalVertices = graph.vertexSet().size();
+            this.isWeighted = graph.getType().isWeighted();
+
+            /*
+             * Initialize score, map vertices to [0,n) and pre-compute degrees and adjacency lists
+             */
+            this.curScore = new double[totalVertices];
+            this.nextScore = new double[totalVertices];
+            this.vertexIndexMap = new HashMap<>();
+            this.vertexMap = (V[]) new Object[totalVertices];
+            this.outDegree = new int[totalVertices];
+
+            double initScore = 1.0d / totalVertices;
+            int i = 0;
+            for (V v : graph.vertexSet()) {
+                vertexIndexMap.put(v, i);
+                vertexMap[i] = v;
+                outDegree[i] = graph.outDegreeOf(v);
+                curScore[i] = initScore;
+                i++;
+            }
+
+            if (isWeighted) {
+                this.weights = new double[totalVertices];
+                for (V v : graph.vertexSet()) {
+                    double sum = 0;
+                    for (E e : graph.outgoingEdgesOf(v)) {
+                        sum += graph.getEdgeWeight(e);
+                    }
+                    weights[vertexIndexMap.get(v)] = sum;
                 }
-                weights.put(v, sum);
+            } else {
+                this.adjList = new ArrayList<>(totalVertices);
+                for (i = 0; i < totalVertices; i++) {
+                    V v = vertexMap[i];
+                    int[] inNeighbors = new int[graph.inDegreeOf(v)];
+                    int j = 0;
+                    for (E e : graph.incomingEdgesOf(v)) {
+                        V w = Graphs.getOppositeVertex(graph, e, v);
+                        inNeighbors[j++] = vertexIndexMap.get(w);
+                    }
+                    adjList.add(inNeighbors);
+                }
             }
         }
 
-        // run PageRank
-        Map<V, Double> nextScores = new HashMap<>();
-        double maxChange = tolerance;
+        public Map<V, Double> getScores()
+        {
+            // compute
+            if (isWeighted) {
+                runWeighted();
+            } else {
+                run();
+            }
 
-        while (maxIterations > 0 && maxChange >= tolerance) {
-            // compute next iteration scores
+            // make results user friendly
+            Map<V, Double> scores = new HashMap<>();
+            for (int i = 0; i < totalVertices; i++) {
+                V v = vertexMap[i];
+                scores.put(v, curScore[i]);
+            }
+            return scores;
+        }
+
+        private void run()
+        {
+            double maxChange = tolerance;
+            int iterations = maxIterations;
+
+            while (iterations > 0 && maxChange >= tolerance) {
+                double r = teleProp();
+
+                maxChange = 0d;
+                for (int i = 0; i < totalVertices; i++) {
+                    double contribution = 0d;
+                    for (int w : adjList.get(i)) {
+                        contribution += dampingFactor * curScore[w] / outDegree[w];
+                    }
+
+                    double vOldValue = curScore[i];
+                    double vNewValue = r + contribution;
+                    maxChange = Math.max(maxChange, Math.abs(vNewValue - vOldValue));
+                    nextScore[i] = vNewValue;
+                }
+
+                // progress
+                swapScores();
+                iterations--;
+            }
+        }
+
+        private void runWeighted()
+        {
+            double maxChange = tolerance;
+            int iterations = maxIterations;
+
+            while (iterations > 0 && maxChange >= tolerance) {
+                double r = teleProp();
+
+                maxChange = 0d;
+                for (int i = 0; i < totalVertices; i++) {
+                    V v = vertexMap[i];
+                    double contribution = 0d;
+
+                    for (E e : graph.incomingEdgesOf(v)) {
+                        V w = Graphs.getOppositeVertex(graph, e, v);
+                        int wIndex = vertexIndexMap.get(w);
+                        contribution += dampingFactor * curScore[wIndex] * graph.getEdgeWeight(e)
+                            / weights[wIndex];
+                    }
+
+                    double vOldValue = curScore[i];
+                    double vNewValue = r + contribution;
+                    maxChange = Math.max(maxChange, Math.abs(vNewValue - vOldValue));
+                    nextScore[i] = vNewValue;
+                }
+
+                // progress
+                swapScores();
+                iterations--;
+            }
+        }
+
+        private double teleProp()
+        {
             double r = 0d;
-            for (V v : g.vertexSet()) {
-                if (g.outgoingEdgesOf(v).size() > 0) {
-                    r += (1d - dampingFactor) * scores.get(v);
+            for (int i = 0; i < totalVertices; i++) {
+                if (outDegree[i] > 0) {
+                    r += (1d - dampingFactor) * curScore[i];
                 } else {
-                    r += scores.get(v);
+                    r += curScore[i];
                 }
             }
             r /= totalVertices;
+            return r;
+        }
 
-            maxChange = 0d;
-            for (V v : g.vertexSet()) {
-                double contribution = 0d;
-
-                if (weighted) {
-                    for (E e : g.incomingEdgesOf(v)) {
-                        V w = Graphs.getOppositeVertex(g, e, v);
-                        contribution +=
-                            dampingFactor * scores.get(w) * g.getEdgeWeight(e) / weights.get(w);
-                    }
-                } else {
-                    for (E e : g.incomingEdgesOf(v)) {
-                        V w = Graphs.getOppositeVertex(g, e, v);
-                        contribution += dampingFactor * scores.get(w) / g.outgoingEdgesOf(w).size();
-                    }
-                }
-
-                double vOldValue = scores.get(v);
-                double vNewValue = r + contribution;
-                maxChange = Math.max(maxChange, Math.abs(vNewValue - vOldValue));
-                nextScores.put(v, vNewValue);
-            }
-
-            // swap scores
-            Map<V, Double> tmp = scores;
-            scores = nextScores;
-            nextScores = tmp;
-
-            // progress
-            maxIterations--;
+        private void swapScores()
+        {
+            double[] tmp = curScore;
+            curScore = nextScore;
+            nextScore = tmp;
         }
 
     }

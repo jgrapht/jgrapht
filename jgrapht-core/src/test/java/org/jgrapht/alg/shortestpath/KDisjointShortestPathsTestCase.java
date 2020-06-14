@@ -1,32 +1,34 @@
 /*
- * (C) Copyright 2018-2018, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2018-2020, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
-
-import static org.junit.Assert.*;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.*;
+import java.util.stream.*;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -167,11 +169,11 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(2.0, pathList.get(1).getWeight(), 0.0);
 
     }
-    
+
     @Test
     public void testDisconnectedGraph()
     {
-        
+
         Graph<Integer, DefaultWeightedEdge> graph = createDisconnectedGraph();
 
         KShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
@@ -193,11 +195,12 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(4.0, pathList.get(1).getWeight(), 0.0);
 
     }
-    
-    private Graph<Integer, DefaultWeightedEdge> createDisconnectedGraph() {
+
+    private Graph<Integer, DefaultWeightedEdge> createDisconnectedGraph()
+    {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        
+
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -210,24 +213,24 @@ public abstract class KDisjointShortestPathsTestCase
         graph.setEdgeWeight(e, 2.0);
         e = graph.addEdge(2, 1);
         graph.setEdgeWeight(e, 2.0);
-        
+
         e = graph.addEdge(2, 3);
         graph.setEdgeWeight(e, 1.0);
         e = graph.addEdge(3, 2);
         graph.setEdgeWeight(e, 1.0);
-        
+
         e = graph.addEdge(3, 1);
         graph.setEdgeWeight(e, 4.0);
         e = graph.addEdge(1, 3);
         graph.setEdgeWeight(e, 4.0);
-        
+
         e = graph.addEdge(4, 5);
         graph.setEdgeWeight(e, 7.0);
         e = graph.addEdge(5, 6);
         graph.setEdgeWeight(e, 8.0);
         e = graph.addEdge(6, 4);
         graph.setEdgeWeight(e, 9.0);
-        
+
         return graph;
     }
 
@@ -430,7 +433,7 @@ public abstract class KDisjointShortestPathsTestCase
     }
 
     /**
-     * Tests three joint paths from 1 to 5. 
+     * Tests three joint paths from 1 to 5.
      * <p>
      * Edges expected in path 1 --------------- {@literal 1 --> 4}, w=4 {@literal 4 --> 5}, w=1
      * <p>
@@ -470,7 +473,7 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(9.0, pathList.get(2).getWeight(), 0.0);
 
     }
-    
+
     @Test
     public void testThreeDisjointPathsReverseEdgeExist()
     {
@@ -501,7 +504,7 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(9.0, pathList.get(2).getWeight(), 0.0);
 
     }
-    
+
     @Test
     public void testMaximumKPathsAreReturned()
     {
@@ -511,19 +514,20 @@ public abstract class KDisjointShortestPathsTestCase
 
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5, 1);
         assertEquals(1, pathList.size());
-        
+
         pathList = alg.getPaths(1, 5, 2);
         assertEquals(2, pathList.size());
-        
+
         pathList = alg.getPaths(1, 5, 3);
         assertEquals(3, pathList.size());
     }
-    
+
     /**
      * Tests that sequential calls return the same result.
      */
     @Test
-    public void testSequentialCallsSanity() {
+    public void testSequentialCallsSanity()
+    {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
@@ -531,12 +535,12 @@ public abstract class KDisjointShortestPathsTestCase
         DefaultWeightedEdge edge = graph.addEdge(1, 2);
         graph.setEdgeWeight(edge, 8);
         KShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
-        
+
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList_1 = alg.getPaths(1, 2, 5);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList_2 = alg.getPaths(1, 2, 5);
-        
+
         assertEquals(pathList_1, pathList_2);
-              
+
     }
 
     private Graph<Integer, DefaultWeightedEdge> createThreeDisjointPathsGraph()
@@ -569,7 +573,7 @@ public abstract class KDisjointShortestPathsTestCase
 
         return graph;
     }
-    
+
     private Graph<Integer, DefaultWeightedEdge> createThreeDisjointPathsGraphBidirectional()
     {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
@@ -582,55 +586,55 @@ public abstract class KDisjointShortestPathsTestCase
 
         DefaultWeightedEdge e12 = graph.addEdge(1, 2);
         DefaultWeightedEdge e21 = graph.addEdge(2, 1);
-        
+
         DefaultWeightedEdge e25 = graph.addEdge(2, 5);
         DefaultWeightedEdge e52 = graph.addEdge(5, 2);
-        
+
         DefaultWeightedEdge e13 = graph.addEdge(1, 3);
         DefaultWeightedEdge e31 = graph.addEdge(3, 1);
-        
+
         DefaultWeightedEdge e35 = graph.addEdge(3, 5);
         DefaultWeightedEdge e53 = graph.addEdge(5, 3);
-        
+
         DefaultWeightedEdge e14 = graph.addEdge(1, 4);
         DefaultWeightedEdge e41 = graph.addEdge(4, 1);
-        
+
         DefaultWeightedEdge e45 = graph.addEdge(4, 5);
         DefaultWeightedEdge e54 = graph.addEdge(5, 4);
-        
+
         DefaultWeightedEdge e23 = graph.addEdge(2, 3);
         DefaultWeightedEdge e32 = graph.addEdge(3, 2);
-        
+
         DefaultWeightedEdge e34 = graph.addEdge(3, 4);
         DefaultWeightedEdge e43 = graph.addEdge(4, 3);
 
         graph.setEdgeWeight(e12, 1);
         graph.setEdgeWeight(e21, 1);
-        
+
         graph.setEdgeWeight(e25, 6);
         graph.setEdgeWeight(e52, 6);
-        
+
         graph.setEdgeWeight(e13, 4);
         graph.setEdgeWeight(e31, 4);
-        
+
         graph.setEdgeWeight(e35, 5);
         graph.setEdgeWeight(e53, 5);
-        
+
         graph.setEdgeWeight(e14, 4);
         graph.setEdgeWeight(e41, 4);
-        
+
         graph.setEdgeWeight(e45, 1);
         graph.setEdgeWeight(e54, 1);
-        
+
         graph.setEdgeWeight(e23, 1);
         graph.setEdgeWeight(e32, 1);
-        
+
         graph.setEdgeWeight(e34, 1);
         graph.setEdgeWeight(e43, 1);
 
         return graph;
     }
-    
+
     private Graph<Integer, DefaultEdge> createUnweightedGraph()
     {
         DefaultDirectedGraph<Integer, DefaultEdge> graph =
@@ -664,13 +668,13 @@ public abstract class KDisjointShortestPathsTestCase
     {
         checkGraphIsNotChanged(createThreeDisjointPathsGraph());
     }
-    
+
     @Test
     public void testDisconnectedGraphIsNotChanged()
     {
         checkGraphIsNotChanged(createDisconnectedGraph());
     }
-    
+
     public void checkGraphIsNotChanged(Graph<Integer, DefaultWeightedEdge> source)
     {
         Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(
@@ -693,13 +697,13 @@ public abstract class KDisjointShortestPathsTestCase
 
         assertEquals(originalWeightMap, weightMap);
     }
-    
+
     @Test
     public void testUnweightedGraphIsNotChanged()
     {
         Graph<Integer, DefaultEdge> source = createUnweightedGraph();
-        Graph<Integer, DefaultEdge> destination =  new DefaultDirectedGraph<>(
-            source.getVertexSupplier(), source.getEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> destination =
+            new DefaultDirectedGraph<>(source.getVertexSupplier(), source.getEdgeSupplier(), false);
         Graphs.addGraph(destination, source);
 
         Map<DefaultEdge, Double> originalWeightMap = new HashMap<>();
@@ -718,14 +722,14 @@ public abstract class KDisjointShortestPathsTestCase
 
         assertEquals(originalWeightMap, weightMap);
     }
-    
+
     @Test
     public void testUnweightedGraph()
     {
         Graph<Integer, DefaultEdge> graph = createUnweightedGraph();
-        
+
         KShortestPathAlgorithm<Integer, DefaultEdge> alg = getKShortestPathAlgorithm(graph);
-        
+
         List<GraphPath<Integer, DefaultEdge>> pathList = alg.getPaths(1, 5, 5);
 
         assertEquals(3, pathList.size());
@@ -748,41 +752,39 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(4, pathList.get(2).getLength());
         assertEquals(4.0, pathList.get(2).getWeight(), 0.0);
     }
-    
+
     @Test
     public void testWikipediaGraph()
     {
         Graph<String, DefaultWeightedEdge> graph = buildWikipediaGraph();
-        
+
         KShortestPathAlgorithm<String, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
-        
+
         List<GraphPath<String, DefaultWeightedEdge>> pathList = alg.getPaths("A", "F", 3);
 
         assertEquals(2, pathList.size());
-        
+
         GraphPath<String, DefaultWeightedEdge> expectedP1 =
             new GraphWalk<>(graph, Arrays.asList("A", "C", "D", "F"), 5);
-        
+
         GraphPath<String, DefaultWeightedEdge> expectedP2 =
             new GraphWalk<>(graph, Arrays.asList("A", "B", "E", "F"), 5);
-        
+
         if (pathList.get(0).equals(expectedP1)) {
             assertEquals(expectedP2, pathList.get(1));
-        } 
-        else if (pathList.get(0).equals(expectedP2)) {
+        } else if (pathList.get(0).equals(expectedP2)) {
             assertEquals(expectedP1, pathList.get(1));
-        } 
-        else {
+        } else {
             fail("Unexpected result");
         }
-        
+
     }
-    
-    private Graph<String, DefaultWeightedEdge> buildWikipediaGraph() 
+
+    private Graph<String, DefaultWeightedEdge> buildWikipediaGraph()
     {
         DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        
+
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -795,32 +797,32 @@ public abstract class KDisjointShortestPathsTestCase
         graph.setEdgeWeight(e, 1.0);
         e = graph.addEdge("B", "A");
         graph.setEdgeWeight(e, 1.0);
-        
+
         e = graph.addEdge("A", "C");
         graph.setEdgeWeight(e, 2.0);
         e = graph.addEdge("C", "A");
         graph.setEdgeWeight(e, 2.0);
-        
+
         e = graph.addEdge("B", "D");
         graph.setEdgeWeight(e, 1.0);
         e = graph.addEdge("D", "B");
         graph.setEdgeWeight(e, 1.0);
-        
+
         e = graph.addEdge("B", "E");
         graph.setEdgeWeight(e, 2.0);
         e = graph.addEdge("E", "B");
         graph.setEdgeWeight(e, 2.0);
-        
+
         e = graph.addEdge("D", "C");
         graph.setEdgeWeight(e, 2.0);
         e = graph.addEdge("C", "D");
         graph.setEdgeWeight(e, 2.0);
-        
+
         e = graph.addEdge("D", "F");
         graph.setEdgeWeight(e, 1.0);
         e = graph.addEdge("F", "D");
         graph.setEdgeWeight(e, 1.0);
-        
+
         e = graph.addEdge("E", "F");
         graph.setEdgeWeight(e, 2.0);
         e = graph.addEdge("F", "E");
@@ -924,7 +926,84 @@ public abstract class KDisjointShortestPathsTestCase
             assertEquals(1, pathList.size());
         }
     }
-    
-    protected abstract <V, E> KShortestPathAlgorithm<V, E> getKShortestPathAlgorithm(Graph<V, E> graph);
+
+    /**
+     * A complex test case with the goal of finding the three shortest paths from vertex 1 to vertex 2 through the following weighted directed graph. Vertices are numbers in boxes, i.e., 1, 3, 4, 5, 6, 7, 8, 2.
+     * Weights are numbers close to an edge. Each edge has its origin to the left, and destination to the right
+     * The source is node 1. Sink is node 2.
+     * The weight of each edge is the unboxed number close to the edge.
+     *
+     * @formatter:off
+     *
+     *                         +-+        2        +-+
+     *                        /|3|-----------------|6|-
+     *                     /-- +-+ \--          /- +-+ \-
+     *                  /--           \-     /--5        \--
+     *              /---                \-/--             1 \-
+     *           /--  1                 /- \--                \-
+     *        /--                    /--    1 \-                \--
+     * +-+ /--                 +-+ /-           \  +-+             \- +-+
+     * |1|---------------------|4|-----------------|7|----------------|2|
+     * +-+ \---        1       +-+       6     /-  +-+      1     /-- +-+
+     *         \---                         /--                /--
+     *             \--                   --/                 /-
+     *              1 \---            /-- 3               /-- 1
+     *                    \--- +-+ /--             +-+ /--
+     *                        \|5|-----------------|8|-
+     *                         +-+         6       +-+
+     *
+     * @formatter:on
+     *
+     * The expected result is the three paths through vertices:
+     * p1 = 1, 3, 7, 2
+     * p2 = 1, 4, 6, 2
+     * p3 = 1, 5, 8, 2
+     *
+     */
+    @Test
+    public void testThreeDisjointPathsWithMultiHitsOnEdge()
+    {
+        GraphBuilder<Integer, DefaultWeightedEdge,
+            ? extends SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>> builder =
+                SimpleDirectedWeightedGraph.createBuilder(DefaultWeightedEdge.class);
+        builder.addEdge(1, 3, 1);
+        builder.addEdge(1, 4, 1);
+        builder.addEdge(1, 5, 1);
+
+        builder.addEdge(3, 6, 2);
+        builder.addEdge(3, 7, 1);
+        builder.addEdge(4, 7, 6);
+        builder.addEdge(4, 6, 5);
+        builder.addEdge(5, 7, 3);
+        builder.addEdge(5, 8, 6);
+
+        builder.addEdge(6, 2, 1);
+        builder.addEdge(7, 2, 1);
+        builder.addEdge(8, 2, 1);
+
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = builder.build();
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> ksp = getKShortestPathAlgorithm(graph);
+        List<GraphPath<Integer, DefaultWeightedEdge>> paths = ksp.getPaths(1, 2, 3);
+
+        int[] p1 = { 1, 3, 7, 2 };
+        int[] p2 = { 1, 4, 6, 2 };
+        int[] p3 = { 1, 5, 8, 2 };
+
+        List<int[]> expectedPaths = Arrays.asList(p1, p2, p3);
+
+        List<int[]> resultPaths = paths
+            .stream().map(GraphPath::getVertexList)
+            .map(vlist -> vlist.stream().mapToInt(i -> i).toArray()).collect(Collectors.toList());
+
+        Assert.assertEquals(expectedPaths.size(), resultPaths.size());
+        for (int[] expectedPath : expectedPaths) {
+            boolean isIncluded =
+                resultPaths.stream().anyMatch(result -> Arrays.equals(result, expectedPath));
+            Assert.assertTrue(isIncluded);
+        }
+    }
+
+    protected abstract <V,
+        E> KShortestPathAlgorithm<V, E> getKShortestPathAlgorithm(Graph<V, E> graph);
 
 }

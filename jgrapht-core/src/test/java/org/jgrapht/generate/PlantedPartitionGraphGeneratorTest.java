@@ -1,27 +1,26 @@
 /*
- * (C) Copyright 2018-2018, by Emilio Cruciani and Contributors.
+ * (C) Copyright 2018-2020, by Emilio Cruciani and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
@@ -30,7 +29,6 @@ import static org.junit.Assert.*;
 
 /**
  * @author Emilio Cruciani
- * @since April 2018
  */
 public class PlantedPartitionGraphGeneratorTest
 {
@@ -79,7 +77,8 @@ public class PlantedPartitionGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(5, 10, 0.5, 0.1, true);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         try {
             gen.generateGraph(g);
             fail("gen.generateGraph() did not throw an IllegalArgumentException as expected");
@@ -98,7 +97,8 @@ public class PlantedPartitionGraphGeneratorTest
         double q = 0.1;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
@@ -113,7 +113,8 @@ public class PlantedPartitionGraphGeneratorTest
         double q = 0.1;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
@@ -131,7 +132,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = k * k * l * (l - 1) / 2;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() <= edges);
@@ -147,7 +149,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = l * k * (k - 1) / 2;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() <= edges);
@@ -163,7 +166,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = l * k * (k - 1) / 2;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() >= edges);
@@ -179,7 +183,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = k * k * l * (l - 1) / 2;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() >= edges);
@@ -197,7 +202,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = k * k * l * (l - 1);
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() <= edges);
@@ -213,7 +219,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = l * k * (k - 1);
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() <= edges);
@@ -229,7 +236,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = l * k * (k - 1);
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() >= edges);
@@ -245,7 +253,8 @@ public class PlantedPartitionGraphGeneratorTest
         int edges = k * k * l * (l - 1);
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         assertTrue(g.edgeSet().size() >= edges);
@@ -263,7 +272,8 @@ public class PlantedPartitionGraphGeneratorTest
         int d = l * k - 1;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         for (Integer v : g.vertexSet()) {
@@ -281,7 +291,8 @@ public class PlantedPartitionGraphGeneratorTest
         int d = 2 * (l * k - 1);
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(l * k, g.vertexSet().size());
         for (Integer v : g.vertexSet()) {
@@ -300,7 +311,7 @@ public class PlantedPartitionGraphGeneratorTest
 
         List<Set<Integer>> groundTruthCommunities = new ArrayList<>(l);
         for (int i = 0; i < l; i++) {
-            groundTruthCommunities.add(new LinkedHashSet<>(k));
+            groundTruthCommunities.add(CollectionUtil.newLinkedHashSetWithExpectedSize(k));
             for (int j = 0; j < k; j++) {
                 groundTruthCommunities.get(i).add(i * k + j);
             }
@@ -308,7 +319,8 @@ public class PlantedPartitionGraphGeneratorTest
 
         PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(groundTruthCommunities, gen.getCommunities());
     }
@@ -340,9 +352,11 @@ public class PlantedPartitionGraphGeneratorTest
 
         PlantedPartitionGraphGenerator<Integer, DefaultEdge> gen =
             new PlantedPartitionGraphGenerator<>(l, k, p, q, SEED);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
-        Graph<Integer, DefaultEdge> f = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
+        Graph<Integer, DefaultEdge> f = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         try {
             gen.generateGraph(f);
             fail("gen.getCommunities() did not throw an IllegalStateException as expected");

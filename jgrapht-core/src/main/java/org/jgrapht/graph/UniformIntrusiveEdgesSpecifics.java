@@ -1,24 +1,23 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An uniform weights variant of the intrusive edges specifics.
@@ -44,17 +43,6 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
     /**
      * Constructor
      * 
-     * @deprecated Since, default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public UniformIntrusiveEdgesSpecifics()
-    {
-        this(new LinkedHashMap<>());
-    }
-    
-    /**
-     * Constructor
-     * 
      * @param map the map to use for storage
      */
     public UniformIntrusiveEdgesSpecifics(Map<E, IntrusiveEdge> map)
@@ -65,6 +53,10 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
     @Override
     public boolean add(E e, V sourceVertex, V targetVertex)
     {
+        if (edgeMap.containsKey(e)) {
+            return false;
+        }
+
         IntrusiveEdge intrusiveEdge;
         if (e instanceof IntrusiveEdge) {
             intrusiveEdge = (IntrusiveEdge) e;
@@ -75,7 +67,8 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
         intrusiveEdge.source = sourceVertex;
         intrusiveEdge.target = targetVertex;
 
-        return edgeMap.putIfAbsent(e, intrusiveEdge) == null;
+        edgeMap.put(e, intrusiveEdge);
+        return true;
     }
 
     @Override

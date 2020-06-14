@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2016-2020, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
@@ -23,7 +23,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -128,7 +129,9 @@ public class AllDirectedPathsTest
         List<GraphPath<String, DefaultWeightedEdge>> allPaths = all.getAllPaths("A", "D", true, 2);
         allPaths.sort(Comparator.comparing(GraphPath::getWeight));
 
-        assertEquals("Example weighted graph has 3 paths of length no greater than 2", 3, allPaths.size());;
+        assertEquals(
+            "Example weighted graph has 3 paths of length no greater than 2", 3, allPaths.size());
+        ;
 
         assertEquals(Arrays.asList("A", "D"), allPaths.get(0).getVertexList());
         assertEquals(-1, allPaths.get(0).getWeight(), 0);
@@ -189,22 +192,30 @@ public class AllDirectedPathsTest
     }
 
     @Test
-    public void testZeroLengthPaths() {
+    public void testZeroLengthPaths()
+    {
         // Verify fix for https://github.com/jgrapht/jgrapht/issues/640.
-        DefaultDirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        DefaultDirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
 
         graph.addVertex("a");
         graph.addVertex("b");
         graph.addEdge("a", "b");
 
         List<GraphPath<String, DefaultEdge>> paths = new AllDirectedPaths<>(graph)
-        .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
+            .getAllPaths(graph.vertexSet(), graph.vertexSet(), false, 0);
 
         Assert.assertFalse("We should find at least some paths!", paths.isEmpty());
 
-        paths.forEach(path ->
-            Assert.assertEquals(String.format("The path %s has length %d even though we requested only paths of length 0", path, path.getLength()), 0, path.getLength())
-        );
+        paths
+            .forEach(
+                path -> Assert
+                    .assertEquals(
+                        String
+                            .format(
+                                "The path %s has length %d even though we requested only paths of length 0",
+                                path, path.getLength()),
+                        0, path.getLength()));
     }
 
     private static Graph<String, DefaultEdge> toyGraph()

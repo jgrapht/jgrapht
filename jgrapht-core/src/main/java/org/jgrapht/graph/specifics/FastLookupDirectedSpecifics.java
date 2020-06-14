@@ -1,27 +1,28 @@
 /*
- * (C) Copyright 2015-2018, by Joris Kinable and Contributors.
+ * (C) Copyright 2015-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * Fast implementation of DirectedSpecifics. This class uses additional data structures to improve
@@ -50,49 +51,6 @@ public class FastLookupDirectedSpecifics<V, E>
      * Construct a new fast lookup directed specifics.
      * 
      * @param graph the graph for which these specifics are for
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public FastLookupDirectedSpecifics(Graph<V, E> graph)
-    {
-        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
-
-    /**
-     * Construct a new fast lookup directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public FastLookupDirectedSpecifics(
-        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
-    {
-        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
-    }
-
-    /**
-     * Construct a new fast lookup directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
-     *        iteration order.
-     * @param edgeSetFactory factory for the creation of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level.
-     */
-    @Deprecated
-    public FastLookupDirectedSpecifics(
-        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
-        EdgeSetFactory<V, E> edgeSetFactory)
-    {
-        this(graph, vertexMap, new HashMap<>(), edgeSetFactory);
-    }
-
-    /**
-     * Construct a new fast lookup directed specifics.
-     * 
-     * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
      * @param touchingVerticesToEdgeMap Additional map for caching. No need for a predictable
@@ -107,9 +65,6 @@ public class FastLookupDirectedSpecifics<V, E>
         this.touchingVerticesToEdgeMap = Objects.requireNonNull(touchingVerticesToEdgeMap);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
@@ -127,9 +82,6 @@ public class FastLookupDirectedSpecifics<V, E>
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
@@ -141,46 +93,81 @@ public class FastLookupDirectedSpecifics<V, E>
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void addEdgeToTouchingVertices(E e)
+    public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
+        if (!super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)) {
+            return false;
+        }
+        addToIndex(sourceVertex, targetVertex, e);
+        return true;
+    }
 
-        getEdgeContainer(source).addOutgoingEdge(e);
-        getEdgeContainer(target).addIncomingEdge(e);
+    @Override
+    public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
+    {
+        // first lookup using our own index
+        E edge = getEdge(sourceVertex, targetVertex);
+        if (edge != null) {
+            return false;
+        }
 
-        Pair<V, V> vertexPair = new Pair<>(source, target);
+        return addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+    }
+
+    @Override
+    public E createEdgeToTouchingVerticesIfAbsent(
+        V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
+    {
+        // first lookup using our own index
+        E edge = getEdge(sourceVertex, targetVertex);
+        if (edge != null) {
+            return null;
+        }
+
+        E e = edgeSupplier.get();
+        addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+        return e;
+    }
+
+    @Override
+    public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
+    {
+        super.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+
+        removeFromIndex(sourceVertex, targetVertex, e);
+    }
+
+    /**
+     * Add an edge to the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
+     */
+    protected void addToIndex(V sourceVertex, V targetVertex, E e)
+    {
+        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null)
             edgeSet.add(e);
         else {
-            edgeSet = edgeSetFactory.createEdgeSet(source);
+            edgeSet = edgeSetFactory.createEdgeSet(sourceVertex);
             edgeSet.add(e);
             touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Remove an edge from the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
      */
-    @Override
-    public void removeEdgeFromTouchingVertices(E e)
+    protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
-
-        getEdgeContainer(source).removeOutgoingEdge(e);
-        getEdgeContainer(target).removeIncomingEdge(e);
-
-        /*
-         * Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
-         * for a pair of touching vertices, remove the pair from the map.
-         */
-        Pair<V, V> vertexPair = new Pair<>(source, target);
+        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null) {
             edgeSet.remove(e);

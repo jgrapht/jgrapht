@@ -1,30 +1,32 @@
 /*
- * (C) Copyright 2003-2018, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2020, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -32,7 +34,6 @@ import static org.junit.Assert.*;
  *
  * @author Patrick Sharp (I pretty much just ripped off Liviu Rau's code from
  *         AbstractGraphIteratorTest)
- * @since May 15, 2017
  */
 public abstract class CrossComponentIteratorTest
     extends
@@ -71,6 +72,46 @@ public abstract class CrossComponentIteratorTest
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
         doDirectedGraphTest(createIterator(graph, (String) null));
         doDirectedGraphTest(createIterator(graph, (Iterable<String>) null));
+    }
+
+    @Test
+    public void testNonCrossComponentTraversal()
+    {
+        final ModifiableInteger iteratorCalls = new ModifiableInteger();
+        final ModifiableInteger sizeCalls = new ModifiableInteger();
+        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
+        Graph<String, DefaultWeightedEdge> wrapper =
+            new GraphDelegator<String, DefaultWeightedEdge>(graph)
+            {
+                @Override
+                public Set<String> vertexSet()
+                {
+                    return new AbstractSet<String>()
+                    {
+                        @Override
+                        public Iterator<String> iterator()
+                        {
+                            iteratorCalls.increment();
+                            return getDelegate().vertexSet().iterator();
+                        }
+
+                        @Override
+                        public int size()
+                        {
+                            sizeCalls.increment();
+                            return getDelegate().vertexSet().size();
+                        }
+                    };
+                }
+            };
+
+        AbstractGraphIterator<String, DefaultWeightedEdge> iterator =
+            createIterator(wrapper, Arrays.asList("orphan"));
+        assertFalse(iterator.isCrossComponentTraversal());
+        result = new StringBuilder();
+        collectResult(iterator, result);
+        assertEquals(0, iteratorCalls.getValue());
+        assertEquals(0, sizeCalls.getValue());
     }
 
     abstract String getExpectedCCStr1();
@@ -184,5 +225,3 @@ public abstract class CrossComponentIteratorTest
         }
     }
 }
-
-// End AbstractGraphIteratorTest.java

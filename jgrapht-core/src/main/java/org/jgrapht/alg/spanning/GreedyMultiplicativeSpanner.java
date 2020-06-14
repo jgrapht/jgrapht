@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.spanning;
 
@@ -22,6 +22,8 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
 import java.util.*;
 
@@ -53,7 +55,6 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
- * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpanner<V, E>
     implements
@@ -150,12 +151,12 @@ public class GreedyMultiplicativeSpanner<V, E>
             spanner = GraphTypeBuilder
                 .<V, E> undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
                 .edgeSupplier(graph.getEdgeSupplier()).buildGraph();
-            touchedVertices = new ArrayDeque<V>(graph.vertexSet().size());
+            touchedVertices = new ArrayDeque<>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
                 touchedVertices.push(v);
             }
-            vertexDistance = new HashMap<>(graph.vertexSet().size());
+            vertexDistance = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
             queue = new ArrayDeque<>();
         }
 
@@ -218,8 +219,8 @@ public class GreedyMultiplicativeSpanner<V, E>
         SpannerAlgorithmBase
     {
         protected Graph<V, DefaultWeightedEdge> spanner;
-        protected FibonacciHeap<V> heap;
-        protected Map<V, FibonacciHeapNode<V>> nodes;
+        protected AddressableHeap<Double, V> heap;
+        protected Map<V, AddressableHeap.Handle<Double, V>> nodes;
 
         public WeightedSpannerAlgorithm()
         {
@@ -227,8 +228,8 @@ public class GreedyMultiplicativeSpanner<V, E>
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
             }
-            this.heap = new FibonacciHeap<V>();
-            this.nodes = new LinkedHashMap<V, FibonacciHeapNode<V>>();
+            this.heap = new PairingHeap<>();
+            this.nodes = new LinkedHashMap<>();
         }
 
         @Override
@@ -238,14 +239,13 @@ public class GreedyMultiplicativeSpanner<V, E>
             heap.clear();
             nodes.clear();
 
-            FibonacciHeapNode<V> sNode = new FibonacciHeapNode<V>(s);
+            AddressableHeap.Handle<Double, V> sNode = heap.insert(0d, s);
             nodes.put(s, sNode);
-            heap.insert(sNode, 0d);
 
             while (!heap.isEmpty()) {
-                FibonacciHeapNode<V> uNode = heap.removeMin();
+                AddressableHeap.Handle<Double, V> uNode = heap.deleteMin();
                 double uDistance = uNode.getKey();
-                V u = uNode.getData();
+                V u = uNode.getValue();
 
                 if (uDistance > distance) {
                     return false;
@@ -257,15 +257,14 @@ public class GreedyMultiplicativeSpanner<V, E>
 
                 for (DefaultWeightedEdge e : spanner.edgesOf(u)) {
                     V v = Graphs.getOppositeVertex(spanner, e, u);
-                    FibonacciHeapNode<V> vNode = nodes.get(v);
+                    AddressableHeap.Handle<Double, V> vNode = nodes.get(v);
                     double vDistance = uDistance + spanner.getEdgeWeight(e);
 
                     if (vNode == null) { // no distance
-                        vNode = new FibonacciHeapNode<>(v);
+                        vNode = heap.insert(vDistance, v);
                         nodes.put(v, vNode);
-                        heap.insert(vNode, vDistance);
                     } else if (vDistance < vNode.getKey()) {
-                        heap.decreaseKey(vNode, vDistance);
+                        vNode.decreaseKey(vDistance);
                     }
                 }
 

@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.traverse;
 
@@ -30,7 +30,6 @@ import java.util.*;
  * @param <D> type of data associated to seen vertices
  *
  * @author Barak Naveh
- * @since Jan 31, 2004
  */
 public abstract class CrossComponentIterator<V, E, D>
     extends
@@ -117,7 +116,6 @@ public abstract class CrossComponentIterator<V, E, D>
         /*
          * Initialize crossComponentTraversal and test for containment
          */
-        this.entireGraphVertexIterator = graph.vertexSet().iterator();
         if (startVertices == null) {
             this.crossComponentTraversal = true;
         } else {
@@ -128,7 +126,8 @@ public abstract class CrossComponentIterator<V, E, D>
         /*
          * Initialize start vertex
          */
-        Iterator<V> it = crossComponentTraversal ? entireGraphVertexIterator : startVertexIterator;
+        Iterator<V> it =
+            crossComponentTraversal ? getEntireGraphVertexIterator() : startVertexIterator;
         // pick a start vertex if possible
         if (it.hasNext()) {
             this.startVertex = it.next();
@@ -157,7 +156,7 @@ public abstract class CrossComponentIterator<V, E, D>
             }
 
             Iterator<V> it =
-                isCrossComponentTraversal() ? entireGraphVertexIterator : startVertexIterator;
+                isCrossComponentTraversal() ? getEntireGraphVertexIterator() : startVertexIterator;
             while (it != null && it.hasNext()) {
                 V v = it.next();
                 if (!graph.containsVertex(v)) {
@@ -206,11 +205,25 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * Returns <tt>true</tt> if there are no more uniterated vertices in the currently iterated
-     * connected component; <tt>false</tt> otherwise.
+     * Lazily instantiates {@code entireGraphVertexIterator}.
      *
-     * @return <tt>true</tt> if there are no more uniterated vertices in the currently iterated
-     *         connected component; <tt>false</tt> otherwise.
+     * @return iterator which provides start vertices for cross-component iteration
+     */
+    protected Iterator<V> getEntireGraphVertexIterator()
+    {
+        if (entireGraphVertexIterator == null) {
+            assert (isCrossComponentTraversal());
+            entireGraphVertexIterator = graph.vertexSet().iterator();
+        }
+        return entireGraphVertexIterator;
+    }
+
+    /**
+     * Returns <code>true</code> if there are no more uniterated vertices in the currently iterated
+     * connected component; <code>false</code> otherwise.
+     *
+     * @return <code>true</code> if there are no more uniterated vertices in the currently iterated
+     *         connected component; <code>false</code> otherwise.
      */
     protected abstract boolean isConnectedComponentExhausted();
 
@@ -251,7 +264,7 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex vertex in question
      *
-     * @return <tt>true</tt> if vertex has already been seen
+     * @return <code>true</code> if vertex has already been seen
      */
     protected boolean isSeenVertex(V vertex)
     {
@@ -295,9 +308,21 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
+    /**
+     * Selects the outgoing edges for a given vertex based on the source vertex and other traversal
+     * state. The default implementation returns all outgoing edges.
+     *
+     * @param vertex vertex in question
+     * @return set of outgoing edges connected to the vertex
+     */
+    protected Set<E> selectOutgoingEdges(V vertex)
+    {
+        return graph.outgoingEdgesOf(vertex);
+    }
+
     private void addUnseenChildrenOf(V vertex)
     {
-        for (E edge : graph.outgoingEdgesOf(vertex)) {
+        for (E edge : selectOutgoingEdges(vertex)) {
             if (nListeners != 0) {
                 fireEdgeTraversed(createEdgeTraversalEvent(edge));
             }
@@ -319,5 +344,3 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
 }
-
-// End CrossComponentIterator.java

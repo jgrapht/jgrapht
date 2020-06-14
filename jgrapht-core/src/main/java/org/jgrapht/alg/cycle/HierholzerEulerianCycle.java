@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.cycle;
 
@@ -43,7 +43,6 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
- * @since October 2016
  */
 public class HierholzerEulerianCycle<V, E>
     implements
@@ -52,23 +51,23 @@ public class HierholzerEulerianCycle<V, E>
     /*
      * The input graph.
      */
-    private Graph<V, E> g;
+    protected Graph<V, E> g;
     /*
      * Whether the graph is directed or not.
      */
-    private boolean isDirected;
+    protected boolean isDirected;
     /*
      * Non-zero degree vertices list head.
      */
-    private VertexNode verticesHead;
+    protected VertexNode verticesHead;
     /*
      * Result edge list head.
      */
-    private EdgeNode eulerianHead;
+    protected EdgeNode eulerianHead;
     /*
      * Result first vertex in the tour.
      */
-    private V startVertex;
+    protected V startVertex;
 
     /**
      * Test whether a graph is Eulerian. An
@@ -206,7 +205,7 @@ public class HierholzerEulerianCycle<V, E>
      * 
      * @param g the graph to index
      */
-    private void initialize(Graph<V, E> g)
+    protected void initialize(Graph<V, E> g)
     {
         this.g = g;
         this.isDirected = g.getType().isDirected();
@@ -236,7 +235,7 @@ public class HierholzerEulerianCycle<V, E>
     /**
      * Release any memory held.
      */
-    private void cleanup()
+    protected void cleanup()
     {
         this.g = null;
         this.verticesHead = null;
@@ -250,7 +249,7 @@ public class HierholzerEulerianCycle<V, E>
      * 
      * @return the partial's cycle head and tail nodes as a pair
      */
-    private Pair<EdgeNode, EdgeNode> computePartialCycle()
+    protected Pair<EdgeNode, EdgeNode> computePartialCycle()
     {
         if (startVertex == null) {
             // record global start vertex
@@ -284,7 +283,7 @@ public class HierholzerEulerianCycle<V, E>
      * @param partialCycle the partial cycle
      * @param partialCycleSourceVertex the source vertex of the first edge in the partial cycle
      */
-    private void updateGraphAndInsertLocations(
+    protected void updateGraphAndInsertLocations(
         Pair<EdgeNode, EdgeNode> partialCycle, VertexNode partialCycleSourceVertex)
     {
         EdgeNode e = partialCycle.getFirst();
@@ -311,7 +310,7 @@ public class HierholzerEulerianCycle<V, E>
      * 
      * @return the final walk
      */
-    private GraphWalk<V, E> buildWalk()
+    protected GraphWalk<V, E> buildWalk()
     {
         double totalWeight = 0d;
         List<E> result = new ArrayList<>();
@@ -325,10 +324,14 @@ public class HierholzerEulerianCycle<V, E>
         return new GraphWalk<>(g, startVertex, startVertex, result, totalWeight);
     }
 
-    /*
+    /**
      * Add an edge to the index.
+     *
+     * @param sNode source vertex
+     * @param tNode target vertex
+     * @param e original (wrapped) edge
      */
-    private void addEdge(VertexNode sNode, VertexNode tNode, E e)
+    protected void addEdge(VertexNode sNode, VertexNode tNode, E e)
     {
         EdgeNode sHead = sNode.adjEdgesHead;
         if (sHead == null) {
@@ -355,10 +358,12 @@ public class HierholzerEulerianCycle<V, E>
         }
     }
 
-    /*
+    /**
      * Unlink a vertex from the vertex list.
+     *
+     * @param vNode vertex to unlink
      */
-    private void unlink(VertexNode vNode)
+    protected void unlink(VertexNode vNode)
     {
         if (verticesHead == null) {
             return;
@@ -380,10 +385,12 @@ public class HierholzerEulerianCycle<V, E>
         vNode.prev = null;
     }
 
-    /*
+    /**
      * Move a vertex as first in the vertex list.
+     *
+     * @param vNode vertex to move to front
      */
-    private void moveToFront(VertexNode vNode)
+    protected void moveToFront(VertexNode vNode)
     {
         if (vNode.prev != null) {
             vNode.prev.next = vNode.next;
@@ -397,10 +404,12 @@ public class HierholzerEulerianCycle<V, E>
         }
     }
 
-    /*
+    /**
      * Unlink an edge from the adjacency lists of its end-points.
+     *
+     * @param eNode edge to unlink
      */
-    private void unlink(EdgeNode eNode)
+    protected void unlink(EdgeNode eNode)
     {
         VertexNode vNode = eNode.sourceNode;
 
@@ -438,10 +447,14 @@ public class HierholzerEulerianCycle<V, E>
         eNode.reverse = null;
     }
 
-    /*
+    /**
      * Compute the opposite end-point of an end-point of an edge.
+     *
+     * @param v vertex that is part of edge
+     * @param e edge used to find opposite vertex
+     * @return opposite vertex in edge
      */
-    private VertexNode getOppositeVertex(VertexNode v, EdgeNode e)
+    protected VertexNode getOppositeVertex(VertexNode v, EdgeNode e)
     {
         return v.equals(e.sourceNode) ? e.targetNode : e.sourceNode;
     }
@@ -449,22 +462,29 @@ public class HierholzerEulerianCycle<V, E>
     /*
      * A list node for the vertices
      */
-    class VertexNode
+    protected class VertexNode
     {
         // actual vertex
-        V v;
+        public V v;
 
         // list
-        VertexNode prev;
-        VertexNode next;
+        public VertexNode prev;
+        public VertexNode next;
 
         // insert location in global Eulerian list
-        EdgeNode insertLocation;
+        public EdgeNode insertLocation;
 
         // adjacent edges
-        EdgeNode adjEdgesHead;
+        public EdgeNode adjEdgesHead;
 
-        VertexNode(VertexNode prev, V v, VertexNode next)
+        /**
+         * Create VertexNode
+         *
+         * @param prev previous vertex
+         * @param v original (wrapped) vertex
+         * @param next next vertex
+         */
+        public VertexNode(VertexNode prev, V v, VertexNode next)
         {
             this.prev = prev;
             this.v = v;
@@ -505,23 +525,33 @@ public class HierholzerEulerianCycle<V, E>
     /*
      * A list node for the edges
      */
-    class EdgeNode
+    protected class EdgeNode
     {
         // the edge
-        E e;
+        public E e;
 
         // list
-        EdgeNode next;
-        EdgeNode prev;
+        public EdgeNode next;
+        public EdgeNode prev;
 
         // reverse if undirected and not a self-loop
-        EdgeNode reverse;
+        public EdgeNode reverse;
 
         // source and target
-        VertexNode sourceNode;
-        VertexNode targetNode;
+        public VertexNode sourceNode;
+        public VertexNode targetNode;
 
-        EdgeNode(
+        /**
+         * Create EdgeNode
+         *
+         * @param sourceNode source vertex
+         * @param targetNode target vertex
+         * @param prev previous edge
+         * @param e wrapped (original) edge
+         * @param reverse reverse edge
+         * @param next next edge
+         */
+        public EdgeNode(
             VertexNode sourceNode, VertexNode targetNode, EdgeNode prev, E e, EdgeNode reverse,
             EdgeNode next)
         {

@@ -1,24 +1,23 @@
 /*
- * (C) Copyright 2005-2018, by Assaf Lehr, Dimitrios Michail and Contributors.
+ * (C) Copyright 2005-2020, by Assaf Lehr, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
@@ -31,7 +30,6 @@ import static org.junit.Assert.*;
  * .
  * 
  * @author Assaf Lehr
- * @since Aug 6, 2005
  */
 public class GnmRandomGraphGeneratorTest
 {
@@ -42,7 +40,8 @@ public class GnmRandomGraphGeneratorTest
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GnmRandomGraphGenerator<>(0, 0);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
@@ -52,7 +51,8 @@ public class GnmRandomGraphGeneratorTest
     public void testZeroEdge()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GnmRandomGraphGenerator<>(10, 0);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
         assertEquals(10, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
@@ -79,7 +79,8 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
 
         int[][] edges = { { 6, 5 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 },
@@ -98,7 +99,8 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED, true, false);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
 
         int[][] edges = { { 6, 5 }, { 3, 3 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 },
@@ -117,7 +119,8 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED, false, true);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
 
         int[][] edges = { { 6, 5 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 },
@@ -135,7 +138,8 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED, true, true);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
 
         int[][] edges = { { 6, 5 }, { 3, 3 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 },
@@ -153,7 +157,8 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 15, SEED);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
 
         int[][] edges = { { 6, 5 }, { 1, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 }, { 1, 3 },
@@ -171,7 +176,8 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 15, SEED, true, false);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen.generateGraph(g);
 
         int[][] edges = { { 6, 5 }, { 3, 3 }, { 1, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 },
@@ -190,7 +196,10 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomGraphGenerator<>(6, 18, SEED, true, false);
-            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer,
+                DefaultEdge> g = new SimpleDirectedGraph<>(
+                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                    false);
             gen.generateGraph(g);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -199,7 +208,10 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomGraphGenerator<>(6, 18, SEED, false, true);
-            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer,
+                DefaultEdge> g = new SimpleDirectedGraph<>(
+                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                    false);
             gen.generateGraph(g);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -212,7 +224,10 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen1 =
                 new GnmRandomGraphGenerator<>(5, 21, SEED, false, false);
-            Graph<Integer, DefaultEdge> g1 = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer,
+                DefaultEdge> g1 = new DirectedPseudograph<>(
+                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                    false);
             gen1.generateGraph(g1);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -220,17 +235,20 @@ public class GnmRandomGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen2 =
             new GnmRandomGraphGenerator<>(5, 20, SEED, false, false);
-        Graph<Integer, DefaultEdge> g2 = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g2 = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen2.generateGraph(g2);
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen3 =
             new GnmRandomGraphGenerator<>(5, 25, SEED, true, false);
-        Graph<Integer, DefaultEdge> g3 = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g3 = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen3.generateGraph(g3);
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen4 =
             new GnmRandomGraphGenerator<>(5, 25, SEED, false, true);
-        Graph<Integer, DefaultEdge> g4 = new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g4 = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen4.generateGraph(g4);
     }
 
@@ -240,7 +258,10 @@ public class GnmRandomGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen1 =
                 new GnmRandomGraphGenerator<>(5, 11, SEED, false, false);
-            Graph<Integer, DefaultEdge> g1 = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            Graph<Integer,
+                DefaultEdge> g1 = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
+                    false);
             gen1.generateGraph(g1);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
@@ -248,17 +269,20 @@ public class GnmRandomGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen2 =
             new GnmRandomGraphGenerator<>(5, 10, SEED, false, false);
-        Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen2.generateGraph(g2);
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen3 =
             new GnmRandomGraphGenerator<>(5, 15, SEED, true, false);
-        Graph<Integer, DefaultEdge> g3 = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g3 = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen3.generateGraph(g3);
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen4 =
             new GnmRandomGraphGenerator<>(5, 15, SEED, false, true);
-        Graph<Integer, DefaultEdge> g4 = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<Integer, DefaultEdge> g4 = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
         gen4.generateGraph(g4);
     }
 
@@ -343,7 +367,11 @@ public class GnmRandomGraphGeneratorTest
     {
         List<Graph<Integer, DefaultEdge>> graphArray = new ArrayList<>();
         for (int i = 0; i < 4; ++i) {
-            graphArray.add(new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false));
+            graphArray
+                .add(
+                    new SimpleDirectedGraph<>(
+                        SupplierUtil.createIntegerSupplier(),
+                        SupplierUtil.createDefaultEdgeSupplier(), false));
         }
 
         generateGraphs(graphArray, 11, 100);
@@ -363,7 +391,12 @@ public class GnmRandomGraphGeneratorTest
     {
         List<Graph<Integer, DefaultEdge>> graphArray = new ArrayList<>();
         for (int i = 0; i < 4; ++i) {
-            graphArray.add(new DefaultListenableGraph<>(new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false)));
+            graphArray
+                .add(
+                    new DefaultListenableGraph<>(
+                        new SimpleGraph<>(
+                            SupplierUtil.createIntegerSupplier(),
+                            SupplierUtil.createDefaultEdgeSupplier(), false)));
         }
 
         generateGraphs(graphArray, 11, 50);
@@ -382,7 +415,10 @@ public class GnmRandomGraphGeneratorTest
     {
         GraphGenerator<String, DefaultEdge, String> randomGen =
             new GnmRandomGraphGenerator<>(10, 3);
-        Graph<String, DefaultEdge> graph = new SimpleDirectedGraph<>(SupplierUtil.createSupplier(String.class),SupplierUtil.createDefaultEdgeSupplier(), false);
+        Graph<String,
+            DefaultEdge> graph = new SimpleDirectedGraph<>(
+                SupplierUtil.createSupplier(String.class), SupplierUtil.createDefaultEdgeSupplier(),
+                false);
         try {
             randomGen.generateGraph(graph);
             fail("IllegalArgumentException expected");
@@ -479,7 +515,7 @@ public class GnmRandomGraphGeneratorTest
             // create a map between vertex value to its order(1st,2nd,etc)
             // "CAT"=1 "DOG"=2 "RHINO"=3
 
-            this.mapVertexToOrder = new HashMap<>(vertexSet.size());
+            this.mapVertexToOrder = CollectionUtil.newHashMapWithExpectedSize(vertexSet.size());
 
             int counter = 0;
             for (V vertex : vertexSet) {
@@ -493,7 +529,7 @@ public class GnmRandomGraphGeneratorTest
             // on directed graph, edge A->B must be (A,B)
             // on undirected graph, edge A-B can be (A,B) or (B,A)
 
-            this.labelsEdgesSet = new HashSet<>(edgeSet.size());
+            this.labelsEdgesSet = CollectionUtil.newHashSetWithExpectedSize(edgeSet.size());
             for (E edge : edgeSet) {
                 V sourceVertex = g.getEdgeSource(edge);
                 int sourceLabel = mapVertexToOrder.get(sourceVertex);
@@ -595,5 +631,3 @@ public class GnmRandomGraphGeneratorTest
         }
     }
 }
-
-// End RandomGraphGeneratorTest.java

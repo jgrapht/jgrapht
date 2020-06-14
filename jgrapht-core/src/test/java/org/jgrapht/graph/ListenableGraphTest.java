@@ -1,33 +1,35 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for {@link ListenableGraph} class.
  *
  * @author Barak Naveh
- * @since Aug 3, 2003
  */
 public class ListenableGraphTest
 {
@@ -160,6 +162,30 @@ public class ListenableGraphTest
     }
 
     /**
+     * Tests VertexSetListener listener. (Issue #887).
+     */
+    @Test
+    public void testWithVertexSupplier()
+    {
+        Graph<String,
+            DefaultEdge> wrappedGraph = GraphTypeBuilder
+                .undirected().weighted(false).edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+                .vertexSupplier(SupplierUtil.createStringSupplier(15)).buildGraph();
+
+        ListenableGraph<String, DefaultEdge> g = new DefaultListenableGraph<>(wrappedGraph);
+        SimpleVertexListener<String> listener = new SimpleVertexListener<>();
+        g.addVertexSetListener(listener);
+
+        g.addVertex();
+        assertEquals("15", listener.getLastVertex());
+        String other = "other";
+        g.addVertex(other);
+        assertEquals("other", listener.getLastVertex());
+        g.addVertex();
+        assertEquals("16", listener.getLastVertex());
+    }
+
+    /**
      * Tests that the combination of weights plus listener works.
      */
     @Test
@@ -249,7 +275,6 @@ public class ListenableGraphTest
      * A listener on the tested graph.
      *
      * @author Barak Naveh
-     * @since Aug 3, 2003
      */
     private class MyGraphListener<E>
         implements
@@ -285,6 +310,32 @@ public class ListenableGraphTest
             lastWeightUpdate = e.getEdgeWeight();
         }
     }
-}
 
-// End ListenableGraphTest.java
+    /**
+     * A listener on the tested graph.
+     */
+    private class SimpleVertexListener<V>
+        implements
+        VertexSetListener<V>
+    {
+        private V lastVertex;
+
+        @Override
+        public void vertexAdded(GraphVertexChangeEvent<V> e)
+        {
+            lastVertex = e.getVertex();
+        }
+
+        @Override
+        public void vertexRemoved(GraphVertexChangeEvent<V> e)
+        {
+            lastVertex = e.getVertex();
+        }
+
+        public V getLastVertex()
+        {
+            return lastVertex;
+        }
+
+    }
+}

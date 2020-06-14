@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.generate;
 
@@ -24,7 +24,8 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author Dimitrios Michail
@@ -179,6 +180,21 @@ public class WattsStrogatzGraphGeneratorTest
 
         assertEquals(6, g.vertexSet().size());
         assertEquals(12, g.edgeSet().size());
+    }
+
+    @Test
+    public void testNonIntegerVertices()
+    {
+        final long seed = 5;
+
+        GraphGenerator<String, DefaultEdge, String> gen =
+            new WattsStrogatzGraphGenerator<>(10, 2, 0.1, seed);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createStringSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
+
+        assertEquals(10, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
     }
 
 }

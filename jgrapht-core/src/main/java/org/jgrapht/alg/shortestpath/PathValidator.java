@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2016-2018, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2016-2020, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
@@ -21,14 +21,13 @@ import org.jgrapht.*;
 
 /**
  * May be used to provide external path validations in addition to the basic validations done by
- * {@link KShortestSimplePaths} - that the path is from source to target and that it does not contain
- * loops.
+ * {@link KShortestSimplePaths} - that the path is from source to target and that it does not
+ * contain loops.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Assaf Mizrachi
- * @since July, 21, 2016
  *
  */
 public interface PathValidator<V, E>

@@ -1,51 +1,55 @@
 /*
- * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2020, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * A bidirectional version of Dijkstra's algorithm.
- * 
+ *
  * <p>
  * See the Wikipedia article for details and references about
  * <a href="https://en.wikipedia.org/wiki/Bidirectional_search">bidirectional search</a>. This
  * technique does not change the worst-case behavior of the algorithm but reduces, in some cases,
  * the number of visited vertices in practice. This implementation alternatively constructs forward
  * and reverse paths from the source and target vertices respectively.
- * 
+ * <p>
+ * This iterator can use a custom heap implementation, which can specified during the construction
+ * time. Pairing heap is used by default
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
- * @see DijkstraShortestPath
- *
  * @author Dimitrios Michail
- * @since July 2016
+ * @see DijkstraShortestPath
  */
 public final class BidirectionalDijkstraShortestPath<V, E>
     extends
-    BaseShortestPathAlgorithm<V, E>
+    BaseBidirectionalShortestPathAlgorithm<V, E>
 {
     private double radius;
+    private final Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier;
 
     /**
      * Constructs a new instance for a specified graph.
@@ -54,7 +58,20 @@ public final class BidirectionalDijkstraShortestPath<V, E>
      */
     public BidirectionalDijkstraShortestPath(Graph<V, E> graph)
     {
-        this(graph, Double.POSITIVE_INFINITY);
+        this(graph, Double.POSITIVE_INFINITY, PairingHeap::new);
+    }
+
+    /**
+     * Constructs a new instance for a specified graph. The constructed algorithm will use the heap
+     * supplied by the {@code heapSupplier}.
+     *
+     * @param graph the input graph
+     * @param heapSupplier supplier of the preferable heap implementation
+     */
+    public BidirectionalDijkstraShortestPath(
+        Graph<V, E> graph, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
+    {
+        this(graph, Double.POSITIVE_INFINITY, heapSupplier);
     }
 
     /**
@@ -65,11 +82,43 @@ public final class BidirectionalDijkstraShortestPath<V, E>
      */
     public BidirectionalDijkstraShortestPath(Graph<V, E> graph, double radius)
     {
+        this(graph, radius, PairingHeap::new);
+    }
+
+    /**
+     * Constructs a new instance for a specified graph. The constructed algorithm will use the heap
+     * supplied by the {@code heapSupplier}.
+     *
+     * @param graph the input graph
+     * @param radius limit on path length, or Double.POSITIVE_INFINITY for unbounded search
+     * @param heapSupplier supplier of the preferable heap implementation
+     */
+    public BidirectionalDijkstraShortestPath(
+        Graph<V, E> graph, double radius,
+        Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
+    {
         super(graph);
         if (radius < 0.0) {
             throw new IllegalArgumentException("Radius must be non-negative");
         }
+        this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
         this.radius = radius;
+    }
+
+    /**
+     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
+     * the constructor instead.
+     *
+     * @param graph the graph to be searched
+     * @param source the vertex at which the path should start
+     * @param sink the vertex at which the path should end
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a shortest path, or null if no path exists
+     */
+    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink)
+    {
+        return new BidirectionalDijkstraShortestPath<>(graph).getPath(source, sink);
     }
 
     @Override
@@ -88,12 +137,14 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         // create frontiers
-        SearchFrontier forwardFrontier = new SearchFrontier(graph);
-        SearchFrontier backwardFrontier;
+        DijkstraSearchFrontier<V, E> forwardFrontier =
+            new DijkstraSearchFrontier<>(graph, heapSupplier);
+        DijkstraSearchFrontier<V, E> backwardFrontier;
         if (graph.getType().isDirected()) {
-            backwardFrontier = new SearchFrontier(new EdgeReversedGraph<>(graph));
+            backwardFrontier =
+                new DijkstraSearchFrontier<>(new EdgeReversedGraph<>(graph), heapSupplier);
         } else {
-            backwardFrontier = new SearchFrontier(graph);
+            backwardFrontier = new DijkstraSearchFrontier<>(graph, heapSupplier);
         }
 
         assert !source.equals(sink);
@@ -106,20 +157,21 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         double bestPath = Double.POSITIVE_INFINITY;
         V bestPathCommonVertex = null;
 
-        SearchFrontier frontier = forwardFrontier;
-        SearchFrontier otherFrontier = backwardFrontier;
+        DijkstraSearchFrontier<V, E> frontier = forwardFrontier;
+        DijkstraSearchFrontier<V, E> otherFrontier = backwardFrontier;
 
         while (true) {
             // stopping condition
             if (frontier.heap.isEmpty() || otherFrontier.heap.isEmpty()
-                || frontier.heap.min().getKey() + otherFrontier.heap.min().getKey() >= bestPath)
+                || frontier.heap.findMin().getKey()
+                    + otherFrontier.heap.findMin().getKey() >= bestPath)
             {
                 break;
             }
 
             // frontier scan
-            FibonacciHeapNode<QueueEntry> node = frontier.heap.removeMin();
-            V v = node.getData().v;
+            AddressableHeap.Handle<Double, Pair<V, E>> node = frontier.heap.deleteMin();
+            V v = node.getValue().getFirst();
             double vDistance = node.getKey();
 
             for (E e : frontier.graph.outgoingEdgesOf(v)) {
@@ -140,7 +192,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             }
 
             // swap frontiers
-            SearchFrontier tmpFrontier = frontier;
+            DijkstraSearchFrontier<V, E> tmpFrontier = frontier;
             frontier = otherFrontier;
             otherFrontier = tmpFrontier;
 
@@ -156,99 +208,45 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     }
 
     /**
-     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
-     * the constructor instead.
-     * 
-     * @param graph the graph to be searched
-     * @param source the vertex at which the path should start
-     * @param sink the vertex at which the path should end
-     * 
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * Maintains search frontier during shortest path computation.
      *
-     * @return a shortest path, or null if no path exists
+     * @param <V> vertices type
+     * @param <E> edges type
      */
-    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink)
+    static class DijkstraSearchFrontier<V, E>
+        extends
+        BaseSearchFrontier<V, E>
     {
-        return new BidirectionalDijkstraShortestPath<>(graph).getPath(source, sink);
-    }
 
-    private GraphPath<V, E> createPath(
-        SearchFrontier forwardFrontier, SearchFrontier backwardFrontier, double weight, V source,
-        V commonVertex, V sink)
-    {
-        LinkedList<E> edgeList = new LinkedList<>();
-        LinkedList<V> vertexList = new LinkedList<>();
+        final AddressableHeap<Double, Pair<V, E>> heap;
+        final Map<V, AddressableHeap.Handle<Double, Pair<V, E>>> seen;
 
-        // add common vertex
-        vertexList.add(commonVertex);
-
-        // traverse forward path
-        V v = commonVertex;
-        while (true) {
-            E e = forwardFrontier.getTreeEdge(v);
-
-            if (e == null) {
-                break;
-            }
-
-            edgeList.addFirst(e);
-            v = Graphs.getOppositeVertex(forwardFrontier.graph, e, v);
-            vertexList.addFirst(v);
-        }
-
-        // traverse reverse path
-        v = commonVertex;
-        while (true) {
-            E e = backwardFrontier.getTreeEdge(v);
-
-            if (e == null) {
-                break;
-            }
-
-            edgeList.addLast(e);
-            v = Graphs.getOppositeVertex(backwardFrontier.graph, e, v);
-            vertexList.addLast(v);
-        }
-
-        return new GraphWalk<>(graph, source, sink, vertexList, edgeList, weight);
-    }
-
-    /**
-     * Helper class to maintain the search frontier
-     */
-    class SearchFrontier
-    {
-        final Graph<V, E> graph;
-
-        final FibonacciHeap<QueueEntry> heap;
-        final Map<V, FibonacciHeapNode<QueueEntry>> seen;
-
-        public SearchFrontier(Graph<V, E> graph)
+        DijkstraSearchFrontier(
+            Graph<V, E> graph, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
         {
-            this.graph = graph;
-            this.heap = new FibonacciHeap<>();
+            super(graph);
+            this.heap = heapSupplier.get();
             this.seen = new HashMap<>();
         }
 
-        public void updateDistance(V v, E e, double distance)
+        void updateDistance(V v, E e, double distance)
         {
-            FibonacciHeapNode<QueueEntry> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
             if (node == null) {
-                node = new FibonacciHeapNode<>(new QueueEntry(e, v));
-                heap.insert(node, distance);
+                node = heap.insert(distance, new Pair<>(v, e));
                 seen.put(v, node);
             } else {
                 if (distance < node.getKey()) {
-                    heap.decreaseKey(node, distance);
-                    node.getData().e = e;
+                    node.decreaseKey(distance);
+                    node.setValue(Pair.of(v, e));
                 }
             }
         }
 
+        @Override
         public double getDistance(V v)
         {
-            FibonacciHeapNode<QueueEntry> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
             if (node == null) {
                 return Double.POSITIVE_INFINITY;
             } else {
@@ -256,30 +254,15 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             }
         }
 
+        @Override
         public E getTreeEdge(V v)
         {
-            FibonacciHeapNode<QueueEntry> node = seen.get(v);
+            AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
             if (node == null) {
                 return null;
             } else {
-                return node.getData().e;
+                return node.getValue().getSecond();
             }
         }
-
     }
-
-    class QueueEntry
-    {
-        E e;
-        V v;
-
-        public QueueEntry(E e, V v)
-        {
-            this.e = e;
-            this.v = v;
-        }
-    }
-
 }
-
-// End BidirectionalDijkstraShortestPath.java

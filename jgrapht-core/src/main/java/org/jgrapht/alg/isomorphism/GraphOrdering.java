@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2015-2018, by Fabian Späh and Contributors.
+ * (C) Copyright 2015-2020, by Fabian Späh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.isomorphism;
 
@@ -29,19 +29,28 @@ import java.util.*;
  * @param <E> the type of the edges
  */
 
-class GraphOrdering<V, E>
+final class GraphOrdering<V, E>
 {
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
 
-    private Map<V, Integer> mapVertexToOrder;
-    private ArrayList<V> mapOrderToVertex;
-    private int vertexCount;
+    private final Map<V, Integer> mapVertexToOrder;
+    private final ArrayList<V> mapOrderToVertex;
+    private final int vertexCount;
 
-    private int[][] outgoingEdges;
-    private int[][] incomingEdges;
-    private Boolean[][] adjMatrix;
+    private final int[][] outgoingEdges;
+    private final int[][] incomingEdges;
+    private final E[] edgeCache;
+    /**
+     * if caching is enabled, adjMatrix contains cached information on existing edges, valid values:
+     * <ul>
+     * <li>0 - no cached value</li>
+     * <li>1 - edge exists</li>
+     * <li>-1 - no edge exists</li>
+     * </ul>
+     */
+    private final byte[] adjMatrix;
 
-    private boolean cacheEdges;
+    private final boolean cacheEdges;
 
     /**
      * @param graph the graph to be ordered
@@ -50,6 +59,7 @@ class GraphOrdering<V, E>
      * @param cacheEdges if true, the class creates a adjacency matrix and two arrays for incoming
      *        and outgoing edges for fast access.
      */
+    @SuppressWarnings("unchecked")
     public GraphOrdering(Graph<V, E> graph, boolean orderByDegree, boolean cacheEdges)
     {
         this.graph = graph;
@@ -67,7 +77,13 @@ class GraphOrdering<V, E>
         if (cacheEdges) {
             outgoingEdges = new int[vertexCount][];
             incomingEdges = new int[vertexCount][];
-            adjMatrix = new Boolean[vertexCount][vertexCount];
+            edgeCache = (E[]) new Object[vertexCount * vertexCount];
+            adjMatrix = new byte[vertexCount * vertexCount];
+        } else {
+            outgoingEdges = null;
+            incomingEdges = null;
+            edgeCache = null;
+            adjMatrix = null;
         }
 
         Integer i = 0;
@@ -161,22 +177,34 @@ class GraphOrdering<V, E>
      */
     public boolean hasEdge(int v1Number, int v2Number)
     {
-        V v1, v2;
-        Boolean containsEdge = null;
 
+        int cacheIndex = 0;
         if (cacheEdges) {
-            containsEdge = adjMatrix[v1Number][v2Number];
+            cacheIndex = v1Number * vertexCount + v2Number;
+            final byte cache = adjMatrix[cacheIndex];
+            if (cache != 0) {
+                return cache > 0;
+            } else {
+                // initialize both the adjacency matrix as well as the edge cache
+                final V v1 = getVertex(v1Number);
+                final V v2 = getVertex(v2Number);
+                final E edge = graph.getEdge(v1, v2);
+                if (edge == null) {
+                    adjMatrix[cacheIndex] = (byte) -1;
+
+                    return false;
+                } else {
+                    adjMatrix[cacheIndex] = (byte) 1;
+                    edgeCache[cacheIndex] = edge;
+
+                    return true;
+                }
+            }
         }
 
-        if (!cacheEdges || (containsEdge == null)) {
-            v1 = getVertex(v1Number);
-            v2 = getVertex(v2Number);
-            containsEdge = graph.containsEdge(v1, v2);
-        }
-
-        if (cacheEdges && (adjMatrix[v1Number][v2Number] == null)) {
-            adjMatrix[v1Number][v2Number] = containsEdge;
-        }
+        V v1 = getVertex(v1Number);
+        V v2 = getVertex(v2Number);
+        boolean containsEdge = graph.containsEdge(v1, v2);
 
         return containsEdge;
     }
@@ -201,9 +229,24 @@ class GraphOrdering<V, E>
      */
     public E getEdge(int v1Number, int v2Number)
     {
+
+        if (cacheEdges) {
+            final int cacheIndex = v1Number * vertexCount + v2Number;
+            final byte containsEdge = adjMatrix[cacheIndex];
+            if (containsEdge == 0) {
+                // edge cache has not been initialized yet for this element
+                hasEdge(v1Number, v2Number);
+            }
+            final E edge = edgeCache[cacheIndex];
+
+            return edge;
+        }
+
         V v1 = getVertex(v1Number), v2 = getVertex(v2Number);
 
-        return graph.getEdge(v1, v2);
+        E edge = graph.getEdge(v1, v2);
+
+        return edge;
     }
 
     public int getVertexNumber(V v)
@@ -245,5 +288,3 @@ class GraphOrdering<V, E>
         }
     }
 }
-
-// End GraphOrdering.java

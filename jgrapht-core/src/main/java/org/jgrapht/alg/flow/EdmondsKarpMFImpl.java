@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2008-2018, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2008-2020, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.flow;
 
@@ -78,11 +78,11 @@ public final class EdmondsKarpMFImpl<V, E>
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
 
     /**
-     * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i> <tt>network</tt>.
-     * Current source and sink are set to <tt>null</tt>. If <tt>network</tt> is weighted, then
-     * capacities are weights, otherwise all capacities are equal to one. Doubles are compared using
-     * <tt>
-     * DEFAULT_EPSILON</tt> tolerance.
+     * Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
+     * <code>network</code>. Current source and sink are set to <code>null</code>. If
+     * <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
+     * equal to one. Doubles are compared using <code>
+     * DEFAULT_EPSILON</code> tolerance.
      *
      * @param network network, where maximum flow will be calculated
      */
@@ -92,9 +92,10 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i> <tt>network</tt>.
-     * Current source and sink are set to <tt>null</tt>. If <tt>network</tt> is weighted, then
-     * capacities are weights, otherwise all capacities are equal to one.
+     * Constructs <code>MaximumFlow</code> instance to work with <i>a copy of</i>
+     * <code>network</code>. Current source and sink are set to <code>null</code>. If
+     * <code>network</code> is weighted, then capacities are weights, otherwise all capacities are
+     * equal to one.
      *
      * @param network network, where maximum flow will be calculated
      * @param epsilon tolerance for comparing doubles
@@ -120,10 +121,10 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
-     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
-     * <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different.
+     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then
+     * calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
+     * <code>source</code> and <code>sink</code> must be vertices of the <code>
+     * network</code> passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex
@@ -138,10 +139,10 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
-     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
-     * <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different. If desired, a flow map
+     * Sets current source to <code>source</code>, current sink to <code>sink</code>, then
+     * calculates maximum flow from <code>source</code> to <code>sink</code>. Note, that
+     * <code>source</code> and <code>sink</code> must be vertices of the <code>
+     * network</code> passed to the constructor, and they must be different. If desired, a flow map
      * can be queried afterwards; this will not require a new invocation of the algorithm.
      *
      * @param source source vertex
@@ -193,7 +194,7 @@ public final class EdmondsKarpMFImpl<V, E>
             getVertexExtension(v).lastArcs = null;
         }
 
-        Queue<VertexExtension> queue = new LinkedList<>();
+        Queue<VertexExtension> queue = new ArrayDeque<>();
         queue.offer(currentSource);
 
         currentSource.visited = true;
@@ -294,5 +295,3 @@ public final class EdmondsKarpMFImpl<V, E>
 
     }
 }
-
-// End EdmondsKarpMFImpl.java

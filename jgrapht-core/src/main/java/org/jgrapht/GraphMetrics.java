@@ -1,27 +1,28 @@
 /*
- * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2020, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.shortestpath.GraphMeasurer;
-import org.jgrapht.alg.util.NeighborCache;
+import org.jgrapht.alg.shortestpath.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * Collection of methods which provide numerical graph information.
@@ -116,7 +117,7 @@ public abstract class GraphMetrics
         // Array storing the depth of each vertex in the search tree
         int[] depth = new int[vertices.size()];
         // Queue for BFS
-        Queue<V> queue = new LinkedList<>();
+        Queue<V> queue = new ArrayDeque<>();
 
         // Check whether the graph has self-loops
         if (graph.getType().isAllowingSelfLoops())
@@ -220,7 +221,8 @@ public abstract class GraphMetrics
      * @param <E> the graph edge type
      * @return the number of triangles in the graph induced by vertexSubset
      */
-     static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertexSubset){
+    static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertexSubset)
+    {
         long total = 0;
 
         for (int i = 0; i < vertexSubset.size(); i++) {
@@ -230,7 +232,9 @@ public abstract class GraphMetrics
                     V v = vertexSubset.get(j);
                     V w = vertexSubset.get(k);
 
-                    if (graph.containsEdge(u, v) && graph.containsEdge(v, w) && graph.containsEdge(w, u)){
+                    if (graph.containsEdge(u, v) && graph.containsEdge(v, w)
+                        && graph.containsEdge(w, u))
+                    {
                         total++;
                     }
                 }
@@ -241,12 +245,13 @@ public abstract class GraphMetrics
     }
 
     /**
-     * An $O(|E|^{3/2})$ algorithm for counting the number of non-trivial triangles in an undirected graph.
-     * A non-trivial triangle is formed by three distinct vertices all connected to each other.
+     * An $O(|E|^{3/2})$ algorithm for counting the number of non-trivial triangles in an undirected
+     * graph. A non-trivial triangle is formed by three distinct vertices all connected to each
+     * other.
      *
      * <p>
-     * For more details of this algorithm see Ullman, Jeffrey: "Mining of Massive Datasets", Cambridge University Press,
-     * Chapter 10
+     * For more details of this algorithm see Ullman, Jeffrey: "Mining of Massive Datasets",
+     * Cambridge University Press, Chapter 10
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -255,56 +260,58 @@ public abstract class GraphMetrics
      * @throws NullPointerException if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is not undirected
      */
-    public static <V, E> long getNumberOfTriangles(Graph<V, E> graph){
+    public static <V, E> long getNumberOfTriangles(Graph<V, E> graph)
+    {
         GraphTests.requireUndirected(graph);
 
-        final int sqrtV = (int)Math.sqrt(graph.vertexSet().size());
+        final int sqrtV = (int) Math.sqrt(graph.vertexSet().size());
 
         List<V> vertexList = new ArrayList<>(graph.vertexSet());
 
         /*
-            The book suggest the following comparator: "Compare vertices based on their degree.
-            If equal compare them of their actual value, since they are all integers".
+         * The book suggest the following comparator: "Compare vertices based on their degree. If
+         * equal compare them of their actual value, since they are all integers".
          */
 
         // Fix vertex order for unique comparison of vertices
-        Map<V, Integer> vertexOrder = new HashMap<>(graph.vertexSet().size());
+        Map<V, Integer> vertexOrder =
+            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         int k = 0;
         for (V v : graph.vertexSet()) {
             vertexOrder.put(v, k++);
         }
 
-        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf)
-                .thenComparingInt(System::identityHashCode)
-                .thenComparingInt(vertexOrder::get);
+        Comparator<V> comparator = Comparator
+            .comparingInt(graph::degreeOf).thenComparingInt(System::identityHashCode)
+            .thenComparingInt(vertexOrder::get);
 
         vertexList.sort(comparator);
 
         // vertex v is a heavy-hitter iff degree(v) >= sqrtV
-        List<V> heavyHitterVertices = vertexList.stream()
-                .filter(x -> graph.degreeOf(x) >= sqrtV)
-                .collect(Collectors.toCollection(ArrayList::new));
+        List<V> heavyHitterVertices = vertexList
+            .stream().filter(x -> graph.degreeOf(x) >= sqrtV)
+            .collect(Collectors.toCollection(ArrayList::new));
 
         // count the number of triangles formed from only heavy-hitter vertices
         long numberTriangles = naiveCountTriangles(graph, heavyHitterVertices);
 
-        for (E edge: graph.edgeSet()){
+        for (E edge : graph.edgeSet()) {
             V v1 = graph.getEdgeSource(edge);
             V v2 = graph.getEdgeTarget(edge);
 
-            if (v1 == v2){
+            if (v1 == v2) {
                 continue;
             }
 
-            if (graph.degreeOf(v1) < sqrtV || graph.degreeOf(v2) < sqrtV){
+            if (graph.degreeOf(v1) < sqrtV || graph.degreeOf(v2) < sqrtV) {
                 // ensure that v1 <= v2 (swap them otherwise)
-                if (comparator.compare(v1, v2) > 0){
+                if (comparator.compare(v1, v2) > 0) {
                     V tmp = v1;
                     v1 = v2;
                     v2 = tmp;
                 }
 
-                for (E e: graph.edgesOf(v1)){
+                for (E e : graph.edgesOf(v1)) {
                     V u = Graphs.getOppositeVertex(graph, e, v1);
 
                     // check if the triangle is non-trivial: u, v1, v2 are distinct vertices
@@ -313,11 +320,11 @@ public abstract class GraphMetrics
                     }
 
                     /*
-                        Check if v2 <= u and if (u, v2) is a valid edge.
-                        If both of them are true, then we have a new triangle (v1, v2, u) and all three vertices
-                        in the triangle are ordered (v1 <= v2 <= u) so we count it only once.
+                     * Check if v2 <= u and if (u, v2) is a valid edge. If both of them are true,
+                     * then we have a new triangle (v1, v2, u) and all three vertices in the
+                     * triangle are ordered (v1 <= v2 <= u) so we count it only once.
                      */
-                    if (comparator.compare(v2, u) <= 0 && graph.containsEdge(u, v2)){
+                    if (comparator.compare(v2, u) <= 0 && graph.containsEdge(u, v2)) {
                         numberTriangles++;
                     }
                 }
@@ -327,5 +334,3 @@ public abstract class GraphMetrics
         return numberTriangles;
     }
 }
-
-// End GraphMetrics.java

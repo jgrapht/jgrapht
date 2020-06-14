@@ -1,22 +1,33 @@
+/*
+ * (C) Copyright 2018-2020, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.graph.specifics.ArrayUnenforcedSetEdgeSetFactory;
-import org.jgrapht.graph.specifics.Specifics;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph specifics construction factory.
  * 
- * <p>Such a strategy can be used to adjust the internals of the default graph implementations. 
+ * <p>
+ * Such a strategy can be used to adjust the internals of the default graph implementations.
  * 
  * @author Dimitrios Michail
  *
@@ -26,16 +37,21 @@ import org.jgrapht.graph.specifics.Specifics;
  * @see FastLookupGraphSpecificsStrategy
  * @see DefaultGraphSpecificsStrategy
  */
-public interface GraphSpecificsStrategy<V, E> extends Serializable
+public interface GraphSpecificsStrategy<V, E>
+    extends
+    Serializable
 {
     /**
      * Get a function which creates the intrusive edges specifics. The factory will accept the graph
      * type as a parameter.
      * 
+     * <p>
+     * Note that it is very important to use a map implementation which respects iteration order.
+     * 
      * @return a function which creates intrusive edges specifics.
      */
     Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory();
-    
+
     /**
      * Get a function which creates the specifics. The factory will accept the graph type as a
      * parameter.
@@ -43,30 +59,6 @@ public interface GraphSpecificsStrategy<V, E> extends Serializable
      * @return a function which creates intrusive edges specifics.
      */
     BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory();
-
-    /**
-     * Get a supplier of maps with a predictable iteration order.
-     * 
-     * @return a supplier of maps with a predictable iteration order.
-     * @param <K1> the key type
-     * @param <V1> the value type 
-     */
-    default <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderMapFactory()
-    {
-        return (Supplier<Map<K1, V1>> & Serializable)() -> new LinkedHashMap<>();
-    }
-
-    /**
-     * Get a supplier of maps.
-     * 
-     * @return a supplier of maps.
-     * @param <K1> the key type
-     * @param <V1> the value type 
-     */
-    default <K1, V1> Supplier<Map<K1, V1>> getMapFactory()
-    {
-        return (Supplier<Map<K1, V1>> & Serializable)() -> new HashMap<>();
-    }
 
     /**
      * Get an edge set factory.

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>1.2.1-SNAPSHOT</version>
+		<version>1.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-core</artifactId>
 	<name>JGraphT - Core</name>
@@ -19,8 +19,8 @@
 			<distribution>repo</distribution>
 		</license>
 		<license>
-			<name>Eclipse Public License (EPL) 1.0</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<name>Eclipse Public License (EPL) 2.0</name>
+			<url>http://www.eclipse.org/legal/epl-v20.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.jheaps</groupId>
 			<artifactId>jheaps</artifactId>
-			<version>0.8</version>
+			<version>0.13</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -44,13 +44,13 @@
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>
-			<version>1.19</version>
+			<version>1.23</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-generator-annprocess</artifactId>
-			<version>1.19</version>
+			<version>1.23</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -59,6 +59,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>

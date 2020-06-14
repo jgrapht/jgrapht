@@ -1,32 +1,34 @@
 /*
- * (C) Copyright 2015-2018, by Graeme Ahokas and Contributors.
+ * (C) Copyright 2015-2020, by Graeme Ahokas and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.matching;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 import org.junit.experimental.categories.*;
 
 import java.math.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MaximumWeightBipartiteMatchingTest
 {
@@ -147,6 +149,7 @@ public class MaximumWeightBipartiteMatchingTest
         assertTrue(matchings.getEdges().contains(e3));
         assertTrue(matchings.getEdges().contains(e5));
         assertTrue(matchings.getEdges().contains(e7));
+        assertEquals(5d, matchings.getWeight(), 1e-9);
     }
 
     @Test
@@ -172,13 +175,13 @@ public class MaximumWeightBipartiteMatchingTest
             Graph<Integer, DefaultWeightedEdge> g =
                 new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-            Set<Integer> partitionA = new LinkedHashSet<>(n);
+            Set<Integer> partitionA = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
             for (int i = 0; i < n; i++) {
                 g.addVertex(i);
                 partitionA.add(i);
             }
 
-            Set<Integer> partitionB = new LinkedHashSet<>(n);
+            Set<Integer> partitionB = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
             for (int i = 0; i < n; i++) {
                 g.addVertex(n + i);
                 partitionB.add(n + i);

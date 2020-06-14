@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2013-2018, by JeanYves Tinevez and Contributors.
+ * (C) Copyright 2013-2020, by JeanYves Tinevez and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.ext;
 
@@ -45,7 +45,6 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author JeanYves Tinevez
- * @since 09 July, 2013
  */
 public class JGraphXAdapter<V, E>
     extends
@@ -187,7 +186,7 @@ public class JGraphXAdapter<V, E>
         // we have to iterate over this because the graphT has already
         // deleted the vertex and edges so we can't query what the edges were
         for (E edge : cellToEdgeMap.values()) {
-            if (!graphT.edgeSet().contains(edge)) {
+            if (!graphT.containsEdge(edge)) {
                 removedEdges.add(edge);
             }
         }
@@ -304,5 +303,3 @@ public class JGraphXAdapter<V, E>
         }
     }
 }
-
-// End JGraphXAdapter.java

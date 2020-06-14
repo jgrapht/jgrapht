@@ -13,7 +13,7 @@ your own applications.  We'll cover the following topics:
 
 ## Development Setup
 
-First, [set up your development environment](https://github.com/jgrapht/jgrapht/wiki/How-to-use-JGraphT-as-a-dependency-in-your-projects) with JGraphT as a dependency.
+First, [set up your development environment](https://github.com/jgrapht/jgrapht/wiki/Users:-How-to-use-JGraphT-as-a-dependency-in-your-projects) with JGraphT as a dependency.
 
 ## Hello JGraphT
 
@@ -23,11 +23,11 @@ supported, as we'll explain further on; but for now, let's take a look
 at a simple example of creating a directed graph:
 
 ```java
-:[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java?example=urlCreate)
+:[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java?example=uriCreate)
 ```
 
 Notice how the vertex objects are instances of the
-[java.net.URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)
+[java.net.URI](https://docs.oracle.com/javase/8/docs/api/java/net/URI.html)
 class.  JGraphT does not supply a vertex class itself; instead, you're
 free to choose your own based on whatever works best for your
 application, subject to certain restrictions mentioned below.
@@ -97,7 +97,6 @@ subclasses of any of these).
 
 | Class Name                   | Edges    | Self-loops | Multiple edges | Weighted |
 |:----------------------------:|:--------:|:----------:|:--------------:|:--------:|
-|DefaultUndirectedWeightedGraph|undirected|yes         | no             |yes       |
 |SimpleGraph                   |undirected|no          | no             |no        |
 |Multigraph                    |undirected|no          | yes            |no        |
 |Pseudograph                   |undirected|yes         | yes            |no        |
@@ -419,7 +418,7 @@ using our
 Simply instantiate the correct adapter on top of your Guava graph, and
 you'll have an implementation of JGraphT's `Graph` interface which
 stays in sync with the Guava graph automatically, at no extra memory
-cost.  Now you can run JGraphT algorithms on top of your Guava graph,
+cost.  Now you can [run JGraphT algorithms](GuavaAdapter) on top of your Guava graph,
 or run our importers or exporters against it.
 
 ### JGraphX Adapter
@@ -438,7 +437,7 @@ visualization.  All you need to do is wrap your JGraphT graph with
 
 If you want to run the demo programs excerpted throughout this
 overview, see
-[these instructions](https://github.com/jgrapht/jgrapht/wiki/Running-JGraphT-demos).
+[these instructions](https://github.com/jgrapht/jgrapht/wiki/Users:-Running-JGraphT-demos).
 You can also find the full source code in
 [github](https://github.com/jgrapht/jgrapht/tree/master/jgrapht-demo/src/main/java/org/jgrapht/demo).
 

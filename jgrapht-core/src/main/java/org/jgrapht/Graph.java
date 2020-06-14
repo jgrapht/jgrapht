@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht;
 
@@ -22,8 +22,8 @@ import java.util.function.*;
 
 /**
  * The root interface in the graph hierarchy. A mathematical graph-theory graph object
- * <tt>G(V,E)</tt> contains a set <tt>V</tt> of vertices and a set <tt>
- * E</tt> of edges. Each edge e=(v1,v2) in E connects vertex v1 to vertex v2. for more information
+ * <code>G(V,E)</code> contains a set <code>V</code> of vertices and a set <code>
+ * E</code> of edges. Each edge e=(v1,v2) in E connects vertex v1 to vertex v2. for more information
  * about graphs and their related definitions see <a href="http://mathworld.wolfram.com/Graph.html">
  * http://mathworld.wolfram.com/Graph.html</a>.
  *
@@ -55,7 +55,6 @@ import java.util.function.*;
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
- * @since Jul 14, 2003
  */
 public interface Graph<V, E>
 {
@@ -108,6 +107,13 @@ public interface Graph<V, E>
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
      * <code>v2</code> such that <code>v2.equals(v)</code>.
      * 
+     * <p>
+     * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
+     * and {@link Graph#addVertex()}. In such a case the user must make sure never to add vertices
+     * in the graph using method {@link Graph#addVertex(Object)}, which are going to be returned in
+     * the future by the supplied vertex supplier. Such a sequence will result into an
+     * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
+     * 
      * @return the vertex supplier or <code>null</code> if the graph has no such supplier
      */
     Supplier<V> getVertexSupplier();
@@ -134,7 +140,7 @@ public interface Graph<V, E>
     /**
      * Creates a new edge in this graph, going from the source vertex to the target vertex, and
      * returns the created edge. Some graphs do not allow edge-multiplicity. In such cases, if the
-     * graph already contains an edge from the specified source to the specified target, than this
+     * graph already contains an edge from the specified source to the specified target, then this
      * method does not change the graph and returns <code>null</code>.
      *
      * <p>
@@ -174,9 +180,9 @@ public interface Graph<V, E>
      * More formally, adds the specified edge, <code>
      * e</code>, to this graph if this graph contains no edge <code>e2</code> such that
      * <code>e2.equals(e)</code>. If this graph already contains such an edge, the call leaves this
-     * graph unchanged and returns <tt>false</tt>. Some graphs do not allow edge-multiplicity. In
-     * such cases, if the graph already contains an edge from the specified source to the specified
-     * target, than this method does not change the graph and returns <code>
+     * graph unchanged and returns <code>false</code>. Some graphs do not allow edge-multiplicity.
+     * In such cases, if the graph already contains an edge from the specified source to the
+     * specified target, then this method does not change the graph and returns <code>
      * false</code>. If the edge was added to the graph, returns <code>
      * true</code>.
      *
@@ -189,7 +195,7 @@ public interface Graph<V, E>
      * @param targetVertex target vertex of the edge.
      * @param e edge to be added to this graph.
      *
-     * @return <tt>true</tt> if this graph did not already contain the specified edge.
+     * @return <code>true</code> if this graph did not already contain the specified edge.
      *
      * @throws IllegalArgumentException if source or target vertices are not found in the graph.
      * @throws ClassCastException if the specified edge is not assignment compatible with the class
@@ -217,10 +223,18 @@ public interface Graph<V, E>
      * If the underlying graph implementation's {@link #getVertexSupplier()} returns
      * <code>null</code>, then this method cannot create vertices and throws an
      * {@link UnsupportedOperationException}.
+     * 
+     * <p>
+     * Care must also be taken when interchanging calls to methods {@link Graph#addVertex(Object)}
+     * and {@link Graph#addVertex()}. In such a case the user must make sure never to add vertices
+     * in the graph using method {@link Graph#addVertex(Object)}, which are going to be returned in
+     * the future by the supplied vertex supplier. Such a sequence will result into an
+     * {@link IllegalArgumentException} when calling method {@link Graph#addVertex()}.
      *
      * @return The newly created vertex if added to the graph.
      *
-     * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in the graph
+     * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in
+     *         the graph
      * @throws UnsupportedOperationException if the graph was not initialized with a vertex supplier
      *
      * @see #getVertexSupplier()
@@ -232,12 +246,12 @@ public interface Graph<V, E>
      * specified vertex, <code>v</code>, to this graph if this graph contains no vertex
      * <code>u</code> such that <code>
      * u.equals(v)</code>. If this graph already contains such vertex, the call leaves this graph
-     * unchanged and returns <tt>false</tt>. In combination with the restriction on constructors,
-     * this ensures that graphs never contain duplicate vertices.
+     * unchanged and returns <code>false</code>. In combination with the restriction on
+     * constructors, this ensures that graphs never contain duplicate vertices.
      *
      * @param v vertex to be added to this graph.
      *
-     * @return <tt>true</tt> if this graph did not already contain the specified vertex.
+     * @return <code>true</code> if this graph did not already contain the specified vertex.
      *
      * @throws NullPointerException if the specified vertex is <code>
      * null</code>.
@@ -245,39 +259,40 @@ public interface Graph<V, E>
     boolean addVertex(V v);
 
     /**
-     * Returns <tt>true</tt> if and only if this graph contains an edge going from the source vertex
-     * to the target vertex. In undirected graphs the same result is obtained when source and target
-     * are inverted. If any of the specified vertices does not exist in the graph, or if is <code>
+     * Returns <code>true</code> if and only if this graph contains an edge going from the source
+     * vertex to the target vertex. In undirected graphs the same result is obtained when source and
+     * target are inverted. If any of the specified vertices does not exist in the graph, or if is
+     * <code>
      * null</code>, returns <code>false</code>.
      *
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
      *
-     * @return <tt>true</tt> if this graph contains the specified edge.
+     * @return <code>true</code> if this graph contains the specified edge.
      */
     boolean containsEdge(V sourceVertex, V targetVertex);
 
     /**
-     * Returns <tt>true</tt> if this graph contains the specified edge. More formally, returns
-     * <tt>true</tt> if and only if this graph contains an edge <code>e2</code> such that
+     * Returns <code>true</code> if this graph contains the specified edge. More formally, returns
+     * <code>true</code> if and only if this graph contains an edge <code>e2</code> such that
      * <code>e.equals(e2)</code>. If the specified edge is <code>null</code> returns
      * <code>false</code>.
      *
      * @param e edge whose presence in this graph is to be tested.
      *
-     * @return <tt>true</tt> if this graph contains the specified edge.
+     * @return <code>true</code> if this graph contains the specified edge.
      */
     boolean containsEdge(E e);
 
     /**
-     * Returns <tt>true</tt> if this graph contains the specified vertex. More formally, returns
-     * <tt>true</tt> if and only if this graph contains a vertex <code>u</code> such that
+     * Returns <code>true</code> if this graph contains the specified vertex. More formally, returns
+     * <code>true</code> if and only if this graph contains a vertex <code>u</code> such that
      * <code>u.equals(v)</code>. If the specified vertex is <code>null</code> returns
      * <code>false</code>.
      *
      * @param v vertex whose presence in this graph is to be tested.
      *
-     * @return <tt>true</tt> if this graph contains the specified vertex.
+     * @return <code>true</code> if this graph contains the specified vertex.
      */
     boolean containsVertex(V v);
 
@@ -404,10 +419,10 @@ public interface Graph<V, E>
      *
      * @param edges edges to be removed from this graph.
      *
-     * @return <tt>true</tt> if this graph changed as a result of the call
+     * @return <code>true</code> if this graph changed as a result of the call
      *
-     * @throws NullPointerException if the specified edge collection is <tt>
-     * null</tt>.
+     * @throws NullPointerException if the specified edge collection is <code>
+     * null</code>.
      *
      * @see #removeEdge(Object)
      * @see #containsEdge(Object)
@@ -435,10 +450,10 @@ public interface Graph<V, E>
      *
      * @param vertices vertices to be removed from this graph.
      *
-     * @return <tt>true</tt> if this graph changed as a result of the call
+     * @return <code>true</code> if this graph changed as a result of the call
      *
-     * @throws NullPointerException if the specified vertex collection is <tt>
-     * null</tt>.
+     * @throws NullPointerException if the specified vertex collection is <code>
+     * null</code>.
      *
      * @see #removeVertex(Object)
      * @see #containsVertex(Object)
@@ -460,7 +475,7 @@ public interface Graph<V, E>
      * Removes the specified edge from the graph. Removes the specified edge from this graph if it
      * is present. More formally, removes an edge <code>
      * e2</code> such that <code>e2.equals(e)</code>, if the graph contains such edge. Returns
-     * <tt>true</tt> if the graph contained the specified edge. (The graph will not contain the
+     * <code>true</code> if the graph contained the specified edge. (The graph will not contain the
      * specified edge once the call returns).
      *
      * <p>
@@ -479,7 +494,7 @@ public interface Graph<V, E>
      * More formally, if the graph contains a vertex <code>
      * u</code> such that <code>u.equals(v)</code>, the call removes all edges that touch
      * <code>u</code> and then removes <code>u</code> itself. If no such <code>u</code> is found,
-     * the call leaves the graph unchanged. Returns <tt>true</tt> if the graph contained the
+     * the call leaves the graph unchanged. Returns <code>true</code> if the graph contained the
      * specified vertex. (The graph will not contain the specified vertex once the call returns).
      *
      * <p>
@@ -563,6 +578,22 @@ public interface Graph<V, E>
      */
     void setEdgeWeight(E e, double weight);
 
-}
+    /**
+     * Assigns a weight to an edge between <code>sourceVertex</code> and <code>targetVertex</code>.
+     * If no edge exists between <code>sourceVertex</code> and <code>targetVertex</code> or either
+     * of these vertices is <code>null</code>, a <code>NullPointerException</code> is thrown.
+     * <p>
+     * When there exist multiple edges between <code>sourceVertex</code> and
+     * <code>targetVertex</code>, consider using {@link #setEdgeWeight(Object, double)} instead.
+     *
+     * @param sourceVertex source vertex of the edge
+     * @param targetVertex target vertex of the edge
+     * @param weight new weight for edge
+     * @throws UnsupportedOperationException if the graph does not support weights
+     */
+    default void setEdgeWeight(V sourceVertex, V targetVertex, double weight)
+    {
+        this.setEdgeWeight(this.getEdge(sourceVertex, targetVertex), weight);
+    }
 
-// End Graph.java
+}

@@ -1,36 +1,44 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.demo;
 
+//@example:uriCreate:begin
+
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.nio.*;
+import org.jgrapht.nio.dot.*;
 import org.jgrapht.traverse.*;
-import org.jgrapht.io.*;
 
+import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.io.*;
+
+//@example:uriCreate:end
+//@example:render:begin
+//@example:render:end
+//@example:uriCreate:begin
+//@example:uriCreate:end
 
 /**
  * A simple introduction to using JGraphT.
  *
  * @author Barak Naveh
- * @since Jul 27, 2003
  */
 public final class HelloJGraphT
 {
@@ -43,33 +51,35 @@ public final class HelloJGraphT
      *
      * @param args ignored.
      *
-     * @throws MalformedURLException if invalid URL is constructed.
+     * @throws URISyntaxException if invalid URI is constructed.
      * @throws ExportException if graph cannot be exported.
      */
     public static void main(String[] args)
-        throws MalformedURLException, ExportException
+        throws URISyntaxException,
+        ExportException
     {
         Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
         // note undirected edges are printed as: {<v1>,<v2>}
         System.out.println("-- toString output");
-        //@example:toString:begin
+        // @example:toString:begin
         System.out.println(stringGraph.toString());
-        //@example:toString:end
+        // @example:toString:end
         System.out.println();
 
-        //@example:traverse:begin
+        // @example:traverse:begin
 
-        // create a graph based on URL objects
-        Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
+        // create a graph based on URI objects
+        Graph<URI, DefaultEdge> hrefGraph = createHrefGraph();
 
         // find the vertex corresponding to www.jgrapht.org
-        //@example:findVertex:begin
-        URL start = hrefGraph.vertexSet().stream().filter(
-            url -> url.getHost().equals("www.jgrapht.org")).findAny().get();
-        //@example:findVertex:end
+        // @example:findVertex:begin
+        URI start = hrefGraph
+            .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
+            .get();
+        // @example:findVertex:end
 
-        //@example:traverse:end
+        // @example:traverse:end
 
         // perform a graph traversal starting from that vertex
         System.out.println("-- traverseHrefGraph output");
@@ -82,19 +92,20 @@ public final class HelloJGraphT
     }
 
     /**
-     * Creates a toy directed graph based on URL objects that represents link structure.
+     * Creates a toy directed graph based on URI objects that represents link structure.
      *
-     * @return a graph based on URL objects.
+     * @return a graph based on URI objects.
      */
-    private static Graph<URL, DefaultEdge> createHrefGraph()
-        throws MalformedURLException
+    private static Graph<URI, DefaultEdge> createHrefGraph()
+        throws URISyntaxException
     {
-        //@example:urlCreate:begin
-        Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        // @example:uriCreate:begin
 
-        URL google = new URL("http://www.google.com");
-        URL wikipedia = new URL("http://www.wikipedia.org");
-        URL jgrapht = new URL("http://www.jgrapht.org");
+        Graph<URI, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        URI google = new URI("http://www.google.com");
+        URI wikipedia = new URI("http://www.wikipedia.org");
+        URI jgrapht = new URI("http://www.jgrapht.org");
 
         // add the vertices
         g.addVertex(google);
@@ -106,7 +117,8 @@ public final class HelloJGraphT
         g.addEdge(google, jgrapht);
         g.addEdge(google, wikipedia);
         g.addEdge(wikipedia, google);
-        //@example:urlCreate:end
+
+        // @example:uriCreate:end
 
         return g;
     }
@@ -114,56 +126,44 @@ public final class HelloJGraphT
     /**
      * Traverse a graph in depth-first order and print the vertices.
      *
-     * @param hrefGraph a graph based on URL objects
+     * @param hrefGraph a graph based on URI objects
      *
      * @param start the vertex where the traversal should start
      */
-    private static void traverseHrefGraph(Graph<URL, DefaultEdge> hrefGraph, URL start)
+    private static void traverseHrefGraph(Graph<URI, DefaultEdge> hrefGraph, URI start)
     {
-        //@example:traverse:begin
-        Iterator<URL> iterator = new DepthFirstIterator<>(hrefGraph, start);
+        // @example:traverse:begin
+        Iterator<URI> iterator = new DepthFirstIterator<>(hrefGraph, start);
         while (iterator.hasNext()) {
-            URL url = iterator.next();
-            System.out.println(url);
+            URI uri = iterator.next();
+            System.out.println(uri);
         }
-        //@example:traverse:end
+        // @example:traverse:end
     }
 
     /**
      * Render a graph in DOT format.
      *
-     * @param hrefGraph a graph based on URL objects
+     * @param hrefGraph a graph based on URI objects
      */
-    private static void renderHrefGraph(Graph<URL, DefaultEdge> hrefGraph)
+    private static void renderHrefGraph(Graph<URI, DefaultEdge> hrefGraph)
         throws ExportException
     {
-        //@example:render:begin
-        // use helper classes to define how vertices should be rendered,
-        // adhering to the DOT language restrictions
-        ComponentNameProvider<URL> vertexIdProvider =
-            new ComponentNameProvider<URL>()
-            {
-                public String getName(URL url)
-                {
-                    return url.getHost().replace('.', '_');
-                }
-            };
-        ComponentNameProvider<URL> vertexLabelProvider =
-            new ComponentNameProvider<URL>()
-            {
-                public String getName(URL url)
-                {
-                    return url.toString();
-                }
-            };
-        GraphExporter<URL, DefaultEdge> exporter = new DOTExporter<>(
-            vertexIdProvider, vertexLabelProvider, null);
+        // @example:render:begin
+
+        DOTExporter<URI, DefaultEdge> exporter =
+            new DOTExporter<>(v -> v.getHost().replace('.', '_'));
+        exporter.setVertexAttributeProvider((v) -> {
+            Map<String, Attribute> map = new LinkedHashMap<>();
+            map.put("label", DefaultAttribute.createAttribute(v.toString()));
+            return map;
+        });
         Writer writer = new StringWriter();
         exporter.exportGraph(hrefGraph, writer);
         System.out.println(writer.toString());
-        //@example:render:end
+        // @example:render:end
     }
-    
+
     /**
      * Create a toy graph based on String objects.
      *
@@ -193,5 +193,3 @@ public final class HelloJGraphT
         return g;
     }
 }
-
-// End HelloJGraphT.java

@@ -1,30 +1,29 @@
 /*
- * (C) Copyright 2013-2018, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2013-2020, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.spanning;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.util.FibonacciHeap;
-import org.jgrapht.util.FibonacciHeapNode;
-import org.jgrapht.util.VertexToIntegerMapping;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -41,7 +40,6 @@ import java.util.*;
  *
  * @author Alexandru Valeanu
  * @author Alexey Kudinkin
- * @since Mar 5, 2013
  */
 public class PrimMinimumSpanningTree<V, E>
     implements
@@ -66,7 +64,8 @@ public class PrimMinimumSpanningTree<V, E>
     @SuppressWarnings("unchecked")
     public SpanningTree<E> getSpanningTree()
     {
-        Set<E> minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());
+        Set<E> minimumSpanningTreeEdgeSet =
+            CollectionUtil.newHashSetWithExpectedSize(g.vertexSet().size());
         double spanningTreeWeight = 0d;
 
         final int N = g.vertexSet().size();
@@ -79,22 +78,21 @@ public class PrimMinimumSpanningTree<V, E>
         List<V> indexList = vertexToIntegerMapping.getIndexList();
 
         VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
-        FibonacciHeapNode<VertexInfo>[] fibNodes =
-            (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
-        FibonacciHeap<VertexInfo> fibonacciHeap = new FibonacciHeap<>();
+        AddressableHeap.Handle<Double, VertexInfo>[] fibNodes =
+            (AddressableHeap.Handle<Double, VertexInfo>[]) Array
+                .newInstance(AddressableHeap.Handle.class, N);
+        AddressableHeap<Double, VertexInfo> fibonacciHeap = new FibonacciHeap<>();
 
         for (int i = 0; i < N; i++) {
             vertices[i] = new VertexInfo();
             vertices[i].id = i;
             vertices[i].distance = Double.MAX_VALUE;
-            fibNodes[i] = new FibonacciHeapNode<>(vertices[i]);
-
-            fibonacciHeap.insert(fibNodes[i], vertices[i].distance);
+            fibNodes[i] = fibonacciHeap.insert(vertices[i].distance, vertices[i]);
         }
 
         while (!fibonacciHeap.isEmpty()) {
-            FibonacciHeapNode<VertexInfo> fibNode = fibonacciHeap.removeMin();
-            VertexInfo vertexInfo = fibNode.getData();
+            AddressableHeap.Handle<Double, VertexInfo> fibNode = fibonacciHeap.deleteMin();
+            VertexInfo vertexInfo = fibNode.getValue();
 
             V p = indexList.get(vertexInfo.id);
             vertexInfo.spanned = true;
@@ -117,8 +115,7 @@ public class PrimMinimumSpanningTree<V, E>
                     if (cost < vertices[id].distance) {
                         vertices[id].distance = cost;
                         vertices[id].edgeFromParent = e;
-
-                        fibonacciHeap.decreaseKey(fibNodes[id], cost);
+                        fibNodes[id].decreaseKey(cost);
                     }
                 }
             }

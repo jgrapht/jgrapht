@@ -1,19 +1,19 @@
 /*
- * (C) Copyright 2005-2017, by Christian Soltenborn and Contributors.
+ * (C) Copyright 2005-2020, by Christian Soltenborn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.alg.connectivity;
 
@@ -43,7 +43,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
 
     public AbstractStrongConnectivityInspector(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.graph = GraphTests.requireDirected(graph);
     }
 
     @Override

@@ -1,21 +1,23 @@
 /*
- * (C) Copyright 2003-2018, by Christoph Zauner and Contributors.
+ * (C) Copyright 2003-2020, by Christoph Zauner and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * This program and the accompanying materials are dual-licensed under
- * either
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * (a) the terms of the GNU Lesser General Public License version 2.1
- * as published by the Free Software Foundation, or (at your option) any
- * later version.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
  *
- * or (per the licensee's choosing)
- *
- * (b) the terms of the Eclipse Public License v1.0 as published by
- * the Eclipse Foundation.
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package org.jgrapht.graph;
+
+import java.util.Objects;
 
 /**
  * {@link org.jgrapht.graph.DefaultEdge} does not implement hashCode() or equals(). Therefore
@@ -38,11 +40,7 @@ public class TestEdge
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getSource() == null) ? 0 : getSource().hashCode());
-        result = prime * result + ((getTarget() == null) ? 0 : getTarget().hashCode());
-        return result;
+        return Objects.hash(source, target);
     }
 
     @Override
@@ -55,19 +53,7 @@ public class TestEdge
         if (getClass() != obj.getClass())
             return false;
         TestEdge other = (TestEdge) obj;
-        if (getSource() == null) {
-            if (other.getSource() != null)
-                return false;
-        } else if (!getSource().equals(other.getSource()))
-            return false;
-        if (getTarget() == null) {
-            if (other.getTarget() != null)
-                return false;
-        } else if (!getTarget().equals(other.getTarget()))
-            return false;
-        return true;
+        return Objects.equals(source, other.source) && Objects.equals(target, other.target);
     }
 
 }
-
-// End TestEdge.java
