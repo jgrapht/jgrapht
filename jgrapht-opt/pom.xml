@@ -41,34 +41,14 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<instructions>
-						<Automatic-Module-Name>org.jgrapht.opt</Automatic-Module-Name>
-						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
-					</instructions>
-				</configuration>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jgrapht-core</artifactId>
-			<type>test-jar</type>
-      		<scope>test</scope>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>it.unimi.dsi</groupId>
 			<artifactId>fastutil</artifactId>

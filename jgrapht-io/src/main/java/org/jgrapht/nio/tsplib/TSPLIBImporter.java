@@ -32,6 +32,7 @@ import static java.util.Arrays.asList;
 /**
  * Importer for files in the
  * <a href="http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/">TSPLIB95</a> format.
+ * 
  * <p>
  * This importer reads the nodes of a <em>Symmetric travelling salesman problem</em> instance from a
  * file and creates a {@link GraphTests#isComplete(Graph) complete graph} and provides further data
@@ -272,7 +273,7 @@ public class TSPLIBImporter<V, E>
 
         /**
          * Returns the mapping of vertex to corresponding node imported from the
-         * <em>NODE_COORD_SECTION<em> of a <em>TSPLIB95</em> file.
+         * <em>NODE_COORD_SECTION</em> of a <em>TSPLIB95</em> file.
          * 
          * @return the mapping of vertex to corresponding node
          */

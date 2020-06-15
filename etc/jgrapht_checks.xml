@@ -4,6 +4,9 @@
 "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value="module\-info\.java$"/>
+    </module>
 	<module name="SuppressionFilter">
 		<property name="file" value="etc/checkstyle_suppressions.xml"/>
 	</module>
@@ -26,19 +29,15 @@
 	<module name="TreeWalker">
 		<module name="JavadocMethod">
 			<property name="scope" value="public" />
-			<property name="allowUndeclaredRTE" value="true" />
 		</module>
 		<module name="JavadocMethod">
 			<property name="scope" value="protected" />
-			<property name="allowUndeclaredRTE" value="true" />
 		</module>
 		<module name="JavadocType">
 			<property name="scope" value="public" />
 		</module>
 		
-		<module name="MissingDeprecated">
-			<property name="skipNoJavadoc" value="true" />
-		</module>
+		<module name="MissingDeprecated" />
 		<module name="MissingOverride" />
 
 		<module name="ConstantName" />

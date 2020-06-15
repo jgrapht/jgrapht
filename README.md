@@ -60,7 +60,6 @@ The files below make up the table of contents for a release distribution archive
     - `jgrapht-ext-x.y.z.jar` extensions
     - `jgrapht-io-x.y.z.jar` Importers/Exporters for various graph formats
     - `jgrapht-guava-x.y.z.jar` Adapter classes for the Guava library
-    - `jgrapht-bundle-x.y.z.jar` all libraries rolled into one
     - `jgraphx-a.b.c.jar` JGraphX dependency library
     - `antlr4-runtime-x.y.jar` ANTLR parser runtime
     - `commons-lang3-x.y.z.jar` Apache Commons Lang library
