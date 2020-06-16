@@ -197,7 +197,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
                     break;
                 }
                 List<E> outgoingEdges = sourceVertexToEdge.get(edgeTarget);
-                edge = outgoingEdges.remove(outgoingEdges.size() - 1);
+                edge = outgoingEdges.remove(0);
                 resultPath.add(edge);
             }
             GraphPath<V, E> graphPath = createGraphPath(resultPath, startVertex, endVertex);
@@ -213,7 +213,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      */
     private void findValidEdges()
     {
-        Map<UnorderedPair<V, V>, E> validEdges = new HashMap<>();
+        Map<UnorderedPair<V, V>, E> validEdges = new LinkedHashMap<>();
         for (List<E> path : pathList) {
             for (E e : path) {
                 V v = this.getEdgeSource(e);
@@ -222,7 +222,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
                 validEdges.compute(edgePair, (unused, edge) -> edge == null ? e : null);
             }
         }
-        this.validEdges = new HashSet<>(validEdges.values());
+        this.validEdges = new LinkedHashSet<>(validEdges.values());
     }
 
     private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex)
