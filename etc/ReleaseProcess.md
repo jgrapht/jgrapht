@@ -13,7 +13,7 @@
 1. Reformat all code [using Eclipse](codeFormatter.sh). 
 1. Commit all work and push to github.
 1. Run `mvn -Dmaven.artifact.threads=1 clean deploy` to push the latest snapshot to Sonatype.
-1. Run `mvn source:jar; mvn javadoc:jar; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central
+1. Run `mvn package -DskipTests; mvn release:prepare; mvn release:perform` to create the Maven artifacts and push them to Maven Central
 1. Publish the release [using the Sonatype UI](http://central.sonatype.org/pages/releasing-the-deployment.html).
 1. Before continuing, restart from a fresh clone to make sure your workspace is clean, and checkout the release branch there.  Otherwise, if you have old files lying around that are hidden by `.gitignore`, they may get accidentally included in the release archive.
 1. Run `mvn javadoc:aggregate; mvn install` from the new release branch to produce the release archive distribution

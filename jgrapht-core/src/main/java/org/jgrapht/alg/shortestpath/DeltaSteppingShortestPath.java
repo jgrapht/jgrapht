@@ -18,6 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 import org.jgrapht.alg.util.*;
 
 import java.util.*;
@@ -117,7 +118,7 @@ public class DeltaSteppingShortestPath<V, E>
     /**
      * Buckets structure.
      */
-    private Set[] bucketStructure;
+    private Set<V>[] bucketStructure;
 
     /**
      * Executor to which relax tasks will be submitted.
@@ -309,9 +310,9 @@ public class DeltaSteppingShortestPath<V, E>
             delta = findDelta();
         }
         numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
-        bucketStructure = new Set[numOfBuckets];
+        bucketStructure = TypeUtil.uncheckedCast(new Set[numOfBuckets]);
         for (int i = 0; i < numOfBuckets; i++) {
-            bucketStructure[i] = new ConcurrentSkipListSet();
+            bucketStructure[i] = new ConcurrentSkipListSet<V>();
         }
         fillDistanceAndPredecessorMap();
 
@@ -597,9 +598,9 @@ public class DeltaSteppingShortestPath<V, E>
      * @param bucketIndex bucket index
      * @return content of the bucket
      */
-    private Set getContentAndReplace(int bucketIndex)
+    private Set<V> getContentAndReplace(int bucketIndex)
     {
-        Set result = bucketStructure[bucketIndex];
+        Set<V> result = bucketStructure[bucketIndex];
         bucketStructure[bucketIndex] = new ConcurrentSkipListSet<V>();
         return result;
     }
