@@ -31,9 +31,9 @@
             <version>0.13</version>
         </dependency>
         <dependency>
-               <groupId>com.googlecode.junit-toolbox</groupId>
-               <artifactId>junit-toolbox</artifactId>
-               <scope>test</scope>
+            <groupId>com.googlecode.junit-toolbox</groupId>
+            <artifactId>junit-toolbox</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
@@ -62,6 +62,11 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Import-Package>!org.jgrapht.*,*</Import-Package>
+                    </instructions>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -88,7 +93,7 @@
                     <groups>org.jgrapht.SlowTests</groups>
                     <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
                 </configuration>
-                  </plugin>
+            </plugin>
         </plugins>
     </build>
 </project>

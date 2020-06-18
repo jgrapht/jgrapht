@@ -41,6 +41,11 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Import-Package>!org.jgrapht.guava.*,*</Import-Package>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -86,7 +91,7 @@
                     <groupId>com.google.guava</groupId>
                     <artifactId>listenablefuture</artifactId>
                 </exclusion>
-                  </exclusions>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
