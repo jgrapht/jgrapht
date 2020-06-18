@@ -292,7 +292,7 @@ Instead, we can use a labeled edge class as
 [described above](#edges-with-attributes).  However, suppose we want
 to find an existing edge given a pair of vertices and a transition
 name.  This requires invoking
-[getAllEdges](https://jgrapht.org/javadoc/org/jgrapht/Graph.html#getAllEdges-V-V-)
+[getAllEdges](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html#getAllEdges-V-V-)
 for the vertex pair and then searching through the result, filtering
 by transition name.  If many transitions are defined, this may become
 slow.

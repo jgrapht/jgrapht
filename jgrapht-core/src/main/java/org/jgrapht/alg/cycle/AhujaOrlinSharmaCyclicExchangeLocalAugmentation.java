@@ -394,8 +394,8 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
         {
             try {
                 LabeledPath<V> newLabeledPath = TypeUtil.uncheckedCast(super.clone());
-                newLabeledPath.vertices = (ArrayList<V>) this.vertices.clone();
-                newLabeledPath.labels = (HashSet<Integer>) this.labels.clone();
+                newLabeledPath.vertices = TypeUtil.uncheckedCast(this.vertices.clone());
+                newLabeledPath.labels = TypeUtil.uncheckedCast(this.labels.clone());
                 newLabeledPath.cost = this.cost;
 
                 return newLabeledPath;

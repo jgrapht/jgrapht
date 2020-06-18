@@ -1,56 +1,53 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.jgrapht</groupId>
-		<artifactId>jgrapht</artifactId>
-		<version>1.4.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>jgrapht-demo</artifactId>
-	<name>JGraphT - Demo</name>
-	<properties>
-		<main.basedir>${project.parent.basedir}</main.basedir>
-	</properties>
-	<licenses>
-		<license>
-			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
-			<url>http://jgrapht.sourceforge.net/LGPL.html</url>
-			<distribution>repo</distribution>
-		</license>
-		<license>
-			<name>Eclipse Public License (EPL) 2.0</name>
-			<url>http://www.eclipse.org/legal/epl-v20.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.jgrapht.demo.JGraphXAdapterDemo</mainClass>
-							<addClasspath>true</addClasspath>
-						</manifest>
-						<manifestEntries>
-							<Automatic-Module-Name>org.jgrapht.demo</Automatic-Module-Name>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jgrapht-io</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jgrapht-ext</artifactId>
-		</dependency>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jgrapht</groupId>
+        <artifactId>jgrapht</artifactId>
+        <version>1.5.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>jgrapht-demo</artifactId>
+    <name>JGraphT - Demo</name>
+    <properties>
+        <main.basedir>${project.parent.basedir}</main.basedir>
+    </properties>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License Version 2.1, February 1999</name>
+            <url>http://jgrapht.sourceforge.net/LGPL.html</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>Eclipse Public License (EPL) 2.0</name>
+            <url>http://www.eclipse.org/legal/epl-v20.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.jgrapht.demo.JGraphXAdapterDemo</mainClass>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-ext</artifactId>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

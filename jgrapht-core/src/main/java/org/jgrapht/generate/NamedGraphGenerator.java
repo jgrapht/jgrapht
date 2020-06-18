@@ -154,8 +154,11 @@ public class NamedGraphGenerator<V, E>
 
     // -------------Dürer Graph-----------//
     /**
-     * @see #generateDürerGraph
-     * @return Dürer Graph
+     * Generates a <a href="http://mathworld.wolfram.com/DuererGraph.html">Dürer Graph</a>. The
+     * Dürer graph is the skeleton of Dürer's solid, which is the generalized Petersen graph
+     * $GP(6,2)$.
+     * 
+     * @return the Dürer Graph
      */
     public static Graph<Integer, DefaultEdge> dürerGraph()
     {
@@ -251,8 +254,11 @@ public class NamedGraphGenerator<V, E>
 
     // -------------Möbius-Kantor Graph-----------//
     /**
-     * @see #generateMöbiusKantorGraph
-     * @return Möbius-Kantor Graph
+     * Generates a <a href="http://mathworld.wolfram.com/Moebius-KantorGraph.html">Möbius-Kantor
+     * Graph</a>. The unique cubic symmetric graph on 16 nodes. It is the generalized Petersen graph
+     * $GP(8,3)$
+     * 
+     * @return the Möbius-Kantor Graph
      */
     public static Graph<Integer, DefaultEdge> möbiusKantorGraph()
     {
@@ -457,8 +463,10 @@ public class NamedGraphGenerator<V, E>
 
     // -------------Grötzsch Graph-----------//
     /**
-     * @see #generateGrötzschGraph
-     * @return Grötzsch Graph
+     * Generates a <a href="http://mathworld.wolfram.com/GroetzschGraph.html">Grötzsch Graph</a>.
+     * The Grötzsch graph is smallest triangle-free graph with chromatic number four.
+     * 
+     * @return the Grötzsch Graph
      */
     public static Graph<Integer, DefaultEdge> grötzschGraph()
     {
@@ -1568,8 +1576,10 @@ public class NamedGraphGenerator<V, E>
 
     // -------------Schläfli Graph-----------//
     /**
-     * @see #generateSchläfliGraph
-     * @return Schläfli Graph
+     * Generates the <a href="http://mathworld.wolfram.com/SchlaefliGraph.html">Schläfli Graph</a>.
+     * The Schläfli graph is a strongly regular graph on 27 nodes
+     * 
+     * @return the Schläfli Graph
      */
     public static Graph<Integer, DefaultEdge> schläfliGraph()
     {

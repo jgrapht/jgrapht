@@ -2066,7 +2066,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
             this.dfsIndex = dfsIndex;
             this.parentEdge = parentEdge;
             this.rootVertex = rootVertex;
-            this.outerFaceNeighbors = (Node[]) Array.newInstance(Node.class, 2);
+            this.outerFaceNeighbors = TypeUtil.uncheckedCast(Array.newInstance(Node.class, 2));
             this.embedded = new DoublyLinkedList<>();
             if (parentEdge != null) {
                 embedded.add(parentEdge);

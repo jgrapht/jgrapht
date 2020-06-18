@@ -2,7 +2,10 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.5.0** (under development)
+- **version 1.5.1** (under development)
+    - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
+
+- **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
     - Bring back vertex factory in importers (contributed by Dimitrios Michail)
     - Added `LabelPropagationClustering` algorithm (contributed by Dimitrios Michail)
@@ -32,6 +35,9 @@ Changes to JGraphT in each version:
     - Add .editorconfig (contributed by Oliver Kopp)
     - Change assert to mandatory enforcement in `AsWeightedGraph` (contributed by Dimitrios Michail)
     - Streamline constructors in `VertexToIntegerMapping` (contributed by Hannes Wellmann)
+    - Add explicit module definitions (contributed by Dimitrios Michail)
+    - Enforce warnings (contributed by John Sichi after nudge from Oliver Kopp)
+    - Prevent tabs in XML files (contributed by John Sichi)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

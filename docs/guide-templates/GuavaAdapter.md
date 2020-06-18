@@ -12,13 +12,13 @@ For example, suppose you've created a Guava graph as follows:
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-guava/src/test/java/org/jgrapht/graph/guava/MutableGraphAdapterTest.java?example=createGuavaGraph)
 ```
 
-The graph does not have any information associated with the edges, so we can use JGraphT's [MutableGraphAdapter](https://jgrapht.org/javadoc/org/jgrapht/graph/guava/MutableGraphAdapter.html) to view it in JGraphT:
+The graph does not have any information associated with the edges, so we can use JGraphT's [MutableGraphAdapter](https://jgrapht.org/javadoc/org.jgrapht.guava/org/jgrapht/graph/guava/MutableGraphAdapter.html) to view it in JGraphT:
 
 ```java
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-guava/src/test/java/org/jgrapht/graph/guava/MutableGraphAdapterTest.java?example=adaptGuavaGraph)
 ```
 
-Now suppose we want to find a [minimum vertex cover](https://brilliant.org/wiki/vertex-cover) for this graph.  JGraphT supplies [several algorithms](https://jgrapht.org/javadoc/org/jgrapht/alg/vertexcover/package-summary.html) for this purpose:
+Now suppose we want to find a [minimum vertex cover](https://brilliant.org/wiki/vertex-cover) for this graph.  JGraphT supplies [several algorithms](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/vertexcover/package-summary.html) for this purpose:
 
 ```java
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-guava/src/test/java/org/jgrapht/graph/guava/MutableGraphAdapterTest.java?example=findVertexCover)
@@ -26,4 +26,4 @@ Now suppose we want to find a [minimum vertex cover](https://brilliant.org/wiki/
 
 Since the result is just a set of strings, it can be used to directly reference the JGraphT view as well as the underlying Guava graph.
 
-For more information on the available adapters, please see the [org.jgrapht.graph.guava javadoc](https://jgrapht.org/javadoc/org/jgrapht/graph/guava/package-summary.html).
+For more information on the available adapters, please see the [org.jgrapht.graph.guava javadoc](https://jgrapht.org/javadoc/org.jgrapht.guava/org/jgrapht/graph/guava/package-summary.html).

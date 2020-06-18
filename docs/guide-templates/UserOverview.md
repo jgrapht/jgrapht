@@ -35,7 +35,7 @@ application, subject to certain restrictions mentioned below.
 You are also free to choose your own edge class.  If you don't need to
 associate any application-specific information with your edges, you
 can just use the library-supplied
-[DefaultEdge](https://jgrapht.org/javadoc/org/jgrapht/graph/DefaultEdge.html)
+[DefaultEdge](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/DefaultEdge.html)
 as in this example.  The graph constructor takes the edge class as a
 parameter so that it can create new edge objects implicitly whenever
 `addEdge` is called to connect two vertices.
@@ -56,7 +56,7 @@ and edges directly via live set views:
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java?example=findVertex)
 ```
 
-Here we iterate over all vertices of the graph via the [vertexSet](https://jgrapht.org/javadoc/org/jgrapht/Graph.html#vertexSet--) method, filtering for only those
+Here we iterate over all vertices of the graph via the [vertexSet](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html#vertexSet--) method, filtering for only those
 whose URL has `www.jgrapht.org` for its hostname; in our example, we can
 expect to find exactly one match, which we obtain via `findAny().get()`.
 
@@ -71,11 +71,11 @@ unmodifiable, while in others they may consist of transient results.
 In no case should an application expect modifications to the returned
 collection to result in modifications to the underyling graph.
 
-The [Graphs](https://jgrapht.org/javadoc/org/jgrapht/Graphs.html)
+The [Graphs](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graphs.html)
 utility class has additional convenience methods such as
-[successorListOf](https://jgrapht.org/javadoc/org/jgrapht/Graphs.html#successorListOf-org.jgrapht.Graph-V-)
+[successorListOf](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graphs.html#successorListOf-org.jgrapht.Graph-V-)
 and
-[getOppositeVertex](https://jgrapht.org/javadoc/org/jgrapht/Graphs.html#getOppositeVertex-org.jgrapht.Graph-E-V-)
+[getOppositeVertex](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graphs.html#getOppositeVertex-org.jgrapht.Graph-E-V-)
 for easing common access patterns.
 
 Note that the default graph implementations guarantee predictable
@@ -90,7 +90,7 @@ are not guaranteed to honor it.
 Besides choosing your vertex and edge classes, JGraphT also allows you
 to choose a graph structure.  One way to do so is by instantiating a
 concrete class which implements the
-[Graph](https://jgrapht.org/javadoc/org/jgrapht/Graph.html) interface,
+[Graph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html) interface,
 as with `DefaultDirectedGraph` in the example above.  When doing so,
 you can make your selection from the table below (or from your own
 subclasses of any of these).
@@ -120,15 +120,15 @@ The structural properties are as follows:
 * directed edges:  an edge has a source and a target
 * self-loops:  whether to allow edges which connect a vertex to itself
 * multiple edges:  whether to allow more than one edge between the same vertex pair (note that in a directed graph, two edges between the same vertex pair but with opposite direction do not count as multiple edges)
-* weighted:  whether a double weight is associated with each edge (for these graph types, you'll usually want to use [DefaultWeightedEdge](https://jgrapht.org/javadoc/org/jgrapht/graph/DefaultWeightedEdge.html) as your edge class); unweighted graphs are treated as if they have a uniform edge weight of 1.0, which allows them to be used in algorithms such as finding a shortest path
+* weighted:  whether a double weight is associated with each edge (for these graph types, you'll usually want to use [DefaultWeightedEdge](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/DefaultWeightedEdge.html) as your edge class); unweighted graphs are treated as if they have a uniform edge weight of 1.0, which allows them to be used in algorithms such as finding a shortest path
 
-The [GraphType](https://jgrapht.org/javadoc/org/jgrapht/GraphType.html)
+The [GraphType](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/GraphType.html)
 interface allows you to access this metadata for an existing graph
 instance (using the
-[getType](https://jgrapht.org/javadoc/org/jgrapht/Graph.html#getType--)
+[getType](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html#getType--)
 accessor).
 
-You can also use [GraphTypeBuilder](https://jgrapht.org/javadoc/org/jgrapht/graph/builder/GraphTypeBuilder.html) to instantiate a new graph without directly constructing a concrete class:
+You can also use [GraphTypeBuilder](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/builder/GraphTypeBuilder.html) to instantiate a new graph without directly constructing a concrete class:
 
 ```java
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/GraphBuilderDemo.java?example=buildType)
@@ -143,9 +143,9 @@ end up needing to subclass one of the provided graph classes.
 
 Earlier, we saw how to add vertices and edges to a new graph by
 calling the
-[addVertex](https://jgrapht.org/javadoc/org/jgrapht/Graph.html#addVertex-V-)
+[addVertex](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html#addVertex-V-)
 and
-[addEdge](https://jgrapht.org/javadoc/org/jgrapht/Graph.html#addEdge-V-V-)
+[addEdge](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graph.html#addEdge-V-V-)
 methods on the `Graph` interface.  Likewise, there are corresponding
 methods for removing graph components.  All of these methods are
 modeled on the `java.util` collections framework, so:
@@ -161,8 +161,8 @@ available to assist with this when adding components to a graph; both
 of them take care of automatically adding vertices whenever edges are
 added:
 
-* The [Graphs](https://jgrapht.org/javadoc/org/jgrapht/Graphs.html) utility class provides methods such as [addEdgeWithVertices](https://jgrapht.org/javadoc/org/jgrapht/Graphs.html#addEdgeWithVertices-org.jgrapht.Graph-V-V-)
-* The [GraphBuilder](https://jgrapht.org/javadoc/org/jgrapht/graph/builder/AbstractGraphBuilder.html) framework also  allows you to use [method chaining](https://en.wikipedia.org/wiki/Method_chaining) when populating data in a new graph.
+* The [Graphs](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graphs.html) utility class provides methods such as [addEdgeWithVertices](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graphs.html#addEdgeWithVertices-org.jgrapht.Graph-V-V-)
+* The [GraphBuilder](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/builder/AbstractGraphBuilder.html) framework also  allows you to use [method chaining](https://en.wikipedia.org/wiki/Method_chaining) when populating data in a new graph.
 
 Here's an example using `GraphBuilder` to construct a
 [kite graph](http://mathworld.wolfram.com/KiteGraph.html):
@@ -188,13 +188,13 @@ supplied by the corresponding `add` method.
 
 JGrapht provides a framework for reacting to graph modifications via
 the
-[ListenableGraph](https://jgrapht.org/javadoc/org/jgrapht/ListenableGraph.html)
+[ListenableGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/ListenableGraph.html)
 interface.  By default, graph instances are not listenable for
 efficiency; here's how to use the framework:
 
-* wrap your graph instance via [DefaultListenableGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/DefaultListenableGraph.html)
+* wrap your graph instance via [DefaultListenableGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/DefaultListenableGraph.html)
 * perform all modifications on the wrapper (not the underlying graph instance)
-* register one or more [GraphListener](https://jgrapht.org/javadoc/org/jgrapht/event/GraphListener.html) to react to modification events
+* register one or more [GraphListener](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/event/GraphListener.html) to react to modification events
 
 This can be a convenient way to keep other data structures or
 visualizations in sync with graph changes.  For example, suppose your
@@ -209,7 +209,7 @@ also generate graph instances according to predefined patterns.  This
 is often useful for generating test cases or default topologies.
 JGraphT provides a number of different generators for this purpose in
 the
-[org.jgrapht.generate](https://jgrapht.org/javadoc/org/jgrapht/generate/package-summary.html)
+[org.jgrapht.generate](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/generate/package-summary.html)
 package.  Here's an example of generating a [complete graph](http://mathworld.wolfram.com/CompleteGraph.html):
 
 ```java
@@ -224,14 +224,14 @@ graph (which in turn dictates the number of edges added).
 Once you've created a graph, you can traverse it using an ordering
 such as depth-first, breadth-first, or topological.  JGraphT provides
 for this via package
-[org.jgrapht.traverse](https://jgrapht.org/javadoc/org/jgrapht/traverse/package-summary.html).
+[org.jgrapht.traverse](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/traverse/package-summary.html).
 The common interface is
-[GraphIterator](https://jgrapht.org/javadoc/org/jgrapht/traverse/GraphIterator.html),
+[GraphIterator](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/traverse/GraphIterator.html),
 which specializes the generic Java `Iterator` interface with JGraphT
 specifics.  A graph iterator produces vertices in the requested order;
 as the iteration proceeds, additional information (such as when a
 particular edge is traversed) can be obtained by registering a
-[TraversalListener](https://jgrapht.org/javadoc/org/jgrapht/event/TraversalListener.html).
+[TraversalListener](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/event/TraversalListener.html).
 (The specific meaning of traversal events varies with the iterator
 type.)
 
@@ -257,13 +257,13 @@ traversal, so it is treated as a standard Java `Iterator`.
 Beyond basic traversals, you'll often want to run more complex algorithms on
 a graph.  JGraphT provides quite a few of these, so they are subcategorized
 under the
-[org.jgrapht.alg parent package](https://jgrapht.org/javadoc/overview-summary.html).
+[org.jgrapht.alg parent package](https://jgrapht.org/javadoc/org.jgrapht.core/module-summary.html).
 For example, various shortest path algorithms are implemented in
-[org.jgrapht.alg.shortestpath](https://jgrapht.org/javadoc/org/jgrapht/alg/shortestpath/package-summary.html).
+[org.jgrapht.alg.shortestpath](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html).
 
 In cases where there are alternative algorithms available for the same
 problem, the commonality is abstracted via an interface in
-[org.jgrapht.alg.interfaces](https://jgrapht.org/javadoc/org/jgrapht/alg/interfaces/package-summary.html).
+[org.jgrapht.alg.interfaces](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/interfaces/package-summary.html).
 This makes it easier to write application code which selects an
 optimal algorithm implementation for a given graph instance.
 
@@ -302,8 +302,8 @@ guarantee of serialization compatibility across JGraphT versions.  (In
 other words, if you serialize a graph with version X, and then attempt
 to deserialize it with version X+1, an exception may be thrown.)
 
-To address this, JGraphT provides package
-[org.jgrapht.io](https://jgrapht.org/javadoc/org/jgrapht/io/package-summary.html)
+To address this, JGraphT provides module
+[org.jgrapht.io](https://jgrapht.org/javadoc/org.jgrapht.io/module-summary.html)
 for exporting and importing graphs in a variety of standard formats.
 These can also be used for data interchange with other applications.
 
@@ -349,7 +349,7 @@ First comes the vertex set, followed by the edge set.  Directed edges
 are rendered with round brackets, whereas undirected edges are
 rendered with curly brackets.  Custom edge attributes are not
 rendered.  If you want a nicer rendering, you can override
-[toStringFromSets](https://jgrapht.org/javadoc/org/jgrapht/graph/AbstractGraph.html#toStringFromSets-java.util.Collection-java.util.Collection-boolean-)
+[toStringFromSets](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AbstractGraph.html#toStringFromSets-java.util.Collection-java.util.Collection-boolean-)
 in your graph implementation, but you're probably better off using one
 of the exporters instead.
 
@@ -358,7 +358,7 @@ of the exporters instead.
 The `Graph` interface does not expose a public `clone` method, because
 we do not require all implementations to be cloneable.  However, all
 subclasses of
-[AbstractBaseGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/AbstractBaseGraph.html)
+[AbstractBaseGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AbstractBaseGraph.html)
 are cloneable.  The clone semantics are shallow in that the same vertex
 and edge objects are shared between the original graph and the clone;
 however, the vertex and edge sets and all associated connectivity
@@ -382,7 +382,7 @@ hold unless both the vertex and edge classes override `equals`/`hashCode`.
 
 If you were expecting a structural comparison instead, then you might
 want to investigate the
-[isomorphism](https://jgrapht.org/javadoc/org/jgrapht/alg/isomorphism/package-summary.html)
+[isomorphism](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/isomorphism/package-summary.html)
 package.  In the unrestricted case, isomorphism detection can take
 exponential time, but it can be speeded up significantly if you're
 able to guide it with a labeling.  For example, suppose you have two
@@ -396,15 +396,15 @@ equivalent (and if so, provide a mapping between the edge objects).
 
 Besides core graph data structures, JGraphT also provides a number of useful wrappers which allow you to define live _transformed_ views into other graphs:
 
-* [AsGraphUnion](https://jgrapht.org/javadoc/org/jgrapht/graph/AsGraphUnion.html):  a union of two underlying graphs
-* [AsSubgraph](https://jgrapht.org/javadoc/org/jgrapht/graph/AsSubgraph.html):  a subgraph (possibly induced) of an underlying graph
-* [AsUndirectedGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/AsUndirectedGraph.html):  an undirected view of an underlying directed graph (with edge directions ignored)
-* [AsUnmodifiableGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/AsUnmodifiableGraph.html): an unmodifiable view of an underlying graph
-* [AsUnweightedGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/AsUnweightedGraph.html): an unweighted view of a underlying weighted graph (ignoring all edge weights and treating them as 1.0 instead)
-* [AsWeightedGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/AsWeightedGraph.html): a weighted view of an underlying unweighted graph (with edge-specific weights imposed via a map)
-* [EdgeReversedGraph](https://jgrapht.org/javadoc/org/jgrapht/graph/EdgeReversedGraph.html): an edge-reversed view of a directed graph
+* [AsGraphUnion](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AsGraphUnion.html):  a union of two underlying graphs
+* [AsSubgraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AsSubgraph.html):  a subgraph (possibly induced) of an underlying graph
+* [AsUndirectedGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AsUndirectedGraph.html):  an undirected view of an underlying directed graph (with edge directions ignored)
+* [AsUnmodifiableGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AsUnmodifiableGraph.html): an unmodifiable view of an underlying graph
+* [AsUnweightedGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AsUnweightedGraph.html): an unweighted view of a underlying weighted graph (ignoring all edge weights and treating them as 1.0 instead)
+* [AsWeightedGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/AsWeightedGraph.html): a weighted view of an underlying unweighted graph (with edge-specific weights imposed via a map)
+* [EdgeReversedGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/EdgeReversedGraph.html): an edge-reversed view of a directed graph
 
-Wrappers add some access cost, so if you don't need a live view, and you will be accessing the transformed results heavily, then you can copy the view to a snapshot using [Graphs.addGraph](https://jgrapht.org/javadoc/org/jgrapht/Graphs.html#addGraph-org.jgrapht.Graph-org.jgrapht.Graph-).
+Wrappers add some access cost, so if you don't need a live view, and you will be accessing the transformed results heavily, then you can copy the view to a snapshot using [Graphs.addGraph](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/Graphs.html#addGraph-org.jgrapht.Graph-org.jgrapht.Graph-).
 
 ## Graph Adapters
 
@@ -414,7 +414,7 @@ If you are already using
 [com.google.common.graph](https://google.github.io/guava/releases/snapshot/api/docs/com/google/common/graph/package-summary.html)
 for representing graphs, it's easy to interoperate with JGraphT by
 using our
-[adapter package](https://jgrapht.org/javadoc/org/jgrapht/graph/guava/package-summary.html).
+[adapter package](https://jgrapht.org/javadoc/org.jgrapht.guava/org/jgrapht/graph/guava/package-summary.html).
 Simply instantiate the correct adapter on top of your Guava graph, and
 you'll have an implementation of JGraphT's `Graph` interface which
 stays in sync with the Guava graph automatically, at no extra memory
@@ -427,7 +427,7 @@ JGraphT also provides an adapter that lets you use a JGraphT graph
 instance as the data model for a
 [JGraphX](https://jgraph.github.io/mxgraph/docs/manual_javavis.html)
 visualization.  All you need to do is wrap your JGraphT graph with
-[org.jgrapht.ext.JGraphXAdapter](https://jgrapht.org/javadoc/org/jgrapht/ext/JGraphXAdapter.html) as in the following example:
+[org.jgrapht.ext.JGraphXAdapter](https://jgrapht.org/javadoc/org.jgrapht.ext/org/jgrapht/ext/JGraphXAdapter.html) as in the following example:
 
 ```java
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphXAdapterDemo.java?example=full)
