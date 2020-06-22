@@ -184,9 +184,9 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
      */
     private List<GraphPath<V, E>> buildPaths(V startVertex, V endVertex)
     {
-        Map<V, List<E>> sourceVertexToEdge = this.validEdges.stream().collect(
-            Collectors.groupingBy(this::getEdgeSource, Collectors.toCollection(LinkedList::new)));
-        List<E> startEdges = sourceVertexToEdge.get(startVertex);
+        Map<V, ArrayDeque<E>> sourceVertexToEdge = this.validEdges.stream().collect(
+            Collectors.groupingBy(this::getEdgeSource, Collectors.toCollection(ArrayDeque::new)));
+        ArrayDeque<E> startEdges = sourceVertexToEdge.get(startVertex);
         List<GraphPath<V, E>> result = new ArrayList<>();
         for (E edge : startEdges) {
             final List<E> resultPath = new ArrayList<>();
@@ -196,8 +196,8 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E>
                 if (edgeTarget.equals(endVertex)) {
                     break;
                 }
-                List<E> outgoingEdges = sourceVertexToEdge.get(edgeTarget);
-                edge = outgoingEdges.remove(0);
+                ArrayDeque<E> outgoingEdges = sourceVertexToEdge.get(edgeTarget);
+                edge = outgoingEdges.poll();
                 resultPath.add(edge);
             }
             GraphPath<V, E> graphPath = createGraphPath(resultPath, startVertex, endVertex);
