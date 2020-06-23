@@ -43,6 +43,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
+                        <!-- Suppress import of own exported packages -->
                         <Import-Package>!org.jgrapht.guava.*,*</Import-Package>
                     </instructions>
                 </configuration>
