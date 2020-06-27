@@ -17,15 +17,24 @@ d *
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
-import org.junit.rules.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.util.CollectionUtil;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -37,6 +46,8 @@ import static org.junit.Assert.assertNull;
  */
 public class DeltaSteppingShortestPathTest
 {
+    private static final long SEED = 19l;
+    private Random random = new Random(SEED);
 
     private static final String s = "s";
     private static final String t = "t";
@@ -74,20 +85,19 @@ public class DeltaSteppingShortestPathTest
     {
         Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
+        ShortestPathAlgorithm<String, DefaultWeightedEdge> algorithm
+                = new DeltaSteppingShortestPath<>(graph);
+
         assertEquals(
-            Arrays.asList(s), new DeltaSteppingShortestPath<>(graph).getPath(s, s).getVertexList());
+                Arrays.asList(s), algorithm.getPath(s, s).getVertexList());
         assertEquals(
-            Arrays.asList(s, y, t),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, t).getVertexList());
+                Arrays.asList(s, y, t), algorithm.getPath(s, t).getVertexList());
         assertEquals(
-            Arrays.asList(s, y, t, x),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, x).getVertexList());
+                Arrays.asList(s, y, t, x), algorithm.getPath(s, x).getVertexList());
         assertEquals(
-            Arrays.asList(s, y),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, y).getVertexList());
+                Arrays.asList(s, y), algorithm.getPath(s, y).getVertexList());
         assertEquals(
-            Arrays.asList(s, y, z),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, z).getVertexList());
+                Arrays.asList(s, y, z), algorithm.getPath(s, z).getVertexList());
     }
 
     @Test
@@ -137,24 +147,37 @@ public class DeltaSteppingShortestPathTest
     {
         int numOfVertices = 1000;
         int vertexDegree = 100;
-        int numOfIterations = 100;
-        int source = 0;
+        int numOfIterations = 20;
+        int numberOfSources = 5;
         for (int i = 0; i < numOfIterations; i++) {
             Graph<Integer, DefaultWeightedEdge> graph =
                 generateRandomGraph(numOfVertices, vertexDegree * numOfVertices);
-            test(graph, source);
+            Set<Integer> sources = selectRandomVertices(graph, numberOfSources);
+            test(graph, sources);
         }
     }
 
-    private void test(Graph<Integer, DefaultWeightedEdge> graph, Integer source)
+    private void test(Graph<Integer, DefaultWeightedEdge> graph, Set<Integer> sources)
     {
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> dijkstraShortestPaths =
-                new DijkstraShortestPath<>(graph).getPaths(source);
-        ShortestPathAlgorithm.SingleSourcePaths<Integer,
-            DefaultWeightedEdge> deltaSteppingShortestPaths =
-                new DeltaSteppingShortestPath<>(graph).getPaths(source);
-        assertEqualPaths(dijkstraShortestPaths, deltaSteppingShortestPaths, graph.vertexSet());
+        for (Integer source : sources) {
+            ShortestPathAlgorithm.SingleSourcePaths<Integer,
+                    DefaultWeightedEdge> dijkstraShortestPaths =
+                    new DijkstraShortestPath<>(graph).getPaths(source);
+            ShortestPathAlgorithm.SingleSourcePaths<Integer,
+                    DefaultWeightedEdge> deltaSteppingShortestPaths =
+                    new DeltaSteppingShortestPath<>(graph).getPaths(source);
+            assertEqualPaths(dijkstraShortestPaths, deltaSteppingShortestPaths, graph.vertexSet());
+        }
+    }
+
+    private Set<Integer> selectRandomVertices(Graph<Integer, DefaultWeightedEdge> graph, int numOfVertices) {
+        Set<Integer> result = CollectionUtil.newHashSetWithExpectedSize(numOfVertices);
+        Object[] vertices = graph.vertexSet().toArray();
+        while (result.size() < numOfVertices) {
+            int position = random.nextInt(vertices.length);
+            result.add((Integer) vertices[position]);
+        }
+        return result;
     }
 
     private Graph<String, DefaultWeightedEdge> generateSimpleGraph()

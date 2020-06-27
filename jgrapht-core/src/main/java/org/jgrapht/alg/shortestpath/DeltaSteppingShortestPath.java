@@ -381,20 +381,6 @@ public class DeltaSteppingShortestPath<V, E>
                 ++firstNonEmptyBucket;
             }
         }
-        shutDownExecutor();
-    }
-
-    /**
-     * Shuts down the {@link #executor}.
-     */
-    private void shutDownExecutor()
-    {
-        executor.shutdown();
-        try { // wait till the executor is shut down
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
