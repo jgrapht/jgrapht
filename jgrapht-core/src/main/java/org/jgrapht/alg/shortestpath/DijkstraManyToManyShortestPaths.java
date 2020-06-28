@@ -147,6 +147,9 @@ public class DijkstraManyToManyShortestPaths<V, E>
         public double getWeight(V source, V target)
         {
             assertCorrectSourceAndTarget(source, target);
+            if(reversed){
+                return searchSpaces.get(target).getWeight(source);
+            }
             return searchSpaces.get(source).getWeight(target);
         }
     }
