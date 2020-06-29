@@ -750,7 +750,7 @@ class TransitNodeRoutingPrecomputation<V, E> {
      * @param <V> graph vertex type
      * @param <E> graph edge type
      */
-    public static class TransitNodeRouting<V, E> {
+    static class TransitNodeRouting<V, E> {
         /**
          * Contraction hierarchy based on which this transit node
          * routing was computed.

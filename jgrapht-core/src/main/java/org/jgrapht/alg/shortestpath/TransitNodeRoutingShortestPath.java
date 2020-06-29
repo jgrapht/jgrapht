@@ -99,7 +99,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      * @param graph graph
      */
     public TransitNodeRoutingShortestPath(Graph<V, E> graph) {
-        this(new TransitNodeRoutingPrecomputation<>(graph).computeTransitNodeRouting());
+        super(graph);
     }
 
     /**
@@ -107,8 +107,30 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      *
      * @param transitNodeRouting transit node routing for {@code graph}
      */
-    public TransitNodeRoutingShortestPath(TransitNodeRouting<V, E> transitNodeRouting) {
+    TransitNodeRoutingShortestPath(TransitNodeRouting<V, E> transitNodeRouting) {
         super(transitNodeRouting.getContractionHierarchy().getGraph());
+        initialize(transitNodeRouting);
+    }
+
+    /**
+     * Lazy computes {@code TransitNodeRouting} for this algorithm. If not called directly
+     * this method will be invoked in ether if {@code getPath()} or {@code getPathWeight()} methods.
+     */
+    public void initializeAlgorithm() {
+        if (contractionHierarchy != null) {
+            return;
+        }
+        TransitNodeRouting<V, E> routing = new TransitNodeRoutingPrecomputation<>(graph).computeTransitNodeRouting();
+        initialize(routing);
+    }
+
+    /**
+     * Initializes fields {@code contractionHierarchy}, {@code localityFilter},
+     * {@code accessVertices}, {@code manyToManyShortestPaths} and {@code localQueriesAlgorithm}.
+     *
+     * @param transitNodeRouting transit node routing.
+     */
+    private void initialize(TransitNodeRouting<V, E> transitNodeRouting) {
         this.contractionHierarchy = transitNodeRouting.getContractionHierarchy();
         this.localityFilter = transitNodeRouting.getLocalityFilter();
         this.accessVertices = transitNodeRouting.getAccessVertices();
@@ -122,6 +144,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink) {
+        initializeAlgorithm();
         if (localityFilter.isLocal(source, sink)) {
             return localQueriesAlgorithm.getPath(source, sink);
         } else {
@@ -144,6 +167,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      */
     @Override
     public double getPathWeight(V source, V sink) {
+        initializeAlgorithm();
         if (localityFilter.isLocal(source, sink)) {
             return localQueriesAlgorithm.getPathWeight(source, sink);
         } else {
