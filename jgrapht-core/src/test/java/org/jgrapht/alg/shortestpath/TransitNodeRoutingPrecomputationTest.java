@@ -209,7 +209,7 @@ public class TransitNodeRoutingPrecomputationTest {
     }
 
     /**
-     * Checks given {@code routing} for correctness wvr the provided {@code graph}.
+     * Checks given {@code routing} for correctness wrt the provided {@code graph}.
      * Firstly, checks that the number of transit vertices is equal to $\sqrt{|V|}$,
      * here $V$ is the set of vertices. Secondly, checks that the transit vertices
      * are selected from the top of the contraction hierarchy. Thirdly, checks that

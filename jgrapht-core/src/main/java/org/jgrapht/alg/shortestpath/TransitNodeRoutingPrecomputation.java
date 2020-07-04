@@ -81,7 +81,7 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * <p>
  * To implement the TNR framework means to define how to select transit vertices and how to compute
  * distance table $D_{T}$, access vertices and locality filter. This implementation selects transit
- * vertices to be to $k$ vertices form the contraction hierarchy. To the details of how other parts
+ * vertices to be to $k$ vertices form the contraction hierarchy. For the details of how other parts
  * of this TNR work please refer to the original paper.
  *
  * <p>

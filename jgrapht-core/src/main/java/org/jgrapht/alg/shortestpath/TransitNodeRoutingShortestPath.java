@@ -61,6 +61,11 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  * backend for large scale shortest path search engines, e.g.
  * <a href="https://www.openstreetmap.org">OpenStreetMap</a>.
  *
+ * <p>
+ * The precomputation in this algorithm is performed in a lazy fashion. It can be performed
+ * by directly calling the {@code #performPrecomputation()} method. Otherwise, this method called
+ * during the first call to either the {@code #getPath()} or {@code #getPathWeight()} methods.
+ *
  * @param <V> graph vertex type
  * @param <E> graph edge type
  * @author Semen Chudakov
@@ -113,10 +118,14 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
     }
 
     /**
-     * Lazy computes {@code TransitNodeRouting} for this algorithm. If not called directly
-     * this method will be invoked in ether if {@code getPath()} or {@code getPathWeight()} methods.
+     * This method performs precomputation for this algorithm in the lazy fashion.
+     * The result of the precomputation stage is the {@code TransitNodeRouting} object
+     * which contains {@code #contractionHierarchy}, {@code #localityFilter},
+     * {@code #accessVertices} and {@code #manyToManyShortestPaths} objects for this algorithm.
+     * If not called directly this method will be invoked in either of {@code getPath()}
+     * or {@code getPathWeight()} methods.
      */
-    public void initializeAlgorithm() {
+    public void performPrecomputation() {
         if (contractionHierarchy != null) {
             return;
         }
@@ -144,7 +153,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink) {
-        initializeAlgorithm();
+        performPrecomputation();
         if (localityFilter.isLocal(source, sink)) {
             return localQueriesAlgorithm.getPath(source, sink);
         } else {
@@ -167,7 +176,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
      */
     @Override
     public double getPathWeight(V source, V sink) {
-        initializeAlgorithm();
+        performPrecomputation();
         if (localityFilter.isLocal(source, sink)) {
             return localQueriesAlgorithm.getPathWeight(source, sink);
         } else {
