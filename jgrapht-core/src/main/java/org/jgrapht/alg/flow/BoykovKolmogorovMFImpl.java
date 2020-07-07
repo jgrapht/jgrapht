@@ -422,7 +422,7 @@ public class BoykovKolmogorovMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Finks augmenting path bottleneck by traversing the path edges.
+     * Finds augmenting path bottleneck by traversing the path edges.
      *
      * @param boundingEdge s-t path bounding edge.
      * @return the computed bottleneck.
