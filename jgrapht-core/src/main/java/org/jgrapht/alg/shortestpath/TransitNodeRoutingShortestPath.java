@@ -63,7 +63,7 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
  *
  * <p>
  * The precomputation in this algorithm is performed in a lazy fashion. It can be performed
- * by directly calling the {@code #performPrecomputation()} method. Otherwise, this method called
+ * by directly calling the {@code #performPrecomputation()} method. Otherwise, this method is called
  * during the first call to either the {@code #getPath()} or {@code #getPathWeight()} methods.
  *
  * @param <V> graph vertex type
