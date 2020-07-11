@@ -39,7 +39,9 @@ public class ChordalGraphColoringTest
     @Test
     public void testGetColoring1()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        int[][] edges = {};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         VertexColoringAlgorithm.Coloring<Integer> coloring =
             new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
@@ -54,10 +56,9 @@ public class ChordalGraphColoringTest
     @Test
     public void testGetColoring2()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
+        int[][] edges = {{1, 2}, {1, 3}, {2, 3},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         VertexColoringAlgorithm.Coloring<Integer> coloring =
             new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
@@ -71,11 +72,9 @@ public class ChordalGraphColoringTest
     @Test
     public void testGetColoring3()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
+        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {3, 4},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         VertexColoringAlgorithm.Coloring<Integer> coloring =
             new ChordalGraphColoring<>(graph).getColoring();
         assertNull(coloring);
@@ -87,27 +86,12 @@ public class ChordalGraphColoringTest
     @Test
     public void testGetColoring4()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 5);
-        Graphs.addEdgeWithVertices(graph, 5, 6);
-        Graphs.addEdgeWithVertices(graph, 6, 7);
-        Graphs.addEdgeWithVertices(graph, 7, 8);
-        Graphs.addEdgeWithVertices(graph, 8, 9);
-        Graphs.addEdgeWithVertices(graph, 9, 10);
-        Graphs.addEdgeWithVertices(graph, 10, 1);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 6);
-        Graphs.addEdgeWithVertices(graph, 6, 8);
-        Graphs.addEdgeWithVertices(graph, 8, 10);
-        Graphs.addEdgeWithVertices(graph, 10, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 6);
-        Graphs.addEdgeWithVertices(graph, 2, 8);
-        Graphs.addEdgeWithVertices(graph, 4, 8);
-        Graphs.addEdgeWithVertices(graph, 4, 10);
-        Graphs.addEdgeWithVertices(graph, 6, 10);
+        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 7},
+                {7, 8}, {8, 9}, {9, 10}, {10, 1}, {2, 4}, {4, 6},
+                {6, 8}, {8, 10}, {10, 2}, {2, 6}, {2, 8}, {4, 8},
+                {4, 10}, {6, 10},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         VertexColoringAlgorithm.Coloring<Integer> coloring =
             new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
@@ -121,19 +105,10 @@ public class ChordalGraphColoringTest
     @Test
     public void testGetColoring5()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 2, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
-        Graphs.addEdgeWithVertices(graph, 5, 5);
-        Graphs.addEdgeWithVertices(graph, 5, 5);
+        int[][] edges = {{1, 1},{2, 2},{2, 3},{2, 3},{2, 4},{3, 4},
+                {3, 4},{3, 4},{4, 4},{4, 4},{5, 5},{5, 5},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
+
         VertexColoringAlgorithm.Coloring<Integer> coloring =
             new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);

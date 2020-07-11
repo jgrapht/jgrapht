@@ -53,13 +53,9 @@ public class ChordalGraphIndependentSetFinderTest
     @Test
     public void testGetMaximumIndependentSet2()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 1, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
+        int[][] edges = {{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNotNull(set);
         assertEquals(1, set.size());
@@ -71,11 +67,9 @@ public class ChordalGraphIndependentSetFinderTest
     @Test
     public void testGetMaximumIndependentSet3()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
+        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {3, 4},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNull(set);
     }
@@ -86,20 +80,11 @@ public class ChordalGraphIndependentSetFinderTest
     @Test
     public void testGetMaximumIndependentSet4()
     {
-        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 3, 3);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 5);
-        Graphs.addEdgeWithVertices(graph, 4, 5);
+        int[][] edges = {{1, 1}, {1, 2}, {1, 2}, {2, 3}, {2, 3}, {1, 3},
+                {3, 3}, {3, 4}, {3, 4}, {4, 4}, {4, 4}, {4, 5},
+                {4, 5},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
+
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
         assertNotNull(set);

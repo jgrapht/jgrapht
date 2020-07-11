@@ -27,6 +27,11 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for {@link WeakChordalityInspector}
+ *
+ * @author Timofey Chudakov
+ */
 public class WeakChordalityInspectorTest
 {
 
@@ -50,12 +55,9 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal2()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
+        int[][] edges = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
@@ -69,11 +71,9 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal3()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
+        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {3, 4},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
@@ -87,12 +87,9 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal4()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 5);
-        Graphs.addEdgeWithVertices(graph, 5, 1);
+        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 1},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());
@@ -107,21 +104,12 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal5()
     {
+        int[][] edges = {{1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 4}, {2, 5},
+                {2, 6}, {2, 7}, {3, 5}, {3, 6}, {3, 7}, {4, 6},
+                {4, 7}, {5, 7},};
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 1, 4);
-        Graphs.addEdgeWithVertices(graph, 1, 5);
-        Graphs.addEdgeWithVertices(graph, 1, 6);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 5);
-        Graphs.addEdgeWithVertices(graph, 2, 6);
-        Graphs.addEdgeWithVertices(graph, 2, 7);
-        Graphs.addEdgeWithVertices(graph, 3, 5);
-        Graphs.addEdgeWithVertices(graph, 3, 6);
-        Graphs.addEdgeWithVertices(graph, 3, 7);
-        Graphs.addEdgeWithVertices(graph, 4, 6);
-        Graphs.addEdgeWithVertices(graph, 4, 7);
-        Graphs.addEdgeWithVertices(graph, 5, 7);
+        TestUtil.constructGraph(graph, edges);
+
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());
@@ -136,20 +124,11 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal6()
     {
-        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
-        Graphs.addEdgeWithVertices(graph, 4, 4);
+        int[][] edges = {{1, 1}, {1, 1}, {1, 2}, {1, 2}, {1, 2}, {1, 3},
+                {2, 4}, {2, 4}, {2, 4}, {3, 4}, {4, 4}, {4, 4},
+                {4, 4},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
@@ -163,26 +142,12 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal7()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 3);
-        Graphs.addEdgeWithVertices(graph, 2, 4);
-        Graphs.addEdgeWithVertices(graph, 2, 7);
-        Graphs.addEdgeWithVertices(graph, 2, 8);
-        Graphs.addEdgeWithVertices(graph, 2, 10);
-        Graphs.addEdgeWithVertices(graph, 2, 5);
-        Graphs.addEdgeWithVertices(graph, 3, 5);
-        Graphs.addEdgeWithVertices(graph, 3, 6);
-        Graphs.addEdgeWithVertices(graph, 4, 7);
-        Graphs.addEdgeWithVertices(graph, 5, 8);
-        Graphs.addEdgeWithVertices(graph, 5, 9);
-        Graphs.addEdgeWithVertices(graph, 5, 6);
-        Graphs.addEdgeWithVertices(graph, 6, 9);
-        Graphs.addEdgeWithVertices(graph, 7, 8);
-        Graphs.addEdgeWithVertices(graph, 7, 10);
-        Graphs.addEdgeWithVertices(graph, 8, 9);
-        Graphs.addEdgeWithVertices(graph, 8, 10);
-        Graphs.addEdgeWithVertices(graph, 9, 10);
+        int[][] edges = {{1, 2}, {1, 3}, {2, 4}, {2, 7}, {2, 8}, {2, 10},
+                {2, 5}, {3, 5}, {3, 6}, {4, 7}, {5, 8}, {5, 9},
+                {5, 6}, {6, 9}, {7, 8}, {7, 10}, {8, 9}, {8, 10},
+                {9, 10},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());

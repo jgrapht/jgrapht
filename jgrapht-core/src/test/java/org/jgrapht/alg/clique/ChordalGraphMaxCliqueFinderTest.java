@@ -50,14 +50,9 @@ public class ChordalGraphMaxCliqueFinderTest
     @Test
     public void testGetMaximumClique2()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 3, 5);
-        Graphs.addEdgeWithVertices(graph, 3, 6);
-        Graphs.addEdgeWithVertices(graph, 4, 5);
-        Graphs.addEdgeWithVertices(graph, 4, 6);
-        Graphs.addEdgeWithVertices(graph, 5, 6);
+        int[][] edges = {{1, 2}, {3, 4}, {3, 5}, {3, 6}, {4, 5}, {4, 6}, {5, 6},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();
         assertNotNull(clique);
         assertEquals(4, clique.size());
@@ -70,11 +65,9 @@ public class ChordalGraphMaxCliqueFinderTest
     @Test
     public void testGetMaximumClique3()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 3);
-        Graphs.addEdgeWithVertices(graph, 3, 4);
-        Graphs.addEdgeWithVertices(graph, 1, 4);
+        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 1},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();
         assertNull(clique);
     }
@@ -85,14 +78,9 @@ public class ChordalGraphMaxCliqueFinderTest
     @Test
     public void testGetMaximumClique4()
     {
-        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 1, 1);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 1, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 2);
-        Graphs.addEdgeWithVertices(graph, 2, 2);
+        int[][] edges = {{1, 1}, {1, 1}, {1, 2}, {1, 2}, {1, 2}, {2, 2}, {2, 2},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createPseudograph(edges);
+
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();
         assertNotNull(clique);
         assertEquals(2, clique.size());

@@ -1616,17 +1616,17 @@ public class KolmogorovWeightedMatchingTest
 
     private void test(int[][] edges, double result, ObjectiveSense objectiveSense)
     {
-        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DefaultUndirectedGraph<Integer, DefaultEdge> graph =
+                (DefaultUndirectedGraph<Integer, DefaultEdge>)
+                        TestUtil.createUndirected(edges);
         int maxVertex = 0;
         for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
             maxVertex = Math.max(Math.max(maxVertex, edge[0]), edge[1]);
         }
         graph.setVertexSupplier(SupplierUtil.createIntegerSupplier(maxVertex + 1));
-        KolmogorovWeightedMatching<Integer, DefaultWeightedEdge> weightedMatching =
+        KolmogorovWeightedMatching<Integer, DefaultEdge> weightedMatching =
             new KolmogorovWeightedMatching<>(graph, options, objectiveSense);
-        MatchingAlgorithm.Matching<Integer, DefaultWeightedEdge> matching =
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching =
             weightedMatching.getMatching();
         assertEquals(matching.getWeight(), result, EPS);
         assertTrue(weightedMatching.testOptimality());

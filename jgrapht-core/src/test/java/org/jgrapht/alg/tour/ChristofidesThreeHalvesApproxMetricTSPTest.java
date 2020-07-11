@@ -81,12 +81,12 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     @Test
     public void testGetTour3()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
-        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
+        int[][] edges = {{1, 2, 5}};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
+        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =
             new ChristofidesThreeHalvesApproxMetricTSP<>();
-        GraphPath<Integer, DefaultWeightedEdge> tour = approxMetricTSP.getTour(graph);
+        GraphPath<Integer, DefaultEdge> tour = approxMetricTSP.getTour(graph);
         assertHamiltonian(graph, tour);
         assertEquals(10, tour.getWeight(), 1e-9);
     }
@@ -97,14 +97,12 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
     @Test
     public void testGetTour4()
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1, 2, 5);
-        Graphs.addEdgeWithVertices(graph, 1, 3, 5);
-        Graphs.addEdgeWithVertices(graph, 2, 3, 9);
-        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
+        int[][] edges = {{1, 2, 5}, {1, 3, 5}, {2, 3, 9},};
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
+        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =
             new ChristofidesThreeHalvesApproxMetricTSP<>();
-        GraphPath<Integer, DefaultWeightedEdge> tour = approxMetricTSP.getTour(graph);
+        GraphPath<Integer, DefaultEdge> tour = approxMetricTSP.getTour(graph);
         assertHamiltonian(graph, tour);
         assertEquals(19, tour.getWeight(), 1e-9);
     }
@@ -171,14 +169,11 @@ public class ChristofidesThreeHalvesApproxMetricTSPTest
 
     private void testOnInstance(int[][] edges, double optWeight)
     {
-        Graph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        for (int[] edge : edges) {
-            Graphs.addEdgeWithVertices(graph, edge[0], edge[1], edge[2]);
-        }
-        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultWeightedEdge> approxMetricTSP =
+        Graph<Integer, DefaultEdge> graph = TestUtil.createUndirected(edges);
+
+        ChristofidesThreeHalvesApproxMetricTSP<Integer, DefaultEdge> approxMetricTSP =
             new ChristofidesThreeHalvesApproxMetricTSP<>();
-        GraphPath<Integer, DefaultWeightedEdge> path = approxMetricTSP.getTour(graph);
+        GraphPath<Integer, DefaultEdge> path = approxMetricTSP.getTour(graph);
         assertHamiltonian(graph, path);
         assertTrue(path.getWeight() <= 1.5 * optWeight);
     }
