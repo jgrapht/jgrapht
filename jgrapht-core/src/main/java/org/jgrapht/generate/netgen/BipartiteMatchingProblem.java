@@ -76,7 +76,7 @@ public interface BipartiteMatchingProblem<V, E> {
      *
      * @return a cost function of this problem
      */
-    Function<E, Integer> getCosts();
+    Function<E, Double> getCosts();
 
     /**
      * Determines if this problem is weighted or not.
@@ -84,6 +84,17 @@ public interface BipartiteMatchingProblem<V, E> {
      * @return {@code true} is the problem is weighted, {@code false} otherwise
      */
     boolean isWeighted();
+
+    /**
+     * Dumps the problem edge costs to the underlying graph.
+     */
+    default void dumpCosts(){
+        Graph<V, E> graph = getGraph();
+        Function<E, Double> costs = getCosts();
+        for (E edge : graph.edgeSet()) {
+            graph.setEdgeWeight(edge, costs.apply(edge));
+        }
+    }
 
     /**
      * Default implementation of a Bipartite Matching Problem
@@ -95,7 +106,7 @@ public interface BipartiteMatchingProblem<V, E> {
         private final Graph<V, E> graph;
         private final Set<V> partition1;
         private final Set<V> partition2;
-        private final Function<E, Integer> costs;
+        private final Function<E, Double> costs;
         private final boolean weighted;
 
         /**
@@ -107,7 +118,7 @@ public interface BipartiteMatchingProblem<V, E> {
          * @param costs      problem cost function
          * @param weighted   is the problem is weighted or not
          */
-        public BipartiteMatchingProblemImpl(Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<E, Integer> costs, boolean weighted) {
+        public BipartiteMatchingProblemImpl(Graph<V, E> graph, Set<V> partition1, Set<V> partition2, Function<E, Double> costs, boolean weighted) {
             this.graph = graph;
             this.partition1 = partition1;
             this.partition2 = partition2;
@@ -127,7 +138,7 @@ public interface BipartiteMatchingProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Function<E, Integer> getCosts() {
+        public Function<E, Double> getCosts() {
             return costs;
         }
 

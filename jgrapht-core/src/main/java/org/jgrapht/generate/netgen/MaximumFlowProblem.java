@@ -55,6 +55,8 @@ import java.util.function.Function;
  */
 public interface MaximumFlowProblem<V, E> {
 
+    double CAPACITY_INF = Integer.MAX_VALUE;
+
     /**
      * Returns the network the problem is defined on.
      *
@@ -97,6 +99,22 @@ public interface MaximumFlowProblem<V, E> {
     }
 
     /**
+     * Returns the capacity function of this problem. This function is defined for
+     * all edges of the underlying network.
+     *
+     * @return the capacity function of this problem.
+     */
+    Function<E, Double> getCapacities();
+
+    /**
+     * Converts this problem to the canonical form. Resulting problem is equivalent
+     * to the previous one.
+     *
+     * @return a problem in the canonical form.
+     */
+    MaximumFlowProblem<V, E> toSingleSourceSingleSinkProblem();
+
+    /**
      * Checks if this problem is in the canonical form.
      *
      * @return {@code true} if this problem is in the canonical form, {@code false} otherwise.
@@ -106,20 +124,15 @@ public interface MaximumFlowProblem<V, E> {
     }
 
     /**
-     * Returns the capacity function of this problem. This function is defined for
-     * all edges of the underlying network.
-     *
-     * @return the capacity function of this problem.
+     * Dumps the network edge capacities to the underlying graph.
      */
-    Function<E, Integer> getCapacities();
-
-    /**
-     * Converts this problem to the canonical form. Resulting problem is equivalent
-     * to the previous one.
-     *
-     * @return a problem in the canonical form.
-     */
-    MaximumFlowProblem<V, E> toSingleSourceSingleSinkProblem();
+    default void dumpCapacities(){
+        Graph<V, E> graph = getGraph();
+        Function<E, Double> capacities = getCapacities();
+        for (E edge : graph.edgeSet()) {
+            graph.setEdgeWeight(edge, capacities.apply(edge));
+        }
+    }
 
     /**
      * Default implementation of a Maximum Flow Problem.
@@ -131,7 +144,7 @@ public interface MaximumFlowProblem<V, E> {
         private final Graph<V, E> graph;
         private final Set<V> sources;
         private final Set<V> sinks;
-        private final Function<E, Integer> capacities;
+        private final Function<E, Double> capacities;
 
         /**
          * Constructs a new maximum flow problem.
@@ -141,7 +154,7 @@ public interface MaximumFlowProblem<V, E> {
          * @param sinks      set of network sinks
          * @param capacities network capacity function
          */
-        public MaximumFlowProblemImpl(Graph<V, E> graph, Set<V> sources, Set<V> sinks, Function<E, Integer> capacities) {
+        public MaximumFlowProblemImpl(Graph<V, E> graph, Set<V> sources, Set<V> sinks, Function<E, Double> capacities) {
             this.graph = graph;
             this.sources = sources;
             this.sinks = sinks;
@@ -176,7 +189,7 @@ public interface MaximumFlowProblem<V, E> {
          * {@inheritDoc}
          */
         @Override
-        public Function<E, Integer> getCapacities() {
+        public Function<E, Double> getCapacities() {
             return capacities;
         }
 
@@ -190,9 +203,9 @@ public interface MaximumFlowProblem<V, E> {
             Set<V> sourceSet = convert(sources, newEdges, true);
             Set<V> sinkSet = convert(sinks, newEdges, false);
 
-            Function<E, Integer> updatedCapacities = e -> {
+            Function<E, Double> updatedCapacities = e -> {
                 if (newEdges.contains(e)) {
-                    return Integer.MAX_VALUE;
+                    return CAPACITY_INF;
                 } else {
                     return capacities.apply(e);
                 }

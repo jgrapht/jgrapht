@@ -105,13 +105,13 @@ public class NetworkGeneratorTest {
 
     }
 
-    private static <V, E> void validateCapacities(Graph<V, E> graph, Function<E, Integer> capacities, NetworkInfo<V, E> info, NetworkGeneratorConfig config) {
+    private static <V, E, N extends Number> void validateCapacities(Graph<V, E> graph, Function<E, N> capacities, NetworkInfo<V, E> info, NetworkGeneratorConfig config) {
         Set<E> skeletonArcs = new HashSet<>(info.getSkeletonArcs());
 
         for (E edge : graph.edgeSet()) {
             if (!skeletonArcs.contains(edge)) {
-                assertTrue(capacities.apply(edge) >= config.getMinCap());
-                assertTrue(capacities.apply(edge) <= config.getMaxCap());
+                assertTrue(capacities.apply(edge).doubleValue() + EPS >= config.getMinCap());
+                assertTrue(capacities.apply(edge).doubleValue() - EPS <= config.getMaxCap());
             }
         }
     }
@@ -215,11 +215,7 @@ public class NetworkGeneratorTest {
         MaximumFlowProblem<V, E> convertedProblem = problem.toSingleSourceSingleSinkProblem();
 
         Graph<V, E> graph = convertedProblem.getGraph();
-
-        Function<E, Integer> capacities = convertedProblem.getCapacities();
-        for (E edge : graph.edgeSet()) {
-            graph.setEdgeWeight(edge, capacities.apply(edge));
-        }
+        convertedProblem.dumpCapacities();
 
         MaximumFlowAlgorithm<V, E> algorithm = new PushRelabelMFImpl<>(graph);
         MaximumFlowAlgorithm.MaximumFlow<E> flow = algorithm.getMaximumFlow(convertedProblem.getSource(), convertedProblem.getSink());
