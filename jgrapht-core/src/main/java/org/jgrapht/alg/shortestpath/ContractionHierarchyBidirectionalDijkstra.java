@@ -24,6 +24,7 @@ import org.jheaps.*;
 import org.jheaps.tree.*;
 
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.*;
 
 import static org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath.DijkstraSearchFrontier;
@@ -114,10 +115,23 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
      * Constructs a new instance of the algorithm for a given {@code graph}.
      *
      * @param graph the graph
+     * @deprecated replaced with {@link #ContractionHierarchyBidirectionalDijkstra(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph)
     {
         this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}.
+     *
+     * @param graph the graph
+     * @param executor executor which is used for computing the {@link ContractionHierarchy}
+     */
+    public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph, ThreadPoolExecutor executor)
+    {
+        this(new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy());
     }
 
     /**

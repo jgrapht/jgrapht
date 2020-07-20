@@ -20,9 +20,11 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.ConcurrentUtil;
 import org.junit.*;
 
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import static org.junit.Assert.assertEquals;
@@ -36,6 +38,20 @@ public class CHManyToManyShortestPathsTest
     extends
     BaseManyToManyShortestPathsTest
 {
+    /**
+     * Executor which is supplied to the {@link CHManyToManyShortestPaths} in this test case.
+     */
+    private static ThreadPoolExecutor executor;
+
+    @BeforeClass
+    public static void createExecutor(){
+        executor = ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    }
+
+    @AfterClass
+    public static void shutdownExecutor(){
+        ConcurrentUtil.shutdownExecutionService(executor);
+    }
 
     @Test
     public void testEmptyGraph()
@@ -91,7 +107,7 @@ public class CHManyToManyShortestPathsTest
         Graph<Integer, DefaultWeightedEdge> graph = getSimpleGraph();
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED))
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
                 .computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
@@ -119,7 +135,7 @@ public class CHManyToManyShortestPathsTest
         Graph<Integer, DefaultWeightedEdge> graph = getMultigraph();
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED))
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED),executor)
                 .computeContractionHierarchy();
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
@@ -155,7 +171,7 @@ public class CHManyToManyShortestPathsTest
         Graph<Integer, DefaultWeightedEdge> graph)
     {
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED))
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED),executor)
                 .computeContractionHierarchy();
         return new CHManyToManyShortestPaths<>(hierarchy);
     }

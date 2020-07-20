@@ -23,6 +23,8 @@ import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.*;
@@ -47,7 +49,7 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingGnm(GnmState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.edgeDegree, data.executor).getPaths(0);
     }
 
     @Benchmark
@@ -69,7 +71,7 @@ public class DeltaSteppingShortestPathPerformance
         DefaultWeightedEdge> testDeltaSteppingGnp(GnpState data)
     {
         return new DeltaSteppingShortestPath<>(
-            data.graph, 1.0 / (1 + (data.p * data.numOfVertices))).getPaths(0);
+            data.graph, 1.0 / (1 + (data.p * data.numOfVertices)), data.executor).getPaths(0);
     }
 
     @Benchmark
@@ -90,7 +92,7 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingBarabasiAlbert(BarabasiAlbertState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.m0).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.m0, data.executor).getPaths(0);
     }
 
     @Benchmark
@@ -111,7 +113,7 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingWattsStogatz(WattsStogatzState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.k).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.k, data.executor).getPaths(0);
     }
 
     @Benchmark
@@ -132,7 +134,7 @@ public class DeltaSteppingShortestPathPerformance
     public ShortestPathAlgorithm.SingleSourcePaths<Integer,
         DefaultWeightedEdge> testDeltaSteppingComplete(CompleteGraphState data)
     {
-        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices).getPaths(0);
+        return new DeltaSteppingShortestPath<>(data.graph, 1.0 / data.numOfVertices, data.executor).getPaths(0);
     }
 
     @Benchmark
@@ -153,6 +155,17 @@ public class DeltaSteppingShortestPathPerformance
     public abstract static class BaseState
     {
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
+        public ThreadPoolExecutor executor;
+
+        @Setup
+        public void createExecutor(){
+            executor = ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+        }
+
+        @TearDown
+        public void shutdownExecutor(){
+            ConcurrentUtil.shutdownExecutionService(executor);
+        }
 
         public abstract void generateGraph();
 

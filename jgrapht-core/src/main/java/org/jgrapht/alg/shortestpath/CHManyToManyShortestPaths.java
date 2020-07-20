@@ -22,6 +22,7 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.*;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
@@ -47,7 +48,7 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
  * restored actual path from the information in the shortest paths trees.
  *
  * <p>
- * Additionally if $|S|$ > $|T|$ the algorithm is executed on the reversed graph. This allows
+ * Additionally if $|S| > |T|$ the algorithm is executed on the reversed graph. This allows
  * to reduce the number of buckets and optimize memory usage of the algorithm.
  *
  * <p>
@@ -86,10 +87,23 @@ public class CHManyToManyShortestPaths<V, E>
      * Constructs an instance of the algorithm for a given {@code graph}.
      *
      * @param graph a graph
+     * @deprecated replaced with {@link #CHManyToManyShortestPaths(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public CHManyToManyShortestPaths(Graph<V, E> graph)
     {
         this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
+    }
+
+    /**
+     * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}.
+     *
+     * @param graph a graph
+     * @param executor executor which will be used to compute {@link ContractionHierarchy}
+     */
+    public CHManyToManyShortestPaths(Graph<V, E> graph, ThreadPoolExecutor executor)
+    {
+        this(new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy());
     }
 
     /**
