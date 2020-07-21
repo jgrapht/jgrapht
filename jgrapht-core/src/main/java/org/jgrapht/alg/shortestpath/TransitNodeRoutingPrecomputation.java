@@ -86,7 +86,7 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from without. This algorithm does not manages the
+ * which is supplied to this algorithm from outside. This algorithm does not manages the
  * lifecycle of the supplied executor instance. For auxiliary methods for creating and
  * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrentUtil}.
  *

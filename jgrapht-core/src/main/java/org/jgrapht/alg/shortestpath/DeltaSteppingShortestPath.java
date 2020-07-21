@@ -64,7 +64,7 @@ import java.util.concurrent.*;
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from without. This algorithm does not manages the
+ * which is supplied to this algorithm from outside. This algorithm does not manages the
  * lifecycle of the supplied executor instance. For auxiliary methods for creating and
  * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrentUtil}.
  *
@@ -124,7 +124,7 @@ public class DeltaSteppingShortestPath<V, E>
     private Set<V>[] bucketStructure;
 
     /**
-     * Decorator for {@code executor} supplied to this algorithm that enables to
+     * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to
      * keep track of when all submitted tasks are finished.
      */
     private ExecutorCompletionService<Void> completionService;
@@ -162,7 +162,7 @@ public class DeltaSteppingShortestPath<V, E>
      * Constructs a new instance of the algorithm for a given graph and {@code executor}.
      *
      * @param graph graph
-     * @param executor executor which will be used to parallelization
+     * @param executor executor which will be used for parallelization
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, ThreadPoolExecutor executor)
     {
@@ -187,7 +187,7 @@ public class DeltaSteppingShortestPath<V, E>
      *
      * @param graph the graph
      * @param delta bucket width
-     * @param executor executor which will be used to parallelization
+     * @param executor executor which will be used for parallelization
      */
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, ThreadPoolExecutor executor)
     {

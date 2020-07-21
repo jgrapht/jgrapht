@@ -64,7 +64,8 @@ public class TransitNodeRoutingPrecomputationTest {
     private static final long SEED = 19L;
 
     /**
-     * Executor which is supplied to {@link TransitNodeRoutingPrecomputation} in this test case.
+     * Executor which is supplied to {@link ContractionHierarchyPrecomputation}
+     * and {@link TransitNodeRoutingPrecomputation} in this test case.
      */
     private static ThreadPoolExecutor executor;
 

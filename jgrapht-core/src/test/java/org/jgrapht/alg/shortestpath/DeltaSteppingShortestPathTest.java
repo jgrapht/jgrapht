@@ -38,6 +38,9 @@ import static org.junit.Assert.assertNull;
  */
 public class DeltaSteppingShortestPathTest
 {
+    /**
+     * Executor which is supplied to {@link DeltaSteppingShortestPath} in this test case.
+     */
     private static ThreadPoolExecutor executor;
 
     @BeforeClass

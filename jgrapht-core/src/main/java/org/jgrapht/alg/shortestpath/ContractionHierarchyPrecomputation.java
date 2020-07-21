@@ -17,32 +17,18 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.MaskSubgraph;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.ConcurrentUtil;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.PairingHeap;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 /**
  * Parallel implementation of the <a href="https://en.wikipedia.org/wiki/Contraction_hierarchies">
@@ -83,7 +69,7 @@ import java.util.function.Supplier;
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from without. This algorithm does not manages the
+ * which is supplied to this algorithm from outside. This algorithm does not manages the
  * lifecycle of the supplied executor instance. For auxiliary methods for creating and
  * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrentUtil}.
  *
@@ -141,7 +127,7 @@ public class ContractionHierarchyPrecomputation<V, E>
     private Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier;
 
     /**
-     * Decorator for {@code executor} supplied to this algorithm that enables to
+     * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to
      * keep track of when all submitted tasks are finished.
      */
     private ExecutorCompletionService<Void> completionService;
@@ -236,7 +222,7 @@ public class ContractionHierarchyPrecomputation<V, E>
      *
      * @param graph graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
-     * @param executor executor which will be used to parallelization
+     * @param executor executor which will be used for parallelization
      */
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier, ThreadPoolExecutor executor)
     {
@@ -288,7 +274,7 @@ public class ContractionHierarchyPrecomputation<V, E>
      * @param graph graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
-     * @param executor executor which will be used to parallelization
+     * @param executor executor which will be used for parallelization
      */
     public ContractionHierarchyPrecomputation(
             Graph<V, E> graph, Supplier<Random> randomSupplier,
@@ -304,7 +290,7 @@ public class ContractionHierarchyPrecomputation<V, E>
      * @param graph                       a graph
      * @param randomSupplier              supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
-     * @param executor                    executor which will be used to parallelization
+     * @param executor                    executor which will be used for parallelization
      */
     private void init(Graph<V, E> graph, Supplier<Random> randomSupplier,
                       Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier,
