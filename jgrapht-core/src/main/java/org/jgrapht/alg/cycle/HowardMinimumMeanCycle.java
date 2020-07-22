@@ -27,9 +27,11 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.CollectionUtil;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -181,13 +183,17 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
      */
     @Override
     public GraphPath<V, E> getCycle() {
+        // best cycle information
         boolean isBestCycleFound = false;
         double bestCycleWeight = 0.0;
         int bestCycleLength = 1;
         V bestCycleVertex = null;
 
+        // search for best cycle over strongly connected components separately
         int numberOfIterations = 0;
         for (Graph<V, E> component : strongConnectivityAlgorithm.getStronglyConnectedComponents()) {
+            // special case: connected component is empty
+            // or contains one vertex with no incoming edges
             boolean skip = component.vertexSet().size() == 0;
             skip |= component.vertexSet().size() == 1 && component.incomingEdgesOf(
                     component.vertexSet().iterator().next()).size() == 0;
@@ -197,6 +203,7 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
 
             constructPolicyGraph(component);
 
+            // try to improve currently best cycle
             boolean improved = true;
             while (numberOfIterations < maximumIterations && improved) {
                 constructCycle(component);
@@ -206,7 +213,7 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
                 ++numberOfIterations;
             }
 
-
+            // update best cycle information if necessary
             if (isCurrentCycleFound &&
                     (!isBestCycleFound || currentCycleWeight * bestCycleLength < bestCycleWeight * currentCycleLength)) {
                 isBestCycleFound = true;
@@ -215,6 +222,7 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
                 bestCycleVertex = currentCycleVertex;
             }
 
+            // iterations limit reached
             if (numberOfIterations == maximumIterations) {
                 break;
             }
@@ -223,12 +231,14 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
         if (isBestCycleFound) {
             return buildPath(bestCycleVertex, bestCycleLength, bestCycleWeight);
         }
+        // no cycle found in the graph
         return null;
     }
 
     /**
      * Computes policy graph for {@code component} and stores result in {@code policyGraph}
-     * and {@code vertexDistance}.
+     * and {@code vertexDistance}. For every vertex in the policy graph an edge with the minimum
+     * weight is retained in the policy graph.
      *
      * @param component connected component
      */
@@ -251,7 +261,18 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
     }
 
     /**
-     * Finds cycle in the {@code policyGraph} using {@code vertexLevel}.
+     * Finds cycle in the {@code policyGraph} and computes computes its mean.
+     * The found cycle is identified by a vertex {@code currentCycleVertex}.
+     * The cycle returned by this method does not necessarily has the smalles
+     * mean over all cycles in the policy graph.
+     *
+     * <p>
+     * To find cycles this methods assigns a level to each vertex. Initially
+     * every vertex has a level equal to $-1$ which means that the vertex has
+     * not been visited. During the computations this method starts DFS from
+     * every not visited vertex and assigns a unique positive level $l$ to every
+     * traversed vertex. If DFS comes across a vertex with level $l$ this indicates
+     * that a cycle has been detected.
      *
      * @param component connected component
      */
@@ -261,23 +282,26 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
         }
 
         isCurrentCycleFound = false;
+        int currentCycleLevel = 0;
         double currentWeight;
         int currentSize;
-        int i = 0;
         for (V u : component.vertexSet()) {
-            if (vertexLevel.get(u) >= 0) {
+            if (vertexLevel.get(u) >= 0) { // vertex is already belongs to a cycle
                 continue;
             }
 
+            // run DFS
             while (vertexLevel.get(u) < 0) {
-                vertexLevel.put(u, i);
+                vertexLevel.put(u, currentCycleLevel);
                 u = Graphs.getOppositeVertex(component, policyGraph.get(u), u);
             }
 
-            if (vertexLevel.get(u) == i) {
+            // check if a cycle has been found
+            if (vertexLevel.get(u) == currentCycleLevel) {
                 currentWeight = component.getEdgeWeight(policyGraph.get(u));
                 currentSize = 1;
 
+                // compute weight and length of the found cycle
                 V v = Graphs.getOppositeVertex(component, policyGraph.get(u), u);
                 while (!v.equals(u)) {
                     currentWeight += component.getEdgeWeight(policyGraph.get(v));
@@ -285,6 +309,8 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
 
                     v = Graphs.getOppositeVertex(component, policyGraph.get(v), v);
                 }
+
+                // update minimum mean value
                 if (!isCurrentCycleFound || (currentWeight * currentCycleLength < currentCycleWeight * currentSize)) {
                     isCurrentCycleFound = true;
                     currentCycleWeight = currentWeight;
@@ -292,70 +318,63 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
                     currentCycleVertex = u;
                 }
             }
-            ++i;
+            ++currentCycleLevel;
         }
     }
 
     /**
-     * Contracts the {@code policyGraph} and computes distances to
-     * all vertices in {@code component}. Return true if the currently best
-     * mean has been improved.
+     * This method runs the reverted BFS starting from {@code currentCycleVertex}
+     * to update data in {@code policyGraph} and {@code vertexDistance}. This step
+     * is needed to identify if current value of minimum mean is optimal for the
+     * {@code graph}. This method also uses {@code comparator} to find out if update
+     * value of minium mean is sufficiently smaller than the previous one.
      *
      * @param component connected component
      * @return if the currently best mean has been improved
      */
     private boolean computeVertexDistance(Graph<V, E> component) {
-        List<V> queue = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
-
+        // BFS queue
+        Deque<V> queue = new ArrayDeque<>();
         for (V v : component.vertexSet()) {
             reachedVertices.put(v, false);
         }
-
-        int queueFrontIndex = 0;
-        int queueBackIndex = 0;
-        queue.set(0, currentCycleVertex);
+        queue.addLast(currentCycleVertex);
         reachedVertices.put(currentCycleVertex, true);
-        vertexDistance.put(currentCycleVertex, 0.0);
 
-        while (queueFrontIndex <= queueBackIndex) {
-            V u = queue.get(queueFrontIndex++);
+        double currentMean = currentCycleWeight / currentCycleLength;
+
+        // run reversed BFS
+        while (!queue.isEmpty()) {
+            V u = queue.removeFirst();
             for (E e : component.incomingEdgesOf(u)) {
                 V v = Graphs.getOppositeVertex(component, e, u);
                 if (policyGraph.get(v).equals(e) && !reachedVertices.get(v)) {
                     reachedVertices.put(v, true);
-                    vertexDistance.put(v, vertexDistance.get(u) + component.getEdgeWeight(e) * currentCycleLength - currentCycleWeight);
-                    queue.set(++queueBackIndex, v);
+                    double updatedDistance = vertexDistance.get(u) + component.getEdgeWeight(e) - currentMean;
+                    vertexDistance.put(v, updatedDistance);
+                    queue.addLast(v);
                 }
             }
         }
 
-        queueFrontIndex = 0;
-        while (queueBackIndex < component.vertexSet().size() - 1) {
-            V u = queue.get(queueFrontIndex++);
-            for (E e : component.incomingEdgesOf(u)) {
-                V v = Graphs.getOppositeVertex(component, e, u);
-                if (!reachedVertices.get(v)) {
-                    reachedVertices.put(v, true);
-                    policyGraph.put(v, e);
-                    vertexDistance.put(v, vertexDistance.get(u) + component.getEdgeWeight(e) * currentCycleLength - currentCycleWeight);
-                    ++queueBackIndex;
-                    queue.set(queueBackIndex, v);
-                }
-            }
-        }
-
+        // identify if the current value of minimum mean
+        // is optimal for the graph
         boolean improved = false;
         for (V u : component.vertexSet()) {
             for (E e : component.incomingEdgesOf(u)) {
                 V v = Graphs.getOppositeVertex(component, e, u);
 
-                double delta = vertexDistance.get(u) +
-                        component.getEdgeWeight(e) * currentCycleLength - currentCycleWeight;
+                double oldDistance = vertexDistance.get(v);
+                double updatedDistance = vertexDistance.get(u) + component.getEdgeWeight(e) - currentMean;
 
-                if (comparator.compare(delta, vertexDistance.get(v)) < 0) {
-                    vertexDistance.put(v, delta);
+                if (oldDistance > updatedDistance) {
+                    // check if the value of minimum mean
+                    // has been sufficiently improved
+                    if (comparator.compare(oldDistance, updatedDistance) > 0) {
+                        improved = true;
+                    }
+                    vertexDistance.put(v, updatedDistance);
                     policyGraph.put(v, e);
-                    improved = true;
                 }
             }
         }
@@ -363,7 +382,7 @@ public class HowardMinimumMeanCycle<V, E> implements MinimumCycleMeanAlgorithm<V
     }
 
     /**
-     * Builds found cycle with minimum mean in the {@code graph}.
+     * Constructs cycle with minimum mean using information in {@code policyGraph}.
      *
      * @param bestCycleVertex cycle vertex
      * @param bestCycleLength cycle length

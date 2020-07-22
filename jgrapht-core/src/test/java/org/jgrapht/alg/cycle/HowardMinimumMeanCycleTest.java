@@ -36,8 +36,9 @@ import static org.junit.Assert.assertEquals;
 public class HowardMinimumMeanCycleTest {
 
     // test graph instances
-    private double[][] graph1 = {{1, 3, 7.0}, {3, 2, 3.0}, {2, 0, 7.0}, {2, 1, 5.0}};
-    private double[][] graph2 = {{1, 0, 0.5309808994022128}, {2, 0, 0.887369465477802}, {0, 3, 0.24854619550940948},
+    private double[][] graph1 = new double[][]{{1, 2, 1}, {1, 3, 10}, {2, 3, 3}, {3, 4, 2}, {4, 1, 8}, {4, 2, 0}};
+    private double[][] graph2 = {{1, 3, 7.0}, {3, 2, 3.0}, {2, 0, 7.0}, {2, 1, 5.0}};
+    private double[][] graph3 = {{1, 0, 0.5309808994022128}, {2, 0, 0.887369465477802}, {0, 3, 0.24854619550940948},
             {5, 0, 0.7862072932065413}, {0, 6, 0.6597510963121964}, {8, 0, 0.3093510947826138},
             {1, 3, 0.16298399773945915}, {3, 1, 0.8880029290778009}, {1, 4, 0.8791863090101949},
             {4, 1, 0.11358409873434094}, {1, 5, 0.03559133251030855}, {1, 6, 0.8374371072320352},
@@ -51,7 +52,7 @@ public class HowardMinimumMeanCycleTest {
             {6, 5, 0.4717895784735354}, {7, 5, 0.5496166423219454}, {5, 9, 0.3610136990994086},
             {6, 7, 0.30034898347163264}, {9, 6, 0.3256821082193059}, {7, 8, 0.8211679242156328},
             {8, 7, 0.47245137817493654}, {9, 7, 0.6610595429601409}};
-    private double[][] graph3 = {{0, 1, 0.9208023183776285}, {1, 0, 0.6430242504341916}, {0, 3, 0.09365718255006317},
+    private double[][] graph4 = {{0, 1, 0.9208023183776285}, {1, 0, 0.6430242504341916}, {0, 3, 0.09365718255006317},
             {5, 0, 0.31375412769298217}, {0, 7, 0.15792425419560785}, {7, 0, 0.13936355638785414},
             {0, 8, 0.8286556745309889}, {9, 0, 0.06546278011245077}, {1, 3, 0.8615410003817705},
             {4, 1, 0.06574244474823454}, {1, 5, 0.6178097749171817}, {5, 1, 0.5583780723473489},
@@ -63,10 +64,10 @@ public class HowardMinimumMeanCycleTest {
             {4, 6, 0.8277720223094508}, {7, 4, 0.2901248861595276}, {4, 8, 0.7834203859115622},
             {9, 4, 0.8022440614359926}, {6, 5, 0.39978526023721506}, {5, 7, 0.6465702401669658},
             {7, 6, 0.5995341305325894}, {6, 8, 0.1243106029504022}};
-    private double[][] graph4 = {{5, 0, 0.12984728244943444}, {0, 9, 0.6091236198949413}, {1, 7, 0.8516203006087194},
+    private double[][] graph5 = {{5, 0, 0.12984728244943444}, {0, 9, 0.6091236198949413}, {1, 7, 0.8516203006087194},
             {4, 2, 0.6700978832134418}, {2, 6, 0.33295099587314136}, {6, 3, 0.6442914735780406},
             {4, 5, 0.6041550406570294}, {8, 5, 0.3669436593853893}};
-    private double[][] graph5 = {{1, 0, 0.8049411475475996}, {4, 0, 0.14879952542017905}, {0, 5, 0.33585405199165874},
+    private double[][] graph6 = {{1, 0, 0.8049411475475996}, {4, 0, 0.14879952542017905}, {0, 5, 0.33585405199165874},
             {7, 0, 0.490216141318886}, {0, 10, 0.9550648737294264}, {10, 0, 0.5045554184080497},
             {0, 12, 0.6702361080542114}, {0, 13, 0.06373787937414133}, {14, 0, 0.8277720223094508},
             {1, 1, 0.2901248861595276}, {4, 1, 0.7834203859115622}, {1, 6, 0.8022440614359926},
@@ -89,7 +90,7 @@ public class HowardMinimumMeanCycleTest {
             {9, 10, 0.4936673569770784}, {11, 9, 0.09271862364523031}, {10, 10, 0.23275669725461445},
             {12, 11, 0.548757460531207}, {13, 11, 0.9146257588559106}, {11, 14, 0.8455102919755371},
             {12, 12, 0.953916026514328}, {12, 13, 0.12400093191112904}, {14, 14, 0.849462984685311}};
-    private double[][] graph6 = {{2, 0, 0.3011115464896066}, {3, 0, 0.03799965844589637}, {4, 0, 0.4794381869658567},
+    private double[][] graph7 = {{2, 0, 0.3011115464896066}, {3, 0, 0.03799965844589637}, {4, 0, 0.4794381869658567},
             {0, 5, 0.5043426071517753}, {5, 0, 0.9355611601089532}, {0, 7, 0.28520030585981493},
             {0, 8, 0.8001347603172168}, {8, 0, 0.791617600181339}, {0, 11, 0.5523882658250229},
             {11, 0, 0.05275408885677668}, {12, 0, 0.5535531434423085}, {1, 3, 0.48507355154682086},
@@ -115,20 +116,22 @@ public class HowardMinimumMeanCycleTest {
             {12, 14, 0.020812929131225788}};
 
     // expected mean values
-    private double expectedMean1 = 5.0;
-    private double expectedMean2 = 0.090372357737592113;
-    private double expectedMean3 = 0.074285947345551759;
-    private double expectedMean4 = Double.POSITIVE_INFINITY;
-    private double expectedMean5 = 0.067734720032592399;
-    private double expectedMean6 = 0.14838114112973164;
+    private double expectedMean1 = 1.6666666666666667;
+    private double expectedMean2 = 5.0;
+    private double expectedMean3 = 0.090372357737592113;
+    private double expectedMean4 = 0.074285947345551759;
+    private double expectedMean5 = Double.POSITIVE_INFINITY;
+    private double expectedMean6 = 0.067734720032592399;
+    private double expectedMean7 = 0.14838114112973164;
 
     // expected minimum mean path for graph instance
-    private double[][] expectedCycle1 = {{1, 3, 7}, {3, 2, 3}, {2, 1, 5}};
-    private double[][] expectedCycle2 = {{3, 9, 0.058634722483110857}, {9, 2, 0.017691113553356841}, {2, 3, 0.19479123717630864}};
-    private double[][] expectedCycle3 = {{0, 3, 0.093657182550063167}, {3, 9, 0.063737879374141326}, {9, 0, 0.065462780112450769}};
-    private double[][] expectedCycle4 = null;
-    private double[][] expectedCycle5 = {{9, 2, 0.095555757812653352}, {2, 11, 0.014929778639893532}, {11, 9, 0.092718623645230314}};
-    private double[][] expectedCycle6 = {{14, 8, 0.23649901286119512}, {8, 12, 0.18783148139677397}, {12, 14, 0.020812929131225788}};
+    private double[][] expectedCycle1 = {{2, 3, 3}, {3, 4, 2},{4, 2, 0}};
+    private double[][] expectedCycle2 = {{1, 3, 7}, {3, 2, 3}, {2, 1, 5}};
+    private double[][] expectedCycle3 = {{3, 9, 0.058634722483110857}, {9, 2, 0.017691113553356841}, {2, 3, 0.19479123717630864}};
+    private double[][] expectedCycle4 = {{0, 3, 0.093657182550063167}, {3, 9, 0.063737879374141326}, {9, 0, 0.065462780112450769}};
+    private double[][] expectedCycle5 = null;
+    private double[][] expectedCycle6 = {{9, 2, 0.095555757812653352}, {2, 11, 0.014929778639893532}, {11, 9, 0.092718623645230314}};
+    private double[][] expectedCycle7 = {{14, 8, 0.23649901286119512}, {8, 12, 0.18783148139677397}, {12, 14, 0.020812929131225788}};
 
     @Test
     public void testGraph1() {
@@ -160,6 +163,11 @@ public class HowardMinimumMeanCycleTest {
         testOnGraph(graph6, expectedMean6, expectedCycle6);
     }
 
+    @Test
+    public void testGraph7() {
+        testOnGraph(graph7, expectedMean7, expectedCycle7);
+    }
+
     /**
      * Tests the algorithm on the graph instance {@code graphArray} using {@code expectedMean}
      * and {@code expectedCycleArray} to check correctness.
@@ -169,9 +177,6 @@ public class HowardMinimumMeanCycleTest {
      * @param expectedCycleArray minimum mean cycle
      */
     private void testOnGraph(double[][] graphArray, double expectedMean, double[][] expectedCycleArray) {
-        if (graphArray == null) {
-            return;
-        }
         Graph<Integer, DefaultWeightedEdge> graph = readGraph(graphArray);
         GraphPath<Integer, DefaultWeightedEdge> expectedPath;
         if (expectedCycleArray == null) {
