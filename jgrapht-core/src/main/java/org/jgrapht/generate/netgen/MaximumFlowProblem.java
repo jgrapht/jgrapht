@@ -29,8 +29,8 @@ import java.util.function.Function;
  * and undirected maximum flow problems.
  * <p>
  * The single-source, single-sink maximum flow problem is defined as follows:
- * \[ \begin{align} \mbox{maximize}~&amp; \sum_{e \in \delta{s}}f_e &amp;\\
- * \mbox{s.t. }&amp;\sum_{e\in \delta^-(v)} f_e = \sum_{e\in \delta^+(v)} f_e &amp; \forall v\in V\ \{s, t\} \\
+ * \[ \begin{align} \mbox{maximize}~&amp; \sum_{e \in \delta^+(s)}f_e - \sum_{e \in \delta^-(s)}f_e &amp;\\
+ * \mbox{s.t. }&amp;\sum_{e\in \delta^-(v)} f_e = \sum_{e\in \delta^+(v)} f_e &amp; \forall v\in V\setminus \{s, t\} \\
  * &amp;0 \leq f_e \leq c_e &amp; \forall e\in E \end{align} \]
  * Here $\delta^+(v)$ and $\delta^-(v)$ denote the outgoing and incoming edges of vertex
  * $v$ respectively. The value $f_e$ denotes the flow on edge $e$, which is bounded by

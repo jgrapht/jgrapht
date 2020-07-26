@@ -64,6 +64,7 @@ package org.jgrapht.generate.netgen;
  *     The number of these nodes is equal to the nodeNum - sourceNum - sinkNum. This parameter
  *     can be called tNodeNum as well, transshipment nodes can be called t-nodes.</li>
  * </ul>
+ * <p>
  * Not every parameter combination specifies a valid config for a network generator. The
  * following are existing parameter constraints:
  * <ul>
@@ -79,18 +80,19 @@ package org.jgrapht.generate.netgen;
  *     <li>all parameters are non-negative except for minCost and maxCost
  *     (the are costs may be negative).</li>
  * </ul>
+ * <p>
  * MinArcNum is a number of arcs that is needed to make every node connected to at least one
  * source and one sink. This value is equal to transshipNodeNum + max(sourceNum, sinkNum).
  * This value can be computed using {@link NetworkGeneratorConfig#getMinimumArcNum()} for a specific
  * network. This value can be computes using {@link NetworkGeneratorConfig#getMinimumArcNum(long, long, long)}
- * as well.
- * MaxArcNum is a number of arcs that makes it impossible to add more arcs to the network without
+ * as well. MaxArcNum is a number of arcs that makes it impossible to add more arcs to the network without
  * violating the constraints. This value consists of 3 quantities:
  * <ul>
  *     <li>sourceArcs = pureSourceNum*tSourceNum + tSourceNum*(tSourceNum - 1) + sourceNum * (tNodeNum + sinkNum)</li>
  *     <li>tNodeArcs = tNodeNum*(tSourceNum + (tNodeNum - 1) + sinkNum)</li>
  *     <li>tSinkArcs = tSinkNum*(tSourceNum + tNodeNum + (tSinkNum - 1))</li>
  * </ul>
+ * <p>
  * The maximum number of arcs is therefore equal to sourceArcs + tNodeArcs + tSinkArcs. This values
  * can be computed for a specific network configuration using {@link NetworkGeneratorConfig#getMaximumArcNum()},
  * or for specified node quantity parameters using {@link NetworkGeneratorConfig#getMaximumArcNum(long, long, long, long, long)}.
@@ -107,6 +109,7 @@ package org.jgrapht.generate.netgen;
  *     <li>totalSupply = sourceNum;</li>
  *     <li>minCap = maxCap = 1.</li>
  * </ul>
+ * <p>
  * Note that bipartite matching problem can be both weighted and unweighted.
  * <p>
  * To construct instances of the {@link NetworkGeneratorConfig}, use {@link NetworkGeneratorConfigBuilder}.
