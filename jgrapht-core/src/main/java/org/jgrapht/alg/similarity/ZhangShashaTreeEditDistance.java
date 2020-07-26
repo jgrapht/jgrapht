@@ -39,20 +39,25 @@ import java.util.function.ToDoubleFunction;
  *
  * <p>
  * The time complexity of the algorithm if $O(|T_1|\cdot|T_2|\cdot min(depth(T_1),leaves(T_1))
- * \cdot min(depth(T_2),leaves(T_2)))$. Space complexity is $O(|T_1|\cdot |T_2|)$.
+ * \cdot min(depth(T_2),leaves(T_2)))$. Space complexity is $O(|T_1|\cdot |T_2|)$, where $|T_1|$
+ * and $|T_2|$ denote number of vertices in trees $T_1$ and $T_2$ correspondingly, $leaves()$
+ * function returns number of leaf vertices in a tree.
+ *
  *
  * <p>
  * The tree edit distance problem is defined in a following way. Consider $2$ trees
- * $t1$ and $t2$ with root vertices $r1$ and $r2$ correspondingly. For trees there
- * are 3 elementary modification actions:
+ * $T_1$ and $T_2$ with root vertices $r_1$ and $r_2$ correspondingly. For those trees
+ * there are 3 elementary modification actions:
+ *
  * <ul>
- *   <li>Remove a vertex $v$ from  $t1$.</li>
- *   <li>Insert a vertex $v$ into $t2$.</li>
- *   <li>Change vertex $v1$ in $t1$ to vertex $v2$ in $t2$.</li>
+ *   <li>Remove a vertex $v$ from  $T_1$.</li>
+ *   <li>Insert a vertex $v$ into $T_2$.</li>
+ *   <li>Change vertex $v_1$ in $T_1$ to vertex $v_2$ in $T_2$.</li>
  * </ul>
+ *
  * The algorithm assigns a cost to each of those operations which also depends
  * on the vertices. The problem is then to compute a sequence of edit operations
- * which transforms $t1$ into $t2$ and has a minimum cost over all such sequences.
+ * which transforms $T_1$ into $T_2$ and has a minimum cost over all such sequences.
  * Here the cost of a sequence of edit operations is defined as sum of costs of
  * individual operations.
  *
@@ -60,14 +65,14 @@ import java.util.function.ToDoubleFunction;
  * The algorithm is base on a dynamic programming principle and assigns a label
  * to each vertex in the trees which is equal to its index in post-oder traversal.
  * It also uses a notion of a keyroot which is defined as a vertex in a tree which
- * has a left sibling. Additionally a special $l()$ function is defined with returns
+ * has a left sibling. Additionally a special $l()$ function is introduced with returns
  * for every vertex the index of its leftmost child wrt the post-order traversal in
  * the tree.
  *
  * <p>
  * Solving the tree edit problem distance is divided into computing edit distance
- * for every pair of subtrees rooted at vertices $v1$ and $v2$ where $v1$ is a
- * keyroot in the first tree and $v2$ is a keyroot in the second tree.
+ * for every pair of subtrees rooted at vertices $v_1$ and $v_2$ where $v_1$ is a
+ * keyroot in the first tree and $v_2$ is a keyroot in the second tree.
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
@@ -110,8 +115,8 @@ public class ZhangShashaTreeEditDistance<V, E> {
     /**
      * Array with edit distances between subtrees of {@code tree1} and
      * {@code tree2}. Formally, $treeDistances[i][j]$ stores edit distance
-     * between subtree of {@code tree1} rooted at vertex $i$ and subtree of
-     * {@code tree2} rooted at vertex $j$, where $i$ and $j$ are vertex indices
+     * between subtree of {@code tree1} rooted at vertex $i+1$ and subtree of
+     * {@code tree2} rooted at vertex $j+1$, where $i$ and $j$ are vertex indices
      * from the corresponding tree orderings.
      */
     private double[][] treeDistances;
@@ -533,7 +538,7 @@ public class ZhangShashaTreeEditDistance<V, E> {
     }
 
     /**
-     * Represents a change operation on a tree.
+     * Represents elementary action which changes the structure of a tree.
      *
      * @param <V> tree vertex type
      */
