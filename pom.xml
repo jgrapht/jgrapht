@@ -345,7 +345,7 @@
                             <configLocation>etc/jgrapht_checks.xml</configLocation>
                             <linkXRef>false</linkXRef>
                             <sourceDirectories>${project.basedir}</sourceDirectories>
-                            <includes>${project.compileSourceRoots}/**/*.java,**/*.xml</includes>
+                            <includes>src/main/**/*.java,**/*.xml</includes>
                             <excludes>**/target/**</excludes>
                         </configuration>
                     </plugin>
