@@ -37,12 +37,12 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Tests for the {@link RandomWalkIterator} class.
+ * Tests for the {@link RandomWalkVertexIterator} class.
  * 
  * @author Assaf Mizrachi
  *
  */
-public class RandomWalkIteratorTest
+public class RandomWalkVertexIteratorTest
 {
 
     /**
@@ -52,7 +52,7 @@ public class RandomWalkIteratorTest
     public void testEmptyGraph()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-        new RandomWalkIterator<>(graph, "unknown", 100);
+        new RandomWalkVertexIterator<>(graph, "unknown", 100);
     }
 
     /**
@@ -63,7 +63,7 @@ public class RandomWalkIteratorTest
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("123");
-        Iterator<String> iter = new RandomWalkIterator<>(graph, "123");
+        Iterator<String> iter = new RandomWalkVertexIterator<>(graph, "123");
         assertTrue(iter.hasNext());
         assertEquals("123", iter.next());
         assertFalse(iter.hasNext());
@@ -85,7 +85,7 @@ public class RandomWalkIteratorTest
             new LinearGraphGenerator<>(graphSize);
         graphGenerator.generateGraph(graph);
         Iterator<String> iter =
-            new RandomWalkIterator<>(graph, graph.vertexSet().iterator().next());
+            new RandomWalkVertexIterator<>(graph, graph.vertexSet().iterator().next());
         for (int i = 0; i < graphSize; i++) {
             assertTrue(iter.hasNext());
             assertNotNull(iter.next());
@@ -108,7 +108,7 @@ public class RandomWalkIteratorTest
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
         graphGenerator.generateGraph(graph);
         long maxSteps = 4;
-        Iterator<String> iter = new RandomWalkIterator<>(graph, "1", maxSteps);
+        Iterator<String> iter = new RandomWalkVertexIterator<>(graph, "1", maxSteps);
         List<String> walk = new ArrayList<>();
         while (iter.hasNext()) {
             walk.add(iter.next());
@@ -131,7 +131,7 @@ public class RandomWalkIteratorTest
         int ringSize = 5;
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
         graphGenerator.generateGraph(graph);
-        Iterator<String> iter = new RandomWalkIterator<>(graph, "0", 20);
+        Iterator<String> iter = new RandomWalkVertexIterator<>(graph, "0", 20);
         int step = 0;
         while (iter.hasNext()) {
             assertEquals(String.valueOf(step % ringSize), iter.next());
@@ -158,7 +158,7 @@ public class RandomWalkIteratorTest
         graph.addEdge("0", "1");
         graph.addEdge("1", "2");
 
-        Iterator<String> iter = new RandomWalkIterator<>(graph, "0");
+        Iterator<String> iter = new RandomWalkVertexIterator<>(graph, "0");
         int count = 0;
         List<String> walk = new ArrayList<>();
         while (iter.hasNext()) {
