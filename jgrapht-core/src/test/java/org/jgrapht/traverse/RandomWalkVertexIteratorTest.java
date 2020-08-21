@@ -46,10 +46,10 @@ public class RandomWalkVertexIteratorTest
 {
 
     /**
-     * Tests empty graph
+     * Tests invalid vertex
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyGraph()
+    public void testInvalidVertex()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         new RandomWalkVertexIterator<>(graph, "unknown", 100);
