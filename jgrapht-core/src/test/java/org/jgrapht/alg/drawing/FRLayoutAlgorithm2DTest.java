@@ -17,16 +17,20 @@
  */
 package org.jgrapht.alg.drawing;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.drawing.model.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.*;
-import org.junit.*;
-
-import java.util.*;
-
 import static org.junit.Assert.assertTrue;
+
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Function;
+
+import org.jgrapht.Graph;
+import org.jgrapht.alg.drawing.model.Box2D;
+import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
+import org.jgrapht.alg.drawing.model.Point2D;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
 /**
  * Test {@link FRLayoutAlgorithm2D}.
@@ -89,6 +93,46 @@ public class FRLayoutAlgorithm2DTest
 
         assertTrue(result.get(v6).getX() < result.get(v2).getX());
         assertTrue(result.get(v6).getY() > result.get(v2).getY());
+    }
+
+    @Test
+    public void testInitializerSamePosition()
+    {
+        Graph<String,
+            DefaultEdge> graph = GraphTypeBuilder
+                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        String v1 = graph.addVertex();
+        String v2 = graph.addVertex();
+        String v3 = graph.addVertex();
+        String v4 = graph.addVertex();
+        String v5 = graph.addVertex();
+        String v6 = graph.addVertex();
+        graph.addEdge(v1, v2);
+        graph.addEdge(v3, v1);
+        graph.addEdge(v4, v1);
+        graph.addEdge(v5, v2);
+        graph.addEdge(v6, v2);
+
+        final Random rng = new Random(17);
+        final int iterations = 100;
+        final double normalizationFactor = 0.5;
+        FRLayoutAlgorithm2D<String, DefaultEdge> alg =
+            new FRLayoutAlgorithm2D<>(iterations, normalizationFactor, rng);
+
+        Function<String, Point2D> init = (v) -> {
+            if (v1.equals(v) || v2.equals(v)) {
+                // two points with same position
+                return Point2D.of(1d, 1d);
+            }
+            return Point2D.of(rng.nextDouble(), rng.nextDouble());
+        };
+        alg.setInitializer(init);
+
+        MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 100d, 100d));
+        alg.layout(graph, model);
+        model.collect();
     }
 
 }

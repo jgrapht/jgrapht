@@ -19,6 +19,7 @@ package org.jgrapht.alg.drawing;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.drawing.model.*;
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 import java.util.*;
 import java.util.function.*;
@@ -59,6 +60,7 @@ public class FRLayoutAlgorithm2D<V, E>
     protected double normalizationFactor;
     protected int iterations;
     protected BiFunction<LayoutModel2D<V>, Integer, TemperatureModel> temperatureModelSupplier;
+    protected final ToleranceDoubleComparator comparator;
 
     /**
      * Create a new layout algorithm
@@ -98,6 +100,20 @@ public class FRLayoutAlgorithm2D<V, E>
      */
     public FRLayoutAlgorithm2D(int iterations, double normalizationFactor, Random rng)
     {
+        this(iterations, normalizationFactor, rng, ToleranceDoubleComparator.DEFAULT_EPSILON);
+    }
+
+    /**
+     * Create a new layout algorithm
+     * 
+     * @param iterations number of iterations
+     * @param normalizationFactor normalization factor for the optimal distance
+     * @param rng the random number generator
+     * @param tolerance tolerance used when comparing floating point values
+     */
+    public FRLayoutAlgorithm2D(
+        int iterations, double normalizationFactor, Random rng, double tolerance)
+    {
         this.rng = Objects.requireNonNull(rng);
         this.iterations = iterations;
         this.normalizationFactor = normalizationFactor;
@@ -107,6 +123,7 @@ public class FRLayoutAlgorithm2D<V, E>
             return new InverseLinearTemperatureModel(
                 -1d * dimension / (10d * totalIterations), dimension / 10d);
         };
+        this.comparator = new ToleranceDoubleComparator(tolerance);
     }
 
     /**
@@ -115,17 +132,37 @@ public class FRLayoutAlgorithm2D<V, E>
      * @param iterations number of iterations
      * @param normalizationFactor normalization factor for the optimal distance
      * @param temperatureModelSupplier a simulated annealing temperature model supplier
-     * @param rng the random number generators
+     * @param rng the random number generator
      */
     public FRLayoutAlgorithm2D(
         int iterations, double normalizationFactor,
         BiFunction<LayoutModel2D<V>, Integer, TemperatureModel> temperatureModelSupplier,
         Random rng)
     {
+        this(
+            iterations, normalizationFactor, temperatureModelSupplier, rng,
+            ToleranceDoubleComparator.DEFAULT_EPSILON);
+    }
+
+    /**
+     * Create a new layout algorithm
+     * 
+     * @param iterations number of iterations
+     * @param normalizationFactor normalization factor for the optimal distance
+     * @param temperatureModelSupplier a simulated annealing temperature model supplier
+     * @param rng the random number generator
+     * @param tolerance tolerance used when comparing floating point values
+     */
+    public FRLayoutAlgorithm2D(
+        int iterations, double normalizationFactor,
+        BiFunction<LayoutModel2D<V>, Integer, TemperatureModel> temperatureModelSupplier,
+        Random rng, double tolerance)
+    {
         this.rng = Objects.requireNonNull(rng);
         this.iterations = iterations;
         this.normalizationFactor = normalizationFactor;
         this.temperatureModelSupplier = Objects.requireNonNull(temperatureModelSupplier);
+        this.comparator = new ToleranceDoubleComparator(tolerance);
     }
 
     @Override
@@ -247,11 +284,16 @@ public class FRLayoutAlgorithm2D<V, E>
                     continue;
                 }
                 Point2D uPos = Points.subtract(model.get(u), origin);
-                Point2D delta = Points.subtract(vPos, uPos);
-                double deltaLen = Points.length(delta);
-                Point2D dispContribution =
-                    Points.scalarMultiply(delta, repulsiveForce(deltaLen) / deltaLen);
-                vDisp = Points.add(vDisp, dispContribution);
+
+                if (comparator.compare(vPos.getX(), uPos.getX()) != 0
+                    || comparator.compare(vPos.getY(), uPos.getY()) != 0)
+                {
+                    Point2D delta = Points.subtract(vPos, uPos);
+                    double deltaLen = Points.length(delta);
+                    Point2D dispContribution =
+                        Points.scalarMultiply(delta, repulsiveForce(deltaLen) / deltaLen);
+                    vDisp = Points.add(vDisp, dispContribution);
+                }
             }
 
             disp.put(v, vDisp);
@@ -277,18 +319,22 @@ public class FRLayoutAlgorithm2D<V, E>
             Point2D vPos = Points.subtract(model.get(v), origin);
             Point2D uPos = Points.subtract(model.get(u), origin);
 
-            Point2D delta = Points.subtract(vPos, uPos);
-            double deltaLen = Points.length(delta);
-            Point2D dispContribution =
-                Points.scalarMultiply(delta, attractiveForce(deltaLen) / deltaLen);
-            disp
-                .put(
-                    v,
-                    Points
-                        .add(
-                            disp.getOrDefault(v, Point2D.of(0d, 0d)),
-                            Points.negate(dispContribution)));
-            disp.put(u, Points.add(disp.getOrDefault(u, Point2D.of(0d, 0d)), dispContribution));
+            if (comparator.compare(vPos.getX(), uPos.getX()) != 0
+                || comparator.compare(vPos.getY(), uPos.getY()) != 0)
+            {
+                Point2D delta = Points.subtract(vPos, uPos);
+                double deltaLen = Points.length(delta);
+                Point2D dispContribution =
+                    Points.scalarMultiply(delta, attractiveForce(deltaLen) / deltaLen);
+                disp
+                    .put(
+                        v,
+                        Points
+                            .add(
+                                disp.getOrDefault(v, Point2D.of(0d, 0d)),
+                                Points.negate(dispContribution)));
+                disp.put(u, Points.add(disp.getOrDefault(u, Point2D.of(0d, 0d)), dispContribution));
+            }
         }
         return disp;
     }

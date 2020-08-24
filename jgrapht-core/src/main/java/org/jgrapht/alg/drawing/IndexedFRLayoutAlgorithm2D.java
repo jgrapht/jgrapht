@@ -51,7 +51,6 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
     protected double theta;
     protected long savedComparisons;
-    protected ToleranceDoubleComparator comparator;
 
     /**
      * Create a new layout algorithm
@@ -111,13 +110,12 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
     public IndexedFRLayoutAlgorithm2D(
         int iterations, double theta, double normalizationFactor, Random rng, double tolerance)
     {
-        super(iterations, normalizationFactor, rng);
+        super(iterations, normalizationFactor, rng, tolerance);
         this.theta = theta;
         if (theta < 0d || theta > 1d) {
             throw new IllegalArgumentException("Illegal theta value");
         }
         this.savedComparisons = 0;
-        this.comparator = new ToleranceDoubleComparator(tolerance);
     }
 
     @Override
