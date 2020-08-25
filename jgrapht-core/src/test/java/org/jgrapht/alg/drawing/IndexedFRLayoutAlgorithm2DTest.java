@@ -152,5 +152,42 @@ public class IndexedFRLayoutAlgorithm2DTest
 
         assertEquals(0, alg.getSavedComparisons());
     }
+    
+    @Test
+    public void testGraphWithIsolatedVertex()
+    {
+        Graph<String,
+            DefaultEdge> graph = GraphTypeBuilder
+                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        String v1 = graph.addVertex();
+        String v2 = graph.addVertex();
+        String v3 = graph.addVertex();
+        String v4 = graph.addVertex();
+        String v5 = graph.addVertex();
+        String v6 = graph.addVertex();
+        String v7 = graph.addVertex();
+        graph.addEdge(v1, v2);
+        graph.addEdge(v3, v1);
+        graph.addEdge(v4, v1);
+        graph.addEdge(v5, v2);
+        graph.addEdge(v6, v2);
+
+        final Random rng = new Random(17);
+        final int iterations = 100;
+        final double normalizationFactor = 0.5;
+        final double theta = 0;
+        IndexedFRLayoutAlgorithm2D<String, DefaultEdge> alg =
+            new IndexedFRLayoutAlgorithm2D<>(iterations, theta, normalizationFactor, rng);        
+
+        MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 100d, 100d));
+        alg.layout(graph, model);
+
+        Map<String, Point2D> result = model.collect();
+
+        assertEquals(result.get(v7).getX(), 100d, 1e-9);
+        assertEquals(result.get(v7).getY(), 100d, 1e-9);
+    }
 
 }

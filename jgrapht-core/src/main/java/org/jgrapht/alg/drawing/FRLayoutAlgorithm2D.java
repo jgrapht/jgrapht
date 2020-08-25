@@ -222,7 +222,8 @@ public class FRLayoutAlgorithm2D<V, E>
             // and prevent from being displaced outside frame
             for (V v : graph.vertexSet()) {
                 // limit by temperature
-                Point2D vDisp = Points.add(repulsiveDisp.get(v), attractiveDisp.get(v));
+                Point2D vDisp = Points
+                    .add(repulsiveDisp.get(v), attractiveDisp.getOrDefault(v, Point2D.of(0d, 0d)));
                 double vDispLen = Points.length(vDisp);
                 Point2D vPos = Points
                     .add(
