@@ -30,7 +30,7 @@ import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToDoubleFunction;
 
 /**
- * Dynamic programming algorithm foe computing edit distance between trees.
+ * Dynamic programming algorithm for computing edit distance between trees.
  *
  * <p>
  * The algorithm is originally described in Zhang, Kaizhong & Shasha, Dennis. (1989).
@@ -62,7 +62,7 @@ import java.util.function.ToDoubleFunction;
  * individual operations.
  *
  * <p>
- * The algorithm is base on a dynamic programming principle and assigns a label
+ * The algorithm is based on a dynamic programming principle and assigns a label
  * to each vertex in the trees which is equal to its index in post-oder traversal.
  * It also uses a notion of a keyroot which is defined as a vertex in a tree which
  * has a left sibling. Additionally a special $l()$ function is introduced with returns
@@ -81,7 +81,7 @@ import java.util.function.ToDoubleFunction;
 public class ZhangShashaTreeEditDistance<V, E> {
 
     /**
-     * First tree for which the fistance is computed by this algorithm.
+     * First tree for which the distance is computed by this algorithm.
      */
     private Graph<V, E> tree1;
     /**
