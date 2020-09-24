@@ -529,5 +529,37 @@ public class JSONImporterTest
         assertEquals(1, g.edgeSet().size());
 
     }
+    
+    @Test
+    public void testNegativeIntegerWeights()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "{\n"
+                     + "  \"nodes\": [\n"    
+                     + "  { \"id\":\"1\" },\n"
+                     + "  { \"id\":\"2\" }\n"
+                     + "  ],\n"
+                     + "  \"edges\": [\n"    
+                     + "  { \"source\":\"1\", \"target\":\"2\", \"weight\": -2 }\n"
+                     + "  ]\n"
+                     + "}";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(2, g.vertexSet().size());
+        assertEquals(1, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertEquals(-2.0, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
+    }
 
 }

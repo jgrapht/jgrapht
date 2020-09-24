@@ -228,7 +228,8 @@ public class JSONEventDrivenImporter
                         Attribute attributeWeight = attributes.get(WEIGHT);
                         if (attributeWeight != null) {
                             AttributeType type = attributeWeight.getType();
-                            if (type.equals(AttributeType.FLOAT)
+                            if (type.equals(AttributeType.INT) || 
+                                type.equals(AttributeType.FLOAT)
                                 || type.equals(AttributeType.DOUBLE))
                             {
                                 weight = Double.parseDouble(attributeWeight.getValue());
