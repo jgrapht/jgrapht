@@ -225,17 +225,43 @@ public abstract class GraphMetrics
     {
         long total = 0;
 
-        for (int i = 0; i < vertexSubset.size(); i++) {
-            for (int j = i + 1; j < vertexSubset.size(); j++) {
-                for (int k = j + 1; k < vertexSubset.size(); k++) {
-                    V u = vertexSubset.get(i);
-                    V v = vertexSubset.get(j);
-                    V w = vertexSubset.get(k);
+        if (graph.getType().isAllowingMultipleEdges()) {
+            for (int i = 0; i < vertexSubset.size(); i++) {
+                for (int j = i + 1; j < vertexSubset.size(); j++) {
+                    for (int k = j + 1; k < vertexSubset.size(); k++) {
+                        V u = vertexSubset.get(i);
+                        V v = vertexSubset.get(j);
+                        V w = vertexSubset.get(k);
 
-                    if (graph.containsEdge(u, v) && graph.containsEdge(v, w)
-                        && graph.containsEdge(w, u))
-                    {
-                        total++;
+                        int uvEdgeCount = graph.getAllEdges(u, v).size();
+                        if (uvEdgeCount == 0) {
+                            continue;
+                        }
+                        int vwEdgeCount = graph.getAllEdges(v, w).size();
+                        if (vwEdgeCount == 0) {
+                            continue;
+                        }
+                        int wuEdgeCount = graph.getAllEdges(w, u).size();
+                        if (wuEdgeCount == 0) {
+                            continue;
+                        }
+                        total += uvEdgeCount * vwEdgeCount * wuEdgeCount;
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < vertexSubset.size(); i++) {
+                for (int j = i + 1; j < vertexSubset.size(); j++) {
+                    for (int k = j + 1; k < vertexSubset.size(); k++) {
+                        V u = vertexSubset.get(i);
+                        V v = vertexSubset.get(j);
+                        V w = vertexSubset.get(k);
+
+                        if (graph.containsEdge(u, v) && graph.containsEdge(v, w)
+                            && graph.containsEdge(w, u))
+                        {
+                            total++;
+                        }
                     }
                 }
             }
