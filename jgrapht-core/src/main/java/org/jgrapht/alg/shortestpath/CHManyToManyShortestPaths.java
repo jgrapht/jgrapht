@@ -84,12 +84,14 @@ public class CHManyToManyShortestPaths<V, E>
     private Map<V, ContractionVertex<V>> contractionMapping;
 
     /**
-     * Constructs an instance of the algorithm for a given {@code graph}.
+     * Constructs an instance of the algorithm for a given {@code graph}. This constructor
+     * computes Contraction Hierarchy with an internal instance of {@link ThreadPoolExecutor}.
+     * This instance is not shut down after Contraction Hierarchy is computed. If you want to
+     * use a custom instance of {@link ThreadPoolExecutor} please use
+     * {@link #CHManyToManyShortestPaths(Graph, ThreadPoolExecutor)} instead.
      *
      * @param graph a graph
-     * @deprecated replaced with {@link #CHManyToManyShortestPaths(Graph, ThreadPoolExecutor)}
      */
-    @Deprecated
     public CHManyToManyShortestPaths(Graph<V, E> graph)
     {
         this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
