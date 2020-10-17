@@ -29,7 +29,7 @@ public class TransitiveReductionTest
 {
 
     // @formatter:off
-    static final int[][] matrix = new int[][] {
+    static final int[][] MATRIX = new int[][] {
         {0, 1, 1, 0, 0},
         {0, 0, 0, 0, 0},
         {0, 0, 0, 1, 1},
@@ -37,7 +37,7 @@ public class TransitiveReductionTest
         {0, 1, 0, 0, 0}
     };
 
-    static final int[][] expected_transitively_reduced_matrix = new int[][] {
+    static final int[][] EXPECTED_TRANSITIVELY_REDUCED_MATRIX = new int[][] {
         {0, 0, 1, 0, 0},
         {0, 0, 0, 0, 0},
         {0, 0, 0, 1, 0},
@@ -63,13 +63,13 @@ public class TransitiveReductionTest
 
         // System.out.println(Arrays.deepToString(matrix) + " original matrix");
 
-        final int n = matrix.length;
+        final int n = MATRIX.length;
 
         // calc path matrix
         int[][] path_matrix = new int[n][n];
         {
             {
-                System.arraycopy(matrix, 0, path_matrix, 0, matrix.length);
+                System.arraycopy(MATRIX, 0, path_matrix, 0, MATRIX.length);
 
                 final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(path_matrix);
 
@@ -103,7 +103,7 @@ public class TransitiveReductionTest
 
             Assert
                 .assertArrayEquals(
-                    expected_transitively_reduced_matrix, transitively_reduced_matrix);
+                    EXPECTED_TRANSITIVELY_REDUCED_MATRIX, transitively_reduced_matrix);
         }
     }
 
@@ -249,7 +249,7 @@ public class TransitiveReductionTest
     @Test
     public void testReduceCanonicalGraph()
     {
-        Graph<Integer, DefaultEdge> graph = fromMatrixToDirectedGraph(matrix);
+        Graph<Integer, DefaultEdge> graph = fromMatrixToDirectedGraph(MATRIX);
 
         // a few spot tests to verify the graph looks like it should
         assertFalse(graph.containsEdge(0, 0));
@@ -274,7 +274,7 @@ public class TransitiveReductionTest
 
         // the full verification; less readable, but somewhat more complete :)
         int[][] actual_transitively_reduced_matrix = fromDirectedGraphToMatrix(graph);
-        assertArrayEquals(expected_transitively_reduced_matrix, actual_transitively_reduced_matrix);
+        assertArrayEquals(EXPECTED_TRANSITIVELY_REDUCED_MATRIX, actual_transitively_reduced_matrix);
     }
 
     static private Graph<Integer, DefaultEdge> fromMatrixToDirectedGraph(final int[][] matrix)

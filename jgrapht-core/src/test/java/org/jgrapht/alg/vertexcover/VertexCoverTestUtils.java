@@ -42,7 +42,7 @@ public class VertexCoverTestUtils
     public final static int TEST_GRAPH_SIZE = 200;
     public final static int TEST_REPEATS = 20;
 
-    public final static Random rnd = new Random(0);
+    public final static Random RANDOM = new Random(0);
 
     // ------- Helper methods ------
 
@@ -77,7 +77,7 @@ public class VertexCoverTestUtils
         Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator =
-            new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
+            new GnmRandomGraphGenerator<>(vertices, RANDOM.nextInt(vertices / 2) + 1);
         graphGenerator.generateGraph(g);
         return g;
     }

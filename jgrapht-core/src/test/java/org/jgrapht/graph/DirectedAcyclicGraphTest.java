@@ -297,7 +297,7 @@ public class DirectedAcyclicGraphTest
      *
      * Expected output when determining ancestors of A:
      *
-     * <empty list>
+     * an empty list
      */
     //@formatter:on
     @Test
@@ -429,7 +429,7 @@ public class DirectedAcyclicGraphTest
      *
      * Expected output when determining descendents of C:
      *
-     * <empty list>
+     * an empty list
      */
     //@formatter:on
     @Test

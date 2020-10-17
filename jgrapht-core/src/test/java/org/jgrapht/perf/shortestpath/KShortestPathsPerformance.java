@@ -37,7 +37,7 @@ import java.util.concurrent.*;
 public class KShortestPathsPerformance
 {
 
-    private static final Random random = new Random(19L);
+    private static final Random RANDOM = new Random(19L);
 
     @Benchmark
     public List<List<GraphPath<Integer, DefaultWeightedEdge>>> testYenKShortestPaths(YenState state)
@@ -140,7 +140,7 @@ public class KShortestPathsPerformance
         private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph)
         {
             for (DefaultWeightedEdge edge : graph.edgeSet()) {
-                double weight = Math.abs(random.nextInt(Integer.MAX_VALUE));
+                double weight = Math.abs(RANDOM.nextInt(Integer.MAX_VALUE));
                 graph.setEdgeWeight(edge, weight);
             }
         }

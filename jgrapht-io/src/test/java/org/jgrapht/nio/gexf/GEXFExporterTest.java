@@ -34,7 +34,7 @@ import static org.junit.Assert.assertFalse;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GEXFExporterTest
@@ -50,46 +50,46 @@ public class GEXFExporterTest
     {
         String output =
         // @formatter:off
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-				+ "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
-				+ "      version=\"1.2\" "
-				+ "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
-				+ "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<meta>" + NL
-				+ "  <creator>The JGraphT Library</creator>" + NL
-				+ "</meta>" + NL
-				+ "<graph defaultedgetype=\"directed\">" + NL 
-				+ "  <attributes class=\"node\">" + NL
-				+ "    <attribute id=\"0\" title=\"color\" type=\"string\"/>" + NL
-				+ "    <attribute id=\"1\" title=\"city\" type=\"string\"/>" + NL
-				+ "    <attribute id=\"2\" title=\"hobby\" type=\"string\">" + NL
-				+ "      <options>ski|dance|photo</options>"
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+                + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
+                + "      version=\"1.2\" "
+                + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
+                + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+                + "<meta>" + NL
+                + "  <creator>The JGraphT Library</creator>" + NL
+                + "</meta>" + NL
+                + "<graph defaultedgetype=\"directed\">" + NL
+                + "  <attributes class=\"node\">" + NL
+                + "    <attribute id=\"0\" title=\"color\" type=\"string\"/>" + NL
+                + "    <attribute id=\"1\" title=\"city\" type=\"string\"/>" + NL
+                + "    <attribute id=\"2\" title=\"hobby\" type=\"string\">" + NL
+                + "      <options>ski|dance|photo</options>"
                 + "    </attribute>" + NL
-                + "  </attributes>" + NL				
+                + "  </attributes>" + NL
                 + "  <attributes class=\"edge\">" + NL
                 + "    <attribute id=\"0\" title=\"length\" type=\"double\"/>" + NL
                 + "  </attributes>" + NL
                 + "  <nodes>" + NL
-				+ "    <node id=\"0\" label=\"0\">" + NL 
-				+ "      <attvalues>" + NL
+                + "    <node id=\"0\" label=\"0\">" + NL
+                + "      <attvalues>" + NL
                 + "        <attvalue for=\"0\" value=\"Red\"/>" + NL
-                + "        <attvalue for=\"1\" value=\"Paris\"/>" + NL                
-                + "      </attvalues>" + NL				
-				+ "    </node>" + NL
-				+ "    <node id=\"1\" label=\"1\"/>" + NL
-				+ "    <node id=\"2\" label=\"2\"/>" + NL 
-				+ "  </nodes>" + NL
-                + "  <edges>" + NL				
-				+ "    <edge id=\"0\" source=\"0\" target=\"1\" type=\"directed\" weight=\"1.0\" label=\"Edge from node 1 to node 2\">" + NL
+                + "        <attvalue for=\"1\" value=\"Paris\"/>" + NL
+                + "      </attvalues>" + NL
+                + "    </node>" + NL
+                + "    <node id=\"1\" label=\"1\"/>" + NL
+                + "    <node id=\"2\" label=\"2\"/>" + NL
+                + "  </nodes>" + NL
+                + "  <edges>" + NL
+                + "    <edge id=\"0\" source=\"0\" target=\"1\" type=\"directed\" weight=\"1.0\" label=\"Edge from node 1 to node 2\">" + NL
                 + "      <attvalues>" + NL
                 + "        <attvalue for=\"0\" value=\"100.0\"/>" + NL
-                + "      </attvalues>" + NL             				
+                + "      </attvalues>" + NL
                 + "    </edge>" + NL
-				+ "    <edge id=\"1\" source=\"2\" target=\"0\" type=\"directed\" weight=\"1.0\"/>" + NL 
-                + "  </edges>" + NL				
-				+ "</graph>" + NL 
-				+ "</gexf>" + NL;
-		    // @formatter:on
+                + "    <edge id=\"1\" source=\"2\" target=\"0\" type=\"directed\" weight=\"1.0\"/>" + NL
+                + "  </edges>" + NL
+                + "</graph>" + NL
+                + "</gexf>" + NL;
+            // @formatter:on
 
         Graph<String,
             DefaultEdge> graph = GraphTypeBuilder
@@ -158,38 +158,38 @@ public class GEXFExporterTest
                 + "<meta>" + NL
                 + "  <creator>The JGraphT Library</creator>" + NL
                 + "  <description>Test</description>" + NL
-                + "</meta>" + NL                
-                + "<graph defaultedgetype=\"undirected\">" + NL 
+                + "</meta>" + NL
+                + "<graph defaultedgetype=\"undirected\">" + NL
                 + "  <attributes class=\"node\">" + NL
                 + "    <attribute id=\"0\" title=\"color\" type=\"string\"/>" + NL
                 + "    <attribute id=\"1\" title=\"city\" type=\"string\"/>" + NL
-                + "  </attributes>" + NL                
+                + "  </attributes>" + NL
                 + "  <attributes class=\"edge\">" + NL
                 + "    <attribute id=\"0\" title=\"length\" type=\"double\"/>" + NL
                 + "  </attributes>" + NL
                 + "  <nodes>" + NL
-                + "    <node id=\"0\" label=\"0\">" + NL 
+                + "    <node id=\"0\" label=\"0\">" + NL
                 + "      <attvalues>" + NL
                 + "        <attvalue for=\"0\" value=\"Red\"/>" + NL
-                + "        <attvalue for=\"1\" value=\"Paris\"/>" + NL                
-                + "      </attvalues>" + NL             
+                + "        <attvalue for=\"1\" value=\"Paris\"/>" + NL
+                + "      </attvalues>" + NL
                 + "    </node>" + NL
                 + "    <node id=\"1\" label=\"1\"/>" + NL
-                + "    <node id=\"2\" label=\"2\"/>" + NL 
+                + "    <node id=\"2\" label=\"2\"/>" + NL
                 + "  </nodes>" + NL
-                + "  <edges>" + NL              
+                + "  <edges>" + NL
                 + "    <edge id=\"0\" source=\"0\" target=\"1\" type=\"undirected\" weight=\"1.0\">" + NL
                 + "      <attvalues>" + NL
                 + "        <attvalue for=\"0\" value=\"100.0\"/>" + NL
-                + "      </attvalues>" + NL                             
+                + "      </attvalues>" + NL
                 + "    </edge>" + NL
-                + "    <edge id=\"1\" source=\"2\" target=\"0\" type=\"undirected\" weight=\"13.5\">" + NL 
+                + "    <edge id=\"1\" source=\"2\" target=\"0\" type=\"undirected\" weight=\"13.5\">" + NL
                 + "      <attvalues>" + NL
                 + "        <attvalue for=\"0\" value=\"30.0\"/>" + NL
-                + "      </attvalues>" + NL                             
-                + "    </edge>" + NL                
-                + "  </edges>" + NL             
-                + "</graph>" + NL 
+                + "      </attvalues>" + NL
+                + "    </edge>" + NL
+                + "  </edges>" + NL
+                + "</graph>" + NL
                 + "</gexf>" + NL;
             // @formatter:on
 

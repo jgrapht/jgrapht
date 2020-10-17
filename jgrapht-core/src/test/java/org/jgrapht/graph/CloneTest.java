@@ -45,7 +45,7 @@ public class CloneTest
         g1.addEdge(one, two);
         g1.addEdge(two, three);
 
-        SimpleGraph<String, DefaultEdge> g2 = (SimpleGraph<String, DefaultEdge>) g1.clone(); // Type-safty
+        SimpleGraph<String, DefaultEdge> g2 = (SimpleGraph<String, DefaultEdge>) g1.clone(); // Type-safety
                                                                                              // warning
                                                                                              // OK
                                                                                              // with
@@ -95,6 +95,11 @@ public class CloneTest
         public boolean equals(Object other)
         {
             return other instanceof BrokenVertex && x == ((BrokenVertex) other).x;
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
         }
     }
 }

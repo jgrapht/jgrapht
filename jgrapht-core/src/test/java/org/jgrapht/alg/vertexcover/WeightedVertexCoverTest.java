@@ -40,7 +40,7 @@ public interface WeightedVertexCoverTest
     {
         Map<Integer, Double> vertexWeights = new HashMap<>();
         for (Integer v : graph.vertexSet())
-            vertexWeights.put(v, 1.0 * VertexCoverTestUtils.rnd.nextInt(25));
+            vertexWeights.put(v, 1.0 * VertexCoverTestUtils.RANDOM.nextInt(25));
         return vertexWeights;
     }
 }

@@ -37,19 +37,19 @@ public class BidirectionalAStarShortestPathTest
     extends
     BaseHeuristicSearchTest
 {
-    private static final String s = "s";
-    private static final String t = "t";
-    private static final String y = "y";
-    private static final String x = "x";
-    private static final String z = "z";
+    private static final String S = "S";
+    private static final String T = "T";
+    private static final String Y = "Y";
+    private static final String X = "X";
+    private static final String Z = "Z";
 
     @Test
     public void testEmptyGraph()
     {
         Graph<String, DefaultWeightedEdge> graph =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        graph.addVertex(s);
-        new BidirectionalAStarShortestPath<>(graph, (sourceVertex, targetVertex) -> 0).getPaths(s);
+        graph.addVertex(S);
+        new BidirectionalAStarShortestPath<>(graph, (sourceVertex, targetVertex) -> 0).getPaths(S);
     }
 
     @Test
@@ -58,8 +58,8 @@ public class BidirectionalAStarShortestPathTest
         Graph<String, DefaultWeightedEdge> graph = getSimpleGraph();
         AStarAdmissibleHeuristic<String> heuristic = getSimpleGraphHeuristic();
         assertEquals(
-            Arrays.asList(s, y, z),
-            new BidirectionalAStarShortestPath<>(graph, heuristic).getPath(s, z).getVertexList());
+            Arrays.asList(S, Y, Z),
+            new BidirectionalAStarShortestPath<>(graph, heuristic).getPath(S, Z).getVertexList());
     }
 
     private Graph<String, DefaultWeightedEdge> getSimpleGraph()
@@ -67,22 +67,22 @@ public class BidirectionalAStarShortestPathTest
         Graph<String, DefaultWeightedEdge> graph =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
-        Graphs.addAllVertices(graph, Arrays.asList(s, t, y, x, z));
+        Graphs.addAllVertices(graph, Arrays.asList(S, T, Y, X, Z));
 
-        Graphs.addEdge(graph, s, t, 10);
-        Graphs.addEdge(graph, s, y, 5);
+        Graphs.addEdge(graph, S, T, 10);
+        Graphs.addEdge(graph, S, Y, 5);
 
-        Graphs.addEdge(graph, t, y, 2);
-        Graphs.addEdge(graph, t, x, 1);
+        Graphs.addEdge(graph, T, Y, 2);
+        Graphs.addEdge(graph, T, X, 1);
 
-        Graphs.addEdge(graph, y, t, 3);
-        Graphs.addEdge(graph, y, z, 2);
-        Graphs.addEdge(graph, y, x, 9);
+        Graphs.addEdge(graph, Y, T, 3);
+        Graphs.addEdge(graph, Y, Z, 2);
+        Graphs.addEdge(graph, Y, X, 9);
 
-        Graphs.addEdge(graph, x, z, 4);
+        Graphs.addEdge(graph, X, Z, 4);
 
-        Graphs.addEdge(graph, z, x, 6);
-        Graphs.addEdge(graph, z, s, 7);
+        Graphs.addEdge(graph, Z, X, 6);
+        Graphs.addEdge(graph, Z, S, 7);
 
         return graph;
     }
@@ -90,21 +90,21 @@ public class BidirectionalAStarShortestPathTest
     private AStarAdmissibleHeuristic<String> getSimpleGraphHeuristic()
     {
         return (sourceVertex, targetVertex) -> {
-            if (sourceVertex.equals(s) && targetVertex.equals(z)) {
+            if (sourceVertex.equals(S) && targetVertex.equals(Z)) {
                 return 7;
-            } else if (sourceVertex.equals(y) && targetVertex.equals(z)) {
+            } else if (sourceVertex.equals(Y) && targetVertex.equals(Z)) {
                 return 2;
-            } else if (sourceVertex.equals(t) && targetVertex.equals(z)) {
+            } else if (sourceVertex.equals(T) && targetVertex.equals(Z)) {
                 return 4;
-            } else if (sourceVertex.equals(x) && targetVertex.equals(z)) {
+            } else if (sourceVertex.equals(X) && targetVertex.equals(Z)) {
                 return 4;
-            } else if (sourceVertex.equals(t) && targetVertex.equals(s)) {
+            } else if (sourceVertex.equals(T) && targetVertex.equals(S)) {
                 return 8;
-            } else if (sourceVertex.equals(y) && targetVertex.equals(s)) {
+            } else if (sourceVertex.equals(Y) && targetVertex.equals(S)) {
                 return 5;
-            } else if (sourceVertex.equals(x) && targetVertex.equals(s)) {
+            } else if (sourceVertex.equals(X) && targetVertex.equals(S)) {
                 return 11;
-            } else if (sourceVertex.equals(z) && targetVertex.equals(s)) {
+            } else if (sourceVertex.equals(Z) && targetVertex.equals(S)) {
                 return 7;
             } else {
                 return 0;

@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  */
 public class AVLTreeTest
 {
-    private static final Random rng = new Random(17L);
+    private static final Random RANDOM = new Random(17L);
 
     @Test
     public void testEmpty()
@@ -223,7 +223,7 @@ public class AVLTreeTest
         Deque<Integer> maxValues =
             IntStream.range(middle, to).boxed().collect(Collectors.toCollection(ArrayDeque::new));
         for (int i = from; i < to; i++) {
-            int rand = rng.nextInt(2);
+            int rand = RANDOM.nextInt(2);
             if ((rand == 0 && !minValues.isEmpty()) || maxValues.isEmpty()) {
                 nodes.addFirst(tree.addMin(minValues.removeLast()));
             } else {

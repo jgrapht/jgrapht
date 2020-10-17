@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests for the Clique Minimal Separator Decomposition.
  * 
- * @author Florian Buenzli <fbuenzli@student.ethz.ch>
+ * @author Florian Buenzli {@literal <fbuenzli@student.ethz.ch>}
  */
 public class CliqueMinimalSeparatorDecompositionTest
 {

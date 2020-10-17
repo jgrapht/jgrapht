@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class TreeDynamicConnectivityTest
 {
-    private static final Random rng = new Random(17L);
+    private static final Random RANDOM = new Random(17L);
 
     @Test
     public void testTreeDynamicConnectivity_addNode_removeNode()
@@ -134,7 +134,7 @@ public class TreeDynamicConnectivityTest
                 false);
 
         BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen =
-            new BarabasiAlbertForestGenerator<>(1, nodeNum, rng);
+            new BarabasiAlbertForestGenerator<>(1, nodeNum, RANDOM);
         gen.generateGraph(tree);
         return tree;
     }

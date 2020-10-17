@@ -40,7 +40,7 @@ import java.util.concurrent.*;
 @Measurement(iterations = 5, time = 1)
 public class TreeDynamicConnectivityPerformanceTest
 {
-    private static final Random rng = new Random(17L);
+    private static final Random RANDOM = new Random(17L);
 
     @Benchmark
     public List<Boolean> testTreeDynamicConnectivity(Data data)
@@ -97,7 +97,7 @@ public class TreeDynamicConnectivityPerformanceTest
         public void init()
         {
             BarabasiAlbertForestGenerator<Integer, DefaultEdge> gen =
-                new BarabasiAlbertForestGenerator<>(1, treeSize, rng);
+                new BarabasiAlbertForestGenerator<>(1, treeSize, RANDOM);
             forest = new DefaultUndirectedGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),
                 false);
@@ -125,8 +125,8 @@ public class TreeDynamicConnectivityPerformanceTest
 
             firstSet = gen(0, treeSize, 5);
             secondSet = gen(treeSize, 2 * treeSize, 5);
-            connectNode1 = rng.nextInt(treeSize);
-            connectNode2 = rng.nextInt(treeSize) + treeSize;
+            connectNode1 = RANDOM.nextInt(treeSize);
+            connectNode2 = RANDOM.nextInt(treeSize) + treeSize;
         }
 
         private Set<Integer> gen(int from, int to, int num)
@@ -134,7 +134,7 @@ public class TreeDynamicConnectivityPerformanceTest
             Set<Integer> res = new HashSet<>();
             int dist = to - from;
             while (res.size() < num) {
-                res.add(rng.nextInt(dist) + from);
+                res.add(RANDOM.nextInt(dist) + from);
             }
             return res;
         }

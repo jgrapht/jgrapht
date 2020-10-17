@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2018-2020, by Semen Chudakov and Contributors.
-d *
+ *
  * JGraphT : a free Java graph-theory library
  *
  * See the CONTRIBUTORS.md file distributed with this work for additional
@@ -38,11 +38,11 @@ import static org.junit.Assert.assertNull;
 public class DeltaSteppingShortestPathTest
 {
 
-    private static final String s = "s";
-    private static final String t = "t";
-    private static final String y = "y";
-    private static final String x = "x";
-    private static final String z = "z";
+    private static final String S = "S";
+    private static final String T = "T";
+    private static final String Y = "Y";
+    private static final String X = "X";
+    private static final String Z = "Z";
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -52,9 +52,9 @@ public class DeltaSteppingShortestPathTest
     {
         Graph<String, DefaultWeightedEdge> graph =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        graph.addVertex(s);
+        graph.addVertex(S);
 
-        new DeltaSteppingShortestPath<>(graph).getPaths(s);
+        new DeltaSteppingShortestPath<>(graph).getPaths(S);
     }
 
     @Test
@@ -62,11 +62,11 @@ public class DeltaSteppingShortestPathTest
     {
         Graph<String, DefaultWeightedEdge> graph =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(s, t));
-        Graphs.addEdge(graph, s, t, -10.0);
+        Graphs.addAllVertices(graph, Arrays.asList(S, T));
+        Graphs.addEdge(graph, S, T, -10.0);
 
         exception.expect(IllegalArgumentException.class);
-        new DeltaSteppingShortestPath<>(graph).getPaths(s);
+        new DeltaSteppingShortestPath<>(graph).getPaths(S);
     }
 
     @Test
@@ -75,19 +75,19 @@ public class DeltaSteppingShortestPathTest
         Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
         assertEquals(
-            Arrays.asList(s), new DeltaSteppingShortestPath<>(graph).getPath(s, s).getVertexList());
+            Arrays.asList(S), new DeltaSteppingShortestPath<>(graph).getPath(S, S).getVertexList());
         assertEquals(
-            Arrays.asList(s, y, t),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, t).getVertexList());
+            Arrays.asList(S, Y, T),
+            new DeltaSteppingShortestPath<>(graph).getPath(S, T).getVertexList());
         assertEquals(
-            Arrays.asList(s, y, t, x),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, x).getVertexList());
+            Arrays.asList(S, Y, T, X),
+            new DeltaSteppingShortestPath<>(graph).getPath(S, X).getVertexList());
         assertEquals(
-            Arrays.asList(s, y),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, y).getVertexList());
+            Arrays.asList(S, Y),
+            new DeltaSteppingShortestPath<>(graph).getPath(S, Y).getVertexList());
         assertEquals(
-            Arrays.asList(s, y, z),
-            new DeltaSteppingShortestPath<>(graph).getPath(s, z).getVertexList());
+            Arrays.asList(S, Y, Z),
+            new DeltaSteppingShortestPath<>(graph).getPath(S, Z).getVertexList());
     }
 
     @Test
@@ -96,40 +96,40 @@ public class DeltaSteppingShortestPathTest
         Graph<String, DefaultWeightedEdge> graph = generateSimpleGraph();
 
         ShortestPathAlgorithm.SingleSourcePaths<String, DefaultWeightedEdge> paths1 =
-            new DeltaSteppingShortestPath<>(graph, 0.999).getPaths(s);
+            new DeltaSteppingShortestPath<>(graph, 0.999).getPaths(S);
 
-        assertEquals(0d, paths1.getWeight(s), 1e-9);
-        assertEquals(8d, paths1.getWeight(t), 1e-9);
-        assertEquals(5d, paths1.getWeight(y), 1e-9);
-        assertEquals(9d, paths1.getWeight(x), 1e-9);
-        assertEquals(7d, paths1.getWeight(z), 1e-9);
+        assertEquals(0d, paths1.getWeight(S), 1e-9);
+        assertEquals(8d, paths1.getWeight(T), 1e-9);
+        assertEquals(5d, paths1.getWeight(Y), 1e-9);
+        assertEquals(9d, paths1.getWeight(X), 1e-9);
+        assertEquals(7d, paths1.getWeight(Z), 1e-9);
 
         ShortestPathAlgorithm.SingleSourcePaths<String, DefaultWeightedEdge> paths2 =
-            new DeltaSteppingShortestPath<>(graph, 5.0).getPaths(s);
+            new DeltaSteppingShortestPath<>(graph, 5.0).getPaths(S);
 
-        assertEquals(0d, paths2.getWeight(s), 1e-9);
-        assertEquals(8d, paths2.getWeight(t), 1e-9);
-        assertEquals(5d, paths2.getWeight(y), 1e-9);
-        assertEquals(9d, paths2.getWeight(x), 1e-9);
-        assertEquals(7d, paths2.getWeight(z), 1e-9);
+        assertEquals(0d, paths2.getWeight(S), 1e-9);
+        assertEquals(8d, paths2.getWeight(T), 1e-9);
+        assertEquals(5d, paths2.getWeight(Y), 1e-9);
+        assertEquals(9d, paths2.getWeight(X), 1e-9);
+        assertEquals(7d, paths2.getWeight(Z), 1e-9);
 
         ShortestPathAlgorithm.SingleSourcePaths<String, DefaultWeightedEdge> path3 =
-            new DeltaSteppingShortestPath<>(graph, 11.0).getPaths(s);
+            new DeltaSteppingShortestPath<>(graph, 11.0).getPaths(S);
 
-        assertEquals(0d, path3.getWeight(s), 1e-9);
-        assertEquals(8d, path3.getWeight(t), 1e-9);
-        assertEquals(5d, path3.getWeight(y), 1e-9);
-        assertEquals(9d, path3.getWeight(x), 1e-9);
-        assertEquals(7d, path3.getWeight(z), 1e-9);
+        assertEquals(0d, path3.getWeight(S), 1e-9);
+        assertEquals(8d, path3.getWeight(T), 1e-9);
+        assertEquals(5d, path3.getWeight(Y), 1e-9);
+        assertEquals(9d, path3.getWeight(X), 1e-9);
+        assertEquals(7d, path3.getWeight(Z), 1e-9);
 
         ShortestPathAlgorithm.SingleSourcePaths<String, DefaultWeightedEdge> path4 =
-            new DeltaSteppingShortestPath<>(graph).getPaths(s);
+            new DeltaSteppingShortestPath<>(graph).getPaths(S);
 
-        assertEquals(0d, path4.getWeight(s), 1e-9);
-        assertEquals(8d, path4.getWeight(t), 1e-9);
-        assertEquals(5d, path4.getWeight(y), 1e-9);
-        assertEquals(9d, path4.getWeight(x), 1e-9);
-        assertEquals(7d, path4.getWeight(z), 1e-9);
+        assertEquals(0d, path4.getWeight(S), 1e-9);
+        assertEquals(8d, path4.getWeight(T), 1e-9);
+        assertEquals(5d, path4.getWeight(Y), 1e-9);
+        assertEquals(9d, path4.getWeight(X), 1e-9);
+        assertEquals(7d, path4.getWeight(Z), 1e-9);
     }
 
     @Test
@@ -162,22 +162,22 @@ public class DeltaSteppingShortestPathTest
         Graph<String, DefaultWeightedEdge> graph =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
-        Graphs.addAllVertices(graph, Arrays.asList(s, t, y, x, z));
+        Graphs.addAllVertices(graph, Arrays.asList(S, T, Y, X, Z));
 
-        Graphs.addEdge(graph, s, t, 10);
-        Graphs.addEdge(graph, s, y, 5);
+        Graphs.addEdge(graph, S, T, 10);
+        Graphs.addEdge(graph, S, Y, 5);
 
-        Graphs.addEdge(graph, t, y, 2);
-        Graphs.addEdge(graph, t, x, 1);
+        Graphs.addEdge(graph, T, Y, 2);
+        Graphs.addEdge(graph, T, X, 1);
 
-        Graphs.addEdge(graph, y, t, 3);
-        Graphs.addEdge(graph, y, z, 2);
-        Graphs.addEdge(graph, y, x, 9);
+        Graphs.addEdge(graph, Y, T, 3);
+        Graphs.addEdge(graph, Y, Z, 2);
+        Graphs.addEdge(graph, Y, X, 9);
 
-        Graphs.addEdge(graph, x, z, 4);
+        Graphs.addEdge(graph, X, Z, 4);
 
-        Graphs.addEdge(graph, z, x, 6);
-        Graphs.addEdge(graph, z, s, 7);
+        Graphs.addEdge(graph, Z, X, 6);
+        Graphs.addEdge(graph, Z, S, 7);
 
         return graph;
     }
