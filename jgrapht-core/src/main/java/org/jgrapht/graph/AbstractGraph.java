@@ -222,10 +222,8 @@ public abstract class AbstractGraph<V, E>
 
             // see http://en.wikipedia.org/wiki/Pairing_function (VK);
             int pairing = ((source + target) * (source + target + 1) / 2) + target;
-            part = (27 * part) + pairing;
-
-            long weight = (long) getEdgeWeight(e);
-            part = (27 * part) + (int) (weight ^ (weight >>> 32));
+            part = (31 * part) + pairing;
+            part = (31 * part) + Double.hashCode(getEdgeWeight(e)); 
 
             hash += part;
         }
@@ -275,7 +273,7 @@ public abstract class AbstractGraph<V, E>
                 return false;
             }
 
-            if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(e)) > 10e-7) {
+            if (Double.compare(getEdgeWeight(e), g.getEdgeWeight(e)) != 0) { 
                 return false;
             }
         }

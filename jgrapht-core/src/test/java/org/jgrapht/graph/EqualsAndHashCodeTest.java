@@ -18,12 +18,14 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.junit.*;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class EqualsAndHashCodeTest
@@ -274,6 +276,30 @@ public class EqualsAndHashCodeTest
         assertFalse(g4.equals(g5));
     }
 
+    @Test
+    public void testHashcodeEquals()
+    {
+        Graph<Integer,
+            Integer> g = GraphTypeBuilder
+                .<Integer, Integer> directed().weighted(true)
+                .buildGraph();
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addEdge(0, 1, 1);
+        g.setEdgeWeight(1, 2 + 1e-08);
+
+        Graph<Integer,
+            Integer> h = GraphTypeBuilder
+            .<Integer, Integer> directed().weighted(true)
+            .buildGraph();
+        h.addVertex(0);
+        h.addVertex(1);
+        h.addEdge(0, 1, 1);
+        h.setEdgeWeight(1, 2 - 1e-08);
+
+        assertNotEquals(g, h);
+    }
+    
     /**
      * Simple custom edge class.
      */
