@@ -126,7 +126,7 @@ public class BarabasiAlbertForestGenerator<V, E>
         }
 
         assert target.vertexSet().isEmpty();
-        assert target.edgeSet().isEmpty();
+        assert target.numberOfEdges() == 0;
 
         List<V> nodes = new ArrayList<>();
 

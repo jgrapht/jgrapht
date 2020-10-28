@@ -177,7 +177,7 @@ public class GraphMeasurer<V, E>
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             V u = entry.getKey();
 
-            for (V v : graph.vertexSet())
+            for (V v : graph.vertexSetIterable())
                 if (comp.compare(shortestPathAlgorithm.getPathWeight(u, v), entry.getValue()) == 0
                     && comp.compare(entry.getValue(), eccentricityMap.get(v)) == 0)
                     graphPseudoPeriphery.add(entry.getKey());
@@ -210,9 +210,9 @@ public class GraphMeasurer<V, E>
             for (int i = 0; i < vertices.size(); i++)
                 eccentricityMap.put(vertices.get(i), eccentricityVector[i]);
         } else {
-            for (V u : graph.vertexSet()) {
+            for (V u : graph.vertexSetIterable()) {
                 double eccentricity = 0;
-                for (V v : graph.vertexSet())
+                for (V v : graph.vertexSetIterable())
                     eccentricity =
                         Double.max(eccentricity, shortestPathAlgorithm.getPathWeight(u, v));
                 eccentricityMap.put(u, eccentricity);
@@ -224,7 +224,7 @@ public class GraphMeasurer<V, E>
             diameter = 0;
             radius = 0;
         } else {
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 diameter = Math.max(diameter, eccentricityMap.get(v));
                 radius = Math.min(radius, eccentricityMap.get(v));
             }

@@ -144,7 +144,7 @@ public class PathGrowingWeightedMatching<V, E>
     private Set<V> initVisibleVertices()
     {
         Set<V> visibleVertex = new HashSet<>();
-        for (E e : graph.edgeSet()) {
+        for (E e : graph.edgeSetIterable()) {
             V s = graph.getEdgeSource(e);
             V t = graph.getEdgeTarget(e);
             if (!s.equals(t)) {
@@ -294,7 +294,7 @@ public class PathGrowingWeightedMatching<V, E>
         }
 
         // extend matching to maximal cardinality (out of edges with positive weight)
-        for (E e : graph.edgeSet()) {
+        for (E e : graph.edgeSetIterable()) {
             double edgeWeight = graph.getEdgeWeight(e);
             if (comparator.compare(edgeWeight, 0d) <= 0) {
                 // ignore zero or negative weight

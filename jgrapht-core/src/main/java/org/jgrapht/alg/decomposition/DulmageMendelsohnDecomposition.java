@@ -267,7 +267,7 @@ public class DulmageMendelsohnDecomposition<V, E>
         graph.vertexSet().forEach((v) -> {
             builder.addVertex(v);
         });
-        graph.edgeSet().forEach((e) -> {
+        graph.edgeSetIterable().forEach((e) -> {
             V v1 = graph.getEdgeSource(e);
             V v2 = graph.getEdgeTarget(e);
             if (partition1.contains(v1)) {
@@ -289,7 +289,7 @@ public class DulmageMendelsohnDecomposition<V, E>
     {
         GraphBuilder<E, DefaultEdge, ? extends DefaultDirectedGraph<E, DefaultEdge>> graphHBuilder =
             DefaultDirectedGraph.createBuilder(DefaultEdge.class);
-        for (E e : graph.edgeSet()) {
+        for (E e : graph.edgeSetIterable()) {
             V v1 = graph.getEdgeSource(e);
             V v2 = graph.getEdgeTarget(e);
             if (subset.contains(v1) && subset.contains(v2)) {

@@ -178,7 +178,7 @@ public class FRLayoutAlgorithm2D<V, E>
             init(graph, model);
 
             // make sure all vertices have coordinates
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 Point2D vPos = model.get(v);
                 if (vPos == null) {
                     model.put(v, Point2D.of(minX, minY));
@@ -188,7 +188,7 @@ public class FRLayoutAlgorithm2D<V, E>
             // assign random initial positions
             MapLayoutModel2D<V> randomModel = new MapLayoutModel2D<>(drawableArea);
             new RandomLayoutAlgorithm2D<V, E>(rng).layout(graph, randomModel);
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 model.put(v, randomModel.get(v));
             }
         }
@@ -220,7 +220,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
             // limit maximum displacement by the temperature
             // and prevent from being displaced outside frame
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 // limit by temperature
                 Point2D vDisp = Points
                     .add(repulsiveDisp.get(v), attractiveDisp.getOrDefault(v, Point2D.of(0d, 0d)));
@@ -276,11 +276,11 @@ public class FRLayoutAlgorithm2D<V, E>
         Point2D origin =
             Point2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
         Map<V, Point2D> disp = new HashMap<>();
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             Point2D vPos = Points.subtract(model.get(v), origin);
             Point2D vDisp = Point2D.of(0d, 0d);
 
-            for (V u : graph.vertexSet()) {
+            for (V u : graph.vertexSetIterable()) {
                 if (v == u) {
                     continue;
                 }
@@ -314,7 +314,7 @@ public class FRLayoutAlgorithm2D<V, E>
         Point2D origin =
             Point2D.of(model.getDrawableArea().getMinX(), model.getDrawableArea().getMinY());
         Map<V, Point2D> disp = new HashMap<>();
-        for (E e : graph.edgeSet()) {
+        for (E e : graph.edgeSetIterable()) {
             V v = graph.getEdgeSource(e);
             V u = graph.getEdgeTarget(e);
             Point2D vPos = Points.subtract(model.get(v), origin);

@@ -152,7 +152,7 @@ public class GreedyMultiplicativeSpanner<V, E>
                 .<V, E> undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
                 .edgeSupplier(graph.getEdgeSupplier()).buildGraph();
             touchedVertices = new ArrayDeque<>(graph.vertexSet().size());
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 spanner.addVertex(v);
                 touchedVertices.push(v);
             }
@@ -225,7 +225,7 @@ public class GreedyMultiplicativeSpanner<V, E>
         public WeightedSpannerAlgorithm()
         {
             this.spanner = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 spanner.addVertex(v);
             }
             this.heap = new PairingHeap<>();

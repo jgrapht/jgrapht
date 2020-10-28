@@ -54,7 +54,7 @@ class VF2GraphMappingIterator<V, E>
             Graph<V, E> g1 = ordering1.getGraph(), g2 = ordering2.getGraph();
 
             if ((g1.vertexSet().size() != g2.vertexSet().size())
-                || (g1.edgeSet().size() != g2.edgeSet().size()))
+                || (g1.numberOfEdges() != g2.numberOfEdges()))
             {
                 return null;
             }

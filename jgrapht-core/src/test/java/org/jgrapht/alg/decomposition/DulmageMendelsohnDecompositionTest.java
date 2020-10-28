@@ -121,7 +121,7 @@ public class DulmageMendelsohnDecompositionTest
                 partition2PerfectlyMatched).getMatching();
         assertTrue("Core of decomposition must perfectly match", perfectMatching.isPerfect());
         // Do all the vertices in the graph appear in the decomposition, and only in one part of it?
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             if (allPerfectlyMatched.contains(v)) {
                 assertFalse(
                     "Vertex appears in multiple sets in decomposition",

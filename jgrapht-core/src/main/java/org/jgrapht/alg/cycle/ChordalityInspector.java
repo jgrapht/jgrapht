@@ -282,7 +282,7 @@ public class ChordalityInspector<V, E>
         List<V> cycle = new ArrayList<>(Arrays.asList(a, b, c));
         Map<V, Boolean> visited =
             CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        for (V vertex : graph.vertexSet()) {
+        for (V vertex : graph.vertexSetIterable()) {
             visited.put(vertex, false);
         }
         visited.put(a, true);

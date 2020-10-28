@@ -251,7 +251,7 @@ public class Graph6Sparse6ExporterTest
             degeeVectorOrig[orig.degreeOf(v)]++;
 
         int[] degeeVectorG = new int[g.edgeSet().size()];
-        for (V v : g.vertexSet())
+        for (V v : g.vertexSetIterable())
             degeeVectorG[g.degreeOf(v)]++;
 
         assertTrue(Arrays.equals(degeeVectorOrig, degeeVectorG));

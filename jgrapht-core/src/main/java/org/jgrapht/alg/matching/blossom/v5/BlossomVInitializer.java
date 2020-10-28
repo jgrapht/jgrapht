@@ -205,7 +205,7 @@ class BlossomVInitializer<V, E>
         HashMap<V, BlossomVNode> vertexMap = CollectionUtil.newHashMapWithExpectedSize(nodeNum);
         int i = 0;
         // maps nodes
-        for (V vertex : graph.vertexSet()) {
+        for (V vertex : graph.vertexSetIterable()) {
             nodes[i] = new BlossomVNode(i);
             graphVertices.add(vertex);
             vertexMap.put(vertex, nodes[i]);

@@ -94,7 +94,7 @@ public class SaturationDegreeColoring<V, E>
          */
         int maxDegree = 0;
         Map<V, Integer> degree = CollectionUtil.newHashMapWithExpectedSize(n);
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);
             maxDegree = Math.max(maxDegree, d);
@@ -107,7 +107,7 @@ public class SaturationDegreeColoring<V, E>
          */
         Heap heap = new Heap(n, new DSaturComparator(saturation, degree));
         Map<V, HeapHandle> handles = new HashMap<>();
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             handles.put(v, new HeapHandle(v));
         }
         heap

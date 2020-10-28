@@ -88,7 +88,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
             }
         }
 
-        for (E e : graph.edgeSet()) {
+        for (E e : graph.edgeSetIterable()) {
             V s = graph.getEdgeSource(e);
             Graph<V, E> sComponent = vertexToComponent.get(s);
 

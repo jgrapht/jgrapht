@@ -92,7 +92,7 @@ public class GabowStrongConnectivityInspector<V, E>
         c = graph.vertexSet().size();
         vertexToVertexNumber = CollectionUtil.newHashMapWithExpectedSize(c);
 
-        for (V vertex : graph.vertexSet()) {
+        for (V vertex : graph.vertexSetIterable()) {
             vertexToVertexNumber.put(vertex, new VertexNumber<>(vertex, 0));
         }
 

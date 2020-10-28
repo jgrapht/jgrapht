@@ -151,7 +151,7 @@ public class ClosenessCentrality<V, E>
 
         // test if we can use Dijkstra
         boolean noNegativeWeights = true;
-        for (E e : g.edgeSet()) {
+        for (E e : g.edgeSetIterable()) {
             double w = g.getEdgeWeight(e);
             if (w < 0.0) {
                 noNegativeWeights = false;
@@ -181,12 +181,12 @@ public class ClosenessCentrality<V, E>
         ShortestPathAlgorithm<V, E> alg = getShortestPathAlgorithm();
 
         // compute shortest paths
-        int n = graph.vertexSet().size();
-        for (V v : graph.vertexSet()) {
+        long n = graph.numberOfVertices();
+        for (V v : graph.vertexSetIterable()) {
             double sum = 0d;
 
             SingleSourcePaths<V, E> paths = alg.getPaths(v);
-            for (V u : graph.vertexSet()) {
+            for (V u : graph.vertexSetIterable()) {
                 if (!u.equals(v)) {
                     sum += paths.getWeight(u);
                 }

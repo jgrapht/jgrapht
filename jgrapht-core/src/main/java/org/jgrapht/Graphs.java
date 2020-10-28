@@ -272,7 +272,7 @@ public abstract class Graphs
     {
         List<V> neighbors = new ArrayList<>();
 
-        for (E e : g.edgesOf(vertex)) {
+        for (E e : g.edgesOfIterable(vertex)) {
             neighbors.add(getOppositeVertex(g, e, vertex));
         }
 
@@ -292,7 +292,7 @@ public abstract class Graphs
     {
         Set<V> neighbors = new LinkedHashSet<>();
 
-        for (E e : g.edgesOf(vertex)) {
+        for (E e : g.edgesOfIterable(vertex)) {
             neighbors.add(Graphs.getOppositeVertex(g, e, vertex));
         }
 
@@ -316,9 +316,8 @@ public abstract class Graphs
     public static <V, E> List<V> predecessorListOf(Graph<V, E> g, V vertex)
     {
         List<V> predecessors = new ArrayList<>();
-        Set<? extends E> edges = g.incomingEdgesOf(vertex);
 
-        for (E e : edges) {
+        for (E e : g.incomingEdgesOfIterable(vertex)) {
             predecessors.add(getOppositeVertex(g, e, vertex));
         }
 
@@ -342,9 +341,8 @@ public abstract class Graphs
     public static <V, E> List<V> successorListOf(Graph<V, E> g, V vertex)
     {
         List<V> successors = new ArrayList<>();
-        Set<? extends E> edges = g.outgoingEdgesOf(vertex);
 
-        for (E e : edges) {
+        for (E e : g.outgoingEdgesOfIterable(vertex)) {
             successors.add(getOppositeVertex(g, e, vertex));
         }
 

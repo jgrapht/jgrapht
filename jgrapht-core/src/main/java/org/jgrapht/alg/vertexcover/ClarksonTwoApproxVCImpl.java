@@ -87,7 +87,7 @@ public class ClarksonTwoApproxVCImpl<V, E>
                 v -> vertexEncapsulationMap
                     .put(v, new RatioVertex<V>(vertexCounter++, v, vertexWeightMap.get(v))));
 
-        for (E e : graph.edgeSet()) {
+        for (E e : graph.edgeSetIterable()) {
             V u = graph.getEdgeSource(e);
             RatioVertex<V> ux = vertexEncapsulationMap.get(u);
             V v = graph.getEdgeTarget(e);

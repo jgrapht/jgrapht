@@ -61,7 +61,7 @@ public interface AStarAdmissibleHeuristic<V>
             throw new IllegalArgumentException("Graph cannot be null!");
         }
         for (V targetVertex : graph.vertexSet()) {
-            for (E e : graph.edgeSet()) {
+            for (E e : graph.edgeSetIterable()) {
                 double weight = graph.getEdgeWeight(e);
                 V edgeSource = graph.getEdgeSource(e);
                 V edgeTarget = graph.getEdgeTarget(e);

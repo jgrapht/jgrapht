@@ -86,9 +86,9 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
         Graph<V, E> sg = new AsSubgraph<>(graph, null, null);
 
         // while E' is non-empty
-        while (!sg.edgeSet().isEmpty()) {
+        while (sg.numberOfEdges() != 0) {
             // let (u,v) be an arbitrary edge of E'
-            E e = sg.edgeSet().iterator().next();
+            E e = sg.edgeSetIterable().iterator().next();
 
             // C <-- C U {u,v}
             V u = graph.getEdgeSource(e);

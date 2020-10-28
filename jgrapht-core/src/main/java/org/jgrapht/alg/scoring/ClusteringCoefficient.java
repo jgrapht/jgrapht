@@ -130,7 +130,7 @@ public class ClusteringCoefficient<V, E>
      */
     public double getAverageClusteringCoefficient()
     {
-        if (graph.vertexSet().size() == 0)
+        if (graph.numberOfVertices() == 0)
             return 0;
 
         if (!computedAverage) {
@@ -141,7 +141,7 @@ public class ClusteringCoefficient<V, E>
             for (double value : scores.values())
                 averageClusteringCoefficient += value;
 
-            averageClusteringCoefficient /= graph.vertexSet().size();
+            averageClusteringCoefficient /= graph.numberOfVertices();
         }
 
         return averageClusteringCoefficient;
@@ -153,7 +153,7 @@ public class ClusteringCoefficient<V, E>
         computed = true;
         double numberTriplets = 0;
 
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             if (graph.getType().isUndirected()) {
                 numberTriplets += 1.0 * graph.degreeOf(v) * (graph.degreeOf(v) - 1) / 2;
             } else {
@@ -196,7 +196,7 @@ public class ClusteringCoefficient<V, E>
 
         fullyComputedMap = true;
 
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             if (scores.containsKey(v)) {
                 continue;
             }

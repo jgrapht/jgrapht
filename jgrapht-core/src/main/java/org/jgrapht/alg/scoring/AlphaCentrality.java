@@ -254,7 +254,7 @@ public final class AlphaCentrality<V, E>
         int totalVertices = g.vertexSet().size();
 
         double initScore = 1.0d / totalVertices;
-        for (V v : g.vertexSet()) {
+        for (V v : g.vertexSetIterable()) {
             scores.put(v, initScore);
         }
 
@@ -265,10 +265,10 @@ public final class AlphaCentrality<V, E>
         while (maxIterations > 0 && maxChange >= tolerance) {
             // compute next iteration scores
             maxChange = 0d;
-            for (V v : g.vertexSet()) {
+            for (V v : g.vertexSetIterable()) {
                 double contribution = 0d;
 
-                for (E e : g.incomingEdgesOf(v)) {
+                for (E e : g.incomingEdgesOfIterable(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     contribution += dampingFactor * scores.get(w) * g.getEdgeWeight(e);
                 }

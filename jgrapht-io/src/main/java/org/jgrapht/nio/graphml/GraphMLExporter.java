@@ -464,7 +464,7 @@ public class GraphMLExporter<V, E>
         throws SAXException
     {
         // Add all the vertices as <node> elements...
-        for (V v : g.vertexSet()) {
+        for (V v : g.vertexSetIterable()) {
             // <node>
             AttributesImpl attr = new AttributesImpl();
             attr.addAttribute("", "", "id", "CDATA", getVertexId(v));

@@ -76,7 +76,7 @@ public class RandomLayoutAlgorithm2D<V, E>
         double width = drawableArea.getWidth();
         double height = drawableArea.getHeight();
 
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             double x = rng.nextDouble() * width;
             double y = rng.nextDouble() * height;
             model.put(v, Point2D.of(minX + x, minY + y));

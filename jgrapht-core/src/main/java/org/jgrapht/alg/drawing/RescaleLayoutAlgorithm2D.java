@@ -70,7 +70,7 @@ public class RescaleLayoutAlgorithm2D<V, E>
             .stream(model.spliterator(), false).mapToDouble(e -> e.getValue().getX()).average();
         if (optMeanX.isPresent()) {
             double meanX = optMeanX.getAsDouble();
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 Point2D p = model.get(v);
                 double newX = p.getX() - meanX;
                 Point2D newP = Point2D.of(newX, p.getY());
@@ -83,7 +83,7 @@ public class RescaleLayoutAlgorithm2D<V, E>
             .stream(model.spliterator(), false).mapToDouble(e -> e.getValue().getY()).average();
         if (optMeanY.isPresent()) {
             double meanY = optMeanY.getAsDouble();
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 Point2D p = model.get(v);
                 double newY = p.getY() - meanY;
                 Point2D newP = Point2D.of(p.getX(), newY);
@@ -95,7 +95,7 @@ public class RescaleLayoutAlgorithm2D<V, E>
         double allMax = Math.max(maxX, maxY);
 
         if (allMax > 0d) {
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 Point2D p = model.get(v);
                 double newX = oldCenterX + p.getX() * scale / allMax;
                 Point2D newP = Point2D.of(newX, p.getY());
@@ -104,7 +104,7 @@ public class RescaleLayoutAlgorithm2D<V, E>
         }
 
         if (allMax > 0d) {
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 Point2D p = model.get(v);
                 double newY = oldCenterY + p.getY() * scale / allMax;
                 Point2D newP = Point2D.of(p.getX(), newY);

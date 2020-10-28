@@ -407,10 +407,10 @@ public class ColorRefinementIsomorphismInspector<V, E>
                     DistinctGraphObject<E, V, E>> forGraphType(graph.getType())
                 .buildGraph();
 
-        for (V vertex : graph.vertexSet()) {
+        for (V vertex : graph.vertexSetIterable()) {
             transformedGraph.addVertex(new DistinctGraphObject<>(vertex, graph));
         }
-        for (E edge : graph.edgeSet()) {
+        for (E edge : graph.edgeSetIterable()) {
             transformedGraph
                 .addEdge(
                     new DistinctGraphObject<>(graph.getEdgeSource(edge), graph),

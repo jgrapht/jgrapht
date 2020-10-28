@@ -132,7 +132,7 @@ public class IsomorphismTestUtil
         SimpleGraph<V, DefaultEdge> isoGraph =
             new SimpleGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier(), false);
 
-        for (V v : graph.vertexSet())
+        for (V v : graph.vertexSetIterable())
             isoGraph.addVertex(mapping.get(v));
 
         for (DefaultEdge edge : graph.edgeSet()) {

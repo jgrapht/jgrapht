@@ -102,7 +102,7 @@ public class LineGraphConverter<V, E, EE>
     {
         Graphs.addAllVertices(target, graph.edgeSet());
         if (graph.getType().isDirected()) {
-            for (V vertex : graph.vertexSet()) {
+            for (V vertex : graph.vertexSetIterable()) {
                 for (E e1 : graph.incomingEdgesOf(vertex)) {
                     for (E e2 : graph.outgoingEdgesOf(vertex)) {
                         EE edge = target.addEdge(e1, e2);
@@ -112,7 +112,7 @@ public class LineGraphConverter<V, E, EE>
                 }
             }
         } else { // undirected graph
-            for (V v : graph.vertexSet()) {
+            for (V v : graph.vertexSetIterable()) {
                 for (E e1 : graph.edgesOf(v)) {
                     for (E e2 : graph.edgesOf(v)) {
                         if (e1 != e2) {

@@ -173,7 +173,7 @@ public class JohnsonSimpleCycles<V, E>
         // algorithm and pretend that vertices
         // with an index smaller than startIndex
         // do not exist.
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             int vI = toI(v);
             if (vI < startIndex) {
                 continue;

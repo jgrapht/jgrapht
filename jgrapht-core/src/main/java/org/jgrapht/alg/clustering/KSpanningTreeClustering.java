@@ -98,7 +98,7 @@ public class KSpanningTreeClustering<V, E>
          * Transform and return result
          */
         Map<V, Set<V>> clusterMap = new LinkedHashMap<>();
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             V rv = forest.find(v);
             Set<V> cluster = clusterMap.get(rv);
             if (cluster == null) {

@@ -113,7 +113,7 @@ public final class EdmondsKarpMFImpl<V, E>
         if (epsilon <= 0) {
             throw new IllegalArgumentException("invalid epsilon (must be positive)");
         }
-        for (E e : network.edgeSet()) {
+        for (E e : network.edgeSetIterable()) {
             if (network.getEdgeWeight(e) < -epsilon) {
                 throw new IllegalArgumentException("invalid capacity (must be non-negative)");
             }
@@ -189,7 +189,7 @@ public final class EdmondsKarpMFImpl<V, E>
      */
     private void breadthFirstSearch()
     {
-        for (V v : network.vertexSet()) {
+        for (V v : network.vertexSetIterable()) {
             getVertexExtension(v).visited = false;
             getVertexExtension(v).lastArcs = null;
         }

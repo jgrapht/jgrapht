@@ -145,7 +145,7 @@ public class LemonExporter<V, E>
     {
         out.println("@nodes");
         out.println("label");
-        for (V v : g.vertexSet()) {
+        for (V v : g.vertexSetIterable()) {
             String id = getVertexId(v);
             String quotedId = prepareId(id);
             out.println(quotedId);

@@ -158,7 +158,7 @@ public class KolmogorovWeightedMatching<V, E>
         for (V v : initialGraph.vertexSet()) {
             duplicatedVertices.put(v, graphCopy.addVertex());
         }
-        for (E edge : initialGraph.edgeSet()) {
+        for (E edge : initialGraph.edgeSetIterable()) {
             Graphs
                 .addEdgeWithVertices(
                     graphCopy, duplicatedVertices.get(initialGraph.getEdgeSource(edge)),

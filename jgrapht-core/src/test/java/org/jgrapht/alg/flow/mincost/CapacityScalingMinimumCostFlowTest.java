@@ -1465,7 +1465,7 @@ public class CapacityScalingMinimumCostFlowTest
     {
         Graph<V, E> graph = problem.getGraph();
         // check supply constraints
-        for (V vertex : graph.vertexSet()) {
+        for (V vertex : graph.vertexSetIterable()) {
             int supply = problem.getNodeSupply().apply(vertex);
             int flowIn = 0;
             for (E edge : graph.incomingEdgesOf(vertex)) {

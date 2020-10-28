@@ -101,7 +101,7 @@ public class TopologicalOrderIterator<V, E>
 
         // count in-degrees
         this.inDegreeMap = new HashMap<>();
-        for (V v : graph.vertexSet()) {
+        for (V v : graph.vertexSetIterable()) {
             int d = 0;
             for (E e : graph.incomingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
