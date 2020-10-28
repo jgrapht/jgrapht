@@ -5,5 +5,9 @@ module org.jgrapht.opt
     
     requires transitive org.jgrapht.core;
     requires transitive it.unimi.dsi.fastutil;
+	requires webgraph.big;
+	requires com.google.common;
+	requires dsiutils;
+	requires webgraph;
    
 }
