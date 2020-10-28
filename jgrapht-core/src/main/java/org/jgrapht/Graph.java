@@ -330,7 +330,16 @@ public interface Graph<V, E>
      * 
      * @return the number of edges.
      */
-    default long numberOfEdges() { 
+    default int numberOfEdges() { 
+        return edgeSet().size();
+    }
+    
+    /**
+     * Return the number of edges in the graph as a long.
+     * 
+     * @return the number of edges.
+     */
+    default long numberOfEdgesAsLong() { 
         return edgeSet().size();
     }
     
@@ -468,7 +477,7 @@ public interface Graph<V, E>
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
      */
-    default Set<E> incomingEdgesOfIterable(V vertex) { 
+    default Iterable<E> incomingEdgesOfIterable(V vertex) { 
         return incomingEdgesOf(vertex);
     }
 
@@ -542,7 +551,7 @@ public interface Graph<V, E>
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
      */
-    default Set<E> outgoingEdgesOfIterable(V vertex) { 
+    default Iterable<E> outgoingEdgesOfIterable(V vertex) { 
         return outgoingEdgesOf(vertex);
     }
 
@@ -677,7 +686,16 @@ public interface Graph<V, E>
      * 
      * @return the number of vertices
      */
-    default long numberOfVertices() { 
+    default int numberOfVertices() { 
+        return vertexSet().size();
+    }
+    
+    /**
+     * Return the number of vertices in the graph as a long.
+     * 
+     * @return the number of vertices
+     */
+    default long numberOfVerticesAsLong() { 
         return vertexSet().size();
     }
 
