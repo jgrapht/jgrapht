@@ -28,6 +28,13 @@ package org.jgrapht;
  */
 public interface GraphIterables<V, E> {
 
+    /**
+     * Get the underlying graph.
+     * 
+     * @return the underlying graph
+     */
+    Graph<V,E> getGraph();
+    
 	/**
 	 * Returns an iterable over the edges of the graph.
 	 * 
@@ -38,14 +45,18 @@ public interface GraphIterables<V, E> {
 	 * 
 	 * @return an iterable over the edges of the graph.
 	 */
-	Iterable<E> edges();
+	default Iterable<E> edges() { 
+	    return getGraph().edgeSet();
+	}
 
 	/**
 	 * Return the number of edges in the graph.
 	 * 
 	 * @return the number of edges.
 	 */
-	long edgeCount();
+	default long edgeCount() { 
+	    return getGraph().edgeSet().size();
+	}
 
 	/**
 	 * Returns a set of the vertices contained in this graph. The set is backed by
@@ -62,14 +73,18 @@ public interface GraphIterables<V, E> {
 	 *
 	 * @return a set view of the vertices contained in this graph.
 	 */
-	Iterable<V> vertices();
+	default Iterable<V> vertices() { 
+	    return getGraph().vertexSet();
+	}
 
 	/**
 	 * Return the number of vertices in the graph.
 	 * 
 	 * @return the number of vertices
 	 */
-	long vertexCount();
+	default long vertexCount() { 
+	    return getGraph().vertexSet().size();
+	}
 
 	/**
 	 * Returns a set of all edges touching the specified vertex. If no edges are
@@ -81,7 +96,9 @@ public interface GraphIterables<V, E> {
 	 * @throws IllegalArgumentException if vertex is not found in the graph.
 	 * @throws NullPointerException     if vertex is <code>null</code>.
 	 */
-	Iterable<E> edgesOf(V vertex);
+	default Iterable<E> edgesOf(V vertex) {
+	    return getGraph().edgesOf(vertex);
+	}
 
 	/**
 	 * Returns the degree of the specified vertex.
@@ -101,7 +118,9 @@ public interface GraphIterables<V, E> {
 	 * @throws IllegalArgumentException if vertex is not found in the graph.
 	 * @throws NullPointerException     if vertex is <code>null</code>.
 	 */
-	long degreeOf(V vertex);
+	default long degreeOf(V vertex) { 
+	    return getGraph().degreeOf(vertex);
+	}
 
 	/**
 	 * Returns a set of all edges incoming into the specified vertex.
@@ -117,7 +136,9 @@ public interface GraphIterables<V, E> {
 	 * @throws IllegalArgumentException if vertex is not found in the graph.
 	 * @throws NullPointerException     if vertex is <code>null</code>.
 	 */
-	Iterable<E> incomingEdgesOf(V vertex);
+	default Iterable<E> incomingEdgesOf(V vertex) { 
+	    return getGraph().incomingEdgesOf(vertex);
+	}
 
 	/**
 	 * Returns the "in degree" of the specified vertex.
@@ -139,7 +160,9 @@ public interface GraphIterables<V, E> {
 	 * @throws IllegalArgumentException if vertex is not found in the graph.
 	 * @throws NullPointerException     if vertex is <code>null</code>.
 	 */
-	long inDegreeOf(V vertex);
+	default long inDegreeOf(V vertex) { 
+	    return getGraph().inDegreeOf(vertex);
+	}
 
 	/**
 	 * Returns a set of all edges outgoing from the specified vertex.
@@ -155,7 +178,9 @@ public interface GraphIterables<V, E> {
 	 * @throws IllegalArgumentException if vertex is not found in the graph.
 	 * @throws NullPointerException     if vertex is <code>null</code>.
 	 */
-	Iterable<E> outgoingEdgesOf(V vertex);
+	default Iterable<E> outgoingEdgesOf(V vertex) { 
+	    return getGraph().outgoingEdgesOf(vertex);
+	}
 
 	/**
 	 * Returns the "out degree" of the specified vertex.
@@ -177,7 +202,9 @@ public interface GraphIterables<V, E> {
 	 * @throws IllegalArgumentException if vertex is not found in the graph.
 	 * @throws NullPointerException     if vertex is <code>null</code>.
 	 */
-	long outDegreeOf(V vertex);
+	default long outDegreeOf(V vertex) { 
+	    return getGraph().outDegreeOf(vertex);
+	}
 
 	/**
 	 * Returns a set of all edges connecting source vertex to target vertex if such
@@ -196,6 +223,8 @@ public interface GraphIterables<V, E> {
 	 *
 	 * @return a set of all edges connecting source vertex to target vertex.
 	 */
-	Iterable<E> allEdges(V sourceVertex, V targetVertex);
+	default Iterable<E> allEdges(V sourceVertex, V targetVertex) { 
+	    return getGraph().getAllEdges(sourceVertex, targetVertex);
+	}
 
 }

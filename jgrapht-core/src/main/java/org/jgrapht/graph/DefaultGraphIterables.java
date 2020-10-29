@@ -15,7 +15,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht;
+package org.jgrapht.graph;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphIterables;
 
 /**
  * Default implementation for the graph iterables which simply delegates to the
@@ -32,6 +35,11 @@ public class DefaultGraphIterables<V, E> implements GraphIterables<V, E> {
 
 	public DefaultGraphIterables(Graph<V, E> graph) {
 		this.graph = graph;
+	}
+	
+	@Override
+	public Graph<V,E> getGraph() { 
+	    return graph;
 	}
 
 	@Override
