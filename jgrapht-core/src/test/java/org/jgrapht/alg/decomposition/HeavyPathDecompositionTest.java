@@ -60,7 +60,7 @@ public class HeavyPathDecompositionTest
         int maxim = 0;
         HeavyPathDecomposition<V, E>.InternalState state = decomposition.getInternalState();
 
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             if (whichPath.containsKey(v)) {
                 int cnt = 0;
 

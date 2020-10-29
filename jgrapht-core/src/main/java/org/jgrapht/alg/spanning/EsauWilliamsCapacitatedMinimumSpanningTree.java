@@ -131,7 +131,7 @@ public class EsauWilliamsCapacitatedMinimumSpanningTree<V, E>
          * solution representation
          */
         int counter = 0;
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             if (v != root) {
                 labels.put(v, counter);
                 Set<V> currentPart = new HashSet<>();

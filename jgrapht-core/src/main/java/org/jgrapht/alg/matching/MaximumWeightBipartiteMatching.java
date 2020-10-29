@@ -124,7 +124,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         matchingWeight = BigDecimal.ZERO;
 
         // empty graph
-        if (graph.numberOfEdges() == 0) {
+        if (graph.iterables().edgeCount() == 0) {
             return new MatchingImpl<>(graph, matching, matchingWeight.doubleValue());
         }
 

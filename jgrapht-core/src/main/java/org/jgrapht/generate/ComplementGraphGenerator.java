@@ -81,8 +81,8 @@ public class ComplementGraphGenerator<V, E>
         Graphs.addAllVertices(target, graph.vertexSet());
 
         if (graph.getType().isDirected()) {
-            for (V u : graph.vertexSetIterable())
-                for (V v : graph.vertexSetIterable())
+            for (V u : graph.iterables().vertices())
+                for (V v : graph.iterables().vertices())
                     if (u == v)
                         continue;
                     else if (!graph.containsEdge(u, v))
@@ -99,7 +99,7 @@ public class ComplementGraphGenerator<V, E>
             }
         }
         if (generateSelfLoops && target.getType().isAllowingSelfLoops()) {
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 if (!graph.containsEdge(v, v))
                     target.addEdge(v, v);
             }

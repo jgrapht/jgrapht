@@ -61,13 +61,13 @@ public class StoerWagnerMinimumCut<V, E>
         // get a version of this graph where each vertex is wrapped with a list
         workingGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Map<V, Set<V>> vertexMap = new HashMap<>();
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             Set<V> list = new HashSet<>();
             list.add(v);
             vertexMap.put(v, list);
             workingGraph.addVertex(list);
         }
-        for (E e : graph.edgeSetIterable()) {
+        for (E e : graph.iterables().edges()) {
             if (graph.getEdgeWeight(e) < 0.0) {
                 throw new IllegalArgumentException("Negative edge weights not allowed");
             }

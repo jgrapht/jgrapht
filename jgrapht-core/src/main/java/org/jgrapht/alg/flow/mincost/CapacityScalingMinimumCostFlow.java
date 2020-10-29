@@ -309,7 +309,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
 
         // convert vertices into internal nodes
         int i = 0;
-        for (V vertex : graph.vertexSetIterable()) {
+        for (V vertex : graph.iterables().vertices()) {
             graphVertices.add(vertex);
             int supply = problem.getNodeSupply().apply(vertex);
             supplySum += supply;

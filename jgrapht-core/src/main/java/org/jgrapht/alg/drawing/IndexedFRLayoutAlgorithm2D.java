@@ -130,7 +130,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
     {
         // index all points
         FRQuadTree quadTree = new FRQuadTree(model.getDrawableArea());
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             quadTree.insert(model.get(v));
         }
 
@@ -139,7 +139,7 @@ public class IndexedFRLayoutAlgorithm2D<V, E>
 
         // compute displacement with index
         Map<V, Point2D> disp = new HashMap<>();
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             Point2D vPos = Points.subtract(model.get(v), origin);
             Point2D vDisp = Point2D.of(0d, 0d);
 

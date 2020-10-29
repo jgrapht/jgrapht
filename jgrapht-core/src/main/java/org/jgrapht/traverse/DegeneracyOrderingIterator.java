@@ -69,7 +69,7 @@ public class DegeneracyOrderingIterator<V, E>
         this.minDegree = Integer.MAX_VALUE;
         int maxDegree = 0;
         this.degrees = new HashMap<>();
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             int d = 0;
             for (E e : graph.edgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
@@ -90,7 +90,7 @@ public class DegeneracyOrderingIterator<V, E>
         for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new HashSet<>();
         }
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             buckets[degrees.get(v)].add(v);
         }
     }

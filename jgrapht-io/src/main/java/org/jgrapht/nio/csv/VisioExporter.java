@@ -77,7 +77,7 @@ public class VisioExporter<V, E>
     {
         PrintWriter out = new PrintWriter(writer);
 
-        for (V v : g.vertexSetIterable()) {
+        for (V v : g.iterables().vertices()) {
             exportVertex(out, v);
         }
 

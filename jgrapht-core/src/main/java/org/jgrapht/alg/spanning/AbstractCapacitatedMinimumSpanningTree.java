@@ -90,7 +90,7 @@ public abstract class AbstractCapacitatedMinimumSpanningTree<V, E>
         this.root = Objects.requireNonNull(root, "Root cannot be null");
         this.capacity = capacity;
         this.demands = Objects.requireNonNull(demands, "Demands cannot be null");
-        for (V vertex : graph.vertexSetIterable()) {
+        for (V vertex : graph.iterables().vertices()) {
             if (vertex != root) {
                 Double demand = demands.get(vertex);
                 if (demand == null) {

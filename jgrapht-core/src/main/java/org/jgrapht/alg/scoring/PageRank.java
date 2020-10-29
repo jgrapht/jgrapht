@@ -233,7 +233,7 @@ public final class PageRank<V, E>
 
             double initScore = 1.0d / totalVertices;
             int i = 0;
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 vertexIndexMap.put(v, i);
                 vertexMap[i] = v;
                 outDegree[i] = graph.outDegreeOf(v);
@@ -243,7 +243,7 @@ public final class PageRank<V, E>
 
             if (isWeighted) {
                 this.weights = new double[totalVertices];
-                for (V v : graph.vertexSetIterable()) {
+                for (V v : graph.iterables().vertices()) {
                     double sum = 0;
                     for (E e : graph.outgoingEdgesOf(v)) {
                         sum += graph.getEdgeWeight(e);

@@ -113,7 +113,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithm<V, E>
     @Override
     protected double computeDensityNumerator(Graph<V, E> g)
     {
-        return StreamSupport.stream(g.edgeSetIterable().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
+        return StreamSupport.stream(g.iterables().edges().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
     }
 
     @Override

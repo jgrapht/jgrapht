@@ -64,7 +64,7 @@ public class LargestDegreeFirstColoring<V, E>
         int n = graph.vertexSet().size();
         int maxDegree = 0;
         Map<V, Integer> degree = CollectionUtil.newHashMapWithExpectedSize(n);
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);
             if (d > maxDegree) {
@@ -92,7 +92,7 @@ public class LargestDegreeFirstColoring<V, E>
             }
 
             // fill buckets
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 buckets[degree.get(v)].add(v);
             }
 

@@ -183,7 +183,7 @@ public class ALTAdmissibleHeuristic<V, E>
         SingleSourcePaths<V, E> fromLandmarkPaths =
             new DijkstraShortestPath<>(graph).getPaths(landmark);
         Map<V, Double> fromLandMarkDistances = new HashMap<>();
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             fromLandMarkDistances.put(v, fromLandmarkPaths.getWeight(v));
         }
         fromLandmark.put(landmark, fromLandMarkDistances);
@@ -194,7 +194,7 @@ public class ALTAdmissibleHeuristic<V, E>
             SingleSourcePaths<V, E> toLandmarkPaths =
                 new DijkstraShortestPath<>(reverseGraph).getPaths(landmark);
             Map<V, Double> toLandMarkDistances = new HashMap<>();
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 toLandMarkDistances.put(v, toLandmarkPaths.getWeight(v));
             }
             toLandmark.put(landmark, toLandMarkDistances);

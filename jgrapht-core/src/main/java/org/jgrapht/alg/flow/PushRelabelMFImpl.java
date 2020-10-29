@@ -142,7 +142,7 @@ public class PushRelabelMFImpl<V, E>
         this.countHeight = new int[2 * N + 1];
 
         int id = 0;
-        for (V v : network.vertexSetIterable()) {
+        for (V v : network.iterables().vertices()) {
             VertexExtension vx = getVertexExtension(v);
             vx.id = id;
             vertexExtension[id] = vx;
@@ -477,7 +477,7 @@ public class PushRelabelMFImpl<V, E>
         {
             Map<Integer, Integer> labels = new HashMap<>();
 
-            for (V v : network.vertexSetIterable()) {
+            for (V v : network.iterables().vertices()) {
                 VertexExtension vx = getVertexExtension(v);
 
                 if (!labels.containsKey(vx.height)) {

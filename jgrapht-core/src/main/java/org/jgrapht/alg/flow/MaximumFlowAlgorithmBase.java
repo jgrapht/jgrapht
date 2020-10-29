@@ -118,7 +118,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     private void buildInternal()
     {
         if (directedGraph) { // Directed graph
-            for (V v : network.vertexSetIterable()) {
+            for (V v : network.iterables().vertices()) {
                 VertexExtensionBase vx = vertexExtensionManager.getExtension(v);
                 vx.prototype = v;
             }
@@ -140,11 +140,11 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
                 }
             }
         } else { // Undirected graph
-            for (V v : network.vertexSetIterable()) {
+            for (V v : network.iterables().vertices()) {
                 VertexExtensionBase vx = vertexExtensionManager.getExtension(v);
                 vx.prototype = v;
             }
-            for (E e : network.edgeSetIterable()) {
+            for (E e : network.iterables().edges()) {
                 VertexExtensionBase ux =
                     vertexExtensionManager.getExtension(network.getEdgeSource(e));
                 VertexExtensionBase vx =
@@ -240,7 +240,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     {
         Map<E, Double> maxFlow = new HashMap<>();
 
-        for (E e : network.edgeSetIterable()) {
+        for (E e : network.iterables().edges()) {
             AnnotatedFlowEdge annotatedFlowEdge = edgeExtensionManager.getExtension(e);
             maxFlow
                 .put(
@@ -452,7 +452,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         } else {
             cutEdges
                 .addAll(
-                    StreamSupport.stream(network.edgeSetIterable().spliterator(), false)
+                    StreamSupport.stream(network.iterables().edges().spliterator(), false)
                         .filter(
                             e -> p1.contains(network.getEdgeSource(e))
                                 ^ p1.contains(network.getEdgeTarget(e)))

@@ -77,7 +77,7 @@ abstract class BaseShortestPathAlgorithm<V, E>
         }
 
         Map<V, GraphPath<V, E>> paths = new HashMap<>();
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             paths.put(v, getPath(source, v));
         }
         return new ListSingleSourcePathsImpl<>(graph, source, paths);

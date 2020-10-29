@@ -84,7 +84,7 @@ public class BoruvkaMinimumSpanningTree<V, E>
         do {
             // find safe edges
             bestEdge.clear();
-            for (E e : graph.edgeSetIterable()) {
+            for (E e : graph.iterables().edges()) {
                 V sTree = forest.find(graph.getEdgeSource(e));
                 V tTree = forest.find(graph.getEdgeTarget(e));
 
