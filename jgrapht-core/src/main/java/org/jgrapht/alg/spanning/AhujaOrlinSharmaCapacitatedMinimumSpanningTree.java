@@ -786,7 +786,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
 
             int counter = 0;
 
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
 
                 if (v.equals(root)) {
                     continue;

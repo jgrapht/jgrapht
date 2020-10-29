@@ -148,7 +148,7 @@ public class LabelPropagationClustering<V, E>
             this.labels = new HashMap<>();
 
             int i = 0;
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 labels.put(v, String.valueOf(i++));
             }
         }
@@ -196,7 +196,7 @@ public class LabelPropagationClustering<V, E>
          */
         private boolean shouldStop()
         {
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 Pair<Map<String, Integer>, Integer> labelCountsAndMaximum =
                     getNeighborLabelCountsAndMaximum(v);
                 Map<String, Integer> counts = labelCountsAndMaximum.getFirst();
@@ -286,7 +286,7 @@ public class LabelPropagationClustering<V, E>
             Map<V, String> finalLabels = new HashMap<>();
             int nextLabel = 0;
 
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 if (finalLabels.containsKey(v)) {
                     continue;
                 }
@@ -326,7 +326,7 @@ public class LabelPropagationClustering<V, E>
         private List<Set<V>> convert(Graph<V, E> graph, Map<V, String> labels)
         {
             Map<String, Set<V>> clusterMap = new LinkedHashMap<>();
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 String rv = labels.get(v);
                 if (rv == null) {
                     throw new IllegalArgumentException("Not all vertices have labels.");

@@ -55,7 +55,7 @@ public abstract class GraphTests
     public static <V, E> boolean isEmpty(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return graph.numberOfEdges() == 0;
+        return graph.iterables().edgeCount() == 0;
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class GraphTests
         }
 
         // no luck, we have to check
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             Set<V> neighbors = new HashSet<>();
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
@@ -108,7 +108,7 @@ public abstract class GraphTests
         }
 
         // no luck, we have to check
-        for (E e : graph.edgeSetIterable()) {
+        for (E e : graph.iterables().edges()) {
             if (graph.getEdgeSource(e).equals(graph.getEdgeTarget(e))) {
                 return true;
             }
@@ -134,7 +134,7 @@ public abstract class GraphTests
         }
 
         // no luck, we have to check
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             Set<V> neighbors = new HashSet<>();
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
@@ -173,7 +173,7 @@ public abstract class GraphTests
         } else {
             throw new IllegalArgumentException(GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
         }
-        return graph.numberOfEdges() == allEdges && isSimple(graph);
+        return graph.iterables().edgeCount() == allEdges && isSimple(graph);
     }
 
     /**
@@ -278,7 +278,7 @@ public abstract class GraphTests
             throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
         }
 
-        return (graph.numberOfEdges() == (graph.vertexSet().size() - 1)) && isConnected(graph);
+        return (graph.iterables().edgeCount() == (graph.vertexSet().size() - 1)) && isConnected(graph);
     }
 
     /**
@@ -296,11 +296,11 @@ public abstract class GraphTests
         if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
         }
-        if (graph.numberOfVertices()==0) // null graph is not a forest
+        if (graph.iterables().vertexCount()==0) // null graph is not a forest
             return false;
 
         int nrConnectedComponents = new ConnectivityInspector<>(graph).connectedSets().size();
-        return graph.numberOfEdges() + nrConnectedComponents == graph.numberOfVertices();
+        return graph.iterables().edgeCount() + nrConnectedComponents == graph.iterables().vertexCount();
     }
 
     /**
@@ -316,7 +316,7 @@ public abstract class GraphTests
     public static <V, E> boolean isOverfull(Graph<V, E> graph)
     {
         int maxDegree = graph.vertexSet().stream().mapToInt(graph::degreeOf).max().getAsInt();
-        return graph.numberOfEdges() > maxDegree * Math.floor(graph.vertexSet().size() / 2.0);
+        return graph.iterables().edgeCount() > maxDegree * Math.floor(graph.vertexSet().size() / 2.0);
     }
 
     /**
@@ -406,7 +406,7 @@ public abstract class GraphTests
      */
     public static <V, E> boolean isCubic(Graph<V, E> graph)
     {
-        for (V v : graph.vertexSetIterable())
+        for (V v : graph.iterables().vertices())
             if (graph.degreeOf(v) != 3)
                 return false;
         return true;
@@ -596,7 +596,7 @@ public abstract class GraphTests
     {
         List<V> degree3 = new ArrayList<>();
         // collect all vertices with degree 3
-        for (V vertex : graph.vertexSetIterable()) {
+        for (V vertex : graph.iterables().vertices()) {
             int degree = graph.degreeOf(vertex);
             if (degree == 3) {
                 degree3.add(vertex);
@@ -628,7 +628,7 @@ public abstract class GraphTests
     public static <V, E> boolean isK5Subdivision(Graph<V, E> graph)
     {
         Set<V> degree5 = new HashSet<>();
-        for (V vertex : graph.vertexSetIterable()) {
+        for (V vertex : graph.iterables().vertices()) {
             int degree = graph.degreeOf(vertex);
             if (degree == 4) {
                 degree5.add(vertex);

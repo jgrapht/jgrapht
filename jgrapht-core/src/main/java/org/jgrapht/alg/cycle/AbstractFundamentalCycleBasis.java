@@ -80,7 +80,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
         Set<List<E>> cycles = new LinkedHashSet<>();
         int length = 0;
         double weight = 0d;
-        for (E e : graph.edgeSetIterable()) {
+        for (E e : graph.iterables().edges()) {
             if (!treeEdges.contains(e)) {
                 Pair<List<E>, Double> c = buildFundamentalCycle(e, spanningForest);
                 cycles.add(c.getFirst());

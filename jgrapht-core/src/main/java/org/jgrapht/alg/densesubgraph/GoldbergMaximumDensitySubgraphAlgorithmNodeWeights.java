@@ -94,8 +94,8 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
     @Override
     protected double computeDensityNumerator(Graph<V, E> g)
     {
-        double sum = StreamSupport.stream(g.edgeSetIterable().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
-        for (V v : g.vertexSetIterable()) {
+        double sum = StreamSupport.stream(g.iterables().edges().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
+        for (V v : g.iterables().vertices()) {
             sum += v.getSecond();
         }
         return sum;

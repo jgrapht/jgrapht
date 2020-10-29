@@ -148,7 +148,7 @@ public class BipartitePartitioning<V, E>
             return false;
         }
 
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             Collection<? extends V> otherPartition;
             if (firstPartition.contains(v)) {
                 otherPartition = secondPartition;

@@ -111,7 +111,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
     {
         vertexToVertexData = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
-        for (V vertex : graph.vertexSetIterable()) {
+        for (V vertex : graph.iterables().vertices()) {
             vertexToVertexData.put(vertex, new VertexData2<V>(vertex, false, false));
         }
     }

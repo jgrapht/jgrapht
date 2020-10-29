@@ -138,7 +138,7 @@ public class BiconnectivityInspector<V, E>
 
         if (vertex2blocks == null) {
             vertex2blocks = new HashMap<>();
-            for (V v : graph.vertexSetIterable())
+            for (V v : graph.iterables().vertices())
                 vertex2blocks.put(v, new LinkedHashSet<>());
 
             for (Graph<V, E> block : this.getBlocks()) {
@@ -233,7 +233,7 @@ public class BiconnectivityInspector<V, E>
         bridges = new LinkedHashSet<>();
         connectedSets = new LinkedHashSet<>();
         stack = new ArrayDeque<>(graph.edgeSet().size());
-        for (V v : graph.vertexSetIterable())
+        for (V v : graph.iterables().vertices())
             discTime.put(v, -1);
     }
 
@@ -242,7 +242,7 @@ public class BiconnectivityInspector<V, E>
         if (blocks == null) {
             init();
             // Iterate over all connected components
-            for (V v : graph.vertexSetIterable()) {
+            for (V v : graph.iterables().vertices()) {
                 if (discTime.get(v) == -1) {
                     connectedSet = new HashSet<>();
                     dfs(v, null);

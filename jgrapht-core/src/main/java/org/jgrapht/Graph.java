@@ -313,37 +313,6 @@ public interface Graph<V, E>
     Set<E> edgeSet();
 
     /**
-     * Returns an iterable over the edges of the graph. 
-     * 
-     * <p>Whether the ordering is deterministic, depends on the actual graph implementation.  It is
-     * the responsibility of callers who rely on this behavior to only use graph implementations
-     * which support it. 
-     * 
-     * @return an iterable over the edges of the graph.
-     */
-    default Iterable<E> edgeSetIterable() { 
-        return edgeSet();
-    }
-    
-    /**
-     * Return the number of edges in the graph.
-     * 
-     * @return the number of edges.
-     */
-    default int numberOfEdges() { 
-        return edgeSet().size();
-    }
-    
-    /**
-     * Return the number of edges in the graph as a long.
-     * 
-     * @return the number of edges.
-     */
-    default long numberOfEdgesAsLong() { 
-        return edgeSet().size();
-    }
-    
-    /**
      * Returns the degree of the specified vertex.
      * 
      * <p>
@@ -358,29 +327,10 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws ArithmeticException if the result overflows an int 
      */
     int degreeOf(V vertex);
     
-    /**
-     * Returns the degree of the specified vertex as a long.
-     * 
-     * <p>
-     * A degree of a vertex in an undirected graph is the number of edges touching that vertex.
-     * Edges with same source and target vertices (self-loops) are counted twice.
-     * 
-     * <p>
-     * In directed graphs this method returns the sum of the "in degree" and the "out degree".
-     *
-     * @param vertex vertex whose degree is to be calculated.
-     * @return the degree of the specified vertex.
-     *
-     * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
-     */
-    default long degreeOfAsLong(V vertex) { 
-        return degreeOf(vertex);
-    }
-
     /**
      * Returns a set of all edges touching the specified vertex. If no edges are touching the
      * specified vertex returns an empty set.
@@ -393,20 +343,6 @@ public interface Graph<V, E>
      */
     Set<E> edgesOf(V vertex);
     
-    /**
-     * Returns the set of all edges touching the specified vertex as an iterable. If no edges are touching the
-     * specified vertex returns an empty set.
-     *
-     * @param vertex the vertex for which a set of touching edges is to be returned.
-     * @return a set of all edges touching the specified vertex.
-     *
-     * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
-     */
-    default Iterable<E> edgesOfIterable(V vertex) { 
-        return edgesOf(vertex);
-    }
-
     /**
      * Returns the "in degree" of the specified vertex.
      * 
@@ -424,30 +360,9 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws ArithmeticException if the result overflows an int 
      */
     int inDegreeOf(V vertex);
-
-    /**
-     * Returns the "in degree" of the specified vertex as a long.
-     * 
-     * <p>
-     * The "in degree" of a vertex in a directed graph is the number of inward directed edges from
-     * that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
-     * http://mathworld.wolfram.com/Indegree.html</a>.
-     * 
-     * <p>
-     * In the case of undirected graphs this method returns the number of edges touching the vertex.
-     * Edges with same source and target vertices (self-loops) are counted twice.
-     *
-     * @param vertex vertex whose degree is to be calculated.
-     * @return the degree of the specified vertex.
-     *
-     * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
-     */
-    default long inDegreeOfAsLong(V vertex) { 
-        return inDegreeOf(vertex);
-    }
     
     /**
      * Returns a set of all edges incoming into the specified vertex.
@@ -463,23 +378,6 @@ public interface Graph<V, E>
      * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> incomingEdgesOf(V vertex);
-    
-    /**
-     * Returns a set of all edges incoming into the specified vertex as an iterable.
-     *
-     * <p>
-     * In the case of undirected graphs this method returns all edges touching the vertex, thus,
-     * some of the returned edges may have their source and target vertices in the opposite order.
-     *
-     * @param vertex the vertex for which the list of incoming edges to be returned.
-     * @return a set of all edges incoming into the specified vertex.
-     *
-     * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
-     */
-    default Iterable<E> incomingEdgesOfIterable(V vertex) { 
-        return incomingEdgesOf(vertex);
-    }
 
     /**
      * Returns the "out degree" of the specified vertex.
@@ -498,31 +396,10 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
+     * @throws ArithmeticException if the result overflows an int 
      */
     int outDegreeOf(V vertex);
-    
-    /**
-     * Returns the "out degree" of the specified vertex as a long.
-     * 
-     * <p>
-     * The "out degree" of a vertex in a directed graph is the number of outward directed edges from
-     * that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
-     * http://mathworld.wolfram.com/Outdegree.html</a>.
-     * 
-     * <p>
-     * In the case of undirected graphs this method returns the number of edges touching the vertex.
-     * Edges with same source and target vertices (self-loops) are counted twice.
-     *
-     * @param vertex vertex whose degree is to be calculated.
-     * @return the degree of the specified vertex.
-     *
-     * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
-     */
-    default long outDegreeOfAsLong(V vertex) { 
-        return outDegreeOf(vertex);
-    }
-
+  
     /**
      * Returns a set of all edges outgoing from the specified vertex.
      * 
@@ -537,24 +414,7 @@ public interface Graph<V, E>
      * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> outgoingEdgesOf(V vertex);
-    
-    /**
-     * Returns a set of all edges outgoing from the specified vertex as an iterable.
-     * 
-     * <p>
-     * In the case of undirected graphs this method returns all edges touching the vertex, thus,
-     * some of the returned edges may have their source and target vertices in the opposite order.
-     *
-     * @param vertex the vertex for which the list of outgoing edges to be returned.
-     * @return a set of all edges outgoing from the specified vertex.
-     *
-     * @throws IllegalArgumentException if vertex is not found in the graph.
-     * @throws NullPointerException if vertex is <code>null</code>.
-     */
-    default Iterable<E> outgoingEdgesOfIterable(V vertex) { 
-        return outgoingEdgesOf(vertex);
-    }
-
+ 
     /**
      * Removes all the edges in this graph that are also contained in the specified edge collection.
      * After this call returns, this graph will contain no edges in common with the specified edges.
@@ -667,37 +527,6 @@ public interface Graph<V, E>
      * @return a set view of the vertices contained in this graph.
      */
     Set<V> vertexSet();
-    
-    /**
-     * Returns an iterable over the vertices of the graph. 
-     * 
-     * <p>Whether the ordering is deterministic, depends on the actual graph implementation.  It is
-     * the responsibility of callers who rely on this behavior to only use graph implementations
-     * which support it. 
-     * 
-     * @return an iterable over the vertices of the graph.
-     */
-    default Iterable<V> vertexSetIterable() { 
-        return vertexSet();
-    }
-    
-    /**
-     * Return the number of vertices in the graph.
-     * 
-     * @return the number of vertices
-     */
-    default int numberOfVertices() { 
-        return vertexSet().size();
-    }
-    
-    /**
-     * Return the number of vertices in the graph as a long.
-     * 
-     * @return the number of vertices
-     */
-    default long numberOfVerticesAsLong() { 
-        return vertexSet().size();
-    }
 
     /**
      * Returns the source vertex of an edge. For an undirected graph, source and target are
@@ -769,5 +598,15 @@ public interface Graph<V, E>
     {
         this.setEdgeWeight(this.getEdge(sourceVertex, targetVertex), weight);
     }
-
+    
+    /**
+     * Access the graph using the {@link GraphIterables} interface. This allows accessing 
+     * graphs without the restrictions imposed by 32-bit arithmetic.  
+     * 
+     * @return the graph iterables
+     */
+    default GraphIterables<V, E> iterables() { 
+    	return new DefaultGraphIterables<V, E>(this);
+    }
+    
 }

@@ -112,7 +112,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
             .allowingSelfLoops(false).buildGraph();
 
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             chordalGraph.addVertex(v);
         }
 
@@ -328,7 +328,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         } else {
             // project graph to SimpleGraph
             Graphs.addAllVertices(copy, graph.vertexSet());
-            for (E e : graph.edgeSetIterable()) {
+            for (E e : graph.iterables().edges()) {
                 V v1 = graph.getEdgeSource(e);
                 V v2 = graph.getEdgeTarget(e);
                 if (!v1.equals(v2) && !copy.containsEdge(e)) {
@@ -350,7 +350,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             computeMinimalTriangulation();
         }
 
-        return (chordalGraph.numberOfEdges() == graph.numberOfEdges());
+        return (chordalGraph.iterables().edgeCount() == graph.iterables().edgeCount());
     }
 
     /**

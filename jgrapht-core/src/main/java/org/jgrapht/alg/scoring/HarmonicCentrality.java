@@ -95,11 +95,11 @@ public final class HarmonicCentrality<V, E>
 
         // compute shortest paths
         int n = graph.vertexSet().size();
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             double sum = 0d;
 
             SingleSourcePaths<V, E> paths = alg.getPaths(v);
-            for (V u : graph.vertexSetIterable()) {
+            for (V u : graph.iterables().vertices()) {
                 if (!u.equals(v)) {
                     sum += 1.0 / paths.getWeight(u);
                 }

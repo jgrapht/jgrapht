@@ -84,7 +84,7 @@ public class DinicMFImpl<V, E>
             throw new IllegalArgumentException("Epsilon must be positive!");
         }
 
-        for (E e : network.edgeSetIterable()) {
+        for (E e : network.iterables().edges()) {
             if (network.getEdgeWeight(e) < -epsilon) {
                 throw new IllegalArgumentException("Capacity must be non-negative!");
             }
@@ -154,7 +154,7 @@ public class DinicMFImpl<V, E>
     private boolean bfs()
     {
 
-        for (V v : network.vertexSetIterable()) {
+        for (V v : network.iterables().vertices()) {
             getVertexExtension(v).level = -1;
         }
 
@@ -225,7 +225,7 @@ public class DinicMFImpl<V, E>
             if (!bfs()) {
                 break;
             }
-            for (V v : network.vertexSetIterable()) {
+            for (V v : network.iterables().vertices()) {
                 getVertexExtension(v).index = 0;
             }
 

@@ -272,7 +272,7 @@ public class FloydWarshallShortestPaths<V, E>
 
         // initialize matrix, 2
         if (graph.getType().isUndirected()) {
-            for (E edge : graph.edgeSetIterable()) {
+            for (E edge : graph.iterables().edges()) {
                 V source = graph.getEdgeSource(edge);
                 V target = graph.getEdgeTarget(edge);
                 if (!source.equals(target)) {

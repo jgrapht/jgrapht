@@ -167,7 +167,7 @@ public class TarjanSimpleCycles<V, E>
         vToI = new HashMap<>();
         removed = new HashMap<>();
         int index = 0;
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             vToI.put(v, index++);
         }
     }

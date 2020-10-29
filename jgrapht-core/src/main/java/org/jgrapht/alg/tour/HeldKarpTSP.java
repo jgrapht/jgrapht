@@ -138,7 +138,7 @@ public class HeldKarpTSP<V, E>
         double[][] W = new double[n][n];
         fill(W, Double.MAX_VALUE);
 
-        for (E e : graph.edgeSetIterable()) {
+        for (E e : graph.iterables().edges()) {
             V source = graph.getEdgeSource(e);
             V target = graph.getEdgeTarget(e);
 

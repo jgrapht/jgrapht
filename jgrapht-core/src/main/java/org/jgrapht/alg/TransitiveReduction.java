@@ -150,7 +150,7 @@ public class TransitiveReduction
         // cf. http://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html
 
         // initialize matrix with edges
-        for (final E edge : directedGraph.edgeSetIterable()) {
+        for (final E edge : directedGraph.iterables().edges()) {
             final V v1 = directedGraph.getEdgeSource(edge);
             final V v2 = directedGraph.getEdgeTarget(edge);
 

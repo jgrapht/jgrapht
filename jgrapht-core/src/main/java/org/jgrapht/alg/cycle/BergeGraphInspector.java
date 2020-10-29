@@ -530,7 +530,7 @@ public class BergeGraphInspector<V, E>
          * Find 3 Paths which are an uneven odd hole when conjunct
          */
         for (V u : g.vertexSet()) {
-            for (V v : g.vertexSetIterable()) {
+            for (V v : g.vertexSet()) {
                 if (u == v || g.containsEdge(u, v))
                     continue;
 
@@ -554,7 +554,7 @@ public class BergeGraphInspector<V, E>
                     Graph<V, E> subg = new AsSubgraph<>(g, set);
                     // Look for holes with more than 6 edges and uneven length
                     if (set.size() < 7 || subg.vertexSet().size() != set.size()
-                        || subg.numberOfEdges() != subg.vertexSet().size()
+                        || subg.edgeSet().size() != subg.vertexSet().size()
                         || subg.vertexSet().size() % 2 == 0
                         || subg.vertexSet().stream().anyMatch(t -> subg.degreeOf(t) != 2))
                         continue;
@@ -1181,7 +1181,7 @@ public class BergeGraphInspector<V, E>
     {
         Set<Set<V>> NuvList = new HashSet<>();
         for (V u : g.vertexSet()) {
-            for (V v : g.vertexSetIterable()) {
+            for (V v : g.iterables().vertices()) {
                 if (u == v || !g.containsEdge(u, v))
                     continue;
                 NuvList.add(N(g, u, v));

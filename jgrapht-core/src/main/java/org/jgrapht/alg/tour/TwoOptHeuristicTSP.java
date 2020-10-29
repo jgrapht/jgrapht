@@ -220,13 +220,13 @@ public class TwoOptHeuristicTSP<V, E>
         this.index = new HashMap<>();
         this.revIndex = new HashMap<>();
         int i = 0;
-        for (V v : graph.vertexSetIterable()) {
+        for (V v : graph.iterables().vertices()) {
             index.put(v, i);
             revIndex.put(i, v);
             i++;
         }
 
-        for (E e : graph.edgeSetIterable()) {
+        for (E e : graph.iterables().edges()) {
             V s = graph.getEdgeSource(e);
             int si = index.get(s);
             V t = graph.getEdgeTarget(e);
