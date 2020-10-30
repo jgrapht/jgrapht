@@ -23,6 +23,8 @@ import java.util.Comparator;
  * Represents the method of ensuring the existence of a total order of a set of elements.
  * 
  * @author Dimitrios Michail
+ * 
+ * @param <T> the element type
  */
 public class ElementOrderMethod<T>
 {
