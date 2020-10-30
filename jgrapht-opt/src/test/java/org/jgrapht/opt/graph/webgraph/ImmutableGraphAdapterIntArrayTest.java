@@ -262,6 +262,7 @@ public class ImmutableGraphAdapterIntArrayTest {
 		}
 
 		assertEquals(6, a.iterables().edgeCount());
+		assertEquals(6, a.edgeSet().size());
 		assertNull(a.getEdge(2, 2));
 		assertTrue(a.containsEdge(new int[] { 0, 1 }));
 		assertArrayEquals(new int[] { 0, 1 }, a.getEdge(0, 1));

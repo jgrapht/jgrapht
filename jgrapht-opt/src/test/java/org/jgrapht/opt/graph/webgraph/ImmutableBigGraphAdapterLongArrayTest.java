@@ -264,6 +264,7 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 		}
 
 		assertEquals(6, a.iterables().edgeCount());
+		assertEquals(6, a.edgeSet().size());
 		assertNull(a.getEdge(2L, 2L));
 		assertArrayEquals(new long[] { 0L, 1L }, a.getEdge(0L, 1L));
 

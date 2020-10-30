@@ -50,10 +50,14 @@ import it.unimi.dsi.lang.FlyweightPrototype;
  * {@link ImmutableGraph}.
  *
  * <p>
- * Nodes are instance of {@link Long} corresponding to the index of a node in WebGraph. The adapter
- * uses two-elements arrays of longs to represent edges, where the first element of the array is the
- * source and the second element the target node (for undirected graphs, the order is immaterial).
- * Since the underlying graph is immutable, the resulting graph is unmodifiable.
+ * Nodes are instance of {@link Long} corresponding to the index of a node in WebGraph. Since the
+ * underlying graph is immutable, the resulting graph is unmodifiable. The adapter uses two-elements
+ * arrays of longs to represent edges of directed graphs, where the first element of the array is
+ * the source node and the second element the target node. For undirected graphs, the order is
+ * immaterial, but {@link #getEdgeSource(long[])} and {@link #getEdgeTarget(long[])} will return
+ * consistently the minimum and maximum between the two vertices, and {@link #edgeSet()} /
+ * {@link GraphIterables#edges()} will return arrays in which the first element is lesser than or
+ * equal to the second element.
  *
  * <p>
  * This implementation has the same features of {@link ImmutableBigGraphAdapterEndpointPair}, but it
@@ -228,7 +232,8 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 		for (long i = 0; i < n; i++) {
 			final long x = nodeIterator.nextLong();
 			final LazyLongIterator successors = nodeIterator.successors();
-			for (long y; (y = successors.nextLong()) != -1;) edges.add(new long[] { x, y });
+			if (directed) for (long y; (y = successors.nextLong()) != -1;) edges.add(new long[] { x, y });
+			else for (long y; (y = successors.nextLong()) != -1;) if (x <= y) edges.add(new long[] { x, y });
 		}
 		return edges;
 	}
@@ -237,7 +242,7 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 	public int degreeOf(final Long vertex) {
 		if (directed) {
 			final long d = inDegreeOf(vertex) + outDegreeOf(vertex);
-			if (d >= Integer.MAX_VALUE) throw new IllegalStateException();
+			if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 			return (int)d;
 		} else return inDegreeOf(vertex);
 	}
@@ -260,7 +265,7 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 	@Override
 	public int inDegreeOf(final Long vertex) {
 		final long d = immutableTranspose.outdegree(vertex);
-		if (d >= Integer.MAX_VALUE) throw new IllegalStateException();
+		if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 		return (int)d;
 	}
 
@@ -275,7 +280,7 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 	@Override
 	public int outDegreeOf(final Long vertex) {
 		final long d = immutableGraph.outdegree(vertex);
-		if (d >= Integer.MAX_VALUE) throw new IllegalStateException();
+		if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 		return (int)d;
 	}
 

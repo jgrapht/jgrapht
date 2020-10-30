@@ -52,10 +52,14 @@ import it.unimi.dsi.webgraph.NodeIterator;
  * {@link ImmutableGraph}.
  *
  * <p>
- * Nodes are instance of {@link Integer} corresponding to the index of a node in WebGraph. The
- * adapter uses two-elements arrays of integers to represent edges, where the first element of the
- * array is the source and the second element the target node (for undirected graphs, the order is
- * immaterial). Since the underlying graph is immutable, the resulting graph is unmodifiable.
+ * Nodes are instance of {@link Integer} corresponding to the index of a node in WebGraph. Since the
+ * underlying graph is immutable, the resulting graph is unmodifiable. The adapter uses two-elements
+ * arrays of integers to represent edges of directed graphs, where the first element of the array is
+ * the source node and the second element the target node. For undirected graphs, the order is
+ * immaterial, but {@link #getEdgeSource(long[])} and {@link #getEdgeTarget(long[])} will return
+ * consistently the minimum and maximum between the two vertices, and {@link #edgeSet()} /
+ * {@link GraphIterables#edges()} will return arrays in which the first element is lesser than or
+ * equal to the second element.
  *
  * <p>
  * This implementation has the same features of {@link ImmutableGraphAdapterEndpointPair}, but it
@@ -230,7 +234,8 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 		for (int i = 0; i < n; i++) {
 			final int x = nodeIterator.nextInt();
 			final LazyIntIterator successors = nodeIterator.successors();
-			for (int y; (y = successors.nextInt()) != -1;) edges.add(new int[] { x, y });
+			if (directed) for (int y; (y = successors.nextInt()) != -1;) edges.add(new int[] { x, y });
+			else for (int y; (y = successors.nextInt()) != -1;) if (x <= y) edges.add(new int[] { x, y });
 		}
 		return edges;
 	}

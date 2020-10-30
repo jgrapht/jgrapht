@@ -254,7 +254,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 	public int degreeOf(final Long vertex) {
 		if (directed) {
 			final long d = inDegreeOf(vertex) + outDegreeOf(vertex);
-			if (d >= Integer.MAX_VALUE) throw new IllegalStateException();
+			if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 			return (int)d;
 		} else return inDegreeOf(vertex);
 	}
@@ -277,7 +277,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 	@Override
 	public int inDegreeOf(final Long vertex) {
 		final long d = immutableTranspose.outdegree(vertex);
-		if (d >= Integer.MAX_VALUE) throw new IllegalStateException();
+		if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 		return (int)d;
 	}
 
@@ -293,7 +293,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 	@Override
 	public int outDegreeOf(final Long vertex) {
 		final long d = immutableGraph.outdegree(vertex);
-		if (d >= Integer.MAX_VALUE) throw new IllegalStateException();
+		if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 		return (int)d;
 	}
 

@@ -229,6 +229,7 @@ public class ImmutableGraphAdapterEndpointPairTest {
 		}
 
 		assertEquals(6, a.iterables().edgeCount());
+		assertEquals(6, a.edgeSet().size());
 		assertNull(a.getEdge(2, 2));
 		assertFalse(a.containsEdge(EndpointPair.ordered(0, 1)));
 		assertEquals(EndpointPair.unordered(0, 1), a.getEdge(0, 1));

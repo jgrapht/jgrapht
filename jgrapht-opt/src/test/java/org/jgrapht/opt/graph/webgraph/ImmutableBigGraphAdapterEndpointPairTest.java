@@ -231,6 +231,7 @@ public class ImmutableBigGraphAdapterEndpointPairTest {
 		}
 
 		assertEquals(6, a.iterables().edgeCount());
+		assertEquals(6, a.edgeSet().size());
 		assertNull(a.getEdge(2L, 2L));
 		assertEquals(EndpointPair.unordered(0L, 1L), a.getEdge(0L, 1L));
 		assertFalse(a.containsEdge(EndpointPair.ordered(0L, 1L)));
