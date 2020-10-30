@@ -82,6 +82,12 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 	private final boolean directed;
 	/** The number of nodes of {@link #immutableGraph}. */
 	private final long n;
+	/**
+	 * The number of edges, cached, or -1 if it still unknown. This will have to be computed by
+	 * enumeration for undirected graphs, as we do not know how many loops are present, and for graphs
+	 * which do not support {@link ImmutableGraph#numArcs()}.
+	 */
+	private long m = -1;
 
 	/**
 	 * Creates an adapter for an undirected (i.e., symmetric) immutable graph.
@@ -364,6 +370,13 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 		return new ImmutableBigGraphAdapterLongArray(copy, copy);
 	}
 
+	// TODO: Replace with fastutil method
+	private long size(final Iterable<?> iterable) {
+		long c = 0;
+		for (final Object o : iterable) c++;
+		return c;
+	}
+
 	private final GraphIterables<Long, long[]> ITERABLES = new GraphIterables<>() {
 		@Override
 		public long vertexCount() {
@@ -372,7 +385,14 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 
 		@Override
 		public long edgeCount() {
-			return directed ? immutableGraph.numArcs() : immutableGraph.numArcs() / 2;
+			if (m != -1) return m;
+			if (directed) {
+				try {
+					return m = immutableGraph.numArcs();
+				} catch (final UnsupportedOperationException e) {
+				}
+			}
+			return m = size(edges());
 		}
 
 		// TODO: remove
@@ -461,11 +481,13 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 				@Override
 				public boolean hasNext() {
 					if (y != -1) return true;
-					while ((y = successors.nextLong()) == -1) {
-						if (!nodeIterator.hasNext()) return false;
-						x = nodeIterator.nextLong();
-						successors = nodeIterator.successors();
-					}
+					do {
+						while ((y = successors.nextLong()) == -1) {
+							if (!nodeIterator.hasNext()) return false;
+							x = nodeIterator.nextLong();
+							successors = nodeIterator.successors();
+						}
+					} while (!directed && y < x);
 					return true;
 				}
 

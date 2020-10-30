@@ -215,6 +215,8 @@ public class ImmutableGraphAdapterEndpointPairTest {
 		m.addArc(0, 2);
 		m.addArc(1, 3);
 		m.addArc(2, 3);
+		m.addArc(1, 1);
+		m.addArc(3, 3);
 
 		final ImmutableGraph g = ImmutableGraph.load(storeTempGraph(Transform.symmetrize(m.immutableView())).toString());
 
@@ -226,7 +228,7 @@ public class ImmutableGraphAdapterEndpointPairTest {
 			for (int y; (y = successors.nextInt()) != -1;) assertTrue(a.containsEdge(x, y));
 		}
 
-		assertEquals(4, a.iterables().edgeCount());
+		assertEquals(6, a.iterables().edgeCount());
 		assertNull(a.getEdge(2, 2));
 		assertFalse(a.containsEdge(EndpointPair.ordered(0, 1)));
 		assertEquals(EndpointPair.unordered(0, 1), a.getEdge(0, 1));
@@ -247,8 +249,8 @@ public class ImmutableGraphAdapterEndpointPairTest {
 				EndpointPair.unordered(2, 3) }), new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(2).iterator()));
 		assertEquals(Collections.singleton(EndpointPair.unordered(0, 1)), a.getAllEdges(0, 1));
 
-		assertEquals(2, a.degreeOf(1));
-		assertEquals(2, a.iterables().degreeOf(1));
+		assertEquals(3, a.degreeOf(1));
+		assertEquals(3, a.iterables().degreeOf(1));
 	}
 
 	@Test

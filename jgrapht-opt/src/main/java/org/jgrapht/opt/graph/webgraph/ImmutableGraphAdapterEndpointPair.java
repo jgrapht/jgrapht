@@ -76,7 +76,10 @@ import it.unimi.dsi.webgraph.Transform;
  * <p>
  * It is your responsibility that the two provided graphs are one the transpose of the other (for
  * each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
- * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). No check will be performed.
+ * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). No check will be performed. Note that
+ * {@linkplain GraphIterables#edgeCount() computing the number of edges of an directed graph}
+ * requires a full scan of the edge set if {@link ImmutableGraph#numArcs()} is not supported (the
+ * first time&mdash;then it will be cached).
  *
  * <p>
  * If you use a load method that does not provide random access, most methods will throw an
@@ -107,7 +110,9 @@ import it.unimi.dsi.webgraph.Transform;
  * It is your responsibility that the provided graph is symmetric (for each arc
  * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> there is an arc&nbsp;<var>y</var>&nbsp;&rarr;
  * <var>x</var>). No check will be performed, but you can use the {@link Check} class to this
- * purpose.
+ * purpose. Note that {@linkplain GraphIterables#edgeCount() computing the number of edges of an
+ * undirected graph} requires a full scan of the edge set (the first time&mdash;then it will be
+ * cached).
  *
  * <p>
  * If necessary, you can adapt a {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph big WebGraph
@@ -148,6 +153,12 @@ public class ImmutableGraphAdapterEndpointPair extends AbstractGraph<Integer, En
 	private final boolean directed;
 	/** The number of nodes of {@link #immutableGraph}. */
 	private final int n;
+	/**
+	 * The number of edges, cached, or -1 if it still unknown. This will have to be computed by
+	 * enumeration for undirected graphs, as we do not know how many loops are present, and for graphs
+	 * which do not support {@link ImmutableGraph#numArcs()}.
+	 */
+	private long m = -1;
 
 	/**
 	 * Creates an adapter for an undirected (i.e., symmetric) immutable graph.
@@ -410,6 +421,13 @@ public class ImmutableGraphAdapterEndpointPair extends AbstractGraph<Integer, En
 		return new ImmutableGraphAdapterEndpointPair(copy, copy);
 	}
 
+	// TODO: Replace with fastutil method
+	private long size(final Iterable<?> iterable) {
+		long c = 0;
+		for (final Object o : iterable) c++;
+		return c;
+	}
+
 	private final GraphIterables<Integer, EndpointPair<Integer>> ITERABLES = new GraphIterables<>() {
 		@Override
 		public long vertexCount() {
@@ -418,7 +436,14 @@ public class ImmutableGraphAdapterEndpointPair extends AbstractGraph<Integer, En
 
 		@Override
 		public long edgeCount() {
-			return directed ? immutableGraph.numArcs() : immutableGraph.numArcs() / 2;
+			if (m != -1) return m;
+			if (directed) {
+				try {
+					return m = immutableGraph.numArcs();
+				} catch (final UnsupportedOperationException e) {
+				}
+			}
+			return m = size(edges());
 		}
 
 		// TODO: remove
@@ -505,11 +530,13 @@ public class ImmutableGraphAdapterEndpointPair extends AbstractGraph<Integer, En
 				@Override
 				public boolean hasNext() {
 					if (y != -1) return true;
-					while ((y = successors.nextInt()) == -1) {
-						if (!nodeIterator.hasNext()) return false;
-						x = nodeIterator.nextInt();
-						successors = nodeIterator.successors();
-					}
+					do {
+						while ((y = successors.nextInt()) == -1) {
+							if (!nodeIterator.hasNext()) return false;
+							x = nodeIterator.nextInt();
+							successors = nodeIterator.successors();
+						}
+					} while (!directed && y < x);
 					return true;
 				}
 

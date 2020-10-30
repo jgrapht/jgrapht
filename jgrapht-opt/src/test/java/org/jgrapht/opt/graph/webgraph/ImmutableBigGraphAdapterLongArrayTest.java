@@ -250,6 +250,8 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 		m.addArc(0, 2);
 		m.addArc(1, 3);
 		m.addArc(2, 3);
+		m.addArc(1, 1);
+		m.addArc(3, 3);
 
 		final ImmutableGraph g = ImmutableGraph.load(storeTempGraph(ImmutableGraph.wrap(Transform.symmetrize(m.immutableView()))).toString());
 
@@ -261,7 +263,7 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 			for (long y; (y = successors.nextLong()) != -1;) assertTrue(a.containsEdge(x, y));
 		}
 
-		assertEquals(4, a.iterables().edgeCount());
+		assertEquals(6, a.iterables().edgeCount());
 		assertNull(a.getEdge(2L, 2L));
 		assertArrayEquals(new long[] { 0L, 1L }, a.getEdge(0L, 1L));
 
@@ -279,8 +281,8 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 		assertEquals(unorderedSingleton(0L, 1L), a.getAllEdges(0L, 1L));
 		assertEquals(unorderedSingleton(0L, 1L), unordered(a.iterables().allEdges(0L, 1L)));
 
-		assertEquals(2, a.degreeOf(1L));
-		assertEquals(2, a.iterables().degreeOf(1L));
+		assertEquals(3, a.degreeOf(1L));
+		assertEquals(3, a.iterables().degreeOf(1L));
 	}
 
 	@Test
