@@ -126,7 +126,29 @@ public class MutableValueGraphAdapter<V, W>
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
         Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
     {
-        super(valueGraph, valueConverter, vertexSupplier, edgeSupplier);
+        super(
+            valueGraph, valueConverter, vertexSupplier, edgeSupplier,
+            ElementOrderMethod.internal());
+        this.defaultValue = Objects.requireNonNull(defaultValue);
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param valueGraph the value graph
+     * @param defaultValue a default value to be used when creating new edges
+     * @param valueConverter a function that converts a value to a double
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
+     *        is required in order to make edge source/targets be consistent.
+     */
+    public MutableValueGraphAdapter(
+        MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
+        Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
+        super(valueGraph, valueConverter, vertexSupplier, edgeSupplier, vertexOrderMethod);
         this.defaultValue = Objects.requireNonNull(defaultValue);
     }
 
@@ -233,6 +255,7 @@ public class MutableValueGraphAdapter<V, W>
     @Override
     public boolean removeVertex(V v)
     {
+        vertexOrder.notifyRemoval(v);
         return valueGraph.removeNode(v);
     }
 

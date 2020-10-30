@@ -82,7 +82,23 @@ public class MutableGraphAdapter<V>
     public MutableGraphAdapter(
         MutableGraph<V> graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
     {
-        super(graph, vertexSupplier, edgeSupplier);
+        super(graph, vertexSupplier, edgeSupplier, ElementOrderMethod.internal());
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param graph the graph
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
+     *        is required in order to make edge source/targets be consistent.
+     */
+    public MutableGraphAdapter(
+        MutableGraph<V> graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
+        super(graph, vertexSupplier, edgeSupplier, vertexOrderMethod);
     }
 
     @Override
@@ -188,6 +204,7 @@ public class MutableGraphAdapter<V>
     @Override
     public boolean removeVertex(V v)
     {
+        vertexOrder.notifyRemoval(v);
         return graph.removeNode(v);
     }
 

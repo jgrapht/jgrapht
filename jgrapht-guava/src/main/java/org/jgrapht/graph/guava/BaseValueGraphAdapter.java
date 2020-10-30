@@ -59,6 +59,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     protected Supplier<EndpointPair<V>> edgeSupplier;
     protected ToDoubleFunction<W> valueConverter;
     protected transient VG valueGraph;
+    
+    protected ElementOrder<V> vertexOrder;
 
     /**
      * Create a new adapter.
@@ -83,12 +85,31 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
         VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
         Supplier<EndpointPair<V>> edgeSupplier)
     {
+        this(valueGraph, valueConverter, vertexSupplier, edgeSupplier, ElementOrderMethod.internal());
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param valueGraph the mutable value graph
+     * @param valueConverter a function that converts a value to a double
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This is required 
+     *        in order to make edge source/targets be consistent.
+     */
+    public BaseValueGraphAdapter(
+        VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
+        Supplier<EndpointPair<V>> edgeSupplier, 
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.valueGraph = Objects.requireNonNull(valueGraph);
         this.valueConverter = Objects.requireNonNull(valueConverter);
+        this.vertexOrder = new ElementOrder<>(vertexOrderMethod);
     }
-
+    
     @Override
     public Supplier<V> getVertexSupplier()
     {
@@ -169,13 +190,25 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     @Override
     public V getEdgeSource(EndpointPair<V> e)
     {
-        return e.nodeU();
+        V u = e.nodeU();
+        V v = e.nodeV();
+        int c = vertexOrder.compare(u, v);
+        if (c <= 0) { 
+            return u;
+        }
+        return v;
     }
 
     @Override
     public V getEdgeTarget(EndpointPair<V> e)
     {
-        return e.nodeV();
+        V u = e.nodeU();
+        V v = e.nodeV();
+        int c = vertexOrder.compare(u, v);
+        if (c > 0) { 
+            return v;
+        }
+        return u;
     }
 
     @Override

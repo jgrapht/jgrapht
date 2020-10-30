@@ -294,4 +294,55 @@ public class MutableNetworkAdapterTest
         assertTrue(g2.containsEdge("v3", "v3"));
     }
 
+    @Test
+    public void testEdgeCoherenceSameNetwork() {
+        final MutableNetwork<String, DefaultEdge> g =
+            NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build();
+        DefaultEdge e = new DefaultEdge();
+        g.addEdge("0", "1", e);
+        
+        final MutableNetworkAdapter<String, DefaultEdge> a = new MutableNetworkAdapter<>(g);
+        
+        DefaultEdge e1 = a.getEdge("0", "1");
+        DefaultEdge e2 = a.getEdge("1", "0");
+        
+        assertEquals(e1, e2);
+        assertEquals(a.getEdgeSource(e1), a.getEdgeSource(e2));
+        assertEquals(a.getEdgeTarget(e1), a.getEdgeTarget(e2));
+    }
+    
+    @Test
+    public void testEdgeCoherenceSameNetworkWithComparator() {
+        final MutableNetwork<Integer, DefaultEdge> g =
+            NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build();
+        DefaultEdge e = new DefaultEdge();
+        g.addEdge(0, 1, e);
+        
+        final MutableNetworkAdapter<Integer, DefaultEdge> a = new MutableNetworkAdapter<>(g, null, null, ElementOrderMethod.comparator(Comparator.<Integer>naturalOrder()));
+        
+        DefaultEdge e1 = a.getEdge(0, 1);
+        DefaultEdge e2 = a.getEdge(1, 0);
+        
+        assertEquals(e1, e2);
+        assertEquals(a.getEdgeSource(e1), a.getEdgeSource(e2));
+        assertEquals(a.getEdgeTarget(e1), a.getEdgeTarget(e2));
+    }
+    
+    @Test
+    public void testEdgeCoherenceSameNetworkWithNaturalOrder() {
+        final MutableNetwork<Integer, DefaultEdge> g =
+            NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build();
+        DefaultEdge e = new DefaultEdge();
+        g.addEdge(0, 1, e);
+        
+        final MutableNetworkAdapter<Integer, DefaultEdge> a = new MutableNetworkAdapter<>(g, null, null, ElementOrderMethod.natural());
+        
+        DefaultEdge e1 = a.getEdge(0, 1);
+        DefaultEdge e2 = a.getEdge(1, 0);
+        
+        assertEquals(e1, e2);
+        assertEquals(a.getEdgeSource(e1), a.getEdgeSource(e2));
+        assertEquals(a.getEdgeTarget(e1), a.getEdgeTarget(e2));
+    }
+    
 }

@@ -55,6 +55,8 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     protected Supplier<V> vertexSupplier;
     protected Supplier<E> edgeSupplier;
     protected transient N network;
+    
+    protected ElementOrder<V> vertexOrder;
 
     /**
      * Create a new network adapter.
@@ -75,11 +77,27 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      */
     public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
+        this(network, vertexSupplier, edgeSupplier, ElementOrderMethod.internal());
+    }
+
+    /**
+     * Create a new network adapter.
+     * 
+     * @param network the mutable network
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This is required 
+     *        in order to make edge source/targets be consistent.
+     */
+    public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.network = Objects.requireNonNull(network);
+        this.vertexOrder = new ElementOrder<>(vertexOrderMethod);
     }
-
+    
     @Override
     public Supplier<V> getVertexSupplier()
     {
@@ -155,15 +173,27 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     @Override
     public V getEdgeSource(E e)
     {
-        return network.incidentNodes(e).nodeU();
+        V u = network.incidentNodes(e).nodeU();
+        V v = network.incidentNodes(e).nodeV();
+        int c = vertexOrder.compare(u, v);
+        if (c <= 0) { 
+            return u;
+        }
+        return v;
     }
 
     @Override
     public V getEdgeTarget(E e)
     {
-        return network.incidentNodes(e).nodeV();
+        V u = network.incidentNodes(e).nodeU();
+        V v = network.incidentNodes(e).nodeV();
+        int c = vertexOrder.compare(u, v);
+        if (c > 0) { 
+            return v;
+        }
+        return u;
     }
-
+    
     @Override
     public GraphType getType()
     {
