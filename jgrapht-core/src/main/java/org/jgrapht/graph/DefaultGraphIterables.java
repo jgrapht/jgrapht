@@ -42,6 +42,8 @@ public class DefaultGraphIterables<V, E>
 
     /**
      * Create new graph iterables
+     * 
+     * @param graph the underlying graph
      */
     public DefaultGraphIterables(Graph<V, E> graph)
     {
