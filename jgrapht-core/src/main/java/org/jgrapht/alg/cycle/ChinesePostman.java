@@ -83,7 +83,7 @@ public class ChinesePostman<V, E>
         GraphTests.requireDirectedOrUndirected(graph);
 
         // If graph has no vertices, or no edges, instantly return.
-        if (graph.vertexSet().isEmpty() || graph.edgeSet().size() == 0)
+        if (graph.vertexSet().isEmpty() || graph.edgeSet().isEmpty())
             return new HierholzerEulerianCycle<V, E>().getEulerianCycle(graph);
 
         assert GraphTests.isStronglyConnected(graph);

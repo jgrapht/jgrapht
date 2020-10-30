@@ -84,7 +84,7 @@ public class HierholzerEulerianCycle<V, E>
         if (graph.vertexSet().isEmpty()) {
             // null-graph return false
             return false;
-        } else if (graph.edgeSet().size() == 0) {
+        } else if (graph.edgeSet().isEmpty()) {
             // empty-graph with vertices
             return true;
         } else if (graph.getType().isUndirected()) {
@@ -146,7 +146,7 @@ public class HierholzerEulerianCycle<V, E>
     {
         if (!isEulerian(g)) {
             throw new IllegalArgumentException("Graph is not Eulerian");
-        } else if (g.vertexSet().size() == 0) {
+        } else if (g.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Null graph not permitted");
         } else if (GraphTests.isEmpty(g)) {
             return GraphWalk.emptyWalk(g);

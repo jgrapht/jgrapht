@@ -130,7 +130,7 @@ public class ClusteringCoefficient<V, E>
      */
     public double getAverageClusteringCoefficient()
     {
-        if (graph.vertexSet().size() == 0)
+        if (graph.vertexSet().isEmpty())
             return 0;
 
         if (!computedAverage) {

@@ -137,7 +137,7 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E>
      */
     protected void requireNotEmpty(Graph<V, E> graph)
     {
-        if (graph.vertexSet().size() == 0) {
+        if (graph.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Graph contains no vertices");
         }
     }

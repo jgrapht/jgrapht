@@ -200,7 +200,7 @@ public class GraphGeneratorTest
         Graph<Object, DefaultEdge> empty = new DefaultDirectedGraph<>(
             SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         generator.generateGraph(empty);
-        assertTrue("non-empty graph generated", empty.vertexSet().size() == 0);
+        assertTrue("non-empty graph generated", empty.vertexSet().isEmpty());
     }
 
     /**

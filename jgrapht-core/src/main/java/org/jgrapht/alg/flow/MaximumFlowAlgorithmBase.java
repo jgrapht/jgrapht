@@ -313,7 +313,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             return comparator.compare(capacity, flow) > 0;
         }
 
-        public double getResidualCapacity(){
+        public double getResidualCapacity()
+        {
             return capacity - flow;
         }
 
@@ -452,7 +453,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         } else {
             cutEdges
                 .addAll(
-                    StreamSupport.stream(network.edgeSet().spliterator(), false)
+                    network
+                        .edgeSet().stream()
                         .filter(
                             e -> p1.contains(network.getEdgeSource(e))
                                 ^ p1.contains(network.getEdgeTarget(e)))

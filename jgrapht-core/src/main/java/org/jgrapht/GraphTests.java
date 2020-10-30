@@ -55,7 +55,7 @@ public abstract class GraphTests
     public static <V, E> boolean isEmpty(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return graph.edgeSet().size() == 0;
+        return graph.edgeSet().isEmpty();
     }
 
     /**
@@ -296,7 +296,7 @@ public abstract class GraphTests
         if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
         }
-        if (graph.vertexSet().size()==0) // null graph is not a forest
+        if (graph.vertexSet().isEmpty()) // null graph is not a forest
             return false;
 
         int nrConnectedComponents = new ConnectivityInspector<>(graph).connectedSets().size();
