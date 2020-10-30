@@ -300,6 +300,52 @@ public class EqualsAndHashCodeTest
         assertNotEquals(g, h);
     }
     
+    @Test
+    public void testUndirectedEquality()
+    {
+        Graph<Integer,
+            Integer> g = GraphTypeBuilder
+                .<Integer, Integer> undirected()
+                .buildGraph();
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addEdge(0, 1, 1);
+
+        Graph<Integer,
+            Integer> h = GraphTypeBuilder
+            .<Integer, Integer> undirected()
+            .buildGraph();
+        h.addVertex(0);
+        h.addVertex(1);
+        h.addEdge(1, 0, 1);
+
+        assertEquals(g.hashCode(), h.hashCode());
+        assertEquals(g, h);
+    }
+    
+    @Test
+    public void testDirectedEquality()
+    {
+        Graph<Integer,
+            Integer> g = GraphTypeBuilder
+                .<Integer, Integer> directed()
+                .buildGraph();
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addEdge(0, 1, 1);
+
+        Graph<Integer,
+            Integer> h = GraphTypeBuilder
+            .<Integer, Integer> directed()
+            .buildGraph();
+        h.addVertex(0);
+        h.addVertex(1);
+        h.addEdge(1, 0, 1);
+
+        assertNotEquals(g.hashCode(), h.hashCode());
+        assertNotEquals(g, h);
+    }
+    
     /**
      * Simple custom edge class.
      */
