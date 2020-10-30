@@ -24,7 +24,6 @@ import org.jgrapht.*;
 import org.jgrapht.util.*;
 
 import java.io.*;
-import java.util.Comparator;
 import java.util.function.*;
 
 /**
@@ -229,6 +228,7 @@ public class MutableNetworkAdapter<V, E>
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.network = Graphs.copyOf(this.network);
+            newGraph.vertexOrder = new ElementOrder<>(newGraph.vertexOrderMethod);
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -293,6 +293,9 @@ public class MutableNetworkAdapter<V, E>
             E e = (E) ois.readObject();
             network.addEdge(s, t, e);
         }
+        
+        // setup the vertex order
+        vertexOrder = new ElementOrder<>(vertexOrderMethod);
     }
 
 }

@@ -229,9 +229,12 @@ public class MutableGraphAdapter<V>
         try {
             MutableGraphAdapter<V> newGraph = TypeUtil.uncheckedCast(super.clone());
 
+            newGraph.vertexSupplier = this.vertexSupplier;
+            newGraph.edgeSupplier = this.edgeSupplier;
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.graph = Graphs.copyOf(this.graph);
+            newGraph.vertexOrder = new ElementOrder<>(newGraph.vertexOrderMethod);
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -295,6 +298,9 @@ public class MutableGraphAdapter<V>
             V t = (V) ois.readObject();
             graph.putEdge(s, t);
         }
+        
+        // setup the vertex order
+        vertexOrder = new ElementOrder<>(vertexOrderMethod);
     }
 
 }

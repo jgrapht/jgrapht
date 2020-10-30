@@ -17,6 +17,7 @@
  */
 package org.jgrapht.graph.guava;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -27,7 +28,11 @@ import java.util.Comparator;
  * @param <T> the element type
  */
 public class ElementOrderMethod<T>
+    implements
+    Serializable
 {
+    private static final long serialVersionUID = 6774881812704056362L;
+
     private Comparator<T> comparator;
     private boolean naturalOrdering;
 

@@ -58,7 +58,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     protected Supplier<EndpointPair<V>> edgeSupplier;
     protected transient G graph;
 
-    protected ElementOrder<V> vertexOrder;
+    protected ElementOrderMethod<V> vertexOrderMethod;
+    protected transient ElementOrder<V> vertexOrder;
 
     /**
      * Create a new adapter.
@@ -89,8 +90,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      * @param graph the graph
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
-     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This is required 
-     *        in order to make edge source/targets be consistent.   
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
+     *        is required in order to make edge source/targets be consistent.
      */
     public BaseGraphAdapter(
         G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
@@ -99,6 +100,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.graph = Objects.requireNonNull(graph);
+        this.vertexOrderMethod = Objects.requireNonNull(vertexOrderMethod);
         this.vertexOrder = new ElementOrder<>(vertexOrderMethod);
     }
 
@@ -182,25 +184,33 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public V getEdgeSource(EndpointPair<V> e)
     {
-        V u = e.nodeU();
-        V v = e.nodeV();
-        int c = vertexOrder.compare(u, v);
-        if (c <= 0) { 
-            return u;
+        if (graph.isDirected()) {
+            return e.nodeU();
+        } else {
+            V u = e.nodeU();
+            V v = e.nodeV();
+            int c = vertexOrder.compare(u, v);
+            if (c <= 0) {
+                return u;
+            }
+            return v;
         }
-        return v;
     }
 
     @Override
     public V getEdgeTarget(EndpointPair<V> e)
     {
-        V u = e.nodeU();
-        V v = e.nodeV();
-        int c = vertexOrder.compare(u, v);
-        if (c > 0) { 
-            return v;
+        if (graph.isDirected()) {
+            return e.nodeV();
+        } else {
+            V u = e.nodeU();
+            V v = e.nodeV();
+            int c = vertexOrder.compare(u, v);
+            if (c <= 0) {
+                return v;
+            }
+            return u;
         }
-        return u;
     }
 
     @Override

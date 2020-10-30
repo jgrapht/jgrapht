@@ -293,10 +293,13 @@ public class MutableValueGraphAdapter<V, W>
         try {
             MutableValueGraphAdapter<V, W> newGraph = TypeUtil.uncheckedCast(super.clone());
 
+            newGraph.vertexSupplier = this.vertexSupplier;
+            newGraph.edgeSupplier = this.edgeSupplier;
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.valueConverter = this.valueConverter;
             newGraph.valueGraph = Graphs.copyOf(this.valueGraph);
+            newGraph.vertexOrder = new ElementOrder<>(newGraph.vertexOrderMethod);
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -363,6 +366,9 @@ public class MutableValueGraphAdapter<V, W>
             W w = (W) ois.readObject();
             valueGraph.putEdgeValue(s, t, w);
         }
+        
+        // setup the vertex order
+        vertexOrder = new ElementOrder<>(vertexOrderMethod);
     }
 
 }
