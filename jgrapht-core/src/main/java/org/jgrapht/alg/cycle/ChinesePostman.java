@@ -83,7 +83,7 @@ public class ChinesePostman<V, E>
         GraphTests.requireDirectedOrUndirected(graph);
 
         // If graph has no vertices, or no edges, instantly return.
-        if (graph.vertexSet().isEmpty() || graph.iterables().edgeCount() == 0)
+        if (graph.vertexSet().isEmpty() || graph.edgeSet().size() == 0)
             return new HierholzerEulerianCycle<V, E>().getEulerianCycle(graph);
 
         assert GraphTests.isStronglyConnected(graph);
@@ -171,7 +171,7 @@ public class ChinesePostman<V, E>
         Map<V, Integer> imbalancedVertices = new LinkedHashMap<>();
         Set<V> negImbalancedVertices = new HashSet<>();
         Set<V> postImbalancedVertices = new HashSet<>();
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             int imbalance = graph.outDegreeOf(v) - graph.inDegreeOf(v);
 
             if (imbalance == 0)

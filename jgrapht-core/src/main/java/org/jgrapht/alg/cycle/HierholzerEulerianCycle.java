@@ -84,12 +84,12 @@ public class HierholzerEulerianCycle<V, E>
         if (graph.vertexSet().isEmpty()) {
             // null-graph return false
             return false;
-        } else if (graph.iterables().edgeCount() == 0) {
+        } else if (graph.edgeSet().size() == 0) {
             // empty-graph with vertices
             return true;
         } else if (graph.getType().isUndirected()) {
             // check odd degrees
-            for (V v : graph.iterables().vertices()) {
+            for (V v : graph.vertexSet()) {
                 if (graph.degreeOf(v) % 2 == 1) {
                     return false;
                 }
@@ -110,7 +110,7 @@ public class HierholzerEulerianCycle<V, E>
             return true;
         } else {
             // check same in and out degrees
-            for (V v : graph.iterables().vertices()) {
+            for (V v : graph.vertexSet()) {
                 if (graph.inDegreeOf(v) != graph.outDegreeOf(v)) {
                     return false;
                 }
@@ -214,7 +214,7 @@ public class HierholzerEulerianCycle<V, E>
         this.startVertex = null;
 
         Map<V, VertexNode> vertices = new HashMap<>();
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             if (g.outDegreeOf(v) > 0) {
                 VertexNode n = new VertexNode(null, v, verticesHead);
                 if (verticesHead != null) {
@@ -225,7 +225,7 @@ public class HierholzerEulerianCycle<V, E>
             }
         }
 
-        for (E e : g.iterables().edges()) {
+        for (E e : g.edgeSet()) {
             VertexNode sNode = vertices.get(g.getEdgeSource(e));
             VertexNode tNode = vertices.get(g.getEdgeTarget(e));
             addEdge(sNode, tNode, e);

@@ -305,7 +305,7 @@ public class ContractionHierarchyPrecomputation<V, E>
     private void fillContractionGraphAndVerticesArray()
     {
         int vertexId = 0;
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             ContractionVertex<V> contractionVertex = new ContractionVertex<>(vertex, vertexId);
             vertices.add(contractionVertex);
             ++vertexId;
@@ -314,7 +314,7 @@ public class ContractionHierarchyPrecomputation<V, E>
             contractionMapping.put(vertex, contractionVertex);
         }
 
-        for (E e : graph.iterables().edges()) {
+        for (E e : graph.edgeSet()) {
             V source = graph.getEdgeSource(e);
             V target = graph.getEdgeTarget(e);
             if (!source.equals(target)) {

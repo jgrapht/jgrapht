@@ -294,7 +294,7 @@ public class JGraphXAdapter<V, E>
      */
     private void insertJGraphT(Graph<V, E> graph)
     {
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             addJGraphTVertex(vertex);
         }
 

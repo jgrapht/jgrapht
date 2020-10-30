@@ -83,7 +83,7 @@ public class MaximumCardinalityIterator<V, E>
             buckets = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
             buckets.set(0, new HashSet<>(graph.vertexSet()));
             cardinalityMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-            for (V v : graph.iterables().vertices()) {
+            for (V v : graph.vertexSet()) {
                 cardinalityMap.put(v, 0);
             }
             maxCardinality = 0;

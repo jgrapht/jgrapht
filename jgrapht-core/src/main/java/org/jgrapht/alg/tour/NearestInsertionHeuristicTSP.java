@@ -107,7 +107,7 @@ public class NearestInsertionHeuristicTSP<V, E>
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
         checkGraph(graph);
-        if (graph.iterables().vertexCount() == 1) {
+        if (graph.vertexSet().size() == 1) {
             return getSingletonTour(graph);
         }
         return vertexListToTour(augment(subtour(graph), graph), graph);

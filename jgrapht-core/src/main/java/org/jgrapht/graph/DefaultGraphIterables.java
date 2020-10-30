@@ -17,84 +17,41 @@
  */
 package org.jgrapht.graph;
 
+import java.util.Objects;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphIterables;
 
 /**
- * Default implementation for the graph iterables which simply delegates to the
- * set implementation.
- * 
+ * The default implementation of the graph iterables which simply delegates to the set
+ * implementations.
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class DefaultGraphIterables<V, E> implements GraphIterables<V, E> {
+public class DefaultGraphIterables<V, E>
+    implements
+    GraphIterables<V, E>
+{
+    /**
+     * The underlying graph
+     */
+    protected Graph<V, E> graph;
 
-	protected Graph<V, E> graph;
+    /**
+     * Create new graph iterables
+     */
+    public DefaultGraphIterables(Graph<V, E> graph)
+    {
+        this.graph = Objects.requireNonNull(graph);
+    }
 
-	public DefaultGraphIterables(Graph<V, E> graph) {
-		this.graph = graph;
-	}
-	
-	@Override
-	public Graph<V,E> getGraph() { 
-	    return graph;
-	}
-
-	@Override
-	public Iterable<E> edges() {
-		return graph.edgeSet();
-	}
-
-	@Override
-	public long edgeCount() {
-		return graph.edgeSet().size();
-	}
-
-	@Override
-	public Iterable<V> vertices() {
-		return graph.vertexSet();
-	}
-
-	@Override
-	public long vertexCount() {
-		return graph.vertexSet().size();
-	}
-
-	@Override
-	public Iterable<E> edgesOf(V vertex) {
-		return graph.edgesOf(vertex);
-	}
-
-	@Override
-	public long degreeOf(V vertex) {
-		return graph.degreeOf(vertex);
-	}
-
-	@Override
-	public Iterable<E> incomingEdgesOf(V vertex) {
-		return graph.incomingEdgesOf(vertex);
-	}
-
-	@Override
-	public long inDegreeOf(V vertex) {
-		return graph.inDegreeOf(vertex);
-	}
-
-	@Override
-	public Iterable<E> outgoingEdgesOf(V vertex) {
-		return graph.outgoingEdgesOf(vertex);
-	}
-
-	@Override
-	public long outDegreeOf(V vertex) {
-		return graph.outDegreeOf(vertex);
-	}
-
-	@Override
-	public Iterable<E> allEdges(V sourceVertex, V targetVertex) {
-		return graph.getAllEdges(sourceVertex, targetVertex);
-	}
+    @Override
+    public Graph<V, E> getGraph()
+    {
+        return graph;
+    }
 
 }

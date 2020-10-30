@@ -270,7 +270,7 @@ public class ColorRefinementAlgorithm<V, E>
             return false;
         }
 
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             // ensure that the key set of alpha and the vertex set of the graph actually
             // coincide
             if (!alpha.getColors().containsKey(v)) {
@@ -365,7 +365,7 @@ public class ColorRefinementAlgorithm<V, E>
                 colorClasses.put(c, new ArrayList<>());
                 positiveDegreeColorClasses.put(c, new ArrayList<>());
             }
-            for (V v : graph.iterables().vertices()) {
+            for (V v : graph.vertexSet()) {
                 colorClasses.get(alpha.getColors().get(v)).add(v);
                 colorDegree.put(v, 0);
                 coloring.put(v, alpha.getColors().get(v));

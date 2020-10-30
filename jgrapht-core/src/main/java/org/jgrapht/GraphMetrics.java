@@ -303,7 +303,7 @@ public abstract class GraphMetrics
         Map<V, Integer> vertexOrder =
             CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         int k = 0;
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             vertexOrder.put(v, k++);
         }
 
@@ -321,7 +321,7 @@ public abstract class GraphMetrics
         // count the number of triangles formed from only heavy-hitter vertices
         long numberTriangles = naiveCountTriangles(graph, heavyHitterVertices);
 
-        for (E edge : graph.iterables().edges()) {
+        for (E edge : graph.edgeSet()) {
             V v1 = graph.getEdgeSource(edge);
             V v2 = graph.getEdgeTarget(edge);
 

@@ -94,7 +94,7 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeightPerEdgeWeight<
     @Override
     protected double computeDensityNumerator(Graph<V, E> g)
     {
-        return StreamSupport.stream(g.iterables().edges().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
+        return StreamSupport.stream(g.edgeSet().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
     }
 
     @Override

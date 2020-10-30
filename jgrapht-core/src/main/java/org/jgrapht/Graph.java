@@ -17,8 +17,9 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Collection;
+import java.util.Set;
+import java.util.function.Supplier;
 
 import org.jgrapht.graph.DefaultGraphIterables;
 
@@ -329,10 +330,10 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
-     * @throws ArithmeticException if the result overflows an int 
+     * @throws ArithmeticException if the result overflows an int
      */
     int degreeOf(V vertex);
-    
+
     /**
      * Returns a set of all edges touching the specified vertex. If no edges are touching the
      * specified vertex returns an empty set.
@@ -344,7 +345,7 @@ public interface Graph<V, E>
      * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> edgesOf(V vertex);
-    
+
     /**
      * Returns the "in degree" of the specified vertex.
      * 
@@ -362,10 +363,10 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
-     * @throws ArithmeticException if the result overflows an int 
+     * @throws ArithmeticException if the result overflows an int
      */
     int inDegreeOf(V vertex);
-    
+
     /**
      * Returns a set of all edges incoming into the specified vertex.
      *
@@ -398,10 +399,10 @@ public interface Graph<V, E>
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
-     * @throws ArithmeticException if the result overflows an int 
+     * @throws ArithmeticException if the result overflows an int
      */
     int outDegreeOf(V vertex);
-  
+
     /**
      * Returns a set of all edges outgoing from the specified vertex.
      * 
@@ -416,7 +417,7 @@ public interface Graph<V, E>
      * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> outgoingEdgesOf(V vertex);
- 
+
     /**
      * Removes all the edges in this graph that are also contained in the specified edge collection.
      * After this call returns, this graph will contain no edges in common with the specified edges.
@@ -600,15 +601,16 @@ public interface Graph<V, E>
     {
         this.setEdgeWeight(this.getEdge(sourceVertex, targetVertex), weight);
     }
-    
+
     /**
-     * Access the graph using the {@link GraphIterables} interface. This allows accessing 
-     * graphs without the restrictions imposed by 32-bit arithmetic.  
+     * Access the graph using the {@link GraphIterables} interface. This allows accessing graphs
+     * without the restrictions imposed by 32-bit arithmetic.
      * 
      * @return the graph iterables
      */
-    default GraphIterables<V, E> iterables() { 
-    	return new DefaultGraphIterables<V, E>(this);
+    default GraphIterables<V, E> iterables()
+    {
+        return new DefaultGraphIterables<V, E>(this);
     }
-    
+
 }

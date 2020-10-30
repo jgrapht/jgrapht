@@ -567,7 +567,8 @@ public abstract class AbstractBaseGraph<V, E>
     {
         // override interface to avoid instantiating frequently
         if (graphIterables == null) {
-            graphIterables = new DefaultGraphIterables<>(this);
+            graphIterables =
+                new SpecificsGraphIterables<>(this, specifics, intrusiveEdgesSpecifics);
         }
         return graphIterables;
     }

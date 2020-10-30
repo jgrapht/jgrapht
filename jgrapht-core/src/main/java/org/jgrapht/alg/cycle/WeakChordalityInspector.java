@@ -126,7 +126,7 @@ public class WeakChordalityInspector<V, E>
         vertices = CollectionUtil.newHashMapWithExpectedSize(n);
         indices = CollectionUtil.newHashMapWithExpectedSize(n);
         int i = 0;
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             indices.put(i, v);
             vertices.put(v, i++);
         }
@@ -233,7 +233,7 @@ public class WeakChordalityInspector<V, E>
     private List<Pair<List<Pair<Integer, Integer>>, E>> computeGlobalSeparatorList()
     {
         List<Pair<List<Pair<Integer, Integer>>, E>> globalSeparatorList = new ArrayList<>();
-        for (E edge : graph.iterables().edges()) {
+        for (E edge : graph.edgeSet()) {
             V source = graph.getEdgeSource(edge);
             V target = graph.getEdgeTarget(edge);
             if (source != target) {
@@ -597,7 +597,7 @@ public class WeakChordalityInspector<V, E>
     {
         Map<V, Boolean> visited =
             CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }
         visited.put(target, true);
@@ -733,7 +733,7 @@ public class WeakChordalityInspector<V, E>
         Map<V, Byte> dfsMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         // 0 - unvisited (white), 1 - neighbor of the edge (red), 2 - visited (black)
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             if (neighborhood.contains(vertex)) {
                 dfsMap.put(vertex, (byte) 1);
             } else {
@@ -743,7 +743,7 @@ public class WeakChordalityInspector<V, E>
         dfsMap.put(source, (byte) 2);
         dfsMap.put(target, (byte) 2);
 
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             if (dfsMap.get(vertex) == 0) {
                 // possible to find one more separator
                 Set<V> separator = getSeparator(graph, vertex, dfsMap);

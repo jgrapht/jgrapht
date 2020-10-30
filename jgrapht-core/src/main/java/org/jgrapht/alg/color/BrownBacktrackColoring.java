@@ -60,7 +60,7 @@ public class BrownBacktrackColoring<V, E>
         vertexList = new ArrayList<>(numVertices);
         neighbors = new int[numVertices][];
         indexMap = CollectionUtil.newHashMapWithExpectedSize(numVertices);
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             neighbors[vertexList.size()] = new int[graph.edgesOf(vertex).size()];
             indexMap.put(vertex, vertexList.size());
             vertexList.add(vertex);

@@ -563,7 +563,7 @@ public class GEXFExporter<V, E>
     {
         handler.startElement("", "", "nodes", null);
 
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             AttributesImpl attr = new AttributesImpl();
             attr.addAttribute("", "", "id", "CDATA", getVertexId(v));
             attr

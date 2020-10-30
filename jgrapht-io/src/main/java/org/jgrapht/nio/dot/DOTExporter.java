@@ -102,7 +102,7 @@ public class DOTExporter<V, E>
         }
 
         // vertex set
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             out.print(INDENT);
             out.print(getVertexID(v));
 

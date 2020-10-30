@@ -224,7 +224,7 @@ public class CSVExporter<V, E>
     {
         boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
 
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             exportEscapedField(out, getVertexId(v));
             for (E e : g.outgoingEdgesOf(v)) {
                 V w = Graphs.getOppositeVertex(g, e, v);
@@ -247,14 +247,14 @@ public class CSVExporter<V, E>
             parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
 
         if (exportNodeId) {
-            for (V v : g.iterables().vertices()) {
+            for (V v : g.vertexSet()) {
                 out.print(delimiter);
                 exportEscapedField(out, getVertexId(v));
             }
             out.println();
         }
         int n = g.vertexSet().size();
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             if (exportNodeId) {
                 exportEscapedField(out, getVertexId(v));
                 out.print(delimiter);

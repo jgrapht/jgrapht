@@ -208,7 +208,7 @@ public abstract class GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
             currentNetwork.addEdge(s, v);
             currentNetwork.addEdge(v, t);
         }
-        for (E e : this.graph.iterables().edges()) {
+        for (E e : this.graph.edgeSet()) {
             DefaultWeightedEdge e1 =
                 currentNetwork.addEdge(this.graph.getEdgeSource(e), this.graph.getEdgeTarget(e));
             DefaultWeightedEdge e2 =
