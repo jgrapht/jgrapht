@@ -98,7 +98,7 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
         this.edgeSupplier = edgeSupplier;
         this.network = Objects.requireNonNull(network);
         this.vertexOrderMethod = Objects.requireNonNull(vertexOrderMethod);
-        this.vertexOrder = new ElementOrder<>(vertexOrderMethod);
+        this.vertexOrder = createVertexOrder(vertexOrderMethod);
     }
 
     @Override
@@ -287,6 +287,33 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return network.edgesConnecting(sourceVertex, targetVertex);
+    }
+
+    /**
+     * Create the internal vertex order implementation.
+     * 
+     * @param vertexOrderMethod method to use
+     * @return the vertex order
+     */
+    protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
+    {
+        switch (vertexOrderMethod.getType()) {
+        case COMPARATOR:
+            return ElementOrder.comparator(vertexOrderMethod.comparator());
+        case GUAVA_COMPARATOR:
+            if (!network
+                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            {
+                throw new IllegalArgumentException(
+                    "Guava comparator only usable if node order is SORTED!");
+            }
+            return ElementOrder.comparator(network.nodeOrder().comparator());
+        case NATURAL:
+            return ElementOrder.natural();
+        case INTERNAL:
+        default:
+            return ElementOrder.internal();
+        }
     }
 
 }

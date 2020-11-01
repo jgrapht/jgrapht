@@ -44,26 +44,50 @@ class ElementOrder<V>
     private long nextId;
 
     /**
-     * Create a new total order.
+     * Create a new element order.
      * 
-     * @param method the method used to implement the total order
+     * @param comparator the comparator to use
+     * @param indices internal map from elements to long indices
      */
-    public ElementOrder(ElementOrderMethod<V> method)
+    private ElementOrder(Comparator<V> comparator, Map<V, Long> indices)
     {
-        this.indices = null;
-        this.comparator = null;
+        this.indices = indices;
+        this.comparator = comparator;
         this.nextId = 0;
+    }
 
-        switch (method.getType()) {
-        case COMPARATOR:
-            this.comparator = method.comparator();
-            break;
-        case NATURAL:
-            break;
-        case INTERNAL:
-        default:
-            this.indices = new HashMap<>();
-        }
+    /**
+     * Create an element order with a comparator
+     * 
+     * @param <V> the element type
+     * @param comparator the comparator
+     * @return the element order
+     */
+    public static <V> ElementOrder<V> comparator(Comparator<V> comparator)
+    {
+        return new ElementOrder<>(comparator, null);
+    }
+
+    /**
+     * Create an element order with the natural ordering
+     * 
+     * @param <V> the element type
+     * @return the element order
+     */
+    public static <V> ElementOrder<V> natural()
+    {
+        return new ElementOrder<>(null, null);
+    }
+
+    /**
+     * Create an internal element order which maintains a map from elements to long values.
+     * 
+     * @param <V> the element type
+     * @return the element order
+     */
+    public static <V> ElementOrder<V> internal()
+    {
+        return new ElementOrder<>(null, new HashMap<>());
     }
 
     /**

@@ -33,11 +33,13 @@ public class ElementOrderMethod<T>
 {
     private static final long serialVersionUID = 6774881812704056362L;
 
+    private Type type;
     private Comparator<T> comparator;
-    private boolean naturalOrdering;
 
-    private ElementOrderMethod()
+    private ElementOrderMethod(Type type, Comparator<T> comparator)
     {
+        this.type = type;
+        this.comparator = comparator;
     }
 
     /**
@@ -48,10 +50,7 @@ public class ElementOrderMethod<T>
      */
     public static <T> ElementOrderMethod<T> natural()
     {
-        ElementOrderMethod<T> m = new ElementOrderMethod<>();
-        m.comparator = null;
-        m.naturalOrdering = true;
-        return m;
+        return new ElementOrderMethod<>(Type.NATURAL, null);
     }
 
     /**
@@ -63,10 +62,7 @@ public class ElementOrderMethod<T>
      */
     public static <T> ElementOrderMethod<T> internal()
     {
-        ElementOrderMethod<T> m = new ElementOrderMethod<>();
-        m.comparator = null;
-        m.naturalOrdering = false;
-        return m;
+        return new ElementOrderMethod<>(Type.INTERNAL, null);
     }
 
     /**
@@ -78,10 +74,18 @@ public class ElementOrderMethod<T>
      */
     public static <T> ElementOrderMethod<T> comparator(Comparator<T> comparator)
     {
-        ElementOrderMethod<T> m = new ElementOrderMethod<>();
-        m.comparator = comparator;
-        m.naturalOrdering = false;
-        return m;
+        return new ElementOrderMethod<T>(Type.COMPARATOR, comparator);
+    }
+    
+    /**
+     * Get the guava comparator ordering method.
+     * 
+     * @param <T> the element type
+     * @return the comparator ordering method
+     */
+    public static <T> ElementOrderMethod<T> guavaComparator()
+    {
+        return new ElementOrderMethod<T>(Type.GUAVA_COMPARATOR, null);
     }
 
     /**
@@ -101,12 +105,7 @@ public class ElementOrderMethod<T>
      */
     public Type getType()
     {
-        if (comparator != null) {
-            return Type.COMPARATOR;
-        } else if (naturalOrdering) {
-            return Type.NATURAL;
-        }
-        return Type.INTERNAL;
+        return type;
     }
 
     /**
@@ -123,6 +122,10 @@ public class ElementOrderMethod<T>
          * are not comparable.
          */
         NATURAL,
+        /**
+         * Use the Guava node order comparator. 
+         */
+        GUAVA_COMPARATOR,
         /**
          * An internal numbering scheme backed by a map. This incurs space penalty and additional
          * hashtable lookups on each comparison.

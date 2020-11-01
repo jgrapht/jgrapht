@@ -60,7 +60,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     protected ToDoubleFunction<W> valueConverter;
     protected transient VG valueGraph;
 
-    protected ElementOrderMethod<V> vertexOrderMethod;    
+    protected ElementOrderMethod<V> vertexOrderMethod;
     protected transient ElementOrder<V> vertexOrder;
 
     /**
@@ -110,7 +110,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
         this.valueGraph = Objects.requireNonNull(valueGraph);
         this.valueConverter = Objects.requireNonNull(valueConverter);
         this.vertexOrderMethod = Objects.requireNonNull(vertexOrderMethod);
-        this.vertexOrder = new ElementOrder<>(vertexOrderMethod);
+        this.vertexOrder = createVertexOrder(vertexOrderMethod);
     }
 
     @Override
@@ -331,6 +331,33 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     final EndpointPair<V> createEdge(V s, V t)
     {
         return valueGraph.isDirected() ? EndpointPair.ordered(s, t) : EndpointPair.unordered(s, t);
+    }
+
+    /**
+     * Create the internal vertex order implementation.
+     * 
+     * @param vertexOrderMethod method to use
+     * @return the vertex order
+     */
+    protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
+    {
+        switch (vertexOrderMethod.getType()) {
+        case COMPARATOR:
+            return ElementOrder.comparator(vertexOrderMethod.comparator());
+        case GUAVA_COMPARATOR:
+            if (!valueGraph
+                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            {
+                throw new IllegalArgumentException(
+                    "Guava comparator only usable if node order is SORTED!");
+            }
+            return ElementOrder.comparator(valueGraph.nodeOrder().comparator());
+        case NATURAL:
+            return ElementOrder.natural();
+        case INTERNAL:
+        default:
+            return ElementOrder.internal();
+        }
     }
 
 }

@@ -101,7 +101,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
         this.edgeSupplier = edgeSupplier;
         this.graph = Objects.requireNonNull(graph);
         this.vertexOrderMethod = Objects.requireNonNull(vertexOrderMethod);
-        this.vertexOrder = new ElementOrder<>(vertexOrderMethod);
+        this.vertexOrder = createVertexOrder(vertexOrderMethod);
     }
 
     @Override
@@ -319,6 +319,33 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     final EndpointPair<V> createEdge(V s, V t)
     {
         return graph.isDirected() ? EndpointPair.ordered(s, t) : EndpointPair.unordered(s, t);
+    }
+
+    /**
+     * Create the internal vertex order implementation.
+     * 
+     * @param vertexOrderMethod method to use
+     * @return the vertex order
+     */
+    protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
+    {
+        switch (vertexOrderMethod.getType()) {
+        case COMPARATOR:
+            return ElementOrder.comparator(vertexOrderMethod.comparator());
+        case GUAVA_COMPARATOR:
+            if (!graph
+                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            {
+                throw new IllegalArgumentException(
+                    "Guava comparator only usable if node order is SORTED!");
+            }
+            return ElementOrder.comparator(graph.nodeOrder().comparator());
+        case NATURAL:
+            return ElementOrder.natural();
+        case INTERNAL:
+        default:
+            return ElementOrder.internal();
+        }
     }
 
 }
