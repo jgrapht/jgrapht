@@ -124,6 +124,7 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 		m.addArc(0, 1);
 		m.addArc(0, 2);
 		m.addArc(1, 2);
+		m.addArc(2, 2);
 
 		final it.unimi.dsi.webgraph.ImmutableGraph mg = m.immutableView();
 		final ImmutableGraph g = ImmutableGraph.wrap(mg);
@@ -189,15 +190,16 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 		assertFalse(b.containsEdge(null));
 
 		assertEquals(2, a.degreeOf(1L));
+		assertEquals(4, a.degreeOf(2L));
 		assertEquals(1, a.inDegreeOf(1L));
 		assertEquals(1, a.outDegreeOf(1L));
 		assertEquals(2, a.iterables().degreeOf(1L));
 		assertEquals(1, a.iterables().inDegreeOf(1L));
 		assertEquals(1, a.iterables().outDegreeOf(1L));
 
-		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 0L, 2L }, new long[] { 1L, 2L }), a.edgeSet());
+		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 0L, 2L }, new long[] { 1L, 2L }, new long[] { 2L, 2L }), a.edgeSet());
 		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 0L, 2L }, new long[] { 1L,
-				2L }), ordered(a.iterables().edges()));
+				2L }, new long[] { 2L, 2L }), ordered(a.iterables().edges()));
 
 		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 1L, 2L }), a.edgesOf(1L));
 		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 1L, 2L }), ordered(a.iterables().edgesOf(1L)));
@@ -282,8 +284,8 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 		assertEquals(unorderedSingleton(0L, 1L), a.getAllEdges(0L, 1L));
 		assertEquals(unorderedSingleton(0L, 1L), unordered(a.iterables().allEdges(0L, 1L)));
 
-		assertEquals(3, a.degreeOf(1L));
-		assertEquals(3, a.iterables().degreeOf(1L));
+		assertEquals(4, a.degreeOf(1L));
+		assertEquals(4, a.iterables().degreeOf(1L));
 	}
 
 	@Test

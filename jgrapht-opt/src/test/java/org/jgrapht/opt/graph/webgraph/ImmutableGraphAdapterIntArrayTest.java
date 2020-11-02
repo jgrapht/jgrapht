@@ -123,6 +123,7 @@ public class ImmutableGraphAdapterIntArrayTest {
 		m.addArc(0, 1);
 		m.addArc(0, 2);
 		m.addArc(1, 2);
+		m.addArc(2, 2);
 
 		final ImmutableGraph g = m.immutableView();
 		final ImmutableGraph t = Transform.transpose(g);
@@ -186,15 +187,17 @@ public class ImmutableGraphAdapterIntArrayTest {
 		assertFalse(b.containsEdge(null));
 
 		assertEquals(2, a.degreeOf(1));
+		assertEquals(4, a.degreeOf(2));
 		assertEquals(1, a.inDegreeOf(1));
 		assertEquals(1, a.outDegreeOf(1));
 		assertEquals(2, a.degreeOf(1));
 		assertEquals(1, a.inDegreeOf(1));
 		assertEquals(1, a.outDegreeOf(1));
 
-		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 0, 2 }, new int[] { 1, 2 }), a.edgeSet());
+		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 0, 2 }, new int[] { 1, 2 }, new int[] { 2,
+				2 }), a.edgeSet());
 		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 0, 2 }, new int[] { 1,
-				2 }), ordered(a.iterables().edges()));
+				2 }, new int[] { 2, 2 }), ordered(a.iterables().edges()));
 
 		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 1, 2 }), a.edgesOf(1));
 		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 1, 2 }), ordered(a.iterables().edgesOf(1)));
@@ -280,8 +283,8 @@ public class ImmutableGraphAdapterIntArrayTest {
 		assertEquals(unorderedSingleton(0, 1), a.getAllEdges(0, 1));
 		assertEquals(unorderedSingleton(0, 1), unordered(a.iterables().allEdges(0, 1)));
 
-		assertEquals(3, a.degreeOf(1));
-		assertEquals(3, a.iterables().degreeOf(1));
+		assertEquals(4, a.degreeOf(1));
+		assertEquals(4, a.iterables().degreeOf(1));
 	}
 
 	@Test

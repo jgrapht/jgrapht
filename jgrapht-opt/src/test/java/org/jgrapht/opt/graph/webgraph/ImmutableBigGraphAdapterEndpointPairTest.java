@@ -83,6 +83,7 @@ public class ImmutableBigGraphAdapterEndpointPairTest {
 		m.addArc(0, 1);
 		m.addArc(0, 2);
 		m.addArc(1, 2);
+		m.addArc(2, 2);
 
 		final it.unimi.dsi.webgraph.ImmutableGraph mg = m.immutableView();
 		final ImmutableGraph g = ImmutableGraph.wrap(mg);
@@ -150,6 +151,7 @@ public class ImmutableBigGraphAdapterEndpointPairTest {
 		assertFalse(a.containsEdge(EndpointPair.unordered(0L, 1L)));
 
 		assertEquals(2, a.degreeOf(1L));
+		assertEquals(4, a.degreeOf(2L));
 		assertEquals(1, a.inDegreeOf(1L));
 		assertEquals(1, a.outDegreeOf(1L));
 		assertEquals(2, a.iterables().degreeOf(1L));
@@ -157,10 +159,12 @@ public class ImmutableBigGraphAdapterEndpointPairTest {
 		assertEquals(1, a.iterables().outDegreeOf(1L));
 
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Long>>(new EndpointPair[] { EndpointPair.ordered(0L, 1L),
-				EndpointPair.ordered(0L, 2L), EndpointPair.ordered(1L, 2L) }), new ObjectOpenHashSet<>(a.edgeSet()));
+				EndpointPair.ordered(0L, 2L),
+				EndpointPair.ordered(1L, 2L), EndpointPair.ordered(2L, 2L) }), new ObjectOpenHashSet<>(a.edgeSet()));
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Long>>(new EndpointPair[] { EndpointPair.ordered(0L, 1L),
 				EndpointPair.ordered(0L, 2L),
-				EndpointPair.ordered(1L, 2L) }), new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
+				EndpointPair.ordered(1L, 2L),
+				EndpointPair.ordered(2L, 2L)}), new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
 
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Long>>(new EndpointPair[] { EndpointPair.ordered(0L, 1L),
 				EndpointPair.ordered(1L, 2L) }), a.edgesOf(1L));
@@ -253,8 +257,8 @@ public class ImmutableBigGraphAdapterEndpointPairTest {
 		assertEquals(Collections.singleton(EndpointPair.unordered(0L, 1L)), a.getAllEdges(0L, 1L));
 		assertEquals(Collections.singleton(EndpointPair.unordered(0L, 1L)), new ObjectOpenHashSet<>(a.iterables().allEdges(0L, 1L).iterator()));
 
-		assertEquals(3, a.degreeOf(1L));
-		assertEquals(3, a.iterables().degreeOf(1L));
+		assertEquals(4, a.degreeOf(1L));
+		assertEquals(4, a.iterables().degreeOf(1L));
 	}
 
 	@Test

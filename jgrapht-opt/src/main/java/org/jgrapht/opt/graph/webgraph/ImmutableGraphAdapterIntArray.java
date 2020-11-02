@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.jgrapht.DefaultGraphIterables;
 import org.jgrapht.GraphIterables;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
@@ -35,9 +36,7 @@ import org.jgrapht.graph.DefaultGraphType.Builder;
 import com.google.common.collect.Iterables;
 import com.google.common.graph.Graph;
 
-import it.unimi.dsi.fastutil.ints.AbstractIntSet;
-import it.unimi.dsi.fastutil.ints.IntIterator;
-import it.unimi.dsi.fastutil.ints.IntIterators;
+import it.unimi.dsi.fastutil.ints.IntSets;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
@@ -242,7 +241,7 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 
 	@Override
 	public int degreeOf(final Integer vertex) {
-		return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex);
+		return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
 	}
 
 	@Override
@@ -304,22 +303,7 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 
 	@Override
 	public Set<Integer> vertexSet() {
-		return new AbstractIntSet() {
-			@Override
-			public boolean contains(final int x) {
-				return x >= 0 && x < n;
-			}
-
-			@Override
-			public int size() {
-				return n;
-			}
-
-			@Override
-			public IntIterator iterator() {
-				return IntIterators.fromTo(0, n);
-			}
-		};
+		return IntSets.fromTo(0, n);
 	}
 
 	@Override
@@ -355,14 +339,14 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 		return new ImmutableGraphAdapterIntArray(copy, copy);
 	}
 
-	// TODO: Replace with fastutil method
-	private long size(final Iterable<?> iterable) {
+	public static long size(final Iterable<?> iterable) {
 		long c = 0;
-		for (final Object o : iterable) c++;
+		for (@SuppressWarnings("unused")
+		final Object dummy : iterable) c++;
 		return c;
 	}
 
-	private final GraphIterables<Integer, int[]> ITERABLES = new GraphIterables<>() {
+	private final GraphIterables<Integer, int[]> ITERABLES = new DefaultGraphIterables<>(this) {
 		@Override
 		public long vertexCount() {
 			return n;
@@ -380,15 +364,9 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 			return m = size(edges());
 		}
 
-		// TODO: remove
-		@Override
-		public Iterable<int[]> allEdges(final Integer sourceVertex, final Integer targetVertex) {
-			return getAllEdges(sourceVertex, targetVertex);
-		}
-
 		@Override
 		public long degreeOf(final Integer vertex) {
-			return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex);
+			return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
 		}
 
 		@Override
@@ -448,12 +426,6 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 					return edge;
 				}
 			};
-		}
-
-		// TODO: remove
-		@Override
-		public Iterable<Integer> vertices() {
-			return vertexSet();
 		}
 
 		@Override

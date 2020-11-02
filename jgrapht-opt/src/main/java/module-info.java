@@ -7,7 +7,8 @@ module org.jgrapht.opt
     requires transitive org.jgrapht.core;
     requires transitive it.unimi.dsi.fastutil;
 	requires transitive webgraph;
-	requires transitive dsiutils;
 	requires transitive webgraph.big;
+	requires transitive dsiutils;
+	requires transitive sux4j;
 	requires transitive com.google.common;
 }

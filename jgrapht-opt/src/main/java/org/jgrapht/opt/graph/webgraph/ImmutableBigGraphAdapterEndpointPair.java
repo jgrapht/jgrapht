@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.jgrapht.DefaultGraphIterables;
 import org.jgrapht.GraphIterables;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
@@ -39,9 +40,7 @@ import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.LazyLongIterators;
 import it.unimi.dsi.big.webgraph.LazyLongSkippableIterator;
 import it.unimi.dsi.big.webgraph.NodeIterator;
-import it.unimi.dsi.fastutil.longs.AbstractLongSet;
-import it.unimi.dsi.fastutil.longs.LongIterator;
-import it.unimi.dsi.fastutil.longs.LongIterators;
+import it.unimi.dsi.fastutil.longs.LongSets;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
@@ -256,7 +255,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 			final long d = inDegreeOf(vertex) + outDegreeOf(vertex);
 			if (d >= Integer.MAX_VALUE) throw new ArithmeticException();
 			return (int)d;
-		} else return inDegreeOf(vertex);
+		} else return inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
 	}
 
 	@Override
@@ -323,22 +322,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 
 	@Override
 	public Set<Long> vertexSet() {
-		return new AbstractLongSet() {
-			@Override
-			public boolean contains(final long x) {
-				return x >= 0 && x < n;
-			}
-
-			@Override
-			public int size() {
-				return n <= Integer.MAX_VALUE ? (int)n : -1;
-			}
-
-			@Override
-			public LongIterator iterator() {
-				return LongIterators.fromTo(0, n);
-			}
-		};
+		return LongSets.fromTo(0, n);
 	}
 
 	@Override
@@ -374,14 +358,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 		return new ImmutableBigGraphAdapterEndpointPair(copy, copy);
 	}
 
-	// TODO: Replace with fastutil method
-	private long size(final Iterable<?> iterable) {
-		long c = 0;
-		for (final Object o : iterable) c++;
-		return c;
-	}
-
-	private final GraphIterables<Long, EndpointPair<Long>> ITERABLES = new GraphIterables<>() {
+	private final GraphIterables<Long, EndpointPair<Long>> ITERABLES = new DefaultGraphIterables<>(this) {
 		@Override
 		public long vertexCount() {
 			return n;
@@ -396,18 +373,12 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 				} catch (final UnsupportedOperationException e) {
 				}
 			}
-			return m = size(edges());
-		}
-
-		// TODO: remove
-		@Override
-		public Iterable<EndpointPair<Long>> allEdges(final Long sourceVertex, final Long targetVertex) {
-			return getAllEdges(sourceVertex, targetVertex);
+			return m = ImmutableGraphAdapterIntArray.size(edges());
 		}
 
 		@Override
 		public long degreeOf(final Long vertex) {
-			return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex);
+			return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
 		}
 
 		@Override
@@ -465,12 +436,6 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 					return edge;
 				}
 			};
-		}
-
-		// TODO: remove
-		@Override
-		public Iterable<Long> vertices() {
-			return vertexSet();
 		}
 
 		@Override

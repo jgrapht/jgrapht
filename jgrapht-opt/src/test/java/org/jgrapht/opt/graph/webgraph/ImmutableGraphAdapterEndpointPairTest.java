@@ -82,6 +82,7 @@ public class ImmutableGraphAdapterEndpointPairTest {
 		m.addArc(0, 1);
 		m.addArc(0, 2);
 		m.addArc(1, 2);
+		m.addArc(2, 2);
 
 		final ImmutableGraph g = m.immutableView();
 		final ImmutableGraph t = Transform.transpose(g);
@@ -147,6 +148,7 @@ public class ImmutableGraphAdapterEndpointPairTest {
 		assertFalse(a.containsEdge(EndpointPair.unordered(0, 1)));
 
 		assertEquals(2, a.degreeOf(1));
+		assertEquals(4, a.degreeOf(2));
 		assertEquals(1, a.inDegreeOf(1));
 		assertEquals(1, a.outDegreeOf(1));
 		assertEquals(2, a.iterables().degreeOf(1));
@@ -155,10 +157,11 @@ public class ImmutableGraphAdapterEndpointPairTest {
 
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Integer>>(new EndpointPair[] { EndpointPair.ordered(0, 1),
 				EndpointPair.ordered(0, 2),
-				EndpointPair.ordered(1, 2) }), a.edgeSet());
+				EndpointPair.ordered(1, 2), EndpointPair.ordered(2, 2) }), a.edgeSet());
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Integer>>(new EndpointPair[] { EndpointPair.ordered(0, 1),
 				EndpointPair.ordered(0, 2),
-				EndpointPair.ordered(1, 2) }), new ObjectOpenHashSet(a.iterables().edges().iterator()));
+				EndpointPair.ordered(1, 2),
+				EndpointPair.ordered(2, 2) }), new ObjectOpenHashSet(a.iterables().edges().iterator()));
 
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Integer>>(new EndpointPair[] { EndpointPair.ordered(0, 1),
 				EndpointPair.ordered(1, 2) }), a.edgesOf(1));
@@ -250,8 +253,8 @@ public class ImmutableGraphAdapterEndpointPairTest {
 				EndpointPair.unordered(2, 3) }), new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(2).iterator()));
 		assertEquals(Collections.singleton(EndpointPair.unordered(0, 1)), a.getAllEdges(0, 1));
 
-		assertEquals(3, a.degreeOf(1));
-		assertEquals(3, a.iterables().degreeOf(1));
+		assertEquals(4, a.degreeOf(1));
+		assertEquals(4, a.iterables().degreeOf(1));
 	}
 
 	@Test
