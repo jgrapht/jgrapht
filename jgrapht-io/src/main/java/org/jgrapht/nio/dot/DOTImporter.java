@@ -306,6 +306,9 @@ public class DOTImporter<V, E>
                 }
                 
                 notifyEdgeWithAttributes(e, attrs);
+                
+                lastPair = p;
+                lastEdge = e;
             };
 
         public final BiConsumer<Pair<Pair<String, String>, String>,
