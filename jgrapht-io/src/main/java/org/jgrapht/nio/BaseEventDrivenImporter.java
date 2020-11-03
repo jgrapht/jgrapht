@@ -59,7 +59,6 @@ public abstract class BaseEventDrivenImporter<V, E>
         this.graphAttributeConsumers = new ArrayList<>();
         this.vertexAttributeConsumers = new ArrayList<>();
         this.edgeAttributeConsumers = new ArrayList<>();
-        this.edgeWithAttributesConsumers = new ArrayList<>();
         this.importEventConsumers = new ArrayList<>();
     }
 
