@@ -21,6 +21,7 @@ import org.jgrapht.alg.util.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.Map;
 import java.util.function.*;
 
 /**
@@ -88,6 +89,20 @@ public interface EventDrivenImporter<V, E>
     void removeVertexConsumer(Consumer<V> consumer);
 
     /**
+     * Add a vertex with attributes consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer);
+    
+    /**
+     * Remove a vertex with attributes consumer
+     * 
+     * @param consumer the consumer
+     */
+    void removeVertexWithAttributesConsumer(BiConsumer<V, Map<String, Attribute>> consumer);
+ 
+    /**
      * Add an edge consumer.
      * 
      * @param consumer the consumer
@@ -101,6 +116,20 @@ public interface EventDrivenImporter<V, E>
      */
     void removeEdgeConsumer(Consumer<E> consumer);
 
+    /**
+     * Add an edge with attributes consumer.
+     * 
+     * @param consumer the consumer
+     */
+    void addEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer);
+    
+    /**
+     * Remove an edge with attributes consumer
+     * 
+     * @param consumer the consumer
+     */
+    void removeEdgeWithAttributesConsumer(BiConsumer<E, Map<String, Attribute>> consumer);
+    
     /**
      * Add a graph attribute consumer.
      * 

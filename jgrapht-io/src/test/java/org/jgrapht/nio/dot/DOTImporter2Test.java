@@ -27,6 +27,7 @@ import java.io.*;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -949,4 +950,64 @@ public class DOTImporter2Test
 
     }
 
+    @Test
+    public void testCreateVerticesWithAttributes()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "digraph G {" + NL +
+                       "  a0 [color=gray];" + NL +
+                       "  a1 [color=green];" + NL +                       
+                       "  a0 -> a1;" + NL +
+                       "  a2 [color=white];" + NL +                       
+                       "}";
+        // @formatter:on
+
+        DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
+        
+        importer.setVertexWithAttributesFactory((id, attrs)->{
+            return id + "-" + attrs.get("color").getValue();
+        });
+
+        DirectedPseudograph<String, DefaultEdge> graph = new DirectedPseudograph<>(
+            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        importer.importGraph(graph, new StringReader(input));
+
+        assertTrue(graph.containsVertex("a0-gray"));
+        assertTrue(graph.containsVertex("a1-green"));
+        assertTrue(graph.containsVertex("a2-white"));
+    }
+    
+    @Test
+    public void testCreateEdgesWithAttributes()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "digraph G {" + NL +
+                       "  a0 [color=gray];" + NL +
+                       "  a1 [color=green];" + NL +                       
+                       "  a2 [color=white];" + NL +                       
+                       "  a0 -> a1 [label=\"e1\"];" + NL +
+                       "  a1 -> a2 [label=\"e2\"];" + NL +                       
+                       "}";
+        // @formatter:on
+
+        DOTImporter<String, String> importer = new DOTImporter<>();
+        
+        importer.setVertexWithAttributesFactory((id, attrs)->{
+            return id + "-" + attrs.get("color").getValue();
+        });
+        
+        importer.setEdgeWithAttributesFactory((attrs)->{
+            return attrs.get("label").getValue();
+        });
+
+        DirectedPseudograph<String, String> graph = new DirectedPseudograph<>(
+            SupplierUtil.createStringSupplier(), null, false);
+        importer.importGraph(graph, new StringReader(input));
+
+        assertTrue(graph.containsEdge("e1"));
+        assertTrue(graph.containsEdge("e2"));
+    }
+    
 }
