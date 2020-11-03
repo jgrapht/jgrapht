@@ -18,8 +18,15 @@
 package org.jgrapht;
 
 /**
- * A collection of graph iterables suitable for graph implementations which may contain a large
- * number of vertices and edges.
+ * Presents a graph as a collection of views suitable for graphs which contain a very large number
+ * of vertices or edges. Graph algorithms written these methods can work with graphs without the
+ * restrictions imposed by 32-bit arithmetic.
+ *
+ * <p>
+ * Whether the returned iterators support removal of elements is left to the graph implementation.
+ * It is the responsibility of callers who rely on this behavior to only use graph implementations
+ * which support it.
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -28,7 +35,6 @@ package org.jgrapht;
  */
 public interface GraphIterables<V, E>
 {
-
     /**
      * Get the underlying graph.
      * 
@@ -62,18 +68,17 @@ public interface GraphIterables<V, E>
     }
 
     /**
-     * Returns a set of the vertices contained in this graph. The set is backed by the graph, so
-     * changes to the graph are reflected in the set. If the graph is modified while an iteration
-     * over the set is in progress, the results of the iteration are undefined.
+     * Returns an iterable view over the vertices contained in this graph. The returned iterator is
+     * a live view of the vertices. If the graph is modified while an iteration is in progress, the
+     * results of the iteration are undefined.
      *
      * <p>
-     * The graph implementation may maintain a particular set ordering (e.g. via
-     * {@link java.util.LinkedHashSet}) for deterministic iteration, but this is not required. It is
-     * the responsibility of callers who rely on this behavior to only use graph implementations
-     * which support it.
+     * The graph implementation may maintain a particular ordering for deterministic iteration, but
+     * this is not required. It is the responsibility of callers who rely on this behavior to only
+     * use graph implementations which support it.
      * </p>
-     *
-     * @return a set view of the vertices contained in this graph.
+     * 
+     * @return an iterable view of the vertices contained in this graph
      */
     default Iterable<V> vertices()
     {
@@ -91,12 +96,13 @@ public interface GraphIterables<V, E>
     }
 
     /**
-     * Returns a set of all edges touching the specified vertex. If no edges are touching the
-     * specified vertex returns an empty set.
+     * Returns an iterable view over all edges touching the specified vertex. The returned iterators
+     * are live views. If the graph is modified while an iteration is in progress, the results of
+     * the iteration are undefined. If no edges are touching the specified vertex, the returned
+     * iterators are already exhausted.
      *
-     * @param vertex the vertex for which a set of touching edges is to be returned.
-     * @return a set of all edges touching the specified vertex.
-     *
+     * @param vertex input vertex
+     * @return an iterable view of the vertices contained in this graph
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
      */
@@ -127,15 +133,17 @@ public interface GraphIterables<V, E>
     }
 
     /**
-     * Returns a set of all edges incoming into the specified vertex.
-     *
+     * Returns an iterable view over all edges incoming into the specified vertex. The returned
+     * iterators are live views. If the graph is modified while an iteration is in progress, the
+     * results of the iteration are undefined.
+     * 
      * <p>
-     * In the case of undirected graphs this method returns all edges touching the vertex, thus,
-     * some of the returned edges may have their source and target vertices in the opposite order.
+     * In the case of undirected graphs the returned iterators return all edges touching the vertex,
+     * thus, some of the returned edges may have their source and target vertices in the opposite
+     * order.
      *
-     * @param vertex the vertex for which the list of incoming edges to be returned.
-     * @return a set of all edges incoming into the specified vertex.
-     *
+     * @param vertex input vertex
+     * @return an iterable view of all edges incoming into the specified vertex
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
      */
@@ -168,15 +176,17 @@ public interface GraphIterables<V, E>
     }
 
     /**
-     * Returns a set of all edges outgoing from the specified vertex.
+     * Returns an iterable view over all edges outgoing into the specified vertex. The returned
+     * iterators are live views. If the graph is modified while an iteration is in progress, the
+     * results of the iteration are undefined.
      * 
      * <p>
-     * In the case of undirected graphs this method returns all edges touching the vertex, thus,
-     * some of the returned edges may have their source and target vertices in the opposite order.
+     * In the case of undirected graphs the returned iterators return all edges touching the vertex,
+     * thus, some of the returned edges may have their source and target vertices in the opposite
+     * order.
      *
-     * @param vertex the vertex for which the list of outgoing edges to be returned.
-     * @return a set of all edges outgoing from the specified vertex.
-     *
+     * @param vertex input vertex
+     * @return an iterable view of all edges outgoing from the specified vertex
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
      */
@@ -209,10 +219,14 @@ public interface GraphIterables<V, E>
     }
 
     /**
-     * Returns a set of all edges connecting source vertex to target vertex if such vertices exist
-     * in this graph. If any of the vertices does not exist or is <code>null</code>, returns
-     * <code>null</code>. If both vertices exist but no edges found, returns an empty set.
-     *
+     * Returns an iterable view over all edges connecting source vertex to target vertex if such 
+     * vertices exist in this graph. The returned iterators are live views. If the graph is modified
+     * while an iteration is in progress, the results of the iteration are undefined.
+     * 
+     * If any of the vertices does not exist or is <code>null</code>, returns
+     * <code>null</code>. If both vertices exist but no edges found, returns an iterable which returns 
+     * exhausted iterators.
+     * 
      * <p>
      * In undirected graphs, some of the returned edges may have their source and target vertices in
      * the opposite order. In simple graphs the returned set is either singleton set or empty set.
@@ -221,7 +235,10 @@ public interface GraphIterables<V, E>
      * @param sourceVertex source vertex of the edge.
      * @param targetVertex target vertex of the edge.
      *
-     * @return a set of all edges connecting source vertex to target vertex.
+     * @return an iterable view of all edges connecting source to target vertex.
+     *
+     * @throws IllegalArgumentException if vertex is not found in the graph.
+     * @throws NullPointerException if vertex is <code>null</code>.
      */
     default Iterable<E> allEdges(V sourceVertex, V targetVertex)
     {

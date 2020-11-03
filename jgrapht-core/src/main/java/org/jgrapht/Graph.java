@@ -604,7 +604,8 @@ public interface Graph<V, E>
 
     /**
      * Access the graph using the {@link GraphIterables} interface. This allows accessing graphs
-     * without the restrictions imposed by 32-bit arithmetic.
+     * without the restrictions imposed by 32-bit arithmetic. Moreover, graph implementations are
+     * free to implement this interface without explicitly materializing intermediate results.
      * 
      * @return the graph iterables
      */
