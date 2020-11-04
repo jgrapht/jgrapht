@@ -54,7 +54,7 @@ public interface GraphIterables<V, E>
      */
     default Iterable<E> edges()
     {
-        return getGraph().edgeSet();
+        return new LiveIterableWrapper<>(() -> getGraph().edgeSet());
     }
 
     /**
@@ -82,7 +82,7 @@ public interface GraphIterables<V, E>
      */
     default Iterable<V> vertices()
     {
-        return getGraph().vertexSet();
+        return new LiveIterableWrapper<>(() -> getGraph().vertexSet());
     }
 
     /**
@@ -108,7 +108,7 @@ public interface GraphIterables<V, E>
      */
     default Iterable<E> edgesOf(V vertex)
     {
-        return getGraph().edgesOf(vertex);
+        return new LiveIterableWrapper<>(() -> getGraph().edgesOf(vertex));
     }
 
     /**
@@ -149,7 +149,7 @@ public interface GraphIterables<V, E>
      */
     default Iterable<E> incomingEdgesOf(V vertex)
     {
-        return getGraph().incomingEdgesOf(vertex);
+        return new LiveIterableWrapper<>(() -> getGraph().incomingEdgesOf(vertex));
     }
 
     /**
@@ -192,7 +192,7 @@ public interface GraphIterables<V, E>
      */
     default Iterable<E> outgoingEdgesOf(V vertex)
     {
-        return getGraph().outgoingEdgesOf(vertex);
+        return new LiveIterableWrapper<>(() -> getGraph().outgoingEdgesOf(vertex));
     }
 
     /**
@@ -219,13 +219,13 @@ public interface GraphIterables<V, E>
     }
 
     /**
-     * Returns an iterable view over all edges connecting source vertex to target vertex if such 
+     * Returns an iterable view over all edges connecting source vertex to target vertex if such
      * vertices exist in this graph. The returned iterators are live views. If the graph is modified
      * while an iteration is in progress, the results of the iteration are undefined.
      * 
-     * If any of the vertices does not exist or is <code>null</code>, returns
-     * <code>null</code>. If both vertices exist but no edges found, returns an iterable which returns 
-     * exhausted iterators.
+     * If any of the vertices does not exist or is <code>null</code>, returns <code>null</code>. If
+     * both vertices exist but no edges found, returns an iterable which returns exhausted
+     * iterators.
      * 
      * <p>
      * In undirected graphs, some of the returned edges may have their source and target vertices in
@@ -242,7 +242,7 @@ public interface GraphIterables<V, E>
      */
     default Iterable<E> allEdges(V sourceVertex, V targetVertex)
     {
-        return getGraph().getAllEdges(sourceVertex, targetVertex);
+        return new LiveIterableWrapper<>(() -> getGraph().getAllEdges(sourceVertex, targetVertex));
     }
 
 }
