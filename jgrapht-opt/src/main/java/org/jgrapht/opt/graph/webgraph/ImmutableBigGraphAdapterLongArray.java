@@ -254,7 +254,8 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 			final LazyLongIterator successors = immutableGraph.successors(source);
 			for (long target; (target = successors.nextLong()) != -1;) set.add(new long[] { source, target });
 			final LazyLongIterator predecessors = immutableTranspose.successors(source);
-			for (long target; (target = predecessors.nextLong()) != -1;) set.add(new long[] { target, source });
+			for (long target; (target = predecessors.nextLong()) != -1;) if (source != target) set.add(new long[] {
+					target, source });
 		} else {
 			final LazyLongIterator successors = immutableGraph.successors(source);
 			for (long target; (target = successors.nextLong()) != -1;) set.add(new long[] { source, target });
@@ -385,7 +386,7 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 
 		@Override
 		public Iterable<long[]> edgesOf(final Long source) {
-			return directed ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source)) : outgoingEdgesOf(source);
+			return directed ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source, true)) : outgoingEdgesOf(source);
 		}
 
 		@Override
@@ -393,16 +394,17 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 			return immutableTranspose.outdegree(vertex);
 		}
 
-		@Override
-		public Iterable<long[]> incomingEdgesOf(final Long vertex) {
+		private Iterable<long[]> incomingEdgesOf(final long x, final boolean skipLoops) {
 			return () -> new Iterator<>() {
-				final long x = vertex;
-				final LazyLongIterator successors = immutableTranspose.successors(vertex);
+				final LazyLongIterator successors = immutableTranspose.successors(x);
 				long y = -1;
 
 				@Override
 				public boolean hasNext() {
-					if (y == -1) y = successors.nextLong();
+					if (y == -1) {
+						y = successors.nextLong();
+						if (skipLoops && x == y) y = successors.nextLong();
+					}
 					return y != -1;
 				}
 
@@ -413,6 +415,11 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 					return edge;
 				}
 			};
+		}
+
+		@Override
+		public Iterable<long[]> incomingEdgesOf(final Long vertex) {
+			return incomingEdgesOf(vertex, false);
 		}
 
 		@Override

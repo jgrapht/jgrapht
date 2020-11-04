@@ -31,6 +31,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.google.common.collect.Iterables;
+
 import it.unimi.dsi.big.webgraph.EFGraph;
 import it.unimi.dsi.big.webgraph.ImmutableGraph;
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
@@ -203,6 +205,8 @@ public class ImmutableBigGraphAdapterLongArrayTest {
 
 		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 1L, 2L }), a.edgesOf(1L));
 		assertEquals(ordered(new long[] { 0L, 1L }, new long[] { 1L, 2L }), ordered(a.iterables().edgesOf(1L)));
+
+		assertEquals(3, Iterables.size(a.iterables().edgesOf(2L)));
 
 		assertEquals(orderedSingleton(0L, 1L), a.incomingEdgesOf(1L));
 		assertEquals(orderedSingleton(0L, 1L), ordered(a.iterables().incomingEdgesOf(1L)));

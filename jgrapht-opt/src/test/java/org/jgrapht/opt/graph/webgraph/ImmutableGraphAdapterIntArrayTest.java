@@ -31,6 +31,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.google.common.collect.Iterables;
+
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.HashCommon;
 import it.unimi.dsi.fastutil.ints.IntArrays;
@@ -201,6 +203,8 @@ public class ImmutableGraphAdapterIntArrayTest {
 
 		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 1, 2 }), a.edgesOf(1));
 		assertEquals(ordered(new int[] { 0, 1 }, new int[] { 1, 2 }), ordered(a.iterables().edgesOf(1)));
+
+		assertEquals(3, Iterables.size(a.iterables().edgesOf(2)));
 
 		assertEquals(orderedSingleton(0, 1), a.incomingEdgesOf(1));
 		assertEquals(orderedSingleton(0, 1), ordered(a.iterables().incomingEdgesOf(1)));

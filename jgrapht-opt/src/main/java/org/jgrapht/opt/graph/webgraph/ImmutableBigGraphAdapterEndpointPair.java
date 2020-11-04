@@ -265,7 +265,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 			final LazyLongIterator successors = immutableGraph.successors(source);
 			for (long target; (target = successors.nextLong()) != -1;) set.add(EndpointPair.ordered(source, target));
 			final LazyLongIterator predecessors = immutableTranspose.successors(source);
-			for (long target; (target = predecessors.nextLong()) != -1;) set.add(EndpointPair.ordered(target, source));
+			for (long target; (target = predecessors.nextLong()) != -1;) if (source != target) set.add(EndpointPair.ordered(target, source));
 		} else {
 			final LazyLongIterator predecessors = immutableTranspose.successors(source);
 			for (long target; (target = predecessors.nextLong()) != -1;) set.add(EndpointPair.unordered(target, source));
@@ -383,7 +383,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 
 		@Override
 		public Iterable<EndpointPair<Long>> edgesOf(final Long source) {
-			return directed ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source)) : outgoingEdgesOf(source);
+			return directed ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source, true)) : outgoingEdgesOf(source);
 		}
 
 		@Override
@@ -391,25 +391,32 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 			return immutableTranspose.outdegree(vertex);
 		}
 
-		@Override
-		public Iterable<EndpointPair<Long>> incomingEdgesOf(final Long vertex) {
+		private Iterable<EndpointPair<Long>> incomingEdgesOf(final long x, final boolean skipLoops) {
 			return () -> new Iterator<>() {
-				final LazyLongIterator successors = immutableTranspose.successors(vertex);
+				final LazyLongIterator successors = immutableTranspose.successors(x);
 				long y = -1;
 
 				@Override
 				public boolean hasNext() {
-					if (y == -1) y = successors.nextLong();
+					if (y == -1) {
+						y = successors.nextLong();
+						if (skipLoops && x == y) y = successors.nextLong();
+					}
 					return y != -1;
 				}
 
 				@Override
 				public EndpointPair<Long> next() {
-					final EndpointPair<Long> edge = directed ? EndpointPair.ordered(y, vertex) : EndpointPair.unordered(y, vertex);
+					final EndpointPair<Long> edge = directed ? EndpointPair.ordered(y, x) : EndpointPair.unordered(y, x);
 					y = -1;
 					return edge;
 				}
 			};
+		}
+
+		@Override
+		public Iterable<EndpointPair<Long>> incomingEdgesOf(final Long vertex) {
+			return incomingEdgesOf(vertex, false);
 		}
 
 		@Override

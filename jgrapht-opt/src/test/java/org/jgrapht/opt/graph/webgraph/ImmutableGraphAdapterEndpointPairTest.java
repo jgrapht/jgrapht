@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.google.common.collect.Iterables;
 import com.google.common.graph.EndpointPair;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -167,6 +168,8 @@ public class ImmutableGraphAdapterEndpointPairTest {
 				EndpointPair.ordered(1, 2) }), a.edgesOf(1));
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Integer>>(new EndpointPair[] { EndpointPair.ordered(0, 1),
 				EndpointPair.ordered(1, 2) }), new ObjectOpenHashSet<>(a.iterables().edgesOf(1).iterator()));
+
+		assertEquals(3, Iterables.size(a.iterables().edgesOf(2)));
 
 		assertEquals(new ObjectOpenHashSet(new EndpointPair[] { EndpointPair.ordered(0, 1) }), a.incomingEdgesOf(1));
 		assertEquals(new ObjectOpenHashSet(new EndpointPair[] {

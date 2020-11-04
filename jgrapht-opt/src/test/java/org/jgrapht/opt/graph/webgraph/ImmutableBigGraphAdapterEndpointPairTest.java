@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.google.common.collect.Iterables;
 import com.google.common.graph.EndpointPair;
 
 import it.unimi.dsi.big.webgraph.EFGraph;
@@ -170,6 +171,8 @@ public class ImmutableBigGraphAdapterEndpointPairTest {
 				EndpointPair.ordered(1L, 2L) }), a.edgesOf(1L));
 		assertEquals(new ObjectOpenHashSet<EndpointPair<Long>>(new EndpointPair[] { EndpointPair.ordered(0L, 1L),
 				EndpointPair.ordered(1L, 2L) }), new ObjectOpenHashSet<>(a.iterables().edgesOf(1L).iterator()));
+
+		assertEquals(3, Iterables.size(a.iterables().edgesOf(2L)));
 
 		assertEquals(new ObjectOpenHashSet(new EndpointPair[] { EndpointPair.ordered(0L, 1L) }), a.incomingEdgesOf(1L));
 		assertEquals(new ObjectOpenHashSet(new EndpointPair[] {
