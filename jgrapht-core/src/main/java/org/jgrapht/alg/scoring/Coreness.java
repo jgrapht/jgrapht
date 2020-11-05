@@ -136,7 +136,7 @@ public final class Coreness<V, E>
 
         int minDegree = n;
         Map<V, Integer> degrees = new HashMap<>();
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             int d = g.degreeOf(v);
             buckets[d].add(v);
             degrees.put(v, d);

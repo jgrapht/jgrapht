@@ -269,7 +269,7 @@ public class IsomorphicGraphMapping<V, E>
                 return false;
         }
 
-        for (E edge : graph1.iterables().edges()) {
+        for (E edge : graph1.edgeSet()) {
             E e = getEdgeCorrespondence(edge, true);
             V u = graph1.getEdgeSource(e);
             V v = graph1.getEdgeTarget(e);
@@ -278,7 +278,7 @@ public class IsomorphicGraphMapping<V, E>
                 return false;
         }
 
-        for (E edge : graph2.iterables().edges()) {
+        for (E edge : graph2.edgeSet()) {
             E e = getEdgeCorrespondence(edge, false);
             V u = graph2.getEdgeSource(e);
             V v = graph2.getEdgeTarget(e);
@@ -349,7 +349,7 @@ public class IsomorphicGraphMapping<V, E>
         Map<V, V> fMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         Map<V, V> bMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             fMap.put(v, v);
             bMap.put(v, v);
         }

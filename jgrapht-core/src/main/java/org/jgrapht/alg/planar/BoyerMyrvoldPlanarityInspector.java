@@ -239,7 +239,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
     {
         Map<V, Node> visited = new HashMap<>();
         int currentDfsIndex = 0;
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             if (!visited.containsKey(vertex)) {
                 currentDfsIndex = orientDfs(visited, vertex, currentDfsIndex);
             }

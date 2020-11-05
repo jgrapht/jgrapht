@@ -128,7 +128,7 @@ public class ChordalGraphColoringTest
         E> void assertIsColoring(Graph<V, E> graph, VertexColoringAlgorithm.Coloring<V> coloring)
     {
         Map<V, Integer> colors = coloring.getColors();
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             for (E edge : graph.edgesOf(vertex)) {
                 V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
                 if (!vertex.equals(opposite)) {

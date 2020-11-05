@@ -1181,7 +1181,7 @@ public class BergeGraphInspector<V, E>
     {
         Set<Set<V>> NuvList = new HashSet<>();
         for (V u : g.vertexSet()) {
-            for (V v : g.iterables().vertices()) {
+            for (V v : g.vertexSet()) {
                 if (u == v || !g.containsEdge(u, v))
                     continue;
                 NuvList.add(N(g, u, v));

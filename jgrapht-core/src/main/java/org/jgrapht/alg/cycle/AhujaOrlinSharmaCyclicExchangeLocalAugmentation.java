@@ -92,7 +92,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
         }
         this.lengthBound = lengthBound;
         this.labelMap = Objects.requireNonNull(labelMap, "Labels cannot be null");
-        for (V vertex : graph.iterables().vertices()) {
+        for (V vertex : graph.vertexSet()) {
             if (!labelMap.containsKey(vertex)) {
                 throw new IllegalArgumentException(
                     "Every vertex has to be labeled, that is, every vertex needs an entry in labelMap.");
@@ -124,7 +124,7 @@ public class AhujaOrlinSharmaCyclicExchangeLocalAugmentation<V, E>
         Map<PathSetKey<V>, LabeledPath<V>> pathsLengthKplus1 = new LinkedHashMap<>();
 
         // initialize pathsLengthK for k = 1
-        for (E e : graph.iterables().edges()) {
+        for (E e : graph.edgeSet()) {
             if (graph.getEdgeWeight(e) < 0) {
                 // initialize all paths of cost < 0
                 V sourceVertex = graph.getEdgeSource(e);

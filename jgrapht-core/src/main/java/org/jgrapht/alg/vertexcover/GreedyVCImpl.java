@@ -100,7 +100,7 @@ public class GreedyVCImpl<V, E>
                 v -> vertexEncapsulationMap
                     .put(v, new RatioVertex<>(vertexCounter++, v, vertexWeightMap.get(v))));
 
-        for (E e : graph.iterables().edges()) {
+        for (E e : graph.edgeSet()) {
             V u = graph.getEdgeSource(e);
             RatioVertex<V> ux = vertexEncapsulationMap.get(u);
             V v = graph.getEdgeTarget(e);

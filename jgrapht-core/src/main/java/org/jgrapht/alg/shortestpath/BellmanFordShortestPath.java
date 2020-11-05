@@ -126,7 +126,7 @@ public class BellmanFordShortestPath<V, E>
         int n = graph.vertexSet().size();
         Map<V, Double> distance = new HashMap<>();
         Map<V, E> pred = new HashMap<>();
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             distance.put(v, Double.POSITIVE_INFINITY);
         }
         distance.put(source, 0d);
@@ -193,7 +193,7 @@ public class BellmanFordShortestPath<V, E>
          * Transform result
          */
         Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             distanceAndPredecessorMap.put(v, Pair.of(distance.get(v), pred.get(v)));
         }
         return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);

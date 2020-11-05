@@ -87,7 +87,7 @@ public class GreedyMaximumCardinalityMatching<V, E>
                 }
             }
         } else {
-            for (V v : graph.iterables().vertices()) {
+            for (V v : graph.vertexSet()) {
                 if (matched.contains(v))
                     continue;
 

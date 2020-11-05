@@ -96,7 +96,7 @@ public class TiernanSimpleCycles<V, E>
         List<List<V>> cycles = new LinkedList<>();
 
         int index = 0;
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             blocked.put(v, new HashSet<>());
             indices.put(v, index++);
         }

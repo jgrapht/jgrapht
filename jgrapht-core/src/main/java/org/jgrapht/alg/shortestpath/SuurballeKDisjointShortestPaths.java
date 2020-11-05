@@ -86,7 +86,7 @@ public class SuurballeKDisjointShortestPaths<V, E>
     @Override
     protected void transformGraph(List<E> previousPath)
     {
-        for (E edge : this.workingGraph.iterables().edges()) {
+        for (E edge : this.workingGraph.edgeSet()) {
             V source = workingGraph.getEdgeSource(edge);
             V target = workingGraph.getEdgeTarget(edge);
             double modifiedWeight = this.workingGraph.getEdgeWeight(edge)

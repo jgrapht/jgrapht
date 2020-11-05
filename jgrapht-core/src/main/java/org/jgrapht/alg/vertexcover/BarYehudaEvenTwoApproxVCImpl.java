@@ -86,7 +86,7 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
         double weight = 0;
         Graph<V, E> copy = new AsSubgraph<>(graph, null, null);
         Map<V, Double> W = new HashMap<>();
-        for (V v : graph.iterables().vertices())
+        for (V v : graph.vertexSet())
             W.put(v, vertexWeightMap.get(v));
 
         // Main loop

@@ -104,8 +104,8 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E>
      */
     protected GraphPath<V, E> getSingletonTour(Graph<V, E> graph)
     {
-        assert graph.iterables().vertexCount() == 1;
-        V start = graph.iterables().vertices().iterator().next();
+        assert graph.vertexSet().size() == 1;
+        V start = graph.vertexSet().iterator().next();
         return new GraphWalk<>(
             graph, start, start, Collections.singletonList(start), Collections.emptyList(), 0d);
     }
@@ -137,7 +137,7 @@ public abstract class HamiltonianCycleAlgorithmBase<V, E>
      */
     protected void requireNotEmpty(Graph<V, E> graph)
     {
-        if (graph.iterables().vertexCount() == 0) {
+        if (graph.vertexSet().isEmpty()) {
             throw new IllegalArgumentException("Graph contains no vertices");
         }
     }

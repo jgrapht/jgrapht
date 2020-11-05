@@ -85,7 +85,7 @@ public class MartinShortestPath<V, E>
                 BaseMultiObjectiveShortestPathAlgorithm.GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
 
-        if (graph.vertexSet().isEmpty() || graph.iterables().edgeCount() == 0) {
+        if (graph.vertexSet().isEmpty() || graph.edgeSet().isEmpty()) {
             return new ListMultiObjectiveSingleSourcePathsImpl<>(
                 graph, source, Collections.emptyMap());
         }
@@ -104,7 +104,7 @@ public class MartinShortestPath<V, E>
     private void runAlgorithm(V source)
     {
         Label sourceLabel = new Label(source, new double[objectives], null, null);
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             nodeLabels.put(v, new LinkedList<>());
         }
         nodeLabels.get(source).add(sourceLabel);

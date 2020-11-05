@@ -768,7 +768,7 @@ public class HierholzerEulerianCycleTest
         Graph<V, E> g = cycle.getGraph();
         assertTrue(GraphTests.isEulerian(g));
 
-        if (g.vertexSet().size() == 0) {
+        if (g.vertexSet().isEmpty()) {
             // we do not consider the null-graph to be connected
             assertTrue(false);
         } else if (GraphTests.isEmpty(g)) {

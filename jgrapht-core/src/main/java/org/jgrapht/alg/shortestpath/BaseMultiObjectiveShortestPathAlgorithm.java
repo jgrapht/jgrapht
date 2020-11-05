@@ -68,7 +68,7 @@ abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E>
         }
 
         Map<V, List<GraphPath<V, E>>> paths = new HashMap<>();
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             paths.put(v, getPaths(source, v));
         }
         return new ListMultiObjectiveSingleSourcePathsImpl<>(graph, source, paths);

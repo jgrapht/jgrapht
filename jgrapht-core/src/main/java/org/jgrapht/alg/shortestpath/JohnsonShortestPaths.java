@@ -168,7 +168,7 @@ public class JohnsonShortestPaths<V, E>
         GraphTests.requireDirectedOrUndirected(graph);
 
         E detectedNegativeEdge = null;
-        for (E e : graph.iterables().edges()) {
+        for (E e : graph.edgeSet()) {
             if (comparator.compare(graph.getEdgeWeight(e), 0.0) < 0) {
                 detectedNegativeEdge = e;
                 break;
@@ -211,7 +211,7 @@ public class JohnsonShortestPaths<V, E>
         /*
          * Execute Dijkstra multiple times
          */
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             DijkstraClosestFirstIterator<V, E> it =
                 new DijkstraClosestFirstIterator<>(g, v, Double.POSITIVE_INFINITY);
             while (it.hasNext()) {
@@ -246,7 +246,7 @@ public class JohnsonShortestPaths<V, E>
          * Compute new non-negative edge weights
          */
         Map<E, Double> newEdgeWeights = new HashMap<>();
-        for (E e : g.iterables().edges()) {
+        for (E e : g.edgeSet()) {
             V u = g.getEdgeSource(e);
             V v = g.getEdgeTarget(e);
             double weight = g.getEdgeWeight(e);
@@ -269,7 +269,7 @@ public class JohnsonShortestPaths<V, E>
         /*
          * Run Dijkstra using new weights for all vertices
          */
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             DijkstraClosestFirstIterator<V, E> it = new DijkstraClosestFirstIterator<>(
                 newEdgeWeightsGraph, v, Double.POSITIVE_INFINITY);
             while (it.hasNext()) {
@@ -324,7 +324,7 @@ public class JohnsonShortestPaths<V, E>
 
         // add new edges with zero weight
         Map<E, Double> zeroWeightFunction = new HashMap<>();
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             extraGraph.addVertex(v);
             zeroWeightFunction.put(extraGraph.addEdge(s, v), 0d);
         }
@@ -340,7 +340,7 @@ public class JohnsonShortestPaths<V, E>
          */
         SingleSourcePaths<V, E> paths = new BellmanFordShortestPath<>(unionGraph).getPaths(s);
         Map<V, Double> weights = new HashMap<>();
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             weights.put(v, paths.getWeight(v));
         }
         return weights;
@@ -356,7 +356,7 @@ public class JohnsonShortestPaths<V, E>
     {
         Map<V, Integer> numbering = new HashMap<>();
         int num = 0;
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             numbering.put(v, num++);
         }
         return numbering;

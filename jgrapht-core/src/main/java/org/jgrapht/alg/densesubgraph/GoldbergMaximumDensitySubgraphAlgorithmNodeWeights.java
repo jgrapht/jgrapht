@@ -24,7 +24,6 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
 import java.util.function.*;
-import java.util.stream.StreamSupport;
 
 /**
  * This class computes a maximum density subgraph based on the algorithm described by Andrew
@@ -94,8 +93,8 @@ public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?
     @Override
     protected double computeDensityNumerator(Graph<V, E> g)
     {
-        double sum = StreamSupport.stream(g.iterables().edges().spliterator(), false).mapToDouble(g::getEdgeWeight).sum();
-        for (V v : g.iterables().vertices()) {
+        double sum = g.edgeSet().stream().mapToDouble(g::getEdgeWeight).sum();
+        for (V v : g.vertexSet()) {
             sum += v.getSecond();
         }
         return sum;

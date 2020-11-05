@@ -125,9 +125,6 @@ public class BarabasiAlbertForestGenerator<V, E>
             throw new IllegalArgumentException("target graph is not empty");
         }
 
-        assert target.iterables().vertexCount() == 0;
-        assert target.iterables().edgeCount() == 0;
-
         List<V> nodes = new ArrayList<>();
 
         /*

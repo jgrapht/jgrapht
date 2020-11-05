@@ -87,7 +87,7 @@ abstract class BaseLayoutAlgorithm2D<V, E>
     {
         Function<V, Point2D> initializer = getInitializer();
         if (initializer != null) {
-            for (V v : graph.iterables().vertices()) {
+            for (V v : graph.vertexSet()) {
                 Point2D value = initializer.apply(v);
                 if (value != null) {
                     model.put(v, value);

@@ -169,7 +169,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
             this.vertexIndexMap = CollectionUtil.newHashMapWithExpectedSize(nodes);
             this.vertexMap = (V[]) new Object[nodes];
             int vIndex = 0;
-            for (V vertex : graph.iterables().vertices()) {
+            for (V vertex : graph.vertexSet()) {
                 vertexIndexMap.put(vertex, vIndex);
                 vertexMap[vIndex] = vertex;
                 vIndex++;
@@ -343,7 +343,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
 
             // compute resulting matching
             Set<E> matching = new HashSet<>();
-            for (E e : graph.iterables().edges()) {
+            for (E e : graph.edgeSet()) {
                 V u = graph.getEdgeSource(e);
                 V v = graph.getEdgeTarget(e);
 
@@ -504,7 +504,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
             count[i] = 0;
         }
 
-        for (V v : graph.iterables().vertices()) {
+        for (V v : graph.vertexSet()) {
             Integer osc = oddSetCover.get(v);
             if (osc < 0 || osc >= n) {
                 return false;
@@ -523,7 +523,7 @@ public class SparseEdmondsMaximumCardinalityMatching<V, E>
             return false;
         }
 
-        for (E e : graph.iterables().edges()) {
+        for (E e : graph.edgeSet()) {
             V v = graph.getEdgeSource(e);
             V w = graph.getEdgeTarget(e);
 

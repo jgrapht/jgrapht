@@ -381,7 +381,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     {
         Set<E> cutEdges = new LinkedHashSet<>();
         Set<V> sourcePartion = this.getSourcePartition();
-        for (E e : network.iterables().edges()) {
+        for (E e : network.edgeSet()) {
             V source = network.getEdgeSource(e);
             V sink = network.getEdgeTarget(e);
             if (sourcePartion.contains(source) ^ sourcePartion.contains(sink))

@@ -101,7 +101,7 @@ public class JSONExporter<V, E>
         out.print(':');
         out.print('[');
         boolean printComma = false;
-        for (V v : g.iterables().vertices()) {
+        for (V v : g.vertexSet()) {
             if (!printComma) {
                 printComma = true;
             } else {

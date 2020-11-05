@@ -82,7 +82,8 @@ public class GreedyHeuristicTSP<V, E>
         }
 
         // Sort all the edges by weight
-        Deque<E> edges = StreamSupport.stream(graph.iterables().edges().spliterator(), false) 
+        Deque<E> edges = graph
+            .edgeSet().stream()
             .sorted((e1, e2) -> Double.compare(graph.getEdgeWeight(e1), graph.getEdgeWeight(e2)))
             .collect(Collectors.toCollection(ArrayDeque::new));
         Set<E> tourEdges = CollectionUtil.newHashSetWithExpectedSize(n);
