@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.jgrapht.DefaultGraphIterables;
 import org.jgrapht.GraphIterables;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
@@ -361,7 +360,12 @@ public class ImmutableBigGraphAdapterLongArray extends AbstractGraph<Long, long[
 		return new ImmutableBigGraphAdapterLongArray(copy, copy);
 	}
 
-	private final GraphIterables<Long, long[]> ITERABLES = new DefaultGraphIterables<>(this) {
+	private final GraphIterables<Long, long[]> ITERABLES = new GraphIterables<>() {
+		@Override
+		public org.jgrapht.Graph<Long, long[]> getGraph() {
+			return ImmutableBigGraphAdapterLongArray.this;
+		}
+
 		@Override
 		public long vertexCount() {
 			return n;

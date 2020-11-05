@@ -99,7 +99,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 	 * enumeration for undirected graphs, as we do not know how many loops are present, and for graphs
 	 * which do not support {@link ImmutableGraph#numArcs()}.
 	 */
-	private final long m = -1;
+	private long m = -1;
 
 	/**
 	 * Creates an adapter for an undirected (i.e., symmetric) big immutable graph.
@@ -357,7 +357,12 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 		return new ImmutableBigGraphAdapterEndpointPair(copy, copy);
 	}
 
-	private final GraphIterables<Long, EndpointPair<Long>> ITERABLES = new DefaultGraphIterables<>(this) {
+	private final GraphIterables<Long, EndpointPair<Long>> ITERABLES = new GraphIterables<>() {
+		@Override
+		public ImmutableBigGraphAdapterEndpointPair getGraph() {
+			return ImmutableBigGraphAdapterEndpointPair.this;
+		}
+
 		@Override
 		public long vertexCount() {
 			return n;

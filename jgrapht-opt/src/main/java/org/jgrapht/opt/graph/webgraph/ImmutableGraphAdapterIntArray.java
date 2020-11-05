@@ -26,7 +26,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.jgrapht.DefaultGraphIterables;
 import org.jgrapht.GraphIterables;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
@@ -347,7 +346,12 @@ public class ImmutableGraphAdapterIntArray extends AbstractGraph<Integer, int[]>
 		return c;
 	}
 
-	private final GraphIterables<Integer, int[]> ITERABLES = new DefaultGraphIterables<>(this) {
+	private final GraphIterables<Integer, int[]> ITERABLES = new GraphIterables<>() {
+		@Override
+		public ImmutableGraphAdapterIntArray getGraph() {
+			return ImmutableGraphAdapterIntArray.this;
+		}
+
 		@Override
 		public long vertexCount() {
 			return n;
