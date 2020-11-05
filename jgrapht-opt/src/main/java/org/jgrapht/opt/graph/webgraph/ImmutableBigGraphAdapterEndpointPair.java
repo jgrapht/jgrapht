@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.jgrapht.DefaultGraphIterables;
 import org.jgrapht.GraphIterables;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
@@ -100,7 +99,7 @@ public class ImmutableBigGraphAdapterEndpointPair extends AbstractGraph<Long, En
 	 * enumeration for undirected graphs, as we do not know how many loops are present, and for graphs
 	 * which do not support {@link ImmutableGraph#numArcs()}.
 	 */
-	private long m = -1;
+	private final long m = -1;
 
 	/**
 	 * Creates an adapter for an undirected (i.e., symmetric) big immutable graph.
