@@ -15,7 +15,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht;
+package org.jgrapht.util;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -28,11 +28,19 @@ import java.util.function.Supplier;
  *
  * @param <E> the element type
  */
-class LiveIterableWrapper<E>
+public class LiveIterableWrapper<E>
     implements
     Iterable<E>
 {
     private Supplier<Iterable<E>> supplier;
+
+    /**
+     * Create a new wrapper
+     */
+    public LiveIterableWrapper()
+    {
+        this(null);
+    }
 
     /**
      * Create a new wrapper
@@ -48,6 +56,26 @@ class LiveIterableWrapper<E>
     public Iterator<E> iterator()
     {
         return supplier.get().iterator();
+    }
+
+    /**
+     * Get the supplier
+     * 
+     * @return the supplier
+     */
+    public Supplier<Iterable<E>> getSupplier()
+    {
+        return supplier;
+    }
+
+    /**
+     * Set the supplier
+     * 
+     * @param supplier the supplier
+     */
+    public void setSupplier(Supplier<Iterable<E>> supplier)
+    {
+        this.supplier = supplier;
     }
 
 }

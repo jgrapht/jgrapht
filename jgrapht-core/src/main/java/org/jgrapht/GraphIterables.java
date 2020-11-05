@@ -17,6 +17,8 @@
  */
 package org.jgrapht;
 
+import org.jgrapht.util.LiveIterableWrapper;
+
 /**
  * Presents a graph as a collection of views suitable for graphs which contain a very large number
  * of vertices or edges. Graph algorithms written these methods can work with graphs without the
