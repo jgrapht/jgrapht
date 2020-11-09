@@ -26,6 +26,7 @@ import org.jgrapht.nio.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Import a graph from a DOT file.
@@ -54,11 +55,26 @@ public class DOTEventDrivenImporter
 
     // identifier unescape rule
     private final CharSequenceTranslator UNESCAPE_ID;
-
+    
+    private boolean notifyVertexAttributesOutOfOrder;
+    private boolean notifyEdgeAttributesOutOfOrder;
+    
     /**
      * Constructs a new importer.
      */
-    public DOTEventDrivenImporter()
+    public DOTEventDrivenImporter() { 
+        this(true, true);
+    }
+    
+    /**
+     * Constructs a new importer.
+     * 
+     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order even if 
+     *        they appear together in the input
+     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even if 
+     *        they appear together in the input        
+     */
+    public DOTEventDrivenImporter(boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
     {
         super();
         Map<CharSequence, CharSequence> lookupMap = new HashMap<>();
@@ -67,6 +83,9 @@ public class DOTEventDrivenImporter
         lookupMap.put("\\'", "'");
         lookupMap.put("\\", "");
         UNESCAPE_ID = new AggregateTranslator(new LookupTranslator(lookupMap));
+        
+        this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
+        this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
     }
 
     @Override
@@ -342,9 +361,16 @@ public class DOTEventDrivenImporter
                             }
 
                             Pair<String, String> pe = Pair.of(sourceVertex, targetVertex);
-                            notifyEdge(pe);
-                            for (String key : edgeAttrs.keySet()) {
-                                notifyEdgeAttribute(pe, key, edgeAttrs.get(key));
+
+                            if (notifyEdgeAttributesOutOfOrder) { 
+                                // notify individually
+                                notifyEdge(pe);
+                                for(Entry<String, Attribute> entry: edgeAttrs.entrySet()) { 
+                                    notifyEdgeAttribute(pe, entry.getKey(), entry.getValue());
+                                }
+                            } else { 
+                                // notify with all attributes
+                                notifyEdgeWithAttributes(pe, edgeAttrs);
                             }
                         }
                     }
@@ -425,11 +451,15 @@ public class DOTEventDrivenImporter
                 // append extra attributes
                 defaultAttrs.putAll(attrs);
 
-                notifyVertex(nodeId);
-                for (String key : defaultAttrs.keySet()) {
-                    notifyVertexAttribute(nodeId, key, defaultAttrs.get(key));
+                if (notifyVertexAttributesOutOfOrder) { 
+                    notifyVertex(nodeId);
+                    for(Entry<String, Attribute> entry: defaultAttrs.entrySet()) { 
+                        notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
+                    }
+                } else { 
+                    notifyVertexWithAttributes(nodeId, defaultAttrs);
                 }
-
+                
                 vertices.add(nodeId);
                 scope.addVertex(nodeId);
             } else {
@@ -474,10 +504,16 @@ public class DOTEventDrivenImporter
                 SubgraphScope scope = subgraphScopes.element();
                 // find default attributes
                 Map<String, Attribute> defaultAttrs = new HashMap<>(scope.nodeAttrs);
-                notifyVertex(nodeId);
-                for (String key : defaultAttrs.keySet()) {
-                    notifyVertexAttribute(nodeId, key, defaultAttrs.get(key));
+                
+                if (notifyVertexAttributesOutOfOrder) { 
+                    notifyVertex(nodeId);
+                    for(Entry<String, Attribute> entry: defaultAttrs.entrySet()) { 
+                        notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
+                    }
+                } else { 
+                    notifyVertexWithAttributes(nodeId, defaultAttrs);
                 }
+                
                 vertices.add(nodeId);
                 scope.addVertex(nodeId);
             }

@@ -17,16 +17,26 @@
  */
 package org.jgrapht.graph.guava;
 
-import com.google.common.graph.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.function.ToDoubleFunction;
+
 import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import org.jgrapht.graph.DefaultEdge;
+import org.junit.Test;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
-
-import static org.junit.Assert.*;
+import com.google.common.graph.EndpointPair;
+import com.google.common.graph.MutableNetwork;
+import com.google.common.graph.MutableValueGraph;
+import com.google.common.graph.NetworkBuilder;
+import com.google.common.graph.ValueGraphBuilder;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -426,6 +436,28 @@ public class MutableValueGraphAdapterTest
         {
             return value;
         }
+    }
+
+    @Test
+    public void testEdgeCoherenceSameNetworkWithComparator()
+    {
+        MutableValueGraph<Integer, MyValue> g =
+            ValueGraphBuilder.undirected().allowsSelfLoops(true).build();
+        g.addNode(0);
+        g.addNode(1);
+        g.putEdgeValue(0, 1, new MyValue(1.0));
+
+        final Graph<Integer,
+            EndpointPair<Integer>> a = new MutableValueGraphAdapter<>(
+                g, new MyValue(1.0d), (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue,
+                null, null, ElementOrderMethod.comparator(Comparator.<Integer> naturalOrder()));
+
+        EndpointPair<Integer> e1 = a.getEdge(0, 1);
+        EndpointPair<Integer> e2 = a.getEdge(1, 0);
+
+        assertEquals(e1, e2);
+        assertEquals(a.getEdgeSource(e1), a.getEdgeSource(e2));
+        assertEquals(a.getEdgeTarget(e1), a.getEdgeTarget(e2));
     }
 
 }

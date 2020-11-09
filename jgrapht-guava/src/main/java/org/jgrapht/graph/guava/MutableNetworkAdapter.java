@@ -86,9 +86,25 @@ public class MutableNetworkAdapter<V, E>
     public MutableNetworkAdapter(
         MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(network, vertexSupplier, edgeSupplier);
+        super(network, vertexSupplier, edgeSupplier, ElementOrderMethod.internal());
     }
 
+    /**
+     * Create a new network adapter.
+     * 
+     * @param network the mutable network
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
+     *        is required in order to make edge source/targets be consistent.
+     */
+    public MutableNetworkAdapter(
+        MutableNetwork<V, E> network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, 
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
+        super(network, vertexSupplier, edgeSupplier, vertexOrderMethod);
+    }
+    
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
@@ -182,6 +198,7 @@ public class MutableNetworkAdapter<V, E>
     @Override
     public boolean removeVertex(V v)
     {
+        vertexOrder.notifyRemoval(v);
         return network.removeNode(v);
     }
 
@@ -211,7 +228,8 @@ public class MutableNetworkAdapter<V, E>
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.network = Graphs.copyOf(this.network);
-
+            newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);
+            
             return newGraph;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -275,6 +293,9 @@ public class MutableNetworkAdapter<V, E>
             E e = (E) ois.readObject();
             network.addEdge(s, t, e);
         }
+        
+        // setup the vertex order
+        vertexOrder = createVertexOrder(vertexOrderMethod);        
     }
 
 }

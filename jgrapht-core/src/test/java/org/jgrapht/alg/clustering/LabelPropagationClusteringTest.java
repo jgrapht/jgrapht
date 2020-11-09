@@ -165,4 +165,32 @@ public class LabelPropagationClusteringTest
         assertEquals(new HashSet<>(Arrays.asList(8, 9, 10, 11)), clusters.get(2));
     }
 
+    @Test
+    public void testWithIsolatedVertex()
+    {
+        Graph<Integer,
+            DefaultEdge> graph = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(true).allowingSelfLoops(true).weighted(false)
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
+
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(0, 2);
+        
+        LabelPropagationClustering<Integer, DefaultEdge> alg =
+            new LabelPropagationClustering<>(graph, 0, new Random(31));
+        Clustering<Integer> clustering = alg.getClustering();
+
+        assertEquals(2, clustering.getNumberClusters());
+        List<Set<Integer>> clusters = clustering.getClusters();
+
+        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2)), clusters.get(0));
+        assertEquals(new HashSet<>(Arrays.asList(3)), clusters.get(1));
+    }
+    
 }

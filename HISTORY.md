@@ -20,6 +20,10 @@ Changes to JGraphT in each version:
     - Fixed JSON importer issue with negative integer weights (see #982) (reported by xianfuzheng, contributed by Dimitrios Michail)
     - Enabled checkstyle for test files (contributed by Szabolcs Besenyei)
     - Fixed hashCode/equals on weighted graphs (reported by Sebastiano Vigna, contributed by Dimitrios Michail)
+    - Changed hashCode/equals to ignore edge direction on undirected graphs, and made source/target assignment harmonious for EndpointPair in Guava adapter (reported by Sebastiano Vigna, contributed by Dimitrios Michail)
+    - Bring back importer support for supplying attributes at the point where vertex/edge instantiation occurs (reported by Sebastian Goeb, contributed by Dimitrios Michail)
+    - Added `GraphIterables` interface extension for big graph support (suggested by Sebastiano Vigna, contributed by Dimitrios Michail)
+    - Fixed label propagation clustering bug with isolated vertices (contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)

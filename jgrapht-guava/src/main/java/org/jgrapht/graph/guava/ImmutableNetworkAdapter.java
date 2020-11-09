@@ -155,7 +155,8 @@ public class ImmutableNetworkAdapter<V, E>
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.network = ImmutableNetwork.copyOf(Graphs.copyOf(this.network));
-
+            newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);
+            
             return newGraph;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -221,6 +222,9 @@ public class ImmutableNetworkAdapter<V, E>
             mutableNetwork.addEdge(s, t, e);
         }
 
+        // setup the vertex order
+        vertexOrder = createVertexOrder(vertexOrderMethod);
+        
         // setup the immutable copy
         this.network = ImmutableNetwork.copyOf(mutableNetwork);
     }

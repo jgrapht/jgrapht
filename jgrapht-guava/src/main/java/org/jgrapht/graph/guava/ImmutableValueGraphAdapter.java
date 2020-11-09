@@ -179,10 +179,13 @@ public class ImmutableValueGraphAdapter<V, W>
         try {
             ImmutableValueGraphAdapter<V, W> newGraph = TypeUtil.uncheckedCast(super.clone());
 
+            newGraph.vertexSupplier = this.vertexSupplier;
+            newGraph.edgeSupplier = this.edgeSupplier;
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.valueConverter = this.valueConverter;
             newGraph.valueGraph = ImmutableValueGraph.copyOf(Graphs.copyOf(this.valueGraph));
+            newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);            
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -250,6 +253,9 @@ public class ImmutableValueGraphAdapter<V, W>
             mutableValueGraph.putEdgeValue(s, t, w);
         }
 
+        // setup the vertex order
+        vertexOrder = createVertexOrder(vertexOrderMethod);
+        
         // setup the immutable copy
         this.valueGraph = ImmutableValueGraph.copyOf(mutableValueGraph);
     }

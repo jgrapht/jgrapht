@@ -144,9 +144,12 @@ public class ImmutableGraphAdapter<V>
         try {
             ImmutableGraphAdapter<V> newGraph = TypeUtil.uncheckedCast(super.clone());
 
+            newGraph.vertexSupplier = this.vertexSupplier;
+            newGraph.edgeSupplier = this.edgeSupplier;
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
             newGraph.graph = ImmutableGraph.copyOf(Graphs.copyOf(this.graph));
+            newGraph.vertexOrder = createVertexOrder(newGraph.vertexOrderMethod);
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -212,6 +215,9 @@ public class ImmutableGraphAdapter<V>
             mutableGraph.putEdge(s, t);
         }
 
+        // setup the vertex order
+        vertexOrder = createVertexOrder(vertexOrderMethod);
+        
         // setup the immutable copy
         this.graph = ImmutableGraph.copyOf(mutableGraph);
     }

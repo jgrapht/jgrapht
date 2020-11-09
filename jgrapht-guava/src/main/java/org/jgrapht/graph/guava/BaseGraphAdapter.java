@@ -58,6 +58,9 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     protected Supplier<EndpointPair<V>> edgeSupplier;
     protected transient G graph;
 
+    protected ElementOrderMethod<V> vertexOrderMethod;
+    protected transient ElementOrder<V> vertexOrder;
+
     /**
      * Create a new adapter.
      * 
@@ -78,9 +81,27 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     public BaseGraphAdapter(
         G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
     {
+        this(graph, vertexSupplier, edgeSupplier, ElementOrderMethod.internal());
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param graph the graph
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
+     *        is required in order to make edge source/targets be consistent.
+     */
+    public BaseGraphAdapter(
+        G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier,
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.graph = Objects.requireNonNull(graph);
+        this.vertexOrderMethod = Objects.requireNonNull(vertexOrderMethod);
+        this.vertexOrder = createVertexOrder(vertexOrderMethod);
     }
 
     @Override
@@ -163,13 +184,33 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public V getEdgeSource(EndpointPair<V> e)
     {
-        return e.nodeU();
+        if (graph.isDirected()) {
+            return e.nodeU();
+        } else {
+            V u = e.nodeU();
+            V v = e.nodeV();
+            int c = vertexOrder.compare(u, v);
+            if (c <= 0) {
+                return u;
+            }
+            return v;
+        }
     }
 
     @Override
     public V getEdgeTarget(EndpointPair<V> e)
     {
-        return e.nodeV();
+        if (graph.isDirected()) {
+            return e.nodeV();
+        } else {
+            V u = e.nodeU();
+            V v = e.nodeV();
+            int c = vertexOrder.compare(u, v);
+            if (c <= 0) {
+                return v;
+            }
+            return u;
+        }
     }
 
     @Override
@@ -278,6 +319,33 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     final EndpointPair<V> createEdge(V s, V t)
     {
         return graph.isDirected() ? EndpointPair.ordered(s, t) : EndpointPair.unordered(s, t);
+    }
+
+    /**
+     * Create the internal vertex order implementation.
+     * 
+     * @param vertexOrderMethod method to use
+     * @return the vertex order
+     */
+    protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
+    {
+        switch (vertexOrderMethod.getType()) {
+        case COMPARATOR:
+            return ElementOrder.comparator(vertexOrderMethod.comparator());
+        case GUAVA_COMPARATOR:
+            if (!graph
+                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            {
+                throw new IllegalArgumentException(
+                    "Guava comparator only usable if node order is SORTED!");
+            }
+            return ElementOrder.comparator(graph.nodeOrder().comparator());
+        case NATURAL:
+            return ElementOrder.natural();
+        case INTERNAL:
+        default:
+            return ElementOrder.internal();
+        }
     }
 
 }

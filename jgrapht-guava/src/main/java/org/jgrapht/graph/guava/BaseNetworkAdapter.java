@@ -56,6 +56,9 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     protected Supplier<E> edgeSupplier;
     protected transient N network;
 
+    protected ElementOrderMethod<V> vertexOrderMethod;
+    protected transient ElementOrder<V> vertexOrder;
+
     /**
      * Create a new network adapter.
      * 
@@ -75,9 +78,27 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
      */
     public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
+        this(network, vertexSupplier, edgeSupplier, ElementOrderMethod.internal());
+    }
+
+    /**
+     * Create a new network adapter.
+     * 
+     * @param network the mutable network
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param vertexOrderMethod the method used to ensure a total order of the graph vertices. This
+     *        is required in order to make edge source/targets be consistent.
+     */
+    public BaseNetworkAdapter(
+        N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
+        ElementOrderMethod<V> vertexOrderMethod)
+    {
         this.vertexSupplier = vertexSupplier;
         this.edgeSupplier = edgeSupplier;
         this.network = Objects.requireNonNull(network);
+        this.vertexOrderMethod = Objects.requireNonNull(vertexOrderMethod);
+        this.vertexOrder = createVertexOrder(vertexOrderMethod);
     }
 
     @Override
@@ -155,13 +176,33 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     @Override
     public V getEdgeSource(E e)
     {
-        return network.incidentNodes(e).nodeU();
+        if (network.isDirected()) {
+            return network.incidentNodes(e).nodeU();
+        } else {
+            V u = network.incidentNodes(e).nodeU();
+            V v = network.incidentNodes(e).nodeV();
+            int c = vertexOrder.compare(u, v);
+            if (c <= 0) {
+                return u;
+            }
+            return v;
+        }
     }
 
     @Override
     public V getEdgeTarget(E e)
     {
-        return network.incidentNodes(e).nodeV();
+        if (network.isDirected()) {
+            return network.incidentNodes(e).nodeV();
+        } else {
+            V u = network.incidentNodes(e).nodeU();
+            V v = network.incidentNodes(e).nodeV();
+            int c = vertexOrder.compare(u, v);
+            if (c <= 0) {
+                return v;
+            }
+            return u;
+        }
     }
 
     @Override
@@ -246,6 +287,33 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return network.edgesConnecting(sourceVertex, targetVertex);
+    }
+
+    /**
+     * Create the internal vertex order implementation.
+     * 
+     * @param vertexOrderMethod method to use
+     * @return the vertex order
+     */
+    protected ElementOrder<V> createVertexOrder(ElementOrderMethod<V> vertexOrderMethod)
+    {
+        switch (vertexOrderMethod.getType()) {
+        case COMPARATOR:
+            return ElementOrder.comparator(vertexOrderMethod.comparator());
+        case GUAVA_COMPARATOR:
+            if (!network
+                .nodeOrder().type().equals(com.google.common.graph.ElementOrder.Type.SORTED))
+            {
+                throw new IllegalArgumentException(
+                    "Guava comparator only usable if node order is SORTED!");
+            }
+            return ElementOrder.comparator(network.nodeOrder().comparator());
+        case NATURAL:
+            return ElementOrder.natural();
+        case INTERNAL:
+        default:
+            return ElementOrder.internal();
+        }
     }
 
 }
