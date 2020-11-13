@@ -137,398 +137,522 @@ import it.unimi.dsi.webgraph.Transform;
  * @author Sebastiano Vigna
  */
 
-public class ImmutableGraphAdapterEndpointPair extends AbstractGraph<Integer, EndpointPair<Integer>> implements FlyweightPrototype<ImmutableGraphAdapterEndpointPair> {
+public class ImmutableGraphAdapterEndpointPair
+    extends
+    AbstractGraph<Integer, EndpointPair<Integer>>
+    implements
+    FlyweightPrototype<ImmutableGraphAdapterEndpointPair>
+{
 
-	/** The underlying graph. */
-	private final ImmutableGraph immutableGraph;
-	/**
-	 * The transpose of {@link #immutableGraph}, for a directed graph with full support; {@code null},
-	 * for a directed graph with access to outgoing edges, only; {@link #immutableGraph}, for an
-	 * undirected graph (in which case, {@link #immutableGraph} must be symmetric).
-	 */
-	private final ImmutableGraph immutableTranspose;
-	/** The cached value of {@link #immutableGraph} != {@link #immutableTranspose}. */
-	private final boolean directed;
-	/** The number of nodes of {@link #immutableGraph}. */
-	private final int n;
-	/**
-	 * The number of edges, cached, or -1 if it still unknown. This will have to be computed by
-	 * enumeration for undirected graphs, as we do not know how many loops are present, and for graphs
-	 * which do not support {@link ImmutableGraph#numArcs()}.
-	 */
-	private long m = -1;
+    /** The underlying graph. */
+    private final ImmutableGraph immutableGraph;
+    /**
+     * The transpose of {@link #immutableGraph}, for a directed graph with full support;
+     * {@code null}, for a directed graph with access to outgoing edges, only;
+     * {@link #immutableGraph}, for an undirected graph (in which case, {@link #immutableGraph} must
+     * be symmetric).
+     */
+    private final ImmutableGraph immutableTranspose;
+    /** The cached value of {@link #immutableGraph} != {@link #immutableTranspose}. */
+    private final boolean directed;
+    /** The number of nodes of {@link #immutableGraph}. */
+    private final int n;
+    /**
+     * The number of edges, cached, or -1 if it still unknown. This will have to be computed by
+     * enumeration for undirected graphs, as we do not know how many loops are present, and for
+     * graphs which do not support {@link ImmutableGraph#numArcs()}.
+     */
+    private long m = -1;
 
-	/**
-	 * Creates an adapter for an undirected (i.e., symmetric) immutable graph.
-	 *
-	 * <p>
-	 * It is your responsibility that the provided graph has is symmetric (for each arc
-	 * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> there is an arc&nbsp;<var>y</var>&nbsp;&rarr;
-	 * <var>x</var>). If this property is not true, results will be unpredictable.
-	 *
-	 * @param immutableGraph a symmetric immutable graph.
-	 * @return an {@linkplain GraphType#isUndirected() undirected} {@link Graph}.
-	 */
-	public static ImmutableGraphAdapterEndpointPair undirected(final ImmutableGraph immutableGraph) {
-		return new ImmutableGraphAdapterEndpointPair(immutableGraph, immutableGraph);
-	}
+    /**
+     * Creates an adapter for an undirected (i.e., symmetric) immutable graph.
+     *
+     * <p>
+     * It is your responsibility that the provided graph has is symmetric (for each arc
+     * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> there is an arc&nbsp;<var>y</var>&nbsp;&rarr;
+     * <var>x</var>). If this property is not true, results will be unpredictable.
+     *
+     * @param immutableGraph a symmetric immutable graph.
+     * @return an {@linkplain GraphType#isUndirected() undirected} {@link Graph}.
+     */
+    public static ImmutableGraphAdapterEndpointPair undirected(final ImmutableGraph immutableGraph)
+    {
+        return new ImmutableGraphAdapterEndpointPair(immutableGraph, immutableGraph);
+    }
 
-	/**
-	 * Creates an adapter for a directed immutable graph.
-	 *
-	 * <p>
-	 * It is your responsibility that the two provided graphs are one the transpose of the other (for
-	 * each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
-	 * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). If this property is not true, results
-	 * will be unpredictable.
-	 *
-	 * @param immutableGraph an immutable graph.
-	 * @param immutableTranspose its transpose.
-	 * @return an {@linkplain GraphType#isDirected() directed} {@link Graph}.
-	 */
-	public static ImmutableGraphAdapterEndpointPair directed(final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose) {
-		return new ImmutableGraphAdapterEndpointPair(immutableGraph, immutableTranspose);
-	}
+    /**
+     * Creates an adapter for a directed immutable graph.
+     *
+     * <p>
+     * It is your responsibility that the two provided graphs are one the transpose of the other
+     * (for each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
+     * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). If this property is not true,
+     * results will be unpredictable.
+     *
+     * @param immutableGraph an immutable graph.
+     * @param immutableTranspose its transpose.
+     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph}.
+     */
+    public static ImmutableGraphAdapterEndpointPair directed(
+        final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose)
+    {
+        return new ImmutableGraphAdapterEndpointPair(immutableGraph, immutableTranspose);
+    }
 
-	/**
-	 * Creates an adapter for a directed immutable graph exposing only methods based on outgoing edges.
-	 *
-	 * @param immutableGraph an immutable graph.
-	 * @return an {@linkplain GraphType#isDirected() directed} {@link Graph} providing only methods
-	 *         based on outgoing edges; all other methods will throw a {@link NullPointerException}.
-	 */
-	public static ImmutableGraphAdapterEndpointPair directed(final ImmutableGraph immutableGraph) {
-		return new ImmutableGraphAdapterEndpointPair(immutableGraph, null);
-	}
+    /**
+     * Creates an adapter for a directed immutable graph exposing only methods based on outgoing
+     * edges.
+     *
+     * @param immutableGraph an immutable graph.
+     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph} providing only methods
+     *         based on outgoing edges; all other methods will throw a {@link NullPointerException}.
+     */
+    public static ImmutableGraphAdapterEndpointPair directed(final ImmutableGraph immutableGraph)
+    {
+        return new ImmutableGraphAdapterEndpointPair(immutableGraph, null);
+    }
 
-	protected ImmutableGraphAdapterEndpointPair(final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose) {
-		this.immutableGraph = immutableGraph;
-		this.immutableTranspose = immutableTranspose;
-		this.directed = immutableGraph != immutableTranspose;
-		this.n = immutableGraph.numNodes();
-		if (immutableTranspose != null && n != immutableTranspose.numNodes()) throw new IllegalArgumentException("The graph has " + n + " nodes, but the transpose has " + immutableTranspose.numNodes());
-	}
+    protected ImmutableGraphAdapterEndpointPair(
+        final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose)
+    {
+        this.immutableGraph = immutableGraph;
+        this.immutableTranspose = immutableTranspose;
+        this.directed = immutableGraph != immutableTranspose;
+        this.n = immutableGraph.numNodes();
+        if (immutableTranspose != null && n != immutableTranspose.numNodes())
+            throw new IllegalArgumentException(
+                "The graph has " + n + " nodes, but the transpose has "
+                    + immutableTranspose.numNodes());
+    }
 
-	@Override
-	public Set<EndpointPair<Integer>> getAllEdges(final Integer sourceVertex, final Integer targetVertex) {
-		if (sourceVertex == null || targetVertex == null) return null;
-		final int x = sourceVertex;
-		final int y = targetVertex;
-		if (x < 0 || x >= n || y < 0 || y >= n) return null;
-		return containsEdgeFast(x, y) ? Collections.singleton(directed ? EndpointPair.ordered(sourceVertex, targetVertex) : EndpointPair.unordered(sourceVertex, targetVertex)) : Collections.emptySet();
-	}
+    @Override
+    public Set<EndpointPair<Integer>> getAllEdges(
+        final Integer sourceVertex, final Integer targetVertex)
+    {
+        if (sourceVertex == null || targetVertex == null)
+            return null;
+        final int x = sourceVertex;
+        final int y = targetVertex;
+        if (x < 0 || x >= n || y < 0 || y >= n)
+            return null;
+        return containsEdgeFast(x, y)
+            ? Collections
+                .singleton(
+                    directed ? EndpointPair.ordered(sourceVertex, targetVertex)
+                        : EndpointPair.unordered(sourceVertex, targetVertex))
+            : Collections.emptySet();
+    }
 
-	@Override
-	public EndpointPair<Integer> getEdge(final Integer sourceVertex, final Integer targetVertex) {
-		if (sourceVertex == null || targetVertex == null) return null;
-		return containsEdgeFast(sourceVertex.intValue(), targetVertex.intValue()) ? (directed ? EndpointPair.ordered(sourceVertex, targetVertex) : EndpointPair.unordered(sourceVertex, targetVertex)) : null;
-	}
+    @Override
+    public EndpointPair<Integer> getEdge(final Integer sourceVertex, final Integer targetVertex)
+    {
+        if (sourceVertex == null || targetVertex == null)
+            return null;
+        return containsEdgeFast(sourceVertex.intValue(), targetVertex.intValue())
+            ? (directed ? EndpointPair.ordered(sourceVertex, targetVertex)
+                : EndpointPair.unordered(sourceVertex, targetVertex))
+            : null;
+    }
 
-	@Override
-	public Supplier<Integer> getVertexSupplier() {
-		return null;
-	}
+    @Override
+    public Supplier<Integer> getVertexSupplier()
+    {
+        return null;
+    }
 
-	@Override
-	public Supplier<EndpointPair<Integer>> getEdgeSupplier() {
-		return null;
-	}
+    @Override
+    public Supplier<EndpointPair<Integer>> getEdgeSupplier()
+    {
+        return null;
+    }
 
-	@Override
-	public EndpointPair<Integer> addEdge(final Integer sourceVertex, final Integer targetVertex) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public EndpointPair<Integer> addEdge(final Integer sourceVertex, final Integer targetVertex)
+    {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public boolean addEdge(final Integer sourceVertex, final Integer targetVertex, final EndpointPair<Integer> e) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public boolean addEdge(
+        final Integer sourceVertex, final Integer targetVertex, final EndpointPair<Integer> e)
+    {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public Integer addVertex() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public Integer addVertex()
+    {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public boolean addVertex(final Integer v) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public boolean addVertex(final Integer v)
+    {
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public boolean containsEdge(final EndpointPair<Integer> e)
+    {
+        if (e == null)
+            return false;
+        final boolean ordered = e.isOrdered();
+        if (directed)
+            return ordered ? containsEdge(e.source(), e.target()) : false;
+        else
+            return ordered ? false : containsEdge(e.nodeU(), e.nodeV());
+    }
 
-	@Override
-	public boolean containsEdge(final EndpointPair<Integer> e) {
-		if (e == null) return false;
-		final boolean ordered = e.isOrdered();
-		if (directed) return ordered ? containsEdge(e.source(), e.target()) : false;
-		else return ordered ? false : containsEdge(e.nodeU(), e.nodeV());
-	}
+    @Override
+    public boolean containsEdge(final Integer sourceVertex, final Integer targetVertex)
+    {
+        if (sourceVertex == null || targetVertex == null)
+            return false;
+        return containsEdgeFast(sourceVertex.intValue(), targetVertex.intValue());
+    }
 
-	@Override
-	public boolean containsEdge(final Integer sourceVertex, final Integer targetVertex) {
-		if (sourceVertex == null || targetVertex == null) return false;
-		return containsEdgeFast(sourceVertex.intValue(), targetVertex.intValue());
-	}
+    private boolean containsEdgeFast(final int x, final int y)
+    {
+        if (x < 0 || x >= n || y < 0 || y >= n)
+            return false;
+        final LazyIntIterator successors = immutableGraph.successors(x);
+        if (successors instanceof LazyIntSkippableIterator) {
+            // Fast skipping available
+            return y == ((LazyIntSkippableIterator) successors).skipTo(y);
+        } else
+            for (int target; (target = successors.nextInt()) != -1;)
+                if (target == y)
+                    return true;
+        return false;
+    }
 
-	private boolean containsEdgeFast(final int x, final int y) {
-		if (x < 0 || x >= n || y < 0 || y >= n) return false;
-		final LazyIntIterator successors = immutableGraph.successors(x);
-		if (successors instanceof LazyIntSkippableIterator) {
-			// Fast skipping available
-			return y == ((LazyIntSkippableIterator)successors).skipTo(y);
-		} else for (int target; (target = successors.nextInt()) != -1;) if (target == y) return true;
-		return false;
-	}
+    @Override
+    public boolean containsVertex(final Integer v)
+    {
+        if (v == null)
+            return false;
+        final int x = v;
+        return x >= 0 && x < n;
+    }
 
-	@Override
-	public boolean containsVertex(final Integer v) {
-		if (v == null) return false;
-		final int x = v;
-		return x >= 0 && x < n;
-	}
+    @Override
+    public Set<EndpointPair<Integer>> edgeSet()
+    {
+        final NodeIterator nodeIterator = immutableGraph.nodeIterator();
+        long m = 16; // Min hash table size
+        try {
+            m = immutableGraph.numArcs();
+        } catch (final UnsupportedOperationException e) {
+        }
+        final ObjectOpenHashBigSet<EndpointPair<Integer>> edges = new ObjectOpenHashBigSet<>(m);
+        for (int i = 0; i < n; i++) {
+            final int x = nodeIterator.nextInt();
+            final LazyIntIterator successors = nodeIterator.successors();
+            if (directed)
+                for (int y; (y = successors.nextInt()) != -1;)
+                    edges.add(EndpointPair.ordered(x, y));
+            else
+                for (int y; (y = successors.nextInt()) != -1;)
+                    if (x <= y)
+                        edges.add(EndpointPair.unordered(x, y));
+        }
+        return edges;
+    }
 
-	@Override
-	public Set<EndpointPair<Integer>> edgeSet() {
-		final NodeIterator nodeIterator = immutableGraph.nodeIterator();
-		long m = 16; // Min hash table size
-		try {
-			m = immutableGraph.numArcs();
-		} catch(final UnsupportedOperationException e) {}
-		final ObjectOpenHashBigSet<EndpointPair<Integer>> edges = new ObjectOpenHashBigSet<>(m);
-		for (int i = 0; i < n; i++) {
-			final int x = nodeIterator.nextInt();
-			final LazyIntIterator successors = nodeIterator.successors();
-			if (directed) for (int y; (y = successors.nextInt()) != -1;) edges.add(EndpointPair.ordered(x, y));
-			else for (int y; (y = successors.nextInt()) != -1;) if (x <= y) edges.add(EndpointPair.unordered(x, y));
-		}
-		return edges;
-	}
+    @Override
+    public int degreeOf(final Integer vertex)
+    {
+        return directed ? inDegreeOf(vertex) + outDegreeOf(vertex)
+            : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
+    }
 
-	@Override
-	public int degreeOf(final Integer vertex) {
-		return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
-	}
+    @Override
+    public Set<EndpointPair<Integer>> edgesOf(final Integer source)
+    {
+        final ObjectLinkedOpenHashSet<EndpointPair<Integer>> set = new ObjectLinkedOpenHashSet<>();
+        if (directed) {
+            final LazyIntIterator successors = immutableGraph.successors(source);
+            for (int target; (target = successors.nextInt()) != -1;)
+                set.add(EndpointPair.ordered(source, target));
+            final LazyIntIterator predecessors = immutableTranspose.successors(source);
+            for (int target; (target = predecessors.nextInt()) != -1;)
+                if (source != target)
+                    set.add(EndpointPair.ordered(target, source));
+        } else {
+            final LazyIntIterator successors = immutableGraph.successors(source);
+            for (int target; (target = successors.nextInt()) != -1;)
+                set.add(EndpointPair.unordered(source, target));
+        }
+        return set;
+    }
 
-	@Override
-	public Set<EndpointPair<Integer>> edgesOf(final Integer source) {
-		final ObjectLinkedOpenHashSet<EndpointPair<Integer>> set = new ObjectLinkedOpenHashSet<>();
-		if (directed) {
-			final LazyIntIterator successors = immutableGraph.successors(source);
-			for (int target; (target = successors.nextInt()) != -1;) set.add(EndpointPair.ordered(source, target));
-			final LazyIntIterator predecessors = immutableTranspose.successors(source);
-			for (int target; (target = predecessors.nextInt()) != -1;) if (source != target) set.add(EndpointPair.ordered(target, source));
-		} else {
-			final LazyIntIterator successors = immutableGraph.successors(source);
-			for (int target; (target = successors.nextInt()) != -1;) set.add(EndpointPair.unordered(source, target));
-		}
-		return set;
-	}
+    @Override
+    public int inDegreeOf(final Integer vertex)
+    {
+        return immutableTranspose.outdegree(vertex);
+    }
 
-	@Override
-	public int inDegreeOf(final Integer vertex) {
-		return immutableTranspose.outdegree(vertex);
-	}
+    @Override
+    public Set<EndpointPair<Integer>> incomingEdgesOf(final Integer vertex)
+    {
+        final ObjectLinkedOpenHashSet<EndpointPair<Integer>> set = new ObjectLinkedOpenHashSet<>();
+        final LazyIntIterator predecessors = immutableTranspose.successors(vertex);
+        if (directed)
+            for (int target; (target = predecessors.nextInt()) != -1;)
+                set.add(EndpointPair.ordered(target, vertex));
+        else
+            for (int target; (target = predecessors.nextInt()) != -1;)
+                set.add(EndpointPair.unordered(target, vertex));
+        return set;
+    }
 
-	@Override
-	public Set<EndpointPair<Integer>> incomingEdgesOf(final Integer vertex) {
-		final ObjectLinkedOpenHashSet<EndpointPair<Integer>> set = new ObjectLinkedOpenHashSet<>();
-		final LazyIntIterator predecessors = immutableTranspose.successors(vertex);
-		if (directed) for (int target; (target = predecessors.nextInt()) != -1;) set.add(EndpointPair.ordered(target, vertex));
-		else for (int target; (target = predecessors.nextInt()) != -1;) set.add(EndpointPair.unordered(target, vertex));
-		return set;
-	}
+    @Override
+    public int outDegreeOf(final Integer vertex)
+    {
+        return immutableGraph.outdegree(vertex);
+    }
 
-	@Override
-	public int outDegreeOf(final Integer vertex) {
-		return immutableGraph.outdegree(vertex);
-	}
+    @Override
+    public Set<EndpointPair<Integer>> outgoingEdgesOf(final Integer vertex)
+    {
+        final ObjectLinkedOpenHashSet<EndpointPair<Integer>> set = new ObjectLinkedOpenHashSet<>();
+        final LazyIntIterator successors = immutableGraph.successors(vertex);
+        if (directed)
+            for (int target; (target = successors.nextInt()) != -1;)
+                set.add(EndpointPair.ordered(vertex, target));
+        else
+            for (int target; (target = successors.nextInt()) != -1;)
+                set.add(EndpointPair.unordered(vertex, target));
+        return set;
+    }
 
-	@Override
-	public Set<EndpointPair<Integer>> outgoingEdgesOf(final Integer vertex) {
-		final ObjectLinkedOpenHashSet<EndpointPair<Integer>> set = new ObjectLinkedOpenHashSet<>();
-		final LazyIntIterator successors = immutableGraph.successors(vertex);
-		if (directed) for (int target; (target = successors.nextInt()) != -1;) set.add(EndpointPair.ordered(vertex, target));
-		else for (int target; (target = successors.nextInt()) != -1;) set.add(EndpointPair.unordered(vertex, target));
-		return set;
-	}
+    @Override
+    public EndpointPair<Integer> removeEdge(final Integer sourceVertex, final Integer targetVertex)
+    {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public EndpointPair<Integer> removeEdge(final Integer sourceVertex, final Integer targetVertex) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public boolean removeEdge(final EndpointPair<Integer> e)
+    {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public boolean removeEdge(final EndpointPair<Integer> e) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public boolean removeVertex(final Integer v)
+    {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public boolean removeVertex(final Integer v) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public Set<Integer> vertexSet()
+    {
+        return IntSets.fromTo(0, n);
+    }
 
-	@Override
-	public Set<Integer> vertexSet() {
-		return IntSets.fromTo(0, n);
-	}
+    @Override
+    public Integer getEdgeSource(final EndpointPair<Integer> e)
+    {
+        return e.isOrdered() ? e.source() : Math.min(e.nodeU(), e.nodeV());
+    }
 
-	@Override
-	public Integer getEdgeSource(final EndpointPair<Integer> e) {
-		return e.isOrdered() ? e.source() : Math.min(e.nodeU(), e.nodeV());
-	}
+    @Override
+    public Integer getEdgeTarget(final EndpointPair<Integer> e)
+    {
+        return e.isOrdered() ? e.target() : Math.max(e.nodeU(), e.nodeV());
+    }
 
-	@Override
-	public Integer getEdgeTarget(final EndpointPair<Integer> e) {
-		return e.isOrdered() ? e.target() : Math.max(e.nodeU(), e.nodeV());
-	}
+    @Override
+    public double getEdgeWeight(final EndpointPair<Integer> e)
+    {
+        return DEFAULT_EDGE_WEIGHT;
+    }
 
-	@Override
-	public double getEdgeWeight(final EndpointPair<Integer> e) {
-		return DEFAULT_EDGE_WEIGHT;
-	}
+    @Override
+    public void setEdgeWeight(final EndpointPair<Integer> e, final double weight)
+    {
+        if (weight != 1)
+            throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public void setEdgeWeight(final EndpointPair<Integer> e, final double weight) {
-		if (weight != 1) throw new UnsupportedOperationException();
-	}
+    @Override
+    public GraphType getType()
+    {
+        final Builder builder = new DefaultGraphType.Builder()
+            .weighted(false).modifiable(false).allowMultipleEdges(false).allowSelfLoops(true);
+        return directed ? builder.directed().build() : builder.undirected().build();
+    }
 
-	@Override
-	public GraphType getType() {
-		final Builder builder = new DefaultGraphType.Builder().weighted(false).modifiable(false).allowMultipleEdges(false).allowSelfLoops(true);
-		return directed ? builder.directed().build() : builder.undirected().build();
-	}
+    @Override
+    public ImmutableGraphAdapterEndpointPair copy()
+    {
+        if (directed)
+            return new ImmutableGraphAdapterEndpointPair(
+                immutableGraph.copy(), immutableTranspose.copy());
+        final ImmutableGraph copy = immutableGraph.copy();
+        return new ImmutableGraphAdapterEndpointPair(copy, copy);
+    }
 
-	@Override
-	public ImmutableGraphAdapterEndpointPair copy() {
-		if (directed) return new ImmutableGraphAdapterEndpointPair(immutableGraph.copy(), immutableTranspose.copy());
-		final ImmutableGraph copy = immutableGraph.copy();
-		return new ImmutableGraphAdapterEndpointPair(copy, copy);
-	}
+    private final GraphIterables<Integer, EndpointPair<Integer>> ITERABLES = new GraphIterables<>()
+    {
+        @Override
+        public ImmutableGraphAdapterEndpointPair getGraph()
+        {
+            return ImmutableGraphAdapterEndpointPair.this;
+        }
 
-	private final GraphIterables<Integer, EndpointPair<Integer>> ITERABLES = new GraphIterables<>() {
-		@Override
-		public ImmutableGraphAdapterEndpointPair getGraph() {
-			return ImmutableGraphAdapterEndpointPair.this;
-		}
+        @Override
+        public long vertexCount()
+        {
+            return n;
+        }
 
-		@Override
-		public long vertexCount() {
-			return n;
-		}
+        @Override
+        public long edgeCount()
+        {
+            if (m != -1)
+                return m;
+            if (directed) {
+                try {
+                    return m = immutableGraph.numArcs();
+                } catch (final UnsupportedOperationException e) {
+                }
+            }
+            return m = ImmutableGraphAdapterIntArray.size(edges());
+        }
 
-		@Override
-		public long edgeCount() {
-			if (m != -1) return m;
-			if (directed) {
-				try {
-					return m = immutableGraph.numArcs();
-				} catch (final UnsupportedOperationException e) {
-				}
-			}
-			return m = ImmutableGraphAdapterIntArray.size(edges());
-		}
+        @Override
+        public long degreeOf(final Integer vertex)
+        {
+            return directed ? inDegreeOf(vertex) + outDegreeOf(vertex)
+                : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
+        }
 
-		@Override
-		public long degreeOf(final Integer vertex) {
-			return directed ? inDegreeOf(vertex) + outDegreeOf(vertex) : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
-		}
+        @Override
+        public Iterable<EndpointPair<Integer>> edgesOf(final Integer source)
+        {
+            return directed
+                ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source, true))
+                : outgoingEdgesOf(source);
+        }
 
-		@Override
-		public Iterable<EndpointPair<Integer>> edgesOf(final Integer source) {
-			return directed ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source, true)) : outgoingEdgesOf(source);
-		}
+        @Override
+        public long inDegreeOf(final Integer vertex)
+        {
+            return immutableTranspose.outdegree(vertex);
+        }
 
-		@Override
-		public long inDegreeOf(final Integer vertex) {
-			return immutableTranspose.outdegree(vertex);
-		}
+        private Iterable<EndpointPair<Integer>> incomingEdgesOf(
+            final int x, final boolean skipLoops)
+        {
+            return () -> new Iterator<>()
+            {
+                final LazyIntIterator successors = immutableTranspose.successors(x);
+                int y = successors.nextInt();
 
-		private Iterable<EndpointPair<Integer>> incomingEdgesOf(final int x, final boolean skipLoops) {
-			return () -> new Iterator<>() {
-				final LazyIntIterator successors = immutableTranspose.successors(x);
-				int y = successors.nextInt();
+                @Override
+                public boolean hasNext()
+                {
+                    if (y == -1) {
+                        y = successors.nextInt();
+                        if (skipLoops && x == y)
+                            y = successors.nextInt();
+                    }
+                    return y != -1;
+                }
 
-				@Override
-				public boolean hasNext() {
-					if (y == -1) {
-						y = successors.nextInt();
-						if (skipLoops && x == y) y = successors.nextInt();
-					}
-					return y != -1;
-				}
+                @Override
+                public EndpointPair<Integer> next()
+                {
+                    final EndpointPair<Integer> edge =
+                        directed ? EndpointPair.ordered(y, x) : EndpointPair.unordered(y, x);
+                    y = -1;
+                    return edge;
+                }
+            };
+        }
 
-				@Override
-				public EndpointPair<Integer> next() {
-					final EndpointPair<Integer> edge = directed ? EndpointPair.ordered(y, x) : EndpointPair.unordered(y, x);
-					y = -1;
-					return edge;
-				}
-			};
-		}
+        @Override
+        public Iterable<EndpointPair<Integer>> incomingEdgesOf(final Integer vertex)
+        {
+            return incomingEdgesOf(vertex, false);
+        }
 
-		@Override
-		public Iterable<EndpointPair<Integer>> incomingEdgesOf(final Integer vertex) {
-			return incomingEdgesOf(vertex, false);
-		}
+        @Override
+        public long outDegreeOf(final Integer vertex)
+        {
+            return immutableGraph.outdegree(vertex);
+        }
 
-		@Override
-		public long outDegreeOf(final Integer vertex) {
-			return immutableGraph.outdegree(vertex);
-		}
+        @Override
+        public Iterable<EndpointPair<Integer>> outgoingEdgesOf(final Integer vertex)
+        {
+            return () -> new Iterator<>()
+            {
+                final LazyIntIterator successors = immutableGraph.successors(vertex);
+                int y = successors.nextInt();
 
-		@Override
-		public Iterable<EndpointPair<Integer>> outgoingEdgesOf(final Integer vertex) {
-			return () -> new Iterator<>() {
-				final LazyIntIterator successors = immutableGraph.successors(vertex);
-				int y = successors.nextInt();
+                @Override
+                public boolean hasNext()
+                {
+                    if (y == -1)
+                        y = successors.nextInt();
+                    return y != -1;
+                }
 
-				@Override
-				public boolean hasNext() {
-					if (y == -1) y = successors.nextInt();
-					return y != -1;
-				}
+                @Override
+                public EndpointPair<Integer> next()
+                {
+                    final EndpointPair<Integer> edge = directed ? EndpointPair.ordered(vertex, y)
+                        : EndpointPair.unordered(vertex, y);
+                    y = -1;
+                    return edge;
+                }
+            };
+        }
 
-				@Override
-				public EndpointPair<Integer> next() {
-					final EndpointPair<Integer> edge = directed ? EndpointPair.ordered(vertex, y) : EndpointPair.unordered(vertex, y);
-					y = -1;
-					return edge;
-				}
-			};
-		}
+        @Override
+        public Iterable<EndpointPair<Integer>> edges()
+        {
+            return () -> new Iterator<>()
+            {
+                final NodeIterator nodeIterator = immutableGraph.nodeIterator();
+                LazyIntIterator successors = LazyIntIterators.EMPTY_ITERATOR;
+                int x, y = -1;
 
-		@Override
-		public Iterable<EndpointPair<Integer>> edges() {
-			return () -> new Iterator<>() {
-				final NodeIterator nodeIterator = immutableGraph.nodeIterator();
-				LazyIntIterator successors = LazyIntIterators.EMPTY_ITERATOR;
-				int x, y = -1;
+                @Override
+                public boolean hasNext()
+                {
+                    if (y != -1)
+                        return true;
+                    do {
+                        while ((y = successors.nextInt()) == -1) {
+                            if (!nodeIterator.hasNext())
+                                return false;
+                            x = nodeIterator.nextInt();
+                            successors = nodeIterator.successors();
+                        }
+                    } while (!directed && y < x);
+                    return true;
+                }
 
-				@Override
-				public boolean hasNext() {
-					if (y != -1) return true;
-					do {
-						while ((y = successors.nextInt()) == -1) {
-							if (!nodeIterator.hasNext()) return false;
-							x = nodeIterator.nextInt();
-							successors = nodeIterator.successors();
-						}
-					} while (!directed && y < x);
-					return true;
-				}
+                @Override
+                public EndpointPair<Integer> next()
+                {
+                    if (!hasNext())
+                        throw new NoSuchElementException();
+                    final EndpointPair<Integer> edge =
+                        directed ? EndpointPair.ordered(x, y) : EndpointPair.unordered(x, y);
+                    y = -1;
+                    return edge;
+                }
+            };
+        }
+    };
 
-				@Override
-				public EndpointPair<Integer> next() {
-					if (!hasNext()) throw new NoSuchElementException();
-					final EndpointPair<Integer> edge = directed ? EndpointPair.ordered(x, y) : EndpointPair.unordered(x, y);
-					y = -1;
-					return edge;
-				}
-			};
-		}
-	};
-
-	@Override
-	public GraphIterables<Integer, EndpointPair<Integer>> iterables() {
-		return ITERABLES;
-	}
+    @Override
+    public GraphIterables<Integer, EndpointPair<Integer>> iterables()
+    {
+        return ITERABLES;
+    }
 }
