@@ -41,7 +41,7 @@ import org.jgrapht.alg.util.Pair;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class TwoLayerBipartiteLayout2D<V, E>
+public class TwoLayeredBipartiteLayout2D<V, E>
     implements
     LayoutAlgorithm2D<V, E>
 {
@@ -52,7 +52,7 @@ public class TwoLayerBipartiteLayout2D<V, E>
     /**
      * Create a new layout
      */
-    public TwoLayerBipartiteLayout2D()
+    public TwoLayeredBipartiteLayout2D()
     {
         this.vertexComparator = null;
         this.vertical = true;
@@ -64,7 +64,7 @@ public class TwoLayerBipartiteLayout2D<V, E>
      * @param vertexComparator the vertex comparator, or null in order to use the graph ordering
      * @return the layout algorithm instance
      */
-    public TwoLayerBipartiteLayout2D<V, E> withVertexComparator(Comparator<V> vertexComparator)
+    public TwoLayeredBipartiteLayout2D<V, E> withVertexComparator(Comparator<V> vertexComparator)
     {
         this.vertexComparator = vertexComparator;
         return this;
@@ -76,7 +76,7 @@ public class TwoLayerBipartiteLayout2D<V, E>
      * @param vertical if true vertical, otherwize horizontal
      * @return the layout algorithm instance
      */
-    public TwoLayerBipartiteLayout2D<V, E> withVertical(boolean vertical)
+    public TwoLayeredBipartiteLayout2D<V, E> withVertical(boolean vertical)
     {
         this.vertical = vertical;
         return this;
@@ -89,7 +89,7 @@ public class TwoLayerBipartiteLayout2D<V, E>
      * @param partition the partition
      * @return the layout algorithm instance
      */
-    public TwoLayerBipartiteLayout2D<V, E> withOnePartition(Set<V> partition)
+    public TwoLayeredBipartiteLayout2D<V, E> withOnePartition(Set<V> partition)
     {
         this.partition = partition;
         return this;
@@ -98,54 +98,77 @@ public class TwoLayerBipartiteLayout2D<V, E>
     @Override
     public void layout(Graph<V, E> graph, LayoutModel2D<V> model)
     {
+        Pair<List<V>, List<V>> partitions = computePartitions(graph);
+
+        drawFirstPartition(graph, partitions.getFirst(), model);
+        drawSecondPartition(graph, partitions.getSecond(), model);
+    }
+
+    protected void drawFirstPartition(Graph<V, E> graph, List<V> partition, LayoutModel2D<V> model)
+    {
+        if (partition.isEmpty()) {
+            throw new IllegalArgumentException("Partition cannot be empty");
+        }
+
         Box2D drawableArea = model.getDrawableArea();
-        double width = drawableArea.getWidth();
         double height = drawableArea.getHeight();
+        double width = drawableArea.getWidth();
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinY();
 
-        Pair<List<V>, List<V>> partitions = computePartitions(graph);
-        List<V> p1 = partitions.getFirst();
-        List<V> p2 = partitions.getSecond();
-
-        if (p1.isEmpty() || p2.isEmpty()) {
-            throw new IllegalArgumentException("One of the partitions is empty");
-        }
-
-        int n1 = p1.size();
-        int n2 = p2.size();
-        double step1 = 0d;
-        if (n1 > 1) {
-            step1 = (vertical ? height : width) / (n1 - 1);
-        }
-        double step2 = 0d;
-        if (n2 > 1) {
-            step2 = (vertical ? height : width) / (n2 - 1);
+        int n = partition.size();
+        double step = 0d;
+        if (n > 1) {
+            step = (vertical ? height : width) / (n - 1);
         }
 
         if (vertical) {
             double y = minY;
-            for (V v : p1) {
+            for (V v : partition) {
                 model.put(v, Point2D.of(minX, y));
-                y += step1;
-            }
-            y = minY;
-            for (V v : p2) {
-                model.put(v, Point2D.of(minX + width, y));
-                y += step2;
+                y += step;
             }
         } else {
             double x = minX;
-            for (V v : p1) {
+            for (V v : partition) {
                 model.put(v, Point2D.of(x, minY));
-                x += step1;
-            }
-            x = minX;
-            for (V v : p2) {
-                model.put(v, Point2D.of(x, minY + height));
-                x += step2;
+                x += step;
             }
         }
+    }
+
+    protected void drawSecondPartition(Graph<V, E> graph, List<V> partition, LayoutModel2D<V> model)
+    {
+        if (partition.isEmpty()) {
+            throw new IllegalArgumentException("Partition cannot be empty");
+        }
+
+        Box2D drawableArea = model.getDrawableArea();
+        double height = drawableArea.getHeight();
+        double width = drawableArea.getWidth();
+        double minX = drawableArea.getMinX();
+        double minY = drawableArea.getMinY();
+
+        int n = partition.size();
+        double step = 0d;
+        if (n > 1) {
+            step = (vertical ? height : width) / (n - 1);
+        }
+
+        if (vertical) {
+            double y = minY;
+            for (V v : partition) {
+                model.put(v, Point2D.of(minX + width, y));
+                y += step;
+            }
+        } else {
+            double x = minX;
+            for (V v : partition) {
+                model.put(v, Point2D.of(x, minY + height));
+                x += step;
+            }
+        }
+
     }
 
     /**

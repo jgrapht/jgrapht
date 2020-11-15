@@ -31,11 +31,11 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Test {@link TwoLayerBipartiteLayout2D}.
+ * Test {@link TwoLayeredBipartiteLayout2D}.
  * 
  * @author Dimitrios Michail
  */
-public class TwoLayerBipartiteLayout2DTest
+public class TwoLayeredBipartiteLayout2DTest
 {
 
     @Test
@@ -61,7 +61,7 @@ public class TwoLayerBipartiteLayout2DTest
         graph.addEdge(v3, v5);
         graph.addEdge(v3, v6);
 
-        TwoLayerBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayerBipartiteLayout2D<>();
+        TwoLayeredBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayeredBipartiteLayout2D<>();
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 3d, 10d));
         alg.layout(graph, model);
@@ -98,7 +98,7 @@ public class TwoLayerBipartiteLayout2DTest
         graph.addEdge(v3, v5);
         graph.addEdge(v3, v6);
 
-        TwoLayerBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayerBipartiteLayout2D<>();
+        TwoLayeredBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayeredBipartiteLayout2D<>();
         alg.withVertical(false);
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 10d, 3d));
@@ -137,7 +137,7 @@ public class TwoLayerBipartiteLayout2DTest
         graph.addEdge(v3, v5);
         graph.addEdge(v3, v6);
 
-        TwoLayerBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayerBipartiteLayout2D<>();
+        TwoLayeredBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayeredBipartiteLayout2D<>();
         alg.withOnePartition(Set.of(v1, v2, v3, v7));
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 3d, 10d));
