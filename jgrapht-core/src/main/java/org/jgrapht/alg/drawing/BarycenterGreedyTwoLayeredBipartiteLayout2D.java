@@ -17,7 +17,6 @@
  */
 package org.jgrapht.alg.drawing;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,7 @@ import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.alg.util.Pair;
 
 /**
- * The median heuristic greedy algorithm for edge crossing minimization in two layered bipartite
+ * The barycenter heuristic greedy algorithm for edge crossing minimization in two layered bipartite
  * layouts.
  * 
  * The algorithm draws a bipartite graph using straight edges. Vertices are arranged along two
@@ -38,25 +37,28 @@ import org.jgrapht.alg.util.Pair;
  * problem where one of the two layers is considered fixed and the algorithm is allowed to adjust
  * the positions of vertices in the other layer.
  * 
- * The algorithm is described in the following paper: Eades, Peter, and Nicholas C. Wormald. "Edge
- * crossings in drawings of bipartite graphs." Algorithmica 11.4 (1994): 379-403.
+ * The algorithm is described in the following paper: K. Sugiyama, S. Tagawa, and M. Toda. Methods
+ * for visual understanding of hierarchical system structures. IEEE Transaction on Systems, Man, and
+ * Cybernetics, 11(2):109–125, 1981.
  * 
  * The problem of minimizing edge crossings when drawing bipartite graphs as two layered graphs is
- * NP-complete and the median heuristic is a 3-approximation algorithm.
+ * NP-complete. If the coordinates of the nodes in the fixed layer are allowed to vary wildly, then
+ * the barycenter heuristic can perform badly. If the coordinates of the nodes in the fixed layer
+ * are $1, 2, 3, \ldots, ...$ then it is an $\mathcal{O}(\sqrt{n})$-approximation algorithm.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
+public class BarycenterGreedyTwoLayeredBipartiteLayout2D<V, E>
     extends
     TwoLayeredBipartiteLayout2D<V, E>
 {
     /**
      * Create a new layout
      */
-    public MedianGreedyTwoLayeredBipartiteLayout2D()
+    public BarycenterGreedyTwoLayeredBipartiteLayout2D()
     {
         super();
     }
@@ -72,21 +74,20 @@ public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
         final Map<V, Pair<Double, Integer>> order = new HashMap<>();
         int i = 0;
         for (V v : partition) {
-            ArrayList<Double> other = new ArrayList<>();
-            for (E e : graph.edgesOf(v)) {
-                V u = Graphs.getOppositeVertex(graph, e, v);
-                Point2D p2d = model.get(u);
-                double coord = vertical ? p2d.getX() : p2d.getY();
-                other.add(coord);
-            }
-            other.sort(null);
-
-            if (other.isEmpty()) {
+            int degree = graph.degreeOf(v);
+            if (degree == 0) {
                 // singleton
                 order.put(v, Pair.of(-Double.MAX_VALUE, i));
             } else {
-                double median = other.get(other.size() / 2);
-                order.put(v, Pair.of(median, i));
+                double barycenter = 0d;
+                for (E e : graph.outgoingEdgesOf(v)) {
+                    V u = Graphs.getOppositeVertex(graph, e, v);
+                    Point2D p2d = model.get(u);
+                    double coord = vertical ? p2d.getX() : p2d.getY();
+                    barycenter += coord;
+                }
+                barycenter /= degree;
+                order.put(v, Pair.of(barycenter, i));
             }
             i++;
         }

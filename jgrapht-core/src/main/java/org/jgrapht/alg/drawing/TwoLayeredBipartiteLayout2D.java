@@ -34,7 +34,10 @@ import org.jgrapht.alg.util.Pair;
  * A two layered bipartite layout.
  * 
  * The algorithm draws a bipartite graph using straight edges. Vertices are arranged along two
- * vertical or horizontal lines. No attempt to minimize any crossings is performed.
+ * vertical or horizontal lines. No attempt is made to minimize edge crossings.
+ * 
+ * The order of the vertices can be adjusted by providing a vertex comparator. Similarly the user
+ * can also determine the two partitions or can let the algorithm compute them.
  * 
  * @author Dimitrios Michail
  *
@@ -83,13 +86,13 @@ public class TwoLayeredBipartiteLayout2D<V, E>
     }
 
     /**
-     * Specify one of the two bipartite partitions. If not provided, the algorithm computes a
+     * Specify the first of the two bipartite partitions. If not provided, the algorithm computes a
      * partitioning.
      * 
      * @param partition the partition
      * @return the layout algorithm instance
      */
-    public TwoLayeredBipartiteLayout2D<V, E> withOnePartition(Set<V> partition)
+    public TwoLayeredBipartiteLayout2D<V, E> withFirstPartition(Set<V> partition)
     {
         this.partition = partition;
         return this;

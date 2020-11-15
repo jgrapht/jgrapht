@@ -31,15 +31,16 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Test {@link TwoLayeredBipartiteLayout2D}.
+ * Test {@link MedianGreedyTwoLayeredBipartiteLayout2D} and
+ * {@link BarycenterGreedyTwoLayeredBipartiteLayout2D}.
  * 
  * @author Dimitrios Michail
  */
-public class TwoLayeredBipartiteLayout2DTest
+public class GreedyTwoLayeredBipartiteLayout2DTest
 {
 
     @Test
-    public void testVertical()
+    public void testMedian()
     {
         Graph<String,
             DefaultEdge> graph = GraphTypeBuilder
@@ -52,16 +53,25 @@ public class TwoLayeredBipartiteLayout2DTest
         String v4 = graph.addVertex();
         String v5 = graph.addVertex();
         String v6 = graph.addVertex();
+        String v7 = graph.addVertex();
+        String v8 = graph.addVertex();
+        String v9 = graph.addVertex();
 
         graph.addEdge(v1, v4);
         graph.addEdge(v1, v5);
         graph.addEdge(v1, v6);
+        graph.addEdge(v1, v7);
+        graph.addEdge(v1, v8);
         graph.addEdge(v2, v4);
         graph.addEdge(v2, v5);
+        graph.addEdge(v2, v7);
         graph.addEdge(v3, v5);
         graph.addEdge(v3, v6);
+        graph.addEdge(v3, v8);
 
-        TwoLayeredBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayeredBipartiteLayout2D<>();
+        MedianGreedyTwoLayeredBipartiteLayout2D<String, DefaultEdge> alg =
+            new MedianGreedyTwoLayeredBipartiteLayout2D<>();
+        alg.withFirstPartition(Set.of(v1, v2, v3));
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 3d, 10d));
         alg.layout(graph, model);
@@ -70,13 +80,16 @@ public class TwoLayeredBipartiteLayout2DTest
         assertEquals(Point2D.of(0.0, 5.0), model.get(v2));
         assertEquals(Point2D.of(0.0, 10.0), model.get(v3));
 
-        assertEquals(Point2D.of(3.0, 0.0), model.get(v4));
-        assertEquals(Point2D.of(3.0, 5.0), model.get(v5));
-        assertEquals(Point2D.of(3.0, 10.0), model.get(v6));
+        assertEquals(Point2D.of(3.0, 0.0), model.get(v9));
+        assertEquals(Point2D.of(3.0, 2.0), model.get(v5));
+        assertEquals(Point2D.of(3.0, 4.0), model.get(v4));
+        assertEquals(Point2D.of(3.0, 6.0), model.get(v6));
+        assertEquals(Point2D.of(3.0, 8.0), model.get(v7));
+        assertEquals(Point2D.of(3.0, 10.0), model.get(v8));
     }
 
     @Test
-    public void testHorizontal()
+    public void testBarycenter()
     {
         Graph<String,
             DefaultEdge> graph = GraphTypeBuilder
@@ -89,68 +102,39 @@ public class TwoLayeredBipartiteLayout2DTest
         String v4 = graph.addVertex();
         String v5 = graph.addVertex();
         String v6 = graph.addVertex();
+        String v7 = graph.addVertex();
+        String v8 = graph.addVertex();
+        String v9 = graph.addVertex();
 
         graph.addEdge(v1, v4);
         graph.addEdge(v1, v5);
         graph.addEdge(v1, v6);
+        graph.addEdge(v1, v7);
+        graph.addEdge(v1, v8);
         graph.addEdge(v2, v4);
         graph.addEdge(v2, v5);
+        graph.addEdge(v2, v7);
         graph.addEdge(v3, v5);
         graph.addEdge(v3, v6);
+        graph.addEdge(v3, v8);
 
-        TwoLayeredBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayeredBipartiteLayout2D<>();
-        alg.withVertical(false);
-
-        MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 10d, 3d));
-        alg.layout(graph, model);
-
-        assertEquals(Point2D.of(0.0, 0.0), model.get(v1));
-        assertEquals(Point2D.of(5.0, 0.0), model.get(v2));
-        assertEquals(Point2D.of(10.0, 0.0), model.get(v3));
-
-        assertEquals(Point2D.of(0.0, 3.0), model.get(v4));
-        assertEquals(Point2D.of(5.0, 3.0), model.get(v5));
-        assertEquals(Point2D.of(10.0, 3.0), model.get(v6));
-    }
-
-    @Test
-    public void testWithPartition()
-    {
-        Graph<String,
-            DefaultEdge> graph = GraphTypeBuilder
-                .undirected().vertexSupplier(SupplierUtil.createStringSupplier())
-                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
-
-        String v1 = graph.addVertex();
-        String v2 = graph.addVertex();
-        String v3 = graph.addVertex();
-        String v4 = graph.addVertex();
-        String v5 = graph.addVertex();
-        String v6 = graph.addVertex();
-        String v7 = graph.addVertex(); 
-
-        graph.addEdge(v1, v4);
-        graph.addEdge(v1, v5);
-        graph.addEdge(v1, v6);
-        graph.addEdge(v2, v4);
-        graph.addEdge(v2, v5);
-        graph.addEdge(v3, v5);
-        graph.addEdge(v3, v6);
-
-        TwoLayeredBipartiteLayout2D<String, DefaultEdge> alg = new TwoLayeredBipartiteLayout2D<>();
-        alg.withFirstPartition(Set.of(v1, v2, v3, v7));
+        BarycenterGreedyTwoLayeredBipartiteLayout2D<String, DefaultEdge> alg =
+            new BarycenterGreedyTwoLayeredBipartiteLayout2D<>();
+        alg.withFirstPartition(Set.of(v1, v2, v3));
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 3d, 10d));
         alg.layout(graph, model);
 
         assertEquals(Point2D.of(0.0, 0.0), model.get(v1));
-        assertEquals(Point2D.of(0.0, 3.3333333333333335), model.get(v2));
-        assertEquals(Point2D.of(0.0, 6.666666666666667), model.get(v3));
-        assertEquals(Point2D.of(0.0, 10.0), model.get(v7));
+        assertEquals(Point2D.of(0.0, 5.0), model.get(v2));
+        assertEquals(Point2D.of(0.0, 10.0), model.get(v3));
 
-        assertEquals(Point2D.of(3.0, 0.0), model.get(v4));
-        assertEquals(Point2D.of(3.0, 5.0), model.get(v5));
-        assertEquals(Point2D.of(3.0, 10.0), model.get(v6));
+        assertEquals(Point2D.of(3.0, 0.0), model.get(v9));
+        assertEquals(Point2D.of(3.0, 2.0), model.get(v5));
+        assertEquals(Point2D.of(3.0, 4.0), model.get(v4));
+        assertEquals(Point2D.of(3.0, 6.0), model.get(v6));
+        assertEquals(Point2D.of(3.0, 8.0), model.get(v7));
+        assertEquals(Point2D.of(3.0, 10.0), model.get(v8));
     }
-    
+
 }
