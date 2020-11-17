@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -61,6 +62,19 @@ public class MedianGreedyTwoLayeredBipartiteLayout2D<V, E>
         super();
     }
 
+    /**
+     * Create a new layout
+     * 
+     * @param partition one of the two partitions, can be null
+     * @param vertexComparator vertex order, can be null
+     * @param vertical draw on two vertical or horizontal lines
+     */
+    public MedianGreedyTwoLayeredBipartiteLayout2D(
+        Set<V> partition, Comparator<V> vertexComparator, boolean vertical)
+    {
+        super(partition, vertexComparator, vertical);
+    }
+    
     @Override
     protected void drawSecondPartition(Graph<V, E> graph, List<V> partition, LayoutModel2D<V> model)
     {

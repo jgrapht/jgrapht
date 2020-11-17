@@ -57,8 +57,22 @@ public class TwoLayeredBipartiteLayout2D<V, E>
      */
     public TwoLayeredBipartiteLayout2D()
     {
-        this.vertexComparator = null;
-        this.vertical = true;
+        this(null, null, true);
+    }
+
+    /**
+     * Create a new layout
+     * 
+     * @param partition one of the two partitions, can be null
+     * @param vertexComparator vertex order, can be null
+     * @param vertical draw on two vertical or horizontal lines
+     */
+    public TwoLayeredBipartiteLayout2D(
+        Set<V> partition, Comparator<V> vertexComparator, boolean vertical)
+    {
+        this.partition = partition;
+        this.vertexComparator = vertexComparator;
+        this.vertical = vertical;
     }
 
     /**
