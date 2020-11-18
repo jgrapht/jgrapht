@@ -29,7 +29,13 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
 /**
  * Predict links using the Jaccard coefficient.
  * 
- * See the following two papers.
+ * <p>
+ * This is a local method which computes $s_{xy} =
+ * \frac{|\Gamma(u)\cap\Gamma(v))|}{|\Gamma(u)\cup\Gamma(v))|}$ where for a node $v$, $\Gamma(v)$
+ * denotes the set of neighbors of $v$.
+ * </p>
+ * 
+ * See the following two papers:
  * <ul>
  * <li>Liben‐Nowell, David, and Jon Kleinberg. "The link‐prediction problem for social networks."
  * Journal of the American society for information science and technology 58.7 (2007):
@@ -49,6 +55,11 @@ public class JaccardCoefficientLinkPrediction<V, E>
 {
     private Graph<V, E> graph;
 
+    /**
+     * Create a new prediction
+     * 
+     * @param graph the input graph
+     */
     public JaccardCoefficientLinkPrediction(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph);

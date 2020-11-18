@@ -17,21 +17,18 @@
  */
 package org.jgrapht.alg.linkprediction;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
 
 /**
- * Predict links using the number of common neighbors.
+ * Predict links using Preferential Attachment.
  * 
  * <p>
- * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))| where for a node $v$,
- * $\Gamma(v)$ denotes the set of neighbors of $v$.
+ * This is a local method which computes $s_{xy} = k(u) \times k(v)$ where for a node $v$,
+ * $\Gamma(v)$ denotes the set of neighbors of $v$ and $k(v) = |\Gamma(v)|$ denotes the degree of
+ * $v$.
  * </p>
  * 
  * See the following two papers:
@@ -48,7 +45,7 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
  * 
  * @author Dimitrios Michail
  */
-public class CommonNeighborsLinkPrediction<V, E>
+public class PreferentialAttachmentLinkPrediction<V, E>
     implements
     LinkPredictionAlgorithm<V, E>
 {
@@ -59,7 +56,7 @@ public class CommonNeighborsLinkPrediction<V, E>
      * 
      * @param graph the input graph
      */
-    public CommonNeighborsLinkPrediction(Graph<V, E> graph)
+    public PreferentialAttachmentLinkPrediction(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph);
     }
@@ -67,13 +64,10 @@ public class CommonNeighborsLinkPrediction<V, E>
     @Override
     public double predict(V u, V v)
     {
-        List<V> gu = Graphs.successorListOf(graph, u);
-        List<V> gv = Graphs.successorListOf(graph, v);
+        int du = graph.outDegreeOf(u);
+        int dv = graph.outDegreeOf(v);
 
-        Set<V> intersection = new HashSet<>(gu);
-        intersection.retainAll(gv);
-
-        return (double) intersection.size();
+        return du * dv;
     }
 
 }

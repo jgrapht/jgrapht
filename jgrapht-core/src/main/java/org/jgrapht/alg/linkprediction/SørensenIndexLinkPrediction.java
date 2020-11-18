@@ -27,11 +27,12 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
 
 /**
- * Predict links using the number of common neighbors.
+ * Predict links using the Sørensen Index.
  * 
  * <p>
- * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))| where for a node $v$,
- * $\Gamma(v)$ denotes the set of neighbors of $v$.
+ * This is a local method which computes $s_{xy} = \frac{2|\Gamma(u)\cap\Gamma(v))|}{k(u) +k(v)}$
+ * where for a node $v$, $\Gamma(v)$ denotes the set of neighbors of $v$ and $k(v) = |\Gamma(v)|$
+ * denotes the degree of $v$.
  * </p>
  * 
  * See the following two papers:
@@ -48,7 +49,7 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
  * 
  * @author Dimitrios Michail
  */
-public class CommonNeighborsLinkPrediction<V, E>
+public class SørensenIndexLinkPrediction<V, E>
     implements
     LinkPredictionAlgorithm<V, E>
 {
@@ -59,7 +60,7 @@ public class CommonNeighborsLinkPrediction<V, E>
      * 
      * @param graph the input graph
      */
-    public CommonNeighborsLinkPrediction(Graph<V, E> graph)
+    public SørensenIndexLinkPrediction(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph);
     }
@@ -67,13 +68,20 @@ public class CommonNeighborsLinkPrediction<V, E>
     @Override
     public double predict(V u, V v)
     {
+        int du = graph.outDegreeOf(u);
+        int dv = graph.outDegreeOf(v);
+
+        if (du + dv == 0) {
+            throw new IllegalArgumentException("Both vertices have zero neighbors");
+        }
+
         List<V> gu = Graphs.successorListOf(graph, u);
         List<V> gv = Graphs.successorListOf(graph, v);
 
         Set<V> intersection = new HashSet<>(gu);
         intersection.retainAll(gv);
 
-        return (double) intersection.size();
+        return 2d * intersection.size() / (du + dv);
     }
 
 }

@@ -27,11 +27,12 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
 
 /**
- * Predict links using the number of common neighbors.
+ * Predict links using the Adamic-Adar Index.
  * 
  * <p>
- * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))| where for a node $v$,
- * $\Gamma(v)$ denotes the set of neighbors of $v$.
+ * This is a local method which computes $s_{uv} = \sum_{z \in
+ * \Gamma(u)\cap\Gamma(v))}\frac{1}{\log(k(z))}$ where for a node $v$, $\Gamma(v)$ denotes the set
+ * of neighbors of $v$ and $k(v) = |\Gamma(v)|$ denotes the degree of $v$.
  * </p>
  * 
  * See the following two papers:
@@ -48,7 +49,7 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
  * 
  * @author Dimitrios Michail
  */
-public class CommonNeighborsLinkPrediction<V, E>
+public class AdamicAdarIndexLinkPrediction<V, E>
     implements
     LinkPredictionAlgorithm<V, E>
 {
@@ -59,7 +60,7 @@ public class CommonNeighborsLinkPrediction<V, E>
      * 
      * @param graph the input graph
      */
-    public CommonNeighborsLinkPrediction(Graph<V, E> graph)
+    public AdamicAdarIndexLinkPrediction(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph);
     }
@@ -73,7 +74,15 @@ public class CommonNeighborsLinkPrediction<V, E>
         Set<V> intersection = new HashSet<>(gu);
         intersection.retainAll(gv);
 
-        return (double) intersection.size();
+        double result = 0d;
+        for (V z : intersection) {
+            int dz = graph.outDegreeOf(z);
+            if (dz < 2) {
+                throw new IllegalArgumentException("Index not well defined");
+            }
+            result += 1d / Math.log(dz);
+        }
+        return result;
     }
 
 }

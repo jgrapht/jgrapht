@@ -27,20 +27,17 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
 
 /**
- * Predict links using the number of common neighbors.
+ * Predict links using the Leicht-Holme-Newman Index.
  * 
  * <p>
- * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))| where for a node $v$,
- * $\Gamma(v)$ denotes the set of neighbors of $v$.
+ * This is a local method which computes $s_{xy} = \frac{|\Gamma(u)\cap\Gamma(v))|}{k(u) \cdot
+ * k(v)}$ where for a node $v$, $\Gamma(v)$ denotes the set of neighbors of $v$ and $k(v) =
+ * |\Gamma(v)|$ denotes the degree of $v$.
  * </p>
  * 
- * See the following two papers:
+ * See the following paper:
  * <ul>
- * <li>Liben‐Nowell, David, and Jon Kleinberg. "The link‐prediction problem for social networks."
- * Journal of the American society for information science and technology 58.7 (2007):
- * 1019-1031.</li>
- * <li>Zhou, Tao, Linyuan Lü, and Yi-Cheng Zhang. "Predicting missing links via local information."
- * The European Physical Journal B 71.4 (2009): 623-630.</li>
+ * <li>E.A. Leicht, P. Holme, M.E.J. Newman, Phys. Rev. E 73, 026120 (2006)</li>
  * </ul>
  * 
  * @param <V> the graph vertex type
@@ -48,7 +45,7 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
  * 
  * @author Dimitrios Michail
  */
-public class CommonNeighborsLinkPrediction<V, E>
+public class LeichtHolmeNewmanIndexLinkPrediction<V, E>
     implements
     LinkPredictionAlgorithm<V, E>
 {
@@ -59,7 +56,7 @@ public class CommonNeighborsLinkPrediction<V, E>
      * 
      * @param graph the input graph
      */
-    public CommonNeighborsLinkPrediction(Graph<V, E> graph)
+    public LeichtHolmeNewmanIndexLinkPrediction(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph);
     }
@@ -67,13 +64,20 @@ public class CommonNeighborsLinkPrediction<V, E>
     @Override
     public double predict(V u, V v)
     {
+        int du = graph.outDegreeOf(u);
+        int dv = graph.outDegreeOf(v);
+
+        if (du == 0 || dv == 0) {
+            throw new IllegalArgumentException("Query vertex with zero neighbors");
+        }
+
         List<V> gu = Graphs.successorListOf(graph, u);
         List<V> gv = Graphs.successorListOf(graph, v);
 
         Set<V> intersection = new HashSet<>(gu);
         intersection.retainAll(gv);
 
-        return (double) intersection.size();
+        return (double) intersection.size() / du * dv;
     }
 
 }

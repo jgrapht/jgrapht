@@ -26,6 +26,13 @@ import org.jgrapht.alg.util.Triple;
 /**
  * A link prediction algorithm.
  * 
+ * <p>
+ * A link prediction algorithm assigns a score $s_{uv}$ for each pair of nodes $u, v \in V$. This
+ * score can be viewed as a measure of similarity between nodes $u$ and $v$. All the non-existent
+ * links are sorted in decreasing order according to their scores, and the links at the top are most
+ * likely to exist.
+ * <p>
+ * 
  * @author Dimitrios Michail
  * 
  * @param <V> the graph vertex type
@@ -51,7 +58,8 @@ public interface LinkPredictionAlgorithm<V, E>
     }
 
     /**
-     * Predict an edge between two vertices.
+     * Predict an edge between two vertices. The magnitude and the interpretation of the returned
+     * scores depend solely on the algorithm.
      * 
      * @param u first vertex
      * @param v second vertex
