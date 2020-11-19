@@ -30,7 +30,7 @@ import org.junit.Test;
  *
  * @author Dimitrios Michail
  */
-public class AdamicAdarIndexLinkPredictionTest
+public class ResourceAllocationIndexLinkPredictionTest
 {
 
     @Test
@@ -54,8 +54,8 @@ public class AdamicAdarIndexLinkPredictionTest
         g.addEdge(3, 5);
         g.addEdge(4, 5);
 
-        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new AdamicAdarIndexLinkPrediction<>(g);
+        ResourceAllocationIndexLinkPrediction<Integer, DefaultEdge> alg =
+            new ResourceAllocationIndexLinkPrediction<>(g);
 
         double[] scores = new double[6];
 
@@ -70,8 +70,8 @@ public class AdamicAdarIndexLinkPredictionTest
             }
         }
 
-        double[] expected = { 1.631586747071319, 1.631586747071319, 0.7213475204444817,
-            3.074281787960283, 0.7213475204444817, 1.4426950408889634 };
+        double[] expected =
+            { 0.5833333333333333, 0.5833333333333333, 0.25, 1.0833333333333333, 0.25, 0.5 };
 
         assertArrayEquals(expected, scores, 1e-9);
 
@@ -92,8 +92,8 @@ public class AdamicAdarIndexLinkPredictionTest
         g.addEdge(0, 2);
         g.addEdge(1, 2);
 
-        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new AdamicAdarIndexLinkPrediction<>(g);
+        ResourceAllocationIndexLinkPrediction<Integer, DefaultEdge> alg =
+            new ResourceAllocationIndexLinkPrediction<>(g);
 
         alg.predict(0, 1);
     }

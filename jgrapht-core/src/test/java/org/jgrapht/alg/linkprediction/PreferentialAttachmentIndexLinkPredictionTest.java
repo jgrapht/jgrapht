@@ -30,7 +30,7 @@ import org.junit.Test;
  *
  * @author Dimitrios Michail
  */
-public class AdamicAdarIndexLinkPredictionTest
+public class PreferentialAttachmentIndexLinkPredictionTest
 {
 
     @Test
@@ -54,8 +54,8 @@ public class AdamicAdarIndexLinkPredictionTest
         g.addEdge(3, 5);
         g.addEdge(4, 5);
 
-        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new AdamicAdarIndexLinkPrediction<>(g);
+        PreferentialAttachmentLinkPrediction<Integer, DefaultEdge> alg =
+            new PreferentialAttachmentLinkPrediction<>(g);
 
         double[] scores = new double[6];
 
@@ -70,32 +70,10 @@ public class AdamicAdarIndexLinkPredictionTest
             }
         }
 
-        double[] expected = { 1.631586747071319, 1.631586747071319, 0.7213475204444817,
-            3.074281787960283, 0.7213475204444817, 1.4426950408889634 };
-
+        double[] expected = { 6.0,8.0,4.0,12.0,6.0,6.0};
+        
         assertArrayEquals(expected, scores, 1e-9);
 
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidPrediction()
-    {
-        Graph<Integer,
-            DefaultEdge> g = GraphTypeBuilder
-                .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
-                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
-
-        g.addVertex(0);
-        g.addVertex(1);
-        g.addVertex(2);
-
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
-
-        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
-            new AdamicAdarIndexLinkPrediction<>(g);
-
-        alg.predict(0, 1);
     }
 
 }
