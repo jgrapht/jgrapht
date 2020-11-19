@@ -30,7 +30,7 @@ import org.junit.Test;
  *
  * @author Dimitrios Michail
  */
-public class CommonNeighborsPredictionTest
+public class CommonNeighborsLinkPredictionTest
 {
 
     @Test

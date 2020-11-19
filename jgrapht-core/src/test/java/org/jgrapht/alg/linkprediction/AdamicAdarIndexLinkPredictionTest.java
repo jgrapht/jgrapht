@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.linkprediction;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -26,11 +26,11 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Tests for the {@link JacardLinkPrediction}
+ * Tests
  *
  * @author Dimitrios Michail
  */
-public class JaccardLinkedPredictionTest
+public class AdamicAdarIndexLinkPredictionTest
 {
 
     @Test
@@ -54,27 +54,56 @@ public class JaccardLinkedPredictionTest
         g.addEdge(3, 5);
         g.addEdge(4, 5);
 
-        JaccardCoefficientLinkPrediction<Integer, DefaultEdge> alg =
-            new JaccardCoefficientLinkPrediction<>(g);
+        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
+            new AdamicAdarIndexLinkPrediction<>(g);
 
-        assertEquals(2d/3, alg.predict(0, 2), 1e-9);
-        assertEquals(2d/4, alg.predict(0, 4), 1e-9);
-        assertEquals(1d/6, alg.predict(3, 2), 1e-9);
+        double[] scores = new double[6];
+
+        int pos = 0;
+        for (int u : g.vertexSet()) {
+            for (int v : g.vertexSet()) {
+                if (u >= v || g.containsEdge(u, v)) {
+                    continue;
+                }
+                double score = alg.predict(u, v);
+                scores[pos++] = score;
+            }
+        }
+
+        double[] expected = { 1.631586747071319, 1.631586747071319, 0.7213475204444817,
+            3.074281787960283, 0.7213475204444817, 1.4426950408889634 };
+
+        assertArrayEquals(expected, scores, 1e-9);
+
+        System.out.print("{ ");
+        for (int i = 0; i < pos; i++) {
+            System.out.print(scores[i]);
+            if (i == pos - 1) {
+                System.out.println("}");
+            } else {
+                System.out.print(",");
+            }
+        }
+
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidPrediction()
     {
         Graph<Integer,
             DefaultEdge> g = GraphTypeBuilder
-                .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
         g.addVertex(0);
         g.addVertex(1);
+        g.addVertex(2);
 
-        JaccardCoefficientLinkPrediction<Integer, DefaultEdge> alg =
-            new JaccardCoefficientLinkPrediction<>(g);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+
+        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
+            new AdamicAdarIndexLinkPrediction<>(g);
 
         alg.predict(0, 1);
     }
