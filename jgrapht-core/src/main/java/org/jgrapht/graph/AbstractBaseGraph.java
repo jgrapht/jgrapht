@@ -39,6 +39,11 @@ import java.util.function.*;
  * set ordering (via {@link LinkedHashMap} and {@link LinkedHashSet}). The defaults are reasonable
  * for most use-cases, only change if you know what you are doing.
  *
+ * <p>
+ * For thread-safety information applicable to all subclasses, please see
+ * <a href="https://jgrapht.org/guide/UserOverview#concurrency">the
+ * application developer guide</a>.
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
