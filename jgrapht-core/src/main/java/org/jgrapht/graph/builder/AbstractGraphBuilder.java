@@ -27,7 +27,7 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  * @param <G> type of the resulting graph
  * @param <B> type of this builder
- * 
+ *
  * @author Andrew Chen
  */
 public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
@@ -251,12 +251,12 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      *
      * @return this builder object
      *
-     * @see Graph#addEdge(Object, Object, Object)
+     * @see #addEdge(Object, Object, Object)
      * @see Graph#setEdgeWeight(Object, double)
      */
     public B addEdge(V source, V target, E edge, double weight)
     {
-        this.graph.addEdge(source, target, edge);
+        this.addEdge(source, target, edge); // adds vertices if needed
         this.graph.setEdgeWeight(edge, weight);
         return this.self();
     }
