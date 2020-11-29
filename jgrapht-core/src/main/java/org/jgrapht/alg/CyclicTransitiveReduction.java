@@ -72,6 +72,8 @@ import java.util.Set;
  * array-based algorithm despite my initial hope that it might be faster than this algorithm. Hence, I decided to keep
  * and improve this one instead.
  *
+ * @param <V> vertex type
+ * @param <E> edge type
  * @author Alexander Kriegisch
  */
 public class CyclicTransitiveReduction<V, E> {
@@ -128,13 +130,13 @@ public class CyclicTransitiveReduction<V, E> {
   /**
    * Removes all transitive edges from the directed, possibly cyclic graph passed as input parameter, e.g.
    * <pre>
-   * Graph<String, DefaultEdge> graph = GraphTypeBuilder
-   *   .<String, DefaultEdge>directed()
+   * Graph&lt;String, DefaultEdge&gt; graph = GraphTypeBuilder
+   *   .&lt;String, DefaultEdge&gt;directed()
    *   .allowingMultipleEdges(false)
    *   .allowingSelfLoops(false)
    *   .edgeClass(DefaultEdge.class)
    *   .buildGraph();
-   * new CyclicTransitiveReduction<String, DefaultEdge>(graph).reduce();
+   * new CyclicTransitiveReduction&lt;String, DefaultEdge&gt;(graph).reduce();
    * </pre>
    * The resulting graph will be minimal and only use originally existing edges, no synthetical ones. I.e. that each SCC
    * (strongly connected component) will be reduced to a Hamiltonian cycle and there will be only a single edge
@@ -153,6 +155,8 @@ public class CyclicTransitiveReduction<V, E> {
 
   /**
    * Condense a directed, possibly cyclical graph by {@link StrongConnectivityAlgorithm#getCondensation()}.
+   * @param directedGraph original graph to be condensed
+   * @return condensed graph with each strongly connected component (SCC) being a subgraph
    */
   protected Graph<Graph<V, E>, DefaultEdge> condenseGraph(Graph<V, E> directedGraph) {
     return new KosarajuStrongConnectivityInspector<>(directedGraph).getCondensation();
@@ -166,6 +170,8 @@ public class CyclicTransitiveReduction<V, E> {
    * If synthetic edges are allowed, this method is very fast (linear time according to the number of SCC vertices).
    * Otherwise it has to find a Hamiltonian cycle (HC) within each SCC, potentially making slower by growing orders of
    * magnitude for bigger SCCs because HC runtime grows exponentially with the number of vertices in the SCC.
+   *
+   * @param condensedGraph condensed graph to be pruned
    */
   protected void pruneCondensedGraph(Graph<Graph<V, E>, DefaultEdge> condensedGraph) {
     TransitiveReduction.INSTANCE.reduce(condensedGraph);
@@ -181,7 +187,7 @@ public class CyclicTransitiveReduction<V, E> {
         scComponent.removeAllEdges(sccEdgesCopy);
         for (int i = 0; i < cycle.size(); i++) {
           V sourceVertex = cycle.get(i);
-          V targetVertex = cycle.get(i + 1 < cycle.size() ? i + 1 : 0);
+          V targetVertex = cycle.get((i + 1) % cycle.size());
           // Add edge to original graph first, otherwise there will be an exception when trying to add it to a subgraph
           // of the condensation
           directedGraph.addEdge(sourceVertex, targetVertex);
@@ -212,6 +218,9 @@ public class CyclicTransitiveReduction<V, E> {
    * Re-expand a condensed graph previously created by {@link #condenseGraph(Graph)} after possible clean-ups by
    * {@link #pruneCondensedGraph(Graph)}) back into the original directed graph, also cleaning up  redundant edges
    * between strongly connected components during the process.
+   *
+   * @param condensedGraph condensed graph to be re-expanded
+   * @param directedGraph target graph to be expanded into
    */
   protected void expandCondensedGraph(Graph<Graph<V, E>, DefaultEdge> condensedGraph, Graph<V, E> directedGraph) {
     // Per condensed graph edge, find one existing edge in the original graph to represent
