@@ -62,15 +62,15 @@ import java.util.Set;
  * </ul>
  * <p></p>
  * <b>Implementation note:</b> This algorithm was compared with an improved version of an existing algorithm found in a
- * C library from the CUTTER project related to the paper
+ * C library from the <a href="https://www.win.tue.nl/emcmc/cutter/">CUTTER project</a> related to the paper
  * <a href="https://bmcbioinformatics.biomedcentral.com/track/pdf/10.1186/1471-2105-13-281.pdf">Efficient reconstruction
  * of biological networks via transitive reduction on general purpose graphics processors</a> and ported to Java,
  * operating directly on int or boolean arrays. The performance was comparable only for small cyclical digraphs, but the
- * CUTTER algorithm, when compared to this one, performs worse and worse for bigger networks with more vertices and more
- * SCCs. Furthermore, for DAGs CUTTER loses even more dramatically because it uses the Warshall transitive closure
- * algorithm which is very slow for large DAGs. So there was no apparent advantage in keeping the array-based algorithm
- * despite my initial hope that it might be faster than this algorithm. Hence, I decided to keep and improve this one
- * instead.
+ * (non-parellel) CUTTER algorithm, when compared to this one, performs worse and worse for bigger networks with more
+ * vertices and more SCCs. Furthermore, for DAGs CUTTER loses even more dramatically because it uses the Warshall
+ * transitive closure algorithm which is very slow for large DAGs. So there was no apparent advantage in keeping the
+ * array-based algorithm despite my initial hope that it might be faster than this algorithm. Hence, I decided to keep
+ * and improve this one instead.
  *
  * @author Alexander Kriegisch
  */
