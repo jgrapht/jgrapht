@@ -40,6 +40,7 @@ import it.unimi.dsi.big.webgraph.LazyLongIterators;
 import it.unimi.dsi.big.webgraph.LazyLongSkippableIterator;
 import it.unimi.dsi.big.webgraph.NodeIterator;
 import it.unimi.dsi.fastutil.longs.LongSets;
+import it.unimi.dsi.fastutil.objects.ObjectIterables;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
@@ -473,7 +474,7 @@ public class ImmutableBigGraphAdapterEndpointPair
                 } catch (final UnsupportedOperationException e) {
                 }
             }
-            return m = ImmutableGraphAdapterIntArray.size(edges());
+            return m = ObjectIterables.size(edges());
         }
 
         @Override

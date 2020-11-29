@@ -35,6 +35,7 @@ import com.google.common.graph.EndpointPair;
 import com.google.common.graph.Graph;
 
 import it.unimi.dsi.fastutil.ints.IntSets;
+import it.unimi.dsi.fastutil.objects.ObjectIterables;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
@@ -518,7 +519,7 @@ public class ImmutableGraphAdapterEndpointPair
                 } catch (final UnsupportedOperationException e) {
                 }
             }
-            return m = ImmutableGraphAdapterIntArray.size(edges());
+            return m = ObjectIterables.size(edges());
         }
 
         @Override
