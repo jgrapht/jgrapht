@@ -63,7 +63,7 @@ public class DirectedHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBas
    * @return Hamiltonian cycle (HC) if the graph is strongly connected, null otherwise. The HC is represented as a
    * {@code GraphPath} in which the first and last vertices are identical, i.e. size is number of graph vertices + 1.
    * @throws IllegalArgumentException if graph is undirected
-   * @throws IllegalArgumentException if graph contains < 3 vertices (cycle impossible)
+   * @throws IllegalArgumentException if graph contains &lt; 3 vertices (cycle impossible)
    * @throws IllegalArgumentException if graph allows self-loops
    * @throws IllegalArgumentException if graph is weighted
    * @throws IllegalArgumentException if graph allows multiple edges between two vertices
