@@ -134,6 +134,40 @@ public class TransitiveReductionTest
         assertThrows(NullPointerException.class, () -> TransitiveReduction.INSTANCE.reduce(null));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testCyclicGraph()
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph =
+          new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "D");
+        graph.addEdge("D", "A");
+        TransitiveReduction.INSTANCE.reduce(graph);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGraphContainingStronglyConnectedComponent()
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph =
+          new SimpleDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "D");
+        graph.addEdge("D", "B");
+        graph.addEdge("C", "E");
+        TransitiveReduction.INSTANCE.reduce(graph);
+    }
+
     @Test
     public void testReduceNoVertexNoEdge()
     {
