@@ -17,9 +17,13 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.alg.cycle.CycleDetector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
 
 /**
  * An implementation of Harry Hsu's
@@ -110,7 +114,9 @@ public class TransitiveReduction
     }
 
     /**
-     * This method will remove all transitive edges from the graph passed as input parameter.
+     * This method will remove all transitive edges from the DAG (directed acyclical graph) graph passed as input
+     * parameter. If you need to transitively reduce a cyclical graph, please use {@link CyclicTransitiveReduction}
+     * instead.
      *
      * <p>
      * You may want to clone the graph before, as transitive edges will be pitilessly removed.
@@ -131,10 +137,19 @@ public class TransitiveReduction
      * @param directedGraph the directed graph that will be reduced transitively
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
+     * @throws IllegalArgumentException if the given directed graph contains cycles because this algorithm only works
+     *                                  for acyclical graphs
      */
     public <V, E> void reduce(final Graph<V, E> directedGraph)
     {
         GraphTests.requireDirected(directedGraph, "Graph must be directed");
+
+        if (new CycleDetector<>(directedGraph).detectCycles()) {
+            throw new IllegalArgumentException(
+              "This algorithm only works properly for DAGs, but the given graph contains cycles. " +
+                "Please use class CyclicTransitiveReduction instead."
+            );
+        }
 
         final List<V> vertices = new ArrayList<>(directedGraph.vertexSet());
 
