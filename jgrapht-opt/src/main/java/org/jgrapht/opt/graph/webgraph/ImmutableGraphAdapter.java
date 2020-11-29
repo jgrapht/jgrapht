@@ -36,6 +36,7 @@ import com.google.common.graph.Graph;
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import it.unimi.dsi.fastutil.ints.IntIntSortedPair;
 import it.unimi.dsi.fastutil.ints.IntSets;
+import it.unimi.dsi.fastutil.objects.ObjectIterables;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
@@ -54,9 +55,12 @@ import it.unimi.dsi.webgraph.Transform;
  *
  * <p>
  * Nodes are instance of {@link Integer} corresponding to the index of a node in WebGraph. Edges are
- * represented by an immutable {@link IntIntPair}, for directed graph, or by an immutable
- * {@link IntIntSortedPair}, for an undirected graph. Since the underlying graph is immutable, the
- * resulting graph is unmodifiable.
+ * represented by an {@link IntIntPair}, for directed graph, or by an {@link IntIntSortedPair}, for
+ * an undirected graph. In directed, the left and right element are the source and the target of the
+ * edge. In the undirected case, edges are canonicalized so that the left element is always smaller
+ * than or equal to the right element. Since the underlying graph is immutable, the resulting graph
+ * is unmodifiable. Edges are immutable and can be tested for equality (e.g., stored in a
+ * dictionary).
  *
  * <p>
  * WebGraph provides methods for successors only, so to adapt a directed graph you must provide both
@@ -239,8 +243,8 @@ public class ImmutableGraphAdapter
         return containsEdgeFast(x, y)
             ? Collections
                 .singleton(
-                    directed ? IntIntPair.of(sourceVertex, targetVertex)
-                        : IntIntSortedPair.of(sourceVertex, targetVertex))
+                    directed ? IntIntPair.of(x, y)
+                        : IntIntSortedPair.of(x, y))
             : Collections.emptySet();
     }
 
@@ -249,9 +253,9 @@ public class ImmutableGraphAdapter
     {
         if (sourceVertex == null || targetVertex == null)
             return null;
-        return containsEdgeFast(sourceVertex.intValue(), targetVertex.intValue())
-            ? (directed ? IntIntPair.of(sourceVertex, targetVertex)
-                : IntIntSortedPair.of(sourceVertex, targetVertex))
+        final int x = sourceVertex;
+        final int y = targetVertex;
+        return containsEdgeFast(x, y) ? (directed ? IntIntPair.of(x, y) : IntIntSortedPair.of(x, y))
             : null;
     }
 
@@ -297,6 +301,8 @@ public class ImmutableGraphAdapter
     {
         if (e == null)
             return false;
+        if (directed == (e instanceof IntIntSortedPair))
+            return false;
         return containsEdgeFast(e.leftInt(), e.rightInt());
     }
 
@@ -305,7 +311,7 @@ public class ImmutableGraphAdapter
     {
         if (sourceVertex == null || targetVertex == null)
             return false;
-        return containsEdgeFast(sourceVertex.intValue(), targetVertex.intValue());
+        return containsEdgeFast(sourceVertex, targetVertex);
     }
 
     private boolean containsEdgeFast(final int x, final int y)
@@ -394,13 +400,14 @@ public class ImmutableGraphAdapter
     public Set<IntIntPair> incomingEdgesOf(final Integer vertex)
     {
         final ObjectLinkedOpenHashSet<IntIntPair> set = new ObjectLinkedOpenHashSet<>();
-        final LazyIntIterator predecessors = immutableTranspose.successors(vertex);
+        final int source = vertex;
+        final LazyIntIterator predecessors = immutableTranspose.successors(source);
         if (directed) {
             for (int target; (target = predecessors.nextInt()) != -1;)
-                set.add(IntIntPair.of(target, vertex));
+                set.add(IntIntPair.of(target, source));
         } else {
             for (int target; (target = predecessors.nextInt()) != -1;)
-                set.add(IntIntSortedPair.of(target, vertex));
+                set.add(IntIntSortedPair.of(target, source));
         }
 
         return set;
@@ -455,13 +462,13 @@ public class ImmutableGraphAdapter
     @Override
     public Integer getEdgeSource(final IntIntPair e)
     {
-        return directed ? e.leftInt() : Math.min(e.leftInt(), e.rightInt());
+        return e.leftInt();
     }
 
     @Override
     public Integer getEdgeTarget(final IntIntPair e)
     {
-        return directed ? e.rightInt() : Math.max(e.leftInt(), e.rightInt());
+        return e.rightInt();
     }
 
     @Override
@@ -520,7 +527,7 @@ public class ImmutableGraphAdapter
                 } catch (final UnsupportedOperationException e) {
                 }
             }
-            return m = ImmutableGraphAdapterIntArray.size(edges());
+            return m = ObjectIterables.size(edges());
         }
 
         @Override

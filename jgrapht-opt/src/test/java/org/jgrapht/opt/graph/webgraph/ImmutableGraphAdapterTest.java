@@ -57,6 +57,9 @@ public class ImmutableGraphAdapterTest
             assertEquals(g.numNodes(), a.vertexSet().size());
             assertEquals(g.numNodes(), a.iterables().vertexCount());
             assertEquals(g.numArcs(), a.iterables().edgeCount());
+            // Test cached value
+            assertEquals(g.numArcs(), a.iterables().edgeCount());
+
             for (int x = 0; x < size; x++) {
                 final LazyIntIterator successors = g.successors(x);
                 for (int y; (y = successors.nextInt()) != -1;)
@@ -192,6 +195,7 @@ public class ImmutableGraphAdapterTest
                 new IntIntPair[] { IntIntPair.of(0, 1), IntIntPair.of(1, 2) }),
             new ObjectOpenHashSet<>(a.iterables().edgesOf(1).iterator()));
 
+        assertEquals(3, Iterables.size(a.edgesOf(2)));
         assertEquals(3, Iterables.size(a.iterables().edgesOf(2)));
 
         assertEquals(
