@@ -145,7 +145,7 @@ public class CyclicTransitiveReduction<V, E> {
   public synchronized void reduce() {
     // Simple transitive reduction algorithm is a bit faster for acyclic digraphs (but faulty for cyclic ones!)
     if (!new CycleDetector<>(directedGraph).detectCycles()) {
-      TransitiveReduction.INSTANCE.reduce(directedGraph);
+      TransitiveReduction.INSTANCE.reduce(directedGraph, false);
       return;
     }
     Graph<Graph<V, E>, DefaultEdge> condensedGraph = condenseGraph(directedGraph);
@@ -174,7 +174,7 @@ public class CyclicTransitiveReduction<V, E> {
    * @param condensedGraph condensed graph to be pruned
    */
   protected void pruneCondensedGraph(Graph<Graph<V, E>, DefaultEdge> condensedGraph) {
-    TransitiveReduction.INSTANCE.reduce(condensedGraph);
+    TransitiveReduction.INSTANCE.reduce(condensedGraph, false);
 
     for (Graph<V, E> scComponent : condensedGraph.vertexSet()) {
       Set<E> sccEdges = scComponent.edgeSet();
