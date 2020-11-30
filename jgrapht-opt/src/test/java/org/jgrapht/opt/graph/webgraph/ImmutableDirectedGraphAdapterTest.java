@@ -255,8 +255,7 @@ public class ImmutableDirectedGraphAdapterTest
     @Test
     public void testCopy()
         throws IllegalArgumentException,
-        SecurityException,
-        IOException
+        SecurityException
     {
         final ArrayListMutableGraph m = new ArrayListMutableGraph();
         m.addNodes(4);
@@ -273,8 +272,7 @@ public class ImmutableDirectedGraphAdapterTest
     @Test
     public void testType()
         throws IllegalArgumentException,
-        SecurityException,
-        IOException
+        SecurityException
     {
         final ArrayListMutableGraph m = new ArrayListMutableGraph();
         m.addNodes(4);
@@ -298,5 +296,27 @@ public class ImmutableDirectedGraphAdapterTest
                     IntIntPair.of(2, 3) }),
             new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
 
+    }
+
+    @Test
+    public void testAdjacencyCheck()
+        throws IllegalArgumentException,
+        SecurityException
+    {
+        final ArrayListMutableGraph m = new ArrayListMutableGraph();
+        m.addNodes(100);
+        for (int i = 0; i < 30; i++)
+            m.addArc(0, i);
+        final it.unimi.dsi.webgraph.ImmutableGraph v = m.immutableView();
+        ImmutableDirectedGraphAdapter a =
+            new ImmutableDirectedGraphAdapter(v, Transform.transpose(v));
+        assertEquals(IntIntPair.of(0, 1), a.getEdge(0, 1));
+        assertEquals(null, a.getEdge(1, 0));
+        assertEquals(null, a.getEdge(0, 50));
+
+        a = new ImmutableDirectedGraphAdapter(v);
+        assertEquals(IntIntPair.of(0, 1), a.getEdge(0, 1));
+        assertEquals(null, a.getEdge(1, 0));
+        assertEquals(null, a.getEdge(0, 50));
     }
 }

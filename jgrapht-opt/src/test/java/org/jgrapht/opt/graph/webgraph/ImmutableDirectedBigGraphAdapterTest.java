@@ -43,7 +43,7 @@ import it.unimi.dsi.webgraph.ArrayListMutableGraph;
 import it.unimi.dsi.webgraph.Transform;
 import it.unimi.dsi.webgraph.examples.ErdosRenyiGraph;
 
-public class ImmutableBigGraphAdapterTest
+public class ImmutableDirectedBigGraphAdapterTest
 {
     @Test
     public void testSmallRandom()
@@ -52,7 +52,7 @@ public class ImmutableBigGraphAdapterTest
             final it.unimi.dsi.webgraph.ImmutableGraph mg =
                 new ArrayListMutableGraph(new ErdosRenyiGraph(size, .1, 0L, true)).immutableView();
             final ImmutableGraph g = ImmutableGraph.wrap(mg);
-            final ImmutableBigGraphAdapter a = new ImmutableBigGraphAdapter(
+            final ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(
                 g, ImmutableGraph.wrap(Transform.transpose(mg)));
 
             assertEquals(g.numNodes(), a.vertexSet().size());
@@ -82,7 +82,7 @@ public class ImmutableBigGraphAdapterTest
         SecurityException
     {
         final File basename = File
-            .createTempFile(ImmutableBigGraphAdapterTest.class.getSimpleName(), "test");
+            .createTempFile(ImmutableDirectedBigGraphAdapterTest.class.getSimpleName(), "test");
         EFGraph.store(g, basename.toString());
         basename.deleteOnExit();
         new File(basename + EFGraph.GRAPH_EXTENSION).deleteOnExit();
@@ -113,13 +113,13 @@ public class ImmutableBigGraphAdapterTest
         /*
          * Assertions.assertThrows(IllegalArgumentException.class, () -> {
          *
-         * @SuppressWarnings("unused") final ImmutableBigGraphAdapter dummy =
-         * ImmutableBigGraphAdapter.directed(g, ImmutableGraph.wrap(new
+         * @SuppressWarnings("unused") final ImmutableDirectedBigGraphAdapter dummy =
+         * ImmutableDirectedBigGraphAdapter.directed(g, ImmutableGraph.wrap(new
          * ArrayListMutableGraph().immutableView())); });
          */
 
-        final ImmutableBigGraphAdapter a = new ImmutableBigGraphAdapter(g, t);
-        final ImmutableBigGraphAdapter b = new ImmutableBigGraphAdapter(
+        final ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(g, t);
+        final ImmutableDirectedBigGraphAdapter b = new ImmutableDirectedBigGraphAdapter(
             ef, ImmutableGraph.wrap(Transform.transpose(mg)));
 
         assertEquals(g.numNodes(), a.vertexSet().size());
@@ -170,8 +170,7 @@ public class ImmutableBigGraphAdapterTest
         assertTrue(b.containsEdge(LongLongPair.of(1L, 2L)));
         assertFalse(b.containsEdge(LongLongPair.of(2L, 1L)));
         assertFalse(b.containsEdge(null));
-
-        assertFalse(a.containsEdge(LongLongSortedPair.of(0L, 1L)));
+        assertFalse(a.containsEdge(LongLongSortedPair.of(0L, 2L)));
 
         assertEquals(2, a.degreeOf(1L));
         assertEquals(4, a.degreeOf(2L));
@@ -256,84 +255,6 @@ public class ImmutableBigGraphAdapterTest
          */
     }
 
-    @Test
-    public void testSmallUndirected()
-        throws IllegalArgumentException,
-        SecurityException,
-        IOException
-    {
-        final ArrayListMutableGraph m = new ArrayListMutableGraph();
-        m.addNodes(4);
-        m.addArc(0, 1);
-        m.addArc(0, 2);
-        m.addArc(1, 3);
-        m.addArc(2, 3);
-        m.addArc(1, 1);
-        m.addArc(3, 3);
-
-        final ImmutableGraph g = ImmutableGraph
-            .load(
-                storeTempGraph(ImmutableGraph.wrap(Transform.symmetrize(m.immutableView())))
-                    .toString());
-
-        final ImmutableBigGraphAdapter a = ImmutableBigGraphAdapter.undirected(g);
-
-        assertEquals(g.numNodes(), a.vertexSet().size());
-        for (long x = 0; x < g.numNodes(); x++) {
-            final LazyLongIterator successors = g.successors(x);
-            for (long y; (y = successors.nextLong()) != -1;)
-                assertTrue(a.containsEdge(x, y));
-        }
-
-        assertEquals(6, a.iterables().edgeCount());
-        assertEquals(6, a.edgeSet().size());
-        assertNull(a.getEdge(2L, 2L));
-        assertEquals(LongLongSortedPair.of(0L, 1L), a.getEdge(0L, 1L));
-        assertFalse(a.containsEdge(LongLongPair.of(0L, 1L)));
-
-        assertTrue(
-            a.getEdgeSource(a.getEdge(0L, 1L)) == 0 && a.getEdgeTarget(a.getEdge(0L, 1L)) == 1
-                || a.getEdgeSource(a.getEdge(0L, 1L)) == 1
-                    && a.getEdgeTarget(a.getEdge(0L, 1L)) == 0);
-
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L),
-                    LongLongSortedPair.of(2L, 3L) }),
-            a.edgesOf(2L));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L),
-                    LongLongSortedPair.of(2L, 3L) }),
-            a.incomingEdgesOf(2L));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L),
-                    LongLongSortedPair.of(2L, 3L) }),
-            a.outgoingEdgesOf(2L));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L),
-                    LongLongSortedPair.of(2L, 3L) }),
-            new ObjectOpenHashSet<>(a.iterables().edgesOf(2L).iterator()));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L),
-                    LongLongSortedPair.of(2L, 3L) }),
-            new ObjectOpenHashSet<>(a.iterables().incomingEdgesOf(2L).iterator()));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L),
-                    LongLongSortedPair.of(2L, 3L) }),
-            new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(2L).iterator()));
-        assertEquals(Collections.singleton(LongLongSortedPair.of(0L, 1L)), a.getAllEdges(0L, 1L));
-        assertEquals(
-            Collections.singleton(LongLongSortedPair.of(0L, 1L)),
-            new ObjectOpenHashSet<>(a.iterables().allEdges(0L, 1L).iterator()));
-
-        assertEquals(4, a.degreeOf(1L));
-        assertEquals(4, a.iterables().degreeOf(1L));
-    }
 
     @Test
     public void testCopy()
@@ -348,13 +269,8 @@ public class ImmutableBigGraphAdapterTest
         m.addArc(1, 3);
         m.addArc(2, 3);
         final it.unimi.dsi.webgraph.ImmutableGraph v = m.immutableView();
-        ImmutableBigGraphAdapter a = ImmutableBigGraphAdapter
-            .directed(ImmutableGraph.wrap(v), ImmutableGraph.wrap(Transform.transpose(v)));
-        assertEquals(a, a.copy());
-
-        final it.unimi.dsi.webgraph.ImmutableGraph g = Transform.symmetrize(v);
-
-        a = ImmutableBigGraphAdapter.undirected(ImmutableGraph.wrap(g));
+        final ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(
+            ImmutableGraph.wrap(v), ImmutableGraph.wrap(Transform.transpose(v)));
         assertEquals(a, a.copy());
     }
 
@@ -371,8 +287,8 @@ public class ImmutableBigGraphAdapterTest
         m.addArc(1, 3);
         m.addArc(2, 3);
         final it.unimi.dsi.webgraph.ImmutableGraph v = m.immutableView();
-        ImmutableBigGraphAdapter a = ImmutableBigGraphAdapter
-            .directed(ImmutableGraph.wrap(v), ImmutableGraph.wrap(Transform.transpose(v)));
+        final ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(
+            ImmutableGraph.wrap(v), ImmutableGraph.wrap(Transform.transpose(v)));
         assertTrue(a.getType().isDirected());
         assertFalse(a.getType().isUndirected());
         assertEquals(
@@ -385,56 +301,27 @@ public class ImmutableBigGraphAdapterTest
                 new LongLongPair[] { LongLongPair.of(0L, 2L), LongLongPair.of(0L, 1L),
                     LongLongPair.of(1L, 3L), LongLongPair.of(2L, 3L) }),
             new ObjectOpenHashSet<>(a.edgeSet().iterator()));
-
-        final it.unimi.dsi.webgraph.ImmutableGraph g = Transform.symmetrize(v);
-
-        a = ImmutableBigGraphAdapter.undirected(ImmutableGraph.wrap(g));
-        assertTrue(a.getType().isUndirected());
-        assertFalse(a.getType().isDirected());
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L), LongLongSortedPair.of(0L, 1L),
-                    LongLongSortedPair.of(1L, 3L), LongLongSortedPair.of(2L, 3L) }),
-            a.edgeSet());
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new LongLongPair[] { LongLongSortedPair.of(0L, 2L), LongLongSortedPair.of(0L, 1L),
-                    LongLongSortedPair.of(1L, 3L), LongLongSortedPair.of(2L, 3L) }),
-            new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
     }
 
     @Test
     public void testAdjacencyCheck()
         throws IllegalArgumentException,
-        SecurityException,
-        IOException
+        SecurityException
     {
         final ArrayListMutableGraph m = new ArrayListMutableGraph();
         m.addNodes(100);
         for (int i = 0; i < 30; i++)
             m.addArc(0, i);
         final it.unimi.dsi.webgraph.ImmutableGraph v = m.immutableView();
-        ImmutableBigGraphAdapter a = ImmutableBigGraphAdapter
-            .directed(ImmutableGraph.wrap(v), ImmutableGraph.wrap(Transform.transpose(v)));
+        ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(
+            ImmutableGraph.wrap(v), ImmutableGraph.wrap(Transform.transpose(v)));
         assertEquals(LongLongPair.of(0L, 1L), a.getEdge(0L, 1L));
         assertEquals(null, a.getEdge(1L, 0L));
         assertEquals(null, a.getEdge(0L, 50L));
 
-        a = ImmutableBigGraphAdapter.directed(ImmutableGraph.wrap(v));
+        a = new ImmutableDirectedBigGraphAdapter(ImmutableGraph.wrap(v));
         assertEquals(LongLongPair.of(0L, 1L), a.getEdge(0L, 1l));
         assertEquals(null, a.getEdge(1L, 0L));
         assertEquals(null, a.getEdge(0L, 50L));
-    }
-
-    @Test
-    public void testEdgeCoherence()
-    {
-        final ImmutableGraph m = ImmutableGraph
-            .wrap(
-                new ArrayListMutableGraph(2, new int[][] { new int[] { 0, 1 }, new int[] { 1, 0 } })
-                    .immutableView());
-        final ImmutableBigGraphAdapter a = ImmutableBigGraphAdapter.undirected(m);
-
-        assertEquals(a.getEdgeSource(a.getEdge(0L, 1L)), a.getEdgeSource(a.getEdge(1L, 0L)));
     }
 }

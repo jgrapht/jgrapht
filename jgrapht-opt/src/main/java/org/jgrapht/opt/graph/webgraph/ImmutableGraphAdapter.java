@@ -163,8 +163,7 @@ public abstract class ImmutableGraphAdapter<E extends IntIntPair>
             return null;
 
         return containsEdgeFast(x, y)
-            ? Collections
-                .singleton(makeEdge(x, y))
+            ? Collections.singleton(makeEdge(x, y))
             : Collections.emptySet();
     }
 
