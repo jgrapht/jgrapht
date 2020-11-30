@@ -289,7 +289,7 @@ public class ImmutableBigGraphAdapter
     {
         if (directed) {
             final long d = inDegreeOf(vertex) + outDegreeOf(vertex);
-            if (d >= Integer.MAX_VALUE)
+            if (d > Integer.MAX_VALUE)
                 throw new ArithmeticException();
             return (int) d;
         } else
@@ -321,7 +321,7 @@ public class ImmutableBigGraphAdapter
     public int inDegreeOf(final Long vertex)
     {
         final long d = immutableTranspose.outdegree(vertex);
-        if (d >= Integer.MAX_VALUE)
+        if (d > Integer.MAX_VALUE)
             throw new ArithmeticException();
         return (int) d;
     }
@@ -345,7 +345,7 @@ public class ImmutableBigGraphAdapter
     public int outDegreeOf(final Long vertex)
     {
         final long d = immutableGraph.outdegree(vertex);
-        if (d >= Integer.MAX_VALUE)
+        if (d > Integer.MAX_VALUE)
             throw new ArithmeticException();
         return (int) d;
     }

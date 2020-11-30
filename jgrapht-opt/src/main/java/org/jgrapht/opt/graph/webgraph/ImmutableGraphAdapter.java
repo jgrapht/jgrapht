@@ -19,34 +19,21 @@
 package org.jgrapht.opt.graph.webgraph;
 
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Supplier;
 
 import org.jgrapht.GraphIterables;
-import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
-import org.jgrapht.graph.DefaultGraphType;
-import org.jgrapht.graph.DefaultGraphType.Builder;
-
-import com.google.common.collect.Iterables;
-import com.google.common.graph.Graph;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import it.unimi.dsi.fastutil.ints.IntIntSortedPair;
 import it.unimi.dsi.fastutil.ints.IntSets;
-import it.unimi.dsi.fastutil.objects.ObjectIterables;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
 import it.unimi.dsi.webgraph.Check;
 import it.unimi.dsi.webgraph.EFGraph;
 import it.unimi.dsi.webgraph.ImmutableGraph;
 import it.unimi.dsi.webgraph.LazyIntIterator;
-import it.unimi.dsi.webgraph.LazyIntIterators;
 import it.unimi.dsi.webgraph.LazyIntSkippableIterator;
-import it.unimi.dsi.webgraph.NodeIterator;
 import it.unimi.dsi.webgraph.Transform;
 
 /**
@@ -141,96 +128,31 @@ import it.unimi.dsi.webgraph.Transform;
  * @author Sebastiano Vigna
  */
 
-public class ImmutableGraphAdapter
+public abstract class ImmutableGraphAdapter<E extends IntIntPair>
     extends
-    AbstractGraph<Integer, IntIntPair>
-    implements
-    FlyweightPrototype<ImmutableGraphAdapter>
+    AbstractGraph<Integer, E>
 {
 
     /** The underlying graph. */
-    private final ImmutableGraph immutableGraph;
-    /**
-     * The transpose of {@link #immutableGraph}, for a directed graph with full support;
-     * {@code null}, for a directed graph with access to outgoing edges, only;
-     * {@link #immutableGraph}, for an undirected graph (in which case, {@link #immutableGraph} must
-     * be symmetric).
-     */
-    private final ImmutableGraph immutableTranspose;
-    /** The cached value of {@link #immutableGraph} != {@link #immutableTranspose}. */
-    private final boolean directed;
+    protected final ImmutableGraph immutableGraph;
     /** The number of nodes of {@link #immutableGraph}. */
-    private final int n;
+    protected final int n;
     /**
      * The number of edges, cached, or -1 if it still unknown. This will have to be computed by
      * enumeration for undirected graphs, as we do not know how many loops are present, and for
      * graphs which do not support {@link ImmutableGraph#numArcs()}.
      */
-    private long m = -1;
-
-    /**
-     * Creates an adapter for an undirected (i.e., symmetric) immutable graph.
-     *
-     * <p>
-     * It is your responsibility that the provided graph has is symmetric (for each arc
-     * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> there is an arc&nbsp;<var>y</var>&nbsp;&rarr;
-     * <var>x</var>). If this property is not true, results will be unpredictable.
-     *
-     * @param immutableGraph a symmetric immutable graph.
-     * @return an {@linkplain GraphType#isUndirected() undirected} {@link Graph}.
-     */
-    public static ImmutableGraphAdapter undirected(final ImmutableGraph immutableGraph)
-    {
-        return new ImmutableGraphAdapter(immutableGraph, immutableGraph);
-    }
-
-    /**
-     * Creates an adapter for a directed immutable graph.
-     *
-     * <p>
-     * It is your responsibility that the two provided graphs are one the transpose of the other
-     * (for each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
-     * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). If this property is not true,
-     * results will be unpredictable.
-     *
-     * @param immutableGraph an immutable graph.
-     * @param immutableTranspose its transpose.
-     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph}.
-     */
-    public static ImmutableGraphAdapter directed(
-        final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose)
-    {
-        return new ImmutableGraphAdapter(immutableGraph, immutableTranspose);
-    }
-
-    /**
-     * Creates an adapter for a directed immutable graph exposing only methods based on outgoing
-     * edges.
-     *
-     * @param immutableGraph an immutable graph.
-     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph} providing only methods
-     *         based on outgoing edges; all other methods will throw a {@link NullPointerException}.
-     */
-    public static ImmutableGraphAdapter directed(final ImmutableGraph immutableGraph)
-    {
-        return new ImmutableGraphAdapter(immutableGraph, null);
-    }
+    protected long m = -1;
 
     protected ImmutableGraphAdapter(
-        final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose)
+        final ImmutableGraph immutableGraph)
     {
         this.immutableGraph = immutableGraph;
-        this.immutableTranspose = immutableTranspose;
-        this.directed = immutableGraph != immutableTranspose;
         this.n = immutableGraph.numNodes();
-        if (immutableTranspose != null && n != immutableTranspose.numNodes())
-            throw new IllegalArgumentException(
-                "The graph has " + n + " nodes, but the transpose has "
-                    + immutableTranspose.numNodes());
     }
 
     @Override
-    public Set<IntIntPair> getAllEdges(
+    public Set<E> getAllEdges(
         final Integer sourceVertex, final Integer targetVertex)
     {
         if (sourceVertex == null || targetVertex == null)
@@ -242,21 +164,20 @@ public class ImmutableGraphAdapter
 
         return containsEdgeFast(x, y)
             ? Collections
-                .singleton(
-                    directed ? IntIntPair.of(x, y)
-                        : IntIntSortedPair.of(x, y))
+                .singleton(makeEdge(x, y))
             : Collections.emptySet();
     }
 
+    protected abstract E makeEdge(int x, int y);
+
     @Override
-    public IntIntPair getEdge(final Integer sourceVertex, final Integer targetVertex)
+    public E getEdge(final Integer sourceVertex, final Integer targetVertex)
     {
         if (sourceVertex == null || targetVertex == null)
             return null;
         final int x = sourceVertex;
         final int y = targetVertex;
-        return containsEdgeFast(x, y) ? (directed ? IntIntPair.of(x, y) : IntIntSortedPair.of(x, y))
-            : null;
+        return containsEdgeFast(x, y) ? makeEdge(x, y) : null;
     }
 
     @Override
@@ -266,20 +187,20 @@ public class ImmutableGraphAdapter
     }
 
     @Override
-    public Supplier<IntIntPair> getEdgeSupplier()
+    public Supplier<E> getEdgeSupplier()
     {
         return null;
     }
 
     @Override
-    public IntIntPair addEdge(final Integer sourceVertex, final Integer targetVertex)
+    public E addEdge(final Integer sourceVertex, final Integer targetVertex)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean addEdge(
-        final Integer sourceVertex, final Integer targetVertex, final IntIntPair e)
+        final Integer sourceVertex, final Integer targetVertex, final E e)
     {
         throw new UnsupportedOperationException();
     }
@@ -297,16 +218,6 @@ public class ImmutableGraphAdapter
     }
 
     @Override
-    public boolean containsEdge(final IntIntPair e)
-    {
-        if (e == null)
-            return false;
-        if (directed == (e instanceof IntIntSortedPair))
-            return false;
-        return containsEdgeFast(e.leftInt(), e.rightInt());
-    }
-
-    @Override
     public boolean containsEdge(final Integer sourceVertex, final Integer targetVertex)
     {
         if (sourceVertex == null || targetVertex == null)
@@ -314,7 +225,7 @@ public class ImmutableGraphAdapter
         return containsEdgeFast(sourceVertex, targetVertex);
     }
 
-    private boolean containsEdgeFast(final int x, final int y)
+    protected boolean containsEdgeFast(final int x, final int y)
     {
         if (x < 0 || x >= n || y < 0 || y >= n)
             return false;
@@ -339,110 +250,13 @@ public class ImmutableGraphAdapter
     }
 
     @Override
-    public Set<IntIntPair> edgeSet()
-    {
-        final NodeIterator nodeIterator = immutableGraph.nodeIterator();
-        long m = 16; // Min hash table size
-        try {
-            m = immutableGraph.numArcs();
-        } catch (final UnsupportedOperationException e) {
-        }
-        final ObjectOpenHashBigSet<IntIntPair> edges = new ObjectOpenHashBigSet<>(m);
-        for (int i = 0; i < n; i++) {
-            final int x = nodeIterator.nextInt();
-            final LazyIntIterator successors = nodeIterator.successors();
-            if (directed)
-                for (int y; (y = successors.nextInt()) != -1;)
-                    edges.add(IntIntPair.of(x, y));
-            else
-                for (int y; (y = successors.nextInt()) != -1;)
-                    if (x <= y)
-                        edges.add(IntIntSortedPair.of(x, y));
-        }
-        return edges;
-    }
-
-    @Override
-    public int degreeOf(final Integer vertex)
-    {
-        return directed ? inDegreeOf(vertex) + outDegreeOf(vertex)
-            : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
-    }
-
-    @Override
-    public Set<IntIntPair> edgesOf(final Integer vertex)
-    {
-        final ObjectLinkedOpenHashSet<IntIntPair> set = new ObjectLinkedOpenHashSet<>();
-        final int source = vertex;
-        if (directed) {
-            final LazyIntIterator successors = immutableGraph.successors(source);
-            for (int target; (target = successors.nextInt()) != -1;)
-                set.add(IntIntPair.of(source, target));
-            final LazyIntIterator predecessors = immutableTranspose.successors(source);
-            for (int target; (target = predecessors.nextInt()) != -1;)
-                if (source != target)
-                    set.add(IntIntPair.of(target, source));
-        } else {
-            final LazyIntIterator successors = immutableGraph.successors(source);
-            for (int target; (target = successors.nextInt()) != -1;)
-                set.add(IntIntSortedPair.of(source, target));
-        }
-        return set;
-    }
-
-    @Override
-    public int inDegreeOf(final Integer vertex)
-    {
-        return immutableTranspose.outdegree(vertex);
-    }
-
-    @Override
-    public Set<IntIntPair> incomingEdgesOf(final Integer vertex)
-    {
-        final ObjectLinkedOpenHashSet<IntIntPair> set = new ObjectLinkedOpenHashSet<>();
-        final int source = vertex;
-        final LazyIntIterator predecessors = immutableTranspose.successors(source);
-        if (directed) {
-            for (int target; (target = predecessors.nextInt()) != -1;)
-                set.add(IntIntPair.of(target, source));
-        } else {
-            for (int target; (target = predecessors.nextInt()) != -1;)
-                set.add(IntIntSortedPair.of(target, source));
-        }
-
-        return set;
-    }
-
-    @Override
-    public int outDegreeOf(final Integer vertex)
-    {
-        return immutableGraph.outdegree(vertex);
-    }
-
-    @Override
-    public Set<IntIntPair> outgoingEdgesOf(final Integer vertex)
-    {
-        final ObjectLinkedOpenHashSet<IntIntPair> set = new ObjectLinkedOpenHashSet<>();
-        final int source = vertex;
-        final LazyIntIterator successors = immutableGraph.successors(source);
-        if (directed) {
-            for (int target; (target = successors.nextInt()) != -1;)
-                set.add(IntIntPair.of(source, target));
-        } else {
-            for (int target; (target = successors.nextInt()) != -1;)
-                set.add(IntIntSortedPair.of(source, target));
-        }
-        return set;
-    }
-
-    @Override
-    public IntIntPair removeEdge(final Integer sourceVertex, final Integer targetVertex)
+    public E removeEdge(final Integer sourceVertex, final Integer targetVertex)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean removeEdge(final IntIntPair e)
+    public boolean removeEdge(final E e)
     {
         throw new UnsupportedOperationException();
     }
@@ -460,209 +274,27 @@ public class ImmutableGraphAdapter
     }
 
     @Override
-    public Integer getEdgeSource(final IntIntPair e)
+    public Integer getEdgeSource(final E e)
     {
         return e.leftInt();
     }
 
     @Override
-    public Integer getEdgeTarget(final IntIntPair e)
+    public Integer getEdgeTarget(final E e)
     {
         return e.rightInt();
     }
 
     @Override
-    public double getEdgeWeight(final IntIntPair e)
+    public double getEdgeWeight(final E e)
     {
         return DEFAULT_EDGE_WEIGHT;
     }
 
     @Override
-    public void setEdgeWeight(final IntIntPair e, final double weight)
+    public void setEdgeWeight(final E e, final double weight)
     {
         if (weight != 1)
             throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public GraphType getType()
-    {
-        final Builder builder = new DefaultGraphType.Builder()
-            .weighted(false).modifiable(false).allowMultipleEdges(false).allowSelfLoops(true);
-        return directed ? builder.directed().build() : builder.undirected().build();
-    }
-
-    @Override
-    public ImmutableGraphAdapter copy()
-    {
-        if (directed)
-            return new ImmutableGraphAdapter(
-                immutableGraph.copy(), immutableTranspose.copy());
-        final ImmutableGraph copy = immutableGraph.copy();
-        return new ImmutableGraphAdapter(copy, copy);
-    }
-
-    private final GraphIterables<Integer, IntIntPair> ITERABLES = new GraphIterables<>()
-    {
-        @Override
-        public ImmutableGraphAdapter getGraph()
-        {
-            return ImmutableGraphAdapter.this;
-        }
-
-        @Override
-        public long vertexCount()
-        {
-            return n;
-        }
-
-        @Override
-        public long edgeCount()
-        {
-            if (ImmutableGraphAdapter.this.m != -1)
-                return m;
-            if (directed) {
-                try {
-                    return m = immutableGraph.numArcs();
-                } catch (final UnsupportedOperationException e) {
-                }
-            }
-            return m = ObjectIterables.size(edges());
-        }
-
-        @Override
-        public long degreeOf(final Integer vertex)
-        {
-            return directed ? inDegreeOf(vertex) + outDegreeOf(vertex)
-                : inDegreeOf(vertex) + (containsEdge(vertex, vertex) ? 1 : 0);
-        }
-
-        @Override
-        public Iterable<IntIntPair> edgesOf(final Integer source)
-        {
-            return directed
-                ? Iterables.concat(outgoingEdgesOf(source), incomingEdgesOf(source, true))
-                : outgoingEdgesOf(source);
-        }
-
-        @Override
-        public long inDegreeOf(final Integer vertex)
-        {
-            return immutableTranspose.outdegree(vertex);
-        }
-
-        private Iterable<IntIntPair> incomingEdgesOf(
-            final int x, final boolean skipLoops)
-        {
-            return () -> new Iterator<>()
-            {
-                final LazyIntIterator successors = immutableTranspose.successors(x);
-                int y = successors.nextInt();
-
-                @Override
-                public boolean hasNext()
-                {
-                    if (y == -1) {
-                        y = successors.nextInt();
-                        if (skipLoops && x == y)
-                            y = successors.nextInt();
-                    }
-                    return y != -1;
-                }
-
-                @Override
-                public IntIntPair next()
-                {
-                    final IntIntPair edge =
-                        directed ? IntIntPair.of(y, x) : IntIntSortedPair.of(y, x);
-                    y = -1;
-                    return edge;
-                }
-            };
-        }
-
-        @Override
-        public Iterable<IntIntPair> incomingEdgesOf(final Integer vertex)
-        {
-            return incomingEdgesOf(vertex, false);
-        }
-
-        @Override
-        public long outDegreeOf(final Integer vertex)
-        {
-            return immutableGraph.outdegree(vertex);
-        }
-
-        @Override
-        public Iterable<IntIntPair> outgoingEdgesOf(final Integer vertex)
-        {
-            return () -> new Iterator<>()
-            {
-                final int x = vertex;
-                final LazyIntIterator successors = immutableGraph.successors(x);
-                int y = successors.nextInt();
-
-                @Override
-                public boolean hasNext()
-                {
-                    if (y == -1)
-                        y = successors.nextInt();
-                    return y != -1;
-                }
-
-                @Override
-                public IntIntPair next()
-                {
-                    final IntIntPair edge =
-                        directed ? IntIntPair.of(x, y) : IntIntSortedPair.of(x, y);
-                    y = -1;
-                    return edge;
-                }
-            };
-        }
-
-        @Override
-        public Iterable<IntIntPair> edges()
-        {
-            return () -> new Iterator<>()
-            {
-                final NodeIterator nodeIterator = immutableGraph.nodeIterator();
-                LazyIntIterator successors = LazyIntIterators.EMPTY_ITERATOR;
-                int x, y = -1;
-
-                @Override
-                public boolean hasNext()
-                {
-                    if (y != -1)
-                        return true;
-                    do {
-                        while ((y = successors.nextInt()) == -1) {
-                            if (!nodeIterator.hasNext())
-                                return false;
-                            x = nodeIterator.nextInt();
-                            successors = nodeIterator.successors();
-                        }
-                    } while (!directed && y < x);
-                    return true;
-                }
-
-                @Override
-                public IntIntPair next()
-                {
-                    if (!hasNext())
-                        throw new NoSuchElementException();
-                    final IntIntPair edge =
-                        directed ? IntIntPair.of(x, y) : IntIntSortedPair.of(x, y);
-                    y = -1;
-                    return edge;
-                }
-            };
-        }
-    };
-
-    @Override
-    public GraphIterables<Integer, IntIntPair> iterables()
-    {
-        return ITERABLES;
     }
 }

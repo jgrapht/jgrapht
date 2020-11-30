@@ -43,7 +43,7 @@ import it.unimi.dsi.webgraph.LazyIntIterator;
 import it.unimi.dsi.webgraph.Transform;
 import it.unimi.dsi.webgraph.examples.ErdosRenyiGraph;
 
-public class ImmutableGraphAdapterTest
+public class ImmutableDirectedGraphAdapterTest
 {
     @Test
     public void testSmallRandom()
@@ -51,8 +51,8 @@ public class ImmutableGraphAdapterTest
         for (final int size : new int[] { 10, 100, 500 }) {
             final ImmutableGraph g =
                 new ArrayListMutableGraph(new ErdosRenyiGraph(size, .1, 0, true)).immutableView();
-            final ImmutableGraphAdapter a =
-                ImmutableGraphAdapter.directed(g, Transform.transpose(g));
+            final ImmutableDirectedGraphAdapter a =
+                new ImmutableDirectedGraphAdapter(g, Transform.transpose(g));
 
             assertEquals(g.numNodes(), a.vertexSet().size());
             assertEquals(g.numNodes(), a.iterables().vertexCount());
@@ -81,7 +81,7 @@ public class ImmutableGraphAdapterTest
         SecurityException
     {
         final File basename = File
-            .createTempFile(ImmutableGraphAdapterTest.class.getSimpleName(), "test");
+            .createTempFile(ImmutableDirectedGraphAdapterTest.class.getSimpleName(), "test");
         EFGraph.store(g, basename.toString());
         basename.deleteOnExit();
         new File(basename + EFGraph.GRAPH_EXTENSION).deleteOnExit();
@@ -111,12 +111,14 @@ public class ImmutableGraphAdapterTest
         /*
          * Assertions.assertThrows(IllegalArgumentException.class, () -> {
          *
-         * @SuppressWarnings("unused") final ImmutableGraphAdapter dummy =
-         * ImmutableGraphAdapter.directed(g, new ArrayListMutableGraph().immutableView()); });
+         * @SuppressWarnings("unused") final ImmutableDirectedGraphAdapter dummy =
+         * ImmutableDirectedGraphAdapter.directed(g, new ArrayListMutableGraph().immutableView());
+         * });
          */
 
-        final ImmutableGraphAdapter a = ImmutableGraphAdapter.directed(g, t);
-        final ImmutableGraphAdapter b = ImmutableGraphAdapter.directed(ef, Transform.transpose(ef));
+        final ImmutableDirectedGraphAdapter a = new ImmutableDirectedGraphAdapter(g, t);
+        final ImmutableDirectedGraphAdapter b =
+            new ImmutableDirectedGraphAdapter(ef, Transform.transpose(ef));
 
         assertEquals(g.numNodes(), a.vertexSet().size());
         for (int x = 0; x < g.numNodes(); x++) {
@@ -166,6 +168,7 @@ public class ImmutableGraphAdapterTest
         assertTrue(b.containsEdge(IntIntPair.of(1, 2)));
         assertFalse(b.containsEdge(IntIntPair.of(2, 1)));
         assertFalse(b.containsEdge(null));
+        assertFalse(b.containsEdge(IntIntSortedPair.of(0, 2)));
 
         assertEquals(2, a.degreeOf(1));
         assertEquals(4, a.degreeOf(2));
@@ -248,71 +251,6 @@ public class ImmutableGraphAdapterTest
          */
     }
 
-    @Test
-    public void testSmallUndirected()
-        throws IllegalArgumentException,
-        SecurityException,
-        IOException
-    {
-        final ArrayListMutableGraph m = new ArrayListMutableGraph();
-        m.addNodes(4);
-        m.addArc(0, 1);
-        m.addArc(0, 2);
-        m.addArc(1, 3);
-        m.addArc(2, 3);
-        m.addArc(1, 1);
-        m.addArc(3, 3);
-
-        final ImmutableGraph g =
-            ImmutableGraph.load(storeTempGraph(Transform.symmetrize(m.immutableView())).toString());
-
-        final ImmutableGraphAdapter a = ImmutableGraphAdapter.undirected(g);
-
-        assertEquals(g.numNodes(), a.vertexSet().size());
-        for (int x = 0; x < g.numNodes(); x++) {
-            final LazyIntIterator successors = g.successors(x);
-            for (int y; (y = successors.nextInt()) != -1;)
-                assertTrue(a.containsEdge(x, y));
-        }
-
-        assertEquals(6, a.iterables().edgeCount());
-        assertEquals(6, a.edgeSet().size());
-        assertNull(a.getEdge(2, 2));
-        assertEquals(IntIntPair.of(0, 1), a.getEdge(0, 1));
-
-        assertTrue(
-            a.getEdgeSource(a.getEdge(0, 1)) == 0 && a.getEdgeTarget(a.getEdge(0, 1)) == 1
-                || a.getEdgeSource(a.getEdge(0, 1)) == 1 && a.getEdgeTarget(a.getEdge(0, 1)) == 0);
-
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(2, 0), IntIntSortedPair.of(2, 3) }),
-            a.edgesOf(2));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(0, 2), IntIntSortedPair.of(3, 2) }),
-            a.incomingEdgesOf(2));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(2, 0), IntIntSortedPair.of(2, 3) }),
-            a.outgoingEdgesOf(2));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(2, 0), IntIntSortedPair.of(2, 3) }),
-            new ObjectOpenHashSet<>(a.iterables().edgesOf(2).iterator()));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(0, 2), IntIntSortedPair.of(3, 2) }),
-            new ObjectOpenHashSet<>(a.iterables().incomingEdgesOf(2).iterator()));
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(2, 0), IntIntSortedPair.of(2, 3) }),
-            new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(2).iterator()));
-        assertEquals(Collections.singleton(IntIntSortedPair.of(0, 1)), a.getAllEdges(0, 1));
-
-        assertEquals(4, a.degreeOf(1));
-        assertEquals(4, a.iterables().degreeOf(1));
-    }
 
     @Test
     public void testCopy()
@@ -327,12 +265,8 @@ public class ImmutableGraphAdapterTest
         m.addArc(1, 3);
         m.addArc(2, 3);
         final ImmutableGraph v = m.immutableView();
-        ImmutableGraphAdapter a = ImmutableGraphAdapter.directed(v, Transform.transpose(v));
-        assertEquals(a, a.copy());
-
-        final ImmutableGraph g = Transform.symmetrize(v);
-
-        a = ImmutableGraphAdapter.undirected(g);
+        final ImmutableDirectedGraphAdapter a =
+            new ImmutableDirectedGraphAdapter(v, Transform.transpose(v));
         assertEquals(a, a.copy());
     }
 
@@ -349,7 +283,8 @@ public class ImmutableGraphAdapterTest
         m.addArc(1, 3);
         m.addArc(2, 3);
         final ImmutableGraph v = m.immutableView();
-        ImmutableGraphAdapter a = ImmutableGraphAdapter.directed(v, Transform.transpose(v));
+        final ImmutableDirectedGraphAdapter a =
+            new ImmutableDirectedGraphAdapter(v, Transform.transpose(v));
         assertTrue(a.getType().isDirected());
         assertFalse(a.getType().isUndirected());
         assertEquals(
@@ -363,53 +298,5 @@ public class ImmutableGraphAdapterTest
                     IntIntPair.of(2, 3) }),
             new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
 
-        final ImmutableGraph g = Transform.symmetrize(v);
-
-        a = ImmutableGraphAdapter.undirected(g);
-        assertTrue(a.getType().isUndirected());
-        assertFalse(a.getType().isDirected());
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(0, 2), IntIntSortedPair.of(0, 1),
-                    IntIntSortedPair.of(1, 3), IntIntSortedPair.of(2, 3) }),
-            a.edgeSet());
-        assertEquals(
-            new ObjectOpenHashSet<>(
-                new IntIntSortedPair[] { IntIntSortedPair.of(0, 2), IntIntSortedPair.of(0, 1),
-                    IntIntSortedPair.of(1, 3), IntIntSortedPair.of(2, 3) }),
-            new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
-    }
-
-    @Test
-    public void testAdjacencyCheck()
-        throws IllegalArgumentException,
-        SecurityException,
-        IOException
-    {
-        final ArrayListMutableGraph m = new ArrayListMutableGraph();
-        m.addNodes(100);
-        for (int i = 0; i < 30; i++)
-            m.addArc(0, i);
-        final ImmutableGraph v = m.immutableView();
-        ImmutableGraphAdapter a = ImmutableGraphAdapter.directed(v, Transform.transpose(v));
-        assertEquals(IntIntPair.of(0, 1), a.getEdge(0, 1));
-        assertEquals(null, a.getEdge(1, 0));
-        assertEquals(null, a.getEdge(0, 50));
-
-        a = ImmutableGraphAdapter.directed(v);
-        assertEquals(IntIntPair.of(0, 1), a.getEdge(0, 1));
-        assertEquals(null, a.getEdge(1, 0));
-        assertEquals(null, a.getEdge(0, 50));
-    }
-
-    @Test
-    public void testEdgeCoherence()
-    {
-        final ImmutableGraph m =
-            new ArrayListMutableGraph(2, new int[][] { new int[] { 0, 1 }, new int[] { 1, 0 } })
-                .immutableView();
-        final ImmutableGraphAdapter a = ImmutableGraphAdapter.undirected(m);
-
-        assertEquals(a.getEdgeSource(a.getEdge(0, 1)), a.getEdgeSource(a.getEdge(1, 0)));
     }
 }
