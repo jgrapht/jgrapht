@@ -41,21 +41,19 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
 
 /**
- * A graph adapter class using <a href="http://webgraph.di.unimi.it/">WebGraph (big)</a>'s
- * {@link ImmutableGraph}.
+ * An adapter class for directed graphs using <a href="http://webgraph.di.unimi.it/">WebGraph
+ * (big)</a>'s {@link ImmutableGraph}.
  *
  * <p>
- * This class is equivalent to {@link ImmutableGraphAdapterEndpointPair}, except that nodes are
- * instances of {@link Long}, and edges are instances of {@link LongLongPair} or
- * {@link LongLongSortedPair}.
+ * This class is equivalent to {@link ImmutableDirectedGraphAdapter}, except that nodes are
+ * instances of {@link Long}, and edges are instances of {@link LongLongPair}.
  *
  * <p>
  * If necessary, you can adapt a {@linkplain it.unimi.dsi.webgraph.ImmutableGraph standard WebGraph
  * graph} using the suitable {@linkplain ImmutableGraph#wrap(it.unimi.dsi.webgraph.ImmutableGraph)
  * wrapper}.
  *
- * @see ImmutableGraphAdapterEndpointPair
- * @see ImmutableBigGraphAdapterLongArray
+ * @see ImmutableDirectedGraphAdapter
  * @author Sebastiano Vigna
  */
 

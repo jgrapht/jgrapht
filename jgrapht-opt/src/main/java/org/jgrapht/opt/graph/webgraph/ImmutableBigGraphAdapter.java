@@ -28,25 +28,13 @@ import it.unimi.dsi.big.webgraph.ImmutableGraph;
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.LazyLongSkippableIterator;
 import it.unimi.dsi.fastutil.longs.LongLongPair;
-import it.unimi.dsi.fastutil.longs.LongLongSortedPair;
 import it.unimi.dsi.fastutil.longs.LongSets;
 
 /**
- * A graph adapter class using <a href="http://webgraph.di.unimi.it/">WebGraph (big)</a>'s
- * {@link ImmutableGraph}.
+ * An abstract base class for adapters using <a href="http://webgraph.di.unimi.it/">WebGraph
+ * (big)</a>'s {@link ImmutableGraph}. Nodes are instances of {@link Long} corresponding to the
+ * index of a node in WebGraph.
  *
- * <p>
- * This class is equivalent to {@link ImmutableGraphAdapterEndpointPair}, except that nodes are
- * instances of {@link Long}, and edges are instances of {@link LongLongPair} or
- * {@link LongLongSortedPair}.
- *
- * <p>
- * If necessary, you can adapt a {@linkplain it.unimi.dsi.webgraph.ImmutableGraph standard WebGraph
- * graph} using the suitable {@linkplain ImmutableGraph#wrap(it.unimi.dsi.webgraph.ImmutableGraph)
- * wrapper}.
- *
- * @see ImmutableGraphAdapterEndpointPair
- * @see ImmutableBigGraphAdapterLongArray
  * @author Sebastiano Vigna
  */
 
@@ -66,12 +54,11 @@ public abstract class ImmutableBigGraphAdapter<E extends LongLongPair>
      */
     protected long m = -1;
 
-    protected ImmutableBigGraphAdapter(
-        final ImmutableGraph immutableGraph)
+    protected ImmutableBigGraphAdapter(final ImmutableGraph immutableGraph)
     {
         this.immutableGraph = immutableGraph;
         this.n = immutableGraph.numNodes();
-     }
+    }
 
     @Override
     public Set<E> getAllEdges(final Long sourceVertex, final Long targetVertex)
@@ -82,8 +69,7 @@ public abstract class ImmutableBigGraphAdapter<E extends LongLongPair>
         final long y = targetVertex;
         if (x < 0 || x >= n || y < 0 || y >= n)
             return null;
-        return containsEdgeFast(x, y)
-            ? Collections.singleton(makeEdge(x, y))
+        return containsEdgeFast(x, y) ? Collections.singleton(makeEdge(x, y))
             : Collections.emptySet();
     }
 
@@ -118,8 +104,7 @@ public abstract class ImmutableBigGraphAdapter<E extends LongLongPair>
     }
 
     @Override
-    public boolean addEdge(
-        final Long sourceVertex, final Long targetVertex, final E e)
+    public boolean addEdge(final Long sourceVertex, final Long targetVertex, final E e)
     {
         throw new UnsupportedOperationException();
     }

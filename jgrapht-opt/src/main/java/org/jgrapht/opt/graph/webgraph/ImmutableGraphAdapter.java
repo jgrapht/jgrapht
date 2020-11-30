@@ -22,109 +22,19 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.jgrapht.GraphIterables;
 import org.jgrapht.graph.AbstractGraph;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
-import it.unimi.dsi.fastutil.ints.IntIntSortedPair;
 import it.unimi.dsi.fastutil.ints.IntSets;
-import it.unimi.dsi.lang.FlyweightPrototype;
-import it.unimi.dsi.webgraph.Check;
-import it.unimi.dsi.webgraph.EFGraph;
 import it.unimi.dsi.webgraph.ImmutableGraph;
 import it.unimi.dsi.webgraph.LazyIntIterator;
 import it.unimi.dsi.webgraph.LazyIntSkippableIterator;
-import it.unimi.dsi.webgraph.Transform;
 
 /**
- * A graph adapter class using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s
- * {@link ImmutableGraph}.
+ * An abstract base class for adapters using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s
+ * {@link ImmutableGraph}. Nodes are instances of {@link Integer} corresponding to the index of a
+ * node in WebGraph.
  *
- * <p>
- * Nodes are instance of {@link Integer} corresponding to the index of a node in WebGraph. Edges are
- * represented by an {@link IntIntPair}, for directed graph, or by an {@link IntIntSortedPair}, for
- * an undirected graph. In directed, the left and right element are the source and the target of the
- * edge. In the undirected case, edges are canonicalized so that the left element is always smaller
- * than or equal to the right element. Since the underlying graph is immutable, the resulting graph
- * is unmodifiable. Edges are immutable and can be tested for equality (e.g., stored in a
- * dictionary).
- *
- * <p>
- * WebGraph provides methods for successors only, so to adapt a directed graph you must provide both
- * a graph and its transpose (methods to compute the transpose are available in {@link Transform}).
- *
- * You need to load an {@link ImmutableGraph} and its transpose using one of the load methods
- * available, and use the {@link #directed(ImmutableGraph, ImmutableGraph)} factory method.
- *
- * <pre>
- * immutableGraph = ImmutableGraph.loadMapped("mygraph");
- * immutableTranspose = ImmutableGraph.loadMapped("mygraph-t");
- * adapter = ImmutableGraphAdapterEndpointPair.directed(immutableGraph, immutableTranspose);
- * </pre>
- *
- * <p>
- * It is your responsibility that the two provided graphs are one the transpose of the other (for
- * each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
- * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). No check will be performed. Note that
- * {@linkplain GraphIterables#edgeCount() computing the number of edges of an directed graph}
- * requires a full scan of the edge set if {@link ImmutableGraph#numArcs()} is not supported (the
- * first time&mdash;then it will be cached).
- *
- * <p>
- * If you use a load method that does not provide random access, most methods will throw an
- * {@link UnsupportedOperationException}. The first graph will be used to implement
- * {@link #outgoingEdgesOf(Integer)}, and the second graph to implement
- * {@link #incomingEdgesOf(Integer)}.
- *
- * <p>
- * If you know that you will never used methods based on incoming edges
- * ({@link #incomingEdgesOf(Integer)}, {@link #inDegreeOf(Integer)}, {@link #edgesOf(Integer)},
- * {@link #degreeOf(Integer)}), you can also use the factory method using just a graph, but all such
- * methods will throw a {@link NullPointerException}:
- *
- * <pre>
- * immutableGraph = ImmutableGraph.loadMapped("mygraph");
- * adapter = ImmutableGraphAdapter.directed(immutableGraph);
- * </pre>
- *
- * <p>
- * If your graph is symmetric, you can adapt it as an undirected graph:
- *
- * <pre>
- * immutableGraph = ImmutableGraph.loadMapped("mygraph");
- * adapter = ImmutableGraphAdapter.undirected(immutableGraph);
- * </pre>
- *
- * <p>
- * It is your responsibility that the provided graph is symmetric (for each arc
- * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> there is an arc&nbsp;<var>y</var>&nbsp;&rarr;
- * <var>x</var>). No check will be performed, but you can use the {@link Check} class to this
- * purpose. Note that {@linkplain GraphIterables#edgeCount() computing the number of edges of an
- * undirected graph} requires a full scan of the edge set (the first time&mdash;then it will be
- * cached).
- *
- * <p>
- * If necessary, you can adapt a {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph big WebGraph
- * graph} with less than {@link Integer#MAX_VALUE} vertices using the suitable
- * {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph#wrap(ImmutableGraph) wrapper}.
- *
- * <h2>Thread safety</h2>
- *
- * <p>
- * This class is not thread safe: following the {@link FlyweightPrototype} pattern, users can access
- * concurrently the graph {@linkplain #copy() by getting lightweight copies}.
- *
- * <h2>Fast adjacency check</h2>
- *
- * <p>
- * As it happens for the sparse representation of JGraphT, usually a WebGraph compressed
- * representation requires scanning the adjacency list of a node to
- * {@linkplain #getEdge(Integer, Integer) test whether a specific arc exists}. However, if you adapt
- * a WebGraph class (such as {@link EFGraph}) which provides {@linkplain LazyIntSkippableIterator
- * skippable iterators} with fast skipping, adjacency can be tested more quickly (e.g., essentially
- * in constant time in the case of {@link EFGraph}).
- *
- * @see ImmutableBigGraphAdapter
  * @author Sebastiano Vigna
  */
 
@@ -144,16 +54,14 @@ public abstract class ImmutableGraphAdapter<E extends IntIntPair>
      */
     protected long m = -1;
 
-    protected ImmutableGraphAdapter(
-        final ImmutableGraph immutableGraph)
+    protected ImmutableGraphAdapter(final ImmutableGraph immutableGraph)
     {
         this.immutableGraph = immutableGraph;
         this.n = immutableGraph.numNodes();
     }
 
     @Override
-    public Set<E> getAllEdges(
-        final Integer sourceVertex, final Integer targetVertex)
+    public Set<E> getAllEdges(final Integer sourceVertex, final Integer targetVertex)
     {
         if (sourceVertex == null || targetVertex == null)
             return null;
@@ -162,8 +70,7 @@ public abstract class ImmutableGraphAdapter<E extends IntIntPair>
         if (x < 0 || x >= n || y < 0 || y >= n)
             return null;
 
-        return containsEdgeFast(x, y)
-            ? Collections.singleton(makeEdge(x, y))
+        return containsEdgeFast(x, y) ? Collections.singleton(makeEdge(x, y))
             : Collections.emptySet();
     }
 
@@ -198,8 +105,7 @@ public abstract class ImmutableGraphAdapter<E extends IntIntPair>
     }
 
     @Override
-    public boolean addEdge(
-        final Integer sourceVertex, final Integer targetVertex, final E e)
+    public boolean addEdge(final Integer sourceVertex, final Integer targetVertex, final E e)
     {
         throw new UnsupportedOperationException();
     }

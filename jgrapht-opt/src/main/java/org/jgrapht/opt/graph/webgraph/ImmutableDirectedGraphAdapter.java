@@ -35,7 +35,6 @@ import it.unimi.dsi.fastutil.objects.ObjectIterables;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import it.unimi.dsi.lang.FlyweightPrototype;
-import it.unimi.dsi.webgraph.Check;
 import it.unimi.dsi.webgraph.EFGraph;
 import it.unimi.dsi.webgraph.ImmutableGraph;
 import it.unimi.dsi.webgraph.LazyIntIterator;
@@ -45,38 +44,35 @@ import it.unimi.dsi.webgraph.NodeIterator;
 import it.unimi.dsi.webgraph.Transform;
 
 /**
- * A graph adapter class using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s
+ * An adapter class for directed graphs using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s
  * {@link ImmutableGraph}.
  *
  * <p>
- * Nodes are instance of {@link Integer} corresponding to the index of a node in WebGraph. Edges are
- * represented by an {@link IntIntPair}, for directed graph, or by an {@link IntIntSortedPair}, for
- * an undirected graph. In directed, the left and right element are the source and the target of the
- * edge. In the undirected case, edges are canonicalized so that the left element is always smaller
- * than or equal to the right element. Since the underlying graph is immutable, the resulting graph
- * is unmodifiable. Edges are immutable and can be tested for equality (e.g., stored in a
- * dictionary).
+ * Nodes are instances of {@link Integer} corresponding to the index of a node in WebGraph. Edges
+ * are represented by an {@link IntIntPair}. The left and right element are the source and the
+ * target of the edge. Since the underlying graph is immutable, the resulting graph is unmodifiable.
+ * Edges are immutable and can be tested for equality (e.g., stored in a dictionary).
  *
  * <p>
  * WebGraph provides methods for successors only, so to adapt a directed graph you must provide both
  * a graph and its transpose (methods to compute the transpose are available in {@link Transform}).
  *
- * You need to load an {@link ImmutableGraph} and its transpose using one of the load methods
- * available, and use the {@link #directed(ImmutableGraph, ImmutableGraph)} factory method.
+ * You need to load an {@link ImmutableGraph} and its transpose using one of the available load
+ * methods, and then build an adapter:
  *
  * <pre>
  * immutableGraph = ImmutableGraph.loadMapped("mygraph");
  * immutableTranspose = ImmutableGraph.loadMapped("mygraph-t");
- * adapter = ImmutableGraphAdapterEndpointPair.directed(immutableGraph, immutableTranspose);
+ * adapter = new ImmutableDirectedGraphAdapter(immutableGraph, immutableTranspose);
  * </pre>
  *
  * <p>
  * It is your responsibility that the two provided graphs are one the transpose of the other (for
  * each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
- * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other). No check will be performed. Note that
- * {@linkplain GraphIterables#edgeCount() computing the number of edges of an directed graph}
- * requires a full scan of the edge set if {@link ImmutableGraph#numArcs()} is not supported (the
- * first time&mdash;then it will be cached).
+ * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other, and <i>vice versa</i>). No check will be
+ * performed. Note that {@linkplain GraphIterables#edgeCount() computing the number of edges of a
+ * graph} requires a full scan of the edge set if {@link ImmutableGraph#numArcs()} is not supported
+ * (the first time&mdash;then it will be cached).
  *
  * <p>
  * If you use a load method that does not provide random access, most methods will throw an
@@ -87,34 +83,13 @@ import it.unimi.dsi.webgraph.Transform;
  * <p>
  * If you know that you will never used methods based on incoming edges
  * ({@link #incomingEdgesOf(Integer)}, {@link #inDegreeOf(Integer)}, {@link #edgesOf(Integer)},
- * {@link #degreeOf(Integer)}), you can also use the factory method using just a graph, but all such
+ * {@link #degreeOf(Integer)}), you can also use the constructor using just a graph, but all such
  * methods will throw a {@link NullPointerException}:
  *
  * <pre>
  * immutableGraph = ImmutableGraph.loadMapped("mygraph");
- * adapter = ImmutableGraphAdapter.directed(immutableGraph);
+ * adapter = new ImmutableDirectedGraphAdapter(immutableGraph);
  * </pre>
- *
- * <p>
- * If your graph is symmetric, you can adapt it as an undirected graph:
- *
- * <pre>
- * immutableGraph = ImmutableGraph.loadMapped("mygraph");
- * adapter = ImmutableGraphAdapter.undirected(immutableGraph);
- * </pre>
- *
- * <p>
- * It is your responsibility that the provided graph is symmetric (for each arc
- * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> there is an arc&nbsp;<var>y</var>&nbsp;&rarr;
- * <var>x</var>). No check will be performed, but you can use the {@link Check} class to this
- * purpose. Note that {@linkplain GraphIterables#edgeCount() computing the number of edges of an
- * undirected graph} requires a full scan of the edge set (the first time&mdash;then it will be
- * cached).
- *
- * <p>
- * If necessary, you can adapt a {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph big WebGraph
- * graph} with less than {@link Integer#MAX_VALUE} vertices using the suitable
- * {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph#wrap(ImmutableGraph) wrapper}.
  *
  * <h2>Thread safety</h2>
  *
@@ -211,8 +186,8 @@ public class ImmutableDirectedGraphAdapter
         for (int i = 0; i < n; i++) {
             final int x = nodeIterator.nextInt();
             final LazyIntIterator successors = nodeIterator.successors();
-                for (int y; (y = successors.nextInt()) != -1;)
-                    edges.add(IntIntPair.of(x, y));
+            for (int y; (y = successors.nextInt()) != -1;)
+                edges.add(IntIntPair.of(x, y));
         }
         return edges;
     }
