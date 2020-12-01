@@ -85,8 +85,16 @@ public class CyclicTransitiveReduction<V, E> {
    *
    * @param directedGraph the directed graph that will be reduced transitively. The input graph must not allow
    *                      self-loops, must be unweighted and must not allow multiple edges between vertices.
+   * @throws IllegalArgumentException if graph is {@code null}
+   * @throws IllegalArgumentException if graph is undirected
+   * @throws IllegalArgumentException if graph contains < 3 vertices (cycle impossible)
+   * @throws IllegalArgumentException if graph allows self-loops
+   * @throws IllegalArgumentException if graph is weighted
+   * @throws IllegalArgumentException if graph allows multiple edges between two vertices
    */
   public CyclicTransitiveReduction(Graph<V, E> directedGraph) {
+    if (directedGraph == null)
+      throw new IllegalArgumentException("Graph must not be null");
     GraphTests.requireDirected(directedGraph, "Graph must be directed");
     if (directedGraph.getType().isAllowingSelfLoops())
       throw new IllegalArgumentException("Graph must not allow self-loops");
@@ -155,6 +163,7 @@ public class CyclicTransitiveReduction<V, E> {
 
   /**
    * Condense a directed, possibly cyclical graph by {@link StrongConnectivityAlgorithm#getCondensation()}.
+   *
    * @param directedGraph original graph to be condensed
    * @return condensed graph with each strongly connected component (SCC) being a subgraph
    */
@@ -178,8 +187,7 @@ public class CyclicTransitiveReduction<V, E> {
 
     for (Graph<V, E> scComponent : condensedGraph.vertexSet()) {
       Set<E> sccEdges = scComponent.edgeSet();
-      if (sccEdges.size() < 3)
-        continue;
+      assert sccEdges.size() > 2;
       Set<E> sccEdgesCopy = new HashSet<>(sccEdges);
       List<V> cycle;
       if (allowSyntheticEdges) {
@@ -220,7 +228,7 @@ public class CyclicTransitiveReduction<V, E> {
    * between strongly connected components during the process.
    *
    * @param condensedGraph condensed graph to be re-expanded
-   * @param directedGraph target graph to be expanded into
+   * @param directedGraph  target graph to be expanded into
    */
   protected void expandCondensedGraph(Graph<Graph<V, E>, DefaultEdge> condensedGraph, Graph<V, E> directedGraph) {
     // Per condensed graph edge, find one existing edge in the original graph to represent
