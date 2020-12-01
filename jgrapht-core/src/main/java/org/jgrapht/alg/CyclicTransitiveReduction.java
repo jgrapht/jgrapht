@@ -142,7 +142,7 @@ public class CyclicTransitiveReduction<V, E> {
    * (strongly connected component) will be reduced to a Hamiltonian cycle and there will be only a single edge
    * connecting SCCs. For more details, please read the class description.
    */
-  public synchronized void reduce() {
+  public void reduce() {
     // Simple transitive reduction algorithm is a bit faster for acyclic digraphs (but faulty for cyclic ones!)
     if (!new CycleDetector<>(directedGraph).detectCycles()) {
       TransitiveReduction.INSTANCE.reduce(directedGraph, false);

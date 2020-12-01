@@ -70,7 +70,7 @@ public class DirectedHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBas
    * @throws IllegalArgumentException if graph allows multiple edges between two vertices
    */
   @Override
-  public synchronized GraphPath<V, E> getTour(Graph<V, E> graph) {
+  public GraphPath<V, E> getTour(Graph<V, E> graph) {
     this.graph = graph;
     checkGraph();
     // If graph is not strongly connected, there cannot be a Hamiltonian cycle
