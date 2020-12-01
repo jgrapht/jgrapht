@@ -27,7 +27,6 @@ import org.jgrapht.GraphType;
 import org.jgrapht.graph.DefaultGraphType;
 
 import com.google.common.collect.Iterables;
-import com.google.common.graph.Graph;
 
 import it.unimi.dsi.big.webgraph.ImmutableGraph;
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
@@ -77,7 +76,6 @@ public class ImmutableDirectedBigGraphAdapter
      *
      * @param immutableGraph a big immutable graph.
      * @param immutableTranspose its transpose.
-     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph}.
      */
     public ImmutableDirectedBigGraphAdapter(
         final ImmutableGraph immutableGraph, final ImmutableGraph immutableTranspose)
@@ -95,8 +93,6 @@ public class ImmutableDirectedBigGraphAdapter
      * outgoing edges.
      *
      * @param immutableGraph a big immutable graph.
-     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph} providing only methods
-     *         based on outgoing edges; all other methods will throw a {@link NullPointerException}.
      */
     public ImmutableDirectedBigGraphAdapter(final ImmutableGraph immutableGraph)
     {

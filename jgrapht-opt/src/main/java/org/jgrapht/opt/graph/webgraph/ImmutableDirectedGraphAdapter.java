@@ -158,8 +158,6 @@ public class ImmutableDirectedGraphAdapter
      * edges.
      *
      * @param immutableGraph an immutable graph.
-     * @return an {@linkplain GraphType#isDirected() directed} {@link Graph} providing only methods
-     *         based on outgoing edges; all other methods will throw a {@link NullPointerException}.
      */
     public ImmutableDirectedGraphAdapter(final ImmutableGraph immutableGraph)
     {

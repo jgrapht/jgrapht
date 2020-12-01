@@ -26,8 +26,6 @@ import org.jgrapht.GraphIterables;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.DefaultGraphType;
 
-import com.google.common.graph.Graph;
-
 import it.unimi.dsi.big.webgraph.ImmutableGraph;
 import it.unimi.dsi.big.webgraph.LazyLongIterator;
 import it.unimi.dsi.big.webgraph.LazyLongIterators;
@@ -72,7 +70,6 @@ public class ImmutableUndirectedBigGraphAdapter
      * <var>x</var>). If this property is not true, results will be unpredictable.
      *
      * @param immutableGraph a symmetric big immutable graph.
-     * @return an {@linkplain GraphType#isUndirected() undirected} {@link Graph}.
      */
     public ImmutableUndirectedBigGraphAdapter(final ImmutableGraph immutableGraph)
     {

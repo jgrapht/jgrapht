@@ -35,6 +35,7 @@ import it.unimi.dsi.fastutil.longs.LongSets;
  * (big)</a>'s {@link ImmutableGraph}. Nodes are instances of {@link Long} corresponding to the
  * index of a node in WebGraph.
  *
+ * @param <E> the type of an edge.
  * @author Sebastiano Vigna
  */
 
