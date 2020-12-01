@@ -258,6 +258,9 @@ public class CyclicTransitiveReduction<V, E> {
    * @return the first edge found which links any source vertex to any target vertex
    */
   private E findSCCLink(Set<V> sourceVertices, Set<V> targetVertices) {
+    // TODO: optimise after #1010 was implemented
+    //   -> https://github.com/jgrapht/jgrapht/issues/1010
+    //   -> https://github.com/jgrapht/jgrapht/pull/1008#discussion_r532379642
     for (V sourceVertex : sourceVertices) {
       for (V targetVertex : targetVertices) {
         if (directedGraph.containsEdge(sourceVertex, targetVertex))
