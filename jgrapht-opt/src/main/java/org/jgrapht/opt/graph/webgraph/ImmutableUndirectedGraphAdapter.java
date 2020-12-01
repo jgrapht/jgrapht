@@ -73,7 +73,7 @@ import it.unimi.dsi.webgraph.NodeIterator;
  *
  * <p>
  * If necessary, you can adapt a {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph big WebGraph
- * graph} with less than {@link Integer#MAX_VALUE} vertices using the suitable
+ * graph} with at most {@link Integer#MAX_VALUE} vertices using the suitable
  * {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph#wrap(ImmutableGraph) wrapper}.
  *
  * <h2>Thread safety</h2>

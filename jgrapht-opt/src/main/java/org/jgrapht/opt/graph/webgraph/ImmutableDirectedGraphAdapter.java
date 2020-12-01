@@ -67,8 +67,10 @@ import it.unimi.dsi.webgraph.Transform;
  * </pre>
  *
  * <p>
- * It is your responsibility that the two provided graphs are one the transpose of the other (for
- * each arc <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
+ * The first graph will be used to implement {@link #outgoingEdgesOf(Integer)}, and the second graph
+ * to implement {@link #incomingEdgesOf(Integer)}. It is your responsibility that the two provided
+ * graphs are one the transpose of the other (for each arc
+ * <var>x</var>&nbsp;&rarr;&nbsp;<var>y</var> in a graph there must be an arc
  * <var>y</var>&nbsp;&rarr;&nbsp;<var>x</var> in the other, and <i>vice versa</i>). No check will be
  * performed. Note that {@linkplain GraphIterables#edgeCount() computing the number of edges of a
  * graph} requires a full scan of the edge set if {@link ImmutableGraph#numArcs()} is not supported
@@ -76,9 +78,7 @@ import it.unimi.dsi.webgraph.Transform;
  *
  * <p>
  * If you use a load method that does not provide random access, most methods will throw an
- * {@link UnsupportedOperationException}. The first graph will be used to implement
- * {@link #outgoingEdgesOf(Integer)}, and the second graph to implement
- * {@link #incomingEdgesOf(Integer)}.
+ * {@link UnsupportedOperationException}.
  *
  * <p>
  * If you know that you will never used methods based on incoming edges
@@ -90,6 +90,11 @@ import it.unimi.dsi.webgraph.Transform;
  * immutableGraph = ImmutableGraph.loadMapped("mygraph");
  * adapter = new ImmutableDirectedGraphAdapter(immutableGraph);
  * </pre>
+ *
+ * <p>
+ * If necessary, you can adapt a {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph big WebGraph
+ * graph} with at most {@link Integer#MAX_VALUE} vertices using the suitable
+ * {@linkplain it.unimi.dsi.big.webgraph.ImmutableGraph#wrap(ImmutableGraph) wrapper}.
  *
  * <h2>Thread safety</h2>
  *
