@@ -64,11 +64,51 @@
             <groupId>it.unimi.dsi</groupId>
             <artifactId>dsiutils</artifactId>
             <version>2.6.15</version>
+            <exclusions>
+                <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-configuration2</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-text</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>commons-logging</groupId>
+                     <artifactId>commons-logging</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-lang3</artifactId>
+                 </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>sux4j</artifactId>
             <version>5.2.1</version>
+            <exclusions>
+                <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-configuration2</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-text</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>commons-logging</groupId>
+                     <artifactId>commons-logging</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-lang3</artifactId>
+                 </exclusion>
+                <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-collections4</artifactId>
+                 </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>it.unimi.dsi</groupId>
@@ -79,12 +119,50 @@
                      <groupId>net.sf.jung</groupId>
                      <artifactId>*</artifactId>
                 </exclusion>
+                <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-configuration2</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-text</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>commons-logging</groupId>
+                     <artifactId>commons-logging</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-lang3</artifactId>
+                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>webgraph-big</artifactId>
             <version>3.6.4</version>
+            <exclusions>
+                <exclusion>
+                     <groupId>net.sf.jung</groupId>
+                     <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-configuration2</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-text</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>commons-logging</groupId>
+                     <artifactId>commons-logging</artifactId>
+                 </exclusion>
+                 <exclusion>
+                     <groupId>org.apache.commons</groupId>
+                     <artifactId>commons-lang3</artifactId>
+                 </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
