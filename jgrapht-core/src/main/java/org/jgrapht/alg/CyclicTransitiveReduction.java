@@ -245,7 +245,7 @@ public class CyclicTransitiveReduction<V, E> {
     // Re-add all edges within SCCs
     condensedGraph.vertexSet().forEach(scComponent ->
       scComponent.edgeSet().forEach(edge ->
-        directedGraph.addEdge(scComponent.getEdgeSource(edge), scComponent.getEdgeTarget(edge))
+        directedGraph.addEdge(scComponent.getEdgeSource(edge), scComponent.getEdgeTarget(edge), edge)
       )
     );
   }
