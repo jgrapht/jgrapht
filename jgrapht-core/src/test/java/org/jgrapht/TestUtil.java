@@ -19,6 +19,10 @@ package org.jgrapht;
 
 import org.jgrapht.graph.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Test related utility methods.
  */
@@ -83,6 +87,37 @@ public class TestUtil
         Graph<V, DefaultEdge> graph = new WeightedPseudograph<>(DefaultEdge.class);
         constructGraph(graph, edges);
         return graph;
+    }
+
+    @SafeVarargs
+    public static <V, E> void addVertices(final Graph<V, E> graph, final V... vertices) {
+        for (V vertex : vertices)
+            graph.addVertex(vertex);
+    }
+
+    @SafeVarargs
+    public static <V, E> void addHamiltonianCycle(final Graph<V, E> graph, final V... vertices) {
+        addVertices(graph, vertices);
+        int numVertices = vertices.length;
+        for (int i = 0; i < numVertices; i++)
+            graph.addEdge(vertices[i], vertices[(i + 1) % numVertices]);
+    }
+
+    public static <V, E> void randomiseGraph(final Graph<V, E> graph) {
+        // Backup + remove vertices and edges
+        List<V> vertices = new ArrayList<>(graph.vertexSet());
+        List<EdgeInfo<V, E>> edgeInfos = EdgeInfo.getEdgeInfos(graph);
+        graph.removeAllVertices(vertices);
+        assert graph.vertexSet().size() == 0;
+        assert graph.edgeSet().size() == 0;
+
+        // Shuffle + re-add vertices and edges
+        Collections.shuffle(vertices);
+        Collections.shuffle(edgeInfos);
+        vertices.forEach(graph::addVertex);
+        edgeInfos.forEach(edgeInfo ->
+            graph.addEdge(edgeInfo.getSourceVertex(), edgeInfo.getTargetVertex(), edgeInfo.getEdge())
+        );
     }
 
 }
