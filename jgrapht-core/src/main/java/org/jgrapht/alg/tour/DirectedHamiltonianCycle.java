@@ -62,6 +62,7 @@ public class DirectedHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBas
    *              multiple edges
    * @return Hamiltonian cycle (HC) if the graph is strongly connected, null otherwise. The HC is represented as a
    * {@code GraphPath} in which the first and last vertices are identical, i.e. size is number of graph vertices + 1.
+   * @throws IllegalArgumentException if graph is {@code null}
    * @throws IllegalArgumentException if graph is undirected
    * @throws IllegalArgumentException if graph contains &lt; 3 vertices (cycle impossible)
    * @throws IllegalArgumentException if graph allows self-loops
@@ -107,6 +108,7 @@ public class DirectedHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBas
    * Checks that the graph is directed, unweighted, has 3+ vertices, does not allow self-loops and does not allow
    * multiple edges
    *
+   * @throws IllegalArgumentException if graph is {@code null}
    * @throws IllegalArgumentException if graph is undirected
    * @throws IllegalArgumentException if graph contains < 3 vertices (cycle impossible)
    * @throws IllegalArgumentException if graph allows self-loops
@@ -114,6 +116,8 @@ public class DirectedHamiltonianCycle<V, E> extends HamiltonianCycleAlgorithmBas
    * @throws IllegalArgumentException if graph allows multiple edges between two vertices
    */
   private void checkGraph() {
+    if (graph == null)
+      throw new IllegalArgumentException("Graph must not be null");
     GraphTests.requireDirected(graph, "Graph must be directed");
     if (graph.vertexSet().size() < 3)
       throw new IllegalArgumentException("Directed graph must have >= 3 vertices for a cycle");
