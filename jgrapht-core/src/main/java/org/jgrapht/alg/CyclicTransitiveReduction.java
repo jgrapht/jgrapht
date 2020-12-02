@@ -26,10 +26,7 @@ import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.alg.tour.DirectedHamiltonianCycle;
 import org.jgrapht.graph.DefaultEdge;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implements a <a href="https://en.wikipedia.org/wiki/Transitive_reduction">transitive reduction</a> algorithm which
@@ -146,9 +143,10 @@ public class CyclicTransitiveReduction<V, E> {
    *   .buildGraph();
    * new CyclicTransitiveReduction&lt;String, DefaultEdge&gt;(graph).reduce();
    * </pre>
-   * The resulting graph will be minimal and only use originally existing edges, no synthetical ones. I.e. that each SCC
-   * (strongly connected component) will be reduced to a Hamiltonian cycle and there will be only a single edge
-   * connecting SCCs. For more details, please read the class description.
+   * By default, the resulting graph will be minimal and only use originally existing edges, no synthetical ones, unless
+   * {@link #allowSyntheticEdges(boolean)} was called with parameter {@code true}. Either way, each SCC (strongly
+   * connected component) will be reduced to a Hamiltonian cycle and there will be only a single edge connecting SCCs.
+   * For more details, please read the class description.
    */
   public void reduce() {
     // Simple transitive reduction algorithm is a bit faster for acyclic digraphs (but faulty for cyclic ones!)
