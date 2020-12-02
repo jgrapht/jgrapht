@@ -201,8 +201,7 @@ public class CyclicTransitiveReductionTest {
   public void smallHamiltonianGraphWithRedundantEdges() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addHamiltonianCycle(graph, "A", "B", "C", "D");
-    graph.addEdge("A", "C");
-    graph.addEdge("D", "B");
+    addEdges(graph, "A", "C", "D", "B");
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
     assertEquals(4, graph.edgeSet().size());
@@ -212,9 +211,7 @@ public class CyclicTransitiveReductionTest {
   public void smallDAG() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D");
-    graph.addEdge("A", "B");
-    graph.addEdge("B", "C");
-    graph.addEdge("B", "D");
+    addEdges(graph, "A", "B", "B", "C", "B", "D");
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
     assertEquals(3, graph.edgeSet().size());
@@ -227,15 +224,7 @@ public class CyclicTransitiveReductionTest {
   public void smallDAGWithRedundantEdges() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D", "E", "F");
-    graph.addEdge("A", "B");
-    graph.addEdge("B", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("C", "E");
-    graph.addEdge("D", "F");
-    graph.addEdge("B", "E");
-    graph.addEdge("B", "F");
-    graph.addEdge("A", "E");
-    graph.addEdge("A", "F");
+    addEdges(graph, "A", "B", "B", "C", "B", "D", "C", "E", "D", "F", "B", "E", "B", "F", "A", "E", "A", "F");
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(6, graph.vertexSet().size());
     assertEquals(5, graph.edgeSet().size());
@@ -259,8 +248,7 @@ public class CyclicTransitiveReductionTest {
   private void mediumCyclicalGraph(final boolean allowSyntheticEdges) {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
-    addEdges(
-      graph,
+    addEdges(graph,
       "A", "B", "B", "C", "C", "D", "D", "A", "A", "C", "D", "B", "A", "E", "B", "G", "E", "F", "F", "G",
       "G", "E", "E", "H", "F", "L", "H", "I", "I", "J", "J", "K", "K", "L", "L", "H", "H", "J", "I", "K",
       "J", "N", "K", "M", "M", "N", "N", "O", "O", "P", "P", "M", "M", "O", "N", "P", "G", "M", "C", "P"

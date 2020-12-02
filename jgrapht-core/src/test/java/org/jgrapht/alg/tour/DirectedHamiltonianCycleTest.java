@@ -52,8 +52,7 @@ public class DirectedHamiltonianCycleTest {
     assertNotNull(tour);
     assertHamiltonian(graph, tour);
 
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
+    addEdges(graph, "A", "C", "B", "D");
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNotNull(tour);
     assertHamiltonian(graph, tour);
@@ -65,9 +64,7 @@ public class DirectedHamiltonianCycleTest {
     GraphPath<String, DefaultEdge> tour;
 
     addVertices(graph, "A", "B", "C", "D");
-    graph.addEdge("A", "B");
-    graph.addEdge("B", "C");
-    graph.addEdge("B", "D");
+    addEdges(graph, "A", "B", "B", "C", "B", "D");
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNull(tour);
   }
