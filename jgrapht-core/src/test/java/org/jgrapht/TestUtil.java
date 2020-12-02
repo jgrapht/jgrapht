@@ -89,43 +89,43 @@ public class TestUtil
         return graph;
     }
 
-  @SafeVarargs
-  public static <V, E> void addVertices(final Graph<V, E> graph, final V... vertices) {
-    for (V vertex : vertices)
-      graph.addVertex(vertex);
-  }
+    @SafeVarargs
+    public static <V, E> void addVertices(final Graph<V, E> graph, final V... vertices) {
+        for (V vertex : vertices)
+            graph.addVertex(vertex);
+    }
 
-  @SafeVarargs
-  public static <V, E> void addEdges(final Graph<V, E> graph, final V... vertices) {
-    if (vertices.length % 2 != 0)
-      throw new IllegalArgumentException("number of vertices (edge pairs) must be even");
-    for (int i = 0; i < vertices.length; i = i + 2)
-      graph.addEdge(vertices[i], vertices[i + 1]);
-  }
+    @SafeVarargs
+    public static <V, E> void addEdges(final Graph<V, E> graph, final V... vertices) {
+        if (vertices.length % 2 != 0)
+            throw new IllegalArgumentException("number of vertices (edge pairs) must be even");
+        for (int i = 0; i < vertices.length; i = i + 2)
+            graph.addEdge(vertices[i], vertices[i + 1]);
+    }
 
-  @SafeVarargs
-  public static <V, E> void addHamiltonianCycle(final Graph<V, E> graph, final V... vertices) {
-    addVertices(graph, vertices);
-    int numVertices = vertices.length;
-    for (int i = 0; i < numVertices; i++)
-      graph.addEdge(vertices[i], vertices[(i + 1) % numVertices]);
-  }
+    @SafeVarargs
+    public static <V, E> void addHamiltonianCycle(final Graph<V, E> graph, final V... vertices) {
+        addVertices(graph, vertices);
+        int numVertices = vertices.length;
+        for (int i = 0; i < numVertices; i++)
+            graph.addEdge(vertices[i], vertices[(i + 1) % numVertices]);
+    }
 
-  public static <V, E> void randomiseGraph(final Graph<V, E> graph) {
-    // Backup + remove vertices and edges
-    List<V> vertices = new ArrayList<>(graph.vertexSet());
-    List<EdgeInfo<V, E>> edgeInfos = EdgeInfo.getEdgeInfos(graph);
-    graph.removeAllVertices(vertices);
-    assert graph.vertexSet().size() == 0;
-    assert graph.edgeSet().size() == 0;
+    public static <V, E> void randomiseGraph(final Graph<V, E> graph) {
+        // Backup + remove vertices and edges
+        List<V> vertices = new ArrayList<>(graph.vertexSet());
+        List<EdgeInfo<V, E>> edgeInfos = EdgeInfo.getEdgeInfos(graph);
+        graph.removeAllVertices(vertices);
+        assert graph.vertexSet().size() == 0;
+        assert graph.edgeSet().size() == 0;
 
-    // Shuffle + re-add vertices and edges
-    Collections.shuffle(vertices);
-    Collections.shuffle(edgeInfos);
-    vertices.forEach(graph::addVertex);
-    edgeInfos.forEach(edgeInfo ->
-      graph.addEdge(edgeInfo.getSourceVertex(), edgeInfo.getTargetVertex(), edgeInfo.getEdge())
-    );
-  }
+        // Shuffle + re-add vertices and edges
+        Collections.shuffle(vertices);
+        Collections.shuffle(edgeInfos);
+        vertices.forEach(graph::addVertex);
+        edgeInfos.forEach(edgeInfo ->
+            graph.addEdge(edgeInfo.getSourceVertex(), edgeInfo.getTargetVertex(), edgeInfo.getEdge())
+        );
+    }
 
 }
