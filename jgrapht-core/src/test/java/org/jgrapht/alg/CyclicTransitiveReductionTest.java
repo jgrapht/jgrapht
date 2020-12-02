@@ -261,6 +261,30 @@ public class CyclicTransitiveReductionTest {
   }
 
   @Test
+  public void mediumCyclicalGraph2NoSynthetic() {
+    cyclicalGraphWithSingleVertexSCC(false);
+  }
+
+  @Test
+  public void mediumCyclicalGraph2Synthetic() {
+    cyclicalGraphWithSingleVertexSCC(true);
+  }
+
+  private void cyclicalGraphWithSingleVertexSCC(final boolean allowSyntheticEdges) {
+    Graph<String, DefaultEdge> graph = createEmptyGraph();
+    addVertices(graph, "A", "B", "C", "D", "E", "F");
+    addEdges(graph,
+      "A", "C", "A", "D", "A", "E", "B", "A", "C", "B", "C", "D", "C", "E", "D", "B", "D", "E", "E", "B",
+      "F", "A", "F", "B", "F", "C", "F", "D", "F", "E"
+    );
+    assertEquals(6, graph.vertexSet().size());
+    assertEquals(15, graph.edgeSet().size());
+    new CyclicTransitiveReduction<>(graph).allowSyntheticEdges(allowSyntheticEdges).reduce();
+    assertEquals(6, graph.vertexSet().size());
+    assertEquals(6, graph.edgeSet().size());
+  }
+
+  @Test
   @Category(SlowTests.class)
   public void randomisedGraphsWithSCCsDifferentSizesNoSynthetic() {
     randomisedGraphsWithSCCsDifferentSizes(false);

@@ -187,7 +187,8 @@ public class CyclicTransitiveReduction<V, E> {
 
     for (Graph<V, E> scComponent : condensedGraph.vertexSet()) {
       Set<E> sccEdges = scComponent.edgeSet();
-      assert sccEdges.size() > 2;
+      if (sccEdges.size() < 3)
+        continue;
       Set<E> sccEdgesCopy = new HashSet<>(sccEdges);
       List<V> cycle;
       if (allowSyntheticEdges) {
