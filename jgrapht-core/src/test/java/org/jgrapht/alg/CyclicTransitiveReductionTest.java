@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2020, by Alexandru Valeanu and Contributors.
+ * (C) Copyright 2018-2020, by Alexander Kriegisch and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,9 +31,6 @@ import static org.jgrapht.util.MathUtil.naturalNumberSumGauss;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * TODO: add tests, for now there are only helper methods to be used both here and in DirectedHamiltonianCycleTest
- */
 public class CyclicTransitiveReductionTest {
   private static final Random RANDOM = new Random();
 
