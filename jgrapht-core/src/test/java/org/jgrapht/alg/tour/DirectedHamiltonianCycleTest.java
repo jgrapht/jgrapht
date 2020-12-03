@@ -20,6 +20,7 @@ package org.jgrapht.alg.tour;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.SlowTests;
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class DirectedHamiltonianCycleTest {
     assertNotNull(tour);
     assertHamiltonian(graph, tour);
 
-    addEdges(graph, "A", "C", "B", "D");
+    addEdges(graph, Pair.of("A", "C"), Pair.of("B", "D"));
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNotNull(tour);
     assertHamiltonian(graph, tour);
@@ -64,7 +65,7 @@ public class DirectedHamiltonianCycleTest {
     GraphPath<String, DefaultEdge> tour;
 
     addVertices(graph, "A", "B", "C", "D");
-    addEdges(graph, "A", "B", "B", "C", "B", "D");
+    addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"));
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNull(tour);
   }

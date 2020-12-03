@@ -17,6 +17,7 @@
  */
 package org.jgrapht;
 
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.*;
 
 import java.util.ArrayList;
@@ -96,11 +97,9 @@ public class TestUtil
     }
 
     @SafeVarargs
-    public static <V, E> void addEdges(final Graph<V, E> graph, final V... vertices) {
-        if (vertices.length % 2 != 0)
-            throw new IllegalArgumentException("number of vertices (edge pairs) must be even");
-        for (int i = 0; i < vertices.length; i = i + 2)
-            graph.addEdge(vertices[i], vertices[i + 1]);
+    public static <V, E> void addEdges(final Graph<V, E> graph, final Pair<V,V>... edges) {
+        for (Pair<V, V> edge : edges)
+            graph.addEdge(edge.getFirst(), edge.getSecond());
     }
 
     @SafeVarargs

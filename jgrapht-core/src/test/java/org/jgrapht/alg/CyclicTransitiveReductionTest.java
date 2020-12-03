@@ -19,6 +19,7 @@ package org.jgrapht.alg;
 
 import org.jgrapht.Graph;
 import org.jgrapht.SlowTests;
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.junit.Test;
@@ -198,7 +199,7 @@ public class CyclicTransitiveReductionTest {
   public void smallHamiltonianGraphWithRedundantEdges() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addHamiltonianCycle(graph, "A", "B", "C", "D");
-    addEdges(graph, "A", "C", "D", "B");
+    addEdges(graph, Pair.of("A", "C"), Pair.of("D", "B"));
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
     assertEquals(4, graph.edgeSet().size());
@@ -208,7 +209,7 @@ public class CyclicTransitiveReductionTest {
   public void smallDAG() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D");
-    addEdges(graph, "A", "B", "B", "C", "B", "D");
+    addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"));
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
     assertEquals(3, graph.edgeSet().size());
@@ -221,7 +222,10 @@ public class CyclicTransitiveReductionTest {
   public void smallDAGWithRedundantEdges() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D", "E", "F");
-    addEdges(graph, "A", "B", "B", "C", "B", "D", "C", "E", "D", "F", "B", "E", "B", "F", "A", "E", "A", "F");
+    addEdges(graph,
+      Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"), Pair.of("C", "E"), Pair.of("D", "F"), Pair.of("B", "E"),
+      Pair.of("B", "F"), Pair.of("A", "E"), Pair.of("A", "F")
+    );
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(6, graph.vertexSet().size());
     assertEquals(5, graph.edgeSet().size());
@@ -246,9 +250,11 @@ public class CyclicTransitiveReductionTest {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
     addEdges(graph,
-      "A", "B", "B", "C", "C", "D", "D", "A", "A", "C", "D", "B", "A", "E", "B", "G", "E", "F", "F", "G",
-      "G", "E", "E", "H", "F", "L", "H", "I", "I", "J", "J", "K", "K", "L", "L", "H", "H", "J", "I", "K",
-      "J", "N", "K", "M", "M", "N", "N", "O", "O", "P", "P", "M", "M", "O", "N", "P", "G", "M", "C", "P"
+      Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("C", "D"), Pair.of("D", "A"), Pair.of("A", "C"), Pair.of("D", "B"),
+      Pair.of("A", "E"), Pair.of("B", "G"), Pair.of("E", "F"), Pair.of("F", "G"), Pair.of("G", "E"), Pair.of("E", "H"),
+      Pair.of("F", "L"), Pair.of("H", "I"), Pair.of("I", "J"), Pair.of("J", "K"), Pair.of("K", "L"), Pair.of("L", "H"),
+      Pair.of("H", "J"), Pair.of("I", "K"), Pair.of("J", "N"), Pair.of("K", "M"), Pair.of("M", "N"), Pair.of("N", "O"),
+      Pair.of("O", "P"), Pair.of("P", "M"), Pair.of("M", "O"), Pair.of("N", "P"), Pair.of("G", "M"), Pair.of("C", "P")
     );
     assertEquals(16, graph.vertexSet().size());
     assertEquals(30, graph.edgeSet().size());
@@ -271,8 +277,9 @@ public class CyclicTransitiveReductionTest {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     addVertices(graph, "A", "B", "C", "D", "E", "F");
     addEdges(graph,
-      "A", "C", "A", "D", "A", "E", "B", "A", "C", "B", "C", "D", "C", "E", "D", "B", "D", "E", "E", "B",
-      "F", "A", "F", "B", "F", "C", "F", "D", "F", "E"
+      Pair.of("A", "C"), Pair.of("A", "D"), Pair.of("A", "E"), Pair.of("B", "A"), Pair.of("C", "B"), Pair.of("C", "D"),
+      Pair.of("C", "E"), Pair.of("D", "B"), Pair.of("D", "E"), Pair.of("E", "B"), Pair.of("F", "A"), Pair.of("F", "B"),
+      Pair.of("F", "C"), Pair.of("F", "D"), Pair.of("F", "E")
     );
     assertEquals(6, graph.vertexSet().size());
     assertEquals(15, graph.edgeSet().size());
