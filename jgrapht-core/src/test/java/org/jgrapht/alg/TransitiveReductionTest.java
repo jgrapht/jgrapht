@@ -139,7 +139,7 @@ public class TransitiveReductionTest
     public void testCyclicGraph()
     {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-          new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -155,7 +155,7 @@ public class TransitiveReductionTest
     public void testAcyclicGraphNoCheck()
     {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-          new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -172,7 +172,7 @@ public class TransitiveReductionTest
     public void testCyclicGraphNoCheck()
     {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-          new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -192,7 +192,7 @@ public class TransitiveReductionTest
     public void testGraphContainingStronglyConnectedComponent()
     {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-          new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
