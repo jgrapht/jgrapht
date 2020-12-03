@@ -184,14 +184,12 @@ public class CyclicTransitiveReduction<V, E> {
     TransitiveReduction.INSTANCE.reduce(condensedGraph, false);
 
     for (Graph<V, E> scComponent : condensedGraph.vertexSet()) {
-      Set<E> sccEdges = scComponent.edgeSet();
+      Set<E> sccEdges = new HashSet<>(scComponent.edgeSet());
       if (sccEdges.size() < 3)
         continue;
-      Set<E> sccEdgesCopy = new HashSet<>(sccEdges);
-      List<V> cycle;
       if (allowSyntheticEdges) {
-        cycle = new ArrayList<>(scComponent.vertexSet());
-        scComponent.removeAllEdges(sccEdgesCopy);
+        List<V> cycle = new ArrayList<>(scComponent.vertexSet());
+        scComponent.removeAllEdges(sccEdges);
         for (int i = 0; i < cycle.size(); i++) {
           V sourceVertex = cycle.get(i);
           V targetVertex = cycle.get((i + 1) % cycle.size());
@@ -204,19 +202,10 @@ public class CyclicTransitiveReduction<V, E> {
       else {
         GraphPath<V, E> graphPath = new DirectedHamiltonianCycle<V, E>().getTour(scComponent);
         assert graphPath != null;
-        cycle = graphPath.getVertexList();
-        // First and last vertices are identical -> remove one of them
-        cycle.remove(0);
-
-        for (E edge : sccEdgesCopy) {
-          int sourceIndex = cycle.indexOf(scComponent.getEdgeSource(edge));
-          assert sourceIndex >= 0;
-          int targetIndex = cycle.indexOf(scComponent.getEdgeTarget(edge));
-          assert targetIndex >= 0;
-          int indexDelta = Math.abs(sourceIndex - targetIndex);
-          if (indexDelta != 1 && indexDelta + 1 != cycle.size())
-            scComponent.removeEdge(edge);
-        }
+        Set<E> cycle = new HashSet<>(graphPath.getEdgeList());
+        sccEdges.stream()
+          .filter(edge -> !cycle.contains(edge))
+          .forEach(scComponent::removeEdge);
       }
     }
   }
