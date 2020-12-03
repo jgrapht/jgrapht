@@ -172,8 +172,7 @@ public class CyclicTransitiveReductionTest {
   @Test
   public void twoElementsGraph() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addVertices(graph, "A", "B");
-    graph.addEdge("A", "B");
+    addEdges(graph, Pair.of("A", "B"));
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(2, graph.vertexSet().size());
     assertEquals(1, graph.edgeSet().size());
@@ -182,7 +181,7 @@ public class CyclicTransitiveReductionTest {
   @Test
   public void smallHamiltonianGraph() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
     assertEquals(4, graph.edgeSet().size());
@@ -195,7 +194,7 @@ public class CyclicTransitiveReductionTest {
   @Test
   public void smallHamiltonianGraphWithRedundantEdges() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     addEdges(graph, Pair.of("A", "C"), Pair.of("D", "B"));
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
@@ -205,7 +204,6 @@ public class CyclicTransitiveReductionTest {
   @Test
   public void smallDAG() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addVertices(graph, "A", "B", "C", "D");
     addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"));
     new CyclicTransitiveReduction<>(graph).reduce();
     assertEquals(4, graph.vertexSet().size());
@@ -218,7 +216,6 @@ public class CyclicTransitiveReductionTest {
   @Test
   public void smallDAGWithRedundantEdges() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addVertices(graph, "A", "B", "C", "D", "E", "F");
     addEdges(graph,
       Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"), Pair.of("C", "E"), Pair.of("D", "F"), Pair.of("B", "E"),
       Pair.of("B", "F"), Pair.of("A", "E"), Pair.of("A", "F")
@@ -245,7 +242,6 @@ public class CyclicTransitiveReductionTest {
 
   private void mediumCyclicalGraph(final boolean allowSyntheticEdges) {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addVertices(graph, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
     addEdges(graph,
       Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("C", "D"), Pair.of("D", "A"), Pair.of("A", "C"), Pair.of("D", "B"),
       Pair.of("A", "E"), Pair.of("B", "G"), Pair.of("E", "F"), Pair.of("F", "G"), Pair.of("G", "E"), Pair.of("E", "H"),
@@ -272,7 +268,6 @@ public class CyclicTransitiveReductionTest {
 
   private void cyclicalGraphWithSingleVertexSCC(final boolean allowSyntheticEdges) {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-    addVertices(graph, "A", "B", "C", "D", "E", "F");
     addEdges(graph,
       Pair.of("A", "C"), Pair.of("A", "D"), Pair.of("A", "E"), Pair.of("B", "A"), Pair.of("C", "B"), Pair.of("C", "D"),
       Pair.of("C", "E"), Pair.of("D", "B"), Pair.of("D", "E"), Pair.of("E", "B"), Pair.of("F", "A"), Pair.of("F", "B"),
@@ -287,19 +282,19 @@ public class CyclicTransitiveReductionTest {
 
   @Test
   @Category(SlowTests.class)
-  public void randomisedGraphsWithSCCsDifferentSizesNoSynthetic() {
+  public void randomizedGraphsWithSCCsDifferentSizesNoSynthetic() {
     // This test can be very slow, e.g. around 20 seconds
-    randomisedGraphsWithSCCsDifferentSizes(false);
+    randomizedGraphsWithSCCsDifferentSizes(false);
   }
 
   @Test
   @Category(SlowTests.class)
-  public void randomisedGraphsWithSCCsDifferentSizesSynthetic() {
+  public void randomizedGraphsWithSCCsDifferentSizesSynthetic() {
     // This test should be very much faster, e.g. around 250 milliseconds
-    randomisedGraphsWithSCCsDifferentSizes(true);
+    randomizedGraphsWithSCCsDifferentSizes(true);
   }
 
-  private void randomisedGraphsWithSCCsDifferentSizes(final boolean allowSyntheticEdges) {
+  private void randomizedGraphsWithSCCsDifferentSizes(final boolean allowSyntheticEdges) {
     Graph<String, DefaultEdge> graph;
     long totalCTRTime = 0;
     // Be careful when increasing the maximum number of vertices -> for allowSyntheticEdges == false, worst-case
@@ -309,7 +304,7 @@ public class CyclicTransitiveReductionTest {
       int sccSize = sccCount;
       populateGraphWithSCCs(graph, sccCount, sccSize);
       // Shuffling vertices and edges helps increase test coverage
-      randomiseGraph(graph);
+      randomizeGraph(graph);
       assertEquals(sccCount * sccSize, graph.vertexSet().size());
       assertEquals(sccCount * naturalNumberSumGauss(sccSize - 1) + (sccCount - 1) * sccSize, graph.edgeSet().size());
       long startTime = System.currentTimeMillis();

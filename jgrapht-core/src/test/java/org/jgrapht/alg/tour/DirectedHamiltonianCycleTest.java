@@ -48,7 +48,7 @@ public class DirectedHamiltonianCycleTest {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     GraphPath<String, DefaultEdge> tour;
 
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNotNull(tour);
     assertHamiltonian(graph, tour);
@@ -64,7 +64,6 @@ public class DirectedHamiltonianCycleTest {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
     GraphPath<String, DefaultEdge> tour;
 
-    addVertices(graph, "A", "B", "C", "D");
     addEdges(graph, Pair.of("A", "B"), Pair.of("B", "C"), Pair.of("B", "D"));
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNull(tour);
@@ -77,7 +76,7 @@ public class DirectedHamiltonianCycleTest {
 
     populateGraphWithSCCs(graph, 1, 16);
     // Shuffling vertices and edges helps increase test coverage
-    randomiseGraph(graph);
+    randomizeGraph(graph);
     tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
     assertNotNull(tour);
     assertHamiltonian(graph, tour);
@@ -97,7 +96,7 @@ public class DirectedHamiltonianCycleTest {
       .allowingSelfLoops(false)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
   }
 
@@ -109,7 +108,7 @@ public class DirectedHamiltonianCycleTest {
       .allowingSelfLoops(true)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
   }
 
@@ -122,7 +121,7 @@ public class DirectedHamiltonianCycleTest {
       .allowingSelfLoops(false)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
   }
 
@@ -134,7 +133,7 @@ public class DirectedHamiltonianCycleTest {
       .allowingSelfLoops(false)
       .edgeClass(DefaultEdge.class)
       .buildGraph();
-    addHamiltonianCycle(graph, "A", "B", "C", "D");
+    addCycle(graph, "A", "B", "C", "D");
     new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
   }
 
@@ -147,14 +146,13 @@ public class DirectedHamiltonianCycleTest {
   @Test(expected = IllegalArgumentException.class)
   public void graphTooSmall() {
     Graph<String, DefaultEdge> graph = createEmptyGraph();
-
-    addVertices(graph, "A", "B");
+    addEdges(graph, Pair.of("A", "B"));
     new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
   }
 
   @Test
   @Category(SlowTests.class)
-  public void randomisedHamiltonianGraphsDifferentSizes() {
+  public void randomizedHamiltonianGraphsDifferentSizes() {
     Graph<String, DefaultEdge> graph;
     GraphPath<String, DefaultEdge> tour;
     // Be careful when increasing the maximum number of vertices -> worst-case runtimes grow explosively!
@@ -162,7 +160,7 @@ public class DirectedHamiltonianCycleTest {
       graph = createEmptyGraph();
       populateGraphWithSCCs(graph, 1, numVertices);
       // Shuffling vertices and edges helps increase test coverage
-      randomiseGraph(graph);
+      randomizeGraph(graph);
       tour = new DirectedHamiltonianCycle<String, DefaultEdge>().getTour(graph);
       assertNotNull(tour);
       assertHamiltonian(graph, tour);
