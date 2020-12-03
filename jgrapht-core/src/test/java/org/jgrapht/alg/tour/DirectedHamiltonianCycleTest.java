@@ -157,7 +157,8 @@ public class DirectedHamiltonianCycleTest {
   public void randomisedHamiltonianGraphsDifferentSizes() {
     Graph<String, DefaultEdge> graph;
     GraphPath<String, DefaultEdge> tour;
-    for (int numVertices = 3; numVertices <= 53; numVertices++) {
+    // Be careful when increasing the maximum number of vertices -> worst-case runtimes grow explosively!
+    for (int numVertices = 3; numVertices <= 20; numVertices++) {
       graph = createEmptyGraph();
       populateGraphWithSCCs(graph, 1, numVertices);
       // Shuffling vertices and edges helps increase test coverage
