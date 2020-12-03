@@ -283,23 +283,34 @@ public class CyclicTransitiveReductionTest {
   @Test
   @Category(SlowTests.class)
   public void randomizedGraphsWithSCCsDifferentSizesNoSynthetic() {
-    // This test can be very slow, e.g. around 20 seconds
+    // This test can be very slow!
     randomizedGraphsWithSCCsDifferentSizes(false);
   }
 
   @Test
   @Category(SlowTests.class)
   public void randomizedGraphsWithSCCsDifferentSizesSynthetic() {
-    // This test should be very much faster, e.g. around 250 milliseconds
+    // This test should be very much faster
     randomizedGraphsWithSCCsDifferentSizes(true);
   }
 
   private void randomizedGraphsWithSCCsDifferentSizes(final boolean allowSyntheticEdges) {
+    /*
+    Be careful when increasing the maximum number of vertices! For allowSyntheticEdges == false, worst-case runtimes
+    for CyclicTransitiveReduction.reduce() grow explosively! Typical values on the author's workstation:
+
+    SCC_MAX | no synthetic | synthetic
+    --------|--------------|----------
+         17 |       900 ms |    280 ms
+         18 |     2,500 ms |    400 ms
+         19 |     4,500 ms |    500 ms
+         20 |    18,000 ms |    600 ms
+         21 |    72,000 ms |    800 ms
+    */
+    final int SCC_MAX = 18;
+
     Graph<String, DefaultEdge> graph;
-    long totalCTRTime = 0;
-    // Be careful when increasing the maximum number of vertices -> for allowSyntheticEdges == false, worst-case
-    // runtimes grow explosively!
-    for (int sccCount = 3; sccCount <= 20; sccCount++) {
+    for (int sccCount = 3; sccCount <= SCC_MAX; sccCount++) {
       graph = createEmptyGraph();
       int sccSize = sccCount;
       populateGraphWithSCCs(graph, sccCount, sccSize);
@@ -307,17 +318,10 @@ public class CyclicTransitiveReductionTest {
       randomizeGraph(graph);
       assertEquals(sccCount * sccSize, graph.vertexSet().size());
       assertEquals(sccCount * naturalNumberSumGauss(sccSize - 1) + (sccCount - 1) * sccSize, graph.edgeSet().size());
-      long startTime = System.currentTimeMillis();
       new CyclicTransitiveReduction<>(graph).allowSyntheticEdges(allowSyntheticEdges).reduce();
-      totalCTRTime += (System.currentTimeMillis() - startTime);
       assertEquals(sccCount * sccSize, graph.vertexSet().size());
       assertEquals(sccCount * sccCount + (sccCount - 1), graph.edgeSet().size());
     }
-    System.out.println(
-      "Total time cyclic transitive reduction (" +
-        (allowSyntheticEdges ? "" : "no ") + "synthetic edges) = " +
-        totalCTRTime + " ms"
-    );
   }
 
 }
