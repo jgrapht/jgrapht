@@ -19,6 +19,7 @@ package org.jgrapht.alg.scoring;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.scoring.BetweennessCentrality.OverflowStrategy;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
@@ -545,4 +546,38 @@ public class BetweennessCentralityTest
 
         return g;
     }
+    
+    @Test(expected = ArithmeticException.class)
+    public void testOverflow()
+    {
+        final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 3300; i++)
+            g.addVertex(i);
+        for (int i = 0; i < 3290; i++)
+            for (int j = 0; j < 10; j++)
+                g.addEdge(i, i - i % 10 + 10 + j);
+        VertexScoringAlgorithm<Integer, Double> bc =
+            new BetweennessCentrality<>(g, false, OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW);
+        bc.getScores();
+    }
+
+    @Test
+    public void testIgnoreOverflow()
+    {
+        final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        for (int i = 0; i < 3300; i++)
+            g.addVertex(i);
+        for (int i = 0; i < 3290; i++)
+            for (int j = 0; j < 10; j++)
+                g.addEdge(i, i - i % 10 + 10 + j);
+        VertexScoringAlgorithm<Integer, Double> bc =
+            new BetweennessCentrality<>(g, false, OverflowStrategy.IGNORE_OVERFLOW);
+        Map<Integer, Double> scores = bc.getScores();
+        assertEquals(scores.get(9), 0d, 1e-9);
+        assertEquals(scores.get(10), Double.NaN, 1e-9);
+        assertEquals(scores.get(3289), Double.NaN, 1e-9);
+        assertEquals(scores.get(3290), 0d, 1e-9);
+    }
+
+
 }

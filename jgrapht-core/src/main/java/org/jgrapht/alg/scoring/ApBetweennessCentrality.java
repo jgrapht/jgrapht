@@ -54,6 +54,13 @@ import org.jheaps.tree.PairingHeap;
  * respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
  * space complexity is $O(n + m)$.
  *
+ * Note that this running time assumes that arithmetic is performed between numbers whose
+ * representation needs a number of bits which is logarithmic in the instance size. There are
+ * instances where this is not true, and thus it is not safe to assume that arithmetic takes 
+ * constant time.
+ * 
+ * This class uses arbitrary precision arithmetic (except for the execution of Dijkstra's algorithm). 
+ * The precision can be adjusted by the constructor parameters.  
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

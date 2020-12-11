@@ -32,7 +32,7 @@ public class ApBetweennessCentralityTest
 {
 
     @Test
-    public void testOverflow()
+    public void testNoOverflow()
     {
         final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         for (int i = 0; i < 3300; i++)
