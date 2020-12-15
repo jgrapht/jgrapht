@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Sebastiano Vigna.
+ * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.opt.graph.webgraph;
+package org.jgrapht.webgraph;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -204,20 +204,20 @@ public class ImmutableDirectedBigGraphAdapterTest
         assertEquals(3, Iterables.size(a.iterables().edgesOf(2L)));
 
         assertEquals(
-            new ObjectOpenHashSet(new LongLongPair[] { LongLongPair.of(0L, 1L) }),
+            new ObjectOpenHashSet<>(new LongLongPair[] { LongLongPair.of(0L, 1L) }),
             a.incomingEdgesOf(1L));
         assertEquals(
-            new ObjectOpenHashSet(new LongLongPair[] { LongLongPair.of(0L, 1L) }),
+            new ObjectOpenHashSet<>(new LongLongPair[] { LongLongPair.of(0L, 1L) }),
             new ObjectOpenHashSet<>(a.iterables().incomingEdgesOf(1L).iterator()));
 
         assertEquals(
-            new ObjectOpenHashSet(new LongLongPair[] { LongLongPair.of(1L, 2L) }),
+            new ObjectOpenHashSet<>(new LongLongPair[] { LongLongPair.of(1L, 2L) }),
             a.outgoingEdgesOf(1L));
         assertEquals(
-            new ObjectOpenHashSet(new LongLongPair[] { LongLongPair.of(1L, 2L) }),
+            new ObjectOpenHashSet<>(new LongLongPair[] { LongLongPair.of(1L, 2L) }),
             new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(1L).iterator()));
 
-        final Set v = a.vertexSet();
+        final Set<Long> v = a.vertexSet();
         assertTrue(v.contains(0L));
         assertFalse(v.contains(-1L));
         assertFalse(v.contains(3L));

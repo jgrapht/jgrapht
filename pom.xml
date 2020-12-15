@@ -96,6 +96,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>jgrapht-unimi-dsi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>jgrapht-demo</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -312,6 +317,7 @@
         <module>jgrapht-opt</module>
         <module>jgrapht-ext</module>
         <module>jgrapht-guava</module>
+        <module>jgrapht-unimi-dsi</module>
         <module>jgrapht-demo</module>
         <module>jgrapht-dist</module>
     </modules>

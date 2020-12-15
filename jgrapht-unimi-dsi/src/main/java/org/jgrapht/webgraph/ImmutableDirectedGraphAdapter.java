@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Sebastiano Vigna.
+ * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.opt.graph.webgraph;
+package org.jgrapht.webgraph;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -27,7 +27,6 @@ import org.jgrapht.GraphType;
 import org.jgrapht.graph.DefaultGraphType;
 
 import com.google.common.collect.Iterables;
-import com.google.common.graph.Graph;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import it.unimi.dsi.fastutil.ints.IntIntSortedPair;

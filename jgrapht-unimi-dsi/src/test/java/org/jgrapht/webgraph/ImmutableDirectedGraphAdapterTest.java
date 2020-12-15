@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Sebastiano Vigna.
+ * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.opt.graph.webgraph;
+package org.jgrapht.webgraph;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -187,7 +187,7 @@ public class ImmutableDirectedGraphAdapterTest
             new ObjectOpenHashSet<>(
                 new IntIntPair[] { IntIntPair.of(0, 1), IntIntPair.of(0, 2), IntIntPair.of(1, 2),
                     IntIntPair.of(2, 2) }),
-            new ObjectOpenHashSet(a.iterables().edges().iterator()));
+            new ObjectOpenHashSet<>(a.iterables().edges().iterator()));
 
         assertEquals(
             new ObjectOpenHashSet<>(
@@ -202,17 +202,17 @@ public class ImmutableDirectedGraphAdapterTest
         assertEquals(3, Iterables.size(a.iterables().edgesOf(2)));
 
         assertEquals(
-            new ObjectOpenHashSet(new IntIntPair[] { IntIntPair.of(0, 1) }),
+            new ObjectOpenHashSet<>(new IntIntPair[] { IntIntPair.of(0, 1) }),
             a.incomingEdgesOf(1));
         assertEquals(
-            new ObjectOpenHashSet(new IntIntPair[] { IntIntPair.of(0, 1) }),
+            new ObjectOpenHashSet<>(new IntIntPair[] { IntIntPair.of(0, 1) }),
             new ObjectOpenHashSet<>(a.iterables().incomingEdgesOf(1).iterator()));
 
         assertEquals(
-            new ObjectOpenHashSet(new IntIntPair[] { IntIntPair.of(1, 2) }),
+            new ObjectOpenHashSet<>(new IntIntPair[] { IntIntPair.of(1, 2) }),
             a.outgoingEdgesOf(1));
         assertEquals(
-            new ObjectOpenHashSet(new IntIntPair[] { IntIntPair.of(1, 2) }),
+            new ObjectOpenHashSet<>(new IntIntPair[] { IntIntPair.of(1, 2) }),
             new ObjectOpenHashSet<>(a.iterables().outgoingEdgesOf(1).iterator()));
 
         final Set<Integer> v = a.vertexSet();

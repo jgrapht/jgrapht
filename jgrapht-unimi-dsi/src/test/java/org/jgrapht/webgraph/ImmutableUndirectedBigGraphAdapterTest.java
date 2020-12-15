@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Sebastiano Vigna.
+ * (C) Copyright 2020-2020, by Sebastiano Vigna and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 
-package org.jgrapht.opt.graph.webgraph;
+package org.jgrapht.webgraph;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
