@@ -24,6 +24,7 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
+import org.junit.experimental.categories.Category;
 
 import java.util.*;
 
@@ -562,6 +563,7 @@ public class BetweennessCentralityTest
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testIgnoreOverflow()
     {
         final Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
