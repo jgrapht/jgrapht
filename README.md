@@ -57,16 +57,26 @@ The files below make up the table of contents for a release distribution archive
 - `lib/` JGraphT libraries and dependencies:
     - `jgrapht-core-x.y.z.jar` core library
     - `jgrapht-demo-x.y.z.jar` demo classes
+    - `jgrapht-opt-x.y.z.jar` optimized graph implementations
     - `jgrapht-ext-x.y.z.jar` extensions
     - `jgrapht-io-x.y.z.jar` Importers/Exporters for various graph formats
     - `jgrapht-guava-x.y.z.jar` Adapter classes for the Guava library
+    - `jgrapht-unimi-dsi-x.y.z.jar` Webgraph adapter and succinct graph implementations
     - `jgraphx-a.b.c.jar` JGraphX dependency library
+    - `jheaps-x.y.jar` JHeaps library 
     - `antlr4-runtime-x.y.jar` ANTLR parser runtime
     - `commons-lang3-x.y.z.jar` Apache Commons Lang library
     - `commons-text-x.y.jar` Apache Commons Text library
     - `fastutil-x.y.z.jar` Fastutil library
     - `guava-x.y-jre.jar` Guava library
-    - `jheaps-x.y.jar` JHeaps library    
+    - `jsap-x.y.jar` Jsap library
+    - `logback-classic-x.y.z.jar` Logger
+    - `logback-core-x.y.z.jar` Logger
+    - `slf4j-api-x.y.z.jar` Logger api
+    - `sux4j-x.y.z.jar` Sux4j library
+    - `webgraph-x.y.z.jar` Webgraph library
+    - `webgraph-big-z.y.z.jar` Webgraph big library
+
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
@@ -140,8 +150,11 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 - [JGraphX](https://github.com/jgraph/jgraphx) is a graph visualizations and editing component (the successor to the older JGraph library). You need JGraphX only if you want to use the JGraphXAdapter to visualize the JGraphT graph interactively via JGraphX. JGraphX is licensed under the terms of the BSD license.
 - [ANTLR](http://www.antlr.org) is a parser generator.  It is used for reading text files containing graph representations, and is only required by the jgrapht-io module.  ANTLR v4 is licensed under the terms of the [BSD license](http://www.antlr.org/license.html).
 - [Guava](https://github.com/google/guava) is Google's core libraries for Java. You need Guava only if you are already using Guava's graph data-structures and wish to use our adapter classes in order to execute JGraphT's algorithms. Only required by the jgrapht-guava module.
-- [Apache Commons Proper](http://commons.apache.org/components.html) is an Apache project containing reusable Java components. The packages [commons-text](https://commons.apache.org/proper/commons-text/) and [commons-lang3.](http://commons.apache.org/proper/commons-lang/) which provide additional utilities for String manipulation are only required by the jgrapht-io module.
+- [Apache Commons Proper](http://commons.apache.org/components.html) is an Apache project containing reusable Java components. The packages [commons-text](https://commons.apache.org/proper/commons-text/) and [commons-lang3.](http://commons.apache.org/proper/commons-lang/) which provide additional utilities for String manipulation are only required by the jgrapht-io module. The package [commons-math](https://commons.apache.org/proper/commons-text/) is only required by the jgrapht-unimi-dsi module.
 - [fastutil](http://fastutil.di.unimi.it/) provides a collection of type-specific maps, sets, lists and queues with a small memory footprint and fast access and insertion. Fastutil is only required by the jgrapht-opt module.
+- [webgraph](http://webgraph.di.unimi.it/) provides a framework for graph compression enabling management of very large graphs. Webgraph is only required by the jgrapht-unimi-dsi module.
+- [sux4j](http://sux.di.unimi.it/) provides implementations of basic succinct data structures. Sux4j is only required by the jgrapht-unimi-dsi module.
+- [jsap](http://www.martiansoftware.com/jsap/) provides a simple argument parser. Jsap is only required by the jgrapht-unimi-dsi module.
 
 ## Online Resources
 

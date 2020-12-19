@@ -53,15 +53,6 @@
             <outputDirectory>3rd-party-licenses</outputDirectory>
         </file>
         <file>
-            <source>${main.basedir}/etc/licenses/jgraphx-license.txt</source>
-            <outputDirectory>3rd-party-licenses</outputDirectory>
-        </file>
-        <file>
-            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
-            <outputDirectory>3rd-party-licenses</outputDirectory>
-            <destName>guava-license.txt</destName>
-        </file>
-        <file>
             <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
             <outputDirectory>3rd-party-licenses</outputDirectory>
             <destName>commons-lang3-license.txt</destName>
@@ -69,13 +60,67 @@
         <file>
             <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
             <outputDirectory>3rd-party-licenses</outputDirectory>
-            <destName>jheaps-license.txt</destName>
+            <destName>commons-math3-license.txt</destName>
         </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>commons-text-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>dsiutils-license.txt</destName>
+        </file>                
         <file>
             <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
             <outputDirectory>3rd-party-licenses</outputDirectory>
             <destName>fastutil-license.txt</destName>
         </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>guava-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/jgraphx-license.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+        </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>jheaps-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/license-EPL.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>jsap-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/license-EPL.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>logback-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/mit-license.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>slf4j-api-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>sux4j-license.txt</destName>
+        </file>
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>webgraph-license.txt</destName>
+        </file>        
+        <file>
+            <source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+            <outputDirectory>3rd-party-licenses</outputDirectory>
+            <destName>webgraph-big-license.txt</destName>
+        </file>        
     </files>
 
     <fileSets>
