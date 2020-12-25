@@ -31,15 +31,16 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Sarah Komla-Ebri
+ * @author Hannes Wellmann
  */
 public class GabowStrongConnectivityInspector<V, E>
     extends
     AbstractStrongConnectivityInspector<V, E>
 {
-    // stores the vertices
+    // the sequence of (original) vertices encountered but not yet assigned to a component
     private Deque<VertexNumber<V>> S = new ArrayDeque<>();
-    // store the numbers
-    private Deque<Integer> B = new ArrayDeque<>();
+    // the boundaries between contracted vertices on the current path of the dfs-tree
+    private Deque<VertexNumber<V>> B = new ArrayDeque<>();
 
     // maps vertices to their VertexNumber object
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
@@ -104,8 +105,8 @@ public class GabowStrongConnectivityInspector<V, E>
     private void dfsVisit(VertexNumber<V> v)
     {
         S.push(v);
-        v.number = S.size() - 1;
-        B.push(v.number);
+        v.number = S.size();
+        B.push(v);
 
         // follow all edges
 
@@ -115,12 +116,12 @@ public class GabowStrongConnectivityInspector<V, E>
             if (w.number == 0) {
                 dfsVisit(w);
             } else { /* contract if necessary */
-                while (w.number < B.peek()) {
+                while (w.number < B.peek().number) {
                     B.pop();
                 }
             }
         }
-        if (v.number == B.peek()) {
+        if (v == B.peek()) {
             // number vertices of the next strong component
             B.pop();
             c++;
@@ -131,7 +132,7 @@ public class GabowStrongConnectivityInspector<V, E>
 
     private Set<V> createSCCVertexSetAndNumberVertices(VertexNumber<V> v)
     {
-        int sccSize = S.size() - v.number;
+        int sccSize = S.size() - v.number + 1;
         // All VertexNumber objects on S above and including v form the current SCC.
         // To collect them from S, elements have to be popped while the size of S is greater or
         // equal to v.number. This results in <sccSize> removals(pops) from S.
