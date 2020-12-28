@@ -208,7 +208,7 @@ public class MaximumCardinalityIterator<V, E>
     {
         cardinalityMap.put(vertex, cardinality);
         if (buckets.get(cardinality) == null) {
-            buckets.set(cardinality, new HashSet<>());
+            buckets.set(cardinality, new LinkedHashSet<>());
         }
         buckets.get(cardinality).add(vertex);
     }
