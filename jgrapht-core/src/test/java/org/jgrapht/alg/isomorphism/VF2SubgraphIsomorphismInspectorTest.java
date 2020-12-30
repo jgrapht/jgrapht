@@ -18,13 +18,12 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class VF2SubgraphIsomorphismInspectorTest
 {
@@ -334,8 +333,9 @@ public class VF2SubgraphIsomorphismInspectorTest
                     "[0=~~ 1=0 2=2 3=1]", "[0=1 1=2 2=0 3=~~]", "[0=1 1=2 2=~~ 3=0]",
                     "[0=1 1=~~ 2=2 3=0]", "[0=~~ 1=1 2=2 3=0]", "[0=2 1=0 2=1 3=~~]",
                     "[0=2 1=0 2=~~ 3=1]", "[0=2 1=~~ 2=0 3=1]", "[0=~~ 1=2 2=0 3=1]"));
-        for (int i = 0; i < 24; i++)
+        for (int i = 0; i < 24; i++) {
             assertEquals(true, mappings10.remove(iter10.next().toString()));
+        }
         assertEquals(false, iter10.hasNext());
 
         /* ECS-11: isomorphic graphs */
@@ -394,8 +394,9 @@ public class VF2SubgraphIsomorphismInspectorTest
                     "[0=~~ 1=10 2=8 3=9 4=7 5=6]", "[0=~~ 1=8 2=9 3=10 4=7 5=6]",
                     "[0=~~ 1=9 2=10 3=8 4=7 5=6]", "[0=~~ 1=10 2=8 3=9 4=6 5=7]",
                     "[0=~~ 1=8 2=9 3=10 4=6 5=7]", "[0=~~ 1=9 2=10 3=8 4=6 5=7]"));
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 12; i++) {
             assertEquals(true, mappings12.remove(iter12.next().toString()));
+        }
         assertEquals(false, iter12.hasNext());
     }
 
@@ -862,8 +863,7 @@ public class VF2SubgraphIsomorphismInspectorTest
          */
 
         VF2SubgraphIsomorphismInspector<String, Integer> vf3 =
-            new VF2SubgraphIsomorphismInspector<>(
-                g1, g2, new VertexComp(), new AlwaysEqualComparator<>());
+            new VF2SubgraphIsomorphismInspector<>(g1, g2, new VertexComp(), (t1, t2) -> 0);
 
         Iterator<GraphMapping<String, Integer>> iter2 = vf3.getMappings();
 
@@ -878,8 +878,7 @@ public class VF2SubgraphIsomorphismInspectorTest
          */
 
         VF2SubgraphIsomorphismInspector<String, Integer> vf4 =
-            new VF2SubgraphIsomorphismInspector<>(
-                g1, g2, new AlwaysEqualComparator<>(), new EdgeComp());
+            new VF2SubgraphIsomorphismInspector<>(g1, g2, (t1, t2) -> 0, new EdgeComp());
 
         Iterator<GraphMapping<String, Integer>> iter3 = vf4.getMappings();
 
@@ -897,10 +896,11 @@ public class VF2SubgraphIsomorphismInspectorTest
         @Override
         public int compare(String o1, String o2)
         {
-            if (o1.toLowerCase().equals(o2.toLowerCase()))
+            if (o1.toLowerCase().equals(o2.toLowerCase())) {
                 return 0;
-            else
+            } else {
                 return 1;
+            }
         }
     }
 

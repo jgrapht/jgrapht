@@ -33,7 +33,13 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Linda Buisman
+ * @deprecated use a lambda like
+ *             {@code (v1,v2) -> Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2))} for
+ *             ascending order or like
+ *             {@code (v1,v2) -> -Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2))} for
+ *             descending order
  */
+@Deprecated(forRemoval = true, since = "1.5.1")
 public class VertexDegreeComparator<V, E>
     implements
     Comparator<V>
@@ -46,7 +52,7 @@ public class VertexDegreeComparator<V, E>
     {
         ASCENDING,
         DESCENDING
-    };
+    }
 
     /**
      * The graph that contains the vertices to be compared.
@@ -96,9 +102,10 @@ public class VertexDegreeComparator<V, E>
     {
         int comparison = Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2));
 
-        if (order == Order.ASCENDING)
+        if (order == Order.ASCENDING) {
             return comparison;
-        else
+        } else {
             return -1 * comparison;
+        }
     }
 }
