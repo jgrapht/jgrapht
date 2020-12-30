@@ -20,6 +20,7 @@ package org.jgrapht.alg.connectivity;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -77,8 +78,10 @@ abstract class AbstractStrongConnectivityInspector<V, E>
     {
         List<Set<V>> sets = stronglyConnectedSets();
 
-        Graph<Graph<V, E>, DefaultEdge> condensation = new SimpleDirectedGraph<>(DefaultEdge.class);
-        Map<V, Graph<V, E>> vertexToComponent = new HashMap<>();
+        Graph<Graph<V, E>, DefaultEdge> condensation =
+            new SimpleDirectedGraph<>(null, DefaultEdge::new, false);
+        Map<V, Graph<V, E>> vertexToComponent =
+            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         for (Set<V> set : sets) {
             Graph<V, E> component = new AsSubgraph<>(graph, set, null);
