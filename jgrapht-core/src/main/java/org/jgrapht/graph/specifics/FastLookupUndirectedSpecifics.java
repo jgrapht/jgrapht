@@ -49,7 +49,7 @@ public class FastLookupUndirectedSpecifics<V, E>
 
     /**
      * Construct a new fast lookup undirected specifics.
-     * 
+     *
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
@@ -88,10 +88,11 @@ public class FastLookupUndirectedSpecifics<V, E>
     {
         Set<E> edges =
             touchingVerticesToEdgeMap.get(new UnorderedPair<>(sourceVertex, targetVertex));
-        if (edges == null || edges.isEmpty())
+        if (edges == null || edges.isEmpty()) {
             return null;
-        else
+        } else {
             return edges.iterator().next();
+        }
     }
 
     @Override
@@ -141,7 +142,7 @@ public class FastLookupUndirectedSpecifics<V, E>
 
     /**
      * Add an edge to the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
@@ -149,19 +150,14 @@ public class FastLookupUndirectedSpecifics<V, E>
     protected void addToIndex(V sourceVertex, V targetVertex, E e)
     {
         Pair<V, V> vertexPair = new UnorderedPair<>(sourceVertex, targetVertex);
-        Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
-        if (edgeSet != null)
-            edgeSet.add(e);
-        else {
-            edgeSet = edgeSetFactory.createEdgeSet(sourceVertex);
-            edgeSet.add(e);
-            touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
-        }
+        Set<E> edgeSet = touchingVerticesToEdgeMap
+            .computeIfAbsent(vertexPair, p -> edgeSetFactory.createEdgeSet(sourceVertex));
+        edgeSet.add(e);
     }
 
     /**
      * Remove an edge from the index.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
@@ -169,12 +165,10 @@ public class FastLookupUndirectedSpecifics<V, E>
     protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
         Pair<V, V> vertexPair = new UnorderedPair<>(sourceVertex, targetVertex);
-        Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
-        if (edgeSet != null) {
+        touchingVerticesToEdgeMap.computeIfPresent(vertexPair, (p, edgeSet) -> {
             edgeSet.remove(e);
-            if (edgeSet.isEmpty())
-                touchingVerticesToEdgeMap.remove(vertexPair);
-        }
+            return !edgeSet.isEmpty() ? edgeSet : null; // remove if empty
+        });
     }
 
 }

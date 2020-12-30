@@ -317,11 +317,8 @@ public abstract class AbstractBaseGraph<V, E>
     {
         if (v == null) {
             throw new NullPointerException();
-        } else if (containsVertex(v)) {
-            return false;
         } else {
-            specifics.addVertex(v);
-            return true;
+            return specifics.addVertex(v);
         }
     }
 
@@ -580,8 +577,7 @@ public abstract class AbstractBaseGraph<V, E>
     {
         // override interface to avoid instantiating frequently
         if (graphIterables == null) {
-            graphIterables =
-                new DefaultGraphIterables<>(this);
+            graphIterables = new DefaultGraphIterables<>(this);
         }
         return graphIterables;
     }
