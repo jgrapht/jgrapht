@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Utility class to manage creation and shutting down instance
- * if the {@link ThreadPoolExecutor}.
+ * of the {@link ThreadPoolExecutor}.
  */
 public class ConcurrencyUtil {
     /**
@@ -40,14 +40,30 @@ public class ConcurrencyUtil {
 
     /**
      * Shuts down the {@code executor}. This operation puts the {@code service}
-     * into a state where every subsequented task to the {@code service} will be rejected.
+     * into a state where every subsequent task submitted to the {@code service}
+     * will be rejected. This method calls
+     * {@link #shutdownExecutionService(ExecutorService, long, TimeUnit)} with
+     * $time = Long.MAX_VALUE$ and $timeUnit = TimeUnit.MILLISECONDS$.
      *
      * @param service service to be shut down
      */
     public static void shutdownExecutionService(ExecutorService service) {
+        shutdownExecutionService(service,Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Shuts down the {@code executor}. This operation puts the {@code service}
+     * into a state where every subsequent task submitted to the {@code service}
+     * will be rejected.
+     *
+     * @param service service to be shut down
+     * @param time period of time to wait for the completion of the termination
+     * @param timeUnit time duration granularity for the provided {@code time}
+     */
+    public static void shutdownExecutionService(ExecutorService service, long time, TimeUnit timeUnit) {
         service.shutdown();
         try {
-            service.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+            service.awaitTermination(time, timeUnit);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

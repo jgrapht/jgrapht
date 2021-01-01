@@ -86,9 +86,7 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from outside. This algorithm does not manages the
- * lifecycle of the supplied executor instance. For auxiliary methods for creating and
- * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrencyUtil}.
+ * which is supplied to this algorithm from outside.
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
@@ -175,6 +173,9 @@ class TransitNodeRoutingPrecomputation<V, E> {
 
     /**
      * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param graph graph
      * @param executor executor which will be used for parallelization
@@ -186,6 +187,9 @@ class TransitNodeRoutingPrecomputation<V, E> {
 
     /**
      * Constructs an instance of the algorithm for the given {@code contractionHierarchy} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param hierarchy contraction hierarchy
      * @param executor executor which will be used for parallelization
@@ -195,8 +199,11 @@ class TransitNodeRoutingPrecomputation<V, E> {
     }
 
     /**
-     * Constructs an instance of the algorithm for a given
-     * {@code contractionHierarchy}, {@code numberOfTransitVertices} and {@code executor}.
+     * Constructs an instance of the algorithm for a given {@code contractionHierarchy},
+     * {@code numberOfTransitVertices} and {@code executor}. It is up to a user of this
+     * algorithm to handle the creation and termination of the provided {@code executor}.
+     * Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param hierarchy               contraction hierarchy
      * @param numberOfTransitVertices number of transit vertices
@@ -211,7 +218,9 @@ class TransitNodeRoutingPrecomputation<V, E> {
      * Constructs an instance of the algorithm for a given {@code contractionHierarchy},
      * {@code parallelism}, {@code numberOfTransitVertices}, {@code heapSupplier} and {@code executor}.
      * Heap provided by the {@code heapSupplier} is used which computing the
-     * Voronoi diagram.
+     * Voronoi diagram. It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param hierarchy               contraction hierarchy
      * @param numberOfTransitVertices number of transit vertices

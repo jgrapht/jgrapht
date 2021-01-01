@@ -17,18 +17,32 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jheaps.*;
-import org.jheaps.tree.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.MaskSubgraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.ConcurrencyUtil;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Parallel implementation of the <a href="https://en.wikipedia.org/wiki/Contraction_hierarchies">
@@ -69,10 +83,7 @@ import java.util.function.*;
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from outside. This algorithm does not manages the
- * lifecycle of the supplied executor instance. For auxiliary methods for creating and
- * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrencyUtil}.
- *
+ * which is supplied to this algorithm from outside.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -179,7 +190,7 @@ public class ContractionHierarchyPrecomputation<V, E>
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}.
      * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph graph
@@ -276,7 +287,7 @@ public class ContractionHierarchyPrecomputation<V, E>
      * {@code randomSupplier}, {@code shortcutsSearchHeapSupplier} and {@code executor}. Provided
      * {@code randomSupplier} should return different random generators instances, because they are
      * used by different threads. It is up to a user of this algorithm to handle the creation and
-     * termination of the provided {@code executor}. Utility methods to manage a
+     * termination of the provided {@code executor}. For utility methods to manage a
      * {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}.
      *
      * @param graph graph

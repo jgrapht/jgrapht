@@ -107,6 +107,9 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
 
     /**
      * Constructs a new instance for the given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param graph    graph
      * @param executor executor which will be used for computing {@code TransitNodeRouting}

@@ -64,9 +64,7 @@ import java.util.concurrent.*;
  *
  * <p>
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
- * which is supplied to this algorithm from outside. This algorithm does not manages the
- * lifecycle of the supplied executor instance. For auxiliary methods for creating and
- * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrencyUtil}.
+ * which is supplied to this algorithm from outside.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -161,7 +159,7 @@ public class DeltaSteppingShortestPath<V, E>
     /**
      * Constructs a new instance of the algorithm for a given graph and {@code executor}.
      * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph graph
@@ -188,7 +186,7 @@ public class DeltaSteppingShortestPath<V, E>
     /**
      * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}.
      * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph the graph

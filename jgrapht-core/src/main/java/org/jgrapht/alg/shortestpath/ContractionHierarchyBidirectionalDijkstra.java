@@ -127,7 +127,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}.
      * It is up to a user of this algorithm to handle the creation and termination of the
-     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
      * {@link ConcurrencyUtil}.
      *
      * @param graph the graph
