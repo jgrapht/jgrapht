@@ -20,6 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.*;
 import org.jheaps.tree.*;
 
@@ -112,14 +113,12 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
     private double radius;
 
     /**
-     * Constructs a new instance of the algorithm for a given {@code graph}. This constructor
-     * computes Contraction Hierarchy with an internal instance of {@link ThreadPoolExecutor}.
-     * This instance is not shut down after Contraction Hierarchy is computed. If you want to
-     * use a custom instance of {@link ThreadPoolExecutor} use
-     * {@link #ContractionHierarchyBidirectionalDijkstra(Graph, ThreadPoolExecutor)} instead.
+     * Constructs a new instance of the algorithm for a given {@code graph}.
      *
      * @param graph the graph
+     * @deprecated replaced with {@link #ContractionHierarchyBidirectionalDijkstra(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph)
     {
         this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
@@ -127,6 +126,9 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E>
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link ConcurrencyUtil}.
      *
      * @param graph the graph
      * @param executor executor which is used for computing the {@link ContractionHierarchy}

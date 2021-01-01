@@ -26,7 +26,7 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.ConcurrentUtil;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -62,12 +62,12 @@ public class TransitNodeRoutingShortestPathTest {
 
     @BeforeClass
     public static void createExecutor(){
-        executor = ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
     public static void shutdownExecutor(){
-        ConcurrentUtil.shutdownExecutionService(executor);
+        ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
     @Test

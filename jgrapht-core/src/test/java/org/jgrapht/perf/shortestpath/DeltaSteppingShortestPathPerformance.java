@@ -23,8 +23,6 @@ import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.*;
@@ -159,12 +157,12 @@ public class DeltaSteppingShortestPathPerformance
 
         @Setup
         public void createExecutor(){
-            executor = ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+            executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
         }
 
         @TearDown
         public void shutdownExecutor(){
-            ConcurrentUtil.shutdownExecutionService(executor);
+            ConcurrencyUtil.shutdownExecutionService(executor);
         }
 
         public abstract void generateGraph();

@@ -20,6 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.ConcurrencyUtil;
 
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -84,14 +85,12 @@ public class CHManyToManyShortestPaths<V, E>
     private Map<V, ContractionVertex<V>> contractionMapping;
 
     /**
-     * Constructs an instance of the algorithm for a given {@code graph}. This constructor
-     * computes Contraction Hierarchy with an internal instance of {@link ThreadPoolExecutor}.
-     * This instance is not shut down after Contraction Hierarchy is computed. If you want to
-     * use a custom instance of {@link ThreadPoolExecutor} please use
-     * {@link #CHManyToManyShortestPaths(Graph, ThreadPoolExecutor)} instead.
+     * Constructs an instance of the algorithm for a given {@code graph}.
      *
      * @param graph a graph
+     * @deprecated replaced with {@link #CHManyToManyShortestPaths(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public CHManyToManyShortestPaths(Graph<V, E> graph)
     {
         this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
@@ -99,6 +98,9 @@ public class CHManyToManyShortestPaths<V, E>
 
     /**
      * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link ConcurrencyUtil}.
      *
      * @param graph a graph
      * @param executor executor which will be used to compute {@link ContractionHierarchy}

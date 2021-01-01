@@ -25,7 +25,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 import org.jgrapht.util.CollectionUtil;
-import org.jgrapht.util.ConcurrentUtil;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
@@ -88,7 +88,7 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
  * which is supplied to this algorithm from outside. This algorithm does not manages the
  * lifecycle of the supplied executor instance. For auxiliary methods for creating and
- * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrentUtil}.
+ * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrencyUtil}.
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type

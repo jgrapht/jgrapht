@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * Utility class to manage creation and shutting down instance
  * if the {@link ThreadPoolExecutor}.
  */
-public class ConcurrentUtil {
+public class ConcurrencyUtil {
     /**
      * Creates a {@link ThreadPoolExecutor} with fixed number of threads which is
      * equal to {@code parallelism}.

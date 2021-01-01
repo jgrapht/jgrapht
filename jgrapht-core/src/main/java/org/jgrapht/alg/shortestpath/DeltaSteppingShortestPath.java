@@ -66,7 +66,7 @@ import java.util.concurrent.*;
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
  * which is supplied to this algorithm from outside. This algorithm does not manages the
  * lifecycle of the supplied executor instance. For auxiliary methods for creating and
- * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrentUtil}.
+ * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrencyUtil}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -147,21 +147,22 @@ public class DeltaSteppingShortestPath<V, E>
     private volatile boolean allVerticesAdded;
 
     /**
-     * Constructs a new instance of the algorithm for a given graph. This constructor initializes
-     * the algorithm with an instance of {@link ThreadPoolExecutor} which has the maximum number
-     * of threads set to {@code Runtime.getRuntime().availableProcessors()}. This executor will
-     * not be shut down by this algorithm. If you want to use a custom instance of {@link ThreadPoolExecutor}
-     * and be able to manage its lifecycle use {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)} instead.
+     * Constructs a new instance of the algorithm for a given graph.
      *
      * @param graph graph
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public DeltaSteppingShortestPath(Graph<V, E> graph)
     {
-        this(graph, ConcurrentUtil.createThreadPoolExecutor(DEFAULT_PARALLELISM));
+        this(graph, DEFAULT_PARALLELISM);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given graph and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link ConcurrencyUtil}.
      *
      * @param graph graph
      * @param executor executor which will be used for parallelization
@@ -172,23 +173,23 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, delta. This constructor
-     * initializes the algorithm with an instance of {@link ThreadPoolExecutor} which has the
-     * maximum number of threads set to {@code Runtime.getRuntime().availableProcessors()}.
-     * This executor will not be shut down by this algorithm. If you want to use a custom instance
-     * of {@link ThreadPoolExecutor} and be able to manage its lifecycle use
-     * {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)} instead.
+     * Constructs a new instance of the algorithm for a given graph, delta.
      *
      * @param graph the graph
      * @param delta bucket width
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
      */
+    @Deprecated
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta)
     {
-        this(graph, delta, ConcurrentUtil.createThreadPoolExecutor(DEFAULT_PARALLELISM));
+        this(graph, delta, DEFAULT_PARALLELISM);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given graph, delta and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link ConcurrencyUtil}.
      *
      * @param graph the graph
      * @param delta bucket width
@@ -201,16 +202,13 @@ public class DeltaSteppingShortestPath<V, E>
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, parallelism. This constructor
-     * initializes the algorithm with an instance of {@link ThreadPoolExecutor} which has the
-     * maximum number of threads set to {@code parallelism}. This executor will not be shut down by
-     * this algorithm. If you want to use a custom instance of {@link ThreadPoolExecutor} and be
-     * able to manage its lifecycle use {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)}
-     * instead.
+     * Constructs a new instance of the algorithm for a given graph, parallelism.
      *
      * @param graph the graph
      * @param parallelism maximum number of threads used in the computations
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public DeltaSteppingShortestPath(Graph<V, E> graph, int parallelism)
     {
         this(graph, 0.0, parallelism);
@@ -222,20 +220,18 @@ public class DeltaSteppingShortestPath<V, E>
      * $0.0$ it will be computed during the algorithm execution. In general if the value of
      * $\frac{maximum edge weight}{maximum outdegree}$ is known beforehand, it is preferable to
      * specify it via this constructor, because processing the whole graph to compute this value may
-     * significantly slow down the algorithm. This constructor initializes the algorithm with an instance
-     * of {@link ThreadPoolExecutor} which has the maximum number of threads set to {@code parallelism}.
-     * This executor will not be shut down by this algorithm. If you want to use a custom instance of
-     * {@link ThreadPoolExecutor} and be able to manage its lifecycle use
-     * {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)} instead.
+     * significantly slow down the algorithm.
      *
      * @param graph the graph
      * @param delta bucket width
      * @param parallelism maximum number of threads used in the computations
+     * @deprecated replaced with {@link #DeltaSteppingShortestPath(Graph, double, ThreadPoolExecutor)}
      */
+    @Deprecated
     public DeltaSteppingShortestPath(Graph<V, E> graph, double delta, int parallelism)
     {
         super(graph);
-        init(graph, delta, ConcurrentUtil.createThreadPoolExecutor(parallelism));
+        init(graph, delta, ConcurrencyUtil.createThreadPoolExecutor(parallelism));
     }
 
     /**

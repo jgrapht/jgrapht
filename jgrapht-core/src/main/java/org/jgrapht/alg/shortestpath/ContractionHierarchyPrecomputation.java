@@ -17,32 +17,18 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.MaskSubgraph;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.ConcurrentUtil;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.PairingHeap;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 /**
  * Parallel implementation of the <a href="https://en.wikipedia.org/wiki/Contraction_hierarchies">
@@ -85,7 +71,7 @@ import java.util.function.Supplier;
  * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
  * which is supplied to this algorithm from outside. This algorithm does not manages the
  * lifecycle of the supplied executor instance. For auxiliary methods for creating and
- * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrentUtil}.
+ * terminating the {@link ThreadPoolExecutor} please refer to {@link ConcurrencyUtil}.
  *
  *
  * @param <V> the graph vertex type
@@ -179,15 +165,12 @@ public class ContractionHierarchyPrecomputation<V, E>
     private Consumer<ContractionVertex<V>> markUpwardEdgesConsumer;
 
     /**
-     * Constructs a new instance of the algorithm for a given {@code graph}. This constructor
-     * initializes the algorithm with an instance of {@link ThreadPoolExecutor} which has the
-     * maximum number of threads set to {@code Runtime.getRuntime().availableProcessors()}.
-     * This executor will not be shut down by this algorithm. If you want to use a custom instance
-     * of {@link ThreadPoolExecutor} and be able to manage its lifecycle use
-     * {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)} instead.
+     * Constructs a new instance of the algorithm for a given {@code graph}.
      *
      * @param graph graph
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(Graph<V, E> graph)
     {
         this(graph, Runtime.getRuntime().availableProcessors());
@@ -195,6 +178,9 @@ public class ContractionHierarchyPrecomputation<V, E>
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link ConcurrencyUtil}.
      *
      * @param graph graph
      * @param executor executor which will be used for parallelization
@@ -206,15 +192,12 @@ public class ContractionHierarchyPrecomputation<V, E>
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and {@code parallelism}.
-     * This constructor initializes the algorithm with an instance of {@link ThreadPoolExecutor} which
-     * has the maximum number of threads set to {@code parallelism}. This executor will not be shut
-     * down by this algorithm. If you want to use a custom instance of {@link ThreadPoolExecutor}
-     * and be able to manage its lifecycle use
-     * {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)} instead.
      *
      * @param graph graph
      * @param parallelism maximum number of threads used in the computations
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism)
     {
         this(graph, parallelism, Random::new, PairingHeap::new);
@@ -224,25 +207,24 @@ public class ContractionHierarchyPrecomputation<V, E>
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and
      * {@code randomSupplier}. Provided {@code randomSupplier} should return different random
-     * generators instances, because they are used by different threads. This constructor
-     * initializes the algorithm with an instance of {@link ThreadPoolExecutor} which has the
-     * maximum number of threads set to {@code Runtime.getRuntime().availableProcessors()}.
-     * This executor will not be shut down by this algorithm. If you want to use a custom instance
-     * of {@link ThreadPoolExecutor} and be able to manage its lifecycle use
-     * {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)} instead.
+     * generators instances, because they are used by different threads.
      *
      * @param graph graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier)
     {
-        this(graph, randomSupplier, ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors()));
+        this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph}, {@code randomSupplier}
      * and {@code executor}. Provided {@code randomSupplier} should return different random
-     * generators instances, because they are used by different threads.
+     * generators instances, because they are used by different threads. It is up to a user of this
+     * algorithm to handle the creation and termination of the provided {@code executor}. Utility
+     * methods to manage a {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}.
      *
      * @param graph graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
@@ -255,49 +237,47 @@ public class ContractionHierarchyPrecomputation<V, E>
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph}, {@code parallelism} and
-     * {@code randomSupplier}. This constructor initializes the algorithm with an instance of
-     * {@link ThreadPoolExecutor} which has the maximum number of threads set to {@code parallelism}.
-     * This executor will not be shut down by this algorithm. If you want to use a custom instance of
-     * {@link ThreadPoolExecutor} and be able to manage its lifecycle use
-     * {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)} instead.
+     * {@code randomSupplier}.
      *
      * @param graph graph
      * @param parallelism maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(
         Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier)
     {
-        this(graph, randomSupplier, ConcurrentUtil.createThreadPoolExecutor(parallelism));
+        this(graph, parallelism, randomSupplier, PairingHeap::new);
     }
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph}, {@code parallelism},
-     * {@code randomSupplier} and {@code shortcutsSearchHeapSupplier}. Provided {@code randomSupplier}
-     * should return different random generators instances, because they are used by different threads.
-     * This constructor initializes the algorithm with an instance of {@link ThreadPoolExecutor} which
-     * has the maximum number of threads set to {@code parallelism}. This executor will not be shut down
-     * by this algorithm. If you want to use a custom instance of {@link ThreadPoolExecutor} and be able
-     * to manage its lifecycle use
-     * {@link #ContractionHierarchyPrecomputation(Graph, Supplier, Supplier, ThreadPoolExecutor)} instead.
+     * {@code randomSupplier} and {@code shortcutsSearchHeapSupplier}. Provided
+     * {@code randomSupplier} should return different random generators instances, because they are
+     * used by different threads.
      *
      * @param graph graph
      * @param parallelism maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, Supplier, Supplier, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(
         Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
         Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier)
     {
-        init(graph, randomSupplier, shortcutsSearchHeapSupplier, ConcurrentUtil.createThreadPoolExecutor(parallelism));
+        init(graph, randomSupplier, shortcutsSearchHeapSupplier, ConcurrencyUtil.createThreadPoolExecutor(parallelism));
     }
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph}, {@code parallelism},
      * {@code randomSupplier}, {@code shortcutsSearchHeapSupplier} and {@code executor}. Provided
      * {@code randomSupplier} should return different random generators instances, because they are
-     * used by different threads.
+     * used by different threads. It is up to a user of this algorithm to handle the creation and
+     * termination of the provided {@code executor}. Utility methods to manage a
+     * {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}.
      *
      * @param graph graph
      * @param randomSupplier supplier for preferable instances of {@link Random}

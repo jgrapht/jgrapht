@@ -49,12 +49,12 @@ public class ContractionHierarchyBidirectionalDijkstraTest
 
     @BeforeClass
     public static void createExecutor(){
-        executor = ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
     public static void shutdownExecutor(){
-        ConcurrentUtil.shutdownExecutionService(executor);
+        ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
     /**

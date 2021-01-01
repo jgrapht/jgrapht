@@ -20,7 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.ConcurrentUtil;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.junit.*;
 
 import java.util.*;
@@ -45,12 +45,12 @@ public class CHManyToManyShortestPathsTest
 
     @BeforeClass
     public static void createExecutor(){
-        executor = ConcurrentUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     @AfterClass
     public static void shutdownExecutor(){
-        ConcurrentUtil.shutdownExecutionService(executor);
+        ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
     @Test
