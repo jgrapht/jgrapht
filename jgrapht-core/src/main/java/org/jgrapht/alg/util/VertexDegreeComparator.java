@@ -33,21 +33,31 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Linda Buisman
- * @deprecated use a lambda like
- *             {@code (v1,v2) -> Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2))} for
- *             ascending order or like
- *             {@code (v1,v2) -> -Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2))} for
- *             descending order
+ *
  */
-@Deprecated(forRemoval = true, since = "1.5.1")
 public class VertexDegreeComparator<V, E>
     implements
     Comparator<V>
 {
+    /**
+     * Returns a {@link Comparator} that compares vertices by their degrees in the specified graph.
+     * <p>
+     * The comparator compares in ascending order of degrees (lower degree first). To obtain a
+     * comparator that compares in descending order call {@link Comparator#reversed()} on the
+     * returned comparator.
+     * </p>
+     *
+     * @param g graph with respect to which the degree is calculated.
+     */
+    public static <V> Comparator<V> of(Graph<V, ?> g)
+    {
+        return Comparator.comparingInt(g::degreeOf);
+    }
 
     /**
      * Order in which we sort the vertices: ascending vertex degree or descending vertex degree
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     public enum Order
     {
         ASCENDING,
@@ -57,11 +67,13 @@ public class VertexDegreeComparator<V, E>
     /**
      * The graph that contains the vertices to be compared.
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     private Graph<V, E> graph;
 
     /**
      * Order in which the vertices are sorted: ascending or descending
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     private Order order;
 
     /**
@@ -69,7 +81,9 @@ public class VertexDegreeComparator<V, E>
      * comparator compares in ascending order of degrees (lowest first).
      *
      * @param g graph with respect to which the degree is calculated.
+     * @deprecated use {@link VertexDegreeComparator#forGraph(Graph)}
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     public VertexDegreeComparator(Graph<V, E> g)
     {
         this(g, Order.ASCENDING);
@@ -80,7 +94,10 @@ public class VertexDegreeComparator<V, E>
      *
      * @param g graph with respect to which the degree is calculated.
      * @param order order in which the vertices are sorted (ascending or descending)
+     * @deprecated use {@link VertexDegreeComparator#forGraph(Graph)} for ascending order or
+     *             {@link Comparator#reversed() reverse the comparator } for descending order.
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     public VertexDegreeComparator(Graph<V, E> g, Order order)
     {
         graph = g;
@@ -98,6 +115,7 @@ public class VertexDegreeComparator<V, E>
      * v1</code> comes after <code>v2</code>, 0 if equal.
      */
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.1")
     public int compare(V v1, V v2)
     {
         int comparison = Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2));

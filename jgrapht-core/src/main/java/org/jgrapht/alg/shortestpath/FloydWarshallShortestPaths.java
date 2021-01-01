@@ -18,6 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -71,8 +72,7 @@ public class FloydWarshallShortestPaths<V, E>
          * vertex which has degree at least one and at least two.
          */
         this.vertices = new ArrayList<>(graph.vertexSet());
-        Collections
-            .sort(vertices, (v1, v2) -> Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2)));
+        Collections.sort(vertices, VertexDegreeComparator.of(graph));
         this.degrees = new ArrayList<>();
         this.vertexIndices = CollectionUtil.newHashMapWithExpectedSize(this.vertices.size());
 
