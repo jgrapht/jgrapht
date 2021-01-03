@@ -71,13 +71,14 @@ public class GridGraphGenerator<V, E>
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
-        Map<Integer, V> map = new TreeMap<>();
+        List<V> list = new ArrayList<>();
+        list.add(null); // add zero'th element to enable one based indices
 
         // Adding all vertices to the set
         int cornerCtr = 0;
         for (int i = 0; i < rows * cols; i++) {
             V vertex = target.addVertex();
-            map.put(i + 1, vertex);
+            list.add(vertex);
 
             boolean isCorner = (i == 0) || (i == (cols - 1)) || (i == (cols * (rows - 1)))
                 || (i == ((rows * cols) - 1));
@@ -91,11 +92,11 @@ public class GridGraphGenerator<V, E>
         // second addEdge call will return nothing; it will not add a the edge
         // at the opposite direction. For directed graph, edges in opposite
         // direction are also added.
-        for (int i : map.keySet()) {
-            for (int j : map.keySet()) {
+        for (int i = 1; i <= list.size(); i++) {
+            for (int j = 1; j <= list.size(); j++) {
                 if ((((i % cols) > 0) && ((i + 1) == j)) || ((i + cols) == j)) {
-                    target.addEdge(map.get(i), map.get(j));
-                    target.addEdge(map.get(j), map.get(i));
+                    target.addEdge(list.get(i), list.get(j));
+                    target.addEdge(list.get(j), list.get(i));
                 }
             }
         }

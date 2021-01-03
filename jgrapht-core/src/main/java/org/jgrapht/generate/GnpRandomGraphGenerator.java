@@ -18,7 +18,6 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -134,9 +133,10 @@ public class GnpRandomGraphGenerator<V, E>
 
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
-        Map<Integer, V> vertices = CollectionUtil.newHashMapWithExpectedSize(n);
+        List<V> vertices = new ArrayList<>(n);
+
         for (int i = 0; i < n; i++) {
-            vertices.put(i, target.addVertex());
+            vertices.add(target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n) {
@@ -151,11 +151,9 @@ public class GnpRandomGraphGenerator<V, E>
         for (int i = 0; i < n; i++) {
             for (int j = i; j < n; j++) {
 
-                if (i == j) {
-                    if (!createLoops) {
-                        // no self-loops
-                        continue;
-                    }
+                if (i == j && !createLoops) {
+                    // no self-loops
+                    continue;
                 }
 
                 V s = null;
@@ -167,16 +165,13 @@ public class GnpRandomGraphGenerator<V, E>
                     t = vertices.get(j);
                     target.addEdge(s, t);
                 }
-
-                if (isDirected) {
-                    // t->s
-                    if (rng.nextDouble() < p) {
-                        if (s == null) {
-                            s = vertices.get(i);
-                            t = vertices.get(j);
-                        }
-                        target.addEdge(t, s);
+                // t->s
+                if (isDirected && rng.nextDouble() < p) {
+                    if (s == null) {
+                        s = vertices.get(i);
+                        t = vertices.get(j);
                     }
+                    target.addEdge(t, s);
                 }
             }
         }
