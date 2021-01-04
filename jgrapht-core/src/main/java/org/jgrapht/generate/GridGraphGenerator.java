@@ -72,7 +72,6 @@ public class GridGraphGenerator<V, E>
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         List<V> list = new ArrayList<>();
-        list.add(null); // add zero'th element to enable one based indices
 
         // Adding all vertices to the set
         int cornerCtr = 0;
@@ -95,8 +94,8 @@ public class GridGraphGenerator<V, E>
         for (int i = 1; i <= list.size(); i++) {
             for (int j = 1; j <= list.size(); j++) {
                 if ((((i % cols) > 0) && ((i + 1) == j)) || ((i + cols) == j)) {
-                    target.addEdge(list.get(i), list.get(j));
-                    target.addEdge(list.get(j), list.get(i));
+                    target.addEdge(list.get(i - 1), list.get(j - 1));
+                    target.addEdge(list.get(j - 1), list.get(i - 1));
                 }
             }
         }
