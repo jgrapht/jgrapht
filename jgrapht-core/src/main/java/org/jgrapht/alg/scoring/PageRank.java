@@ -210,11 +210,12 @@ public final class PageRank<V, E>
         private Map<V, Integer> vertexIndexMap;
         private V[] vertexMap;
 
-        private double[] weights;
+        private double[] weightSum;
         private double[] curScore;
         private double[] nextScore;
         private int[] outDegree;
         private ArrayList<int[]> adjList;
+        private ArrayList<double[]> weightsList;
 
         @SuppressWarnings("unchecked")
         public Algorithm()
@@ -230,6 +231,7 @@ public final class PageRank<V, E>
             this.vertexIndexMap = new HashMap<>();
             this.vertexMap = (V[]) new Object[totalVertices];
             this.outDegree = new int[totalVertices];
+            this.adjList = new ArrayList<>(totalVertices);
 
             double initScore = 1.0d / totalVertices;
             int i = 0;
@@ -242,16 +244,28 @@ public final class PageRank<V, E>
             }
 
             if (isWeighted) {
-                this.weights = new double[totalVertices];
-                for (V v : graph.vertexSet()) {
-                    double sum = 0;
-                    for (E e : graph.outgoingEdgesOf(v)) {
-                        sum += graph.getEdgeWeight(e);
+                this.weightSum = new double[totalVertices];
+                this.weightsList = new ArrayList<>(totalVertices);
+
+                for (i = 0; i < totalVertices; i++) {
+                    V v = vertexMap[i];
+                    int[] inNeighbors = new int[graph.inDegreeOf(v)];
+                    double[] edgeWeights = new double[graph.inDegreeOf(v)];
+
+                    int j = 0;
+                    for (E e : graph.incomingEdgesOf(v)) {
+                        V w = Graphs.getOppositeVertex(graph, e, v);
+                        Integer mappedVertexId = vertexIndexMap.get(w);
+                        inNeighbors[j] = mappedVertexId;
+                        double edgeWeight = graph.getEdgeWeight(e);
+                        edgeWeights[j] += edgeWeight;
+                        weightSum[mappedVertexId] += edgeWeight;
+                        j++;
                     }
-                    weights[vertexIndexMap.get(v)] = sum;
+                    weightsList.add(edgeWeights);
+                    adjList.add(inNeighbors);
                 }
             } else {
-                this.adjList = new ArrayList<>(totalVertices);
                 for (i = 0; i < totalVertices; i++) {
                     V v = vertexMap[i];
                     int[] inNeighbors = new int[graph.inDegreeOf(v)];
@@ -320,14 +334,13 @@ public final class PageRank<V, E>
 
                 maxChange = 0d;
                 for (int i = 0; i < totalVertices; i++) {
-                    V v = vertexMap[i];
                     double contribution = 0d;
 
-                    for (E e : graph.incomingEdgesOf(v)) {
-                        V w = Graphs.getOppositeVertex(graph, e, v);
-                        int wIndex = vertexIndexMap.get(w);
-                        contribution += dampingFactor * curScore[wIndex] * graph.getEdgeWeight(e)
-                            / weights[wIndex];
+                    int[] neighbors = adjList.get(i);
+                    double[] weights = weightsList.get(i);
+                    for (int j = 0, getLength = neighbors.length; j < getLength; j++) {
+                        int w = neighbors[j];
+                        contribution += dampingFactor * curScore[w] * weights[j] / weightSum[w];
                     }
 
                     double vOldValue = curScore[i];
