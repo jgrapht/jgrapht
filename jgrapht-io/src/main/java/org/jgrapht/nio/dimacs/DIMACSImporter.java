@@ -188,13 +188,13 @@ public class DIMACSImporter<V, E>
 
         public final Consumer<Triple<Integer, Integer, Double>> edgeConsumer = t -> {
             int source = t.getFirst();
-            V from = list.get(source - 1);
+            V from = getElement(list, source - 1);
             if (from == null) {
                 throw new ImportException("Node " + source + " does not exist");
             }
 
             int target = t.getSecond();
-            V to = list.get(target - 1);
+            V to = getElement(list, target - 1);
             if (to == null) {
                 throw new ImportException("Node " + target + " does not exist");
             }
@@ -208,6 +208,11 @@ public class DIMACSImporter<V, E>
             notifyEdge(e);
         };
 
+    }
+
+    private static <E> E getElement(List<E> list, int index)
+    {
+        return index < list.size() ? list.get(index) : null;
     }
 
 }
