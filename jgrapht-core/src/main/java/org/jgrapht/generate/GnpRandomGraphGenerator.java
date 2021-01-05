@@ -151,9 +151,11 @@ public class GnpRandomGraphGenerator<V, E>
         for (int i = 0; i < n; i++) {
             for (int j = i; j < n; j++) {
 
-                if (i == j && !createLoops) {
-                    // no self-loops
-                    continue;
+                if (i == j) {
+                    if (!createLoops) {
+                        // no self-loops
+                        continue;
+                    }
                 }
 
                 V s = null;
@@ -165,13 +167,16 @@ public class GnpRandomGraphGenerator<V, E>
                     t = vertices.get(j);
                     target.addEdge(s, t);
                 }
-                // t->s
-                if (isDirected && rng.nextDouble() < p) {
-                    if (s == null) {
-                        s = vertices.get(i);
-                        t = vertices.get(j);
+
+                if (isDirected) {
+                    // t->s
+                    if (rng.nextDouble() < p) {
+                        if (s == null) {
+                            s = vertices.get(i);
+                            t = vertices.get(j);
+                        }
+                        target.addEdge(t, s);
                     }
-                    target.addEdge(t, s);
                 }
             }
         }

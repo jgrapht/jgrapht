@@ -273,8 +273,10 @@ public class GnmRandomGraphGenerator<V, E>
                     }
                 }
             } else {
-                if (createMultipleEdges && n > 1) {
-                    return Integer.MAX_VALUE;
+                if (createMultipleEdges) {
+                    if (n > 1) {
+                        return Integer.MAX_VALUE;
+                    }
                 }
             }
         } catch (ArithmeticException e) {

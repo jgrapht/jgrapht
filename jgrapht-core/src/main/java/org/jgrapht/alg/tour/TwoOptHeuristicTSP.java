@@ -223,7 +223,6 @@ public class TwoOptHeuristicTSP<V, E>
         this.revIndex = vertex2index.getIndexList();
 
         for (E e : graph.edgeSet()) {
-
             V s = graph.getEdgeSource(e);
             int si = index.get(s);
             V t = graph.getEdgeTarget(e);

@@ -200,11 +200,10 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
      */
     public Set<V> getFirstPartition()
     {
-        if (partitionA.size() <= partitionB.size()) {
+        if (partitionA.size() <= partitionB.size())
             return new LinkedHashSet<>(partitionA);
-        } else {
+        else
             return new LinkedHashSet<>(partitionB);
-        }
     }
 
     /**
@@ -215,11 +214,10 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
      */
     public Set<V> getSecondPartition()
     {
-        if (partitionB.size() >= partitionA.size()) {
+        if (partitionB.size() >= partitionA.size())
             return new LinkedHashSet<>(partitionB);
-        } else {
+        else
             return new LinkedHashSet<>(partitionA);
-        }
     }
 
 }

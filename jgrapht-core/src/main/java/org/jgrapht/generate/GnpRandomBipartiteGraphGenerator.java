@@ -154,9 +154,11 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
                     target.addEdge(s, t);
                 }
 
-                // t->s
-                if (isDirected && rng.nextDouble() < p) {
-                    target.addEdge(t, s);
+                if (isDirected) {
+                    // t->s
+                    if (rng.nextDouble() < p) {
+                        target.addEdge(t, s);
+                    }
                 }
             }
         }
@@ -171,11 +173,10 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
      */
     public Set<V> getFirstPartition()
     {
-        if (partitionA.size() <= partitionB.size()) {
+        if (partitionA.size() <= partitionB.size())
             return new LinkedHashSet<>(partitionA);
-        } else {
+        else
             return new LinkedHashSet<>(partitionB);
-        }
     }
 
     /**
@@ -186,11 +187,10 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
      */
     public Set<V> getSecondPartition()
     {
-        if (partitionB.size() >= partitionA.size()) {
+        if (partitionB.size() >= partitionA.size())
             return new LinkedHashSet<>(partitionB);
-        } else {
+        else
             return new LinkedHashSet<>(partitionA);
-        }
     }
 
 }

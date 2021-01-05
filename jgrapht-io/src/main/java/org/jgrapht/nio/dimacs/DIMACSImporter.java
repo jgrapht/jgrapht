@@ -90,6 +90,7 @@ public class DIMACSImporter<V, E>
      */
     public DIMACSImporter(double defaultWeight)
     {
+        super();
         this.defaultWeight = defaultWeight;
     }
 
@@ -214,5 +215,4 @@ public class DIMACSImporter<V, E>
     {
         return index < list.size() ? list.get(index) : null;
     }
-
 }

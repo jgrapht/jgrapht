@@ -83,17 +83,15 @@ public class ChinesePostman<V, E>
         GraphTests.requireDirectedOrUndirected(graph);
 
         // If graph has no vertices, or no edges, instantly return.
-        if (graph.vertexSet().isEmpty() || graph.edgeSet().isEmpty()) {
+        if (graph.vertexSet().isEmpty() || graph.edgeSet().isEmpty())
             return new HierholzerEulerianCycle<V, E>().getEulerianCycle(graph);
-        }
 
         assert GraphTests.isStronglyConnected(graph);
 
-        if (graph.getType().isUndirected()) {
+        if (graph.getType().isUndirected())
             return solveCPPUndirected(graph);
-        } else {
+        else
             return solveCPPDirected(graph);
-        }
 
     }
 
@@ -130,9 +128,8 @@ public class ChinesePostman<V, E>
 
         for (V u : oddDegreeVertices) {
             for (V v : oddDegreeVertices) {
-                if (u == v) {
+                if (u == v)
                     continue;
-                }
                 Graphs
                     .addEdge(
                         auxGraph, u, v, shortestPaths.get(new UnorderedPair<>(u, v)).getWeight());
@@ -177,16 +174,14 @@ public class ChinesePostman<V, E>
         for (V v : graph.vertexSet()) {
             int imbalance = graph.outDegreeOf(v) - graph.inDegreeOf(v);
 
-            if (imbalance == 0) {
+            if (imbalance == 0)
                 continue;
-            }
             imbalancedVertices.put(v, Math.abs(imbalance));
 
-            if (imbalance < 0) {
+            if (imbalance < 0)
                 negImbalancedVertices.add(v);
-            } else {
+            else
                 postImbalancedVertices.add(v);
-            }
         }
 
         // 2. Compute all pairwise shortest paths from the negative imbalanced vertices to the

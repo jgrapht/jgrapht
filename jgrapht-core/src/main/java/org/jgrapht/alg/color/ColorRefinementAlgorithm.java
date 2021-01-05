@@ -236,8 +236,8 @@ public class ColorRefinementAlgorithm<V, E>
 
         // Update colors classes if some color has changed
         for (V v : positiveDegreeColorClasses) {
-            Integer value = newMapping[rep.colorDegree.get(v)];
-            if (!value.equals(color)) {
+            int value = newMapping[rep.colorDegree.get(v)];
+            if (value != color.intValue()) {
                 rep.colorClasses.get(color).remove(v);
                 rep.colorClasses.get(value).add(v);
                 rep.coloring.replace(v, value);

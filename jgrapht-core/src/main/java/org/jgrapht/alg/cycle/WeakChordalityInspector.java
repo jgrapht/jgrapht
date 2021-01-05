@@ -165,7 +165,7 @@ public class WeakChordalityInspector<V, E>
             List<Pair<List<Pair<Integer, Integer>>, E>> globalSeparatorList =
                 computeGlobalSeparatorList();
 
-            if (!globalSeparatorList.isEmpty()) {
+            if (globalSeparatorList.size() > 0) {
                 Pair<Integer, Integer> pair;
                 sortSeparatorsList(globalSeparatorList);
 
@@ -402,7 +402,7 @@ public class WeakChordalityInspector<V, E>
         bucketsByLabel.set(0, unvisited);
         int minLabel = 0;
 
-        while (!unvisited.isEmpty()) {
+        while (unvisited.size() > 0) {
             List<Integer> coConnectedComponent = new ArrayList<>();
             do {
                 // When minLabel = coConnectedComponent.size(), we've visited all vertices in some
