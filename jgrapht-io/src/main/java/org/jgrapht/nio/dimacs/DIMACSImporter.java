@@ -159,11 +159,12 @@ public class DIMACSImporter<V, E>
     private class Consumers
     {
         private Graph<V, E> graph;
-        private final List<V> list = new ArrayList<>();
+        private List<V> list;
 
         public Consumers(Graph<V, E> graph)
         {
             this.graph = graph;
+            this.list = new ArrayList<>();
         }
 
         public final Consumer<Integer> nodeCountConsumer = n -> {
