@@ -115,10 +115,10 @@ public class DirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
-            DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
+        DirectedEdgeContainer<V, E> sourceEC = vertexMap.get(sourceVertex);
+        if (sourceEC != null && vertexMap.containsKey(targetVertex)) {
 
-            for (E e : ec.outgoing) {
+            for (E e : sourceEC.outgoing) {
                 if (graph.getEdgeTarget(e).equals(targetVertex)) {
                     return e;
                 }

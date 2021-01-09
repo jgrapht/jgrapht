@@ -115,9 +115,10 @@ public class UndirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
+        UndirectedEdgeContainer<V, E> sourceEC = vertexMap.get(sourceVertex);
+        if (sourceEC != null && vertexMap.containsKey(targetVertex)) {
 
-            for (E e : getEdgeContainer(sourceVertex).vertexEdges) {
+            for (E e : sourceEC.vertexEdges) {
                 boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
 
                 if (equal) {
@@ -236,7 +237,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
+        return edgesOf(vertex);
     }
 
     /**
@@ -254,7 +255,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
+        return edgesOf(vertex);
     }
 
     /**

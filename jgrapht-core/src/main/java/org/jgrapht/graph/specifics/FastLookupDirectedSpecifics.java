@@ -96,9 +96,12 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        if (!super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)) {
-            return false;
-        }
+        Pair<V, V> pair = new Pair<>(sourceVertex, targetVertex);
+        Set<E> edgeSet = touchingVerticesToEdgeMap
+            .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
+
+        super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+        edgeSet.add(e);
         addToIndex(sourceVertex, targetVertex, e);
         return true;
     }
@@ -106,34 +109,51 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
     {
-        // first lookup using our own index
-        E edge = getEdge(sourceVertex, targetVertex);
-        if (edge != null) {
-            return false;
-        }
+        int previousSize = touchingVerticesToEdgeMap.size();
+        Pair<V, V> pair = new Pair<>(sourceVertex, targetVertex);
 
-        return addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+        Set<E> edgeSet = touchingVerticesToEdgeMap
+            .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
+
+        if (previousSize < touchingVerticesToEdgeMap.size()) { // new pair added to map
+            super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+            edgeSet.add(e);
+            addToIndex(sourceVertex, targetVertex, e);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public E createEdgeToTouchingVerticesIfAbsent(
         V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
     {
-        // first lookup using our own index
-        E edge = getEdge(sourceVertex, targetVertex);
-        if (edge != null) {
-            return null;
-        }
+        int previousSize = touchingVerticesToEdgeMap.size();
+        Pair<V, V> pair = new Pair<>(sourceVertex, targetVertex);
 
-        E e = edgeSupplier.get();
-        addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
-        return e;
+        Set<E> edgeSet = touchingVerticesToEdgeMap
+            .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
+
+        if (previousSize < touchingVerticesToEdgeMap.size()) { // new pair added to map
+            E e = edgeSupplier.get();
+            super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+            edgeSet.add(e);
+            addToIndex(sourceVertex, targetVertex, e);
+            return e;
+        }
+        return null;
     }
 
     @Override
     public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
         super.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+
+        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
+        touchingVerticesToEdgeMap.computeIfPresent(vertexPair, (p, edgeSet) -> {
+            edgeSet.remove(e);
+            return !edgeSet.isEmpty() ? edgeSet : null; // remove if empty
+        });
 
         removeFromIndex(sourceVertex, targetVertex, e);
     }
@@ -145,12 +165,10 @@ public class FastLookupDirectedSpecifics<V, E>
      * @param targetVertex the target vertex
      * @param e the edge
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     protected void addToIndex(V sourceVertex, V targetVertex, E e)
     {
-        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
-        Set<E> edgeSet = touchingVerticesToEdgeMap
-            .computeIfAbsent(vertexPair, p -> edgeSetFactory.createEdgeSet(sourceVertex));
-        edgeSet.add(e);
+        // TODO: Remove this after next release. Only kept for backward compatibility.
     }
 
     /**
@@ -160,13 +178,12 @@ public class FastLookupDirectedSpecifics<V, E>
      * @param targetVertex the target vertex
      * @param e the edge
      */
+    @Deprecated(forRemoval = true, since = "1.5.1")
     protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
-        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
-        touchingVerticesToEdgeMap.computeIfPresent(vertexPair, (p, edgeSet) -> {
-            edgeSet.remove(e);
-            return !edgeSet.isEmpty() ? edgeSet : null; // remove if empty
-        });
+        // TODO: Remove this after next release. Only kept for backward compatibility.
+        // Code of this method was in-lined into the only caller and deprecated to be consistent
+        // with addToIndex(V,V,E)
     }
 
 }
