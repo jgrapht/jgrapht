@@ -98,49 +98,37 @@ public class FastLookupUndirectedSpecifics<V, E>
     @Override
     public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
-        Pair<V, V> pair = new UnorderedPair<>(sourceVertex, targetVertex);
-        Set<E> edgeSet = touchingVerticesToEdgeMap
-            .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
-
-        super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
-        edgeSet.add(e);
-        addToIndex(sourceVertex, targetVertex, e);
+        addToTouchingVertices(sourceVertex, targetVertex, e, null, false);
         return true;
     }
 
     @Override
     public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
     {
-        int previousSize = touchingVerticesToEdgeMap.size();
-        Pair<V, V> pair = new UnorderedPair<>(sourceVertex, targetVertex);
-
-        Set<E> edgeSet = touchingVerticesToEdgeMap
-            .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
-
-        if (previousSize < touchingVerticesToEdgeMap.size()) { // new pair added to map
-            super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
-            edgeSet.add(e);
-            addToIndex(sourceVertex, targetVertex, e);
-            return true;
-        }
-        return false;
+        return addToTouchingVertices(sourceVertex, targetVertex, e, null, true) != null;
     }
 
     @Override
     public E createEdgeToTouchingVerticesIfAbsent(
         V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
     {
+        return addToTouchingVertices(sourceVertex, targetVertex, null, edgeSupplier, true);
+    }
+
+    private E addToTouchingVertices(
+        V source, V target, E edge, Supplier<E> edgeSupplier, boolean addOnlyIfAbsent)
+    {
         int previousSize = touchingVerticesToEdgeMap.size();
-        UnorderedPair<V, V> pair = new UnorderedPair<>(sourceVertex, targetVertex);
+        UnorderedPair<V, V> pair = new UnorderedPair<>(source, target);
 
         Set<E> edgeSet = touchingVerticesToEdgeMap
             .computeIfAbsent(pair, p -> edgeSetFactory.createEdgeSet(p.getFirst()));
 
-        if (previousSize < touchingVerticesToEdgeMap.size()) { // new pair added to map
-            E e = edgeSupplier.get();
-            super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+        if (!addOnlyIfAbsent || previousSize < touchingVerticesToEdgeMap.size()) { // new pair added
+            E e = edge != null ? edge : edgeSupplier.get();
+            super.addEdgeToTouchingVertices(source, target, e);
             edgeSet.add(e);
-            addToIndex(sourceVertex, targetVertex, e);
+            addToIndex(source, target, e);
             return e;
         }
         return null;
