@@ -55,7 +55,7 @@ public class JaccardCoefficientLinkPredictionTest
         assertEquals(1d/6, alg.predict(3, 2), 1e-9);
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
     public void testInvalidPrediction()
     {
         Graph<Integer,

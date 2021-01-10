@@ -27,7 +27,7 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Tests for {@link SørensenIndexLinkPrediction}
+ * Tests for class SørensenIndexLinkPrediction
  *
  * @author Dimitrios Michail
  */
@@ -68,7 +68,7 @@ public class SørensenIndexLinkPredictionTest
         assertArrayEquals(expected, scores, 1e-9);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
     public void testInvalidPrediction()
     {
         Graph<Integer,

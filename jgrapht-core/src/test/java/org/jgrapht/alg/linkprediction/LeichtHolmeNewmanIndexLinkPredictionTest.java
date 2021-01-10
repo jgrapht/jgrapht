@@ -69,7 +69,7 @@ public class LeichtHolmeNewmanIndexLinkPredictionTest
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = LinkPredictionIndexNotWellDefinedException.class)
     public void testInvalidPrediction()
     {
         Graph<Integer,
