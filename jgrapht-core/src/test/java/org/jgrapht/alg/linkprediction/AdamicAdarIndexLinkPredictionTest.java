@@ -19,14 +19,20 @@ package org.jgrapht.alg.linkprediction;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgrapht.Graph;
+import org.jgrapht.TestUtil;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Tests
+ * Tests for {@link AdamicAdarIndexLinkPrediction}
  *
  * @author Dimitrios Michail
  */
@@ -41,18 +47,10 @@ public class AdamicAdarIndexLinkPredictionTest
                 .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        for (int i = 0; i < 6; i++)
-            g.addVertex(i);
-
-        g.addEdge(0, 1);
-        g.addEdge(0, 3);
-        g.addEdge(1, 2);
-        g.addEdge(1, 4);
-        g.addEdge(2, 3);
-        g.addEdge(2, 4);
-        g.addEdge(3, 4);
-        g.addEdge(3, 5);
-        g.addEdge(4, 5);
+        TestUtil
+            .constructGraph(
+                g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
+                    { 3, 4 }, { 3, 5 }, { 4, 5 } });
 
         AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
             new AdamicAdarIndexLinkPrediction<>(g);
@@ -77,6 +75,43 @@ public class AdamicAdarIndexLinkPredictionTest
 
     }
 
+    @Test
+    public void testPredictionWithListOfPairs()
+    {
+        Graph<Integer,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
+
+        TestUtil
+            .constructGraph(
+                g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
+                    { 3, 4 }, { 3, 5 }, { 4, 5 } });
+
+        AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
+            new AdamicAdarIndexLinkPrediction<>(g);
+
+        List<Pair<Integer, Integer>> queries = new ArrayList<>();
+        for (int u : g.vertexSet()) {
+            for (int v : g.vertexSet()) {
+                if (u >= v || g.containsEdge(u, v)) {
+                    continue;
+                }
+                queries.add(Pair.of(u, v));
+            }
+
+        }
+
+        List<Triple<Integer, Integer, Double>> predictions = alg.predict(queries);
+        double[] scores = predictions.stream().mapToDouble(x -> x.getThird()).toArray();
+
+        double[] expected = { 1.631586747071319, 1.631586747071319, 0.7213475204444817,
+            3.074281787960283, 0.7213475204444817, 1.4426950408889634 };
+
+        assertArrayEquals(expected, scores, 1e-9);
+
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidPrediction()
     {
@@ -85,12 +120,7 @@ public class AdamicAdarIndexLinkPredictionTest
                 .directed().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        g.addVertex(0);
-        g.addVertex(1);
-        g.addVertex(2);
-
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
+        TestUtil.constructGraph(g, new int[][] { { 0, 2 }, { 1, 2 } });
 
         AdamicAdarIndexLinkPrediction<Integer, DefaultEdge> alg =
             new AdamicAdarIndexLinkPrediction<>(g);

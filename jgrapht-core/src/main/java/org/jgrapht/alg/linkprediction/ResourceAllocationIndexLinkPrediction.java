@@ -25,6 +25,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
+import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Resource Allocation Index.
@@ -78,7 +79,8 @@ public class ResourceAllocationIndexLinkPrediction<V, E>
         for (V z : intersection) {
             int dz = graph.outDegreeOf(z);
             if (dz == 0) {
-                throw new IllegalArgumentException("Index not well defined");
+                throw new LinkPredictionIndexNotWellDefinedException(
+                    "Index not well defined", Pair.of(u, v));
             }
             result += 1d / dz;
         }

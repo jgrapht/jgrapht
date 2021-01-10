@@ -25,6 +25,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
+import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Salton Index, also called the cosine similarity.
@@ -72,7 +73,8 @@ public class SaltonIndexLinkPrediction<V, E>
         int dv = graph.outDegreeOf(v);
 
         if (du == 0 || dv == 0) {
-            throw new IllegalArgumentException("Query vertex with zero neighbors");
+            throw new LinkPredictionIndexNotWellDefinedException(
+                "Query vertex with zero neighbors", Pair.of(u, v));
         }
 
         List<V> gu = Graphs.successorListOf(graph, u);

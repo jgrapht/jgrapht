@@ -20,13 +20,14 @@ package org.jgrapht.alg.linkprediction;
 import static org.junit.Assert.assertArrayEquals;
 
 import org.jgrapht.Graph;
+import org.jgrapht.TestUtil;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 /**
- * Tests
+ * Tests for {@link SaltonIndexLinkPrediction}
  *
  * @author Dimitrios Michail
  */
@@ -41,18 +42,10 @@ public class SaltonIndexLinkPredictionTest
                 .undirected().weighted(false).vertexSupplier(SupplierUtil.createIntegerSupplier())
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER).buildGraph();
 
-        for (int i = 0; i < 6; i++)
-            g.addVertex(i);
-
-        g.addEdge(0, 1);
-        g.addEdge(0, 3);
-        g.addEdge(1, 2);
-        g.addEdge(1, 4);
-        g.addEdge(2, 3);
-        g.addEdge(2, 4);
-        g.addEdge(3, 4);
-        g.addEdge(3, 5);
-        g.addEdge(4, 5);
+        TestUtil
+        .constructGraph(
+            g, new int[][] { { 0, 1 }, { 0, 3 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 4 },
+                { 3, 4 }, { 3, 5 }, { 4, 5 } });
 
         SaltonIndexLinkPrediction<Integer, DefaultEdge> alg = new SaltonIndexLinkPrediction<>(g);
 

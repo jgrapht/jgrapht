@@ -30,7 +30,7 @@ import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
  * Predict links using the number of common neighbors.
  * 
  * <p>
- * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))| where for a node $v$,
+ * This is a local method which computes $s_{xy} = |\Gamma(u)\cap\Gamma(v))|$ where for a node $v$,
  * $\Gamma(v)$ denotes the set of neighbors of $v$.
  * </p>
  * 
@@ -73,7 +73,7 @@ public class CommonNeighborsLinkPrediction<V, E>
         Set<V> intersection = new HashSet<>(gu);
         intersection.retainAll(gv);
 
-        return (double) intersection.size();
+        return intersection.size();
     }
 
 }

@@ -25,6 +25,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.LinkPredictionAlgorithm;
+import org.jgrapht.alg.util.Pair;
 
 /**
  * Predict links using the Jaccard coefficient.
@@ -78,7 +79,8 @@ public class JaccardCoefficientLinkPrediction<V, E>
         Set<V> union = new HashSet<>(gu);
         union.addAll(gv);
         if (union.isEmpty()) {
-            throw new IllegalArgumentException("Query nodes have no neighbor in common");
+            throw new LinkPredictionIndexNotWellDefinedException(
+                "Query nodes have no neighbor in common", Pair.of(u, v));
         }
 
         Set<V> intersection = new HashSet<>(gu);
