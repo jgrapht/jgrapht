@@ -51,22 +51,24 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
     }
 
     @Override
-    public boolean add(E edge, V sourceVertex, V targetVertex)
+    public boolean add(E e, V sourceVertex, V targetVertex)
     {
-        int previousSize = edgeMap.size();
-        IntrusiveEdge intrusiveEdge = edgeMap.computeIfAbsent(edge, e -> {
-            if (e instanceof IntrusiveEdge) {
-                return (IntrusiveEdge) e;
-            } else {
-                return new IntrusiveEdge();
-            }
-        });
-        if (previousSize < edgeMap.size()) { // edge was added to the map
-            intrusiveEdge.source = sourceVertex;
-            intrusiveEdge.target = targetVertex;
-            return true;
+        if (edgeMap.containsKey(e)) {
+            return false;
         }
-        return false;
+
+        IntrusiveEdge intrusiveEdge;
+        if (e instanceof IntrusiveEdge) {
+            intrusiveEdge = (IntrusiveEdge) e;
+        } else {
+            intrusiveEdge = new IntrusiveEdge();
+        }
+
+        intrusiveEdge.source = sourceVertex;
+        intrusiveEdge.target = targetVertex;
+
+        edgeMap.put(e, intrusiveEdge);
+        return true;
     }
 
     @Override

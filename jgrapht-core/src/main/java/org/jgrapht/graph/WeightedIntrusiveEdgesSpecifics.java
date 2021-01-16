@@ -51,23 +51,24 @@ public class WeightedIntrusiveEdgesSpecifics<V, E>
     }
 
     @Override
-    public boolean add(E edge, V sourceVertex, V targetVertex)
+    public boolean add(E e, V sourceVertex, V targetVertex)
     {
-        int previousSize = edgeMap.size();
-        IntrusiveWeightedEdge intrusiveEdge = edgeMap.computeIfAbsent(edge, e -> {
-            if (e instanceof IntrusiveWeightedEdge) {
-                return (IntrusiveWeightedEdge) e;
-            } else {
-                return new IntrusiveWeightedEdge();
-            }
-        });
-
-        if (previousSize < edgeMap.size()) { // edge was added to the map
-            intrusiveEdge.source = sourceVertex;
-            intrusiveEdge.target = targetVertex;
-            return true;
+        if (edgeMap.containsKey(e)) {
+            return false;
         }
-        return false;
+
+        IntrusiveWeightedEdge intrusiveEdge;
+        if (e instanceof IntrusiveWeightedEdge) {
+            intrusiveEdge = (IntrusiveWeightedEdge) e;
+        } else {
+            intrusiveEdge = new IntrusiveWeightedEdge();
+        }
+
+        intrusiveEdge.source = sourceVertex;
+        intrusiveEdge.target = targetVertex;
+
+        edgeMap.put(e, intrusiveEdge);
+        return true;
     }
 
     @Override
