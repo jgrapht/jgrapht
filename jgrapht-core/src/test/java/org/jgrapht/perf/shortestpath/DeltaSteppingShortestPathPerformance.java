@@ -161,7 +161,7 @@ public class DeltaSteppingShortestPathPerformance
         }
 
         @TearDown
-        public void shutdownExecutor(){
+        public void shutdownExecutor() throws InterruptedException {
             ConcurrencyUtil.shutdownExecutionService(executor);
         }
 

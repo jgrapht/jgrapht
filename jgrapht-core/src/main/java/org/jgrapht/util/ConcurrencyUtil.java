@@ -47,7 +47,7 @@ public class ConcurrencyUtil {
      *
      * @param service service to be shut down
      */
-    public static void shutdownExecutionService(ExecutorService service) {
+    public static void shutdownExecutionService(ExecutorService service) throws InterruptedException {
         shutdownExecutionService(service,Long.MAX_VALUE, TimeUnit.MILLISECONDS);
     }
 
@@ -60,12 +60,8 @@ public class ConcurrencyUtil {
      * @param time period of time to wait for the completion of the termination
      * @param timeUnit time duration granularity for the provided {@code time}
      */
-    public static void shutdownExecutionService(ExecutorService service, long time, TimeUnit timeUnit) {
+    public static void shutdownExecutionService(ExecutorService service, long time, TimeUnit timeUnit) throws InterruptedException {
         service.shutdown();
-        try {
-            service.awaitTermination(time, timeUnit);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        service.awaitTermination(time, timeUnit);
     }
 }

@@ -53,7 +53,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
     }
 
     @AfterClass
-    public static void shutdownExecutor(){
+    public static void shutdownExecutor() throws InterruptedException {
         ConcurrencyUtil.shutdownExecutionService(executor);
     }
 
