@@ -51,24 +51,32 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
     }
 
     @Override
-    public boolean add(E e, V sourceVertex, V targetVertex)
+    public boolean add(E edge, V sourceVertex, V targetVertex)
     {
-        if (edgeMap.containsKey(e)) {
+        if (edge instanceof IntrusiveEdge) {
+            IntrusiveEdge e = (IntrusiveEdge) edge;
+            if (e.source == null && e.target == null) { // edge not yet in any graph
+                e.source = sourceVertex;
+                e.target = targetVertex;
+
+            } else if (e.source != sourceVertex || e.target != targetVertex) {
+                // Edge already contained in this or another graph but with different touching
+                // edges. Reject the edge to not reset the touching vertices of the edge.
+                // Changing the touching vertices causes major inconsistent behavior.
+                return false;
+            }
+            return edgeMap.putIfAbsent(edge, e) == null;
+
+        } else {
+            int previousSize = edgeMap.size();
+            IntrusiveEdge intrusiveEdge = edgeMap.computeIfAbsent(edge, e -> new IntrusiveEdge());
+            if (previousSize < edgeMap.size()) { // edge was added
+                intrusiveEdge.source = sourceVertex;
+                intrusiveEdge.target = targetVertex;
+                return true;
+            }
             return false;
         }
-
-        IntrusiveEdge intrusiveEdge;
-        if (e instanceof IntrusiveEdge) {
-            intrusiveEdge = (IntrusiveEdge) e;
-        } else {
-            intrusiveEdge = new IntrusiveEdge();
-        }
-
-        intrusiveEdge.source = sourceVertex;
-        intrusiveEdge.target = targetVertex;
-
-        edgeMap.put(e, intrusiveEdge);
-        return true;
     }
 
     @Override

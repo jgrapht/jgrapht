@@ -243,8 +243,14 @@ public abstract class AbstractBaseGraph<V, E>
         if (!type.isAllowingMultipleEdges()) {
             E e = specifics
                 .createEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
-            if (e != null && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-                return e;
+            if (e != null) {
+                if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                    return e;
+                } else {
+                    // edge is already contained in another graph with differing touching vertices
+                    // -> revert add to specifics
+                    specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+                }
             }
         } else {
             E e = edgeSupplier.get();
@@ -274,15 +280,19 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         if (!type.isAllowingMultipleEdges()) {
-            // check that second operation will succeed
+
             if (intrusiveEdgesSpecifics.containsEdge(e)) {
                 return false;
             }
             if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
                 return false;
             }
-            // cannot fail due to first check
-            intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+            if (!intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
+                // edge is already contained in another graph with differing touching vertices
+                // -> revert add to specifics
+                specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+                return false;
+            }
             return true;
         } else {
             if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
@@ -580,8 +590,7 @@ public abstract class AbstractBaseGraph<V, E>
     {
         // override interface to avoid instantiating frequently
         if (graphIterables == null) {
-            graphIterables =
-                new DefaultGraphIterables<>(this);
+            graphIterables = new DefaultGraphIterables<>(this);
         }
         return graphIterables;
     }
