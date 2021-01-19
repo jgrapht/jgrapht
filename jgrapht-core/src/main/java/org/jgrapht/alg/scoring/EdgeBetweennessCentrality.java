@@ -139,7 +139,7 @@ public class EdgeBetweennessCentrality<V, E>
                 singleVertex(v);
             }
             if (!graph.getType().isDirected()) {
-                scores.forEach((e, score) -> scores.put(e, score / 2));
+                scores.forEach((e, score) -> scores.put(e, score / 2d));
             }
             return scores;
         }
@@ -176,7 +176,7 @@ public class EdgeBetweennessCentrality<V, E>
 
                     // path counting
                     double wDistance = dist.get(w);
-                    if (wDistance == vDistance + 1) {
+                    if (Double.compare(wDistance,vDistance + 1d) == 0) {
                         long wCounter = sigma.get(w);
                         long vCounter = sigma.get(v);
                         long sum = wCounter + vCounter;
