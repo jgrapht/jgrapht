@@ -59,21 +59,21 @@ public class EdgeBetweennessCentralityTest
         g.addEdge("B", "C");
         g.addEdge("B", "D");
         g.addEdge("C", "D");
-        
+
         DefaultEdge e_D_E = g.addEdge("D", "E");
-        
+
         g.addEdge("E", "F");
         DefaultEdge e_E_G = g.addEdge("E", "G");
         g.addEdge("F", "G");
         g.addEdge("F", "H");
         g.addEdge("G", "H");
-        
+
         EdgeBetweennessCentrality<String, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g);
 
         assertEquals(16.0, ebc.getEdgeScore(e_D_E), 1e-9);
         assertEquals(7.5, ebc.getEdgeScore(e_E_G), 1e-9);
     }
-    
+
     @Test
     public void testUndirectedGraph2()
     {
@@ -83,10 +83,10 @@ public class EdgeBetweennessCentralityTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
-        for(int i = 1; i < 15; i++) { 
+        for (int i = 1; i < 15; i++) {
             g.addVertex(i);
         }
-        
+
         g.addEdge(1, 2);
         g.addEdge(1, 3);
         g.addEdge(2, 3);
@@ -104,15 +104,15 @@ public class EdgeBetweennessCentralityTest
         g.addEdge(12, 14);
         g.addEdge(10, 11);
         DefaultEdge e13_14 = g.addEdge(13, 14);
-        
+
         EdgeBetweennessCentrality<Integer, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g);
-        
+
         assertEquals(33.0, ebc.getEdgeScore(e3_7), 1e-9);
         assertEquals(49.0, ebc.getEdgeScore(e7_8), 1e-9);
         assertEquals(12.0, ebc.getEdgeScore(e9_11), 1e-9);
         assertEquals(1.0, ebc.getEdgeScore(e13_14), 1e-9);
     }
-    
+
     @Test
     public void testDirectedGraph3()
     {
@@ -122,10 +122,10 @@ public class EdgeBetweennessCentralityTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
-        for(int i = 1; i < 15; i++) { 
+        for (int i = 1; i < 15; i++) {
             g.addVertex(i);
         }
-        
+
         g.addEdge(1, 2);
         g.addEdge(1, 3);
         g.addEdge(2, 3);
@@ -143,15 +143,15 @@ public class EdgeBetweennessCentralityTest
         g.addEdge(12, 14);
         g.addEdge(10, 11);
         DefaultEdge e13_14 = g.addEdge(13, 14);
-        
+
         EdgeBetweennessCentrality<Integer, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g);
-        
+
         assertEquals(24.0, ebc.getEdgeScore(e3_7), 1e-9);
         assertEquals(49.0, ebc.getEdgeScore(e7_8), 1e-9);
         assertEquals(9.0, ebc.getEdgeScore(e9_11), 1e-9);
         assertEquals(1.0, ebc.getEdgeScore(e13_14), 1e-9);
     }
-    
+
     @Test
     public void testDirectedGraph3Subset()
     {
@@ -161,10 +161,10 @@ public class EdgeBetweennessCentralityTest
                 .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
 
-        for(int i = 1; i < 15; i++) { 
+        for (int i = 1; i < 15; i++) {
             g.addVertex(i);
         }
-        
+
         g.addEdge(1, 2);
         g.addEdge(1, 3);
         g.addEdge(2, 3);
@@ -182,13 +182,58 @@ public class EdgeBetweennessCentralityTest
         g.addEdge(12, 14);
         g.addEdge(10, 11);
         DefaultEdge e13_14 = g.addEdge(13, 14);
-        
-        EdgeBetweennessCentrality<Integer, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g, OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW, List.of(1, 2, 4, 11));
-        
+
+        EdgeBetweennessCentrality<Integer, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(
+            g, OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW, List.of(1, 2, 4, 11));
+
         assertEquals(16.0, ebc.getEdgeScore(e3_7), 1e-9);
         assertEquals(21.0, ebc.getEdgeScore(e7_8), 1e-9);
         assertEquals(3.0, ebc.getEdgeScore(e9_11), 1e-9);
         assertEquals(0.0, ebc.getEdgeScore(e13_14), 1e-9);
+    }
+
+    @Test
+    public void testUndirectedGraphWithWeights()
+    {
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(true)
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+                .vertexSupplier(SupplierUtil.createStringSupplier()).buildGraph();
+
+        g.addVertex("A");
+        g.addVertex("B");
+        g.addVertex("C");
+        g.addVertex("D");
+        g.addVertex("E");
+        g.addVertex("F");
+        g.addVertex("G");
+        g.addVertex("H");
+
+        g.addEdge("A", "B");
+        g.addEdge("A", "C");
+        g.addEdge("A", "D");
+        g.addEdge("B", "C");
+        g.addEdge("B", "D");
+        g.addEdge("C", "D");
+
+        DefaultEdge e_D_E = g.addEdge("D", "E");
+        g.setEdgeWeight(e_D_E, 1000.0); // very large
+
+        DefaultEdge e_D_F = g.addEdge("D", "F");
+
+        g.addEdge("E", "F");
+        DefaultEdge e_E_G = g.addEdge("E", "G");
+        DefaultEdge e_F_G = g.addEdge("F", "G");
+        g.addEdge("F", "H");
+        g.addEdge("G", "H");
+
+        EdgeBetweennessCentrality<String, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g);
+
+        assertEquals(0.0, ebc.getEdgeScore(e_D_E), 1e-9);
+        assertEquals(16.0, ebc.getEdgeScore(e_D_F), 1e-9);
+        assertEquals(1.5, ebc.getEdgeScore(e_E_G), 1e-9);
+        assertEquals(5.0, ebc.getEdgeScore(e_F_G), 1e-9);
     }
 
 }
