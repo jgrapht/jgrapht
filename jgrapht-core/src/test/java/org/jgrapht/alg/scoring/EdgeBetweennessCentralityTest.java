@@ -19,7 +19,10 @@ package org.jgrapht.alg.scoring;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.jgrapht.Graph;
+import org.jgrapht.alg.scoring.EdgeBetweennessCentrality.OverflowStrategy;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
@@ -147,6 +150,45 @@ public class EdgeBetweennessCentralityTest
         assertEquals(49.0, ebc.getEdgeScore(e7_8), 1e-9);
         assertEquals(9.0, ebc.getEdgeScore(e9_11), 1e-9);
         assertEquals(1.0, ebc.getEdgeScore(e13_14), 1e-9);
+    }
+    
+    @Test
+    public void testDirectedGraph3Subset()
+    {
+        Graph<Integer,
+            DefaultEdge> g = GraphTypeBuilder
+                .directed().allowingMultipleEdges(false).allowingSelfLoops(true).weighted(false)
+                .edgeSupplier(SupplierUtil.DEFAULT_EDGE_SUPPLIER)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
+
+        for(int i = 1; i < 15; i++) { 
+            g.addVertex(i);
+        }
+        
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(2, 3);
+        DefaultEdge e3_7 = g.addEdge(3, 7);
+        g.addEdge(4, 6);
+        g.addEdge(4, 5);
+        g.addEdge(5, 6);
+        g.addEdge(6, 7);
+        DefaultEdge e7_8 = g.addEdge(7, 8);
+        g.addEdge(8, 9);
+        g.addEdge(8, 12);
+        g.addEdge(9, 10);
+        DefaultEdge e9_11 = g.addEdge(9, 11);
+        g.addEdge(12, 13);
+        g.addEdge(12, 14);
+        g.addEdge(10, 11);
+        DefaultEdge e13_14 = g.addEdge(13, 14);
+        
+        EdgeBetweennessCentrality<Integer, DefaultEdge> ebc = new EdgeBetweennessCentrality<>(g, OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW, List.of(1, 2, 4, 11));
+        
+        assertEquals(16.0, ebc.getEdgeScore(e3_7), 1e-9);
+        assertEquals(21.0, ebc.getEdgeScore(e7_8), 1e-9);
+        assertEquals(3.0, ebc.getEdgeScore(e9_11), 1e-9);
+        assertEquals(0.0, ebc.getEdgeScore(e13_14), 1e-9);
     }
 
 }
