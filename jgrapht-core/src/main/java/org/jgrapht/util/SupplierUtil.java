@@ -35,19 +35,23 @@ public class SupplierUtil
     /**
      * Supplier for {@link DefaultEdge}.
      */
+    @SuppressWarnings("unchecked")
     public static final Supplier<DefaultEdge> DEFAULT_EDGE_SUPPLIER =
-        createSupplier(DefaultEdge.class);
+        (Supplier<DefaultEdge> & Serializable) DefaultEdge::new;
 
     /**
      * Supplier for {@link DefaultWeightedEdge}.
      */
+    @SuppressWarnings("unchecked")
     public static final Supplier<DefaultWeightedEdge> DEFAULT_WEIGHTED_EDGE_SUPPLIER =
-        createSupplier(DefaultWeightedEdge.class);
+        (Supplier<DefaultWeightedEdge> & Serializable) DefaultWeightedEdge::new;
 
     /**
      * Supplier for {@link Object}.
      */
-    public static final Supplier<Object> OBJECT_SUPPLIER = createSupplier(Object.class);
+    @SuppressWarnings("unchecked")
+    public static final Supplier<Object> OBJECT_SUPPLIER =
+        (Supplier<Object> & Serializable) Object::new;
 
     /**
      * Create a supplier from a class which calls the default constructor.
@@ -56,19 +60,40 @@ public class SupplierUtil
      * @return the supplier
      * @param <T> the type of results supplied by this supplier
      */
+    @SuppressWarnings("unchecked")
     public static <T> Supplier<T> createSupplier(Class<? extends T> clazz)
     {
+        // shortcut to use pre-defined constructor method reference based suppliers
+        if (clazz == DefaultEdge.class) {
+            return (Supplier<T>) DEFAULT_EDGE_SUPPLIER;
+        } else if (clazz == DefaultWeightedEdge.class) {
+            return (Supplier<T>) DEFAULT_WEIGHTED_EDGE_SUPPLIER;
+        } else if (clazz == Object.class) {
+            return (Supplier<T>) OBJECT_SUPPLIER;
+        }
+
         try {
             final Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
             if ((!Modifier.isPublic(constructor.getModifiers())
                 || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers()))
                 && !constructor.canAccess(null))
+            {
                 constructor.setAccessible(true);
+            }
             return new ConstructorSupplier<>(constructor);
         } catch (ReflectiveOperationException e) {
-            String error = e.getMessage();
-            return new AlwaysFailingSupplier<T>(error);
+            // Defer throwing an exception to the first time the supplier is called
+            return getThrowingSupplier(e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Supplier<T> getThrowingSupplier(ReflectiveOperationException e)
+    {
+        String error = e.getMessage();
+        return (Supplier<T> & Serializable) () -> {
+            throw new IllegalStateException(error);
+        };
     }
 
     /**
@@ -78,7 +103,7 @@ public class SupplierUtil
      */
     public static Supplier<DefaultEdge> createDefaultEdgeSupplier()
     {
-        return createSupplier(DefaultEdge.class);
+        return DEFAULT_EDGE_SUPPLIER;
     }
 
     /**
@@ -88,7 +113,7 @@ public class SupplierUtil
      */
     public static Supplier<DefaultWeightedEdge> createDefaultWeightedEdgeSupplier()
     {
-        return createSupplier(DefaultWeightedEdge.class);
+        return DEFAULT_WEIGHTED_EDGE_SUPPLIER;
     }
 
     /**
@@ -98,7 +123,7 @@ public class SupplierUtil
      */
     public static Supplier<Integer> createIntegerSupplier()
     {
-        return new IntegerSupplier(0);
+        return createIntegerSupplier(0);
     }
 
     /**
@@ -107,9 +132,11 @@ public class SupplierUtil
      * @param start where to start the sequence
      * @return an integer supplier
      */
+    @SuppressWarnings("unchecked")
     public static Supplier<Integer> createIntegerSupplier(int start)
     {
-        return new IntegerSupplier(start);
+        int[] modifiableInt = new int[] { start }; // like a modifiable int
+        return (Supplier<Integer> & Serializable) () -> modifiableInt[0]++;
     }
 
     /**
@@ -119,7 +146,7 @@ public class SupplierUtil
      */
     public static Supplier<Long> createLongSupplier()
     {
-        return new LongSupplier(0);
+        return createLongSupplier(0);
     }
 
     /**
@@ -128,9 +155,11 @@ public class SupplierUtil
      * @param start where to start the sequence
      * @return a long supplier
      */
+    @SuppressWarnings("unchecked")
     public static Supplier<Long> createLongSupplier(long start)
     {
-        return new LongSupplier(start);
+        long[] modifiableLong = new long[] { start }; // like a modifiable long
+        return (Supplier<Long> & Serializable) () -> modifiableLong[0]++;
     }
 
     /**
@@ -141,7 +170,7 @@ public class SupplierUtil
      */
     public static Supplier<String> createStringSupplier()
     {
-        return new StringSupplier(0);
+        return createStringSupplier(0);
     }
 
     /**
@@ -149,9 +178,10 @@ public class SupplierUtil
      * 
      * @return a string supplier
      */
+    @SuppressWarnings("unchecked")
     public static Supplier<String> createRandomUUIDStringSupplier()
     {
-        return new RandomUUIDStringSupplier();
+        return (Supplier<String> & Serializable) () -> UUID.randomUUID().toString();
     }
 
     /**
@@ -161,86 +191,11 @@ public class SupplierUtil
      * @param start where to start the sequence
      * @return a string supplier
      */
+    @SuppressWarnings("unchecked")
     public static Supplier<String> createStringSupplier(int start)
     {
-        return new StringSupplier(start);
-    }
-
-    private static class IntegerSupplier
-        implements
-        Supplier<Integer>,
-        Serializable
-    {
-        private static final long serialVersionUID = -4714266728630636497L;
-
-        private int i = 0;
-
-        public IntegerSupplier(int start)
-        {
-            this.i = start;
-        }
-
-        @Override
-        public Integer get()
-        {
-            return i++;
-        }
-    }
-
-    private static class LongSupplier
-        implements
-        Supplier<Long>,
-        Serializable
-    {
-        private static final long serialVersionUID = 4994477932143967277L;
-
-        private long i = 0;
-
-        public LongSupplier(long start)
-        {
-            this.i = start;
-        }
-
-        @Override
-        public Long get()
-        {
-            return i++;
-        }
-    }
-
-    private static class StringSupplier
-        implements
-        Supplier<String>,
-        Serializable
-    {
-        private static final long serialVersionUID = -5025488316341437260L;
-
-        private int i = 0;
-
-        public StringSupplier(int start)
-        {
-            this.i = start;
-        }
-
-        @Override
-        public String get()
-        {
-            return String.valueOf(i++);
-        }
-    }
-
-    private static class RandomUUIDStringSupplier
-        implements
-        Supplier<String>,
-        Serializable
-    {
-        private static final long serialVersionUID = -4636552536822031851L;
-
-        @Override
-        public String get()
-        {
-            return UUID.randomUUID().toString();
-        }
+        int[] container = new int[] { start };
+        return (Supplier<String> & Serializable) () -> String.valueOf(container[0]++);
     }
 
     private static class ConstructorSupplier<T>
@@ -267,7 +222,7 @@ public class SupplierUtil
                 throws ObjectStreamException
             {
                 try {
-                    return new ConstructorSupplier<T>(type.getDeclaredConstructor());
+                    return new ConstructorSupplier<>(type.getDeclaredConstructor());
                 } catch (ReflectiveOperationException e) {
                     InvalidObjectException ex = new InvalidObjectException(
                         "Failed to get no-args constructor from " + type);
@@ -288,7 +243,7 @@ public class SupplierUtil
             try {
                 return constructor.newInstance();
             } catch (ReflectiveOperationException ex) {
-                throw new RuntimeException("Supplier failed", ex);
+                throw new IllegalStateException("Supplier failed", ex);
             }
         }
 
@@ -298,30 +253,4 @@ public class SupplierUtil
             return new SerializedForm<>(constructor.getDeclaringClass());
         }
     }
-
-    private static class AlwaysFailingSupplier<T>
-        implements
-        Supplier<T>,
-        Serializable
-    {
-        private static final long serialVersionUID = -560480634880773413L;
-
-        private String error;
-
-        public AlwaysFailingSupplier()
-        {
-        }
-
-        public AlwaysFailingSupplier(String error)
-        {
-            this.error = error;
-        }
-
-        @Override
-        public T get()
-        {
-            throw new RuntimeException(error);
-        }
-    }
-
 }
