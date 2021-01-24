@@ -68,9 +68,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         labels.put(6, 2);
 
         Map<Integer, Pair<Set<Integer>, Double>> partition = new HashMap<>();
-        partition.put(0, Pair.of(Set.of(1, 4), 2.0));
-        partition.put(1, Pair.of(Set.of(2, 5), 2.0));
-        partition.put(2, Pair.of(Set.of(3, 6), 2.0));
+        partition.put(0, Pair.of(new HashSet<>(Arrays.asList(1, 4)), 2.0));
+        partition.put(1, Pair.of(new HashSet<>(Arrays.asList(2, 5)), 2.0));
+        partition.put(2, Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0));
 
         Set<DefaultWeightedEdge> edges = new HashSet<>();
         edges.add(graph.getEdge(0, 1));
@@ -216,10 +216,10 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         labels.put(5, 1);
 
         Map<Integer, Pair<Set<Integer>, Double>> partition = new HashMap<>();
-        partition.put(0, Pair.of(Set.of(1), 1.0));
-        partition.put(1, Pair.of(Set.of(2, 5), 2.0));
-        partition.put(2, Pair.of(Set.of(3), 1.0));
-        partition.put(3, Pair.of(Set.of(4), 2.0));
+        partition.put(0, Pair.of(new HashSet<>(Arrays.asList(1)), 1.0));
+        partition.put(1, Pair.of(new HashSet<>(Arrays.asList(2, 5)), 2.0));
+        partition.put(2, Pair.of(new HashSet<>(Arrays.asList(3)), 1.0));
+        partition.put(3, Pair.of(new HashSet<>(Arrays.asList(4)), 2.0));
 
         Set<DefaultWeightedEdge> edges = new HashSet<>();
         edges.add(graph.getEdge(0, 1));
@@ -300,9 +300,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         labels.put(7, 1);
 
         Map<Integer, Pair<Set<Integer>, Double>> partition = new HashMap<>();
-        partition.put(0, Pair.of(Set.of(1, 4), 2.0));
-        partition.put(1, Pair.of(Set.of(2, 5, 7), 3.0));
-        partition.put(2, Pair.of(Set.of(3, 6), 2.0));
+        partition.put(0, Pair.of(new HashSet<>(Arrays.asList(1, 4)), 2.0));
+        partition.put(1, Pair.of(new HashSet<>(Arrays.asList(2, 5, 7)), 3.0));
+        partition.put(2, Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0));
 
         Set<DefaultWeightedEdge> edges = new HashSet<>();
         edges.add(graph.getEdge(0, 1));
@@ -396,9 +396,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         labels.put(8, 1);
 
         Map<Integer, Pair<Set<Integer>, Double>> partition = new HashMap<>();
-        partition.put(0, Pair.of(Set.of(1, 4), 2.0));
-        partition.put(1, Pair.of(Set.of(2, 5, 7, 8), 4.0));
-        partition.put(2, Pair.of(Set.of(3, 6), 2.0));
+        partition.put(0, Pair.of(new HashSet<>(Arrays.asList(1, 4)), 2.0));
+        partition.put(1, Pair.of(new HashSet<>(Arrays.asList(2, 5, 7, 8)), 4.0));
+        partition.put(2, Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0));
 
         Set<DefaultWeightedEdge> edges = new HashSet<>();
         edges.add(graph.getEdge(0, 1));
@@ -506,11 +506,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
         labels.put(5, 4);
 
         Map<Integer, Pair<Set<Integer>, Double>> partition = new HashMap<>();
-        partition.put(0, Pair.of(Set.of(1), 2.0));
-        partition.put(1, Pair.of(Set.of(2), 1.0));
-        partition.put(2, Pair.of(Set.of(3), 2.0));
-        partition.put(3, Pair.of(Set.of(4), 3.0));
-        partition.put(4, Pair.of(Set.of(5), 2.0));
+        partition.put(0, Pair.of(new HashSet<>(Arrays.asList(1)), 2.0));
+        partition.put(1, Pair.of(new HashSet<>(Arrays.asList(2)), 1.0));
+        partition.put(2, Pair.of(new HashSet<>(Arrays.asList(3)), 2.0));
+        partition.put(3, Pair.of(new HashSet<>(Arrays.asList(4)), 3.0));
+        partition.put(4, Pair.of(new HashSet<>(Arrays.asList(5)), 2.0));
 
         Set<DefaultWeightedEdge> edges = new HashSet<>();
         edges.add(graph.getEdge(0, 1));

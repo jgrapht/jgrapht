@@ -1152,7 +1152,7 @@ public class BlossomVPrimalUpdaterTest
         assertEquals(blossom, node5.blossomGrandparent);
 
         Set<BlossomVNode> expectedBlossomNodes = Set.of(node1, node2, node3, node4, node5);
-        Set<BlossomVNode> actualBlossomNodes = Set.of(node1);
+        Set<BlossomVNode> actualBlossomNodes = new HashSet<>(Collections.singletonList(node1));
         for (BlossomVNode current = node1.blossomSibling.getOpposite(node1); current != node1;
             current = current.blossomSibling.getOpposite(current))
         {

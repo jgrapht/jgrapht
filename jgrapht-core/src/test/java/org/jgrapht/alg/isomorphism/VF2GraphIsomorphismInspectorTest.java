@@ -23,7 +23,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * This test class is fairly small compared with the tests for the VF2SubgraphIsomorphismInspector
@@ -87,9 +87,9 @@ public class VF2GraphIsomorphismInspectorTest
         Iterator<GraphMapping<Integer, DefaultEdge>> iter2 = vf3.getMappings();
 
         Set<String> mappings2 = Set.of("[1=1 2=2 3=3]", "[1=3 2=2 3=1]");
-        assertEquals(true, mappings2.remove(iter2.next().toString()));
-        assertEquals(true, mappings2.remove(iter2.next().toString()));
-        assertEquals(false, iter2.hasNext());
+        assertTrue(mappings2.contains(iter2.next().toString()));
+        assertTrue(mappings2.contains(iter2.next().toString()));
+        assertFalse(iter2.hasNext());
     }
 
     @Test
