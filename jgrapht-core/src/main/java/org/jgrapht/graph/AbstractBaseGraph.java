@@ -275,9 +275,6 @@ public abstract class AbstractBaseGraph<V, E>
 
         if (!type.isAllowingMultipleEdges()) {
 
-            if (intrusiveEdgesSpecifics.containsEdge(e)) {
-                return false;
-            }
             if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
                 return false;
             }
