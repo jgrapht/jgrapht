@@ -17,13 +17,15 @@
  */
 package org.jgrapht.opt.graph.sparse;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import java.util.*;
-import java.util.function.*;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.opt.graph.sparse.specifics.AbstractSparseSpecificsGraph;
+import org.jgrapht.opt.graph.sparse.specifics.IncomingNoReindexSparseDirectedSpecifics;
+import org.jgrapht.opt.graph.sparse.specifics.NoIncomingNoReindexSparseDirectedSpecifics;
+import org.jgrapht.opt.graph.sparse.specifics.SparseGraphSpecifics;
 
 /**
  * A sparse directed graph.
@@ -56,29 +58,9 @@ import java.util.function.*;
  */
 public class SparseIntDirectedGraph
     extends
-    AbstractGraph<Integer, Integer>
+    AbstractSparseSpecificsGraph<SparseGraphSpecifics>
 {
     protected static final String UNMODIFIABLE = "this graph is unmodifiable";
-
-    /**
-     * Source vertex of edge
-     */
-    protected int[] source;
-
-    /**
-     * Target vertex of edge
-     */
-    protected int[] target;
-
-    /**
-     * Incidence matrix with outgoing edges
-     */
-    protected CSRBooleanMatrix outIncidenceMatrix;
-
-    /**
-     * Incidence matrix with incoming edges
-     */
-    protected CSRBooleanMatrix inIncidenceMatrix;
 
     /**
      * Create a new graph from an edge list.
@@ -88,263 +70,50 @@ public class SparseIntDirectedGraph
      */
     public SparseIntDirectedGraph(int numVertices, List<Pair<Integer, Integer>> edges)
     {
-        final int m = edges.size();
-        source = new int[m];
-        target = new int[m];
-
-        List<Pair<Integer, Integer>> outgoing = new ArrayList<>(m);
-        List<Pair<Integer, Integer>> incoming = new ArrayList<>(m);
-        int eIndex = 0;
-        for (Pair<Integer, Integer> e : edges) {
-            source[eIndex] = e.getFirst();
-            target[eIndex] = e.getSecond();
-            outgoing.add(Pair.of(e.getFirst(), eIndex));
-            incoming.add(Pair.of(e.getSecond(), eIndex));
-            eIndex++;
-        }
-
-        outIncidenceMatrix = new CSRBooleanMatrix(numVertices, m, outgoing);
-        inIncidenceMatrix = new CSRBooleanMatrix(numVertices, m, incoming);
-    }
-
-    @Override
-    public Supplier<Integer> getVertexSupplier()
-    {
-        return null;
-    }
-
-    @Override
-    public Supplier<Integer> getEdgeSupplier()
-    {
-        return null;
-    }
-
-    @Override
-    public Integer addEdge(Integer sourceVertex, Integer targetVertex)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean addEdge(Integer sourceVertex, Integer targetVertex, Integer e)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public Integer addVertex()
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean addVertex(Integer v)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean containsEdge(Integer e)
-    {
-        return e >= 0 && e < outIncidenceMatrix.columns();
-    }
-
-    @Override
-    public boolean containsVertex(Integer v)
-    {
-        return v >= 0 && v < outIncidenceMatrix.rows();
-    }
-
-    @Override
-    public Set<Integer> edgeSet()
-    {
-        return new CompleteIntegerSet(outIncidenceMatrix.columns());
-    }
-
-    @Override
-    public int degreeOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return outIncidenceMatrix.nonZeros(vertex) + inIncidenceMatrix.nonZeros(vertex);
-    }
-
-    @Override
-    public Set<Integer> edgesOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return new UnmodifiableUnionSet<>(
-            outIncidenceMatrix.nonZerosSet(vertex), inIncidenceMatrix.nonZerosSet(vertex));
-    }
-
-    @Override
-    public int inDegreeOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return inIncidenceMatrix.nonZeros(vertex);
-    }
-
-    @Override
-    public Set<Integer> incomingEdgesOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return inIncidenceMatrix.nonZerosSet(vertex);
-    }
-
-    @Override
-    public int outDegreeOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return outIncidenceMatrix.nonZeros(vertex);
-    }
-
-    @Override
-    public Set<Integer> outgoingEdgesOf(Integer vertex)
-    {
-        assertVertexExist(vertex);
-        return outIncidenceMatrix.nonZerosSet(vertex);
-    }
-
-    @Override
-    public Integer removeEdge(Integer sourceVertex, Integer targetVertex)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean removeEdge(Integer e)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public boolean removeVertex(Integer v)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    @Override
-    public Set<Integer> vertexSet()
-    {
-        return new CompleteIntegerSet(outIncidenceMatrix.rows());
-    }
-
-    @Override
-    public Integer getEdgeSource(Integer e)
-    {
-        assertEdgeExist(e);
-        return source[e];
-    }
-
-    @Override
-    public Integer getEdgeTarget(Integer e)
-    {
-        assertEdgeExist(e);
-        return target[e];
-    }
-
-    @Override
-    public GraphType getType()
-    {
-        return new DefaultGraphType.Builder()
-            .directed().weighted(false).modifiable(false).allowMultipleEdges(true)
-            .allowSelfLoops(true).build();
-    }
-
-    @Override
-    public double getEdgeWeight(Integer e)
-    {
-        return 1.0;
-    }
-
-    @Override
-    public void setEdgeWeight(Integer e, double weight)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
+        this(
+            numVertices, edges.size(), () -> edges.stream(),
+            IncomingEdgesSupport.FULL_INCOMING_EDGES);
     }
 
     /**
-     * {@inheritDoc}
+     * Create a new graph from an edge list.
      * 
-     * This operation costs $O(d)$ where $d$ is the out-degree of the source vertex.
+     * @param numVertices the number of vertices
+     * @param edges the edge list
+     * @param incomingEdgesSupport whether to support incoming edges or not
      */
-    @Override
-    public Integer getEdge(Integer sourceVertex, Integer targetVertex)
+    public SparseIntDirectedGraph(
+        int numVertices, List<Pair<Integer, Integer>> edges,
+        IncomingEdgesSupport incomingEdgesSupport)
     {
-        if (sourceVertex < 0 || sourceVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-        if (targetVertex < 0 || targetVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-
-        Iterator<Integer> it = outIncidenceMatrix.nonZerosPositionIterator(sourceVertex);
-        while (it.hasNext()) {
-            int eId = it.next();
-            if (getEdgeTarget(eId) == targetVertex) {
-                return eId;
-            }
-        }
-        return null;
+        this(numVertices, edges.size(), () -> edges.stream(), incomingEdgesSupport);
     }
 
     /**
-     * {@inheritDoc}
+     * Create a new graph from an edge stream.
      * 
-     * This operation costs $O(d)$ where $d$ is the out-degree of the source vertex.
+     * @param numVertices the number of vertices
+     * @param numEdges the number of edges
+     * @param edges the edge stream
+     * @param incomingEdgesSupport whether to support incoming edges or not
      */
-    @Override
-    public Set<Integer> getAllEdges(Integer sourceVertex, Integer targetVertex)
+    public SparseIntDirectedGraph(
+        int numVertices, int numEdges, Supplier<Stream<Pair<Integer, Integer>>> edges,
+        IncomingEdgesSupport incomingEdgesSupport)
     {
-        if (sourceVertex < 0 || sourceVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-        if (targetVertex < 0 || targetVertex >= outIncidenceMatrix.rows()) {
-            return null;
-        }
-
-        Set<Integer> result = new LinkedHashSet<>();
-
-        Iterator<Integer> it = outIncidenceMatrix.nonZerosPositionIterator(sourceVertex);
-        while (it.hasNext()) {
-            int eId = it.next();
-
-            if (getEdgeTarget(eId) == targetVertex) {
-                result.add(eId);
+        super(() -> {
+            switch (incomingEdgesSupport) {
+            case FULL_INCOMING_EDGES:
+                return new IncomingNoReindexSparseDirectedSpecifics(
+                    numVertices, numEdges, edges, false);
+            case LAZY_INCOMING_EDGES:
+                return new IncomingNoReindexSparseDirectedSpecifics(
+                    numVertices, numEdges, edges, true);
+            case NO_INCOMING_EDGES:
+            default:
+                return new NoIncomingNoReindexSparseDirectedSpecifics(numVertices, numEdges, edges);
             }
-        }
-        return result;
-    }
-
-    /**
-     * Ensures that the specified vertex exists in this graph, or else throws exception.
-     *
-     * @param v vertex
-     * @return <code>true</code> if this assertion holds.
-     * @throws IllegalArgumentException if specified vertex does not exist in this graph.
-     */
-    protected boolean assertVertexExist(Integer v)
-    {
-        if (v >= 0 && v < outIncidenceMatrix.rows()) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
-        }
-    }
-
-    /**
-     * Ensures that the specified edge exists in this graph, or else throws exception.
-     *
-     * @param e edge
-     * @return <code>true</code> if this assertion holds.
-     * @throws IllegalArgumentException if specified edge does not exist in this graph.
-     */
-    protected boolean assertEdgeExist(Integer e)
-    {
-        if (e >= 0 && e < outIncidenceMatrix.columns()) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("no such edge in graph: " + e.toString());
-        }
+        });
     }
 
 }
