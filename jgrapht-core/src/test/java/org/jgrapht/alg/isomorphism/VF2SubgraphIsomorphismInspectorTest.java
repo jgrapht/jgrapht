@@ -345,8 +345,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<Integer, DefaultEdge>> iter11 = vfs11.getMappings();
 
-        Set<String> mappings11 =
-            new HashSet<>(Arrays.asList("[1=1 2=2 3=3 4=4]", "[1=4 2=3 3=2 4=1]"));
+        Set<String> mappings11 = Set.of("[1=1 2=2 3=3 4=4]", "[1=4 2=3 3=2 4=1]");
         assertEquals(true, mappings11.remove(iter11.next().toString()));
         assertEquals(true, mappings11.remove(iter11.next().toString()));
         assertEquals(false, iter11.hasNext());
@@ -867,8 +866,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<String, Integer>> iter2 = vf3.getMappings();
 
-        Set<String> mappings =
-            new HashSet<>(Arrays.asList("[A=A B=b a=~~ b=B]", "[A=~~ B=B a=A b=b]"));
+        Set<String> mappings = Set.of("[A=A B=b a=~~ b=B]", "[A=~~ B=B a=A b=b]");
         assertEquals(true, mappings.remove(iter2.next().toString()));
         assertEquals(true, mappings.remove(iter2.next().toString()));
         assertEquals(false, iter2.hasNext());
@@ -882,8 +880,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<String, Integer>> iter3 = vf4.getMappings();
 
-        Set<String> mappings2 =
-            new HashSet<>(Arrays.asList("[A=A B=b a=~~ b=B]", "[A=A B=~~ a=b b=B]"));
+        Set<String> mappings2 = Set.of("[A=A B=b a=~~ b=B]", "[A=A B=~~ a=b b=B]");
         assertEquals(true, mappings2.remove(iter3.next().toString()));
         assertEquals(true, mappings2.remove(iter3.next().toString()));
         assertEquals(false, iter3.hasNext());

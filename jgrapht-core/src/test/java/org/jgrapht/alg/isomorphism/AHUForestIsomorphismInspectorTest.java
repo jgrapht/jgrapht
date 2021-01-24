@@ -47,10 +47,8 @@ public class AHUForestIsomorphismInspectorTest
         tree1.addEdge("1", "2");
         tree1.addVertex("3");
 
-        AHUForestIsomorphismInspector<String,
-            DefaultEdge> forestIsomorphism = new AHUForestIsomorphismInspector<>(
-                tree1, new HashSet<>(Arrays.asList("1", "2")), tree1,
-                new HashSet<>(Arrays.asList("1", "2")));
+        AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
+            new AHUForestIsomorphismInspector<>(tree1, Set.of("1", "2"), tree1, Set.of("1", "2"));
 
         forestIsomorphism.isomorphismExists();
     }
@@ -136,10 +134,8 @@ public class AHUForestIsomorphismInspectorTest
 
         tree2.addVertex("D");
 
-        AHUForestIsomorphismInspector<String,
-            DefaultEdge> forestIsomorphism = new AHUForestIsomorphismInspector<>(
-                tree1, new HashSet<>(Arrays.asList("b", "d")), tree2,
-                new HashSet<>(Arrays.asList("A", "D")));
+        AHUForestIsomorphismInspector<String, DefaultEdge> forestIsomorphism =
+            new AHUForestIsomorphismInspector<>(tree1, Set.of("b", "d"), tree2, Set.of("A", "D"));
 
         Assert.assertFalse(forestIsomorphism.isomorphismExists());
     }

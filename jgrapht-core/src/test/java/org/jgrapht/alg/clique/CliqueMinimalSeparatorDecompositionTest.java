@@ -69,9 +69,9 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false, atom2found = false;
         for (Set<Integer> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(Arrays.asList(1, 2, 3)))) {
+            if (atom.equals(Set.of(1, 2, 3))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList(2, 3, 4)))) {
+            } else if (atom.equals(Set.of(2, 3, 4))) {
                 atom2found = true;
             }
         }
@@ -82,7 +82,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check seprators
         boolean separator1found = false;
         for (Set<Integer> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(Arrays.asList(2, 3)))) {
+            if (separator.equals(Set.of(2, 3))) {
                 separator1found = true;
             }
         }
@@ -127,9 +127,9 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false, atom2found = false;
         for (Set<Integer> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(Arrays.asList(1, 2, 3)))) {
+            if (atom.equals(Set.of(1, 2, 3))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList(2, 3, 4)))) {
+            } else if (atom.equals(Set.of(2, 3, 4))) {
                 atom2found = true;
             }
         }
@@ -140,7 +140,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check seprators
         boolean separator1found = false;
         for (Set<Integer> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(Arrays.asList(2, 3)))) {
+            if (separator.equals(Set.of(2, 3))) {
                 separator1found = true;
             }
         }
@@ -179,7 +179,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false;
         for (Set<Integer> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(Arrays.asList(1, 2, 3, 4)))) {
+            if (atom.equals(Set.of(1, 2, 3, 4))) {
                 atom1found = true;
             }
         }
@@ -243,13 +243,13 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false, atom2found = false, atom3found = false, atom4found = false;
         for (Set<String> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(Arrays.asList("a", "b", "c", "k")))) {
+            if (atom.equals(Set.of("a", "b", "c", "k"))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("c", "d", "j", "k")))) {
+            } else if (atom.equals(Set.of("c", "d", "j", "k"))) {
                 atom2found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("h", "i", "j", "k")))) {
+            } else if (atom.equals(Set.of("h", "i", "j", "k"))) {
                 atom3found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("d", "e", "f", "g", "j", "k")))) {
+            } else if (atom.equals(Set.of("d", "e", "f", "g", "j", "k"))) {
                 atom4found = true;
             }
         }
@@ -262,11 +262,11 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check seprators
         boolean separator1found = false, separator2found = false, separator3found = false;
         for (Set<String> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(Arrays.asList("c", "k")))) {
+            if (separator.equals(Set.of("c", "k"))) {
                 separator1found = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("j", "k")))) {
+            } else if (separator.equals(Set.of("j", "k"))) {
                 separator2found = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("d", "j", "k")))) {
+            } else if (separator.equals(Set.of("d", "j", "k"))) {
                 separator3found = true;
             }
         }
@@ -331,13 +331,13 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false, atom2found = false, atom3found = false, atom4found = false;
         for (Set<String> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(Arrays.asList("a", "c", "d", "f")))) {
+            if (atom.equals(Set.of("a", "c", "d", "f"))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("b", "c", "g", "h")))) {
+            } else if (atom.equals(Set.of("b", "c", "g", "h"))) {
                 atom2found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("d", "e", "i", "j")))) {
+            } else if (atom.equals(Set.of("d", "e", "i", "j"))) {
                 atom3found = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("c", "d", "f", "h", "i", "k")))) {
+            } else if (atom.equals(Set.of("c", "d", "f", "h", "i", "k"))) {
                 atom4found = true;
             }
         }
@@ -350,11 +350,11 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check seprators
         boolean separator1found = false, separator2found = false, separator3found = false;
         for (Set<String> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(Arrays.asList("c", "d", "f")))) {
+            if (separator.equals(Set.of("c", "d", "f"))) {
                 separator1found = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("c", "h")))) {
+            } else if (separator.equals(Set.of("c", "h"))) {
                 separator2found = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("d", "i")))) {
+            } else if (separator.equals(Set.of("d", "i"))) {
                 separator3found = true;
             }
         }
@@ -421,23 +421,23 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(9, cmsd.getAtoms().size());
         boolean[] atomsFound = new boolean[cmsd.getAtoms().size()];
         for (Set<String> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(Arrays.asList("a", "b", "d", "e")))) {
+            if (atom.equals(Set.of("a", "b", "d", "e"))) {
                 atomsFound[0] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("c", "e")))) {
+            } else if (atom.equals(Set.of("c", "e"))) {
                 atomsFound[1] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("d", "g", "i")))) {
+            } else if (atom.equals(Set.of("d", "g", "i"))) {
                 atomsFound[2] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("d", "h", "i")))) {
+            } else if (atom.equals(Set.of("d", "h", "i"))) {
                 atomsFound[3] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("d", "e", "i", "j")))) {
+            } else if (atom.equals(Set.of("d", "e", "i", "j"))) {
                 atomsFound[4] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("e", "f", "j", "k")))) {
+            } else if (atom.equals(Set.of("e", "f", "j", "k"))) {
                 atomsFound[5] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("i", "l")))) {
+            } else if (atom.equals(Set.of("i", "l"))) {
                 atomsFound[6] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("i", "j", "m")))) {
+            } else if (atom.equals(Set.of("i", "j", "m"))) {
                 atomsFound[7] = true;
-            } else if (atom.equals(new HashSet<>(Arrays.asList("i", "j", "n")))) {
+            } else if (atom.equals(Set.of("i", "j", "n"))) {
                 atomsFound[8] = true;
             }
         }
@@ -448,17 +448,17 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(6, cmsd.getSeparators().size());
         boolean[] separatorsFound = new boolean[cmsd.getSeparators().size()];
         for (Set<String> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(Arrays.asList("d", "e")))) {
+            if (separator.equals(Set.of("d", "e"))) {
                 separatorsFound[0] = true;
-            } else if (separator.equals(new HashSet<>(Collections.singletonList("e")))) {
+            } else if (separator.equals(Set.of("e"))) {
                 separatorsFound[1] = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("d", "i")))) {
+            } else if (separator.equals(Set.of("d", "i"))) {
                 separatorsFound[2] = true;
-            } else if (separator.equals(new HashSet<>(Collections.singletonList("i")))) {
+            } else if (separator.equals(Set.of("i"))) {
                 separatorsFound[3] = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("e", "j")))) {
+            } else if (separator.equals(Set.of("e", "j"))) {
                 separatorsFound[4] = true;
-            } else if (separator.equals(new HashSet<>(Arrays.asList("i", "j")))) {
+            } else if (separator.equals(Set.of("i", "j"))) {
                 separatorsFound[5] = true;
             }
         }
@@ -468,29 +468,17 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check component counts
         assertEquals(6, cmsd.getFullComponentCount().size());
 
-        assertEquals(
-            2, cmsd.getFullComponentCount().get(new HashSet<>(Arrays.asList("d", "e"))).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("d", "e")).intValue());
 
-        assertEquals(
-            2,
-            cmsd
-                .getFullComponentCount().get(new HashSet<>(Collections.singletonList("e")))
-                .intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e")).intValue());
 
-        assertEquals(
-            3, cmsd.getFullComponentCount().get(new HashSet<>(Arrays.asList("d", "i"))).intValue());
+        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("d", "i")).intValue());
 
-        assertEquals(
-            2,
-            cmsd
-                .getFullComponentCount().get(new HashSet<>(Collections.singletonList("i")))
-                .intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("i")).intValue());
 
-        assertEquals(
-            2, cmsd.getFullComponentCount().get(new HashSet<>(Arrays.asList("e", "j"))).intValue());
+        assertEquals(2, cmsd.getFullComponentCount().get(Set.of("e", "j")).intValue());
 
-        assertEquals(
-            3, cmsd.getFullComponentCount().get(new HashSet<>(Arrays.asList("i", "j"))).intValue());
+        assertEquals(3, cmsd.getFullComponentCount().get(Set.of("i", "j")).intValue());
     }
 
     /**

@@ -17,22 +17,16 @@
  */
 package org.jgrapht.opt.graph.fastutil;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -56,9 +50,9 @@ public class IncomingOutgoingEdgesTest
         assertTrue(g.edgeSet().size() == 1);
         assertEquals(Collections.emptySet(), g.incomingEdgesOf(1));
         assertEquals(0, g.inDegreeOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.outgoingEdgesOf(1));
+        assertEquals(Set.of(e), g.outgoingEdgesOf(1));
         assertEquals(1, g.outDegreeOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.incomingEdgesOf(2));
+        assertEquals(Set.of(e), g.incomingEdgesOf(2));
         assertEquals(1, g.inDegreeOf(2));
         assertEquals(Collections.emptySet(), g.outgoingEdgesOf(2));
         assertEquals(0, g.outDegreeOf(2));
@@ -71,9 +65,9 @@ public class IncomingOutgoingEdgesTest
         assertTrue(g.edgeSet().size() == 1);
         assertEquals(Collections.emptySet(), g.incomingEdgesOf(1));
         assertEquals(0, g.inDegreeOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.outgoingEdgesOf(1));
+        assertEquals(Set.of(e), g.outgoingEdgesOf(1));
         assertEquals(1, g.outDegreeOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.incomingEdgesOf(2));
+        assertEquals(Set.of(e), g.incomingEdgesOf(2));
         assertEquals(1, g.inDegreeOf(2));
         assertEquals(Collections.emptySet(), g.outgoingEdgesOf(2));
         assertEquals(0, g.outDegreeOf(2));
@@ -114,11 +108,11 @@ public class IncomingOutgoingEdgesTest
         assertEquals(3, g.degreeOf(4));
         assertEquals(5, g.degreeOf(5));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.edgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23_1, e23_2, e24, e52)), g.edgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.edgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.edgesOf(4));
-        assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.edgesOf(5));
+        assertEquals(Set.of(e12), g.edgesOf(1));
+        assertEquals(Set.of(e12, e23_1, e23_2, e24, e52), g.edgesOf(2));
+        assertEquals(Set.of(e23_1, e23_2), g.edgesOf(3));
+        assertEquals(Set.of(e24, e44), g.edgesOf(4));
+        assertEquals(Set.of(e52, e55_1, e55_2), g.edgesOf(5));
 
         assertEquals(0, g.inDegreeOf(1));
         assertEquals(2, g.inDegreeOf(2));
@@ -126,11 +120,11 @@ public class IncomingOutgoingEdgesTest
         assertEquals(2, g.inDegreeOf(4));
         assertEquals(2, g.inDegreeOf(5));
 
-        assertEquals(new HashSet<>(), g.incomingEdgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e52)), g.incomingEdgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.incomingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.incomingEdgesOf(4));
-        assertEquals(new HashSet<>(Arrays.asList(e55_1, e55_2)), g.incomingEdgesOf(5));
+        assertEquals(Set.of(), g.incomingEdgesOf(1));
+        assertEquals(Set.of(e12, e52), g.incomingEdgesOf(2));
+        assertEquals(Set.of(e23_1, e23_2), g.incomingEdgesOf(3));
+        assertEquals(Set.of(e24, e44), g.incomingEdgesOf(4));
+        assertEquals(Set.of(e55_1, e55_2), g.incomingEdgesOf(5));
 
         assertEquals(1, g.outDegreeOf(1));
         assertEquals(3, g.outDegreeOf(2));
@@ -138,11 +132,11 @@ public class IncomingOutgoingEdgesTest
         assertEquals(1, g.outDegreeOf(4));
         assertEquals(3, g.outDegreeOf(5));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.outgoingEdgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2, e24)), g.outgoingEdgesOf(2));
-        assertEquals(new HashSet<>(), g.outgoingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e44)), g.outgoingEdgesOf(4));
-        assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.outgoingEdgesOf(5));
+        assertEquals(Set.of(e12), g.outgoingEdgesOf(1));
+        assertEquals(Set.of(e23_1, e23_2, e24), g.outgoingEdgesOf(2));
+        assertEquals(Set.of(), g.outgoingEdgesOf(3));
+        assertEquals(Set.of(e44), g.outgoingEdgesOf(4));
+        assertEquals(Set.of(e52, e55_1, e55_2), g.outgoingEdgesOf(5));
     }
 
     /**
@@ -187,18 +181,18 @@ public class IncomingOutgoingEdgesTest
         DefaultEdge e = new DefaultEdge();
         g.addEdge(1, 2, e);
         assertTrue(g.edgeSet().size() == 1);
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(1));
+        assertEquals(Set.of(e), g.edgesOf(1));
         assertEquals(1, g.degreeOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(2));
+        assertEquals(Set.of(e), g.edgesOf(2));
         assertEquals(1, g.degreeOf(2));
         assertEquals(Collections.emptySet(), g.edgesOf(3));
         assertEquals(0, g.degreeOf(3));
 
         assertFalse(g.addEdge(1, 3, e));
         assertTrue(g.edgeSet().size() == 1);
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(1));
+        assertEquals(Set.of(e), g.edgesOf(1));
         assertEquals(1, g.degreeOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e)), g.edgesOf(2));
+        assertEquals(Set.of(e), g.edgesOf(2));
         assertEquals(1, g.degreeOf(2));
         assertEquals(Collections.emptySet(), g.edgesOf(3));
         assertEquals(0, g.degreeOf(3));
@@ -238,11 +232,11 @@ public class IncomingOutgoingEdgesTest
         assertEquals(3, g.degreeOf(4));
         assertEquals(5, g.degreeOf(5));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.edgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23_1, e23_2, e24, e52)), g.edgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.edgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.edgesOf(4));
-        assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.edgesOf(5));
+        assertEquals(Set.of(e12), g.edgesOf(1));
+        assertEquals(Set.of(e12, e23_1, e23_2, e24, e52), g.edgesOf(2));
+        assertEquals(Set.of(e23_1, e23_2), g.edgesOf(3));
+        assertEquals(Set.of(e24, e44), g.edgesOf(4));
+        assertEquals(Set.of(e52, e55_1, e55_2), g.edgesOf(5));
 
         assertEquals(1, g.inDegreeOf(1));
         assertEquals(5, g.inDegreeOf(2));
@@ -250,12 +244,11 @@ public class IncomingOutgoingEdgesTest
         assertEquals(3, g.inDegreeOf(4));
         assertEquals(5, g.inDegreeOf(5));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.incomingEdgesOf(1));
-        assertEquals(
-            new HashSet<>(Arrays.asList(e12, e23_1, e23_2, e24, e52)), g.incomingEdgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.incomingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.incomingEdgesOf(4));
-        assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.incomingEdgesOf(5));
+        assertEquals(Set.of(e12), g.incomingEdgesOf(1));
+        assertEquals(Set.of(e12, e23_1, e23_2, e24, e52), g.incomingEdgesOf(2));
+        assertEquals(Set.of(e23_1, e23_2), g.incomingEdgesOf(3));
+        assertEquals(Set.of(e24, e44), g.incomingEdgesOf(4));
+        assertEquals(Set.of(e52, e55_1, e55_2), g.incomingEdgesOf(5));
 
         assertEquals(1, g.outDegreeOf(1));
         assertEquals(5, g.outDegreeOf(2));
@@ -263,12 +256,11 @@ public class IncomingOutgoingEdgesTest
         assertEquals(3, g.outDegreeOf(4));
         assertEquals(5, g.outDegreeOf(5));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.outgoingEdgesOf(1));
-        assertEquals(
-            new HashSet<>(Arrays.asList(e12, e23_1, e23_2, e24, e52)), g.outgoingEdgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.outgoingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.outgoingEdgesOf(4));
-        assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.outgoingEdgesOf(5));
+        assertEquals(Set.of(e12), g.outgoingEdgesOf(1));
+        assertEquals(Set.of(e12, e23_1, e23_2, e24, e52), g.outgoingEdgesOf(2));
+        assertEquals(Set.of(e23_1, e23_2), g.outgoingEdgesOf(3));
+        assertEquals(Set.of(e24, e44), g.outgoingEdgesOf(4));
+        assertEquals(Set.of(e52, e55_1, e55_2), g.outgoingEdgesOf(5));
     }
 
     /**

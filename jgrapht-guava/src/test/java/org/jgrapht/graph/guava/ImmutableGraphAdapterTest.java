@@ -75,11 +75,11 @@ public class ImmutableGraphAdapterTest
         EndpointPair<String> e44 = EndpointPair.ordered("v4", "v4");
         EndpointPair<String> e52 = EndpointPair.ordered("v5", "v2");
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.edgesOf("v1"));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24, e52)), g.edgesOf("v2"));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), g.edgesOf("v3"));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.edgesOf("v4"));
-        assertEquals(new HashSet<>(Arrays.asList(e52)), g.edgesOf("v5"));
+        assertEquals(Set.of(e12), g.edgesOf("v1"));
+        assertEquals(Set.of(e12, e23, e24, e52), g.edgesOf("v2"));
+        assertEquals(Set.of(e23), g.edgesOf("v3"));
+        assertEquals(Set.of(e24, e44), g.edgesOf("v4"));
+        assertEquals(Set.of(e52), g.edgesOf("v5"));
 
         assertEquals(0, g.inDegreeOf("v1"));
         assertEquals(2, g.inDegreeOf("v2"));
@@ -87,11 +87,11 @@ public class ImmutableGraphAdapterTest
         assertEquals(2, g.inDegreeOf("v4"));
         assertEquals(0, g.inDegreeOf("v5"));
 
-        assertEquals(new HashSet<>(), g.incomingEdgesOf("v1"));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e52)), g.incomingEdgesOf("v2"));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), g.incomingEdgesOf("v3"));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.incomingEdgesOf("v4"));
-        assertEquals(new HashSet<>(), g.incomingEdgesOf("v5"));
+        assertEquals(Set.of(), g.incomingEdgesOf("v1"));
+        assertEquals(Set.of(e12, e52), g.incomingEdgesOf("v2"));
+        assertEquals(Set.of(e23), g.incomingEdgesOf("v3"));
+        assertEquals(Set.of(e24, e44), g.incomingEdgesOf("v4"));
+        assertEquals(Set.of(), g.incomingEdgesOf("v5"));
 
         assertEquals(1, g.outDegreeOf("v1"));
         assertEquals(2, g.outDegreeOf("v2"));
@@ -99,11 +99,11 @@ public class ImmutableGraphAdapterTest
         assertEquals(1, g.outDegreeOf("v4"));
         assertEquals(1, g.outDegreeOf("v5"));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.outgoingEdgesOf("v1"));
-        assertEquals(new HashSet<>(Arrays.asList(e23, e24)), g.outgoingEdgesOf("v2"));
-        assertEquals(new HashSet<>(), g.outgoingEdgesOf("v3"));
-        assertEquals(new HashSet<>(Arrays.asList(e44)), g.outgoingEdgesOf("v4"));
-        assertEquals(new HashSet<>(Arrays.asList(e52)), g.outgoingEdgesOf("v5"));
+        assertEquals(Set.of(e12), g.outgoingEdgesOf("v1"));
+        assertEquals(Set.of(e23, e24), g.outgoingEdgesOf("v2"));
+        assertEquals(Set.of(), g.outgoingEdgesOf("v3"));
+        assertEquals(Set.of(e44), g.outgoingEdgesOf("v4"));
+        assertEquals(Set.of(e52), g.outgoingEdgesOf("v5"));
 
         // test indeed immutable
         try {
@@ -195,11 +195,11 @@ public class ImmutableGraphAdapterTest
         EndpointPair<String> e44 = EndpointPair.ordered("v4", "v4");
         EndpointPair<String> e52 = EndpointPair.ordered("v5", "v2");
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.edgesOf("v1"));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24, e52)), g.edgesOf("v2"));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), g.edgesOf("v3"));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.edgesOf("v4"));
-        assertEquals(new HashSet<>(Arrays.asList(e52)), g.edgesOf("v5"));
+        assertEquals(Set.of(e12), g.edgesOf("v1"));
+        assertEquals(Set.of(e12, e23, e24, e52), g.edgesOf("v2"));
+        assertEquals(Set.of(e23), g.edgesOf("v3"));
+        assertEquals(Set.of(e24, e44), g.edgesOf("v4"));
+        assertEquals(Set.of(e52), g.edgesOf("v5"));
 
         assertEquals(0, g.inDegreeOf("v1"));
         assertEquals(2, g.inDegreeOf("v2"));
@@ -207,11 +207,11 @@ public class ImmutableGraphAdapterTest
         assertEquals(2, g.inDegreeOf("v4"));
         assertEquals(0, g.inDegreeOf("v5"));
 
-        assertEquals(new HashSet<>(), g.incomingEdgesOf("v1"));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e52)), g.incomingEdgesOf("v2"));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), g.incomingEdgesOf("v3"));
-        assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.incomingEdgesOf("v4"));
-        assertEquals(new HashSet<>(), g.incomingEdgesOf("v5"));
+        assertEquals(Set.of(), g.incomingEdgesOf("v1"));
+        assertEquals(Set.of(e12, e52), g.incomingEdgesOf("v2"));
+        assertEquals(Set.of(e23), g.incomingEdgesOf("v3"));
+        assertEquals(Set.of(e24, e44), g.incomingEdgesOf("v4"));
+        assertEquals(Set.of(), g.incomingEdgesOf("v5"));
 
         assertEquals(1, g.outDegreeOf("v1"));
         assertEquals(2, g.outDegreeOf("v2"));
@@ -219,11 +219,11 @@ public class ImmutableGraphAdapterTest
         assertEquals(1, g.outDegreeOf("v4"));
         assertEquals(1, g.outDegreeOf("v5"));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12)), g.outgoingEdgesOf("v1"));
-        assertEquals(new HashSet<>(Arrays.asList(e23, e24)), g.outgoingEdgesOf("v2"));
-        assertEquals(new HashSet<>(), g.outgoingEdgesOf("v3"));
-        assertEquals(new HashSet<>(Arrays.asList(e44)), g.outgoingEdgesOf("v4"));
-        assertEquals(new HashSet<>(Arrays.asList(e52)), g.outgoingEdgesOf("v5"));
+        assertEquals(Set.of(e12), g.outgoingEdgesOf("v1"));
+        assertEquals(Set.of(e23, e24), g.outgoingEdgesOf("v2"));
+        assertEquals(Set.of(), g.outgoingEdgesOf("v3"));
+        assertEquals(Set.of(e44), g.outgoingEdgesOf("v4"));
+        assertEquals(Set.of(e52), g.outgoingEdgesOf("v5"));
 
     }
 
