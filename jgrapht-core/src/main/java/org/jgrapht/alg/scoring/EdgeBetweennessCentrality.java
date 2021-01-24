@@ -136,15 +136,15 @@ public class EdgeBetweennessCentrality<V, E>
                 scores.put(e, 0d);
             }
             for (V v : graph.iterables().vertices()) {
-                singleVertex(v);
+                singleVertexUpdate(v);
             }
-            if (!graph.getType().isDirected()) {
+            if (graph.getType().isUndirected()) {
                 scores.forEach((e, score) -> scores.put(e, score / 2d));
             }
             return scores;
         }
 
-        protected void singleVertex(V source)
+        protected void singleVertexUpdate(V source)
         {
             // initialization
             Map<V, List<E>> pred = new HashMap<>();
@@ -176,7 +176,7 @@ public class EdgeBetweennessCentrality<V, E>
 
                     // path counting
                     double wDistance = dist.get(w);
-                    if (Double.compare(wDistance,vDistance + 1d) == 0) {
+                    if (Double.compare(wDistance, vDistance + 1d) == 0) {
                         long wCounter = sigma.get(w);
                         long vCounter = sigma.get(v);
                         long sum = wCounter + vCounter;
@@ -207,7 +207,8 @@ public class EdgeBetweennessCentrality<V, E>
                 if (wPred != null) {
                     for (E e : wPred) {
                         V v = Graphs.getOppositeVertex(graph, e, w);
-                        double c = (sigma.get(v) / sigma.get(w)) * (1 + delta.get(w));
+                        double c = (sigma.get(v).doubleValue() / sigma.get(w).doubleValue())
+                            * (1 + delta.get(w));
                         scores.put(e, scores.get(e) + c);
                         delta.put(v, delta.get(v) + c);
                     }
@@ -224,13 +225,8 @@ public class EdgeBetweennessCentrality<V, E>
         extends
         Algorithm
     {
-        public WeightedAlgorithm()
-        {
-            super();
-        }
-
         @Override
-        protected void singleVertex(V source)
+        protected void singleVertexUpdate(V source)
         {
             // initialization
             Map<V, List<E>> pred = new HashMap<>();
@@ -267,14 +263,14 @@ public class EdgeBetweennessCentrality<V, E>
                         dist.put(w, wHandle);
                         sigma.put(w, 0l);
                         pred.put(w, new ArrayList<>());
-                    } else if (wHandle.getKey() > newDistance) {
+                    } else if (Double.compare(wHandle.getKey(), newDistance) > 0) {
                         wHandle.decreaseKey(newDistance);
                         sigma.put(w, 0l);
                         pred.put(w, new ArrayList<>());
                     }
 
                     // path counting
-                    if (wHandle.getKey() == newDistance) {
+                    if (Double.compare(wHandle.getKey(), newDistance) == 0) {
                         long wCounter = sigma.get(w);
                         long vCounter = sigma.get(v);
                         long sum = wCounter + vCounter;
