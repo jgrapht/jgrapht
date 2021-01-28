@@ -25,6 +25,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 import org.jgrapht.util.CollectionUtil;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
@@ -41,8 +42,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -85,7 +85,8 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * of this TNR work please refer to the original paper.
  *
  * <p>
- * For parallelization, this implementation relies on the {@link ExecutorService}.
+ * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
+ * which is supplied to this algorithm from outside.
  *
  * @param <V> graph vertex type
  * @param <E> graph edge type
@@ -171,61 +172,65 @@ class TransitNodeRoutingPrecomputation<V, E> {
 
 
     /**
-     * Constructs an instance of the algorithm for a given {@code graph}.
+     * Constructs an instance of the algorithm for a given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param graph graph
+     * @param executor executor which will be used for parallelization
      */
-    public TransitNodeRoutingPrecomputation(Graph<V, E> graph) {
-        this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
+    public TransitNodeRoutingPrecomputation(Graph<V, E> graph, ThreadPoolExecutor executor) {
+        this(new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy(), executor);
     }
 
-    /**
-     * Constructs an instance of the algorithm for a given {@code graph}
-     * and {@code parallelism}.
-     *
-     * @param graph       graph
-     * @param parallelism maximum number of threads used in the computations
-     */
-    public TransitNodeRoutingPrecomputation(Graph<V, E> graph, int parallelism) {
-        this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy(), parallelism,
-                (int) Math.sqrt(graph.vertexSet().size()), PairingHeap::new);
-    }
 
     /**
-     * Constructs an instance of the algorithm for the given {@code contractionHierarchy}.
+     * Constructs an instance of the algorithm for the given {@code contractionHierarchy} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param hierarchy contraction hierarchy
+     * @param executor executor which will be used for parallelization
      */
-    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy) {
-        this(hierarchy, (int) Math.sqrt(hierarchy.getGraph().vertexSet().size()));
-    }
-
-    /**
-     * Constructs an instance of the algorithm for a given {@code contractionHierarchy} and {@code numberOfTransitVertices}.
-     *
-     * @param hierarchy               contraction hierarchy
-     * @param numberOfTransitVertices number of transit vertices
-     */
-    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy,
-                                            int numberOfTransitVertices) {
-        this(hierarchy, Runtime.getRuntime().availableProcessors(), numberOfTransitVertices, PairingHeap::new);
+    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy, ThreadPoolExecutor executor) {
+        this(hierarchy, (int) Math.sqrt(hierarchy.getGraph().vertexSet().size()), executor);
     }
 
     /**
      * Constructs an instance of the algorithm for a given {@code contractionHierarchy},
-     * {@code parallelism}, {@code numberOfTransitVertices} and {@code heapSupplier}.
-     * Heap provided by the {@code heapSupplier} is used which computing the
-     * Voronoi diagram.
+     * {@code numberOfTransitVertices} and {@code executor}. It is up to a user of this
+     * algorithm to handle the creation and termination of the provided {@code executor}.
+     * Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
      * @param hierarchy               contraction hierarchy
-     * @param parallelism             maximum number of threads to be used in the computations
      * @param numberOfTransitVertices number of transit vertices
-     * @param heapSupplier            supplier for preferable heap implementation
+     * @param executor executor which will be used for parallelization
      */
     public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy,
-                                            int parallelism,
+                                            int numberOfTransitVertices, ThreadPoolExecutor executor) {
+        this(hierarchy, numberOfTransitVertices, PairingHeap::new, executor);
+    }
+
+    /**
+     * Constructs an instance of the algorithm for a given {@code contractionHierarchy},
+     * {@code parallelism}, {@code numberOfTransitVertices}, {@code heapSupplier} and {@code executor}.
+     * Heap provided by the {@code heapSupplier} is used which computing the
+     * Voronoi diagram. It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. Utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
+     *
+     * @param hierarchy               contraction hierarchy
+     * @param numberOfTransitVertices number of transit vertices
+     * @param heapSupplier            supplier for preferable heap implementation
+     * @param executor                executor which will be used for parallelization
+     */
+    public TransitNodeRoutingPrecomputation(ContractionHierarchy<V, E> hierarchy,
                                             int numberOfTransitVertices,
-                                            Supplier<AddressableHeap<Double, ContractionVertex<V>>> heapSupplier) {
+                                            Supplier<AddressableHeap<Double, ContractionVertex<V>>> heapSupplier,
+                                            ThreadPoolExecutor executor) {
         if (numberOfTransitVertices > hierarchy.getGraph().vertexSet().size()) {
             throw new IllegalArgumentException("number of transit vertices is larger than the number of vertices in the graph");
         }
@@ -233,14 +238,14 @@ class TransitNodeRoutingPrecomputation<V, E> {
         this.contractionGraph = hierarchy.getContractionGraph();
         this.contractionMapping = hierarchy.getContractionMapping();
         this.numberOfTransitVertices = numberOfTransitVertices;
-        this.parallelism = parallelism;
+        this.parallelism = executor.getMaximumPoolSize();
         this.heapSupplier = heapSupplier;
 
         this.contractionVertices = new ArrayList<>(Collections.nCopies(contractionGraph.vertexSet().size(), null));
         this.manyToManyShortestPathsAlgorithm = new CHManyToManyShortestPaths<>(hierarchy);
 
-        this.executor = Executors.newFixedThreadPool(parallelism);
-        this.completionService = new ExecutorCompletionService<>(executor);
+        this.executor = executor;
+        this.completionService = new ExecutorCompletionService<>(this.executor);
     }
 
 
@@ -265,7 +270,6 @@ class TransitNodeRoutingPrecomputation<V, E> {
         transitVerticesPaths = unpackPaths(contractedPaths);
 
         Pair<AccessVertices<V, E>, LocalityFilter<V>> avAndLf = computeAVAndLF();
-        shutdownExecutor();
 
         return new TransitNodeRouting<>(contractionHierarchy, contractedTransitVerticesSet,
                 transitVerticesPaths, voronoiDiagram, avAndLf.getFirst(), avAndLf.getSecond());
@@ -361,18 +365,6 @@ class TransitNodeRoutingPrecomputation<V, E> {
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    /**
-     * Shuts down the {@code executor}.
-     */
-    private void shutdownExecutor() {
-        executor.shutdown();
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 

@@ -17,6 +17,7 @@ module org.jgrapht.core
     exports org.jgrapht.alg.interfaces;
     exports org.jgrapht.alg.isomorphism;
     exports org.jgrapht.alg.lca;
+    exports org.jgrapht.alg.linkprediction;
     exports org.jgrapht.alg.matching;
     exports org.jgrapht.alg.matching.blossom.v5;
     exports org.jgrapht.alg.partition;
@@ -33,6 +34,7 @@ module org.jgrapht.core
     exports org.jgrapht.alg.vertexcover.util;
     exports org.jgrapht.event;
     exports org.jgrapht.generate;
+    exports org.jgrapht.generate.netgen;
     exports org.jgrapht.graph;
     exports org.jgrapht.graph.builder;
     exports org.jgrapht.graph.concurrent;

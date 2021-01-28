@@ -91,22 +91,14 @@ public class BlossomVTreeEdgeTest
 
         treeEdge12.removeFromTreeEdgeList();
 
-        assertEquals(
-            new HashSet<>(Collections.singletonList(treeEdge13)),
-            BlossomVDebugger.getTreeEdgesOf(tree1));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(treeEdge23)),
-            BlossomVDebugger.getTreeEdgesOf(tree2));
+        assertEquals(Set.of(treeEdge13), BlossomVDebugger.getTreeEdgesOf(tree1));
+        assertEquals(Set.of(treeEdge23), BlossomVDebugger.getTreeEdgesOf(tree2));
 
         treeEdge13.removeFromTreeEdgeList();
 
         assertTrue(BlossomVDebugger.getTreeEdgesOf(tree1).isEmpty());
-        assertEquals(
-            new HashSet<>(Collections.singletonList(treeEdge23)),
-            BlossomVDebugger.getTreeEdgesOf(tree2));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(treeEdge23)),
-            BlossomVDebugger.getTreeEdgesOf(tree3));
+        assertEquals(Set.of(treeEdge23), BlossomVDebugger.getTreeEdgesOf(tree2));
+        assertEquals(Set.of(treeEdge23), BlossomVDebugger.getTreeEdgesOf(tree3));
 
         treeEdge23.removeFromTreeEdgeList();
 

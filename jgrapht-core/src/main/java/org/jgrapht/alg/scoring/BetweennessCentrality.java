@@ -93,8 +93,8 @@ public class BetweennessCentrality<V, E>
     public enum OverflowStrategy
     {
         /**
-         * Not check for overflow in counters. This means that on certain instances the results
-         * might wrong due to counters being too large to fit in a long.
+         * Do not check for overflow in counters. This means that on certain instances the results
+         * might be wrong due to counters being too large to fit in a long.
          */
         IGNORE_OVERFLOW,
         /**

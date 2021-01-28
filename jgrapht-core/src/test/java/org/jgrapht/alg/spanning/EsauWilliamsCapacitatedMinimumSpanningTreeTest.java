@@ -86,15 +86,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         assertNotNull(cmst);
         assertEquals(42.0, cmst.getWeight(), 0.0000001);
 
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(Set.of(1, 4), 2.0));
         assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(1)),
-            Pair.of(new HashSet<>(Arrays.asList(1, 4)), 2.0));
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(2)),
-            Pair.of(new HashSet<>(Arrays.asList(2, 5, 6)), 3.0));
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(3)),
-            Pair.of(new HashSet<>(Collections.singletonList(3)), 2.0));
+            cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(Set.of(2, 5, 6), 3.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(3)), Pair.of(Set.of(3), 2.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(4), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(5), 0);
@@ -161,15 +156,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         assertNotNull(cmst);
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(1)),
-            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(2)),
-            Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(4)),
-            Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(Set.of(1, 5), 4.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(Set.of(2, 3), 3.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(4)), Pair.of(Set.of(4), 3.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(3), 0);
@@ -235,15 +224,9 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
         assertNotNull(cmst);
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(1)),
-            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(2)),
-            Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
-        assertEquals(
-            cmst.getPartition().get(cmst.getLabels().get(4)),
-            Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(Set.of(1, 5), 4.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(Set.of(2, 3), 3.0));
+        assertEquals(cmst.getPartition().get(cmst.getLabels().get(4)), Pair.of(Set.of(4), 3.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(3), 0);

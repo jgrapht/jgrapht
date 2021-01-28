@@ -18,6 +18,8 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -34,7 +36,7 @@ final class GraphOrdering<V, E>
     private final Graph<V, E> graph;
 
     private final Map<V, Integer> mapVertexToOrder;
-    private final ArrayList<V> mapOrderToVertex;
+    private final List<V> mapOrderToVertex;
     private final int vertexCount;
 
     private final int[][] outgoingEdges;
@@ -65,14 +67,14 @@ final class GraphOrdering<V, E>
         this.graph = graph;
         this.cacheEdges = cacheEdges;
 
-        List<V> vertexSet = new ArrayList<>(graph.vertexSet());
+        List<V> vertexList = new ArrayList<>(graph.vertexSet());
         if (orderByDegree) {
-            vertexSet.sort(new GeneralVertexDegreeComparator<>(graph));
+            vertexList.sort(VertexDegreeComparator.of(graph));
         }
 
-        vertexCount = vertexSet.size();
-        mapVertexToOrder = new HashMap<>();
-        mapOrderToVertex = new ArrayList<>(vertexCount);
+        vertexCount = vertexList.size();
+        mapVertexToOrder = new VertexToIntegerMapping<>(vertexList).getVertexMap();
+        mapOrderToVertex = vertexList;
 
         if (cacheEdges) {
             outgoingEdges = new int[vertexCount][];
@@ -84,12 +86,6 @@ final class GraphOrdering<V, E>
             incomingEdges = null;
             edgeCache = null;
             adjMatrix = null;
-        }
-
-        Integer i = 0;
-        for (V vertex : vertexSet) {
-            mapVertexToOrder.put(vertex, i++);
-            mapOrderToVertex.add(vertex);
         }
     }
 
@@ -268,23 +264,5 @@ final class GraphOrdering<V, E>
     public Graph<V, E> getGraph()
     {
         return graph;
-    }
-
-    private static class GeneralVertexDegreeComparator<V2>
-        implements
-        Comparator<V2>
-    {
-        private Graph<V2, ?> graph;
-
-        GeneralVertexDegreeComparator(Graph<V2, ?> graph)
-        {
-            this.graph = graph;
-        }
-
-        @Override
-        public int compare(V2 v1, V2 v2)
-        {
-            return graph.edgesOf(v1).size() - graph.edgesOf(v2).size();
-        }
     }
 }
