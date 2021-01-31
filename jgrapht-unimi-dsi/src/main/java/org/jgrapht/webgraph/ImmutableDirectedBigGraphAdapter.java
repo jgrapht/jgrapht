@@ -206,7 +206,7 @@ public class ImmutableDirectedBigGraphAdapter
     public ImmutableDirectedBigGraphAdapter copy()
     {
         return new ImmutableDirectedBigGraphAdapter(
-            immutableGraph.copy(), immutableTranspose.copy());
+            immutableGraph.copy(), immutableTranspose != null ? immutableTranspose.copy() : null);
     }
 
     private final GraphIterables<Long, LongLongPair> ITERABLES = new GraphIterables<>()
