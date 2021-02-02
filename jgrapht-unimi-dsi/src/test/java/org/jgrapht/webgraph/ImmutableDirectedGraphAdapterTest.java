@@ -108,14 +108,6 @@ public class ImmutableDirectedGraphAdapterTest
         final File basename = storeTempGraph(g);
         final EFGraph ef = EFGraph.load(basename.toString());
 
-        /*
-         * Assertions.assertThrows(IllegalArgumentException.class, () -> {
-         *
-         * @SuppressWarnings("unused") final ImmutableDirectedGraphAdapter dummy =
-         * ImmutableDirectedGraphAdapter.directed(g, new ArrayListMutableGraph().immutableView());
-         * });
-         */
-
         final ImmutableDirectedGraphAdapter a = new ImmutableDirectedGraphAdapter(g, t);
         final ImmutableDirectedGraphAdapter b =
             new ImmutableDirectedGraphAdapter(ef, Transform.transpose(ef));
@@ -226,29 +218,6 @@ public class ImmutableDirectedGraphAdapterTest
 
         assertEquals(1.0, a.getEdgeWeight(IntIntPair.of(1, 2)), 0);
         a.setEdgeWeight(IntIntPair.of(0, 1), 1);
-
-        /*
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addEdge(0, 1); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addEdge(0, 1,
-         * IntIntPair.of(0, 1)); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.removeEdge(0, 1);
-         * });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-         * a.removeEdge(IntIntPair.of(0, 1)); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-         * a.setEdgeWeight(IntIntPair.of(0, 1), 0); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addVertex(); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addVertex(0); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.removeVertex(0);
-         * });
-         */
     }
 
 
