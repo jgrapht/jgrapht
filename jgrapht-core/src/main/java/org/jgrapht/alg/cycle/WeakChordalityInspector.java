@@ -91,7 +91,7 @@ public class WeakChordalityInspector<V, E>
     /**
      * Inverse of the bijective mapping of vertices onto $\left[0,n-1\right]$
      */
-    private Map<Integer, V> indices;
+    private List<V> indices;
     /**
      * Contains true if the graph is weakly chordal, otherwise false. Is null before the first call
      * to the {@link WeakChordalityInspector#isWeaklyChordal()}.
@@ -123,13 +123,9 @@ public class WeakChordalityInspector<V, E>
      */
     private void initMappings()
     {
-        vertices = CollectionUtil.newHashMapWithExpectedSize(n);
-        indices = CollectionUtil.newHashMapWithExpectedSize(n);
-        int i = 0;
-        for (V v : graph.vertexSet()) {
-            indices.put(i, v);
-            vertices.put(v, i++);
-        }
+        VertexToIntegerMapping<V> mapping = new VertexToIntegerMapping<>(graph.vertexSet());
+        vertices = mapping.getVertexMap();
+        indices = mapping.getIndexList();
     }
 
     /**
@@ -595,13 +591,9 @@ public class WeakChordalityInspector<V, E>
     private GraphPath<V, E> findHole(
         Graph<V, E> graph, V sourceInSeparator, V source, V target, V targetInSeparator)
     {
-        Map<V, Boolean> visited =
-            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
-        for (V vertex : graph.vertexSet()) {
-            visited.put(vertex, false);
-        }
-        visited.put(target, true);
-        visited.put(source, true);
+        Set<V> visited = CollectionUtil.newHashSetWithExpectedSize(graph.vertexSet().size());
+        visited.add(target);
+        visited.add(source);
 
         // Obtaining some cycle, which can be minimized to a hole
         List<V> cycle =
@@ -626,7 +618,7 @@ public class WeakChordalityInspector<V, E>
      * @return the computed cycle, which contains a hole
      */
     private List<V> findCycle(
-        Map<V, Boolean> visited, Graph<V, E> graph, V tarInSep, V tar, V sour, V sourInSep)
+        Set<V> visited, Graph<V, E> graph, V tarInSep, V tar, V sour, V sourInSep)
     {
         List<V> cycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
         Deque<V> stack = new ArrayDeque<>();
@@ -634,8 +626,7 @@ public class WeakChordalityInspector<V, E>
 
         while (!stack.isEmpty()) {
             V currentVertex = stack.removeLast();
-            if (!visited.get(currentVertex)) {
-                visited.put(currentVertex, true);
+            if (visited.add(currentVertex)) {
 
                 // trying to advance cycle from current vertex
                 // removing all vertices from the head of the cycle, which aren't adjacent to the
@@ -653,7 +644,7 @@ public class WeakChordalityInspector<V, E>
                         // adjacent to the
                         // source vertex and (it isn't adjacent to the target vertex or it is
                         // targetInSeparator (the end of the cycle))
-                        if (!visited.get(neighbor) && !graph.containsEdge(sour, neighbor)
+                        if (!visited.contains(neighbor) && !graph.containsEdge(sour, neighbor)
                             && (!graph.containsEdge(tar, neighbor) || neighbor.equals(tarInSep)))
                         {
                             stack.add(neighbor);

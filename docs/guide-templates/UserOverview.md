@@ -202,6 +202,20 @@ graph represents a CAD model being visualized; then every time the
 graph is edited, all affected views can be automatically refreshed
 from listener events.
 
+### Concurrency
+
+The default graph implementations are not safe for concurrent reads
+and writes from different threads.  If an application attempts to
+modify a graph in one thread while another thread is reading or
+writing the same graph, undefined behavior will result.  However,
+concurrent reads against the same graph from different threads are
+safe.  (Note that the Graph interface itself makes no such guarantee,
+so for non-default implementations, different rules may apply.)
+
+If you need support for concurrent reads and writes, consider using
+the
+[AsSynchronizedGraph wrapper](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/graph/concurrent/AsSynchronizedGraph.html).
+
 ## Graph Generation
 
 Besides constructing vertices and edges individually, applications can
@@ -372,7 +386,7 @@ The default JGraphT implementations of the `Graph` interface override `equals`/`
 * the two graph instances must be of identical concrete class (e.g. `DefaultDirectedGraph`)
 * the vertex sets of the two graph instances must be equal (using the definition from [java.util.Set](https://docs.oracle.com/javase/7/docs/api/java/util/Set.html#equals(java.lang.Object)), and taking into account the `equals` implementation of the vertex type you've chosen)
 * the edges sets of the two graph instances must be equal (again using the `java.util.Set` definition, and taking into account the `equals` implementation of the edge type you've chosen)
-* for a given edge, the source/target/weight must be equal in both graph instances
+* for a given edge, the source/target/weight must be equal in both graph instances (for undirected graphs, the source/target distinction is ignored)
 
 In general, an exact copy of a graph object via `Graphs.addGraph` or
 `clone` will be equal to the original according to this definition

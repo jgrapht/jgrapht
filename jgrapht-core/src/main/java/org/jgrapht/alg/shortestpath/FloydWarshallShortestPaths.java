@@ -72,10 +72,7 @@ public class FloydWarshallShortestPaths<V, E>
          * vertex which has degree at least one and at least two.
          */
         this.vertices = new ArrayList<>(graph.vertexSet());
-        Collections
-            .sort(
-                vertices,
-                new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
+        Collections.sort(vertices, VertexDegreeComparator.of(graph));
         this.degrees = new ArrayList<>();
         this.vertexIndices = CollectionUtil.newHashMapWithExpectedSize(this.vertices.size());
 
@@ -333,8 +330,9 @@ public class FloydWarshallShortestPaths<V, E>
     {
         lazyCalculateMatrix();
 
-        if (lastHopMatrix != null)
+        if (lastHopMatrix != null) {
             return;
+        }
 
         // Initialize matrix
         int n = vertices.size();
@@ -343,8 +341,9 @@ public class FloydWarshallShortestPaths<V, E>
         // Populate matrix
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (i == j || lastHopMatrix[i][j] != null || backtrace[i][j] == null)
+                if (i == j || lastHopMatrix[i][j] != null || backtrace[i][j] == null) {
                     continue;
+                }
 
                 // Reconstruct the path from i to j
                 V u = vertices.get(i);
@@ -364,7 +363,7 @@ public class FloydWarshallShortestPaths<V, E>
         implements
         SingleSourcePaths<V, E>
     {
-        private V source;
+        private final V source;
 
         public FloydWarshallSingleSourcePaths(V source)
         {

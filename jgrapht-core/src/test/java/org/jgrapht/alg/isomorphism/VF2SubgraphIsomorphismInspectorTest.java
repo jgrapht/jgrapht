@@ -18,13 +18,12 @@
 package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class VF2SubgraphIsomorphismInspectorTest
 {
@@ -323,19 +322,19 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<>(sg4k, sg3k);
         Iterator<GraphMapping<Integer, DefaultEdge>> iter10 = vfs10.getMappings();
 
-        Set<String> mappings10 = new HashSet<>(
-            Arrays
-                .asList(
-                    "[0=0 1=1 2=2 3=~~]", "[0=0 1=1 2=~~ 3=2]", "[0=0 1=~~ 2=1 3=2]",
-                    "[0=~~ 1=0 2=1 3=2]", "[0=1 1=0 2=2 3=~~]", "[0=1 1=0 2=~~ 3=2]",
-                    "[0=1 1=~~ 2=0 3=2]", "[0=~~ 1=1 2=0 3=2]", "[0=2 1=1 2=0 3=~~]",
-                    "[0=2 1=1 2=~~ 3=0]", "[0=2 1=~~ 2=1 3=0]", "[0=~~ 1=2 2=1 3=0]",
-                    "[0=0 1=2 2=1 3=~~]", "[0=0 1=2 2=~~ 3=1]", "[0=0 1=~~ 2=2 3=1]",
-                    "[0=~~ 1=0 2=2 3=1]", "[0=1 1=2 2=0 3=~~]", "[0=1 1=2 2=~~ 3=0]",
-                    "[0=1 1=~~ 2=2 3=0]", "[0=~~ 1=1 2=2 3=0]", "[0=2 1=0 2=1 3=~~]",
-                    "[0=2 1=0 2=~~ 3=1]", "[0=2 1=~~ 2=0 3=1]", "[0=~~ 1=2 2=0 3=1]"));
-        for (int i = 0; i < 24; i++)
-            assertEquals(true, mappings10.remove(iter10.next().toString()));
+        Set<String> mappings10 = Set
+            .of(
+                "[0=0 1=1 2=2 3=~~]", "[0=0 1=1 2=~~ 3=2]", "[0=0 1=~~ 2=1 3=2]",
+                "[0=~~ 1=0 2=1 3=2]", "[0=1 1=0 2=2 3=~~]", "[0=1 1=0 2=~~ 3=2]",
+                "[0=1 1=~~ 2=0 3=2]", "[0=~~ 1=1 2=0 3=2]", "[0=2 1=1 2=0 3=~~]",
+                "[0=2 1=1 2=~~ 3=0]", "[0=2 1=~~ 2=1 3=0]", "[0=~~ 1=2 2=1 3=0]",
+                "[0=0 1=2 2=1 3=~~]", "[0=0 1=2 2=~~ 3=1]", "[0=0 1=~~ 2=2 3=1]",
+                "[0=~~ 1=0 2=2 3=1]", "[0=1 1=2 2=0 3=~~]", "[0=1 1=2 2=~~ 3=0]",
+                "[0=1 1=~~ 2=2 3=0]", "[0=~~ 1=1 2=2 3=0]", "[0=2 1=0 2=1 3=~~]",
+                "[0=2 1=0 2=~~ 3=1]", "[0=2 1=~~ 2=0 3=1]", "[0=~~ 1=2 2=0 3=1]");
+        for (int i = 0; i < 24; i++) {
+            assertTrue(mappings10.contains(iter10.next().toString()));
+        }
         assertEquals(false, iter10.hasNext());
 
         /* ECS-11: isomorphic graphs */
@@ -345,11 +344,10 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<Integer, DefaultEdge>> iter11 = vfs11.getMappings();
 
-        Set<String> mappings11 =
-            new HashSet<>(Arrays.asList("[1=1 2=2 3=3 4=4]", "[1=4 2=3 3=2 4=1]"));
-        assertEquals(true, mappings11.remove(iter11.next().toString()));
-        assertEquals(true, mappings11.remove(iter11.next().toString()));
-        assertEquals(false, iter11.hasNext());
+        Set<String> mappings11 = Set.of("[1=1 2=2 3=3 4=4]", "[1=4 2=3 3=2 4=1]");
+        assertTrue(mappings11.contains(iter11.next().toString()));
+        assertTrue(mappings11.contains(iter11.next().toString()));
+        assertFalse(iter11.hasNext());
 
         /* ECS-12: not connected graphs of different size */
 
@@ -394,8 +392,9 @@ public class VF2SubgraphIsomorphismInspectorTest
                     "[0=~~ 1=10 2=8 3=9 4=7 5=6]", "[0=~~ 1=8 2=9 3=10 4=7 5=6]",
                     "[0=~~ 1=9 2=10 3=8 4=7 5=6]", "[0=~~ 1=10 2=8 3=9 4=6 5=7]",
                     "[0=~~ 1=8 2=9 3=10 4=6 5=7]", "[0=~~ 1=9 2=10 3=8 4=6 5=7]"));
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 12; i++) {
             assertEquals(true, mappings12.remove(iter12.next().toString()));
+        }
         assertEquals(false, iter12.hasNext());
     }
 
@@ -862,32 +861,28 @@ public class VF2SubgraphIsomorphismInspectorTest
          */
 
         VF2SubgraphIsomorphismInspector<String, Integer> vf3 =
-            new VF2SubgraphIsomorphismInspector<>(
-                g1, g2, new VertexComp(), new AlwaysEqualComparator<>());
+            new VF2SubgraphIsomorphismInspector<>(g1, g2, new VertexComp(), (t1, t2) -> 0);
 
         Iterator<GraphMapping<String, Integer>> iter2 = vf3.getMappings();
 
-        Set<String> mappings =
-            new HashSet<>(Arrays.asList("[A=A B=b a=~~ b=B]", "[A=~~ B=B a=A b=b]"));
-        assertEquals(true, mappings.remove(iter2.next().toString()));
-        assertEquals(true, mappings.remove(iter2.next().toString()));
-        assertEquals(false, iter2.hasNext());
+        Set<String> mappings = Set.of("[A=A B=b a=~~ b=B]", "[A=~~ B=B a=A b=b]");
+        assertTrue(mappings.contains(iter2.next().toString()));
+        assertTrue(mappings.contains(iter2.next().toString()));
+        assertFalse(iter2.hasNext());
 
         /*
          * SEM-3 test edge comparator
          */
 
         VF2SubgraphIsomorphismInspector<String, Integer> vf4 =
-            new VF2SubgraphIsomorphismInspector<>(
-                g1, g2, new AlwaysEqualComparator<>(), new EdgeComp());
+            new VF2SubgraphIsomorphismInspector<>(g1, g2, (t1, t2) -> 0, new EdgeComp());
 
         Iterator<GraphMapping<String, Integer>> iter3 = vf4.getMappings();
 
-        Set<String> mappings2 =
-            new HashSet<>(Arrays.asList("[A=A B=b a=~~ b=B]", "[A=A B=~~ a=b b=B]"));
-        assertEquals(true, mappings2.remove(iter3.next().toString()));
-        assertEquals(true, mappings2.remove(iter3.next().toString()));
-        assertEquals(false, iter3.hasNext());
+        Set<String> mappings2 = Set.of("[A=A B=b a=~~ b=B]", "[A=A B=~~ a=b b=B]");
+        assertTrue(mappings2.contains(iter3.next().toString()));
+        assertTrue(mappings2.contains(iter3.next().toString()));
+        assertFalse(iter3.hasNext());
     }
 
     private class VertexComp
@@ -897,10 +892,11 @@ public class VF2SubgraphIsomorphismInspectorTest
         @Override
         public int compare(String o1, String o2)
         {
-            if (o1.toLowerCase().equals(o2.toLowerCase()))
+            if (o1.toLowerCase().equals(o2.toLowerCase())) {
                 return 0;
-            else
+            } else {
                 return 1;
+            }
         }
     }
 

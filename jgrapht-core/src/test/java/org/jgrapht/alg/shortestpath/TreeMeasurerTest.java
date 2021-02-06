@@ -59,7 +59,7 @@ public class TreeMeasurerTest
 
         TreeMeasurer<Integer, DefaultEdge> treeMeasurer = new TreeMeasurer<>(tree);
 
-        assertEquals(new HashSet<>(Arrays.asList(2, 3)), treeMeasurer.getGraphCenter());
+        assertEquals(Set.of(2, 3), treeMeasurer.getGraphCenter());
     }
 
     @Test
@@ -80,6 +80,6 @@ public class TreeMeasurerTest
 
         TreeMeasurer<Integer, DefaultEdge> treeMeasurer = new TreeMeasurer<>(tree);
 
-        assertEquals(new HashSet<>(Collections.singletonList(3)), treeMeasurer.getGraphCenter());
+        assertEquals(Set.of(3), treeMeasurer.getGraphCenter());
     }
 }

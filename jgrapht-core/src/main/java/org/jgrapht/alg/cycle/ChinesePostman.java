@@ -202,15 +202,15 @@ public class ChinesePostman<V, E>
         // node equals its imbalance.
         Graph<Integer, DefaultWeightedEdge> auxGraph =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Map<Integer, V> duplicateMap = new HashMap<>();
+        List<V> duplicateMap = new ArrayList<>();
         Set<Integer> negImbalancedPartition = new HashSet<>();
         Set<Integer> postImbalancedPartition = new HashSet<>();
-        int vertex = 0;
+        Integer vertex = 0;
 
         for (V v : negImbalancedVertices) {
             for (int i = 0; i < imbalancedVertices.get(v); i++) {
                 auxGraph.addVertex(vertex);
-                duplicateMap.put(vertex, v);
+                duplicateMap.add(v);
                 negImbalancedPartition.add(vertex);
                 vertex++;
             }
@@ -218,7 +218,7 @@ public class ChinesePostman<V, E>
         for (V v : postImbalancedVertices) {
             for (int i = 0; i < imbalancedVertices.get(v); i++) {
                 auxGraph.addVertex(vertex);
-                duplicateMap.put(vertex, v);
+                duplicateMap.add(v);
                 postImbalancedPartition.add(vertex);
                 vertex++;
             }

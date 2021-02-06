@@ -19,6 +19,7 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -67,7 +68,7 @@ public class TwoOptHeuristicTSP<V, E>
     private int n;
     private double[][] dist;
     private Map<V, Integer> index;
-    private Map<Integer, V> revIndex;
+    private List<V> revIndex;
 
     /**
      * Constructor. By default one initial random tour is used.
@@ -217,20 +218,16 @@ public class TwoOptHeuristicTSP<V, E>
         this.graph = graph;
         this.n = graph.vertexSet().size();
         this.dist = new double[n][n];
-        this.index = new HashMap<>();
-        this.revIndex = new HashMap<>();
-        int i = 0;
-        for (V v : graph.vertexSet()) {
-            index.put(v, i);
-            revIndex.put(i, v);
-            i++;
-        }
+        VertexToIntegerMapping<V> vertex2index = new VertexToIntegerMapping<>(graph.vertexSet());
+        this.index = vertex2index.getVertexMap();
+        this.revIndex = vertex2index.getIndexList();
 
         for (E e : graph.edgeSet()) {
             V s = graph.getEdgeSource(e);
             int si = index.get(s);
             V t = graph.getEdgeTarget(e);
             int ti = index.get(t);
+
             double weight = graph.getEdgeWeight(e);
             dist[si][ti] = weight;
             dist[ti][si] = weight;

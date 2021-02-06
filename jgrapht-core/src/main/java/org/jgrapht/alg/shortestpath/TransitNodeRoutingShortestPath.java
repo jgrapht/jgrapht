@@ -26,6 +26,8 @@ import org.jgrapht.graph.GraphWalk;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths;
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
@@ -75,6 +77,11 @@ import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.Tran
 public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgorithm<V, E> {
 
     /**
+     * Executor which is used for parallelization in this algorithm.
+     */
+    private ThreadPoolExecutor executor;
+
+    /**
      * Contraction hierarchy which is used to compute shortest paths.
      */
     private ContractionHierarchy<V, E> contractionHierarchy;
@@ -99,12 +106,17 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
     private LocalityFilter<V> localityFilter;
 
     /**
-     * Constructs a new instance for the given {@code graph}.
+     * Constructs a new instance for the given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link org.jgrapht.util.ConcurrencyUtil}.
      *
-     * @param graph graph
+     * @param graph    graph
+     * @param executor executor which will be used for computing {@code TransitNodeRouting}
      */
-    public TransitNodeRoutingShortestPath(Graph<V, E> graph) {
+    public TransitNodeRoutingShortestPath(Graph<V, E> graph, ThreadPoolExecutor executor) {
         super(graph);
+        this.executor = Objects.requireNonNull(executor, "executor cannot be null!");
     }
 
     /**
@@ -129,7 +141,7 @@ public class TransitNodeRoutingShortestPath<V, E> extends BaseShortestPathAlgori
         if (contractionHierarchy != null) {
             return;
         }
-        TransitNodeRouting<V, E> routing = new TransitNodeRoutingPrecomputation<>(graph).computeTransitNodeRouting();
+        TransitNodeRouting<V, E> routing = new TransitNodeRoutingPrecomputation<>(graph, executor).computeTransitNodeRouting();
         initialize(routing);
     }
 

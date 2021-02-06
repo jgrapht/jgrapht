@@ -39,6 +39,19 @@ import java.util.function.*;
  * set ordering (via {@link LinkedHashMap} and {@link LinkedHashSet}). The defaults are reasonable
  * for most use-cases, only change if you know what you are doing.
  *
+ * <p> The default graph implementations are not safe for concurrent reads and
+ * writes from different threads.  If an application attempts to modify a graph
+ * in one thread while another thread is reading or writing the same graph,
+ * undefined behavior will result.  However, concurrent reads against the same
+ * graph from different threads are safe.  (Note that the {@link
+ * org.jgrapht.Graph Graph interface} itself makes no such guarantee, so for
+ * non-default implementations, different rules may apply.)
+ *
+ * <p>
+ * If you need support for concurrent reads and writes, consider using
+ * the {@link org.jgrapht.graph.concurrent.AsSynchronizedGraph
+ * AsSynchronizedGraph wrapper}.
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *

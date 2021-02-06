@@ -65,7 +65,7 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
         Map<Set<Integer>, Integer> separatorsAndMultiplicities =
             finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
-        expected.put(new HashSet<>(Arrays.asList(2, 3)), 1);
+        expected.put(Set.of(2, 3), 1);
         assertEquals(expected.keySet(), separators);
         assertEquals(expected, separatorsAndMultiplicities);
     }
@@ -88,10 +88,10 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
         Map<Set<Integer>, Integer> separatorsAndMultiplicities =
             finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
-        expected.put(new HashSet<>(Collections.singletonList(3)), 1);
-        expected.put(new HashSet<>(Arrays.asList(3, 6)), 2);
-        expected.put(new HashSet<>(Arrays.asList(8, 10)), 1);
-        expected.put(new HashSet<>(Arrays.asList(6, 8, 10)), 1);
+        expected.put(Set.of(3), 1);
+        expected.put(Set.of(3, 6), 2);
+        expected.put(Set.of(8, 10), 1);
+        expected.put(Set.of(6, 8, 10), 1);
         assertEquals(expected.keySet(), separators);
         assertEquals(expected, separatorsAndMultiplicities);
     }
@@ -114,10 +114,10 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
         Map<Set<Integer>, Integer> separatorsAndMultiplicities =
             finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
-        expected.put(new HashSet<>(Collections.singletonList(2)), 1);
-        expected.put(new HashSet<>(Arrays.asList(6, 8)), 2);
-        expected.put(new HashSet<>(Arrays.asList(8, 9)), 3);
-        expected.put(new HashSet<>(Arrays.asList(8, 9, 11)), 1);
+        expected.put(Set.of(2), 1);
+        expected.put(Set.of(6, 8), 2);
+        expected.put(Set.of(8, 9), 3);
+        expected.put(Set.of(8, 9, 11), 1);
         assertEquals(expected.keySet(), separators);
         assertEquals(expected, separatorsAndMultiplicities);
     }
@@ -156,8 +156,8 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest
         Map<Set<Integer>, Integer> separatorsAndMultiplicities =
             finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
-        expected.put(new HashSet<>(Collections.singletonList(2)), 1);
-        expected.put(new HashSet<>(Arrays.asList(3, 5)), 1);
+        expected.put(Set.of(2), 1);
+        expected.put(Set.of(3, 5), 1);
         assertEquals(expected.keySet(), separators);
         assertEquals(expected, separatorsAndMultiplicities);
     }
