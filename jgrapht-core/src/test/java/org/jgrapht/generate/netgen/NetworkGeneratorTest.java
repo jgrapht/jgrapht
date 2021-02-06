@@ -44,10 +44,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class NetworkGeneratorTest {
 
-    private static final long seed = 1;
+    private static final long SEED = 1;
     private static final double EPS = 1e-9;
 
-    private final Random rng = new Random(seed);
+    private final Random rng = new Random(SEED);
 
     private static <V, E> void validateNetwork(Graph<V, E> network, NetworkInfo<V, E> networkInfo, NetworkGeneratorConfig config) {
         List<V> pureSources = networkInfo.getPureSources();

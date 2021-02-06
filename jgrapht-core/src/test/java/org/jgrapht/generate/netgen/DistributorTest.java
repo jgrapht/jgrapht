@@ -32,9 +32,9 @@ import static org.junit.Assert.*;
  * @author Timofey Chudakov
  */
 public class DistributorTest {
-    private static final long seed = 1;
+    private static final long SEED = 1;
 
-    private final Random rng = new Random(seed);
+    private final Random rng = new Random(SEED);
 
     @Test
     public void testDistributor_NoUpperBounds_OneValidDistribution() {
