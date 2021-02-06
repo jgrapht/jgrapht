@@ -110,14 +110,6 @@ public class ImmutableDirectedBigGraphAdapterTest
         final File basename = storeTempGraph(g);
         final EFGraph ef = EFGraph.load(basename.toString());
 
-        /*
-         * Assertions.assertThrows(IllegalArgumentException.class, () -> {
-         *
-         * @SuppressWarnings("unused") final ImmutableDirectedBigGraphAdapter dummy =
-         * ImmutableDirectedBigGraphAdapter.directed(g, ImmutableGraph.wrap(new
-         * ArrayListMutableGraph().immutableView())); });
-         */
-
         final ImmutableDirectedBigGraphAdapter a = new ImmutableDirectedBigGraphAdapter(g, t);
         final ImmutableDirectedBigGraphAdapter b = new ImmutableDirectedBigGraphAdapter(
             ef, ImmutableGraph.wrap(Transform.transpose(mg)));
@@ -230,29 +222,6 @@ public class ImmutableDirectedBigGraphAdapterTest
         assertEquals(1, a.getEdgeWeight(LongLongPair.of(1L, 2L)), 0);
         a.setEdgeWeight(LongLongPair.of(0L, 1L), 1);
 
-        /*
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addEdge(0L, 1L);
-         * });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addEdge(0L, 1L,
-         * LongLongPair.of(0L, 1L)); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.removeEdge(0L,
-         * 1L); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-         * a.removeEdge(LongLongPair.of(0L, 1L)); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-         * a.setEdgeWeight(LongLongPair.of(0L, 1L), 0L); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addVertex(); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.addVertex(0L); });
-         *
-         * Assertions.assertThrows(UnsupportedOperationException.class, () -> { a.removeVertex(0L);
-         * });
-         */
     }
 
 
