@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jgrapht/jgrapht.svg?branch=master)](https://travis-ci.org/jgrapht/jgrapht)
+![Build Status](https://github.com/jgrapht/jgrapht/workflows/JGrapht%20Master%20build/badge.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jgrapht/jgrapht/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jgrapht%22)
 [![Snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.jgrapht/jgrapht.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/jgrapht/jgrapht-core/)
 [![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](http://www.gnu.org/licenses/lgpl-2.1.html)
