@@ -18,7 +18,6 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -48,8 +47,8 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     private final int n2;
     private final double p;
 
-    private Map<Integer, V> partitionA;
-    private Map<Integer, V> partitionB;
+    private List<V> partitionA;
+    private List<V> partitionB;
 
     /**
      * Create a new random bipartite graph generator. The generator uses the $G(n, p)$ model when $n
@@ -126,14 +125,14 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
 
-        partitionA = CollectionUtil.newLinkedHashMapWithExpectedSize(n1);
+        partitionA = new ArrayList<>(n1);
         for (int i = 0; i < n1; i++) {
-            partitionA.put(i, target.addVertex());
+            partitionA.add(target.addVertex());
         }
 
-        partitionB = CollectionUtil.newLinkedHashMapWithExpectedSize(n2);
+        partitionB = new ArrayList<>(n2);
         for (int i = 0; i < n2; i++) {
-            partitionB.put(i, target.addVertex());
+            partitionB.add(target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n1 + n2) {
@@ -175,9 +174,9 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     public Set<V> getFirstPartition()
     {
         if (partitionA.size() <= partitionB.size())
-            return new LinkedHashSet<>(partitionA.values());
+            return new LinkedHashSet<>(partitionA);
         else
-            return new LinkedHashSet<>(partitionB.values());
+            return new LinkedHashSet<>(partitionB);
     }
 
     /**
@@ -189,9 +188,9 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     public Set<V> getSecondPartition()
     {
         if (partitionB.size() >= partitionA.size())
-            return new LinkedHashSet<>(partitionB.values());
+            return new LinkedHashSet<>(partitionB);
         else
-            return new LinkedHashSet<>(partitionA.values());
+            return new LinkedHashSet<>(partitionA);
     }
 
 }

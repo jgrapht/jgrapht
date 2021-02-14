@@ -91,10 +91,10 @@ public class AsUndirectedGraphTest
     @Test
     public void testEdgesOf()
     {
-        assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.edgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24)), undirected.edgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), undirected.edgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, loop)), undirected.edgesOf(v4));
+        assertEquals(Set.of(e12), undirected.edgesOf(v1));
+        assertEquals(Set.of(e12, e23, e24), undirected.edgesOf(v2));
+        assertEquals(Set.of(e23), undirected.edgesOf(v3));
+        assertEquals(Set.of(e24, loop), undirected.edgesOf(v4));
     }
 
     /**
@@ -115,10 +115,10 @@ public class AsUndirectedGraphTest
     @Test
     public void testIncomingEdgesOf()
     {
-        assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.incomingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24)), undirected.incomingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), undirected.incomingEdgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, loop)), undirected.incomingEdgesOf(v4));
+        assertEquals(Set.of(e12), undirected.incomingEdgesOf(v1));
+        assertEquals(Set.of(e12, e23, e24), undirected.incomingEdgesOf(v2));
+        assertEquals(Set.of(e23), undirected.incomingEdgesOf(v3));
+        assertEquals(Set.of(e24, loop), undirected.incomingEdgesOf(v4));
     }
 
     /**
@@ -139,10 +139,10 @@ public class AsUndirectedGraphTest
     @Test
     public void testOutgoingEdgesOf()
     {
-        assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.outgoingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24)), undirected.outgoingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e23)), undirected.outgoingEdgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e24, loop)), undirected.outgoingEdgesOf(v4));
+        assertEquals(Set.of(e12), undirected.outgoingEdgesOf(v1));
+        assertEquals(Set.of(e12, e23, e24), undirected.outgoingEdgesOf(v2));
+        assertEquals(Set.of(e23), undirected.outgoingEdgesOf(v3));
+        assertEquals(Set.of(e24, loop), undirected.outgoingEdgesOf(v4));
     }
 
     /**

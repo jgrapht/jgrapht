@@ -70,7 +70,7 @@ public class ComplementGraphGeneratorTest
         Graph<Integer, DefaultEdge> target = new SimpleWeightedGraph<>(DefaultEdge.class);
         cgg.generateGraph(target);
 
-        assertTrue(target.vertexSet().equals(new HashSet<>(Arrays.asList(0, 1, 2, 3))));
+        assertTrue(target.vertexSet().equals(Set.of(0, 1, 2, 3)));
         assertEquals(3, target.edgeSet().size());
         assertTrue(target.containsEdge(0, 3));
         assertTrue(target.containsEdge(2, 3));
@@ -90,7 +90,7 @@ public class ComplementGraphGeneratorTest
         Graph<Integer, DefaultEdge> target = new SimpleWeightedGraph<>(DefaultEdge.class);
         cgg.generateGraph(target);
 
-        assertTrue(target.vertexSet().equals(new HashSet<>(Arrays.asList(0, 1, 2))));
+        assertTrue(target.vertexSet().equals(Set.of(0, 1, 2)));
         assertEquals(3, target.edgeSet().size());
         assertTrue(target.containsEdge(1, 0));
         assertTrue(target.containsEdge(2, 1));
@@ -110,7 +110,7 @@ public class ComplementGraphGeneratorTest
             new ComplementGraphGenerator<>(g, true);
         Graph<Integer, DefaultEdge> target = new Pseudograph<>(DefaultEdge.class);
         cgg.generateGraph(target);
-        assertTrue(target.vertexSet().equals(new HashSet<>(Arrays.asList(0, 1, 2))));
+        assertTrue(target.vertexSet().equals(Set.of(0, 1, 2)));
         assertEquals(3, target.edgeSet().size());
         for (Integer v : target.vertexSet())
             assertTrue(target.containsEdge(v, v));

@@ -17,17 +17,32 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.*;
-import org.jheaps.*;
-import org.jheaps.tree.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.MaskSubgraph;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.util.ConcurrencyUtil;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Parallel implementation of the <a href="https://en.wikipedia.org/wiki/Contraction_hierarchies">
@@ -67,7 +82,8 @@ import java.util.function.*;
  * comparing to the sequential approach.
  *
  * <p>
- * For parallelization, this implementation relies on the {@link ExecutorService}.
+ * For parallelization, this implementation relies on the {@link ThreadPoolExecutor}
+ * which is supplied to this algorithm from outside.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -122,12 +138,8 @@ public class ContractionHierarchyPrecomputation<V, E>
     private Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier;
 
     /**
-     * Executor to which contraction tasks are submitted.
-     */
-    private ExecutorService executor;
-    /**
-     * Decorator for {@code executor} that enables to keep track of when all submitted tasks are
-     * finished.
+     * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to
+     * keep track of when all submitted tasks are finished.
      */
     private ExecutorCompletionService<Void> completionService;
     /**
@@ -167,10 +179,26 @@ public class ContractionHierarchyPrecomputation<V, E>
      * Constructs a new instance of the algorithm for a given {@code graph}.
      *
      * @param graph graph
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(Graph<V, E> graph)
     {
         this(graph, Runtime.getRuntime().availableProcessors());
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given {@code graph} and {@code executor}.
+     * It is up to a user of this algorithm to handle the creation and termination of the
+     * provided {@code executor}. For utility methods to manage a {@code ThreadPoolExecutor} see
+     * {@link ConcurrencyUtil}.
+     *
+     * @param graph graph
+     * @param executor executor which will be used for parallelization
+     */
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, ThreadPoolExecutor executor)
+    {
+        this(graph,  Random::new, executor);
     }
 
     /**
@@ -178,11 +206,14 @@ public class ContractionHierarchyPrecomputation<V, E>
      *
      * @param graph graph
      * @param parallelism maximum number of threads used in the computations
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism)
     {
         this(graph, parallelism, Random::new, PairingHeap::new);
     }
+
 
     /**
      * Constructs a new instance of the algorithm for a given {@code graph} and
@@ -191,10 +222,28 @@ public class ContractionHierarchyPrecomputation<V, E>
      *
      * @param graph graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier)
     {
         this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier);
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given {@code graph}, {@code randomSupplier}
+     * and {@code executor}. Provided {@code randomSupplier} should return different random
+     * generators instances, because they are used by different threads. It is up to a user of this
+     * algorithm to handle the creation and termination of the provided {@code executor}. Utility
+     * methods to manage a {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}.
+     *
+     * @param graph graph
+     * @param randomSupplier supplier for preferable instances of {@link Random}
+     * @param executor executor which will be used for parallelization
+     */
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier, ThreadPoolExecutor executor)
+    {
+        this(graph, randomSupplier, PairingHeap::new, executor);
     }
 
     /**
@@ -204,7 +253,9 @@ public class ContractionHierarchyPrecomputation<V, E>
      * @param graph graph
      * @param parallelism maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, Supplier, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(
         Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier)
     {
@@ -221,16 +272,53 @@ public class ContractionHierarchyPrecomputation<V, E>
      * @param parallelism maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
+     * @deprecated replaced with {@link #ContractionHierarchyPrecomputation(Graph, Supplier, Supplier, ThreadPoolExecutor)}
      */
+    @Deprecated
     public ContractionHierarchyPrecomputation(
         Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
         Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier)
     {
+        init(graph, randomSupplier, shortcutsSearchHeapSupplier, ConcurrencyUtil.createThreadPoolExecutor(parallelism));
+    }
+
+    /**
+     * Constructs a new instance of the algorithm for a given {@code graph}, {@code parallelism},
+     * {@code randomSupplier}, {@code shortcutsSearchHeapSupplier} and {@code executor}. Provided
+     * {@code randomSupplier} should return different random generators instances, because they are
+     * used by different threads. It is up to a user of this algorithm to handle the creation and
+     * termination of the provided {@code executor}. For utility methods to manage a
+     * {@code ThreadPoolExecutor} see {@link ConcurrencyUtil}.
+     *
+     * @param graph graph
+     * @param randomSupplier supplier for preferable instances of {@link Random}
+     * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
+     * @param executor executor which will be used for parallelization
+     */
+    public ContractionHierarchyPrecomputation(
+            Graph<V, E> graph, Supplier<Random> randomSupplier,
+            Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier,
+            ThreadPoolExecutor executor)
+    {
+        init(graph, randomSupplier, shortcutsSearchHeapSupplier, executor);
+    }
+
+    /**
+     * Initialized field of this algorithm.
+     *
+     * @param graph                       a graph
+     * @param randomSupplier              supplier for preferable instances of {@link Random}
+     * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
+     * @param executor                    executor which will be used for parallelization
+     */
+    private void init(Graph<V, E> graph, Supplier<Random> randomSupplier,
+                      Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier,
+                      ThreadPoolExecutor executor){
         this.graph = graph;
         this.contractionGraph = GraphTypeBuilder
-            .<ContractionVertex<V>, ContractionEdge<E>> directed().weighted(true)
-            .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
-        this.parallelism = parallelism;
+                .<ContractionVertex<V>, ContractionEdge<E>> directed().weighted(true)
+                .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
+        this.parallelism = executor.getMaximumPoolSize();
         this.shortcutsSearchHeapSupplier = shortcutsSearchHeapSupplier;
 
         vertices = new ArrayList<>(graph.vertexSet().size());
@@ -240,40 +328,37 @@ public class ContractionHierarchyPrecomputation<V, E>
         contractionLevelCounter = new AtomicInteger();
 
         maskedContractionGraph = new MaskSubgraph<>(
-            contractionGraph,
-            v -> verticesData.get(v.vertexId) != null && verticesData.get(v.vertexId).isContracted,
-            e -> false);
+                contractionGraph,
+                v -> verticesData.get(v.vertexId) != null && verticesData.get(v.vertexId).isContracted,
+                e -> false);
         contractionMapping = new HashMap<>();
 
-        executor = Executors.newFixedThreadPool(parallelism);
         completionService = new ExecutorCompletionService<>(executor);
 
         tasks = new ArrayList<>(parallelism);
         computeInitialPrioritiesConsumers = new ArrayList<>(parallelism);
         for (int i = 0; i < parallelism; ++i) {
             tasks.add(new ContractionTask(i));
-            computeInitialPrioritiesConsumers.add(new Consumer<ContractionVertex<V>>()
-            {
+            computeInitialPrioritiesConsumers.add(new Consumer<>() {
                 Random random = randomSupplier.get();
 
                 @Override
-                public void accept(ContractionVertex<V> vertex)
-                {
+                public void accept(ContractionVertex<V> vertex) {
                     verticesData.set(vertex.vertexId, getVertexData(vertex, random.nextInt()));
                 }
             });
         }
 
         computeIndependentSetConsumer =
-            vertex -> verticesData.get(vertex.vertexId).isIndependent = vertexIsIndependent(vertex);
+                vertex -> verticesData.get(vertex.vertexId).isIndependent = vertexIsIndependent(vertex);
         computeShortcutsConsumer =
-            vertex -> shortcutEdges.set(vertex.vertexId, getShortcuts(vertex));
+                vertex -> shortcutEdges.set(vertex.vertexId, getShortcuts(vertex));
         updateNeighboursConsumer = vertex -> updateNeighboursData(vertex);
         markUpwardEdgesConsumer = vertex -> contractionGraph
-            .outgoingEdgesOf(vertex).forEach(
-                e -> e.isUpward =
-                    contractionGraph.getEdgeSource(e).contractionLevel < contractionGraph
-                        .getEdgeTarget(e).contractionLevel);
+                .outgoingEdgesOf(vertex).forEach(
+                        e -> e.isUpward =
+                                contractionGraph.getEdgeSource(e).contractionLevel < contractionGraph
+                                        .getEdgeTarget(e).contractionLevel);
     }
 
     /**
@@ -291,7 +376,6 @@ public class ContractionHierarchyPrecomputation<V, E>
 
         // mark upward edges in parallel
         submitTasks(0, contractionGraph.vertexSet().size(), markUpwardEdgesConsumer);
-        shutdownExecutor();
 
         return new ContractionHierarchy<>(graph, contractionGraph, contractionMapping);
     }
@@ -878,18 +962,6 @@ public class ContractionHierarchyPrecomputation<V, E>
         }
     }
 
-    /**
-     * Shuts down the {@link #executor}.
-     */
-    private void shutdownExecutor()
-    {
-        executor.shutdown();
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Return type of this algorithm. Contains {@code contractionGraph} and

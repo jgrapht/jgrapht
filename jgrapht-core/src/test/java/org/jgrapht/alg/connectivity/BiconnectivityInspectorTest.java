@@ -100,8 +100,8 @@ public class BiconnectivityInspectorTest
         assertEquals(2, inspector.getConnectedComponents().size());
         assertFalse(inspector.isConnected());
 
-        Graph<Integer, DefaultEdge> g1 = new AsSubgraph<>(g, new HashSet<>(Arrays.asList(1, 2, 3)));
-        Graph<Integer, DefaultEdge> g2 = new AsSubgraph<>(g, new HashSet<>(Arrays.asList(4, 5)));
+        Graph<Integer, DefaultEdge> g1 = new AsSubgraph<>(g, Set.of(1, 2, 3));
+        Graph<Integer, DefaultEdge> g2 = new AsSubgraph<>(g, Set.of(4, 5));
 
         for (Integer v : g1.vertexSet())
             assertEquals(g1, inspector.getConnectedComponent(v));
@@ -124,7 +124,7 @@ public class BiconnectivityInspectorTest
 
         assertTrue(inspector.isConnected());
 
-        Set<Integer> expectedCutpoints = new HashSet<>(Arrays.asList(4, 5, 6, 7, 9));
+        Set<Integer> expectedCutpoints = Set.of(4, 5, 6, 7, 9);
         assertEquals(expectedCutpoints, inspector.getCutpoints());
 
         Set<DefaultEdge> expectedBridges = new HashSet<>();
@@ -137,13 +137,13 @@ public class BiconnectivityInspectorTest
 
         // Check vertex to block mapping
         List<Graph<Integer, DefaultEdge>> blocks = new ArrayList<>();
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(1, 2, 3, 4)))); // 0
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(4, 5)))); // 1
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(5, 6)))); // 2
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(6, 7)))); // 3
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(7, 8)))); // 4
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(9, 10)))); // 5
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(7, 9, 11, 12, 13, 14)))); // 6
+        blocks.add(new AsSubgraph<>(g, Set.of(1, 2, 3, 4))); // 0
+        blocks.add(new AsSubgraph<>(g, Set.of(4, 5))); // 1
+        blocks.add(new AsSubgraph<>(g, Set.of(5, 6))); // 2
+        blocks.add(new AsSubgraph<>(g, Set.of(6, 7))); // 3
+        blocks.add(new AsSubgraph<>(g, Set.of(7, 8))); // 4
+        blocks.add(new AsSubgraph<>(g, Set.of(9, 10))); // 5
+        blocks.add(new AsSubgraph<>(g, Set.of(7, 9, 11, 12, 13, 14))); // 6
 
         for (int v : Arrays.asList(1, 2, 3))
             assertEquals(Collections.singleton(blocks.get(0)), inspector.getBlocks(v));
@@ -153,17 +153,11 @@ public class BiconnectivityInspectorTest
         }
 
         // cutpoints reside in multiple blocks
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(0), blocks.get(1))), inspector.getBlocks(4));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(1), blocks.get(2))), inspector.getBlocks(5));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(2), blocks.get(3))), inspector.getBlocks(6));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(3), blocks.get(4), blocks.get(6))),
-            inspector.getBlocks(7));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(5), blocks.get(6))), inspector.getBlocks(9));
+        assertEquals(Set.of(blocks.get(0), blocks.get(1)), inspector.getBlocks(4));
+        assertEquals(Set.of(blocks.get(1), blocks.get(2)), inspector.getBlocks(5));
+        assertEquals(Set.of(blocks.get(2), blocks.get(3)), inspector.getBlocks(6));
+        assertEquals(Set.of(blocks.get(3), blocks.get(4), blocks.get(6)), inspector.getBlocks(7));
+        assertEquals(Set.of(blocks.get(5), blocks.get(6)), inspector.getBlocks(9));
 
     }
 
@@ -183,8 +177,8 @@ public class BiconnectivityInspectorTest
         assertEquals(Collections.singleton(bridge), inspector.getBridges());
 
         List<Graph<Integer, DefaultEdge>> blocks = new ArrayList<>();
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(0, 1)))); // 0
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(1, 2)))); // 1
+        blocks.add(new AsSubgraph<>(g, Set.of(0, 1))); // 0
+        blocks.add(new AsSubgraph<>(g, Set.of(1, 2))); // 1
 
         assertEquals(new HashSet<>(blocks), inspector.getBlocks());
     }
@@ -206,20 +200,20 @@ public class BiconnectivityInspectorTest
 
         assertTrue(inspector.isConnected());
 
-        Set<Integer> expectedCutpoints = new HashSet<>(Arrays.asList(4, 5, 6, 7, 9));
+        Set<Integer> expectedCutpoints = Set.of(4, 5, 6, 7, 9);
         assertEquals(expectedCutpoints, inspector.getCutpoints());
 
         assertEquals(Collections.emptySet(), inspector.getBridges());
 
         // Check vertex to block mapping
         List<Graph<Integer, DefaultEdge>> blocks = new ArrayList<>();
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(1, 2, 3, 4)))); // 0
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(4, 5)))); // 1
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(5, 6)))); // 2
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(6, 7)))); // 3
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(7, 8)))); // 4
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(9, 10)))); // 5
-        blocks.add(new AsSubgraph<>(g, new HashSet<>(Arrays.asList(7, 9, 11, 12, 13, 14)))); // 6
+        blocks.add(new AsSubgraph<>(g, Set.of(1, 2, 3, 4))); // 0
+        blocks.add(new AsSubgraph<>(g, Set.of(4, 5))); // 1
+        blocks.add(new AsSubgraph<>(g, Set.of(5, 6))); // 2
+        blocks.add(new AsSubgraph<>(g, Set.of(6, 7))); // 3
+        blocks.add(new AsSubgraph<>(g, Set.of(7, 8))); // 4
+        blocks.add(new AsSubgraph<>(g, Set.of(9, 10))); // 5
+        blocks.add(new AsSubgraph<>(g, Set.of(7, 9, 11, 12, 13, 14))); // 6
 
         for (int v : Arrays.asList(1, 2, 3))
             assertEquals(Collections.singleton(blocks.get(0)), inspector.getBlocks(v));
@@ -229,17 +223,11 @@ public class BiconnectivityInspectorTest
         }
 
         // cutpoints reside in multiple blocks
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(0), blocks.get(1))), inspector.getBlocks(4));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(1), blocks.get(2))), inspector.getBlocks(5));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(2), blocks.get(3))), inspector.getBlocks(6));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(3), blocks.get(4), blocks.get(6))),
-            inspector.getBlocks(7));
-        assertEquals(
-            new HashSet<>(Arrays.asList(blocks.get(5), blocks.get(6))), inspector.getBlocks(9));
+        assertEquals(Set.of(blocks.get(0), blocks.get(1)), inspector.getBlocks(4));
+        assertEquals(Set.of(blocks.get(1), blocks.get(2)), inspector.getBlocks(5));
+        assertEquals(Set.of(blocks.get(2), blocks.get(3)), inspector.getBlocks(6));
+        assertEquals(Set.of(blocks.get(3), blocks.get(4), blocks.get(6)), inspector.getBlocks(7));
+        assertEquals(Set.of(blocks.get(5), blocks.get(6)), inspector.getBlocks(9));
     }
 
     @Test

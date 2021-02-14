@@ -159,19 +159,16 @@ public class DIMACSImporter<V, E>
     private class Consumers
     {
         private Graph<V, E> graph;
-        private Integer nodeCount;
-        private Map<Integer, V> map;
+        private List<V> list;
 
         public Consumers(Graph<V, E> graph)
         {
             this.graph = graph;
-            this.nodeCount = null;
-            this.map = new HashMap<Integer, V>();
+            this.list = new ArrayList<>();
         }
 
-        public final Consumer<Integer> nodeCountConsumer = (n) -> {
-            this.nodeCount = n;
-            for (int i = 1; i <= nodeCount; i++) {
+        public final Consumer<Integer> nodeCountConsumer = n -> {
+            for (int i = 1; i <= n; i++) {
                 V v;
                 if (vertexFactory != null) {
                     v = vertexFactory.apply(i);
@@ -180,7 +177,7 @@ public class DIMACSImporter<V, E>
                     v = graph.addVertex();
                 }
 
-                map.put(i, v);
+                list.add(v);
 
                 /*
                  * Notify the first time we create the node.
@@ -191,15 +188,15 @@ public class DIMACSImporter<V, E>
             }
         };
 
-        public final Consumer<Triple<Integer, Integer, Double>> edgeConsumer = (t) -> {
+        public final Consumer<Triple<Integer, Integer, Double>> edgeConsumer = t -> {
             int source = t.getFirst();
-            V from = map.get(t.getFirst());
+            V from = getElement(list, source - 1);
             if (from == null) {
                 throw new ImportException("Node " + source + " does not exist");
             }
 
             int target = t.getSecond();
-            V to = map.get(target);
+            V to = getElement(list, target - 1);
             if (to == null) {
                 throw new ImportException("Node " + target + " does not exist");
             }
@@ -215,4 +212,8 @@ public class DIMACSImporter<V, E>
 
     }
 
+    private static <E> E getElement(List<E> list, int index)
+    {
+        return index < list.size() ? list.get(index) : null;
+    }
 }

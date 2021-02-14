@@ -174,7 +174,7 @@ public class ColorRefinementAlgorithm<V, E>
                 rep.colorDegree.put(v, 0);
             }
             rep.maxColorDegree[c] = 0;
-            rep.positiveDegreeColorClasses.put(c, new ArrayList<>());
+            rep.positiveDegreeColorClasses.set(c, new ArrayList<>());
         }
     }
 
@@ -189,60 +189,58 @@ public class ColorRefinementAlgorithm<V, E>
     {
         // Initialize and calculate numColorDegree (mapping from the color degree to the number of
         // vertices with that color degree).
-        Map<Integer, Integer> numColorDegree = new HashMap<>();
-        for (int i = 1; i <= rep.maxColorDegree[color]; ++i) {
-            numColorDegree.put(i, 0);
-        }
-        numColorDegree
-            .put(
-                0, rep.colorClasses.get(color).size()
-                    - rep.positiveDegreeColorClasses.get(color).size());
-        for (V v : rep.positiveDegreeColorClasses.get(color)) {
-            numColorDegree
-                .put(rep.colorDegree.get(v), numColorDegree.get(rep.colorDegree.get(v)) + 1);
+        List<V> positiveDegreeColorClasses = rep.positiveDegreeColorClasses.get(color);
+        int maxColorDegree = rep.maxColorDegree[color];
+
+        int[] numColorDegree = new int[maxColorDegree + 1];
+        numColorDegree[0] = rep.colorClasses.get(color).size() - positiveDegreeColorClasses.size();
+
+        for (V v : positiveDegreeColorClasses) {
+            int degree = rep.colorDegree.get(v);
+            numColorDegree[degree] += 1;
         }
 
         // Helper variable storing the index with the maximum number of vertices with the
         // corresponding color degree
         int maxColorDegreeIndex = 0;
-        for (int i = 1; i <= rep.maxColorDegree[color]; ++i) {
-            if (numColorDegree.get(i) > numColorDegree.get(maxColorDegreeIndex)) {
+        for (int i = 1; i <= maxColorDegree; ++i) {
+            if (numColorDegree[i] > numColorDegree[maxColorDegreeIndex]) {
                 maxColorDegreeIndex = i;
             }
         }
 
         // Go through all indices (color degrees) of numColorDegree
-        Map<Integer, Integer> newMapping = new HashMap<>();
+        int[] newMapping = new int[maxColorDegree + 1];
         boolean isCurrentColorInStack = refineStack.contains(color);
-        int currentMaxColorDegree = rep.maxColorDegree[color];
-        for (int i = 0; i <= currentMaxColorDegree; ++i) {
-            if (numColorDegree.get(i) >= 1) {
+        for (int i = 0; i <= maxColorDegree; ++i) {
+            if (numColorDegree[i] >= 1) {
                 if (i == rep.minColorDegree[color]) {
-                    newMapping.put(i, color); // keep current color
+                    newMapping[i] = color; // keep current color
 
                     // Push current color on the stack if it is not in the stack and i is not the
                     // index with the maximum number of vertices with the corresponding color degree
                     if (!isCurrentColorInStack && maxColorDegreeIndex != i) {
-                        refineStack.push(newMapping.get(i));
+                        refineStack.push(newMapping[i]);
                     }
                 } else {
-                    newMapping.put(i, ++rep.lastUsedColor); // new color
+                    newMapping[i] = ++rep.lastUsedColor; // new color
 
                     // Push current color on the stack if it is in the stack and i is not the index
                     // with the maximum number of vertices with the corresponding color degree
                     if (isCurrentColorInStack || i != maxColorDegreeIndex) {
-                        refineStack.push(newMapping.get(i));
+                        refineStack.push(newMapping[i]);
                     }
                 }
             }
         }
 
         // Update colors classes if some color has changed
-        for (V v : rep.positiveDegreeColorClasses.get(color)) {
-            if (!newMapping.get(rep.colorDegree.get(v)).equals(color)) {
+        for (V v : positiveDegreeColorClasses) {
+            int value = newMapping[rep.colorDegree.get(v)];
+            if (value != color.intValue()) {
                 rep.colorClasses.get(color).remove(v);
-                rep.colorClasses.get(newMapping.get(rep.colorDegree.get(v))).add(v);
-                rep.coloring.replace(v, newMapping.get(rep.colorDegree.get(v)));
+                rep.colorClasses.get(value).add(v);
+                rep.coloring.replace(v, value);
             }
         }
     }
@@ -323,12 +321,12 @@ public class ColorRefinementAlgorithm<V, E>
         /**
          * mapping from all colors to their classes
          */
-        HashMap<Integer, List<V>> colorClasses;
+        List<List<V>> colorClasses;
         /**
          * mapping from color to their classes, whereby every vertex in the classes has
          * colorDegree(v) >= 1
          */
-        HashMap<Integer, List<V>> positiveDegreeColorClasses;
+        List<List<V>> positiveDegreeColorClasses;
         /**
          * mapping from color to its maximum color degree
          */
@@ -354,16 +352,16 @@ public class ColorRefinementAlgorithm<V, E>
         public ColoringRepresentation(Graph<V, E> graph, Coloring<V> alpha)
         {
             int n = graph.vertexSet().size();
-            this.colorClasses = CollectionUtil.newHashMapWithExpectedSize(n);
-            this.positiveDegreeColorClasses = CollectionUtil.newHashMapWithExpectedSize(n);
+            this.colorClasses = new ArrayList<>(n);
+            this.positiveDegreeColorClasses = new ArrayList<>(n);
             this.maxColorDegree = new int[n];
             this.minColorDegree = new int[n];
             this.colorDegree = new HashMap<>();
             this.coloring = new HashMap<>();
 
             for (int c = 0; c < n; ++c) {
-                colorClasses.put(c, new ArrayList<>());
-                positiveDegreeColorClasses.put(c, new ArrayList<>());
+                colorClasses.add(new ArrayList<>());
+                positiveDegreeColorClasses.add(new ArrayList<>());
             }
             for (V v : graph.vertexSet()) {
                 colorClasses.get(alpha.getColors().get(v)).add(v);

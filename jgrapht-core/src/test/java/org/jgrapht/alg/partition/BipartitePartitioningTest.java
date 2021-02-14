@@ -123,7 +123,7 @@ public class BipartitePartitioningTest
         for (Graph<Integer, DefaultEdge> g : gList) {
             Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
             Set<Integer> a = new HashSet<>(Arrays.asList(1, 2));
-            Set<Integer> b = new HashSet<>(Arrays.asList(3, 4));
+            Set<Integer> b = Set.of(3, 4);
             assertTrue(GraphTests.isBipartitePartition(g, a, b));
             g.addEdge(1, 3);
             g.addEdge(1, 4);

@@ -17,12 +17,20 @@
  */
 package org.jgrapht.alg.scoring;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jheaps.*;
-import org.jheaps.tree.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
 /**
  * Betweenness centrality.
@@ -44,6 +52,12 @@ import java.util.*;
  * The running time is $O(nm)$ and $O(nm +n^2 \log n)$ for unweighted and weighted graph
  * respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
  * space complexity is $O(n + m)$.
+ * 
+ * Note that this running time assumes that arithmetic is performed between numbers whose
+ * representation needs a number of bits which is logarithmic in the instance size. There are
+ * instances where this is not true and path counters might grow super exponential. This class
+ * allows the user to adjust whether an exception is thrown in case overflow occurs. Default
+ * behavior is to ignore overflow issues.
  *
  * 
  * @param <V> the graph vertex type
@@ -55,7 +69,6 @@ public class BetweennessCentrality<V, E>
     implements
     VertexScoringAlgorithm<V, Double>
 {
-
     /**
      * Underlying graph
      */
@@ -68,6 +81,27 @@ public class BetweennessCentrality<V, E>
      * The actual scores
      */
     private Map<V, Double> scores;
+
+    /**
+     * Strategy for overflow when counting paths.
+     */
+    private OverflowStrategy overflowStrategy;
+
+    /**
+     * Strategy followed when counting paths.
+     */
+    public enum OverflowStrategy
+    {
+        /**
+         * Do not check for overflow in counters. This means that on certain instances the results
+         * might be wrong due to counters being too large to fit in a long.
+         */
+        IGNORE_OVERFLOW,
+        /**
+         * An exception is thrown if an overflow in counters is detected.
+         */
+        THROW_EXCEPTION_ON_OVERFLOW,
+    }
 
     /**
      * Construct a new instance.
@@ -88,10 +122,25 @@ public class BetweennessCentrality<V, E>
      */
     public BetweennessCentrality(Graph<V, E> graph, boolean normalize)
     {
+        this(graph, normalize, OverflowStrategy.IGNORE_OVERFLOW);
+    }
+
+    /**
+     * Construct a new instance.
+     * 
+     * @param graph the input graph
+     * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where
+     *        $n$ is the number of vertices of the graph
+     * @param overflowStrategy strategy to use if overflow is detected
+     */
+    public BetweennessCentrality(
+        Graph<V, E> graph, boolean normalize, OverflowStrategy overflowStrategy)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
 
         this.scores = null;
         this.normalize = normalize;
+        this.overflowStrategy = overflowStrategy;
     }
 
     /**
@@ -127,23 +176,23 @@ public class BetweennessCentrality<V, E>
     private void compute()
     {
         // initialize result container
-        this.scores = new HashMap<>();
-        this.graph.vertexSet().forEach(v -> this.scores.put(v, 0.0));
+        scores = new HashMap<>();
+        graph.vertexSet().forEach(v -> scores.put(v, 0.0));
 
         // compute for each source
-        this.graph.vertexSet().forEach(this::compute);
+        graph.vertexSet().forEach(this::compute);
 
         // For undirected graph, divide scores by two as each shortest path
         // considered twice.
-        if (!this.graph.getType().isDirected()) {
-            this.scores.forEach((v, score) -> this.scores.put(v, score / 2));
+        if (!graph.getType().isDirected()) {
+            scores.forEach((v, score) -> scores.put(v, score / 2));
         }
 
         if (normalize) {
-            int n = this.graph.vertexSet().size();
+            int n = graph.vertexSet().size();
             int normalizationFactor = (n - 1) * (n - 2);
             if (normalizationFactor != 0) {
-                this.scores.forEach((v, score) -> this.scores.put(v, score / normalizationFactor));
+                scores.forEach((v, score) -> scores.put(v, score / normalizationFactor));
             }
         }
     }
@@ -153,20 +202,20 @@ public class BetweennessCentrality<V, E>
         // initialize
         ArrayDeque<V> stack = new ArrayDeque<>();
         Map<V, List<V>> predecessors = new HashMap<>();
-        this.graph.vertexSet().forEach(w -> predecessors.put(w, new ArrayList<>()));
+        graph.vertexSet().forEach(w -> predecessors.put(w, new ArrayList<>()));
 
         // Number of shortest paths from s to v
-        Map<V, Double> sigma = new HashMap<>();
-        this.graph.vertexSet().forEach(t -> sigma.put(t, 0.0));
-        sigma.put(s, 1.0);
+        Map<V, Long> sigma = new HashMap<>();
+        graph.vertexSet().forEach(t -> sigma.put(t, 0l));
+        sigma.put(s, 1l);
 
         // Distance (Weight) of the shortest path from s to v
         Map<V, Double> distance = new HashMap<>();
-        this.graph.vertexSet().forEach(t -> distance.put(t, Double.POSITIVE_INFINITY));
+        graph.vertexSet().forEach(t -> distance.put(t, Double.POSITIVE_INFINITY));
         distance.put(s, 0.0);
 
         MyQueue<V, Double> queue =
-            this.graph.getType().isWeighted() ? new WeightedQueue() : new UnweightedQueue();
+            graph.getType().isWeighted() ? new WeightedQueue() : new UnweightedQueue();
         queue.insert(s, 0.0);
 
         // 1. compute the length and the number of shortest paths between all s to v
@@ -174,8 +223,8 @@ public class BetweennessCentrality<V, E>
             V v = queue.remove();
             stack.push(v);
 
-            for (E e : this.graph.outgoingEdgesOf(v)) {
-                V w = Graphs.getOppositeVertex(this.graph, e, v);
+            for (E e : graph.outgoingEdgesOf(v)) {
+                V w = Graphs.getOppositeVertex(graph, e, v);
                 double eWeight = graph.getEdgeWeight(e);
                 if (eWeight < 0.0) {
                     throw new IllegalArgumentException("Negative edge weight not allowed");
@@ -191,7 +240,15 @@ public class BetweennessCentrality<V, E>
                 // shortest path to w via v?
                 else if (distance.get(w) == d) {
                     // queue.update(w, d);
-                    sigma.put(w, sigma.get(w) + sigma.get(v));
+                    long wCounter = sigma.get(w);
+                    long vCounter = sigma.get(v);
+                    long sum = wCounter + vCounter;
+                    if (overflowStrategy.equals(OverflowStrategy.THROW_EXCEPTION_ON_OVERFLOW)
+                        && sum < 0)
+                    {
+                        throw new ArithmeticException("long overflow");
+                    }
+                    sigma.put(w, sum);
                     predecessors.get(w).add(v);
                 } else if (distance.get(w) > d) {
                     queue.update(w, d);
@@ -206,18 +263,20 @@ public class BetweennessCentrality<V, E>
         // 2. sum all pair dependencies.
         // The pair-dependency of s and v in w
         Map<V, Double> dependency = new HashMap<>();
-        this.graph.vertexSet().forEach(v -> dependency.put(v, 0.0));
+        graph.vertexSet().forEach(v -> dependency.put(v, 0.0));
         // S returns vertices in order of non-increasing distance from s
         while (!stack.isEmpty()) {
             V w = stack.pop();
             for (V v : predecessors.get(w)) {
                 dependency
                     .put(
-                        v, dependency.get(v)
-                            + (sigma.get(v) / sigma.get(w)) * (1 + dependency.get(w)));
+                        v,
+                        dependency.get(v)
+                            + (sigma.get(v).doubleValue() / sigma.get(w).doubleValue())
+                                * (1 + dependency.get(w)));
             }
             if (!w.equals(s)) {
-                this.scores.put(w, this.scores.get(w) + dependency.get(w));
+                scores.put(w, scores.get(w) + dependency.get(w));
             }
         }
     }

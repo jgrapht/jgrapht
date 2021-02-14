@@ -18,7 +18,6 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -134,9 +133,10 @@ public class GnpRandomGraphGenerator<V, E>
 
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
-        Map<Integer, V> vertices = CollectionUtil.newHashMapWithExpectedSize(n);
+        List<V> vertices = new ArrayList<>(n);
+
         for (int i = 0; i < n; i++) {
-            vertices.put(i, target.addVertex());
+            vertices.add(target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n) {

@@ -197,7 +197,7 @@ public final class IntVertexDijkstraShortestPath<E>
                 double vDistance = vNode.getKey();
                 dist[v] = vDistance;
 
-                if (v == target) {
+                if (target != null && v.intValue() == target.intValue()) {
                     break;
                 }
 
@@ -234,7 +234,7 @@ public final class IntVertexDijkstraShortestPath<E>
                 double vDistance = vNode.getKey();
                 dist[idMap.get(v)] = vDistance;
 
-                if (v == target) {
+                if (target != null && v.intValue() == target.intValue()) {
                     break;
                 }
 
