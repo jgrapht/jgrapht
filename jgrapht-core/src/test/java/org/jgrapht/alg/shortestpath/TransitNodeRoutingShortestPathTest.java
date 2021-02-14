@@ -26,13 +26,17 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jgrapht.util.SupplierUtil;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import static org.jgrapht.alg.shortestpath.TransitNodeRoutingPrecomputation.TransitNodeRouting;
@@ -50,13 +54,30 @@ public class TransitNodeRoutingShortestPathTest {
      */
     private static final long SEED = 19L;
 
+    /**
+     * Executor which is supplied to {@link TransitNodeRoutingShortestPath},
+     * {@link TransitNodeRoutingPrecomputation} and {@link ContractionHierarchyPrecomputation} in this test case.
+     */
+    private static ThreadPoolExecutor executor;
+
+    @BeforeClass
+    public static void createExecutor(){
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    }
+
+    @AfterClass
+    public static void shutdownExecutor() throws InterruptedException {
+        ConcurrencyUtil.shutdownExecutionService(executor);
+    }
+
     @Test
     public void testOneVertex() {
         Integer vertex = 1;
         Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         graph.addVertex(vertex);
 
-        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath = new TransitNodeRoutingShortestPath<>(graph);
+        TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath
+                = new TransitNodeRoutingShortestPath<>(graph, executor);
 
         GraphPath<Integer, DefaultWeightedEdge> path = shortestPath.getPath(vertex, vertex);
         GraphWalk<Integer, DefaultWeightedEdge> expectedPath = new GraphWalk<>(graph, vertex, vertex,
@@ -75,10 +96,11 @@ public class TransitNodeRoutingShortestPathTest {
         DefaultWeightedEdge edge3 = Graphs.addEdgeWithVertices(graph, v2, v1, 1.0);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy =
-                new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+                new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor).computeContractionHierarchy();
 
         TransitNodeRouting<Integer, DefaultWeightedEdge> routing
-                = new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1).computeTransitNodeRouting();
+                = new TransitNodeRoutingPrecomputation<>(
+                        contractionHierarchy, 1, executor).computeTransitNodeRouting();
         TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath
                 = new TransitNodeRoutingShortestPath<>(routing);
 
@@ -103,10 +125,12 @@ public class TransitNodeRoutingShortestPathTest {
         DefaultWeightedEdge edge3 = Graphs.addEdgeWithVertices(graph, v3, v2, 1.0);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy =
-                new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+                new ContractionHierarchyPrecomputation<>(
+                        graph, () -> new Random(SEED), executor).computeContractionHierarchy();
 
         TransitNodeRouting<Integer, DefaultWeightedEdge> routing
-                = new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1).computeTransitNodeRouting();
+                = new TransitNodeRoutingPrecomputation<>(
+                        contractionHierarchy, 1, executor).computeTransitNodeRouting();
         TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> shortestPath
                 = new TransitNodeRoutingShortestPath<>(routing);
 
@@ -152,10 +176,11 @@ public class TransitNodeRoutingShortestPathTest {
                 new DijkstraShortestPath<>(graph).getPaths(source);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy
-                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+                = new ContractionHierarchyPrecomputation<>(
+                        graph, () -> new Random(SEED), executor).computeContractionHierarchy();
 
         TransitNodeRouting<Integer, DefaultWeightedEdge> routing =
-                new TransitNodeRoutingPrecomputation<>(contractionHierarchy).computeTransitNodeRouting();
+                new TransitNodeRoutingPrecomputation<>(contractionHierarchy, executor).computeTransitNodeRouting();
 
         TransitNodeRoutingShortestPath<Integer, DefaultWeightedEdge> transitNodeRoutingShortestPath
                 = new TransitNodeRoutingShortestPath<>(routing);

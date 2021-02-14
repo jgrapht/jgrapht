@@ -103,9 +103,9 @@ public class PadbergRaoOddMinimumCutsetTest
     @Test
     public void testIsOddSetMethod()
     {
-        Set<Integer> vertices = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
-        Set<Integer> oddVertices1 = new HashSet<>(Arrays.asList(1, 2, 3, 7));
-        Set<Integer> oddVertices2 = new HashSet<>(Arrays.asList(1, 2, 3, 4));
+        Set<Integer> vertices = Set.of(1, 2, 3, 4, 5, 6);
+        Set<Integer> oddVertices1 = Set.of(1, 2, 3, 7);
+        Set<Integer> oddVertices2 = Set.of(1, 2, 3, 4);
         assertTrue(PadbergRaoOddMinimumCutset.isOddVertexSet(vertices, oddVertices1));
         assertFalse(PadbergRaoOddMinimumCutset.isOddVertexSet(vertices, oddVertices2));
     }
@@ -131,7 +131,7 @@ public class PadbergRaoOddMinimumCutsetTest
         Graphs.addEdge(network, 5, 4, 7);
         Graphs.addEdge(network, 3, 4, 5);
 
-        Set<Integer> oddVertices = new HashSet<>(Arrays.asList(2, 3, 5, 6));
+        Set<Integer> oddVertices = Set.of(2, 3, 5, 6);
         this.runTest(network, oddVertices, true);
         this.runTest(network, oddVertices, false);
 
@@ -150,7 +150,7 @@ public class PadbergRaoOddMinimumCutsetTest
         Graphs.addEdge(network, 1, 2, 4);
         Graphs.addEdge(network, 0, 2, 7);
         Graphs.addEdge(network, 3, 4, 9);
-        Set<Integer> oddVertices = new HashSet<>(Arrays.asList(0, 1, 2, 4));
+        Set<Integer> oddVertices = Set.of(0, 1, 2, 4);
         this.runTest(network, oddVertices, true);
         this.runTest(network, oddVertices, false);
     }

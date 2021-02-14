@@ -26,7 +26,10 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jgrapht.util.SupplierUtil;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -36,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
@@ -60,6 +64,22 @@ public class TransitNodeRoutingPrecomputationTest {
     private static final long SEED = 19L;
 
     /**
+     * Executor which is supplied to {@link ContractionHierarchyPrecomputation}
+     * and {@link TransitNodeRoutingPrecomputation} in this test case.
+     */
+    private static ThreadPoolExecutor executor;
+
+    @BeforeClass
+    public static void createExecutor(){
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    }
+
+    @AfterClass
+    public static void shutdownExecutor() throws InterruptedException {
+        ConcurrencyUtil.shutdownExecutionService(executor);
+    }
+
+    /**
      * Tests the algorithm on an empty graph to ensure no exception is thrown.
      */
     @Test
@@ -67,9 +87,9 @@ public class TransitNodeRoutingPrecomputationTest {
         Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy
-                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor).computeContractionHierarchy();
         TransitNodeRoutingPrecomputation<Integer, DefaultWeightedEdge> routing
-                = new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 0);
+                = new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 0, executor);
         routing.computeTransitNodeRouting();
     }
 
@@ -81,11 +101,12 @@ public class TransitNodeRoutingPrecomputationTest {
         graph.addVertex(vertex);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy
-                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+                = new ContractionHierarchyPrecomputation<>(
+                        graph, () -> new Random(SEED), executor).computeContractionHierarchy();
 
         // computation
         TransitNodeRoutingPrecomputation<Integer, DefaultWeightedEdge> precomputation =
-                new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1);
+                new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1, executor);
         TransitNodeRouting<Integer, DefaultWeightedEdge> routing = precomputation.computeTransitNodeRouting();
 
         Map<Integer, ContractionVertex<Integer>> contractionMapping = contractionHierarchy.getContractionMapping();
@@ -131,11 +152,12 @@ public class TransitNodeRoutingPrecomputationTest {
         DefaultWeightedEdge edge4 = Graphs.addEdgeWithVertices(graph, v3, v2, 2.0);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> contractionHierarchy
-                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+                = new ContractionHierarchyPrecomputation<>(
+                        graph, () -> new Random(SEED), executor).computeContractionHierarchy();
 
         // computation
         TransitNodeRoutingPrecomputation<Integer, DefaultWeightedEdge> precomputation =
-                new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1);
+                new TransitNodeRoutingPrecomputation<>(contractionHierarchy, 1, executor);
         TransitNodeRouting<Integer, DefaultWeightedEdge> routing = precomputation.computeTransitNodeRouting();
 
         Map<Integer, ContractionVertex<Integer>> contractionMapping = routing.getContractionHierarchy().getContractionMapping();
@@ -203,7 +225,8 @@ public class TransitNodeRoutingPrecomputationTest {
         for (int i = 0; i < numOfIterations; ++i) {
             Graph<Integer, DefaultWeightedEdge> graph = generateRandomGraph(numOfVertices,
                     vertexDegree * numOfVertices, random);
-            TransitNodeRoutingPrecomputation<Integer, DefaultWeightedEdge> routing = new TransitNodeRoutingPrecomputation<>(graph);
+            TransitNodeRoutingPrecomputation<Integer, DefaultWeightedEdge> routing =
+                    new TransitNodeRoutingPrecomputation<>(graph, executor);
             assertCorrectTNR(graph, routing.computeTransitNodeRouting());
         }
     }

@@ -96,6 +96,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>jgrapht-unimi-dsi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>jgrapht-demo</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -149,19 +154,20 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M4</version>
+                    <version>3.0.0-M5</version>
                     <configuration>
                         <testFailureIgnore>false</testFailureIgnore>
+                        <useSystemClassLoader>false</useSystemClassLoader>
                     </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                     <version>3.0.0-M4</version>
+                     <version>3.0.0-M5</version>
                      <dependencies>
                           <dependency>
                                <groupId>org.apache.maven.surefire</groupId>
                                <artifactId>surefire-junit47</artifactId>
-                               <version>3.0.0-M4</version>
+                               <version>3.0.0-M5</version>
                           </dependency>
                      </dependencies>
                     <executions>
@@ -182,7 +188,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>4.2.1</version>
+                    <version>5.1.1</version>
                     <executions>
                         <execution>
                             <phase>process-classes</phase>
@@ -312,6 +318,7 @@
         <module>jgrapht-opt</module>
         <module>jgrapht-ext</module>
         <module>jgrapht-guava</module>
+        <module>jgrapht-unimi-dsi</module>
         <module>jgrapht-demo</module>
         <module>jgrapht-dist</module>
     </modules>

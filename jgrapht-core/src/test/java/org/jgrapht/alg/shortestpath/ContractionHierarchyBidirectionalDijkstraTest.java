@@ -25,6 +25,7 @@ import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import static org.junit.Assert.assertEquals;
@@ -41,6 +42,22 @@ public class ContractionHierarchyBidirectionalDijkstraTest
     private static final long SEED = 19L;
 
     /**
+     * Executor which is supplied to the {@link ContractionHierarchyBidirectionalDijkstra}
+     * algorithm in this test case.
+     */
+    private static ThreadPoolExecutor executor;
+
+    @BeforeClass
+    public static void createExecutor(){
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    }
+
+    @AfterClass
+    public static void shutdownExecutor() throws InterruptedException {
+        ConcurrencyUtil.shutdownExecutionService(executor);
+    }
+
+    /**
      * This test asserts that not exception is thrown when an algorithm object is initialized with
      * an empty graph.
      */
@@ -50,7 +67,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
         Graph<Integer, DefaultWeightedEdge> graph =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph);
+            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -60,7 +77,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(2);
         ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph);
+            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
         dijkstra.getPath(1, 2);
     }
 
@@ -71,7 +88,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         graph.addVertex(1);
         ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph);
+            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
         dijkstra.getPath(1, 2);
     }
 
@@ -83,7 +100,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
         graph.addVertex(1);
         graph.addVertex(2);
         ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph);
+            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
         GraphPath<Integer, DefaultWeightedEdge> path = dijkstra.getPath(1, 2);
         assertNull(path);
     }
@@ -114,7 +131,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
         Graphs.addEdgeWithVertices(graph, 8, 9, 3);
 
         ContractionHierarchyBidirectionalDijkstra<Integer, DefaultWeightedEdge> dijkstra =
-            new ContractionHierarchyBidirectionalDijkstra<>(graph);
+            new ContractionHierarchyBidirectionalDijkstra<>(graph, executor);
 
         assertEquals(Collections.singletonList(1), dijkstra.getPath(1, 1).getVertexList());
         assertEquals(Arrays.asList(1, 2), dijkstra.getPath(1, 2).getVertexList());
@@ -180,7 +197,7 @@ public class ContractionHierarchyBidirectionalDijkstraTest
                 new DijkstraShortestPath<>(graph).getPaths(source);
 
         ContractionHierarchy<Integer, DefaultWeightedEdge> data =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED))
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor)
                 .computeContractionHierarchy();
 
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> contractionDijkstra =

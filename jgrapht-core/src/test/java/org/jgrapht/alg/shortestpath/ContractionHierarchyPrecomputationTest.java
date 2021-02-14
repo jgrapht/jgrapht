@@ -25,6 +25,7 @@ import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
 import static org.junit.Assert.*;
@@ -39,13 +40,29 @@ public class ContractionHierarchyPrecomputationTest
      */
     private static final long SEED = 19L;
 
+    /**
+     * Executor which is supplied to the {@link ContractionHierarchyPrecomputation}
+     * algorithm in this test case.
+     */
+    private static ThreadPoolExecutor executor;
+
+    @BeforeClass
+    public static void createExecutor(){
+        executor = ConcurrencyUtil.createThreadPoolExecutor(Runtime.getRuntime().availableProcessors());
+    }
+
+    @AfterClass
+    public static void shutdownExecutor() throws InterruptedException {
+        ConcurrencyUtil.shutdownExecutionService(executor);
+    }
+
     @Test
     public void testEmptyGraph()
     {
         Graph<Integer, DefaultWeightedEdge> graph =
             new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -74,7 +91,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 2, 3, 1);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -111,7 +128,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 1, 3, 1);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -140,7 +157,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 3, 5, 1);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -179,7 +196,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 2, 3, 1);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -219,7 +236,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 3, 1, 1);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -250,7 +267,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 3, 5, 1);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -307,7 +324,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 8, 9, 3);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -360,7 +377,7 @@ public class ContractionHierarchyPrecomputationTest
         Graphs.addEdgeWithVertices(graph, 2, 2, 2);
 
         ContractionHierarchyPrecomputation<Integer, DefaultWeightedEdge> contractor =
-            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED));
+            new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED), executor);
         ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
             contractor.computeContractionHierarchy();
 
@@ -411,7 +428,7 @@ public class ContractionHierarchyPrecomputationTest
             generateRandomGraph(graph, numOfVertices, probability);
 
             ContractionHierarchy<Integer, DefaultWeightedEdge> hierarchy =
-                new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy();
+                new ContractionHierarchyPrecomputation<>(graph, executor).computeContractionHierarchy();
 
             assertCorrectMapping(graph, hierarchy);
             assertNoEdgesRemoved(graph, hierarchy);

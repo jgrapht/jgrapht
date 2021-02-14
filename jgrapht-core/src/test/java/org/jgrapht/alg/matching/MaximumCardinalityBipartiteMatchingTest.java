@@ -114,8 +114,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     public void testGraph1()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
-        Set<Integer> partition2 = new HashSet<>(Arrays.asList(7, 8, 9));
+        Set<Integer> partition1 = Set.of(0, 1, 2, 3, 4, 5, 6);
+        Set<Integer> partition2 = Set.of(7, 8, 9);
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
         int[][] edges = { { 5, 8 }, { 4, 9 }, { 2, 7 }, { 6, 9 }, { 1, 9 } };
@@ -132,8 +132,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     public void testGraph2()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
-        Set<Integer> partition2 = new HashSet<>(Arrays.asList(7, 8, 9));
+        Set<Integer> partition1 = Set.of(0, 1, 2, 3, 4, 5, 6);
+        Set<Integer> partition2 = Set.of(7, 8, 9);
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
         int[][] edges =
@@ -157,8 +157,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
 
         Graphs.addAllVertices(g, IntStream.rangeClosed(0, 3).boxed().collect(Collectors.toList()));
 
-        Set<Integer> left = new HashSet<>(Arrays.asList(0, 1));
-        Set<Integer> right = new HashSet<>(Arrays.asList(2, 3));
+        Set<Integer> left = Set.of(0, 1);
+        Set<Integer> right = Set.of(2, 3);
 
         g.addEdge(0, 2);
         g.addEdge(0, 3);
@@ -175,8 +175,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     public void testPseudoGraph()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2));
-        Set<Integer> partition2 = new HashSet<>(Arrays.asList(3, 4, 5));
+        Set<Integer> partition1 = Set.of(0, 1, 2);
+        Set<Integer> partition2 = Set.of(3, 4, 5);
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
         int[][] edges = { { 0, 3 }, { 1, 4 }, { 2, 5 }, { 0, 3 }, { 0, 0 } };
