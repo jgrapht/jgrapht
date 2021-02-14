@@ -3,9 +3,9 @@
 
 set -e
 
-: ${TRAVIS_BUILD_DIR?"variable value required"}
+: ${GITHUB_WORKSPACE?"variable value required"}
 
-${TRAVIS_BUILD_DIR}/etc/expandMarkdown.sh
-rm -f ${TRAVIS_BUILD_DIR}/docs/guide/.gitignore
-${TRAVIS_BUILD_DIR}/etc/downloadJavadoc.sh
-mv ${TRAVIS_BUILD_DIR}/target/site/apidocs ${TRAVIS_BUILD_DIR}/docs/javadoc-SNAPSHOT
+${GITHUB_WORKSPACE}/etc/expandMarkdown.sh
+rm -f ${GITHUB_WORKSPACE}/docs/guide/.gitignore
+${GITHUB_WORKSPACE}/etc/downloadJavadoc.sh
+mv ${GITHUB_WORKSPACE}/target/site/apidocs ${GITHUB_WORKSPACE}/docs/javadoc-SNAPSHOT

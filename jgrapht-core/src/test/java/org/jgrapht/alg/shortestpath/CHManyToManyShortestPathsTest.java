@@ -112,9 +112,7 @@ public class CHManyToManyShortestPathsTest
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
             DefaultWeightedEdge> shortestPaths = new CHManyToManyShortestPaths<>(hierarchy)
-                .getManyToManyPaths(
-                    new HashSet<>(Arrays.asList(1, 3, 7, 9)),
-                    new HashSet<>(Collections.singletonList(5)));
+                .getManyToManyPaths(Set.of(1, 3, 7, 9), Set.of(5));
 
         assertEquals(2.0, shortestPaths.getWeight(1, 5), 1e-9);
         assertEquals(Arrays.asList(1, 4, 5), shortestPaths.getPath(1, 5).getVertexList());
@@ -140,9 +138,7 @@ public class CHManyToManyShortestPathsTest
 
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Integer,
             DefaultWeightedEdge> shortestPaths = new CHManyToManyShortestPaths<>(hierarchy)
-                .getManyToManyPaths(
-                    new HashSet<>(Arrays.asList(2, 3, 4, 5, 6)),
-                    new HashSet<>(Collections.singletonList(1)));
+                .getManyToManyPaths(Set.of(2, 3, 4, 5, 6), Set.of(1));
 
         assertEquals(3.0, shortestPaths.getWeight(2, 1), 1e-9);
         assertEquals(Arrays.asList(2, 1), shortestPaths.getPath(2, 1).getVertexList());

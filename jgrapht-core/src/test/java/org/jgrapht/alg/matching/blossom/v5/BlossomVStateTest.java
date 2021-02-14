@@ -72,23 +72,15 @@ public class BlossomVStateTest
 
         edge12.moveEdgeTail(node2, node3);
         assertEquals(node3, edge12.getOpposite(node1));
-        assertEquals(
-            new HashSet<>(Arrays.asList(edge12, edge13)), BlossomVDebugger.getEdgesOf(node1));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge23)), BlossomVDebugger.getEdgesOf(node2));
-        assertEquals(
-            new HashSet<>(Arrays.asList(edge12, edge13, edge23)),
-            BlossomVDebugger.getEdgesOf(node3));
+        assertEquals(Set.of(edge12, edge13), BlossomVDebugger.getEdgesOf(node1));
+        assertEquals(Set.of(edge23), BlossomVDebugger.getEdgesOf(node2));
+        assertEquals(Set.of(edge12, edge13, edge23), BlossomVDebugger.getEdgesOf(node3));
 
         edge23.moveEdgeTail(node2, node1);
         assertEquals(node1, edge13.getOpposite(node3));
-        assertEquals(
-            new HashSet<>(Arrays.asList(edge12, edge13, edge23)),
-            BlossomVDebugger.getEdgesOf(node1));
-        assertEquals(new HashSet<>(), BlossomVDebugger.getEdgesOf(node2));
-        assertEquals(
-            new HashSet<>(Arrays.asList(edge12, edge13, edge23)),
-            BlossomVDebugger.getEdgesOf(node3));
+        assertEquals(Set.of(edge12, edge13, edge23), BlossomVDebugger.getEdgesOf(node1));
+        assertEquals(Set.of(), BlossomVDebugger.getEdgesOf(node2));
+        assertEquals(Set.of(edge12, edge13, edge23), BlossomVDebugger.getEdgesOf(node3));
     }
 
 }

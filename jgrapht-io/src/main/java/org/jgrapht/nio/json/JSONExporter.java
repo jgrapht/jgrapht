@@ -198,7 +198,7 @@ public class JSONExporter<V, E>
         if (!edgeAttributeProvider.isPresent()) {
             return;
         }
-        Set<String> forbidden = new HashSet<>(Arrays.asList("id", "source", "target"));
+        Set<String> forbidden = Set.of("id", "source", "target");
         edgeAttributeProvider
             .get().apply(e).entrySet().stream().filter(entry -> !forbidden.contains(entry.getKey()))
             .forEach(entry -> {

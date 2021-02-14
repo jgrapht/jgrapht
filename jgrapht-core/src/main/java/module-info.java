@@ -34,6 +34,7 @@ module org.jgrapht.core
     exports org.jgrapht.alg.vertexcover.util;
     exports org.jgrapht.event;
     exports org.jgrapht.generate;
+    exports org.jgrapht.generate.netgen;
     exports org.jgrapht.graph;
     exports org.jgrapht.graph.builder;
     exports org.jgrapht.graph.concurrent;

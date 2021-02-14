@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2019-2020, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2021, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,17 +17,34 @@
  */
 package org.jgrapht.nio.json;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
-import org.apache.commons.text.*;
-import org.jgrapht.*;
-import org.jgrapht.alg.util.Triple;
-import org.jgrapht.nio.*;
-import org.jgrapht.nio.json.JsonParser.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.Map.Entry;
 
-import java.io.*;
-import java.util.*;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.apache.commons.text.StringEscapeUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Triple;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.EventDrivenImporter;
+import org.jgrapht.nio.ImportEvent;
+import org.jgrapht.nio.ImportException;
+import org.jgrapht.nio.json.JsonParser.JsonContext;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
@@ -81,12 +98,29 @@ public class JSONEventDrivenImporter
     implements
     EventDrivenImporter<String, Triple<String, String, Double>>
 {
+    private boolean notifyVertexAttributesOutOfOrder;
+    private boolean notifyEdgeAttributesOutOfOrder;
+    
     /**
      * Constructs a new importer.
      */
     public JSONEventDrivenImporter()
     {
-        super();
+        this(true, true);
+    }
+    
+    /**
+     * Constructs a new importer.
+     * 
+     * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order even if 
+     *        they appear together in the input
+     * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even if 
+     *        they appear together in the input        
+     */
+    public JSONEventDrivenImporter(boolean notifyVertexAttributesOutOfOrder, boolean notifyEdgeAttributesOutOfOrder)
+    {
+        this.notifyVertexAttributesOutOfOrder = notifyVertexAttributesOutOfOrder;
+        this.notifyEdgeAttributesOutOfOrder = notifyEdgeAttributesOutOfOrder;
     }
 
     @Override
@@ -216,9 +250,13 @@ public class JSONEventDrivenImporter
                     if (nodeId == null) {
                         nodeId = "Singleton_" + singletonsUUID + "_" + (singletons++);
                     }
-                    notifyVertex(nodeId);
-                    for (String key : attributes.keySet()) {
-                        notifyVertexAttribute(nodeId, key, attributes.get(key));
+                    if (notifyVertexAttributesOutOfOrder) { 
+                        notifyVertex(nodeId);
+                        for(Entry<String, Attribute> entry: attributes.entrySet()) { 
+                            notifyVertexAttribute(nodeId, entry.getKey(), entry.getValue());
+                        }
+                    } else { 
+                        notifyVertexWithAttributes(nodeId, attributes);
                     }
                     insideNode = false;
                     attributes = null;
@@ -236,9 +274,15 @@ public class JSONEventDrivenImporter
                             }
                         }
                         Triple<String, String, Double> et = Triple.of(sourceId, targetId, weight);
-                        notifyEdge(et);
-                        for (String key : attributes.keySet()) {
-                            notifyEdgeAttribute(et, key, attributes.get(key));
+                        if (notifyEdgeAttributesOutOfOrder) { 
+                            // notify individually
+                            notifyEdge(et);
+                            for(Entry<String, Attribute> entry: attributes.entrySet()) { 
+                                notifyEdgeAttribute(et, entry.getKey(), entry.getValue());
+                            }
+                        } else { 
+                            // notify with all attributes
+                            notifyEdgeWithAttributes(et, attributes);
                         }
                     } else if (sourceId == null) {
                         throw new IllegalArgumentException("Edge with missing source detected");

@@ -67,7 +67,7 @@ public class LabelPropagationClusteringTest
         assertEquals(1, clustering.getNumberClusters());
         List<Set<Integer>> clusters = clustering.getClusters();
 
-        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8)), clusters.get(0));
+        assertEquals(Set.of(0, 1, 2, 3, 4, 5, 6, 7, 8), clusters.get(0));
     }
 
     @Test
@@ -108,8 +108,8 @@ public class LabelPropagationClusteringTest
         assertEquals(2, clustering.getNumberClusters());
         List<Set<Integer>> clusters = clustering.getClusters();
 
-        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2, 3)), clusters.get(0));
-        assertEquals(new HashSet<>(Arrays.asList(4, 5, 6, 7)), clusters.get(1));
+        assertEquals(Set.of(0, 1, 2, 3), clusters.get(0));
+        assertEquals(Set.of(4, 5, 6, 7), clusters.get(1));
     }
 
     @Test
@@ -160,9 +160,9 @@ public class LabelPropagationClusteringTest
         assertEquals(3, clustering.getNumberClusters());
         List<Set<Integer>> clusters = clustering.getClusters();
 
-        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2, 3)), clusters.get(0));
-        assertEquals(new HashSet<>(Arrays.asList(4, 5, 6, 7)), clusters.get(1));
-        assertEquals(new HashSet<>(Arrays.asList(8, 9, 10, 11)), clusters.get(2));
+        assertEquals(Set.of(0, 1, 2, 3), clusters.get(0));
+        assertEquals(Set.of(4, 5, 6, 7), clusters.get(1));
+        assertEquals(Set.of(8, 9, 10, 11), clusters.get(2));
     }
 
     @Test
@@ -189,8 +189,8 @@ public class LabelPropagationClusteringTest
         assertEquals(2, clustering.getNumberClusters());
         List<Set<Integer>> clusters = clustering.getClusters();
 
-        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2)), clusters.get(0));
-        assertEquals(new HashSet<>(Arrays.asList(3)), clusters.get(1));
+        assertEquals(Set.of(0, 1, 2), clusters.get(0));
+        assertEquals(Set.of(3), clusters.get(1));
     }
     
 }

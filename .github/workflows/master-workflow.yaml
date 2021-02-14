@@ -1,0 +1,56 @@
+name: JGrapht Master build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+          architecture: x64
+
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build with Maven
+        run: |
+          set -e
+          mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          architecture: x64
+      - run: npm install -g hercule@5.0.0
+
+      - name: Run prepareDocs script
+        run: ./etc/prepareDocs.sh
+        shell: bash
+
+      - name: Deploy snapshot to Sonatype
+        env:
+          SONATYPE_USER: ${{ secrets.CI_DEPLOY_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+        run: mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml
+        shell: bash
+
+      - name: Publish Github Pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          ACCESS_TOKEN: ${{ secrets.PAGES_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: docs
+          CLEAN: true
