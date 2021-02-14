@@ -35,7 +35,8 @@ public class SupplierUtilTest
     public void testCreateSupplier()
         throws Exception
     {
-        Supplier<List<?>> supplier = SupplierUtil.createSupplier(ArrayList.class);
+        @SuppressWarnings("rawtypes") Supplier<ArrayList> supplier =
+            SupplierUtil.createSupplier(ArrayList.class);
         testSupplier(supplier, new ArrayList<>());
     }
 
@@ -43,7 +44,8 @@ public class SupplierUtilTest
     public void testCreateSupplier_classWithoutNoArgumentConstructor()
     {
         // SimpleGraph has no no-argument constructor
-        Supplier<SimpleGraph<?, ?>> supplier = SupplierUtil.createSupplier(SimpleGraph.class);
+        @SuppressWarnings("rawtypes") Supplier<SimpleGraph> supplier =
+            SupplierUtil.createSupplier(SimpleGraph.class);
         org.junit.Assert.assertThrows(IllegalStateException.class, () -> supplier.get());
     }
 
