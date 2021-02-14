@@ -189,6 +189,12 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>5.1.1</version>
+                    <configuration>
+                        <instructions>
+                            <!-- Suppress import of own exported packages -->
+                            <Export-Package>*;-noimport:=true</Export-Package>
+                        </instructions>
+                    </configuration>
                     <executions>
                         <execution>
                             <phase>process-classes</phase>
