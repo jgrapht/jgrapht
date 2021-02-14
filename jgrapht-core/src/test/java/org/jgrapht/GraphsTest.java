@@ -443,7 +443,7 @@ public class GraphsTest
         graph.addEdge(3, 4);
         graph.addEdge(1, 4);
         Set<Integer> neighborSet = Graphs.neighborSetOf(graph, 1);
-        Assert.assertEquals(new HashSet<>(Arrays.asList(2, 4)), neighborSet);
+        Assert.assertEquals(Set.of(2, 4), neighborSet);
     }
 
 }

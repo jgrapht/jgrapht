@@ -199,7 +199,7 @@ public class AsSubgraphTest
         g.addEdge(5, 2);
 
         Graph<Integer, DefaultEdge> sg =
-            new AsSubgraph<>(g, new HashSet<>(Arrays.asList(1, 3, 100, 200, 300, 500, 800, 1000)));
+            new AsSubgraph<>(g, Set.of(1, 3, 100, 200, 300, 500, 800, 1000));
         assertEquals(2, sg.edgeSet().size());
         assertEquals(2, sg.vertexSet().size());
     }
@@ -225,8 +225,8 @@ public class AsSubgraphTest
         DefaultEdge nonValid2 = g.addEdge(5, 1);
         g.removeEdge(nonValid2);
 
-        Graph<Integer, DefaultEdge> sg = new AsSubgraph<>(
-            g, null, new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, nonValid1, nonValid2)));
+        Graph<Integer, DefaultEdge> sg =
+            new AsSubgraph<>(g, null, Set.of(e1, e2, e3, e4, e5, nonValid1, nonValid2));
         assertEquals(5, sg.edgeSet().size());
         assertEquals(5, sg.vertexSet().size());
     }
@@ -246,37 +246,35 @@ public class AsSubgraphTest
         DefaultEdge e44 = g.addEdge(4, 4);
         g.addEdge(4, 5);
 
-        Graph<Integer,
-            DefaultEdge> sg = new AsSubgraph<>(
-                g, new HashSet<>(Arrays.asList(1, 2, 3, 4)),
-                new HashSet<>(Arrays.asList(e12, e13, e23, e24_1, e24_2, e44)));
+        Graph<Integer, DefaultEdge> sg =
+            new AsSubgraph<>(g, Set.of(1, 2, 3, 4), Set.of(e12, e13, e23, e24_1, e24_2, e44));
 
         assertEquals(6, sg.edgeSet().size());
 
-        assertEquals(new HashSet<>(Arrays.asList(e12, e13)), sg.edgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e24_1, e24_2, e23)), sg.edgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e13, e23)), sg.edgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e44)), sg.edgesOf(4));
+        assertEquals(Set.of(e12, e13), sg.edgesOf(1));
+        assertEquals(Set.of(e12, e24_1, e24_2, e23), sg.edgesOf(2));
+        assertEquals(Set.of(e13, e23), sg.edgesOf(3));
+        assertEquals(Set.of(e24_1, e24_2, e44), sg.edgesOf(4));
 
         assertEquals(2, sg.degreeOf(1));
         assertEquals(4, sg.degreeOf(2));
         assertEquals(2, sg.degreeOf(3));
         assertEquals(4, sg.degreeOf(4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12, e13)), sg.incomingEdgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e24_1, e24_2, e23)), sg.incomingEdgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e13, e23)), sg.incomingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e44)), sg.incomingEdgesOf(4));
+        assertEquals(Set.of(e12, e13), sg.incomingEdgesOf(1));
+        assertEquals(Set.of(e12, e24_1, e24_2, e23), sg.incomingEdgesOf(2));
+        assertEquals(Set.of(e13, e23), sg.incomingEdgesOf(3));
+        assertEquals(Set.of(e24_1, e24_2, e44), sg.incomingEdgesOf(4));
 
         assertEquals(2, sg.inDegreeOf(1));
         assertEquals(4, sg.inDegreeOf(2));
         assertEquals(2, sg.inDegreeOf(3));
         assertEquals(4, sg.inDegreeOf(4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12, e13)), sg.outgoingEdgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e24_1, e24_2, e23)), sg.outgoingEdgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e13, e23)), sg.outgoingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e44)), sg.outgoingEdgesOf(4));
+        assertEquals(Set.of(e12, e13), sg.outgoingEdgesOf(1));
+        assertEquals(Set.of(e12, e24_1, e24_2, e23), sg.outgoingEdgesOf(2));
+        assertEquals(Set.of(e13, e23), sg.outgoingEdgesOf(3));
+        assertEquals(Set.of(e24_1, e24_2, e44), sg.outgoingEdgesOf(4));
 
         assertEquals(2, sg.outDegreeOf(1));
         assertEquals(4, sg.outDegreeOf(2));
@@ -299,37 +297,35 @@ public class AsSubgraphTest
         DefaultEdge e44 = g.addEdge(4, 4);
         g.addEdge(4, 5);
 
-        Graph<Integer,
-            DefaultEdge> sg = new AsSubgraph<>(
-                g, new HashSet<>(Arrays.asList(1, 2, 3, 4)),
-                new HashSet<>(Arrays.asList(e12, e13, e23, e24_1, e24_2, e44)));
+        Graph<Integer, DefaultEdge> sg =
+            new AsSubgraph<>(g, Set.of(1, 2, 3, 4), Set.of(e12, e13, e23, e24_1, e24_2, e44));
 
         assertEquals(6, sg.edgeSet().size());
 
-        assertEquals(new HashSet<>(Arrays.asList(e12, e13)), sg.edgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12, e24_1, e24_2, e23)), sg.edgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e13, e23)), sg.edgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e44)), sg.edgesOf(4));
+        assertEquals(Set.of(e12, e13), sg.edgesOf(1));
+        assertEquals(Set.of(e12, e24_1, e24_2, e23), sg.edgesOf(2));
+        assertEquals(Set.of(e13, e23), sg.edgesOf(3));
+        assertEquals(Set.of(e24_1, e24_2, e44), sg.edgesOf(4));
 
         assertEquals(2, sg.degreeOf(1));
         assertEquals(4, sg.degreeOf(2));
         assertEquals(2, sg.degreeOf(3));
         assertEquals(4, sg.degreeOf(4));
 
-        assertEquals(new HashSet<>(), sg.incomingEdgesOf(1));
-        assertEquals(new HashSet<>(Collections.singletonList(e12)), sg.incomingEdgesOf(2));
-        assertEquals(new HashSet<>(Arrays.asList(e13, e23)), sg.incomingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e44)), sg.incomingEdgesOf(4));
+        assertEquals(Set.of(), sg.incomingEdgesOf(1));
+        assertEquals(Set.of(e12), sg.incomingEdgesOf(2));
+        assertEquals(Set.of(e13, e23), sg.incomingEdgesOf(3));
+        assertEquals(Set.of(e24_1, e24_2, e44), sg.incomingEdgesOf(4));
 
         assertEquals(0, sg.inDegreeOf(1));
         assertEquals(1, sg.inDegreeOf(2));
         assertEquals(2, sg.inDegreeOf(3));
         assertEquals(3, sg.inDegreeOf(4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e12, e13)), sg.outgoingEdgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e23)), sg.outgoingEdgesOf(2));
-        assertEquals(new HashSet<>(), sg.outgoingEdgesOf(3));
-        assertEquals(new HashSet<>(Collections.singletonList(e44)), sg.outgoingEdgesOf(4));
+        assertEquals(Set.of(e12, e13), sg.outgoingEdgesOf(1));
+        assertEquals(Set.of(e24_1, e24_2, e23), sg.outgoingEdgesOf(2));
+        assertEquals(Set.of(), sg.outgoingEdgesOf(3));
+        assertEquals(Set.of(e44), sg.outgoingEdgesOf(4));
 
         assertEquals(2, sg.outDegreeOf(1));
         assertEquals(3, sg.outDegreeOf(2));

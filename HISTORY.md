@@ -37,6 +37,11 @@ Changes to JGraphT in each version:
     - Fixed some linty Integer comparisons (contributed by Dimitrios Michail)
     - Added `ThreadPoolExecutor` parameter to all parallel algorithms (contributed by Semen Chudakov)
     - Fixed bug in `DeltaSteppingShortestPath` (see #994) (reported by Andreas Hartung, contributed by Semen Chudakov)
+    - Added NETGEN-style problems generator (contributed by Timofey Chudakov)
+    - Added algorithm for minimum cycle mean (contributed by Semen Chudakov)
+    - Replace Travis CI with Github Actions (contributed by Szabolcs Besenyei)
+    - Added WebGraph adapter (contributed by Sebastiano Vigna with assistance from Dimitrios Michail)
+    - Added support for vertex provider with attributes in `JSONImporter` (contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)

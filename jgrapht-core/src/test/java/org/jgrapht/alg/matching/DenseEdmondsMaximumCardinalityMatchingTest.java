@@ -176,7 +176,7 @@ public final class DenseEdmondsMaximumCardinalityMatchingTest
 
         // Perfect matching
         Matching<Integer, DefaultEdge> m1 =
-            new MatchingAlgorithm.MatchingImpl<>(g, new HashSet<>(Arrays.asList(e12, e34)), 2);
+            new MatchingAlgorithm.MatchingImpl<>(g, Set.of(e12, e34), 2);
         assertTrue(matcher.isMaximumMatching(m1));
 
         // Maximum matching in graph with odd number of vertices
@@ -185,8 +185,8 @@ public final class DenseEdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(m1));
 
         // Not a maximum matching: augmenting path exists
-        Matching<Integer, DefaultEdge> m2 = new MatchingAlgorithm.MatchingImpl<>(
-            g, new HashSet<>(Collections.singletonList(e12)), 2);
+        Matching<Integer, DefaultEdge> m2 =
+            new MatchingAlgorithm.MatchingImpl<>(g, Set.of(e12), 2);
         assertFalse(matcher.isMaximumMatching(m2));
     }
 

@@ -205,7 +205,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g1 = getGraph1();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1);
         Set<Integer> graphCenter1 = gdm.getGraphCenter();
-        assertEquals(new HashSet<>(Collections.singletonList(1)), graphCenter1);
+        assertEquals(Set.of(1), graphCenter1);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g2 = getGraph2();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2);
         Set<Integer> graphCenter2 = gdm.getGraphCenter();
-        assertEquals(new HashSet<>(Arrays.asList(1, 5)), graphCenter2);
+        assertEquals(Set.of(1, 5), graphCenter2);
     }
 
     @Test
@@ -223,7 +223,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g1 = getGraph1();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1);
         Set<Integer> graphPeriphery1 = gdm.getGraphPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(4, 6)), graphPeriphery1);
+        assertEquals(Set.of(4, 6), graphPeriphery1);
     }
 
     @Test
@@ -232,7 +232,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g2 = getGraph2();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2);
         Set<Integer> graphPeriphery2 = gdm.getGraphPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(0, 2, 3, 4, 6)), graphPeriphery2);
+        assertEquals(Set.of(0, 2, 3, 4, 6), graphPeriphery2);
     }
 
     @Test
@@ -241,7 +241,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g1 = getGraph1();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1);
         Set<Integer> graphPseudoPeriphery1 = gdm.getGraphPseudoPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(4, 6)), graphPseudoPeriphery1);
+        assertEquals(Set.of(4, 6), graphPseudoPeriphery1);
     }
 
     @Test
@@ -250,7 +250,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g2 = getGraph2();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2);
         Set<Integer> graphPseudoPeriphery2 = gdm.getGraphPseudoPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(0, 2, 3, 4, 6)), graphPseudoPeriphery2);
+        assertEquals(Set.of(0, 2, 3, 4, 6), graphPseudoPeriphery2);
     }
 
     @Test
@@ -260,11 +260,10 @@ public class GraphMeasurerTest
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g3);
         Set<Integer> graphPseudoPeriphery3 = gdm.getGraphPseudoPeriphery();
         assertEquals(
-            new HashSet<>(
-                Arrays
-                    .asList(
-                        6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46, 48, 51, 53, 60,
-                        61, 63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)),
+            Set
+                .of(
+                    6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46, 48, 51, 53, 60, 61,
+                    63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98),
             graphPseudoPeriphery3);
     }
 }

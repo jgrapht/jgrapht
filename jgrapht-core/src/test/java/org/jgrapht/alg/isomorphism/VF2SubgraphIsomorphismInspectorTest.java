@@ -322,19 +322,18 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<>(sg4k, sg3k);
         Iterator<GraphMapping<Integer, DefaultEdge>> iter10 = vfs10.getMappings();
 
-        Set<String> mappings10 = new HashSet<>(
-            Arrays
-                .asList(
-                    "[0=0 1=1 2=2 3=~~]", "[0=0 1=1 2=~~ 3=2]", "[0=0 1=~~ 2=1 3=2]",
-                    "[0=~~ 1=0 2=1 3=2]", "[0=1 1=0 2=2 3=~~]", "[0=1 1=0 2=~~ 3=2]",
-                    "[0=1 1=~~ 2=0 3=2]", "[0=~~ 1=1 2=0 3=2]", "[0=2 1=1 2=0 3=~~]",
-                    "[0=2 1=1 2=~~ 3=0]", "[0=2 1=~~ 2=1 3=0]", "[0=~~ 1=2 2=1 3=0]",
-                    "[0=0 1=2 2=1 3=~~]", "[0=0 1=2 2=~~ 3=1]", "[0=0 1=~~ 2=2 3=1]",
-                    "[0=~~ 1=0 2=2 3=1]", "[0=1 1=2 2=0 3=~~]", "[0=1 1=2 2=~~ 3=0]",
-                    "[0=1 1=~~ 2=2 3=0]", "[0=~~ 1=1 2=2 3=0]", "[0=2 1=0 2=1 3=~~]",
-                    "[0=2 1=0 2=~~ 3=1]", "[0=2 1=~~ 2=0 3=1]", "[0=~~ 1=2 2=0 3=1]"));
+        Set<String> mappings10 = Set
+            .of(
+                "[0=0 1=1 2=2 3=~~]", "[0=0 1=1 2=~~ 3=2]", "[0=0 1=~~ 2=1 3=2]",
+                "[0=~~ 1=0 2=1 3=2]", "[0=1 1=0 2=2 3=~~]", "[0=1 1=0 2=~~ 3=2]",
+                "[0=1 1=~~ 2=0 3=2]", "[0=~~ 1=1 2=0 3=2]", "[0=2 1=1 2=0 3=~~]",
+                "[0=2 1=1 2=~~ 3=0]", "[0=2 1=~~ 2=1 3=0]", "[0=~~ 1=2 2=1 3=0]",
+                "[0=0 1=2 2=1 3=~~]", "[0=0 1=2 2=~~ 3=1]", "[0=0 1=~~ 2=2 3=1]",
+                "[0=~~ 1=0 2=2 3=1]", "[0=1 1=2 2=0 3=~~]", "[0=1 1=2 2=~~ 3=0]",
+                "[0=1 1=~~ 2=2 3=0]", "[0=~~ 1=1 2=2 3=0]", "[0=2 1=0 2=1 3=~~]",
+                "[0=2 1=0 2=~~ 3=1]", "[0=2 1=~~ 2=0 3=1]", "[0=~~ 1=2 2=0 3=1]");
         for (int i = 0; i < 24; i++) {
-            assertEquals(true, mappings10.remove(iter10.next().toString()));
+            assertTrue(mappings10.contains(iter10.next().toString()));
         }
         assertEquals(false, iter10.hasNext());
 
@@ -345,11 +344,10 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<Integer, DefaultEdge>> iter11 = vfs11.getMappings();
 
-        Set<String> mappings11 =
-            new HashSet<>(Arrays.asList("[1=1 2=2 3=3 4=4]", "[1=4 2=3 3=2 4=1]"));
-        assertEquals(true, mappings11.remove(iter11.next().toString()));
-        assertEquals(true, mappings11.remove(iter11.next().toString()));
-        assertEquals(false, iter11.hasNext());
+        Set<String> mappings11 = Set.of("[1=1 2=2 3=3 4=4]", "[1=4 2=3 3=2 4=1]");
+        assertTrue(mappings11.contains(iter11.next().toString()));
+        assertTrue(mappings11.contains(iter11.next().toString()));
+        assertFalse(iter11.hasNext());
 
         /* ECS-12: not connected graphs of different size */
 
@@ -867,11 +865,10 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<String, Integer>> iter2 = vf3.getMappings();
 
-        Set<String> mappings =
-            new HashSet<>(Arrays.asList("[A=A B=b a=~~ b=B]", "[A=~~ B=B a=A b=b]"));
-        assertEquals(true, mappings.remove(iter2.next().toString()));
-        assertEquals(true, mappings.remove(iter2.next().toString()));
-        assertEquals(false, iter2.hasNext());
+        Set<String> mappings = Set.of("[A=A B=b a=~~ b=B]", "[A=~~ B=B a=A b=b]");
+        assertTrue(mappings.contains(iter2.next().toString()));
+        assertTrue(mappings.contains(iter2.next().toString()));
+        assertFalse(iter2.hasNext());
 
         /*
          * SEM-3 test edge comparator
@@ -882,11 +879,10 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         Iterator<GraphMapping<String, Integer>> iter3 = vf4.getMappings();
 
-        Set<String> mappings2 =
-            new HashSet<>(Arrays.asList("[A=A B=b a=~~ b=B]", "[A=A B=~~ a=b b=B]"));
-        assertEquals(true, mappings2.remove(iter3.next().toString()));
-        assertEquals(true, mappings2.remove(iter3.next().toString()));
-        assertEquals(false, iter3.hasNext());
+        Set<String> mappings2 = Set.of("[A=A B=b a=~~ b=B]", "[A=A B=~~ a=b b=B]");
+        assertTrue(mappings2.contains(iter3.next().toString()));
+        assertTrue(mappings2.contains(iter3.next().toString()));
+        assertFalse(iter3.hasNext());
     }
 
     private class VertexComp
