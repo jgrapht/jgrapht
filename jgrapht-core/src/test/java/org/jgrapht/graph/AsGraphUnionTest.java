@@ -105,15 +105,14 @@ public class AsGraphUnionTest
         assertTrue(graphUnion.getType().isWeighted());
         assertFalse(graphUnion.getType().isModifiable());
 
-        assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
-        assertEquals(
-            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8)), graphUnion.edgeSet());
+        assertEquals(Set.of(v0, v1, v2, v3, v4), graphUnion.vertexSet());
+        assertEquals(Set.of(e1, e2, e3, e4, e5, e6, e7, e8), graphUnion.edgeSet());
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.edgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.edgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.edgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.edgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.edgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.edgesOf(v0));
+        assertEquals(Set.of(e1, e2, e4, e7), graphUnion.edgesOf(v1));
+        assertEquals(Set.of(e4, e5), graphUnion.edgesOf(v2));
+        assertEquals(Set.of(e5, e6), graphUnion.edgesOf(v3));
+        assertEquals(Set.of(e2, e3, e6, e7, e8), graphUnion.edgesOf(v4));
 
         assertEquals(2, graphUnion.degreeOf(v0));
         assertEquals(4, graphUnion.degreeOf(v1));
@@ -121,12 +120,11 @@ public class AsGraphUnionTest
         assertEquals(2, graphUnion.degreeOf(v3));
         assertEquals(6, graphUnion.degreeOf(v4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.incomingEdgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.incomingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.incomingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.incomingEdgesOf(v3));
-        assertEquals(
-            new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.incomingEdgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.incomingEdgesOf(v0));
+        assertEquals(Set.of(e1, e2, e4, e7), graphUnion.incomingEdgesOf(v1));
+        assertEquals(Set.of(e4, e5), graphUnion.incomingEdgesOf(v2));
+        assertEquals(Set.of(e5, e6), graphUnion.incomingEdgesOf(v3));
+        assertEquals(Set.of(e2, e3, e6, e7, e8), graphUnion.incomingEdgesOf(v4));
 
         assertEquals(2, graphUnion.inDegreeOf(v0));
         assertEquals(4, graphUnion.inDegreeOf(v1));
@@ -134,12 +132,11 @@ public class AsGraphUnionTest
         assertEquals(2, graphUnion.inDegreeOf(v3));
         assertEquals(6, graphUnion.inDegreeOf(v4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.outgoingEdgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.outgoingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.outgoingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.outgoingEdgesOf(v3));
-        assertEquals(
-            new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.outgoingEdgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.outgoingEdgesOf(v0));
+        assertEquals(Set.of(e1, e2, e4, e7), graphUnion.outgoingEdgesOf(v1));
+        assertEquals(Set.of(e4, e5), graphUnion.outgoingEdgesOf(v2));
+        assertEquals(Set.of(e5, e6), graphUnion.outgoingEdgesOf(v3));
+        assertEquals(Set.of(e2, e3, e6, e7, e8), graphUnion.outgoingEdgesOf(v4));
 
         assertEquals(2, graphUnion.outDegreeOf(v0));
         assertEquals(4, graphUnion.outDegreeOf(v1));
@@ -164,15 +161,14 @@ public class AsGraphUnionTest
         assertTrue(graphUnion.getType().isWeighted());
         assertFalse(graphUnion.getType().isModifiable());
 
-        assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
-        assertEquals(
-            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8)), graphUnion.edgeSet());
+        assertEquals(Set.of(v0, v1, v2, v3, v4), graphUnion.vertexSet());
+        assertEquals(Set.of(e1, e2, e3, e4, e5, e6, e7, e8), graphUnion.edgeSet());
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.edgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.edgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.edgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.edgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.edgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.edgesOf(v0));
+        assertEquals(Set.of(e1, e2, e4, e7), graphUnion.edgesOf(v1));
+        assertEquals(Set.of(e4, e5), graphUnion.edgesOf(v2));
+        assertEquals(Set.of(e5, e6), graphUnion.edgesOf(v3));
+        assertEquals(Set.of(e2, e3, e6, e7, e8), graphUnion.edgesOf(v4));
 
         assertEquals(2, graphUnion.degreeOf(v0));
         assertEquals(4, graphUnion.degreeOf(v1));
@@ -180,11 +176,11 @@ public class AsGraphUnionTest
         assertEquals(2, graphUnion.degreeOf(v3));
         assertEquals(6, graphUnion.degreeOf(v4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e3)), graphUnion.incomingEdgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e7)), graphUnion.incomingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4)), graphUnion.incomingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.incomingEdgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e6, e8)), graphUnion.incomingEdgesOf(v4));
+        assertEquals(Set.of(e3), graphUnion.incomingEdgesOf(v0));
+        assertEquals(Set.of(e1, e7), graphUnion.incomingEdgesOf(v1));
+        assertEquals(Set.of(e4), graphUnion.incomingEdgesOf(v2));
+        assertEquals(Set.of(e5), graphUnion.incomingEdgesOf(v3));
+        assertEquals(Set.of(e2, e6, e8), graphUnion.incomingEdgesOf(v4));
 
         assertEquals(1, graphUnion.inDegreeOf(v0));
         assertEquals(2, graphUnion.inDegreeOf(v1));
@@ -192,11 +188,11 @@ public class AsGraphUnionTest
         assertEquals(1, graphUnion.inDegreeOf(v3));
         assertEquals(3, graphUnion.inDegreeOf(v4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e1)), graphUnion.outgoingEdgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e4)), graphUnion.outgoingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.outgoingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e6)), graphUnion.outgoingEdgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e3, e7, e8)), graphUnion.outgoingEdgesOf(v4));
+        assertEquals(Set.of(e1), graphUnion.outgoingEdgesOf(v0));
+        assertEquals(Set.of(e2, e4), graphUnion.outgoingEdgesOf(v1));
+        assertEquals(Set.of(e5), graphUnion.outgoingEdgesOf(v2));
+        assertEquals(Set.of(e6), graphUnion.outgoingEdgesOf(v3));
+        assertEquals(Set.of(e3, e7, e8), graphUnion.outgoingEdgesOf(v4));
 
         assertEquals(1, graphUnion.outDegreeOf(v0));
         assertEquals(2, graphUnion.outDegreeOf(v1));
@@ -224,15 +220,14 @@ public class AsGraphUnionTest
         assertTrue(graphUnion.getType().isWeighted());
         assertFalse(graphUnion.getType().isModifiable());
 
-        assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
-        assertEquals(
-            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8)), graphUnion.edgeSet());
+        assertEquals(Set.of(v0, v1, v2, v3, v4), graphUnion.vertexSet());
+        assertEquals(Set.of(e1, e2, e3, e4, e5, e6, e7, e8), graphUnion.edgeSet());
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.edgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.edgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.edgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.edgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.edgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.edgesOf(v0));
+        assertEquals(Set.of(e1, e2, e4, e7), graphUnion.edgesOf(v1));
+        assertEquals(Set.of(e4, e5), graphUnion.edgesOf(v2));
+        assertEquals(Set.of(e5, e6), graphUnion.edgesOf(v3));
+        assertEquals(Set.of(e2, e3, e6, e7, e8), graphUnion.edgesOf(v4));
 
         assertEquals(2, graphUnion.degreeOf(v0));
         assertEquals(4, graphUnion.degreeOf(v1));
@@ -240,11 +235,11 @@ public class AsGraphUnionTest
         assertEquals(2, graphUnion.degreeOf(v3));
         assertEquals(6, graphUnion.degreeOf(v4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.incomingEdgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e7)), graphUnion.incomingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e4)), graphUnion.incomingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.incomingEdgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e8)), graphUnion.incomingEdgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.incomingEdgesOf(v0));
+        assertEquals(Set.of(e1, e2, e7), graphUnion.incomingEdgesOf(v1));
+        assertEquals(Set.of(e4), graphUnion.incomingEdgesOf(v2));
+        assertEquals(Set.of(e5), graphUnion.incomingEdgesOf(v3));
+        assertEquals(Set.of(e2, e3, e6, e8), graphUnion.incomingEdgesOf(v4));
 
         assertEquals(2, graphUnion.inDegreeOf(v0));
         assertEquals(3, graphUnion.inDegreeOf(v1));
@@ -252,11 +247,11 @@ public class AsGraphUnionTest
         assertEquals(1, graphUnion.inDegreeOf(v3));
         assertEquals(5, graphUnion.inDegreeOf(v4));
 
-        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.outgoingEdgesOf(v0));
-        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4)), graphUnion.outgoingEdgesOf(v1));
-        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.outgoingEdgesOf(v2));
-        assertEquals(new HashSet<>(Arrays.asList(e6)), graphUnion.outgoingEdgesOf(v3));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e7, e8)), graphUnion.outgoingEdgesOf(v4));
+        assertEquals(Set.of(e1, e3), graphUnion.outgoingEdgesOf(v0));
+        assertEquals(Set.of(e1, e2, e4), graphUnion.outgoingEdgesOf(v1));
+        assertEquals(Set.of(e5), graphUnion.outgoingEdgesOf(v2));
+        assertEquals(Set.of(e6), graphUnion.outgoingEdgesOf(v3));
+        assertEquals(Set.of(e2, e3, e7, e8), graphUnion.outgoingEdgesOf(v4));
 
         assertEquals(2, graphUnion.outDegreeOf(v0));
         assertEquals(3, graphUnion.outDegreeOf(v1));
