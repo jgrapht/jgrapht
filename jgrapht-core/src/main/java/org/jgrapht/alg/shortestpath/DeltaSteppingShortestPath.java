@@ -119,7 +119,7 @@ public class DeltaSteppingShortestPath<V, E>
     /**
      * Buckets structure.
      */
-    private Set<V>[] bucketStructure;
+    private List<Set<V>> bucketStructure;
 
     /**
      * Decorator for {@link ThreadPoolExecutor} supplied to this algorithm that enables to
@@ -358,9 +358,9 @@ public class DeltaSteppingShortestPath<V, E>
             delta = findDelta();
         }
         numOfBuckets = (int) (Math.ceil(maxEdgeWeight / delta) + 1);
-        bucketStructure = TypeUtil.uncheckedCast(new Set[numOfBuckets]);
+        bucketStructure = new ArrayList<>(numOfBuckets);
         for (int i = 0; i < numOfBuckets; i++) {
-            bucketStructure[i] = new ConcurrentSkipListSet<V>();
+            bucketStructure.add(new ConcurrentSkipListSet<>());
         }
         fillDistanceAndPredecessorMap();
 
@@ -406,9 +406,17 @@ public class DeltaSteppingShortestPath<V, E>
     {
         relax(source, null, 0.0);
 
-        int firstNonEmptyBucket = 0;
         List<Set<V>> removed = new ArrayList<>();
-        while (firstNonEmptyBucket < numOfBuckets) {
+        while (true) {
+            int firstNonEmptyBucket = 0;
+            while (firstNonEmptyBucket < numOfBuckets
+                    && bucketStructure.get(firstNonEmptyBucket).isEmpty())
+            { // skip empty buckets
+                ++firstNonEmptyBucket;
+            }
+            if(firstNonEmptyBucket == numOfBuckets) { // terminate if all buckets are empty
+                break;
+            }
             // the content of a bucket is replaced
             // in order not to handle the same vertices
             // multiple times
@@ -422,12 +430,6 @@ public class DeltaSteppingShortestPath<V, E>
 
             findAndRelaxHeavyRequests(removed);
             removed.clear();
-            ++firstNonEmptyBucket;
-            while (firstNonEmptyBucket < numOfBuckets
-                && bucketStructure[firstNonEmptyBucket].isEmpty())
-            { // skip empty buckets
-                ++firstNonEmptyBucket;
-            }
         }
     }
 
@@ -606,9 +608,9 @@ public class DeltaSteppingShortestPath<V, E>
             Pair<Double, E> oldData = distanceAndPredecessorMap.get(v);
             if (distance < oldData.getFirst()) {
                 if (!oldData.getFirst().equals(Double.POSITIVE_INFINITY)) {
-                    bucketStructure[bucketIndex(oldData.getFirst())].remove(v);
+                    bucketStructure.get(bucketIndex(oldData.getFirst())).remove(v);
                 }
-                bucketStructure[updatedBucket].add(v);
+                bucketStructure.get(updatedBucket).add(v);
                 distanceAndPredecessorMap.put(v, Pair.of(distance, e));
             }
         }
@@ -635,8 +637,8 @@ public class DeltaSteppingShortestPath<V, E>
      */
     private Set<V> getContentAndReplace(int bucketIndex)
     {
-        Set<V> result = bucketStructure[bucketIndex];
-        bucketStructure[bucketIndex] = new ConcurrentSkipListSet<V>();
+        Set<V> result = bucketStructure.get(bucketIndex);
+        bucketStructure.set(bucketIndex, new ConcurrentSkipListSet<V>());
         return result;
     }
 

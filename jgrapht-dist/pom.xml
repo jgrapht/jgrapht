@@ -48,6 +48,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>jgrapht-opt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jgrapht-unimi-dsi</artifactId>
+        </dependency>        
     </dependencies>
     <build>
         <plugins>

@@ -50,10 +50,10 @@ public interface MinimumCostFlowProblem<V, E>
     Graph<V, E> getGraph();
 
     /**
-     * Returns a function which defines the supply and demand of each node in thet network. Supplies
+     * Returns a function which defines the supply and demand of each node in that network. Supplies
      * can be positive, negative or 0. Nodes with positive negative supply are the demand nodes,
      * nodes with zero supply are the transhipment nodes. Flow is always directed from nodes with
-     * postive supply to nodes with negative supply. Summed over all nodes, the total demand should
+     * positive supply to nodes with negative supply. Summed over all nodes, the total demand should
      * equal 0.
      *
      * @return supply function
@@ -77,8 +77,16 @@ public interface MinimumCostFlowProblem<V, E>
     Function<E, Integer> getArcCapacityUpperBounds();
 
     /**
+     * Returns a function which specifies the network arc costs. Every unit of flow through an
+     * arc will have the price of the cost of this arc.
+     *
+     * @return arc cost function
+     */
+    Function<E, Double> getArcCosts();
+
+    /**
      * Default implementation of a Minimum Cost Flow Problem
-     * 
+     *
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
@@ -91,6 +99,7 @@ public interface MinimumCostFlowProblem<V, E>
         private final Function<V, Integer> nodeSupplies;
         private final Function<E, Integer> arcCapacityLowerBounds;
         private final Function<E, Integer> arcCapacityUpperBounds;
+        private final Function<E, Double> arcCosts;
 
         /**
          * Constructs a new minimum cost flow problem without arc capacity lower bounds.
@@ -119,10 +128,29 @@ public interface MinimumCostFlowProblem<V, E>
             Function<E, Integer> arcCapacityUpperBounds,
             Function<E, Integer> arcCapacityLowerBounds)
         {
+            this(graph, nodeSupplies, arcCapacityUpperBounds, arcCapacityLowerBounds, graph::getEdgeWeight);
+        }
+
+        /**
+         * Constructs a new minimum cost flow problem
+         *
+         * @param graph the flow network
+         * @param nodeSupplies the node demands
+         * @param arcCapacityUpperBounds the arc capacity upper bounds
+         * @param arcCapacityLowerBounds the arc capacity lower bounds
+         * @param arcCosts the arc costs
+         */
+        public MinimumCostFlowProblemImpl(
+                Graph<V, E> graph, Function<V, Integer> nodeSupplies,
+                Function<E, Integer> arcCapacityUpperBounds,
+                Function<E, Integer> arcCapacityLowerBounds,
+                Function<E, Double> arcCosts)
+        {
             this.graph = Objects.requireNonNull(graph);
             this.nodeSupplies = Objects.requireNonNull(nodeSupplies);
             this.arcCapacityUpperBounds = Objects.requireNonNull(arcCapacityUpperBounds);
             this.arcCapacityLowerBounds = Objects.requireNonNull(arcCapacityLowerBounds);
+            this.arcCosts = Objects.requireNonNull(arcCosts);
         }
 
         /**
@@ -159,6 +187,14 @@ public interface MinimumCostFlowProblem<V, E>
         public Function<E, Integer> getArcCapacityUpperBounds()
         {
             return arcCapacityUpperBounds;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Function<E, Double> getArcCosts(){
+            return arcCosts;
         }
     }
 }

@@ -19,6 +19,7 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
@@ -38,6 +39,11 @@ import static org.junit.Assert.assertNull;
  */
 public class DeltaSteppingShortestPathTest
 {
+    /**
+     * Seed value which is used to generate random graphs by
+     * {@code generateRandomGraph(Graph, int, double)} method.
+     */
+    private static final long SEED = 17l;
     /**
      * Executor which is supplied to {@link DeltaSteppingShortestPath} in this test case.
      */
@@ -83,6 +89,23 @@ public class DeltaSteppingShortestPathTest
 
         exception.expect(IllegalArgumentException.class);
         new DeltaSteppingShortestPath<>(graph, executor).getPaths(S);
+    }
+
+    @Test
+    public void testLineGraph() {
+        int maxNumberOfVertices = 10;
+        for (int numberOfVertices = 2; numberOfVertices < maxNumberOfVertices; ++numberOfVertices) {
+            Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>>
+                    testInput = generateLineGraphTestInput(numberOfVertices);
+            Graph<Integer, DefaultWeightedEdge> graph = testInput.getFirst();
+            List<Integer> vertices = testInput.getSecond();
+            List<DefaultWeightedEdge> edges = testInput.getThird();
+            GraphPath<Integer, DefaultWeightedEdge> shortestPath =
+                    new DeltaSteppingShortestPath<>(graph, executor).getPath(0, numberOfVertices - 1);
+            assertEquals(numberOfVertices - 1, shortestPath.getWeight(), 1e-9);
+            assertEquals(vertices, shortestPath.getVertexList());
+            assertEquals(edges, shortestPath.getEdgeList());
+        }
     }
 
     @Test
@@ -151,13 +174,14 @@ public class DeltaSteppingShortestPathTest
     @Test
     public void testGetPaths2()
     {
-        int numOfVertices = 1000;
-        int vertexDegree = 100;
-        int numOfIterations = 100;
+        int numOfVertices = 100;
+        int vertexDegree = 50;
+        int numOfIterations = 30;
         int source = 0;
+        Random random = new Random(SEED);
         for (int i = 0; i < numOfIterations; i++) {
             Graph<Integer, DefaultWeightedEdge> graph =
-                generateRandomGraph(numOfVertices, vertexDegree * numOfVertices);
+                generateRandomGraph(numOfVertices, vertexDegree * numOfVertices, random);
             test(graph, source);
         }
     }
@@ -198,18 +222,32 @@ public class DeltaSteppingShortestPathTest
         return graph;
     }
 
+    private Triple<Graph<Integer, DefaultWeightedEdge>, List<Integer>, List<DefaultWeightedEdge>>
+    generateLineGraphTestInput(int numberOfVertices) {
+        Graph<Integer, DefaultWeightedEdge> result = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        List<Integer> vertices = new ArrayList<>(numberOfVertices);
+        List<DefaultWeightedEdge> edges = new ArrayList<>(numberOfVertices - 1);
+        for (int i = 0; i < numberOfVertices - 1; ++i) {
+            DefaultWeightedEdge edge = Graphs.addEdgeWithVertices(result, i, i + 1);
+            vertices.add(i);
+            edges.add(edge);
+        }
+        vertices.add(numberOfVertices - 1);
+        return Triple.of(result, vertices, edges);
+    }
+
     private Graph<Integer, DefaultWeightedEdge> generateRandomGraph(
-        int numOfVertices, int numOfEdges)
+        int numOfVertices, int numOfEdges, Random random)
     {
-        DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-            new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1);
+            new GnmRandomGraphGenerator<>(numOfVertices, numOfEdges - numOfVertices + 1, random, true, true);
         generator.generateGraph(graph);
         makeConnected(graph);
-        addEdgeWeights(graph);
+        addEdgeWeights(graph, random);
 
         return graph;
     }
@@ -222,10 +260,10 @@ public class DeltaSteppingShortestPathTest
         }
     }
 
-    private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph)
+    private void addEdgeWeights(Graph<Integer, DefaultWeightedEdge> graph, Random random)
     {
         for (DefaultWeightedEdge edge : graph.edgeSet()) {
-            graph.setEdgeWeight(edge, Math.random());
+            graph.setEdgeWeight(edge, random.nextDouble());
         }
     }
 

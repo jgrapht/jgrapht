@@ -67,9 +67,9 @@ public class KSpanningTreeClusteringTest
         assertEquals(clustering.getNumberClusters(), k);
         List<Set<Integer>> clusters = clustering.getClusters();
 
-        assertEquals(new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6)), clusters.get(0));
-        assertEquals(new HashSet<>(Arrays.asList(7)), clusters.get(1));
-        assertEquals(new HashSet<>(Arrays.asList(8)), clusters.get(2));
+        assertEquals(Set.of(0, 1, 2, 3, 4, 5, 6), clusters.get(0));
+        assertEquals(Set.of(7), clusters.get(1));
+        assertEquals(Set.of(8), clusters.get(2));
     }
 
     @Test
@@ -104,10 +104,10 @@ public class KSpanningTreeClusteringTest
         assertEquals(clustering.getNumberClusters(), k);
         List<Set<Integer>> clusters = clustering.getClusters();
 
-        assertEquals(new HashSet<>(Arrays.asList(0, 1, 5)), clusters.get(0));
-        assertEquals(new HashSet<>(Arrays.asList(2, 3, 4)), clusters.get(1));
-        assertEquals(new HashSet<>(Arrays.asList(6)), clusters.get(2));
-        assertEquals(new HashSet<>(Arrays.asList(7, 8)), clusters.get(3));
+        assertEquals(Set.of(0, 1, 5), clusters.get(0));
+        assertEquals(Set.of(2, 3, 4), clusters.get(1));
+        assertEquals(Set.of(6), clusters.get(2));
+        assertEquals(Set.of(7, 8), clusters.get(3));
     }
 
     @Test

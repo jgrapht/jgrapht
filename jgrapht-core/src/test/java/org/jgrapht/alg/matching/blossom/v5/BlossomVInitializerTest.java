@@ -76,11 +76,9 @@ public class BlossomVInitializerTest
         assertEquals(2, state.edgeNum);
         assertEquals(0, state.treeNum);
 
-        assertEquals(Collections.emptySet(), BlossomVDebugger.getTreeRoots(state));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.getEdgesOf(node1));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.getEdgesOf(node2));
+        assertEquals(Set.of(), BlossomVDebugger.getTreeRoots(state));
+        assertEquals(Set.of(edge12), BlossomVDebugger.getEdgesOf(node1));
+        assertEquals(Set.of(edge12), BlossomVDebugger.getEdgesOf(node2));
 
         assertEquals(edge12, node1.matched);
         assertEquals(edge12, node2.matched);
@@ -170,21 +168,13 @@ public class BlossomVInitializerTest
         assertEquals(expectedRoots.size(), actualRoots.size());
         assertTrue(actualRoots.containsAll(expectedRoots));
 
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge12)), BlossomVDebugger.getEdgesOf(node1));
-        assertEquals(
-            new HashSet<>(Arrays.asList(edge12, edge23, edge25)),
-            BlossomVDebugger.getEdgesOf(node2));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge23)), BlossomVDebugger.getEdgesOf(node3));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge45)), BlossomVDebugger.getEdgesOf(node4));
-        assertEquals(
-            new HashSet<>(Arrays.asList(edge25, edge45, edge56)),
-            BlossomVDebugger.getEdgesOf(node5));
-        assertEquals(
-            new HashSet<>(Collections.singletonList(edge56)), BlossomVDebugger.getEdgesOf(node6));
-        assertEquals(new HashSet<>(), BlossomVDebugger.getEdgesOf(node7));
+        assertEquals(Set.of(edge12), BlossomVDebugger.getEdgesOf(node1));
+        assertEquals(Set.of(edge12, edge23, edge25), BlossomVDebugger.getEdgesOf(node2));
+        assertEquals(Set.of(edge23), BlossomVDebugger.getEdgesOf(node3));
+        assertEquals(Set.of(edge45), BlossomVDebugger.getEdgesOf(node4));
+        assertEquals(Set.of(edge25, edge45, edge56), BlossomVDebugger.getEdgesOf(node5));
+        assertEquals(Set.of(edge56), BlossomVDebugger.getEdgesOf(node6));
+        assertEquals(Set.of(), BlossomVDebugger.getEdgesOf(node7));
 
         assertEquals(1, BlossomVDebugger.getTreeEdgesOf(tree1).size());
         assertEquals(3, BlossomVDebugger.getTreeEdgesOf(tree2).size());

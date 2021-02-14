@@ -44,7 +44,7 @@
                 <configuration>
                     <instructions>
                         <!-- Suppress import of own exported packages -->
-                        <Import-Package>!org.jgrapht.guava.*,*</Import-Package>
+                        <Import-Package>!org.jgrapht.graph.guava.*,*</Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
