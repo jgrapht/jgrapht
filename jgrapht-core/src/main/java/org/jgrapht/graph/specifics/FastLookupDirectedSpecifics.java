@@ -152,6 +152,7 @@ public class FastLookupDirectedSpecifics<V, E>
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
+     * @deprecated not used anymore, without replacement
      */
     @Deprecated(forRemoval = true, since = "1.5.1")
     protected void addToIndex(V sourceVertex, V targetVertex, E e)
@@ -165,6 +166,7 @@ public class FastLookupDirectedSpecifics<V, E>
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      * @param e the edge
+     * @deprecated not used anymore, without replacement
      */
     @Deprecated(forRemoval = true, since = "1.5.1")
     protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
