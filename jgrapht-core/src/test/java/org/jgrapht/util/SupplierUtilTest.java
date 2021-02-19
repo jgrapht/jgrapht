@@ -18,6 +18,7 @@
 package org.jgrapht.util;
 
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil.*;
 import org.junit.*;
 
 import java.lang.reflect.*;
@@ -63,7 +64,7 @@ public class SupplierUtilTest
         // SimpleGraph has no no-argument constructor
         @SuppressWarnings("rawtypes") Supplier<SimpleGraph> supplier =
             SupplierUtil.createSupplier(SimpleGraph.class);
-        org.junit.Assert.assertThrows(IllegalStateException.class, () -> supplier.get());
+        org.junit.Assert.assertThrows(InvalidSuppliedClassException.class, () -> supplier.get());
     }
 
     @Test

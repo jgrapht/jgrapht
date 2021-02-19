@@ -253,7 +253,7 @@ public class SupplierUtil
         }
     }
 
-    private static class InvalidSuppliedClassException
+    static class InvalidSuppliedClassException
         extends
         IllegalArgumentException
     {
