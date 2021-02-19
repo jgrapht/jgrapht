@@ -266,7 +266,9 @@ public class SparseIntUndirectedGraph
             int v = getEdgeSource(eId);
             int u = getEdgeTarget(eId);
 
-            if (v == sourceVertex && u == targetVertex || v == targetVertex && u == sourceVertex) {
+            if (v == sourceVertex.intValue() && u == targetVertex.intValue()
+                || v == targetVertex.intValue() && u == sourceVertex.intValue())
+            {
                 return eId;
             }
         }
@@ -296,7 +298,9 @@ public class SparseIntUndirectedGraph
             int v = getEdgeSource(eId);
             int u = getEdgeTarget(eId);
 
-            if (v == sourceVertex && u == targetVertex || v == targetVertex && u == sourceVertex) {
+            if (v == sourceVertex.intValue() && u == targetVertex.intValue()
+                || v == targetVertex.intValue() && u == sourceVertex.intValue())
+            {
                 result.add(eId);
             }
         }

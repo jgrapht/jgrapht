@@ -280,7 +280,7 @@ public class SparseIntDirectedGraph
         Iterator<Integer> it = outIncidenceMatrix.nonZerosPositionIterator(sourceVertex);
         while (it.hasNext()) {
             int eId = it.next();
-            if (getEdgeTarget(eId) == targetVertex) {
+            if (getEdgeTarget(eId).equals(targetVertex)) {
                 return eId;
             }
         }
@@ -308,7 +308,7 @@ public class SparseIntDirectedGraph
         while (it.hasNext()) {
             int eId = it.next();
 
-            if (getEdgeTarget(eId) == targetVertex) {
+            if (getEdgeTarget(eId).equals(targetVertex)) {
                 result.add(eId);
             }
         }
