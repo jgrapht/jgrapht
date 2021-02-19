@@ -88,11 +88,10 @@ public class SupplierUtil
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> Supplier<T> getThrowingSupplier(ReflectiveOperationException e)
+    private static <T> Supplier<T> getThrowingSupplier(Throwable e)
     {
-        String error = e.getMessage();
         return (Supplier<T> & Serializable) () -> {
-            throw new IllegalStateException(error);
+            throw new InvalidSuppliedClassException(e.getMessage(), e);
         };
     }
 
@@ -243,7 +242,7 @@ public class SupplierUtil
             try {
                 return constructor.newInstance();
             } catch (ReflectiveOperationException ex) {
-                throw new IllegalStateException("Supplier failed", ex);
+                throw new InvalidSuppliedClassException("Supplier failed", ex);
             }
         }
 
@@ -251,6 +250,18 @@ public class SupplierUtil
             throws ObjectStreamException
         {
             return new SerializedForm<>(constructor.getDeclaringClass());
+        }
+    }
+
+    private static class InvalidSuppliedClassException
+        extends
+        IllegalArgumentException
+    {
+        private static final long serialVersionUID = -8192314371524515620L;
+
+        public InvalidSuppliedClassException(String message, Throwable cause)
+        {
+            super(message, cause);
         }
     }
 }
