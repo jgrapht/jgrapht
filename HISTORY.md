@@ -42,6 +42,8 @@ Changes to JGraphT in each version:
     - Replace Travis CI with Github Actions (contributed by Szabolcs Besenyei)
     - Added WebGraph adapter (contributed by Sebastiano Vigna with assistance from Dimitrios Michail)
     - Added support for vertex provider with attributes in `JSONImporter` (contributed by Dimitrios Michail)
+    - Added edge betweenness centrality algorithm (contributed by Dimitrios Michail)
+    - Added Girvan-Newman community detection algorithm (contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
