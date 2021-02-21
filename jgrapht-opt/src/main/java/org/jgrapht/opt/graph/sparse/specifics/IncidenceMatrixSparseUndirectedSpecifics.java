@@ -72,19 +72,19 @@ public class IncidenceMatrixSparseUndirectedSpecifics
     }
 
     @Override
-    public int edgesCount()
+    public long edgesCount()
     {
         return incidenceMatrix.columns();
     }
 
     @Override
-    public int verticesCount()
+    public long verticesCount()
     {
         return incidenceMatrix.rows();
     }
 
     @Override
-    public int degreeOf(Integer vertex)
+    public long degreeOf(Integer vertex)
     {
         assertVertexExist(vertex);
         return incidenceMatrix.nonZeros(vertex);
@@ -98,7 +98,7 @@ public class IncidenceMatrixSparseUndirectedSpecifics
     }
 
     @Override
-    public int inDegreeOf(Integer vertex)
+    public long inDegreeOf(Integer vertex)
     {
         assertVertexExist(vertex);
         return incidenceMatrix.nonZeros(vertex);
@@ -112,7 +112,7 @@ public class IncidenceMatrixSparseUndirectedSpecifics
     }
 
     @Override
-    public int outDegreeOf(Integer vertex)
+    public long outDegreeOf(Integer vertex)
     {
         assertVertexExist(vertex);
         return incidenceMatrix.nonZeros(vertex);

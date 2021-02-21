@@ -105,7 +105,7 @@ public class AbstractSparseSpecificsGraph<S extends SparseGraphSpecifics>
     @Override
     public int degreeOf(Integer vertex)
     {
-        return specifics.degreeOf(vertex);
+        return (int) specifics.degreeOf(vertex);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class AbstractSparseSpecificsGraph<S extends SparseGraphSpecifics>
     @Override
     public int inDegreeOf(Integer vertex)
     {
-        return specifics.inDegreeOf(vertex);
+        return (int) specifics.inDegreeOf(vertex);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class AbstractSparseSpecificsGraph<S extends SparseGraphSpecifics>
     @Override
     public int outDegreeOf(Integer vertex)
     {
-        return specifics.outDegreeOf(vertex);
+        return (int) specifics.outDegreeOf(vertex);
     }
 
     @Override

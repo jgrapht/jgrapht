@@ -64,7 +64,7 @@ public class IncomingNoReindexSparseDirectedSpecifics
     }
 
     @Override
-    public int degreeOf(Integer vertex)
+    public long degreeOf(Integer vertex)
     {
         assertVertexExist(vertex);
         if (inIncidenceMatrix == null) {
@@ -85,7 +85,7 @@ public class IncomingNoReindexSparseDirectedSpecifics
     }
 
     @Override
-    public int inDegreeOf(Integer vertex)
+    public long inDegreeOf(Integer vertex)
     {
         assertVertexExist(vertex);
         if (inIncidenceMatrix == null) {

@@ -86,13 +86,13 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
     }
 
     @Override
-    public int edgesCount()
+    public long edgesCount()
     {
         return outIncidenceMatrix.columns();
     }
 
     @Override
-    public int degreeOf(Integer vertex)
+    public long degreeOf(Integer vertex)
     {
         throw new UnsupportedOperationException(NO_INCOMING);
     }
@@ -104,7 +104,7 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
     }
 
     @Override
-    public int inDegreeOf(Integer vertex)
+    public long inDegreeOf(Integer vertex)
     {
         throw new UnsupportedOperationException(NO_INCOMING);
     }
@@ -116,7 +116,7 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
     }
 
     @Override
-    public int outDegreeOf(Integer vertex)
+    public long outDegreeOf(Integer vertex)
     {
         assertVertexExist(vertex);
         return outIncidenceMatrix.nonZeros(vertex);
@@ -130,7 +130,7 @@ public class NoIncomingNoReindexSparseDirectedSpecifics
     }
 
     @Override
-    public int verticesCount()
+    public long verticesCount()
     {
         return outIncidenceMatrix.rows();
     }

@@ -34,14 +34,14 @@ public interface SparseGraphSpecifics
      * 
      * @return the number of edges
      */
-    int edgesCount();
+    long edgesCount();
 
     /**
      * Get the number of vertices
      * 
      * @return the number of vertices
      */
-    int verticesCount();
+    long verticesCount();
 
     /**
      * Returns <code>true</code> if this graph contains the specified edge. More formally, returns
@@ -89,7 +89,11 @@ public interface SparseGraphSpecifics
      */
     default Set<Integer> edgeSet()
     {
-        return new CompleteIntegerSet(edgesCount());
+        Long edgesCount = edgesCount();
+        if (edgesCount > Integer.MAX_VALUE) { 
+            throw new ArithmeticException("integer overflow");
+        }
+        return new CompleteIntegerSet(edgesCount.intValue());
     }
 
     /**
@@ -109,7 +113,7 @@ public interface SparseGraphSpecifics
      * @throws NullPointerException if vertex is <code>null</code>.
      * @throws ArithmeticException if the result overflows an int
      */
-    int degreeOf(Integer vertex);
+    long degreeOf(Integer vertex);
 
     /**
      * Returns a set of all edges touching the specified vertex. If no edges are touching the
@@ -142,7 +146,7 @@ public interface SparseGraphSpecifics
      * @throws NullPointerException if vertex is <code>null</code>.
      * @throws ArithmeticException if the result overflows an int
      */
-    int inDegreeOf(Integer vertex);
+    long inDegreeOf(Integer vertex);
 
     /**
      * Returns a set of all edges incoming into the specified vertex.
@@ -178,7 +182,7 @@ public interface SparseGraphSpecifics
      * @throws NullPointerException if vertex is <code>null</code>.
      * @throws ArithmeticException if the result overflows an int
      */
-    int outDegreeOf(Integer vertex);
+    long outDegreeOf(Integer vertex);
 
     /**
      * Returns a set of all edges outgoing from the specified vertex.
@@ -211,7 +215,11 @@ public interface SparseGraphSpecifics
      */
     default Set<Integer> vertexSet()
     {
-        return new CompleteIntegerSet(verticesCount());
+        Long verticesCount = verticesCount();
+        if (verticesCount > Integer.MAX_VALUE) { 
+            throw new ArithmeticException("integer overflow");
+        }
+        return new CompleteIntegerSet(verticesCount.intValue());
     }
 
     /**
