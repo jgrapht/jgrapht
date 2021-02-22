@@ -64,7 +64,7 @@ public class SupplierUtilTest
         // SimpleGraph has no no-argument constructor
         @SuppressWarnings("rawtypes") Supplier<SimpleGraph> supplier =
             SupplierUtil.createSupplier(SimpleGraph.class);
-        org.junit.Assert.assertThrows(InvalidSuppliedClassException.class, () -> supplier.get());
+        org.junit.Assert.assertThrows(SupplierException.class, () -> supplier.get());
     }
 
     @Test

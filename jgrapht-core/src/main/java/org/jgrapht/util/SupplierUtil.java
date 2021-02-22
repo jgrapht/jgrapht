@@ -91,7 +91,7 @@ public class SupplierUtil
     private static <T> Supplier<T> getThrowingSupplier(Throwable e)
     {
         return (Supplier<T> & Serializable) () -> {
-            throw new InvalidSuppliedClassException(e.getMessage(), e);
+            throw new SupplierException(e.getMessage(), e);
         };
     }
 
@@ -242,7 +242,7 @@ public class SupplierUtil
             try {
                 return constructor.newInstance();
             } catch (ReflectiveOperationException ex) {
-                throw new InvalidSuppliedClassException("Supplier failed", ex);
+                throw new SupplierException("Supplier failed", ex);
             }
         }
 
@@ -253,13 +253,13 @@ public class SupplierUtil
         }
     }
 
-    static class InvalidSuppliedClassException
+    static class SupplierException
         extends
         IllegalArgumentException
     {
         private static final long serialVersionUID = -8192314371524515620L;
 
-        public InvalidSuppliedClassException(String message, Throwable cause)
+        public SupplierException(String message, Throwable cause)
         {
             super(message, cause);
         }
