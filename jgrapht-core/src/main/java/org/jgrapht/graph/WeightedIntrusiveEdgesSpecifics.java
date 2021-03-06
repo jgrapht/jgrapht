@@ -54,18 +54,7 @@ public class WeightedIntrusiveEdgesSpecifics<V, E>
     public boolean add(E edge, V sourceVertex, V targetVertex)
     {
         if (edge instanceof IntrusiveWeightedEdge) {
-            IntrusiveWeightedEdge e = (IntrusiveWeightedEdge) edge;
-            if (e.source == null && e.target == null) { // edge not yet in any graph
-                e.source = sourceVertex;
-                e.target = targetVertex;
-
-            } else if (e.source != sourceVertex || e.target != targetVertex) {
-                // Edge already contained in this or another graph but with different touching
-                // edges. Reject the edge to not reset the touching vertices of the edge.
-                // Changing the touching vertices causes major inconsistent behavior.
-                return false;
-            }
-            return edgeMap.putIfAbsent(edge, e) == null;
+            return addIntrusiveEdge(edge, sourceVertex, targetVertex, (IntrusiveWeightedEdge) edge);
 
         } else {
             int previousSize = edgeMap.size();

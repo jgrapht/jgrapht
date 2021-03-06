@@ -18,6 +18,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.BaseIntrusiveEdgesSpecifics.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
@@ -76,7 +77,7 @@ public class SimpleDirectedGraphTest
         assertThrows(IllegalArgumentException.class, () -> g1.addEdge("ya", "ya", e));
 
         // supplied edge already in another graph with differing touching vertices
-        assertFalse(g4.addEdge(v1, v3, e12_1));
+        assertThrows(IntrusiveEdgeException.class, () -> g4.addEdge(v1, v3, e12_1));
 
         assertFalse(g2.addEdge(v2, v1, e));
         assertFalse(g3.addEdge(v2, v1, e));
@@ -101,7 +102,7 @@ public class SimpleDirectedGraphTest
         Graph<Object, DefaultEdge> g5 = new SimpleDirectedGraph<>(null, () -> this.e12_1, false);
         g5.addVertex(v1);
         g5.addVertex(v3);
-        assertNull(g5.addEdge(v1, v3));
+        assertThrows(IntrusiveEdgeException.class, () -> g5.addEdge(v1, v3));
 
         assertNull(g2.addEdge(v2, v1));
         assertNull(g3.addEdge(v2, v1));

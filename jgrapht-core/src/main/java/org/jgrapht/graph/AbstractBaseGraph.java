@@ -243,14 +243,8 @@ public abstract class AbstractBaseGraph<V, E>
         if (!type.isAllowingMultipleEdges()) {
             E e = specifics
                 .createEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
-            if (e != null) {
-                if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-                    return e;
-                } else {
-                    // edge is already contained in another graph with differing touching vertices
-                    // -> revert add to specifics
-                    specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
-                }
+            if (e != null && addIntrusiveEdge(e, sourceVertex, targetVertex)) {
+                return e;
             }
         } else {
             E e = edgeSupplier.get();
@@ -287,13 +281,7 @@ public abstract class AbstractBaseGraph<V, E>
             if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
                 return false;
             }
-            if (!intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-                // edge is already contained in another graph with differing touching vertices
-                // -> revert add to specifics
-                specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
-                return false;
-            }
-            return true;
+            return addIntrusiveEdge(e, sourceVertex, targetVertex);
         } else {
             if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
                 specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
@@ -301,6 +289,20 @@ public abstract class AbstractBaseGraph<V, E>
             }
             return false;
         }
+    }
+
+    private boolean addIntrusiveEdge(E e, V sourceVertex, V targetVertex)
+    {
+        boolean added = false;
+        try {
+            added = intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+        } finally {
+            if (!added) {
+                // edge not added (either already present or threw an exception) -> revert add
+                specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+            }
+        }
+        return added;
     }
 
     @Override

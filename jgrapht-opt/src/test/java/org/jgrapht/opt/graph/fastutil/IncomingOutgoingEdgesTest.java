@@ -61,7 +61,7 @@ public class IncomingOutgoingEdgesTest
         assertEquals(Collections.emptySet(), g.outgoingEdgesOf(3));
         assertEquals(0, g.outDegreeOf(3));
 
-        assertFalse(g.addEdge(1, 3, e));
+        assertThrows(IllegalStateException.class, () -> g.addEdge(1, 3, e));
         assertTrue(g.edgeSet().size() == 1);
         assertEquals(Collections.emptySet(), g.incomingEdgesOf(1));
         assertEquals(0, g.inDegreeOf(1));
@@ -188,7 +188,7 @@ public class IncomingOutgoingEdgesTest
         assertEquals(Collections.emptySet(), g.edgesOf(3));
         assertEquals(0, g.degreeOf(3));
 
-        assertFalse(g.addEdge(1, 3, e));
+        assertThrows(IllegalStateException.class, () -> g.addEdge(1, 3, e));
         assertTrue(g.edgeSet().size() == 1);
         assertEquals(Set.of(e), g.edgesOf(1));
         assertEquals(1, g.degreeOf(1));
