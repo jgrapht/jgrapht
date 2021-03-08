@@ -148,7 +148,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
      */
     public abstract boolean add(E e, V sourceVertex, V targetVertex);
 
-    boolean addIntrusiveEdge(E edge, V sourceVertex, V targetVertex, IE e)
+    protected boolean addIntrusiveEdge(E edge, V sourceVertex, V targetVertex, IE e)
     {
         if (e.source == null && e.target == null) { // edge not yet in any graph
             e.source = sourceVertex;
@@ -171,7 +171,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
      */
     protected abstract IE getIntrusiveEdge(E e);
 
-    static class IntrusiveEdgeException
+    protected static class IntrusiveEdgeException
         extends
         IllegalStateException
     {

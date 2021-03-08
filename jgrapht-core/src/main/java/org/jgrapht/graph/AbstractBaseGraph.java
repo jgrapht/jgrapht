@@ -243,8 +243,19 @@ public abstract class AbstractBaseGraph<V, E>
         if (!type.isAllowingMultipleEdges()) {
             E e = specifics
                 .createEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
-            if (e != null && addIntrusiveEdge(e, sourceVertex, targetVertex)) {
-                return e;
+            if (e != null) {
+                boolean edgeAdded = false;
+                try {
+                    edgeAdded = intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+                } finally {
+                    if (!edgeAdded) {
+                        // edge was already present or adding threw an exception -> revert add
+                        specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+                    }
+                }
+                if (edgeAdded) {
+                    return e;
+                }
             }
         } else {
             E e = edgeSupplier.get();
@@ -278,7 +289,16 @@ public abstract class AbstractBaseGraph<V, E>
             if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
                 return false;
             }
-            return addIntrusiveEdge(e, sourceVertex, targetVertex);
+            boolean edgeAdded = false;
+            try {
+                edgeAdded = intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+            } finally {
+                if (!edgeAdded) {
+                    // edge was already present or adding threw an exception -> revert add
+                    specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+                }
+            }
+            return edgeAdded;
         } else {
             if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
                 specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
@@ -286,20 +306,6 @@ public abstract class AbstractBaseGraph<V, E>
             }
             return false;
         }
-    }
-
-    private boolean addIntrusiveEdge(E e, V sourceVertex, V targetVertex)
-    {
-        boolean added = false;
-        try {
-            added = intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
-        } finally {
-            if (!added) {
-                // edge not added (either already present or threw an exception) -> revert add
-                specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
-            }
-        }
-        return added;
     }
 
     @Override
