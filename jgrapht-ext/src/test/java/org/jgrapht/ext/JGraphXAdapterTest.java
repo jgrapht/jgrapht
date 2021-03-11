@@ -299,8 +299,8 @@ public class JGraphXAdapterTest
         final int expectedEdges = 3;
         jGraphT.addEdge(v1, v2, edge1);
         jGraphT.addEdge(v1, v2, new DefaultEdge());
-        assertThrows(IllegalStateException.class, () -> jGraphT.addEdge(v1, v3, edge1));
-        assertThrows(IllegalStateException.class, () -> jGraphT.addEdge(v1, v4, edge1));
+        assertThrows(IntrusiveEdgeException.class, () -> jGraphT.addEdge(v1, v3, edge1));
+        assertThrows(IntrusiveEdgeException.class, () -> jGraphT.addEdge(v1, v4, edge1));
         jGraphT.addEdge(v2, v3);
         jGraphT.addEdge(v3, v4);
 
