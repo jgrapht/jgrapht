@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2020, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2021, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -524,22 +524,6 @@ public class GraphWalk<V, E>
     {
         return new GraphWalk<>(
             graph, v, v, Collections.singletonList(v), Collections.emptyList(), weight);
-    }
-
-}
-
-/**
- * Exception thrown in the event that the path is invalid.
- */
-class InvalidGraphWalkException
-    extends
-    RuntimeException
-{
-    private static final long serialVersionUID = 3811666107707436479L;
-
-    public InvalidGraphWalkException(String message)
-    {
-        super(message);
     }
 
 }
