@@ -19,7 +19,6 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -68,7 +67,8 @@ public class TwoOptHeuristicTSP<V, E>
     private Graph<V, E> graph;
     private int n;
     private double[][] dist;
-    private VertexToIntegerMapping<V> vertex2index;
+    private Map<V, Integer> index;
+    private Map<Integer, V> revIndex;
 
     /**
      * Constructor. By default one initial random tour is used.
@@ -216,20 +216,22 @@ public class TwoOptHeuristicTSP<V, E>
     private void init(Graph<V, E> graph)
     {
         this.graph = graph;
-        Set<V> vertexSet = graph.vertexSet();
-        this.n = vertexSet.size();
+        this.n = graph.vertexSet().size();
         this.dist = new double[n][n];
-        vertex2index = new VertexToIntegerMapping<>(vertexSet);
-
-        Map<V, Integer> index = vertex2index.getVertexMap();
+        this.index = new HashMap<>();
+        this.revIndex = new HashMap<>();
+        int i = 0;
+        for (V v : graph.vertexSet()) {
+            index.put(v, i);
+            revIndex.put(i, v);
+            i++;
+        }
 
         for (E e : graph.edgeSet()) {
-
             V s = graph.getEdgeSource(e);
             int si = index.get(s);
             V t = graph.getEdgeTarget(e);
             int ti = index.get(t);
-
             double weight = graph.getEdgeWeight(e);
             dist[si][ti] = weight;
             dist[ti][si] = weight;
@@ -295,7 +297,6 @@ public class TwoOptHeuristicTSP<V, E>
      */
     private GraphPath<V, E> tourToPath(int[] tour)
     {
-        List<V> revIndex = vertex2index.getIndexList();
         List<V> tourVertices = new ArrayList<>(n + 1);
         for (int vi : tour) {
             V v = revIndex.get(vi);
@@ -313,7 +314,6 @@ public class TwoOptHeuristicTSP<V, E>
     private int[] pathToTour(GraphPath<V, E> path)
     {
         boolean[] visited = new boolean[n];
-        Map<V, Integer> index = vertex2index.getVertexMap();
 
         List<V> vertexList = path.getVertexList(); // first and last element are the starting vertex
         if (vertexList.size() != n + 1) {

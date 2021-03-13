@@ -171,9 +171,9 @@ public class NearestNeighborHeuristicTSP<V, E>
         }
 
         Set<V> vertexSet = graph.vertexSet();
-        int size = vertexSet.size();
+        int n = vertexSet.size();
 
-        @SuppressWarnings("unchecked") V[] path = (V[]) vertexSet.toArray(new Object[size + 1]);
+        @SuppressWarnings("unchecked") V[] path = (V[]) vertexSet.toArray(new Object[n + 1]);
         List<V> pathList = Arrays.asList(path); // List backed by path-array
 
         // move initial vertex to the beginning
@@ -181,17 +181,17 @@ public class NearestNeighborHeuristicTSP<V, E>
         swap(path, 0, initalIndex);
 
         // search nearest neighbors
-        int limit = size - 1; // no need to check the last vertex
+        int limit = n - 1; // last vertex won't be changed -> no need to check it
         for (int i = 1; i < limit; i++) {
             V v = path[i - 1];
             // path before i is established. The element at i must be the closest to element at i-1.
-            // -> get nearest of remaining elements (index >=i) and set it as next in path
+            // -> get nearest of remaining elements (index >= i) and set it as next in path
             int nearestNeighbor = getNearestNeighbor(v, path, i, graph);
 
             swap(path, i, nearestNeighbor);
         }
 
-        path[size] = path[0]; // close tour manually. Arrays.asList does not support add
+        path[n] = path[0]; // close tour manually. Arrays.asList does not support add
         return closedVertexListToTour(pathList, graph);
     }
 
@@ -223,7 +223,7 @@ public class NearestNeighborHeuristicTSP<V, E>
      * Find the vertex in the range staring at {@code from} that is closest to the element at index
      * from-1.
      *
-     * @param v the vertex for which the nearest neighbor is searched
+     * @param current the vertex for which the nearest neighbor is searched
      * @param vertices the vertices of the graph. The unvisited neighbors start at index
      *        {@code start}
      * @param start the index of the first vertex to consider
@@ -231,20 +231,20 @@ public class NearestNeighborHeuristicTSP<V, E>
      *
      * @return the index of the unvisited vertex closest to the vertex at firstNeighbor-1.
      */
-    private static <V, E> int getNearestNeighbor(V v, V[] vertices, int start, Graph<V, E> g)
+    private static <V, E> int getNearestNeighbor(V current, V[] vertices, int start, Graph<V, E> g)
     {
-        int minIndex = -1;
-        double minDistance = Double.MAX_VALUE;
+        int closest = -1;
+        double minDist = Double.MAX_VALUE;
 
-        int to = vertices.length - 1; // last element in vertices is null
-        for (int i = start; i < to; i++) {
-            E e = g.getEdge(v, vertices[i]);
-            double distance = g.getEdgeWeight(e);
-            if (distance < minDistance) {
-                minDistance = distance;
-                minIndex = i;
+        int n = vertices.length - 1; // last element in vertices is null
+        for (int i = start; i < n; i++) {
+            V v = vertices[i];
+            double vDist = g.getEdgeWeight(g.getEdge(current, v));
+            if (vDist < minDist) {
+                closest = i;
+                minDist = vDist;
             }
         }
-        return minIndex;
+        return closest;
     }
 }
