@@ -21,6 +21,8 @@ import org.jgrapht.*;
 
 import java.util.*;
 
+import static org.jgrapht.util.ArrayUtil.*;
+
 /**
  * Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition. Ore gave
  * a sufficient condition for a graph to be Hamiltonian, essentially stating that a graph with

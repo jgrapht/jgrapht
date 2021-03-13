@@ -22,6 +22,8 @@ import org.jgrapht.alg.interfaces.*;
 
 import java.util.*;
 
+import static org.jgrapht.util.ArrayUtil.*;
+
 /**
  * The 2-opt heuristic algorithm for the TSP problem.
  *

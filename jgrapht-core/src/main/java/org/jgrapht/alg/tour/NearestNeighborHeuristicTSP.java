@@ -21,6 +21,8 @@ import org.jgrapht.*;
 
 import java.util.*;
 
+import static org.jgrapht.util.ArrayUtil.*;
+
 /**
  * The nearest neighbour heuristic algorithm for the TSP problem.
  *
