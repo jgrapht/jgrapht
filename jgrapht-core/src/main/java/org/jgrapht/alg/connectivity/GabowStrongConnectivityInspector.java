@@ -38,9 +38,9 @@ public class GabowStrongConnectivityInspector<V, E>
     AbstractStrongConnectivityInspector<V, E>
 {
     // the sequence of (original) vertices encountered but not yet assigned to a component
-    private Deque<VertexNumber<V>> S = new ArrayDeque<>();
+    private Deque<VertexNumber<V>> stackS = new ArrayDeque<>();
     // the boundaries between contracted vertices on the current path of the dfs-tree
-    private Deque<VertexNumber<V>> B = new ArrayDeque<>();
+    private Deque<VertexNumber<V>> stackB = new ArrayDeque<>();
 
     // maps vertices to their VertexNumber object
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
@@ -76,8 +76,8 @@ public class GabowStrongConnectivityInspector<V, E>
             }
 
             vertexToVertexNumber = null;
-            S = null;
-            B = null;
+            stackS = null;
+            stackB = null;
         }
 
         return stronglyConnectedSets;
@@ -95,8 +95,8 @@ public class GabowStrongConnectivityInspector<V, E>
             vertexToVertexNumber.put(vertex, new VertexNumber<>(vertex));
         }
 
-        S = new ArrayDeque<>(c);
-        B = new ArrayDeque<>(c);
+        stackS = new ArrayDeque<>(c);
+        stackB = new ArrayDeque<>(c);
     }
 
     /*
@@ -104,9 +104,9 @@ public class GabowStrongConnectivityInspector<V, E>
      */
     private void dfsVisit(VertexNumber<V> v)
     {
-        S.push(v);
-        v.number = S.size();
-        B.push(v);
+        stackS.push(v);
+        v.number = stackS.size();
+        stackB.push(v);
 
         // follow all edges
 
@@ -116,14 +116,14 @@ public class GabowStrongConnectivityInspector<V, E>
             if (w.number == 0) {
                 dfsVisit(w);
             } else { /* contract if necessary */
-                while (w.number < B.peek().number) {
-                    B.pop();
+                while (w.number < stackB.peek().number) {
+                    stackB.pop();
                 }
             }
         }
-        if (v == B.peek()) {
+        if (v == stackB.peek()) {
             // number vertices of the next strong component
-            B.pop();
+            stackB.pop();
             c++;
             Set<V> sccVertices = createSCCVertexSetAndNumberVertices(v);
             stronglyConnectedSets.add(sccVertices);
@@ -132,19 +132,19 @@ public class GabowStrongConnectivityInspector<V, E>
 
     private Set<V> createSCCVertexSetAndNumberVertices(VertexNumber<V> v)
     {
-        int sccSize = S.size() - v.number + 1;
+        int sccSize = stackS.size() - v.number + 1;
         // All VertexNumber objects on S above and including v form the current SCC.
         // To collect them from S, elements have to be popped while the size of S is greater or
         // equal to v.number. This results in <sccSize> removals(pops) from S.
         Set<V> scc;
         if (sccSize == 1) {
-            VertexNumber<V> r = S.pop();
+            VertexNumber<V> r = stackS.pop();
             scc = Collections.singleton(r.vertex);
             r.number = c;
         } else {
             scc = CollectionUtil.newHashSetWithExpectedSize(sccSize);
             for (int i = 0; i < sccSize; i++) {
-                VertexNumber<V> r = S.pop();
+                VertexNumber<V> r = stackS.pop();
                 scc.add(r.vertex);
                 r.number = c;
             }

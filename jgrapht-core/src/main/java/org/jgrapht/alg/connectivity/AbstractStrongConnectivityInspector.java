@@ -78,8 +78,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
     {
         List<Set<V>> sets = stronglyConnectedSets();
 
-        Graph<Graph<V, E>, DefaultEdge> condensation =
-            new SimpleDirectedGraph<>(null, DefaultEdge::new, false);
+        Graph<Graph<V, E>, DefaultEdge> condensation = new SimpleDirectedGraph<>(DefaultEdge.class);
         Map<V, Graph<V, E>> vertexToComponent =
             CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
