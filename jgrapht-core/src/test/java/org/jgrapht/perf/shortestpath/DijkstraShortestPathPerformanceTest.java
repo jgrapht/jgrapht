@@ -242,6 +242,37 @@ public class DijkstraShortestPathPerformanceTest
             return "A* with ALT heuristic (" + totalLandmarks + " random landmarks)";
         }
     }
+    
+    public static class AStarALTIncBenchmark
+        extends
+        BenchmarkBase
+    {
+        private int totalLandmarks;
+
+        AStarALTIncBenchmark(int totalLandmarks)
+        {
+            this.totalLandmarks = totalLandmarks;
+        }
+
+        @Override
+        ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph)
+        {
+            Integer[] vertices = graph.vertexSet().toArray(new Integer[0]);
+            Set<Integer> landmarks = new HashSet<>();
+            while (landmarks.size() < totalLandmarks) {
+                landmarks.add(vertices[rng.nextInt(graph.vertexSet().size())]);
+            }
+            return new AStarShortestPath<>(graph, new ALTInconsistentHeuristic<>(graph, landmarks, SEED));
+        }
+
+        @Override
+        public String toString()
+        {
+            return "A* with inconsistent heuristic";
+        }
+    }
+    
 
     public static class BidirectionalAStarNoHeuristicBenchmark
         extends
@@ -292,6 +323,38 @@ public class DijkstraShortestPathPerformanceTest
             return "Bidirectional A* with ALT heuristic (" + totalLandmarks + " random landmarks)";
         }
     }
+    
+    public static class BidirectionalAStarALTIncBenchmark
+        extends
+        BenchmarkBase
+    {
+        private int totalLandmarks;
+
+        BidirectionalAStarALTIncBenchmark(int totalLandmarks)
+        {
+            this.totalLandmarks = totalLandmarks;
+        }
+
+        @Override
+        ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph)
+        {
+            Integer[] vertices = graph.vertexSet().toArray(new Integer[0]);
+            Set<Integer> landmarks = new HashSet<>();
+            while (landmarks.size() < totalLandmarks) {
+                landmarks.add(vertices[rng.nextInt(graph.vertexSet().size())]);
+            }
+            AStarAdmissibleHeuristic<Integer> heuristic =
+                new ALTInconsistentHeuristic<>(graph, landmarks, SEED);
+            return new BidirectionalAStarShortestPath<>(graph, heuristic);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Bidirectional A* with inconsistent heuristic";
+        }
+    }
 
     @Test
     public void testBenchmark()
@@ -316,6 +379,8 @@ public class DijkstraShortestPathPerformanceTest
         algFactory.add(() -> new BidirectionalAStarALTBenchmark(1));
         algFactory.add(() -> new BidirectionalAStarALTBenchmark(5));
         algFactory.add(() -> new BidirectionalAStarNoHeuristicBenchmark());
+        algFactory.add(() -> new AStarALTIncBenchmark(10));
+        algFactory.add(() -> new BidirectionalAStarALTIncBenchmark(10));
 
         for (Supplier<BenchmarkBase> alg : algFactory) {
 
@@ -350,5 +415,4 @@ public class DijkstraShortestPathPerformanceTest
         }
 
     }
-
 }

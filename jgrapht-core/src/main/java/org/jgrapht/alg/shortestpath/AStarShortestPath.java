@@ -45,18 +45,42 @@ import java.util.function.*;
  * necessarily the case though. This could be improved in a later version.
  *
  * <p>
- * Note: This implementation works with both consistent and inconsistent admissible heuristics. For
- * details on consistency, refer to the description of the method
- * {@link AStarAdmissibleHeuristic#isConsistent(Graph)}. However, this class is <i>not</i> optimized
- * for inconsistent heuristics. Several opportunities to improve both worst case and average runtime
- * complexities for A* with inconsistent heuristics described in literature can be used to improve
- * this implementation!
+ * Note: This implementation works with both consistent and inconsistent admissible heuristics. 
+ * Given two nodes $i$, $j$, a heuristic is said to to be inconsistent if $|h(i)-h(j)| &gt; dist(i,j)$.
+ * This is similar to the definition of admissibility where $h(i) &lt;= dist(i, tar)$ must hold.  That 
+ * is an admissible heuristic displays consistancy between any given node and the target.  While a 
+ * consistent heuristic displays consistancy between any pair of two arbitrary nodes.
+ *
+ * <p>
+ * For most classes of graphs a consistent heuristic will be most appropriate, and is the industry
+ * standard.  There are however a few situations when an inconsistent heuristic can perform better
+ * in practice.  These situations usually arise when there are a number of different heuristics to 
+ * choose from and various nodes are better suited to different instances of these heuristics.  
+ * Even in this case, multiple heuristics can be combined in a consisntent fashion, by always using 
+ * the maximum value amongst all heuristics.  When the best heuristic choice is unknown this tends to 
+ * be the situation in practice when an inconsistent heurstic becomes preferable, as it allows one to 
+ * combine various heuristics in an arbitrary manner.
+ *
+ *<p>
+ * The user can choose to use the standard A* implementation by passing to the constructor any 
+ * {@link AStarAdmissibleHeuristic} implementation that is not an instance of 
+ * {@link AStarInconsistentHeuristic}.  If an inconsistent heuristic is to be used
+ * the user can elect to use the inconsistent optimizations by passing in an instance of
+ * {@link AStarInconsistentHeuristic} instead.  This optimization uses a Bidirectional Pathmax (BPMX) 
+ * style algorithm (<a href="https://www.aaai.org/Papers/AAAI/2007/AAAI07-192.pdf">Inconsistent Heuristics</a>).
+ * Standard A* when supplied with an inconsistent heuristic can result in a worst case exponential
+ * number of node expansions.  This BPMX optimization reduces this worst case to quadratic.
+ * This interface should however not be used with consistent heuristics as it adds additional
+ * computational overhead.  It is advised to start with the standard herustic interface and
+ * move to the optimization only where excessive node expansions are causing noteable performance 
+ * issues.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Joris Kinable
  * @author Jon Robison
  * @author Thomas Breitbart
+ * @author Brooks Bockman
  */
 public class AStarShortestPath<V, E>
     extends
@@ -86,6 +110,12 @@ public class AStarShortestPath<V, E>
 
     // Comparator for comparing doubles with tolerance
     protected Comparator<Double> comparator;
+    
+    // Mapping for updated heuristic values
+    protected Map<V, Double> hScoreMap;
+    
+    // Flag whether or not to use inconsistent optimization
+    protected boolean inconsistent;
 
     /**
      * Create a new instance of the A* shortest path algorithm.
@@ -116,6 +146,9 @@ public class AStarShortestPath<V, E>
             Objects.requireNonNull(admissibleHeuristic, "Heuristic function cannot be null!");
         this.comparator = new ToleranceDoubleComparator();
         this.heapSupplier = Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null!");
+        
+        //flag to decide whether to use inconsistent optimization
+        inconsistent = admissibleHeuristic instanceof AStarInconsistentHeuristic;
     }
 
     /**
@@ -130,6 +163,7 @@ public class AStarShortestPath<V, E>
         vertexToHeapNodeMap = new HashMap<>();
         closedList = new HashSet<>();
         gScoreMap = new HashMap<>();
+        hScoreMap = new HashMap<>();
         cameFrom = new HashMap<>();
         numberOfExpandedNodes = 0;
     }
@@ -187,47 +221,80 @@ public class AStarShortestPath<V, E>
     {
         return numberOfExpandedNodes;
     }
-
+    
+    /** Expand node, update cost estimates, and  add neighbors to heap where appropriate
+     * 
+     * @param currentNode Node being expanded.
+     * @param endVertex Target node.
+     */
     private void expandNode(AddressableHeap.Handle<Double, V> currentNode, V endVertex)
     {
         numberOfExpandedNodes++;
+        
+        V currentVertex = currentNode.getValue();
 
-        Set<E> outgoingEdges = graph.outgoingEdgesOf(currentNode.getValue());
-
+        // If if using inconsistent heuristic "pull-up" parent h value 
+        double hParent = 0d;
+        if (inconsistent) {
+            hParent = ((AStarInconsistentHeuristic<V>) admissibleHeuristic)
+                .updateExpandedHeuristic(graph, currentVertex, endVertex, hScoreMap);
+        }
+        
+        Set<E> outgoingEdges = graph.outgoingEdgesOf(currentVertex);
+        
         for (E edge : outgoingEdges) {
-            V successor = Graphs.getOppositeVertex(graph, edge, currentNode.getValue());
+            V successor = Graphs.getOppositeVertex(graph, edge, currentVertex);
 
-            if (successor.equals(currentNode.getValue())) { // Ignore self-loop
+            if (successor.equals(currentVertex)) // Ignore self-loop
                 continue;
-            }
 
-            double gScore_current = gScoreMap.get(currentNode.getValue());
-            double tentativeGScore = gScore_current + graph.getEdgeWeight(edge);
-            double fScore =
-                tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex);
+            double edgeWeight = graph.getEdgeWeight(edge);
+            double tentativeGScore = gScoreMap.get(currentVertex) + edgeWeight;
+            double fScore;
+            boolean improvedH = false;
+            
+            // If using inconsistent heuristic "pull up" successor h value 
+            if (inconsistent) {
+                improvedH = ((AStarInconsistentHeuristic<V>) admissibleHeuristic)
+                    .updateSuccessorHeuristic(successor, endVertex, hParent, edgeWeight, hScoreMap);
+                fScore = tentativeGScore + hScoreMap.get(successor);
+            }else {
+                fScore = tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex); 
+            }
 
             if (vertexToHeapNodeMap.containsKey(successor)) { // We re-encountered a vertex. It's
                 // either in the open or closed list.
-                if (tentativeGScore >= gScoreMap.get(successor)) // Ignore path since it is
-                    // non-improving
-                    continue;
-
-                cameFrom.put(successor, edge);
-                gScoreMap.put(successor, tentativeGScore);
+                boolean improvedG = false;
+                if (tentativeGScore < gScoreMap.get(successor)) { // If this is improving, update
+                    cameFrom.put(successor, edge);
+                    gScoreMap.put(successor, tentativeGScore);
+                    improvedG = true;
+                }
 
                 if (closedList.contains(successor)) { // it's in the closed list. Move node back to
-                    // open list, since we discovered a shorter
-                    // path to this node
-                    closedList.remove(successor);
-                    openList.insert(fScore, vertexToHeapNodeMap.get(successor).getValue());
-                } else { // It's in the open list
-                    vertexToHeapNodeMap.get(successor).decreaseKey(fScore);
+                    // open list if we discovered a shorter path to this node
+                    if (improvedG) {
+                        closedList.remove(successor);
+                        vertexToHeapNodeMap.put(successor, openList.insert(fScore, successor));
+                    }
+
+                } else { // It's in the open list, if H or G improved update its heap key
+                    if (improvedH || improvedG) {
+                        AddressableHeap.Handle<Double, V> node = vertexToHeapNodeMap.get(successor);
+                        fScore = fScore - tentativeGScore + gScoreMap.get(successor);
+                        if (node.getKey() < fScore) {
+                            node.delete();
+                            vertexToHeapNodeMap.put(successor, openList.insert(fScore, successor));
+                        } else {
+                            node.decreaseKey(fScore);
+                        }
+                    }
                 }
+
             } else { // We've encountered a new vertex.
                 cameFrom.put(successor, edge);
                 gScoreMap.put(successor, tentativeGScore);
-                AddressableHeap.Handle<Double, V> heapNode = openList.insert(fScore, successor);
-                vertexToHeapNodeMap.put(successor, heapNode);
+                vertexToHeapNodeMap.put(successor, openList.insert(fScore, successor));
             }
         }
     }
@@ -240,7 +307,7 @@ public class AStarShortestPath<V, E>
      * @param pathLength length of the path
      * @return the shortest path from startVertex to endVertex
      */
-    private GraphPath<V, E> buildGraphPath(V startVertex, V targetVertex, double pathLength)
+    protected GraphPath<V, E> buildGraphPath(V startVertex, V targetVertex, double pathLength)
     {
         List<E> edgeList = new ArrayList<>();
         List<V> vertexList = new ArrayList<>();
@@ -256,5 +323,4 @@ public class AStarShortestPath<V, E>
         Collections.reverse(vertexList);
         return new GraphWalk<>(graph, startVertex, targetVertex, vertexList, edgeList, pathLength);
     }
-
 }

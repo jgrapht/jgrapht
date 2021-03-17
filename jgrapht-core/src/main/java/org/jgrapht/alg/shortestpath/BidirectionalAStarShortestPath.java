@@ -266,7 +266,7 @@ public class BidirectionalAStarShortestPath<V, E>
                 if (closedList.contains(v)) { // it's in the closed list. Move node back to
                     // open list, since we discovered a shorter path to this node
                     closedList.remove(v);
-                    openList.insert(fScore, v);
+                    vertexToHeapNodeMap.put(v, openList.insert(fScore, v));
                 } else { // It's in the open list
                     node.decreaseKey(fScore);
                 }
