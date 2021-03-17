@@ -42,7 +42,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
     protected List<Set<V>> stronglyConnectedSets;
     protected List<Graph<V, E>> stronglyConnectedSubgraphs;
 
-    public AbstractStrongConnectivityInspector(Graph<V, E> graph)
+    protected AbstractStrongConnectivityInspector(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph);
     }

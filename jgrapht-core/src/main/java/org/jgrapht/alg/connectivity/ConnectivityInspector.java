@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -142,7 +143,8 @@ public class ConnectivityInspector<V, E>
 
         // If source and target are in the same set, do nothing, otherwise, merge sets
         if (sourceSet != targetSet) {
-            Set<V> merge = new HashSet<>();
+            Set<V> merge =
+                CollectionUtil.newHashSetWithExpectedSize(sourceSet.size() + targetSet.size());
             merge.addAll(sourceSet);
             merge.addAll(targetSet);
             connectedSets.remove(sourceSet);
