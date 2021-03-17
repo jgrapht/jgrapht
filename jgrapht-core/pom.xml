@@ -28,7 +28,12 @@
         <dependency>
             <groupId>org.jheaps</groupId>
             <artifactId>jheaps</artifactId>
-            <version>0.13</version>
+            <version>0.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apfloat</groupId>
+            <artifactId>apfloat</artifactId>
+            <version>1.9.1</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.junit-toolbox</groupId>
