@@ -33,7 +33,7 @@ import java.util.function.ToDoubleFunction;
  * Dynamic programming algorithm for computing edit distance between trees.
  *
  * <p>
- * The algorithm is originally described in Zhang, Kaizhong & Shasha, Dennis. (1989). Simple Fast
+ * The algorithm is originally described in Zhang, Kaizhong &amp; Shasha, Dennis. (1989). Simple Fast
  * Algorithms for the Editing Distance Between Trees and Related Problems. SIAM J. Comput.. 18.
  * 1245-1262. 10.1137/0218082.
  *

@@ -25,7 +25,7 @@
  * SparseIntDirectedGraph} and {@link org.jgrapht.opt.graph.sparse.SparseIntUndirectedGraph
  * SparseIntUndirectedGraph}, in the sense that both vertices and edges are integers (and they are
  * numbered contiguously). Thus, by definition these classes cannot represent graphs with more than
- * {@link Integer#MAX_VALUE} edges.
+ * {@link java.lang.Integer#MAX_VALUE} edges.
  *
  * <ul>
  * <li>{@link org.jgrapht.sux4j.SuccinctIntDirectedGraph} is an implementation for directed graphs.
@@ -68,7 +68,7 @@
  * Finally, note that the best performance and compression can be obtained by representing the graph
  * using <a href="http://webgraph.di.unimi.it/">WebGraph</a>'s {@link it.unimi.dsi.webgraph.EFGraph
  * EFGraph} format and then accessing the graph using the suitable {@linkplain org.jgrapht.webgraph
- * adapter}; in particular, one can represent graphs with more than {@link Integer#MAX_VALUE}
+ * adapter}; in particular, one can represent graphs with more than {@link java.lang.Integer#MAX_VALUE}
  * vertices. However, the adapters do not provide methods mapping bijectively edges into a
  * contiguous set of integers.
  *
@@ -91,7 +91,7 @@
  * transpose of your graph in the same way;
  * <li>use a {@linkplain org.jgrapht.webgraph suitable adapter} to get a {@link org.jgrapht.Graph
  * Graph} representing your graph, taking care of loading the WebGraph representations using
- * {@link it.unimi.dsi.webgraph.ImmutableGraph#loadMapped() ImmutableGraph.loadMapped()};
+ * {@link it.unimi.dsi.webgraph.ImmutableGraph#loadMapped(java.lang.CharSequence)}  ImmutableGraph.loadMapped()};
  * <li>use the copy constructor to obtain a quasi-succinct representation.
  * </ol>
  */

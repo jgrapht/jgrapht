@@ -71,7 +71,7 @@ package org.jgrapht.generate.netgen;
  * <li>sourceNum $+$ sinkNum $\leq$ nodeNum;</li>
  * <li>max(sourceNum, sinkNum) $\leq$ totalSupply;</li>
  * <li>minArcNum $\leq$ arcNum $\leq$ maxArcNum;</li>
- * <li>minCap $\leq$ maxCap<;/li>
+ * <li>minCap $\leq$ maxCap;</li>
  * <li>minCost $\leq$ maxCost;</li>
  * <li>0 $\leq$ percentCapacitated $\leq$ 100;</li>
  * <li>0 $\leq$ percentWithInfCost $\leq$ 100;</li>

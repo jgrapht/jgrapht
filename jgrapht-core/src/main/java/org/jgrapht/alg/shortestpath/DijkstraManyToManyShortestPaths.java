@@ -35,7 +35,7 @@ import java.util.*;
  * <p>
  * For each source vertex a single source shortest paths search is performed, which is stopped as
  * soon as all target vertices are reached. Shortest paths trees are constructed using
- * {@link DijkstraClosestFirstIterator}. In case $|T| > |S|$ the searches are performed on the
+ * {@link DijkstraClosestFirstIterator}. In case $|T| &gt; |S|$ the searches are performed on the
  * reversed graph using $|T|$ as source vertices and $|S|$ as target vertices. This allows to reduce
  * the total number of searches from $|S|$ to $min(|S|,|T|)$.
  *
