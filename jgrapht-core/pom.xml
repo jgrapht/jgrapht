@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.jheaps</groupId>
             <artifactId>jheaps</artifactId>
-            <version>0.13</version>
+            <version>0.14</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.junit-toolbox</groupId>
@@ -38,13 +38,13 @@
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
-            <version>1.23</version>
+            <version>1.28</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
-            <version>1.23</version>
+            <version>1.28</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
